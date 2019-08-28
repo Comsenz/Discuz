@@ -1,7 +1,8 @@
 {
     "name": "comsenz/discuss",
-    "description": "New all Discuz",
+    "description": "The Discuz software open-source.",
     "type": "project",
+    "keywords": ["discuz", "comsenz", "forum", "community"],
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
