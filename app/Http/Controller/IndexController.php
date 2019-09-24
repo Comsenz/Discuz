@@ -3,26 +3,28 @@
 namespace App\Http\Controller;
 
 use App\Models\User;
+use Discuz\Web\Controller\AbstractWebController;
+use Illuminate\View\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 
-class IndexController implements RequestHandlerInterface {
+class IndexController extends AbstractWebController
+{
+
     /**
-     * Handles a request and produces a response.
-     *
-     * May call other collaborating code to generate the response.
      * @param ServerRequestInterface $request
-     * @return ResponseInterface
+     * @param Factory $view
+     * @return \Illuminate\Contracts\View\View|Factory
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function render(ServerRequestInterface $request, Factory $view)
     {
-        // TODO: Implement handle() method.
-//        throw new \Exception('asldjflsdf', 333);
 
-        $users = User::all();
+        $view = $view->make('app');
+        $view->with('title', 'discuss');
 
-        return new HtmlResponse('BAR!'.(microtime(true)-DISCUZ_START));
+        return $view;
+
     }
 }
