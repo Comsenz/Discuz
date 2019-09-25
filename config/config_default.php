@@ -2,6 +2,7 @@
 
 return [
     'debug' => false,
+    'timezone' => 'Asia/Shanghai',
     'database' =>
         [
             'driver' => 'mysql',
