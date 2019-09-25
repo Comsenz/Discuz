@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+define('DISCUZ_START', microtime(true));
+
+require __DIR__.'/vendor/autoload.php';
+
+$app = new Discuz\Foundation\Application(__DIR__);
+
+$app->singleton(
+    Illuminate\Contracts\Console\Kernel::class,
+    App\Console\Kernel::class
+);
+
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+exit($status);
