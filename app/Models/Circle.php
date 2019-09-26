@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property 圈子图标 icon
  * @property 圈子介绍 description
  * @property 圈子属性 property
- * @property 创建的IP地址 ipAddress
+ * @property 创建的IP地址 ip
  */
 class Circle extends Model
 {
@@ -38,6 +38,27 @@ class Circle extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    /**
+     * 模型的日期字段的存储格式
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+
+    /**
+     * 存储时间戳的字段名
+     *
+     * @var string
+     */
+    const CREATED_AT = 'createtime';
+
+    /**
+     * 存储时间戳的字段名
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'updatetime';
 
     /**
      * 模型的「启动」方法.
@@ -69,7 +90,7 @@ class Circle extends Model
         $circle->icon = $icon;
         $circle->description = $description;
         $circle->property = $property;
-        $circle->ipAddress = $ipAddress;
+        $circle->ip = $ipAddress;
 
         // 暂存需要执行的事件
         $circle->raise(new Created($circle));

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property 收费类型 type
  * @property 收费金额 price
  * @property 分成规则 share_rule
- * @property 创建的IP地址 ipAddress
+ * @property 创建的IP地址 ip
  */
 class CircleExtend extends Model
 {
@@ -38,6 +38,27 @@ class CircleExtend extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    /**
+     * 模型的日期字段的存储格式
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+
+    /**
+     * 存储时间戳的字段名
+     *
+     * @var string
+     */
+    const CREATED_AT = 'createtime';
+
+    /**
+     * 存储时间戳的字段名
+     *
+     * @var string
+     */
+    const UPDATED_AT = 'updatetime';
 
     /**
      * 模型的「启动」方法.
@@ -69,7 +90,7 @@ class CircleExtend extends Model
         $circleExtend->type = $type;
         $circleExtend->price = $price;
         $circleExtend->share_rule = $share_rule;
-        $circleExtend->ipAddress = $ipAddress;
+        $circleExtend->ip = $ipAddress;
 
         // 暂存需要执行的事件
         $circleExtend->raise(new Created($circleExtend));

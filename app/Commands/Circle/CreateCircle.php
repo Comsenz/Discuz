@@ -67,6 +67,8 @@ class CreateCircle
      */
     public function handle(BusDispatcher $bus, EventDispatcher $events)
     {
+        $this->events = $events;
+
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCircle');
 
@@ -80,7 +82,7 @@ class CreateCircle
         );
 
         // 触发钩子事件
-        $events->dispatch(
+        $this->events->dispatch(
             new Saving($circle, $this->actor, $this->data)
         );
 
@@ -90,7 +92,7 @@ class CreateCircle
         // 分发创建圈子扩展信息的任务
         try {
             $bus->dispatch(
-                new CreateCircleExtend($circle->id, $this->data, $this->ipAddress)
+                new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
             );
         } catch (Exception $e) {
             $circle->delete();

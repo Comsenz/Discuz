@@ -52,12 +52,12 @@ class CreateCircleExtend
     /**
      * 初始化命令参数
      *
-     * @param string $circleId  圈子的ID.
+     * @param int    $circleId  圈子的ID.
      * @param User   $actor     执行操作的用户.
      * @param array  $data      创建圈子的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
-    public function __construct(string $circleId, $actor, array $data, string $ipAddress)
+    public function __construct(int $circleId, $actor, array $data, string $ipAddress)
     {
         $this->circleId = $circleId;
         $this->actor = $actor;
@@ -75,6 +75,8 @@ class CreateCircleExtend
      */
     public function handle(BusDispatcher $bus, EventDispatcher $events)
     {
+        $this->events = $events;
+
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCircleExtend');
 
@@ -88,7 +90,7 @@ class CreateCircleExtend
         );
 
         // 触发钩子事件
-        $events->dispatch(
+        $this->events->dispatch(
             new Saving($circleExtend, $this->actor, $this->data)
         );
 

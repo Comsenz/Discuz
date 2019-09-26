@@ -10,27 +10,15 @@ declare(strict_types=1);
 
 namespace App\Api\Controller\Circle;
 
-
-use App\Api\Serializer\UserSerializer;
 use Discuz\Api\Controller\AbstractListController;
+use App\Api\Serializer\UserSerializer;
 use App\Commands\Circle\CreateThread;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Contracts\Bus\Dispatcher;
 
 class ListCircleController extends AbstractListController
 {
     public $serializer = UserSerializer::class;
-
-    /**
-     * @var Dispatcher
-     */
-    private $bus;
-
-    public function __construct(Dispatcher $bus)
-    {
-        $this->bus = $bus;
-    }
 
     public function data(ServerRequestInterface $request, Document $document)
     {

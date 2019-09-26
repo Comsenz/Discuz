@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace App\Api\Serializer;
 
-
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class CircleSerializer extends AbstractSerializer

@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace App\Api\Controller\Circle;
 
 use Discuz\Api\Controller\AbstractCreateController;
+use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
 class UpdateCircleController extends AbstractCreateController
 {

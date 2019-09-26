@@ -14,7 +14,6 @@ namespace App\Api\Controller\Circle;
 use Discuz\Api\Controller\AbstractCreateController;
 use App\Api\Serializer\CircleSerializer;
 use App\Commands\Circle\CreateCircle;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -27,23 +26,6 @@ class CreateCircleController extends AbstractCreateController
      * @var Serializer
      */
     public $serializer = CircleSerializer::class;
-
-    /**
-     * 命令集调用工具类.
-     *
-     * @var Dispatcher
-     */
-    private $bus;
-
-    /**
-     * 初始化控制器.
-     *
-     * @param Dispatcher $bus 注入命令集调用工具类
-     */
-    public function __construct(Dispatcher $bus)
-    {
-        $this->bus = $bus;
-    }
 
     /**
      * 数据操作.
@@ -65,7 +47,7 @@ class CreateCircleController extends AbstractCreateController
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new CreateCircle($actor, $inputs, $ipAddress)
+            new CreateCircle($actor = [], $inputs, $ipAddress)
         );
 
         // 返回结果
