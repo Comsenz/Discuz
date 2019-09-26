@@ -10,3 +10,5 @@ $route->get('/circle', 'circle.list', ApiController\Circle\ListCircleController:
 $route->post('/circle/create', 'circle.create', ApiController\Circle\CreateCircleController::class);
 $route->post('/circle/update', 'circle.update', ApiController\Circle\UpdateCircleController::class);
 $route->post('/circle/delete', 'circle.delete', ApiController\Circle\DeleteCircleController::class);
+
+$route->post('/settings', 'settings', ApiController\SetSettingsController::class);
