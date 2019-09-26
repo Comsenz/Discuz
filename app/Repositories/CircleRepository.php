@@ -8,7 +8,7 @@ declare(strict_types=1);
  *      1: CircleRepository.php 28830 2019-09-25 11:45 chenkeke $
  */
 
-namespace App\Repositorys;
+namespace App\Repositories;
 
 class CircleRepository
 {

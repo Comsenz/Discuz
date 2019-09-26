@@ -5,15 +5,16 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: CreateThread.php 28830 2019-09-24 18:59 chenkeke $
+ *      1: DeleteCircle.php 28830 2019-09-26 10:10 chenkeke $
  */
 
 namespace App\Commands\Circle;
 
-use App\Repositorys\CircleRepository;
+
+use App\Repositories\CircleRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class CreateThread
+class DeleteCircle
 {
     /**
      * The ID of the post to edit.
@@ -35,11 +36,6 @@ class CreateThread
      * @var array
      */
     public $data;
-
-    /**
-     * @var \Illuminate\Contracts\Events\Dispatcher
-     */
-    protected $events;
 
     /**
      * @param int $postId The ID of the post to edit.
