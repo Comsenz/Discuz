@@ -17,7 +17,7 @@ class ListUsersController extends AbstractListController
     public function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
-
+        
         return User::all();
     }
 }

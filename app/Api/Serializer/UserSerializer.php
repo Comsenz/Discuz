@@ -16,7 +16,8 @@ class UserSerializer extends AbstractSerializer
         return [
             'id' => $model->id,
             'username' => $model->username,
-            'email' => $model->email
+            'password' => $model->password,
+            'createtime' => $model->createtime
         ];
     }
 }

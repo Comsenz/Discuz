@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model {
 
-    protected $fillable = ['id', 'username'];
+    public $timestamps = false;
+
+    protected $fillable = ['id', 'username','password','createtime'];
+
+    protected function setUserLoginPasswordAttr($value)
+    {
+        return md5($value);
+    }
 }
