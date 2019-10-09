@@ -5,26 +5,27 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CreateCircleController.php 28830 2019-09-26 09:47 chenkeke $
+ *      Id: CreateAttachmentController.php 28830 2019-09-29 16:55 chenkeke $
  */
 
-namespace App\Api\Controller\Circle;
+namespace App\Api\Controller\Attachment;
 
+
+use App\Api\Serializer\AttachmentSerializer;
+use App\Commands\Attachment\CreateAttachment;
 use Discuz\Api\Controller\AbstractCreateController;
-use App\Api\Serializer\CircleSerializer;
-use App\Commands\Circle\CreateCircle;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class CreateCircleController extends AbstractCreateController
+class CreateAttachmentController extends AbstractCreateController
 {
     /**
      * 返回的数据字段和格式.
      *
      * @var Serializer
      */
-    public $serializer = CircleSerializer::class;
+    public $serializer = AttachmentSerializer::class;
 
     /**
      * 数据操作.
@@ -46,9 +47,9 @@ class CreateCircleController extends AbstractCreateController
 
         $inputs['file'] = $file;
 
-        // 分发创建圈子的任务
+        // 处理上传的圈子图片
         $data = $this->bus->dispatch(
-            new CreateCircle($actor = [], $inputs, $ipAddress)
+            new CreateAttachment($actor = [], $inputs, $ipAddress)
         );
 
         // 返回结果

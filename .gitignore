@@ -3,4 +3,4 @@
 /composer.lock
 /.idea
 config/config.php
-discuz.sql
+/storage

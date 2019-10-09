@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: CircleExtend.php28830 2019-09-26 17:59 chenkeke $
+ *      Id: CircleExtend.php28830 2019-09-26 17:59 chenkeke $
  */
 
 namespace App\Models;

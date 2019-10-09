@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: Circle.php 28830 2019-09-25 14:49 chenkeke $
+ *      Id: Circle.php 28830 2019-09-25 14:49 chenkeke $
  */
 
 namespace App\Models;
@@ -80,7 +80,7 @@ class Circle extends Model
      * @param $ipAddress   创建的IP地址
      * @return static
      */
-    public static function create($name, $icon, $description, $property, $ipAddress)
+    public static function creation($name, $icon, $description, $property, $ipAddress)
     {
         // 实例一个圈子模型
         $circle = new static;

@@ -5,16 +5,18 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CircleServiceProvider.php 28830 2019-09-26 14:16 chenkeke $
+ *      Id: FileServiceProvider.phphp 28830 2019-09-29 18:04 chenkeke $
  */
 
 namespace App\ServiceProviders;
 
-use App\Commands\Attachment\Attach;
-use Discuz\Repository\RepositoryInterface;
 use Discuz\Foundation\AbstractServiceProvider;
+use App\Commands\File\Upload;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Filesystem\Factory;
+use League\Flysystem\FilesystemInterface;
 
-class CircleServiceProvider extends AbstractServiceProvider
+class FileServiceProvider extends AbstractServiceProvider
 {
     /**
      * 注册服务.
@@ -23,7 +25,7 @@ class CircleServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-
+        $this->registerFilesystem();
     }
 
     /**
@@ -36,7 +38,7 @@ class CircleServiceProvider extends AbstractServiceProvider
         /**
          * 事件处理类
          */
-        // $events = $this->app->make('events');
+        $events = $this->app->make('events');
 
         // 订阅事件
         // $events->subscribe(DiscussionMetadataUpdater::class);
@@ -45,7 +47,17 @@ class CircleServiceProvider extends AbstractServiceProvider
         // $events->listen(
         //     Renamed::class, DiscussionRenamedLogger::class
         // );
+    }
 
+    protected function registerFilesystem()
+    {
+        $filesystem = function (Container $app) {
+            return $app->make('filesystem')->disk(config('filesystems.default'))->getDriver();
+        };
+
+        $this->app->when(Upload::class)
+            ->needs(Factory::class)
+            ->give($filesystem);
     }
 
 }

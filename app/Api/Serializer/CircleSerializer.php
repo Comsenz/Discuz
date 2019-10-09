@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: CircleSerializer.php 28830 2019-09-26 09:50 chenkeke $
+ *      Id: CircleSerializer.php 28830 2019-09-26 09:50 chenkeke $
  */
 
 namespace App\Api\Serializer;

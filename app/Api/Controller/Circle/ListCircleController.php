@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: ListCircleController.php 28830 2019-09-25 11:13 chenkeke $
+ *      Id: ListCircleController.php 28830 2019-09-25 11:13 chenkeke $
  */
 
 namespace App\Api\Controller\Circle;

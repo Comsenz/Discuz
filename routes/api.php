@@ -6,9 +6,9 @@ $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/add', '', ApiController\Users\AddUsersController::class);
 $route->post('/login', '', ApiController\Users\LoginUsersController::class);
 
-$route->get('/circle', 'circle.list', ApiController\Circle\ListCircleController::class);
-$route->post('/circle/create', 'circle.create', ApiController\Circle\CreateCircleController::class);
-$route->post('/circle/update', 'circle.update', ApiController\Circle\UpdateCircleController::class);
-$route->post('/circle/delete', 'circle.delete', ApiController\Circle\DeleteCircleController::class);
+$route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
+$route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
+$route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleController::class);
+$route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
 
 $route->post('/settings', 'settings', ApiController\SetSettingsController::class);

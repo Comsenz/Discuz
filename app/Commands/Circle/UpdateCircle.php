@@ -5,62 +5,113 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      1: UpdateCircle.php 28830 2019-09-26 10:09 chenkeke $
+ *      Id: UpdateCircle.php 28830 2019-09-26 10:09 chenkeke $
  */
 
 namespace App\Commands\Circle;
 
-
-use App\Repositories\CircleRepository;
-use Illuminate\Contracts\Events\Dispatcher;
+use Exception;
+use App\Models\Circle;
+use App\Events\Circle\Saving;
+use App\Commands\CircleExtend\CreateCircleExtend;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 
 class UpdateCircle
 {
+    use EventsDispatchTrait;
+
     /**
-     * The ID of the post to edit.
+     * 执行操作的圈子id.
      *
      * @var int
      */
-    public $postId;
+    public $circleId;
 
-    /**
-     * The user performing the action.
+   /**
+     * 执行操作的用户.
      *
      * @var User
      */
     public $actor;
 
     /**
-     * The attributes to update on the post.
+     * 创建圈子的数据.
      *
      * @var array
      */
     public $data;
 
     /**
-     * @param int $postId The ID of the post to edit.
-     * @param User $actor The user performing the action.
-     * @param array $data The attributes to update on the post.
+     * 请求来源的IP地址.
+     *
+     * @var string
      */
-    public function __construct($postId, $actor, array $data)
+    public $ipAddress;
+
+    /**
+     * 初始化命令参数
+     *
+     * @param int    $circleId  执行操作的圈子id
+     * @param User   $actor     执行操作的用户.
+     * @param array  $data      创建圈子的数据.
+     * @param string $ipAddress 请求来源的IP地址.
+     */
+    public function __construct(int $circleId, $actor, array $data, string $ipAddress)
     {
-        $this->postId = $postId;
+        $this->circleId = $circleId;
         $this->actor = $actor;
         $this->data = $data;
+        $this->ipAddress = $ipAddress;
     }
 
     /**
-     * @param Dispatcher $events
-     * @param CircleRepository $repository
+     * 执行命令
+     *
+     * @param BusDispatcher   $bus
+     * @param EventDispatcher $events
      * @return Circle
+     * @throws Exception
      */
-    public function handle(Dispatcher $events, CircleRepository $repository)
+    public function handle(BusDispatcher $bus, EventDispatcher $events)
     {
-        var_dump($this->postId);
-        var_dump($this->actor);
-        var_dump($this->data);
-        $circle = $repository->getdata($this->data);
+        $this->events = $events;
 
+        // 判断有没有权限执行此操作
+        // $this->assertCan($this->actor, 'createCircle');
+
+        // 初始圈子数据
+        $circle = Circle::update(
+            $this->data['name'],
+            $this->data['icon'],
+            $this->data['description'],
+            $this->data['property'],
+            $this->ipAddress
+        );
+
+        // 触发钩子事件
+        $this->events->dispatch(
+            new Saving($circle, $this->actor, $this->data)
+        );
+
+        // 保存圈子
+        $circle->save();
+
+        // 分发创建圈子扩展信息的任务
+        try {
+            $bus->dispatch(
+                new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
+            );
+        } catch (Exception $e) {
+            $circle->delete();
+            throw $e;
+        }
+
+        // 调用钩子事件
+        $this->dispatchEventsFor($circle);
+
+        // 返回数据对象
         return $circle;
     }
 }
