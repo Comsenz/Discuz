@@ -106,11 +106,12 @@ class CreateCircle
 
         if ($this->data['file'] instanceof UploadedFileInterface)
         {
+            $uploadTool->setFile($this->data['file']);
             $uploadTool->setSingleData($circle);
 
             // 处理上传的圈子图片
             $attachment = $bus->dispatch(
-                new CreateAttachment($actor = [], $uploadTool, $this->data['file'], $this->ipAddress)
+                new CreateAttachment($actor = [], $uploadTool, $this->ipAddress)
             );
 
             $icon = $attachment->file_path . $attachment->attachment;

@@ -42,13 +42,6 @@ class CreateAttachment
     public $uploadTool;
 
     /**
-     * 上传的文件.
-     *
-     * @var array
-     */
-    public $file;
-
-    /**
      * 请求来源的IP地址.
      *
      * @var string
@@ -60,20 +53,17 @@ class CreateAttachment
      *
      * @param User                  $actor      执行操作的用户.
      * @param UploadTool            $uploadTool 上传附件的工具.
-     * @param UploadedFileInterface $file       上传的文件.
      * @param string                $ipAddress  请求来源的IP地址.
      */
     public function __construct
     (
         $actor,
         UploadTool $uploadTool,
-        UploadedFileInterface $file,
         string $ipAddress
     )
     {
         $this->actor = $actor;
         $this->uploadTool = $uploadTool;
-        $this->file = $file;
         $this->ipAddress = $ipAddress;
 
     }
@@ -86,7 +76,7 @@ class CreateAttachment
      * @return Attach
      * @throws Exception
      */
-    public function handle(EventDispatcher $events, FileFactory $fileFactory)
+    public function handle(EventDispatcher $events)
     {
         $this->events = $events;
 
@@ -102,23 +92,25 @@ class CreateAttachment
 
         $uploadPath = $this->uploadTool->getUploadPath();
 
-        $uploadName = $this->uploadTool->getUploadName(pathinfo($this->file->getClientFilename(), PATHINFO_EXTENSION));
+        $uploadName = $this->uploadTool->getUploadName();
+
+        $uploadFile = $this->uploadTool->getFile();
 
         $this->events->dispatch(
-            new Uploading($this->actor, $this->file, $this->uploadTool->getType())
+            new Uploading($this->actor, $this->uploadTool)
         );
 
-        $fileFactory->put($uploadPath.$uploadName, $this->file, 'public');
-
+        $this->uploadTool->saveFile();
+dd('aaa');
         // 初始附件数据
         $attachment = Attachment::creation(
             0,// $this->actor,
             $model->id,
             $uploadName,
             $uploadPath,
-            $this->file->getClientFilename(),
-            $this->file->getSize(),
-            $this->file->getClientMediaType(),
+            $uploadFile->getClientFilename(),
+            $uploadFile->getSize(),
+            $uploadFile->getClientMediaType(),
             0,
             $this->ipAddress
         );

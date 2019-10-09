@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace App\Events\Attachment;
 
 
+use Discuz\Contracts\Tool\UploadTool;
+
 class Uploading
 {
 
@@ -20,23 +22,17 @@ class Uploading
     public $actor;
 
     /**
-     * @var User
+     * @var UploadTool
      */
-    public $file;
+    public $uploadTool;
 
     /**
-     * @var User
+     * @param User       $actor
+     * @param UploadTool $uploadTool
      */
-    public $type;
-
-    /**
-     * @param Circle $circle
-     * @param User   $actor
-     */
-    public function __construct($actor, $file, $type)
+    public function __construct($actor, UploadTool $uploadTool)
     {
         $this->actor = $actor;
-        $this->file = $file;
-        $this->type = $type;
+        $this->uploadTool = $uploadTool;
     }
 }
