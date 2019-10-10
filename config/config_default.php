@@ -2,8 +2,11 @@
 
 return [
     'debug' => true,
-    'locale' => 'zh_CN',
+    'locale' => 'zh-CN',
+    'fallback_locale' => 'zh-CN',
     'timezone' => 'Asia/Shanghai',
+    'key' => 'base64:1iVfMjNNpAeMTc0vX70xebqjjQrdApyLibw5LhX6YHs=',
+    'cipher' => 'AES-256-CBC',
     'database' =>
         [
             'driver' => 'mysql',
@@ -21,6 +24,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
         ],
+    //缓存系统配置
     'cache' => [
         'default' => 'file',
 
@@ -34,6 +38,7 @@ return [
         'prefix' => 'discuz_cache',
 
     ],
+    //文件系统配置
     'filesystems' => [
         'default' => 'local',
         'cloud' => '',
@@ -67,4 +72,8 @@ return [
             ]
         ]
     ],
+    //加载ServiceProvider
+    'providers' => [
+        //App\Providers\EventServiceProvider::class 测试示例
+    ]
 ];
