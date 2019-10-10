@@ -1,0 +1,3 @@
+
+1、在服务器上启动prerender服务；
+2、在业务网站的服务器配置中设置重定向，如果发现是爬虫的userAgent就将请求转发给prerender服务，具体配置请参考该目录下的apache和nginx配置。
