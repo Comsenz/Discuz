@@ -12,3 +12,27 @@ $route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleCon
 $route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
 
 $route->post('/settings', 'settings', ApiController\SetSettingsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Threads
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
+$route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
+$route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
+$route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
+$route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
+
+/*
+|--------------------------------------------------------------------------
+| StopWords
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/stop-words', 'stop-words.index', ApiController\StopWords\ListStopWordsController::class);
+$route->get('/stop-words/{id}', 'stop-words.resource', ApiController\StopWords\ResourceStopWordController::class);
+$route->post('/stop-words', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
+$route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
+$route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
