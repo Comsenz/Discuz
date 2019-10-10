@@ -23,7 +23,7 @@ class NoExceptionHandler implements ExceptionHandlerInterface
     public function manages(Exception $e)
     {
         // TODO: Implement manages() method.
-        return $e instanceof RouteNotFoundException;;
+        return $e instanceof RouteNotFoundException;
     }
 
     /**

@@ -29,7 +29,7 @@ class UploadExceptionHandler implements ExceptionHandlerInterface
     public function manages(Exception $e)
     {
         // TODO: Implement manages() method.
-        return $e instanceof UploadException;;
+        return $e instanceof UploadException;
     }
 
     /**

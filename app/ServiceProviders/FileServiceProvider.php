@@ -51,13 +51,13 @@ class FileServiceProvider extends AbstractServiceProvider
 
     protected function registerFilesystem()
     {
-        $filesystem = function (Container $app) {
-            return $app->make('filesystem')->disk(config('filesystems.default'))->getDriver();
-        };
-
-        $this->app->when(Upload::class)
-            ->needs(Factory::class)
-            ->give($filesystem);
+//        $filesystem = function (Container $app) {
+//            return $app->make('filesystem')->disk(config('filesystems.default'))->getDriver();
+//        };
+//
+//        $this->app->when(Upload::class)
+//            ->needs(Factory::class)
+//            ->give($filesystem);
     }
 
 }

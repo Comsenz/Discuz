@@ -21,7 +21,6 @@ use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Filesystem\Factory as FileFactory;
 use Illuminate\Database\Eloquent\Model;
 use Intervention\Image\ImageManager;
-use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
 {
@@ -83,25 +82,31 @@ class CreateAttachment
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'uploadFile');
 
+        $uploadFile = $this->uploadTool->getFile();
+
         // 判断上传的文件是否正常
-        if ($this->file->getError()){
+        if ($uploadFile->getError()){
             throw new UploadException;
         }
 
         $model = $this->uploadTool->getSingleData();
 
-        $uploadPath = $this->uploadTool->getUploadPath();
+        $extension = pathinfo($uploadFile->getClientFilename(), PATHINFO_EXTENSION);
 
-        $uploadName = $this->uploadTool->getUploadName();
+        $uploadPath = $this->uploadTool->getUploadPath('', true);
 
-        $uploadFile = $this->uploadTool->getFile();
+        $uploadName = $this->uploadTool->getUploadName($extension, true);
 
         $this->events->dispatch(
             new Uploading($this->actor, $this->uploadTool)
         );
 
-        $this->uploadTool->saveFile();
-dd('aaa');
+        $res = $this->uploadTool->saveFile($uploadPath, $uploadName);
+
+        if (!$res){
+            throw new UploadException;
+        }
+
         // 初始附件数据
         $attachment = Attachment::creation(
             0,// $this->actor,

@@ -114,9 +114,7 @@ class CreateCircle
                 new CreateAttachment($actor = [], $uploadTool, $this->ipAddress)
             );
 
-            $icon = $attachment->file_path . $attachment->attachment;
-
-            $circle->icon = $icon;
+            $circle->icon = $uploadTool->getFullName();
 
             // 保存圈子
             $circle->save();

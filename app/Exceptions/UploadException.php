@@ -11,11 +11,10 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use Exception;
-use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class UploadException extends Exception
 {
-    public function __construct($message = null, $code = 404, Exception $previous = null)
+    public function __construct($message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
