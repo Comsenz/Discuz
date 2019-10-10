@@ -8,7 +8,7 @@ declare(strict_types=1);
  *      Id: FileServiceProvider.phphp 28830 2019-09-29 18:04 chenkeke $
  */
 
-namespace App\ServiceProviders;
+namespace App\Providers;
 
 use Discuz\Foundation\AbstractServiceProvider;
 use App\Commands\File\Upload;

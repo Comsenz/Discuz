@@ -12,6 +12,7 @@ namespace App\Models;
 
 use App\Events\Attachment\Created;
 use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
 class Attachment extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * 与模型关联的数据表.

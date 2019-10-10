@@ -45,7 +45,7 @@ class UpdateCircleController extends AbstractCreateController
 
         // 分发修改圈子的任务
         $data = $this->bus->dispatch(
-            new UpdateCircle($actor = [], $inputs, $ipAddress)
+            new UpdateCircle($inputs['id'], $actor = [], $inputs, $ipAddress)
         );
 
         // 返回结果

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Commands\Circle;
 
+use App\Repositories\CircleRepository;
 use Exception;
 use App\Models\Circle;
 use App\Events\Circle\Saving;
@@ -74,39 +75,34 @@ class UpdateCircle
      * @return Circle
      * @throws Exception
      */
-    public function handle(BusDispatcher $bus, EventDispatcher $events)
+    public function handle(BusDispatcher $bus, EventDispatcher $events, CircleRepository $repository, CircleValidator $validator)
     {
         $this->events = $events;
 
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        $circle = $repository->findOrFail($this->circleId, $this->actor);
 
-        // 初始圈子数据
-        $circle = Circle::update(
-            $this->data['name'],
-            $this->data['icon'],
-            $this->data['description'],
-            $this->data['property'],
-            $this->ipAddress
-        );
+        // 判断有没有权限执行此操作
+        // $this->assertCan($this->actor, 'updateCircle', $circle);
+
+        if (isset($this->data['color'])) {
+            $circle->color = $this->data['color'];
+        }
 
         // 触发钩子事件
         $this->events->dispatch(
             new Saving($circle, $this->actor, $this->data)
         );
 
+        // 分发创建圈子扩展信息的任务
+        $bus->dispatch(
+            new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
+        );
+
+        // 验证参数
+        $validator->assertValid($circle->getDirty());
+
         // 保存圈子
         $circle->save();
-
-        // 分发创建圈子扩展信息的任务
-        try {
-            $bus->dispatch(
-                new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
-            );
-        } catch (Exception $e) {
-            $circle->delete();
-            throw $e;
-        }
 
         // 调用钩子事件
         $this->dispatchEventsFor($circle);

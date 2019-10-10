@@ -11,11 +11,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * 与模型关联的数据表.

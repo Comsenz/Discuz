@@ -89,8 +89,6 @@ class CreateAttachment
             throw new UploadException;
         }
 
-        $model = $this->uploadTool->getSingleData();
-
         $extension = pathinfo($uploadFile->getClientFilename(), PATHINFO_EXTENSION);
 
         $uploadPath = $this->uploadTool->getUploadPath('', true);
@@ -107,10 +105,12 @@ class CreateAttachment
             throw new UploadException;
         }
 
+        $model = $this->uploadTool->getSingleData();
+
         // 初始附件数据
         $attachment = Attachment::creation(
             0,// $this->actor,
-            $model->id,
+            $model->id?:0,
             $uploadName,
             $uploadPath,
             $uploadFile->getClientFilename(),

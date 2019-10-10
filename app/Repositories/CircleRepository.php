@@ -10,9 +10,11 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use Discuz\Foundation\AbstractRepository;
 use App\Models\Circle;
+use Illuminate\Database\Eloquent\Model;
 
-class CircleRepository
+class CircleRepository extends AbstractRepository
 {
 
     /**
@@ -24,5 +26,23 @@ class CircleRepository
     {
         return Circle::query();
     }
+
+    /**
+     * Find a user by ID, optionally making sure it is visible to a certain
+     * user, or throw an exception.
+     *
+     * @param int $id
+     * @param User $actor
+     * @return \Flarum\Group\Group
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function findOrFail($id, Model $actor = null)
+    {
+        $query = Circle::where('id', $id);
+
+        return $this->scopeVisibleTo($query, $actor)->firstOrFail();
+    }
+
 
 }

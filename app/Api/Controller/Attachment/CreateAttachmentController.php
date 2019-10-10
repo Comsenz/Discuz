@@ -13,6 +13,7 @@ namespace App\Api\Controller\Attachment;
 
 use App\Api\Serializer\AttachmentSerializer;
 use App\Commands\Attachment\CreateAttachment;
+use App\Tools\AttachmentUploadTool;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -45,11 +46,13 @@ class CreateAttachmentController extends AbstractCreateController
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        $inputs['file'] = $file;
+        $uploadTool = $this->app->make(AttachmentUploadTool::class);
+
+        $uploadTool->setFile($file);
 
         // 处理上传的圈子图片
         $data = $this->bus->dispatch(
-            new CreateAttachment($actor = [], $inputs, $ipAddress)
+            new CreateAttachment($actor = [], $uploadTool, $ipAddress)
         );
 
         // 返回结果

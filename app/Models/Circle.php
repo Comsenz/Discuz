@@ -12,6 +12,7 @@ namespace App\Models;
 
 use App\Events\Circle\Created;
 use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 class Circle extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * 与模型关联的数据表.

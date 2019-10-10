@@ -8,11 +8,11 @@ declare(strict_types=1);
  *      Id: CircleServiceProvider.php 28830 2019-09-26 14:16 chenkeke $
  */
 
-namespace App\ServiceProviders;
+namespace App\Providers;
 
-use App\Commands\Attachment\Attach;
 use Discuz\Repository\RepositoryInterface;
 use Discuz\Foundation\AbstractServiceProvider;
+use App\Policies\CirclePolicy;
 
 class CircleServiceProvider extends AbstractServiceProvider
 {
@@ -36,10 +36,10 @@ class CircleServiceProvider extends AbstractServiceProvider
         /**
          * 事件处理类
          */
-        // $events = $this->app->make('events');
+        $events = $this->app->make('events');
 
         // 订阅事件
-        // $events->subscribe(DiscussionMetadataUpdater::class);
+        $events->subscribe(CirclePolicy::class);
 
         // 监听事件
         // $events->listen(
