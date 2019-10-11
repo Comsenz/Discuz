@@ -35,6 +35,7 @@ $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\
  | Payment
  |--------------------------------------------------------------------------
  */
+$route->post('/pay/notify', 'pay.notify', ApiController\PayNotifyController::class);
 $route->post('/pay/order', 'pay.order', ApiController\PayOrderController::class);
 $route->get('/pay/qrcode', 'pay.qrcode', ApiController\PayQrcodeController::class);
 $route->get('/pay/qr/img', 'pay.qr.img', ApiController\PayQrImgController::class);
