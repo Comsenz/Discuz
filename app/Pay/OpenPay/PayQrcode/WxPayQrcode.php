@@ -1,18 +1,18 @@
 <?php
 namespace App\Pay\OpenPay\PayQrcode;
 
-use App\Pay\PhpQrCode\QRFactory;
 use App\Pay\WxPayApi\WxPayApi;
-use App\Pay\OpenPay\Config\WxPayConfig;
 use App\Pay\WxPayApi\WxPayData\WxPayBizPayUrl;
+use App\Pay\PhpQrCode\QRFactory;
+use App\Pay\OpenPay\Config\WxPayConfig;
 
 class WxPayQrcode implements PayQrcodeInterface {
 	
 	
 	public function run($scene, $product_type, $product_id, $print_img=true) {
 		
-		$notify = new NativePay();
-		$url1 = $notify->GetPrePayUrl("123456789");
+// 		$notify = new NativePay();
+// 		$url1 = $notify->GetPrePayUrl("123456789");
 		
 		$objPayApi = new WxPayApi();
 		$objPayConf = new WxPayConfig();

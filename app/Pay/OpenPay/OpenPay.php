@@ -18,7 +18,7 @@ class OpenPay
 	public function payQrcode($platform, $scene, $product_type, $product_id, $print=true)
 	{
 		
-		$clsName = 'xubin\\openpay\\PayQrcode\\' . $this->platfPrefixList[$platform] . 'PayQrcode';
+		$clsName = 'App\\Pay\\OpenPay\\PayQrcode\\' . $this->platfPrefixList[$platform] . 'PayQrcode';
 		return (new $clsName)->run($scene, $product_type, $product_id, $print);
 		
 	}
