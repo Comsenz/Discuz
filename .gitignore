@@ -5,5 +5,7 @@
 config/config.php
 /storage
 xubin/phpqrcode/temp/*
+.project
+.settings
 
 
