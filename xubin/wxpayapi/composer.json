@@ -1,0 +1,24 @@
+{
+	"name" : "xubin/wxpayapi",
+	"authors" : [{
+			"name" : "xubin",
+			"email" : "xubin727@163.com",
+			"role" : "PHP码农"
+		}
+	],
+	"description" : "基于微信官方SDK的微信支付API封装",
+	"version" : "3.0.10",
+	"license" : "MIT",
+	"minimum-stability" : "dev",
+	"autoload" : {
+		"psr-4" : {
+			"xubin\\wxpayapi" : "xubin/wxpayapi"
+		}
+	},
+	"autoload-dev" : {
+		"psr-4" : {
+			"xubin\\wxpayapi" : "xubin/wxpayapi"
+		}
+	},
+	"type" : "package"
+}
