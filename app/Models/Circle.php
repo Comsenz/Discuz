@@ -82,8 +82,13 @@ class Circle extends Model
      * @param $ipAddress   创建的IP地址
      * @return static
      */
-    public static function creation($name, $icon, $description, $property, $ipAddress)
-    {
+    public static function creation(
+        $name,
+        $icon,
+        $description,
+        $property,
+        $ipAddress
+    ) {
         // 实例一个圈子模型
         $circle = new static;
 

@@ -54,8 +54,7 @@ class CreateAttachment
      * @param UploadTool            $uploadTool 上传附件的工具.
      * @param string                $ipAddress  请求来源的IP地址.
      */
-    public function __construct
-    (
+    public function __construct(
         $actor,
         UploadTool $uploadTool,
         string $ipAddress
@@ -101,7 +100,7 @@ class CreateAttachment
 
         $res = $this->uploadTool->saveFile($uploadPath, $uploadName);
 
-        if (!$res){
+        if (!$res) {
             throw new UploadException;
         }
 

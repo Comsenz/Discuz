@@ -104,8 +104,7 @@ class CreateCircle
             throw $e;
         }
 
-        if ($this->data['file'] instanceof UploadedFileInterface)
-        {
+        if ($this->data['file'] instanceof UploadedFileInterface) {
             $uploadTool->setFile($this->data['file']);
             $uploadTool->setSingleData($circle);
 

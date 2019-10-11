@@ -75,8 +75,12 @@ class UpdateCircle
      * @return Circle
      * @throws Exception
      */
-    public function handle(BusDispatcher $bus, EventDispatcher $events, CircleRepository $repository, CircleValidator $validator)
-    {
+    public function handle(
+        BusDispatcher $bus,
+        EventDispatcher $events,
+        CircleRepository $repository,
+        CircleValidator $validator
+    ) {
         $this->events = $events;
 
         $circle = $repository->findOrFail($this->circleId, $this->actor);

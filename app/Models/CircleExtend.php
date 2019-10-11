@@ -82,8 +82,13 @@ class CircleExtend extends Model
      * @param $ipAddress  创建的IP地址
      * @return static
      */
-    public static function create($circle_id, $type, $price, $share_rule, $ipAddress)
-    {
+    public static function create(
+        $circle_id,
+        $type,
+        $price,
+        $share_rule,
+        $ipAddress
+    ) {
         // 实例一个圈子扩展模型
         $circleExtend = new static;
 
@@ -91,7 +96,12 @@ class CircleExtend extends Model
         $circleExtend->circle_id = $circle_id;
         $circleExtend->type = $type;
         $circleExtend->price = $price;
-        $circleExtend->share_rule = $share_rule;
+        $circleExtend->indate_type = $share_rule;
+        $circleExtend->indate_time = $share_rule;
+        $circleExtend->join_circle_ratio_master = $share_rule;
+        $circleExtend->read_thread_ratio_master = $share_rule;
+        $circleExtend->give_thread_ratio_master = $share_rule;
+        $circleExtend->give_thread_ratio_admin = $share_rule;
         $circleExtend->ip = $ipAddress;
 
         // 暂存需要执行的事件
