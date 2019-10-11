@@ -4,7 +4,7 @@
 /.idea
 config/config.php
 /storage
-xubin/phpqrcode/temp/*
+xubin/phpqrcode/temp/tst*.png
 .project
 .settings
 
