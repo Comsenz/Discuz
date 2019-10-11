@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @package App\Models
+ */
 class User extends Model {
 
     public $timestamps = false;

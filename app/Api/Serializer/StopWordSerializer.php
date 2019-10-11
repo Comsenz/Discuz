@@ -9,23 +9,32 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\StopWord;
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class StopWordSerializer extends AbstractSerializer
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $type = 'StopWord';
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param StopWord $model
+     */
     public function getDefaultAttributes($model)
     {
         return [
-            'id' => $model->id,
-            'user_id' => $model->user_id,
-            'type' => $model->type,
-            'class' => $model->class,
-            'find' => $model->find,
+            'id'          => (int) $model->id,
+            'user_id'     => (int) $model->user_id,
+            'ugc'         => $model->ugc,
+            'username'    => $model->username,
+            'find'        => $model->find,
             'replacement' => $model->replacement,
-            'create_at' => $model->create_at,
-            'update_at' => $model->update_at,
+            'created_at'  => $this->formatDate($model->created_at),
+            'updated_at'  => $this->formatDate($model->updated_at),
         ];
     }
 }

@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $user_id
- * @property string $type
- * @property string $class
+ * @property string $ugc
+ * @property string $username
  * @property string $find
  * @property string $replacement
  * @property Carbon $created_at
@@ -33,20 +33,20 @@ class StopWord extends Model
     /**
      * Create a new stop word.
      *
-     * @param string $type
-     * @param string $class
+     * @param string $ugc
+     * @param string $username
      * @param string $find
      * @param string $replacement
      * @param User $user
      * @return static
      */
-    public static function build($type, $class, $find, $replacement, $user)
+    public static function build($ugc, $username, $find, $replacement, $user)
     {
         $stopWord = new static;
 
         $stopWord->user_id = $user->id;
-        $stopWord->type = $type;
-        $stopWord->class = $class;
+        $stopWord->ugc = $ugc;
+        $stopWord->username = $username;
         $stopWord->find = $find;
         $stopWord->replacement = $replacement;
 

@@ -4,7 +4,7 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateStopWord.php xxx 2019-10-09 15:50:00 LiuDongdong $
+ *      $Id: EditStopWord.php xxx 2019-10-10 16:47:00 LiuDongdong $
  */
 
 namespace App\Commands\StopWord;
@@ -16,9 +16,16 @@ use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 
-class CreateStopWord
+class EditStopWord
 {
     use EventsDispatchTrait;
+
+    /**
+     * The ID of the stop word to edit.
+     *
+     * @var int
+     */
+    public $stopWordId;
 
     /**
      * The user performing the action.
@@ -35,12 +42,14 @@ class CreateStopWord
     public $data;
 
     /**
+     * @param int $stopWordId The ID of the stop word to edit.
      * @param User $actor The user performing the action.
      * @param array $data The attributes of the new group.
      */
-    public function __construct($actor, array $data)
+    public function __construct($stopWordId, $actor, array $data)
     {
         // TODO: User $actor
+        $this->stopWordId = $stopWordId;
         $this->actor = $actor;
         $this->data = $data;
     }
@@ -56,13 +65,12 @@ class CreateStopWord
         // TODO: 权限验证
         // $this->assertCan($this->actor, 'startDiscussion');
 
-        $stopWord = StopWord::build(
-            Arr::get($this->data, 'ugc'),
-            Arr::get($this->data, 'username'),
-            Arr::get($this->data, 'find'),
-            Arr::get($this->data, 'replacement'),
-            $this->actor
-        );
+        $stopWord = StopWord::findOrFail($this->stopWordId);
+
+        $stopWord->ugc = Arr::get($this->data, 'ugc');
+        $stopWord->username = Arr::get($this->data, 'username');
+        $stopWord->find = Arr::get($this->data, 'find');
+        $stopWord->replacement = Arr::get($this->data, 'replacement');
 
         $this->events->dispatch(
             new Saving($stopWord, $this->actor, $this->data)
