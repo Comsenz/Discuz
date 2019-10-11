@@ -1,0 +1,23 @@
+# Change YOUR_TOKEN to your prerender token
+# Change http://example.com (at the end of the last RewriteRule) to your website url
+
+<IfModule mod_headers.c>
+    RequestHeader set X-Prerender-Token "YOUR_TOKEN"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    <IfModule mod_proxy_http.c>
+        RewriteCond %{HTTP_USER_AGENT} googlebot|bingbot|yandex|baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora\ link\ preview|showyoubot|outbrain|pinterest\/0\.|pinterestbot|slackbot|vkShare|W3C_Validator [NC,OR]
+		RewriteCond %{QUERY_STRING} _escaped_fragment_
+        
+		# Only proxy the request to Prerender if it's a request for HTML
+		RewriteRule ^(?!.*?(\.js|\.css|\.xml|\.less|\.png|\.jpg|\.jpeg|\.gif|\.pdf|\.doc|\.txt|\.ico|\.rss|\.zip|\.mp3|\.rar|\.exe|\.wmv|\.doc|\.avi|\.ppt|\.mpg|\.mpeg|\.tif|\.wav|\.mov|\.psd|\.ai|\.xls|\.mp4|\.m4a|\.swf|\.dat|\.dmg|\.iso|\.flv|\.m4v|\.torrent|\.ttf|\.woff|\.svg))(.*) http://localhost:3000/http://local.test.discuz.com$2 [P,L]
+
+		RewriteRule ^(/|)$ /index.html [PT,L]
+		RewriteRule ^(/site|/v2|/assets|/font|/static|/js|/css|/images|/favicon\.ico|/crossdomain\.xml|/upload|/html).* $0 [PT,L]
+		RewriteCond %{QUERY_STRING} ^(.*)$
+		RewriteRule ^([^\?]*)$  /index.html?c=$1&%1 [L]
+    </IfModule>
+</IfModule>

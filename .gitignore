@@ -2,3 +2,5 @@
 /vendor
 /composer.lock
 /.idea
+config/config.php
+/storage

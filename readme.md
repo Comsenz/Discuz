@@ -11,7 +11,7 @@
 <a href="https://packagist.org/packages/comsenz/discuz"><img src="https://poser.pugx.org/comsenz/discuz/license.svg" alt="License"></a>
 </p>
 
-## ## 关于 Discuz X5.0
+## ## 关于 Discuz！2020
 
 **[Discuz](http://www.discuz.net/)
 
