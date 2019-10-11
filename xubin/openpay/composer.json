@@ -1,0 +1,22 @@
+{
+	"name" : "xubin/openpay",
+	"authors" : [{
+			"name" : "xubin",
+			"email" : "xubin727@163.com",
+			"role" : "PHP码农"
+		}
+	],
+	"description" : "通用的支付工具集成。目前仅集成了微信支付",
+	"license" : "MIT",
+	"require" : {
+		"xubin/wxpayapi" : "dev-master@dev",
+		"xubin/phpqrcode" : "dev-master@dev"
+	},
+	"minimum-stability" : "dev",
+	"autoload" : {
+		"psr-4" : {
+			"xubin\\openpay\\" : "./"
+		}
+	},
+	"type" : "package"
+}

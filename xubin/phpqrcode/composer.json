@@ -1,0 +1,24 @@
+{
+	"name" : "xubin/phpqrcode",
+	"description" : "基于 phpqrcode.sourceforge.net 的PHP生成qrcode二维码",
+	"license" : "MIT",
+	"minimum-stability" : "dev",
+	"authors" : [{
+			"name" : "xubin",
+			"email" : "xubin727@163.com"
+		}
+	],
+	"support" : {
+		"email" : "xubin727@163.com"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"xubin\\phpqrcode\\" : "xubin/phpqrcode"
+		}
+	},
+	"keywords" : [
+		"php",
+		"qrcode"
+	],
+	"type" : "package"
+}
