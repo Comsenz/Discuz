@@ -4,3 +4,6 @@
 /.idea
 config/config.php
 /storage
+xubin/phpqrcode/temp/*
+
+
