@@ -60,7 +60,7 @@ class InvitePolicy extends AbstractPolicy
     public function findEditVisibility(Model $actor, Builder $query)
     {
         if ($actor->cannot('editInvite')) {
-            $query->where('circle_users.user_id', $actor->id);
+            $query->where('invites.user_id', $actor->id);
         }
     }
 
