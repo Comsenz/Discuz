@@ -112,7 +112,7 @@ class CreateCircle
             $attachment = $bus->dispatch(
                 new CreateAttachment($actor = [], $uploadTool, $this->ipAddress)
             );
-
+            dd($attachment);
             $circle->icon = $uploadTool->getFullName();
 
             // 保存圈子

@@ -41,3 +41,13 @@ $route->get('/pay/qrcode', 'pay.qrcode', ApiController\Pay\PayQrcodeController::
 $route->get('/pay/qr/img', 'pay.qr.img', ApiController\Pay\PayQrImgController::class);
 $route->get('/pay/test', 'pay.test', ApiController\Pay\PayTestController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Invites
+|--------------------------------------------------------------------------
+*/
+$route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
+$route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
+$route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
+$route->patch('/invites', 'invites.update', ApiController\Invite\UpdateInviteController::class);
+$route->delete('/invites', 'invites.delete', ApiController\Invite\DeleteInviteController::class);

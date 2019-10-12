@@ -5,35 +5,32 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: UpdateCircle.php 28830 2019-09-26 10:09 chenkeke $
+ *      Id: UpdateInvite.php 28830 2019-10-12 17:16 chenkeke $
  */
 
-namespace App\Commands\Circle;
+namespace App\Commands\Invite;
 
+
+use App\Events\Invite\Saving;
 use App\Models\User;
-use App\Repositories\CircleRepository;
-use App\Validators\CircleValidator;
-use Exception;
-use App\Models\Circle;
-use App\Events\Circle\Saving;
-use App\Commands\CircleExtend\CreateCircleExtend;
+use App\Repositories\InviteRepository;
+use App\Validators\InviteValidator;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 
-class UpdateCircle
+class UpdateInvite
 {
     use EventsDispatchTrait;
 
     /**
-     * 执行操作的圈子id.
+     * 执行操作的id.
      *
      * @var int
      */
-    public $circleId;
+    public $inviteId;
 
-   /**
+    /**
      * 执行操作的用户.
      *
      * @var User
@@ -57,14 +54,14 @@ class UpdateCircle
     /**
      * 初始化命令参数
      *
-     * @param int $circleId 执行操作的圈子id
+     * @param int $inviteId 执行操作的id
      * @param User $actor 执行操作的用户.
      * @param array $data 创建圈子的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
-    public function __construct($circleId, User $actor, array $data, string $ipAddress)
+    public function __construct($inviteId, User $actor, array $data, string $ipAddress)
     {
-        $this->circleId = $circleId;
+        $this->inviteId = $inviteId;
         $this->actor = $actor;
         $this->data = $data;
         $this->ipAddress = $ipAddress;
@@ -75,47 +72,42 @@ class UpdateCircle
      *
      * @param BusDispatcher $bus
      * @param EventDispatcher $events
-     * @param CircleRepository $repository
-     * @param CircleValidator $validator
+     * @param InviteRepository $repository
+     * @param InviteValidator $validator
      * @return \Flarum\Group\Group
      */
     public function handle(
         BusDispatcher $bus,
         EventDispatcher $events,
-        CircleRepository $repository,
-        CircleValidator $validator
+        InviteRepository $repository,
+        InviteValidator $validator
     ) {
         $this->events = $events;
-dd($this->actor);
-        $circle = $repository->findOrFail($this->circleId, $this->actor);
-        dd($circle);
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'updateCircle', $circle);
 
-        if (isset($this->data['color'])) {
-            $circle->color = $this->data['color'];
+        $invite = $repository->findOrFail($this->inviteId, $this->actor, 'findEdit');
+
+        // 判断有没有权限执行此操作
+        // $this->assertCan($this->actor, 'updateInvite', $invite);
+
+        if (isset($this->data['status'])) {
+            $invite->status = $this->data['status'];
         }
 
         // 触发钩子事件
         $this->events->dispatch(
-            new Saving($circle, $this->actor, $this->data)
-        );
-
-        // 分发创建圈子扩展信息的任务
-        $bus->dispatch(
-            new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
+            new Saving($invite, $this->actor, $this->data)
         );
 
         // 验证参数
-        $validator->assertValid($circle->getDirty());
+        $validator->assertValid($invite->getDirty());
 
         // 保存圈子
-        $circle->save();
+        $invite->save();
 
         // 调用钩子事件
-        $this->dispatchEventsFor($circle);
+        $this->dispatchEventsFor($invite);
 
         // 返回数据对象
-        return $circle;
+        return $invite;
     }
 }

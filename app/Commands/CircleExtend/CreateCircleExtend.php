@@ -81,11 +81,17 @@ class CreateCircleExtend
         // $this->assertCan($this->actor, 'createCircleExtend');
 
         // 初始圈子扩展数据
-        $circleExtend = CircleExtend::create(
+        $circleExtend = CircleExtend::creation(
             $this->circleId,
             $this->data['type'],
             $this->data['price'],
-            $this->data['share_rule'],
+            $this->data['indate_type'],
+            $this->data['indate_time'],
+            $this->data['join_circle_ratio_master'],
+            $this->data['read_thread_ratio_master'],
+            $this->data['read_thread_ratio_admin'],
+            $this->data['give_thread_ratio_master'],
+            $this->data['give_thread_ratio_admin'],
             $this->ipAddress
         );
 

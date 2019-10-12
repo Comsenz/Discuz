@@ -44,42 +44,25 @@ class CirclePolicy extends AbstractPolicy
      */
     public function findVisibility(Model $actor, Builder $query)
     {
+        // 当前用户是否有权限查看圈子
         if ($actor->cannot('viewDiscussions')) {
             $query->whereRaw('FALSE');
             return;
         }
-
-        // 默认隐藏私人讨论.
-        $query->where(function ($query) use ($actor) {
-            $query->where('discussions.is_private', false)
-                ->orWhere(function ($query) use ($actor) {
-                    $this->events->dispatch(
-                        new ScopeModelVisibility($actor, $query, 'findPrivate')
-                    );
-                });
-        });
-
-        // 隐藏隐藏的讨论，除非他们是当前的作者或当前用户具有查看隐藏讨论的权限。
-        if (! $actor->hasPermission('discussion.hide')) {
+var_dump($actor);die;
+        // 隐藏私密圈子，除非他们是圈子成员或当前用户具有查看私密圈子的权限。
+        if (!$actor->hasPermission('circles.private')) {
             $query->where(function ($query) use ($actor) {
-                $query->whereNull('discussions.hidden_at')
-                    ->orWhere('discussions.user_id', $actor->id)
+                $query->whereIn('circles.property', [0, 1])
+                    ->orWhereExists(function ($query) use ($actor) {
+                        $query->selectRaw('1')
+                            ->from('circle_users')
+                            ->where('circle_users.user_id', $actor->id)
+                            ->whereColumn('circles.id', 'circle_users.circle_id');
+                    })
                     ->orWhere(function ($query) use ($actor) {
                         $this->events->dispatch(
                             new ScopeModelVisibility($actor, $query, 'hide')
-                        );
-                    });
-            });
-        }
-
-        // 隐藏不带注释的讨论，除非它们是由当前用户，或者允许用户编辑讨论的帖子.
-        if (! $actor->hasPermission('discussion.editPosts')) {
-            $query->where(function ($query) use ($actor) {
-                $query->where('discussions.comment_count', '>', 0)
-                    ->orWhere('discussions.user_id', $actor->id)
-                    ->orWhere(function ($query) use ($actor) {
-                        $this->events->dispatch(
-                            new ScopeModelVisibility($actor, $query, 'editPosts')
                         );
                     });
             });

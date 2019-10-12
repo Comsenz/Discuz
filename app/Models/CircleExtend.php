@@ -21,6 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property 收费金额 price
  * @property 分成规则 share_rule
  * @property 创建的IP地址 ip
+ * @property 分成规则 indate_type
+ * @property 有效时间 indate_time
+ * @property 加入圈子站长分成比例 join_circle_ratio_master
+ * @property 看帖站长分成比例 read_thread_ratio_master
+ * @property 看帖圈主分成比例 read_thread_ratio_admin
+ * @property 打赏帖子站长分成比例 give_thread_ratio_master
+ * @property 打赏帖子圈主分成比例 give_thread_ratio_admin
  */
 class CircleExtend extends Model
 {
@@ -75,18 +82,30 @@ class CircleExtend extends Model
     /**
      * 创建圈子扩展数据.
      *
-     * @param $circle_id  圈子ID
-     * @param $type       收费类型
-     * @param $price      收费金额
-     * @param $share_rule 分成规则
-     * @param $ipAddress  创建的IP地址
+     * @param $circle_id 圈子ID
+     * @param $type 收费类型
+     * @param $price 收费金额
+     * @param $indate_type 有效期类型
+     * @param $indate_time 有效时间
+     * @param $join_circle_ratio_master 加入圈子站长分成比例
+     * @param $read_thread_ratio_master 看帖站长分成比例
+     * @param $read_thread_ratio_admin 看帖圈主分成比例
+     * @param $give_thread_ratio_master 打赏帖子站长分成比例
+     * @param $give_thread_ratio_admin 打赏帖子圈主分成比例
+     * @param $ipAddress 创建的IP地址
      * @return static
      */
-    public static function create(
+    public static function creation(
         $circle_id,
         $type,
         $price,
-        $share_rule,
+        $indate_type,
+        $indate_time,
+        $join_circle_ratio_master,
+        $read_thread_ratio_master,
+        $read_thread_ratio_admin,
+        $give_thread_ratio_master,
+        $give_thread_ratio_admin,
         $ipAddress
     ) {
         // 实例一个圈子扩展模型
@@ -96,12 +115,13 @@ class CircleExtend extends Model
         $circleExtend->circle_id = $circle_id;
         $circleExtend->type = $type;
         $circleExtend->price = $price;
-        $circleExtend->indate_type = $share_rule;
-        $circleExtend->indate_time = $share_rule;
-        $circleExtend->join_circle_ratio_master = $share_rule;
-        $circleExtend->read_thread_ratio_master = $share_rule;
-        $circleExtend->give_thread_ratio_master = $share_rule;
-        $circleExtend->give_thread_ratio_admin = $share_rule;
+        $circleExtend->indate_type = $indate_type;
+        $circleExtend->indate_time = $indate_time;
+        $circleExtend->join_circle_ratio_master = $join_circle_ratio_master;
+        $circleExtend->read_thread_ratio_master = $read_thread_ratio_master;
+        $circleExtend->read_thread_ratio_admin = $read_thread_ratio_admin;
+        $circleExtend->give_thread_ratio_master = $give_thread_ratio_master;
+        $circleExtend->give_thread_ratio_admin = $give_thread_ratio_admin;
         $circleExtend->ip = $ipAddress;
 
         // 暂存需要执行的事件

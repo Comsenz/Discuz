@@ -4,7 +4,7 @@ CREATE TABLE `pre_circles` (
     `name` char(50) NOT NULL DEFAULT '' COMMENT '圈子名称',
     `icon` varchar(200) NOT NULL DEFAULT '' COMMENT '圈子图标',
     `description` varchar(200) NOT NULL DEFAULT '' COMMENT '圈子介绍',
-    `property` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '属性：公开、非公开、私密',
+    `property` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '属性：0:公开、1:非公开、2:私密',
     `threads` int(10) NOT NULL DEFAULT '0' COMMENT '主题数',
     `digestposts` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '精华数',
     `membernum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成员数',
@@ -21,7 +21,7 @@ CREATE TABLE `pre_circle_extends` (
     `circle_id` int(11) unsigned NOT NULL COMMENT '圈子ID',
     `type` char(10) NOT NULL DEFAULT '' COMMENT '类型:月、年等',
     `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '进圈价格',
-    `indate_type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '属性：永久、固定日期、推移日期',
+    `indate_type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '属性：0:永久、1:固定日期、2:推移日期',
     `indate_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间',
     `join_circle_ratio_master` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '加入圈子站长分成比例',
     `read_thread_ratio_master` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '看帖站长分成比例',
@@ -31,7 +31,8 @@ CREATE TABLE `pre_circle_extends` (
     `ip` char(15) NOT NULL DEFAULT '0' COMMENT '创建IP',
     `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
     `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `circle_id` (`circle_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子扩展表';
 
 -- 圈子用户表
@@ -44,7 +45,9 @@ CREATE TABLE `pre_circle_users` (
     `endline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '圈子到期时间',
     `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
     `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `circle_id` (`circle_id`),
+    KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子用户表';
 
 -- 圈子用户组表
@@ -69,21 +72,20 @@ CREATE TABLE `pre_circle_tags` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子主题标签表';
 
--- 圈子邀请码表
-CREATE TABLE `pre_circle_invites` (
+-- 邀请码表
+CREATE TABLE `pre_invites` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-    `circle_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '圈子ID',
-    `circle_group_id` int(11) unsigned NOT NULL COMMENT '进圈后的用户组ID',
+    `user_group_id` int(11) unsigned NOT NULL COMMENT '默认用户组ID',
     `code` char(32) NOT NULL COMMENT '邀请码',
     `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请码生效时间',
-    `endline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请码结束时间',
+    `endtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请码结束时间',
     `user_id` int(11) unsigned NOT NULL COMMENT '邀请用户ID',
     `to_user_id` int(11) unsigned NOT NULL COMMENT '被邀请用户ID',
     `status` tinyint(1) unsigned NOT NULL COMMENT '邀请码状态',
     `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
     `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='圈子主题标签表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邀请码表';
 
 -- 主题表
 CREATE TABLE `pre_threads` (

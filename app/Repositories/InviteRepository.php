@@ -5,17 +5,18 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CircleRepository.php 28830 2019-09-25 11:45 chenkeke $
+ *      Id: InviteRepository.php 28830 2019-10-12 15:58 chenkeke $
  */
 
 namespace App\Repositories;
 
+
+use App\Models\Invite;
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
-use App\Models\Circle;
 use Illuminate\Database\Eloquent\Model;
 
-class CircleRepository extends AbstractRepository
+class InviteRepository extends AbstractRepository
 {
 
     /**
@@ -25,7 +26,7 @@ class CircleRepository extends AbstractRepository
      */
     public static function query()
     {
-        return Circle::query();
+        return Invite::query();
     }
 
     /**
@@ -40,7 +41,7 @@ class CircleRepository extends AbstractRepository
      */
     public function findOrFail($id, User $actor = null, $ability = 'find')
     {
-        $query = Circle::where('id', $id);
+        $query = Invite::where('id', $id);
 
         return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
     }

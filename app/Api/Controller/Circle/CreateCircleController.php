@@ -35,20 +35,18 @@ class CreateCircleController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+
         // 获取请求的参数
         $inputs = $request->getParsedBody();
-
-        // 获取上传的图标
-        $file = Arr::get($request->getUploadedFiles(), 'icon');
 
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        $inputs['file'] = $file;
-
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new CreateCircle($actor = [], $inputs, $ipAddress)
+            new CreateCircle($actor, $inputs->toArray(), $ipAddress)
         );
 
         // 返回结果
