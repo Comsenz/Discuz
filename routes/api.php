@@ -1,12 +1,9 @@
 <?php
 use App\Api\Controller as ApiController;
+
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/add', '', ApiController\Users\AddUsersController::class);
 $route->post('/login', '', ApiController\Users\LoginUsersController::class);
-$route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
-$route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
-$route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleController::class);
-$route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
 $route->post('/settings', 'settings', ApiController\SetSettingsController::class);
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +40,16 @@ $route->get('/pay/test', 'pay.test', ApiController\Pay\PayTestController::class)
 
 /*
 |--------------------------------------------------------------------------
+| Circles
+|--------------------------------------------------------------------------
+*/
+$route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
+$route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
+$route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleController::class);
+$route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Invites
 |--------------------------------------------------------------------------
 */
@@ -51,3 +58,19 @@ $route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceIn
 $route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
 $route->patch('/invites', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invites', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Classify
+|--------------------------------------------------------------------------
+*/
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->get('/classify', 'classify.list', ApiController\Classify\ListClassifyController::class);
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->get('/classify/{id}', 'classify.resource', ApiController\Classify\ResourceClassifyController::class);
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->post('/classify', 'classify.create', ApiController\Classify\CreateClassifyController::class);
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->patch('/classify', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->delete('/classify', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);

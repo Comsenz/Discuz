@@ -5,15 +5,14 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CircleValidator.php 28830 2019-10-11 11:10 chenkeke $
+ *      Id: ClassifyValidator.php 28830 2019-10-14 11:50 chenkeke $
  */
 
 namespace App\Validators;
 
-
 use Discuz\Foundation\AbstractValidator;
 
-class CircleValidator extends AbstractValidator
+class ClassifyValidator extends AbstractValidator
 {
     protected function getRules()
     {

@@ -11,7 +11,27 @@ declare(strict_types=1);
 namespace App\Validators;
 
 
-class InviteValidator
-{
+use Discuz\Foundation\AbstractValidator;
 
+class InviteValidator extends AbstractValidator
+{
+    protected function getRules()
+    {
+        return [
+            'name' => [
+                'required',
+                'min:1',
+                'max:10'
+            ],
+        ];
+    }
+
+    protected function getMessages()
+    {
+        return [
+            'name.required' => '不能为空',
+            'name.min' => '最少输入1个字',
+            'name.max' => '最多输入10个字'
+        ];
+    }
 }
