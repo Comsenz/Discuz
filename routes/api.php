@@ -24,28 +24,34 @@ $route->post('/login', '', ApiController\Users\LoginUsersController::class);
 | Threads
 |--------------------------------------------------------------------------
 */
+
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
+
 /*
 |--------------------------------------------------------------------------
 | StopWords
 |--------------------------------------------------------------------------
 */
+
 $route->get('/stop-words', 'stop-words.index', ApiController\StopWords\ListStopWordsController::class);
 $route->get('/stop-words/{id}', 'stop-words.resource', ApiController\StopWords\ResourceStopWordController::class);
 $route->post('/stop-words', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
+$route->post('/stop-words/batch', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
+$route->patch('/stop-words/', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
 $route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
+$route->delete('/stop-words', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
 $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
-
 
 /*
  |--------------------------------------------------------------------------
  | Payment
  |--------------------------------------------------------------------------
  */
+
 $route->post('/pay/notify', 'pay.notify', ApiController\Pay\PayNotifyController::class);
 $route->post('/pay/order', 'pay.order', ApiController\Pay\PayOrderController::class);
 $route->get('/pay/qrcode', 'pay.qrcode', ApiController\Pay\PayQrcodeController::class);
@@ -67,6 +73,7 @@ $route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleCo
 | Invites
 |--------------------------------------------------------------------------
 */
+
 $route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
@@ -78,6 +85,7 @@ $route->delete('/invites', 'invites.delete', ApiController\Invite\DeleteInviteCo
 | Classify
 |--------------------------------------------------------------------------
 */
+
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->get('/classify', 'classify.list', ApiController\Classify\ListClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)

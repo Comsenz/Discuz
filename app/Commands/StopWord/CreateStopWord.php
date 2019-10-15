@@ -14,7 +14,9 @@ use App\Models\StopWord;
 use App\Models\User;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\ValidationException;
 
 class CreateStopWord
 {
@@ -28,7 +30,7 @@ class CreateStopWord
     public $actor;
 
     /**
-     * The attributes of the new group.
+     * The attributes of the new stop word.
      *
      * @var array
      */
@@ -36,9 +38,9 @@ class CreateStopWord
 
     /**
      * @param User $actor The user performing the action.
-     * @param array $data The attributes of the new group.
+     * @param Collection $data The attributes of the new group.
      */
-    public function __construct($actor, array $data)
+    public function __construct($actor, Collection $data)
     {
         // TODO: User $actor
         $this->actor = $actor;
@@ -47,29 +49,39 @@ class CreateStopWord
 
     /**
      * @param EventDispatcher $events
+     * @param Validator $validator
      * @return StopWord
+     * @throws ValidationException
      */
-    public function handle(EventDispatcher $events)
+    public function handle(EventDispatcher $events, Validator $validator)
     {
         $this->events = $events;
 
         // TODO: 权限验证
         // $this->assertCan($this->actor, 'startDiscussion');
 
+        $validator = $validator->make($this->data->all(), [
+            'ugc' => 'required|in:{MOD},{BANNED},{REPLACE}',
+            'username' => 'required|in:{MOD},{BANNED},{REPLACE}',
+            'find' => 'required|unique:stop_words,find|between:1,200',
+            'replacement' => 'required|between:1,200',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         $stopWord = StopWord::build(
-            Arr::get($this->data, 'ugc'),
-            Arr::get($this->data, 'username'),
-            Arr::get($this->data, 'find'),
-            Arr::get($this->data, 'replacement'),
+            $this->data->get('ugc'),
+            $this->data->get('username'),
+            $this->data->get('find'),
+            $this->data->get('replacement'),
             $this->actor
         );
 
         $this->events->dispatch(
-            new Saving($stopWord, $this->actor, $this->data)
+            new Saving($stopWord, $this->actor, $this->data->all())
         );
-
-        // TODO: 数据验证
-        // $this->validator->assertValid($stopWord->getAttributes());
 
         $stopWord->save();
 

@@ -31,6 +31,11 @@ class StopWord extends Model
     use EventGeneratorTrait;
 
     /**
+     * @var array
+     */
+    protected $fillable = ['user_id', 'ugc', 'username', 'find', 'replacement'];
+
+    /**
      * Create a new stop word.
      *
      * @param string $ugc

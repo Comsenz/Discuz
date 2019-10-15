@@ -10,6 +10,7 @@
 namespace App\Api\Controller\StopWords;
 
 use App\Api\Serializer\StopWordSerializer;
+use App\Commands\StopWord\BatchCreateStopWord;
 use App\Commands\StopWord\CreateStopWord;
 use Discuz\Api\Controller\AbstractCreateController;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,13 +28,21 @@ class CreateStopWordController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
+        // TODO: $actor 权限验证 创建敏感词
         // $actor = $request->getAttribute('actor');
+        // $this->assertCan($actor, 'createWordList');
         $actor = new \stdClass();
         $actor->id = 1;
 
-        return $this->bus->dispatch(
-            new CreateStopWord($actor, $request->getParsedBody())
-        );
+        if (strrchr($request->getUri()->getPath(), '/') == '/batch') {
+            return $this->bus->dispatch(
+                new BatchCreateStopWord($actor, $request->getParsedBody())
+            );
+        } else {
+            return $this->bus->dispatch(
+                new CreateStopWord($actor, $request->getParsedBody())
+            );
+        }
+
     }
 }
