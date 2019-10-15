@@ -1,10 +1,24 @@
 <?php
+
 use App\Api\Controller as ApiController;
 
+/*
+|--------------------------------------------------------------------------
+| Site
+|--------------------------------------------------------------------------
+*/
+$route->post('/settings', 'settings', ApiController\SetSettingsController::class);
+$route->get('/siteinfo', 'siteinfo', ApiController\SiteInfoController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Users
+|--------------------------------------------------------------------------
+*/
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/add', '', ApiController\Users\AddUsersController::class);
 $route->post('/login', '', ApiController\Users\LoginUsersController::class);
-$route->post('/settings', 'settings', ApiController\SetSettingsController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Threads
