@@ -1,11 +1,14 @@
 /**
  * 模板实例化和个性化设置
  */
+
+import pcMobileChange from "../../template/default/config/pcMobileConfig";	//获取手机和移动端切换配置
+
 import Vue from 'vue';
-import baseTpl from "../../../extend/viewBase/baseTpl";
-import appConfig from "../../../../config/appConfig";
-import tplConfig from "./tplConfig";
+import baseTpl from "../../extend/viewBase/baseTpl";
+import tplConfig from "../viewConfig/tplConfig";
 import commonHelper from "commonHelper";
+import "../config/elementuiInit";						//初始化饿了么组件
 import "systemCommon.scss";
 
 
@@ -34,7 +37,7 @@ defaultConfig.pcToMobile = function(Router, to) {
 	var eventIsPhone = commonHelper.isWeixin().isPhone,
 		nowPath = nowPage.path,
 		pageIsPhone = nowPath.indexOf("m_") !== -1,
-		pcMobileChange = appConfig.pcMobileChange;
+		pcMobileChange = pcMobileChange;
 		
 	if(eventIsPhone !== pageIsPhone) {
 		var nowKey = pageIsPhone ? "mobilePath" : "pcPath",

@@ -1,6 +1,7 @@
 /**
  * 模板配置
  */
+import tplConfig from "../../template/default/viewConfig/tplConfig";         //获取配置信息
 
 export default {
   /**
@@ -10,19 +11,17 @@ export default {
    * site为模块名，index为页面名称，拼接后路径为site/index
    */
   template: {
-    site: {
+    global: {
       index: {
         comLoad: function (resolve) {
-          require(['../view/site/indexView'], resolve)
+          require(['../view/global/indexView'], resolve)
         },
         metaInfo: {
-          title: 'pc首页'
-        },
-        css: [],
-        js: ['/js/testselfjsload.js']
-      },
-      
-    }
+          title: '后台首页'
+        }
+      }, 
+    },
+    ...tplConfig.template
   },
 
   /**
@@ -30,7 +29,8 @@ export default {
    * @type {Array}
    */
   notNeedLogins: [
-    "site/index",
+    "site/index", 
+    "m_site/m_index",
+    ...tplConfig.notNeedLogins
   ]
-
 };

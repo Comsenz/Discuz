@@ -9,6 +9,20 @@ import appConfig from "../../config/appConfig";
 const appCommonH = {};
 
 /**
+ * [根据模块名称调用模块方法]
+ * @param  {[type]} _this [description]
+ * @param  {[type]} data  [description]
+ * @return {[type]}       [description]
+ */
+appCommonH.apiCallBack = function(_this, data) {
+    for(var key in data) {
+      if(_this[key+"CallBack"]) {
+          _this[key+"CallBack"](data[key]);
+      }
+    }  
+}
+
+/**
  * 根据参数对象和url拼接url
  * @param  {[type]} url    [不带参数的url]
  * @param  {[type]} urlObj [参数对象]

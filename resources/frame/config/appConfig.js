@@ -2,12 +2,11 @@
  * 全局配置
  */
 let apiConfig = require("./apiConfig.js");
-let pcMobileConfig = require("./pcMobileConfig.js");
 
 var appConfig = {
  	  port: '8883',                          //本地调试端口
     devHostName: 'local.test.discuz.com',  //本地调试域名
-  	devApiUrl: 'http://api.itv.cctv.com',   //本地调试接口域名
+  	devApiUrl: 'http://api.itv.cctv.com/api',   //本地调试接口域名
   	
   	baseUrl: '',                           //网站根目录
     apiBaseUrl: '',                        //网站根目录
@@ -21,10 +20,7 @@ var appConfig = {
     sourceV: new Date().getTime(),         //资源版本，打包时使用    
 
   	//接口列表
-  	apis: apiConfig,
-
-    //pc端和手机端页面对应互换
-    pcMobileChange: pcMobileConfig,
+  	apis: apiConfig
 }
 
 module.exports = appConfig

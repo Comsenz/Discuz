@@ -9,13 +9,12 @@ import jQuery from "jquery";
 window.$ = jQuery;
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
-import "./extend/viewBase/elementuiInit";						//初始化饿了么组件
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
-import appStore from "./template/default/store/index";							//vuex 初始化
+import appStore from "./admin/store/index";							//vuex 初始化
 
 /* start 设置引入的模板路径 start */
-import RConfig from "./template/default/viewConfig/tpl";					//获取路由对象
+import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 /* end 设置引入的模板路径 end */
 
 //实例化根目录

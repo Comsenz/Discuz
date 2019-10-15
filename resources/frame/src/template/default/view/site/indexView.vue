@@ -1,7 +1,7 @@
 <!-- 网站首页模板 -->
 
 <template>
-	<div class="site_index">
+	<div class="pc_index">
 		<h3>{{ title }}</h3>
 		<p>{{ description }}</p>
 		<p>
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import 'pcIndex.scss';
-import siteIndexCon from 'siteIndexCon';
+import '../../scss/pc/pcIndex.scss';
+import siteIndexCon from '../../controllers/site/indexCon';
 export default {
 	name: "siteIndex",
 	...siteIndexCon

@@ -42,7 +42,21 @@ export default {
 			}, function(error) {
 				console.error(error.msg);
 			});
-		}
+		},
+
+		module1CallBack: function() {
+
+		},
+
+		module2CallBack: function() {
+			
+		},
+
+		getModuleInfo: function() {
+			let data = {module1: {}, module2: {}};
+
+			this.appCommonH.apiCallBack(this, data);
+		}		
 	},
 
 	mounted: function() {

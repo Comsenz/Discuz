@@ -17,7 +17,7 @@ if (location.href.indexOf('local.') !== -1) {
   	appConfig.apiBaseUrl = appConfig.devApiUrl;
   	appConfig.uploadBaseUrl = appConfig.devApiUrl + appConfig.uploadPath;
 } else {
-	appConfig.apiBaseUrl = baseUrl;
+	appConfig.apiBaseUrl = baseUrl + appConfig.apiBasePath;
 	appConfig.uploadBaseUrl = baseUrl + appConfig.uploadPath;
 }
 appConfig.staticBaseUrl = appConfig.baseUrl + appConfig.staticPath;

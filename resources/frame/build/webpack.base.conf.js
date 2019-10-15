@@ -11,7 +11,7 @@ function resolve (dir) {
 }
 
 /* 添加模块搜索目录 */
-const searchRoots = require(path.resolve(__dirname, '../src/template/default/viewConfig/search.js'));
+const searchRoots = require(path.resolve(__dirname, '../src/admin/viewConfig/search.js'));
 
 module.exports = {
   context: path.resolve(__dirname, '../'),

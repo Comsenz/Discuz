@@ -168,7 +168,7 @@
 		sessionStorage.removeItem(this.getKey(key));
 	};
 
-	export default (new browserDb({
+	export default (new ({
 		DbName: "officeDb",
 		expires: 0 //默认为永久保存
 	}));
