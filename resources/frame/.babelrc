@@ -8,5 +8,5 @@
     }],
     "stage-2"
   ],
-  "plugins": ["transform-vue-jsx", "transform-runtime"]
+  "plugins": ["transform-es2015-modules-commonjs","transform-vue-jsx", "transform-runtime"]
 }
