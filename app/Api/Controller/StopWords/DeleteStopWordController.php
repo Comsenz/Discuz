@@ -23,7 +23,14 @@ class DeleteStopWordController extends AbstractDeleteController
      */
     public function delete(ServerRequestInterface $request)
     {
-        StopWord::findOrFail(Arr::get($request->getQueryParams(), 'id'))->delete();
+        // TODO: $actor 权限验证 删除敏感词
+        // $actor = $request->getAttribute('actor');
+        // $this->assertCan($actor, 'deleteStopWord');
+
+        $id = Arr::get($request->getQueryParams(), 'id');
+        $ids = $id ?: Arr::get($request->getParsedBody(), 'ids');
+
+        StopWord::destroy($ids);
 
         return new EmptyResponse(204);
     }
