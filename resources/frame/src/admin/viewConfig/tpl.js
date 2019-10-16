@@ -36,8 +36,7 @@ defaultConfig.pcToMobile = function(Router, to) {
 
 	var eventIsPhone = commonHelper.isWeixin().isPhone,
 		nowPath = nowPage.path,
-		pageIsPhone = nowPath.indexOf("m_") !== -1,
-		pcMobileChange = pcMobileChange;
+		pageIsPhone = nowPath.indexOf("m_") !== -1;
 		
 	if(eventIsPhone !== pageIsPhone) {
 		var nowKey = pageIsPhone ? "mobilePath" : "pcPath",
