@@ -9,6 +9,8 @@ use App\Api\Controller as ApiController;
 */
 $route->post('/settings', 'settings', ApiController\SetSettingsController::class);
 $route->get('/siteinfo', 'siteinfo', ApiController\SiteInfoController::class);
+$route->get('/groups', 'groups', ApiController\Group\ListGroupsController::class);
+$route->post('/groups', 'group.create', ApiController\Group\CreateGroupController::class);
 
 /*
 |--------------------------------------------------------------------------

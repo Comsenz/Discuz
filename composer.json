@@ -10,7 +10,7 @@
 	],
 	"license" : "MIT",
 	"require" : {
-		"php" : "^7.1.3",
+		"php" : "^7.2",
 		"discuz/core" : "dev-master"
 	},
 	"config" : {
@@ -21,16 +21,11 @@
 	"repositories" : [{
 			"type" : "path",
 			"url" : "./framework"
-		}, {
-			"type" : "path",
-			"url" : "./vendor"
 		}
 	],
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"require-dev" : {
-		"maximebf/debugbar" : "^1.15.0",
-		"filp/whoops" : "^2.5",
 		"symfony/var-dumper" : "^4.3"
 	},
 	"autoload" : {
