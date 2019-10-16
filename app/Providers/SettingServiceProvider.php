@@ -1,6 +1,6 @@
 <?php
 
-namespace Discuz\Setting;
+namespace App\Providers;
 
 use App\Settings\SettingsRepository;
 use Discuz\Contracts\Setting\SettingRepository;
