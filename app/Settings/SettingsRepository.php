@@ -5,7 +5,7 @@ namespace App\Settings;
 
 
 use Discuz\Contracts\Setting\SettingRepository as ContractsSettingRepository;
-use Illuminate\Cache\Repository;
+use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Support\Collection;
 
 class SettingsRepository implements ContractsSettingRepository
@@ -16,7 +16,7 @@ class SettingsRepository implements ContractsSettingRepository
 
     protected $settings = null;
 
-    public function __construct(Repository $cache)
+    public function __construct(Factory $cache)
     {
         $this->cache = $cache;
     }
