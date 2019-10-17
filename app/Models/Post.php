@@ -1,66 +1,72 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: Post.php 28830 2019-10-08 16:21 chenkeke $
+ *      $Id: Post.php xxx 2019-10-08 16:21 LiuDongdong $
  */
 
 namespace App\Models;
 
+use App\Events\Post\Created;
+use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $thread_id
+ * @property string $content
+ * @property string $ip
+ * @property int $comment_count
+ * @property int $like_count
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
+ * @property bool $is_first
+ * @property bool $is_approved
+ * @package App\Models
+ */
 class Post extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+    use SoftDeletes;
 
     /**
-     * 与模型关联的数据表.
+     * Create a new instance in reply to a thread.
      *
-     * @var string
+     * @param $threadId
+     * @param string $content
+     * @param int $userId
+     * @param $ip
+     * @param int $isFirst
+     * @return static
      */
-    protected $table = 'posts';
-
-    /**
-     * 该模型是否被自动维护时间戳.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
-     * 模型的日期字段的存储格式
-     *
-     * @var string
-     */
-    protected $dateFormat = 'U';
-
-    /**
-     * 存储时间戳的字段名
-     *
-     * @var string
-     */
-    const CREATED_AT = 'createtime';
-
-    /**
-     * 存储时间戳的字段名
-     *
-     * @var string
-     */
-    const UPDATED_AT = 'updatetime';
-
-    /**
-     * 模型的「启动」方法.
-     *
-     * @return void
-     */
-    public static function boot()
+    public static function reply($threadId, $content, $userId, $ip, $isFirst = 0)
     {
-        parent::boot();
+        $post = new static;
+
+        $post->created_at = Carbon::now();
+        $post->thread_id = $threadId;
+        $post->user_id = $userId;
+        $post->ip = $ip;
+        $post->is_first = $isFirst;
+
+        // Set content last, as the parsing may rely on other post attributes.
+        $post->content = $content;
+
+        $post->raise(new Created($post));
+
+        return $post;
+    }
+
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }
