@@ -2,10 +2,10 @@
 /vendor
 /composer.lock
 /.idea
-config/config.php
+/config/config.php
 /storage
-xubin/phpqrcode/temp/tst*.png
 .project
 .settings
+/node_modules
 
 
