@@ -36,7 +36,7 @@ class ListClassifyController extends AbstractListController
 
         $data = $this->searcher->apply(
             new ClassifySearch($actor, $inputs, ClassifyRepository::query())
-        )->search()->getResults();
+        )->search()->getMultiple();
 
         return $data;
     }
