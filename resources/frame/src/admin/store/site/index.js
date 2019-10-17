@@ -7,7 +7,8 @@ export default{
 	namespaced: true,
 	state: function() {
 		return {
-			loading: 0,		//loading状态，0为隐藏，非0显示		
+			loading: 0,		//loading状态，0为隐藏，非0显示
+      num:0
 		};
 	},
 	getters,

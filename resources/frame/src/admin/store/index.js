@@ -5,11 +5,13 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 import siteModule from "./site/index";
+import loginModule from './login/index';
 
 //实例化vuex
 const appStore = new Vuex.Store({
 	modules: {
-    site: siteModule
+    site: siteModule,
+    login: loginModule
 	}
 });
 

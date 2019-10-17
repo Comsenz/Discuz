@@ -19,9 +19,39 @@ export default {
         metaInfo: {
           title: '后台首页'
         }
-      }, 
+      },
     },
-    ...tplConfig.template
+    login:{
+      loginview:{
+        comLoad:function (resolve) {
+          require(['../view/login/loginView'],resolve)
+        },
+        metaInfo:{
+          title:'后台登录'
+        }
+      }
+    },
+    user:{
+      userview:{
+        comLoad:function (resolve) {
+          require(['../view/user/userView'],resolve)
+        },
+        metaInfo:{
+          title:'用户管理'
+        }
+      }
+    },
+    cont:{
+      contview:{
+        comLoad:function (resolve) {
+          require(['../view/cont/contView'],resolve)
+        },
+        metaInfo:{
+          title:'用户管理'
+        }
+      }
+    },
+    ...tplConfig.template,
   },
 
   /**
@@ -29,8 +59,8 @@ export default {
    * @type {Array}
    */
   notNeedLogins: [
-    "site/index", 
-    "m_site/m_index",
+    "site/index",
+    // 'login/loginView',
     ...tplConfig.notNeedLogins
   ]
 };
