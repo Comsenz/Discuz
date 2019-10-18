@@ -12,6 +12,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -39,7 +40,18 @@ class Thread extends Model
     use SoftDeletes;
 
     /**
-     * Set the discussion's last post details.
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_approved' => 'boolean',
+        'is_sticky' => 'boolean',
+        'is_essence' => 'boolean',
+    ];
+
+    /**
+     * Set the thread's last post details.
      *
      * @param Post $post
      * @return $this
@@ -50,5 +62,52 @@ class Thread extends Model
         $this->updated_at = $post->created_at;
 
         return $this;
+    }
+
+    /**
+     * Refresh a thread's last post details.
+     *
+     * @return $this
+     */
+    public function refreshLastPost()
+    {
+        /** @var Post $lastPost */
+        if ($lastPost = $this->replies()->latest()->first()) {
+            $this->setLastPost($lastPost);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Refresh the thread's post count.
+     *
+     * @return $this
+     */
+    public function refreshReplyCount()
+    {
+        $this->reply_count = $this->replies()->count();
+
+        return $this;
+    }
+
+    /**
+     * Define the relationship with the thread's publicly-visible posts.
+     *
+     * @return HasMany
+     */
+    public function replies()
+    {
+        return $this->posts()->where('is_approved', true);
+    }
+
+    /**
+     * Define the relationship with the thread's posts.
+     *
+     * @return HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

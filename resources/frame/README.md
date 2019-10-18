@@ -6,7 +6,7 @@
 		本地开发：npm run dev
 		打包上线：npm run build
 
-1.1 weiui文档
+1.1 weui文档
 	https://github.com/Tencent/weui/wiki/getting-started
 
 二、交互框架目录介绍

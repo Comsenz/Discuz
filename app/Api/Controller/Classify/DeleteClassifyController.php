@@ -15,6 +15,7 @@ use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Zend\Diactoros\Response\EmptyResponse;
 
 class DeleteClassifyController extends AbstractDeleteController
 {
@@ -33,6 +34,8 @@ class DeleteClassifyController extends AbstractDeleteController
         $this->bus->dispatch(
             new DeleteClassify($inputs['id'], $actor)
         );
+
+        return new EmptyResponse(204);
     }
 
     public function data(ServerRequestInterface $request, Document $document)

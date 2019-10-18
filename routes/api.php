@@ -35,6 +35,14 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 
 /*
 |--------------------------------------------------------------------------
+| Posts
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
+
+/*
+|--------------------------------------------------------------------------
 | StopWords
 |--------------------------------------------------------------------------
 */
@@ -68,14 +76,13 @@ $route->get('/pay/test', 'pay.test', ApiController\Pay\PayTestController::class)
 $route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
 $route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
 $route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleController::class);
-$route->delete('/circles', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
+$route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
 
 /*
 |--------------------------------------------------------------------------
 | Invites
 |--------------------------------------------------------------------------
 */
-
 $route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
@@ -87,7 +94,6 @@ $route->delete('/invites', 'invites.delete', ApiController\Invite\DeleteInviteCo
 | Classify
 |--------------------------------------------------------------------------
 */
-
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->get('/classify', 'classify.list', ApiController\Classify\ListClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
@@ -98,3 +104,12 @@ $route->middleware(App\Api\Middleware\Authentication::class)
     ->patch('/classify', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->delete('/classify', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Attachment
+|--------------------------------------------------------------------------
+*/
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
+

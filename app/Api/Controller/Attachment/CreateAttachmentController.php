@@ -37,11 +37,11 @@ class CreateAttachmentController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取请求的参数
-        $inputs = $request->getParsedBody();
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
 
         // 获取上传的图标
-        $file = Arr::get($request->getUploadedFiles(), 'icon');
+        $file = Arr::get($request->getUploadedFiles(), 'file');
 
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
@@ -52,7 +52,7 @@ class CreateAttachmentController extends AbstractCreateController
 
         // 处理上传的圈子图片
         $data = $this->bus->dispatch(
-            new CreateAttachment($actor = [], $uploadTool, $ipAddress)
+            new CreateAttachment($actor, $uploadTool, $ipAddress)
         );
 
         // 返回结果

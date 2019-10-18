@@ -84,7 +84,7 @@ class CreatePost
         // if ($discussion->post_number_index > 0) {
         //     $this->assertCan($actor, 'reply', $discussion);
         // }
-        $isFirst = empty($thread->last_posted_user_id) ? 1 : 0;
+        $isFirst = empty($thread->last_posted_user_id);
 
         // 一个 post 实例，在入库前前确保插件可以使用它
         $post = Post::reply(
@@ -110,7 +110,7 @@ class CreatePost
 
         // 在给定的整个持续时间内，每位用户只能收到一个通知
         // $this->notifications->onePerUser(function () use ($post, $actor) {
-        //     $this->dispatchEventsFor($post, $actor);
+            $this->dispatchEventsFor($post, $this->actor);
         // });
 
         return $post;

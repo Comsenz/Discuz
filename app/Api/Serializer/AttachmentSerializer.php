@@ -24,6 +24,7 @@ class AttachmentSerializer extends AbstractSerializer
             'post_id' => $model->post_id,
             'attachment' => $model->attachment,
             'file_name' => $model->file_name,
+            'file_path' => $model->file_path,
             'file_size' => $model->file_size,
             'file_type' => $model->file_type,
             'remote' => $model->remote
