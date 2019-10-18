@@ -1,12 +1,14 @@
 <template>
 	<div>
 		后台首页
-		<el-button @click="buttonClick">+1</el-button>
-    <el-button @click="login">登录</el-button>
+		<button @click="buttonClick">+1</button>
+    <button @click="login">登录</button>
     <p>{{this.$store.state.site.num}}</p>
     <!--<p>{{this.$store.state.login.loginState}}</p>-->
     <p>{{this.loginState}}</p>
     <p>{{this.countPlusLocalState}}</p>
+
+    <a href="javascript:;" class="weui-btn weui-btn_primary">页面主操作</a>
 	</div>
 </template>
 

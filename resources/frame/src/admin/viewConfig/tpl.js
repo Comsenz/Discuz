@@ -8,7 +8,6 @@ import Vue from 'vue';
 import baseTpl from "../../extend/viewBase/baseTpl";
 import tplConfig from "../viewConfig/tplConfig";
 import commonHelper from "commonHelper";
-import "../config/elementuiInit";						//初始化饿了么组件
 import "systemCommon.scss";
 
 

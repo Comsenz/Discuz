@@ -6,7 +6,7 @@ export default {
 	data: function() {
 		return {
 			title: "纯净版框架",
-			description: "vue + webpack + vue-router + vuex + sass + prerender + axios +  element ui ",
+			description: "vue + webpack + vue-router + vuex + sass + prerender + axios ",
 			num: 0,
 			voteInfo: {}
 		}
