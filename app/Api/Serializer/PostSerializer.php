@@ -38,8 +38,8 @@ class PostSerializer extends AbstractSerializer
             'updated_at'        => $this->formatDate($model->updated_at),
             'deleted_at'        => $this->formatDate($model->deleted_at),
             'delete_user_id'    => (int) $model->delete_user_id,
-            'is_first'          => (int) $model->is_first,
-            'is_approved'       => (int) $model->is_approved,
+            'is_first'          => (bool) $model->is_first,
+            'is_approved'       => (bool) $model->is_approved,
         ];
     }
 }
