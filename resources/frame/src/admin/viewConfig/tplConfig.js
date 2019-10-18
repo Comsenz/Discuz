@@ -11,6 +11,7 @@ export default {
    * site为模块名，index为页面名称，拼接后路径为site/index
    */
   template: {
+    ...tplConfig.template,
     global: {
       index: {
         comLoad: function (resolve) {
@@ -21,7 +22,7 @@ export default {
         }
       },
     },
-    login:{
+    /*login:{
       loginview:{
         comLoad:function (resolve) {
           require(['../view/login/loginView'],resolve)
@@ -50,8 +51,7 @@ export default {
           title:'用户管理'
         }
       }
-    },
-    ...tplConfig.template,
+    }*/
   },
 
   /**

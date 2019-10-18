@@ -10,18 +10,34 @@ export default {
    * site为模块名，index为页面名称，拼接后路径为site/index
    */
   template: {
+    m_site:{
+      index:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/indexView'],resolve)
+        },
+        metaInfo:{
+          title:"移动端首页"
+        }
+      },
+      login:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/loginView'],resolve)
+        },
+        metaInfo:{
+          title:"移动端登录"
+        }
+      }
+    },
     site: {
       index: {
         comLoad: function (resolve) {
-          require(['../view/site/indexView'], resolve)
+          require(['../view/site/home/indexView'], resolve)
         },
         metaInfo: {
-          title: 'pc首页'
-        },
-        css: [],
-        js: ['/js/testselfjsload.js']
+          title: '首页'
+        }
       },
-      
+
     }
   },
 
@@ -31,6 +47,8 @@ export default {
    */
   notNeedLogins: [
     "site/index",
+    "m_site/index",
+    "m_site/login"
   ]
 
 };

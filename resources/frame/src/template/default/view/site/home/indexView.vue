@@ -2,7 +2,8 @@
 
 <template>
 	<div class="pc_index">
-		<h3>{{ title }}</h3>
+    <a href="javascript:;"  class=" weui-btn weui-btn_primary">页面主操作</a>
+		<h3 class="h3-title">{{ title }}</h3>
 		<p>{{ description }}</p>
 		<p>
 			<span>{{ num }}</span>
@@ -10,12 +11,11 @@
 		</p>
 		<div id="1">
 			<p>
-				
+
 			</p>
 			<p></p>
 			<p></p>
 		</div>
-	
 		<template v-if="voteInfo.body">
 			<h3>投票列表</h3>
 			<p>
@@ -24,22 +24,22 @@
 						<span>{{ item.description }}</span>
 					</li>
 				</ul>
-			</p>			
+			</p>
 		</template>
 		<p v-else>暂无投票</p>
 		<div id="2">
 			<p>
-				
+
 			</p>
 			<p></p>
 			<p></p>
-		</div>		
+		</div>
 	</div>
 </template>
 
 <script>
-import '../../scss/pc/pcIndex.scss';
-import siteIndexCon from '../../controllers/site/indexCon';
+import '../../../scss/pc/pcIndex.scss';
+import siteIndexCon from '../../../controllers/site/home/indexCon';
 export default {
 	name: "siteIndex",
 	...siteIndexCon

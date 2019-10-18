@@ -19,7 +19,7 @@ const getApi = function(key){
     if(!uri) {
     	return "";
     }
-  
+
    	return appConfig.apiBaseUrl + uri;
 }
 
@@ -32,7 +32,7 @@ const getApi = function(key){
  */
 const appFetch = function(params, success, error) {
 	var oldUrl = params.url;
-	
+
 	if(params === undefined) {
 		console.error("必须传递参数");
 		return false;
@@ -52,7 +52,7 @@ const appFetch = function(params, success, error) {
 		params.baseURL = "/";
 		params.url = appConfig.apiBaseUrl + appConfig.apis[oldUrl];
 	}
-	
+
 	params.withCredentials = true;
 
 	//设置默认header
@@ -64,7 +64,7 @@ const appFetch = function(params, success, error) {
 		params.headers = {
 			...defaultHeaders,
 			...params.headers
-		};		
+		};
 	} else {
 		params.headers = defaultHeaders;
 	}
@@ -97,7 +97,7 @@ const appFetch = function(params, success, error) {
 		}
 	})
 	.catch(function(err) {
-		console.error(err, 'API '+oldUrl);
+		// console.error(err, 'API '+oldUrl);
 		error && error(err);
 	});
 }
