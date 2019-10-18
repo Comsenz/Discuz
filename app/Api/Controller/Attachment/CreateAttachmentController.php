@@ -46,13 +46,9 @@ class CreateAttachmentController extends AbstractCreateController
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        $uploadTool = $this->app->make(AttachmentUploadTool::class);
-
-        $uploadTool->setFile($file);
-
         // 处理上传的圈子图片
         $data = $this->bus->dispatch(
-            new CreateAttachment($actor, $uploadTool, $ipAddress)
+            new CreateAttachment($actor, $file, $ipAddress)
         );
 
         // 返回结果
