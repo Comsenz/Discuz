@@ -41,8 +41,12 @@ class ResourceClassifyController extends AbstractResourceController
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
+        $query = ClassifyRepository::query();
+
+        $query->where('id', $inputs['id']);
+
         $data = $this->searcher->apply(
-            new ClassifySearch($actor, $inputs, ClassifyRepository::query())
+            new ClassifySearch($actor, $inputs, $query)
         )->search()->getSingle();
 
         return $data;

@@ -26,7 +26,7 @@ class ClassifySerializer extends AbstractSerializer
             'description' => $model->description,
             'property' => $model->property,
             'sort' => $model->sort,
-            'threads' => $model->threads
+            'threads' => $model->threads?:0
         ];
     }
 }

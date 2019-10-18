@@ -111,4 +111,18 @@ class Classify extends Model
         return $classify;
     }
 
+    public function firstPost()
+    {
+
+    }
+
+    public function lastPost()
+    {
+
+    }
+
+    public function user()
+    {
+
+    }
 }

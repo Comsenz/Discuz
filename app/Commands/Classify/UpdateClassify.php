@@ -73,7 +73,7 @@ class UpdateClassify
      * @param EventDispatcher $events
      * @param ClassifyRepository $repository
      * @param ClassifyValidator $validator
-     * @return \Flarum\Group\Group
+     * @return App\Model\Classify
      */
     public function handle(
         EventDispatcher $events,

@@ -27,14 +27,13 @@ class CirclePolicy extends AbstractPolicy
      * @param Model $actor
      * @param Model $model
      * @param string $ability
-     * @return bool
+     * @return bool|null
      */
-    public function canPermission(Model $actor, Model $model, $ability): bool
+    public function canPermission(Model $actor, Model $model, $ability)
     {
         if ($actor->hasPermission('circle.'.$ability)) {
             return true;
         }
-        return true;
     }
 
     /**
@@ -49,7 +48,7 @@ class CirclePolicy extends AbstractPolicy
             $query->whereRaw('FALSE');
             return;
         }
-var_dump($actor);die;
+
         // 隐藏私密圈子，除非他们是圈子成员或当前用户具有查看私密圈子的权限。
         if (!$actor->hasPermission('circles.private')) {
             $query->where(function ($query) use ($actor) {

@@ -16,9 +16,9 @@ class GroupPolicy extends AbstractPolicy
      * @param Model $actor
      * @param Model $model
      * @param string $ability
-     * @return bool
+     * @return bool|null
      */
-    public function canPermission(Model $actor, Model $model, $ability): bool
+    public function canPermission(Model $actor, Model $model, $ability)
     {
         if($actor->hasPermission('group.'.$ability)) {
             return true;

@@ -100,7 +100,7 @@ class CreateAttachment
 
         $res = $this->uploadTool->saveFile($uploadPath, $uploadName);
 
-        if (!$res) {
+        if ($res) {
             throw new UploadException;
         }
 
@@ -108,8 +108,8 @@ class CreateAttachment
 
         // 初始附件数据
         $attachment = Attachment::creation(
-            0,// $this->actor,
-            $model->id?:0,
+            $this->actor->id,
+            isset($model->id)?$model->id:0,
             $uploadName,
             $uploadPath,
             $uploadFile->getClientFilename(),
@@ -119,13 +119,11 @@ class CreateAttachment
             $this->ipAddress
         );
 
-        if ($model instanceof Post) {
-            // 保存附件
-            $attachment->save();
+        // 保存附件
+        $attachment->save();
 
-            // 调用钩子事件
-            $this->dispatchEventsFor($attachment);
-        }
+        // 调用钩子事件
+        $this->dispatchEventsFor($attachment);
 
         return $attachment;
     }
