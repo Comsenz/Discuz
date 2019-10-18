@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -27,8 +28,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
+ * @property int $delete_user_id
  * @property bool $is_first
  * @property bool $is_approved
+ * @property Thread $thread
  * @package App\Models
  */
 class Post extends Model
@@ -36,6 +39,16 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
     use SoftDeletes;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_first' => 'boolean',
+        'is_approved' => 'boolean',
+    ];
 
     /**
      * Create a new instance in reply to a thread.
@@ -65,6 +78,11 @@ class Post extends Model
         return $post;
     }
 
+    /**
+     * Define the relationship with the post's thread.
+     *
+     * @return BelongsTo
+     */
     public function thread()
     {
         return $this->belongsTo(Thread::class);

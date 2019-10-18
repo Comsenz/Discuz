@@ -79,21 +79,21 @@ class EditThread
             // TODO: 是否有权 审核/放入待审核
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_approved = $this->data->get('isApproved') ? 1 : 0;
+            $thread->is_approved = $this->data->get('isApproved');
         }
 
         if ($this->data->has('isSticky')) {
             // TODO: 是否有权 置顶/取消置顶
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_sticky = $this->data->get('isSticky') ? 1 : 0;
+            $thread->is_sticky = $this->data->get('isSticky');
         }
 
         if ($this->data->has('isEssence')) {
             // TODO: 是否有权 加精/取消加精
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_essence = $this->data->get('isEssence') ? 1 : 0;
+            $thread->is_essence = $this->data->get('isEssence');
         }
 
         if ($this->data->has('isDelete')) {
