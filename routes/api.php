@@ -101,9 +101,9 @@ $route->middleware(App\Api\Middleware\Authentication::class)
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->post('/classify', 'classify.create', ApiController\Classify\CreateClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
-    ->patch('/classify', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
+    ->patch('/classify/{id}', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
-    ->delete('/classify', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
+    ->delete('/classify/{id}', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
 
 /*
 |--------------------------------------------------------------------------

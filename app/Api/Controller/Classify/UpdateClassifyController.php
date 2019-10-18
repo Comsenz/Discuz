@@ -39,6 +39,7 @@ class UpdateClassifyController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
 
         // 获取请求的参数
+        $body = $request->getQueryParams();
         $inputs = $request->getParsedBody();
 
         // 获取请求的IP
@@ -46,7 +47,7 @@ class UpdateClassifyController extends AbstractCreateController
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new UpdateClassify($inputs['id'], $actor, $inputs->toArray(), $ipAddress)
+            new UpdateClassify($body['id'], $actor, $inputs->toArray(), $ipAddress)
         );
 
         // 返回结果
