@@ -4,17 +4,17 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ModelNotFoundExceptionHandler.php xxx 2019-10-10 16:20:00 LiuDongdong $
+ *      $Id: CensorNotPassedExceptionHandler.php xxx 2019-10-18 16:13:00 LiuDongdong $
  */
 
 namespace App\Api\Exceptions;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Discuz\Censor\CensorNotPassedException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
-class ModelNotFoundExceptionHandler implements ExceptionHandlerInterface
+class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
 {
     /**
      * If the exception handler is able to format a response for the provided exception,
@@ -26,7 +26,7 @@ class ModelNotFoundExceptionHandler implements ExceptionHandlerInterface
      */
     public function manages(Exception $e)
     {
-        return $e instanceof ModelNotFoundException;
+        return $e instanceof CensorNotPassedException;
     }
 
     /**
@@ -38,10 +38,10 @@ class ModelNotFoundExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(Exception $e)
     {
-        $status = 404;
+        $status = 500;
         $error = [
             'status' => (string) $status,
-            'code' => 'model_not_found',
+            'code' => 'censor_not_passed',
         ];
 
         return new ResponseBag($status, [$error]);
