@@ -12,11 +12,13 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$app->make(Illuminate\Contracts\Console\Kernel::class)->run();
 
-$status = $kernel->handle(
-    $input = new Symfony\Component\Console\Input\ArgvInput,
-    new Symfony\Component\Console\Output\ConsoleOutput
-);
-
-exit($status);
+//$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+//
+//$status = $kernel->handle(
+//    $input = new Symfony\Component\Console\Input\ArgvInput,
+//    new Symfony\Component\Console\Output\ConsoleOutput
+//);
+//
+//exit($status);
