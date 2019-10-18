@@ -51,11 +51,6 @@ class CreateThread
     public $ip;
 
     /**
-     * @var BusDispatcher
-     */
-    protected $bus;
-
-    /**
      * @var Validator
      */
     protected $validator;
@@ -87,7 +82,6 @@ class CreateThread
     public function handle(EventDispatcher $events, BusDispatcher $bus, ThreadValidator $validator, Thread $thread, Censor $censor)
     {
         $this->events = $events;
-        $this->bus = $bus;
 
         // TODO: 权限验证
         // $this->assertCan($this->actor, 'startDiscussion');
@@ -114,7 +108,7 @@ class CreateThread
         $thread->save();
 
         try {
-            $post = $this->bus->dispatch(
+            $post = $bus->dispatch(
                 new CreatePost($thread->id, $this->actor, $this->data, $this->ip)
             );
         } catch (Exception $e) {
