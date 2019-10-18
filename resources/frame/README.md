@@ -6,6 +6,9 @@
 		本地开发：npm run dev
 		打包上线：npm run build
 
+1.1 weiui文档
+	https://github.com/Tencent/weui/wiki/getting-started
+
 二、交互框架目录介绍
 	--config（打包和详细应用相关配置）
 		--appConfig.js（应用配置文件）
