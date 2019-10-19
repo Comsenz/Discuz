@@ -6,6 +6,7 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
+
 class UserSerializer extends AbstractSerializer
 {
 
@@ -16,8 +17,11 @@ class UserSerializer extends AbstractSerializer
         return [
             'id' => $model->id,
             'username' => $model->username,
-            'password' => $model->password,
-            'createtime' => $model->createtime
+            'adminid' => $model->adminid,
+            'unionid' => $model->unionid,
+            'mobile' => $model->mobile,
+            'createtime' => $model->createtime,
+            'nickname' => $model->nickname
         ];
     }
 }
