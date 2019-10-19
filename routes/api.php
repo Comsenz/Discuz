@@ -113,3 +113,17 @@ $route->middleware(App\Api\Middleware\Authentication::class)
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
 
+/*
+ |--------------------------------------------------------------------------
+ | Order
+ |--------------------------------------------------------------------------
+ */
+$route->post('/order', 'order.create', ApiController\Order\CreateOrderController::class);
+
+/*
+ |--------------------------------------------------------------------------
+ | Trade
+ |--------------------------------------------------------------------------
+ */
+$route->post('/trade/notify/wechat', 'trade.notify.wechat', ApiController\Trade\Notify\WechatNotifyController::class);
+$route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Trade\PayOrderController::class);
