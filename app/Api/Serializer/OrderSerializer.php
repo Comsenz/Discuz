@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: PaySerializer.php   2019-10-15 16:56 zhouzhou $
+ *      Id: PaySerializer.php xxx  2019-10-15 16:56 zhouzhou $
  */
 
 namespace App\Api\Serializer;
@@ -20,7 +20,8 @@ class OrderSerializer extends AbstractSerializer
     {
         return [
            'order_sn' => $model->order_sn,
-           'amount' => $model->amount
+           'amount' => $model->amount,
+           'status' => $model->status
         ];
     }
 }

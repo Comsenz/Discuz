@@ -73,11 +73,15 @@ class PayOrder
         }
 
         $order_info = Order::where('order_sn', $this->order_sn)->first();
-        $order_info->body = '收款';
+       
         $payment_params = '';
         $payment_type = (int)$this->data->get('payment_type');
-        // 支付参数
-	    $order_info->payment_params = $this->paymentParams($order_info->toArray(), $payment_type);
+        if (!empty($order_info)) {
+            $order_info->body = '收款';
+            // 支付参数
+            $order_info->payment_params = $this->paymentParams($order_info->toArray(), $payment_type);
+        }
+       
         // 返回数据对象
         return $order_info;
     }
