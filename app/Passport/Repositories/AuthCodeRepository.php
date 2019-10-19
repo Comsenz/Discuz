@@ -6,10 +6,10 @@
  * Time: 17:36
  */
 
-namespace App\Passport\Repositorys;
+namespace App\Passport\Repositories;
 
 
-use App\Passport\Entitys\AuthCodeEntity;
+use App\Passport\Entities\AuthCodeEntity;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;

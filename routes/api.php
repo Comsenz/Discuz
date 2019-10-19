@@ -18,8 +18,11 @@ $route->post('/groups', 'group.create', ApiController\Group\CreateGroupControlle
 |--------------------------------------------------------------------------
 */
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
-$route->post('/add', '', ApiController\Users\AddUsersController::class);
-$route->post('/login', '', ApiController\Users\LoginUsersController::class);
+$route->post('/users', 'users.add', ApiController\Users\AddUsersController::class);
+$route->post('/login', 'users.login', ApiController\Users\LoginUsersController::class);
+$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
+$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
+$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
 
 /*
 |--------------------------------------------------------------------------
