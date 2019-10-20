@@ -26,22 +26,24 @@
         <div class="login-user-btn">
           <button class="weui-btn weui-btn_primary login-btn">登录</button>
         </div>
+
         <div class="login-user-method">
           <div class="login-user-method-box weui-loadmore weui-loadmore_line">
             <span class="weui-loadmore__tips">其他登录方式</span>
           </div>
+
           <div class="login-user-method-icon">
             <div class="login-user-method-icon-box">
-              <i class="login-user-method-icon-iphone">
-                <svg t="1571402781821" class="icon icon-iphone" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3934" width="40" height="30"><path d="M736 48H288a48 48 0 0 0-48 48v832a48 48 0 0 0 48 48h448a48 48 0 0 0 48-48V96a48 48 0 0 0-48-48zM512 928a32 32 0 1 1-0.016-63.984A32 32 0 0 1 512 928z m224-112H288V144h448v672z" fill="" p-id="3935"></path></svg>
+
+              <i class="login-user-method-icon-iphone iconfont">
+                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60d;</span>
               </i>
-              <i class="login-user-method-icon-iphone">
-                <svg t="1571402781821" class="icon icon-iphone" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3934" width="40" height="30"><path d="M736 48H288a48 48 0 0 0-48 48v832a48 48 0 0 0 48 48h448a48 48 0 0 0 48-48V96a48 48 0 0 0-48-48zM512 928a32 32 0 1 1-0.016-63.984A32 32 0 0 1 512 928z m224-112H288V144h448v672z" fill="" p-id="3935"></path></svg>
+
+              <i class="login-user-method-icon-iphone iconfont">
+                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60e;</span>
               </i>
+
             </div>
-
-
-            <!--<i></i>-->
           </div>
         </div>
       </main>
@@ -50,6 +52,7 @@
 </template>
 
 <script>
+import '../../../../../../static/css/iconfont.css';
 import '../../../scss/mobile/login/loginIndex.scss';
 import loginCon from '../../../controllers/m_site/login/loginCon'
 export default {

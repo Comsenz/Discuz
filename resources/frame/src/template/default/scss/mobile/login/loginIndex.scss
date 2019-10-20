@@ -35,11 +35,11 @@ body{
 
       .login-user-title-p{
         text-align: center;
-        font-weight:500;
         //@include font-dpr(19);
-        font-size: 19px;
-        color:rgba(0,0,0,1);
+        font-size:19px;
         font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
         line-height:26px;
       }
     }
