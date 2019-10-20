@@ -6,7 +6,35 @@
           <p class="login-phone-title-p">手机号登录</p>
         </div>
 
-        <form class="weui-cells__group weui-cells__group_form phone-login-form">
+        <form class="weui-form__control-area phone-login-form">
+          <div class="weui-cells__group weui-cells__group_form ">
+            <div class="weui-cells weui-cells_form login-phone-input-form">
+              <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+                <div class="weui-cell__bd">
+                  <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" value="12345678907">
+                </div>
+                <div class="weui-cell__ft">
+                  <button class="weui-btn_reset weui-btn_icon">
+                    <i id="showIOSDialog1" class="weui-icon-info-circle"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                  <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
+                </div>
+                <div class="weui-cell__ft">
+                  <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
+                </div>
+              </div>
+            </div>
+            <!--<div class="weui-cells__tips"><a href="javascript:;">收不到验证码</a></div>-->
+          </div>
+        </form>
+
+        <!--<form class="weui-cells__group weui-cells__group_form phone-login-form">
           <div class="weui-cells weui-cells_form login-phone-input-form">
             <div class="weui-cell">
               <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
@@ -14,14 +42,25 @@
                 <input id="js_input" class="weui-input" placeholder="请输入您的手机号">
               </div>
             </div>
-            <div class="weui-cell">
-              <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+
+            <div class="weui-cell weui-cell_vcode">
+              <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
               <div class="weui-cell__bd">
-                <input id="js_input" class="weui-input" type="password" placeholder="请填写密码">
+                <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
+              </div>
+              <div class="weui-cell__ft">
+                <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
               </div>
             </div>
+
+            &lt;!&ndash;<div class="weui-cell">&ndash;&gt;
+              &lt;!&ndash;<div class="weui-cell__hd"><label class="weui-label">密码</label></div>&ndash;&gt;
+              &lt;!&ndash;<div class="weui-cell__bd">&ndash;&gt;
+                &lt;!&ndash;<input id="js_input" class="weui-input" type="password" placeholder="请填写验证码">&ndash;&gt;
+              &lt;!&ndash;</div>&ndash;&gt;
+            &lt;!&ndash;</div>&ndash;&gt;
           </div>
-        </form>
+        </form>-->
 
         <div class="login-phone-btn">
           <button class="weui-btn weui-btn_primary login-btn">登录</button>
