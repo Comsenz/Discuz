@@ -6,7 +6,7 @@
  * Time: 17:36
  */
 
-namespace App\Passport\Entitys;
+namespace App\Passport\Entities;
 
 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;

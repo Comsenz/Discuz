@@ -1,50 +1,74 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\UserSerializer;
-use App\Models\User;
-use Discuz\Api\Controller\AbstractResourceController;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use App\Api\Controller\Users\Server;
+use Zend\Diactoros\Response;
+use Psr\Http\Server\RequestHandlerInterface;
+use App\Passport\Repositories\UserRepository;
+use App\Passport\Repositories\RefreshTokenRepository;
 use Illuminate\Support\Arr;
+use App\Models\User;
 
-class LoginUsersController extends AbstractResourceController
+class LoginUsersController implements RequestHandlerInterface
 {
-    public $serializer = UserSerializer::class;
-
-    public function data(ServerRequestInterface $request, Document $document)
+   
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // TODO: Implement data() method.
         
-        $username = Arr::get($request->getParsedBody(), 'username');
-        $password = Arr::get($request->getParsedBody(), 'password');
-        $checked = Arr::get($request->getParsedBody(), 'checked');
-
-        if(!preg_match('/^[a-zA-Z0-9]{4,16}$/',$username)) {
-            return json_encode(["code"=>2,'msg'=>"用户名不存在！"]); 
-        }
-
-        $data=[
-            'username' => $username,
-            'password' => User::setUserLoginPasswordAttr($password)
+        $data = $request->getParsedBody();
+        $user =[
+            'grant_type'=>'password',
+            'client_id'=> '2',
+            'client_secret'=>'1',
+            'scope'=>'',
+            'username'=>Arr::get($data,'username'),
+            'password'=>Arr::get($data,'password')
         ];
-        $user=User::where($data)->first();
-        if($user){
-            // var_dump($user);
-            $id=$user->id;
-            $username=$user->username;
-            var_dump($id);
-            // session(['id'=>$id,'username'=>$username]);
-            if($checked==1){
-            //    Cookie::queue('user',json_encode(['username'=>$username,'password'=>$password]));  
-            }
-            return json_encode(["code"=>1,'msg'=>"登录成功"]);
-        }else{
-            return json_encode(["code"=>2,'msg'=>"用户名或密码错误"]);
+        $request= $request->withqueryParams($user);
+        // dd($request);
+        $userRepository = new UserRepository(); // instance of UserRepositoryInterface
+        $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
+        // dd($request);
+        $server = new Server;
+        $server=$server->server;
+        
+        $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
+                    $userRepository,
+                    $refreshTokenRepository
+                );
+       
+        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // 设置刷新令牌过期时间1个月
+        // dd($grant);
+        // 将密码授权类型添加进 server
+        $server->enableGrantType(
+            $grant,
+            new \DateInterval('PT1H') // 设置访问令牌过期时间1小时
+        );
+        // dd($server);
+        $response =new Response();
+       
+        try {
+            // Try to respond to the request
+            $user=User::where('username',Arr::get($data, 'username'))->first();
+            $iplogin = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+            $objuser = User::findOrFail($user->id);
+            $objuser->login_ip = $iplogin;
+            $objuser->save();
+            return $server->respondToAccessTokenRequest($request, $response);
+        } catch (\League\OAuth2\Server\Exception\OAuthServerException $exception) {
+            // All instances of OAuthServerException can be formatted into a HTTP response
+            return $exception->generateHttpResponse($response);
+        } catch (\Exception $exception) {
+            // Unknown exception
+            $body = new Stream('php://temp', 'r+');
+            $body->write($exception->getMessage());
+            return $response->withStatus(500)->withBody($body);
         }
-
     }
 }

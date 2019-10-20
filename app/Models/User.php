@@ -110,4 +110,15 @@ class User extends Model {
         }
         return $this->groups->contains(Group::ADMINISTRATOR_ID);
     }
+    protected function setUserPasswordAttr($value)
+    {
+        // return $this->hashManager->make($value);
+        return password_hash($value, PASSWORD_BCRYPT);
+    }
+
+    protected function unsetUserPasswordAttr($value,$userpwd)
+    {
+        // return $this->hashManager->check($value,$userpwd);
+        return password_verify($value,$userpwd);
+    }
 }

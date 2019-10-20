@@ -90,7 +90,7 @@ class CreateThread
         $validator->valid($this->data->all());
 
         // 敏感词处理
-        // $censor->check('');
+        $this->data->put('content', $censor->check($this->data->get('content')));
 
         // 模型实例
         $thread->user_id = $this->actor->id;

@@ -20,7 +20,7 @@ class ModelNotFoundExceptionHandler implements ExceptionHandlerInterface
      * If the exception handler is able to format a response for the provided exception,
      * then the implementation should return true.
      *
-     * @param \Exception $e
+     * @param Exception $e
      *
      * @return bool
      */
@@ -32,16 +32,16 @@ class ModelNotFoundExceptionHandler implements ExceptionHandlerInterface
     /**
      * Handle the provided exception.
      *
-     * @param \Exception $e
+     * @param Exception $e
      *
-     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
+     * @return ResponseBag
      */
     public function handle(Exception $e)
     {
         $status = 404;
         $error = [
             'status' => (string) $status,
-            'code' => 'model_not_found'
+            'code' => 'model_not_found',
         ];
 
         return new ResponseBag($status, [$error]);

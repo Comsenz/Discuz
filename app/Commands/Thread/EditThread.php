@@ -100,7 +100,7 @@ class EditThread
             // TODO: 是否有权删除
             // $this->assertCan($actor, 'hide', $discussion);
 
-            if ($this->data->get('isHidden')) {
+            if ($this->data->get('isDelete')) {
                 $thread->delete_user_id = null;
                 $thread->delete();
             } else {

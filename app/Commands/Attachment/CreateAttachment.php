@@ -10,17 +10,16 @@ declare(strict_types=1);
 
 namespace App\Commands\Attachment;
 
+use App\Tools\AttachmentUploadTool;
 use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
 use App\Models\Attachment;
-use App\Models\Post;
 use Discuz\Foundation\EventsDispatchTrait;
-use Discuz\Contracts\Tool\UploadTool;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Filesystem\Factory as FileFactory;
-use Illuminate\Database\Eloquent\Model;
 use Intervention\Image\ImageManager;
+use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
 {
@@ -34,11 +33,11 @@ class CreateAttachment
     public $actor;
 
     /**
-     * 上传附件的工具.
+     * 上传的附件.
      *
-     * @var Model
+     * @var UploadedFileInterface
      */
-    public $uploadTool;
+    public $file;
 
     /**
      * 请求来源的IP地址.
@@ -50,71 +49,69 @@ class CreateAttachment
     /**
      * 初始化命令参数
      *
-     * @param User                  $actor      执行操作的用户.
-     * @param UploadTool            $uploadTool 上传附件的工具.
-     * @param string                $ipAddress  请求来源的IP地址.
+     * @param User $actor 执行操作的用户.
+     * @param UploadedFileInterface $file
+     * @param string $ipAddress 请求来源的IP地址.
      */
     public function __construct(
         $actor,
-        UploadTool $uploadTool,
+        UploadedFileInterface $file,
         string $ipAddress
-    )
-    {
+    ) {
         $this->actor = $actor;
-        $this->uploadTool = $uploadTool;
+        $this->file = $file;
         $this->ipAddress = $ipAddress;
-
     }
 
     /**
      * 执行命令
      *
      * @param EventDispatcher $events
-     * @param FileFactory $fileFactory
-     * @return Attach
-     * @throws Exception
+     * @param AttachmentUploadTool $uploadTool
+     * @return Attachment
+     * @throws UploadException
      */
-    public function handle(EventDispatcher $events)
+    public function handle(EventDispatcher $events, AttachmentUploadTool $uploadTool)
     {
         $this->events = $events;
 
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'uploadFile');
 
-        $uploadFile = $this->uploadTool->getFile();
-
         // 判断上传的文件是否正常
-        if ($uploadFile->getError()){
-            throw new UploadException;
+        if ($this->file->getError()){
+            throw new UploadException();
         }
 
-        $extension = pathinfo($uploadFile->getClientFilename(), PATHINFO_EXTENSION);
-
-        $uploadPath = $this->uploadTool->getUploadPath('', true);
-
-        $uploadName = $this->uploadTool->getUploadName($extension, true);
+        $uploadTool->upload($this->file, 'attachment');
 
         $this->events->dispatch(
-            new Uploading($this->actor, $this->uploadTool)
+            new Uploading($this->actor, $this->file)
         );
 
-        $res = $this->uploadTool->saveFile($uploadPath, $uploadName);
+        $type = [];
 
-        if ($res) {
-            throw new UploadException;
+        $size = 0;
+
+        $uploadFile = $uploadTool->save($type, $size);
+
+        if (!$uploadFile){
+            throw new UploadException();
         }
 
-        $model = $this->uploadTool->getSingleData();
+        $uploadPath = $uploadTool->getUploadPath();
+
+        $uploadName = $uploadTool->getUploadName();
 
         // 初始附件数据
         $attachment = Attachment::creation(
             $this->actor->id,
-            isset($model->id)?$model->id:0,
+            0,
             $uploadName,
             $uploadPath,
-            $uploadFile->getClientFilename(),
-            $uploadFile->getSize(),
-            $uploadFile->getClientMediaType(),
+            $this->file->getClientFilename(),
+            $this->file->getSize(),
+            $this->file->getClientMediaType(),
             0,
             $this->ipAddress
         );

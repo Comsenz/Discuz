@@ -14,5 +14,13 @@ use Discuz\Foundation\AbstractUploadTool;
 
 class AttachmentUploadTool extends AbstractUploadTool
 {
-    protected $type = 'attachment';
+    /**
+     * @var type
+     */
+    protected $fileType = [];
+
+    /**
+     * @var type
+     */
+    protected $fileSize = 5*1024*1024;
 }

@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace App\Events\Attachment;
 
 
-use Discuz\Contracts\Tool\UploadTool;
+use Psr\Http\Message\UploadedFileInterface;
 
 class Uploading
 {
@@ -22,17 +22,17 @@ class Uploading
     public $actor;
 
     /**
-     * @var UploadTool
+     * @var UploadedFileInterface
      */
-    public $uploadTool;
+    public $file;
 
     /**
-     * @param User       $actor
-     * @param UploadTool $uploadTool
+     * @param User $actor
+     * @param UploadedFileInterface $file
      */
-    public function __construct($actor, UploadTool $uploadTool)
+    public function __construct($actor, UploadedFileInterface $file)
     {
         $this->actor = $actor;
-        $this->uploadTool = $uploadTool;
+        $this->file = $file;
     }
 }

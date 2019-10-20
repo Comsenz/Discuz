@@ -1,13 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: leiyu
- * Date: 2018/4/23
- * Time: 17:55
+ * @author      Alex Bilbie <hello@alexbilbie.com>
+ * @copyright   Copyright (c) Alex Bilbie
+ * @license     http://mit-license.org/
+ *
+ * @link        https://github.com/thephpleague/oauth2-server
  */
-
-namespace App\Passport\Entitys;
-
+namespace App\Passport\Entities;
 
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;

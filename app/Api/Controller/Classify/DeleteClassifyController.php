@@ -29,10 +29,10 @@ class DeleteClassifyController extends AbstractDeleteController
         $actor = $request->getAttribute('actor');
 
         // 获取请求的参数
-        $inputs = $request->getParsedBody();
+        $body = $request->getQueryParams();
 
         $this->bus->dispatch(
-            new DeleteClassify($inputs['id'], $actor)
+            new DeleteClassify($body['id'], $actor)
         );
 
         return new EmptyResponse(204);

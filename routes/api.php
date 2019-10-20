@@ -18,8 +18,11 @@ $route->post('/groups', 'group.create', ApiController\Group\CreateGroupControlle
 |--------------------------------------------------------------------------
 */
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
-$route->post('/add', '', ApiController\Users\AddUsersController::class);
-$route->post('/login', '', ApiController\Users\LoginUsersController::class);
+$route->post('/users', 'users.add', ApiController\Users\AddUsersController::class);
+$route->post('/login', 'users.login', ApiController\Users\LoginUsersController::class);
+$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
+$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
+$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +78,7 @@ $route->get('/pay/test', 'pay.test', ApiController\Pay\PayTestController::class)
 */
 $route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
 $route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
-$route->patch('/circles', 'circles.update', ApiController\Circle\UpdateCircleController::class);
+$route->patch('/circles/{id}', 'circles.update', ApiController\Circle\UpdateCircleController::class);
 $route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
 
 /*
@@ -86,8 +89,8 @@ $route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCir
 $route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
-$route->patch('/invites', 'invites.update', ApiController\Invite\UpdateInviteController::class);
-$route->delete('/invites', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
+$route->patch('/invites/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
+$route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -101,9 +104,9 @@ $route->middleware(App\Api\Middleware\Authentication::class)
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->post('/classify', 'classify.create', ApiController\Classify\CreateClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
-    ->patch('/classify', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
+    ->patch('/classify/{id}', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
 $route->middleware(App\Api\Middleware\Authentication::class)
-    ->delete('/classify', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
+    ->delete('/classify/{id}', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -113,3 +116,19 @@ $route->middleware(App\Api\Middleware\Authentication::class)
 $route->middleware(App\Api\Middleware\Authentication::class)
     ->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
 
+/*
+ |--------------------------------------------------------------------------
+ | Order
+ |--------------------------------------------------------------------------
+ */
+$route->get('/order/{order_sn}', 'order.resource', ApiController\Order\ResourceOrderController::class);
+$route->post('/order', 'order.create', ApiController\Order\CreateOrderController::class);
+
+/*
+ |--------------------------------------------------------------------------
+ | Trade
+ |--------------------------------------------------------------------------
+ */
+$route->post('/trade/notify/wechat', 'trade.notify.wechat', ApiController\Trade\Notify\WechatNotifyController::class);
+$route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Trade\PayOrderController::class);
+$route->post('/trade/query/order/{order_sn}', 'trade.query.order', ApiController\Trade\QueryOrderController::class);

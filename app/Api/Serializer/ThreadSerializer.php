@@ -40,9 +40,9 @@ class ThreadSerializer extends AbstractSerializer
             'updated_at'            => $this->formatDate($model->updated_at),
             'deleted_at'            => $this->formatDate($model->deleted_at),
             'delete_user_id'        => (int) $model->delete_user_id,
-            'is_approved'           => (int) $model->is_approved,
-            'is_sticky'             => (int) $model->is_sticky,
-            'is_essence'            => (int) $model->is_essence,
+            'is_approved'           => (bool) $model->is_approved,
+            'is_sticky'             => (bool) $model->is_sticky,
+            'is_essence'            => (bool) $model->is_essence,
         ];
     }
 }

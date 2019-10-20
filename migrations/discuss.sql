@@ -74,3 +74,32 @@ CREATE TABLE `posts` (
   `is_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `orders` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_sn` bigint(20) UNSIGNED NOT NULL,
+  `payment_sn` bigint(20) UNSIGNED NOT NULL,
+  `amount` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `payee_id` int(10) UNSIGNED NOT NULL,
+  `type` tinyint(3) UNSIGNED NOT NULL,
+  `type_id` int(10) UNSIGNED NOT NULL,
+  `status` tinyint(3) NOT NULL DEFAULT '0',
+  `platform` smallint(5) UNSIGNED DEFAULT NULL,
+  `payment_type` smallint(5) DEFAULT NULL,
+  `remark` text,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `pay_notify` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `payment_sn` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `trade_no` varchar(64) DEFAULT NULL,
+  `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `updated_at` timestamp NOT NULL,
+  `created_at` timestamp NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
