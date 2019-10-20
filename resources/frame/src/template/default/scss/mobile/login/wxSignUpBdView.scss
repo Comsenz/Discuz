@@ -1,0 +1,30 @@
+
+@import "../app";
+@import "../../var";
+
+$lh:40px;    //height 和 line-height值
+$w100:100%;  //宽度100%
+$fontSize:15px; //整体字体大小
+
+
+.wx-sign-up-bd-box{
+  width: 100%;
+  height: calc(100% - 50px);
+
+  .weui-form__control-area{
+    flex: none;
+  }
+
+  .wx-sign-up-bd-main{
+    width: 100%;
+    height: calc(100% - 44px);
+    font-size: $fontSize;
+
+    .wx-sign-up-bd-btn{
+      width: 100%;
+
+    }
+
+  }
+
+}

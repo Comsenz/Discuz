@@ -34,6 +34,22 @@ export default {
         metaInfo:{
           title:"手机号登录"
         }
+      },
+      wx_login_bd:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/wxLoginBdView'],resolve)
+        },
+        metaInfo:{
+          title:"微信登录绑定账号"
+        }
+      },
+      wx_sign_up_bd:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/wxSignUpBdView'],resolve)
+        },
+        metaInfo:{
+          title:"微信注册绑定账号"
+        }
       }
     },
     site: {
