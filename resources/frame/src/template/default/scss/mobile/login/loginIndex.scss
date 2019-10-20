@@ -1,0 +1,111 @@
+@charset "utf-8";
+/**
+ *移动端登录样式
+ */
+
+@import "../../var";
+@import "../app";
+
+$lh:40px;    //height 和 line-height值
+$w100:100%;  //宽度100%
+
+html,
+body{
+  color: $fontColor;
+  width: $w100;
+  height: 100%;
+  display: block;
+}
+
+.login-user-box{
+  width: $w100;
+  height: calc(100% - 44px);
+
+  .login-user-box-main{
+    width: $w100;
+    height: calc(100% - 40px);
+
+    .login-user-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+
+      .login-user-title-p{
+        text-align: center;
+        font-weight:500;
+        //@include font-dpr(19);
+        font-size: 19px;
+        color:rgba(0,0,0,1);
+        font-family:PingFangSC-Medium,PingFangSC;
+        line-height:26px;
+      }
+    }
+
+    .user-login-form{
+      font-size:15px;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      .login-user-input-form{
+        &:after{
+          content: " ";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          height: 1px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          color: rgba(0, 0, 0, 0.1);
+          -webkit-transform-origin: 0 100%;
+          transform-origin: 0 100%;
+          -webkit-transform: scaleY(0.5);
+          transform: scaleY(0.5);
+          z-index: 2;
+
+        }
+      }
+
+    }
+
+    .login-user-btn{
+      margin-top: 50px;
+      margin-bottom: 50px;
+      .login-btn{
+        width: 167px;
+        height: 36px;
+        font-size: 16px;
+      }
+    }
+
+    .login-user-method{
+
+      .login-user-method-box{
+        width: 50%;
+      }
+
+      .login-user-method-icon{
+        display: flex;
+        justify-content: center;
+        .login-user-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-user-method-icon-iphone{
+            width: 54px;
+            height: 54px;
+            border-radius: 50px;
+            border:1px solid rgba(229,229,229,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+
+      }
+    }
+  }
+
+}
