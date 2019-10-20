@@ -22,6 +22,10 @@
       <span></span>
     </template>
 
+    <template v-else>
+      <span></span>
+    </template>
+
   </footer>
 </template>
 

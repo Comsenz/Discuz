@@ -14,7 +14,8 @@ export default {
     }
   },
   created(){
-    console.log(this.$router.history);
+    this.pageName = this.$router.history.current.query.pageName;
+    console.log(this.$router.history.current.query.pageName);
   }
 
 }

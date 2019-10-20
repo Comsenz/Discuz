@@ -1,6 +1,6 @@
 <template>
   <header class="header-box">
-    <span class="icon iconfont header-icon" >&#xe605;</span>
+    <span @click="headerBack" class="icon iconfont header-icon" >&#xe605;</span>
     <span class="header-title">{{headerTitle}}</span>
   </header>
 </template>

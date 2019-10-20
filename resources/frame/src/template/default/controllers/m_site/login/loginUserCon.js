@@ -20,6 +20,9 @@ export default {
   methods:{
     btnClick(){
       console.log(123);
+    },
+    loginPhoneClick(){
+      this.$router.push({path:'/m_site/login_phone/',query:{pageName:'login'}})
     }
   }
 

@@ -1,0 +1,112 @@
+@charset "utf-8";
+/**
+ * 登录-手机号登录
+ */
+
+@import "../app";
+@import "../../var";
+
+$lh:40px;    //height 和 line-height值
+$w100:100%;  //宽度100%
+
+html,
+body{
+  color: $fontColor;
+  width: $w100;
+  height: 100%;
+  display: block;
+}
+
+.login-phone-box{
+  width: $w100;
+  height: calc(100% - 44px);
+
+  .login-phone-box-main{
+    width: $w100;
+    height: calc(100% - 40px);
+
+    .login-phone-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+
+      .login-phone-title-p{
+        text-align: center;
+        //@include font-dpr(19);
+        font-size:19px;
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
+        line-height:26px;
+      }
+    }
+
+    .phone-login-form{
+      font-size:15px;
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      .login-phone-input-form{
+        &:after{
+          content: " ";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          height: 1px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          color: rgba(0, 0, 0, 0.1);
+          -webkit-transform-origin: 0 100%;
+          transform-origin: 0 100%;
+          -webkit-transform: scaleY(0.5);
+          transform: scaleY(0.5);
+          z-index: 2;
+
+        }
+      }
+
+    }
+
+    .login-phone-btn{
+      margin-top: 50px;
+      margin-bottom: 50px;
+      .login-btn{
+        width: 167px;
+        height: 36px;
+        font-size: 16px;
+      }
+    }
+
+    .login-phone-method{
+
+      .login-phone-method-box{
+        width: 50%;
+      }
+
+      .login-phone-method-icon{
+        display: flex;
+        justify-content: center;
+        .login-phone-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-phone-method-icon-iphone{
+            width: 54px;
+            height: 54px;
+            border-radius: 50px;
+            border:1px solid rgba(229,229,229,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+
+      }
+    }
+  }
+
+}
+

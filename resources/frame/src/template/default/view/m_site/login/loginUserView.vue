@@ -35,7 +35,7 @@
           <div class="login-user-method-icon">
             <div class="login-user-method-icon-box">
 
-              <i class="login-user-method-icon-iphone iconfont">
+              <i @click="loginPhoneClick" class="login-user-method-icon-iphone iconfont">
                 <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60d;</span>
               </i>
 
@@ -53,8 +53,8 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/login/loginIndex.scss';
-import loginCon from '../../../controllers/m_site/login/loginCon'
+import '../../../scss/mobile/login/loginUserView.scss';
+import loginCon from '../../../controllers/m_site/login/loginUserCon'
 export default {
     name: "login-view",
   ...loginCon

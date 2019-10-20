@@ -19,12 +19,20 @@ export default {
           title:"移动端首页"
         }
       },
-      login:{
+      login_user:{
         comLoad:function (resolve) {
-          require(['../view/m_site/login/loginView'],resolve)
+          require(['../view/m_site/login/loginUserView'],resolve)
         },
         metaInfo:{
           title:"移动端登录"
+        }
+      },
+      login_phone:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/loginPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"手机号登录"
         }
       }
     },
