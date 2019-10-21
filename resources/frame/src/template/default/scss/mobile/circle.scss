@@ -7,6 +7,8 @@
 @import "./_app";
 $bgFff: #fff;
 $borE5: #e5e5e5;
+$corF7: #f7f7f7;
+$corD8: #d8d8d8;
 body {
 	// color: $fontColor;
 	background: #bgFff;
@@ -96,8 +98,19 @@ body {
 .postOpera {
 	float: right;
 	@include px2rem(height, 80);
+	.moreCli {
+		display: inline-block;
+		@include px2rem(height, 40);
+		@include px2rem(width, 52);
+		background: $corF7;
+		span {
+			color: $fontColor;
+		}
+	}
 	span {
 		@include font-dpr(40);
+		@include px2rem(line-height, 40);
+		color: $corD8;
 		cursor: pointer;
 	}
 }
