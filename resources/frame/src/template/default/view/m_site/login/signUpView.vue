@@ -27,8 +27,8 @@
           </div>
         </div>
 
-        <div class=" sign-up-btn">
-          <button class="weui-btn weui-btn_primary">注册</button>
+        <div class="sign-up-btn">
+          <button @click="signUpClick" class="weui-btn weui-btn_primary">注册</button>
         </div>
 
       </main>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/signUpView.scss';
+import '../../../scss/mobile/login/loginSignUpModule.scss';
 import signUpCon from '../../../controllers/m_site/login/signUpCon';
 export default {
     name: "sign-up-view",

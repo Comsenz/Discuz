@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/bindPhoneView.scss';
+import '../../../scss/mobile/login/loginSignUpModule.scss';
 import bindPhoneCon from '../../../controllers/m_site/login/bindPhoneCon';
 export default {
     name: "bind-phone-view",

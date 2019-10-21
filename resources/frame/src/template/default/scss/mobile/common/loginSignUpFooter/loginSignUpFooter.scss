@@ -7,15 +7,16 @@
 
 
 .login-user-footer{
-  position: relative;
-  bottom: 49px;
+  width: 100%;
+  position: absolute;
+  @include px2px(bottom,98);
   text-align: center;
-  font-size: 13px;
+  @include font-dpr(26);
   i{
-    width: 1px;
-    height: 14px;
-    margin-left: 14px;
-    margin-right: 14px;
+    @include px2px(width,1);
+    @include px2px(height,28);
+    @include px2px(margin-left,28);
+    @include px2px(margin-right,28);
     background-color: rgba(229, 229, 229, 1);
     font-style: normal;
     display: inline-block;

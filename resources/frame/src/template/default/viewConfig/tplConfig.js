@@ -27,20 +27,22 @@ export default {
           title:"圈子首页"
         }
       },
-      login_user:{
-        comLoad:function (resolve) {
-          require(['../view/m_site/login/loginUserView'],resolve)
-        },
-        metaInfo:{
-          title:"圈子首页"
-        }
-      },
       header:{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)
         },
         metaInfo:{
           title:"header"
+        }
+      },
+
+      //登录、注册、微信绑定模块路由
+      login_user:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/loginUserView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子首页"
         }
       },
       login_phone:{

@@ -1,0 +1,309 @@
+@charset "utf-8";
+/**
+ *   移动端登录模块样式
+ */
+
+@import "../../var";
+@import "../app";
+
+$w100:100%;  //宽度100%
+
+html,
+body{
+  color: $fontColor;
+  width: $w100;
+  height: 100%;
+  display: block;
+}
+
+/**
+ *  登录-用户名登录
+ */
+.login-user-box{
+  width: $w100;
+  height: calc(100% - 44px);
+
+  .login-user-box-main{
+    width: $w100;
+    height: calc(100% - 40px);
+
+    .login-user-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(margin-top,80);
+      @include px2rem(margin-bottom,80);
+
+      .login-user-title-p{
+        text-align: center;
+        @include font-dpr(38);
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
+        @include px2rem(line-height,52);
+      }
+    }
+
+    .user-login-form .weui-cells{
+      @include font-dpr(30);
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      //.login-user-input-form{
+      //}
+
+    }
+
+    .login-user-btn{
+      @include px2rem(margin-top,100);
+      @include px2rem(margin-bottom,100);
+      .login-btn{
+        @include px2rem(width,334);
+        @include px2rem(height,72);
+        @include font-dpr(32);
+        @include px2rem(lint-height,44);
+      }
+    }
+
+    .login-user-method{
+
+      .login-user-method-box{
+        width: 50%;
+      }
+
+      .login-user-method-icon{
+        display: flex;
+        justify-content: center;
+        .login-user-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-user-method-icon-ring{
+            @include px2rem(width,108);
+            @include px2rem(height,108);
+            @include px2rem(border-radius,100);
+            border:2px solid rgba(229,229,229,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span{
+              @include font-dpr(50)
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+}
+
+
+/**
+ * 登录-手机号登录
+ */
+.login-phone-box{
+  width: $w100;
+  height: calc(100% - 44px);
+
+  .login-phone-box-main{
+    width: $w100;
+    height: calc(100% - 40px);
+
+    .login-phone-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(margin-top,80);
+      @include px2rem(margin-bottom,80);
+
+      .login-phone-title-p{
+        text-align: center;
+        @include font-dpr(38);
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
+        @include px2rem(line-height,52);
+      }
+    }
+
+    .phone-login-form .weui-cells{
+      @include font-dpr(30);
+      font-family:PingFangSC-Regular,PingFangSC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      .login-phone-input-form{
+      }
+
+    }
+
+    .login-phone-btn{
+      @include px2rem(margin-top,100);
+      @include px2rem(margin-bottom,100);
+      .login-btn{
+        @include px2rem(width,334);
+        @include px2rem(height,72);
+        @include font-dpr(32);
+        @include px2rem(lint-height,44);
+      }
+    }
+
+    .login-phone-method{
+
+      .login-phone-method-box{
+        width: 50%;
+      }
+
+      .login-phone-method-icon{
+        display: flex;
+        justify-content: center;
+        .login-phone-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-phone-method-icon-ring{
+            @include px2rem(width,108);
+            @include px2rem(height,108);
+            @include px2rem(border-radius,100);
+            border:2px solid rgba(229,229,229,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span{
+              @include font-dpr(50)
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+
+}
+
+
+/**
+ *  微信登录绑定
+ */
+.wx-login-bd-box{
+  width: 100%;
+  height: calc(100% - 50px);
+
+  .weui-form__control-area{
+    flex: none;
+  }
+
+  .wx-login-bd-main{
+    width: 100%;
+    height: calc(100% - 44px);
+    @include font-dpr(30);
+    .wx-login-bd-btn{
+      width: 100%;
+    }
+  }
+}
+
+
+/**
+ *  微信注册绑定
+ */
+.wx-sign-up-bd-box{
+  width: 100%;
+  height: calc(100% - 50px);
+
+  .weui-form__control-area{
+    flex: none;
+  }
+
+  .wx-sign-up-bd-main{
+    width: 100%;
+    height: calc(100% - 44px);
+    @include font-dpr(30);
+
+    .wx-sign-up-bd-btn{
+      width: 100%;
+
+    }
+
+  }
+
+}
+
+
+/**
+ *  绑定手机号
+ */
+.bind-phone-box{
+  width: 100%;
+  height: calc(100% - 44px);
+
+  .bind-phone-main{
+    width: 100%;
+    height: calc(100% - 60px);
+
+    .bind-phone-main-header{
+      @include px2rem(margin,90 0);
+    }
+
+    .bind-phone-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  忘记密码
+ */
+.retrieve-password-box{
+  width: 100%;
+  height: calc(100% - 44px);
+
+  .retrieve-password-main{
+    width: 100%;
+    height: calc(100% - 60px);
+
+    .retrieve-password-main-header{
+      @include px2rem(margin,90 0);
+    }
+
+    .retrieve-password-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  注册页面
+ */
+.sign-up-box{
+  width: 100%;
+  height: calc(100% - 44px);
+
+  .sign-up-main{
+    width: 100%;
+    height: calc(100% - 60px);
+
+    .sign-up-main-header{
+      @include px2rem(margin,80 0);
+      //@include px2rem(line-height,52)
+    }
+
+    .sign-up-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}

@@ -18,12 +18,14 @@ export default {
   },
 
   methods:{
-    btnClick(){
-      console.log(123);
+    loginWxClick(){
+      this.$router.push({path:'/m_site/wx_login_bd'})
     },
     loginPhoneClick(){
-      this.$router.push({path:'/m_site/login_phone/',query:{pageName:'login'}})
-    }
+      this.$router.push({path:'/m_site/login_phone'})
+    },
+
+
   }
 
 }

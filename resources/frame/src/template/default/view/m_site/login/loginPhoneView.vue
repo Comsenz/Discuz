@@ -7,30 +7,30 @@
         </div>
 
 
-        <form class="weui-form__control-area phone-login-form">
-          <div class="weui-cells__group weui-cells__group_form ">
-            <div class="weui-cells weui-cells_form login-phone-input-form">
-              <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
-                <div class="weui-cell__bd">
-                  <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" >
-                </div>
-                <!--<div class="weui-cell__ft">-->
-                  <!--<button class="weui-btn_reset weui-btn_icon">-->
-                    <!--<i id="showIOSDialog1" class="weui-icon-info-circle"></i>-->
-                  <!--</button>-->
-                <!--</div>-->
+        <form class="weui-cells__group weui-cells__group_form phone-login-form">
+          <div class="weui-cells weui-cells_form login-phone-input-form">
+
+            <div class="weui-cell">
+              <div class="weui-cell__hd">
+                <label class="weui-label">手机号</label>
               </div>
-              <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
-                <div class="weui-cell__bd">
-                  <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
-                </div>
-                <div class="weui-cell__ft">
-                  <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
-                </div>
+              <div class="weui-cell__bd">
+                <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" >
               </div>
             </div>
+
+            <div class="weui-cell weui-cell_vcode">
+              <div class="weui-cell__hd">
+                <label class="weui-label">验证码</label>
+              </div>
+              <div class="weui-cell__bd">
+                <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
+              </div>
+              <div class="weui-cell__ft">
+                <a href="javascript:;" @click="getYZ" class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</a>
+              </div>
+            </div>
+
           </div>
         </form>
 
@@ -46,11 +46,11 @@
           <div class="login-phone-method-icon">
             <div class="login-phone-method-icon-box">
 
-              <i @click="loginUserClick" class="login-phone-method-icon-iphone iconfont">
+              <i @click="loginUserClick" class="login-phone-method-icon-ring iconfont">
                 <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60f;</span>
               </i>
 
-              <i class="login-phone-method-icon-iphone iconfont">
+              <i @click="wxLoginClick" class="login-phone-method-icon-ring iconfont">
                 <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60e;</span>
               </i>
 
@@ -64,7 +64,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/login/loginPhoneView.scss';
+import '../../../scss/mobile/login/loginSignUpModule.scss';
 import loginPhoneCon from '../../../controllers/m_site/login/loginPhoneCon';
 export default {
     name: "loging-phone-view",

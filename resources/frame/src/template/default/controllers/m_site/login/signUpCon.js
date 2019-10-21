@@ -15,7 +15,9 @@ export default {
   },
 
   methods:{
-
+    signUpClick(){
+      this.$router.push({path:'/m_site/bind_phone'})
+    }
   }
 
 }

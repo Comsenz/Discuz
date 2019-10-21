@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/retrievePasswordView.scss';
+import '../../../scss/mobile/login/loginSignUpModule.scss';
 import retrievePasswordCon from '../../../controllers/m_site/login/retrievePasswordCon';
 export default {
     name: "retrieve-password-view",

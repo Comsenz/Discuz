@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/wxLoginBdView.scss';
+import '../../../scss/mobile/login/loginSignUpModule.scss';
 import wxLoginBdCon from '../../../controllers/m_site/login/wxLoginBdCon';
 export default {
     name: "wx-login-bd",
