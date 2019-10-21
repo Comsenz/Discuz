@@ -28,7 +28,7 @@ class DeleteStopWordController extends AbstractDeleteController
         // $this->assertCan($actor, 'deleteStopWord');
 
         $id = Arr::get($request->getQueryParams(), 'id');
-        $ids = $id ?: Arr::get($request->getParsedBody(), 'ids');
+        $ids = $id ?: $request->getParsedBody()->get('ids');
 
         StopWord::destroy($ids);
 

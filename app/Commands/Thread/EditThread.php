@@ -101,7 +101,7 @@ class EditThread
             // $this->assertCan($actor, 'hide', $discussion);
 
             if ($this->data->get('isDelete')) {
-                $thread->delete_user_id = null;
+                $thread->delete_user_id = $this->actor->id;
                 $thread->delete();
             } else {
                 $thread->delete_user_id = null;

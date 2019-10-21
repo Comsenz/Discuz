@@ -33,6 +33,7 @@ $route->post('/access', 'access', ApiController\Users\AccessTockenController::cl
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
+$route->patch('/threads/batch', 'threads.batch', ApiController\Threads\BatchThreadController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 
@@ -54,7 +55,6 @@ $route->get('/stop-words', 'stop-words.index', ApiController\StopWords\ListStopW
 $route->get('/stop-words/{id}', 'stop-words.resource', ApiController\StopWords\ResourceStopWordController::class);
 $route->post('/stop-words', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
 $route->post('/stop-words/batch', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
-$route->patch('/stop-words/', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
 $route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
 $route->delete('/stop-words', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
 $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
