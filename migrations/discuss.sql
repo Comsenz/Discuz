@@ -62,6 +62,7 @@ CREATE TABLE `posts` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
   `thread_id` int(10) unsigned DEFAULT NULL,
+  `reply_id` int(10) unsigned DEFAULT NULL,
   `content` text COLLATE utf8mb4_unicode_ci,
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `comment_count` int(10) unsigned NOT NULL DEFAULT '0',

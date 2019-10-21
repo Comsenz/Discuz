@@ -1,0 +1,28 @@
+@charset "utf-8";
+/**
+ *移动端注册样式
+ */
+
+@import "../../var";
+@import "../app";
+
+.sign-up-box{
+  width: 100%;
+  height: calc(100% - 44px);
+
+  .sign-up-main{
+    width: 100%;
+    height: calc(100% - 60px);
+
+    .sign-up-main-header{
+      margin: 45px 0;
+    }
+
+    .sign-up-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}

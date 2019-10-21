@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $user_id
  * @property int $thread_id
+ * @property int $reply_id
  * @property string $content
  * @property string $ip
  * @property int $comment_count
@@ -57,10 +58,11 @@ class Post extends Model
      * @param string $content
      * @param int $userId
      * @param $ip
+     * @param $replyId
      * @param int $isFirst
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $isFirst = 0)
+    public static function reply($threadId, $content, $userId, $ip, $replyId, $isFirst = 0)
     {
         $post = new static;
 
@@ -68,6 +70,7 @@ class Post extends Model
         $post->thread_id = $threadId;
         $post->user_id = $userId;
         $post->ip = $ip;
+        $post->reply_id = $replyId;
         $post->is_first = $isFirst;
 
         // Set content last, as the parsing may rely on other post attributes.

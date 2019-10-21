@@ -13,13 +13,13 @@
               <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
                 <div class="weui-cell__bd">
-                  <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" value="12345678907">
+                  <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" >
                 </div>
-                <div class="weui-cell__ft">
-                  <button class="weui-btn_reset weui-btn_icon">
-                    <i id="showIOSDialog1" class="weui-icon-info-circle"></i>
-                  </button>
-                </div>
+                <!--<div class="weui-cell__ft">-->
+                  <!--<button class="weui-btn_reset weui-btn_icon">-->
+                    <!--<i id="showIOSDialog1" class="weui-icon-info-circle"></i>-->
+                  <!--</button>-->
+                <!--</div>-->
               </div>
               <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
