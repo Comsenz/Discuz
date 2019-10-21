@@ -35,8 +35,9 @@ class CreateStopWordController extends AbstractCreateController
         $actor->id = 1;
 
         if (strrchr($request->getUri()->getPath(), '/') == '/batch') {
+            $words = collect($request->getParsedBody()->get('words', []));
             return $this->bus->dispatch(
-                new BatchCreateStopWord($actor, $request->getParsedBody())
+                new BatchCreateStopWord($actor, $words)
             );
         } else {
             return $this->bus->dispatch(
