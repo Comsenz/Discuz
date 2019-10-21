@@ -16,7 +16,7 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdateThreadController  extends AbstractCreateController
+class UpdateThreadController extends AbstractCreateController
 {
     /**
      * {@inheritdoc}

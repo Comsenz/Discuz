@@ -133,3 +133,51 @@ CREATE TABLE `user_wechat` (
   `updatetime` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 分类表
+CREATE TABLE `classify` (
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类id',
+  `name` varchar(255) NOT NULL default '' COMMENT '分类名称',
+  `description` varchar(255) NOT NULL default '' COMMENT '分类说明',
+  `icon` varchar(255) NOT NULL default '' COMMENT '分类图标URL',
+  `sort` smallint(6) NOT NULL default '0' COMMENT '显示顺序',
+  `property` smallint(6) NOT NULL default '0' COMMENT '属性：0:正常 1:首页展示',
+  `threads` int(10) NOT NULL DEFAULT '0' COMMENT '主题数',
+  `ip` char(15) NOT NULL DEFAULT '0' COMMENT '更新IP',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  PRIMARY KEY (id),
+  KEY `sort` (`sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类表';
+
+-- 邀请码表
+CREATE TABLE `invites` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+   `user_group_id` int(11) unsigned NOT NULL COMMENT '默认用户组ID',
+   `code` char(32) NOT NULL COMMENT '邀请码',
+   `dateline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请码生效时间',
+   `endtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请码结束时间',
+   `user_id` int(11) unsigned NOT NULL COMMENT '邀请用户ID',
+   `to_user_id` int(11) unsigned NOT NULL COMMENT '被邀请用户ID',
+   `status` tinyint(1) unsigned NOT NULL COMMENT '邀请码状态',
+   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邀请码表';
+
+-- 附件表
+CREATE TABLE `attachments` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+   `user_id` int(10) unsigned DEFAULT NULL COMMENT '用户ID',
+   `post_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '回复ID',
+   `attachment` varchar(255) NOT NULL DEFAULT '' COMMENT '文件系统生成的名称',
+   `file_path` varchar(255) NOT NULL DEFAULT '' COMMENT '文件路径',
+   `file_name` varchar(255) NOT NULL DEFAULT '' COMMENT '文件原名称',
+   `file_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
+   `file_type` char(15) NOT NULL DEFAULT '' COMMENT '文件类型',
+   `remote` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
+   `ip` char(15) NOT NULL DEFAULT '0' COMMENT '创建IP',
+   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件表';
