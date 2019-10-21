@@ -62,6 +62,7 @@ CREATE TABLE `posts` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
   `thread_id` int(10) unsigned DEFAULT NULL,
+  `reply_id` int(10) unsigned DEFAULT NULL,
   `content` text COLLATE utf8mb4_unicode_ci,
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `comment_count` int(10) unsigned NOT NULL DEFAULT '0',
@@ -103,3 +104,32 @@ CREATE TABLE `pay_notify` (
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `password` char(60) CHARACTER SET utf8 NOT NULL,
+  `mobile` char(11) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `adminid` int(11) unsigned NOT NULL DEFAULT '0',
+  `unionid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `login_ip` varchar(15) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `user_wechat` (
+  `id` int(11) NOT NULL,
+  `openid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `nickname` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `province` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `city` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `country` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `headimgurl` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `privilege` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `unionid` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatetime` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

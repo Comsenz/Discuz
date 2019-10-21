@@ -61,3 +61,11 @@
   content: "\e60f";
 }
 
+.icon-down-menu:before {
+  content: "\e612";
+}
+
+.icon-more:before {
+  content: "\e613";
+}
+
