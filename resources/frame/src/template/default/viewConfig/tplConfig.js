@@ -22,6 +22,11 @@ export default {
       circle:{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子首页"
+        }
+      },
       login_user:{
         comLoad:function (resolve) {
           require(['../view/m_site/login/loginUserView'],resolve)
