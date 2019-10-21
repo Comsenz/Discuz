@@ -1,0 +1,200 @@
+@charset "utf-8";
+
+/**
+ * index style 
+ */
+@import "./../var";
+@import "./_app";
+$bgFff: #fff;
+$borE5: #e5e5e5;
+body {
+	// color: $fontColor;
+	background: #bgFff;
+}
+.navBarBox {
+	@include px2rem(height, 94);
+	@include px2rem(padding, 0 8);
+	overflow: hidden;
+	.navBarCon {
+		width: 100%;
+		overflow: auto;
+		margin: 0 auto;
+		height: 120%;
+		white-space: nowrap;
+	}
+
+}
+
+.navBarCon li {
+	width: auto;
+	display: inline-block;
+	@include px2rem(line-height, 90);
+	@include px2rem(padding, 0 12);
+	@include px2rem(margin, 0 22);
+	cursor: pointer;
+	@include font-dpr(30);
+}
+.navBarCon li.navActi {
+	color: $fontColor;
+	border-bottom: 2px solid $fontColor;
+}
+.themeTitBox {
+	@include px2rem(height, 106);
+	@include px2rem(padding, 30 30 28 30);
+	border-bottom: 1px solid $borE5;
+	box-sizing:border-box;
+	.themeTit {
+		float: left;
+		color: #888888;
+		@include font-dpr(28);
+		@include px2rem(line-height, 48);
+	}
+	.screen {
+		float: right;
+		cursor: pointer;
+		@include font-dpr(28);
+		color: #888888;
+		@include px2rem(line-height, 48);
+	}
+}
+.cirPostCon {
+	@include px2rem(padding, 30 30 20 30);
+}
+.postTop {
+	overflow: hidden;
+	@include px2rem(margin-bottom, 12);
+}
+.postPer {
+	float: left;
+	@include px2rem(max-width, 580);
+	.postHead {
+		float: left;
+		@include px2rem(width, 80);
+		@include px2rem(height, 80);
+		@include px2rem(margin-right, 18);
+		@include px2rem(border-radius, 8);
+	}
+	.perDet {
+		float: left;
+		@include px2rem(height, 80);
+		@include px2rem(width, 480);
+		.perName {
+			@include px2rem(line-height, 40);
+			color: $fontColor;
+			@include font-dpr(30);
+			@include px2rem(margin-bottom, 4);
+			@include px2rem(height, 40);
+			@include singleline-ellipsis(0);
+		}
+		.postTime {
+			@include px2rem(line-height, 32);
+			color: $font888;
+			@include font-dpr(28);
+		}
+	}
+}
+.postOpera {
+	float: right;
+	@include px2rem(height, 80);
+	span {
+		@include font-dpr(40);
+		cursor: pointer;
+	}
+}
+.postContent {
+	@include font-dpr(30);
+	@include px2rem(line-height, 40);
+	a {
+		color: $font000;
+	}
+}
+.operaBox {
+	background: $bgF7;
+	@include px2rem(padding, 16 0 20 0);
+	@include px2rem(margin-top, 20);
+	.likeBox {
+		@include px2rem(padding, 0 18 0 18);
+		vertical-align: middle;
+		@include px2rem(margin-bottom, 8);
+		.icon {
+			@include font-dpr(28);
+			color: $fontColor;
+		}
+		a {
+			color: $fontColor;
+			@include px2rem(line-height, 36);
+		}
+	}
+	.reward {
+		@include px2rem(padding, 0 18 0 18);
+		vertical-align: middle;
+		@include px2rem(padding-bottom, 16);
+		.icon {
+			@include font-dpr(28);
+			color: #FF5453;
+		}
+		a {
+			color: $fontColor;
+			@include px2rem(line-height, 36);
+		}
+	}
+	
+}
+.replyBox {
+	@include px2rem(padding, 16 18 0 18);
+	border-top: 1px solid $borE5;
+	@include px2rem(line-height, 40);
+	.replyCon {
+		@include px2rem(line-height, 40);
+		@include px2rem(margin-bottom, 8);
+		@include font-dpr(28);
+		a {
+			color: $fontColor;
+		}
+		span {
+			display: inline;
+		}
+		.font8 {
+			color: $font888;
+		}
+	}
+	.allReply {
+		display: block;
+		color: $fontColor;
+		@include font-dpr(26);
+		font-weight: 500;
+		@include px2rem(margin-top, 12);
+		.icon {
+			@include font-dpr(20);
+			@include px2rem(margin-left, 12);
+		}
+	}
+}
+.fixedEdit {
+	position: fixed;
+	@include px2rem(right, 30);
+	@include px2rem(bottom, 108);
+	z-index: 12;
+	@include px2rem(width, 100);
+	@include px2rem(height, 100);
+	background: $fontColor;
+	border-radius: 50%;
+	text-align: center;
+	@include px2rem(line-height, 100);
+	.icon {
+		color: #fff;
+		@include font-dpr(40);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+

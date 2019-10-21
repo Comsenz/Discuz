@@ -19,14 +19,30 @@ export default {
           title:"移动端首页"
         }
       },
-      login:{
+      circle:{
         comLoad:function (resolve) {
-          require(['../view/m_site/login/loginView'],resolve)
+          require(['../view/m_site/home/circleView'],resolve)
         },
         metaInfo:{
-          title:"移动端登录"
+          title:"圈子首页"
         }
-      }
+      },
+      header:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/headerView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子首页"
+        }
+      },
+      // login:{
+      //   comLoad:function (resolve) {
+      //     require(['../view/m_site/login/loginView'],resolve)
+      //   },
+      //   metaInfo:{
+      //     title:"移动端登录"
+      //   }
+      // }
     },
     site: {
       index: {
