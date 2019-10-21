@@ -66,7 +66,32 @@ export default {
         metaInfo:{
           title:"微信注册绑定账号"
         }
+      },
+      sign_up:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/signUpView'],resolve)
+        },
+        metaInfo:{
+          title:"注册账号"
+        }
+      },
+      bind_phone:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/bindPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"绑定手机号"
+        }
+      },
+      retrieve_pwd:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/retrievePasswordView'],resolve)
+        },
+        metaInfo:{
+          title:"忘记密码"
+        }
       }
+
     },
     site: {
       index: {
