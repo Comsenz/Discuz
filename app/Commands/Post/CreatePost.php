@@ -16,6 +16,7 @@ use App\Models\User;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 class CreatePost
@@ -24,11 +25,18 @@ class CreatePost
     // use AssertPermissionTrait;
 
     /**
-     * The id of the new thread.
+     * The id of the thread.
      *
      * @var int
      */
     public $threadId;
+
+    /**
+     * The id of the post waiting to be replied.
+     *
+     * @var int
+     */
+    public $replyId;
 
     /**
      * The user performing the action.
@@ -61,6 +69,7 @@ class CreatePost
     {
         // TODO: User $actor
         $this->threadId = $threadId;
+        $this->replyId = $data->get('replyId', null);
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
@@ -86,12 +95,21 @@ class CreatePost
         // }
         $isFirst = empty($thread->last_posted_user_id);
 
+        // 回复其它回复必须是同一主题下的
+        if (!$isFirst && !empty($this->replyId)) {
+            $replyThreadId = Post::where('id', $this->replyId)->value('thread_id');
+            if ($replyThreadId != $this->threadId) {
+                throw (new ModelNotFoundException);
+            }
+        }
+
         // 一个 post 实例，在入库前前确保插件可以使用它
         $post = Post::reply(
             $thread->id,
             $this->data->get('content'),
             $this->actor->id,
             $this->ip,
+            $this->replyId,
             $isFirst
         );
 
