@@ -1,0 +1,28 @@
+/**
+ * 公共组件样式：登录/注册头部
+ */
+@import "../../app";
+@import "../../../var";
+
+$lh:44px;   //height和line-height
+
+.header-box{
+  width: 100%;
+  height: $lh;
+  background-color: rgba(249,249,249,0.9);
+  -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);;
+  -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);;
+  box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .header-icon{
+    fill:$fontColor;
+    position: absolute;
+    left: 16px;
+    cursor: pointer;
+  }
+
+}

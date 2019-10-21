@@ -22,6 +22,9 @@ export default {
       circle:{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
+      login_user:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/loginUserView'],resolve)
         },
         metaInfo:{
           title:"圈子首页"
@@ -32,17 +35,33 @@ export default {
           require(['../view/m_site/common/headerView'],resolve)
         },
         metaInfo:{
-          title:"圈子首页"
+          title:"header"
         }
       },
-      // login:{
-      //   comLoad:function (resolve) {
-      //     require(['../view/m_site/login/loginView'],resolve)
-      //   },
-      //   metaInfo:{
-      //     title:"移动端登录"
-      //   }
-      // }
+      login_phone:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/loginPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"手机号登录"
+        }
+      },
+      wx_login_bd:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/wxLoginBdView'],resolve)
+        },
+        metaInfo:{
+          title:"微信登录绑定账号"
+        }
+      },
+      wx_sign_up_bd:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/wxSignUpBdView'],resolve)
+        },
+        metaInfo:{
+          title:"微信注册绑定账号"
+        }
+      }
     },
     site: {
       index: {

@@ -11,3 +11,25 @@ $font000: #000000;
 $bgF7: #f7f7f7;
 $borE5: #e5e5e5;
 $cor999: #999999;
+$fontSize:15px;  //内容字体大小
+$fontSizeTitle:19px;  //标题大小
+
+html,
+body{
+  color: $fontColor;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.weui-cells{
+  font-size: $fontSize;   //登录注册-表单输入
+}
+
+.weui-form__desc {
+  font-size: $fontSize;
+}
+
+.weui-form__title{
+  font-size: $fontSizeTitle;
+}

@@ -1,0 +1,27 @@
+/**
+ * 登录/注册页面底部
+ */
+
+@import "../../../var";
+@import "../../app";
+
+
+.login-user-footer{
+  position: relative;
+  bottom: 49px;
+  text-align: center;
+  font-size: 13px;
+  i{
+    width: 1px;
+    height: 14px;
+    margin-left: 14px;
+    margin-right: 14px;
+    background-color: rgba(229, 229, 229, 1);
+    font-style: normal;
+    display: inline-block;
+    color: rgba(229, 229, 229, 1);
+  }
+  span{
+    cursor: pointer;
+  }
+}
