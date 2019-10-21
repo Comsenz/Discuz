@@ -135,7 +135,7 @@ CREATE TABLE `user_wechat` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 分类表
-CREATE TABLE pre_classify (
+CREATE TABLE `classify` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类id',
   `name` varchar(255) NOT NULL default '' COMMENT '分类名称',
   `description` varchar(255) NOT NULL default '' COMMENT '分类说明',
@@ -151,7 +151,7 @@ CREATE TABLE pre_classify (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类表';
 
 -- 邀请码表
-CREATE TABLE `pre_invites` (
+CREATE TABLE `invites` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
    `user_group_id` int(11) unsigned NOT NULL COMMENT '默认用户组ID',
    `code` char(32) NOT NULL COMMENT '邀请码',
@@ -166,7 +166,7 @@ CREATE TABLE `pre_invites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邀请码表';
 
 -- 附件表
-CREATE TABLE `pre_attachments` (
+CREATE TABLE `attachments` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
    `user_id` int(10) unsigned DEFAULT NULL COMMENT '用户ID',
    `post_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '回复ID',
