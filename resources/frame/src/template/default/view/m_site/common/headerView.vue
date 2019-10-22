@@ -1,115 +1,145 @@
 <template>
-<section>
-<header>
-  <!-- 是否显示返回按钮或者使用第二套头部样式，可根据路由参数twoHeader判断 -->
-  <div class="heder-wrap flex" :class="{'bg_blue':$route.meta.twoHeader}">
-    <span class="left_btn cell_0" @click="backUrl" v-if="!$route.meta.twoHeader">返回</span>
-    <span class="cell_1 center_content">{{$route.meta.title}}</span>
-    <span class="right_btn cell_0" @click="bindSidebar">菜单</span>
-  </div>
-</header>
-<div class="sidebar_wrap" v-if="showSidebar">
-  <p v-for="(item, i) in sidebarList" :key="i">
-    <router-link class="sidebar_item" :to="{path: item.path, query: item.query}" v-if="item.path">{{item.name}}</router-link>
-    <span class="sidebar_item" v-else @click="bindEvent(item.enentType)">{{item.name}}</span>
-  </p>
-</div>
-</section>
+  <section>
+    <header>
+
+      <!-- <div :class="{'fixedHead': isfixHead}">这是导航</div> -->
+      <!-- 是否显示返回按钮或者使用第二套头部样式，可根据路由参数twoHeader判断 -->
+      <div class="" :class="{'bg_blue':$route.meta.twoHeader,'fixedHead': isfixHead}">
+        <!--  <span class="left_btn cell_0" @click="backUrl" v-if="!$route.meta.twoHeader">返回</span> -->
+        <!-- <span class="cell_1 center_content">{{$route.meta.title}}</span> -->
+        <div class="hederWrap" v-if="showHeader">
+          <img src="../../../../../../static/images/logo.png" class="logo headLogo">
+          <div class="topRight">
+            <span class="icon iconfont icon-search" @click="searchJump"></span>
+            <span class="icon iconfont icon-Shape" @click="bindSidebar"></span>
+          </div>
+          
+          <!-- <span class="right_btn cell_0" @click="searchJump">搜索</span>
+          <span class="right_btn cell_0" @click="bindSidebar">菜单</span> -->
+        </div>
+      </div>
+    </header>
+    <div class="mask" v-if="showMask"></div>
+    <div class="sidebarWrap" v-if="showSidebar">
+      <p v-for="(item, i) in sidebarList" :key="i">
+        <router-link class="sidebar_item" :to="{path: item.path, query: item.query}" v-if="item.path">{{item.name}}</router-link>
+        <span class="sidebar_item" v-else @click="bindEvent(item.enentType)">{{item.name}}</span>
+      </p>
+    </div>
+
+    <div class="headerBox">
+        <div class="headOpe">
+          <span class="icon iconfont">&#xe60b;</span>
+          <span class="icon iconfont">&#xe60c;</span>
+        </div>
+        <img src="../../../../../../static/images/logo.png" class="logo">
+        <div class="circleDet">
+          <span>主题：125</span>
+          <span>成员：125</span>
+          <span>圈主：我是谁</span>
+        </div>
+      </div>
+
+
+
+
+  </section>
 </template>
 <script>
+// import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
+
+import  '../../../scss/mobile/mobileIndex.scss';
+// export default {
+//   name: "headerView",
+//   ...mSiteHeaderCon
+// }
 export default {
-  data () {
+  data: function() {
     return {
+      isfixNav: false,
+      isfixHead: false,
+      isShow: false,
+      isHeadShow: false,
+      showHeader: false,
       showSidebar: false,
+      showMask: false,
       sidebarList: [
         {
-          name: '我的资料',
-          path: 'login', // 跳转路径
-          query: { // 跳转参数
+            name: '我的资料',
+            path: 'login', // 跳转路径
+            query: { // 跳转参数
             index: 1
           },
-          enentType: ''
+            enentType: ''
         },
         {
-          name: '退出登录',
-          path: '', // 跳转路径
-          query: { // 跳转参数
+            name: '退出登录',
+            path: '', // 跳转路径
+            query: { // 跳转参数
             index: 1
           },
-          enentType: 1 // 事件类型
+            enentType: 1 // 事件类型
         }
       ]
+
     }
   },
   methods: {
-    backUrl () {
-      // 返回上一级
-      window.history.go(-1)
-    },
-    bindSidebar () {
-      // 是否显示侧边栏
-      this.showSidebar = !this.showSidebar
-    },
-    bindEvent (typeName) {
-      if (typeName == 1) {
-        this.LogOut()
+    
+      // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
+    // 比较他们的大小来确定是否添加fixedHead样式
+    handleTabFix() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+        if(scrollTop > offsetTop){
+          console.log('dayu');
+          this.showHeader = true;
+          this.isfixHead = true;
+          this.isfixNav = true;
+          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
+          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
+        } else {
+          console.log('小于');
+          this.showHeader = false;
+          this.isfixHead = false;
+          this.isfixNav = false;
+          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
+          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
+        };    
+        
+      },
+      searchJump () {
+
+      },
+      backUrl () {
+        // 返回上一级
+        window.history.go(-1)
+      },
+      bindSidebar () {
+        // 是否显示侧边栏
+        this.showSidebar = !this.showSidebar;
+        this.showMask =  !this.showMask;
+      },
+      bindEvent (typeName) {
+        if (typeName == 1) {
+          this.LogOut()
+        }
+      },
+      LogOut () {
+        console.log('测试')
       }
-    },
-    LogOut () {
-      console.log('测试')
-    }
+
+  },
+
+  mounted: function() {
+    // this.getVote();
+    window.addEventListener('scroll', this.handleTabFix, true);
+  },
+  beforeRouteLeave (to, from, next) {
+     window.removeEventListener('scroll', this.handleTabFix, true)
+     next()
   }
 }
-</script>
+// </script>
 
-<style lang="scss">
-.flex, .flex *, .flex:after, .flex:before {
-  box-sizing: border-box;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-.flex > .cell_0 {
-  display: block;
-  position: relative;
-}
-.flex > .cell_1 {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  display: block;
-  position: relative;
-  -webkit-flex-basis: 0;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-}
-.heder-wrap{
-  background: #f5f5f5;
-  padding: 0.5rem 0;
-}
-.center_content{
-  text-align: center;
-}
-.left_btn, .right_btn{
-  width: 4rem;
-  text-align: center;
-}
-// 侧边栏
-.sidebar_wrap{
-  background: #eee1e1;
-  width: 50%;
-  position: absolute;
-  right: 0;
-}
-.bg_blue{
-  background: #00f;
-}
-.sidebar_item{
-  line-height: 2;
-  text-align: center;
-  display: block;
-}
-</style>
+

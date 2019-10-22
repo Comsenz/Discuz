@@ -11,7 +11,7 @@ $corF7: #f7f7f7;
 $corD8: #d8d8d8;
 body {
 	// color: $fontColor;
-	background: #bgFff;
+	background: $bgFff;
 }
 .navBarBox {
 	@include px2rem(height, 94);

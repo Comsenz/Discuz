@@ -103,15 +103,25 @@ body {
 	@include px2rem(padding-top,24);
 }
 
-
+.mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 13;
+	background: rgba(#000000,0.6);
+	width: 100%;
+	height: 100%;
+}
 
 // 侧边栏
-.sidebar_wrap{
-  background: #eee1e1;
-  width: 50%;
+.sidebarWrap {
+  @include px2rem(width,520);
+  background: #fff;
   position: fixed;
   right: 0;
-  @include px2rem(top,88);
+  top: 0;
+  height: 100%;
+  z-index: 14
 }
 .bg_blue{
   background: #00f;
