@@ -39,11 +39,11 @@ export default {
           password:this.password,
           adminid:1
         }
-      }),function (res) {
-        console.log(res);
-      },function (error) {
-        console.log(error);
-      }
+      }, function(res) {
+        console.log(res, 'success')
+      }, function(error) {
+        console.log(error, 'eror')
+      })
 
       // this.$router.push({path:'/m_site/bind_phone'})
 
