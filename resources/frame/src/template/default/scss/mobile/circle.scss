@@ -5,13 +5,10 @@
  */
 @import "./../var";
 @import "./_app";
-$bgFff: #fff;
-$borE5: #e5e5e5;
-$corF7: #f7f7f7;
-$corD8: #d8d8d8;
+
 body {
 	// color: $fontColor;
-	background: $bgFff;
+	background: $corFff;
 }
 .navBarBox {
 	@include px2rem(height, 94);
@@ -43,7 +40,7 @@ body {
 .themeTitBox {
 	@include px2rem(height, 106);
 	@include px2rem(padding, 30 30 28 30);
-	border-bottom: 1px solid $borE5;
+	border-bottom: 1px solid $corE5;
 	box-sizing:border-box;
 	.themeTit {
 		float: left;
@@ -122,7 +119,7 @@ body {
 	}
 }
 .operaBox {
-	background: $bgF7;
+	background: $corF7;
 	@include px2rem(padding, 16 0 20 0);
 	@include px2rem(margin-top, 20);
 	.likeBox {
@@ -155,7 +152,7 @@ body {
 }
 .replyBox {
 	@include px2rem(padding, 16 18 0 18);
-	border-top: 1px solid $borE5;
+	border-top: 1px solid $corE5;
 	@include px2rem(line-height, 40);
 	.replyCon {
 		@include px2rem(line-height, 40);
@@ -200,14 +197,160 @@ body {
 	}
 }
 
+/*
+付费圈子-首页-未登录
+payCircle.view
+*/
+.circleLoBox {
+	@include px2rem(padding, 26 30);
+	overflow: hidden;
+	border-bottom: 1px solid $corE5;
+	.circleIcon {
+		float: left;
+		@include px2rem(line-height, 42);
+		@include font-dpr(30);
+	}
+	.circleLogo {
+		float: right;
+		@include px2rem(height, 42);
+		@include px2rem(max-width, 220);
+	}
+}
+.circleInfo {
+	@include px2rem(padding, 26 30 28 30);
+	.cirInfoTit {
+		@include px2rem(line-height, 42);
+		@include font-dpr(30);
+		@include px2rem(padding-bottom, 8);
+	}
+	.cirInfoWord {
+		@include px2rem(line-height, 40);
+		color: rgba(#000,0.5);
+		@include font-dpr(28);
+		@include px2rem(padding-bottom, 28);
+		border-bottom: 1px solid $corE5;
+	}
+}
+.infoItem {
+	@include px2rem(padding, 26 0);
+	overflow: hidden;
+	border-bottom: 1px solid $corE5;
+	.infoItemLeft {
+		float: left;
+		@include px2rem(line-height, 42);
+		@include font-dpr(30);
+	}
+	.infoItemRight {
+		float: right;
+		@include px2rem(line-height, 42);
+		@include font-dpr(28);
+		color: rgba(#000,0.5);
+		@include px2rem(max-width, 520);
+		@include px2rem(height, 42);
+		@include singleline-ellipsis(0);
+		text-align: right;
+	}
+	.lookMore {
+	 	.icon {
+			@include font-dpr(32);
+			@include px2rem(padding-left, 14);
+		}
+	}
+	.circleMemberList {
+		overflow: hidden;
+		@include px2rem(padding-top, 28);
+		.circleMember {
+			float: left;
+			@include px2rem(height, 92);
+			@include px2rem(width, 92);
+			@include px2rem(margin-right, 56);
+			@include px2rem(border-radius, 8);
+			&:nth-child(5) {
+				@include px2rem(margin-right, 0);
+			}
+		}
+	}
+	
+}
+.loginOpera {
+	@include px2rem(padding, 50 30 86 30);
+	.mustLogin {
+		display: block;
+		@include horizontal-center;
+		@include px2rem(margin-bottom, 28);
+		background: $corF2;
+		@include px2rem(height, 72);
+		@include px2rem(width, 334);
+		text-align: center;
+		@include px2rem(line-height, 72);
+		@include px2rem(border-radius, 10);
+		color: $fontColor;
+		@include font-dpr(32);
+	}
+	.regiJoin {
+		display: block;
+		@include horizontal-center;
+		background: $fontColor;
+		color: #fff;
+		@include px2rem(height, 72);
+		@include px2rem(width, 334);
+		text-align: center;
+		@include px2rem(line-height, 72);
+		@include px2rem(border-radius, 10);
+		@include font-dpr(32);
+	}
+}
 
-
-
-
-
-
-
-
-
+/*
+	圈子管理-邀请
+	circleInviteView.vue
+*/
+.invitePerDet {
+	@include px2rem(padding, 88 30 6 30);
+	.inviteHead {
+		display: block;
+		@include px2rem(height, 92);
+		@include px2rem(width, 92);
+		@include horizontal-center;
+		@include px2rem(margin-bottom, 12);
+	}
+	.inviteName {
+		color: $fontColor;
+		@include font-dpr(30);
+		@include singleline-ellipsis(0);
+		text-align: center;
+		@include px2rem(margin-bottom, 28);
+		@include px2rem(line-height, 40);
+	}
+	.inviteWo {
+		@include font-dpr(30);
+		text-align: center;
+		@include px2rem(line-height, 40);
+	}
+}
+.powerListBox {
+	.powerTit {
+		@include font-dpr(30);
+		@include px2rem(line-height, 42);
+		@include px2rem(padding, 28 30 36 30);
+		border-bottom: 1px solid $corE5;
+	}
+	.powerList {
+		@include px2rem(padding, 28 0 36 0);
+		@include px2rem(margin, 0 30 0 30);
+		border-bottom: 1px solid $corE5;
+		.powerClassify {
+			@include font-dpr(34);
+			@include px2rem(line-height, 48);
+			@include px2rem(padding-bottom, 16);
+		}
+		.powerChi {
+			@include font-dpr(28);
+			@include px2rem(line-height, 40);
+			color: rgba(#000,0.5);
+		}
+	}
+	
+}
 
 

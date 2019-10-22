@@ -9,10 +9,14 @@
 @import "./circle";
 $headBg: #EEEFF0;
 
-body {
+body,html {
 	color: $font000;
 	@include font-dpr(28);
+	letter-spacing: 1px;
 }
+.borNone { border: none !important;}
+.padB0 { padding-bottom: 0 !important;}
+.overHide { overflow: hidden;}
 .headOpe {
 	text-align: right;
 	@include px2rem(padding, 28 30 14 30);
@@ -23,11 +27,6 @@ body {
 	}
 }
 .icon_search{
-
-	&:before {
-
-	}
-
 
 }
 .logo {
@@ -41,10 +40,10 @@ body {
 	@include px2rem(padding, 36 30 42 30);
 	@include px2rem(lin-height, 40);
 	color: $cor999;
-	border-bottom: 1px solid $borE5;
+	border-bottom: 1px solid $corE5;
 	span {
 		@include px2rem(padding,0 28);
-		border-right: 1px solid $borE5;
+		border-right: 1px solid $corE5;
 		&:last-child {
 			border: none; 
 		}
@@ -116,12 +115,71 @@ body {
 // 侧边栏
 .sidebarWrap {
   @include px2rem(width,520);
-  background: #fff;
+  background: $corE5;
   position: fixed;
   right: 0;
   top: 0;
   height: 100%;
   z-index: 14
+}
+.sideCon {
+	background: $corFff;
+	@include px2rem(padding-left,30);
+}
+.sideUserBox {
+	overflow: hidden;
+	@include px2rem(padding,108 30 28 0);
+	.userHead {
+		float: left;
+		@include px2rem(width,116);
+		@include px2rem(height,116);
+	}
+	.userDet {
+		float: left;
+		@include px2rem(margin-left,18);
+		@include px2rem(width,280);
+		.userName {
+			@include px2rem(line-height, 40);
+			color: $fontColor;
+			@include font-dpr(34);
+			@include px2rem(margin-bottom, 28);
+			@include px2rem(height, 40);
+			@include singleline-ellipsis(0);
+		}
+		.userPhone {
+			@include px2rem(line-height, 32);
+			color: $font888;
+			@include font-dpr(28);
+			@include px2rem(height, 32);
+		}
+	}
+	.jumpJtr {
+		float: right;
+		@include font-dpr(32);
+		color: $corE5;
+		@include px2rem(margin-top, 42);
+	}
+}
+.sideItem {
+	overflow: hidden;
+	@include px2rem(padding, 28);
+	border-bottom: 1px solid $corE5;
+	.itemTit {
+		@include px2rem(line-height, 42);
+		@include font-dpr(30);
+	}
+	.jumpJtr {
+		float: right;
+		@include font-dpr(32);
+		color: $corE5;
+		@include px2rem(margin-top, 5);
+	}
+}
+.itemGap {
+	background: $corEd;
+	border-top: 1px solid $corE5;
+	border-bottom: 1px solid $corE5;
+	@include px2rem(height, 22);
 }
 .bg_blue{
   background: #00f;
@@ -131,7 +189,9 @@ body {
   text-align: center;
   display: block;
 }
-
+.padTgap {
+	@include px2rem(padding-top, 96);
+}
 
 
 
