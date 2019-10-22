@@ -10,19 +10,18 @@ declare(strict_types=1);
 
 namespace App\Commands\Classify;
 
-
+use Discuz\Auth\AssertPermissionTrait;
 use Exception;
 use App\Models\Classify;
 use App\Events\Classify\Saving;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Psr\Http\Message\UploadedFileInterface;
 
 class CreateClassify
 {
     use EventsDispatchTrait;
-
+    use AssertPermissionTrait;
     /**
      * 执行操作的用户.
      *
@@ -71,7 +70,7 @@ class CreateClassify
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        $this->assertCan($this->actor, 'createCircle');
 
         // 初始圈子数据
         $classify = Classify::creation(
