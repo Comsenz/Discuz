@@ -5,6 +5,10 @@ import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSig
 export default {
   data:function () {
     return {
+      username:'',
+      password:'',
+      password2:'',
+      adminid:''
 
     }
   },
@@ -16,7 +20,37 @@ export default {
 
   methods:{
     signUpClick(){
-      this.$router.push({path:'/m_site/bind_phone'})
+
+      /*this.axios.post('http://local.test.discuz.com:8883/api/users',{
+        username:this.username,
+        password:this.password,
+        adminid:1
+      }).then((res)=>{
+        console.log(res);
+      }).catch((err)=>{
+        console.log(err);
+      })*/
+
+      this.appFetch({
+        url:'signUp',
+        method:'post',
+        data:{
+          username:this.username,
+          password:this.password,
+          adminid:1
+        }
+      }),function (res) {
+        console.log(res);
+      },function (error) {
+        console.log(error);
+      }
+
+      // this.$router.push({path:'/m_site/bind_phone'})
+
+      console.log(this.username + 'u');
+      console.log(this.password + 'p1');
+
+
     }
   }
 

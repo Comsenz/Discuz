@@ -35,6 +35,14 @@ export default {
           title:"header"
         }
       },
+      post_topic:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/postTopicView'],resolve)
+        },
+        metaInfo:{
+          title:"发布主题"
+        }
+      },
 
       //登录、注册、微信绑定模块路由
       login_user:{

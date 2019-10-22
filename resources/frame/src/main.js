@@ -18,6 +18,10 @@ import appStore from "./admin/store/index";							//vuex 初始化
 import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 /* end 设置引入的模板路径 end */
 
+import axios from 'axios';
+Vue.prototype.axios = axios;
+
+
 //实例化根目录
 const appRouter = RConfig.init();
 const App = new Vue({
