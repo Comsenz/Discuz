@@ -51,7 +51,7 @@ CREATE TABLE `threads` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  `delete_user_id` int(10) unsigned DEFAULT NULL,
+  `deleted_user_id` int(10) unsigned DEFAULT NULL,
   `is_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `is_sticky` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_essence` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -70,7 +70,7 @@ CREATE TABLE `posts` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  `delete_user_id` int(10) unsigned DEFAULT NULL,
+  `deleted_user_id` int(10) unsigned DEFAULT NULL,
   `is_first` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE

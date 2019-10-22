@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
- * @property int $delete_user_id
+ * @property int $deleted_user_id
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
