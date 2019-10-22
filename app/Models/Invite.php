@@ -46,14 +46,14 @@ class Invite extends Model
      *
      * @var string
      */
-    const CREATED_AT = 'createtime';
+    const CREATED_AT = 'created_at';
 
     /**
      * 存储时间戳的字段名
      *
      * @var string
      */
-    const UPDATED_AT = 'updatetime';
+    const UPDATED_AT = 'updated_at';
 
     /**
      * 模型的「启动」方法.

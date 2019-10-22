@@ -6,7 +6,7 @@ let apiConfig = require("./apiConfig.js");
 var appConfig = {
  	  port: '8883',                          //本地调试端口
     devHostName: 'local.test.discuz.com',  //本地调试域名
-    devApiUrl: 'http://api.itv.cctv.com/api',   //本地调试接口域名
+    devApiUrl: 'https://2020.comsenz-service.com',   //本地调试接口域名
 
   	baseUrl: '',                           //网站根目录
     apiBaseUrl: '',                        //网站根目录
@@ -21,6 +21,6 @@ var appConfig = {
 
   	//接口列表
   	apis: apiConfig
-}
+};
 
-module.exports = appConfig
+module.exports = appConfig;

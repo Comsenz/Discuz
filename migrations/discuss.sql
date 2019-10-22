@@ -51,7 +51,7 @@ CREATE TABLE `threads` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  `delete_user_id` int(10) unsigned DEFAULT NULL,
+  `deleted_user_id` int(10) unsigned DEFAULT NULL,
   `is_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `is_sticky` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_essence` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -70,7 +70,7 @@ CREATE TABLE `posts` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
-  `delete_user_id` int(10) unsigned DEFAULT NULL,
+  `deleted_user_id` int(10) unsigned DEFAULT NULL,
   `is_first` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_approved` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE
@@ -144,8 +144,8 @@ CREATE TABLE `classify` (
   `property` smallint(6) NOT NULL default '0' COMMENT '属性：0:正常 1:首页展示',
   `threads` int(10) NOT NULL DEFAULT '0' COMMENT '主题数',
   `ip` char(15) NOT NULL DEFAULT '0' COMMENT '更新IP',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `updated_at` timestamp NOT NULL,
+  `created_at` timestamp NOT NULL,
   PRIMARY KEY (id),
   KEY `sort` (`sort`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类表';
@@ -160,8 +160,8 @@ CREATE TABLE `invites` (
    `user_id` int(11) unsigned NOT NULL COMMENT '邀请用户ID',
    `to_user_id` int(11) unsigned NOT NULL COMMENT '被邀请用户ID',
    `status` tinyint(1) unsigned NOT NULL COMMENT '邀请码状态',
-   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+   `updated_at` timestamp NOT NULL,
+   `created_at` timestamp NOT NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='邀请码表';
 
@@ -177,7 +177,7 @@ CREATE TABLE `attachments` (
    `file_type` char(15) NOT NULL DEFAULT '' COMMENT '文件类型',
    `remote` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
    `ip` char(15) NOT NULL DEFAULT '0' COMMENT '创建IP',
-   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+   `updated_at` timestamp NOT NULL,
+   `created_at` timestamp NOT NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件表';

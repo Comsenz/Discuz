@@ -8,6 +8,22 @@ import appConfig from "../../config/appConfig";
 const erroCode = [-2];
 const qs = require('qs');
 
+//可以正常返回的状态码
+var codes = [422];
+
+// http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+  	if(codes.includes(error.response.status)) {
+  		return error.response;
+  	} else {
+  		return Promise.reject(error)
+  	}
+  }
+)
 
 /**
  * 根据api key 获取api 地址
@@ -78,23 +94,8 @@ const appFetch = function(params, success, error) {
 
 	return axios(params).then(function(response) {
 		let res = response.data || {};
-		res.code = +res.code;
-
-		if(res.code == 10042) {
-			//统一判断判断，需要登录
-			// Vue.authH.toLogin();
-
-			return;
-		} else if(res.e == 10044) {
-			//统一提示错误信息
-			Vue.prototype.$message({
-				type: "error",
-				message: res.msg,
-				showClose: true
-			});
-		} else {
-			success(response.data);
-		}
+		
+		success(response.data);
 	})
 	.catch(function(err) {
 		// console.error(err, 'API '+oldUrl);

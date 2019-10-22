@@ -4,10 +4,9 @@
 namespace App\Console\Commands;
 
 use Discuz\Console\AbstractCommand;
+use Discuz\Database\MigrationCreator;
 use Discuz\Foundation\Application;
 use Illuminate\Support\Str;
-use Illuminate\Support\Composer;
-use Illuminate\Database\Migrations\MigrationCreator;
 use Symfony\Component\Console\Input\InputOption;
 
 class MigrateMakeCommand extends AbstractCommand
@@ -42,9 +41,15 @@ class MigrateMakeCommand extends AbstractCommand
 
         $this->creator = $creator;
         $this->app = $app;
-        $this->addArgument('name');
-        $this->addOption('create');
-        $this->addOption('table', 'table name', InputOption::VALUE_REQUIRED);
+
+    }
+
+    protected function configure()
+    {
+        $this->addArgument('name')
+            ->addOption('create')
+            ->addOption('table', 'table name', InputOption::VALUE_REQUIRED);
+        parent::configure();
     }
 
     /**
@@ -59,8 +64,6 @@ class MigrateMakeCommand extends AbstractCommand
 
         $create = $this->input->getOption('create') ?: false;
         $table = $this->input->getOption('table');
-
-        $create = $create ? $table : ($table ? true : false);
 
         // Now we are ready to write the migration out to disk. Once we've written
         // the migration out, we will dump-autoload for the entire framework to

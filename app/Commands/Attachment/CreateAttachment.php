@@ -15,9 +15,7 @@ use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
 use App\Models\Attachment;
 use Discuz\Foundation\EventsDispatchTrait;
-use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Filesystem\Factory as FileFactory;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 

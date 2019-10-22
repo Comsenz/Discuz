@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\Circle;
+use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
 use Discuz\Api\Events\ScopeModelVisibility;
 use Illuminate\Database\Eloquent\Model;
@@ -24,12 +25,12 @@ class CirclePolicy extends AbstractPolicy
     protected $model = Circle::class;
 
     /**
-     * @param Model $actor
+     * @param User $actor
      * @param Model $model
      * @param string $ability
      * @return bool|null
      */
-    public function canPermission(Model $actor, Model $model, $ability)
+    public function canPermission(User $actor, Model $model, $ability)
     {
         if ($actor->hasPermission('circle.'.$ability)) {
             return true;

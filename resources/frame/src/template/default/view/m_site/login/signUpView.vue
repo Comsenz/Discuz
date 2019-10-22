@@ -13,14 +13,14 @@
               <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">用户名</label></div>
                 <div class="weui-cell__bd">
-                  <input id="js_input" class="weui-input" placeholder="请输入您的用户名">
+                  <input v-model="username" id="js_input" class="weui-input" placeholder="请输入您的用户名">
                 </div>
               </div>
 
               <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
                 <div class="weui-cell__bd">
-                  <input id="js_input" class="weui-input" placeholder="请填写密码">
+                  <input v-model="password" id="js_input" type="password" class="weui-input" placeholder="请填写密码">
                 </div>
               </div>
             </div>
