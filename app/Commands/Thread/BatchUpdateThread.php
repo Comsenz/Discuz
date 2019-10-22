@@ -89,10 +89,10 @@ class BatchUpdateThread
 
             if ($this->data->get('isDelete')) {
                 $update->put('deleted_at', Carbon::now());
-                $update->put('delete_user_id', $this->actor->id);
+                $update->put('deleted_user_id', $this->actor->id);
             } else {
                 $update->put('deleted_at', null);
-                $update->put('delete_user_id', null);
+                $update->put('deleted_user_id', null);
             }
         }
 

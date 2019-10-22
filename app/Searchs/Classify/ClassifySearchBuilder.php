@@ -15,7 +15,14 @@ use Discuz\Api\Events\SearchModelField;
 
 class ClassifySearchBuilder extends AbstractSearchBuilder
 {
-
+    /**
+     * 定义查询条件的方法
+     *
+     * @param $actor
+     * @param $query
+     * @param $content
+     * @return null
+     */
     public function name($actor, $query, $content)
     {
         $query->where('name', 'like', '%'.$content.'%');
@@ -25,9 +32,14 @@ class ClassifySearchBuilder extends AbstractSearchBuilder
         );
     }
 
-
-
-    public function user($actor, $query)
+    /**
+     * 定义关联模型的方法
+     *
+     * @param $actor
+     * @param $query
+     * @return null
+     */
+    public function firstPost($actor, $query)
     {
 
     }

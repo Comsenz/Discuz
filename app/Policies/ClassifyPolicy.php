@@ -12,6 +12,7 @@ namespace App\Policies;
 
 
 use App\Models\Classify;
+use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -24,16 +25,14 @@ class ClassifyPolicy extends AbstractPolicy
     protected $model = Classify::class;
 
     /**
-     * @param Model $actor
+     * @param User $actor
      * @param Model $model
      * @param string $ability
      * @return bool|null
      */
-    public function canPermission(Model $actor, Model $model, $ability)
+    public function canPermission(User $actor, Model $model, $ability)
     {
-//        if ($actor->hasPermission('invite.'.$ability)) {
-//            return true;
-//        }
+
     }
 
     /**
@@ -43,11 +42,7 @@ class ClassifyPolicy extends AbstractPolicy
      */
     public function findVisibility(Model $actor, Builder $query)
     {
-        // 当前用户是否有权限查看
-//        if ($actor->cannot('viewDiscussions')) {
-//            $query->whereRaw('FALSE');
-//            return;
-//        }
+
     }
 
     /**
@@ -57,9 +52,7 @@ class ClassifyPolicy extends AbstractPolicy
      */
     public function findEditVisibility(Model $actor, Builder $query)
     {
-//        if ($actor->cannot('editInvite')) {
-//            $query->where('invites.user_id', $actor->id);
-//        }
+
     }
 
 }
