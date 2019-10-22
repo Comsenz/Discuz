@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+/**
+ * 发布主题样式
+ */
+@import "./../var";
+@import "./_app";
+
+.post-topic-box{
+  width: 100%;
+  height: 100%;
+
+
+  .post-topic-header{
+    width: 100%;
+    @include px2rem(height,88);
+    background-color: rgba(249, 249, 249, 0.9);
+    box-shadow:0px 1px 0px 0px rgba(0,0,0,0.1);
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include px2rem(padding,0 32);
+
+    //color: #000;
+
+  }
+
+  .post-topic-form{
+    width: 100%;
+    height: 50%;
+    min-height: 300px;
+    border-bottom: 1px solid red;
+    #post-topic-form-text{
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      resize: none;
+      background: transparent;
+      color: inherit;
+      line-height: inherit;
+      outline: 0;
+      @include px2rem(padding,40);
+      @include font-dpr(34);
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      caret-color: $fontColor;  //光标颜色
+    }
+  }
+
+  .post-topic-footer{
+    width: 100%;
+    @include px2rem(height,100);
+    background-color: rgba(246, 246, 246, 1);
+    position: absolute;
+    bottom: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top:1px solid rgba(229,229,229,1);
+    border-bottom: 1px solid rgba(229,229,229,1);
+    display: flex;
+    justify-content: space-between;
+    @include px2rem(padding,0 32);
+
+    .post-topic-footer-left{
+      width: 30%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .post-topic-footer-right{
+      width: 20%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+  }
+
+}
+
