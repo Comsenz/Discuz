@@ -148,7 +148,7 @@ body{
         @include px2rem(width,334);
         @include px2rem(height,72);
         @include font-dpr(32);
-        @include px2rem(lint-height,44);
+        @include px2rem(line-height,44);
       }
     }
 
@@ -340,12 +340,18 @@ body{
     }
 
     .pay-the-fee-btn{
-      @include px2rem(width,370);
-      @include font-dpr(32)
+      @include px2rem(width,334);
+      @include font-dpr(32);
+      @include px2rem(padding,22 14);
     }
     .pay-the-fee-title-footer{
       @include px2rem(margin-top,30);
-      @include px2rem(margin-bottom,30)
+      @include px2rem(margin-bottom,30);
+      @include font-dpr(28);
+      font-family:PingFangSC-Medium,PingFang SC;
+      font-weight:500;
+      color:rgba(0,0,0,0.5);
+      @include px2rem(line-height,40)
     }
 
   }
@@ -365,13 +371,25 @@ body{
       width: 100%;
       border-bottom: 1px solid rgba(229, 229, 229, 1);
       justify-items: center;
+      h3{
+        @include font-dpr(30);
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        @include px2rem(line-height,42)
+      }
     }
 
     .pay-the-fee-per-list{
 
-      h3{
+      .pay-the-fee-per-name{
         @include px2rem(padding-top,28);
         @include px2rem(padding-bottom,16);
+        @include font-dpr(34);
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        @include px2rem(line-height,44);
       }
 
       ul{
