@@ -32,4 +32,11 @@ class GroupPermissionSerializer extends AbstractSerializer
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getId($model)
+    {
+        return hexdec(substr(md5($model->group_id.$model->permission), -3));
+    }
 }

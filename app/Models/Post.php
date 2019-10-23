@@ -90,4 +90,24 @@ class Post extends Model
     {
         return $this->belongsTo(Thread::class);
     }
+
+    /**
+     * Define the relationship with the post's author.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the user who hid the post.
+     *
+     * @return BelongsTo
+     */
+    public function deletedUser()
+    {
+        return $this->belongsTo(User::class, 'deleted_user_id');
+    }
 }

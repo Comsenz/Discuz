@@ -24,5 +24,8 @@ class Group extends Model
 
     protected $fillable = ['name', 'type', 'color', 'icon'];
 
-
+    public function groupPermission()
+    {
+        return $this->hasMany(GroupPermission::class);
+    }
 }

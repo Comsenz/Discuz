@@ -10,8 +10,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Thread extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
     use SoftDeletes;
 
     /**
@@ -99,6 +102,26 @@ class Thread extends Model
     public function replies()
     {
         return $this->posts()->where('is_approved', true);
+    }
+
+    /**
+     * Define the relationship with the thread's first post.
+     *
+     * @return HasMany
+     */
+    public function firstPost()
+    {
+        return $this->posts()->where('is_first', true);
+    }
+
+    /**
+     * Define the relationship with the thread's author.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

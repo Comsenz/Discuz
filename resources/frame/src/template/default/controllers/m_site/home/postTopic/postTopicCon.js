@@ -1,5 +1,6 @@
-// import weui from 'weui';
-
+/**
+ * 发布主题控制器
+ */
 
 export default {
   data:function () {
@@ -14,7 +15,7 @@ export default {
       this.$router.go(-1);
     },
     dClick() {
-      console.log(123);
+      var _this = this;
 
       weui.picker([{
         label: '飞机票',
@@ -35,11 +36,15 @@ export default {
       }], {
         onChange: function (result) {
           console.log(result);
+          // let selectName = result[0].label;
+          // _this.selectSort = selectName;
         },
-        onConfirm: function (result) {
-          console.log(result);
+        onConfirm: function (result) {    //问题：this.能读取到data数据，但是修改后页面不更新
+          console.log(result[0].label);
+          let selectName = result[0].label;
+          _this.selectSort = selectName;
         },
-        title: '单列选择器'
+        title: '选择分类'
       });
 
 

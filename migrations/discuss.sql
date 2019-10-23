@@ -56,7 +56,7 @@ CREATE TABLE `threads` (
   `is_sticky` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_essence` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `posts` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
