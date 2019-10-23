@@ -11,6 +11,8 @@ namespace App\Api\Serializer;
 
 use App\Models\Thread;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Tobscure\JsonApi\Relationship;
 
 class ThreadSerializer extends AbstractSerializer
 {
@@ -44,5 +46,35 @@ class ThreadSerializer extends AbstractSerializer
             'is_sticky'             => (bool) $model->is_sticky,
             'is_essence'            => (bool) $model->is_essence,
         ];
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    protected function user($thread)
+    {
+        return $this->hasOne($thread, UserSerializer::class, 'user');
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    public function firstPost($thread)
+    {
+        return $this->hasMany($thread, PostSerializer::class, 'firstPost');
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    public function posts($thread)
+    {
+        return $this->hasMany($thread, PostSerializer::class, 'posts');
     }
 }
