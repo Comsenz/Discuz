@@ -14,11 +14,13 @@ class CreateGroups extends Migration
     {
         $this->schema()->create('groups', function (Blueprint $table) {
             $table->integerIncrements('id')->comment('用户组ID');
-            $table->string('name')->comment('用户组名称');
-            $table->string('type', 50)->comment('类型');
-            $table->string('color', 20)->comment('颜色');
-            $table->string('icon', 100)->comment('icon类');
+            $table->string('name')->default('')->comment('用户组名称');
+            $table->string('type', 50)->default('')->comment('类型');
+            $table->string('color', 20)->default('')->comment('颜色');
+            $table->string('icon', 100)->default('')->comment('icon类');
         });
+
+        $this->table('groups')->insert(['name' => 'test']);
     }
 
     /**
