@@ -78,7 +78,7 @@ class CreateCircleExtend
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircleExtend');
+        // $this->assertCan($this->actor, 'circleExtend.createCircleExtend');
 
         // 初始圈子扩展数据
         $circleExtend = CircleExtend::creation(

@@ -70,7 +70,7 @@ class CreateClassify
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        $this->assertCan($this->actor, 'createCircle');
+        $this->assertCan($this->actor, 'classify.createClassify');
 
         // 初始圈子数据
         $classify = Classify::creation(
