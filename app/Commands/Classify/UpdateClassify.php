@@ -13,6 +13,7 @@ namespace App\Commands\Classify;
 use App\Models\User;
 use App\Repositories\ClassifyRepository;
 use App\Validators\ClassifyValidator;
+use Discuz\Auth\AssertPermissionTrait;
 use Exception;
 use App\Models\Classify;
 use App\Events\Classify\Saving;
@@ -22,7 +23,7 @@ use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 class UpdateClassify
 {
     use EventsDispatchTrait;
-
+    use AssertPermissionTrait;
     /**
      * 执行操作的id.
      *
@@ -85,7 +86,7 @@ class UpdateClassify
         $classify = $repository->findOrFail($this->classifyId, $this->actor);
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'updateCircle', $circle);
+        $this->assertCan($this->actor, 'classify.updateClassify', $classify);
 
         if (isset($this->data['name'])) {
             $classify->name = $this->data['name'];

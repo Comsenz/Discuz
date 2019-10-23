@@ -56,9 +56,7 @@ class UpdateCircleExtend
      */
     public function handle(Dispatcher $events, CircleRepository $repository)
     {
-        var_dump($this->postId);
-        var_dump($this->actor);
-        var_dump($this->data);
+
         $circle = $repository->getdata($this->data);
 
         return $circle;

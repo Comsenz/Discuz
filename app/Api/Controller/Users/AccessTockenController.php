@@ -18,6 +18,8 @@ class AccessTockenController implements RequestHandlerInterface
     {
         $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
         // dd($request);
+        $data=$request->getqueryParams();
+        $request= $request->withParsedBody($data);
         $server = new Server;
         $server=$server->server;
         $grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);

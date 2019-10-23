@@ -86,11 +86,11 @@ class UpdateCircle
         CircleValidator $validator
     ) {
         $this->events = $events;
-dd($this->actor);
+
         $circle = $repository->findOrFail($this->circleId, $this->actor);
-        dd($circle);
+
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'updateCircle', $circle);
+        // $this->assertCan($this->actor, 'circle.updateCircle', $circle);
 
         if (isset($this->data['color'])) {
             $circle->color = $this->data['color'];

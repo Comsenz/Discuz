@@ -27,15 +27,6 @@ class ClassifySearch extends AbstractSearch
     ];
 
     /**
-     * 每页多少条数据.
-     * $offset!=0时，请求参数为：page[number]=当前页数，会自动计算需要跳过多少条数据.
-     * $offset=0时，请求参数为：page[offset]=跳过的条数.
-     *
-     * @var int
-     */
-    public $offset = 10;
-
-    /**
      * 默认显示多少条数据.
      *
      * @var int

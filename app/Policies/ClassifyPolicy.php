@@ -32,7 +32,9 @@ class ClassifyPolicy extends AbstractPolicy
      */
     public function canPermission(User $actor, Model $model, $ability)
     {
-
+        if ($actor->hasPermission($this->getAbility($ability))) {
+            return true;
+        }
     }
 
     /**

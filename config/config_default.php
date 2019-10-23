@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
     'debug' => true,
     'locale' => 'zh-CN',
     'fallback_locale' => 'zh-CN',
     'timezone' => 'Asia/Shanghai',
-    'key' => 'base64:1iVfMjNNpAeMTc0vX70xebqjjQrdApyLibw5LhX6YHs=',
+    'key' => 'base64:JtNRiS14Mopb+HNi3ztxi6259im9DTDBJXOzLDbcquw=',
     'cipher' => 'AES-256-CBC',
     'database' =>
         [
@@ -24,6 +26,30 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
         ],
+    'redis' => [
+        'client' => 'phpredis',
+
+        'options' => [
+            'cluster' => 'redis',
+            'prefix' => Str::slug('discuz', '_').'_database_'
+        ],
+
+        'default' => [
+            'url' => '',
+            'host' => '127.0.0.1',
+            'password' => null,
+            'port' => 6379,
+            'database' => 0
+        ],
+
+        'cache' => [
+            'url' => '',
+            'host' => '127.0.0.1',
+            'password' => '123',
+            'port' => 6379,
+            'database' => 1
+        ],
+    ],
     //缓存系统配置
     'cache' => [
         'default' => 'file',
@@ -32,6 +58,10 @@ return [
             'file' => [
                 'driver' => 'file',
                 'path' => storage_path('cache/data'),
+            ],
+            'redis' => [
+                'driver' => 'redis',
+                'connection' => 'cache',
             ],
         ],
 
@@ -74,6 +104,34 @@ return [
     ],
     //加载ServiceProvider
     'providers' => [
-        //App\Providers\EventServiceProvider::class 测试示例
+//        App\Providers\EventServiceProvider::class
+        App\Providers\EventServiceProvider::class
+
+    ],
+    'sms' => [
+        // HTTP 请求的超时时间（秒）
+        'timeout' => 5.0,
+
+        // 默认发送配置
+        'default' => [
+            // 网关调用策略，默认：顺序调用
+            'strategy' => Overtrue\EasySms\Strategies\OrderStrategy::class,
+
+            // 默认可用的发送网关
+            'gateways' => [
+                'qcloud'
+            ],
+        ],
+        // 可用的网关配置
+        'gateways' => [
+            'errorlog' => [
+                'file' => storage_path('log/easy-sms.log')
+            ],
+            'qcloud' => [
+                'sdk_app_id' => '', // SDK APP ID
+                'app_key' => '', // APP KEY
+                'sign_name' => '', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
+            ],
+        ],
     ]
 ];

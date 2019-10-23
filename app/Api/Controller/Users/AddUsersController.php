@@ -17,7 +17,7 @@ use App\Validators\UserValidator;
 
 class AddUsersController implements RequestHandlerInterface
 {
-   protected $userValidator;
+    protected $userValidator;
 
     public function __construct(UserValidator $userValidator){
         $this->userValidator = $userValidator;
@@ -29,7 +29,7 @@ class AddUsersController implements RequestHandlerInterface
    
         $data = $request->getParsedBody();
 
-        $this->userValidator->valid(['username' => Arr::get($data, 'username'), 'password' => Arr::get($data, 'password'), 'password_confirmation' => Arr::get($data, 'password2')]);
+        $this->userValidator->valid(['username' => Arr::get($data, 'username'), 'password' => Arr::get($data, 'password')]);
        
         $user=User::create([
                 'username' => Arr::get($data, 'username'),
@@ -45,7 +45,7 @@ class AddUsersController implements RequestHandlerInterface
             'username'=>Arr::get($data,'username'),
             'password'=>Arr::get($data,'password')
         ];
-        $request= $request->withqueryParams($user);
+        $request= $request->withParsedBody($user);
         $userRepository = new UserRepository(); // instance of UserRepositoryInterface
         $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
         // dd($request);

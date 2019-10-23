@@ -35,12 +35,18 @@ class ListUsersController extends AbstractListController
         }
         if($is_wx==1){
             $users = User::where($arr)
-            ->join('user_wechat', 'user_wechat.id', '=', 'users.id')
+            ->rightjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
+            ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","nickname")
             ->orderBy('adminid','asc')
             ->offset($offset)->limit($num)->get();
         }else{
-            $users = User::where($arr)->orderBy('adminid','asc')->offset($offset)->limit($num)->get();
+            $users = User::where($arr)
+            ->leftjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
+            ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","nickname")
+            ->orderBy('adminid','asc')
+            ->offset($offset)->limit($num)->get();
         }
+        // dd($users);
         return $users;
     }
 }

@@ -23,6 +23,10 @@ $route->post('/login', 'users.login', ApiController\Users\LoginUsersController::
 $route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
+$route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileController::class);
+$route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
+$route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
+$route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
 
 /*
 |--------------------------------------------------------------------------

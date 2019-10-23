@@ -3,7 +3,8 @@
       <header class="post-topic-header">
         <span @click="backClick"  class="icon iconfont post-topic-header-icon" >&#xe605;</span>
         <h2>{{headerTitle}}</h2>
-        <span  class="icon iconfont post-topic-header-icon" >&#xe60c;</span>
+        <a href="javascript:;" class=" weui-btn weui-btn_mini weui-btn_primary post-topic-release-btn">发布</a>
+        <!--<span  class="icon iconfont post-topic-header-icon" >&#xe60c;</span>-->
       </header>
       <div class="post-topic-form">
         <textarea id="post-topic-form-text" name="post-topic"   placeholder="请输入内容"></textarea>
@@ -14,9 +15,9 @@
           <span  class="icon iconfont post-topic-header-icon" >&#xe612;</span>
           <span  class="icon iconfont post-topic-header-icon" >&#xe60a;</span>
         </div>
-        <div class="post-topic-footer-right">
+        <div @click="dClick"  class="post-topic-footer-right">
           <span>{{selectSort}}</span>
-          <span @click="dClick"  class="icon iconfont post-topic-header-icon" >&#xe60a;</span>
+          <span class="icon iconfont post-topic-header-icon" >&#xe612;</span>
         </div>
       </footer>
     </div>
