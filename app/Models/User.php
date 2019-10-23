@@ -21,7 +21,7 @@ class User extends Model {
      */
     protected static $gate;
 
-    protected $fillable = ['id', 'username','password','createtime'];
+    protected $fillable = ['id', 'username','password','adminid','mobile','createtime'];
 
     protected $permissions = null;
 

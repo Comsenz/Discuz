@@ -12,13 +12,14 @@ namespace App\Commands\Classify;
 
 use App\Events\Classify\Deleting;
 use App\Repositories\ClassifyRepository;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteClassify
 {
     use EventsDispatchTrait;
-
+    use AssertPermissionTrait;
     /**
      * 数据id.
      *
@@ -61,7 +62,7 @@ class DeleteClassify
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'deleteClassify');
+        $this->assertCan($this->actor, 'classify.deleteClassify');
 
         $classify = $repository->findOrFail($this->classifyId, $this->actor);
 

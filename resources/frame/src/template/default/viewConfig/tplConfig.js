@@ -27,6 +27,22 @@ export default {
           title:"圈子首页"
         }
       },
+      payCircle:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/payCircleView'],resolve)
+        },
+        metaInfo:{
+          title:"私密圈子待支付"
+        }
+      },
+      circleInvite:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/circleInviteView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子管理-邀请"
+        }
+      },
       header:{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)

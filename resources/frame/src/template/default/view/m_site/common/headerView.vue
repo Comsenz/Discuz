@@ -19,12 +19,58 @@
         </div>
       </div>
     </header>
-    <div class="mask" v-if="showMask"></div>
+    <div class="mask" v-if="showMask" @click="hideSidebar"></div>
     <div class="sidebarWrap" v-if="showSidebar">
-      <p v-for="(item, i) in sidebarList" :key="i">
+      <div class="sideCon">
+        <div class="sideUserBox">
+          <img src="" class="userHead">
+          <div class="userDet">
+            <div class="userName">jdhdskhfkdshfkdsh</div>
+            <div class="userPhone">183****0522</div>
+          </div>
+          <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+        </div>
+      </div>
+      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">
+        <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
+           <span class="itemTit">{{item.name}}</span>
+           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+        </div>
+      </div>
+      <div class="itemGap"></div>
+      <div class="sideCon" v-for="(item, i) in sidebarList2" :key="'list2'+i">
+        <div class="sideItem":to="{path: item.path, query: item.query}" v-if="item.path">
+           <span class="itemTit">{{item.name}}</span>
+           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+        </div>
+        <div class="sideItem" v-else @click="bindEvent(item.enentType)">
+           <span class="itemTit">{{item.name}}</span>
+           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+        </div>
+        <!-- <div class="weui-cell weui-cell_access">
+
+            <div class="weui-cell__bd">
+
+                <span style="vertical-align: middle">单行列表</span>
+
+            </div>
+
+            <div class="weui-cell__ft"></div>
+
+        </div> -->
+      </div>
+
+      <div class="itemGap"></div>
+      <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
+        <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
+           <span class="itemTit">{{item.name}}</span>
+           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+        </div>
+      </div>
+      <!-- <p v-for="(item, i) in sidebarList" :key="i">
         <router-link class="sidebar_item" :to="{path: item.path, query: item.query}" v-if="item.path">{{item.name}}</router-link>
         <span class="sidebar_item" v-else @click="bindEvent(item.enentType)">{{item.name}}</span>
-      </p>
+      </p> -->
     </div>
 
     <div class="headerBox">
@@ -63,23 +109,68 @@ export default {
       showHeader: false,
       showSidebar: false,
       showMask: false,
-      sidebarList: [
+      sidebarList1: [
         {
-            name: '我的资料',
-            path: 'login', // 跳转路径
-            query: { // 跳转参数
-            index: 1
+          name: '我的资料',
+          path: 'login', // 跳转路径
+          query: { // 跳转参数
+          index: 1
           },
             enentType: ''
         },
         {
-            name: '退出登录',
-            path: '', // 跳转路径
-            query: { // 跳转参数
-            index: 1
+          name: '我的钱包',
+          path: 'wallent', // 跳转路径
+          query: { // 跳转参数
+          index: 2
           },
-            enentType: 1 // 事件类型
+            enentType: ''
+        },
+        {
+          name: '我的收藏',
+          path: 'collection', // 跳转路径
+          query: { // 跳转参数
+          index: 3
+          },
+            enentType: ''
         }
+      ],
+      sidebarList2: [
+        {
+          name: '圈子信息',
+          path: 'login', // 跳转路径
+          query: { // 跳转参数
+          index: 1
+          },
+            enentType: ''
+        },
+        {
+          name: '圈子管理',
+          path: 'login', // 跳转路径
+          query: { // 跳转参数
+            index: 2
+          },
+          enentType: ''
+        },
+        {
+          name: '退出登录',
+          path: '', // 跳转路径
+          query: { // 跳转参数
+            index: 3
+          },
+          enentType: 1 // 事件类型
+        }
+      ],
+      sidebarList3: [
+        {
+          name: '邀请朋友',
+          path: 'login', // 跳转路径
+          query: { // 跳转参数
+          index: 1
+          },
+            enentType: ''
+        }
+        
       ]
 
     }
@@ -92,14 +183,14 @@ export default {
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         var offsetTop = document.querySelector('#testNavBar').offsetTop;
         if(scrollTop > offsetTop){
-          console.log('dayu');
+          // console.log('大于');
           this.showHeader = true;
           this.isfixHead = true;
           this.isfixNav = true;
           // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
           // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
         } else {
-          console.log('小于');
+          // console.log('小于');
           this.showHeader = false;
           this.isfixHead = false;
           this.isfixNav = false;
@@ -120,13 +211,17 @@ export default {
         this.showSidebar = !this.showSidebar;
         this.showMask =  !this.showMask;
       },
+      hideSidebar(){
+        this.showSidebar = false;
+        this.showMask =  false;
+      },
       bindEvent (typeName) {
         if (typeName == 1) {
           this.LogOut()
         }
       },
       LogOut () {
-        console.log('测试')
+        console.log('测试');
       }
 
   },
