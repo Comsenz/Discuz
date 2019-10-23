@@ -4,10 +4,14 @@
 namespace App\Models;
 
 
+use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
+    use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     const GUEST_ID = 7;
 

@@ -38,21 +38,21 @@ class ClassifyPolicy extends AbstractPolicy
     }
 
     /**
-     * @param Model $actor
+     * @param User $actor
      * @param Builder $query
      * @return void
      */
-    public function findVisibility(Model $actor, Builder $query)
+    public function findVisibility(User $actor, Builder $query)
     {
 
     }
 
     /**
-     * @param Model $actor
+     * @param User $actor
      * @param Builder $query
      * @return void
      */
-    public function findEditVisibility(Model $actor, Builder $query)
+    public function findEditVisibility(User $actor, Builder $query)
     {
 
     }

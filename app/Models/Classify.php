@@ -36,33 +36,6 @@ class Classify extends Model
      */
     protected $table = 'classify';
 
-    /**
-     * 该模型是否被自动维护时间戳.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
-     * 模型的日期字段的存储格式
-     *
-     * @var string
-     */
-    protected $dateFormat = 'U';
-
-    /**
-     * 存储时间戳的字段名
-     *
-     * @var string
-     */
-    const CREATED_AT = 'created_at';
-
-    /**
-     * 存储时间戳的字段名
-     *
-     * @var string
-     */
-    const UPDATED_AT = 'updated_at';
 
     /**
      * 模型的「启动」方法.

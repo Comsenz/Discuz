@@ -136,3 +136,11 @@ $route->post('/order', 'order.create', ApiController\Order\CreateOrderController
 $route->post('/trade/notify/wechat', 'trade.notify.wechat', ApiController\Trade\Notify\WechatNotifyController::class);
 $route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Trade\PayOrderController::class);
 $route->post('/trade/query/order/{order_sn}', 'trade.query.order', ApiController\Trade\QueryOrderController::class);
+
+/*
+|--------------------------------------------------------------------------
+| GroupPermission
+|--------------------------------------------------------------------------
+*/
+$route->middleware(App\Api\Middleware\Authentication::class)
+    ->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
