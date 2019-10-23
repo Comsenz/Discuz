@@ -6,9 +6,12 @@
 @import "./../var";
 @import "./_app";
 
+$postTopicColor:#336699;
+
 .post-topic-box{
   width: 100%;
   height: 100%;
+  color: #000;
 
 
   .post-topic-header{
@@ -77,14 +80,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .post-topic-header-icon{
+        @include font-dpr(48);
+      }
+
     }
 
     .post-topic-footer-right{
-      width: 20%;
+      //width: 20%;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: flex-end;
+
+      .post-topic-footer-right-sort{
+        color: rgba(136, 136, 136, 1);
+        @include font-dpr(28)
+      }
     }
 
   }

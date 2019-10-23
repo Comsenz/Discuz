@@ -11,12 +11,12 @@
       </div>
       <footer class="post-topic-footer">
         <div class="post-topic-footer-left">
-          <span  class="icon iconfont post-topic-header-icon" >&#xe608;</span>
-          <span  class="icon iconfont post-topic-header-icon" >&#xe612;</span>
-          <span  class="icon iconfont post-topic-header-icon" >&#xe60a;</span>
+          <span  class="icon iconfont post-topic-header-icon" >&#xe616;</span>
+          <span  class="icon iconfont post-topic-header-icon" >&#xe617;</span>
+          <span  class="icon iconfont post-topic-header-icon" >&#xe615;</span>
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
-          <span>{{selectSort}}</span>
+          <span class="post-topic-footer-right-sort">{{selectSort}}</span>
           <span class="icon iconfont post-topic-header-icon" >&#xe612;</span>
         </div>
       </footer>
