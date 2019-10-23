@@ -51,9 +51,8 @@
 	    <div class="loginOpera">
 	    	<a href="javascript:;" class="mustLogin">立即登录</a>
 	    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+	    	<p class="payMoney">￥20.00 / 永久有效</p>
 	    </div>
-	    
-	    
     </div>
 </template>
 

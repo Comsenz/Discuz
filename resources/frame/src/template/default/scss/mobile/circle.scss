@@ -333,12 +333,35 @@ payCircle.view
 		@include font-dpr(30);
 		@include px2rem(line-height, 42);
 		@include px2rem(padding, 28 30 36 30);
-		border-bottom: 1px solid $corE5;
+		position: relative;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    right: 0;
+		    bottom: 0;
+		    left: 16px;
+		    border-bottom: 1px solid $corE5;
+		    -webkit-transform: scaleY(0.5);
+		    transform: scaleY(0.5);
+		}
 	}
 	.powerList {
-		@include px2rem(padding, 28 0 36 0);
-		@include px2rem(margin, 0 30 0 30);
-		border-bottom: 1px solid $corE5;
+		@include px2rem(padding, 28 30 36 30);
+		position: relative;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    right: 0;
+		    bottom: 0;
+		    left: 16px;
+		    border-bottom: 1px solid $corE5;
+		    -webkit-transform: scaleY(0.5);
+		    transform: scaleY(0.5);
+		}
 		.powerClassify {
 			@include font-dpr(34);
 			@include px2rem(line-height, 48);
@@ -352,5 +375,98 @@ payCircle.view
 	}
 	
 }
+.payMoney {
+	@include font-dpr(28);
+	@include px2rem(line-height, 40);
+	@include px2rem(padding-top, 30);
+	color: rgba(#000,0.5);
+	text-align: center;
+}
+
+/*
+公开圈子，内容页的分享
+openCircleConView.vue
+*/
+.contentHead {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 11;
+	width: 100%;
+	background: #f9f9f9;
+	@include px2rem(height, 88);
+	box-shadow: 0px 1px rgba(#000,0.1);
+	@include px2rem(padding, 20 30);
+	box-sizing: border-box;
+	.headBack {
+		position: absolute;
+		@include px2rem(top, 28);
+		@include px2rem(left, 30);
+		z-index: 12;
+		@include font-dpr(32);
+	}
+	.headTit {
+		@include font-dpr(36);
+		@include px2rem(line-height, 48);
+		text-align: center;
+	}
+}
+.content {
+	@include px2rem(padding-top, 88);
+}
+.postImgBox {
+	@include px2rem(padding, 28 0);
+}
+//当只有一张图片时
+.oneImgBox {
+	width: 100%;
+	@include px2rem(height, 400);
+	.oneImg {
+		position: relative;
+		width: 100%;
+		@include px2rem(height, 400);
+	}
+	.postPictures {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+}
+//当只有两张图片时
+.twoImgBox {
+
+}
+//当只有三张图片时
+.threeImgBox {
+
+}
+
+.fileChi {
+	display: block;
+	@include px2rem(height, 40);
+	@include px2rem(line-height, 40);
+	@include font-dpr(30);
+	@include px2rem(margin-bottom, 26);
+	.icon {
+		float: left;
+		@include font-dpr(36);
+	}
+	.fileName {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		@include px2rem(padding-left, 46);
+		@include px2rem(height, 40);
+		@include px2rem(line-height, 40);
+		@include singleline-ellipsis(0);
+	}
+	&:last-child {
+		
+	}
+}
+
+
+
+
 
 

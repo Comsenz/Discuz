@@ -71,3 +71,26 @@
   content: "\e614";
 }
 
+.icon-enclosure:before {
+  content: "\e615";
+}
+
+.icon-label:before {
+  content: "\e616";
+}
+
+.icon-picture:before {
+  content: "\e617";
+}
+
+.icon-pdf:before {
+  content: "\e618";
+}
+
+.icon-rar:before {
+  content: "\e619";
+}
+
+.icon-word:before {
+  content: "\e61a";
+}

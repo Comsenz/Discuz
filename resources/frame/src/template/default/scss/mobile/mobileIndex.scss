@@ -12,8 +12,10 @@ $headBg: #EEEFF0;
 body,html {
 	color: $font000;
 	@include font-dpr(28);
-	letter-spacing: 1px;
+	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
+* {	letter-spacing: 1px;}
+a { color: $fontColor;}
 .borNone { border: none !important;}
 .padB0 { padding-bottom: 0 !important;}
 .overHide { overflow: hidden;}

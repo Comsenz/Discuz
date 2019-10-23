@@ -2,6 +2,11 @@
 
 <template>
     <div class="circleCon">
+    	<div class="invitePerDet">
+    		<img src="" class="inviteHead">
+	    	<div class="inviteName">Efhdkjfhk</div>
+	    	<p class="inviteWo">邀请您加入</p>
+    	</div>
 	    <Header></Header>
 	    <!-- <div class="headerBox">
 	        <div class="headOpe">

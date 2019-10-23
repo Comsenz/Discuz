@@ -35,6 +35,30 @@ export default {
           title:"私密圈子待支付"
         }
       },
+      payCircleCon:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/payCircleConView'],resolve)
+        },
+        metaInfo:{
+          title:"付费圈子，内容页的分享"
+        }
+      },
+      openCircle:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/openCircleView'],resolve)
+        },
+        metaInfo:{
+          title:"公开的圈子，菜单栏内的邀请"
+        }
+      },
+      openCircleCon:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/openCircleConView'],resolve)
+        },
+        metaInfo:{
+          title:"公开的圈子，内容页的分享"
+        }
+      },
       circleInvite:{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleInviteView'],resolve)
