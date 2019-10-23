@@ -32,17 +32,17 @@ class CirclePolicy extends AbstractPolicy
      */
     public function canPermission(User $actor, Model $model, $ability)
     {
-        if ($actor->hasPermission('circle.'.$ability)) {
+        if ($actor->hasPermission($this->getAbility($ability))) {
             return true;
         }
     }
 
     /**
-     * @param Model $actor
+     * @param User $actor
      * @param Builder $query
      * @return void
      */
-    public function findVisibility(Model $actor, Builder $query)
+    public function findVisibility(User $actor, Builder $query)
     {
         // 当前用户是否有权限查看圈子
         if ($actor->cannot('viewDiscussions')) {

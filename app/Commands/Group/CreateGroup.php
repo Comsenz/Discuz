@@ -34,7 +34,7 @@ class CreateGroup
      */
     public function handle(GroupValidator $groupValidator)
     {
-        $this->assertCan($this->user, 'createGroup');
+        $this->assertCan($this->user, 'group.createGroup');
 
         $group = new Group();
 
