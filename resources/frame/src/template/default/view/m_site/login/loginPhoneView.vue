@@ -27,7 +27,7 @@
                 <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
               </div>
               <div class="weui-cell__ft">
-                <a href="javascript:;" @click="getYZ" class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</a>
+                <a href="javascript:;" @click="getYZ" class="weui-btn weui-btn_default weui-vcode-btn verification-code-btn">获取验证码</a>
               </div>
             </div>
 
@@ -47,11 +47,11 @@
             <div class="login-phone-method-icon-box">
 
               <i @click="loginUserClick" class="login-phone-method-icon-ring iconfont">
-                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60f;</span>
+                <span class="icon iconfont icon-yonghu" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
 
               <i @click="wxLoginClick" class="login-phone-method-icon-ring iconfont">
-                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60e;</span>
+                <span class="icon iconfont icon-weixin" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
 
             </div>
