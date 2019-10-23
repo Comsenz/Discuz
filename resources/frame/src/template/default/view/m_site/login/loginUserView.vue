@@ -36,11 +36,11 @@
             <div class="login-user-method-icon-box">
 
               <i @click="loginPhoneClick" class="login-user-method-icon-ring iconfont">
-                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60d;</span>
+                <span class="icon iconfont icon-shouji" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
 
               <i @click="loginWxClick" class="login-user-method-icon-ring iconfont">
-                <span class="icon iconfont" style="color:rgba(136, 136, 136, 1);">&#xe60e;</span>
+                <span class="icon iconfont icon-weixin" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
 
             </div>
