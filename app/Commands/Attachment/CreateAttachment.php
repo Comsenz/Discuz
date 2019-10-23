@@ -14,6 +14,7 @@ use App\Tools\AttachmentUploadTool;
 use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
 use App\Models\Attachment;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Intervention\Image\ImageManager;
@@ -22,7 +23,7 @@ use Psr\Http\Message\UploadedFileInterface;
 class CreateAttachment
 {
     use EventsDispatchTrait;
-
+    use AssertPermissionTrait;
     /**
      * 执行操作的用户.
      *
@@ -74,7 +75,7 @@ class CreateAttachment
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'uploadFile');
+        $this->assertCan($this->actor, 'attachment.createAttachment');
 
         // 判断上传的文件是否正常
         if ($this->file->getError()){
