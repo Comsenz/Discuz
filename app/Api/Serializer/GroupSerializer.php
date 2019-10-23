@@ -4,7 +4,10 @@
 namespace App\Api\Serializer;
 
 
+use App\Models\GroupPermission;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Tobscure\JsonApi\Relationship;
 
 class GroupSerializer extends AbstractSerializer
 {
@@ -27,4 +30,15 @@ class GroupSerializer extends AbstractSerializer
             'icon' => $model->icon
         ];
     }
+
+    /**
+     * @param $group
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    public function groupPermission($group)
+    {
+        return $this->hasMany($group, GroupPermissionSerializer::class, 'groupPermission');
+    }
+
 }

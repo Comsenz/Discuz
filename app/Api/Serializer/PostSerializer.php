@@ -11,6 +11,8 @@ namespace App\Api\Serializer;
 
 use App\Models\Post;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Tobscure\JsonApi\Relationship;
 
 class PostSerializer extends AbstractSerializer
 {
@@ -41,5 +43,25 @@ class PostSerializer extends AbstractSerializer
             'is_first'          => (bool) $model->is_first,
             'is_approved'       => (bool) $model->is_approved,
         ];
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    protected function user($post)
+    {
+        return $this->hasOne($post, UserSerializer::class, 'user');
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    protected function thread($post)
+    {
+        return $this->hasOne($post, ThreadSerializer::class, 'thread');
     }
 }
