@@ -5,7 +5,7 @@
 	    <Header></Header>
 	    <!-- <div class="headerBox">
 	        <div class="headOpe">
-	          <span class="icon iconfont">&#xe60b;</span>
+	          <span class="icon iconfont">&#xe<b;</span>
 	          <span class="icon iconfont">&#xe60c;</span>
 	        </div>
 	        <img src="../../../../../../static/images/logo.png" class="logo">
@@ -26,7 +26,7 @@
 	    	<span class="themeTit">全部主题</span>
 	    	<div class="screen">
 	    		<span>筛选</span>
-	    		<span class="icon iconfont jtGrayB">&#xe612;</span>
+	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>
 	    	</div>
 	    </div>
 	    <div class="cirPostCon">
@@ -39,9 +39,9 @@
 	    			</div>
 	    		</div>
 	    		<div class="postOpera">
-	    			<span class="icon iconfont">&#xe614;</span>
+	    			<span class="icon iconfont icon-top"></span>
 	    			<div class="moreCli">
-	    				<span class="icon iconfont">&#xe613;</span>
+	    				<span class="icon iconfont icon-more"></span>
 	    			</div>
 	    		</div>
 	    	</div>
@@ -50,11 +50,11 @@
 	    	</div>
 	    	<div class="operaBox">
 	    		<div class="likeBox">
-	    			<span class="icon iconfont">&#xe607;</span>
+	    			<span class="icon iconfont icon-praise-after"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">sdfdsfsd</a>，<a href="javascript:;">第三方第三方</a>，<a href="javascript:;">电风扇</a>，<a href="javascript:;">dfffss</a>&nbsp;等<span>21</span>个人觉得很赞
 	    		</div>
 	    		<div class="reward">
-	    			<span class="icon iconfont">&#xe606;</span>
+	    			<span class="icon iconfont icon-money"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>
 	    		</div>
 	    		<div class="replyBox">
@@ -68,10 +68,10 @@
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
-	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont">&#xe60a;</span></a>
+	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
 	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont">&#xe608;</span>
+	    			<span class="icon iconfont icon-publish"></span>
 	    		</a>
 	    	</div>
 	    </div>
@@ -86,8 +86,10 @@
 	    			</div>
 	    		</div>
 	    		<div class="postOpera">
-	    			<span class="icon iconfont">&#xe60a;</span>
-	    			<span class="icon iconfont">&#xe60b;</span>
+	    			<span class="icon iconfont icon-top"></span>
+	    			<div class="moreCli">
+	    				<span class="icon iconfont icon-more"></span>
+	    			</div>
 	    		</div>
 	    	</div>
 	    	<div class="postContent">
@@ -95,11 +97,11 @@
 	    	</div>
 	    	<div class="operaBox">
 	    		<div class="likeBox">
-	    			<span class="icon iconfont">&#xe607;</span>
+	    			<span class="icon iconfont icon-praise-after"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">sdfdsfsd</a>，<a href="javascript:;">第三方第三方</a>，<a href="javascript:;">电风扇</a>，<a href="javascript:;">dfffss</a>&nbsp;等<span>21</span>个人觉得很赞
 	    		</div>
 	    		<div class="reward">
-	    			<span class="icon iconfont">&#xe606;</span>
+	    			<span class="icon iconfont icon-money"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>
 	    		</div>
 	    		<div class="replyBox">
@@ -113,10 +115,10 @@
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
-	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont">&#xe60a;</span></a>
+	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
 	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont">&#xe608;</span>
+	    			<span class="icon iconfont icon-publish"></span>
 	    		</a>
 	    	</div>
 	    </div>
@@ -131,8 +133,10 @@
 	    			</div>
 	    		</div>
 	    		<div class="postOpera">
-	    			<span class="icon iconfont">&#xe60a;</span>
-	    			<span class="icon iconfont">&#xe60b;</span>
+	    			<span class="icon iconfont icon-top"></span>
+	    			<div class="moreCli">
+	    				<span class="icon iconfont icon-more"></span>
+	    			</div>
 	    		</div>
 	    	</div>
 	    	<div class="postContent">
@@ -140,11 +144,11 @@
 	    	</div>
 	    	<div class="operaBox">
 	    		<div class="likeBox">
-	    			<span class="icon iconfont">&#xe607;</span>
+	    			<span class="icon iconfont icon-praise-after"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">sdfdsfsd</a>，<a href="javascript:;">第三方第三方</a>，<a href="javascript:;">电风扇</a>，<a href="javascript:;">dfffss</a>&nbsp;等<span>21</span>个人觉得很赞
 	    		</div>
 	    		<div class="reward">
-	    			<span class="icon iconfont">&#xe606;</span>
+	    			<span class="icon iconfont icon-money"></span>
 	    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">Elizabetch</a>
 	    		</div>
 	    		<div class="replyBox">
@@ -158,11 +162,11 @@
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
-	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont">&#xe60a;</span></a>
+	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
 
 	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont">&#xe608;</span>
+	    			<span class="icon iconfont icon-publish"></span>
 	    		</a>
 	    	</div>
 

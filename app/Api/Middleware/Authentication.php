@@ -33,8 +33,7 @@ class Authentication implements MiddlewareInterface
 
     private function getActor($session)
     {
-        $actor = User::creation();
-
+        $actor = User::find(1);
         return $actor;
     }
 }
