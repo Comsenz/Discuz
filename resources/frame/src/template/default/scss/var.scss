@@ -36,3 +36,11 @@ body{
 .weui-form__title{
   font-size: $fontSizeTitle;
 }
+
+
+/**
+ * 获取验证码按钮样式
+ */
+.verification-code-btn{
+  font-weight:400
+}

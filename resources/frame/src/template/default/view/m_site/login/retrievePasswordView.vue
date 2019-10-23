@@ -22,7 +22,7 @@
                   <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="请输入验证码" maxlength="6">
                 </div>
                 <div class="weui-cell__ft">
-                  <button class="weui-btn weui-btn_default weui-vcode-btn">获取验证码</button>
+                  <button class="weui-btn weui-btn_default weui-vcode-btn verification-code-btn">获取验证码</button>
                 </div>
               </div>
               <div class="weui-cell">
