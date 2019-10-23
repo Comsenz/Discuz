@@ -13,15 +13,24 @@ use App\Passport\Repositories\UserRepository;
 use App\Passport\Repositories\RefreshTokenRepository;
 use Illuminate\Support\Arr;
 use App\Models\User;
+use App\Validators\UserValidator;
 
 class LoginUsersController implements RequestHandlerInterface
 {
-   
+    protected $userValidator;
+
+    public function __construct(UserValidator $userValidator){
+        $this->userValidator = $userValidator;
+    }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // TODO: Implement data() method.
         
         $data = $request->getParsedBody();
+
+        $this->userValidator->valid(['loginusername' => Arr::get($data, 'username'), 'loginpwd' => Arr::get($data, 'password')]);
+       
         $user =[
             'grant_type'=>'password',
             'client_id'=> '2',
@@ -30,7 +39,7 @@ class LoginUsersController implements RequestHandlerInterface
             'username'=>Arr::get($data,'username'),
             'password'=>Arr::get($data,'password')
         ];
-        $request= $request->withqueryParams($user);
+        $request= $request->withParsedBody($user);
         // dd($request);
         $userRepository = new UserRepository(); // instance of UserRepositoryInterface
         $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface

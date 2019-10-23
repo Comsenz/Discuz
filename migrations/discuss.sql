@@ -132,7 +132,7 @@ CREATE TABLE `user_wechat` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 分类表
 CREATE TABLE `classify` (
