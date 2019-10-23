@@ -136,22 +136,24 @@
 	    <div class="gap"></div>    
 	    <div class="loginOpera">
 	    	<a href="javascript:;" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+	    	<a href="javascript:;" class="regiJoin">注册</a>
 	    </div>
     </div>
 </template>
 
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
-import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
+// import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
+import mSiteOpenCircleConCon from '../../../controllers/m_site/circle/openCircleConCon';
+import mSiteHeader from '../../../controllers/m_site/common/header';
 import Header from '../../m_site/common//headerView';
 import  '../../../scss/mobile/mobileIndex.scss';
 export default {
     name: "circleView",
     components:{
-    	Header
+    	// Header
     },
-    ...mSiteCircleCon
+    ...mSiteOpenCircleConCon
 }
 
 

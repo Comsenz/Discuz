@@ -57,6 +57,52 @@ body {
 		@include font-dpr(28);
 		color: #888888;
 		@include px2rem(line-height, 48);
+		position: relative;
+		.themeList {
+			display: none;
+			position: absolute;
+			@include px2rem(top, 60);
+			background: $corF7;
+			right: 0;
+			@include px2rem(width, 240);
+			@include px2rem(border-radius, 10);
+			border: 1px solid $corE5;
+			&:after {
+				content: '';
+				display: block;
+				border-width: 10px;
+				position: absolute;
+				top: -17px;
+				right: 10px;
+				border-style: solid dashed dashed;
+				border-color: transparent transparent $corF7;
+				font-size: 0;
+				line-height: 0;
+			}
+			&:before {
+				content: '';
+				display: block;
+				border-width: 10px;
+				position: absolute;
+				top: -18px;
+				right: 10px;
+				border-style: solid dashed dashed;
+				border-color: transparent transparent $corE5;
+				font-size: 0;
+				line-height: 0;
+			}
+			a {
+				display: block;
+				@include px2rem(padding, 22 30);
+				@include px2rem(line-height, 42);
+				color: $cor888;
+				@include font-dpr(30);
+				border-bottom: 1px solid $corE5;
+				&:last-child {
+					border: none;
+				}
+			}
+		}
 	}
 }
 .cirPostCon {
@@ -228,6 +274,7 @@ payCircle.view
 		@include px2rem(line-height, 42);
 		@include font-dpr(30);
 		@include px2rem(padding-bottom, 8);
+		font-weight: normal;
 	}
 	.cirInfoWord {
 		@include px2rem(line-height, 40);
@@ -606,8 +653,21 @@ openCircleConView.vue
 		}
 	}
 }
-
-
+/*
+付费的圈子，已登录，未付费
+*/
+.welcomeUser {
+	text-align: center;
+	@include font-dpr(28);
+	@include px2rem(line-height, 40);
+	color: rgba(#000,0.5);
+	@include px2rem(margin-bottom, 28);
+	.signOut {
+		@include font-dpr(28);
+		@include px2rem(line-height, 40);
+		@include px2rem(margin-left, 40);
+	}
+}
 
 
 
