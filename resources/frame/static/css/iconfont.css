@@ -93,3 +93,15 @@
 .icon-word:before {
   content: "\e61a";
 }
+
+.icon-like:before {
+  content: "\e61b";
+}
+
+.icon-review:before {
+  content: "\e61c";
+}
+
+.icon-reward:before {
+  content: "\e61d";
+}
