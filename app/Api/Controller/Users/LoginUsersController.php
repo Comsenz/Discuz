@@ -61,7 +61,6 @@ class LoginUsersController implements RequestHandlerInterface
         );
         // dd($server);
         $response =new Response();
-       
         try {
             // Try to respond to the request
             $user=User::where('username',Arr::get($data, 'username'))->first();

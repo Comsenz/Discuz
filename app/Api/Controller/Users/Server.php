@@ -27,7 +27,7 @@ class Server
         // $encryptionKey = Key::loadFromAsciiSafeString($encryptionKey); //如果通过 generate-defuse-key 脚本生成的字符串，可使用此方法传入
 
         // 初始化 server
-        $server = new \League\OAuth2\Server\AuthorizationServer(
+        $server = @new \League\OAuth2\Server\AuthorizationServer(
             $clientRepository,
             $accessTokenRepository,
             $scopeRepository,
@@ -36,7 +36,7 @@ class Server
         );
        
         // dd($server);
-        $this->server=$server;
+        $this->server= $server;
     }
     
 }
