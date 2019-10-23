@@ -16,6 +16,8 @@ class CreateGroupPermission extends Migration
             $table->unsignedInteger('group_id')->comment('用户组ID');
             $table->string('permission')->comment('权限名称');
             $table->primary(['group_id', 'permission']);
+
+
         });
     }
 
