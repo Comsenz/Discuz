@@ -8,7 +8,7 @@ import "babel-polyfill";
 import jQuery from "jquery";
 window.$ = jQuery;
 
-import "weui";
+// import "weui";
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
