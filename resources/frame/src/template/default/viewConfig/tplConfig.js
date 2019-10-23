@@ -100,6 +100,14 @@ export default {
         metaInfo:{
           title:"忘记密码"
         }
+      },
+      pay_the_fee:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/payTheFeeView'],resolve)
+        },
+        metaInfo:{
+          title:"支付费用"
+        }
       }
 
     },

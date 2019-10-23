@@ -7,6 +7,8 @@
 @import "../app";
 
 $w100:100%;  //宽度100%
+$payColor:#000; //支付费用字体颜色
+$themeColor: rgba(51, 102, 153, 1);  //主题颜色
 
 html,
 body{
@@ -302,6 +304,97 @@ body{
     .sign-up-btn{
       width: 100%;
       text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  支付费用页面
+ */
+.pay-the-fee-box{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(237, 237, 237, 1);
+  overflow: hidden;
+  color: $payColor;
+
+  .pay-the-fee-main{
+    width: 100%;
+    height: 35%;
+    text-align: center;
+    background-color: white;
+    overflow: hidden;
+
+    .pay-the-fee-titel{
+      width: 100%;
+      //height: 40%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(margin-top,80);
+      @include px2rem(margin-bottom,116)
+
+    }
+
+    .pay-the-fee-btn{
+      @include px2rem(width,370);
+      @include font-dpr(32)
+    }
+    .pay-the-fee-title-footer{
+      @include px2rem(margin-top,30);
+      @include px2rem(margin-bottom,30)
+    }
+
+  }
+
+  .pay-the-fee-permission{
+    width: 100%;
+    height: calc(65% - 55px);
+    background-color: white;
+    @include px2rem(margin-top,22);
+    @include px2rem(padding,32);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .pay-the-fee-per-title{
+      @include px2rem(height,70);
+      width: 100%;
+      border-bottom: 1px solid rgba(229, 229, 229, 1);
+      justify-items: center;
+    }
+
+    .pay-the-fee-per-list{
+
+      h3{
+        @include px2rem(padding-top,28);
+        @include px2rem(padding-bottom,16);
+      }
+
+      ul{
+        @include font-dpr(28);
+        color: rgba(0, 0, 0, 0.5);
+      }
+
+    }
+
+    .pay-the-fee-per-list-footer{
+      width: 100%;
+      height: 30px;
+      position: absolute;
+      left: 0;
+      @include px2rem(bottom,98);
+      text-align: center;
+      p{
+        color: $themeColor;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        @include font-dpr(26);
+        line-height:36px;
+      }
     }
 
   }
