@@ -50,7 +50,7 @@ class Attachment extends Model
      *
      * @var string
      */
-    protected $dateFormat = 'U';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     /**
      * 存储时间戳的字段名
