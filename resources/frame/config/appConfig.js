@@ -13,7 +13,7 @@ var appConfig = {
   	staticBaseUrl: '',                     //静态文件根目录
     uploadBaseUrl: '',                     //上传文件地址
 
-  	siteBasePath: './',                     //网站所属目录
+  	siteBasePath: '/',                     //网站所属目录
     apiBasePath: "/",                      //接口所属目录
     staticPath: "/static",                 //静态文件所属目录
     uploadPath: "/upload",                 //上传文件所属目录

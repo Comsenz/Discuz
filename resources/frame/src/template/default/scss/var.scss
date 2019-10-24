@@ -77,3 +77,45 @@ body{
   box-sizing: border-box;
   caret-color: $fontColor;  //光标颜色
 }
+
+/**
+  列表-公共样式
+ */
+.m-site-cell-access{
+  width: 100%;
+  @include px2rem(height,90);
+  border-bottom: 1px solid #E5E5E5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:last-child{
+    border-bottom: 0;
+  }
+
+  .m-site-cell-access-bd{
+    flex: 1;
+    @include font-dpr(30);
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:#000000;
+    @include px2rem(line-height,42);
+  }
+
+  .m-site-cell-access-ft{
+    @include font-dpr(30);
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(0,0,0,0.5);
+    @include px2rem(line-height,32);
+    @include px2rem(padding-right,45);
+    position: relative;
+
+    i{
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

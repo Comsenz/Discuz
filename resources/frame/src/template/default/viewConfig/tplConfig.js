@@ -175,7 +175,41 @@ export default {
         metaInfo:{
           title:"回复主题"
         }
-      }
+      },
+
+      //我的模块
+      'modify-data':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/modifyDataView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
+        }
+      },
+      'modify-phone':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/modifyPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
+        }
+      },
+      'change-pwd':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/changePasswordView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
+        }
+      },
+      'withdraw':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/withdrawView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
+        }
+      },
 
     },
     site: {
