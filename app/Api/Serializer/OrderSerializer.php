@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -19,9 +19,9 @@ class OrderSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-           'order_sn' => $model->order_sn,
-           'amount' => $model->amount,
-           'status' => $model->status
+            'order_sn' => $model->order_sn,
+            'amount'   => $model->amount,
+            'status'   => $model->status,
         ];
     }
 }

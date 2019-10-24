@@ -1,27 +1,26 @@
 <?php
-
 /**
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateOrderController.php xxx 2019-10-16 00:00:00 zhouzhou $
+ *      $Id: UpdateUserWalletController.php xxx 2019-10-22 17:20:00 zhouzhou $
  */
 
-namespace App\Api\Controller\Order;
+namespace App\Api\Controller\Wallet;
 
+use App\Api\Serializer\UserWalletSerializer;
+use App\Commands\Wallet\UpdateUserWallet;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use App\Api\Serializer\OrderSerializer;
-use App\Commands\Order\CreateOrder;
 
-
-class CreateOrderController extends AbstractCreateController
+class UpdateUserWalletController extends AbstractCreateController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = OrderSerializer::class;
+    public $serializer = UserWalletSerializer::class;
 
     /**
      * {@inheritdoc}
@@ -30,10 +29,11 @@ class CreateOrderController extends AbstractCreateController
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-        $inputs    = $request->getParsedBody();
 
+        //钱包ID
+        $wallet_id = Arr::get($request->getQueryParams(), 'wallet_id');
         return $this->bus->dispatch(
-            new CreateOrder($actor, $inputs)
+            new UpdateUserWallet($wallet_id, $actor, $request->getParsedBody())
         );
     }
 }

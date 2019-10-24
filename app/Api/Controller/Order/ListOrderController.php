@@ -4,19 +4,18 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateOrderController.php xxx 2019-10-16 00:00:00 zhouzhou $
+ *      $Id: CreateOrderController.php xxx 2019-10-24 11:20:00 zhouzhou $
  */
 
 namespace App\Api\Controller\Order;
 
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use App\Api\Serializer\OrderSerializer;
-use App\Commands\Order\CreateOrder;
+use App\Commands\Order\ListOrder;
 
-
-class CreateOrderController extends AbstractCreateController
+class ListOrderController extends AbstractListController
 {
     /**
      * {@inheritdoc}
@@ -28,12 +27,13 @@ class CreateOrderController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
+        // 获取当前用户
         $actor = $request->getAttribute('actor');
-        $inputs    = $request->getParsedBody();
+        // 获取请求的参数
+        $query_inputs = $request->getQueryParams();
 
         return $this->bus->dispatch(
-            new CreateOrder($actor, $inputs)
+            new ListOrder($actor, $query_inputs)
         );
     }
 }

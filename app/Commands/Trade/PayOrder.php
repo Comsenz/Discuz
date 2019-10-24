@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -11,12 +11,11 @@ declare(strict_types=1);
 namespace App\Commands\Trade;
 
 use App\Models\Order;
-use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Collection;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\PayTrade;
-use App\Settings\SettingsRepository;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\ValidationException;
 
 class PayOrder
 {
@@ -49,8 +48,8 @@ class PayOrder
      */
     public function __construct($order_sn, $actor, Collection $data)
     {
-        $this->actor = $actor;
-        $this->data = $data;
+        $this->actor    = $actor;
+        $this->data     = $data;
         $this->order_sn = $order_sn;
     }
 
@@ -65,23 +64,23 @@ class PayOrder
         // $this->assertCan($this->actor, 'createCircle');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-        	'payment_type' => 'required'
+            'payment_type' => 'required',
         ]);
 
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
+        //订单展示权限？？？？？？？？
+        $order_info = Order::where('order_sn', $this->order_sn)->where('status', 0)->first();
 
-        $order_info = Order::where('order_sn', $this->order_sn)->first();
-       
         $payment_params = '';
-        $payment_type = (int)$this->data->get('payment_type');
+        $payment_type   = (int) $this->data->get('payment_type');
         if (!empty($order_info)) {
             $order_info->body = '收款';
             // 支付参数
             $order_info->payment_params = $this->paymentParams($order_info->toArray(), $payment_type);
         }
-       
+
         // 返回数据对象
         return $order_info;
     }
@@ -93,38 +92,38 @@ class PayOrder
      */
     public function paymentParams($order_info, $payment_type)
     {
-    	if (empty($order_info)) {
-    		return [];
-    	}
+        if (empty($order_info)) {
+            return [];
+        }
         // $wechat_payment_config = $this->app->make(SettingsRepository::class)->get('wechat_payment_config');
         // print_r($wechat_payment_config);
         // exit;
-    	$config = [
-    		'app_id' => '',
-    		'mch_id' => '',
-    		'api_key' => '',
-            'notify_url' => '',
-    	];
-        $extra = [];//可选参数
-        $pay_gateway = '';//付款通道及方式
-    	switch ($payment_type) {
-    		case '10': //微信扫码支付
+        $config = [
+            'app_id'     => 'wx24ef8273fde3334e',
+            'mch_id'     => '1515287121',
+            'api_key'    => 'sajhulDAAhkH1341H9H1O1OR31O12e1o',
+            'notify_url' => 'http://2020.comsenz-service.com/api/trade/notify/wechat',
+        ];
+        $extra       = []; //可选参数
+        $pay_gateway = ''; //付款通道及方式
+        switch ($payment_type) {
+            case '10': //微信扫码支付
                 $pay_gateway = GatewayConfig::WECAHT_PAY_NATIVE;
-    			break;
+                break;
             case '11': //微信h5支付
                 $pay_gateway = GatewayConfig::WECAHT_PAY_WAP;
                 break;
             case '12': //微信网页、公众号、小程序支付网关
                 $pay_gateway = GatewayConfig::WECAHT_PAY_JS;
-                $extra = [
-                    'openid' => 'opBsM00ZzlDhl7cEVonf_MD01VK4',//$this->$actor->openid;
+                $extra       = [
+                    'openid' => $this->$actor->openid,
                 ];
                 break;
-    		default:
+            default:
                 return [];
-    			break;
-    	}
-        return PayTrade::pay($order_info, $pay_gateway, $config, $extra);//生成支付参数
+                break;
+        }
+        return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -32,7 +32,6 @@ class Order extends Model
      * @var bool
      */
     public $timestamps = true;
-
 
     /**
      * 模型的「启动」方法.

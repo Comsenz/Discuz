@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -18,11 +18,11 @@ class PayOrderSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-    	if (isset($model->payment_params)) {
-    		return $model->payment_params;
-    	} else {
+        if (isset($model->payment_params)) {
+            return $model->payment_params;
+        } else {
             return '';
         }
-        
+
     }
 }
