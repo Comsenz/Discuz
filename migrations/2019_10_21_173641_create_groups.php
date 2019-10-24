@@ -19,8 +19,6 @@ class CreateGroups extends Migration
             $table->string('color', 20)->default('')->comment('颜色');
             $table->string('icon', 100)->default('')->comment('icon类');
         });
-
-        $this->table('groups')->insert(['name' => 'test']);
     }
 
     /**
