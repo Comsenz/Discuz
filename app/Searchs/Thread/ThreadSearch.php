@@ -22,7 +22,33 @@ class ThreadSearch extends AbstractSearch
     public $includes = [
         'user',
         'firstPost',
-        'posts',
-        'posts.user'
+    ];
+
+
+
+    /**
+     * 默认显示多少条数据.
+     *
+     * @var int
+     */
+    public $defaultLimit = 20;
+
+    /**
+     * 可被排序的字段。
+     *
+     * @var array
+     */
+    public $sort = [
+        'id',
+        'updated_at',
+    ];
+
+    /**
+     * 默认的排序字段。
+     *
+     * @var array
+     */
+    public $defaultSort = [
+        'updated_at' => 'desc'
     ];
 }

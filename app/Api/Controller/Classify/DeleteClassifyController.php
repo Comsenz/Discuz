@@ -22,6 +22,7 @@ class DeleteClassifyController extends AbstractDeleteController
 
     /**
      * @param ServerRequestInterface $request
+     * @return EmptyResponse
      */
     public function delete(ServerRequestInterface $request)
     {

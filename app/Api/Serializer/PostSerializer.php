@@ -34,7 +34,7 @@ class PostSerializer extends AbstractSerializer
             'thread_id'         => (int) $model->thread_id,
             'content'           => $model->content,
             'ip'                => $model->ip,
-            'comment_count'     => $model->comment_count,
+            'reply_count'     => $model->reply_count,
             'like_count'        => $model->like_count,
             'created_at'        => $this->formatDate($model->created_at),
             'updated_at'        => $this->formatDate($model->updated_at),

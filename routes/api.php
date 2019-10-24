@@ -49,6 +49,7 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 */
 
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
+$route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -102,24 +103,18 @@ $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInv
 | Classify
 |--------------------------------------------------------------------------
 */
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->get('/classify', 'classify.list', ApiController\Classify\ListClassifyController::class);
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->get('/classify/{id}', 'classify.resource', ApiController\Classify\ResourceClassifyController::class);
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->post('/classify', 'classify.create', ApiController\Classify\CreateClassifyController::class);
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->patch('/classify/{id}', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->delete('/classify/{id}', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
+$route->get('/classify', 'classify.list', ApiController\Classify\ListClassifyController::class);
+$route->get('/classify/{id}', 'classify.resource', ApiController\Classify\ResourceClassifyController::class);
+$route->post('/classify', 'classify.create', ApiController\Classify\CreateClassifyController::class);
+$route->patch('/classify/{id}', 'classify.update', ApiController\Classify\UpdateClassifyController::class);
+$route->delete('/classify/{id}', 'classify.delete', ApiController\Classify\DeleteClassifyController::class);
 
 /*
 |--------------------------------------------------------------------------
 | Attachment
 |--------------------------------------------------------------------------
 */
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
+$route->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -152,5 +147,4 @@ $route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Walle
 | GroupPermission
 |--------------------------------------------------------------------------
 */
-$route->middleware(App\Api\Middleware\Authentication::class)
-    ->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);

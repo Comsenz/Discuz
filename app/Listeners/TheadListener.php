@@ -24,7 +24,7 @@ class TheadListener
         $thread = $event->post->thread;
 
         if ($thread && $thread->exists) {
-            $thread->refreshReplyCount();
+            $thread->refreshPostCount();
             $thread->refreshLastPost();
             $thread->save();
         }

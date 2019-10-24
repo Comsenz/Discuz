@@ -10,6 +10,20 @@ $w100:100%;  //宽度100%
 $payColor:#000; //支付费用字体颜色
 $themeColor: rgba(51, 102, 153, 1);  //主题颜色
 
+::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #B2B2B2;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #B2B2B2;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #B2B2B2;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #B2B2B2;
+}
+
+
 /**
 登录、注册、微信等模块公共按钮样式
  */
@@ -61,7 +75,7 @@ body{
       @include font-dpr(30);
       font-family:PingFangSC-Regular,PingFangSC;
       font-weight:400;
-      color:rgba(0,0,0,1);
+      color:#000;
       //.login-user-input-form{
       //}
 
@@ -79,6 +93,7 @@ body{
 
       .login-user-method-box{
         @include px2rem(width,334);
+        @include font-dpr(30);
       }
 
       .login-user-method-icon{
@@ -144,6 +159,9 @@ body{
       font-weight:400;
       color:rgba(0,0,0,1);
       .login-phone-input-form{
+        .verification-code-btn{
+          //@include font-dpr(30);
+        }
       }
 
     }
@@ -160,6 +178,7 @@ body{
 
       .login-phone-method-box{
           @include px2rem(width,334);
+          @include font-dpr(30);
       }
 
       .login-phone-method-icon{
@@ -173,7 +192,7 @@ body{
             @include px2rem(width,108);
             @include px2rem(height,108);
             @include px2rem(border-radius,100);
-            border:2px solid rgba(229,229,229,1);
+            border:1px solid rgba(229,229,229,1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -358,9 +377,9 @@ body{
     }
 
     .pay-the-fee-btn{
-      @include px2rem(width,334);
+      //@include px2rem(width,334);
       @include font-dpr(32);
-      @include px2rem(padding,22 14);
+      //@include px2rem(padding,22 14);
     }
     .pay-the-fee-title-footer{
       @include px2rem(margin-top,30);
@@ -411,7 +430,7 @@ body{
         @include px2rem(line-height,44);
       }
 
-      ul{
+      p{
         @include font-dpr(28);
         color: rgba(0, 0, 0, 0.5);
       }

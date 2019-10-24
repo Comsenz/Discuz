@@ -13,9 +13,9 @@
           <h3>作为成员，您将获得以下权限</h3>
         </div>
         <div class="pay-the-fee-per-list">
-          <h3 class="pay-the-fee-per-name">帖子操作</h3>
-          <ul>查看主题</ul>
-          <ul>发图文贴</ul>
+          <div class="pay-the-fee-per-name">帖子操作</div>
+          <p>查看主题</p>
+          <p>发图文贴</p>
         </div>
         <div class="pay-the-fee-per-list-footer">
           <p @click="leapFrogClick">跳过，进入首页</p>

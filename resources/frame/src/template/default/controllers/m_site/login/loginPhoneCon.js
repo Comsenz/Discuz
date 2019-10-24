@@ -20,10 +20,10 @@ export default {
 
   methods:{
     loginUserClick(){
-      this.$router.push({path:'/m_site/login_user'})
+      this.$router.push({path:'/m_site/login-user'})
     },
     wxLoginClick(){
-      this.$router.push({path:'/m_site/wx_login_bd'})
+      this.$router.push({path:'/m_site/wx-login-bd'})
     },
 
     getYZ(){
