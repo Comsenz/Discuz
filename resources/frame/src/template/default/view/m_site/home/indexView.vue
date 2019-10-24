@@ -12,11 +12,7 @@
 <script>
 import  '../../../../../../static/css/iconfont.css';
 
-
 export default {
     name: "index-view"
 }
-
-
-
 </script>
