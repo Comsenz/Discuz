@@ -10,6 +10,20 @@ $w100:100%;  //宽度100%
 $payColor:#000; //支付费用字体颜色
 $themeColor: rgba(51, 102, 153, 1);  //主题颜色
 
+::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #B2B2B2;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #B2B2B2;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #B2B2B2;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #B2B2B2;
+}
+
+
 /**
 登录、注册、微信等模块公共按钮样式
  */
@@ -61,7 +75,7 @@ body{
       @include font-dpr(30);
       font-family:PingFangSC-Regular,PingFangSC;
       font-weight:400;
-      color:rgba(0,0,0,1);
+      color:#000;
       //.login-user-input-form{
       //}
 
@@ -79,6 +93,7 @@ body{
 
       .login-user-method-box{
         @include px2rem(width,334);
+        @include font-dpr(30);
       }
 
       .login-user-method-icon{

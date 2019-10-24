@@ -1386,7 +1386,7 @@ button.weui-vcode-btn{
 }
 .weui-cells__group_form .weui-cell{
   padding:16px 32px;
-  color:rgba(0, 0, 0, 0.9);
+  color:#000;
 }
 .weui-cells__group_form .weui-cell__hd{
   padding-right:16px;
@@ -2565,7 +2565,9 @@ a.weui-media-box:active{
   top:-0.9em;
   padding:0 .55em;
   background-color:#FFFFFF;
-  color:rgba(0, 0, 0, 0.5);
+  color:rgba(187,187,187,1);
+  /*color:rgba(0, 0, 0, 0.5);*/
+
 }
 .weui-loadmore_dot .weui-loadmore__tips{
   padding:0 .16em;
