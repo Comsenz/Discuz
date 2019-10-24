@@ -10,6 +10,16 @@ $w100:100%;  //宽度100%
 $payColor:#000; //支付费用字体颜色
 $themeColor: rgba(51, 102, 153, 1);  //主题颜色
 
+/**
+登录、注册、微信等模块公共按钮样式
+ */
+@mixin loginModelBtn {
+  @include px2rem(width,334);
+  @include px2rem(height,72);
+  @include font-dpr(32);
+  @include px2rem(line-height,44);
+}
+
 html,
 body{
   color: $fontColor;
@@ -61,17 +71,14 @@ body{
       @include px2rem(margin-top,100);
       @include px2rem(margin-bottom,100);
       .login-btn{
-        @include px2rem(width,334);
-        @include px2rem(height,72);
-        @include font-dpr(32);
-        @include px2rem(lint-height,44);
+       @include loginModelBtn;
       }
     }
 
     .login-user-method{
 
       .login-user-method-box{
-        width: 50%;
+        @include px2rem(width,334);
       }
 
       .login-user-method-icon{
@@ -145,17 +152,14 @@ body{
       @include px2rem(margin-top,100);
       @include px2rem(margin-bottom,100);
       .login-btn{
-        @include px2rem(width,334);
-        @include px2rem(height,72);
-        @include font-dpr(32);
-        @include px2rem(line-height,44);
+        @include loginModelBtn;
       }
     }
 
     .login-phone-method{
 
       .login-phone-method-box{
-        width: 50%;
+          @include px2rem(width,334);
       }
 
       .login-phone-method-icon{
@@ -204,6 +208,9 @@ body{
     @include font-dpr(30);
     .wx-login-bd-btn{
       width: 100%;
+      .login-btn{
+        @include loginModelBtn;
+      }
     }
   }
 }
@@ -228,6 +235,9 @@ body{
     .wx-sign-up-bd-btn{
       width: 100%;
 
+      .login-btn{
+        @include loginModelBtn;
+      }
     }
 
   }
@@ -278,6 +288,9 @@ body{
     .retrieve-password-btn{
       width: 100%;
       text-align: center;
+      .login-btn{
+        @include loginModelBtn;
+      }
     }
 
   }
@@ -304,6 +317,10 @@ body{
     .sign-up-btn{
       width: 100%;
       text-align: center;
+
+      .login-btn{
+        @include loginModelBtn;
+      }
     }
 
   }
@@ -327,6 +344,7 @@ body{
     text-align: center;
     background-color: white;
     overflow: hidden;
+    border-bottom: 1px solid rgba(237, 237, 237, 1);
 
     .pay-the-fee-titel{
       width: 100%;
@@ -365,6 +383,7 @@ body{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    border-top: 1px solid rgba(237, 237, 237, 1);
 
     .pay-the-fee-per-title{
       @include px2rem(height,70);

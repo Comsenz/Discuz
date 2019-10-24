@@ -36,8 +36,8 @@
           </div>
         </div>
 
-        <div class=" sign-up-btn">
-          <button class="weui-btn weui-btn_primary">提交</button>
+        <div class="retrieve-password-btn">
+          <button class="weui-btn weui-btn_primary login-btn">提交</button>
         </div>
 
       </main>

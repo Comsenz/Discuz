@@ -28,7 +28,7 @@
         </div>
 
         <div class="sign-up-btn">
-          <button @click="signUpClick" class="weui-btn weui-btn_primary">注册</button>
+          <button @click="signUpClick" class="weui-btn weui-btn_primary login-btn">注册</button>
         </div>
 
       </main>
