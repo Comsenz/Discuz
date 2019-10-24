@@ -15,6 +15,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $last_posted_user_id
  * @property string $title
  * @property float $price
- * @property int $reply_count
+ * @property int $post_count
  * @property int $view_count
  * @property int $like_count
  * @property int $favorite_count
@@ -87,9 +88,9 @@ class Thread extends Model
      *
      * @return $this
      */
-    public function refreshReplyCount()
+    public function refreshPostCount()
     {
-        $this->reply_count = $this->replies()->count();
+        $this->post_count = $this->replies()->count();
 
         return $this;
     }
@@ -107,11 +108,11 @@ class Thread extends Model
     /**
      * Define the relationship with the thread's first post.
      *
-     * @return HasMany
+     * @return HasOne
      */
     public function firstPost()
     {
-        return $this->posts()->where('is_first', true);
+        return $this->hasOne(Post::class)->where('is_first', true);
     }
 
     /**
