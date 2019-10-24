@@ -467,12 +467,12 @@ input.weui-btn_plain-default{
   bottom:0;
   right:0;
   height:1px;
-  border-bottom:1px solid rgba(0, 0, 0, 0.1);
-  color:rgba(0, 0, 0, 0.1);
+  border-bottom:1px solid #e5e5e5;
+  color:#e5e5e5;
   -webkit-transform-origin:0 100%;
   transform-origin:0 100%;
-  -webkit-transform:scaleY(0.5);
-  transform:scaleY(0.5);
+  /*-webkit-transform:scaleY(0.5);*/
+  /*transform:scaleY(0.5);*/
   z-index:2;
 }
 .weui-cells__title{

@@ -92,7 +92,7 @@ body{
             @include px2rem(width,108);
             @include px2rem(height,108);
             @include px2rem(border-radius,100);
-            border:2px solid rgba(229,229,229,1);
+            border:1px solid rgba(229,229,229,1);
             display: flex;
             justify-content: center;
             align-items: center;
