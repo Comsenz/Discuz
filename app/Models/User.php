@@ -5,14 +5,27 @@ namespace App\Models;
 use Discuz\Auth\Guest;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\Users\Created;
+use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\Database\ScopeVisibilityTrait;
 
 /**
  * @property int $id
  * @package App\Models
  */
 class User extends Model {
+    use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
-    public $timestamps = false;
+    protected $table = 'users';
+
+    public $timestamps = true;
+
+    protected $dateFormat = 'U';
+
+    const CREATED_AT = 'createtime';
+
+    const UPDATED_AT = 'updatetime';
 
     /**
      * The access gate.
@@ -79,14 +92,27 @@ class User extends Model {
      *
      * @return static
      */
-    public static function creation() {
+    public static function creation(
+        $username,
+        $password,
+        $mobile,
+        $adminid,
+        $ipAddress
+    ) {
         // 实例一个圈子模型
         $user = new static;
 
         // 设置模型属性值
-        $user->id = 1;
+        $user->username = $username;
+        $user->password = $password;
+        $user->mobile = $mobile;
+        $user->adminid = $adminid;
+        $user->login_ip = $ipAddress;
 
+        // 暂存需要执行的事件
+        $user->raise(new Created($user));
         // 返回模型
+
         return $user;
     }
 
@@ -118,7 +144,10 @@ class User extends Model {
 
     protected function unsetUserPasswordAttr($value,$userpwd)
     {
+
         // return $this->hashManager->check($value,$userpwd);
         return password_verify($value,$userpwd);
     }
+ 
+
 }

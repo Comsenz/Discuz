@@ -24,9 +24,12 @@ class UserRepository implements UserRepositoryInterface
         $grantType,
         ClientEntityInterface $clientEntity
     ) {
-        $user=User::where('username',$username)->first();
-        $userpwd=$user->password;
-        if(User::unsetUserPasswordAttr($password,$userpwd)){
+        $where=[
+          'username' => $username,
+          'password' => $password
+        ];
+        $user=User::where($where)->first();
+        if($user){
             return new UserEntity($user->id);
         }
         

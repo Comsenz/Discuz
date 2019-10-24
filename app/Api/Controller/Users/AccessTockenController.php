@@ -1,54 +1,54 @@
 <?php
+declare(strict_types=1);
+
+/**
+ *      Discuz & Tencent Cloud
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      Id: CreateCircleController.php 28830 2019-09-26 09:47 chenkeke $
+ */
 
 namespace App\Api\Controller\Users;
 
-
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use App\Api\Controller\Users\Server;
-use Zend\Diactoros\Response;
-use Psr\Http\Server\RequestHandlerInterface;
-use App\Passport\Repositories\UserRepository;
-use App\Passport\Repositories\RefreshTokenRepository;
+use App\Oauth\RefreshToken;
+use App\Commands\Users\CreateUsers;
+use Discuz\Foundation\Application;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class AccessTockenController implements RequestHandlerInterface
 {
+    /**
+     * 命令集调用工具类.
+     *
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    public function __construct( BusDispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
-        // dd($request);
-        $data=$request->getqueryParams();
-        $request= $request->withParsedBody($data);
-        $server = new Server;
-        $server=$server->server;
-        $grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // 设置刷新令牌过期时间1个月
-        // dd($grant);
-        // 将密码授权类型添加进 server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // 设置访问令牌过期时间1小时
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+        // 获取请求的参数
+        $inputs = $request->getParsedBody();
+
+        // 获取请求的IP
+        $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+
+        //生成jwt
+        /** @var TYPE_NAME $actor */
+        $jwt = $this->bus->dispatch(
+            new RefreshToken($actor,$request)
         );
-        // dd($server);
-        $response =new Response();
-       
-        try {
-            // Try to respond to the request
-            return $server->respondToAccessTokenRequest($request, $response);
-            
-        } catch (\League\OAuth2\Server\Exception\OAuthServerException $exception) {
-        
-            // All instances of OAuthServerException can be formatted into a HTTP response
-            return $exception->generateHttpResponse($response);
-            
-        } catch (\Exception $exception) {
-        
-            // Unknown exception
-            $body = new Stream('php://temp', 'r+');
-            $body->write($exception->getMessage());
-            return $response->withStatus(500)->withBody($body);
-            
-        }
+        // 返回结果
+        return $jwt;
     }
 }
