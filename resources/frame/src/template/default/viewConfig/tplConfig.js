@@ -11,20 +11,20 @@ export default {
    */
   template: {
     m_site:{
-      'index':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/home/indexView'],resolve)
-        },
-        metaInfo:{
-          title:"移动端首页"
-        }
-      },
       'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
         },
         metaInfo:{
           title:"圈子首页"
+        }
+      },
+      'index':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/indexView'],resolve)
+        },
+        metaInfo:{
+          title:"移动端首页"
         }
       },
       'pay-circle':{
@@ -164,6 +164,16 @@ export default {
         },
         metaInfo:{
           title:"支付费用"
+        }
+      },
+
+      //主题详情页模块
+      'reply-to-topic':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
         }
       }
 
