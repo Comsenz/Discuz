@@ -44,7 +44,7 @@ CREATE TABLE `threads` (
   `last_posted_user_id` int(10) unsigned DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `reply_count` int(10) unsigned NOT NULL DEFAULT '0',
+  `post_count` int(10) unsigned NOT NULL DEFAULT '0',
   `view_count` int(10) unsigned NOT NULL DEFAULT '0',
   `like_count` int(10) unsigned NOT NULL DEFAULT '0',
   `favorite_count` int(10) unsigned NOT NULL DEFAULT '0',
@@ -65,7 +65,7 @@ CREATE TABLE `posts` (
   `reply_id` int(10) unsigned DEFAULT NULL,
   `content` text COLLATE utf8mb4_unicode_ci,
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `comment_count` int(10) unsigned NOT NULL DEFAULT '0',
+  `reply_count` int(10) unsigned NOT NULL DEFAULT '0',
   `like_count` int(10) unsigned NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `pay_notify` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -103,7 +103,7 @@ CREATE TABLE `pay_notify` (
   `updated_at` timestamp NOT NULL,
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

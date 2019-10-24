@@ -49,6 +49,7 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 */
 
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
+$route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 
 /*
 |--------------------------------------------------------------------------

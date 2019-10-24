@@ -35,7 +35,7 @@ class ThreadSerializer extends AbstractSerializer
             'title'                 => $model->title,
             'price'                 => $model->price,
             'view_count'            => (int) $model->view_count,
-            'reply_count'           => (int) $model->reply_count,
+            'post_count'            => (int) $model->post_count,
             'like_count'            => (int) $model->like_count,
             'favorite_count'        => (int) $model->favorite_count,
             'created_at'            => $this->formatDate($model->created_at),
@@ -65,7 +65,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function firstPost($thread)
     {
-        return $this->hasMany($thread, PostSerializer::class, 'firstPost');
+        return $this->hasOne($thread, PostSerializer::class, 'firstPost');
     }
 
     /**
