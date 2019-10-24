@@ -17,6 +17,13 @@ use Illuminate\Support\Collection;
 class BatchUpdateThread
 {
     /**
+     * The ID array of the thread to delete.
+     *
+     * @var array
+     */
+    public $ids;
+
+    /**
      * The user performing the action.
      *
      * @var User
@@ -39,13 +46,15 @@ class BatchUpdateThread
 
     /**
      * CreateThread constructor.
+     * @param array $ids
      * @param User $actor
      * @param Collection $data
      * @param $ip
      */
-    public function __construct($actor, Collection $data, $ip)
+    public function __construct(array $ids, $actor, Collection $data, $ip)
     {
         // TODO: User $actor
+        $this->ids = $ids;
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
@@ -59,7 +68,6 @@ class BatchUpdateThread
         // TODO: 权限验证
         // $this->assertCan($this->actor, 'startDiscussion');
 
-        $ids = explode(',', $this->data->get('ids'));
         $update = collect();
 
         if ($this->data->has('isApproved')) {
@@ -96,6 +104,6 @@ class BatchUpdateThread
             }
         }
 
-        return Thread::whereIn('id', $ids)->update($update->all());
+        return Thread::whereIn('id', $this->ids)->update($update->all());
     }
 }
