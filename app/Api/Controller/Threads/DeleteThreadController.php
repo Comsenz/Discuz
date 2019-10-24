@@ -29,7 +29,7 @@ class DeleteThreadController extends AbstractDeleteController
         // $this->assertCan($actor, 'deleteStopWord');
 
         $id = Arr::get($request->getQueryParams(), 'id');
-        $ids = $id ?: $request->getParsedBody()->get('ids');
+        $ids = $id ? [$id] : $request->getParsedBody()->get('ids');
 
         // 删除相关主题下的所有回复
         Post::whereIn('thread_id', $ids)->forceDelete();
