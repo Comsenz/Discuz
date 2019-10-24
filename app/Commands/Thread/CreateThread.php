@@ -79,7 +79,7 @@ class CreateThread
      * @throws ValidationException
      * @throws Exception
      */
-    public function handle(EventDispatcher $events, BusDispatcher $bus, ThreadValidator $validator, Thread $thread, Censor $censor)
+    public function handle(EventDispatcher $events, BusDispatcher $bus, ThreadValidator $validator, Thread $thread)
     {
         $this->events = $events;
 
@@ -90,7 +90,7 @@ class CreateThread
         $validator->valid($this->data->all());
 
         // 敏感词处理
-        $this->data->put('content', $censor->check($this->data->get('content')));
+        // $this->data->put('content', $censor->check($this->data->get('content')));
 
         // 模型实例
         $thread->user_id = $this->actor->id;
