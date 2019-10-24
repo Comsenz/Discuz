@@ -18,9 +18,7 @@ class CreateUserWalletListner
     {
         $user_wallet = UserWallet::where('user_id', $event->user->id)->first();
         if (empty($user_wallet)) {
-            return UserWallet::createUserWallet($event->user->id);
-        } else {
-            return $user_wallet;
+            UserWallet::createUserWallet($event->user->id);
         }
     }
 }
