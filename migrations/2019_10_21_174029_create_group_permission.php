@@ -14,7 +14,7 @@ class CreateGroupPermission extends Migration
     {
         $this->schema()->create('group_permission', function (Blueprint $table) {
             $table->unsignedInteger('group_id')->comment('用户组ID');
-            $table->string('permission')->comment('权限名称');
+            $table->string('permission')->default('')->comment('权限名称');
             $table->primary(['group_id', 'permission']);
 
 

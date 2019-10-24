@@ -14,8 +14,9 @@ class CreateSettings extends Migration
     {
         $this->schema()->create('settings', function (Blueprint $table) {
             $table->string('key')->comment('设置表key');
-            $table->string('value')->comment('设置表value');
-            $table->primary('key');
+            $table->text('value')->comment('设置表value');
+            $table->string('tag')->default('')->comment('分组tag');
+            $table->primary(['key', 'tag']);
         });
     }
 
