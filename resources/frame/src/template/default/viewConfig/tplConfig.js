@@ -165,6 +165,16 @@ export default {
         metaInfo:{
           title:"支付费用"
         }
+      },
+
+      //主题详情页模块
+      'reply-to-topic':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
+        },
+        metaInfo:{
+          title:"回复主题"
+        }
       }
 
     },
