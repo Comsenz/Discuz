@@ -178,6 +178,7 @@ body{
 
       .login-phone-method-box{
           @include px2rem(width,334);
+          @include font-dpr(30);
       }
 
       .login-phone-method-icon{
