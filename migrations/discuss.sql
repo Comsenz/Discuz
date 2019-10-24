@@ -118,7 +118,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `user_wechat` (
+CREATE TABLE `user_wechats` (
   `id` int(11) NOT NULL,
   `openid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `nickname` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
