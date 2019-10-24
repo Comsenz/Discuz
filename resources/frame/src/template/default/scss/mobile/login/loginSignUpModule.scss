@@ -159,6 +159,9 @@ body{
       font-weight:400;
       color:rgba(0,0,0,1);
       .login-phone-input-form{
+        .verification-code-btn{
+          //@include font-dpr(30);
+        }
       }
 
     }
@@ -188,7 +191,7 @@ body{
             @include px2rem(width,108);
             @include px2rem(height,108);
             @include px2rem(border-radius,100);
-            border:2px solid rgba(229,229,229,1);
+            border:1px solid rgba(229,229,229,1);
             display: flex;
             justify-content: center;
             align-items: center;
