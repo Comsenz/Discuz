@@ -41,6 +41,6 @@ class BatchUpdateThreadController extends AbstractCreateController
             new BatchUpdateThread($ids, $actor, $request->getParsedBody(), $ip)
         );
 
-        return new EmptyResponse(204);
+        return null;
     }
 }

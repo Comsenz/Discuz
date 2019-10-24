@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,13 +10,14 @@ declare(strict_types=1);
 
 namespace App\Commands\Order;
 
-use App\Models\Order;
-use App\Models\PayNotify;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Collection;
-use Illuminate\Database\ConnectionInterface;
+use App\Exceptions\ErrorException;
 use Exception;
+use App\Models\Order;
+use App\Models\PayNotify;
 
 class CreateOrder
 {
@@ -31,19 +32,19 @@ class CreateOrder
     /**
      * 请求的数据.
      *
-     * @var array
+     * @var Collection
      */
     public $data;
 
     /**
      * 初始化命令参数
      * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
+     * @param Collection  $data         请求的数据.
      */
     public function __construct($actor, Collection $data)
     {
         $this->actor = $actor;
-        $this->data = $data;
+        $this->data  = $data;
     }
 
     /**
@@ -57,9 +58,9 @@ class CreateOrder
         // $this->assertCan($this->actor, 'createCircle');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|int',
-            'type_id' => 'required|int',
+            'amount'   => 'required|numeric|min:0',
+            'type'     => 'required|int',
+            'type_id'  => 'required|int',
             'payee_id' => 'required|int',
         ]);
 
@@ -68,37 +69,38 @@ class CreateOrder
         }
         //开始事务
         $db->beginTransaction();
+        try {
+            $payment_sn             = $this->getPaymentSn();
+            $pay_notify             = new PayNotify();
+            $pay_notify->payment_sn = $payment_sn;
+            $pay_notify->user_id    = $this->actor->id;
+            $pay_notify->save();
+            $notify_id = $pay_notify->id;
 
-        $payment_sn = $this->getPaymentSn();
-        $pay_notify = new PayNotify();
-        $pay_notify->payment_sn = $payment_sn;
-        $pay_notify->user_id = $this->actor->id;
-        $pay_notify->save();
-        $notify_id = $pay_notify->id;
+            $order = new Order();
+            //订单金额处理
+            $amount = sprintf("%.2f", floatval($this->data->get('amount')));
 
-        $order = new Order();
-        //订单金额处理
-        $amount = sprintf("%.2f", floatval($this->data->get('amount')));
-
-        $order->payment_sn = $payment_sn;
-        $order->order_sn = $this->getOrderSn($notify_id);
-        $order->amount = $amount;
-        $order->user_id = $this->actor->id;
-        $order->type = $this->data->get('type');
-        $order->type_id = $this->data->get('type_id');
-        $order->payee_id = $this->data->get('payee_id');
-        $order->remark = $this->data->get('remark');
-        $order->status = 0;
-        // 保存订单
-        $order->save();
-        if (empty($order->id)) {
+            $order->payment_sn = $payment_sn;
+            $order->order_sn   = $this->getOrderSn($notify_id);
+            $order->amount     = $amount;
+            $order->user_id    = $this->actor->id;
+            $order->type       = $this->data->get('type');
+            $order->type_id    = $this->data->get('type_id');
+            $order->payee_id   = $this->data->get('payee_id');
+            $order->remark     = $this->data->get('remark');
+            $order->status     = 0; //待支付
+            // 保存订单
+            $order->save();
+            //提交事务
+            $db->commit();
+            // 返回数据对象
+            return $order;
+        } catch (Exception $e) {
+            //回滚事务
             $db->rollback();
-            throw new Exception('订单保存失败');
+            throw new ErrorException(app('translator')->get('order.create_failure'), 500);
         }
-        //提交事务
-        $db->commit();
-        // 返回数据对象
-        return $order;
     }
 
     /**
@@ -108,8 +110,8 @@ class CreateOrder
     public function getPaymentSn()
     {
         return date('Ymd')
-          . str_pad(strval(mt_rand(1, 99)), 2, '0', STR_PAD_LEFT)
-          . substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        . str_pad(strval(mt_rand(1, 99)), 2, '0', STR_PAD_LEFT)
+        . substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
 
     /**
@@ -117,8 +119,9 @@ class CreateOrder
      * @param int $notify_id 通知自增ID
      * @return string
      */
-    public function getOrderSn($notify_id) {
-        return (date('y',time()) % 9+1) . sprintf('%015d', $notify_id);
+    public function getOrderSn($notify_id)
+    {
+        return (date('y', time()) % 9 + 1) . sprintf('%015d', $notify_id);
     }
 
 }

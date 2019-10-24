@@ -45,6 +45,9 @@ class UpdateUserProfileController extends AbstractResourceController
         if($data['user']['username']!=""){
             $this->userValidator->valid(['updatename' => Arr::get($data['user'], 'username')]);
         }
+        if($data['user']['password']!=""){
+            $this->userValidator->valid(['password' => Arr::get($data['user'], 'password')]);
+        }
         if($data['user']!=""){
             $objuser = User::findOrFail($id);
             foreach($data['user'] as $k=>$v){

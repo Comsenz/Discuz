@@ -124,6 +124,7 @@ $route->post('/attachment', 'attachment.create', ApiController\Attachment\Create
  */
 $route->get('/order/{order_sn}', 'order.resource', ApiController\Order\ResourceOrderController::class);
 $route->post('/order', 'order.create', ApiController\Order\CreateOrderController::class);
+$route->get('/order', 'order.list', ApiController\Order\ListOrderController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -132,7 +133,16 @@ $route->post('/order', 'order.create', ApiController\Order\CreateOrderController
  */
 $route->post('/trade/notify/wechat', 'trade.notify.wechat', ApiController\Trade\Notify\WechatNotifyController::class);
 $route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Trade\PayOrderController::class);
-$route->post('/trade/query/order/{order_sn}', 'trade.query.order', ApiController\Trade\QueryOrderController::class);
+
+/*
+ |--------------------------------------------------------------------------
+ | Wallet
+ |--------------------------------------------------------------------------
+ */
+$route->post('/wallet/user', 'wallet.user.create', ApiController\Wallet\CreateUserWalletController::class);
+$route->get('/wallet/user/{user_id}', 'wallet.user.resource', ApiController\Wallet\ResourceUserWalletController::class);
+$route->patch('/wallet/{wallet_id}', 'wallet.update', ApiController\Wallet\UpdateUserWalletController::class);
+$route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
 
 /*
 |--------------------------------------------------------------------------

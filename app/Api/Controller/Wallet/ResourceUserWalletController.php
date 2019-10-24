@@ -3,24 +3,24 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: PayOrderController.php xxx 2019-10-16 00:00:00 zhouzhou $
+ *      $Id: ResourceUserWalletController.php xxx 2019-10-22 17:20:00 zhouzhou $
  */
 
-namespace App\Api\Controller\Trade;
+namespace App\Api\Controller\Wallet;
 
-use App\Api\Serializer\PayOrderSerializer;
-use App\Commands\Trade\PayOrder;
+use App\Api\Serializer\UserWalletSerializer;
+use App\Commands\Wallet\ResourceUserWallet;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class PayOrderController extends AbstractResourceController
+class ResourceUserWalletController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = PayOrderSerializer::class;
+    public $serializer = UserWalletSerializer::class;
 
     /**
      * {@inheritdoc}
@@ -30,11 +30,10 @@ class PayOrderController extends AbstractResourceController
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
 
-        //订单编号
-        $order_sn = Arr::get($request->getQueryParams(), 'order_sn');
-
+        //用户ID
+        $user_id = Arr::get($request->getQueryParams(), 'user_id');
         return $this->bus->dispatch(
-            new PayOrder($order_sn, $actor, $request->getParsedBody())
+            new ResourceUserWallet($user_id, $actor)
         );
     }
 }

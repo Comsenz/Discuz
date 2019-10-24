@@ -1,27 +1,25 @@
 <?php
-
 /**
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateOrderController.php xxx 2019-10-16 00:00:00 zhouzhou $
+ *      $Id: CreateUserWalletController.php xxx 2019-10-24 17:20:00 zhouzhou $
  */
 
-namespace App\Api\Controller\Order;
+namespace App\Api\Controller\Wallet;
 
-use Discuz\Api\Controller\AbstractCreateController;
+use App\Api\Serializer\UserWalletSerializer;
+use App\Commands\Wallet\CreateUserWallet;
+use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use App\Api\Serializer\OrderSerializer;
-use App\Commands\Order\CreateOrder;
 
-
-class CreateOrderController extends AbstractCreateController
+class CreateUserWalletController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = OrderSerializer::class;
+    public $serializer = UserWalletSerializer::class;
 
     /**
      * {@inheritdoc}
@@ -30,10 +28,8 @@ class CreateOrderController extends AbstractCreateController
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-        $inputs    = $request->getParsedBody();
-
         return $this->bus->dispatch(
-            new CreateOrder($actor, $inputs)
+            new CreateUserWallet($actor, $request->getParsedBody())
         );
     }
 }
