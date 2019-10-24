@@ -34,10 +34,11 @@ class BatchUpdateThreadController extends AbstractCreateController
         // $actor = $request->getAttribute('actor');
         $actor = User::find(1);
 
+        $ids = (array) $request->getParsedBody()->get('ids', []);
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
         $this->bus->dispatch(
-            new BatchUpdateThread($actor, $request->getParsedBody(), $ip)
+            new BatchUpdateThread($ids, $actor, $request->getParsedBody(), $ip)
         );
 
         return new EmptyResponse(204);
