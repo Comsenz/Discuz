@@ -3,29 +3,26 @@
 <template>
     <div class="circleCon">
     	<div class="invitePerDet">
-    		<img src="" class="inviteHead">
+    		<img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
 	    	<div class="inviteName">Efhdkjfhk</div>
 	    	<p class="inviteWo">邀请您加入</p>
     	</div>
-	    <Header></Header>
-	    <!-- <div class="headerBox">
-	        <div class="headOpe">
-	          <span class="icon iconfont">&#xe60b;</span>
-	          <span class="icon iconfont">&#xe60c;</span>
-	        </div>
-	        <img src="../../../../../../static/images/logo.png" class="logo">
+	    <!-- <Header></Header> -->
+	    <div class="headerBox">
+	        
+	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
 	          <span>成员：125</span>
 	          <span>圈主：我是谁</span>
 	        </div>
-      	</div> -->
+      	</div>
 
-      <div class="navBarBox" id="testNavBar":class="{'fixedNavBar': isfixNav}">
+      	<div class="navBarBox" id="testNavBar" >
           <ul class="navBarCon">
             <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
           </ul>
-      </div>
+      	</div>
 	    <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
@@ -75,9 +72,6 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont icon-publish"></span>
-	    		</a>
 	    	</div>
 	    </div>
 	    <div class="gap"></div>
@@ -122,31 +116,31 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont icon-publish"></span>
-	    		</a>
+	    		
 	    	</div>
 	    </div>
-	    
 	    <div class="gap"></div>    
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+	    	<a href="javascript:;" class="mustLogin">已注册，登录</a>
+	    	<a href="javascript:;" class="regiJoin">接受邀请，注册</a>
 	    </div>
     </div>
 </template>
 
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
-import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
-import Header from '../../m_site/common//headerView';
+import mSiteOpenCircleCon from '../../../controllers/m_site/circle/openCircleCon';
+// import Header from '../../m_site/common//headerView';
+// import mSiteHeader from '../../../controllers/m_site/common/header';
+// import Header from '../../m_site/common//headerView';
 import  '../../../scss/mobile/mobileIndex.scss';
 export default {
-    name: "circleView",
+    name: "openCircleView",
     components:{
-    	Header
+    	// Header
     },
-    ...mSiteCircleCon
+    // ...mSiteHeader,
+    ...mSiteOpenCircleCon
 }
 
 

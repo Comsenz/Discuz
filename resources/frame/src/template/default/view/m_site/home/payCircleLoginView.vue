@@ -1,4 +1,4 @@
-<!--移动端付费圈子模板-->
+<!--移动端付费圈子-已登录-未付费模板-->
 
 <template>
     <div class="circleCon">
@@ -49,8 +49,9 @@
 		    	</div>
 		    </div>
 		    <div class="loginOpera">
-		    	<a href="javascript:;" class="mustLogin">立即登录</a>
-		    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+		    	<p class="welcomeUser">欢迎您，小虫<a href="javascript:;" class="signOut">退出</a></p>
+		    	<a href="javascript:;" class="regiJoin">付费，获得成员权限</a>
+		    	<p class="payMoney">￥20.00 / 永久有效</p>
 		    </div>
 	    </div>
 	    

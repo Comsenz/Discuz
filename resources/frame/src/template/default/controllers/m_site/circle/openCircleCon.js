@@ -5,7 +5,17 @@
 export default {
 	data: function() {
 		return {
-			showScreen: false
+			current:0,
+	        todos: [
+	            { text: '选项一111' },
+	            { text: '选项二' },
+	            { text: '选项三' },
+	            { text: '选项四' },
+	            { text: '选项五' },
+	            { text: '选项六' },
+	            { text: '选项七' },
+	            { text: '选项八' }
+	    	]
 		}
 	},
 	
@@ -19,18 +29,7 @@ export default {
 　　　　　　 //获取点击对象      
            var el = event.currentTarget;
            // alert("当前对象的内容："+el.innerHTML);
-        },
-        //筛选
-        bindScreen:function(){
-        	//是否显示筛选内容
-        	this.showScreen = !this.showScreen;
-        },
-        
-      	hideScreen(){
-      		//是否显示筛选内容
-	        this.showScreen = false;
-      	},
-
+        }
 		
 	},
 

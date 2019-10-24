@@ -1,4 +1,4 @@
-<!--移动端付费圈子-菜单栏内的邀请模板-->
+<!--移动端圈子管理里的邀请模板-->
 
 <template>
     <div class="circleCon">
@@ -24,7 +24,7 @@
 	    </div>
 	    <div class="gap"></div>
 	    <div class="powerListBox">
-	    	<div class="powerTit">作为成员，您将获得以下权限</div>
+	    	<div class="powerTit">作为合伙人，您将获得以下权限</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">帖子操作</div>
 	    		<p class="powerChi">查看主题</p>
@@ -33,12 +33,24 @@
 	    		<p class="powerChi">附件查看</p>
 	    		<p class="powerChi">回帖</p>
 	    	</div>
+	    	<div class="powerList">
+	    		<div class="powerClassify">圈子前台管理</div>
+	    		<p class="powerChi">编辑圈子</p>
+	    		<p class="powerChi">邀请加入</p>
+	    		<p class="powerChi">标签管理</p>
+	    		<p class="powerChi">用户管理</p>
+	    	</div>
+	    	<div class="powerList">
+	    		<div class="powerClassify">前台内容管理</div>
+	    		<p class="powerChi">置顶</p>
+	    		<p class="powerChi">加精</p>
+	    		<p class="powerChi">删帖</p>
+	    	</div>
 	    </div>
 		<div class="gap"></div>    
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">已注册，登录</a>
+	    	<a href="javascript:;" class="mustLogin">已加入，登录</a>
 	    	<a href="javascript:;" class="regiJoin">接受邀请，注册</a>
-	    	<p class="payMoney">￥20.00 / 永久有效</p>
 	    </div>
     </div>
 </template>

@@ -252,14 +252,14 @@ textarea{
   display:inline-block;
 }
 .weui-btn_default{
-  color:#225588;
+  color:#336699;
   background-color:#F2F2F2;
 }
 .weui-btn_default:not(.weui-btn_disabled):visited{
-  color:#225588;
+  color:#336699;
 }
 .weui-btn_default:not(.weui-btn_disabled):active{
-  color:#225588;
+  color:#336699;
   background-color:#D9D9D9;
 }
 .weui-btn_primary{
@@ -270,7 +270,7 @@ textarea{
 }
 .weui-btn_primary:not(.weui-btn_disabled):active{
   color:#FFFFFF;
-  background-color:#225588;
+  background-color:#336699;
 }
 .weui-btn_warn{
   color:#FA5151;
@@ -297,7 +297,7 @@ textarea{
   background-color:#D9D9D9;
 }
 .weui-btn_loading.weui-btn_primary{
-  background-color:#225588;
+  background-color:#336699;
 }
 .weui-btn_loading.weui-btn_warn{
   background-color:#D9D9D9;
@@ -307,7 +307,7 @@ textarea{
   border:1px solid #1aad19;
 }
 .weui-btn_plain-primary:not(.weui-btn_plain-disabled):active{
-  color:#225588;
+  color:#336699;
   border-color:#179c16;
   background-color:rgba(0, 0, 0, 0.1);
 }
@@ -467,12 +467,12 @@ input.weui-btn_plain-default{
   bottom:0;
   right:0;
   height:1px;
-  border-bottom:1px solid rgba(0, 0, 0, 0.1);
-  color:rgba(0, 0, 0, 0.1);
+  border-bottom:1px solid #e5e5e5;
+  color:#e5e5e5;
   -webkit-transform-origin:0 100%;
   transform-origin:0 100%;
-  -webkit-transform:scaleY(0.5);
-  transform:scaleY(0.5);
+  /*-webkit-transform:scaleY(0.5);*/
+  /*transform:scaleY(0.5);*/
   z-index:2;
 }
 .weui-cells__title{
@@ -1386,7 +1386,7 @@ button.weui-vcode-btn{
 }
 .weui-cells__group_form .weui-cell{
   padding:16px 32px;
-  color:rgba(0, 0, 0, 0.9);
+  color:#000;
 }
 .weui-cells__group_form .weui-cell__hd{
   padding-right:16px;
@@ -1411,13 +1411,13 @@ button.weui-vcode-btn{
   padding:12px 32px;
 }
 .weui-cells__group_form .weui-vcode-btn{
-  font-size:16px;
+  font-size:15px;
   padding:0 12px;
   margin-left:0;
   height:auto;
   width:auto;
   line-height:2em;
-  color:#225588;
+  color:#336699;
   background-color:#F2F2F2;
 }
 .weui-cells__group_form .weui-vcode-btn:before{
@@ -2565,7 +2565,9 @@ a.weui-media-box:active{
   top:-0.9em;
   padding:0 .55em;
   background-color:#FFFFFF;
-  color:rgba(0, 0, 0, 0.5);
+  color:rgba(187,187,187,1);
+  /*color:rgba(0, 0, 0, 0.5);*/
+
 }
 .weui-loadmore_dot .weui-loadmore__tips{
   padding:0 .16em;

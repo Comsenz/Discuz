@@ -27,7 +27,7 @@
       </div>
 
       <div class="wx-sign-up-bd-btn">
-        <button class="weui-btn weui-btn_primary "  id="showTooltips">注册并绑定</button>
+        <button class="weui-btn weui-btn_primary login-btn"  id="showTooltips">注册并绑定</button>
       </div>
 
     </main>

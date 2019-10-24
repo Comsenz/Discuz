@@ -4,6 +4,8 @@
  * style var
  */
 
+@import "/mobile/app";
+
 $fontColor: #336699;
 $cor888: #888888;
 $gap: #EDEDED;
@@ -39,6 +41,10 @@ body{
 
 .weui-btn{
   font-weight: 500;
+}
+
+.weui-cells weui-cells_form{
+
 }
 
 

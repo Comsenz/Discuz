@@ -4,10 +4,6 @@
     <div class="circleCon">
 	    <!-- <Header></Header> -->
 	    <div class="headerBox">
-	        <!-- <div class="headOpe">
-	          <span class="icon iconfont">&#xe60b;</span>
-	          <span class="icon iconfont">&#xe60c;</span>
-	        </div> -->
 	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
@@ -19,7 +15,7 @@
 	    <div class="cirPostCon">
 		    <div class="postTop">
 	    		<div class="postPer">
-	    			<img src="" class="postHead">
+	    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
 	    			<div class="perDet">
 	    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 	    				<div class="postTime">1小时前</div>
@@ -33,8 +29,8 @@
     	</div>
     	<div class="gap"></div>
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+	    	<a href="javascript:;" class="mustLogin">已注册，登录</a>
+	    	<a href="javascript:;" class="regiJoin">立即注册并加入</a>
 	    	<p class="payMoney">￥20.00 / 永久有效</p>
 	    </div>
 	    <div class="gap"></div>
@@ -56,15 +52,17 @@
 
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
-import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
-import Header from '../../m_site/common//headerView';
+import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCOn';
+// import mSiteHeader from '../../../controllers/m_site/common/header';
+// import Header from '../../m_site/common//headerView';
 import  '../../../scss/mobile/mobileIndex.scss';
 export default {
     name: "payCircleView",
     components:{
-    	Header
+    	// Header
     },
-    ...mSitePayCircleCon
+    // ...mSiteHeader,
+    ...mSitePayCircleConCon
 }
 
 

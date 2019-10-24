@@ -32,7 +32,15 @@ export default {
           require(['../view/m_site/home/payCircleView'],resolve)
         },
         metaInfo:{
-          title:"私密圈子待支付"
+          title:"付费圈子-首页-未登录"
+        }
+      },
+      payCircleLogin:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/payCircleLoginView'],resolve)
+        },
+        metaInfo:{
+          title:"付费圈子-已登录-未付费"
         }
       },
       payCircleCon:{
@@ -64,9 +72,18 @@ export default {
           require(['../view/m_site/home/circleInviteView'],resolve)
         },
         metaInfo:{
-          title:"圈子管理-邀请"
+          title:"付费圈子，菜单栏内的邀请"
         }
       },
+      circleManageInvite:{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/circleManageInviteView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子管理里的邀请"
+        }
+      },
+      
       header:{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)

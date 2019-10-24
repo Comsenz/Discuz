@@ -4,7 +4,7 @@
       <main class="weui-form wx-login-bd-main">
         <div class="weui-form__text-area wx-login-bd-title">
           <h2 class="weui-form__title">微信绑定账号</h2>
-          <div class="weui-form__desc">您的微信号未绑定账号，请登录绑定您的账号</div>
+          <div class="weui-form__desc wx-login-main-desc">您的微信号未绑定账号，请登录绑定您的账号</div>
         </div>
 
         <div class="weui-form__control-area">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="wx-login-bd-btn">
-          <button class="weui-btn weui-btn_primary "  id="showTooltips">登录并绑定</button>
+          <button class="weui-btn weui-btn_primary login-btn"  id="showTooltips">登录并绑定</button>
         </div>
 
       </main>

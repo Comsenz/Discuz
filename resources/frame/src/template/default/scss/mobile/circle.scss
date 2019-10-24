@@ -57,6 +57,51 @@ body {
 		@include font-dpr(28);
 		color: #888888;
 		@include px2rem(line-height, 48);
+		position: relative;
+		.themeList {
+			position: absolute;
+			@include px2rem(top, 60);
+			background: $corF7;
+			right: 0;
+			@include px2rem(min-width, 180);
+			@include px2rem(border-radius, 10);
+			border: 1px solid $corE5;
+			&:after {
+				content: '';
+				display: block;
+				border-width: 10px;
+				position: absolute;
+				top: -17px;
+				right: 10px;
+				border-style: solid dashed dashed;
+				border-color: transparent transparent $corF7;
+				font-size: 0;
+				line-height: 0;
+			}
+			&:before {
+				content: '';
+				display: block;
+				border-width: 10px;
+				position: absolute;
+				top: -18px;
+				right: 10px;
+				border-style: solid dashed dashed;
+				border-color: transparent transparent $corE5;
+				font-size: 0;
+				line-height: 0;
+			}
+			a {
+				display: block;
+				@include px2rem(padding, 22 30);
+				@include px2rem(line-height, 42);
+				color: $cor888;
+				@include font-dpr(30);
+				border-bottom: 1px solid $corE5;
+				&:last-child {
+					border: none;
+				}
+			}
+		}
 	}
 }
 .cirPostCon {
@@ -102,6 +147,7 @@ body {
 		display: inline-block;
 		@include px2rem(height, 40);
 		@include px2rem(width, 52);
+		@include px2rem(margin-left, 12);
 		background: $corF7;
 		span {
 			color: $fontColor;
@@ -126,9 +172,11 @@ body {
 	@include px2rem(padding, 16 0 20 0);
 	@include px2rem(margin-top, 20);
 	.likeBox {
+		@include font-dpr(28);
 		@include px2rem(padding, 0 18 0 18);
 		vertical-align: middle;
 		@include px2rem(margin-bottom, 8);
+		word-break: break-all;
 		.icon {
 			@include font-dpr(28);
 			color: $fontColor;
@@ -223,24 +271,39 @@ payCircle.view
 	}
 }
 .circleInfo {
-	@include px2rem(padding, 26 30 28 30);
+	@include px2rem(padding, 26 0 28 30);
 	.cirInfoTit {
 		@include px2rem(line-height, 42);
 		@include font-dpr(30);
 		@include px2rem(padding-bottom, 8);
+		@include px2rem(padding-right, 30);
+		font-weight: normal;
 	}
 	.cirInfoWord {
 		@include px2rem(line-height, 40);
 		color: rgba(#000,0.5);
 		@include font-dpr(28);
 		@include px2rem(padding-bottom, 28);
+		@include px2rem(padding-right, 30);
 		border-bottom: 1px solid $corE5;
 	}
 }
 .infoItem {
 	@include px2rem(padding, 26 0);
 	overflow: hidden;
-	border-bottom: 1px solid $corE5;
+	@include px2rem(padding-right, 30);
+	position: relative;
+	// border-bottom: 1px solid $corE5;
+	&:after {
+		position: absolute;
+	    box-sizing: border-box;
+	    content: ' ';
+	    pointer-events: none;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	    border-bottom: 1px solid $corE5;
+	}
 	.infoItemLeft {
 		float: left;
 		@include px2rem(line-height, 42);
@@ -260,6 +323,7 @@ payCircle.view
 	 	.icon {
 			@include font-dpr(32);
 			@include px2rem(padding-left, 14);
+			color: $corE5;
 		}
 	}
 	.circleMemberList {
@@ -349,8 +413,6 @@ payCircle.view
 		    bottom: 0;
 		    left: 16px;
 		    border-bottom: 1px solid $corE5;
-		    -webkit-transform: scaleY(0.5);
-		    transform: scaleY(0.5);
 		}
 	}
 	.powerList {
@@ -365,8 +427,18 @@ payCircle.view
 		    bottom: 0;
 		    left: 16px;
 		    border-bottom: 1px solid $corE5;
-		    -webkit-transform: scaleY(0.5);
-		    transform: scaleY(0.5);
+		}
+		&:last-child {
+			&:after {
+				position: absolute;
+			    box-sizing: border-box;
+			    content: ' ';
+			    pointer-events: none;
+			    right: 0;
+			    bottom: 0;
+			    left: 16px;
+			    border-bottom: none;
+			}
 		}
 		.powerClassify {
 			@include font-dpr(34);
@@ -524,6 +596,7 @@ openCircleConView.vue
 		}
 		.payPerHead {
 			float: left;
+			@include px2rem(border-radius, 4);
 			@include px2rem(height, 52);
 			@include px2rem(width, 52);
 			@include px2rem(margin-left, 7);
@@ -571,7 +644,6 @@ openCircleConView.vue
 			@include px2rem(margin-left, 20);
 			vertical-align: baseline;
 			.icon-praise-after {
-				@include px2rem(margin-left, 20);
 				@include px2rem(margin-right, 8);
 			}
 		}
@@ -584,8 +656,6 @@ openCircleConView.vue
 		    bottom: 0;
 		    left: 16px;
 		    border-bottom: 1px solid $corE5;
-		    -webkit-transform: scaleY(0.5);
-		    transform: scaleY(0.5);
 		}
 	}
 	.padT22 {
@@ -601,13 +671,24 @@ openCircleConView.vue
 		    bottom: 0;
 		    left: 16px;
 		    border-bottom: none;
-		    -webkit-transform: scaleY(0.5);
-		    transform: scaleY(0.5);
 		}
 	}
 }
-
-
+/*
+付费的圈子，已登录，未付费
+*/
+.welcomeUser {
+	text-align: center;
+	@include font-dpr(28);
+	@include px2rem(line-height, 40);
+	color: rgba(#000,0.5);
+	@include px2rem(margin-bottom, 28);
+	.signOut {
+		@include font-dpr(28);
+		@include px2rem(line-height, 40);
+		@include px2rem(margin-left, 40);
+	}
+}
 
 
 
