@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $reply_id
  * @property string $content
  * @property string $ip
- * @property int $comment_count
+ * @property int $reply_count
  * @property int $like_count
  * @property Carbon $created_at
  * @property Carbon $updated_at

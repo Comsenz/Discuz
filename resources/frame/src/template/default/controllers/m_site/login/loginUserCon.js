@@ -19,10 +19,10 @@ export default {
 
   methods:{
     loginWxClick(){
-      this.$router.push({path:'/m_site/wx_login_bd'})
+      this.$router.push({path:'/m_site/wx-login-bd'})
     },
     loginPhoneClick(){
-      this.$router.push({path:'/m_site/login_phone'})
+      this.$router.push({path:'/m_site/login-phone'})
     },
 
 

@@ -11,7 +11,7 @@ export default {
    */
   template: {
     m_site:{
-      index:{
+      'index':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/indexView'],resolve)
         },
@@ -19,7 +19,7 @@ export default {
           title:"移动端首页"
         }
       },
-      circle:{
+      'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
         },
@@ -27,7 +27,7 @@ export default {
           title:"圈子首页"
         }
       },
-      payCircle:{
+      'pay-circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleView'],resolve)
         },
@@ -35,7 +35,7 @@ export default {
           title:"付费圈子-首页-未登录"
         }
       },
-      payCircleLogin:{
+      'pay-circle-login':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleLoginView'],resolve)
         },
@@ -43,7 +43,7 @@ export default {
           title:"付费圈子-已登录-未付费"
         }
       },
-      payCircleCon:{
+      'pay-circle-con':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
@@ -51,7 +51,7 @@ export default {
           title:"付费圈子，内容页的分享"
         }
       },
-      openCircle:{
+      'open-circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/openCircleView'],resolve)
         },
@@ -59,7 +59,7 @@ export default {
           title:"公开的圈子，菜单栏内的邀请"
         }
       },
-      openCircleCon:{
+      'open-circle-con':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/openCircleConView'],resolve)
         },
@@ -67,7 +67,7 @@ export default {
           title:"公开的圈子，内容页的分享"
         }
       },
-      circleInvite:{
+      'circle-invite':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleInviteView'],resolve)
         },
@@ -75,7 +75,7 @@ export default {
           title:"付费圈子，菜单栏内的邀请"
         }
       },
-      circleManageInvite:{
+      'circle-manage-invite':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleManageInviteView'],resolve)
         },
@@ -83,8 +83,8 @@ export default {
           title:"圈子管理里的邀请"
         }
       },
-      
-      header:{
+
+      'header':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)
         },
@@ -92,7 +92,7 @@ export default {
           title:"header"
         }
       },
-      post_topic:{
+      'post-topic':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/postTopicView'],resolve)
         },
@@ -102,7 +102,7 @@ export default {
       },
 
       //登录、注册、微信绑定模块路由
-      login_user:{
+      'login-user':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/loginUserView'],resolve)
         },
@@ -110,7 +110,7 @@ export default {
           title:"圈子首页"
         }
       },
-      login_phone:{
+      'login-phone':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/loginPhoneView'],resolve)
         },
@@ -118,7 +118,7 @@ export default {
           title:"手机号登录"
         }
       },
-      wx_login_bd:{
+      'wx-login-bd':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/wxLoginBdView'],resolve)
         },
@@ -126,7 +126,7 @@ export default {
           title:"微信登录绑定账号"
         }
       },
-      wx_sign_up_bd:{
+      'wx-sign-up-bd':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/wxSignUpBdView'],resolve)
         },
@@ -134,7 +134,7 @@ export default {
           title:"微信注册绑定账号"
         }
       },
-      sign_up:{
+      'sign-up':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/signUpView'],resolve)
         },
@@ -142,7 +142,7 @@ export default {
           title:"注册账号"
         }
       },
-      bind_phone:{
+      'bind-phone':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/bindPhoneView'],resolve)
         },
@@ -150,7 +150,7 @@ export default {
           title:"绑定手机号"
         }
       },
-      retrieve_pwd:{
+      'retrieve-pwd':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/retrievePasswordView'],resolve)
         },
@@ -158,7 +158,7 @@ export default {
           title:"忘记密码"
         }
       },
-      pay_the_fee:{
+      'pay-the-fee':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/payTheFeeView'],resolve)
         },

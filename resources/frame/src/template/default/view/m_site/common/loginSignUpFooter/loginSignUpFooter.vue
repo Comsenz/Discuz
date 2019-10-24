@@ -1,24 +1,24 @@
 <template>
   <footer class="login-user-footer">
-    <template v-if="pageName === 'login_user'||pageName === 'login_phone'">
+    <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
       <span @click="retrieveClick">忘记密码？找回</span>
       <i></i>
       <span @click="signUpClick">注册</span>
     </template>
 
-    <template v-else-if="pageName === 'wx_login_bd'||pageName === 'wx_sign_up_bd'">
+    <template v-else-if="pageName === 'wx-login-bd'||pageName === 'wx-sign-up-bd'">
       <span @click="wxSignUpBdClick">没有账号？注册，绑定微信新账号</span>
     </template>
 
-    <template v-else-if="pageName === 'sign_up'">
+    <template v-else-if="pageName === 'sign-up'">
       <span @click="loginClick">已有账号立即登录</span>
     </template>
 
-    <template v-else-if="pageName === 'bind_phone'">
+    <template v-else-if="pageName === 'bind-phone'">
       <span @click="homeClick">跳过，进入首页</span>
     </template>
 
-    <template v-else-if="pageName === 'retrieve_pwd'">
+    <template v-else-if="pageName === 'retrieve-pwd'">
       <span></span>
     </template>
 

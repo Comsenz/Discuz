@@ -13,7 +13,7 @@
           <h3>作为成员，您将获得以下权限</h3>
         </div>
         <div class="pay-the-fee-per-list">
-          <h3 class="pay-the-fee-per-name">帖子操作</h3>
+          <div class="pay-the-fee-per-name">帖子操作</div>
           <p>查看主题</p>
           <p>发图文贴</p>
         </div>

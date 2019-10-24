@@ -21,16 +21,6 @@ export default {
   methods:{
     signUpClick(){
 
-      /*this.axios.post('http://local.test.discuz.com:8883/api/users',{
-        username:this.username,
-        password:this.password,
-        adminid:1
-      }).then((res)=>{
-        console.log(res);
-      }).catch((err)=>{
-        console.log(err);
-      })*/
-
       this.appFetch({
         url:'signUp',
         method:'post',
