@@ -377,9 +377,9 @@ body{
     }
 
     .pay-the-fee-btn{
-      @include px2rem(width,334);
+      //@include px2rem(width,334);
       @include font-dpr(32);
-      @include px2rem(padding,22 14);
+      //@include px2rem(padding,22 14);
     }
     .pay-the-fee-title-footer{
       @include px2rem(margin-top,30);
@@ -430,7 +430,7 @@ body{
         @include px2rem(line-height,44);
       }
 
-      ul{
+      p{
         @include font-dpr(28);
         color: rgba(0, 0, 0, 0.5);
       }
