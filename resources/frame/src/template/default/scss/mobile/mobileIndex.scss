@@ -46,6 +46,7 @@ a { color: $fontColor;}
 	span {
 		@include px2rem(padding,0 28);
 		border-right: 1px solid $corE5;
+		@include font-dpr(28);
 		&:last-child {
 			border: none; 
 		}
@@ -55,6 +56,8 @@ a { color: $fontColor;}
 	background: $gap;
 	width: 100%;
 	@include px2rem(height,22);
+	border-top: 1px solid $corE5;
+	border-bottom: 1px solid $corE5;
 }
 
 .fixedHead {
@@ -129,6 +132,14 @@ a { color: $fontColor;}
 	background: $corFff;
 	@include px2rem(padding-left,30);
 }
+.sideConList {
+	.sideCon:first-child {
+		.sideItem {
+			border-top: none;
+		}	
+	}
+	
+}
 .sideUserBox {
 	overflow: hidden;
 	@include px2rem(padding,108 30 28 0);
@@ -165,8 +176,8 @@ a { color: $fontColor;}
 }
 .sideItem {
 	overflow: hidden;
-	@include px2rem(padding, 28);
-	border-bottom: 1px solid $corE5;
+	@include px2rem(padding, 28 28 28 0);
+	border-top: 1px solid $corE5;
 	.itemTit {
 		@include px2rem(line-height, 42);
 		@include font-dpr(30);

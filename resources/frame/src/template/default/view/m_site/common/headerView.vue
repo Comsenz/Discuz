@@ -19,7 +19,7 @@
     <div class="sidebarWrap" v-if="showSidebar">
       <div class="sideCon">
         <div class="sideUserBox">
-          <img src="" class="userHead">
+          <img src="../../../../../../static/images/noavatar.gif" class="userHead">
           <div class="userDet">
             <div class="userName">jdhdskhfkdshfkdsh</div>
             <div class="userPhone">183****0522</div>
@@ -34,21 +34,26 @@
         </div>
       </div>
       <div class="itemGap"></div>
-      <div class="sideCon" v-for="(item, i) in sidebarList2" :key="'list2'+i">
-        <div class="sideItem":to="{path: item.path, query: item.query}" v-if="item.path">
-           <span class="itemTit">{{item.name}}</span>
-           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-        </div>
-        <div class="sideItem" v-else @click="bindEvent(item.enentType)">
-           <span class="itemTit">{{item.name}}</span>
-           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+      <div class="sideConList">
+        <div class="sideCon" v-for="(item, i) in sidebarList2" :key="'list2'+i">
+          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
+             <span class="itemTit">{{item.name}}</span>
+             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+          </div>
+          <div class="sideItem" v-else @click="bindEvent(item.enentType)">
+             <span class="itemTit">{{item.name}}</span>
+             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+          </div>
         </div>
       </div>
+      
       <div class="itemGap"></div>
-      <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
-        <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-           <span class="itemTit">{{item.name}}</span>
-           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+      <div class="sideConList">
+        <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
+          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
+             <span class="itemTit">{{item.name}}</span>
+             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -70,7 +75,6 @@
           <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
         </ul>
       </div>
-      <div class="gap"></div>
     </div>
     
     

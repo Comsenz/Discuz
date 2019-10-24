@@ -3,7 +3,7 @@
 <template>
     <div class="circleCon">
     	<div class="invitePerDet">
-    		<img src="" class="inviteHead">
+    		<img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
 	    	<div class="inviteName">Efhdkjfhk</div>
 	    	<p class="inviteWo">邀请您加入</p>
     	</div>

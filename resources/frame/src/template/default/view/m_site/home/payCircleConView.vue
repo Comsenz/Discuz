@@ -15,7 +15,7 @@
 	    <div class="cirPostCon">
 		    <div class="postTop">
 	    		<div class="postPer">
-	    			<img src="" class="postHead">
+	    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
 	    			<div class="perDet">
 	    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 	    				<div class="postTime">1小时前</div>

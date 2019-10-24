@@ -5,7 +5,7 @@
 export default {
 	data: function() {
 		return {
-			
+			showScreen: false
 		}
 	},
 	
@@ -21,9 +21,15 @@ export default {
            // alert("当前对象的内容："+el.innerHTML);
         },
         //筛选
-        screen:function(){
-        	
-        }
+        bindScreen:function(){
+        	//是否显示筛选内容
+        	this.showScreen = !this.showScreen;
+        },
+        
+      	hideScreen(){
+      		//是否显示筛选内容
+	        this.showScreen = false;
+      	},
 
 		
 	},
