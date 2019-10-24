@@ -38,8 +38,9 @@ $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersCont
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
-$route->patch('/threads/batch', 'threads.batch', ApiController\Threads\BatchThreadController::class);
+$route->patch('/threads/batch', 'threads.batch', ApiController\Threads\BatchUpdateThreadController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
+$route->delete('/threads/batch', 'threads.delete', ApiController\Threads\BatchDeleteThreadController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 
 /*
