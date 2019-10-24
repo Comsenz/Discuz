@@ -74,7 +74,9 @@ class UpdateClassify
      * @param EventDispatcher $events
      * @param ClassifyRepository $repository
      * @param ClassifyValidator $validator
-     * @return App\Model\Classify
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function handle(
         EventDispatcher $events,

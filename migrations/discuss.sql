@@ -118,7 +118,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `user_wechat` (
+CREATE TABLE `user_wechats` (
   `id` int(11) NOT NULL,
   `openid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `nickname` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
@@ -178,5 +178,15 @@ CREATE TABLE `attachments` (
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建IP',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--用户详情
+CREATE TABLE `user_profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `ip` varchar(15) CHARACTER SET utf8 DEFAULT '',
+  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '3' COMMENT '1男2女',
+  `icon` varchar(200) CHARACTER SET utf8 DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
