@@ -7,7 +7,7 @@
             <p>头像</p>
           </div>
           <div class="modify-data-avatar-img m-site-cell-access-ft">
-            <!--<img src="../../../../../../static/images/mytx.png" alt="我的头像">-->
+            <img  src="../../../../../../static/images/mytx.png" alt="我的头像">
             <i>
               <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
             </i>

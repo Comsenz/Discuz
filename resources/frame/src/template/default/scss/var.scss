@@ -110,7 +110,12 @@ body{
     @include px2rem(line-height,32);
     @include px2rem(padding-right,45);
     position: relative;
-
+    //img{
+    //  width:58px;
+    //  height:58px;
+    //  border-radius:4px;
+    //  position: relative;
+    //}
     i{
       position: absolute;
       right: 0;

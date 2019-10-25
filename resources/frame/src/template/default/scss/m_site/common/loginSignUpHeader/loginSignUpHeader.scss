@@ -18,6 +18,14 @@ $lh:44px;   //height和line-height
   align-items: center;
   position: relative;
 
+  .header-title{
+    @include font-dpr(36);
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:500;
+    color:#000;
+    @include px2rem(line-height,48);
+  }
+
   .header-icon{
     fill:$fontColor;
     position: absolute;

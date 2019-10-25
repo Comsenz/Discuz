@@ -8,20 +8,20 @@ export default {
   methods:{
     //忘记密码？找回按钮
     retrieveClick(){
-      this.$router.push('/m_site/retrieve-pwd')
+      this.$router.push('/retrieve-pwd')
     },
     //注册按钮
     signUpClick(){
-      this.$router.push('/m_site/sign-up')
+      this.$router.push('/sign-up')
     },
     //注册，绑定微信新账号
     wxSignUpBdClick(){
-      this.$router.push('/m_site/wx-sign-up-bd');
+      this.$router.push('/wx-sign-up-bd');
     },
 
     //已有账号立即登录
     loginClick(){
-      this.$router.push('/m_site/login-user')
+      this.$router.push('/login-user')
     },
     //进入首页
     homeClick(){

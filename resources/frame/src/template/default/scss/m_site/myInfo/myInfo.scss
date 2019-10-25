@@ -21,6 +21,29 @@
     @include px2rem(padding,0 30);
     border-bottom: 1px solid #E5E5E5;
     background-color: white;
+
+    .modify-data-avatar{
+      height: auto;
+      padding: 8px 0;
+      .modify-data-avatar-img {
+        img {
+          width: 58px;
+          height: 58px;
+          border-radius: 4px;
+          position: relative;
+        }
+      }
+    }
+
+
+
+
+    .modify-data-wx{
+
+      .modify-data-wx-string{
+
+      }
+    }
   }
 
 }
