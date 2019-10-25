@@ -16,7 +16,7 @@
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
           <span class="post-topic-footer-right-sort">{{selectSort}}</span>
-          <span class="icon iconfont icon-down-menu post-topic-header-icon" ></span>
+          <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
     </div>
