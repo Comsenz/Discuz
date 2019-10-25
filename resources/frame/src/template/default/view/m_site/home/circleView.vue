@@ -68,7 +68,7 @@
 	    			</div>
 	    			<div class="replyCon">
 	    				<a href="javascript:;">jsone</a>
-	    				<span class="font8">回复</span>
+	    				<span class="font9">回复</span>
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
@@ -115,7 +115,7 @@
 	    			</div>
 	    			<div class="replyCon">
 	    				<a href="javascript:;">jsone</a>
-	    				<span class="font8">回复</span>
+	    				<span class="font9">回复</span>
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>

@@ -171,6 +171,7 @@ body {
 	background: $corF7;
 	@include px2rem(padding, 16 0 20 0);
 	@include px2rem(margin-top, 20);
+	color: #444;
 	.likeBox {
 		@include font-dpr(28);
 		@include px2rem(padding, 0 18 0 18);
@@ -218,8 +219,8 @@ body {
 		span {
 			display: inline;
 		}
-		.font8 {
-			color: $cor888;
+		.font9 {
+			color: $cor999;
 		}
 	}
 	.allReply {
@@ -328,12 +329,12 @@ payCircle.view
 	}
 	.circleMemberList {
 		overflow: hidden;
-		@include px2rem(padding-top, 28);
+		@include px2rem(padding, 28 10 0 10);
 		.circleMember {
 			float: left;
 			@include px2rem(height, 92);
 			@include px2rem(width, 92);
-			@include px2rem(margin-right, 56);
+			@include px2rem(margin-right, 52);
 			@include px2rem(border-radius, 8);
 			&:nth-child(5) {
 				@include px2rem(margin-right, 0);
@@ -383,6 +384,7 @@ payCircle.view
 		@include px2rem(width, 92);
 		@include horizontal-center;
 		@include px2rem(margin-bottom, 12);
+		@include px2rem(border-radius, 8);
 	}
 	.inviteName {
 		color: $fontColor;

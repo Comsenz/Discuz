@@ -34,7 +34,7 @@
 	    <div class="cirPostCon">
 	    	<div class="postTop">
 	    		<div class="postPer">
-	    			<img src="" class="postHead">
+	    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
 	    			<div class="perDet">
 	    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 	    				<div class="postTime">1小时前</div>
@@ -66,7 +66,7 @@
 	    			</div>
 	    			<div class="replyCon">
 	    				<a href="javascript:;">jsone</a>
-	    				<span class="font8">回复</span>
+	    				<span class="font9">回复</span>
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
@@ -78,7 +78,7 @@
 	    <div class="cirPostCon">
 	    	<div class="postTop">
 	    		<div class="postPer">
-	    			<img src="" class="postHead">
+	    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
 	    			<div class="perDet">
 	    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 	    				<div class="postTime">1小时前</div>
@@ -110,7 +110,7 @@
 	    			</div>
 	    			<div class="replyCon">
 	    				<a href="javascript:;">jsone</a>
-	    				<span class="font8">回复</span>
+	    				<span class="font9">回复</span>
 	    				<a href="javascript:;">jsosdsdne</a>:
 	    				<span>手动给赞克斯的机会放大看就看</span>
 	    			</div>
