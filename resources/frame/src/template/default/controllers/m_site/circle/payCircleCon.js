@@ -24,17 +24,15 @@ export default {
 		}
 	},
 	
-	methods: {	
-		/**
-		 * 给导航添加点击状态
-		 */
-		addClass:function(index,event){
-            this.current=index;
-             
-　　　　　　 //获取点击对象      
-           var el = event.currentTarget;
-           // alert("当前对象的内容："+el.innerHTML);
-        }
+	methods: {
+		//跳转到登录页
+		loginJump:function(){
+			this.$router.push({ path:'login-user'}) 
+		},
+		//跳转到注册页
+		registerJump:function(){
+			this.$router.push({ path:'sign-up'}) 
+		}
 		
 	},
 

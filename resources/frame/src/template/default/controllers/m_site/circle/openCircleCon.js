@@ -20,6 +20,14 @@ export default {
 	},
 	
 	methods: {	
+		//跳转到登录页
+		loginJump:function(){
+			this.$router.push({ path:'login-user'}) 
+		},
+		//跳转到注册页
+		registerJump:function(){
+			this.$router.push({ path:'sign-up'}) 
+		},
 		/**
 		 * 给导航添加点击状态
 		 */

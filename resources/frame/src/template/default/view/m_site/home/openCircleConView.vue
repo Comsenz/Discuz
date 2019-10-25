@@ -135,8 +135,8 @@
 	    </div>
 	    <div class="gap"></div>    
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" class="regiJoin">注册</a>
+	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
+	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册</a>
 	    </div>
     </div>
 </template>

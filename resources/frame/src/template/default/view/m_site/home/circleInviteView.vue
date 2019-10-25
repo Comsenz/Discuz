@@ -36,8 +36,8 @@
 	    </div>
 		<div class="gap"></div>    
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">已注册，登录</a>
-	    	<a href="javascript:;" class="regiJoin">接受邀请，注册</a>
+	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
+	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
 	    	<p class="payMoney">￥20.00 / 永久有效</p>
 	    </div>
     </div>
