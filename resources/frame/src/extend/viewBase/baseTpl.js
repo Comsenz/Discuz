@@ -18,7 +18,7 @@ const baseTpl = function (params) {
 	this.publicCss = params.publicCss ? params.publicCss : [];
 	this.publicJs = params.publicJs ? params.publicJs : [];
 	this.styleCss = params.styleCss ? params.styleCss : {};
-	
+
 	this.needLogins = params.needLogins ? params.needLogins : [];
 	this.ctype = "";
 }
@@ -127,7 +127,8 @@ baseTpl.prototype.loadRouter = function() {
 		for(var mName in nowModules) {
 			var nowRouterInfo = {
 				name: mName,
-				path: "/"+folder+"/"+mName,
+				// path: "/"+folder+"/"+mName,
+        path: `/${folder === 'm_site' ? '' : (folder + '/')}${mName}`,
 				component: nowModules[mName]["comLoad"],
 				meta: nowModules[mName]["metaInfo"]
 			};
@@ -179,7 +180,8 @@ baseTpl.prototype.loadOtherSource = function(Router) {
 
 		var path = to.matched[0].path == "*" ? Router.options.routes[0].path : to.path;
 		path = path.split("/");
-		path = [path[1], path[2]];
+    path[2] ? path = [path[1], path[2]] : path[0] = 'm_site'
+		// path = [path[1], path[2]];
 
 		var publicCss = _this.publicCss ? _this.publicCss : [],
 			publicJs = _this.publicJs ? _this.publicJs : [],
@@ -211,7 +213,7 @@ baseTpl.prototype.getStyleCss = function(topath) {
 	if(!styleCss.path || !styleCss.baseName.length) {
 		return [];
 	}
-	
+
 	var styleCssPaths = [],
 		mobilePrefix = commonHelper.getClientType(topath) ? "m." : "",
 		type = commonHelper.getClientType(topath) ? "mstyle" : "style";
@@ -220,7 +222,7 @@ baseTpl.prototype.getStyleCss = function(topath) {
 	styleCss.baseName.forEach(function(cssName) {
 		styleCssPaths.push(styleCss.path+mobilePrefix+commonHelper.getWebStyle(type)+"."+cssName);
 	});
-	
+
 	return styleCssPaths;
 };
 
@@ -341,7 +343,7 @@ baseTpl.prototype.clearOtherClientStyle = function() {
 	//手机转pc 端去掉rem 设置
 	if(this.ctype == "pc") {
 		document.documentElement.style = "";
-	}	
+	}
 }
 
 /**
