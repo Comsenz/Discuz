@@ -85,17 +85,17 @@ class UpdateUserWallet
                     default:
                         break;
                 }
+                $operate_reason = Arr::get($this->data, 'operate_reason');
+                //添加钱包明细
+                $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $this->wallet_id, $change_available_amount, 0, 50, $operate_reason);
+                //修改钱包金额
+                $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
+                $user_wallet->save();
             }
             //钱包状态修改
             if (isset($this->data['wallet_status'])) {
                 $user_wallet->wallet_status = (int) $this->data['wallet_status'];
             }
-
-            //添加钱包明细
-            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $this->wallet_id, $change_available_amount, 0, 50, $this->data['operate_reason']);
-            //修改钱包金额
-            $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
-            $user_wallet->save();
             //提交事务
             $db->commit();
             return $user_wallet;
