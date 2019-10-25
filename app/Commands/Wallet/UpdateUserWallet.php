@@ -66,6 +66,7 @@ class UpdateUserWallet
         $db->beginTransaction();
         try {
             $user_wallet = UserWallet::findOrFail($this->wallet_id)->lockForUpdate()->first();
+            $change_status = false;
             //加减操作
             if (isset($this->data['operate_type'])) {
                 $operate_amount = Arr::get($this->data, 'operate_amount');
@@ -83,6 +84,7 @@ class UpdateUserWallet
                         $change_available_amount = -$change_available_amount;
                         break;
                     default:
+                        throw new Exception(app('translator')->get('wallet.operate_type_error'), 500);
                         break;
                 }
                 $operate_reason = Arr::get($this->data, 'operate_reason');
@@ -90,14 +92,17 @@ class UpdateUserWallet
                 $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $this->wallet_id, $change_available_amount, 0, 50, $operate_reason);
                 //修改钱包金额
                 $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
-                $user_wallet->save();
+                $change_status = true;
             }
             //钱包状态修改
             if (isset($this->data['wallet_status'])) {
                 $user_wallet->wallet_status = (int) $this->data['wallet_status'];
             }
-            //提交事务
-            $db->commit();
+            if ($change_status) {
+                $user_wallet->save();
+                //提交事务
+                $db->commit();
+            }
             return $user_wallet;
         } catch (Exception $e) {
             //回滚事务
