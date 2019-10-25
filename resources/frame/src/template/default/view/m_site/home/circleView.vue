@@ -140,7 +140,7 @@
 import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
 import mSiteHeader from '../../../controllers/m_site/common/header';
 import Header from '../../m_site/common/headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleView",
     components:{

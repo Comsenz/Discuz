@@ -64,7 +64,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/login/loginSignUpModule.scss';
+import '../../../scss/m_site/login/loginSignUpModule.scss';
 import loginPhoneCon from '../../../controllers/m_site/login/loginPhoneCon';
 export default {
     name: "loging-phone-view",

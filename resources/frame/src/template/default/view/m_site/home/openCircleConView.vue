@@ -71,7 +71,7 @@
 		    		<a href="javascript:;" class="postDetR">收藏</a>
 		    		<a href="javascript:;" class="postDetR">分享</a>
 		    	</div>
-		    </div>	    
+		    </div>
 	    </div>
 	    <div class="gap"></div>
 	    <div class="commentBox">
@@ -110,7 +110,7 @@
 		    <div class="commentOpera padT22">
 	    		<a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
 	    		<a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
-	    		<a class="icon iconfont icon-review"></a>		    		
+	    		<a class="icon iconfont icon-review"></a>
 	    	</div>
 		    <div class="commentPostDet">
 		    	<div class="postTop quotePostTop">
@@ -130,10 +130,10 @@
 	    	<div class="commentOpera afterNone">
 	    		<a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
 	    		<a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
-	    		<a class="icon iconfont icon-review"></a>		    		
+	    		<a class="icon iconfont icon-review"></a>
 	    	</div>
 	    </div>
-	    <div class="gap"></div>    
+	    <div class="gap"></div>
 	    <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册</a>
@@ -147,7 +147,7 @@
 import mSiteOpenCircleConCon from '../../../controllers/m_site/circle/openCircleConCon';
 import mSiteHeader from '../../../controllers/m_site/common/header';
 import Header from '../../m_site/common//headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleView",
     components:{

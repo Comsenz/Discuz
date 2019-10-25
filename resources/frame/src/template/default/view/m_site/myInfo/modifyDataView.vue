@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/myInfo/myInfo.scss';
+import '../../../scss/m_site/myInfo/myInfo.scss';
 import modifyDataCon from '../../../controllers/m_site/myInfo/modifyDataCon';
 export default {
     name: "modify-data-view",

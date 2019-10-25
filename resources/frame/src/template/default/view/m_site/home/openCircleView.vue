@@ -9,7 +9,7 @@
     	</div>
 	    <!-- <Header></Header> -->
 	    <div class="headerBox">
-	        
+
 	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
@@ -116,10 +116,10 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		
+
 	    	</div>
 	    </div>
-	    <div class="gap"></div>    
+	    <div class="gap"></div>
 	    <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
@@ -133,7 +133,7 @@ import mSiteOpenCircleCon from '../../../controllers/m_site/circle/openCircleCon
 // import Header from '../../m_site/common//headerView';
 // import mSiteHeader from '../../../controllers/m_site/common/header';
 // import Header from '../../m_site/common//headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "openCircleView",
     components:{

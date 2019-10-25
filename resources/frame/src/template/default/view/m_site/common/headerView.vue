@@ -92,7 +92,7 @@
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/header';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",
   ...mSiteHeader

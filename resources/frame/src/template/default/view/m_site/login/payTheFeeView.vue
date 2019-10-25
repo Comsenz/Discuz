@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/loginSignUpModule.scss';
+import '../../../scss/m_site/login/loginSignUpModule.scss';
 import payTheFeeCon from '../../../controllers/m_site/login/payTheFeeCon';
 export default {
     name: "pay-the-fee-view",

@@ -24,7 +24,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/postTopicView.scss'
+import '../../../scss/m_site/postTopicView.scss'
 import postTopicCon from '../../../controllers/m_site/home/postTopic/postTopicCon'
 export default {
     name: "post-topic",

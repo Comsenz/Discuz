@@ -21,7 +21,7 @@
 	    				<div class="postTime">1小时前</div>
 	    			</div>
 	    		</div>
-	    		
+
 	    	</div>
 	    	<div class="postContent">
 	    		<a href="javascript:;">我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</a>
@@ -45,8 +45,8 @@
 	    		<p class="powerChi">回帖</p>
 	    	</div>
 	    </div>
-	    
-	    
+
+
     </div>
 </template>
 
@@ -55,7 +55,7 @@
 import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCOn';
 // import mSiteHeader from '../../../controllers/m_site/common/header';
 // import Header from '../../m_site/common//headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
     components:{
