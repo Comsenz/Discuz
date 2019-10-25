@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="itemGap"></div>
       <div class="sideConList">
         <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
@@ -77,8 +77,8 @@
         </ul>
       </div>
     </div>
-    
-    
+
+
 
 
   </section>
@@ -86,7 +86,7 @@
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/header';
 
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",
   ...mSiteHeader
@@ -162,13 +162,13 @@ export default {
   //         },
   //           enentType: ''
   //       }
-        
+
   //     ]
 
   //   }
   // },
   // methods: {
-    
+
     // // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // // 比较他们的大小来确定是否添加fixedHead样式
     // handleTabFix() {
@@ -188,8 +188,8 @@ export default {
     //       this.isfixNav = false;
     //       // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
     //       // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
-    //     };    
-        
+    //     };
+
     //   },
     //   searchJump () {
 

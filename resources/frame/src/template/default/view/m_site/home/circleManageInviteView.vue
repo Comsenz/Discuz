@@ -9,7 +9,7 @@
 		    	<div class="inviteName">Efhdkjfhk</div>
 		    	<p class="inviteWo">邀请您加入</p>
 	    	</div>
-	    	
+
 	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
@@ -47,7 +47,7 @@
 	    		<p class="powerChi">删帖</p>
 	    	</div>
 	    </div>
-		<div class="gap"></div>    
+		<div class="gap"></div>
 	    <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已加入，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
@@ -59,7 +59,7 @@
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSiteCircleManageInviteCon from '../../../controllers/m_site/circle/circleManageInviteCon';
 // import Header from '../../m_site/common//headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleInviteView",
     ...mSiteCircleManageInviteCon

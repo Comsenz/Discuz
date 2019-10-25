@@ -54,9 +54,9 @@
 		    	<p class="payMoney">￥20.00 / 永久有效</p>
 		    </div>
 	    </div>
-	    
-	    
-	    
+
+
+
     </div>
 </template>
 
@@ -65,7 +65,7 @@
 import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
 import mSiteHeader from '../../../controllers/m_site/common/header';
 import Header from '../../m_site/common//headerView';
-import  '../../../scss/mobile/mobileIndex.scss';
+import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
     components:{

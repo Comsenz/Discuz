@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import '../../../scss/mobile/login/loginSignUpModule.scss';
+import '../../../scss/m_site/login/loginSignUpModule.scss';
 import signUpCon from '../../../controllers/m_site/login/signUpCon';
 export default {
     name: "sign-up-view",

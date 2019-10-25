@@ -53,7 +53,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/login/loginSignUpModule.scss';
+import '../../../scss/m_site/login/loginSignUpModule.scss';
 import loginCon from '../../../controllers/m_site/login/loginUserCon'
 export default {
     name: "login-view",

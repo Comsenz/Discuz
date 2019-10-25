@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import '../../../../scss/mobile/common/loginSignUpFooter/loginSignUpFooter.scss'
+import '../../../../scss/m_site/common/loginSignUpFooter/loginSignUpFooter.scss'
 import loginSignUpFooterCon from '../../../../controllers/m_site/common/loginSignUpFooter/loginSignUpFooter'
 export default {
     name: "login-sign-up-footer",

@@ -21,7 +21,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/mobile/themeDetails/themeDetails.scss';
+import '../../../scss/m_site/themeDetails/themeDetails.scss';
 import replyToTopicCon from '../../../controllers/m_site/themeDetails/replyToTopicCon';
 export default {
     name: "reply-to-topic-view",
