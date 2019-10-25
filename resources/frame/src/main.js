@@ -12,6 +12,7 @@ window.$ = jQuery;
 
 import './extend/viewBase/vantuiInit';   //引入vant组件
 import 'vant/lib/index.css'          //引入vant样式
+// import '../static/js/rem'
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
