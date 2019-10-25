@@ -5,7 +5,7 @@ namespace App\Models;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
-use App\Events\Userprofile\Created;
+use App\Events\UserProfile\Created;
 
 class UserProfile extends Model {
     use EventGeneratorTrait;
