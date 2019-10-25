@@ -10,14 +10,20 @@
           <img src="../../../../../../static/images/logo.png" class="logo headLogo">
           <div class="topRight">
             <span class="icon iconfont icon-search" @click="searchJump"></span>
-            <span class="icon iconfont icon-Shape" @click="bindSidebar"></span>
-            <!-- <van-cell is-link @click="showPopup">展示弹出层</van-cell> -->
+            <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
+
           </div>
         </div>
       </div>
     </header>
+    
     <div class="mask" v-if="showMask" @click="hideSidebar"></div>
-    <div class="sidebarWrap" v-if="showSidebar">
+    <van-popup
+      class="sidebarWrap"
+      v-model="show"
+      position="right"
+      :style="{ height: '100%' }"
+   >
       <div class="sideCon">
         <div class="sideUserBox">
           <img src="../../../../../../static/images/noavatar.gif" class="userHead">
@@ -57,7 +63,8 @@
           </div>
         </div>
       </div>
-    </div>
+      
+    </van-popup>
     <div class="headerBox">
       <div class="headOpe">
         <span class="icon iconfont icon-search"></span>
@@ -85,7 +92,6 @@
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/header';
-
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",
@@ -228,5 +234,3 @@ export default {
   // }
 // }
 // </script>
-
-
