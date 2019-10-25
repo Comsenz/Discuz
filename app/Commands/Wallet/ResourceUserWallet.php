@@ -47,15 +47,7 @@ class ResourceUserWallet
     {
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCircle');
-        $right = '';
-        if ($right == 'admin') {
-            //管理员权限
-            return UserWallet::where('user_id', $this->user_id)->first();
-        } else {
-            //普通成员
-            return UserWallet::where('user_id', $this->actor->id)->first();
-        }
-
+        return UserWallet::where('user_id', $this->user_id)->first();
     }
 
 }
