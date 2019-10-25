@@ -10,6 +10,8 @@ declare (strict_types = 1);
 
 namespace App\Commands\Order;
 
+use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use App\Models\Order;
@@ -46,10 +48,18 @@ class ListOrder
      * 执行命令
      * @return order
      */
-    public function handle()
+    public function handle(Validator $validator)
     {
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCircle');
+        // 验证参数
+        $validator_info = $validator->make($this->data, [
+            'size' => 'sometimes|required|integer|min:1',
+        ]);
+
+        if ($validator_info->fails()) {
+            throw new ValidationException($validator_info);
+        }
         $limit = (int)Arr::get($this->data, 'size', 10);
         $page = (int)Arr::get($this->data, 'page', 1);
         if ($page < 1) {

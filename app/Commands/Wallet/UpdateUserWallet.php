@@ -10,15 +10,15 @@ declare (strict_types = 1);
 
 namespace App\Commands\Wallet;
 
-use Exception;
 use App\Exceptions\ErrorException;
+use App\Models\UserWallet;
+use App\Models\UserWalletLog;
+use Exception;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
-use App\Models\UserWallet;
-use App\Models\UserWalletLog;
-
+use Illuminate\Validation\ValidationException;
 
 class UpdateUserWallet
 {
@@ -60,12 +60,24 @@ class UpdateUserWallet
      */
     public function handle(Validator $validator, ConnectionInterface $db)
     {
+
+        // 验证参数
+        $validator_info = $validator->make($this->data, [
+            'operate_type' => 'sometimes|required|integer|between:1,2',//操作类型，1：增加；2：增加
+            'operate_amount' => 'sometimes|required|numeric|min:0.01',//操作金额
+            'wallet_status' => 'sometimes|required|integer|between:0,1',//钱包状态
+        ]);
+
+        if ($validator_info->fails()) {
+            throw new ValidationException($validator_info);
+        }
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'UpdateUserWallet');
         //开始事务
         $db->beginTransaction();
         try {
-            $user_wallet = UserWallet::findOrFail($this->wallet_id)->lockForUpdate()->first();
+            $user_wallet   = UserWallet::findOrFail($this->wallet_id)->lockForUpdate()->first();
+            //是否有修改
             $change_status = false;
             //加减操作
             if (isset($this->data['operate_type'])) {
@@ -92,17 +104,18 @@ class UpdateUserWallet
                 $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $this->wallet_id, $change_available_amount, 0, 50, $operate_reason);
                 //修改钱包金额
                 $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
-                $change_status = true;
+                $change_status                 = true;
             }
             //钱包状态修改
             if (isset($this->data['wallet_status'])) {
+                $change_status              = true;
                 $user_wallet->wallet_status = (int) $this->data['wallet_status'];
             }
             if ($change_status) {
                 $user_wallet->save();
-                //提交事务
-                $db->commit();
             }
+            //提交事务
+            $db->commit();
             return $user_wallet;
         } catch (Exception $e) {
             //回滚事务
