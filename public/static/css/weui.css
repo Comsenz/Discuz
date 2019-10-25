@@ -452,12 +452,12 @@ input.weui-btn_plain-default{
   top:0;
   right:0;
   height:1px;
-  border-top:1px solid rgba(0, 0, 0, 0.1);
-  color:rgba(0, 0, 0, 0.1);
+  border-top:1px solid #e5e5e5;;
+  color:#e5e5e5;;
   -webkit-transform-origin:0 0;
   transform-origin:0 0;
-  -webkit-transform:scaleY(0.5);
-  transform:scaleY(0.5);
+  /*-webkit-transform:scaleY(0.5);*/
+  /*transform:scaleY(0.5);*/
   z-index:2;
 }
 .weui-cells:after{
