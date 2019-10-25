@@ -1,6 +1,4 @@
 import Vue from 'vue';
-import { Button } from 'vant';
-import { Popup } from 'vant';
+import { Button,Popup,Cell } from 'vant';
 
-Vue.use(Button);
-Vue.use(Popup);
+Vue.use(Button).use(Popup).use(Cell);

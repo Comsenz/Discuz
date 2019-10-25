@@ -10,6 +10,8 @@
 $headBg: #EEEFF0;
 
 body,html {
+	min-height: 100%;
+	height: auto;
 	color: $font000;
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
@@ -124,10 +126,10 @@ a { color: $fontColor;}
 .sidebarWrap {
   @include px2rem(width,520);
   background: $corE5;
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
+  // position: fixed;
+  // right: 0;
+  // top: 0;
+  // height: 100%;
   z-index: 14
 }
 .sideCon {

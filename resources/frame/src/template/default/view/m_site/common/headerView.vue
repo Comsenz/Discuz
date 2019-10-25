@@ -10,14 +10,20 @@
           <img src="../../../../../../static/images/logo.png" class="logo headLogo">
           <div class="topRight">
             <span class="icon iconfont icon-search" @click="searchJump"></span>
-            <span class="icon iconfont icon-Shape" @click="bindSidebar"></span>
-            <!-- <van-cell is-link @click="showPopup">展示弹出层</van-cell> -->
+            <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
+
           </div>
         </div>
       </div>
     </header>
+    
     <div class="mask" v-if="showMask" @click="hideSidebar"></div>
-    <div class="sidebarWrap" v-if="showSidebar">
+    <van-popup
+      class="sidebarWrap"
+      v-model="show"
+      position="right"
+      :style="{ height: '100%' }"
+   >
       <div class="sideCon">
         <div class="sideUserBox">
           <img src="../../../../../../static/images/noavatar.gif" class="userHead">
@@ -47,7 +53,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="itemGap"></div>
       <div class="sideConList">
         <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
@@ -57,7 +63,8 @@
           </div>
         </div>
       </div>
-    </div>
+      
+    </van-popup>
     <div class="headerBox">
       <div class="headOpe">
         <span class="icon iconfont icon-search"></span>
@@ -77,15 +84,14 @@
         </ul>
       </div>
     </div>
-    
-    
+
+
 
 
   </section>
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/header';
-
 import  '../../../scss/mobile/mobileIndex.scss';
 export default {
   name: "headerView",
@@ -162,13 +168,13 @@ export default {
   //         },
   //           enentType: ''
   //       }
-        
+
   //     ]
 
   //   }
   // },
   // methods: {
-    
+
     // // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // // 比较他们的大小来确定是否添加fixedHead样式
     // handleTabFix() {
@@ -188,8 +194,8 @@ export default {
     //       this.isfixNav = false;
     //       // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
     //       // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
-    //     };    
-        
+    //     };
+
     //   },
     //   searchJump () {
 
@@ -228,5 +234,3 @@ export default {
   // }
 // }
 // </script>
-
-

@@ -3,6 +3,7 @@
  */
 
 export default {
+  
 	data: function() {
 	    return {
 	      isfixNav: false,
@@ -10,7 +11,7 @@ export default {
 	      isShow: false,
 	      isHeadShow: false,
 	      showHeader: false,
-	      showSidebar: false,
+	      showSidebar: true,
 	      showMask: false,
 	      navShow: true,
 	      sidebarList1: [
@@ -74,9 +75,10 @@ export default {
 	          },
 	            enentType: ''
 	        }
-	        
+
 	      ],
 	      isfixNav: false,
+	      show: false,
 			current:0,
 	        todos: [
 	            { text: '选项一111' },
@@ -92,14 +94,16 @@ export default {
 	    }
 	},
 	methods: {
-		
+		showPopup() {
+      this.show = true;
+    },
 	 	/**
 		 * 给导航添加点击状态
 		 */
 		addClass:function(index,event){
             this.current=index;
-             
-　　　　　　 //获取点击对象      
+
+　　　　　　 //获取点击对象
            var el = event.currentTarget;
            // alert("当前对象的内容："+el.innerHTML);
         },
@@ -125,10 +129,10 @@ export default {
 		          this.isfixNav = false;
 		          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
 		          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
-		        };    
+		        };
 	    	}
-	        
-	        
+
+
 	    },
 	    searchJump () {
 

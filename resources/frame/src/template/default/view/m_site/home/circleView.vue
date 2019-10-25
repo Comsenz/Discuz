@@ -121,16 +121,16 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
+	    		<a href="javascript:;" @click="postTopic" class="fixedEdit">
 	    			<span class="icon iconfont icon-publish"></span>
 	    		</a>
 	    	</div>
 	    </div>
 
-	    <div class="gap"></div>    
+	    <div class="gap"></div>
 	    <div class="loginOpera">
-	    	<a href="javascript:;" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" class="regiJoin">注册，并加入</a>
+	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
+	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
 	    </div>
     </div>
 </template>
