@@ -28,7 +28,7 @@
 		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
 		    		</div>
 		    	</div>
-		    	<div class="postImgBox twoImgBox">
+		    	<!-- <div class="postImgBox twoImgBox">
 		    		<div class="twoImg">
 		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
 		    		</div>
@@ -46,7 +46,7 @@
 		    		<div class="threeImg">
 		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
 		    		</div>
-		    	</div>
+		    	</div> -->
 		    	<div class="uploadFileList">
 		    		<a href="javascript:;" class="fileChi">
 		    			<span class="icon iconfont icon-pdf"></span>

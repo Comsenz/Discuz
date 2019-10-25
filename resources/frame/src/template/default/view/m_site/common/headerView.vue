@@ -11,6 +11,7 @@
           <div class="topRight">
             <span class="icon iconfont icon-search" @click="searchJump"></span>
             <span class="icon iconfont icon-Shape" @click="bindSidebar"></span>
+            <!-- <van-cell is-link @click="showPopup">展示弹出层</van-cell> -->
           </div>
         </div>
       </div>

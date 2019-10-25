@@ -116,7 +116,6 @@ export default {
 		          this.showHeader = true;
 		          this.isfixHead = true;
 		          this.isfixNav = true;
-		          console.log( this.isfixNav + '00');
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
@@ -124,7 +123,6 @@ export default {
 		          this.showHeader = false;
 		          this.isfixHead = false;
 		          this.isfixNav = false;
-		          console.log( this.isfixNav + '111');
 		          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
 		          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
 		        };    
