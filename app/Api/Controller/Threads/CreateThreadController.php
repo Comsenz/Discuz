@@ -21,6 +21,14 @@ class CreateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
+    public $include = [
+        'user',
+        'firstPost',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = ThreadSerializer::class;
 
     /**
@@ -28,12 +36,7 @@ class CreateThreadController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: $actor 权限验证 用户模型
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'createWordList');
-        $actor = new \stdClass();
-        $actor->id = 1;
-
+        $actor = $request->getAttribute('actor');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
         // 检查发帖频率

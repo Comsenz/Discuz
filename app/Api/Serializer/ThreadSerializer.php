@@ -55,7 +55,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     protected function user($thread)
     {
-        return $this->hasOne($thread, UserSerializer::class, 'user');
+        return $this->hasOne($thread, UserSerializer::class);
     }
 
     /**
@@ -65,7 +65,17 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function firstPost($thread)
     {
-        return $this->hasOne($thread, PostSerializer::class, 'firstPost');
+        return $this->hasOne($thread, PostSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     * @throws BindingResolutionException
+     */
+    public function lastThreePosts($thread)
+    {
+        return $this->hasMany($thread, PostSerializer::class);
     }
 
     /**
@@ -75,6 +85,6 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function posts($thread)
     {
-        return $this->hasMany($thread, PostSerializer::class, 'posts');
+        return $this->hasMany($thread, PostSerializer::class);
     }
 }
