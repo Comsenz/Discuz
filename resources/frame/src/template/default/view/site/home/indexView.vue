@@ -20,7 +20,7 @@
 			<h3>投票列表</h3>
 			<p>
 				<ul>
-					<li v-for="item in voteInfo.body.items">
+					<li v-for="item in voteInfo.body.items" :key="index">
 						<span>{{ item.description }}</span>
 					</li>
 				</ul>

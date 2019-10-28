@@ -23,30 +23,12 @@
 		    	<div class="postContent">
 		    		<a href="javascript:;">我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</a>
 		    	</div>
-		    	<div class="postImgBox oneImgBox">
-		    		<div class="oneImg">
+		    	<div class="postImgBox">
+		    		<div class="postImgList">
+		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
 		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
 		    		</div>
 		    	</div>
-		    	<!-- <div class="postImgBox twoImgBox">
-		    		<div class="twoImg">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    		</div>
-		    		<div class="twoImg">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    		</div>
-		    	</div>
-		    	<div class="postImgBox threeImgBox">
-		    		<div class="threeImg">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    		</div>
-		    		<div class="threeImg">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    		</div>
-		    		<div class="threeImg">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    		</div>
-		    	</div> -->
 		    	<div class="uploadFileList">
 		    		<a href="javascript:;" class="fileChi">
 		    			<span class="icon iconfont icon-pdf"></span>
