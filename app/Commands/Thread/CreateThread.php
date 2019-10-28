@@ -61,9 +61,8 @@ class CreateThread
      * @param Collection $data
      * @param $ip
      */
-    public function __construct($actor, Collection $data, $ip)
+    public function __construct(User $actor, Collection $data, $ip)
     {
-        // TODO: User $actor
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
@@ -74,7 +73,6 @@ class CreateThread
      * @param BusDispatcher $bus
      * @param ThreadValidator $validator
      * @param Thread $thread
-     * @param Censor $censor
      * @return Thread
      * @throws ValidationException
      * @throws Exception
