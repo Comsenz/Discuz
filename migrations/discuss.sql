@@ -1,7 +1,8 @@
 CREATE TABLE `settings` (
-  `key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci,
-  PRIMARY KEY (`key`)
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '设置表key',
+  `value` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '设置表value',
+  `tag` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default' COMMENT '分组tag',
+  PRIMARY KEY (`key`,`tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `stop_words` (

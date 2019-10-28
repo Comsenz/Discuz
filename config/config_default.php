@@ -105,7 +105,8 @@ return [
     //加载ServiceProvider
     'providers' => [
 //        App\Providers\EventServiceProvider::class
-        App\Providers\EventServiceProvider::class
+        App\Providers\EventServiceProvider::class,
+        App\Settings\SettingsServiceProvider::class
 
     ],
     'sms' => [
@@ -128,8 +129,8 @@ return [
                 'file' => storage_path('log/easy-sms.log')
             ],
             'qcloud' => [
-                'sdk_app_id' => '', // SDK APP ID
-                'app_key' => '', // APP KEY
+                'sdk_app_id' => '1251099537', // SDK APP ID
+                'app_key' => 'g7KJ3atwlMlcKn0zpRnYaNvEI7lBQYS4', // APP KEY
                 'sign_name' => '', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
             ],
         ],

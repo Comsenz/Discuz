@@ -5,8 +5,9 @@ namespace App\Settings;
 
 
 use App\Models\Setting;
-use Discuz\Contracts\Setting\SettingRepository as ContractsSettingRepository;
+use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingRepository;
 use Illuminate\Contracts\Cache\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class SettingsRepository implements ContractsSettingRepository
@@ -25,45 +26,49 @@ class SettingsRepository implements ContractsSettingRepository
     public function all()
     {
         $settings = $this->settings ?? $this->cache->get($this->key);
-
-        if(!$settings) {
-            $settings = Setting::query()->pluck('value', 'key')->all();
-            $this->cache->put($this->key, collect($settings));
+        if(true || !$settings) {
+            $settings = [];
+            foreach(Setting::all() as $setting) {
+                $tag = $setting['tag'] ?? 'default';
+                $settings[$tag][$setting['key']] = $setting['value'];
+            }
+            $settings = collect($settings);
+            $this->cache->put($this->key, $settings);
+            $this->settings = $settings;
         }
-
-        $this->settings = $settings;
-
-        return $this->settings;
+        return $settings;
     }
 
-    public function get($key, $default = null)
+    public function get($key, $tag = 'default', $default = null)
     {
-        $value = $this->all()->get($key, $default);
-         if(is_null($value)) {
-             $value = Setting::query()->where('key', $key)->value('value');
-             $value = $value ?? $default;
-             $this->set($key, $value);
-         }
+        $value = Arr::get($this->all(), $tag.'.'.$key, $default);
          return $value;
     }
 
-    public function set($key, $value)
-    {
-        $settings = $this->all();
-
-        if(! is_null($settings) && $settings instanceof Collection) {
-            $settings->put($key, $value);
-        } else {
-            $settings = collect([$key => $value]);
-        }
-
-        Setting::updateOrCreate(['key' => $key], ['value' => $value]);
-
-        return $this->cache->put($this->key, $settings);
+    public function tag($tag = 'default') {
+        return Arr::get($this->all(), $tag);
     }
 
-    public function delete($keyLike)
+    public function set($key, $value = '', $tag = 'default')
     {
-        return $this->all()->pull($keyLike);
+        if(!is_string($value)) {
+            return false;
+        }
+        $settings = $this->all()->toArray();
+        Arr::set($settings, $tag.'.'.$key, $value);
+
+        $query = Setting::where([['key', $key], ['tag', $tag]]);
+        $method = $query->exists() ? 'update' : 'insert';
+        $query->$method(compact('key', 'value', 'tag'));
+
+        return $this->cache->put($this->key, collect($settings));
+    }
+
+    public function delete($key, $tag = 'default')
+    {
+        Setting::where([['key', $key], ['tag', $tag]])->delete();
+        $settings = $this->all()->toArray();
+        Arr::pull($settings, $tag.'.'.$key);
+        return $this->cache->put($this->key, collect($settings));
     }
 }
