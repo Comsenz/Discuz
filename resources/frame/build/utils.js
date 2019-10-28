@@ -57,11 +57,8 @@ exports.cssLoaders = function (options) {
     postcss: generateLoaders(),
     less: generateLoaders('less',{
       modifyVars: {
-        // 直接覆盖变量
-        // 'text-color': '#111',
-        // 'border-color': '#eee'
         // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
-        'hack': `true; @import "${path.json(__dirname,'../src/template/default/less/theme.less')}";`
+        'hack': `true; @import "${path.join(__dirname,'../src/template/default/less/theme.less')}";`
       }
     }),
     sass: generateLoaders('sass', { indentedSyntax: true }),
