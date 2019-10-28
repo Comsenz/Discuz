@@ -191,7 +191,7 @@ export default {
           require(['../view/m_site/myInfo/modifyPhoneView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"修改手机号"
         }
       },
       'change-pwd':{
@@ -199,7 +199,7 @@ export default {
           require(['../view/m_site/myInfo/changePasswordView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"修改密码"
         }
       },
       'withdraw':{
@@ -207,7 +207,7 @@ export default {
           require(['../view/m_site/myInfo/withdrawView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"提款"
         }
       },
 
