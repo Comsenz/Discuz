@@ -11,7 +11,7 @@ window.$ = jQuery;
 // import "weui";
 
 import './extend/viewBase/vantuiInit';   //引入vant组件
-// import 'vant/lib/index.css'          //引入vant样式
+import 'vant/lib/index.css'          //引入vant样式
 import './template/default/less/publicIndex.less' //引入vant公共样式
 import '../static/js/rem'
 

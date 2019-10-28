@@ -1,5 +1,5 @@
 /**
- * 修改资料
+ * 修改手机号
  */
 
 
@@ -9,7 +9,9 @@ import ModifyHeader from '../../../view/m_site/common/loginSignUpHeader/loginSig
 export default {
   data:function () {
     return {
-
+      username:'187****1235',
+      password:'',
+      sms:''
     }
   },
 

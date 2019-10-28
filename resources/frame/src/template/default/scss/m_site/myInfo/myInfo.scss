@@ -35,9 +35,6 @@
       }
     }
 
-
-
-
     .modify-data-wx{
 
       .modify-data-wx-string{
@@ -47,3 +44,51 @@
   }
 
 }
+
+
+/**
+  修改手机号
+ */
+.modify-phone-box{
+  width: 100%;
+  height: calc(100% - 44px);
+  //overflow: hidden;
+
+  .modify-phone-main{
+    width: 100%;
+    height: calc(100% - 40px);
+    @include px2rem(padding,0 30);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .modify-phone-title-box{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include px2rem(margin-top,80);
+      @include px2rem(margin-bottom,80);
+
+      .modify-phone-title-p{
+        text-align: center;
+        @include font-dpr(38);
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:rgba(0,0,0,1);
+        @include px2rem(line-height,52);
+      }
+    }
+
+    .modify-phone-operating{
+      width: 100%;
+      height: auto;
+      @include px2rem(margin-top,100);
+      //display: flex;
+      //align-items: center;
+      //justify-items: center;
+      text-align: center;
+    }
+  }
+}
+

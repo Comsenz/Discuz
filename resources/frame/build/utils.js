@@ -55,7 +55,15 @@ exports.cssLoaders = function (options) {
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
-    less: generateLoaders('less'),
+    less: generateLoaders('less',{
+      modifyVars: {
+        // 直接覆盖变量
+        // 'text-color': '#111',
+        // 'border-color': '#eee'
+        // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
+        'hack': `true; @import "${path.json(__dirname,'../src/template/default/less/theme.less')}";`
+      }
+    }),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
