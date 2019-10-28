@@ -67,6 +67,14 @@ export default {
           title:"公开的圈子，内容页的分享"
         }
       },
+      'details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/detailsView'],resolve)
+        },
+        metaInfo:{
+          title:"主题详情页"
+        }
+      },
       'circle-invite':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleInviteView'],resolve)

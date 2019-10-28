@@ -6,14 +6,16 @@ export default {
   
 	data: function() {
 	    return {
+	      headBackShow: false,
 	      isfixNav: false,
 	      isfixHead: false,
 	      isShow: false,
 	      isHeadShow: false,
 	      showHeader: false,
-	      showSidebar: true,
-	      showMask: false,
+	      // showSidebar: true,
+	      // showMask: false,
 	      navShow: true,
+	      navActi:1,
 	      sidebarList1: [
 	        {
 	          name: '我的资料',
@@ -95,8 +97,8 @@ export default {
 	},
 	methods: {
 		showPopup() {
-      this.show = true;
-    },
+	      this.show = true;
+	    },
 	 	/**
 		 * 给导航添加点击状态
 		 */
@@ -141,15 +143,15 @@ export default {
         // 返回上一级
         window.history.go(-1)
       	},
-      	bindSidebar () {
-        // 是否显示侧边栏
-	        this.showSidebar = !this.showSidebar;
-	        this.showMask =  !this.showMask;
-      	},
-      	hideSidebar(){
-	        this.showSidebar = false;
-	        this.showMask =  false;
-      	},
+      	// bindSidebar () {
+       //  // 是否显示侧边栏
+	      //   this.showSidebar = !this.showSidebar;
+	      //   this.showMask =  !this.showMask;
+      	// },
+      	// hideSidebar(){
+	      //   this.showSidebar = false;
+	      //   this.showMask =  false;
+      	// },
       	bindEvent (typeName) {
 	        if (typeName == 1) {
 	          this.LogOut()

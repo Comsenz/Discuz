@@ -11,13 +11,20 @@
           <div class="topRight">
             <span class="icon iconfont icon-search" @click="searchJump"></span>
             <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
-
           </div>
         </div>
       </div>
     </header>
+    <!-- <header id="headTwo">
+      <div class="contentHead" v-if="headBackShow">
+        <span class="icon iconfont icon-back headBack"></span>
+        <h1 class="headTit">{{$route.meta.title}}</h1>
+        <span class="icon iconfont icon-Shape menuCli"></span>
+      </div>
+    </header> -->
     
-    <div class="mask" v-if="showMask" @click="hideSidebar"></div>
+<!--     
+    <div class="mask" v-if="showMask" @click="hideSidebar"></div> -->
     <van-popup
       class="sidebarWrap"
       v-model="show"
@@ -68,7 +75,7 @@
     <div class="headerBox">
       <div class="headOpe">
         <span class="icon iconfont icon-search"></span>
-        <span class="icon iconfont icon-Shape" @click="bindSidebar"></span>
+        <span class="icon iconfont icon-Shape" is-link @click="showPopup"></span>
       </div>
       <img src="../../../../../../static/images/logo.png" class="logo">
       <div class="circleDet">
@@ -77,7 +84,13 @@
         <span>圈主：我是谁</span>
       </div>
     </div>
+
     <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-if="navShow">
+      <!-- <van-tabs v-model="navActi">
+        <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
+          内容 {{ index }}
+        </van-tab>
+      </van-tabs> -->
       <div class="navBarBox">
         <ul class="navBarCon">
           <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
@@ -93,6 +106,7 @@
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/header';
 import '../../../scss/m_site/mobileIndex.scss';
+import '../../../scss/vantLess.less';
 export default {
   name: "headerView",
   ...mSiteHeader
