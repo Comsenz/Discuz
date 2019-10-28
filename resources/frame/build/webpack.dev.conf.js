@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
 const path = require('path')
+const os = require('os')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -13,6 +14,21 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+
+//获取本地IP地址
+let currentIp;
+
+const ipInfo = os.networkInterfaces();
+
+for(let devName in ipInfo){
+  let iface = ipInfo[devName];
+  for(let i=0;i<iface.length;i++){
+    let alias = iface[i];
+    if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
+      currentIp = alias.address;
+    }
+  }
+}
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -88,7 +104,11 @@ module.exports = new Promise((resolve, reject) => {
       // Add FriendlyErrorsPlugin
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+          messages: [
+            `App running at:`,
+            `Local: http://${devWebpackConfig.devServer.host}:${port}`,
+            `Network: http://${currentIp}:${port}`
+          ],
         },
         onErrors: config.dev.notifyOnErrors
         ? utils.createNotifierCallback()
