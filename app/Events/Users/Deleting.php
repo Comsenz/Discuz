@@ -5,19 +5,20 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: Saving.php 28830 2019-09-26 17:51 chenkeke $
+ *      Id: Deleting.php 28830 2019-10-14 13:54 chenkeke $
  */
 
-namespace App\Events\UserProfile;
+namespace App\Events\Users;
+
 
 use App\Models\User;
 
-class Saving
+class Deleting
 {
     /**
-     * @var Users
+     * @var user
      */
-    public $userprofile;
+    public $user;
 
     /**
      * @var User
@@ -25,20 +26,20 @@ class Saving
     public $actor;
 
     /**
-     * 用户输入的参数.
+     * 管理员输入的参数.
      *
      * @var array
      */
     public $data;
 
     /**
-     * @param user $userProfile
+     * @param Classify $classify
      * @param User   $actor
      * @param array  $data
      */
-    public function __construct(User $userProfile, $actor = null, array $data = [])
+    public function __construct(User $user, $actor = null, array $data = [])
     {
-        $this->userprofile = $userProfile;
+        $this->user = $user;
         $this->actor = $actor;
         $this->data = $data;
     }

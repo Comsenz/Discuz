@@ -13,7 +13,6 @@ class UserValidator extends AbstractValidator
         return [
             'username' => [
                 'required',
-                'regex:/^[a-z0-9_-]+$/i',
                 'min:3',
                 'max:15',
                 'unique:users'
@@ -32,7 +31,6 @@ class UserValidator extends AbstractValidator
                 'required'
             ],
             'updatename' => [
-                'regex:/^[a-z0-9_-]+$/i',
                 'min:3',
                 'max:15',
                 'unique:users,username'

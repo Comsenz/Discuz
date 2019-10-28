@@ -11,14 +11,15 @@ class UserSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-        return [
+        return  [
             'id'         => $model->id,
             'username'   => $model->username,
             'adminid'    => $model->adminid,
             'unionid'    => $model->unionid,
             'mobile'     => $model->mobile,
             'createtime' => $model->createtime,
-            'nickname'   => $model->nickname,
+            'nickname'   => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
         ];
+
     }
 }

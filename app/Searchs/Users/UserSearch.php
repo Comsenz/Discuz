@@ -12,7 +12,7 @@ namespace App\Searchs\users;
 
 use Discuz\Search\AbstractSearch;
 
-class UsersSearch extends AbstractSearch
+class UserSearch extends AbstractSearch
 {
     /**
      * 可被包括的关联方法.
@@ -21,9 +21,8 @@ class UsersSearch extends AbstractSearch
      * @var User
      */
     public $includes = [
-        'firstPost',
-        'last-post',
-        'user'
+        'userWechats',
+        'userProfiles'
     ];
 
     /**
@@ -40,7 +39,7 @@ class UsersSearch extends AbstractSearch
      */
     public $sort = [
         'id',
-        'name'
+        'adminid'
     ];
 
     /**
@@ -49,7 +48,8 @@ class UsersSearch extends AbstractSearch
      * @var string
      */
     public $defaultSort = [
-        'id'=>'desc'
+        'id'=>'desc',
+        'adminid' => 'desc'
     ];
 
 }

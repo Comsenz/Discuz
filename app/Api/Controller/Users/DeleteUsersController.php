@@ -4,17 +4,16 @@ declare(strict_types=1);
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\UserSerializer;
-use App\Models\User;
+use App\Commands\Users\DeleteUsers;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Support\Arr;
+use Zend\Diactoros\Response\EmptyResponse;
 
 
 class DeleteUsersController extends AbstractDeleteController
 {
-    
+
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
@@ -27,11 +26,17 @@ class DeleteUsersController extends AbstractDeleteController
     public function delete(ServerRequestInterface $request)
     {
         // TODO: Implement delete() method.
-        
-        $data = $request->getParsedBody();
-        // dd($request);
-        $users = User::wherein("id",$data['user'])->delete();
-        // dd($users);
-        return $users;
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+
+        // 获取请求的参数
+        $inputs = $request->getParsedBody();
+
+        $this->bus->dispatch(
+            new DeleteUsers($actor, $inputs->toArray())
+        );
+
+        return new EmptyResponse(204);
+
     }
 }
