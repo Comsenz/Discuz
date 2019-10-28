@@ -26,14 +26,34 @@ class ListThreadsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
+    public $include = [
+        'user',
+        'firstPost',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'lastThreePosts',
+        'lastThreePosts.user',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->searcher->apply(
+        $data = $this->searcher->apply(
             new ThreadSearch(
                 $request->getAttribute('actor'),
                 $request->getQueryParams(),
                 ThreadRepository::query()
             )
         )->search()->getMultiple();
+
+        return $data->each(function ($thread) {
+            $thread->setRelation('lastThreePosts', $thread->lastThreePosts());
+        });
     }
 }
