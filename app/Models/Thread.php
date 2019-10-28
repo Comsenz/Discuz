@@ -12,6 +12,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,6 +54,19 @@ class Thread extends Model
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
     ];
+
+    /**
+     * Get the last three posts of the thread.
+     *
+     * @return Collection
+     */
+    public function lastThreePosts()
+    {
+        return $this->posts()
+            ->where('is_first', false)
+            ->limit(3)
+            ->get();
+    }
 
     /**
      * Set the thread's last post details.

@@ -148,6 +148,13 @@ class User extends Model {
         // return $this->hashManager->check($value,$userpwd);
         return password_verify($value,$userpwd);
     }
- 
+    public function userWechats()
+    {
+        return $this->hasOne("App\Models\UserWechat", "id", "id");
+    }
 
+    public function userProfiles()
+    {
+        return $this->hasOne("App\Models\UserProfile", "id", "user_id");
+    }
 }

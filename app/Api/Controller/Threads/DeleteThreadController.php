@@ -12,6 +12,7 @@ namespace App\Api\Controller\Threads;
 use App\Models\Post;
 use App\Models\Thread;
 use Discuz\Api\Controller\AbstractDeleteController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -31,11 +32,15 @@ class DeleteThreadController extends AbstractDeleteController
         $id = Arr::get($request->getQueryParams(), 'id');
         $ids = $id ? [$id] : $request->getParsedBody()->get('ids');
 
-        // 删除相关主题下的所有回复
-        Post::whereIn('thread_id', $ids)->forceDelete();
+        if ($ids) {
+            // 删除相关主题下的所有回复
+            Post::whereIn('thread_id', $ids)->forceDelete();
 
-        // 删除主题
-        Thread::whereIn('id', $ids)->forceDelete();
+            // 删除主题
+            Thread::whereIn('id', $ids)->forceDelete();
+        } else {
+            throw (new ModelNotFoundException);
+        }
 
         return new EmptyResponse(204);
     }

@@ -12,4 +12,6 @@ class UserWechat extends Model {
 
     protected $fillable = ['id', 'openid','nickname','sex'];
 
+
+
 }

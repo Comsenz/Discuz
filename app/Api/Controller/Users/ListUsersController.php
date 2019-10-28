@@ -5,8 +5,8 @@ namespace App\Api\Controller\Users;
 
 
 use App\Api\Serializer\UserSerializer;
-use App\Models\User;
-use App\Models\CircleUser;
+use App\Repositories\UserRepository;
+use App\Searchs\Users\UserSearch;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -18,35 +18,20 @@ class ListUsersController extends AbstractListController
 
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: Implement data() method.
-        $data = $request->getParsedBody();
-        // $data=json_decode(json_encode($data),true);
-        $num=20;
-        $offset=(Arr::get($data, 'page') - 1)*$num;
-        unset($data['page']);
-        $is_wx=Arr::get($data, 'is_wx');
-        unset($data['is_wx']);
-        //管理 or 圈子
-        $arr=[];
-        foreach($data as $k=>$v){
-            if($v){
-                array_push($arr,["$k",'like',"%$v%"]);
-            }
-        }
-        if($is_wx==1){
-            $users = User::where($arr)
-            ->rightjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
-            ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","nickname")
-            ->orderBy('adminid','asc')
-            ->offset($offset)->limit($num)->get();
-        }else{
-            $users = User::where($arr)
-            ->leftjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
-            ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","nickname")
-            ->orderBy('adminid','asc')
-            ->offset($offset)->limit($num)->get();
-        }
-        // dd($users);
-        return $users;
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+
+        // 获取请求的参数
+        $inputs = $request->getQueryParams();
+
+        // 获取请求的IP
+        $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+
+        $data = $this->searcher->apply(
+            new UserSearch($actor, $inputs, UserRepository::query())
+        )->search()->getMultiple();
+
+        return $data;
+
     }
 }

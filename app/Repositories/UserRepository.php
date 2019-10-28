@@ -45,5 +45,4 @@ class UserRepository extends AbstractRepository
         return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
     }
 
-
 }

@@ -5,12 +5,10 @@ namespace App\Api\Controller\Users;
 
 
 use App\Api\Serializer\UserPorfileSerializer;
-use App\Models\User;
-use App\Models\CircleUser;
+use App\Commands\UserProfile\UserProfile;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Support\Arr;
 
 class UserProfileController extends AbstractResourceController
 {
@@ -19,15 +17,18 @@ class UserProfileController extends AbstractResourceController
     public function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
-       
-        $id = Arr::get($request->getQueryParams(), 'id');
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
 
-        $user= User::where('users.id',$id)
-        ->leftjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
-        ->leftjoin('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-        ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","users.login_ip","nickname","user_profiles.sex","icon")
-        ->first();
-        // dd($user);
-        return $user;
+        // 获取请求的参数
+        $body = $request->getQueryParams();
+
+        // 分发创建的任务
+        $data = $this->bus->dispatch(
+            new UserProfile($body['id'], $actor)
+        );
+
+        // 返回结果
+        return $data;
     }
 }
