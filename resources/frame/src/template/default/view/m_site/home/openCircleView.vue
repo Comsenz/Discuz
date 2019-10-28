@@ -20,7 +20,7 @@
 
       	<div class="navBarBox" id="testNavBar" >
           <ul class="navBarCon">
-            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
+            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}" :key="index">{{ todo.text }}</li>
           </ul>
       	</div>
 	    <div class="gap"></div>
