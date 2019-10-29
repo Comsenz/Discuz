@@ -53,6 +53,10 @@ body{
   .login-user-box-main{
     width: $w100;
     height: calc(100% - 40px);
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .login-user-title-box{
       width: $w100;
