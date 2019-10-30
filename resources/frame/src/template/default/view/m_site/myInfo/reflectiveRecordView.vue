@@ -1,6 +1,10 @@
 <template>
-    <div>
-      体现记录
+    <div class="reflective-record-box">
+
+      <main class="reflective-record-main">
+
+      </main>
+
     </div>
 </template>
 

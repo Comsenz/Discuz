@@ -1,4 +1,23 @@
+
+
+/**
+  冻结金额
+  问题：如果内容撑满，头部高度会变小
+ */
 .frozen-amount-box{
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-Y: scroll;
 
+  .frozen-amount-main{
+    //height: calc(100% - 44px);
+  }
+
+  .frozen-amount-footer{
+    flex: 1;
+    background-color: #EDEDED;
+    border:1px solid #E5E5E5;
+  }
 }
