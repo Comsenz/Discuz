@@ -10,7 +10,8 @@
 @gray: #c8c9cc;
 @gray-light: #e5e5e5;
 @gray-darker: #7d7e80;
-@gray-dark: #969799;
+// @gray-dark: #969799; //修改前
+@gray-dark: #B2B2B2; //修改后，输入框placeholder颜色
 
 @main:#336688;
 
@@ -19,7 +20,7 @@
 @gradient-orange: linear-gradient(to right, #ffd01e, #ff8917);
 
 // Component Colors
-@text-color: #323233;
+@text-color: #000000;
 @active-color: #f2f3f5;
 @active-opacity: .7;
 @disabled-opacity: .5;
@@ -37,8 +38,9 @@
 // Font
 @font-size-xs: 10px;
 @font-size-sm: 12px;
+@font-size-sl: 13px;
 @font-size-md: 14px;
-@font-size-xm: 15px;
+@font-size-ml: 15px;
 @font-size-lg: 16px;
 @font-weight-bold: 500;
 
@@ -52,6 +54,7 @@
 @border-width-base: 1px;
 @border-radius-sm: 2px;
 @border-radius-md: 4px;
+@border-radius-ml: 5px;
 @border-radius-max: 999px;
 
 // ActionSheet
@@ -508,8 +511,8 @@
 @rate-icon-gutter: 4px;
 
 // Search
-@search-padding: 10px @padding-sm;
-@search-background-color: #f7f8fA;
+@search-padding: 8px @padding-xs;
+@search-background-color: #ffffff;
 @search-input-height: 34px;
 @search-label-padding: 0 5px;
 @search-label-color: @text-color;
@@ -644,7 +647,7 @@
 @tab-text-color: @gray-darker;
 @tab-active-text-color: @text-color;
 @tab-disabled-text-color: @gray;
-@tab-font-size: @font-size-xm;
+@tab-font-size: @font-size-ml;
 
 // Tabs
 @tabs-default-color: @red;

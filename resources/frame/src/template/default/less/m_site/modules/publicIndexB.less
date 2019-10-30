@@ -1,1 +1,69 @@
-@import "../../../../../../node_modules/vant/lib/index";
+// @import "../../../../../../node_modules/vant/lib/index";
+@fontColor: #336699;
+
+
+/**
+ * tabs -start
+ */
+
+
+
+/** end **/
+
+
+/**
+ * search -start
+ */
+.van-search {
+	&__action {
+	    color: @fontColor;
+	}
+}
+
+
+/** end **/
+
+
+/**
+ * tabs -start
+ */
+
+
+
+/** end **/
+
+
+/**
+ * cell -start
+ */
+.van-search {
+	.van-cell {
+		padding: 4px 0;
+	}
+	&__content {
+		border-radius: @border-radius-ml;
+		border: 1px solid #E6E6EA;
+		box-sizing: border-box;
+	}
+}
+
+/** end **/
+
+
+/**
+ * field -start
+ */
+.van-field {
+	&__control {
+		caret-color: @fontColor;/*光标颜色*/
+		font-size: @font-size-sl;
+	}
+	&::placeholder {
+      color: @field-placeholder-text-color;
+
+    }
+    &__left-icon .van-icon {
+		color: @field-placeholder-text-color;
+	}
+}
+/** end **/
