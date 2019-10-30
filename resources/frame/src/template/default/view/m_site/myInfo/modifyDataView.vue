@@ -1,6 +1,6 @@
 <template>
     <div class="modify-data-box">
-      <ModifyHeader></ModifyHeader>
+      <ModifyHeader title="修改资料"></ModifyHeader>
       <main class="modify-data-main">
         <div class="modify-data-avatar m-site-cell-access">
           <div class="modify-data-avatar-title m-site-cell-access-bd">
