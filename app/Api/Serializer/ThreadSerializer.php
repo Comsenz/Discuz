@@ -28,24 +28,31 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
-            'id'                    => (int) $model->id,
-            'user_id'               => (int) $model->user_id,
-            'last_posted_user_id'   => (int) $model->last_posted_user_id,
+        $attributes = [
+            // 'id'                    => (int) $model->id,
+            // 'user_id'               => (int) $model->user_id,
+            // 'last_posted_user_id'   => (int) $model->last_posted_user_id,
             'title'                 => $model->title,
             'price'                 => $model->price,
-            'view_count'            => (int) $model->view_count,
-            'post_count'            => (int) $model->post_count,
-            'like_count'            => (int) $model->like_count,
-            'favorite_count'        => (int) $model->favorite_count,
-            'created_at'            => $this->formatDate($model->created_at),
-            'updated_at'            => $this->formatDate($model->updated_at),
-            'deleted_at'            => $this->formatDate($model->deleted_at),
-            'deleted_user_id'       => (int) $model->deleted_user_id,
-            'is_approved'           => (bool) $model->is_approved,
-            'is_sticky'             => (bool) $model->is_sticky,
-            'is_essence'            => (bool) $model->is_essence,
+            'viewCount'             => (int) $model->view_count,
+            'postCount'             => (int) $model->post_count,
+            'likeCount'             => (int) $model->like_count,
+            'favoriteCount'         => (int) $model->favorite_count,
+            'createdAt'             => $this->formatDate($model->created_at),
+            'updatedAt'             => $this->formatDate($model->updated_at),
+            // 'deleted_at'            => $this->formatDate($model->deleted_at),
+            // 'deleted_user_id'       => (int) $model->deleted_user_id,
+            'isApproved'            => (bool) $model->is_approved,
+            'isSticky'              => (bool) $model->is_sticky,
+            'isEssence'             => (bool) $model->is_essence,
         ];
+
+        if ($model->deleted_at) {
+            $attributes['isDeleted'] = true;
+            $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
+        }
+
+        return $attributes;
     }
 
     /**

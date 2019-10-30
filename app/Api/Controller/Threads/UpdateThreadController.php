@@ -12,6 +12,7 @@ namespace App\Api\Controller\Threads;
 use App\Api\Serializer\ThreadSerializer;
 use App\Commands\Thread\EditThread;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -24,19 +25,29 @@ class UpdateThreadController extends AbstractCreateController
     public $serializer = ThreadSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: $actor 权限验证 用户模型
-        // $actor = $request->getAttribute('actor');
-        $actor = new \stdClass();
-        $actor->id = 1;
-
-        $id = Arr::get($request->getQueryParams(), 'id');
+        $actor = $request->getAttribute('actor');
+        $threadId = Arr::get($request->getQueryParams(), 'id');
+        $data = $request->getParsedBody()->get('data', []);
 
         return $this->bus->dispatch(
-            new EditThread($id, $actor, $request->getParsedBody())
+            new EditThread($threadId, $actor, $data)
         );
     }
 }

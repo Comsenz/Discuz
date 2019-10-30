@@ -36,9 +36,8 @@ class Saving
      * @param User $actor
      * @param array $data
      */
-    public function __construct(Thread $thread, $actor, array $data = [])
+    public function __construct(Thread $thread, User $actor, array $data = [])
     {
-        // TODO: User $actor
         $this->thread = $thread;
         $this->actor = $actor;
         $this->data = $data;

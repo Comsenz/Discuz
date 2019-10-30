@@ -12,10 +12,14 @@ namespace App\Commands\Thread;
 use App\Events\Thread\Saving;
 use App\Models\Thread;
 use App\Models\User;
+use App\Repositories\ThreadRepository;
 use App\Validators\ThreadValidator;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class EditThread
 {
@@ -45,62 +49,68 @@ class EditThread
     /**
      * @param int $threadId The ID of the discussion to edit.
      * @param User $actor The user performing the action.
-     * @param Collection $data The attributes to update on the discussion.
+     * @param array $data The attributes to update on the discussion.
      */
-    public function __construct($threadId, $actor, Collection $data)
+    public function __construct($threadId, User $actor, array $data)
     {
-        // TODO: User $actor
         $this->threadId = $threadId;
         $this->actor = $actor;
         $this->data = $data;
     }
 
-
-    public function handle(EventDispatcher $events, ThreadValidator $validator)
+    /**
+     * @param EventDispatcher $events
+     * @param ThreadRepository $thread
+     * @param ThreadValidator $validator
+     * @return Thread|Builder|Model
+     * @throws ValidationException
+     */
+    public function handle(EventDispatcher $events, ThreadRepository $thread, ThreadValidator $validator)
     {
         $this->events = $events;
+        $attributes = Arr::get($this->data, 'attributes', []);
 
         // TODO: 权限验证 是否有权查看
         // $this->assertCan($this->actor, 'startDiscussion');
 
         // 数据验证
-        $validator->valid($this->data->all());
+        $validator->valid($this->data);
 
-        $thread = Thread::findOrFail($this->threadId);
+        $thread = $thread->findOrFail($this->threadId, $this->actor);
 
-        if ($this->data->has('title')) {
-            // TODO: 是否有权重命名
+        if (isset($attributes['title'])) {
+            // TODO: 是否有权修改标题
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->title = $this->data->get('title');
+            $thread->title = $attributes['title'];
         }
 
-        if ($this->data->has('isApproved')) {
+        if (isset($attributes['isApproved'])) {
             // TODO: 是否有权 审核/放入待审核
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_approved = $this->data->get('isApproved');
+            $thread->is_approved = $attributes['isApproved'];
         }
 
-        if ($this->data->has('isSticky')) {
+        if (isset($attributes['isSticky'])) {
             // TODO: 是否有权 置顶/取消置顶
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_sticky = $this->data->get('isSticky');
+            $thread->is_sticky = $attributes['isSticky'];
         }
 
-        if ($this->data->has('isEssence')) {
+        if (isset($attributes['isEssence'])) {
             // TODO: 是否有权 加精/取消加精
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $thread->is_essence = $this->data->get('isEssence');
+            $thread->is_essence = $attributes['isEssence'];
         }
 
-        if ($this->data->has('isDelete')) {
+        if (isset($attributes['isDelete'])) {
             // TODO: 是否有权删除
             // $this->assertCan($actor, 'hide', $discussion);
 
-            if ($this->data->get('isDelete')) {
+            if ($attributes['isDelete']) {
                 $thread->deleted_user_id = $this->actor->id;
                 $thread->delete();
             } else {
@@ -110,7 +120,7 @@ class EditThread
         }
 
         $this->events->dispatch(
-            new Saving($thread, $this->actor, $this->data->all())
+            new Saving($thread, $this->actor, $this->data)
         );
 
         $thread->save();
