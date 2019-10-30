@@ -1,8 +1,15 @@
 export default {
   data:function () {
     return {
-      headerTitle:"",
+      headerTitle:this.title,
       pageName:""
+    }
+  },
+
+  props:{
+    title:{
+      default:'',
+      type:String
     }
   },
 
@@ -14,10 +21,10 @@ export default {
   },
 
   mounted (){
-    this.pageName = this.$router.history.current.name;
+    /*this.pageName = this.$router.history.current.name;
     if (this.pageName === 'modify-data'){
       this.headerTitle="修改资料"
-    }
+    }*/
   }
 
 }

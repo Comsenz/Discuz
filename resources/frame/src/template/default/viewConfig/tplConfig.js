@@ -226,6 +226,14 @@ export default {
           title:"提款"
         }
       },
+      'frozen-amount':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/frozenAmountView'],resolve)
+        },
+        metaInfo:{
+          title:"冻结资金"
+        }
+      }
 
     },
     site: {
