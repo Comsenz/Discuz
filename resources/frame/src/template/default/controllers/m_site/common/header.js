@@ -15,7 +15,7 @@ export default {
 	      // showSidebar: true,
 	      // showMask: false,
 	      navShow: true,
-	      navActi:1,
+	      navActi:0,
 	      sidebarList1: [
 	        {
 	          name: '我的资料',
@@ -83,14 +83,12 @@ export default {
 	      show: false,
 			current:0,
 	        todos: [
-	            { text: '选项一111' },
+	            { text: '选项' },
 	            { text: '选项二' },
 	            { text: '选项三' },
-	            { text: '选项四' },
+	            { text: '选项四dsdsddsd' },
 	            { text: '选项五' },
-	            { text: '选项六' },
-	            { text: '选项七' },
-	            { text: '选项八' }
+	            { text: '选项六' }
 	    	]
 
 	    }
@@ -99,6 +97,7 @@ export default {
 		showPopup() {
 	      this.show = true;
 	    },
+
 	 	/**
 		 * 给导航添加点击状态
 		 */

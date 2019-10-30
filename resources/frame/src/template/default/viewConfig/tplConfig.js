@@ -27,6 +27,14 @@ export default {
           title:"移动端首页"
         }
       },
+      'search':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/search/searchView'],resolve)
+        },
+        metaInfo:{
+          title:"搜索"
+        }
+      },
       'pay-circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleView'],resolve)

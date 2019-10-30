@@ -84,18 +84,18 @@
         <span>圈主：我是谁</span>
       </div>
     </div>
-
+    
     <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-if="navShow">
-      <van-tabs v-model="navActi" sticky="false">
-        <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
-          内容 {{ index }}
+      <van-tabs v-model="navActi">
+        <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
+          
         </van-tab>
       </van-tabs>
-      <div class="navBarBox">
+      <!-- <div class="navBarBox">
         <ul class="navBarCon">
           <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
         </ul>
-      </div>
+      </div> -->
     </div>
 
 
