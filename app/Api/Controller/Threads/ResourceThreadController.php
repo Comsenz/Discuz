@@ -11,12 +11,9 @@ namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
 use App\Models\Thread;
-use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
-use App\Searchs\Thread\ThreadSearch;
 use Discuz\Api\Controller\AbstractResourceController;
-use Discuz\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,6 +41,7 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $include = [
+        'user',
         'posts',
         'posts.thread',
         'posts.user',
@@ -56,11 +54,21 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $optionalInclude = [
-        'user',
+        // 'user',
         // 'lastPostedUser',
         // 'firstPost',
         // 'lastPost'
     ];
+
+    /**
+     * @param ThreadRepository $thread
+     * @param PostRepository $posts
+     */
+    public function __construct(ThreadRepository $thread, PostRepository $posts)
+    {
+        $this->thread = $thread;
+        $this->posts = $posts;
+    }
 
     /**
      * {@inheritdoc}
@@ -68,9 +76,6 @@ class ResourceThreadController extends AbstractResourceController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        $this->thread = new ThreadRepository;
-        $this->posts = new PostRepository;
-
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
         $include = $this->extractInclude($request);

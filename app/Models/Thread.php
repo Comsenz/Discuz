@@ -15,6 +15,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -147,5 +148,15 @@ class Thread extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Define the relationship with the thread's favorite users.
+     *
+     * @return BelongsToMany
+     */
+    public function favoriteUsers()
+    {
+        return $this->belongsToMany(User::class)->withPivot('created_at');
     }
 }

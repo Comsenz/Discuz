@@ -9,7 +9,7 @@
 
 namespace App\Providers;
 
-use App\Listeners\TheadListener;
+use App\Listeners\Thread\ThreadListener;
 use Discuz\Foundation\AbstractServiceProvider;
 
 class ThreadServiceProvider extends AbstractServiceProvider
@@ -35,6 +35,6 @@ class ThreadServiceProvider extends AbstractServiceProvider
         $events = $this->app->make('events');
 
         // 订阅事件
-        $events->subscribe(TheadListener::class);
+        $events->subscribe(ThreadListener::class);
     }
 }

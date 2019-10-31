@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Events\Users\Created;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
@@ -156,5 +157,25 @@ class User extends Model {
     public function userProfiles()
     {
         return $this->hasOne("App\Models\UserProfile", "id", "user_id");
+    }
+
+    /**
+     * Check whether or not the user is a guest.
+     *
+     * @return bool
+     */
+    public function isGuest()
+    {
+        return false;
+    }
+
+    /**
+     * Define the relationship with the user's favorite threads.
+     *
+     * @return BelongsToMany
+     */
+    public function favoriteThreads()
+    {
+        return $this->belongsToMany(Thread::class);
     }
 }
