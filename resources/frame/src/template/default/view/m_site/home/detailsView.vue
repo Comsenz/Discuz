@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import mSiteHeader from '../../../controllers/m_site/common/header';
+import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';

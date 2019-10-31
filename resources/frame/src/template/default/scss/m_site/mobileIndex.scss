@@ -223,6 +223,7 @@ a { color: $fontColor;}
 		@include font-dpr(36);
 		@include px2rem(line-height, 48);
 		text-align: center;
+		font-weight: normal;
 	}
 	.menuCli {
 		position: absolute;
