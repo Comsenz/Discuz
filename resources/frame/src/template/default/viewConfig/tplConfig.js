@@ -16,7 +16,8 @@ export default {
           require(['../view/m_site/home/circleView'],resolve)
         },
         metaInfo:{
-          title:"圈子首页"
+          title:"圈子首页",
+          oneHeader: true
         }
       },
       'index':{
@@ -72,7 +73,8 @@ export default {
           require(['../view/m_site/home/openCircleConView'],resolve)
         },
         metaInfo:{
-          title:"公开的圈子，内容页的分享"
+          title:"详情",
+          threeHeader: true
         }
       },
       'details':{
@@ -99,7 +101,16 @@ export default {
           title:"圈子管理里的邀请"
         }
       },
-
+      'management-circles':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/managementCirclesView'],resolve)
+        },
+        metaInfo:{
+          title:"管理圈子",
+          threeHeader: true
+        }
+        
+      },
       'header':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)
