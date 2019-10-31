@@ -52,6 +52,8 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
 $route->patch('/posts/batch', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
+$route->delete('/posts', 'posts.delete', ApiController\Posts\DeletePostController::class);
+$route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
 
 /*
 |--------------------------------------------------------------------------
