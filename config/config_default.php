@@ -108,6 +108,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Settings\SettingsServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
+        App\Providers\PostServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

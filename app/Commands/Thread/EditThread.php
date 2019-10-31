@@ -16,14 +16,13 @@ use App\Repositories\ThreadRepository;
 use App\Validators\ThreadValidator;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class EditThread
 {
     use EventsDispatchTrait;
+    // use AssertPermissionTrait;
 
     /**
      * The ID of the thread to edit.
@@ -40,7 +39,7 @@ class EditThread
     public $actor;
 
     /**
-     * The attributes of the new thread.
+     * The attributes to update on the thread.
      *
      * @var array
      */
@@ -60,29 +59,33 @@ class EditThread
 
     /**
      * @param EventDispatcher $events
-     * @param ThreadRepository $thread
+     * @param ThreadRepository $threads
      * @param ThreadValidator $validator
-     * @return Thread|Builder|Model
+     * @return Thread
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, ThreadRepository $thread, ThreadValidator $validator)
+    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadValidator $validator)
     {
         $this->events = $events;
-        $attributes = Arr::get($this->data, 'attributes', []);
 
-        // TODO: 权限验证 是否有权查看
+        // TODO: 权限验证（是否有权查看）
         // $this->assertCan($this->actor, 'startDiscussion');
+
+        $attributes = Arr::get($this->data, 'attributes', []);
 
         // 数据验证
         $validator->valid($this->data);
 
-        $thread = $thread->findOrFail($this->threadId, $this->actor);
+        $thread = $threads->findOrFail($this->threadId, $this->actor);
 
         if (isset($attributes['title'])) {
             // TODO: 是否有权修改标题
             // $this->assertCan($actor, 'rename', $discussion);
 
             $thread->title = $attributes['title'];
+        } else {
+            // 不修改标题时，不更新修改时间
+            $thread->timestamps = false;
         }
 
         if (isset($attributes['isApproved'])) {
@@ -106,11 +109,11 @@ class EditThread
             $thread->is_essence = $attributes['isEssence'];
         }
 
-        if (isset($attributes['isDelete'])) {
+        if (isset($attributes['isDeleted'])) {
             // TODO: 是否有权删除
             // $this->assertCan($actor, 'hide', $discussion);
 
-            if ($attributes['isDelete']) {
+            if ($attributes['isDeleted']) {
                 $thread->deleted_user_id = $this->actor->id;
                 $thread->delete();
             } else {

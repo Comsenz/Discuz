@@ -11,12 +11,13 @@ namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
 use App\Commands\Post\EditPost;
-use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Api\Controller\AbstractResourceController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UpdatePostController extends AbstractCreateController
+class UpdatePostController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}
@@ -26,17 +27,35 @@ class UpdatePostController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
+    public $include = [
+        'editedUser',
+        'thread'
+    ];
+
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
-        // $actor = $request->getAttribute('actor');
-        $actor = new \stdClass();
-        $actor->id = 1;
-
         $id = Arr::get($request->getQueryParams(), 'id');
+        $actor = $request->getAttribute('actor');
+        $data = $request->getParsedBody()->get('data', []);
 
         return $this->bus->dispatch(
-            new EditPost($id, $actor, $request->getParsedBody())
+            new EditPost($id, $actor, $data)
         );
     }
 }
