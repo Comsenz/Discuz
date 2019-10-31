@@ -9,7 +9,8 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 export default {
   data:function () {
     return {
-
+      phone:"",
+      sms:""
     }
   },
 

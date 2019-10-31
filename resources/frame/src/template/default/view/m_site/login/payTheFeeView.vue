@@ -5,7 +5,8 @@
         <div class="pay-the-fee-titel">
           <h2>支付费用</h2>
         </div>
-        <button class="pay-the-fee-btn weui-btn weui-btn_primary">立即付费,获得权限</button>
+        <van-button type="primary">立即付费,获得权限</van-button>
+        <!--<button class="pay-the-fee-btn weui-btn weui-btn_primary">立即付费,获得权限</button>-->
         <p class="pay-the-fee-title-footer">￥20.00 / 永久有效</p>
       </main>
       <div class="pay-the-fee-permission">

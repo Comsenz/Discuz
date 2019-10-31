@@ -1,16 +1,94 @@
 @import "../../../../../../node_modules/vant/lib/index";
+@import "./mixins/hairline";
 
+@color:#336699;
 
-//单元格
-.van-cell{
-  padding: 10px 0;
+/**
+  van-button --start
+ */
+.van-button{
+  border-radius: 4px;
+  font-size:16px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  line-height:21px;
+
+  &--default{
+    color: @color;
+  }
+
+  &--small{
+    height: 30px;
+    line-height: inherit;
+    background-color: #F2F2F2;
+  }
+
+  &--primary{
+    min-width: 167px;
+    height: 36px;
+  }
+
+  &__text{
+    //font-size: 16px;
+  }
+
 }
 
-//单元格格栅
+/** end */
+
+
+/**
+  van-cell --start
+ */
+.van-cell{
+  padding: 14px 0;
+  span{
+    font-size: 15px;
+  }
+
+  &:not(:last-child)::after{
+    left:0;
+  }
+
+}
+/** end */
+
+/**
+  van-cell-group --start
+ */
 .van-cell-group{
   padding: 0;
 }
+/** end */
 
-.van-cell:not(:last-child)::after{
-  left:0;
+/**
+  van-field__control -start
+ */
+.van-field__control{
+  font-size: 15px;
 }
+//输入框闪烁光标颜色
+.van-field__control::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #B2B2B2;
+}
+.van-field__control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #B2B2B2;
+}
+.van-field__control::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #B2B2B2;
+}
+.van-field__control:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #B2B2B2;
+}
+/** ent */
+
+/**
+  hairline --start
+ */
+[class*='van-hairline'] {
+  &::after {
+    .hairline();
+  }
+}
+/** end */
+

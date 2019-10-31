@@ -3,11 +3,11 @@
       <SignUpHeader></SignUpHeader>
 
       <main class="sign-up-main">
-        <div class="weui-form__text-area sign-up-main-header">
-          <h2 class="weui-form__title">注册</h2>
+        <div class="login-module-title-box">
+          <p class="login-module-title">注册</p>
         </div>
 
-        <div class="weui-form__control-area">
+        <!--<div class="weui-form__control-area">
           <div class="weui-cells__group weui-cells__group_form">
             <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -25,10 +25,26 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>-->
+
+        <form class="login-module-form">
+          <van-cell-group>
+            <van-field
+              clearable
+              label="用户名"
+              placeholder="请输入您的用户名"
+            />
+
+            <van-field
+              type="password"
+              label="密码"
+              placeholder="请填写密码"
+            />
+          </van-cell-group>
+        </form>
 
         <div class="sign-up-btn">
-          <button @click="signUpClick" class="weui-btn weui-btn_primary login-btn">注册</button>
+          <van-button @click="signUpClick" type="primary">注册</van-button>
         </div>
 
       </main>

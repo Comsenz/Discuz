@@ -37,11 +37,42 @@ $themeColor: rgba(51, 102, 153, 1);  //主题颜色
 
 html,
 body{
-  color: $fontColor;
   width: $w100;
   height: 100%;
   display: block;
 }
+
+/**
+  登录注册页模块，公共标题样式
+ */
+.login-module-title-box{
+  width: $w100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 58px 0;
+
+  .login-module-title{
+    text-align: center;
+    font-size: 19px;
+    font-family:PingFangSC-Medium,PingFangSC;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height: 26px;
+  }
+}
+
+/**
+  登录注册页模块，公共表单样式
+ */
+.login-module-form{
+  font-size: 15px;
+  font-family:PingFangSC-Regular,PingFangSC;
+  font-weight:400;
+  color:#000;
+  margin-bottom: 50px;
+}
+
 
 /**
  *  登录-用户名登录
@@ -58,40 +89,9 @@ body{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 
-    .login-user-title-box{
-      width: $w100;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      @include px2rem(margin-top,80);
-      @include px2rem(margin-bottom,80);
-
-      .login-user-title-p{
-        text-align: center;
-        @include font-dpr(38);
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(0,0,0,1);
-        @include px2rem(line-height,52);
-      }
-    }
-
-    .user-login-form .weui-cells{
-      @include font-dpr(30);
-      font-family:PingFangSC-Regular,PingFangSC;
-      font-weight:400;
-      color:#000;
-      //.login-user-input-form{
-      //}
-
-    }
-
     .login-user-btn{
-      @include px2rem(margin-top,100);
-      @include px2rem(margin-bottom,100);
-      .login-btn{
-       @include loginModelBtn;
-      }
+      text-align: center;
+      margin-bottom: 56px;
     }
 
     .login-user-method{
@@ -139,44 +139,14 @@ body{
   .login-phone-box-main{
     width: $w100;
     height: calc(100% - 40px);
-
-    .login-phone-title-box{
-      width: $w100;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      @include px2rem(margin-top,80);
-      @include px2rem(margin-bottom,80);
-
-      .login-phone-title-p{
-        text-align: center;
-        @include font-dpr(38);
-        font-family:PingFangSC-Medium,PingFangSC;
-        font-weight:500;
-        color:rgba(0,0,0,1);
-        @include px2rem(line-height,52);
-      }
-    }
-
-    .phone-login-form .weui-cells{
-      @include font-dpr(30);
-      font-family:PingFangSC-Regular,PingFangSC;
-      font-weight:400;
-      color:rgba(0,0,0,1);
-      .login-phone-input-form{
-        .verification-code-btn{
-          //@include font-dpr(30);
-        }
-      }
-
-    }
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .login-phone-btn{
-      @include px2rem(margin-top,100);
-      @include px2rem(margin-bottom,100);
-      .login-btn{
-        @include loginModelBtn;
-      }
+      text-align: center;
+      margin-bottom: 56px;
     }
 
     .login-phone-method{
@@ -222,19 +192,39 @@ body{
   width: 100%;
   height: calc(100% - 50px);
 
-  .weui-form__control-area{
-    flex: none;
-  }
-
   .wx-login-bd-main{
     width: 100%;
     height: calc(100% - 44px);
-    @include font-dpr(30);
+    font-size: 15px;
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .wx-login-bd-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 40px 0;
+
+      .wx-login-bd-title-h2{
+        margin-bottom: 20px;
+        font-size: 19px;
+      }
+      .wx-login-main-desc{
+        font-size: 15px;
+      }
+    }
+
+    .wx-login-bd-form{
+      margin-bottom: 49px;
+    }
+
     .wx-login-bd-btn{
       width: 100%;
-      .login-btn{
-        @include loginModelBtn;
-      }
+      text-align: center;
     }
   }
 }
@@ -247,21 +237,39 @@ body{
   width: 100%;
   height: calc(100% - 50px);
 
-  .weui-form__control-area{
-    flex: none;
-  }
-
   .wx-sign-up-bd-main{
     width: 100%;
     height: calc(100% - 44px);
-    @include font-dpr(30);
+    font-size: 15px;
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .wx-sign-up-bd-title-box{
+      width: $w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 40px 0;
+
+      .wx-sign-up-bd-title-box-h2{
+        margin-bottom: 20px;
+        font-size: 19px;
+      }
+      .wx-sign-up-main-desc{
+        font-size: 15px;
+      }
+    }
+
+    .wx-sign-up-bd-form{
+      margin-bottom: 49px;
+    }
 
     .wx-sign-up-bd-btn{
       width: 100%;
-
-      .login-btn{
-        @include loginModelBtn;
-      }
+      text-align: center;
     }
 
   }
@@ -277,8 +285,12 @@ body{
   height: calc(100% - 44px);
 
   .bind-phone-main{
-    width: 100%;
-    height: calc(100% - 60px);
+    width: $w100;
+    height: calc(100% - 40px);
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .bind-phone-main-header{
       @include px2rem(margin,90 0);
@@ -302,19 +314,19 @@ body{
   height: calc(100% - 44px);
 
   .retrieve-password-main{
-    width: 100%;
-    height: calc(100% - 60px);
+    width: $w100;
+    height: calc(100% - 40px);
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .retrieve-password-main-header{
       @include px2rem(margin,90 0);
     }
 
     .retrieve-password-btn{
-      width: 100%;
       text-align: center;
-      .login-btn{
-        @include loginModelBtn;
-      }
     }
 
   }
@@ -331,20 +343,15 @@ body{
 
   .sign-up-main{
     width: 100%;
-    height: calc(100% - 60px);
-
-    .sign-up-main-header{
-      @include px2rem(margin,80 0);
-      //@include px2rem(line-height,52)
-    }
+    height: calc(100% - 40px);
+    padding: 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .sign-up-btn{
       width: 100%;
       text-align: center;
-
-      .login-btn{
-        @include loginModelBtn;
-      }
     }
 
   }

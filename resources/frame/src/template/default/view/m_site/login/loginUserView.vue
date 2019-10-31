@@ -2,8 +2,8 @@
     <div class="login-user-box">
       <LoginHeader></LoginHeader>
       <main class="login-user-box-main">
-        <div class="login-user-title-box">
-          <p class="login-user-title-p">用户名登录</p>
+        <div class="login-user-title-box login-module-title-box">
+          <p class="login-user-title-p login-module-title">用户名登录</p>
         </div>
 
         <!--<form class="weui-cells__group weui-cells__group_form user-login-form">
@@ -23,25 +23,25 @@
         </div>
       </form>-->
 
-        <form class="user-login-form">
+        <form class="user-login-form login-module-form">
           <van-cell-group>
             <van-field
               clearable
               label="用户名"
-              placeholder="请输入用户名"
+              placeholder="请输入您的用户名"
             />
 
             <van-field
               type="password"
               label="密码"
-              placeholder="请输入密码"
+              placeholder="请填写密码"
             />
           </van-cell-group>
         </form>
 
 
         <div class="login-user-btn">
-          <button class="weui-btn weui-btn_primary login-btn">登录</button>
+          <van-button type="primary">登录</van-button>
         </div>
 
         <div class="login-user-method">

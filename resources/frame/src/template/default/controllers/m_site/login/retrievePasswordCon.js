@@ -6,7 +6,9 @@ import retrievePWDFooter from '../../../view/m_site/common/loginSignUpFooter/log
 export default {
   data:function () {
     return {
-
+      newpwd:"",
+      sms:"",
+      phone:""
     }
   },
 

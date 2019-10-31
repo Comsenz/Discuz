@@ -12,6 +12,7 @@
   @include px2px(bottom,98);
   text-align: center;
   @include font-dpr(26);
+  color: $fontColor;
   i{
     @include px2px(width,1);
     @include px2px(height,28);

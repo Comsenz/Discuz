@@ -3,11 +3,11 @@
       <retrievePWDHeader></retrievePWDHeader>
       <main class="retrieve-password-main">
 
-        <div class="weui-form__text-area retrieve-password-main-header">
-          <h2 class="weui-form__title">忘记密码</h2>
+        <div class="login-module-title-box">
+          <h2 class="login-module-title">忘记密码</h2>
         </div>
 
-        <div class="weui-form__control-area">
+        <!--<div class="weui-form__control-area">
           <div class="weui-cells__group weui-cells__group_form">
             <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -34,10 +34,38 @@
 
             </div>
           </div>
+        </div>-->
+
+        <div class="login-module-form">
+          <van-cell-group>
+            <van-field
+              label="手机号"
+              v-model="phone"
+              placeholder="请输入您的手机号"
+            />
+
+            <van-field
+              v-model="sms"
+              center
+              clearable
+              label="验证码"
+              placeholder="请输入验证码"
+            >
+              <van-button slot="button" size="small" type="default">发送验证码</van-button>
+            </van-field>
+
+            <van-field
+              label="新密码"
+              v-model="newpwd"
+              placeholder="请输入新密码"
+            />
+
+          </van-cell-group>
         </div>
 
+
         <div class="retrieve-password-btn">
-          <button class="weui-btn weui-btn_primary login-btn">提交</button>
+          <van-button type="primary">提交</van-button>
         </div>
 
       </main>

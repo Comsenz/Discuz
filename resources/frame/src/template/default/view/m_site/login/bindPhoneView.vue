@@ -3,11 +3,11 @@
       <BindPhoneHeader></BindPhoneHeader>
       <main class='bind-phone-main'>
 
-        <div class="weui-form__text-area bind-phone-main-header">
-          <h2 class="weui-form__title">绑定手机号</h2>
+        <div class="login-module-title-box">
+          <h2 class="login-module-title">绑定手机号</h2>
         </div>
 
-        <div class="weui-form__control-area">
+       <!-- <div class="weui-form__control-area">
           <div class="weui-cells__group weui-cells__group_form">
             <div class="weui-cells weui-cells_form">
               <div class="weui-cell">
@@ -27,10 +27,30 @@
               </div>
             </div>
           </div>
+        </div>-->
+
+        <div class="login-module-form">
+          <van-cell-group>
+            <van-field
+              label="手机号"
+              placeholder="请输入您的手机号"
+            />
+
+            <van-field
+              center
+              clearable
+              label="验证码"
+              placeholder="请输入验证码"
+            >
+              <van-button slot="button" size="small" type="default">发送验证码</van-button>
+            </van-field>
+
+          </van-cell-group>
         </div>
 
-        <div class=" sign-up-btn">
-          <button class="weui-btn weui-btn_primary">提交</button>
+
+        <div class="bind-phone-btn">
+          <van-button type="primary">提交</van-button>
         </div>
 
       </main>
