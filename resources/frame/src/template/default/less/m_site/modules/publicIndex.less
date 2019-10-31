@@ -33,7 +33,6 @@
   }
 
 }
-
 /** end */
 
 
@@ -41,25 +40,23 @@
   van-cell --start
  */
 .van-cell{
-  padding: 14px 0;
   span{
     font-size: 15px;
   }
-
-  &:not(:last-child)::after{
-    left:0;
+  &:not(:last-child)::after {
+    //.hairline-bottom(@cell-border-color, @padding-md);
+    border-bottom: 1PX solid #E5E5E5;
   }
-
 }
 /** end */
+
 
 /**
   van-cell-group --start
  */
-.van-cell-group{
-  padding: 0;
-}
+.van-cell-group{}
 /** end */
+
 
 /**
   van-field__control -start
@@ -92,3 +89,18 @@
 }
 /** end */
 
+
+/**
+  van-divider  --start
+ */
+.van-divider {
+  color: #BBBBBB;
+  font-size: 15px;
+  &:before{
+    border-width: 1PX;
+  }
+  &:after{
+    border-width: 1PX;
+  }
+}
+/** end */

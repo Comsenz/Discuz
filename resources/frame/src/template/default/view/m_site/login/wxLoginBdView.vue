@@ -26,7 +26,6 @@
           </div>
         </form>-->
 
-
         <form class="wx-login-bd-form">
           <van-cell-group>
             <van-field

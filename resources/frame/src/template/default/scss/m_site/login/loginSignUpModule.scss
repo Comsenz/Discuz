@@ -71,6 +71,19 @@ body{
   font-weight:400;
   color:#000;
   margin-bottom: 50px;
+
+  .van-cell-group{
+    padding: 0;
+  }
+
+  .van-cell{
+    padding: 14px 0;
+
+    &:not(:last-child)::after{
+      left:0;
+    }
+  }
+
 }
 
 
@@ -99,11 +112,13 @@ body{
       .login-user-method-box{
         @include px2rem(width,334);
         @include font-dpr(30);
+        margin: auto;
       }
 
       .login-user-method-icon{
         display: flex;
         justify-content: center;
+        margin-top: 25px;
         .login-user-method-icon-box{
           width: 50%;
           display: flex;
@@ -152,13 +167,15 @@ body{
     .login-phone-method{
 
       .login-phone-method-box{
-          @include px2rem(width,334);
-          @include font-dpr(30);
+        @include px2rem(width,334);
+        @include font-dpr(30);
+        margin: auto;
       }
 
       .login-phone-method-icon{
         display: flex;
         justify-content: center;
+        margin-top: 25px;
         .login-phone-method-icon-box{
           width: 50%;
           display: flex;
@@ -220,6 +237,18 @@ body{
 
     .wx-login-bd-form{
       margin-bottom: 49px;
+      .van-cell-group{
+        padding: 0;
+      }
+
+      .van-cell{
+        padding: 14px 0;
+
+        &:not(:last-child)::after{
+          left:0;
+        }
+      }
+
     }
 
     .wx-login-bd-btn{
@@ -265,6 +294,17 @@ body{
 
     .wx-sign-up-bd-form{
       margin-bottom: 49px;
+
+      .van-cell-group{
+        padding: 0;
+      }
+      .van-cell{
+        padding: 14px 0;
+
+        &:not(:last-child)::after{
+          left:0;
+        }
+      }
     }
 
     .wx-sign-up-bd-btn{

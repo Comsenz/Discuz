@@ -45,8 +45,8 @@
         </div>
 
         <div class="login-user-method">
-          <div class="login-user-method-box weui-loadmore weui-loadmore_line">
-            <span class="weui-loadmore__tips">其他登录方式</span>
+          <div class="login-user-method-box">
+            <van-divider>其他登录方式</van-divider>
           </div>
 
           <div class="login-user-method-icon">
