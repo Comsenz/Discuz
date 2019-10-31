@@ -37,7 +37,6 @@ class ThreadSerializer extends AbstractSerializer
             'viewCount'             => (int) $model->view_count,
             'postCount'             => (int) $model->post_count,
             'likeCount'             => (int) $model->like_count,
-            'favoriteCount'         => (int) $model->favorite_count,
             'createdAt'             => $this->formatDate($model->created_at),
             'updatedAt'             => $this->formatDate($model->updated_at),
             // 'deleted_at'            => $this->formatDate($model->deleted_at),
