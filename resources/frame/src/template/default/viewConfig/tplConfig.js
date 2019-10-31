@@ -109,7 +109,14 @@ export default {
           title:"管理圈子",
           threeHeader: true
         }
-        
+      },
+      'circle-members':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/circleMembersView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子成员"
+        } 
       },
       'header':{
         comLoad:function (resolve) {
