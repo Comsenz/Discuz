@@ -69,27 +69,23 @@
 		    	</div>
 		    </div>
 	    </div>
-	    
-	    
-
-
-
     </div>
 </template>
 
 <script>
-// import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
-import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
+import mSiteCircleInfoCon from '../../../controllers/m_site/management/circleInfoCon';
+// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+// import Header from '../../m_site/common//headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+import Header from '../../m_site/common/headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
-    name: "payCircleView",
+    name: "circleInfoView",
     components:{
     	Header
     },
     ...mSiteHeader,
-    ...mSitePayCircleCon
+    ...mSiteCircleInfoCon
 }
 
 

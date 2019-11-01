@@ -3,24 +3,6 @@
 <template>
     <div class="circleCon">
 	    <Header></Header>
-	    <!-- <div class="headerBox">
-	        <div class="headOpe">
-	          <span class="icon iconfont">&#xe<b;</span>
-	          <span class="icon iconfont">&#xe60c;</span>
-	        </div>
-	        <img src="../../../../../../static/images/logo.png" class="logo">
-	        <div class="circleDet">
-	          <span>主题：125</span>
-	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
-	        </div>
-      	</div> -->
-
-      <!-- <div class="navBarBox" id="testNavBar":class="{'fixedNavBar': isfixNav}">
-          <ul class="navBarCon">
-            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}":key="index">{{ todo.text }}</li>
-          </ul>
-      </div> -->
         <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>

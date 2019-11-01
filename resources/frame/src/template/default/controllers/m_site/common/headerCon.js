@@ -122,8 +122,8 @@ export default {
     	// 比较他们的大小来确定是否添加fixedHead样式
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 	    handleTabFix() {
-	    	if(this.navShow){
-	    		// console.log(this.navShow);
+	    	if(this.oneHeader){
+	    		console.log(this.navShow+'000');
 	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
