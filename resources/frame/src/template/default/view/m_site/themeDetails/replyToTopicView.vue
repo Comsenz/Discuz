@@ -3,7 +3,7 @@
       <header class="reply-to-topic-header">
         <span class="icon iconfont icon-back reply-to-topic-header-icon" ></span>
         <h2>{{headerTitle}}</h2>
-        <a href="javascript:;" class=" weui-btn weui-btn_mini weui-btn_primary reply-to-topic-release-btn">发布</a>
+        <van-button type="primary" class="reply-to-topic-release-btn" size="mini">发布</van-button>
       </header>
 
       <main class="reply-to-topic-main">
