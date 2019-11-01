@@ -218,7 +218,7 @@ export default {
           require(['../view/m_site/myInfo/modifyDataView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"修改资料"
         }
       },
       'modify-phone':{

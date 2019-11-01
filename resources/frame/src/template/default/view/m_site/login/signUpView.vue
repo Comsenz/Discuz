@@ -37,16 +37,23 @@
             />
 
             <van-field
+              clearable
               type="password"
               label="密码"
               placeholder="请填写密码"
               v-model="password"
+              :error="error"
+              :error-message="errorMessage"
+              @clear="clearError('clear')"
+              @focus="clearError('focus')"
+              @input="clearError('input')"
+              @blur="clearError('blur')"
             />
           </van-cell-group>
         </form>
 
         <div class="sign-up-btn">
-          <van-button @click="signUpClick" type="primary">注册</van-button>
+          <van-button @click="signUpClick" :loading="btnLoading"  type="primary">注册</van-button>
         </div>
 
       </main>

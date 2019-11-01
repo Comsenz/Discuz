@@ -8,7 +8,8 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 export default {
   data:function () {
     return {
-
+      userName:"",
+      password:""
     }
   },
 
@@ -18,6 +19,26 @@ export default {
   },
 
   methods:{
+
+    loginClick(){
+
+      this.appFetch({
+        url:"login",
+        method:"post",
+        data:{
+          username:this.userName,
+          password:this.password
+        }
+      },(res)=>{
+        // console.log(res.errors[0].status);
+        // console.log(status);
+        console.log(res);
+      },(err)=>{
+        console.log(err);
+      })
+
+    },
+
     loginWxClick(){
       this.$router.push({path:'/wx-login-bd'})
     },

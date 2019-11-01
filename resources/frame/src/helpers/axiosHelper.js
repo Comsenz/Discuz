@@ -14,11 +14,11 @@ var codes = [422];
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    return response
+    return response;
   },
   error => {
-  	if(codes.includes(error.response.status)) {
-  		return error.response;
+    if(codes.includes(error.response.status)) {
+      return error.response.status;
   	} else {
   		return Promise.reject(error)
   	}
@@ -73,8 +73,9 @@ const appFetch = function(params, success, error) {
 
 	//设置默认header
 	let defaultHeaders = {
-		'Content-Type': 'application/x-www-form-urlencoded',
-		//'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+		// 'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/json',
+    //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
 	};
 	if(params.headers) {
 		params.headers = {
@@ -94,8 +95,7 @@ const appFetch = function(params, success, error) {
 
 	return axios(params).then(function(response) {
 		let res = response.data || {};
-		
-		success(response.data);
+		success(response);
 	})
 	.catch(function(err) {
 		// console.error(err, 'API '+oldUrl);
