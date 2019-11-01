@@ -122,4 +122,105 @@
 	}
 }
 
+//邀请加入
+.inviteTable {
+	border: none;
+	width: 100%;
+	margin: 0;
+	tr th {
+		text-align: left;
+		@include font-dpr(30);
+		@include px2rem(height, 94);
+		@include px2rem(line-height, 94);
+		border-bottom: 1px solid $corE5;
+		font-weight: normal;
+		&:nth-child(1) {
+			@include px2rem(width, 110);
+			@include px2rem(padding-left, 30);
+		}
+		&:nth-child(2) {
+			@include px2rem(width, 150);
+		}
+		&:nth-child(3) {
+			@include px2rem(width, 180);
+		}
+		&:nth-child(4) {
+			@include px2rem(padding-right, 30);
+		}
+	}
+	tr td {
+		text-align: left;
+		@include px2rem(line-height, 90);
+		@include font-dpr(30);
+		&:nth-child(1) {
+			@include px2rem(padding-left, 30);
+		}
+		&:nth-child(4) {
+			@include px2rem(padding-right, 30);
+		}
+		.copyA {
+			@include px2rem(margin-right, 40);
+		}
+		.font9 {
+			color: $cor999;
+		}
+	}
+}
+
+//批量删除
+.choFixed {
+	a {
+		display: inline-block;
+		@include font-dpr(30);
+		@include px2rem(line-height, 72);
+		&:first-child {
+			@include px2rem(margin-right, 60);
+		}
+	}
+}
+
+//圈子信息
+
+.infoPower {
+	.powerList {
+		@include px2rem(padding, 0 30 36 30);
+		position: relative;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    right: 0;
+		    bottom: 0;
+		    left: 16px;
+		    border-bottom: 1px solid $corE5;
+		}
+		&:last-child {
+			&:after {
+				position: absolute;
+			    box-sizing: border-box;
+			    content: ' ';
+			    pointer-events: none;
+			    right: 0;
+			    bottom: 0;
+			    left: 16px;
+			    border-bottom: none;
+			}
+		}
+		.powerClassify {
+			@include font-dpr(34);
+			@include px2rem(line-height, 48);
+			@include px2rem(padding-bottom, 16);
+		}
+		.powerChi {
+			@include font-dpr(28);
+			@include px2rem(line-height, 40);
+			color: rgba(#000,0.5);
+		}
+	}
+	
+}
+
+
+
 
