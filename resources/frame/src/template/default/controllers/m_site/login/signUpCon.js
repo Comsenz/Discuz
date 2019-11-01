@@ -7,7 +7,6 @@ export default {
     return {
       username:'',
       password:'',
-      password2:'',
       adminid:''
 
     }

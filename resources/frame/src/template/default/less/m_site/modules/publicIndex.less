@@ -44,7 +44,9 @@
     font-size: 15px;
   }
   &:not(:last-child)::after {
-    //.hairline-bottom(@cell-border-color, @padding-md);
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
     border-bottom: 1PX solid #E5E5E5;
   }
 }
@@ -84,7 +86,19 @@
  */
 [class*='van-hairline'] {
   &::after {
-    .hairline();
+    //.hairline();
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border: 0 solid #E5E5E5;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    border-top: 1PX solid #E5E5E5;
+    border-bottom: 1PX solid #E5E5E5;
+    width: 100%;
+
   }
 }
 /** end */

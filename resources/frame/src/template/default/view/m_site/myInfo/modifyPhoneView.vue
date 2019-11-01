@@ -7,14 +7,24 @@
         </div>
 
 
-        <form class="modify-phone-form" action="">
+        <div class="modify-phone-form my-info-form">
           <van-cell-group>
+
             <van-field
-              v-model="username"
+              v-if="modifyState"
+              v-model="phone"
               clearable
               label="验证旧手机"
               placeholder="请输入旧手机号"
               readonly
+            />
+
+            <van-field
+              v-else
+              v-model="newphone"
+              clearable
+              label="设置新手机"
+              placeholder="请输入新手机号"
             />
 
             <van-field
@@ -23,13 +33,15 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" color="#336699" size="small" plain type="primary">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default">发送验证码</van-button>
             </van-field>
+
           </van-cell-group>
-        </form>
+        </div>
 
         <div class="modify-phone-operating">
-          <van-button type="primary">下一步</van-button>
+          <van-button type="primary" v-if="modifyState" @click="nextStep" >下一步</van-button>
+          <van-button type="primary" v-else >提交</van-button>
         </div>
 
       </main>

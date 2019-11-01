@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace App\Commands\UserProfile;
 
 
-use App\Events\Userprofile\Saving;
+use App\Events\UserProfile\Saving;
 use App\Repositories\UserRepository;
 use Exception;
 use App\Models\User;

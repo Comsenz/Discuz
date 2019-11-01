@@ -1,38 +1,10 @@
 <template>
-    <div class="login-phone-box">
+    <div  class="login-phone-box">
       <LoginHeader></LoginHeader>
       <main class="login-phone-box-main">
         <div class="login-module-title-box">
           <p class="login-module-title">手机号登录</p>
         </div>
-
-
-        <!--<form class="weui-cells__group weui-cells__group_form phone-login-form">
-          <div class="weui-cells weui-cells_form login-phone-input-form">
-
-            <div class="weui-cell">
-              <div class="weui-cell__hd">
-                <label class="weui-label">手机号</label>
-              </div>
-              <div class="weui-cell__bd">
-                <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入手机号" >
-              </div>
-            </div>
-
-            <div class="weui-cell weui-cell_vcode">
-              <div class="weui-cell__hd">
-                <label class="weui-label">验证码</label>
-              </div>
-              <div class="weui-cell__bd">
-                <input autofocus="" class="weui-input" type="text" pattern="[0-9]*" id="js_input" placeholder="输入验证码" maxlength="6">
-              </div>
-              <div class="weui-cell__ft">
-                <a href="javascript:;" @click="getYZ" class="weui-btn weui-btn_default weui-vcode-btn verification-code-btn">获取验证码</a>
-              </div>
-            </div>
-
-          </div>
-        </form>-->
 
         <div class="login-module-form">
           <van-cell-group>
@@ -54,7 +26,6 @@
 
           </van-cell-group>
         </div>
-
 
         <div class="login-phone-btn">
           <van-button type="primary">登录</van-button>

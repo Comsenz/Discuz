@@ -13,6 +13,7 @@ class Server
     public $server;
     public $request;
     public $actor;
+    public $username;
     public $password;
     public $grant;
     /**

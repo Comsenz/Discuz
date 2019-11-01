@@ -33,12 +33,14 @@
               clearable
               label="用户名"
               placeholder="请输入您的用户名"
+              v-model="username"
             />
 
             <van-field
               type="password"
               label="密码"
               placeholder="请填写密码"
+              v-model="password"
             />
           </van-cell-group>
         </form>

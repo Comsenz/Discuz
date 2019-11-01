@@ -28,6 +28,12 @@ $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileContro
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
+$route->post('/send', 'send', ApiController\Mobile\SendController::class);
+$route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
+$route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
+$route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
+$route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
+$route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -49,9 +55,12 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 |--------------------------------------------------------------------------
 */
 
+$route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::class);
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
 $route->patch('/posts/batch', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
+$route->delete('/posts', 'posts.delete', ApiController\Posts\DeletePostController::class);
+$route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
 
 /*
 |--------------------------------------------------------------------------

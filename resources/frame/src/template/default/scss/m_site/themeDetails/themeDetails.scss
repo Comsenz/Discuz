@@ -29,9 +29,18 @@
     @include px2rem(padding,0 32);
     @include px2rem(line-height,48);
 
+    .van-button{
+      min-width: 52px;
+      height: 30px;
+      &__text{
+        font-size: 14px;
+        line-height:20px;
+        font-weight: 500;
+      }
+    }
+
     .reply-to-topic-release-btn{
-      margin: 0;
-      @include font-dpr(28);
+
     }
   }
 

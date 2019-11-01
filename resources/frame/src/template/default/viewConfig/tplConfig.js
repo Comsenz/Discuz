@@ -124,7 +124,8 @@ export default {
         },
         metaInfo:{
           title:"圈子成员"
-        } 
+        }
+
       },
       'circle-info':{
         comLoad:function (resolve) {
