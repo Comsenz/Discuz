@@ -15,10 +15,11 @@ class Password extends Server
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function  __construct($actor,$request,$password)
+    public function  __construct($actor,$request,$username,$password)
     {
         $this->actor=$actor;
         $this->password=$password;
+        $this->username=$username;
         //处理请求
         $data = $request->getParsedBody();
         $user =[
@@ -26,7 +27,7 @@ class Password extends Server
             'client_id'=> '1',
             'client_secret'=>'secret2',
             'scope'=>'',
-            'username'=>Arr::get($data,'username'),
+            'username'=>$this->username,
             'password'=>$this->password
         ];
         $request= $request->withParsedBody($user);

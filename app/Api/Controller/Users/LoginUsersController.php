@@ -50,7 +50,7 @@ class LoginUsersController implements RequestHandlerInterface
         //生成jwt
         /** @var TYPE_NAME $actor */
         $jwt = $this->bus->dispatch(
-            new Password($data->id,$request,$data->password)
+            new Password($data->id,$request,$data->username,$data->password)
         );
         // 返回结果
         return $jwt;
