@@ -1,23 +1,96 @@
 
-
 /**
-  冻结金额
-  问题：如果内容撑满，头部高度会变小
+ 我的-冻结金额、提现记录、钱包明细、订单明细
+ 主体，白色部分
  */
-.frozen-amount-box{
+.my-info-money-header{
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow-Y: scroll;
+}
 
-  .frozen-amount-main{
-    //height: calc(100% - 44px);
+
+/**
+  我的-冻结金额、提现记录、钱包明细、订单明细
+  页脚，灰色部分
+ */
+.my-info-money-footer{
+  flex: 1;
+  background-color: #EDEDED;
+  border:1px solid #E5E5E5;
+}
+
+
+/**
+  我的-表单输入
+ */
+.my-info-form{
+  .van-cell-group{
+    padding: 0;
   }
 
-  .frozen-amount-footer{
-    flex: 1;
-    background-color: #EDEDED;
-    border:1px solid #E5E5E5;
+  .van-cell{
+    padding: 14px 0;
+
+    &:not(:last-child)::after{
+      left:0;
+    }
   }
+}
+
+
+/**
+  我的-修改手机、修改密码公共标题头部
+ */
+.my-info-module-title-box{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 58px 0;
+
+  .my-info-module-title{
+    text-align: center;
+    font-size: 19px;
+    font-family:PingFangSC-Medium,PingFangSC;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height: 26px;
+  }
+}
+
+
+/**
+  冻结金额
+ */
+.frozen-amount-box{}
+
+/**
+  提现
+ */
+.withdraw-box{
+  .withdraw-main{
+    padding: 0 29px;
+
+    .withdraw-form{
+      .van-field {
+        &__label {
+          flex: none;
+          width: 110px;
+        }
+
+      }
+
+    }
+  }
+}
+
+
+/**
+  修改密码
+ */
+.change-pwd-main{
+  padding: 0 29px;
 }

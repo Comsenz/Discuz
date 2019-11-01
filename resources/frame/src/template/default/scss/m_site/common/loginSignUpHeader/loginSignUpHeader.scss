@@ -17,6 +17,7 @@ $lh:44px;   //height和line-height
   justify-content: center;
   align-items: center;
   position: relative;
+  flex-shrink:0;
 
   .header-title{
     @include font-dpr(36);

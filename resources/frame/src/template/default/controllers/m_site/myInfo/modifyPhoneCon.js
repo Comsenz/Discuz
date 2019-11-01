@@ -9,14 +9,22 @@ import ModifyHeader from '../../../view/m_site/common/loginSignUpHeader/loginSig
 export default {
   data:function () {
     return {
-      username:'187****1235',
+      phone:'187****1235',
       password:'',
-      sms:''
+      sms:'',
+      newphone:'',
+      modifyState:true
     }
   },
 
   components:{
     ModifyHeader
   },
+
+  methods:{
+    nextStep(){
+      this.modifyState=!this.modifyState;
+    }
+  }
 
 }

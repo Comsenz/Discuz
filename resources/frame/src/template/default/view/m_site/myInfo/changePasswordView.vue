@@ -1,15 +1,45 @@
 <template>
-    <div>
-      修改密码
+    <div class="change-pwd-box">
+      <ChangePWDHeader></ChangePWDHeader>
+      <main class="change-pwd-main">
+        <div class="my-info-module-title-box">
+          <p class="my-info-module-title">修改密码</p>
+        </div>
+
+        <div class="change-pwd-form">
+          <van-cell-group>
+            <van-field
+              label="旧密码"
+              v-model="pwd"
+              placeholder="请输入您的旧密码"
+            />
+          </van-cell-group>
+          <van-cell-group>
+            <van-field
+              label="新密码"
+              v-model="newpwd"
+              placeholder="请输入您的新密码"
+            />
+          </van-cell-group>
+          <van-cell-group>
+            <van-field
+              label="确认密码"
+              v-model="confirmpwd"
+              placeholder="请输入您的确认密码"
+            />
+          </van-cell-group>
+        </div>
+
+
+      </main>
     </div>
 </template>
 
 <script>
-    export default {
-        name: "change-password-view"
-    }
+import '../../../less/m_site/myInfo/myInfo.less';
+import changePwdCon from '../../../controllers/m_site/myInfo/changePwdCon'
+export default {
+    name: "change-password-view",
+  ...changePwdCon
+}
 </script>
-
-<style scoped>
-
-</style>

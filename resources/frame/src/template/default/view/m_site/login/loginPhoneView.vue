@@ -1,5 +1,5 @@
 <template>
-    <div class="login-phone-box">
+    <div  class="login-phone-box">
       <LoginHeader></LoginHeader>
       <main class="login-phone-box-main">
         <div class="login-module-title-box">
