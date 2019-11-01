@@ -36,9 +36,8 @@ class Saving
      * @param User $actor
      * @param array $data
      */
-    public function __construct(Post $post, $actor, array $data = [])
+    public function __construct(Post $post, User $actor, array $data = [])
     {
-        // TODO: User $actor
         $this->post = $post;
         $this->actor = $actor;
         $this->data = $data;

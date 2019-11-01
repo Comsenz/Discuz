@@ -28,22 +28,29 @@ class PostSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
-            'id'                => (int) $model->id,
-            'user_id'           => (int) $model->user_id,
-            'thread_id'         => (int) $model->thread_id,
-            'reply_id'          => (int) $model->reply_id,
+        $attributes = [
+            // 'id'                => (int) $model->id,
+            // 'user_id'           => (int) $model->user_id,
+            // 'thread_id'         => (int) $model->thread_id,
+            // 'reply_id'          => (int) $model->reply_id,
             'content'           => $model->content,
             'ip'                => $model->ip,
-            'reply_count'       => $model->reply_count,
-            'like_count'        => $model->like_count,
-            'created_at'        => $this->formatDate($model->created_at),
-            'updated_at'        => $this->formatDate($model->updated_at),
-            'deleted_at'        => $this->formatDate($model->deleted_at),
-            'deleted_user_id'   => (int) $model->deleted_user_id,
-            'is_first'          => (bool) $model->is_first,
-            'is_approved'       => (bool) $model->is_approved,
+            'replyCount'        => $model->reply_count,
+            'likeCount'         => $model->like_count,
+            'createdAt'         => $this->formatDate($model->created_at),
+            'updatedAt'         => $this->formatDate($model->updated_at),
+            // 'deletedAt'         => $this->formatDate($model->deleted_at),
+            // 'deleted_user_id'   => (int) $model->deleted_user_id,
+            'isFirst'           => (bool) $model->is_first,
+            'isApproved'        => (bool) $model->is_approved,
         ];
+
+        if ($model->deleted_at) {
+            $attributes['isDeleted'] = true;
+            $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
+        }
+
+        return $attributes;
     }
 
     /**

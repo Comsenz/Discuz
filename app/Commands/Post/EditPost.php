@@ -9,12 +9,14 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\User;
+use App\Repositories\PostRepository;
 use App\Validators\PostValidator;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class EditPost
@@ -23,7 +25,7 @@ class EditPost
     // use AssertPermissionTrait;
 
     /**
-     * The id of the post.
+     * The ID of the post to edit.
      *
      * @var int
      */
@@ -37,71 +39,67 @@ class EditPost
     public $actor;
 
     /**
-     * The attributes of the new thread.
+     * The attributes to update on the post.
      *
      * @var array
      */
     public $data;
 
     /**
-     * The current ip address of the actor.
-     *
-     * @var array
+     * @param int $postId The ID of the post to edit.
+     * @param User $actor The user performing the action.
+     * @param array $data The attributes to update on the post.
      */
-    public $ip;
-
-    /**
-     * @param $postId
-     * @param User $actor
-     * @param Collection $data
-     * @param null $ip
-     */
-    public function __construct($postId, $actor, Collection $data, $ip = null)
+    public function __construct($postId, User $actor, array $data)
     {
-        // TODO: User $actor
         $this->postId = $postId;
         $this->actor = $actor;
         $this->data = $data;
-        $this->ip = $ip;
     }
 
     /**
      * @param EventDispatcher $events
+     * @param PostRepository $posts
      * @param PostValidator $validator
      * @return Post
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, PostValidator $validator)
+    public function handle(EventDispatcher $events, PostRepository $posts, PostValidator $validator)
     {
         $this->events = $events;
 
         // TODO: 权限验证（是否有权查看）
         // $this->assertCan($this->actor, 'startDiscussion');
 
+        $attributes = Arr::get($this->data, 'attributes', []);
+
         // 数据验证
-        $validator->valid($this->data->all());
+        $validator->valid($this->data);
 
-        $post = Post::findOrFail($this->postId);
+        $post = $posts->findOrFail($this->postId, $this->actor);
 
-        if ($this->data->has('content')) {
+        if (isset($attributes['content'])) {
             // TODO: 是否有权修改内容
-            // $this->assertCan($actor, 'rename', $discussion);
+            // $this->assertCan($actor, 'edit', $post);
 
-            $post->content = $this->data->get('content');
+            $post->content = $attributes['content'];
+        } else {
+            // 不修改内容时，不更新修改时间
+            $post->timestamps = false;
         }
 
-        if ($this->data->has('isApproved')) {
+        if (isset($attributes['isApproved'])) {
             // TODO: 是否有权 审核/放入待审核
             // $this->assertCan($actor, 'rename', $discussion);
 
-            $post->is_approved = $this->data->get('isApproved');
+            $post->is_approved = $attributes['isApproved'];
         }
 
-        if ($this->data->has('isDelete')) {
+        if (isset($attributes['isDeleted'])) {
             // TODO: 是否有权删除
-            // $this->assertCan($actor, 'hide', $discussion);
+            // $this->assertCan($actor, 'hide', $post);
 
-            if ($this->data->get('isDelete')) {
+            if ($attributes['isDeleted']) {
                 $post->deleted_user_id = $this->actor->id;
                 $post->delete();
             } else {
@@ -109,6 +107,10 @@ class EditPost
                 $post->restore();
             }
         }
+
+        $this->events->dispatch(
+            new Saving($post, $this->actor, $this->data)
+        );
 
         $post->save();
 

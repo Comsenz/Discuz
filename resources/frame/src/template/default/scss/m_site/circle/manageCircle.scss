@@ -1,0 +1,125 @@
+@charset "utf-8";
+
+/**
+ * manageCircle style 
+ */
+@import "./../var";
+@import "./_app";
+
+.serBox {
+	@include px2rem(padding, 16);
+	@include px2rem(height, 64);
+	position: relative;
+	.serInp {
+		display: block;
+		@include px2rem(height, 64);
+		width: 100%;
+		border: 1px solid #e6e6ea;
+		@include px2rem(border-radius, 10);
+		text-align: center;
+		@include placeholder {
+		    color: #b2b2b2;
+		    @include font-dpr(26);
+		  }
+		}
+	.icon {
+		position: absolute;
+		@include px2rem(top, 36);
+		@include px2rem(left, 314);
+		@include font-dpr(26);
+		color: #b2b2b2;
+	}
+	span {
+
+	}
+}
+@include placeholder {
+  color: red;
+}
+.memberCheckList {
+	@include px2rem(padding-bottom, 104);
+	.resUser {
+		.resUserDet {
+			.resUserName {
+				@include px2rem(max-width, 300);	
+			}
+			.memberCheck {
+				float: right;
+				@include px2rem(margin-right, 30);
+			}
+		}
+	}
+	
+}
+.manageFootFixed {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 12;
+	width: 100%;
+	@include px2rem(height, 104);
+	@include px2rem(padding, 18 28 14 28);
+	background: #fff;
+	border-top: 1px solid $corE5;
+	box-sizing: border-box;
+	.operaCho {
+		position: relative;
+		@include px2rem(width, 432);
+		.operaWo {
+			float: left;
+			position: relative;
+			@include px2rem(width, 432);
+			@include px2rem(height, 72);
+			@include px2rem(padding, 16 22 14 30);
+			background: $corF7;
+			border: 1px solid $corE5;
+			box-sizing: border-box;
+			@include px2rem(border-radius, 10);
+			text-align: left;
+			span {
+				@include font-dpr(30);
+				@include px2rem(line-height, 42);
+			}
+			.icon {
+				position: absolute;
+				@include font-dpr(24);
+				@include px2rem(bottom, 24);
+				@include px2rem(right, 22);
+			}
+		}
+		.operaChoList {
+			position: absolute;
+			@include px2rem(bottom, 10);
+			left: 0;
+			width: 100%;
+			background: $corF7;
+			border: 1px solid $corE5;
+			@include px2rem(border-radius, 10);
+			box-sizing: border-box;
+			.operaChoLi {
+				@include px2rem(line-height, 94);
+				@include px2rem(height, 94);
+				border-bottom: 1px solid $corE5;
+				@include font-dpr(30);
+				color: $cor888;
+				@include px2rem(padding, 0 30);
+				box-sizing: border-box;
+			}
+		}
+		
+	}
+	.checkSubmit {
+		float: right;
+		background: $fontColor;
+		@include px2rem(width, 240);
+		@include px2rem(height, 72);
+		@include px2rem(line-height, 72);
+		@include px2rem(border-radius, 10);
+		border: none;
+		color: #fff;
+		@include font-dpr(32);
+		text-align: center;
+	}
+}
+
+

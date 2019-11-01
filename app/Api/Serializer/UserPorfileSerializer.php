@@ -19,7 +19,7 @@ class UserPorfileSerializer extends AbstractSerializer
             'username' => $model->username,
             'adminid' => $model->adminid,
             'unionid' => $model->unionid,
-            'mobile' => $model->mobile,
+            'mobile'     => $model->mobile?substr($model->mobile, 0, 3).'****'.substr($model->mobile, 7):"",
             'createtime' => $model->createtime,
             'login_ip' => $model->login_ip,
             'nickname' => $model->nickname,

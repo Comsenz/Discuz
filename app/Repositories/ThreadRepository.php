@@ -13,16 +13,15 @@ use App\Models\Thread;
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class ThreadRepository extends AbstractRepository
 {
     /**
-     * Get a new query builder for the discussions table.
+     * Get a new query builder for the threads table.
      *
      * @return Builder
      */
-    public static function query()
+    public function query()
     {
         return Thread::query();
     }
@@ -32,13 +31,13 @@ class ThreadRepository extends AbstractRepository
      * certain user, or throw an exception.
      *
      * @param int $id
-     * @param User $user
-     * @return Thread|Builder|Model
+     * @param User|null $actor
+     * @return Thread
      */
-    public function findOrFail($id, User $user = null)
+    public function findOrFail($id, User $actor = null)
     {
-        $query = Thread::where('id', $id);
+        $query = $this->query()->where('id', $id);
 
-        return $this->scopeVisibleTo($query, $user)->firstOrFail();
+        return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 }

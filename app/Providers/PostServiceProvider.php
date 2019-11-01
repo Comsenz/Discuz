@@ -4,16 +4,15 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ThreadServiceProvider.php xxx 2019-10-18 13:28:00 LiuDongdong $
+ *      $Id: PostServiceProvider.php xxx 2019-10-31 20:02:00 LiuDongdong $
  */
 
 namespace App\Providers;
 
-use App\Listeners\Thread\ThreadListener;
-use App\Policies\ThreadPolicy;
+use App\Policies\PostPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
-class ThreadServiceProvider extends AbstractServiceProvider
+class PostServiceProvider extends AbstractServiceProvider
 {
     /**
      * 注册服务.
@@ -36,7 +35,6 @@ class ThreadServiceProvider extends AbstractServiceProvider
         $events = $this->app->make('events');
 
         // 订阅事件
-        $events->subscribe(ThreadListener::class);
-        $events->subscribe(ThreadPolicy::class);
+        $events->subscribe(PostPolicy::class);
     }
 }

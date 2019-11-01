@@ -46,14 +46,21 @@ class Thread extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $casts = [
         'is_approved' => 'boolean',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**

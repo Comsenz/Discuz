@@ -42,13 +42,20 @@ class Post extends Model
     use SoftDeletes;
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $casts = [
         'is_first' => 'boolean',
         'is_approved' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**

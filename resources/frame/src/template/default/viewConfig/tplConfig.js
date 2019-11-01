@@ -109,6 +109,14 @@ export default {
           title:"管理圈子",
           threeHeader: true
         }
+      },
+      'circle-members':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/circleMembersView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子成员"
+        }
 
       },
       'header':{
@@ -210,7 +218,7 @@ export default {
           require(['../view/m_site/myInfo/modifyDataView'],resolve)
         },
         metaInfo:{
-          title:"修改资料"
+          title:"回复主题"
         }
       },
       'modify-phone':{
@@ -234,15 +242,7 @@ export default {
           require(['../view/m_site/myInfo/withdrawView'],resolve)
         },
         metaInfo:{
-          title:"提现"
-        }
-      },
-      'withdrawals-record':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/withdrawalsRecordView'],resolve)
-        },
-        metaInfo:{
-          title:"提现记录"
+          title:"提款"
         }
       },
       'frozen-amount':{
@@ -251,22 +251,6 @@ export default {
         },
         metaInfo:{
           title:"冻结资金"
-        }
-      },
-      'order-details':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/orderDetailsView'],resolve)
-        },
-        metaInfo:{
-          title:"订单明细"
-        }
-      },
-      'wallet-details':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/walletDetailsView'],resolve)
-        },
-        metaInfo:{
-          title:"钱包明细"
         }
       }
 
