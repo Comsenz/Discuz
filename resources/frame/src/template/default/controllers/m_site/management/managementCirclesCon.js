@@ -12,10 +12,10 @@ export default {
 	},
 	 //用于数据初始化
     created: function(){
-		console.log(this.headOneShow)
+		// console.log(this.headOneShow)
 	},
 	methods: {
-	    //跳转到登录页
+	    //跳转到成员管理
 	    loginJump:function(){
 	    	// alert('跳转到成员管理');
 	    	this.$router.push({ path:'m_site/open-circle'});

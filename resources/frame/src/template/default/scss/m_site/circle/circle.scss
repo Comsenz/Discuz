@@ -195,6 +195,7 @@ body {
 		vertical-align: middle;
 		@include px2rem(padding-bottom, 16);
 		@include font-dpr(28);
+		word-break: break-all;
 		.icon {
 			@include font-dpr(28);
 			color: #FF5453;

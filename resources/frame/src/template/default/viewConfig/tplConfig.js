@@ -110,6 +110,14 @@ export default {
           threeHeader: true
         }
       },
+      'members-management':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/membersManagementView'],resolve)
+        },
+        metaInfo:{
+          title:"成员管理"
+        } 
+      },
       'circle-members':{
         comLoad:function (resolve) {
           require(['../view/m_site/management/circleMembersView'],resolve)
@@ -118,6 +126,33 @@ export default {
           title:"圈子成员"
         }
 
+      },
+      'circle-info':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/circleInfoView'],resolve)
+        },
+        metaInfo:{
+          title:"圈子信息",
+          threeHeader: true
+        } 
+      },
+      'invite-join':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/inviteToJoinView'],resolve)
+        },
+        metaInfo:{
+          title:"邀请加入",
+          threeHeader: true
+        } 
+      },
+      'delete':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/management/deleteView'],resolve)
+        },
+        metaInfo:{
+          title:"批量删除",
+          oneHeader: true
+        } 
       },
       'header':{
         comLoad:function (resolve) {

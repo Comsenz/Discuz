@@ -122,20 +122,20 @@ export default {
     	// 比较他们的大小来确定是否添加fixedHead样式
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 	    handleTabFix() {
-	    	if(this.navShow){
-	    		// console.log(this.navShow);
+	    	if(this.oneHeader){
+	    		console.log(this.navShow+'000');
 	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
-		          console.log('大于');
+		          // console.log('大于');
 		          this.showHeader = true;
-		          console.log(this.showHeader);
+		          // console.log(this.showHeader);
 		          this.isfixHead = true;
 		          this.isfixNav = true;
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
-		          console.log('小于');
+		          // console.log('小于');
 		          this.showHeader = false;
 		          this.isfixHead = false;
 		          this.isfixNav = false;
