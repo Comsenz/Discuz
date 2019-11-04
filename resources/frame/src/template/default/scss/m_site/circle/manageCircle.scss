@@ -178,6 +178,11 @@
 		}
 	}
 }
+.deleChi {
+	.operaBox {
+		@include px2rem(margin-bottom, 28);
+	}
+}
 
 //圈子信息
 
