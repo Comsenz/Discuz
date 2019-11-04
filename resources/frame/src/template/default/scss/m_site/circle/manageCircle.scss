@@ -182,6 +182,9 @@
 	.operaBox {
 		@include px2rem(margin-bottom, 28);
 	}
+	&:last-child {
+		.gap { display: none;}
+	}
 }
 
 //圈子信息
