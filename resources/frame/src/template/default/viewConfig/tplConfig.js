@@ -116,7 +116,7 @@ export default {
         },
         metaInfo:{
           title:"成员管理"
-        } 
+        }
       },
       'circle-members':{
         comLoad:function (resolve) {
@@ -134,7 +134,7 @@ export default {
         metaInfo:{
           title:"圈子信息",
           threeHeader: true
-        } 
+        }
       },
       'invite-join':{
         comLoad:function (resolve) {
@@ -143,7 +143,7 @@ export default {
         metaInfo:{
           title:"邀请加入",
           threeHeader: true
-        } 
+        }
       },
       'delete':{
         comLoad:function (resolve) {
@@ -152,7 +152,7 @@ export default {
         metaInfo:{
           title:"批量删除",
           oneHeader: true
-        } 
+        }
       },
       'header':{
         comLoad:function (resolve) {
@@ -287,7 +287,56 @@ export default {
         metaInfo:{
           title:"冻结资金"
         }
+      },
+      'withdrawals-record':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/withdrawalsRecordView'],resolve)
+        },
+        metaInfo:{
+          title:"提现记录"
+        }
+      },
+      'my-notice':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+        },
+        metaInfo:{
+          title:"我的通知"
+        }
+      },
+      'hone-page':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/homePageView'],resolve)
+        },
+        metaInfo:{
+          title:"个人主页"
+        }
+      },
+      'reply':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/replyView'],resolve)
+        },
+        metaInfo:{
+          title:"回复我的"
+        }
+      },
+      'reward':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+        },
+        metaInfo:{
+          title:"打赏我的"
+        }
+      },
+      'like':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+        },
+        metaInfo:{
+          title:"点赞我的"
+        }
       }
+
 
     },
     site: {

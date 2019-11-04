@@ -10,9 +10,9 @@ $lh:44px;   //height和line-height
   width: 100%;
   height: $lh;
   background-color: rgba(249,249,249,0.9);
-  -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);;
-  -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);;
-  box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1PX 0 0 rgba(0,0,0,0.1);;
+  -moz-box-shadow: 0 1PX 0 0 rgba(0,0,0,0.1);;
+  box-shadow: 0 1PX 0 0 rgba(0,0,0,0.1);
   display: flex;
   justify-content: center;
   align-items: center;
