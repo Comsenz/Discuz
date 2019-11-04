@@ -4,7 +4,7 @@ use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateThreadUser extends Migration
+class CreatePostUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateThreadUser extends Migration
      */
     public function up()
     {
-        $this->schema()->create('thread_user', function (Blueprint $table) {
-            $table->integer('thread_id')->unsigned()->nullable()->comment('主题 id');
+        $this->schema()->create('post_user', function (Blueprint $table) {
+            $table->integer('post_id')->unsigned()->nullable()->comment('帖子 id');
             $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
             $table->dateTime('created_at')->comment('创建时间');
 
-            $table->primary(['thread_id', 'user_id']);
+            $table->primary(['post_id', 'user_id']);
 
-            $table->foreign('thread_id')->references('id')->on('threads')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
@@ -32,6 +32,6 @@ class CreateThreadUser extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('thread_user');
+        $this->schema()->dropIfExists('post_user');
     }
 }

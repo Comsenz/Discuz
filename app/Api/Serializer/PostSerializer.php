@@ -56,20 +56,18 @@ class PostSerializer extends AbstractSerializer
     /**
      * @param $post
      * @return Relationship
-     * @throws BindingResolutionException
      */
     protected function user($post)
     {
-        return $this->hasOne($post, UserSerializer::class, 'user');
+        return $this->hasOne($post, UserSerializer::class);
     }
 
     /**
      * @param $post
      * @return Relationship
-     * @throws BindingResolutionException
      */
     protected function thread($post)
     {
-        return $this->hasOne($post, ThreadSerializer::class, 'thread');
+        return $this->hasOne($post, ThreadSerializer::class);
     }
 }

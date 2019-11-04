@@ -178,4 +178,14 @@ class User extends Model {
     {
         return $this->belongsToMany(Thread::class);
     }
+
+    /**
+     * Define the relationship with the user's liked posts.
+     *
+     * @return BelongsToMany
+     */
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class);
+    }
 }

@@ -57,7 +57,6 @@ class ThreadSerializer extends AbstractSerializer
     /**
      * @param $thread
      * @return Relationship
-     * @throws BindingResolutionException
      */
     protected function user($thread)
     {
@@ -67,7 +66,6 @@ class ThreadSerializer extends AbstractSerializer
     /**
      * @param $thread
      * @return Relationship
-     * @throws BindingResolutionException
      */
     public function firstPost($thread)
     {
@@ -77,7 +75,6 @@ class ThreadSerializer extends AbstractSerializer
     /**
      * @param $thread
      * @return Relationship
-     * @throws BindingResolutionException
      */
     public function lastThreePosts($thread)
     {
@@ -87,7 +84,6 @@ class ThreadSerializer extends AbstractSerializer
     /**
      * @param $thread
      * @return Relationship
-     * @throws BindingResolutionException
      */
     public function posts($thread)
     {

@@ -15,6 +15,7 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -116,5 +117,15 @@ class Post extends Model
     public function deletedUser()
     {
         return $this->belongsTo(User::class, 'deleted_user_id');
+    }
+
+    /**
+     * Define the relationship with the post's liked users.
+     *
+     * @return BelongsToMany
+     */
+    public function likedUsers()
+    {
+        return $this->belongsToMany(User::class)->withPivot('created_at');
     }
 }
