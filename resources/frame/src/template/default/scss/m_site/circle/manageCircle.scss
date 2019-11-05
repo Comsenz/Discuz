@@ -5,7 +5,9 @@
  */
 @import "./../var";
 @import "./_app";
-
+.borNone {
+	&:after { border-bottom: none !important;}
+}
 .serBox {
 	@include px2rem(padding, 16);
 	@include px2rem(height, 64);
