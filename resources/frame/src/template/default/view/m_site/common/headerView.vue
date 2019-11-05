@@ -24,12 +24,19 @@
         </div>
       </div>
     </header>
-     <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数threeHeader判断 -->
-      <header id="headThree" v-if="$route.meta.threeHeader">
+    <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数threeHeader判断 -->
+    <header id="headThree" v-if="$route.meta.threeHeader">
+      <div class="contentHead">
+        <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
+        <h1 class="headTit">{{$route.meta.title}}</h1>
+        <!-- <span class="icon iconfont icon-Shape menuCli"></span> -->
+      </div>
+    </header>
+    <header id="headFour" v-if="$route.meta.fourHeader">
         <div class="contentHead">
           <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
           <h1 class="headTit">{{$route.meta.title}}</h1>
-          <!-- <span class="icon iconfont icon-Shape menuCli"></span> -->
+          <span class="icon iconfont icon-Shape menuCli" @click="showPopup"></span>
         </div>
       </header>
     <van-popup

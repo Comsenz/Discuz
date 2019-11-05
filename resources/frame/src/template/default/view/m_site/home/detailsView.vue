@@ -7,7 +7,7 @@
     		<h1 class="headTit">详情</h1>
     		<span class="icon iconfont icon-Shape menuCli"></span>
     	</div> -->
-    	<header></header>
+    	<Header></Header>
     	<div class="content">
 		    <div class="cirPostCon">
 		    	<div class="postTop">

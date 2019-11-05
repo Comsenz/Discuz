@@ -21,7 +21,7 @@
 			    	<div class="postTop">
 			    		<div class="postPer">
 			    			
-			    			<img :src="items.postHead" class="postHead">
+			    			<img :src="items.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
 			    			<div class="perDet">
 			    				<div class="perName">{{items.postName}}</div>
 			    				<div class="postTime">{{items.postTime}}</div>
