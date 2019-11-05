@@ -154,15 +154,6 @@ export default {
           oneHeader: true
         }
       },
-      'deletes':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/management/deletesView'],resolve)
-        },
-        metaInfo:{
-          title:"批量删除ssss",
-          oneHeader: true
-        }
-      },
       'header':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/headerView'],resolve)
