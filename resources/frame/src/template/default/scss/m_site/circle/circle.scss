@@ -149,6 +149,7 @@ body {
 		@include px2rem(width, 52);
 		@include px2rem(margin-left, 12);
 		background: $corF7;
+		@include px2rem(border-radius, 3);
 		span {
 			color: $fontColor;
 		}
@@ -248,7 +249,7 @@ body {
 	background: $fontColor;
 	border-radius: 50%;
 	text-align: center;
-  box-shadow: 0 0 7px rgba(0,0,0,0.2);;
+  	box-shadow: 0 0 7px rgba(0,0,0,0.2);
 	@include px2rem(line-height, 100);
 	.icon {
 		color: #fff;
@@ -400,7 +401,7 @@ payCircle.view
 		@include px2rem(line-height, 40);
 	}
 	.inviteWo {
-		@include font-dpr(30);
+		@include font-dpr(36);
 		text-align: center;
 		@include px2rem(line-height, 40);
 	}
@@ -541,8 +542,12 @@ openCircleConView.vue
 	.postDetR {
 		float: right;
 		@include px2rem(margin-left, 40);
+		@include px2rem(line-height, 40);
 		color: $cor888;
 		@include font-dpr(28);
+		.icon {
+			@include font-dpr(28);
+		}
 	}
 }
 .commentBox {
@@ -554,6 +559,7 @@ openCircleConView.vue
 		word-break: break-all;
 		.icon {
 			@include font-dpr(28);
+			@include px2rem(line-height, 36);
 		}
 		a {
 			@include font-dpr(28);
@@ -613,6 +619,7 @@ openCircleConView.vue
 		@include px2rem(padding, 0 30 22 30);
 		.icon {
 			@include font-dpr(26);
+			@include px2rem(line-height, 36);
 		}
 		a {
 			float: right;
