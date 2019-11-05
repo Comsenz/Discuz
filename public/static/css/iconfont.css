@@ -108,3 +108,6 @@
 .icon-up-menu:before {
   content: "\e61e";
 }
+.icon-choice-item:before {
+  content: "\e61f";
+}
