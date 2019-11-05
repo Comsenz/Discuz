@@ -348,7 +348,8 @@ payCircle.view
 	
 }
 .loginOpera {
-	@include px2rem(padding, 50 30 86 30);
+	@include px2rem(padding, 50 30);
+	box-sizing: border-box;
 	.mustLogin {
 		display: block;
 		@include horizontal-center;

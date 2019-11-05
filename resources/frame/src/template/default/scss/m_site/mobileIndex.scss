@@ -83,6 +83,18 @@ a { color: $fontColor;}
 	background: #fff;
 	border-bottom: 1px solid $corE5;
 }
+.fixedFoot {
+	position: fixed !important;
+	bottom: 0;
+	left: 0;
+	z-index: 15;
+	width: 100%;
+	background: #ffffff;
+	border-top: 1px solid $corE5;
+}
+.padBfoot {
+	@include px2rem(margin-bottom, 244);
+}
 .hederWrap {
 	position: relative;
 	background: $headBg;
