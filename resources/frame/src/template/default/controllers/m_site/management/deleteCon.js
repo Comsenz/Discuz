@@ -5,11 +5,12 @@
 export default {
 	data: function() {
 		return {
+			result: [],
 			showScreen: false,
-			checked: false, //全选
 			themeList: [
 				{
 					postHead: '',
+					checked: false,
 					postName: '我的名称',
 					postTime: '11分钟前',
 					postCon: '标题标题',
@@ -36,21 +37,22 @@ export default {
 							replyName:'cc',
 							commentsName:'dddddd',
 							replyWo: '第二个回复的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
-						},
+						}
 					],
-					checked: false
+					
 				},
 				{
 					postHead: '',
+					checked: false,
 					postName: '名字2222',
 					postTime: '1个小时前',
 					postCon: '这是内容内容，这是内容内容这是内容，这是内容内容这是内容内容这是内容内容这是内容内容这',
 					fabulousList: ['aaaa','bbbbbbfcffffb','cc','ddddddd','eee','ffffffff'],
 					fabulousNum: '14',
-					rewardList: ['adasda','dsddddfggf','cc','regvt','eee','trtrg','dsdsadasd','sfsadasdsadsdddssasasasadasdsadsasadddddd'],
-					checked: false
+					rewardList: ['adasda','dsddddfggf','cc','regvt','eee','trtrg','dsdsadasd','sfsadasdsadsdddssasasasadasdsadsasadddddd']
 				}
-			]
+			],
+			checked:null
 			
 		}
 	},
@@ -58,17 +60,19 @@ export default {
 	created() {
 	    
 	},
+	
 	methods: {
-		//全选
-		checkAll() {
-			// console.log('sssss');
-			let a = !this.checked;
-		    this.themeList = this.themeList.map(e => {
-		        e.checked = a;
-		        return e;
-		    });
-	      // this.$refs.checkboxGroup.toggleAll(true);
+	
+      	checkAll:function(checkAll){       
+      		this.checked = !this.checked;      
+    	},
+	    toggleAll() {
+	      this.$refs.checkboxGroup.toggleAll();
 	    },
+		//全选
+		// checkAll() {
+  //       this.$refs.checkboxGroup.toggleAll(true);
+  //     },
 	    //退出批量删除
 	    signOutDele(){
 
