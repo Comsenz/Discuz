@@ -304,7 +304,15 @@ export default {
           title:"我的通知"
         }
       },
-      'hone-page':{
+      'my-collection':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myCollectionView'],resolve)
+        },
+        metaInfo:{
+          title:"我的收藏"
+        }
+      },
+      'home-page':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/homePageView'],resolve)
         },
@@ -322,7 +330,7 @@ export default {
       },
       'reward':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+          require(['../view/m_site/myInfo/rewardView'],resolve)
         },
         metaInfo:{
           title:"打赏我的"
@@ -330,7 +338,7 @@ export default {
       },
       'like':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+          require(['../view/m_site/myInfo/likeView'],resolve)
         },
         metaInfo:{
           title:"点赞我的"

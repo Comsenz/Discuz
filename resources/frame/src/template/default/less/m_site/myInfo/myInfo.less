@@ -1,6 +1,26 @@
 
+
+
 /**
- 我的-冻结金额、提现记录、钱包明细、订单明细
+  公共样式--strat
+ */
+/**
+  隔栏
+ */
+.barrier{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  width:100%;
+  height:11px;
+  background:rgba(237,237,237,1);
+  border:1px solid rgba(229,229,229,1);
+}
+
+
+/**
+ 我的-冻结金额、提现记录、钱包明细、订单明细等
  主体，白色部分
  */
 .my-info-money-header{
@@ -13,7 +33,7 @@
 
 
 /**
-  我的-冻结金额、提现记录、钱包明细、订单明细
+  我的-冻结金额、提现记录、钱包明细、订单明细等
   页脚，灰色部分
  */
 .my-info-money-footer{
@@ -61,7 +81,50 @@
   }
 }
 
+/**
+  单元格-横道
+ */
+.cell-crossing{
+  position: relative;
+  &:not(:last-child)::after{
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 16px;
+    border-bottom: 1PX solid #E5E5E5;
+  }
+}
 
+/**
+  引用内容---回复内容样式
+ */
+.reference{
+  padding: 10px 15px 0 15px;
+  .reference-cont{
+    background-color: #F7F7F7;
+    padding: 8px;
+    font-size:13px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(136,136,136,1);
+    line-height:20px;
+  }
+}
+.quote-reply{
+  font-size: 14px;
+  padding: 10px 15px 12px 15px;
+}
+
+
+/**
+  公共样式--end
+  */
+
+
+//各个页面样式
 /**
   冻结金额
  */
@@ -97,6 +160,76 @@
 
 
 /**
+  我的主页
+ */
+
+//内容页面-头像
+.avatar-img{
+  border-radius:4px;
+}
+
+.home-page-box{
+
+  .home-page-main{
+
+    .home-page-main-header{
+      height: 152px;
+      width: 100%;
+      background-color: #FFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .home-page-main-box{
+        text-align: center;
+
+        .header-avatar{
+          width: 46px;
+          height: 46px;
+        }
+        .user-name{
+          margin: 6px 0;
+          font-size:15px;
+          font-family:PingFangSC-Medium,PingFang SC;
+          font-weight:500;
+          color:rgba(51,102,153,1);
+          line-height:20px;
+        }
+      }
+
+    }
+
+    .home-page-main-cont{
+      width: 100%;
+
+    }
+
+  }
+
+  .home-page-footer{
+    width: 100%;
+    height:46px;
+    background:#F2F2F2;
+    border:1px solid #E5E5E5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p{
+      font-size:14px;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:rgba(0,0,0,1);
+      line-height:20px;
+    }
+  }
+}
+
+
+
+/**
   我的通知
  */
 .my-notice-box{
@@ -109,6 +242,14 @@
       .van-cell__title{
         display: flex;
         align-items: center;
+      }
+
+      .custom-title{
+        font-size:15px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        line-height:21px;
       }
 
       .custom-title-icon{
@@ -128,6 +269,58 @@
         color:rgba(255,255,255,1);
 
       }
+    }
+  }
+}
+
+
+/**
+  我的收藏
+ */
+.my-collection-box{
+
+}
+
+
+/**
+  回复我的
+ */
+
+.reply-my-box{
+
+  .reply-my-main{
+
+    .reply-my-cont{
+
+      .reference{
+        padding: 10px 15px 0 15px;
+        .reference-cont{
+          background-color: #F7F7F7;
+          padding: 8px;
+          font-size:13px;
+          font-family:PingFangSC-Regular,PingFang SC;
+          font-weight:400;
+          color:rgba(136,136,136,1);
+          line-height:20px;
+        }
+      }
+      .quote-reply{
+        padding: 10px 15px 12px 15px;
+      }
+    }
+  }
+}
+
+
+/**
+  点赞我的
+ */
+.like-box{
+
+  .like-main{
+
+    .like-cont{
+
     }
   }
 }
