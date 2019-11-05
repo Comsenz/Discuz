@@ -31,7 +31,7 @@
         <h1 class="headTit">{{$route.meta.title}}</h1>
       </div>
     </header>
-    <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数fourHeader判断 -->
+    <!-- 是否显示返回按钮或者使用第四套头部样式，可根据路由参数fourHeader判断 -->
     <header id="headFour" v-if="$route.meta.fourHeader">
         <div class="contentHead">
           <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
