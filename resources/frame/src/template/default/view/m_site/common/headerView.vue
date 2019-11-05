@@ -29,9 +29,9 @@
       <div class="contentHead">
         <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
         <h1 class="headTit">{{$route.meta.title}}</h1>
-        <!-- <span class="icon iconfont icon-Shape menuCli"></span> -->
       </div>
     </header>
+    <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数fourHeader判断 -->
     <header id="headFour" v-if="$route.meta.fourHeader">
         <div class="contentHead">
           <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
