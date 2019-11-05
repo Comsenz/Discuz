@@ -9,6 +9,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\Post\PostListener;
 use App\Policies\PostPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -35,6 +36,7 @@ class PostServiceProvider extends AbstractServiceProvider
         $events = $this->app->make('events');
 
         // 订阅事件
+        $events->subscribe(PostListener::class);
         $events->subscribe(PostPolicy::class);
     }
 }

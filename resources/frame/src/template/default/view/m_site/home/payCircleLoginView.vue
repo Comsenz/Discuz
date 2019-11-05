@@ -48,13 +48,13 @@
 		    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
 		    	</div>
 		    </div>
+	    </div>
+	    <div class="gap"></div>
 		    <div class="loginOpera">
 		    	<p class="welcomeUser">欢迎您，小虫<a href="javascript:;" class="signOut">退出</a></p>
 		    	<a href="javascript:;" class="regiJoin">付费，获得成员权限</a>
 		    	<p class="payMoney">￥20.00 / 永久有效</p>
 		    </div>
-	    </div>
-
 
 
     </div>

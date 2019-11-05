@@ -108,12 +108,13 @@
 	    		</a>
 	    	</div>
 	    </div>
-
 	    <div class="gap"></div>
-	    <div class="loginOpera">
-	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
-	    </div>
+	    <transition name="fade">
+		    <div class="loginOpera" v-if="footShow">
+		    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
+		    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
+		    </div>
+	    </transition>
     </div>
 </template>
 

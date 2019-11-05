@@ -18,6 +18,8 @@ class CreateThreadUser extends Migration
             $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
             $table->dateTime('created_at')->comment('创建时间');
 
+            $table->primary(['thread_id', 'user_id']);
+
             $table->foreign('thread_id')->references('id')->on('threads')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

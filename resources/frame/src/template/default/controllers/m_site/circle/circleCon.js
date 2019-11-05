@@ -5,13 +5,37 @@
 export default {
 	data: function() {
 		return {
-			showScreen: false
+			showScreen: false,
+			isfixFoot: true,
+			footShow: true
 		}
 	},
 	
 	methods: {
+		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
+    	// 比较他们的大小来确定是否添加fixedHead样式
+    	// 比较他们的大小来确定是否添加fixedNavBar样式
+		footFix() {
+	    	// console.log(this.$route.meta.oneHeader);
+	    	if(this.$route.meta.oneHeader){
+	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+		        if(scrollTop > offsetTop){
+		        	console.log('12');
+		          this.isfixFoot = false;
+		          this.footShow = false; 
+		          console.log(this.padBfoot);
+		        } else {
+		        	console.log('34');
+		          this.isfixFoot = true;
+		          this.footShow = true; 
+		        };
+	    	}
+
+	    },
 	    //跳转到登录页
 	    loginJump:function(){
+	    	console.log(this.oneHeader);
 	    	// alert('跳转到登录页');
 	    	this.$router.push({ path:'m_site/open-circle'});
 	    	// console.log(this.$router);
@@ -50,10 +74,10 @@ export default {
 
 	mounted: function() {
 		// this.getVote();
-		// window.addEventListener('scroll', this.handleTabFix, true);
+		window.addEventListener('scroll', this.footFix, true);
 	},
 	beforeRouteLeave (to, from, next) {
-	   // window.removeEventListener('scroll', this.handleTabFix, true)
+	   window.removeEventListener('scroll', this.footFix, true)
 	   // next()
 	}
 }

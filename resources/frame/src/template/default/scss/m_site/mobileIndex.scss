@@ -83,6 +83,21 @@ a { color: $fontColor;}
 	background: #fff;
 	border-bottom: 1px solid $corE5;
 }
+.fixedFoot {
+	position: fixed !important;
+	bottom: 0;
+	left: 0;
+	z-index: 15;
+	width: 100%;
+	background: #ffffff;
+	border-top: 1px solid $corE5;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 .hederWrap {
 	position: relative;
 	background: $headBg;

@@ -82,7 +82,8 @@ export default {
           require(['../view/m_site/home/detailsView'],resolve)
         },
         metaInfo:{
-          title:"主题详情页"
+          title:"主题详情页",
+          fourHeader: true
         }
       },
       'circle-invite':{

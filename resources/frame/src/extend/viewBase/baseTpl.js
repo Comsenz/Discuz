@@ -127,8 +127,7 @@ baseTpl.prototype.loadRouter = function() {
 		for(var mName in nowModules) {
 			var nowRouterInfo = {
 				name: mName,
-				// path: "/"+folder+"/"+mName,
-        path: `/${folder === 'm_site' ? '' : (folder + '/')}${mName}`,
+        		path: `${folder === 'm_site' ? '' : ('/'+folder )}${'/'+mName}`,
 				component: nowModules[mName]["comLoad"],
 				meta: nowModules[mName]["metaInfo"]
 			};

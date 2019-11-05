@@ -12,4 +12,4 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-$app->make(Illuminate\Contracts\Console\Kernel::class)->run();
+$app->make(Illuminate\Contracts\Console\Kernel::class)->listen();

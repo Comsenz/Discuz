@@ -155,7 +155,7 @@ body {
 	}
 	span {
 		@include font-dpr(40);
-		@include px2rem(line-height, 40);
+		// @include px2rem(line-height, 40);
 		color: $corD8;
 		cursor: pointer;
 	}
@@ -248,6 +248,7 @@ body {
 	background: $fontColor;
 	border-radius: 50%;
 	text-align: center;
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);;
 	@include px2rem(line-height, 100);
 	.icon {
 		color: #fff;
@@ -347,7 +348,8 @@ payCircle.view
 	
 }
 .loginOpera {
-	@include px2rem(padding, 50 30 86 30);
+	@include px2rem(padding, 50 30);
+	box-sizing: border-box;
 	.mustLogin {
 		display: block;
 		@include horizontal-center;
