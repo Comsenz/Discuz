@@ -16,11 +16,11 @@
 	    	</div>
 	    </div>
 	    <div class="memberCheckList">
-		    <van-checkbox-group ref="checkboxGroup" class="deleChi" v-for="(items,index) in themeList" :key="index">
+		    <van-checkbox-group v-model="result" ref="checkboxGroup" class="deleChi" v-for="(items,index) in themeList" :key="index">
 			    <div class="cirPostCon">
 			    	<div class="postTop">
 			    		<div class="postPer">
-			    			<!-- <img src="../../../../../../static/images/noavatar.gif" class="postHead"> -->
+			    			
 			    			<img :src="items.postHead" class="postHead">
 			    			<div class="perDet">
 			    				<div class="perName">{{items.postName}}</div>
@@ -60,21 +60,21 @@
 			    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 			    		</div>
 			    	</div>
-			    	<van-checkbox
-			    		v-model="items.checked"
-			    	 	name="a">
-			    	</van-checkbox>
+					<van-checkbox v-model="items.checked"></van-checkbox>
 			    </div>
 			    <div class="gap"></div>
-			    
+
 		    </van-checkbox-group>
+
+
+
 	    </div>
 	    <div class="manageFootFixed choFixed">
-			<a href="javascript:;" @click="checkAll">全选</a>
+          <a href="javascript:;" @click="checkAll">全选</a>
 			<a href="javascript:;" @click="signOutDele">退出批量删除</a>
 			<button class="checkSubmit">删除选中</button>
 		</div>
-	    
+
     </div>
 </template>
 
