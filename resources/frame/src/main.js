@@ -11,7 +11,7 @@ window.$ = jQuery;
 
 import 'vant/lib/index.css'          //引入vant样式
 import './template/default/less/m_site/modules/publicIndex.less' //引入公共样式
-// import './template/default/less/m_site/modules/publicIndexB.less' //引入B公共样式
+import './template/default/less/m_site/modules/publicIndexB.less' //引入B公共样式
 import './extend/viewBase/vantuiInit';   //引入vant组件
 import '../static/js/rem'   //引入Rem配置
 
