@@ -127,14 +127,12 @@ export default {
 	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
-		          // console.log('大于');
 		          this.showHeader = true;
 		          this.isfixHead = true;
 		          this.isfixNav = true;
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
-		          // console.log('小于');
 		          this.showHeader = false;
 		          this.isfixHead = false;
 		          this.isfixNav = false;
@@ -142,7 +140,6 @@ export default {
 		          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
 		        };
 	    	}
-
 	    },
 	    searchJump () {
 

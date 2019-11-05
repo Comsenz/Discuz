@@ -92,8 +92,11 @@ a { color: $fontColor;}
 	background: #ffffff;
 	border-top: 1px solid $corE5;
 }
-.padBfoot {
-	@include px2rem(margin-bottom, 244);
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 .hederWrap {
 	position: relative;
