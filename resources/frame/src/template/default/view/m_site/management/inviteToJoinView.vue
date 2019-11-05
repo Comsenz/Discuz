@@ -20,15 +20,15 @@
 	        			<a href="javascript:;" class="invalidA">置为无效</a>
 	        		</td>
 	        	</tr>
-	        	<!-- <tr>
-	        		<td>2</td>
+	        	<tr class="">
+	        		<td>1</td>
 	        		<td>合伙人</td>
 	        		<td>已失效</td>
 	        		<td>
 	        			<a href="javascript:;" class="copyA font9">复制</a>
 	        			<a href="javascript:;" class="invalidA font9">置为无效</a>
 	        		</td>
-	        	</tr> -->
+	        	</tr>
 	        </table>
 	    </div>
 		<div class="manageFootFixed">

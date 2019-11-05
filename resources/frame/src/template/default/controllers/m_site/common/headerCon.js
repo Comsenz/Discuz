@@ -45,6 +45,14 @@ export default {
 	          index: 3
 	          },
 	            enentType: ''
+	        },
+	        {
+	          name: '我的通知',
+	          path: 'notice', // 跳转路径
+	          query: { // 跳转参数
+	          index: 4
+	          },
+	            enentType: ''
 	        }
 	      ],
 	      sidebarList2: [

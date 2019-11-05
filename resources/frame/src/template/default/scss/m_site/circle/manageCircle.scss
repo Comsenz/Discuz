@@ -104,6 +104,9 @@
 				color: $cor888;
 				@include px2rem(padding, 0 30);
 				box-sizing: border-box;
+				&:last-child {
+					border-bottom: none;
+				}
 			}
 		}
 		
@@ -127,6 +130,7 @@
 	border: none;
 	width: 100%;
 	margin: 0;
+	border-collapse: collapse;
 	tr th {
 		text-align: left;
 		@include font-dpr(30);
