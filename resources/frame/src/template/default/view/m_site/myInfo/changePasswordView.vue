@@ -6,22 +6,18 @@
           <p class="my-info-module-title">修改密码</p>
         </div>
 
-        <div class="change-pwd-form">
+        <div class="change-pwd-form my-info-form">
           <van-cell-group>
             <van-field
               label="旧密码"
               v-model="pwd"
               placeholder="请输入您的旧密码"
             />
-          </van-cell-group>
-          <van-cell-group>
             <van-field
               label="新密码"
               v-model="newpwd"
               placeholder="请输入您的新密码"
             />
-          </van-cell-group>
-          <van-cell-group>
             <van-field
               label="确认密码"
               v-model="confirmpwd"
@@ -30,6 +26,9 @@
           </van-cell-group>
         </div>
 
+        <div class="change-pwd-operating">
+          <van-button type="primary" >提交</van-button>
+        </div>
 
       </main>
     </div>

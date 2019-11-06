@@ -82,7 +82,7 @@ body{
  */
 .m-site-cell-access{
   width: 100%;
-  @include px2rem(height,90);
+  height: 50px;
   border-bottom: 1px solid #E5E5E5;
   display: flex;
   justify-content: space-between;

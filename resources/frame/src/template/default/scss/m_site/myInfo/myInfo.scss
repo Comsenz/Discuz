@@ -19,7 +19,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     @include px2rem(padding,0 30);
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1PX solid #E5E5E5;
     background-color: white;
 
     .modify-data-avatar{
@@ -31,6 +31,7 @@
           height: 58px;
           border-radius: 4px;
           position: relative;
+          vertical-align: top;
         }
       }
     }

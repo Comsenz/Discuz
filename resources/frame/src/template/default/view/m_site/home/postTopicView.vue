@@ -3,7 +3,7 @@
       <header class="post-topic-header">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
         <h2>{{headerTitle}}</h2>
-        <a href="javascript:;" class=" weui-btn weui-btn_mini weui-btn_primary post-topic-release-btn">发布</a>
+        <van-button type="primary" size="mini">发布</van-button>
       </header>
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic"   placeholder="请输入内容"></textarea>
