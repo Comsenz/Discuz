@@ -10,9 +10,9 @@
 namespace App\Api\Controller\StopWords;
 
 use App\Api\Serializer\StopWordSerializer;
-use App\Commands\StopWord\BatchCreateStopWord;
 use App\Commands\StopWord\CreateStopWord;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -26,24 +26,28 @@ class CreateStopWordController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    public $include = ['user'];
+
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
     {
-        // TODO: $actor 权限验证 创建敏感词
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'createWordList');
-        $actor = new \stdClass();
-        $actor->id = 1;
+        $this->bus = $bus;
+    }
 
-        if (strrchr($request->getUri()->getPath(), '/') == '/batch') {
-            $words = collect($request->getParsedBody()->get('words', []));
-            return $this->bus->dispatch(
-                new BatchCreateStopWord($actor, $words)
-            );
-        } else {
-            return $this->bus->dispatch(
-                new CreateStopWord($actor, $request->getParsedBody())
-            );
-        }
-
+    /**
+     * {@inheritdoc}
+     */
+    protected function data(ServerRequestInterface $request, Document $document)
+    {
+        return $this->bus->dispatch(
+            new CreateStopWord($request->getAttribute('actor'), $request->getParsedBody()->get('data', []))
+        );
     }
 }
