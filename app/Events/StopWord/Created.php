@@ -30,9 +30,8 @@ class Created
      * @param StopWord $stopWord
      * @param User|null $actor
      */
-    public function __construct(StopWord $stopWord, $actor = null)
+    public function __construct(StopWord $stopWord, User $actor = null)
     {
-        // TODO: User $actor
         $this->stopWord = $stopWord;
         $this->actor = $actor;
     }

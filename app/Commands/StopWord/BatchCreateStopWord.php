@@ -9,17 +9,18 @@
 
 namespace App\Commands\StopWord;
 
-use App\Events\StopWord\Saving;
 use App\Models\StopWord;
 use App\Models\User;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\Factory as Validator;
 
 class BatchCreateStopWord
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     /**
@@ -38,41 +39,45 @@ class BatchCreateStopWord
 
     /**
      * @param User $actor The user performing the action.
-     * @param Collection $data The attributes of the new group.
+     * @param array $data The attributes of the new group.
      */
-    public function __construct($actor, Collection $data)
+    public function __construct(User $actor, array $data)
     {
-        // TODO: User $actorÅÅ
         $this->actor = $actor;
         $this->data = $data;
     }
 
     /**
-     * @param EventDispatcher $events
-     * @return bool
+     * @return Collection
+     * @throws NotAuthenticatedException
+     * @throws PermissionDeniedException
      */
-    public function handle(EventDispatcher $events)
+    public function handle()
     {
-        $this->events = $events;
+        $this->assertRegistered($this->actor);
+        $this->assertCan($this->actor, 'stopWord.createStopWord');
 
-        // TODO: 权限验证
-        // $this->assertCan($this->actor, 'startDiscussion');
-
-        $user_id = $this->actor->id;
-
-        $this->data
+        $result = collect(Arr::get($this->data, 'words'))
             ->unique()
             ->map(function ($word) {
                 return $this->parseWord($word);
             })
             ->filter()
             ->unique('find')
-            ->each(function ($word) use ($user_id) {
-                $word['user_id'] = $user_id;
-                StopWord::updateOrCreate(['find' => $word['find']], $word);
-            });
+            ->map(function ($word) {
+                $word['user_id'] = $this->actor->id;
+                $stopWord = StopWord::updateOrCreate(['find' => $word['find']], $word);
+                if ($stopWord->wasRecentlyCreated) {
+                    return 'created';
+                } elseif ($stopWord->wasChanged()) {
+                    return 'updated';
+                } else {
+                    return 'unique';
+                }
+            })
+            ->countBy();
 
-        return null;
+        return $result;
     }
 
     /**
