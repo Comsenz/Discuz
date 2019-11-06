@@ -5,6 +5,7 @@
 export default {
 	data: function() {
 		return {
+			navActi: 0,
 			current:0,
 	        todos: [
 	            { text: '选项一111' },

@@ -9,7 +9,6 @@
     	</div>
 	    <!-- <Header></Header> -->
 	    <div class="headerBox">
-
 	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
@@ -17,12 +16,15 @@
 	          <span>圈主：我是谁</span>
 	        </div>
       	</div>
-
-      	<div class="navBarBox">
+      	<van-tabs v-model="navActi">
+            <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
+            </van-tab>
+        </van-tabs>
+      	<!-- <div class="navBarBox">
           <ul class="navBarCon">
             <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}" :key="index">{{ todo.text }}</li>
           </ul>
-      	</div>
+      	</div> -->
 	    <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>

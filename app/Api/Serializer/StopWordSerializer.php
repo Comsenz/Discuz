@@ -11,13 +11,14 @@ namespace App\Api\Serializer;
 
 use App\Models\StopWord;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Tobscure\JsonApi\Relationship;
 
 class StopWordSerializer extends AbstractSerializer
 {
     /**
      * {@inheritdoc}
      */
-    protected $type = 'StopWord';
+    protected $type = 'stop-words';
 
     /**
      * {@inheritdoc}
@@ -27,8 +28,6 @@ class StopWordSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'id'          => (int) $model->id,
-            'user_id'     => (int) $model->user_id,
             'ugc'         => $model->ugc,
             'username'    => $model->username,
             'find'        => $model->find,
@@ -36,5 +35,14 @@ class StopWordSerializer extends AbstractSerializer
             'created_at'  => $this->formatDate($model->created_at),
             'updated_at'  => $this->formatDate($model->updated_at),
         ];
+    }
+
+    /**
+     * @param $stopWord
+     * @return Relationship
+     */
+    protected function user($stopWord)
+    {
+        return $this->hasOne($stopWord, UserSerializer::class);
     }
 }

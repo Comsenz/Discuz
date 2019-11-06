@@ -71,7 +71,7 @@ $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostCont
 $route->get('/stop-words', 'stop-words.index', ApiController\StopWords\ListStopWordsController::class);
 $route->get('/stop-words/{id}', 'stop-words.resource', ApiController\StopWords\ResourceStopWordController::class);
 $route->post('/stop-words', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
-$route->post('/stop-words/batch', 'stop-words.create', ApiController\StopWords\CreateStopWordController::class);
+$route->post('/stop-words/batch', 'stop-words.create', ApiController\StopWords\BatchCreateStopWordController::class);
 $route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
 $route->delete('/stop-words', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
 $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);

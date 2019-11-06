@@ -55,7 +55,7 @@ class StopWord extends Model
         $stopWord->find = $find;
         $stopWord->replacement = $replacement;
 
-        $stopWord->raise(new Created($stopWord));
+        $stopWord->raise(new Created($stopWord, $user));
 
         return $stopWord;
     }

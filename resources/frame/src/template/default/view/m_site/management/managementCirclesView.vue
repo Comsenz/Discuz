@@ -6,7 +6,7 @@
 	    <div class="content">
 	    	<van-cell title="成员管理" is-link url="/vant/mobile.html" />
 			<van-cell title="批量管理" is-link to="index" />
-			<van-cell title="邀请成员" is-link to="index" />
+			<van-cell title="邀请成员" is-link to="index" class="borNone"/>
 			<div class="lineE5"></div>
 	    </div>
 	    

@@ -6,6 +6,21 @@
  * tabs -start
  */
 
+/** end **/
+
+/**
+  hairline --start
+ */
+//导航结构去掉上边框
+.navBox {
+  [class*='van-hairline'] {
+    &::after {
+      border-top: none !important;
+    }
+  }
+
+}
+
 
 
 /** end **/
@@ -15,8 +30,12 @@
  * search -start
  */
 .van-search {
+  &__content {
+    border: 1px solid #E6E6EA;
+  }
 	&__action {
 	    color: @fontColor;
+      font-size: 16px
 	}
 }
 
@@ -131,3 +150,7 @@
  */
 
 /** end **/
+
+
+
+

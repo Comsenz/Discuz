@@ -12,14 +12,18 @@ namespace App\Commands\StopWord;
 use App\Events\StopWord\Saving;
 use App\Models\StopWord;
 use App\Models\User;
+use App\Validators\StopWordValidator;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Factory as Validator;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class CreateStopWord
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     /**
@@ -38,50 +42,42 @@ class CreateStopWord
 
     /**
      * @param User $actor The user performing the action.
-     * @param Collection $data The attributes of the new group.
+     * @param array $data The attributes of the new group.
      */
-    public function __construct($actor, Collection $data)
+    public function __construct(User $actor, array $data)
     {
-        // TODO: User $actor
         $this->actor = $actor;
         $this->data = $data;
     }
 
     /**
      * @param EventDispatcher $events
-     * @param Validator $validator
+     * @param StopWordValidator $validator
      * @return StopWord
+     * @throws NotAuthenticatedException
+     * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, Validator $validator)
+    public function handle(EventDispatcher $events, StopWordValidator $validator)
     {
         $this->events = $events;
 
-        // TODO: 权限验证
-        // $this->assertCan($this->actor, 'startDiscussion');
-
-        $validator = $validator->make($this->data->all(), [
-            'ugc' => 'required|in:{MOD},{BANNED},{REPLACE}',
-            'username' => 'required|in:{MOD},{BANNED},{REPLACE}',
-            'find' => 'required|unique:stop_words,find|between:1,200',
-            'replacement' => 'required|between:1,200',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
+        $this->assertRegistered($this->actor);
+        $this->assertCan($this->actor, 'stopWord.createStopWord');
 
         $stopWord = StopWord::build(
-            $this->data->get('ugc'),
-            $this->data->get('username'),
-            $this->data->get('find'),
-            $this->data->get('replacement'),
+            Arr::get($this->data, 'attributes.ugc'),
+            Arr::get($this->data, 'attributes.username'),
+            Arr::get($this->data, 'attributes.find'),
+            Arr::get($this->data, 'attributes.replacement'),
             $this->actor
         );
 
         $this->events->dispatch(
-            new Saving($stopWord, $this->actor, $this->data->all())
+            new Saving($stopWord, $this->actor, $this->data)
         );
+
+        $validator->valid($stopWord->getAttributes());
 
         $stopWord->save();
 

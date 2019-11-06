@@ -4,17 +4,19 @@
     <div class="circleCon">
 	    <Header></Header>
 	    <div class="content">
-	    	<div class="circleInfo">
+	    	<div class="circlePL">
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">圈子名称</span>
 			    	<span class="infoItemRight">Discuz!Q</span>
 			    </div>
 		    </div>
-	    	<div class="circleLoBox">
-		    	<span class="circleIcon">圈子图标</span>
-		    	<img src="../../../../../../static/images/logo.png" class="circleLogo">
+		    <div class="circlePL">
+		    	<div class="circleLoBox">
+			    	<span class="circleIcon">圈子图标</span>
+			    	<img src="../../../../../../static/images/logo.png" class="circleLogo">
+			    </div>
 		    </div>
-		    <div class="circleInfo">
+		    <div class="circleInfo padB0 lastBorNone">
 		    	<h1 class="cirInfoTit">圈子简介</h1>
 		    	<p class="cirInfoWord">Crossday Discuz! Board（简称 Discuz!）是北京康盛新创科技有限责任公司推出的一套通用的社区论坛软件系统。自2001年6月面世以来，Discuz!已拥有15年以上的应用历史和200多万网站用户案例，是全球成熟度最高、覆盖率最大的论坛软件系统之一。目前最新版本Discuz! X3.4正式版于2017年8月2日发布，去除</p>
 		    	<div class="infoItem">
@@ -44,7 +46,7 @@
 			    </div>
 		    </div>
 		    <div class="gap"></div>
-		    <div class="circleInfo">
+		    <div class="circleInfo padT0">
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">我的角色</span>
 			    	<span class="infoItemRight">成员</span>

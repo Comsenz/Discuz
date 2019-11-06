@@ -174,5 +174,10 @@ return [
         'time'                  => '时间',
         'available'             => '可用的',
         'size'                  => '大小',
+
+        // 新增
+        'ugc'                   => '用户内容',
+        'find'                  => '敏感词',
+        'replacement'           => '替换词',
     ],
 ];

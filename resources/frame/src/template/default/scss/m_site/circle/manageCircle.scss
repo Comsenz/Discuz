@@ -5,7 +5,11 @@
  */
 @import "./../var";
 @import "./_app";
-
+.borNone {
+	&:after { border-bottom: none !important;}
+}
+.padT0 { padding-top: 0 !important;}
+.padB0 { padding-bottom: 0 !important;}
 .serBox {
 	@include px2rem(padding, 16);
 	@include px2rem(height, 64);
@@ -192,7 +196,21 @@
 }
 
 //圈子信息
-
+.circlePL {
+	@include px2rem(padding-left, 30);
+	.circleLoBox {
+		@include px2rem(padding-left, 0);
+	}
+}
+.lastBorNone {
+	.infoItem {
+		&:last-child {
+			&:after {
+				border-bottom: none;
+			}
+		}
+	}
+}
 .infoPower {
 	.powerList {
 		@include px2rem(padding, 0 30 36 30);
