@@ -1,7 +1,7 @@
 @import "../../../../../../node_modules/vant/lib/index";
 @import "./mixins/hairline";
+@import "theme";
 
-@color:#336699;
 
 /**
   van-button --start
@@ -14,7 +14,7 @@
   line-height:21px;
 
   &--default{
-    color: @color;
+    color: @blue;
   }
 
   &--small{
@@ -50,7 +50,7 @@
     -webkit-transform: none;
     -ms-transform: none;
     transform: none;
-    border-bottom: 1PX solid #E5E5E5;
+    border-bottom: 1PX solid @border-color;
   }
 }
 /** end */
@@ -94,12 +94,12 @@
     right: 0%;
     bottom: 0%;
     left: 0%;
-    border: 0 solid #E5E5E5;
+    border: 0 solid @border-color;
     -webkit-transform: none;
     -ms-transform: none;
     transform: none;
-    border-top: 1PX solid #E5E5E5;
-    border-bottom: 1PX solid #E5E5E5;
+    border-top: 1PX solid @border-color;
+    border-bottom: 1PX solid @border-color;
     width: 100%;
 
   }
