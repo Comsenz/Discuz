@@ -12,10 +12,16 @@
     "transform-es2015-modules-commonjs",
     "transform-vue-jsx",
     "transform-runtime",
-    ["import", {
+    [
+      "import", {
       "libraryName": "vant",
       "libraryDirectory": "es"
-    }]
+    },
+      "component", {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
   ]
 }
 

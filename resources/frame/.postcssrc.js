@@ -13,7 +13,8 @@ module.exports = {
     },
     'postcss-pxtorem': {
       rootValue: 37.5, //需要跟rem.js文件基准大小统一
-      propList: ['*']
+      propList: ['*'],
+      selectorBlackList:['.el-','.ad-']
     }
   }
 }

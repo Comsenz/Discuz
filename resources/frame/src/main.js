@@ -15,6 +15,9 @@ import './template/default/less/m_site/modules/publicIndexB.less' //引入B公�
 import './extend/viewBase/vantuiInit';   //引入vant组件
 import '../static/js/rem'   //引入Rem配置
 
+import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
+import './extend/viewBase/elementuiInit'; //引入element组件
+
 // import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中

@@ -81,7 +81,8 @@ baseTpl.prototype.checkTemplate= function() {
  * @return {[object]}        [路由对象]
  */
 baseTpl.prototype.getBaseRouter = function(routes) {
-	if(this.Router) {
+
+  if(this.Router) {
 		return this.Router;
 	} else {
 		//实例化路由
@@ -121,13 +122,33 @@ baseTpl.prototype.loadRouter = function() {
 		defaultView = null,
 		_this = this;
 
-	for(var folder in template) {
-		var nowModules = template[folder];
 
-		for(var mName in nowModules) {
-			var nowRouterInfo = {
+  for(var folder in template) {
+
+    var nowModules = template[folder];
+
+    for(var mName in nowModules) {
+
+      var newChildrenList = [];
+
+      for (var childrenName in nowModules[mName].children){
+
+        var newChildren = {
+            name: nowModules[mName].children[childrenName].metaInfo.title,
+            path: "/" + folder + "/" + mName + "/" + childrenName,
+            // path: `${mName === 'index' ? '' : ('/'+folder ) + ('/'+childrenName)}${'/'+childrenName}`,
+            component: nowModules[mName].children[childrenName]['comLoad'],
+            meta: nowModules[mName].children[childrenName]['metaInfo'],
+          };
+
+        newChildrenList.push(newChildren);
+
+      }
+
+      var nowRouterInfo = {
 				name: mName,
-        		path: `${folder === 'm_site' ? '' : ('/'+folder )}${'/'+mName}`,
+        path: `${folder === 'm_site' ? '' : ('/'+folder )}${'/'+mName}`,
+        children:newChildrenList,
 				component: nowModules[mName]["comLoad"],
 				meta: nowModules[mName]["metaInfo"]
 			};
@@ -141,7 +162,7 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView.path = "*";
 	routes.push(defaultView);
 
-	return this.getBaseRouter(routes);
+  return this.getBaseRouter(routes);
 }
 
 /**
