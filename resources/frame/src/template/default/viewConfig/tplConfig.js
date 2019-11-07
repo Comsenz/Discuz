@@ -49,7 +49,8 @@ export default {
           require(['../view/m_site/home/payCircleLoginView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-已登录-未付费"
+          title:"付费圈子-已登录-未付费",
+          oneHeader: true
         }
       },
       'pay-circle-con':{
@@ -178,7 +179,8 @@ export default {
           require(['../view/m_site/login/loginUserView'],resolve)
         },
         metaInfo:{
-          title:"圈子首页"
+          title:"登录",
+          threeHeader: true
         }
       },
       'login-phone':{
@@ -343,6 +345,14 @@ export default {
         },
         metaInfo:{
           title:"点赞我的"
+        }
+      },
+      'my-wallet':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myWalletView'],resolve)
+        },
+        metaInfo:{
+          title:"我的钱包"
         }
       }
 
