@@ -19,6 +19,7 @@ body,html {
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
+.bgEd { min-height: 100%; background: #EDEDED; }
 * {	margin: 0; padding: 0;}
 a { color: $fontColor;}
 .lineE5 { border-bottom: 1px solid #e5e5e5;}
@@ -45,7 +46,7 @@ a { color: $fontColor;}
 .circleDet {
 	text-align: center;
 	@include px2rem(padding, 36 30 42 30);
-	@include px2rem(lin-height, 40);
+	@include px2rem(line-height, 40);
 	color: $cor999;
 	border-bottom: 1px solid $corE5;
 	span {
@@ -94,9 +95,11 @@ a { color: $fontColor;}
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.4s;
+  // position: fixed;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+  // position: fixed;
 }
 .hederWrap {
 	position: relative;
@@ -192,7 +195,6 @@ a { color: $fontColor;}
 		}
 	}
 }
-
 .content {
 	@include px2rem(padding-top, 88);
 }

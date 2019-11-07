@@ -1,5 +1,5 @@
 <template>
-  <div class="like-box my-info-money-header">
+  <div class="bgEd">
     <myWalletHeader title="我的钱包"></myWalletHeader>
     <main class="like-main">
       <van-cell title="可用余额" is-link is-link value="6423.00元"/>
@@ -13,6 +13,7 @@
 
 <script>
 // import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../scss/m_site/mobileIndex.scss';
 import myWalletCon from '../../../controllers/m_site/myInfo/myWalletCon';
 export default {
   name: "myWallet-view",
