@@ -36,7 +36,7 @@ class PostRepository extends AbstractRepository
      */
     public function findOrFail($id, User $actor = null)
     {
-        $query = $this->query()->where('id', $id);
+        $query = Post::where('id', $id);
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
