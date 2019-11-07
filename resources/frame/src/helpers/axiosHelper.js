@@ -18,7 +18,7 @@ axios.interceptors.response.use(
   },
   error => {
     if(codes.includes(error.response.status)) {
-      return error.response.status;
+      return error.response;
   	} else {
   		return Promise.reject(error)
   	}
