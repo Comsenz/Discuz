@@ -179,8 +179,7 @@ export default {
           require(['../view/m_site/login/loginUserView'],resolve)
         },
         metaInfo:{
-          title:"登录",
-          threeHeader: true
+          title:"用户名登录"
         }
       },
       'login-phone':{
@@ -281,6 +280,22 @@ export default {
         },
         metaInfo:{
           title:"提款"
+        }
+      },
+      'wallet-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/walletDetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"钱包明细"
+        }
+      },
+      'order-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/orderDetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"订单明细"
         }
       },
       'frozen-amount':{

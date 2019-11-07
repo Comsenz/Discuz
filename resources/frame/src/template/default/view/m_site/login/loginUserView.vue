@@ -1,6 +1,7 @@
 <template>
     <div class="login-user-box">
       <LoginHeader></LoginHeader>
+      <!--<Header></Header>-->
       <main class="login-user-box-main">
         <div class="login-user-title-box login-module-title-box">
           <p class="login-user-title-p login-module-title">用户名登录</p>
@@ -18,6 +19,7 @@
             <van-field
               v-model="password"
               type="password"
+              clearable
               label="密码"
               placeholder="请填写密码"
             />
@@ -26,7 +28,7 @@
 
 
         <div class="login-user-btn">
-          <van-button type="primary" @click="loginClick" >登录</van-button>
+          <van-button type="primary" @click="loginClick" :loading="btnLoading" loading-text="登录中..." >登录</van-button>
         </div>
 
         <div class="login-user-method">

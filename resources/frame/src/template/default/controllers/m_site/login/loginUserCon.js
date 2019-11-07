@@ -5,22 +5,31 @@
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 
+// import Header from '../../../view/m_site/common/headerView'
+
 export default {
   data:function () {
     return {
       userName:"",
-      password:""
+      password:"",
+      btnLoading:false
     }
   },
 
   components:{
     LoginHeader,
-    LoginFooter
+    LoginFooter,
+    // Header
   },
 
   methods:{
 
     loginClick(){
+      this.btnLoading = true;
+
+
+
+
 
       this.appFetch({
         url:"login",
@@ -30,11 +39,19 @@ export default {
           password:this.password
         }
       },(res)=>{
-        // console.log(res.errors[0].status);
-        // console.log(status);
         console.log(res);
+
+        if (res.status === 200){
+          this.$toast.success('登录成功');
+        } else {
+
+        }
+
+        this.btnLoading = false;
+
       },(err)=>{
         console.log(err);
+        this.btnLoading = false;
       })
 
     },
