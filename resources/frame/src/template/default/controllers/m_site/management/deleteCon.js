@@ -1,8 +1,22 @@
 /**
  * pc 端首页控制器
  */
-
+import {Bus} from '../../../store/site/bus.js';
 export default {
+	props: {
+        title: { // 组件的标题
+          type: String,
+          default: () => {
+            return '';
+          }
+        },
+        headOpeShow: { // 组件是否显示返回按钮和菜单按钮
+          headOpeShow:Boolean,
+          default: () => {
+            return 'fasle';
+          }
+        }
+    },
 	data: function() {
 		return {
 			result: [],
@@ -58,9 +72,12 @@ export default {
 	},
 	
 	created() {
-	    
-	},
-	
+		// console.log(789);
+  //       Bus.$emit('setHeader',['标题标题333','fasle', 'false']);
+    },
+    mounted(){
+    	Bus.$emit('setHeader',['标题标题3443453454','fasle', 'false']);
+    },
 	methods: {
 	
       	checkAll:function(checkAll){       
