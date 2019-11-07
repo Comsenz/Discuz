@@ -16,17 +16,16 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Validators\ThreadValidator;
 use Carbon\Carbon;
-use Discuz\Censor\Censor;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Validator;
 
 class CreateThread
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     /**
@@ -51,17 +50,12 @@ class CreateThread
     public $ip;
 
     /**
-     * @var Validator
-     */
-    protected $validator;
-
-    /**
      * CreateThread constructor.
      * @param User $actor
-     * @param Collection $data
+     * @param array $data
      * @param $ip
      */
-    public function __construct(User $actor, Collection $data, $ip)
+    public function __construct(User $actor, array $data, $ip)
     {
         $this->actor = $actor;
         $this->data = $data;
@@ -81,16 +75,11 @@ class CreateThread
     {
         $this->events = $events;
 
-        // TODO: 权限验证
-        // $this->assertCan($this->actor, 'startDiscussion');
+        $this->assertCan($this->actor, 'createThread');
 
-        // 数据验证
-        $validator->valid($this->data->all());
-
-        // 敏感词处理
+        // TODO: 敏感词处理
         // $this->data->put('content', $censor->check($this->data->get('content')));
 
-        // 模型实例
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
 
@@ -99,10 +88,11 @@ class CreateThread
         $thread->raise(new Created($thread));
 
         $this->events->dispatch(
-            new Saving($thread, $this->actor, $this->data->all())
+            new Saving($thread, $this->actor, $this->data)
         );
 
-        // 保存模型
+        $validator->valid($thread->getAttributes());
+
         $thread->save();
 
         try {

@@ -30,9 +30,8 @@ class Created
      * @param Post $post
      * @param User $actor
      */
-    public function __construct(Post $post, $actor = null)
+    public function __construct(Post $post, User $actor = null)
     {
-        // TODO: User $actor
         $this->post = $post;
         $this->actor = $actor;
     }
