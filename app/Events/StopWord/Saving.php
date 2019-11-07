@@ -36,9 +36,8 @@ class Saving
      * @param User $actor
      * @param array $data
      */
-    public function __construct(StopWord $stopWord, $actor, array $data = [])
+    public function __construct(StopWord $stopWord, User $actor, array $data)
     {
-        // TODO: User $actor
         $this->stopWord = $stopWord;
         $this->actor = $actor;
         $this->data = $data;

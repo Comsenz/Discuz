@@ -12,6 +12,7 @@ namespace app\Api\Controller\StopWords;
 use App\Api\Serializer\StopWordSerializer;
 use App\Commands\StopWord\EditStopWord;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -24,19 +25,29 @@ class UpdateStopWordController extends AbstractCreateController
     public $serializer = StopWordSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
-        // $actor = $request->getAttribute('actor');
-        $actor = new \stdClass();
-        $actor->id = 1;
-
         $id = Arr::get($request->getQueryParams(), 'id');
+        $actor = $request->getAttribute('actor');
+        $data = $request->getParsedBody()->get('data', []);
 
         return $this->bus->dispatch(
-            new EditStopWord($id, $actor, $request->getParsedBody()->all())
+            new EditStopWord($id, $actor, $data)
         );
     }
 }
