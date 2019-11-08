@@ -33,12 +33,26 @@
     </header>
     <!-- 是否显示返回按钮或者使用第四套头部样式，可根据路由参数fourHeader判断 -->
     <header id="headFour" v-if="$route.meta.fourHeader">
-        <div class="contentHead">
-          <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
-          <h1 class="headTit">{{$route.meta.title}}</h1>
-          <span class="icon iconfont icon-Shape menuCli" @click="showPopup"></span>
-        </div>
-      </header>
+      <div class="contentHead">
+        <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
+        <h1 class="headTit">{{$route.meta.title}}</h1>
+        <span v-show="menuIconShow" class="icon iconfont icon-Shape menuCli" @click="showPopup"></span>
+      </div>
+    </header>
+    <!-- 是否显示返回按钮或者使用五套头部样式，可根据路由参数fiveHeader判断 -->
+    <div class="headerBox" v-if="$route.meta.fiveHeader">
+      <div class="headOpe">
+        <span class="icon iconfont icon-search"></span>
+        <span class="icon iconfont icon-Shape" is-link @click="showPopup"></span>
+      </div>
+      <img src="../../../../../../static/images/logo.png" class="logo">
+      <div class="circleDet" v-model="perDet">
+        <span v-model="perDet.themeNum">主题：{{perDet.themeNum}}</span>
+        <span v-model="perDet.memberNum">成员：{{perDet.memberNum}}</span>
+        <span v-model="perDet.circleLeader">圈主：{{perDet.circleLeader}}</span>
+      </div>
+    </div>
+
     <van-popup
       class="sidebarWrap"
       v-model="popupShow"
@@ -87,32 +101,33 @@
     </van-popup>
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="headOpe">
-        <span class="icon iconfont icon-search"></span>
-        <span class="icon iconfont icon-Shape" is-link @click="showPopup"></span>
+        <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
+        <span class="icon iconfont icon-search" v-show="searchIconShow"></span>
+        <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
       <img src="../../../../../../static/images/logo.png" class="logo">
-      <div class="circleDet">
-        <span>主题：125</span>
-        <span>成员：125</span>
-        <span>圈主：我是谁</span>
+      <div class="circleDet" v-model="perDet">
+        <span v-model="perDet.themeNum">主题：{{perDet.themeNum}}</span>
+        <span v-model="perDet.memberNum">成员：{{perDet.memberNum}}</span>
+        <span v-model="perDet.circleLeader">圈主：{{perDet.circleLeader}}</span>
       </div>
-        <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-if="navShow">
-          <van-tabs v-model="navActi">
-            <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
-
-            </van-tab>
-          </van-tabs>
-          <!-- <div class="navBarBox">
-            <ul class="navBarCon">
-              <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
-            </ul>
-          </div> -->
-        </div>
+      <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
+        <van-tabs v-model="navActi">
+          <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
+          </van-tab>
+        </van-tabs>
+        <!-- <div class="navBarBox">
+          <ul class="navBarCon">
+            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
+          </ul>
+        </div> -->
+      </div>
     </div>
   </section>
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",

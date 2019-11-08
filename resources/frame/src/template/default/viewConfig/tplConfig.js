@@ -41,7 +41,8 @@ export default {
           require(['../view/m_site/home/payCircleView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-首页-未登录"
+          title:"付费圈子-首页-未登录",
+          oneHeader: true
         }
       },
       'pay-circle-login':{

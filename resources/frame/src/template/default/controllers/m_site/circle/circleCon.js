@@ -1,37 +1,52 @@
 /**
- * pc 端首页控制器
+ * 移动端圈子首页控制器
  */
-
 export default {
 	data: function() {
 		return {
 			showScreen: false,
 			isfixFoot: true,
-			footShow: true
+			// footShow: true,
+			fourHeader: true,
+			themeChoList: [
+				{
+					typeWo: '全部主题',
+					type:'1'
+				},
+				{
+					typeWo: '精华主题',
+					type:'2'
+				}
+
+			]
 		}
 	},
-	
 	methods: {
+
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     	// 比较他们的大小来确定是否添加fixedHead样式
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 		footFix() {
 	    	// console.log(this.$route.meta.oneHeader);
-	    	if(this.$route.meta.oneHeader){
-	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
-		        if(scrollTop > offsetTop){
-		        	console.log('12');
-		          this.isfixFoot = false;
-		          this.footShow = false; 
-		          console.log(this.padBfoot);
-		        } else {
-		        	console.log('34');
-		          this.isfixFoot = true;
-		          this.footShow = true; 
-		        };
-	    	}
+	    	// if(this.$route.meta.oneHeader){
+	    	// 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+		    //     var offsetTop = document.querySelector('#testNavBar').offsetTop;
+		    //     if(scrollTop > offsetTop){
+		    //     	// console.log('12');
+		    //       // this.isfixFoot = false;
+		    //       // this.footShow = false;
+		    //     } else {
+		    //     	// console.log('34');
+		    //       // this.isfixFoot = true;
+		    //       // this.footShow = true;
+		    //     };
+	    	// }
 
+	    },
+
+
+	    choTheme() {
+	    	console.log('筛选');
 	    },
 	    //跳转到登录页
 	    loginJump:function(){
