@@ -56,9 +56,6 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont icon-publish"></span>
-	    		</a>
 	    	</div>
 	    </div>
 	    <div class="gap"></div>
@@ -103,9 +100,7 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
-	    			<span class="icon iconfont icon-publish"></span>
-	    		</a>
+	    		
 	    	</div>
 	    </div>
 	    <div class="gap"></div>
@@ -150,11 +145,12 @@
 	    			</div>
 	    			<a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a>
 	    		</div>
-	    		<a href="javascript:;" class="fixedEdit">
+	    		<!-- <a href="javascript:;" class="fixedEdit">
 	    			<span class="icon iconfont icon-publish"></span>
-	    		</a>
+	    		</a> -->
 	    	</div>
 	    </div>
+	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录/注册</van-button>
 	    <!-- <div class="gap"></div> -->
 	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">
 		    <transition name="fade">

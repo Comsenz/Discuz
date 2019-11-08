@@ -86,14 +86,13 @@ a { color: $fontColor;}
 	background: #fff;
 	// border-bottom: 1px solid $corE5;
 }
-.fixedFoot {
-	position: absolute !important;
-	bottom: 0;
-	left: 0;
+.loginBtnFix {
+	position: fixed !important;
+	@include px2rem(bottom, 88);
+	left: 30%;
 	z-index: 15;
-	width: 100%;
-	background: #ffffff;
-	border-top: 1px solid $corE5;
+	width: 40%;
+	box-sizing: border-box;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.4s;

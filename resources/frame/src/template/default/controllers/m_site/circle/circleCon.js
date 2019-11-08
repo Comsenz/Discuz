@@ -5,7 +5,7 @@ export default {
 	data: function() {
 		return {
 			showScreen: false,
-			isfixFoot: true,
+			loginBtnFix: true,
 			// footShow: true,
 			fourHeader: true,
 			themeChoList: [
@@ -28,19 +28,19 @@ export default {
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 		footFix() {
 	    	// console.log(this.$route.meta.oneHeader);
-	    	// if(this.$route.meta.oneHeader){
-	    	// 	var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-		    //     var offsetTop = document.querySelector('#testNavBar').offsetTop;
-		    //     if(scrollTop > offsetTop){
-		    //     	// console.log('12');
-		    //       // this.isfixFoot = false;
-		    //       // this.footShow = false;
-		    //     } else {
-		    //     	// console.log('34');
-		    //       // this.isfixFoot = true;
-		    //       // this.footShow = true;
-		    //     };
-	    	// }
+	    	if(this.$route.meta.oneHeader){
+	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+		        if(scrollTop > offsetTop){
+		        	// console.log('12');
+		          this.loginBtnFix = false;
+		          // this.footShow = false;
+		        } else {
+		        	// console.log('34');
+		          this.loginBtnFix = true;
+		          // this.footShow = true;
+		        };
+	    	}
 
 	    },
 
