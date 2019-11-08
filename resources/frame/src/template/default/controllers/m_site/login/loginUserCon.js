@@ -7,6 +7,8 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 
 // import Header from '../../../view/m_site/common/headerView'
 
+import { mapMutations } from 'vuex';
+
 export default {
   data:function () {
     return {
@@ -24,14 +26,17 @@ export default {
 
   methods:{
 
+    ...mapMutations({
+      setStatus:'site/SET_STATUS'
+    }),
+
     loginClick(){
-      this.btnLoading = true;
+      // this.btnLoading = true;
+
+      this.setStatus();
 
 
-
-
-
-      this.appFetch({
+      /*this.appFetch({
         url:"login",
         method:"post",
         data:{
@@ -52,7 +57,7 @@ export default {
       },(err)=>{
         console.log(err);
         this.btnLoading = false;
-      })
+      })*/
 
     },
 

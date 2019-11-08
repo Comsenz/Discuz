@@ -12,46 +12,59 @@ export default {
    */
   template: {
     ...tplConfig.template,
-    global: {
-      index: {
+    admin:{
+      // path:'/',
+      // children:[
+      //   {
+      //     index:{
+      //       comLoad: function (resolve) {
+      //         require(['../view/site/IndexView'], resolve)
+      //       },
+      //       metaInfo: {
+      //         title: '后台架子'
+      //       }
+      //     },
+      //   },
+      //   {
+      //     home:{
+      //       comLoad: function (resolve) {
+      //         require(['../view/site/home/homeView'], resolve)
+      //       },
+      //       metaInfo: {
+      //         title: '首页'
+      //       }
+      //     },
+      //   }
+      // ],
+
+      index:{
         comLoad: function (resolve) {
-          require(['../view/global/indexView'], resolve)
+          require(['../view/site/IndexView'], resolve)
+        },
+        children:{
+          'home':{
+            comLoad: function (resolve) {
+              require(['../view/site/home/homeView'], resolve)
+            },
+            metaInfo: {
+              title: '后台首页1'
+            }
+          },
+          'login':{
+            comLoad:function (resolve) {
+              require(['../view/site/login/loginView'],resolve)
+            },
+            metaInfo:{
+              title:'后台登录'
+            }
+          }
         },
         metaInfo: {
-          title: '后台首页'
-        }
-      },
-    },
-    /*login:{
-      loginview:{
-        comLoad:function (resolve) {
-          require(['../view/login/loginView'],resolve)
-        },
-        metaInfo:{
-          title:'后台登录'
+          title: '后台架子'
         }
       }
-    },
-    user:{
-      userview:{
-        comLoad:function (resolve) {
-          require(['../view/user/userView'],resolve)
-        },
-        metaInfo:{
-          title:'用户管理'
-        }
-      }
-    },
-    cont:{
-      contview:{
-        comLoad:function (resolve) {
-          require(['../view/cont/contView'],resolve)
-        },
-        metaInfo:{
-          title:'用户管理'
-        }
-      }
-    }*/
+
+    }
   },
 
   /**

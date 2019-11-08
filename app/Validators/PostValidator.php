@@ -19,7 +19,7 @@ class PostValidator extends AbstractValidator
     protected function getRules()
     {
         return [
-            'content' => 'required|between:5,3000',
+            'content' => 'required|max:65535',
         ];
     }
 

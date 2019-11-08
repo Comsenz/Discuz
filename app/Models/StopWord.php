@@ -11,6 +11,7 @@ namespace App\Models;
 
 use App\Events\StopWord\Created;
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StopWord extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * @var array
@@ -61,7 +63,7 @@ class StopWord extends Model
     }
 
     /**
-     * Define the relationship with the discussion's author.
+     * Define the relationship with the stop word's author.
      *
      * @return BelongsTo
      */

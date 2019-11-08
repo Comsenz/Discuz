@@ -4,7 +4,7 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Saving.php xxx 2019-10-10 13:21:00 LiuDongdong $
+ *      $Id: Deleting.php xxx 2019-11-06 17:06:00 LiuDongdong $
  */
 
 namespace App\Events\StopWord;
@@ -12,26 +12,30 @@ namespace App\Events\StopWord;
 use App\Models\StopWord;
 use App\Models\User;
 
-class Saving
+class Deleting
 {
     /**
+     * The stop word that will be deleted.
+     *
      * @var StopWord
      */
     public $stopWord;
 
     /**
+     * The user who is performing the action.
+     *
      * @var User
      */
     public $actor;
 
     /**
+     * Any user input associated with the command.
+     *
      * @var array
      */
     public $data;
 
     /**
-     * Saving constructor.
-     *
      * @param StopWord $stopWord
      * @param User $actor
      * @param array $data

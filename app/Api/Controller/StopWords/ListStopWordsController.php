@@ -10,46 +10,78 @@
 namespace App\Api\Controller\StopWords;
 
 use App\Api\Serializer\StopWordSerializer;
-use App\Models\StopWord;
+use App\Repositories\StopWordRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class ListStopWordsController extends AbstractListController
 {
+    use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
     public $serializer = StopWordSerializer::class;
 
     /**
+     * @var StopWordRepository
+     */
+    protected $stopWords;
+
+    /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
+    /**
+     * @param StopWordRepository $stopWords
+     * @param UrlGenerator $url
+     */
+    public function __construct(StopWordRepository $stopWords, UrlGenerator $url)
+    {
+        $this->stopWords = $stopWords;
+        $this->url = $url;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: $actor 权限验证 查询敏感词
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'viewStopWordList');
+        $this->assertAdmin($request->getAttribute('actor'));
 
-        $limit = Arr::get($request->getQueryParams(), 'limit', 10);
-        $offset = Arr::get($request->getQueryParams(), 'offset');
-        $keyword = Arr::get($request->getQueryParams(), 'keyword');
+        $limit = $this->extractLimit($request);
+        $offset = $this->extractOffset($request);
+        $keyword = Arr::get($this->extractFilter($request), 'q');
 
-        $results = StopWord::when($keyword, function ($query, $keyword) {
-            return $query->where('find', 'like', "%$keyword%");
-        })->limit($limit)->offset($offset);
+        $stopWords = $this->stopWords
+            ->query()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('find', 'like', "%$keyword%");
+            })
+            ->limit($limit + 1)
+            ->offset($offset)
+            ->get();
+
+        $hasMoreResults = false;
+
+        if (count($stopWords) > $limit) {
+            array_pop($stopWords);
+            $hasMoreResults = true;
+        }
 
         $document->addPaginationLinks(
-            // $this->url->to('api')->route('discussions.index'),
-            'stop-words.index',
+            $this->url->route('stop-words.index'),
             $request->getQueryParams(),
             $offset,
             $limit,
-            // $results->areMoreResults() ? null : 0
-            $results->count()
+            $hasMoreResults ? null : 0
         );
 
-        return $results->get();
+        return $stopWords;
     }
 }
