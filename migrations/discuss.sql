@@ -107,7 +107,7 @@ CREATE TABLE `pay_notify` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(20) CHARACTER SET utf8 NOT NULL,
   `password` char(60) CHARACTER SET utf8 NOT NULL,
   `mobile` char(11) CHARACTER SET utf8 NOT NULL DEFAULT '',

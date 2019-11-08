@@ -17,7 +17,7 @@ class CreateUserWalletCash extends Migration
             $table->bigIncrements('id')->comment('提现ID');
             $table->unsignedBigInteger('user_id')->comment('提现用户ID');
             $table->unsignedBigInteger('user_wallet_id')->comment('提现钱包ID');
-            $table->unsignedBigInteger('cash_sn')->default('')->comment('提现交易编号');
+            $table->unsignedBigInteger('cash_sn')->comment('提现交易编号');
             $table->unsignedDecimal('cash_charge', 10, 2)->comment('提现手续费');
             $table->unsignedDecimal('cash_actual_amount', 10, 2)->comment('实际提现金额');
             $table->unsignedDecimal('cash_apply_amount', 10, 2)->comment('提现申请金额');
