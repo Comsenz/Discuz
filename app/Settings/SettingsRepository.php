@@ -41,8 +41,7 @@ class SettingsRepository implements ContractsSettingRepository
 
     public function get($key, $tag = 'default', $default = null)
     {
-        $value = Arr::get($this->all(), $tag.'.'.$key, $default);
-         return $value;
+        return Arr::get($this->all(), $tag.'.'.$key, $default);
     }
 
     public function tag($tag = 'default') {
