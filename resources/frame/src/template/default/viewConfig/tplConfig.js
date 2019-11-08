@@ -59,7 +59,8 @@ export default {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子，内容页的分享"
+          title:"付费圈子，内容页的分享",
+          oneHeader: true
         }
       },
       'open-circle':{
@@ -67,7 +68,8 @@ export default {
           require(['../view/m_site/home/openCircleView'],resolve)
         },
         metaInfo:{
-          title:"公开的圈子，菜单栏内的邀请"
+          title:"公开的圈子，菜单栏内的邀请",
+          oneHeader: true
         }
       },
       'open-circle-con':{
@@ -101,7 +103,8 @@ export default {
           require(['../view/m_site/home/circleManageInviteView'],resolve)
         },
         metaInfo:{
-          title:"圈子管理里的邀请"
+          title:"圈子管理里的邀请",
+          oneHeader: true
         }
       },
       'management-circles':{

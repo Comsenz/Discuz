@@ -2,21 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <!-- <Header></Header> -->
-	    <div class="headerBox">
-	    	<div class="invitePerDet">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
-		    	<div class="inviteName">Efhdkjfhk</div>
-		    	<p class="inviteWo">邀请您加入</p>
-	    	</div>
-
-	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
-	        <div class="circleDet">
-	          <span>主题：125</span>
-	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
-	        </div>
-      	</div>
+	    <Header :invitePerDet="true"></Header>
 	    <div class="gap"></div>
 	    <div class="circleInfo padB0">
 	    	<h1 class="cirInfoTit">圈子简介</h1>
@@ -56,12 +42,16 @@
 </template>
 
 <script>
-// import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
+import Header from '../../m_site/common/headerView';
+import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteCircleManageInviteCon from '../../../controllers/m_site/circle/circleManageInviteCon';
-// import Header from '../../m_site/common//headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleInviteView",
+    components:{
+    	Header
+    },
+    ...mSiteHeader,
     ...mSiteCircleManageInviteCon
 }
 

@@ -2,29 +2,7 @@
 
 <template>
     <div class="circleCon">
-    	<div class="invitePerDet">
-    		<img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
-	    	<div class="inviteName">Efhdkjfhk</div>
-	    	<p class="inviteWo">邀请您加入</p>
-    	</div>
-	    <!-- <Header></Header> -->
-	    <div class="headerBox">
-	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
-	        <div class="circleDet">
-	          <span>主题：125</span>
-	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
-	        </div>
-      	</div>
-      	<van-tabs v-model="navActi">
-            <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
-            </van-tab>
-        </van-tabs>
-      	<!-- <div class="navBarBox">
-          <ul class="navBarCon">
-            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}" :key="index">{{ todo.text }}</li>
-          </ul>
-      	</div> -->
+	    <Header :navShow="true" :invitePerDet="true" :headFixed="false"></Header>
 	    <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
@@ -132,16 +110,15 @@
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSiteOpenCircleCon from '../../../controllers/m_site/circle/openCircleCon';
-// import Header from '../../m_site/common//headerView';
-// import mSiteHeader from '../../../controllers/m_site/common/header';
-// import Header from '../../m_site/common//headerView';
+import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+import Header from '../../m_site/common/headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "openCircleView",
     components:{
-    	// Header
+    	Header
     },
-    // ...mSiteHeader,
+    ...mSiteHeader,
     ...mSiteOpenCircleCon
 }
 

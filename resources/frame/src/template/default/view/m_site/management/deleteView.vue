@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header></Header>
+	    <Header :searchIconShow="true" :menuIconShow="true" navShow="true" headFixed="true"></Header>
         <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>

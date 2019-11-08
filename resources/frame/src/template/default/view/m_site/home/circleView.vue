@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :menuIconShow="true" :navShow="true"></Header>
+	    <Header :searchIconShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true"></Header>
 	    <div class="padB"></div>
         <div class="gap"></div>
 	    <div class="themeTitBox">

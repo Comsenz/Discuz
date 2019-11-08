@@ -2,19 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <!-- <Header></Header> -->
-	    <div class="headerBox">
-	        <!-- <div class="headOpe">
-	          <span class="icon iconfont">&#xe60b;</span>
-	          <span class="icon iconfont">&#xe60c;</span>
-	        </div> -->
-	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
-	        <div class="circleDet">
-	          <span>主题：125</span>
-	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
-	        </div>
-      	</div>
+	    <Header></Header>
 	    <div class="gap"></div>
 	    <div class="circleLoBox">
 	    	<span class="circleIcon">圈子图标</span>
@@ -62,8 +50,8 @@
 
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
-import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+import mSitePayCircleLoginCon from '../../../controllers/m_site/circle/payCircleLoginCon';
 import Header from '../../m_site/common//headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
@@ -72,7 +60,7 @@ export default {
     	Header
     },
     ...mSiteHeader,
-    ...mSitePayCircleCon
+    ...mSitePayCircleLoginCon
 }
 
 

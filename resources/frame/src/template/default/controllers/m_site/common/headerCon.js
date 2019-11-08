@@ -3,32 +3,7 @@
  */
 import {Bus} from '../../../store/site/bus.js';
 export default {
-  props: {
-        // title: { // 组件的标题
-        //   type: String,
-        //   default: () => {
-        //     return '';
-        //   }
-        // },
-        searchIconShow: { // 组件是否显示搜索按钮
-          searchIconShow:Boolean,
-          default: () => {
-            return 'false';
-          }
-        },
-        menuIconShow: { // 组件是否显示菜单按钮
-          menuIconShow:Boolean,
-          default: () => {
-            return 'false';
-          }
-        },
-        navShow: { // 组件是否显示导航菜单
-          navShow:Boolean,
-          default: () => {
-            return 'false';
-          }
-        }
-    },
+  
 	data: function() {
 	    return {
 		    headBackShow: false,
@@ -42,11 +17,11 @@ export default {
 		    isHeadShow: false,
 		    showHeader: false,
 	        showMask: false,
+	        title:'',
+	        // invitePerDet: false,
 	        // menuIconShow:false,
 	        // searchIconShow: false,
-	        title:'',
-	        // headOpeShow: true,
-		    // navShow: true,
+		    // navShow: false,
 		    navActi:0,
 		    perDet:{
 		    	themeNum: '1222',
@@ -138,6 +113,33 @@ export default {
 
 	    }
 	},
+	props: {
+        // title: { // 组件的标题
+        //   type: String,
+        //   default: () => {
+        //     return '';
+        //   }
+        // },
+        headFixed: { // 组件是否悬浮头部
+          headFixed: false
+          // default: () => {
+          //   return 'false';
+          // }
+        },
+        invitePerDet: { // 组件是否显示邀请人头像以及名称
+          invitePerDet: false
+        },
+        searchIconShow: { // 组件是否显示搜索按钮
+          searchIconShow: false
+          
+        },
+        menuIconShow: { // 组件是否显示菜单按钮
+          menuIconShow: false
+        },
+        navShow: { // 组件是否显示导航菜单
+          navShow: false
+        }
+    },
 	created(){
         // Bus.$on('setHeader', function (title, headOpeShow, navShow) {
         // 	this.title = title;
@@ -206,20 +208,20 @@ export default {
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 	    handleTabFix() {
 	    	// console.log(this.$route.meta.oneHeader);
-	    	if(this.$route.meta.oneHeader){
+	    	if(this.headFixed){
 	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
 		          this.showHeader = true;
 		          this.isfixHead = true;
-		          console.log(this.isfixHead+'1');
+		          // console.log(this.isfixHead+'1');
 		          this.isfixNav = true;
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
 		          this.showHeader = false;
 		          this.isfixHead = false;
-		          console.log(this.isfixHead+'2');
+		          // console.log(this.isfixHead+'2');
 		          this.isfixNav = false;
 		          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
 		          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true

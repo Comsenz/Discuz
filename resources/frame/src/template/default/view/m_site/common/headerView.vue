@@ -100,6 +100,11 @@
       </div>
     </van-popup>
     <div class="headerBox" v-if="$route.meta.oneHeader">
+      <div class="invitePerDet" v-show="invitePerDet">
+        <img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
+        <div class="inviteName">Efhdkjfhk</div>
+        <p class="inviteWo">邀请您加入</p>
+      </div>
       <div class="headOpe">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" v-show="searchIconShow"></span>
