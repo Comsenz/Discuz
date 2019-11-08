@@ -41,7 +41,8 @@ export default {
           require(['../view/m_site/home/payCircleView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-首页-未登录"
+          title:"付费圈子-首页-未登录",
+          oneHeader: true
         }
       },
       'pay-circle-login':{
@@ -49,7 +50,8 @@ export default {
           require(['../view/m_site/home/payCircleLoginView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-已登录-未付费"
+          title:"付费圈子-已登录-未付费",
+          oneHeader: true
         }
       },
       'pay-circle-con':{
@@ -57,7 +59,8 @@ export default {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子，内容页的分享"
+          title:"付费圈子，内容页的分享",
+          oneHeader: true
         }
       },
       'open-circle':{
@@ -65,7 +68,8 @@ export default {
           require(['../view/m_site/home/openCircleView'],resolve)
         },
         metaInfo:{
-          title:"公开的圈子，菜单栏内的邀请"
+          title:"公开的圈子，菜单栏内的邀请",
+          oneHeader: true
         }
       },
       'open-circle-con':{
@@ -99,7 +103,8 @@ export default {
           require(['../view/m_site/home/circleManageInviteView'],resolve)
         },
         metaInfo:{
-          title:"圈子管理里的邀请"
+          title:"圈子管理里的邀请",
+          oneHeader: true
         }
       },
       'management-circles':{
@@ -359,6 +364,14 @@ export default {
         },
         metaInfo:{
           title:"点赞我的"
+        }
+      },
+      'my-wallet':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myWalletView'],resolve)
+        },
+        metaInfo:{
+          title:"我的钱包"
         }
       }
 

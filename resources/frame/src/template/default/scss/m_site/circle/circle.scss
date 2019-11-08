@@ -277,7 +277,7 @@ payCircle.view
 	}
 }
 .circleInfo {
-	@include px2rem(padding, 26 0 28 30);
+	@include px2rem(padding, 26 0 0 30);
 	.cirInfoTit {
 		@include px2rem(line-height, 42);
 		@include font-dpr(30);
@@ -346,7 +346,9 @@ payCircle.view
 			}
 		}
 	}
-	
+}
+.memberItem {
+	@include px2rem(padding, 26 30 28 30);
 }
 .loginOpera {
 	@include px2rem(padding, 50 30);

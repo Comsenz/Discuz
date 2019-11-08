@@ -19,6 +19,7 @@ body,html {
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
+.bgEd { min-height: 100%; background: #EDEDED; }
 * {	margin: 0; padding: 0;}
 a { color: $fontColor;}
 .lineE5 { border-bottom: 1px solid #e5e5e5;}
@@ -28,6 +29,8 @@ a { color: $fontColor;}
 .headOpe {
 	text-align: right;
 	@include px2rem(padding, 28 30 14 30);
+	@include px2rem(height, 40);
+	box-sizing: content-box;
 	span {
 		display: inline-block;
 		@include font-dpr(40);
@@ -45,7 +48,7 @@ a { color: $fontColor;}
 .circleDet {
 	text-align: center;
 	@include px2rem(padding, 36 30 42 30);
-	@include px2rem(lin-height, 40);
+	@include px2rem(line-height, 40);
 	color: $cor999;
 	border-bottom: 1px solid $corE5;
 	span {
@@ -81,22 +84,23 @@ a { color: $fontColor;}
 	z-index: 16;
 	width: 100%;
 	background: #fff;
-	border-bottom: 1px solid $corE5;
+	// border-bottom: 1px solid $corE5;
 }
-.fixedFoot {
+.loginBtnFix {
 	position: fixed !important;
-	bottom: 0;
-	left: 0;
+	@include px2rem(bottom, 88);
+	left: 30%;
 	z-index: 15;
-	width: 100%;
-	background: #ffffff;
-	border-top: 1px solid $corE5;
+	width: 40%;
+	box-sizing: border-box;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.4s;
+  // position: fixed;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+  // position: fixed;
 }
 .hederWrap {
 	position: relative;
@@ -192,7 +196,6 @@ a { color: $fontColor;}
 		}
 	}
 }
-
 .content {
 	@include px2rem(padding-top, 88);
 }

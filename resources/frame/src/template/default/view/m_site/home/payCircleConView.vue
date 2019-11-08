@@ -2,15 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <!-- <Header></Header> -->
-	    <div class="headerBox">
-	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
-	        <div class="circleDet">
-	          <span>主题：125</span>
-	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
-	        </div>
-      	</div>
+	    <Header></Header>
 	    <div class="gap"></div>
 	    <div class="cirPostCon">
 		    <div class="postTop">
@@ -51,17 +43,16 @@
 </template>
 
 <script>
-// import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCOn';
-// import mSiteHeader from '../../../controllers/m_site/common/header';
-// import Header from '../../m_site/common//headerView';
+import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+import Header from '../../m_site/common//headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
     components:{
-    	// Header
+    	Header
     },
-    // ...mSiteHeader,
+    ...mSiteHeader,
     ...mSitePayCircleConCon
 }
 

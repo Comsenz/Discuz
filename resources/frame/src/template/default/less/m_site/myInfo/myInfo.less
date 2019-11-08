@@ -273,7 +273,8 @@ h2,h3,h4{
       }
 
       .custom-title-icon{
-        width: 16px;
+        // width: 16px;
+        padding: 0 5px;
         height: 16px;
         background-color: #FA5151;
         color: white;
@@ -317,11 +318,12 @@ h2,h3,h4{
         .reference-cont{
           background-color: #F7F7F7;
           padding: 8px;
-          font-size:13px;
-          font-family:PingFangSC-Regular,PingFang SC;
-          font-weight:400;
-          color:rgba(136,136,136,1);
-          line-height:20px;
+          span {
+            display: block;
+            font-size:13px;
+            color:rgba(136,136,136,1);
+            line-height:  20px;
+          }
         }
       }
       .quote-reply{

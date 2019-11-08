@@ -7,8 +7,17 @@ use App\Api\Controller as ApiController;
 | Site
 |--------------------------------------------------------------------------
 */
-$route->post('/settings', 'settings', ApiController\SetSettingsController::class);
-$route->get('/siteinfo', 'siteinfo', ApiController\SiteInfoController::class);
+$route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
+$route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
+$route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
+$route->get('/check', 'check', ApiController\CheckController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Groups
+|--------------------------------------------------------------------------
+*/
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'group.create', ApiController\Group\CreateGroupController::class);
@@ -34,6 +43,7 @@ $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class)
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
 $route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
 $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
+$route->get('/notification', 'notification.index', ApiController\Notification\ListNotificationController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +96,12 @@ $route->post('/pay/order', 'pay.order', ApiController\Pay\PayOrderController::cl
 $route->get('/pay/qrcode', 'pay.qrcode', ApiController\Pay\PayQrcodeController::class);
 $route->get('/pay/qr/img', 'pay.qr.img', ApiController\Pay\PayQrImgController::class);
 $route->get('/pay/test', 'pay.test', ApiController\Pay\PayTestController::class);
+/*
+ |--------------------------------------------------------------------------
+ | Payments settings
+ |--------------------------------------------------------------------------
+ */
+$route->get('/payments', 'payment.list', ApiController\Payment\ListPaymentsController::class);
 
 /*
 |--------------------------------------------------------------------------

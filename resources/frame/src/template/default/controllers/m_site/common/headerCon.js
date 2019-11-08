@@ -1,7 +1,7 @@
 /**
  * 移动端header控制器
  */
-
+import {Bus} from '../../../store/site/bus.js';
 export default {
   
 	data: function() {
@@ -16,11 +16,18 @@ export default {
 		    isShow: false,
 		    isHeadShow: false,
 		    showHeader: false,
-	        // headOneShow: false,
-	        // headTwoShow: false,
 	        showMask: false,
-		    navShow: true,
+	        title:'',
+	        // invitePerDet: false,
+	        // menuIconShow:false,
+	        // searchIconShow: false,
+		    // navShow: false,
 		    navActi:0,
+		    perDet:{
+		    	themeNum: '1222',
+		    	memberNum: '1222',
+		    	circleLeader: '圈主名称'
+		    },
 		    sidebarList1: [
 	        {
 	          name: '我的资料',
@@ -106,7 +113,77 @@ export default {
 
 	    }
 	},
+	props: {
+        // title: { // 组件的标题
+        //   type: String,
+        //   default: () => {
+        //     return '';
+        //   }
+        // },
+        headFixed: { // 组件是否悬浮头部
+          headFixed: false
+          // default: () => {
+          //   return 'false';
+          // }
+        },
+        invitePerDet: { // 组件是否显示邀请人头像以及名称
+          invitePerDet: false
+        },
+        searchIconShow: { // 组件是否显示搜索按钮
+          searchIconShow: false
+          
+        },
+        menuIconShow: { // 组件是否显示菜单按钮
+          menuIconShow: false
+        },
+        navShow: { // 组件是否显示导航菜单
+          navShow: false
+        }
+    },
+	created(){
+        // Bus.$on('setHeader', function (title, headOpeShow, navShow) {
+        // 	this.title = title;
+        //     this.headOpeShow = headOpeShow;
+        //     this.navShow = navShow;
+        //     console.log(headOpeShow);
+        //     // if (typeof(curMenu) !== 'undefined') {
+        //     //     console.log('curMenu', curMenu)
+        //     //     this.currentMenu = curMenu;
+        //     // }
+        // }.bind(this));
+
+    },
+	beforeDestroy () {
+        // Bus.$off('setHeader');
+    },
+	mounted: function() {
+		this.getCircle();
+	},
 	methods: {
+		//获取圈子主题数，成员数，圈主名称
+		getCircle(){
+			console.log('1234');
+			this.appFetch({
+		        url:'getCircle',
+		        method:'post',
+		        data:{
+		          themeNum:this.themeNum,
+		          memberNum:this.memberNum,
+		          circleLeader:this.circleLeader
+		        }
+		    }, (res) => {
+		        if (res== "200"){
+		          _this.perDet = res.data;
+		          console.log("报错")
+		        } else {
+		          console.error("获取圈子信息失败");
+		        }
+
+		    }, function(error) {
+		        // console.log(error, 'error')
+		    });
+		},
+
 		backUrl () {
 	      	// 返回上一级
 	      	window.history.go(-1)
@@ -131,18 +208,20 @@ export default {
     	// 比较他们的大小来确定是否添加fixedNavBar样式
 	    handleTabFix() {
 	    	// console.log(this.$route.meta.oneHeader);
-	    	if(this.$route.meta.oneHeader){
+	    	if(this.headFixed){
 	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
 		          this.showHeader = true;
 		          this.isfixHead = true;
+		          // console.log(this.isfixHead+'1');
 		          this.isfixNav = true;
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
 		          this.showHeader = false;
 		          this.isfixHead = false;
+		          // console.log(this.isfixHead+'2');
 		          this.isfixNav = false;
 		          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
 		          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
