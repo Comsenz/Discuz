@@ -3,20 +3,20 @@
  */
 import {Bus} from '../../../store/site/bus.js';
 export default {
-	props: {
-        title: { // 组件的标题
-          type: String,
-          default: () => {
-            return '';
-          }
-        },
-        headOpeShow: { // 组件是否显示返回按钮和菜单按钮
-          headOpeShow:Boolean,
-          default: () => {
-            return 'fasle';
-          }
-        }
-    },
+	// props: {
+ //        title: { // 组件的标题
+ //          type: String,
+ //          default: () => {
+ //            return '';
+ //          }
+ //        },
+ //        headOpeShow: { // 组件是否显示返回按钮和菜单按钮
+ //          headOpeShow:Boolean,
+ //          default: () => {
+ //            return 'fasle';
+ //          }
+ //        }
+ //    },
 	data: function() {
 		return {
 			result: [],
@@ -53,7 +53,7 @@ export default {
 							replyWo: '第二个回复的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
 						}
 					],
-					
+
 				},
 				{
 					postHead: '',
@@ -67,21 +67,22 @@ export default {
 				}
 			],
 			checked:null
-			
+
 		}
 	},
-	
+
 	created() {
 		// console.log(789);
   //       Bus.$emit('setHeader',['标题标题333','fasle', 'false']);
     },
     mounted(){
-    	Bus.$emit('setHeader',['标题标题3443453454','fasle', 'false']);
+      
+    	Bus.$emit('setHeader',['标题标题3443453454ee','fasle', 'false']);
     },
 	methods: {
-	
-      	checkAll:function(checkAll){       
-      		this.checked = !this.checked;      
+
+      	checkAll:function(checkAll){
+      		this.checked = !this.checked;
     	},
 	    toggleAll() {
 	      this.$refs.checkboxGroup.toggleAll();
@@ -94,14 +95,14 @@ export default {
 	    signOutDele(){
 
 	    },
-	    
+
 		/**
 		 * 给导航添加点击状态
 		 */
 		addClass:function(index,event){
 	    this.current=index;
-     
-　　　　　　 //获取点击对象      
+
+　　　　　　 //获取点击对象
 		var el = event.currentTarget;
 		   // alert("当前对象的内容："+el.innerHTML);
 		},
@@ -110,12 +111,12 @@ export default {
 	        //是否显示筛选内容
 	        this.showScreen = !this.showScreen;
 	    },
-	      
+
 	    hideScreen(){
 	        //是否显示筛选内容
 	        this.showScreen = false;
 	    },
-		
+
 	},
 
 	mounted: function() {
