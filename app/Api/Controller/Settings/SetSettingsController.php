@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controller;
+namespace App\Api\Controller\Settings;
 
 use App\Models\Setting;
 use App\Settings\SettingsRepository;
