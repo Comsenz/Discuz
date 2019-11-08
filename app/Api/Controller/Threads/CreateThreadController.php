@@ -12,6 +12,7 @@ namespace App\Api\Controller\Threads;
 use App\Api\Serializer\ThreadSerializer;
 use App\Commands\Thread\CreateThread;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -21,15 +22,28 @@ class CreateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
+    public $serializer = ThreadSerializer::class;
+
+    /**
+     * {@inheritdoc}
+     */
     public $include = [
         'user',
         'firstPost',
     ];
 
     /**
-     * {@inheritdoc}
+     * @var Dispatcher
      */
-    public $serializer = ThreadSerializer::class;
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
 
     /**
      * {@inheritdoc}
@@ -39,13 +53,13 @@ class CreateThreadController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        // 检查发帖频率
+        // TODO: 检查发帖频率
         // if (! $request->getAttribute('bypassFloodgate')) {
         //     $this->floodgate->assertNotFlooding($actor);
         // }
 
         return $this->bus->dispatch(
-            new CreateThread($actor, $request->getParsedBody(), $ip)
+            new CreateThread($actor, $request->getParsedBody()->get('data', []), $ip)
         );
     }
 }

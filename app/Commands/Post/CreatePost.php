@@ -11,18 +11,21 @@ namespace App\Commands\Post;
 
 use App\Events\Post\Saving;
 use App\Models\Post;
-use App\Models\Thread;
 use App\Models\User;
+use App\Repositories\ThreadRepository;
+use App\Validators\PostValidator;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Exception;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class CreatePost
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
-    // use AssertPermissionTrait;
 
     /**
      * The id of the thread.
@@ -62,14 +65,13 @@ class CreatePost
     /**
      * @param $threadId
      * @param User $actor
-     * @param Collection $data
+     * @param array $data
      * @param null $ip
      */
-    public function __construct($threadId, $actor, Collection $data, $ip = null)
+    public function __construct($threadId, User $actor, array $data, $ip = null)
     {
-        // TODO: User $actor
         $this->threadId = $threadId;
-        $this->replyId = $data->get('replyId', null);
+        $this->replyId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
@@ -77,56 +79,50 @@ class CreatePost
 
     /**
      * @param EventDispatcher $events
+     * @param ThreadRepository $threads
+     * @param PostValidator $validator
      * @return Post
-     * @throws Exception
+     * @throws PermissionDeniedException
+     * @throws ValidationException
      */
-    public function handle(EventDispatcher $events)
+    public function handle(EventDispatcher $events, ThreadRepository $threads, PostValidator $validator)
     {
         $this->events = $events;
 
-        // TODO: 权限验证（是否有权查看，是否有权回复）
-        // $this->assertCan($this->actor, 'startDiscussion');
+        $thread = $threads->findOrFail($this->threadId);
 
-        $thread = Thread::findOrFail($this->threadId);
-
-        // 是否首帖
-        // if ($discussion->post_number_index > 0) {
-        //     $this->assertCan($actor, 'reply', $discussion);
-        // }
         $isFirst = empty($thread->last_posted_user_id);
 
-        // 回复其它回复必须是同一主题下的
-        if (!$isFirst && !empty($this->replyId)) {
-            $replyThreadId = Post::where('id', $this->replyId)->value('thread_id');
-            if ($replyThreadId != $this->threadId) {
-                throw (new ModelNotFoundException);
+        if (!$isFirst) {
+            // 非首帖，检查是否有权回复
+            $this->assertCan($this->actor, 'reply', $thread);
+
+            // 回复另一条回复时，检查是否在同一主题下的
+            if (!empty($this->replyId)) {
+                if (Post::where([['id', $this->replyId], ['thread_id', $thread->id]])->doesntExist()) {
+                    throw (new ModelNotFoundException);
+                }
             }
         }
 
-        // 一个 post 实例，在入库前前确保插件可以使用它
         $post = Post::reply(
             $thread->id,
-            $this->data->get('content'),
+            Arr::get($this->data, 'attributes.content'),
             $this->actor->id,
             $this->ip,
             $this->replyId,
             $isFirst
         );
 
-        // 管理员
-        // if ($this->actor->isAdmin() && ($time = Arr::get($command->data, 'attributes.createdAt'))) {
-        //     $post->created_at = new Carbon($time);
-        // }
-
         $this->events->dispatch(
-            new Saving($post, $this->actor, $this->data->all())
+            new Saving($post, $this->actor, $this->data)
         );
 
-        // $this->validator->assertValid($post->getAttributes());
+        $validator->valid($post->getAttributes());
 
         $post->save();
 
-        // 在给定的整个持续时间内，每位用户只能收到一个通知
+        // TODO: 通知相关用户，在给定的整个持续时间内，每位用户只能收到一个通知
         // $this->notifications->onePerUser(function () use ($post, $actor) {
             $this->dispatchEventsFor($post, $this->actor);
         // });

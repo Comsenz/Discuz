@@ -104,7 +104,7 @@ class ListThreadsController extends AbstractListController
         $threads = $this->search($actor, $query, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
-            $this->url->current(),
+            $this->url->route('threads.index'),
             $request->getQueryParams(),
             $offset,
             $limit,

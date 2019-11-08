@@ -9,41 +9,39 @@
 
 namespace app\Api\Controller\StopWords;
 
-use App\Models\StopWord;
+use App\Commands\StopWord\DeleteStopWord;
 use Discuz\Api\Controller\AbstractDeleteController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
-use Zend\Diactoros\Response\EmptyResponse;
 
 class DeleteStopWordController extends AbstractDeleteController
 {
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function delete(ServerRequestInterface $request)
     {
-        // TODO: $actor 权限验证 删除敏感词
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'deleteStopWord');
+        $ids = explode(',', Arr::get($request->getQueryParams(), 'id'));
+        $actor = $request->getAttribute('actor');
 
-        $id = Arr::get($request->getQueryParams(), 'id');
-        $ids = $id ?: $request->getParsedBody()->get('ids');
-
-        StopWord::destroy($ids);
-
-        return new EmptyResponse(204);
-    }
-
-    /**
-     * Get the data to be serialized and assigned to the response document.
-     *
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return mixed
-     */
-    public function data(ServerRequestInterface $request, Document $document)
-    {
-        // TODO: Implement data() method.
+        foreach ($ids as $id) {
+            $this->bus->dispatch(
+                new DeleteStopWord($id, $actor)
+            );
+        }
     }
 }
