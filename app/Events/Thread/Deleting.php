@@ -4,22 +4,22 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Deleting.php xxx 2019-11-06 17:06:00 LiuDongdong $
+ *      $Id: Deleting.php xxx 2019-11-08 15:34:00 LiuDongdong $
  */
 
-namespace App\Events\StopWord;
+namespace App\Events\Thread;
 
-use App\Models\StopWord;
+use App\Models\Thread;
 use App\Models\User;
 
 class Deleting
 {
     /**
-     * The stop word that will be deleted.
+     * The thread that is going to be deleted.
      *
-     * @var StopWord
+     * @var Thread
      */
-    public $stopWord;
+    public $thread;
 
     /**
      * The user who is performing the action.
@@ -36,13 +36,13 @@ class Deleting
     public $data;
 
     /**
-     * @param StopWord $stopWord
+     * @param Thread $thread
      * @param User $actor
      * @param array $data
      */
-    public function __construct(StopWord $stopWord, User $actor, array $data = [])
+    public function __construct(Thread $thread, User $actor, array $data = [])
     {
-        $this->stopWord = $stopWord;
+        $this->thread = $thread;
         $this->actor = $actor;
         $this->data = $data;
     }
