@@ -47,7 +47,7 @@ export default {
               require(['../view/site/home/homeView'], resolve)
             },
             metaInfo: {
-              title: '后台首页1'
+              title: '后台首页'
             }
           },
           'login':{

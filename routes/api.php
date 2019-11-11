@@ -43,6 +43,7 @@ $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class)
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
 $route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
 $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
+$route->get('/notification', 'notification.index', ApiController\Notification\ListNotificationController::class);
 
 /*
 |--------------------------------------------------------------------------

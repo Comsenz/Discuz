@@ -17,8 +17,9 @@ import '../static/js/rem'   //引入Rem配置
 
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
+// import './admin/scss/modules/element-variables.scss'  //引入主题样式
 
-// import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
+import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装

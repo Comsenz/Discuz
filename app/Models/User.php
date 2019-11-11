@@ -14,6 +14,7 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
@@ -30,6 +31,7 @@ class User extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+    use Notifiable;
 
     /**
      * {@inheritdoc}
@@ -299,10 +301,11 @@ class User extends Model
      *
      * @return HasMany
      */
-    public function notifications()
-    {
-        return $this->hasMany(''); // Notification::class
-    }
+//    public function notifications()
+//    {
+//        dd(123);exit();
+//        return $this->hasMany(''); // Notification::class
+//    }
 
     /**
      * Define the relationship with the user's favorite threads.
@@ -401,4 +404,5 @@ class User extends Model
     {
         static::$hasher = $hasher;
     }
+
 }
