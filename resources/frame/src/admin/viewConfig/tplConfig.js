@@ -12,32 +12,10 @@ export default {
    */
   template: {
     ...tplConfig.template,
-    admin:{
-      // path:'/',
-      // children:[
-      //   {
-      //     index:{
-      //       comLoad: function (resolve) {
-      //         require(['../view/site/IndexView'], resolve)
-      //       },
-      //       metaInfo: {
-      //         title: '后台架子'
-      //       }
-      //     },
-      //   },
-      //   {
-      //     home:{
-      //       comLoad: function (resolve) {
-      //         require(['../view/site/home/homeView'], resolve)
-      //       },
-      //       metaInfo: {
-      //         title: '首页'
-      //       }
-      //     },
-      //   }
-      // ],
 
-      index:{
+    //后台模块
+    admin_site:{
+      admin:{
         comLoad: function (resolve) {
           require(['../view/site/IndexView'], resolve)
         },

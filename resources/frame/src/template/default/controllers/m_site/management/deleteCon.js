@@ -1,7 +1,7 @@
 /**
  * pc 端首页控制器
  */
-import {Bus} from '../../../store/site/bus.js';
+import {Bus} from '../../../store/bus.js';
 export default {
 	// props: {
  //        title: { // 组件的标题
