@@ -33,7 +33,7 @@ class DeleteThreadController extends AbstractDeleteController
     /**
      * {@inheritdoc}
      */
-    public function delete(ServerRequestInterface $request)
+    protected function delete(ServerRequestInterface $request)
     {
         $ids = explode(',', Arr::get($request->getQueryParams(), 'id'));
         $actor = $request->getAttribute('actor');
