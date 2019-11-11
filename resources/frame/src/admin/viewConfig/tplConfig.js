@@ -28,6 +28,14 @@ export default {
               title: '后台首页'
             }
           },
+          'site-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/siteSetView'], resolve)
+            },
+            metaInfo: {
+              title: '站点设置'
+            }
+          },
           'login':{
             comLoad:function (resolve) {
               require(['../view/site/login/loginView'],resolve)

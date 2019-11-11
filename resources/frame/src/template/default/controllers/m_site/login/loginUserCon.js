@@ -33,7 +33,7 @@ export default {
     loginClick(){
       // this.btnLoading = true;
 
-      this.setStatus();
+      // this.setStatus();
 
 
       /*this.appFetch({

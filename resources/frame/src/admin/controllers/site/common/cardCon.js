@@ -5,7 +5,7 @@
 export default {
   data:function () {
     return {
-      title:''  //卡片标题
+
     }
   }
 }

@@ -30,10 +30,28 @@
 
     }
   }
-  .hemo-card__footer{
+  .home-card__footer{
     a{
       margin-right: 20PX;
       color: $main;
+    }
+  }
+}
+
+
+/**
+  全局-站点信息
+ */
+.site-set-box{
+
+  .site-set__logo{
+    i{
+      height: 15PX;
+      width: 1PX;
+      background-color: $borderColor;
+      display: inline-block;
+      vertical-align: text-top;
+      margin: 0 20PX;
     }
   }
 }

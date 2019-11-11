@@ -144,8 +144,8 @@ baseTpl.prototype.loadRouter = function() {
 
 	    	var nowRouterInfo = {
 				name: mName,
-	        	path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
-	        	children:newChildrenList,
+        path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
+        children:newChildrenList,
 				component: nowModules[mName]["comLoad"],
 				meta: nowModules[mName]["metaInfo"],
 				css: nowModules[mName]["css"],
@@ -161,8 +161,8 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView.path = "*";
 	routes.push(defaultView);
 
-	console.log(routes, '1111');
-  	return this.getBaseRouter(routes);
+	// console.log(routes, '1111');
+  return this.getBaseRouter(routes);
 }
 
 /**

@@ -1,0 +1,28 @@
+/**
+  公共组件--横条
+ */
+
+@import "../../modules/element-variables";
+
+.card-row-box{
+  min-width: 650PX;
+  .card-row-lf{
+    display: inline-block;
+    margin-right: 14PX;
+    width: 40%;
+  }
+  .card-row-rf{
+    width: calc(40% - 30PX);
+    display: inline-block;
+    vertical-align: top;
+    span{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:rgba(144,147,153,1);
+      line-height:20PX;
+      white-space: pre-wrap;
+    }
+
+  }
+}

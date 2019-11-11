@@ -38,7 +38,7 @@
         </p>
       </Card>
 
-      <Card class="home-card-box hemo-card__footer" header="相关链接">
+      <Card class="home-card-box home-card__footer" header="相关链接">
         <a href="/">Discuz!&nbsp;支持论坛</a>
         <a href="/">腾讯云</a>
         <a href="/">DNSPod</a>
