@@ -1,0 +1,39 @@
+/**
+  后台页面全部样式
+  根据页面、类名一一划分
+ */
+
+@import "../modules/element-variables";
+
+
+/**
+  home页面样式
+ */
+
+.home-box{
+
+  .home-card-box{
+    p{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:#303133;
+      line-height:20PX;
+
+      &:not(:last-child){
+        margin-bottom: 20PX;
+      }
+
+      span{
+        margin-right: 20PX;
+      }
+
+    }
+  }
+  .hemo-card__footer{
+    a{
+      margin-right: 20PX;
+      color: $main;
+    }
+  }
+}

@@ -10,7 +10,7 @@
       <div class="index-header__nav">
         <ul class="menu-demo">
           <!--is-active-->
-          <li class="menu-item" :class="item.name === '首页'?'is-active':''" v-for="(item,index) in navList" :key="index">{{item.name}}</li>
+          <li class="menu-item" @click="menuClick(item.name)" :class="item.name === '首页'?'is-active':''" v-for="(item,index) in navList" :key="index">{{item.name}}</li>
 
         </ul>
 
@@ -27,7 +27,7 @@
 
       <el-aside class="index-main-con__side" width="256px">
         <div class="index-main-con__side-title">
-          <span>首页</span>
+          <span>{{sideTitle}}</span>
         </div>
 
         <div class="index-main-con__side-list">
@@ -64,7 +64,7 @@
       <el-main class="index-main-con__main">
 
         <div class="index-main-con__main-title">
-          <h1>内容标题</h1>
+          <h1>{{indexTitle}}</h1>
         </div>
 
         <div class="router-con">
@@ -79,7 +79,7 @@
 
 <script>
 import '../../scss/indexView.scss';
-import IndexCon from '../../controllers/IndexCon';
+import IndexCon from '../../controllers/site/IndexCon';
 export default {
 	name: "adminIndex",
   ...IndexCon

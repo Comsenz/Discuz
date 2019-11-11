@@ -64,10 +64,9 @@ html,body{
 
         .menu-item{
           height: 100%;
-          min-width:60PX;
           list-style: none;
           position: relative;
-          margin: 0;
+          margin-right: 40PX;
           padding-left: 0;
           line-height: 50PX;
           text-align: center;
@@ -175,7 +174,7 @@ html,body{
           }
 
           .is-active{
-            color: $main;
+            color: $blue;
           }
 
         }
@@ -216,7 +215,7 @@ html,body{
       }
 
       .router-con{
-        padding: 15PX 49PX;
+        padding: 0 49PX;
       }
 
     }
