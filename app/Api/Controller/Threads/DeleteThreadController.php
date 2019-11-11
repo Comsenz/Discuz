@@ -9,47 +9,39 @@
 
 namespace App\Api\Controller\Threads;
 
-use App\Models\Post;
-use App\Models\Thread;
+use App\Commands\Thread\DeleteThread;
 use Discuz\Api\Controller\AbstractDeleteController;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
-use Zend\Diactoros\Response\EmptyResponse;
 
 class DeleteThreadController extends AbstractDeleteController
 {
     /**
-     * {@inheritdoc}
+     * @var Dispatcher
      */
-    public function delete(ServerRequestInterface $request)
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
     {
-        // TODO: $actor 权限验证 删除敏感词
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'deleteStopWord');
-
-        $id = Arr::get($request->getQueryParams(), 'id');
-        $ids = $id ? [$id] : $request->getParsedBody()->get('ids');
-
-        if ($ids) {
-            // 删除相关主题下的所有回复
-            Post::whereIn('thread_id', $ids)->forceDelete();
-
-            // 删除主题
-            Thread::whereIn('id', $ids)->forceDelete();
-        } else {
-            throw (new ModelNotFoundException);
-        }
-
-        return new EmptyResponse(204);
+        $this->bus = $bus;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function delete(ServerRequestInterface $request)
     {
-        // TODO: Implement data() method.
+        $ids = explode(',', Arr::get($request->getQueryParams(), 'id'));
+        $actor = $request->getAttribute('actor');
+
+        foreach ($ids as $id) {
+            $this->bus->dispatch(
+                new DeleteThread($id, $actor)
+            );
+        }
     }
 }

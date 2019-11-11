@@ -11,11 +11,12 @@
 	"license" : "MIT",
 	"require" : {
 		"php": "^7.2",
+        "ext-json": "*",
 		"discuz/core": "dev-master",
 		"endroid/qr-code": "^3.6",
 		"league/omnipay": "^3.0",
 		"lokielse/omnipay-wechatpay": "^3.0"
-	},
+    },
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",

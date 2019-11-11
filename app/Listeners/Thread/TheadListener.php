@@ -10,7 +10,9 @@
 namespace App\Listeners\Thread;
 
 use App\Events\Post\Created;
+use App\Events\Thread\Deleted;
 use App\Events\Thread\Saving;
+use App\Models\Post;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -20,6 +22,9 @@ class ThreadListener
     {
         // 发布帖子
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+
+        // 删除主题
+        $events->listen(Deleted::class, [$this, 'whenThreadWasDeleted']);
 
         // 收藏主题
         $events->listen(Serializing::class, AddThreadFavoriteAttribute::class);
@@ -35,5 +40,15 @@ class ThreadListener
             $thread->refreshLastPost();
             $thread->save();
         }
+    }
+
+    /**
+     * 删除主题时，删除主题下所有回复
+     *
+     * @param Deleted $event
+     */
+    public function whenThreadWasDeleted(Deleted $event)
+    {
+        Post::where('thread_id', $event->thread->id)->forceDelete();
     }
 }

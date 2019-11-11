@@ -52,7 +52,7 @@ return [
     ],
     //缓存系统配置
     'cache' => [
-        'default' => 'file',
+        'default' => 'file', //如果配置的 redis 可用， 会自动切换为redis
 
         'stores' => [
             'file' => [
@@ -93,7 +93,8 @@ return [
                 'driver' => 'cos',
                 'region' => 'ap-beijing', //设置一个默认的存储桶地域
                 'schema' => 'https', //协议头部，默认为http
-                'bucket' => 'bucket',
+                'bucket' => 'test-1251011534',
+                'read_from_cdn' => false, //是否从cdn读取，如果为true ， 设置cdn地址
                 'credentials'=> [
                     'secretId'  => 'COS_SECRETID',  //"云 API 密钥 SecretId";
                     'secretKey' => 'COS_SECRETKEY', //"云 API 密钥 SecretKey";
@@ -104,11 +105,9 @@ return [
     ],
     //加载ServiceProvider
     'providers' => [
-//        App\Providers\EventServiceProvider::class
         App\Providers\EventServiceProvider::class,
-        App\Settings\SettingsServiceProvider::class,
-        App\Providers\ThreadServiceProvider::class,
-        App\Providers\PostServiceProvider::class,
+        App\Settings\SettingsServiceProvider::class
+
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
@@ -130,9 +129,9 @@ return [
                 'file' => storage_path('log/easy-sms.log')
             ],
             'qcloud' => [
-                'sdk_app_id' => '1251099537', // SDK APP ID
-                'app_key' => 'g7KJ3atwlMlcKn0zpRnYaNvEI7lBQYS4', // APP KEY
-                'sign_name' => '', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
+                'sdk_app_id' => '{sdk_app_id}', // SDK APP ID
+                'app_key' => '{app_key}', // APP KEY
+                'sign_name' => '{sign_name}', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
             ],
         ],
     ]

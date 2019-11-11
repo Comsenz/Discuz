@@ -12,6 +12,7 @@ namespace App\Api\Controller\Posts;
 use App\Api\Serializer\PostSerializer;
 use App\Commands\Post\CreatePost;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -26,15 +27,32 @@ class CreatePostController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
-    {
-        // TODO: $actor 权限验证 用户模型
-        // $actor = $request->getAttribute('actor');
-        // $this->assertCan($actor, 'createWordList');
-        $actor = new \stdClass();
-        $actor->id = 2;
+    public $include = [
+        'user',
+        'thread',
+    ];
 
-        $threadId = $request->getParsedBody()->get('threadId');
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function data(ServerRequestInterface $request, Document $document)
+    {
+        $actor = $request->getAttribute('actor');
+        $data = $request->getParsedBody()->get('data', []);
+        $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
         // 检查发帖频率
@@ -43,7 +61,7 @@ class CreatePostController extends AbstractCreateController
         // }
 
         return $this->bus->dispatch(
-            new CreatePost($threadId, $actor, $request->getParsedBody(), $ip)
+            new CreatePost($threadId, $actor, $data, $ip)
         );
     }
 }

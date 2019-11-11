@@ -1,31 +1,26 @@
-// vuex 入口文件
+// 表单模块 vuex
+import getters from "./getters";
+import mutations from "./mutations";
+import actions from "./actions";
 
-import Vue from "vue";
-import Vuex from "vuex";
-Vue.use(Vuex);
+export default{
+	namespaced: true,
+	state: function() {
+		return {
+			loading: 0,		//loading状态，0为隐藏，非0显示
+      status:0
+		};
+	},
+	getters,
+	mutations,
+	actions
+};
 
-import siteModule from "./site/index";
 
-//实例化vuex
-const appStore = new Vuex.Store({
-	modules: {
-    site: siteModule
-	}
-});
 
-//热加载模块
-if (module.hot) {
-  module.hot.accept(['./site/index'], () => {
-    const newSiteModule = require('./site/index').default;
 
-    // 加载新模块
-    appStore.hotUpdate({
-      modules: {
-        site: newSiteModule
-      }
-    });
 
-  })
-}
 
-export default appStore;
+
+
+
