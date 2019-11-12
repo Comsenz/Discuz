@@ -6,7 +6,7 @@
 
 <script>
 import paySetCon from '../../../controllers/site/global/paySetCon';
-import '../../../scss/modules/element-variables.scss';
+import '../../../scss/site/pageStyle.scss';
 export default {
     name: "pay-set-view",
   ...paySetCon

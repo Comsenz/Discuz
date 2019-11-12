@@ -59,13 +59,13 @@
 
       <Card header="主题打赏金额分成比例：">
         <CardRow description="主题打赏的分成比例设置">
-          <div>
-            作者
-            <el-input></el-input>
+          <div class="proportion-box">
+            <span>作者</span>
+            <el-input class="" size="small" ></el-input>
           </div>
-          <div>
-            平台(圈主)
-            <el-input></el-input>
+          <div class="proportion-box">
+           <span>平台(圈主)</span>
+            <el-input size="small" ></el-input>
           </div>
         </CardRow>
       </Card>
@@ -78,7 +78,10 @@
 
       <Card header="网站备案信息：">
         <CardRow description="你的Discuz!网站的第三方统计代码">
-          <el-input></el-input>
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 4}">
+          </el-input>
         </CardRow>
       </Card>
 
@@ -95,6 +98,9 @@
         </CardRow>
       </Card>
 
+      <Card >
+        <el-button type="primary" size="medium">提交</el-button>
+      </Card>
 
     </div>
 </template>

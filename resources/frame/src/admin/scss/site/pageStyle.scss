@@ -9,7 +9,6 @@
 /**
   home页面样式
  */
-
 .home-box{
 
   .home-card-box{
@@ -40,7 +39,7 @@
 
 
 /**
-  全局-站点信息
+  全局--站点信息
  */
 .site-set-box{
 
@@ -54,4 +53,31 @@
       margin: 0 20PX;
     }
   }
+
+  .proportion-box{
+    width: 45%;
+    display: inline-block;
+    span{
+      height: 20PX;
+      display: inline-block;
+      white-space: pre-wrap;
+      margin-right: 20PX;
+    }
+
+    .el-input{
+      width: 120PX;
+      height: 36PX;
+    }
+
+    margin-right: 5PX;
+  }
+
+}
+
+
+/**
+  全局--注册设置
+ */
+.sign-up-set-box{
+
 }

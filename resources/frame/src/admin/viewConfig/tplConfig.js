@@ -36,6 +36,16 @@ export default {
               title: '站点设置'
             }
           },
+          'sign-up':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/signUpSetView'], resolve)
+            },
+            metaInfo: {
+              title: '注册设置'
+            }
+          },
+
+
           'login':{
             comLoad:function (resolve) {
               require(['../view/site/login/loginView'],resolve)

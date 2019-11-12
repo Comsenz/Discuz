@@ -6,7 +6,7 @@
 
 <script>
 import contentFilteringSetCon from '../../../controllers/site/global/contentFilteringSetCon';
-import '../../../scss/modules/element-variables.scss';
+import '../../../scss/site/pageStyle.scss';
 export default {
     name: "content-filtering-set-view",
   ...contentFilteringSetCon

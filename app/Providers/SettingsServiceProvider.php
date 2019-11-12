@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Settings;
+namespace App\Providers;
 
 
+use App\Settings\SettingsRepository;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
 use Illuminate\Support\ServiceProvider;
 
