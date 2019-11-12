@@ -19,7 +19,7 @@ appCommonH.apiCallBack = function(_this, data) {
       if(_this[key+"CallBack"]) {
           _this[key+"CallBack"](data[key]);
       }
-    }  
+    }
 }
 
 /**
@@ -45,7 +45,7 @@ appCommonH.getUrlStr = function(url, urlObj) {
  */
 appCommonH.isEmptyObj = function(data) {
   if(!data) return true;
-  
+
   return !Object.keys(data).length;
 }
 
@@ -92,7 +92,7 @@ appCommonH.copyObjFor = function(obj) {
     if(newobj !== null) {
       for ( var attr in obj) {
           newobj[attr] = deepCopy(obj[attr]);
-      }      
+      }
     }
 
     return newobj;
@@ -111,7 +111,11 @@ appCommonH.isWeixin = function(){
       isiOS = !!u.match(/\(i[^;]+;( u;)? cpu.+mac os x/),
       isPhone = isAndroid || isiOS,
       isWeixin = u.match(/microMessenger/i) == 'micromessenger' || u.match(/_sq_/i) == '_sq_'
-
+      // if(isWeixin == true){
+      //   alert('weixin');
+      // } else if(isPhone == true){
+      //   alert('isAndroid');
+      // }
   return {
     isWeixin, isPhone
   }
@@ -132,7 +136,7 @@ appCommonH.getCookie = function(name) {
 
 /**
  * 计算时间差
- * @param {*} 
+ * @param {*}
  */
 appCommonH.getSpendTime = function (startTime, endTime) {
   startTime = startTime.replace(/\-/g, "/"); //兼容ios时间转换
@@ -142,7 +146,7 @@ appCommonH.getSpendTime = function (startTime, endTime) {
   }else{
     var T = new Date().getTime() - new Date(startTime).getTime();
   }
-  
+
   var d = parseInt(T / 1000 / 60 / 60 / 24);
   var h = parseInt(T / 1000 / 60 / 60 % 24);
   var m = parseInt(T / 1000 / 60 % 60);
@@ -167,9 +171,9 @@ appCommonH.getSpendTime = function (startTime, endTime) {
  * @return {[type]}      [description]
  */
 appCommonH.query = function(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-  var r = window.location.search.substr(1).match(reg); 
-  
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+  var r = window.location.search.substr(1).match(reg);
+
   if (r != null) return unescape(r[2]); return null;
 }
 
@@ -267,7 +271,7 @@ appCommonH.setGetUrl = function(url, params) {
  */
 appCommonH.closePage = function() {
   var browserName = navigator.appName;
-  
+
   if (browserName == "Netscape") {
     window.open('', '_self', '');
     window.close();
@@ -276,7 +280,7 @@ appCommonH.closePage = function() {
   if (browserName == "Microsoft Internet Explorer") {
     window.parent.opener = "whocares";
     window.parent.close();
-  }  
+  }
 }
 
 

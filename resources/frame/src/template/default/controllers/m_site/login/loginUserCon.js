@@ -23,7 +23,21 @@ export default {
     LoginFooter,
     // Header
   },
+  mounted:function(){
+    let isWeixin =this.appCommonH.isWeixin().isWeixin;
+    if(isWeixin == true){
+      //微信登录时
+      // alert('微信登录');
 
+    } else {
+      //手机浏览器登录时
+      // alert('手机浏览器登录');
+
+
+
+
+    }
+  },
   methods:{
 
     // ...mapMutations({
@@ -34,7 +48,6 @@ export default {
       // this.btnLoading = true;
 
       // this.setStatus();
-
 
       this.appFetch({
         url:"login",
