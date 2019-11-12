@@ -18,7 +18,7 @@ class DeleteUsersController extends AbstractDeleteController
      * @param ServerRequestInterface $request
      * @param Document $document
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
     }

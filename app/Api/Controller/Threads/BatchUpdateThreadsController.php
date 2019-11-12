@@ -40,7 +40,7 @@ class BatchUpdateThreadsController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);

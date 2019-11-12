@@ -24,7 +24,7 @@ class CreateCashUserWalletController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');

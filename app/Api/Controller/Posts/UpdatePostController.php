@@ -48,7 +48,7 @@ class UpdatePostController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');

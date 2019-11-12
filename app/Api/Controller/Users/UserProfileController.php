@@ -14,7 +14,7 @@ class UserProfileController extends AbstractResourceController
 {
     public $serializer = UserPorfileSerializer::class;
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
         // 获取当前用户

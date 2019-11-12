@@ -36,7 +36,7 @@ class ListPaymentsController extends AbstractListController
      * @return mixed|null
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         return unserialize($this->settings->get('payments', 'default', []));
     }

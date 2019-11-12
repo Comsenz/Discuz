@@ -86,7 +86,7 @@ class ListThreadsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $query = Arr::get($this->extractFilter($request), 'q');

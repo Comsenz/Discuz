@@ -14,10 +14,10 @@ class ListUsersController extends AbstractListController
 {
     public $serializer = UserSerializer::class;
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
-        
+
         return User::all();
     }
 }

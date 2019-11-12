@@ -74,7 +74,7 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      * @throws InvalidParameterException
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');

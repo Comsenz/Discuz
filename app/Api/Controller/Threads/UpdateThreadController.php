@@ -40,7 +40,7 @@ class UpdateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $threadId = Arr::get($request->getQueryParams(), 'id');

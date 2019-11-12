@@ -35,7 +35,7 @@ class CreateAttachmentController extends AbstractCreateController
      * @param Document               $document 注入返回数据的文档
      * @return mixed
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');

@@ -50,7 +50,7 @@ class ListStopWordsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
