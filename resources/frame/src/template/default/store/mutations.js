@@ -3,7 +3,7 @@
 import Vue from "vue";
 import {
 	SET_LOADING,SET_STATUS
-} from "../mutationTypes";
+} from "./mutationTypes";
 
 export default {
 	/**
@@ -18,9 +18,10 @@ export default {
 		nowLoadingNum = nowLoadingNum >= 0 ? nowLoadingNum : 0;
 		state.index.loading = nowLoadingNum;
 	},
-  [SET_STATUS](state,payload){
-    console.log(123);
-    state.status = !state.status;
-  }
+	
+  	[SET_STATUS](state,payload){
+	    console.log(123);
+	    state.status = !state.status;
+  	}
 }
 

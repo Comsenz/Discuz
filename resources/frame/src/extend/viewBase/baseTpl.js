@@ -123,34 +123,33 @@ baseTpl.prototype.loadRouter = function() {
 		_this = this;
 
 
-  for(var folder in template) {
+  	for(var folder in template) {
+	    var nowModules = template[folder];
 
-    var nowModules = template[folder];
+	    for(var mName in nowModules) {
+	      	var newChildrenList = [];
 
-    for(var mName in nowModules) {
+	      	for (var childrenName in nowModules[mName].children){
+	        	var newChildren = {
+		            name: nowModules[mName].children[childrenName].metaInfo.title,
+		            path: (['m_site', 'admin_site'].includes(folder) ? '' : "/" + folder) + "/" + mName + "/" + childrenName,
+		            component: nowModules[mName].children[childrenName]['comLoad'],
+		            meta: nowModules[mName].children[childrenName]['metaInfo'],
+		            css: nowModules[mName].children[childrenName]['css'],
+		            js: nowModules[mName].children[childrenName]['js']
+		          	};
 
-      var newChildrenList = [];
+	        	newChildrenList.push(newChildren);
+	      	}
 
-      for (var childrenName in nowModules[mName].children){
-
-        var newChildren = {
-            name: nowModules[mName].children[childrenName].metaInfo.title,
-            path: "/" + folder + "/" + mName + "/" + childrenName,
-            // path: `${mName === 'index' ? '' : ('/'+folder ) + ('/'+childrenName)}${'/'+childrenName}`,
-            component: nowModules[mName].children[childrenName]['comLoad'],
-            meta: nowModules[mName].children[childrenName]['metaInfo'],
-          };
-
-        newChildrenList.push(newChildren);
-
-      }
-
-      var nowRouterInfo = {
+	    	var nowRouterInfo = {
 				name: mName,
-        path: `${folder === 'm_site' ? '' : ('/'+folder )}${'/'+mName}`,
+        path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
         children:newChildrenList,
 				component: nowModules[mName]["comLoad"],
-				meta: nowModules[mName]["metaInfo"]
+				meta: nowModules[mName]["metaInfo"],
+				css: nowModules[mName]["css"],
+				js: nowModules[mName]["js"]
 			};
 
 			routes.push(nowRouterInfo);
@@ -162,6 +161,7 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView.path = "*";
 	routes.push(defaultView);
 
+	// console.log(routes, '1111');
   return this.getBaseRouter(routes);
 }
 
@@ -198,15 +198,11 @@ baseTpl.prototype.loadOtherSource = function(Router) {
 	Router.beforeEach(function(to, from, next) {
 		_this.clearSource();
 
-		var path = to.matched[0].path == "*" ? Router.options.routes[0].path : to.path;
-		path = path.split("/");
-    path[2] ? path = [path[1], path[2]] : path[0] = 'm_site'
-		// path = [path[1], path[2]];
-
+		var nowRoute = to.matched[0].path == "*" ? Router.options.routes[0] : to;
 		var publicCss = _this.publicCss ? _this.publicCss : [],
 			publicJs = _this.publicJs ? _this.publicJs : [],
-			selfCss = _this.template[path[0]][path[1]].css ? _this.template[path[0]][path[1]].css : [],
-			selfJs = _this.template[path[0]][path[1]].js ? _this.template[path[0]][path[1]].js : [];
+			selfCss = nowRoute.css ? nowRoute.css : [],
+			selfJs = nowRoute.js ? nowRoute.js : [];
 
 		var sourceArrs = {
 			css: [...publicCss, ...selfCss],

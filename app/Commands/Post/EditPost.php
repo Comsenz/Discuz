@@ -14,6 +14,8 @@ use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use App\Validators\PostValidator;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
@@ -21,8 +23,8 @@ use Illuminate\Validation\ValidationException;
 
 class EditPost
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
-    // use AssertPermissionTrait;
 
     /**
      * The ID of the post to edit.
@@ -62,25 +64,19 @@ class EditPost
      * @param PostRepository $posts
      * @param PostValidator $validator
      * @return Post
+     * @throws PermissionDeniedException
      * @throws ValidationException
      */
     public function handle(EventDispatcher $events, PostRepository $posts, PostValidator $validator)
     {
         $this->events = $events;
 
-        // TODO: 权限验证（是否有权查看）
-        // $this->assertCan($this->actor, 'startDiscussion');
+        $post = $posts->findOrFail($this->postId, $this->actor);
 
         $attributes = Arr::get($this->data, 'attributes', []);
 
-        // 数据验证
-        $validator->valid($this->data);
-
-        $post = $posts->findOrFail($this->postId, $this->actor);
-
         if (isset($attributes['content'])) {
-            // TODO: 是否有权修改内容
-            // $this->assertCan($actor, 'edit', $post);
+            $this->assertCan($this->actor, 'edit', $post);
 
             $post->content = $attributes['content'];
         } else {
@@ -89,17 +85,15 @@ class EditPost
         }
 
         if (isset($attributes['isApproved'])) {
-            // TODO: 是否有权 审核/放入待审核
-            // $this->assertCan($actor, 'rename', $discussion);
+            $this->assertCan($this->actor, 'approved', $post);
 
             $post->is_approved = $attributes['isApproved'];
         }
 
         if (isset($attributes['isDeleted'])) {
-            // TODO: 是否有权删除
-            // $this->assertCan($actor, 'hide', $post);
+            $this->assertCan($this->actor, 'delete', $post);
 
-            if ($attributes['isDeleted']) {
+            if ($attributes['isDeleted'] && !$post->deleted_at) {
                 $post->deleted_user_id = $this->actor->id;
                 $post->delete();
             } else {
@@ -111,6 +105,8 @@ class EditPost
         $this->events->dispatch(
             new Saving($post, $this->actor, $this->data)
         );
+
+        $validator->valid($post->getDirty());
 
         $post->save();
 

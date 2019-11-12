@@ -40,7 +40,7 @@ class Deleting
      * @param User $actor
      * @param array $data
      */
-    public function __construct(StopWord $stopWord, User $actor, array $data)
+    public function __construct(StopWord $stopWord, User $actor, array $data = [])
     {
         $this->stopWord = $stopWord;
         $this->actor = $actor;

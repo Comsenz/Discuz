@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import loginCon from 'loginCon';
+// import loginCon from 'loginCon';
 export default {
   name: "login-view",
-  ...loginCon
+  // ...loginCon
 }
 </script>

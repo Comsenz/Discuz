@@ -1,7 +1,7 @@
 /**
  * 移动端header控制器
  */
-import {Bus} from '../../../store/site/bus.js';
+import {Bus} from '../../../store/bus.js';
 export default {
   
 	data: function() {

@@ -13,7 +13,6 @@ use App\Events\StopWord\Deleting;
 use App\Models\StopWord;
 use App\Models\User;
 use App\Repositories\StopWordRepository;
-use App\Repositories\ThreadRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;

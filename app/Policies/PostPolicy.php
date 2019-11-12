@@ -11,9 +11,10 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
+use Discuz\Api\Events\ScopeModelVisibility;
 use Discuz\Foundation\AbstractPolicy;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class PostPolicy extends AbstractPolicy
 {
@@ -23,30 +24,43 @@ class PostPolicy extends AbstractPolicy
     protected $model = Post::class;
 
     /**
-     * @param User $actor
-     * @param Model $model
-     * @param string $ability
-     * @return bool|null
+     * @var Dispatcher
      */
-    public function canPermission(User $actor, Model $model, $ability)
+    protected $events;
+
+    /**
+     * @param Dispatcher $events
+     */
+    public function __construct(Dispatcher $events)
     {
-        dd(__FUNCTION__);
-        if ($actor->hasPermission($this->getAbility($ability))) {
-            return true;
+        $this->events = $events;
+    }
+
+    /**
+     * @param User $actor
+     * @param Builder $query
+     */
+    public function find(User $actor, Builder $query)
+    {
+        if ($actor->cannot('viewPosts')) {
+            $query->whereRaw('FALSE');
+
+            return;
+        }
+
+        if ($actor->hasPermission('post.viewTrashed')) {
+            $this->events->dispatch(
+                new ScopeModelVisibility($query, $actor, 'viewTrashed')
+            );
         }
     }
 
     /**
-     * 当前用户是否有权限查看帖子
-     *
-     * {@inheritdoc}
+     * @param User $actor
+     * @param Builder $query
      */
-    public function findVisibility(User $actor, Builder $query)
+    public function findTrashed(User $actor, Builder $query)
     {
-        // 暂时添加是否可以查看已删除主题
-        if ($actor->id == 1) {
-            $query->withTrashed();
-            return;
-        }
+        $query->withTrashed();
     }
 }

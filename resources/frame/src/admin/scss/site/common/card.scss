@@ -1,0 +1,62 @@
+/**
+  公共组件--卡片
+ */
+
+@import "../../modules/element-variables";
+
+$fontColor:#909399;
+
+.card-box{
+  width: 100%;
+  height: auto;
+  padding: 15PX 0;
+  border-bottom: 1PX solid $contBorderColor;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  .card-box__header{
+    width: 100%;
+    margin-bottom: 14PX;
+
+    .card-title{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:$fontColor;
+      line-height:20PX;
+    }
+
+    .card-box__main{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:#303133;
+      line-height:20PX;
+    }
+  }
+
+  .card-box__main{
+
+    .row-box{
+
+      .row-slot{
+        display: inline-block;
+        width: 60%;
+        margin-right: 14PX;
+      }
+
+      .row-desc{
+        width: 40%;
+        color: $descColor;
+        vertical-align: top;
+        font-size:14PX;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        line-height:20PX;
+      }
+
+    }
+  }
+
+}

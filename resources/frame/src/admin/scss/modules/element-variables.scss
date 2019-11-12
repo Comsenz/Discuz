@@ -2,16 +2,13 @@
   全局变量
  */
 
+
+//载入后打包慢
 /* 改变主题色变量 */
-//$--color-primary: #0054A5;
+//$--color-primary:#336699;
 /* 改变 icon 字体路径变量，必需 */
 //$--font-path: '~element-ui/lib/theme-chalk/fonts';
 //@import "~element-ui/packages/theme-chalk/src/index";
-//@import "../../../../node_modules/element-ui/packages/theme-chalk/src/index";
-
-//@import "~element-ui/packages/theme-chalk/src/menu";
-//@import "~element-ui/packages/theme-chalk/src/menu-item";
-
 
 
 $blue:#0054A5;
@@ -21,5 +18,10 @@ $main:#336699;
 $headerFontColor:#FFF;    //头部字体原色
 $headerFontColorShallow:rgba(255,255,255,0.65);   //头部字体浅色
 
-$borderColor:#E5E5E5;     //边框颜色
+$borderColor:#E5E5E5;    //边框颜色
+
+$contBorderColor:#F8F9F9;   //card边框、内容、子边框颜色
+
+$descColor:#909399;   //row插槽-描述字体颜色
+
 

@@ -1,0 +1,57 @@
+/**
+  后台页面全部样式
+  根据页面、类名一一划分
+ */
+
+@import "../modules/element-variables";
+
+
+/**
+  home页面样式
+ */
+
+.home-box{
+
+  .home-card-box{
+    p{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:#303133;
+      line-height:20PX;
+
+      &:not(:last-child){
+        margin-bottom: 20PX;
+      }
+
+      span{
+        margin-right: 20PX;
+      }
+
+    }
+  }
+  .home-card__footer{
+    a{
+      margin-right: 20PX;
+      color: $main;
+    }
+  }
+}
+
+
+/**
+  全局-站点信息
+ */
+.site-set-box{
+
+  .site-set__logo{
+    i{
+      height: 15PX;
+      width: 1PX;
+      background-color: $borderColor;
+      display: inline-block;
+      vertical-align: text-top;
+      margin: 0 20PX;
+    }
+  }
+}
