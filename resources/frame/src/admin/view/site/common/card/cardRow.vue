@@ -4,7 +4,7 @@
         <slot></slot>
       </div>
       <div class="card-row-rf">
-        <span >{{$attrs.description}}</span>
+        <span>{{$attrs.description}}</span>
       </div>
 
     </div>

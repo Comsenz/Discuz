@@ -6,7 +6,7 @@
 
 <script>
 import annexSetCon from '../../../controllers/site/global/annexSetCon';
-import '../../../scss/modules/element-variables.scss';
+import '../../../scss/site/pageStyle.scss';
 export default {
     name: "annex-set-view",
   ...annexSetCon

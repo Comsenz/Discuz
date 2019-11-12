@@ -1,12 +1,39 @@
 <template>
-  <div>
-    注册设置
+  <div class="sign-up-set-box">
+
+    <Card header="新用户注册：">
+      <CardRow description="设置是否允许游客注册成为会员">
+        <el-checkbox v-model="checked">允许新用户注册</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card header="注册密码最小长度：">
+      <CardRow description="新用户注册时密码最小长度，0或不填为不限制">
+        <el-input v-model="pwdLength" clearable></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="密码字符类型：">
+      <CardRow description="新用户注册时密码中必须存在所选字符类型，不选则为无限制">
+        <el-checkbox-group v-model="checkList">
+          <el-checkbox label="数字">数字</el-checkbox>
+          <el-checkbox label="小写字母">小写字母</el-checkbox>
+          <el-checkbox label="符号">符号</el-checkbox>
+          <el-checkbox label="大写字母">大写字母</el-checkbox>
+        </el-checkbox-group>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <el-button type="primary" size="medium">提交</el-button>
+    </Card>
+
   </div>
 </template>
 
 <script>
 import signUpSetCon from '../../../controllers/site/global/signUpSetCon';
-import '../../../scss/modules/element-variables.scss';
+import '../../../scss/site/pageStyle.scss';
 export default {
     name: "sign-up-set-view",
   ...signUpSetCon
