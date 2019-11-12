@@ -7,7 +7,7 @@
  *      $Id: BatchCreateStopWordController.php xxx 2019-11-05 18:00:00 LiuDongdong $
  */
 
-namespace app\Api\Controller\StopWords;
+namespace App\Api\Controller\StopWords;
 
 use App\Commands\StopWord\BatchCreateStopWord;
 use Discuz\Api\JsonApiResponse;
