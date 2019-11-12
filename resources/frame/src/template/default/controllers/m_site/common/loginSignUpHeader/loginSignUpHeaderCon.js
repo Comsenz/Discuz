@@ -1,4 +1,4 @@
-import {Bus} from '../../../../store/site/bus.js';
+// import {Bus} from '../../../../store/site/bus.js';
 export default {
   data:function () {
     return {
