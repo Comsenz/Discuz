@@ -12,7 +12,7 @@ export default {
 		    threeHeader: false,
 		    fourHeader: false,
 		    isfixNav: false,
-		    isfixHead: false,
+		    // isfixHead: false,
 		    isShow: false,
 		    isHeadShow: false,
 		    showHeader: false,
@@ -213,14 +213,14 @@ export default {
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
 		        if(scrollTop > offsetTop){
 		          this.showHeader = true;
-		          this.isfixHead = true;
+		          // this.isfixHead = true;
 		          // console.log(this.isfixHead+'1');
 		          this.isfixNav = true;
 		          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
 		          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
 		        } else {
 		          this.showHeader = false;
-		          this.isfixHead = false;
+		          // this.isfixHead = false;
 		          // console.log(this.isfixHead+'2');
 		          this.isfixNav = false;
 		          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;

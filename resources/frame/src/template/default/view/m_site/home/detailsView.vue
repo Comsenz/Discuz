@@ -7,7 +7,7 @@
     		<h1 class="headTit">详情</h1>
     		<span class="icon iconfont icon-Shape menuCli"></span>
     	</div> -->
-    	<Header></Header>
+    	<commonHeader title="详情"></commonHeader>
     	<div class="content">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
@@ -176,16 +176,16 @@
 </template>
 
 <script>
-import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common/headerView';
+// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+// import commonHeader from '../../m_site/common/headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "detailsView",
-    components:{
-    	Header
-    },
-    ...mSiteHeader,
+    // components:{
+    // 	// commonHeader
+    // },
+    // ...mSiteHeader,
     ...mSiteDetailsCon
 }
 

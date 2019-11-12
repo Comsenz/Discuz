@@ -26,6 +26,9 @@ import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
 
+import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
+Vue.component('commonHeader', commonHeader);
+
 /* start 设置引入的模板路径 start */
 import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 /* end 设置引入的模板路径 end */

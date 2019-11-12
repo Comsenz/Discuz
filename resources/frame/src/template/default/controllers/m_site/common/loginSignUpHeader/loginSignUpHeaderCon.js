@@ -1,18 +1,23 @@
+import {Bus} from '../../../../store/site/bus.js';
 export default {
   data:function () {
     return {
       headerTitle:this.title,
-      pageName:""
+      // menuIconShow: this.menuIconShow,
+      pageName:"",
+
     }
   },
 
   props:{
     title:{
       default:'',
-      type:String
+      type:String,
+    },
+    menuIconShow: { // 组件是否显示菜单按钮
+          menuIconShow: false
     }
   },
-
   methods:{
     headerBack(){
       console.log("回退");
