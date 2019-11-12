@@ -6,20 +6,25 @@ use Discuz\Api\Serializer\AbstractSerializer;
 
 class UserSerializer extends AbstractSerializer
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $type = 'users';
 
-    protected $type = 'user';
-
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultAttributes($model)
     {
-        return  [
-            'id'         => $model->id,
-            'username'   => $model->username,
-            'adminid'    => $model->adminid,
-            'unionid'    => $model->unionid,
-            'mobile'     => $model->mobile?substr($model->mobile, 0, 3).'****'.substr($model->mobile, 7):"",
-            'createtime' => $model->createtime,
-            'nickname'   => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
+        return [
+            'username'    => $model->username,
+            'nickname'    => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
+            'mobile'      => $model->mobile,
+            // 'avatarUrl'   => $model->avatar_url,
+            'unionId'     => $model->union_id,
+            'lastLoginIp' => $model->last_login_ip,
+            'createdAt'   => $this->formatDate($model->created_at),
+            'updatedAt'   => $this->formatDate($model->updated_at),
         ];
-
     }
 }

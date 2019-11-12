@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Users\Registered;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -19,10 +20,10 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property int $id
  * @property string $username
- * @property string $password
- * @property int $admin_id
  * @property string $mobile
- * @property string $login_ip
+ * @property string $password
+ * @property string $union_id
+ * @property string $last_login_ip
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @package App\Models
@@ -67,32 +68,23 @@ class User extends Model
     protected static $gate;
 
     /**
-     * TODO: rename to register
      * Register a new user.
      *
      * @param string $username
-     * @param string $password
      * @param string $mobile
-     * @param int $admin_id
-     * @param string $ipAddress
+     * @param string $password
      * @return static
      */
-    public static function creation(
-        $username,
-        $password,
-        $mobile,
-        $admin_id,
-        $ipAddress
-    ) {
+    public static function register($username, $mobile, $password)
+    {
         $user = new static;
 
         $user->username = $username;
-        $user->password = $password;
         $user->mobile = $mobile;
-        $user->adminid = $admin_id;
-        $user->login_ip = $ipAddress;
+        $user->password = $password;
+        $user->created_at = Carbon::now();
 
-        $user->raise(new Created($user));
+        $user->raise(new Registered($user));
 
         return $user;
     }
@@ -395,7 +387,6 @@ class User extends Model
     }
 
     /**
-     * TODO: hash （预留，可能用不到）
      * Set the hasher with which to hash passwords.
      *
      * @param Hasher $hasher
@@ -404,5 +395,4 @@ class User extends Model
     {
         static::$hasher = $hasher;
     }
-
 }

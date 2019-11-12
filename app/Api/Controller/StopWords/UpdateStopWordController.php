@@ -7,7 +7,7 @@
  *      $Id: UpdateStopWordController.php xxx 2019-09-26 00:00:00 LiuDongdong $
  */
 
-namespace app\Api\Controller\StopWords;
+namespace App\Api\Controller\StopWords;
 
 use App\Api\Serializer\StopWordSerializer;
 use App\Commands\StopWord\EditStopWord;

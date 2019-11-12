@@ -7,7 +7,7 @@
  *      $Id: DeleteStopWordController.php xxx 2019-09-26 3:55 下午 LiuDongdong $
  */
 
-namespace app\Api\Controller\StopWords;
+namespace App\Api\Controller\StopWords;
 
 use App\Commands\StopWord\DeleteStopWord;
 use Discuz\Api\Controller\AbstractDeleteController;
