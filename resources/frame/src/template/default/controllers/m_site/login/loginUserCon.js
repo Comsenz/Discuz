@@ -26,17 +26,17 @@ export default {
 
   methods:{
 
-    ...mapMutations({
-      setStatus:'site/SET_STATUS'
-    }),
+    // ...mapMutations({
+    //   setStatus:'site/SET_STATUS'
+    // }),
 
     loginClick(){
       // this.btnLoading = true;
 
-      this.setStatus();
+      // this.setStatus();
 
 
-      /*this.appFetch({
+      this.appFetch({
         url:"login",
         method:"post",
         data:{
@@ -44,12 +44,14 @@ export default {
           password:this.password
         }
       },(res)=>{
+        console.log('123456');
         console.log(res);
 
         if (res.status === 200){
           this.$toast.success('登录成功');
-        } else {
-
+          console.log('登录成功');
+        } else{
+          console.log('400');
         }
 
         this.btnLoading = false;
@@ -57,7 +59,7 @@ export default {
       },(err)=>{
         console.log(err);
         this.btnLoading = false;
-      })*/
+      })
 
     },
 

@@ -14,7 +14,7 @@
     </header>
     <header>
       <!-- 是否显示悬浮导航，滚动后置顶导航 -->
-      <div class="" :class="{'fixedHead': isfixHead}" v-if="showHeader">
+      <!-- <div class="" :class="{'fixedHead': isfixHead}" v-if="showHeader">
         <div class="hederWrap">
           <img src="../../../../../../static/images/logo.png" class="logo headLogo">
           <div class="topRight">
@@ -22,7 +22,7 @@
             <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
           </div>
         </div>
-      </div>
+      </div> -->
     </header>
     <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数threeHeader判断 -->
     <header id="headThree" v-if="$route.meta.threeHeader">
@@ -31,27 +31,6 @@
         <h1 class="headTit">{{$route.meta.title}}</h1>
       </div>
     </header>
-    <!-- 是否显示返回按钮或者使用第四套头部样式，可根据路由参数fourHeader判断 -->
-    <header id="headFour" v-if="$route.meta.fourHeader">
-      <div class="contentHead">
-        <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
-        <h1 class="headTit">{{$route.meta.title}}</h1>
-        <span v-show="menuIconShow" class="icon iconfont icon-Shape menuCli" @click="showPopup"></span>
-      </div>
-    </header>
-    <!-- 是否显示返回按钮或者使用五套头部样式，可根据路由参数fiveHeader判断 -->
-    <div class="headerBox" v-if="$route.meta.fiveHeader">
-      <div class="headOpe">
-        <span class="icon iconfont icon-search"></span>
-        <span class="icon iconfont icon-Shape" is-link @click="showPopup"></span>
-      </div>
-      <img src="../../../../../../static/images/logo.png" class="logo">
-      <div class="circleDet" v-model="perDet">
-        <span v-model="perDet.themeNum">主题：{{perDet.themeNum}}</span>
-        <span v-model="perDet.memberNum">成员：{{perDet.memberNum}}</span>
-        <span v-model="perDet.circleLeader">圈主：{{perDet.circleLeader}}</span>
-      </div>
-    </div>
 
     <van-popup
       class="sidebarWrap"

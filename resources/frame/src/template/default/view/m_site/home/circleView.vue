@@ -150,7 +150,7 @@
 	    		</a> -->
 	    	</div>
 	    </div>
-	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录/注册</van-button>
+	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->
 	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">
 		    <transition name="fade">

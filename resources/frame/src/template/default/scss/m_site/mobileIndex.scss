@@ -79,7 +79,8 @@ a { color: $fontColor;}
 .fixedNavBar {
 	position: fixed !important;
 	// top: 0;
-	@include px2rem(top, 88);
+	// @include px2rem(top, 88);
+	top: 0;
 	left: 0;
 	z-index: 16;
 	width: 100%;
@@ -92,6 +93,7 @@ a { color: $fontColor;}
 	left: 30%;
 	z-index: 15;
 	width: 40%;
+	opacity: 0.9;
 	box-sizing: border-box;
 }
 .fade-enter-active, .fade-leave-active {

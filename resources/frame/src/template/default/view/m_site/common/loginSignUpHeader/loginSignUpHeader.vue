@@ -2,6 +2,7 @@
   <header class="header-box">
     <span @click="headerBack" class="icon iconfont header-icon icon-back" ></span>
     <span class="header-title">{{headerTitle}}</span>
+    <span class="icon iconfont icon-Shape" v-show="menuIconShow"></span>
   </header>
 </template>
 
