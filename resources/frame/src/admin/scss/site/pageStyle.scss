@@ -1,9 +1,51 @@
+@charset "utf-8";
 /**
   后台页面全部样式
   根据页面、类名一一划分
  */
 
 @import "../modules/element-variables";
+
+
+/**
+  公共样式
+ */
+
+/*表格图标和内容*/
+.table-icon{
+  font-size: 40PX;
+  vertical-align: middle
+}
+
+.table-con-box{
+  width:calc(100% - 50px);
+
+  //width: calc(100% - 50px);
+
+  display: inline-block;
+  vertical-align: middle;
+
+  p{
+    font-size:12PX;
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:500;
+    color:rgba(144,147,153,1);
+    line-height:14PX;
+  }
+
+  p:first-of-type{
+    font-size:14PX;
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:600;
+    color:$titleColor;
+    line-height:20PX;
+  }
+  p:last-of-type{
+    margin-top: 7PX;
+  }
+
+}
+
 
 
 /**
@@ -16,7 +58,7 @@
       font-size:14PX;
       font-family:PingFangSC-Regular,PingFang SC;
       font-weight:400;
-      color:#303133;
+      color:$titleColor;
       line-height:20PX;
 
       &:not(:last-child){
@@ -79,5 +121,28 @@
   全局--注册设置
  */
 .sign-up-set-box{
+
+}
+
+
+/**
+  附件设置
+ */
+.annex-set-box{
+
+}
+
+
+/**
+  第三方登录设置
+ */
+
+$margin:50PX;
+
+.worth-mention-box{
+
+  .worth-mention__default{
+    padding-top: 15PX;
+  }
 
 }

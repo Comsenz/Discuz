@@ -44,6 +44,38 @@ export default {
               title: '注册设置'
             }
           },
+          'worth-mentioning-set': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/worthMentioningSetView'], resolve)
+            },
+            metaInfo: {
+              title: '第三方登录设置'
+            }
+          },
+          'pay-set': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/paySetView'], resolve)
+            },
+            metaInfo: {
+              title: '支付设置'
+            }
+          },
+          'tencent-cloud-set': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudSetView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置'
+            }
+          },
+          'annex-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/annexSetView'], resolve)
+            },
+            metaInfo: {
+              title: '附件设置'
+            }
+          },
 
 
           'login':{

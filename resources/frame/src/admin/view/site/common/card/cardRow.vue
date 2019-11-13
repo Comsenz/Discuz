@@ -5,6 +5,7 @@
       </div>
       <div class="card-row-rf">
         <span>{{$attrs.description}}</span>
+        <slot name="tail"></slot>
       </div>
 
     </div>

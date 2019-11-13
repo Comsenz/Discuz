@@ -1,8 +1,11 @@
+@charset "utf-8";
 /**
   公共组件--横条
  */
 
 @import "../../modules/element-variables";
+
+$width:30PX;
 
 .card-row-box{
   min-width: 650PX;
@@ -12,7 +15,7 @@
     width: 40%;
   }
   .card-row-rf{
-    width: calc(40% - 30PX);
+    width: calc(40% - 30px);
     display: inline-block;
     vertical-align: top;
     span{
