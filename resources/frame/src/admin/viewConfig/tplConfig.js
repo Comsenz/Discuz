@@ -76,6 +76,30 @@ export default {
               title: '附件设置'
             }
           },
+          'content-filter-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/contentFilteringSetView'], resolve)
+            },
+            metaInfo: {
+              title: '内容过滤设置'
+            }
+          },
+          'user-manage-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/userManageSetView'], resolve)
+            },
+            metaInfo: {
+              title: '后台用户管理'
+            }
+          },
+          'role-manage-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/roleManageSetView'], resolve)
+            },
+            metaInfo: {
+              title: '后台角色管理'
+            }
+          },
 
 
           'login':{

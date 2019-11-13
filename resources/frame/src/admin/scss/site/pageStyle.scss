@@ -136,13 +136,84 @@
 /**
   第三方登录设置
  */
-
 $margin:50PX;
-
 .worth-mention-box{
 
   .worth-mention__default{
     padding-top: 15PX;
+  }
+
+}
+
+
+/**
+  内容过滤设置
+ */
+.content-filter-set-box{
+
+  .content-filter-set__search{
+
+    .el-cascader__search-input{
+      width: 60%;
+      max-width: 440PX;
+      margin: 0 14PX 0 0;
+    }
+    &-button{
+      width: 20%;
+      max-width: 68PX;
+    }
+
+  }
+
+  .content-filter-set-main{
+
+    .list-set-box{
+      margin: 15PX 0;
+      span{
+        color: $main;
+        margin-right: 40PX;
+        cursor: pointer;
+      }
+    }
+
+    &__checked{
+      padding: 15PX 15PX 0 17PX;
+
+      .el-checkbox__label{
+        padding-left: 35PX;
+      }
+
+    }
+
+  }
+
+  .batch-set-box{
+
+    .el-radio-group{
+      margin-top: 15PX;
+
+      div:last-of-type{
+        margin-top: 22PX;
+      }
+
+    }
+
+    h2{
+      font-size:18PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:$titleColor;
+      line-height:25PX;
+      margin-bottom: 11PX;
+    }
+    p{
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:$commentColor;
+      line-height:28PX;
+    }
+
   }
 
 }
