@@ -288,18 +288,6 @@ class User extends Model
     }
 
     /**
-     * TODO: 消息提醒
-     * Define the relationship with the user's notifications.
-     *
-     * @return HasMany
-     */
-//    public function notifications()
-//    {
-//        dd(123);exit();
-//        return $this->hasMany(''); // Notification::class
-//    }
-
-    /**
      * Define the relationship with the user's favorite threads.
      *
      * @return BelongsToMany
