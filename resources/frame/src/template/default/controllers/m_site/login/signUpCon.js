@@ -7,10 +7,8 @@ export default {
     return {
       username:'',
       password:'',
-      adminid:'',
-
+      mobile:'13434900053',
       btnLoading:false, //注册按钮状态
-
       error:false,    //错误状态
       errorMessage:"" //错误信息
     }
@@ -20,33 +18,42 @@ export default {
     SignUpHeader,
     SignUpFooter
   },
-
   methods:{
-
     signUpClick(){
-
       this.btnLoading = true;
-
       this.appFetch({
         url:'signUp',
         method:'post',
         data:{
-          username:this.username,
-          password:this.password,
-          adminid:1
+          "data": {
+          "type": "users",
+          "attributes": {
+              username:this.username,
+              password:this.password,
+              mobile: this.mobile
+          },
+          }
         }
       }, (res) => {
         this.btnLoading = false;
-
-        if (res.errors[0].status !== "200"){
+        console.log(res);
+        if (res.status !== "201"){
+          //注册账号成功时
+          this.$toast({
+            type:'success',
+            message: "注册成功，正在跳转",
+          });
+          this.$router.push({path:'bind-phone'});
+          // this.error = false;
+          // this.errorMessage = '';
+        } else {
+          //注册失败时
+          this.$toast({
+            type:'fail',
+            message: "注册失败",
+          });
           this.error = true;
           this.errorMessage = res.errors[0].detail[0];
-          console.log("报错")
-        } else {
-          this.error = false;
-          this.errorMessage = "";
-          Toast('注册成功，正在跳转首页');
-          this.$router.push({path:'/m_site/bind_phone'})
         }
 
       }, function(error) {
@@ -54,7 +61,6 @@ export default {
       });
 
     },
-
     //错误提示
     clearError(str){
       switch (str){
