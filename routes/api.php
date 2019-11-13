@@ -43,7 +43,6 @@ $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class)
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
 $route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
 $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
-$route->get('/notification', 'notification.index', ApiController\Notification\ListNotificationController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -175,3 +174,12 @@ $route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Walle
 |--------------------------------------------------------------------------
 */
 $route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Notification
+|--------------------------------------------------------------------------
+*/
+$route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
+$route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
+$route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);
