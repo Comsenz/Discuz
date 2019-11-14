@@ -45,4 +45,14 @@ class UserRepository extends AbstractRepository
         return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
     }
 
+    /**
+     * Find a user by an identification (username or phone number).
+     *
+     * @param string $identification
+     * @return User|null
+     */
+    public function findByIdentification($param)
+    {
+        return User::where($param)->first();
+    }
 }

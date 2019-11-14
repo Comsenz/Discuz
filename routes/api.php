@@ -12,6 +12,14 @@ $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsCon
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Cloud APIs
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionController::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +37,7 @@ $route->post('/groups', 'group.create', ApiController\Group\CreateGroupControlle
 */
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->post('/login', 'users.login', ApiController\Users\LoginUsersController::class);
+$route->post('/login', 'users.login', ApiController\Users\LoginController::class);
 $route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);

@@ -7,46 +7,42 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 namespace App\Passport\Repositories;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+
 use App\Passport\Entities\ClientEntity;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\Traits\ClientTrait;
+use League\OAuth2\Server\Entities\Traits\EntityTrait;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+
 class ClientRepository implements ClientRepositoryInterface
 {
-    const CLIENT_NAME = 'discuz';
-    const REDIRECT_URI = 'http://www.discuz.com/api';
+    use ClientTrait, EntityTrait;
+
     /**
-     * {@inheritdoc}
+     * Get a client.
+     *
+     * @param string $clientIdentifier The client's identifier
+     *
+     * @return ClientEntityInterface|null
      */
     public function getClientEntity($clientIdentifier)
     {
-        $client = new ClientEntity();
-        $client->setIdentifier($clientIdentifier);
-        $client->setName(self::CLIENT_NAME);
-        $client->setRedirectUri(self::REDIRECT_URI);
-        $client->setConfidential();
-        return $client;
+        // TODO: Implement getClientEntity() method.
+        return new ClientEntity();
     }
+
     /**
-     * {@inheritdoc}
+     * Validate a client's secret.
+     *
+     * @param string $clientIdentifier The client's identifier
+     * @param null|string $clientSecret The client's secret (if sent)
+     * @param null|string $grantType The type of grant the client is using (if sent)
+     *
+     * @return bool
      */
     public function validateClient($clientIdentifier, $clientSecret, $grantType)
     {
-        $clients = [
-            'myawesomeapp' => [
-                'secret'          => password_hash('abc123', PASSWORD_BCRYPT),
-                'name'            => self::CLIENT_NAME,
-                'redirect_uri'    => self::REDIRECT_URI,
-                'is_confidential' => true,
-            ],
-        ];
-        // Check if client is registered
-        if (array_key_exists($clientIdentifier, $clients) === false) {
-            return;
-        }
-        if (
-            $clients[$clientIdentifier]['is_confidential'] === true
-            && password_verify($clientSecret, $clients[$clientIdentifier]['secret']) === false
-        ) {
-            return;
-        }
+        // TODO: Implement validateClient() method.
+        return true;
     }
 }
