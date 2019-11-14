@@ -45,7 +45,13 @@ $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileContro
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
-$route->post('/send', 'send', ApiController\Mobile\SendController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Sms
+|--------------------------------------------------------------------------
+*/
+$route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
 $route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
 $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
