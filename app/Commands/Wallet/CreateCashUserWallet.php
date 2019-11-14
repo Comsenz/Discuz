@@ -105,7 +105,7 @@ class CreateCashUserWallet
             $user_wallet->save();
 
             //添加钱包明细,
-            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, 0, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
+            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
 
             //创建提现记录
             $cash = UserWalletCash::createCash(
