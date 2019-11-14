@@ -107,6 +107,7 @@ html,body{
         font-weight:400;
         color:$headerFontColor;
         line-height:20PX;
+        cursor: pointer;
       }
 
       .site-home{
@@ -157,6 +158,7 @@ html,body{
 
             display: flex;
             align-items: center;
+            cursor: pointer;
 
             span{
               &:first-of-type{

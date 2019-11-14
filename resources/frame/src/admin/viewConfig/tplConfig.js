@@ -36,7 +36,7 @@ export default {
               title: '站点设置'
             }
           },
-          'sign-up':{
+          'sign-up-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/signUpSetView'], resolve)
             },
