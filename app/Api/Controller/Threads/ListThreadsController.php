@@ -54,7 +54,7 @@ class ListThreadsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    protected $defaultSort = [
+    public $sort = [
         'updatedAt' => 'desc'
     ];
 
@@ -90,14 +90,13 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
         $query = Arr::get($this->extractFilter($request), 'q');
-        $sort = $this->extractSort($request) ?: $this->defaultSort;
+        $sort = $this->extractSort($request);
 
         // $criteria = new SearchCriteria($actor, $query, $sort);
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        // $load = array_merge($this->extractInclude($request), ['state']);
-        $include = $this->extractInclude($request);
+        $load = array_merge($this->extractInclude($request), ['favoriteState']);
 
         // 查主题
         // $results = $this->searcher->search($criteria, $limit, $offset);
@@ -111,9 +110,9 @@ class ListThreadsController extends AbstractListController
             $this->hasMoreResults ? null : 0
         );
 
-        // Discussion::setStateUser($actor);
+        Thread::setStateUser($actor);
 
-        $threads = $threads->load(array_diff($include, ['lastThreePosts', 'lastThreePosts.user']));
+        $threads = $threads->load(array_diff($load, ['lastThreePosts', 'lastThreePosts.user']));
 
         $threads = $threads->each(function ($thread) {
             $thread->setRelation('lastThreePosts', $thread->lastThreePosts());

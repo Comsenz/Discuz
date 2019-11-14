@@ -64,6 +64,13 @@ class Thread extends Model
     ];
 
     /**
+     * The user for which the state relationship should be loaded.
+     *
+     * @var User
+     */
+    protected static $stateUser;
+
+    /**
      * Get the last three posts of the thread.
      *
      * @return Collection
@@ -165,5 +172,28 @@ class Thread extends Model
     public function favoriteUsers()
     {
         return $this->belongsToMany(User::class)->withPivot('created_at');
+    }
+
+    /**
+     * Define the relationship with the discussion's state for a particular user.
+     *
+     * @param User|null $user
+     * @return HasOne
+     */
+    public function favoriteState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
+    }
+
+    /**
+     * Set the user for which the state relationship should be loaded.
+     *
+     * @param User $user
+     */
+    public static function setStateUser(User $user)
+    {
+        static::$stateUser = $user;
     }
 }

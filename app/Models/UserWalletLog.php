@@ -34,6 +34,16 @@ class UserWalletLog extends Model
     public $timestamps = true;
 
     /**
+     * 钱包明细类型
+     */
+    const TYPE_CASH_SFREEZE = 10;//提现冻结
+    const TYPE_CASH_SUCCESS = 11;//提现成功
+    const TYPE_CASH_THAW = 12;//提现解冻
+
+    const TYPE_INCOME_REWARD = 31;//打赏收入
+    const TYPE_INCOME_ARTIFICIAL = 32;//人工收入
+     
+    /**
      * 模型的「启动」方法.
      *
      * @return void
@@ -46,7 +56,6 @@ class UserWalletLog extends Model
     /**
      * 创建钱包动账记录
      * @param  [type] $user_id                 [description]
-     * @param  [type] $user_wallet_id          [description]
      * @param  [type] $change_available_amount [description]
      * @param  [type] $change_freeze_amount    [description]
      * @param  [type] $change_type             [description]
@@ -55,14 +64,12 @@ class UserWalletLog extends Model
      */
     public static function createWalletLog(
         $user_id,
-        $user_wallet_id,
         $change_available_amount,
         $change_freeze_amount,
         $change_type,
         $change_desc) {
         $wallet_log                          = new static;
         $wallet_log->user_id                 = $user_id;
-        $wallet_log->user_wallet_id          = $user_wallet_id;
         $wallet_log->change_available_amount = $change_available_amount;
         $wallet_log->change_freeze_amount    = $change_freeze_amount;
         $wallet_log->change_type             = $change_type;

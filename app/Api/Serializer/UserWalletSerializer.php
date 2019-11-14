@@ -12,7 +12,6 @@ class UserWalletSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'id'               => $model->id,
             'user_id'          => $model->user_id,
             'available_amount' => $model->available_amount,
             'freeze_amount'    => $model->freeze_amount,

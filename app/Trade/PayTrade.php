@@ -71,8 +71,13 @@ class PayTrade
         if (isset($extra['time_expire'])) {
             $order['time_expire'] = $extra['time_expire'];
         }
+
+        if (isset($extra['h5_info'])) {
+            $order['h5_info'] = $extra['h5_info'];
+        }
         $request  = $gateway->purchase($order);
         $response = $request->send();
+
         $result   = [];
         if ($response->isSuccessful()) {
             switch ($payment_type) {
@@ -92,10 +97,11 @@ class PayTrade
                 default:
                     break;
             }
-            $response->getCodeUrl();
         } else {
             return $response->getData();
         }
+
+
         return $result;
     }
 

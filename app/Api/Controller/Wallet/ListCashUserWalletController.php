@@ -1,28 +1,26 @@
 <?php
-
 /**
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateOrderController.php xxx 2019-10-24 11:20:00 zhouzhou $
+ *      $Id: ListCashUserWalletController.php xxx 2019-11-10 157:20:00 zhouzhou $
  */
 
-namespace App\Api\Controller\Order;
+namespace App\Api\Controller\Wallet;
 
+use Illuminate\Contracts\Bus\Dispatcher;
+use App\Api\Serializer\UserWalletCashSerializer;
+use App\Commands\Wallet\ListCashUserWallet;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Tobscure\JsonApi\Document;
-use App\Api\Serializer\OrderSerializer;
-use App\Commands\Order\ListOrder;
 
-class ListOrderController extends AbstractListController
+class ListCashUserWalletController extends AbstractListController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = OrderSerializer::class;
-
+    public $serializer = UserWalletCashSerializer::class;
     /**
      * @var Dispatcher
      */
@@ -35,18 +33,16 @@ class ListOrderController extends AbstractListController
     {
         $this->bus = $bus;
     }
+    
     /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
+        // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-        // 获取请求的参数
-        $query_inputs = $request->getQueryParams();
-
         return $this->bus->dispatch(
-            new ListOrder($actor, $query_inputs)
+            new ListCashUserWallet($actor, $request->getQueryParams())
         );
     }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Api\Controller\Trade\Notify;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use App\Commands\Trade\Notify\WechatNotify;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ResponseInterface;
@@ -20,6 +21,19 @@ class WechatNotifyController extends AbstractResourceController
 {
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+    
+    /**
      * {@inheritdoc}
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -29,7 +43,7 @@ class WechatNotifyController extends AbstractResourceController
         return new XmlResponse($data);
     }
 
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
             new WechatNotify($request->getParsedBody())

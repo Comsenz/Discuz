@@ -27,6 +27,18 @@ class UserWallet extends Model
     protected $table = 'user_wallet';
 
     /**
+     * 主键
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * 非递增主键
+     * @var boolean
+     */
+    public $incrementing = false;
+
+    /**
      * 该模型是否被自动维护时间戳.
      *
      * @var bool

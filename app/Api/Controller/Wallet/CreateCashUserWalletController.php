@@ -8,6 +8,7 @@
 
 namespace App\Api\Controller\Wallet;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletCashSerializer;
 use App\Commands\Wallet\CreateCashUserWallet;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -22,13 +23,25 @@ class CreateCashUserWalletController extends AbstractResourceController
     public $serializer = UserWalletCashSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+    
+    /**
      * {@inheritdoc}
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-
         return $this->bus->dispatch(
             new CreateCashUserWallet($actor, $request->getParsedBody())
         );

@@ -45,7 +45,13 @@ $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileContro
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
-$route->post('/send', 'send', ApiController\Mobile\SendController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Sms
+|--------------------------------------------------------------------------
+*/
+$route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
 $route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
 $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
@@ -58,6 +64,7 @@ $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::
 |--------------------------------------------------------------------------
 */
 
+$route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
@@ -171,10 +178,12 @@ $route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Tra
  | Wallet
  |--------------------------------------------------------------------------
  */
-$route->post('/wallet/user', 'wallet.user.create', ApiController\Wallet\CreateUserWalletController::class);
 $route->get('/wallet/user/{user_id}', 'wallet.user.resource', ApiController\Wallet\ResourceUserWalletController::class);
-$route->patch('/wallet/{wallet_id}', 'wallet.update', ApiController\Wallet\UpdateUserWalletController::class);
-$route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
+$route->patch('/wallet/user/{user_id}', 'wallet.user.update', ApiController\Wallet\UpdateUserWalletController::class);
+
+$route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
+$route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListCashUserWalletController::class);
+$route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\ReviewCashUserWalletController::class);
 
 /*
 |--------------------------------------------------------------------------

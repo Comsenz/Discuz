@@ -42,12 +42,6 @@ class UserRepository implements UserRepositoryInterface
             throw new PermissionDeniedException;
         }
 
-        $user = $this->users->findByIdentification(compact('username'));
-
-        if (! $user || ! $user->checkPassword($password)) {
-            throw new PermissionDeniedException;
-        }
-
         return new UserEntity($user['id']);
     }
 }
