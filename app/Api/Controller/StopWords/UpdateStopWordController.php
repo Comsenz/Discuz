@@ -25,6 +25,11 @@ class UpdateStopWordController extends AbstractCreateController
     public $serializer = StopWordSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = ['user'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;

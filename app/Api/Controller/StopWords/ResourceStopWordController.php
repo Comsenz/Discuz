@@ -26,8 +26,13 @@ class ResourceStopWordController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
+    public $include = ['user'];
+
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return StopWord::findOrFail(Arr::get($request->getQueryParams(), 'id'));
+        return StopWord::with('user')->findOrFail(Arr::get($request->getQueryParams(), 'id'));
     }
 }
