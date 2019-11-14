@@ -11,6 +11,7 @@ namespace App\Api\Controller\Order;
 
 use Discuz\Api\Controller\AbstractCreateController;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Tobscure\JsonApi\Document;
 use App\Api\Serializer\OrderSerializer;
 use App\Commands\Order\CreateOrder;
@@ -24,9 +25,22 @@ class CreateOrderController extends AbstractCreateController
     public $serializer = OrderSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');

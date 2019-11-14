@@ -10,14 +10,16 @@ declare (strict_types = 1);
 
 namespace App\Commands\Trade\Notify;
 
-use App\Models\Order;
-use App\Models\PayNotify;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\NotifyTrade;
 use App\Trade\QeuryTrade;
+use App\Settings\SettingsRepository;
+use Illuminate\Database\ConnectionInterface;
 
 class WechatNotify
 {
+    use NotifyTrait;
+
     /**
      * 微信配置参数
      * @var array
@@ -29,34 +31,37 @@ class WechatNotify
      */
     public function __construct()
     {
-        $this->config = [
-            'app_id'  => 'wx24ef8273fde3334e',
-            'mch_id'  => '1515287121',
-            'api_key' => 'sajhulDAAhkH1341H9H1O1OR31O12e1o',
-        ];
+
     }
 
     /**
      * 执行命令
      * @return mixed 返回给支付平台数据
      */
-    public function handle()
-    {
-        $notify_result = NotifyTrade::notify(GatewayConfig::WECAHT_PAY_NOTIFY, $this->config);
+    public function handle(SettingsRepository $setting, ConnectionInterface $connection)
+    {   
+        $this->config = $setting->tag('wxpay');
+        $notify_result = NotifyTrade::notify(GatewayConfig::WECAHT_PAY_NOTIFY, $this->config);      
         if (isset($notify_result['result_code']) && $notify_result['result_code'] == 'SUCCESS') {
-//支付成功
+            //支付成功
             if ($this->queryOrderStatus($notify_result['transaction_id'])) {
                 $log = app('log');
                 $log->info('notify', $notify_result);
-                $payment_sn = $notify_result['out_trade_no'];
-                //修改通知数据
-                $pay_notify_result = PayNotify::where('payment_sn', $payment_sn)
-                    ->update(['status' => 1, 'trade_no' => $notify_result['transaction_id']]);
-                //修改订单,已支付
-                $order_result = Order::where('payment_sn', $payment_sn)->update(['status' => 1]);
-
-                if ($order_result) {
-                    return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+                $payment_sn = $notify_result['out_trade_no'];//商户交易号
+                $trade_no = $notify_result['transaction_id'];//微信交易号
+                //开始事务
+                $connection->beginTransaction();
+                try {
+                    //支付成功处理
+                    $result = $this->paymentSuccess($payment_sn, $trade_no);
+                    $connection->commit();
+                    if ($result) {
+                        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+                    }
+                } catch (Exception $e) {
+                    //回滚事务
+                    $connection->rollback();
+                    throw new ErrorException($e->getMessage(), 500);
                 }
             }
         }
