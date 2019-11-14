@@ -185,6 +185,20 @@ $margin:50PX;
 
     }
 
+    .content-filter-set-table-add{
+      width: 100%;
+      height: 45PX;
+      border-bottom: 1PX solid #EBEEF5;
+      line-height: 45PX;
+      p{
+        margin-left: 65PX;
+        color: $main;
+        font-size:14PX;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+      }
+    }
+
   }
 
   .batch-set-box{
@@ -217,3 +231,100 @@ $margin:50PX;
   }
 
 }
+
+
+/**
+  用户管理
+ */
+
+.user-manage-set-box{
+  margin-top: 15PX;
+
+  .user-manage-set-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    line-height: 45PX;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+    }
+  }
+
+}
+
+
+/**
+  角色管理
+ */
+
+$tableHeaderColor:#FAFAFA;
+
+.role-manage-set-box{
+  margin-top: 15PX;
+
+  .role-manage-set-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    line-height: 45PX;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      font-size:14PX;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+    }
+  }
+
+  .role-editing-box{
+
+    .card-box{
+      border-bottom: 0;
+    }
+
+    .role-table{
+      width: 100%;
+      tr{
+        width: 100%;
+        border-bottom: 1PX solid #EBEEF5;
+
+        th{
+          background-color: #FAFAFA;
+          padding: 12PX 14PX 12PX 17PX;
+          line-height: 23PX;
+        }
+
+        td{
+          vertical-align: middle;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 12PX 17PX 12PX 17PX;
+          line-height: 23PX;
+          margin-right: 68PX;
+        }
+
+        .el-checkbox-group{
+          //display: table;
+          //table-layout: fixed;
+          //width: 100%;
+
+          .el-checkbox{
+            //display: table-cell;
+          }
+        }
+
+      }
+    }
+  }
+
+
+
+}
+
+
+

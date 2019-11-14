@@ -31,11 +31,6 @@ export default {
         method: '处理',
         address: '上海市普陀区金沙江路 1518 弄',
         value:'不处理'
-      },{
-        name: '新增',
-        method: '',
-        address: '',
-        value:''
       }],
       multipleSelection: [],
 
