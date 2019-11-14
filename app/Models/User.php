@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Discuz\Auth\Guest;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
@@ -206,6 +207,10 @@ class User extends Model
      */
     public function isAdmin()
     {
+        if ($this instanceof Guest) {
+            return false;
+        }
+
         return $this->groups->contains(Group::ADMINISTRATOR_ID);
     }
 
