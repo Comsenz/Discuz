@@ -24,12 +24,19 @@ class Registered
     public $actor;
 
     /**
+     * @var array
+     */
+    public $data;
+
+    /**
      * @param User $user
      * @param User $actor
+     * @param array $data
      */
-    public function __construct(User $user, User $actor = null)
+    public function __construct(User $user, User $actor = null, array $data = [])
     {
         $this->user = $user;
         $this->actor = $actor;
+        $this->data = $data;
     }
 }
