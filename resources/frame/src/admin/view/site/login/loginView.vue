@@ -47,7 +47,7 @@
 <script>
 import loginCon from '../../../controllers/site/login/loginCon';
 import '../../../scss/site/pageStyle.scss';
-import '../../../../../static/css/admin/iconfont.css';
+import '../../../../../static/css/admin/iconfont.css'
 export default {
   name: "login-view",
   ...loginCon
