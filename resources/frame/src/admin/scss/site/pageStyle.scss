@@ -136,7 +136,6 @@
 /**
   第三方登录设置
  */
-$margin:50PX;
 .worth-mention-box{
 
   .worth-mention__default{
@@ -236,7 +235,6 @@ $margin:50PX;
 /**
   用户管理
  */
-
 .user-manage-set-box{
   margin-top: 15PX;
 
@@ -260,9 +258,7 @@ $margin:50PX;
 /**
   角色管理
  */
-
 $tableHeaderColor:#FAFAFA;
-
 .role-manage-set-box{
   margin-top: 15PX;
 
@@ -327,4 +323,90 @@ $tableHeaderColor:#FAFAFA;
 }
 
 
+/**
+  登录界面
+ */
+.login-box{
+  width: 100%;
+  height: 100%;
+  background-color: #F4F4F4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .login-main{
+    width: 400PX;
+    height: 484PX;
+    background-color: white;
+    box-shadow:0 0 12px 0 rgba(88,88,90,0.21);
+    border-radius:4px 0 0 0;
+
+    .login-header{
+      padding: 74PX 105PX 35PX 105PX;
+
+      a{
+        height: 30PX;
+        width: 184PX;
+        display: block;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+    }
+
+    .login-main-form{
+      padding: 22PX 40PX;
+
+      .el-form-item{
+        border-bottom: 1PX solid #E3E3E3;
+        padding: 12PX 0 ;
+        margin-bottom: 0;
+      }
+
+      .el-input__inner{
+        border: 0;
+        padding-left: 42PX;
+
+        :-moz-placeholder {
+          color: $descColor;
+          opacity: 1;
+        }
+
+        ::-moz-placeholder {
+          color: $descColor;
+          opacity: 1;
+        }
+
+      }
+
+      .iconfont{
+        font-size: 22PX;
+        color: #D7DEE4;
+      }
+
+      .login-main-form__item{
+        border-bottom: 0;
+
+       .el-button{
+         width: 256PX;
+         height: 36PX;
+         padding-top: 10PX;
+         padding-bottom:10PX;
+       }
+        .el-checkbox__label{
+          color: $descColor;
+        }
+
+        &:last-child{
+          text-align: center;
+        }
+
+      }
+
+    }
+
+  }
+}
 

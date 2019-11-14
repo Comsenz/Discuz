@@ -100,18 +100,17 @@ export default {
               title: '后台角色管理'
             }
           },
-
-          'login':{
-            comLoad:function (resolve) {
-              require(['../view/site/login/loginView'],resolve)
-            },
-            metaInfo:{
-              title:'后台登录'
-            }
-          }
         },
         metaInfo: {
           title: '后台架子'
+        }
+      },
+      'admin/login':{
+        comLoad:function (resolve) {
+          require(['../view/site/login/loginView'],resolve)
+        },
+        metaInfo:{
+          title:'后台登录'
         }
       }
 
@@ -123,8 +122,7 @@ export default {
    * @type {Array}
    */
   notNeedLogins: [
-    "site/index",
-    // 'login/loginView',
+    "admin/login",
     ...tplConfig.notNeedLogins
   ]
 };
