@@ -71,6 +71,11 @@
               </el-table-column>
 
             </el-table>
+
+            <div class="content-filter-set-table-add">
+              <p>+新增</p>
+            </div>
+
           </div>
 
           <div class="content-filter-set-main__checked">

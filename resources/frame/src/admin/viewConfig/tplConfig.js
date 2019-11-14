@@ -101,7 +101,6 @@ export default {
             }
           },
 
-
           'login':{
             comLoad:function (resolve) {
               require(['../view/site/login/loginView'],resolve)
