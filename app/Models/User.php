@@ -117,7 +117,6 @@ class User extends Model
     }
 
     /**
-     * TODO: 验证密码（预留）
      * Check if a given password matches the user's password.
      *
      * @param string $password
@@ -125,12 +124,6 @@ class User extends Model
      */
     public function checkPassword($password)
     {
-        $valid = static::$dispatcher->until(new CheckingPassword($this, $password));
-
-        if ($valid !== null) {
-            return $valid;
-        }
-
         return static::$hasher->check($password, $this->password);
     }
 
@@ -289,7 +282,9 @@ class User extends Model
      */
     public function favoriteThreads()
     {
-        return $this->belongsToMany(Thread::class);
+        return $this->belongsToMany(Thread::class)
+            ->as('favoriteState')
+            ->withPivot('created_at');
     }
 
     /**

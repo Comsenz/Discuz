@@ -64,6 +64,7 @@ $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::
 |--------------------------------------------------------------------------
 */
 
+$route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
