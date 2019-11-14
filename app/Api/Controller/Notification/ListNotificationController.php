@@ -26,7 +26,7 @@ class ListNotificationController extends AbstractListController
      */
     public $serializer = NotificationSerializer::class;
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $query_inputs = $request->getQueryParams();

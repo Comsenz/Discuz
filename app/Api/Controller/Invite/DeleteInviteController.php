@@ -26,7 +26,7 @@ class DeleteInviteController extends AbstractDeleteController
 
     }
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
     }

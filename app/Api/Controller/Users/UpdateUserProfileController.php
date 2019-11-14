@@ -21,7 +21,7 @@ class UpdateUserProfileController extends AbstractResourceController
      * @param ServerRequestInterface $request
      * @param Document $document
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');
@@ -36,9 +36,9 @@ class UpdateUserProfileController extends AbstractResourceController
         $data = $this->bus->dispatch(
             new UserProfile($id, $actor)
         );
-        
+
         return $data;
-        
-         
+
+
     }
 }

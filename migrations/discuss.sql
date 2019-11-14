@@ -108,17 +108,17 @@ CREATE TABLE `pay_notify` (
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8 NOT NULL,
+  `username` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `password` char(60) CHARACTER SET utf8 NOT NULL,
   `mobile` char(11) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `adminid` int(11) unsigned NOT NULL DEFAULT '0',
-  `unionid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `login_ip` varchar(15) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
-  `status` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `last_login_ip` varchar(15) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `mobile` (`mobile`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `user_wechats` (
   `id` int(11) NOT NULL,

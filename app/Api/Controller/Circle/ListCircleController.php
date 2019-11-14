@@ -20,7 +20,7 @@ class ListCircleController extends AbstractListController
 {
     public $serializer = UserSerializer::class;
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
         $res = $this->bus->dispatch(

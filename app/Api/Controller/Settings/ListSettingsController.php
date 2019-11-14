@@ -35,7 +35,7 @@ class ListSettingsController extends AbstractListController
      * @return array|mixed
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
 

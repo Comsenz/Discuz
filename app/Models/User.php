@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Events\Users\Registered;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use App\Events\Users\Created;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -41,7 +39,6 @@ class User extends Model
         'id',
         'username',
         'password',
-        'adminid',
         'mobile',
         'created_at'
     ];
@@ -83,8 +80,6 @@ class User extends Model
         $user->mobile = $mobile;
         $user->password = $password;
         $user->created_at = Carbon::now();
-
-        $user->raise(new Registered($user));
 
         return $user;
     }

@@ -29,7 +29,7 @@ class WechatNotifyController extends AbstractResourceController
         return new XmlResponse($data);
     }
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
             new WechatNotify($request->getParsedBody())

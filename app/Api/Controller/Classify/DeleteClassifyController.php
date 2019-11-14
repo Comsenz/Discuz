@@ -39,7 +39,7 @@ class DeleteClassifyController extends AbstractDeleteController
         return new EmptyResponse(204);
     }
 
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
     }

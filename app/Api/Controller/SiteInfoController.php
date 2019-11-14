@@ -23,7 +23,7 @@ class SiteInfoController extends AbstractResourceController
      * @return array|mixed
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         //权限验证，只能是能进入后台人员查看.
         $this->assertAdmin($request->getAttribute('actor'));
