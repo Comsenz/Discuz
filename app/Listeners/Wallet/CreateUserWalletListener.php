@@ -4,15 +4,15 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CreateUserWalletListner.php xxx 2019-10-24 17:14:00 zhouzhou $
+ *      $Id: CreateUserWalletListener.php xxx 2019-10-24 17:14:00 zhouzhou $
  */
 
-namespace App\Listeners;
+namespace App\Listeners\Wallet;
 
 use App\Events\Users\Saving;
 use App\Models\UserWallet;
 
-class CreateUserWalletListner
+class CreateUserWalletListener
 {
     public function handle(Saving $event)
     {

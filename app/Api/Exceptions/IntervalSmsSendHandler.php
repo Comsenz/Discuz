@@ -1,0 +1,47 @@
+<?php
+
+
+namespace App\Api\Exceptions;
+
+
+use App\Exceptions\IntervalSmsSend;
+use Exception;
+use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
+use Tobscure\JsonApi\Exception\Handler\ResponseBag;
+
+class IntervalSmsSendHandler implements ExceptionHandlerInterface
+{
+
+    /**
+     * If the exception handler is able to format a response for the provided exception,
+     * then the implementation should return true.
+     *
+     * @param \Exception $e
+     *
+     * @return bool
+     */
+    public function manages(Exception $e)
+    {
+        return $e instanceof IntervalSmsSend;
+    }
+
+    /**
+     * Handle the provided exception.
+     *
+     * @param \Exception $e
+     *
+     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
+     */
+    public function handle(Exception $e)
+    {
+        $errors = [
+            [
+                'status' => 500,
+                'code' => 100002,
+                'message' => 'sms_interval'
+            ]
+        ];
+
+        return new ResponseBag(500, $errors);
+    }
+}

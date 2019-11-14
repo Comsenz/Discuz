@@ -34,6 +34,19 @@ class Order extends Model
     public $timestamps = true;
 
     /**
+     * 订单类型
+     */
+    const ORDER_TYPE_REGISTER = 1;//注册
+    const ORDER_TYPE_REWARD = 2;//打赏
+
+    /**
+     * 订单状态
+     */
+    const ORDER_STATUS_PENDING = 0;//待付款
+    const ORDER_STATUS_PAID = 1;//已付款
+    const ORDER_STATUS_CANCEL = 2;//取消订单
+
+    /**
      * 模型的「启动」方法.
      *
      * @return void

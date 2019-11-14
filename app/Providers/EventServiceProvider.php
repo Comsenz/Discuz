@@ -9,12 +9,12 @@ use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceP
 class EventServiceProvider extends BaseEventServiceProvider
 {
     protected $listen = [
-        App\Events\Users\Saving::class => [App\Listeners\Wallet\CreateUserWalletListner::class],
-        App\Events\Wallet\Cash::class => [App\Listeners\Wallet\CashUserWalletListner::class],
+        \App\Events\Users\Saving::class => [\App\Listeners\Wallet\CreateUserWalletListener::class]
     ];
 
     protected $subscribe = [
         GroupPolicy::class,
         StopWordPolicy::class,
+        'App\Listeners\Wallet\ReviewCashSubscriber',
     ];
 }

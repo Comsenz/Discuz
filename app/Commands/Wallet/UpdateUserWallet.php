@@ -23,10 +23,10 @@ use Illuminate\Validation\ValidationException;
 class UpdateUserWallet
 {
     /**
-     * 钱包ID
+     * 钱包用户ID
      * @var int
      */
-    public $wallet_id;
+    public $user_id;
     /**
      * 执行操作的用户.
      *
@@ -46,9 +46,9 @@ class UpdateUserWallet
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
      */
-    public function __construct($wallet_id, $actor, Collection $data)
+    public function __construct($user_id, $actor, Collection $data)
     {
-        $this->wallet_id = $wallet_id;
+        $this->user_id = $user_id;
         $this->actor     = $actor;
         $this->data      = $data->toArray();
     }
@@ -76,7 +76,7 @@ class UpdateUserWallet
         //开始事务
         $db->beginTransaction();
         try {
-            $user_wallet   = UserWallet::findOrFail($this->wallet_id)->lockForUpdate()->first();
+            $user_wallet   = UserWallet::lockForUpdate()->findOrFail($this->user_id);
             //是否有修改
             $change_status = false;
             //加减操作
@@ -101,7 +101,7 @@ class UpdateUserWallet
                 }
                 $operate_reason = Arr::get($this->data, 'operate_reason');
                 //添加钱包明细
-                $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $this->wallet_id, $change_available_amount, 0, 50, $operate_reason);
+                $user_wallet_log = UserWalletLog::createWalletLog($this->user_id, $change_available_amount, 0, 50, $operate_reason);
                 //修改钱包金额
                 $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
                 $change_status                 = true;

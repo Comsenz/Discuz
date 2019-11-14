@@ -8,6 +8,7 @@
 
 namespace App\Api\Controller\Wallet;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletSerializer;
 use App\Commands\Wallet\UpdateUserWallet;
 use Discuz\Api\Controller\AbstractCreateController;
@@ -23,17 +24,30 @@ class UpdateUserWalletController extends AbstractCreateController
     public $serializer = UserWalletSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+    
+    /**
      * {@inheritdoc}
      */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
 
         //钱包ID
-        $wallet_id = Arr::get($request->getQueryParams(), 'wallet_id');
+        $user_id = (int)Arr::get($request->getQueryParams(), 'user_id');
         return $this->bus->dispatch(
-            new UpdateUserWallet($wallet_id, $actor, $request->getParsedBody())
+            new UpdateUserWallet($user_id, $actor, $request->getParsedBody())
         );
     }
 }
