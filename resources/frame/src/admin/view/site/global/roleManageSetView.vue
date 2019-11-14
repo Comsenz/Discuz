@@ -34,11 +34,14 @@
         </el-table>
 
         <div class="role-manage-set-table-add">
-          <p>+新增</p>
+          <p>
+            <span class="iconfont iconicon_add icon-add"></span>
+            <span>新增</span>
+          </p>
         </div>
 
         <Card>
-          <el-button type="primary" size="medium" @click="roleStatus = 'roleEditing'">提交</el-button>
+          <el-button type="primary" si ze="medium" @click="roleStatus = 'roleEditing'">提交</el-button>
         </Card>
 
       </div>

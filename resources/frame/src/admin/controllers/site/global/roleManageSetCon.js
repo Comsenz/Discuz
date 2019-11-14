@@ -22,7 +22,7 @@ export default {
       users:userOptions,
 
       isIndeterminate: true,
-      roleStatus:'roleEditing'  //default roleEditing
+      roleStatus:'default'  //default roleEditing
 
     }
   },

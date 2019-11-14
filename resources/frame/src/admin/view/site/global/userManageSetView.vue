@@ -30,7 +30,10 @@
 
             <el-input v-else-if="scope.row.name !== '新增'" v-model="scope.row.name" />
 
-            <span v-else>+新增</span>
+            <p v-else>
+              <span class="iconfont iconicon_add icon-add"></span>
+              新增
+            </p>
           </template>
 
         </el-table-column>
@@ -65,7 +68,10 @@
       </el-table>
 
       <div class="user-manage-set-table-add">
-        <p>+新增</p>
+        <p>
+          <span class="iconfont iconicon_add icon-add"></span>
+          <span>新增</span>
+        </p>
       </div>
 
       <Card >

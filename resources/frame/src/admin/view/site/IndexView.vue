@@ -9,11 +9,14 @@
 
       <div class="index-header__nav">
         <ul class="menu-demo">
-          <!--is-active-->
-          <li class="menu-item" @click="menuClick(item.name)" :class="item.name === '首页'?'is-active':''" v-for="(item,index) in navList" :key="index">{{item.name}}</li>
-
+          <li class="menu-item"
+              @click="menuClick(item.name)"
+              :class="item.name === '首页'?'is-active':''"
+              v-for="(item,index) in navList"
+              :key="index">
+            {{item.name}}
+          </li>
         </ul>
-
       </div>
 
       <div class="index-header__info-menu">
@@ -34,24 +37,20 @@
 
           <ul class="index-side-ul">
             <li class="index-side-li is-active">
-              <span></span>
+              <span class="iconfont iconshouye"></span>
               <span>管理中心首页</span>
             </li>
 
             <li class="index-side-li">
-              <span></span>
+              <span class="iconfont iconzhandianshezhi"></span>
               <span>站点信息</span>
             </li>
 
             <li class="index-side-li">
-              <span></span>
+              <span class="iconfont iconzhuceshezhi"></span>
               <span>注册设置</span>
             </li>
 
-            <li class="index-side-li">
-              <span></span>
-              <span>登录设置</span>
-            </li>
           </ul>
 
         </div>
@@ -80,6 +79,8 @@
 <script>
 import '../../scss/indexView.scss';
 import IndexCon from '../../controllers/site/IndexCon';
+import '../../../../static/css/admin/iconfont.css'
+
 export default {
 	name: "adminIndex",
   ...IndexCon

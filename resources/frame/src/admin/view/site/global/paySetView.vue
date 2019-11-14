@@ -6,10 +6,10 @@
         style="width: 100%">
         <el-table-column
           prop="date"
-          label="第三方登录类型"
+          label="支付类型"
         >
           <template slot-scope="scope">
-            <i class="el-icon-time table-icon"></i>
+            <i class="iconfont iconweixin table-icon"></i>
             <div class="table-con-box">
               <p>{{scope.row.name }}</p>
               <p>{{scope.row.description }}</p>

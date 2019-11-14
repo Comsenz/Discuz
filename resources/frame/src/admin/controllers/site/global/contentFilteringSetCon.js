@@ -44,7 +44,8 @@ export default {
 
       checked:false,
       radio2:"1",
-      loginStatus:'default'  //default  batchSet
+      loginStatus:'default',  //default  batchSet
+      deleteStatus:true
 
     }
   },
@@ -60,6 +61,11 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+
+      if (this.multipleSelection.length = 4){
+        this.deleteStatus = !this.deleteStatus;
+      }
+
     }
   },
   components:{

@@ -9,7 +9,7 @@
             label="第三方登录类型"
           >
             <template slot-scope="scope">
-              <i class="el-icon-time table-icon"></i>
+              <i class="iconfont table-icon" :class="scope.row.icon"></i>
               <div class="table-con-box">
                 <p>{{scope.row.name }}</p>
                 <p>{{scope.row.description }}</p>

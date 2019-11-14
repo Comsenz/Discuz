@@ -36,6 +36,9 @@ export default {
   methods:{
     menuClick(title){
       this.sideTitle = title;
+
+
+
     }
   }
 }
