@@ -1,3 +1,4 @@
+@charset "utf-8";
 /**
   后台-index
   @Param：后台所有大小单位以大写PX书写，避免转成rem。
@@ -118,7 +119,7 @@ html,body{
 
   .index-main-con{
     width: 100%;
-    height: calc(100% - 80PX);
+    height: calc(100% - #{80px});
 
     .index-main-con__side{
       width: 100%;
@@ -193,9 +194,10 @@ html,body{
 
     .index-main-con__main{
       height: 100%;
-      width: calc(100% - 256PX);
+      //width: calc(100% - #{256PX});
+      width: calc(100% - #{256px});
       padding: 0;
-      padding-bottom: 50PX;
+      padding-bottom: 20PX;
 
       .index-main-con__main-title{
         width: 100%;

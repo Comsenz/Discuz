@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 /**
   全局变量
  */
@@ -5,10 +7,21 @@
 
 //载入后打包慢
 /* 改变主题色变量 */
-//$--color-primary:#336699;
+$--color-primary:#336699;
 /* 改变 icon 字体路径变量，必需 */
-//$--font-path: '~element-ui/lib/theme-chalk/fonts';
-//@import "~element-ui/packages/theme-chalk/src/index";
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
+
+/*表格表头背景颜色*/
+.el-table th{
+  background-color: #FAFAFA;
+  color: #606266;
+  font-weight: 600;
+}
+/*表格单元格左缩进*/
+.el-table .cell{
+  padding-left: 17PX;
+}
 
 
 $blue:#0054A5;
@@ -24,4 +37,6 @@ $contBorderColor:#F8F9F9;   //card边框、内容、子边框颜色
 
 $descColor:#909399;   //row插槽-描述字体颜色
 
+$titleColor:#303133;    //标题字体颜色
 
+$commentColor:#606266;    //注释字体颜色

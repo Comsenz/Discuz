@@ -1,6 +1,133 @@
 <template>
-    <div>
-      第三方登录设置
+    <div class="worth-mention-box">
+      <div class="worth-mention__default" v-if="loginStatus === 'default'">
+        <el-table
+          :data="tableData"
+          style="width: 100%">
+          <el-table-column
+            prop="date"
+            label="第三方登录类型"
+          >
+            <template slot-scope="scope">
+              <i class="el-icon-time table-icon"></i>
+              <div class="table-con-box">
+                <p>{{scope.row.name }}</p>
+                <p>{{scope.row.description }}</p>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="状态"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.status" style="color: #336699;font-weight: 600;">√</p>
+              <p v-else style="color: #336699;font-weight: 600;">—</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作"
+            width="180">
+            <template slot-scope="scope">
+              <div v-if="scope.row.status">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                  @click="configClick(scope.row.type)"
+                >配置</el-button>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                >关闭</el-button>
+              </div>
+
+              <el-button
+                v-else
+                size="mini"
+                type="primary"
+                plain
+              >开启</el-button>
+
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <div class="worth-mention__h5" v-if="loginStatus === 'h5'">
+        <Card header="H5微信授权登录"></Card>
+
+        <Card header="APPID：">
+          <CardRow description="填写申请H5微信授权登录后，你获得的APPID">
+            <el-input></el-input>
+
+            <template #tail>
+              <span  style="color: #336699;margin-left: 15PX" >未申请？点此申请</span>
+            </template>
+          </CardRow>
+        </Card>
+
+
+        <Card header="App secret：">
+          <CardRow description="填写申请H5微信授权登陆后，你获得的App secret">
+            <el-input></el-input>
+          </CardRow>
+        </Card>
+
+        <Card >
+          <el-button type="primary" size="medium" @click="loginStatus = 'default'" >提交</el-button>
+        </Card>
+      </div>
+
+      <div class="worth-mention__applets" v-if="loginStatus === 'applets'">
+        <Card header="小程序微信授权登录"></Card>
+
+        <Card header="APPID：">
+          <CardRow description="填写申请小程序微信授权登陆后，你获得的APPID">
+            <el-input></el-input>
+            <template #tail>
+              <span style="color: #336699">未申请？点此申请</span>
+            </template>
+          </CardRow>
+        </Card>
+
+        <Card header="App secret：">
+          <CardRow description="填写申请小程序微信授权登陆后，你获得的App secret">
+            <el-input></el-input>
+          </CardRow>
+        </Card>
+
+        <Card >
+          <el-button type="primary" size="medium" @click@click="loginStatus = 'default'">提交</el-button>
+        </Card>
+      </div>
+
+      <div v-if="loginStatus === 'pc'">
+        <Card header="PC端微信授权登录"></Card>
+
+        <Card header="APPID：">
+          <CardRow description="填写申请PC端微信授权登陆后，你获得的APPID">
+            <el-input></el-input>
+            <template #tail>
+              <span style="color: #336699">未申请？点此申请</span>
+            </template>
+          </CardRow>
+        </Card>
+
+        <Card header="App secret：">
+          <CardRow description="填写申请PC端微信授权登陆后，你获得的App secret">
+            <el-input></el-input>
+          </CardRow>
+        </Card>
+
+        <Card >
+          <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
+        </Card>
+      </div>
+
     </div>
 </template>
 
