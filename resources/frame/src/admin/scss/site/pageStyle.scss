@@ -49,13 +49,12 @@
 .icon-add{
   font-size: 15.5PX !important;
 }
-//.iconfont{
-//  font-size: 15.5PX;
-//}
 
 body{
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
 }
+
+/**/
 
 
 
@@ -239,6 +238,9 @@ $contFontSize:14PX;
  */
 .pay-set-box{
 
+  .pay-set__default{
+    margin-top: 15PX;
+  }
 }
 
 

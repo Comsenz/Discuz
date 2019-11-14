@@ -1,7 +1,7 @@
 <template>
   <div class="card-box">
     <div class="card-box__header" :class="$slots.default?'':'not-main'" >
-      <header class="card-title">{{$attrs.header}}</header>
+      <header class="card-title" :class="$attrs.intercept?'card-intercept-title':''" >{{$attrs.header}}</header>
       <slot name="header"></slot>
     </div>
     <main class="card-box__main">

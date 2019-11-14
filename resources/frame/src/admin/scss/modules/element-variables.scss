@@ -22,6 +22,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-table .cell{
   padding-left: 17PX;
 }
+.el-table tr{
+  height: 53PX;
+}
 
 
 $blue:#0054A5;

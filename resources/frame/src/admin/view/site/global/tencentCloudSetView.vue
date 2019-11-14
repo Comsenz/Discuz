@@ -34,22 +34,16 @@
             <div v-if="scope.row.status">
               <el-button
                 size="mini"
-                type="primary"
-                plain
                 @click="configClick(scope.row.type)"
               >配置</el-button>
               <el-button
                 size="mini"
-                type="primary"
-                plain
               >关闭</el-button>
             </div>
 
             <el-button
               v-else
               size="mini"
-              type="primary"
-              plain
             >开启</el-button>
 
           </template>

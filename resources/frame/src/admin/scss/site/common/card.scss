@@ -5,7 +5,8 @@
 
 @import "../../modules/element-variables";
 
-$fontColor:#909399;
+$fontColor:#606266;     //正常标题
+$interceptHeaderColor:#909399;    //拦截标题
 
 .card-box{
   width: 100%;
@@ -26,6 +27,10 @@ $fontColor:#909399;
       font-weight:400;
       color:$fontColor;
       line-height:20PX;
+    }
+
+    .card-intercept-title{
+      color:$interceptHeaderColor;
     }
 
     .card-box__main{
