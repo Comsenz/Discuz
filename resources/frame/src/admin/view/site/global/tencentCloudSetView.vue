@@ -20,10 +20,11 @@
           prop="name"
           label="状态"
           width="100"
+          align="center"
         >
           <template slot-scope="scope">
-            <p v-if="scope.row.status" style="color: #336699;font-weight: 600;">√</p>
-            <p v-else style="color: #336699;font-weight: 600;">—</p>
+            <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
+            <span v-else class="iconfont iconicon_"  ></span>
           </template>
         </el-table-column>
         <el-table-column

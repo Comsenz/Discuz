@@ -20,6 +20,7 @@
           prop="name"
           label="状态"
           width="100"
+          align="center"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>

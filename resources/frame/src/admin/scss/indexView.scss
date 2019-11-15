@@ -5,6 +5,8 @@
  */
 
 @import "modules/element-variables";
+@import '../../../static/css/admin/iconfont.css';
+
 
 html,body{
   width: 100%;
@@ -79,8 +81,8 @@ html,body{
           transition-duration:0.5s;
           cursor: pointer;
 
-          font-size:14PX;
-          font-family:PingFangSC-Medium,PingFang SC;
+          //font-size:14PX;
+          //font-family:PingFangSC-Medium,PingFang SC;
           font-weight:500;
 
           &:hover{
@@ -102,9 +104,9 @@ html,body{
       right: 14PX;
 
       span{
-        font-size:14PX;
-        font-family:PingFangSC-Regular,PingFang SC;
-        font-weight:400;
+        //font-size:14PX;
+        //font-family:PingFangSC-Regular,PingFang SC;
+        //font-weight:400;
         color:$headerFontColor;
         line-height:20PX;
         cursor: pointer;
@@ -150,10 +152,6 @@ html,body{
 
           .index-side-li{
             padding-bottom: 25PX;
-
-            font-size:14PX;
-            font-family:PingFangSC-Regular,PingFang SC;
-            font-weight:400;
             line-height:20PX;
 
             display: flex;
@@ -190,6 +188,7 @@ html,body{
         bottom: 30PX;
         left: 50%;
         transform: translateX(-50%);
+        white-space: nowrap;
       }
 
 
@@ -213,7 +212,6 @@ html,body{
         line-height: 25PX;
         h1{
           font-size:18PX;
-          font-family:PingFangSC-Regular,PingFang SC;
           font-weight:400;
           color:rgba(0,0,0,1);
           line-height: 25PX;

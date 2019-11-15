@@ -73,8 +73,6 @@
 <script>
 import '../../scss/indexView.scss';
 import IndexCon from '../../controllers/site/IndexCon';
-import '../../../../static/css/admin/iconfont.css'
-
 export default {
 	name: "adminIndex",
   ...IndexCon
