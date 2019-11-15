@@ -42,6 +42,7 @@
 
         <Card>
           <el-button type="primary" si ze="medium" @click="roleStatus = 'roleEditing'">提交</el-button>
+          <el-button  size="medium" :disabled="deleteStatus" >删除</el-button>
         </Card>
 
       </div>

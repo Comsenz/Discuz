@@ -12,10 +12,12 @@ $--color-primary:#336699;
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 
-//多选、单选按钮颜色
+
+//多选、单选按钮颜色、副颜色
 $selectColor:#1989FA;
 //多选、单选文字颜色
 $selectFontColor:#303133;
+
 
 /*表格表头背景颜色*/
 .el-table th{
@@ -33,12 +35,19 @@ $selectFontColor:#303133;
 }
 
 /*复选按钮*/
+.el-checkbox{
+  font-weight: 400;
+}
 .el-checkbox__input.is-checked .el-checkbox__inner{
   background-color: $selectColor;
   border-color: $selectColor;
 }
 .el-checkbox__input.is-checked + .el-checkbox__label{
   color: $selectFontColor;
+}
+.el-checkbox__input.is-indeterminate .el-checkbox__inner{
+  background-color: $selectColor;
+  border-color: $selectColor;
 }
 /*单选按钮*/
 .el-radio__input.is-checked .el-radio__inner{
@@ -56,13 +65,46 @@ $selectFontColor:#303133;
 
 .el-button--default{
   border: 1PX solid $--color-primary;
+  color: $--color-primary;
+  &:hover{
+    border:1PX solid $selectColor;
+    //background-color: $selectColor;
+  }
+  &:focus{
+    border:1PX solid $selectColor;
+    //background-color: $selectColor;
+  }
 }
+
 .el-button--mini{
   span{
     font-size: 12PX;
   }
 }
 
+.el-button.is-disabled{
+  background-color: #EDF5FF;
+  border: 1PX solid #D9ECFF;
+  color: #8CC5FF;
+
+  &:hover{
+    background-color: #EDF5FF;
+    border: 1PX solid #D9ECFF;
+    color: #8CC5FF;
+  }
+  &:focus{
+    background-color: #EDF5FF;
+    border: 1PX solid #D9ECFF;
+    color: #8CC5FF;
+  }
+
+}
+
+
+/*输入框*/
+.el-input__inner{
+  border: 1PX solid #D8DCE6;
+}
 
 
 $blue:#0054A5;

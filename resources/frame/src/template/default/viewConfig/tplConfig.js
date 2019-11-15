@@ -167,6 +167,14 @@ export default {
           title:"header"
         }
       },
+	  'theme-det':{
+	    comLoad:function (resolve) {
+	      require(['../view/m_site/common/themeDetView'],resolve)
+	    },
+	    metaInfo:{
+	      title:"主题详情"
+	    }
+	  },
       'post-topic':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/postTopicView'],resolve)

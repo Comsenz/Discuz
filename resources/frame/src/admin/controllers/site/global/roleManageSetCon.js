@@ -22,7 +22,10 @@ export default {
       users:userOptions,
 
       isIndeterminate: true,
-      roleStatus:'default'  //default roleEditing
+      roleStatus:'default',  //default roleEditing
+
+      deleteStatus:true, //删除按钮状态
+      multipleSelection:[]
 
     }
   },
@@ -30,7 +33,12 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
-      console.log(this.multipleSelection);
+      if (this.multipleSelection.length >= 1){
+        this.deleteStatus = false
+      } else {
+        this.deleteStatus = true
+      }
+
     },
 
     handleCheckAllChange(val) {

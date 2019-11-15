@@ -176,7 +176,7 @@ html,body{
           }
 
           .is-active{
-            color: $blue;
+            color: $main;
           }
 
         }
@@ -189,6 +189,7 @@ html,body{
         left: 50%;
         transform: translateX(-50%);
         white-space: nowrap;
+        color: rgba(0,0,0,0.45);
       }
 
 

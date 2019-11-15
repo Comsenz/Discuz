@@ -62,8 +62,12 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
-      if (this.multipleSelection.length = 4){
-        this.deleteStatus = !this.deleteStatus;
+      // console.log(this.multipleSelection);
+
+      if (this.multipleSelection.length >= 1){
+        this.deleteStatus = false
+      } else {
+        this.deleteStatus = true;
       }
 
     }

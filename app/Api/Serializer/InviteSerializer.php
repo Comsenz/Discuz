@@ -21,7 +21,7 @@ class InviteSerializer extends AbstractSerializer
     {
         return [
             'id' => $model->id,
-            'user_group_id' => $model->user_group_id,
+            'group_id' => $model->group_id,
             'code' => $model->code,
             'dateline' => $model->dateline,
             'endtime' => $model->endtime,
