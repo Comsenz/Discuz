@@ -24,6 +24,19 @@ class UpdateGroupPermissionController extends AbstractListController
     public $serializer = GroupPermissionSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
      * Get the data to be serialized and assigned to the response document.
      *
      * @param ServerRequestInterface $request
