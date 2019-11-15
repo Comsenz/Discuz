@@ -12,6 +12,11 @@ $--color-primary:#336699;
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 
+//多选、单选按钮颜色
+$selectColor:#1989FA;
+//多选、单选文字颜色
+$selectFontColor:#303133;
+
 /*表格表头背景颜色*/
 .el-table th{
   background-color: #FAFAFA;
@@ -22,14 +27,49 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 .el-table .cell{
   padding-left: 17PX;
 }
+/*表格表头高度*/
 .el-table tr{
   height: 53PX;
 }
+
+/*复选按钮*/
+.el-checkbox__input.is-checked .el-checkbox__inner{
+  background-color: $selectColor;
+  border-color: $selectColor;
+}
+.el-checkbox__input.is-checked + .el-checkbox__label{
+  color: $selectFontColor;
+}
+/*单选按钮*/
+.el-radio__input.is-checked .el-radio__inner{
+  background-color: $selectColor;
+  border-color: $selectColor;
+}
+.el-radio__input.is-checked + .el-radio__label{
+  color: $selectFontColor;
+}
+
+/*按钮*/
+.el-button{
+  font-weight: 400;
+}
+
+.el-button--default{
+  border: 1PX solid $--color-primary;
+}
+.el-button--mini{
+  span{
+    font-size: 12PX;
+  }
+}
+
 
 
 $blue:#0054A5;
 
 $main:#336699;
+
+$inputPlaceholder:#B2B2B2;
 
 $headerFontColor:#FFF;    //头部字体原色
 $headerFontColorShallow:rgba(255,255,255,0.65);   //头部字体浅色
@@ -43,3 +83,17 @@ $descColor:#909399;   //row插槽-描述字体颜色
 $titleColor:#303133;    //标题字体颜色
 
 $commentColor:#606266;    //注释字体颜色
+
+
+
+
+/*后台界面规定元素默认属性*/
+html,body{
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
+  a{
+    color: $main;
+  }
+  p,span,li,ul,a{
+    font-size: 14PX;
+  }
+}

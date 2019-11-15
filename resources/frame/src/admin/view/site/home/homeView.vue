@@ -34,7 +34,7 @@
         </p>
         <p>
           <span>当前附件尺寸</span>
-          <span>[详情]</span>
+          <span><a href="#">[详情]</a></span>
         </p>
       </Card>
 

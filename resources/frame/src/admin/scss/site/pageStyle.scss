@@ -5,6 +5,7 @@
  */
 
 @import "../modules/element-variables";
+@import "../../../../static/css/admin/iconfont.css";
 @import "../modules/icon";
 
 
@@ -50,27 +51,20 @@
   font-size: 15.5PX !important;
 }
 
-body{
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
-}
-
-/**/
-
-
 
 
 /**
   home页面样式
  */
 
-$contFontSize:14PX;
+//$contFontSize:14PX;
 
 .home-box{
 
   .home-card-box{
     p{
-      font-size:$contFontSize;
-      font-weight:400;
+      //font-size:$contFontSize;
+      //font-weight:400;
       color:$titleColor;
       line-height:20PX;
 
@@ -88,7 +82,7 @@ $contFontSize:14PX;
     a{
       margin-right: 20PX;
       color: $main;
-      font-size: $contFontSize;
+      //font-size: $contFontSize;
     }
   }
 }
@@ -197,8 +191,8 @@ $contFontSize:14PX;
       p{
         margin-left: 65PX;
         color: $main;
-        font-size:14PX;
-        font-weight:400;
+        //font-size:14PX;
+        //font-weight:400;
       }
     }
 
@@ -217,14 +211,14 @@ $contFontSize:14PX;
 
     h2{
       font-size:18PX;
-      font-weight:400;
+      //font-weight:400;
       color:$titleColor;
       line-height:25PX;
       margin-bottom: 11PX;
     }
     p{
-      font-size:14PX;
-      font-weight:400;
+      //font-size:14PX;
+      //font-weight:400;
       color:$commentColor;
       line-height:28PX;
     }
@@ -258,8 +252,8 @@ $contFontSize:14PX;
     p{
       margin-left: 65PX;
       color: $main;
-      font-size:14PX;
-      font-weight:400;
+      //font-size:14PX;
+      //font-weight:400;
       span{
         cursor: pointer;
       }
@@ -284,8 +278,8 @@ $tableHeaderColor:#FAFAFA;
     p{
       margin-left: 65PX;
       color: $main;
-      font-size:14PX;
-      font-weight:400;
+      //font-size:14PX;
+      //font-weight:400;
       span{
         cursor: pointer;
       }
@@ -333,8 +327,6 @@ $tableHeaderColor:#FAFAFA;
       }
     }
   }
-
-
 
 }
 
@@ -386,12 +378,12 @@ $tableHeaderColor:#FAFAFA;
         padding-left: 42PX;
 
         :-moz-placeholder {
-          color: $descColor;
+          color: $inputPlaceholder;
           opacity: 1;
         }
 
         ::-moz-placeholder {
-          color: $descColor;
+          color: $inputPlaceholder;
           opacity: 1;
         }
 
