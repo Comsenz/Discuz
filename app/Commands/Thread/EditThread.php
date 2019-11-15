@@ -107,7 +107,7 @@ class EditThread
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'delete', $thread);
 
-            if ($attributes['isDeleted'] && !$thread->deleted_at) {
+            if ($attributes['isDeleted']) {
                 $thread->deleted_user_id = $this->actor->id;
                 $thread->delete();
             } else {

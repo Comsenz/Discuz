@@ -93,7 +93,7 @@ class EditPost
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'delete', $post);
 
-            if ($attributes['isDeleted'] && !$post->deleted_at) {
+            if ($attributes['isDeleted']) {
                 $post->deleted_user_id = $this->actor->id;
                 $post->delete();
             } else {

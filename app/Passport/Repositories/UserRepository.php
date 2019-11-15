@@ -38,7 +38,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->users->findByIdentification(compact('username'));
 
-        if (! $user || ! $user->checkPassword($password)) {
+        if ($password && (! $user || ! $user->checkPassword($password))) {
             throw new PermissionDeniedException;
         }
 

@@ -46,8 +46,14 @@ class UpdateThreadController extends AbstractCreateController
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
+        $thread = $this->bus->dispatch(
             new EditThread($threadId, $actor, $data)
         );
+
+        $this->include = array_merge($this->include, ['user', 'favoriteState']);
+
+        $thread = $thread->load($this->include);
+
+        return $thread;
     }
 }
