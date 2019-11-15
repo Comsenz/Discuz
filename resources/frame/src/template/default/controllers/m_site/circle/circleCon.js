@@ -79,34 +79,38 @@ export default {
   },
 	methods: {
     loadThemeList(){
-      this.appFetch({
-        url:"threads",
-        method:"get",
-        data:{
-          include:'user,firstPost,lastThreePosts,lastThreePosts.user'
-        }
-      },(res)=>{
-        if (res.status === 200){
-          // console.log(res);
-          this.themeListCon = res.data; //是个对象
-          console.log(this.themeListCon);
-          // for(var i=0; i<this.themeListCon.length;i++){
-          //   this.currentData = this.themeListCon[i];
-          //   var lastThreePostsLen = this.currentData.relationships.lastThreePosts.data.length;
-          //   // console.log(lastThreePosts);
-          //   if(lastThreePostsLen == 0){
-          //     // console.log(lastThreePosts.length);
-          //     this.replyTagShow = false;
-          //   } else {
-          //     this.replyTagShow = true;
-          //   }
-          // }
-        } else{
-          console.log('400');
-        }
-      },(err)=>{
-        console.log(err);
-      })
+
+      console.log(this.sotre.find('threads').then(data => console.log(data)))
+
+
+      // this.appFetch({
+      //   url:"threads",
+      //   method:"get",
+      //   data:{
+      //     include:'user,firstPost,lastThreePosts,lastThreePosts.user'
+      //   }
+      // },(res)=>{
+      //   if (res.status === 200){
+      //     // console.log(res);
+      //     this.themeListCon = res.data; //是个对象
+      //     console.log(this.themeListCon);
+      //     // for(var i=0; i<this.themeListCon.length;i++){
+      //     //   this.currentData = this.themeListCon[i];
+      //     //   var lastThreePostsLen = this.currentData.relationships.lastThreePosts.data.length;
+      //     //   // console.log(lastThreePosts);
+      //     //   if(lastThreePostsLen == 0){
+      //     //     // console.log(lastThreePosts.length);
+      //     //     this.replyTagShow = false;
+      //     //   } else {
+      //     //     this.replyTagShow = true;
+      //     //   }
+      //     // }
+      //   } else{
+      //     console.log('400');
+      //   }
+      // },(err)=>{
+      //   console.log(err);
+      // })
     },
 
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离

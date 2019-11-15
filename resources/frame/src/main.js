@@ -25,6 +25,7 @@ import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一�
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
+import Store from "./common/Store";
 
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
@@ -35,6 +36,7 @@ import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 
 import axios from 'axios';
 Vue.prototype.axios = axios;
+Vue.prototype.sotre = new Store();
 
 
 //实例化根目录
