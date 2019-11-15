@@ -19,7 +19,7 @@ class ThreadSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
-    protected $type = 'Threads';
+    protected $type = 'threads';
 
     /**
      * {@inheritdoc}

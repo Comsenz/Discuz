@@ -19,7 +19,7 @@ class PostSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
-    protected $type = 'Posts';
+    protected $type = 'posts';
 
     /**
      * {@inheritdoc}
