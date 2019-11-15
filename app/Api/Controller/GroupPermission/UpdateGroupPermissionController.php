@@ -14,6 +14,7 @@ namespace App\Api\Controller\GroupPermission;
 use App\Api\Serializer\GroupPermissionSerializer;
 use App\Commands\GroupPermission\UpdateGroupPermission;
 use Discuz\Api\Controller\AbstractListController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Zend\Diactoros\Response\EmptyResponse;
