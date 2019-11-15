@@ -18,6 +18,7 @@ use App\Exceptions\ErrorException;
 use Exception;
 use App\Models\Order;
 use App\Models\PayNotify;
+use App\Models\User;
 
 class CreateOrder
 {
@@ -67,6 +68,12 @@ class CreateOrder
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
+        //收款人
+        $payee_id = (int)$this->data->get('payee_id');
+        $payee_user = User::find($payee_id);
+        if (empty($payee_user)) {
+            throw new ErrorException(app('translator')->get('order.payee_not_found'), 500);
+        }
         //开始事务
         $db->beginTransaction();
         try {
@@ -87,7 +94,7 @@ class CreateOrder
             $order->user_id    = $this->actor->id;
             $order->type       = $this->data->get('type');
             $order->type_id    = $this->data->get('type_id');
-            $order->payee_id   = $this->data->get('payee_id');
+            $order->payee_id   = $payee_id;
             $order->remark     = $this->data->get('remark');
             $order->status     = 0; //待支付
             // 保存订单
