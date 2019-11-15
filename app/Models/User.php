@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Events\Users\Registered;
 use Carbon\Carbon;
+use Discuz\Auth\Guest;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use App\Events\Users\Created;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -41,7 +40,6 @@ class User extends Model
         'id',
         'username',
         'password',
-        'adminid',
         'mobile',
         'created_at'
     ];
@@ -84,8 +82,6 @@ class User extends Model
         $user->password = $password;
         $user->created_at = Carbon::now();
 
-        $user->raise(new Registered($user));
-
         return $user;
     }
 
@@ -122,7 +118,6 @@ class User extends Model
     }
 
     /**
-     * TODO: 验证密码（预留）
      * Check if a given password matches the user's password.
      *
      * @param string $password
@@ -130,12 +125,6 @@ class User extends Model
      */
     public function checkPassword($password)
     {
-        $valid = static::$dispatcher->until(new CheckingPassword($this, $password));
-
-        if ($valid !== null) {
-            return $valid;
-        }
-
         return static::$hasher->check($password, $this->password);
     }
 
@@ -218,6 +207,10 @@ class User extends Model
      */
     public function isAdmin()
     {
+        if ($this instanceof Guest) {
+            return false;
+        }
+
         return $this->groups->contains(Group::ADMINISTRATOR_ID);
     }
 
@@ -288,25 +281,15 @@ class User extends Model
     }
 
     /**
-     * TODO: 消息提醒
-     * Define the relationship with the user's notifications.
-     *
-     * @return HasMany
-     */
-//    public function notifications()
-//    {
-//        dd(123);exit();
-//        return $this->hasMany(''); // Notification::class
-//    }
-
-    /**
      * Define the relationship with the user's favorite threads.
      *
      * @return BelongsToMany
      */
     public function favoriteThreads()
     {
-        return $this->belongsToMany(Thread::class);
+        return $this->belongsToMany(Thread::class)
+            ->as('favoriteState')
+            ->withPivot('created_at');
     }
 
     /**

@@ -21,4 +21,6 @@ class GatewayConfig
     const WECAHT_PAY_NOTIFY = 'WechatPay'; //微信支付异步通知
 
     const WECAHT_PAY_QUERY = 'WechatPay'; //微信支付支付查询
+
+    const WECAHT_TRANSFER = 'WechatPay'; //微信支付企业付款
 }

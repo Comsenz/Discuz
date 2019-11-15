@@ -28,6 +28,11 @@ class ListStopWordsController extends AbstractListController
     public $serializer = StopWordSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = ['user'];
+
+    /**
      * @var StopWordRepository
      */
     protected $stopWords;
@@ -50,16 +55,18 @@ class ListStopWordsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
         $keyword = Arr::get($this->extractFilter($request), 'q');
 
         $stopWords = $this->stopWords
             ->query()
+            ->with($include)
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('find', 'like', "%$keyword%");
             })
@@ -70,7 +77,7 @@ class ListStopWordsController extends AbstractListController
         $hasMoreResults = false;
 
         if (count($stopWords) > $limit) {
-            array_pop($stopWords);
+            $stopWords->pop();
             $hasMoreResults = true;
         }
 

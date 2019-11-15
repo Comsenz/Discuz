@@ -25,7 +25,9 @@ export default {
               require(['../view/site/home/homeView'], resolve)
             },
             metaInfo: {
-              title: '后台首页'
+              title: '管理中心首页',
+              name:'controlCenter',
+              attribution:'首页'
             }
           },
           'site-set':{
@@ -33,15 +35,19 @@ export default {
               require(['../view/site/global/siteSetView'], resolve)
             },
             metaInfo: {
-              title: '站点设置'
+              title: '站点设置',
+              name:'siteSet',
+              attribution:'全局'
             }
           },
-          'sign-up':{
+          'sign-up-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/signUpSetView'], resolve)
             },
             metaInfo: {
-              title: '注册设置'
+              title: '注册设置',
+              name:'signUpSet',
+              attribution:'全局'
             }
           },
           'worth-mentioning-set': {
@@ -49,7 +55,9 @@ export default {
               require(['../view/site/global/worthMentioningSetView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置'
+              title: '第三方登录设置',
+              name:'worthMentioningSet',
+              attribution:'全局'
             }
           },
           'pay-set': {
@@ -57,7 +65,9 @@ export default {
               require(['../view/site/global/paySetView'], resolve)
             },
             metaInfo: {
-              title: '支付设置'
+              title: '支付设置',
+              name:'paySet',
+              attribution:'全局'
             }
           },
           'tencent-cloud-set': {
@@ -65,7 +75,9 @@ export default {
               require(['../view/site/global/tencentCloudSetView'], resolve)
             },
             metaInfo: {
-              title: '腾讯云设置'
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
             }
           },
           'annex-set':{
@@ -73,22 +85,52 @@ export default {
               require(['../view/site/global/annexSetView'], resolve)
             },
             metaInfo: {
-              title: '附件设置'
+              title: '附件设置',
+              name:'annexSet',
+              attribution:'全局'
             }
           },
-
-
-          'login':{
-            comLoad:function (resolve) {
-              require(['../view/site/login/loginView'],resolve)
+          'content-filter-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/contentFilteringSetView'], resolve)
             },
-            metaInfo:{
-              title:'后台登录'
+            metaInfo: {
+              title: '内容过滤设置',
+              name:'contentFilteringSet',
+              attribution:'全局'
             }
-          }
+          },
+          'user-manage-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/userManageSetView'], resolve)
+            },
+            metaInfo: {
+              title: '后台用户管理',
+              ame:'userManage',
+              attribution:'全局'
+            }
+          },
+          'role-manage-set':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/roleManageSetView'], resolve)
+            },
+            metaInfo: {
+              title: '后台角色管理',
+              name:'roleManage',
+              attribution:'全局'
+            }
+          },
         },
         metaInfo: {
           title: '后台架子'
+        }
+      },
+      'admin/login':{
+        comLoad:function (resolve) {
+          require(['../view/site/login/loginView'],resolve)
+        },
+        metaInfo:{
+          title:'后台登录'
         }
       }
 
@@ -100,8 +142,7 @@ export default {
    * @type {Array}
    */
   notNeedLogins: [
-    "site/index",
-    // 'login/loginView',
+    "admin/login",
     ...tplConfig.notNeedLogins
   ]
 };

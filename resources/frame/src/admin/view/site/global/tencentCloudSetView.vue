@@ -9,7 +9,7 @@
           label="腾讯云设置"
         >
           <template slot-scope="scope">
-            <i class="el-icon-time table-icon"></i>
+            <i class="iconfont table-icon" :class="scope.row.icon" ></i>
             <div class="table-con-box">
               <p>{{scope.row.name }}</p>
               <p>{{scope.row.description }}</p>
@@ -20,10 +20,11 @@
           prop="name"
           label="状态"
           width="100"
+          align="center"
         >
           <template slot-scope="scope">
-            <p v-if="scope.row.status" style="color: #336699;font-weight: 600;">√</p>
-            <p v-else style="color: #336699;font-weight: 600;">—</p>
+            <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
+            <span v-else class="iconfont iconicon_"  ></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -34,22 +35,16 @@
             <div v-if="scope.row.status">
               <el-button
                 size="mini"
-                type="primary"
-                plain
                 @click="configClick(scope.row.type)"
               >配置</el-button>
               <el-button
                 size="mini"
-                type="primary"
-                plain
               >关闭</el-button>
             </div>
 
             <el-button
               v-else
               size="mini"
-              type="primary"
-              plain
             >开启</el-button>
 
           </template>

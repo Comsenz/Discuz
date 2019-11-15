@@ -11,7 +11,11 @@ import { mapMutations } from 'vuex';
 export default {
   data:function () {
     return {
-
+      checked:false,
+      form: {
+        user: '',
+        password: '',
+      }
     }
   },
   methods:{
@@ -19,12 +23,16 @@ export default {
       setLoginState:'login/SET_LOGIN_STATE'
     }),
 
-      black(){
-        this.setLoginState();
-        this.$router.go(-1)
-      },
-      user(){
-        this.$router.push('/user/userview')
-      }
+    adminLogin(){
+      this.$router.push({path:'/admin/home'})
+    },
+
+    black(){
+      this.setLoginState();
+      this.$router.go(-1)
+    },
+    user(){
+      this.$router.push('/user/userview')
+    }
   }
 }

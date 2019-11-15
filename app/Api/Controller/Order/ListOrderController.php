@@ -11,6 +11,7 @@ namespace App\Api\Controller\Order;
 
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Tobscure\JsonApi\Document;
 use App\Api\Serializer\OrderSerializer;
 use App\Commands\Order\ListOrder;
@@ -22,6 +23,18 @@ class ListOrderController extends AbstractListController
      */
     public $serializer = OrderSerializer::class;
 
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
     /**
      * {@inheritdoc}
      */

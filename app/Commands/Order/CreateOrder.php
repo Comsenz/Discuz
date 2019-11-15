@@ -58,7 +58,7 @@ class CreateOrder
         // $this->assertCan($this->actor, 'createCircle');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'amount'   => 'required|numeric|min:0',
+            'amount'   => 'required|numeric|min:0.01',
             'type'     => 'required|int',
             'type_id'  => 'required|int',
             'payee_id' => 'required|int',

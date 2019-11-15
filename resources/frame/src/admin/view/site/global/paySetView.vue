@@ -1,15 +1,15 @@
 <template>
   <div class="pay-set-box">
-    <div v-if="loginStatus === 'default'">
+    <div class="pay-set__default" v-if="loginStatus === 'default'">
       <el-table
         :data="tableData"
         style="width: 100%">
         <el-table-column
           prop="date"
-          label="第三方登录类型"
+          label="支付类型"
         >
           <template slot-scope="scope">
-            <i class="el-icon-time table-icon"></i>
+            <i class="iconfont iconweixin table-icon"></i>
             <div class="table-con-box">
               <p>{{scope.row.name }}</p>
               <p>{{scope.row.description }}</p>
@@ -20,10 +20,11 @@
           prop="name"
           label="状态"
           width="100"
+          align="center"
         >
           <template slot-scope="scope">
-            <p v-if="scope.row.status" style="color: #336699;font-weight: 600;">√</p>
-            <p v-else style="color: #336699;font-weight: 600;">—</p>
+            <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
+            <span v-else class="iconfont iconicon_"  ></span>
           </template>
         </el-table-column>
         <el-table-column
@@ -34,14 +35,10 @@
             <div v-if="scope.row.status">
               <el-button
                 size="mini"
-                type="primary"
-                plain
                 @click="configClick"
               >配置</el-button>
               <el-button
                 size="mini"
-                type="primary"
-                plain
               >关闭</el-button>
             </div>
 

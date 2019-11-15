@@ -12,6 +12,14 @@ $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsCon
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Cloud APIs
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionController::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +32,21 @@ $route->post('/groups', 'group.create', ApiController\Group\CreateGroupControlle
 
 /*
 |--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/login', 'login', ApiController\Users\LoginController::class);
+$route->post('/register', 'register', ApiController\Users\RegisterController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Users
 |--------------------------------------------------------------------------
 */
+
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->post('/login', 'users.login', ApiController\Users\LoginUsersController::class);
 $route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
@@ -37,13 +54,18 @@ $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileContro
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
-$route->post('/send', 'send', ApiController\Mobile\SendController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Sms
+|--------------------------------------------------------------------------
+*/
+$route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
 $route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
 $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
 $route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
 $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
-$route->get('/notification', 'notification.index', ApiController\Notification\ListNotificationController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +73,7 @@ $route->get('/notification', 'notification.index', ApiController\Notification\Li
 |--------------------------------------------------------------------------
 */
 
+$route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
@@ -164,10 +187,12 @@ $route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Tra
  | Wallet
  |--------------------------------------------------------------------------
  */
-$route->post('/wallet/user', 'wallet.user.create', ApiController\Wallet\CreateUserWalletController::class);
 $route->get('/wallet/user/{user_id}', 'wallet.user.resource', ApiController\Wallet\ResourceUserWalletController::class);
-$route->patch('/wallet/{wallet_id}', 'wallet.update', ApiController\Wallet\UpdateUserWalletController::class);
-$route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
+$route->patch('/wallet/user/{user_id}', 'wallet.user.update', ApiController\Wallet\UpdateUserWalletController::class);
+
+$route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
+$route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListCashUserWalletController::class);
+$route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\ReviewCashUserWalletController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -175,3 +200,12 @@ $route->post('/wallet/user/cash', 'wallet.user.cash.create', ApiController\Walle
 |--------------------------------------------------------------------------
 */
 $route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Notification
+|--------------------------------------------------------------------------
+*/
+$route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
+$route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
+$route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);

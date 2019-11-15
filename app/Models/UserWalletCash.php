@@ -34,6 +34,21 @@ class UserWalletCash extends Model
     public $timestamps = true;
 
     /**
+     * 提现状态
+     */
+    const STATUS_REVIEW = 1; //待审核
+
+    const STATUS_REVIEWED = 2; //审核通过
+
+    const STATUS_REVIEW_FAILED = 3; //审核不通过
+
+    const STATUS_IN_PAYMENT = 4; //待打款
+
+    const STATUS_PAID = 5; //已打款
+
+    const STATUS_PAYMENT_FAILURE = 6; //打款失败
+
+    /**
      * 模型的「启动」方法.
      *
      * @return void
@@ -46,7 +61,6 @@ class UserWalletCash extends Model
     /**
      * 创建提现申请
      * @param  [type] $user_id        [description]
-     * @param  [type] $user_wallet_id [description]
      * @param  [type] $cash_sn        [description]
      * @param  [type] $cash_charge    [description]
      * @param  [type] $cash_actual_amount    [description]
@@ -56,7 +70,6 @@ class UserWalletCash extends Model
      */
     public static function createCash(
         $user_id,
-        $user_wallet_id,
         $cash_sn,
         $cash_charge,
         $cash_actual_amount,
@@ -64,11 +77,13 @@ class UserWalletCash extends Model
         $remark) {
         $cash                     = new static;
         $cash->user_id            = $user_id;
-        $cash->user_wallet_id     = $user_wallet_id;
         $cash->cash_sn            = $cash_sn;
         $cash->cash_charge        = $cash_charge;
         $cash->cash_actual_amount = $cash_actual_amount;
         $cash->cash_apply_amount  = $cash_apply_amount;
+        $cash->trade_no           = '';
+        $cash->error_code         = '';
+        $cash->error_message      = '';
         $cash->remark             = $remark;
         $cash->cash_status        = 1; //待审核
         $cash->save();

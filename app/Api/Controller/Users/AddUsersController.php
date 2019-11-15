@@ -46,6 +46,7 @@ class AddUsersController implements RequestHandlerInterface
         $data = $this->bus->dispatch(
             new CreateUsers($actor, $inputs->toArray(), $ipAddress)
         );
+        dd(2);
         //生成jwt
         /** @var TYPE_NAME $actor */
         $jwt = $this->bus->dispatch(

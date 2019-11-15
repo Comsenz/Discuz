@@ -40,14 +40,20 @@ class UpdateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
+        $thread = $this->bus->dispatch(
             new EditThread($threadId, $actor, $data)
         );
+
+        $thread->setStateUser($actor);
+
+        $thread = $thread->load(array_merge($this->include, ['user', 'favoriteState']));
+
+        return $thread;
     }
 }

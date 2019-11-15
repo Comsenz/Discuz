@@ -25,6 +25,11 @@ class UpdateStopWordController extends AbstractCreateController
     public $serializer = StopWordSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = ['user'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -40,7 +45,7 @@ class UpdateStopWordController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');

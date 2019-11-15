@@ -27,6 +27,12 @@ class PayNotify extends Model
     protected $table = 'pay_notify';
 
     /**
+     * 通知状态
+     */
+    const NOTIFY_STATUS_PENDING = 0;//未收到通知
+    const NOTIFY_STATUS_RECEIVED = 1;//已收到通知
+
+    /**
      * 该模型是否被自动维护时间戳.
      *
      * @var bool

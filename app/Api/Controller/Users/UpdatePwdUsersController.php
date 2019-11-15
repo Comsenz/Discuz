@@ -20,17 +20,17 @@ class updatePwdUsersController extends AbstractResourceController
      * @param ServerRequestInterface $request
      * @param Document $document
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // TODO: Implement data() method.
-        
+
         $data = $request->getParsedBody();
         //验证    密码格式
-        
+
         //验证权限
         if(false){
             $objuser = User::findOrFail(Arr::get($data, 'id'));
-               
+
             $objuser->password = User::setUserPasswordAttr('123456');
 
             $objuser->save();
@@ -40,16 +40,16 @@ class updatePwdUsersController extends AbstractResourceController
             $userpwd=$user->password;
             if(User::unsetUserPasswordAttr(Arr::get($data, 'password'),$userpwd)){
                 $objuser = User::findOrFail(Arr::get($data, 'id'));
-               
+
                 $objuser->password = User::setUserPasswordAttr(Arr::get($request->getParsedBody(), 'newpassword'));
-    
+
                 $objuser->save();
                 return "修改成功";
             }else{
                 return "原密码错误";
             }
-    
+
         }
-         
+
     }
 }

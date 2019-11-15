@@ -1,13 +1,13 @@
 <template>
     <div class="home-box">
-      <Card class="home-card-box" header="待处理事项">
+      <Card class="home-card-box" header="待处理事项" intercept="true">
         <p>
           等待审核的主题数
           <span style="color: #336699;">(&nbsp;1&nbsp;)</span>
         </p>
       </Card>
 
-      <Card class="home-card-box" header="系统信息">
+      <Card class="home-card-box" header="系统信息" intercept="true">
         <p>
           <span>Discuz!程序版本</span>
           <span>Discuz! Q Bete 1.0.12.31</span>
@@ -34,7 +34,7 @@
         </p>
         <p>
           <span>当前附件尺寸</span>
-          <span>[详情]</span>
+          <span><a href="#">[详情]</a></span>
         </p>
       </Card>
 

@@ -17,9 +17,12 @@ class AddThreadFavoriteAttribute
     public function handle(Serializing $event)
     {
         if ($event->isSerializer(ThreadSerializer::class)) {
-            $isFavorite = $event->model->favoriteUsers()->where('user_id', $event->actor->id)->first();
+            $event->attributes['canFavorite'] = (bool) $event->actor->can('favorite', $event->model);
 
-            $event->attributes['isFavorite'] = $isFavorite ? true : false;
+            if ($favoriteState = $event->model->favoriteState) {
+                $event->attributes['isFavorite'] = $favoriteState ? true : false;
+                $event->attributes['favoriteAt'] = $event->formatDate($favoriteState->created_at);
+            }
         }
     }
 }

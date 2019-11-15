@@ -8,6 +8,7 @@
 
 namespace App\Api\Controller\Wallet;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletSerializer;
 use App\Commands\Wallet\ResourceUserWallet;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -21,6 +22,19 @@ class ResourceUserWalletController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $serializer = UserWalletSerializer::class;
+    
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
 
     /**
      * {@inheritdoc}

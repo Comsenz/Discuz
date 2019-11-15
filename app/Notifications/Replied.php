@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: TopicRepied 28830 2019-11-08 14:52 yanchen $
+ *      Id: Replied 28830 2019-11-08 14:52 yanchen $
  */
 
 namespace App\Notifications;
@@ -14,7 +14,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
 
-class TopicReplied extends Notification
+class Replied extends Notification
 {
     use Queueable;
 
@@ -41,7 +41,7 @@ class TopicReplied extends Notification
 
     public function toDatabase($notifiable){
         return [
-            'reply_id' => $notifiable->reply_id,
+            'id' => $notifiable->id,
         ];
     }
 }

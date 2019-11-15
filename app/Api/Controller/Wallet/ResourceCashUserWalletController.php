@@ -8,25 +8,43 @@
 
 namespace App\Api\Controller\Wallet;
 
-use App\Api\Serializer\WalletUserSerializer;
+use Illuminate\Contracts\Bus\Dispatcher;
+use App\Api\Serializer\UserWalletCashSerializer;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use App\Commands\Wallet\ReasourseUserWalletCash;
 
 class ResourceCashUserWalletController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = WalletUserSerializer::class;
+    public $serializer = UserWalletCashSerializer::class;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
+        // 获取当前用户
         $actor = $request->getAttribute('actor');
+        return $this->bus->dispatch(
+            new ReasourseUserWalletCash($actor)
+        );
 
     }
 }

@@ -9,16 +9,20 @@
 
       <div class="index-header__nav">
         <ul class="menu-demo">
-          <!--is-active-->
-          <li class="menu-item" @click="menuClick(item.name)" :class="item.name === '首页'?'is-active':''" v-for="(item,index) in navList" :key="index">{{item.name}}</li>
-
+          <li class="menu-item"
+              @click="menuClick(item)"
+              :class="navSelect === item.name?'is-active':''"
+              v-for="(item,index) in navList"
+              :key="index">
+            {{item.title}}
+          </li>
         </ul>
-
       </div>
 
       <div class="index-header__info-menu">
-          <span>您好，admin [退出]</span>
-          <span class="site-home">站点首页</span>
+        <span>您好，admin</span>
+        <span @click="$router.push({path:'/admin/login'})">&nbsp;[退出]</span>
+        <span class="site-home">站点首页</span>
       </div>
 
     </el-header>
@@ -33,25 +37,14 @@
         <div class="index-main-con__side-list">
 
           <ul class="index-side-ul">
-            <li class="index-side-li is-active">
-              <span></span>
-              <span>管理中心首页</span>
+            <li v-for="item in sideList"
+                class="index-side-li"
+                :class="sideSelect === item.name?'is-active':''"
+                @click="sideClick(item)">
+              <span class="iconfont" :class="item.icon"></span>
+              <span>{{item.title}}</span>
             </li>
 
-            <li class="index-side-li">
-              <span></span>
-              <span>站点信息</span>
-            </li>
-
-            <li class="index-side-li">
-              <span></span>
-              <span>注册设置</span>
-            </li>
-
-            <li class="index-side-li">
-              <span></span>
-              <span>登录设置</span>
-            </li>
           </ul>
 
         </div>

@@ -9,6 +9,7 @@
 
 namespace App\Api\Controller\Trade\Notify;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use App\Commands\Trade\Notify\WechatNotify;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ResponseInterface;
@@ -19,6 +20,19 @@ use Zend\Diactoros\Response\XmlResponse;
 class WechatNotifyController extends AbstractResourceController
 {
 
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+    
     /**
      * {@inheritdoc}
      */

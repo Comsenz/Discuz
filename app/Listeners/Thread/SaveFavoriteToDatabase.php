@@ -30,12 +30,16 @@ class SaveFavoriteToDatabase
 
             $isFavorite = $actor->favoriteThreads()->where('thread_id', $thread->id)->exists();
 
-            if ($data['attributes']['isFavorite'] && !$isFavorite) {
-                // 未收藏且 isFavorite 为 true 时，添加收藏
-                $actor->favoriteThreads()->attach($thread->id, ['created_at' => Carbon::now()]);
-            } elseif ($isFavorite) {
+            if ($isFavorite) {
                 // 已收藏且 isFavorite 为 false 时，取消收藏
-                $actor->favoriteThreads()->detach($thread->id);
+                if (!$data['attributes']['isFavorite']) {
+                    $actor->favoriteThreads()->detach($thread->id);
+                }
+            } else {
+                // 未收藏且 isFavorite 为 true 时，添加收藏
+                if ($data['attributes']['isFavorite']) {
+                    $actor->favoriteThreads()->attach($thread->id, ['created_at' => Carbon::now()]);
+                }
             }
         }
     }

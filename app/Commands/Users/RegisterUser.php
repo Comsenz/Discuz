@@ -9,6 +9,7 @@
 
 namespace App\Commands\Users;
 
+use App\Events\Users\Registered;
 use App\Events\Users\Saving;
 use App\Models\User;
 use App\Validators\UserValidator;
@@ -78,6 +79,8 @@ class RegisterUser
             Arr::get($this->data, 'attributes.mobile'),
             $password
         );
+
+        $user->raise(new Registered($user, $this->actor, $this->data));
 
         $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)

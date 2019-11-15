@@ -56,10 +56,10 @@ class CreateCashUserWallet
     public function handle(Validator $validator, ConnectionInterface $db)
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        // $this->assertCan($this->actor, 'createCash');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'cash_apply_amount' => 'required|min:1|max:5000',
+            'cash_apply_amount' => 'required|numeric|min:0|max:5000',
             'remark'            => 'sometimes|max:255',
         ]);
 
@@ -70,7 +70,9 @@ class CreateCashUserWallet
         $db->beginTransaction();
         try {
             //获取用户钱包
-            $user_wallet = UserWallet::where('user_id', $this->actor->id)->lockForUpdate()->first();
+            $user_wallet = UserWallet::lockForUpdate()->find($this->actor->id);
+
+
             //检查钱包是否允许提现,1:钱包已冻结
             if ($user_wallet->wallet_status == 1) {
                 throw new Exception(app('translator')->get('wallet.status_cash_freeze'), 500);
@@ -91,7 +93,6 @@ class CreateCashUserWallet
             $tax_amount = sprintf("%.2f", ceil($tax_amount * 100) / 100); //格式化手续费
 
             $user_id            = $this->actor->id;
-            $user_wallet_id     = $user_wallet->id;
             $cash_sn            = $this->getCashSn();
             $cash_charge        = $tax_amount;
             $cash_actual_amount = $cash_apply_amount - $tax_amount;
@@ -104,12 +105,11 @@ class CreateCashUserWallet
             $user_wallet->save();
 
             //添加钱包明细,
-            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, $user_wallet_id, 0, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
+            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
 
             //创建提现记录
             $cash = UserWalletCash::createCash(
                 $this->actor->id,
-                $user_wallet_id,
                 $cash_sn,
                 $cash_charge,
                 $cash_actual_amount,

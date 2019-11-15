@@ -28,7 +28,7 @@ class ResourceInviteController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         return StopWord::findOrFail(Arr::get($request->getQueryParams(), 'id'));
     }

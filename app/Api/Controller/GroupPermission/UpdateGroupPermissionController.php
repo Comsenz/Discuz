@@ -14,6 +14,7 @@ namespace App\Api\Controller\GroupPermission;
 use App\Api\Serializer\GroupPermissionSerializer;
 use App\Commands\GroupPermission\UpdateGroupPermission;
 use Discuz\Api\Controller\AbstractListController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Zend\Diactoros\Response\EmptyResponse;
@@ -24,13 +25,26 @@ class UpdateGroupPermissionController extends AbstractListController
     public $serializer = GroupPermissionSerializer::class;
 
     /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
      * Get the data to be serialized and assigned to the response document.
      *
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return mixed
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');

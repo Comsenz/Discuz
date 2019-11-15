@@ -48,7 +48,7 @@ class CreateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public function data(ServerRequestInterface $request, Document $document)
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
