@@ -32,12 +32,21 @@ $route->post('/groups', 'group.create', ApiController\Group\CreateGroupControlle
 
 /*
 |--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/login', 'login', ApiController\Users\LoginController::class);
+$route->post('/register', 'register', ApiController\Users\RegisterController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Users
 |--------------------------------------------------------------------------
 */
+
 $route->get('/users', 'users.list', ApiController\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->post('/login', 'users.login', ApiController\Users\LoginController::class);
 $route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
