@@ -11,10 +11,10 @@
         <ul class="menu-demo">
           <li class="menu-item"
               @click="menuClick(item)"
-              :class="navSelect === item.id?'is-active':''"
+              :class="navSelect === item.name?'is-active':''"
               v-for="(item,index) in navList"
               :key="index">
-            {{item.name}}
+            {{item.title}}
           </li>
         </ul>
       </div>
@@ -42,7 +42,7 @@
                 :class="sideSelect === item.name?'is-active':''"
                 @click="sideClick(item)">
               <span class="iconfont" :class="item.icon"></span>
-              <span>{{item.name}}</span>
+              <span>{{item.title}}</span>
             </li>
 
           </ul>

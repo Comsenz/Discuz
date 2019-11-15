@@ -27,6 +27,7 @@ export default {
         value: '选项2',
         label: '处理'
       }],
+      multipleSelection:[]
     }
   },
   methods:{
@@ -41,11 +42,12 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
-      if (this.multipleSelection.length = 2){
-        this.deleteStatus = !this.deleteStatus;
+      if (this.multipleSelection.length >= 1){
+        this.deleteStatus = false
+      } else {
+        this.deleteStatus = true
       }
 
-      console.log(this.multipleSelection);
     }
 
   },
