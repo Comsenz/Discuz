@@ -12,6 +12,11 @@ namespace App\Api\Controller\Invite;
 
 
 use App\Api\Serializer\InviteSerializer;
+use App\Models\Group;
+use App\Models\Invite;
+use App\Models\User;
+use App\Repositories\ClassifyRepository;
+use App\Searchs\Classify\ClassifySearch;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -22,11 +27,11 @@ class ListInviteController extends AbstractListController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: Implement data() method.
-        $res = $this->bus->dispatch(
-            new CreateThread('aaa','bb',array('cc'))
-        );
-        dd($res);
-        return $res;
+        $actor = $request->getAttribute('actor');
+        $actor->id = 1;
+
+        return Invite::where([
+            ['user_id', '=', 1],
+            ['type', '=', '2']])->get();
     }
 }

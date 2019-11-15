@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: UpdateInviteController.php 28830 2019-10-12 15:47 chenkeke $
+ *      Id: UpdateInviteController.php 28830 2019-10-12 15:47 yanchen $
  */
 
 namespace App\Api\Controller\Invite;
@@ -36,18 +36,13 @@ class UpdateInviteController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
+        $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
-
-        // 获取请求的参数
-        $inputs = $request->getParsedBody();
-
-        // 获取请求的IP
-        $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $data = $request->getParsedBody()->get('data', []);
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new UpdateInvite($inputs['id'], $actor, $inputs->toArray(), $ipAddress)
+            new UpdateInvite()
         );
 
         // 返回结果

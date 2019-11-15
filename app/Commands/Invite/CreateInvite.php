@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class CreateInvite
 {
@@ -50,13 +51,11 @@ class CreateInvite
      *
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
-     * @param string $ipAddress    请求来源的IP地址.
      */
-    public function __construct($actor, array $data, string $ipAddress)
+    public function __construct($actor, array $data)
     {
         $this->actor = $actor;
         $this->data = $data;
-        $this->ipAddress = $ipAddress;
     }
 
     /**
@@ -72,20 +71,21 @@ class CreateInvite
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+         $this->assertCan($this->actor, 'createInvite');
 
         // 生成邀请码
         $code = Str::random(32);
         $dateline = Carbon::now()->timestamp;
-        $endtime = Carbon::parse('2099-01-01')->timestamp;
+        //7天有效期
+        $endtime  = Carbon::now()->addDay(7)->timestamp;
 
         // 初始数据
         $invite = Invite::creation(
-            $this->data['user_group_id'],
+            Arr::get($this->data, 'attributes.group_id'),
             $code,
             $dateline,
             $endtime,
-            $this->actor['id']?:0
+            $this->actor->id ?: 0
         );
 
         // 触发钩子事件

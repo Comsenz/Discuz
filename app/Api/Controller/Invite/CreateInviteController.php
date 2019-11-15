@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CreateInviteController.php 28830 2019-10-12 15:43 chenkeke $
+ *      Id: CreateInviteController.php 28830 2019-10-12 15:43 yanchen $
  */
 
 namespace App\Api\Controller\Invite;
@@ -14,9 +14,9 @@ namespace App\Api\Controller\Invite;
 use App\Api\Serializer\InviteSerializer;
 use App\Commands\Invite\CreateInvite;
 use Discuz\Api\Controller\AbstractCreateController;
-use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 class CreateInviteController extends AbstractCreateController
 {
@@ -26,6 +26,14 @@ class CreateInviteController extends AbstractCreateController
      * @var Serializer
      */
     public $serializer = InviteSerializer::class;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
 
     /**
      * 数据操作.
@@ -38,16 +46,11 @@ class CreateInviteController extends AbstractCreateController
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');
-
-        // 获取请求的参数
-        $inputs = $request->getParsedBody();
-
-        // 获取请求的IP
-        $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $actor->id = 1;
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new CreateInvite($actor, $inputs->toArray(), $ipAddress)
+            new CreateInvite($actor, $request->getParsedBody()->get('data', []))
         );
 
         // 返回结果
