@@ -9,12 +9,12 @@
 
 namespace App\Listeners\Wallet;
 
-use App\Events\Users\Saving;
+use App\Events\Users\Registered;
 use App\Models\UserWallet;
 
 class CreateUserWalletListener
 {
-    public function handle(Saving $event)
+    public function handle(Registered $event)
     {
         $user_wallet = UserWallet::where('user_id', $event->user->id)->first();
         if (empty($user_wallet)) {
