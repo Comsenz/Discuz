@@ -101,11 +101,7 @@ export default {
       ],  //导航菜单列表
       navSelect:'',  //导航选中
 
-      sideList:[{
-        id:0,
-        name:'管理中心首页',
-        icon:'iconshouye'
-      }],    //侧边菜单
+      sideList:[],    //侧边菜单
       sideSelect:''    //侧边选中
 
     }
@@ -138,7 +134,7 @@ export default {
           console.log("获取菜单出错");
       }
 
-      console.log(this.sideList);
+      // console.log(this.sideList);
 
     },
 

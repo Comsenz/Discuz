@@ -5,8 +5,6 @@
 
 @import "../../modules/element-variables";
 
-$width:30PX;
-
 .card-row-box{
   min-width: 650PX;
   .card-row-lf{
@@ -15,17 +13,14 @@ $width:30PX;
     width: 40%;
   }
   .card-row-rf{
-    width: calc(40% - 30px);
+    width: 57%;
+    flex-basis:auto;
     display: inline-block;
     vertical-align: top;
     padding-top: 8PX;
     span{
-      font-size:14PX;
-      font-family:PingFangSC-Regular,PingFang SC;
-      font-weight:400;
       color:rgba(144,147,153,1);
       line-height:20PX;
-      white-space: pre-wrap;
     }
 
   }
