@@ -120,6 +120,56 @@ export default {
               attribution:'全局'
             }
           },
+
+          //内容分类
+          'cont-class':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/contClassView'], resolve)
+            },
+            metaInfo: {
+              title: '内容分类',
+              name:'contClass',
+              attribution:'内容'
+            }
+          },
+          'cont-manage':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/contManageView'], resolve)
+            },
+            metaInfo: {
+              title: '内容管理',
+              name:'contManage',
+              attribution:'内容'
+            }
+          },
+          'cont-review':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/contReviewView'], resolve)
+            },
+            metaInfo: {
+              title: '内容审核',
+              name:'contReview',
+              attribution:'内容'
+            }
+          },'recycle-bin':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/recycleBinView'], resolve)
+            },
+            metaInfo: {
+              title: '回收站',
+              name:'recycleBin',
+              attribution:'内容'
+            }
+          },'reply-review':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/replyReviewView'], resolve)
+            },
+            metaInfo: {
+              title: '回复审核',
+              name:'replyReview',
+              attribution:'内容'
+            }
+          },
         },
         metaInfo: {
           title: '后台架子'

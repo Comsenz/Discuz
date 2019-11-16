@@ -1,13 +1,13 @@
 <template>
     <div>
-      <p>内容</p>
+      <p>内容分类</p>
     </div>
 </template>
 
 <script>
-// import contCon from 'contCon';
+import '../../../scss/site/pageStyle.scss';
 export default {
-    name: "cont-view",
+    name: "cont-class",
   // ...contCon
 }
 </script>
