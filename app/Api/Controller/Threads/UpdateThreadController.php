@@ -50,9 +50,9 @@ class UpdateThreadController extends AbstractCreateController
             new EditThread($threadId, $actor, $data)
         );
 
-        $this->include = array_merge($this->include, ['user', 'favoriteState']);
+        $thread->setStateUser($actor);
 
-        $thread = $thread->load($this->include);
+        $thread = $thread->load(array_merge($this->include, ['user', 'favoriteState']));
 
         return $thread;
     }

@@ -16,7 +16,7 @@ use Discuz\Api\Serializer\AbstractSerializer;
 class GroupPermissionSerializer extends AbstractSerializer
 {
 
-    protected $type = 'groupPermission';
+    protected $type = 'group-permission';
 
     /**
      * Get the default set of serialized attributes for a model.

@@ -35,13 +35,6 @@ class Invite extends Model
     public $timestamps = true;
 
     /**
-     * 模型的日期字段的存储格式
-     *
-     * @var string
-     */
-    protected $dateFormat = 'U';
-
-    /**
      * 存储时间戳的字段名
      *
      * @var string
@@ -76,7 +69,7 @@ class Invite extends Model
      * @return static
      */
     public static function creation(
-        $user_group_id,
+        $group_id,
         $code,
         $dateline,
         $endtime,
@@ -86,7 +79,7 @@ class Invite extends Model
         $invite = new static;
 
         // 设置模型属性值
-        $invite->user_group_id = $user_group_id;
+        $invite->group_id = $group_id;
         $invite->code = $code;
         $invite->dateline = $dateline;
         $invite->endtime = $endtime;
