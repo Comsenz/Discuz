@@ -1,6 +1,6 @@
 <template>
     <div class="cont-class-box">
-      <div>
+      <div class="cont-class-table">
         <el-table
           ref="multipleTable"
           :data="tableData"

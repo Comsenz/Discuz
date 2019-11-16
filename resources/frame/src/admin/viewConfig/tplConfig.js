@@ -142,6 +142,18 @@ export default {
               attribution:'内容'
             }
           },
+
+          'cont-manage/search':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/contManageSearchView'], resolve)
+            },
+            metaInfo: {
+              title: '内容管理',
+              name:'contManage',
+              attribution:'内容'
+            }
+          },
+
           'cont-review':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contReviewView'], resolve)
