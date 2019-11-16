@@ -1,0 +1,22 @@
+/*内容导航菜单各个页面*/
+
+@import "../modules/element-variables";
+@import "../../../../static/css/admin/iconfont.css";
+@import "../modules/icon";
+
+.cont-class-box{
+
+  .cont-class-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      line-height: 45PX;
+      span{
+        cursor: pointer;
+      }
+    }
+  }
+}

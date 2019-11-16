@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import '../../../scss/site/contStyle.scss';
 export default {
     name: "cont-manage-view"
 }

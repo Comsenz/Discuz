@@ -5,7 +5,8 @@
 </template>
 
 <script>
-export default {
+import '../../../scss/site/contStyle.scss';
+  export default {
     name: "reply-review-view"
 }
 </script>
