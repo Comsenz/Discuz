@@ -23,8 +23,6 @@
 .table-con-box{
   width:calc(100% - 50px);
 
-  //width: calc(100% - 50px);
-
   display: inline-block;
   vertical-align: middle;
 
@@ -252,8 +250,6 @@
     p{
       margin-left: 65PX;
       color: $main;
-      //font-size:14PX;
-      //font-weight:400;
       span{
         cursor: pointer;
       }
@@ -313,17 +309,6 @@ $tableHeaderColor:#FAFAFA;
           line-height: 23PX;
           margin-right: 68PX;
         }
-
-        .el-checkbox-group{
-          //display: table;
-          //table-layout: fixed;
-          //width: 100%;
-
-          .el-checkbox{
-            //display: table-cell;
-          }
-        }
-
       }
     }
   }

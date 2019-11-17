@@ -86,7 +86,33 @@ export default {
         {
           id:2,
           title:'用户',
-          name:'user'
+          name:'user',
+          submenu:[
+            {
+              id:0,
+              title:'内容分类',
+              name:'contClass',
+              icon:'iconneirongfenlei'
+            },
+            {
+              id:1,
+              title:'内容管理',
+              name:'contManage',
+              icon:'iconneirongguanli'
+            },
+            {
+              id:2,
+              title:'内容审核',
+              name:'contReview',
+              icon:'iconneirongshenhe'
+            },
+            {
+              id:3,
+              title:'回收站',
+              name:'recycleBin',
+              icon:'iconhuishouzhan'
+            }
+          ]
         },
         {
           id:3,
@@ -130,11 +156,16 @@ export default {
           this.sideSelect = name;
           this.sideList = this.navList[1].submenu;
           break;
+        case '内容':
+          this.navSelect = this.navList[2].name;
+          this.indexTitle = title;
+          this.sideTitle = attribution;
+          this.sideSelect = name;
+          this.sideList = this.navList[2].submenu;
+          break;
         default :
           console.log("获取菜单出错");
       }
-
-      // console.log(this.sideList);
 
     },
 
@@ -154,6 +185,12 @@ export default {
           this.sideList = this.navList[1].submenu;
           this.sideSelect = this.navList[1].submenu[0].name;
           this.indexTitle = this.navList[1].submenu[0].title;
+          this.$router.push({path:'/admin/site-set'});
+          break;
+        case 'user':
+          this.sideList = this.navList[2].submenu;
+          this.sideSelect = this.navList[2].submenu[0].name;
+          this.indexTitle = this.navList[2].submenu[0].title;
           this.$router.push({path:'/admin/site-set'});
           break;
         default :
@@ -197,6 +234,19 @@ export default {
           break;
         case 'roleManage':
           this.$router.push({path:'/admin/role-manage-set'});
+          break;
+
+        case 'contClass':
+          this.$router.push({path:'/admin/cont-class'});
+          break;
+        case 'contManage':
+          this.$router.push({path:'/admin/cont-manage'});
+          break;
+        case 'contReview':
+          this.$router.push({path:'/admin/cont-review'});
+          break;
+        case 'recycleBin':
+          this.$router.push({path:'/admin/recycle-bin'});
           break;
       }
 

@@ -1,0 +1,104 @@
+/*内容导航菜单各个页面*/
+
+@import "../modules/element-variables";
+@import "../../../../static/css/admin/iconfont.css";
+@import "../modules/icon";
+
+.transition-box {
+  margin-bottom: 10px;
+  width: 200px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: #409EFF;
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+
+/*
+  内容分类
+  */
+.cont-class-box{
+
+  .cont-class-table{
+    margin-top: 15PX;
+  }
+
+  .cont-class-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      line-height: 45PX;
+      span{
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+
+
+/*
+  内容管理
+  */
+.cont-manage-box{
+
+  .cont-manage-theme{
+    margin-top: 15PX;
+  }
+
+  .cont-manage-operating{
+    p{
+      padding: 25PX 0 15PX 0;
+    }
+  }
+}
+
+/*
+  内容管理--主题搜索
+*/
+
+/*范围box*/
+
+.range-box{
+
+  .card-box__main{
+    width: 40%;
+    display: flex;
+    align-items: center;
+
+    i{
+      width: 10PX;
+      height: 1PX;
+      margin: 0 15PX;
+      background-color: $commentColor;
+    }
+  }
+}
+
+.cont-manage-search-box{
+  margin-top: 15PX;
+
+  .el-select{
+    width: 40%;
+  }
+
+  .el-button{
+    margin-right:40PX;
+  }
+
+  .cont-manage-search-more{
+
+    .el-date-editor{
+      width: 100%;
+    }
+
+  }
+
+
+}

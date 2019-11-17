@@ -58,6 +58,11 @@
 
         <div class="index-main-con__main-title">
           <h1>{{indexTitle}}</h1>
+          <div class="index-main-con__main-title__class">
+            <i></i>
+            <span class="is-active">最新主题</span>
+            <span>搜索</span>
+          </div>
         </div>
 
         <div class="router-con">

@@ -67,11 +67,11 @@ $selectFontColor:#303133;
   border: 1PX solid $--color-primary;
   color: $--color-primary;
   &:hover{
-    border:1PX solid $selectColor;
+    border:1PX solid $--color-primary;
     //background-color: $selectColor;
   }
   &:focus{
-    border:1PX solid $selectColor;
+    border:1PX solid $--color-primary;
     //background-color: $selectColor;
   }
 }
@@ -130,12 +130,14 @@ $commentColor:#606266;    //注释字体颜色
 
 
 /*后台界面规定元素默认属性*/
-html,body{
-  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
+*{
+  //font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
+  //font-size: 14PX;
+  font:14PX/1 Lucida Grande,Lucida Sans Unicode,Helvetica Neue,Hiragino Sans GB,Microsoft Yahei,sans-serif;
   a{
     color: $main;
   }
-  p,span,li,ul,a{
+  /*p,span,li,ul,a{
     font-size: 14PX;
-  }
+  }*/
 }

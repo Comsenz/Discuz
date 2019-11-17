@@ -8,17 +8,10 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
         >
-        <!--:type="tableData[3].name !=='新增'?'selection':''"-->
-
         <el-table-column
           type="selection"
           width="50"
           :selectable="checkboxT">
-          <!--<el-checkbox-group v-model="checkList">-->
-            <!--<template slot-scope="scope">-->
-              <!--<el-checkbox v-model="checked" v-if="scope.row.name !== '新增'"></el-checkbox>-->
-            <!--</template>-->
-          <!--</el-checkbox-group>-->
         </el-table-column>
 
         <el-table-column
