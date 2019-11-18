@@ -10,6 +10,7 @@
 namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
+use App\Models\User;
 use App\Repositories\PostRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -37,7 +38,7 @@ class ListPostsController extends AbstractListController
         // 'user.groups',
         // 'editedUser',
         // 'hiddenUser',
-        // 'thread'
+        'thread',
     ];
 
     /**
@@ -87,9 +88,7 @@ class ListPostsController extends AbstractListController
 
         $query = $this->posts->query();
 
-        // $this->assertCan($actor, 'viewTrashedPost');
-
-        $this->applyFilters($query, $filter);
+        $this->applyFilters($query, $filter, $actor);
 
         $query->skip($offset)->take($limit);
 
@@ -103,8 +102,9 @@ class ListPostsController extends AbstractListController
     /**
      * @param Builder $query
      * @param array $filter
+     * @param User $actor
      */
-    private function applyFilters(Builder $query, array $filter)
+    private function applyFilters(Builder $query, array $filter, User $actor)
     {
         if ($userId = Arr::get($filter, 'user')) {
             $query->where('user_id', $userId);
@@ -116,6 +116,24 @@ class ListPostsController extends AbstractListController
 
         if ($replyId = Arr::get($filter, 'reply')) {
             $query->where('reply_id', $replyId);
+        }
+
+        // 待审核
+        if ($isApproved = Arr::get($filter, 'isApproved')) {
+            if ($isApproved == 'no' && $actor->can('review')) {
+                $query->where('is_approved', false);
+            } else {
+                $query->where('is_approved', true);
+            }
+        }
+
+        // 回收站
+        if ($isDeleted = Arr::get($filter, 'isDeleted') && $actor->can('viewTrashed')) {
+            // 包含回收站帖子
+            $query->withTrashed()->when($isDeleted == 'yes', function ($query) {
+                // 只看回收站帖子
+                $query->whereNotNull('deleted_at');
+            });
         }
 
         // event(new ConfigurePostsQuery($query, $filter));
