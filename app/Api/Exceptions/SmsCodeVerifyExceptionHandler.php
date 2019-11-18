@@ -5,13 +5,12 @@ namespace App\Api\Exceptions;
 
 
 use App\Api\ApiCode;
+use App\Exceptions\SmsCodeVerifyException;
 use Exception;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
-use Zend\Diactoros\Response;
 
-class OAuthServerExceptionHandler implements ExceptionHandlerInterface
+class SmsCodeVerifyExceptionHandler implements ExceptionHandlerInterface
 {
 
     /**
@@ -24,7 +23,7 @@ class OAuthServerExceptionHandler implements ExceptionHandlerInterface
      */
     public function manages(Exception $e)
     {
-        return $e instanceof OAuthServerException;
+        return $e instanceof SmsCodeVerifyException;
     }
 
     /**
@@ -36,16 +35,14 @@ class OAuthServerExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(Exception $e)
     {
-        // TODO: Implement handle() method.
-
-        $response = $e->generateHttpResponse(new Response());
+        $status = 500;
 
         $data = [
-            'status' => 500,
-            'code' => ApiCode::OAUTH_SERVER_ERROR,
-            'detail' => json_decode($response->getBody(), true)
+            'status' => $status,
+            'code' => ApiCode::SMS_VERIFY_ERROR,
+            'message' => 'sms_verify_error'
         ];
 
-        return new ResponseBag(500, $data);
+        return new ResponseBag($status, $data);
     }
 }

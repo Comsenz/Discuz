@@ -11,16 +11,15 @@ declare(strict_types=1);
 namespace App\Api\Controller\Mobile;
 
 use App\Api\Serializer\SmsSendSerializer;
-use App\Exceptions\IntervalSmsSend;
+use App\Exceptions\IntervalSmsSendException;
 use App\Models\MobileCode;
+use App\Repositories\MobileCodeRepository;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Qcloud\QcloudTrait;
-use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
@@ -37,11 +36,13 @@ class SendController extends AbstractCreateController
 
     protected $validation;
     protected $cache;
+    protected $mobileCodeRepository;
 
-    public function __construct(ValidationFactory $validation, CacheRepository $cache)
+    public function __construct(ValidationFactory $validation, CacheRepository $cache, MobileCodeRepository $mobileCodeRepository)
     {
         $this->validation = $validation;
         $this->cache = $cache;
+        $this->mobileCodeRepository = $mobileCodeRepository;
     }
 
 
@@ -65,10 +66,16 @@ class SendController extends AbstractCreateController
         $type = Arr::get($data, 'type');
 
         if(!is_null($this->cache->get($mobile, null))) {
-            throw new IntervalSmsSend();
+            throw new IntervalSmsSendException();
         }
 
-        $mobileCode = MobileCode::make($mobile, self::CODE_EXCEPTION, $type);
+        $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
+
+        if($mobileCode->exists) {
+            $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION);
+        } else {
+            $mobileCode = MobileCode::make($mobile, self::CODE_EXCEPTION, $type);
+        }
 
         $result = $this->smsSend($mobile, new SendCodeMessage(['code' => $mobileCode->code, 'expire' => self::CODE_EXCEPTION]));
 
