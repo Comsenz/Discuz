@@ -5,6 +5,7 @@ namespace App\Api\Exceptions;
 
 
 use App\Exceptions\IntervalSmsSend;
+use App\Exceptions\IntervalSmsSendException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
@@ -22,7 +23,7 @@ class IntervalSmsSendHandler implements ExceptionHandlerInterface
      */
     public function manages(Exception $e)
     {
-        return $e instanceof IntervalSmsSend;
+        return $e instanceof IntervalSmsSendException;
     }
 
     /**

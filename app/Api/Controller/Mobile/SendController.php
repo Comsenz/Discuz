@@ -71,7 +71,7 @@ class SendController extends AbstractCreateController
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
 
-        if($mobileCode->exists) {
+        if(!is_null($mobileCode) && $mobileCode->exists) {
             $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION);
         } else {
             $mobileCode = MobileCode::make($mobile, self::CODE_EXCEPTION, $type);
