@@ -49,6 +49,6 @@ class VerifyController extends AbstractResourceController
         }
 
         //各种类型验证通过后，返回相关数据
-        return $this->bus->dispatch(new VerifyMobile($this, $mobileCode));
+        return $this->bus->dispatch(new VerifyMobile($this, $mobileCode, $request->getAttribute('actor')));
     }
 }

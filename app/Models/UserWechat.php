@@ -10,4 +10,8 @@ class UserWechat extends Model {
 
     protected $fillable = ['user_id', 'openid','nickname','sex', 'city', 'headimgurl', 'unionid'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

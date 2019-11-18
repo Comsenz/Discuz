@@ -121,7 +121,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `user_wechats` (
-  `id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `openid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `nickname` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `sex` tinyint(1) NOT NULL DEFAULT '0',
@@ -133,7 +133,7 @@ CREATE TABLE `user_wechats` (
   `unionid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 分类表
