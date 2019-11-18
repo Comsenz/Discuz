@@ -20,13 +20,6 @@ class UserWallet extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 与模型关联的数据表.
-     *
-     * @var string
-     */
-    protected $table = 'user_wallet';
-
-    /**
      * 主键
      * @var string
      */
@@ -46,16 +39,6 @@ class UserWallet extends Model
     public $timestamps = true;
 
     /**
-     * 模型的「启动」方法.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-    }
-
-    /**
      * 创建用户钱包
      * @param  int $user_id 用户ID
      * @return UserWallet
@@ -70,4 +53,35 @@ class UserWallet extends Model
         $user_wallet->save();
         return $user_wallet;
     }
+
+    /**
+     * Define the relationship with the wallet's owner.
+     *
+     * @return belongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the user wallet's cashes.
+     *
+     * @return hasMany
+     */
+    public function userWallet()
+    {
+        return $this->hasMany(UserWalletCash::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Define the relationship with the user wallet's logs.
+     *
+     * @return hasMany
+     */
+    public function userWalletLog()
+    {
+        return $this->hasMany(UserWalletLog::class, 'user_id', 'user_id');
+    }
+
 }

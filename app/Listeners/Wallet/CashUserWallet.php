@@ -13,6 +13,7 @@ use App\Events\Wallet\Cash;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\TransferTrade;
 use App\Settings\SettingsRepository;
+use Illuminate\Database\ConnectionInterface;
 use App\Models\UserWalletCash;
 use App\Models\UserWechat;
 use App\Models\UserWalletLog;
@@ -27,9 +28,16 @@ class CashUserWallet
      */
 	protected $settings;
 
-	public function __construct(SettingsRepository $settings)
+    /**
+     * 数据库连接
+     * @var ConnectionInterface
+     */
+    protected $connection;
+
+	public function __construct(SettingsRepository $settings, ConnectionInterface $connection)
 	{
 		$this->settings = $settings;
+        $this->connection = $connection;
 	}
 
     public function handle(Cash $event)
@@ -114,18 +122,26 @@ class CashUserWallet
             $user_wallet_cash->error_message = '';
             $user_wallet_cash->cash_status = UserWalletCash::STATUS_PAID;//已打款
             $user_wallet_cash->save();
-
-
-            //获取用户钱包
-            $user_wallet = UserWallet::lockForUpdate()->find($user_id);
-            //去除冻结金额
-            $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_apply_amount;
-            $user_wallet->save();
-
-            //冻结变动金额，为负数
-            $change_freeze_amount = -$cash_apply_amount;
-            //添加钱包明细
-            $user_wallet_log = UserWalletLog::createWalletLog($user_id, 0, $change_freeze_amount, UserWalletLog::TYPE_CASH_SUCCESS, app('translator')->get('wallet.cash_success'));
+            //开始事务
+            $this->connection->beginTransaction();
+            try {
+                //获取用户钱包
+                $user_wallet = UserWallet::lockForUpdate()->find($user_id);
+                //去除冻结金额  
+                $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_apply_amount;
+                $user_wallet->save();
+                //冻结变动金额，为负数
+                $change_freeze_amount = -$cash_apply_amount;
+                //添加钱包明细
+                $user_wallet_log = UserWalletLog::createWalletLog($user_id, 0, $change_freeze_amount, UserWalletLog::TYPE_CASH_SUCCESS, app('translator')->get('wallet.cash_success'));
+                //提交事务
+                $this->connection->commit();
+                return true;
+            } catch (Exception $e) {
+                //回滚事务
+                $this->connection->rollback();
+                return false;
+            }
         }
        
     }
@@ -149,21 +165,36 @@ class CashUserWallet
         $user_wallet_cash->save();
 
         if ($is_thaw) {
-            //获取用户钱包
-            $user_wallet = UserWallet::lockForUpdate()->find($user_id);
-            //返回冻结金额至用户钱包
-            $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_apply_amount;
-            $user_wallet->available_amount = $user_wallet->available_amount + $cash_apply_amount;
-            $user_wallet->save();
+            //开始事务
+            $this->connection->beginTransaction();
+            try {
+                //获取用户钱包
+                $user_wallet = UserWallet::lockForUpdate()->find($user_id);
+                //返回冻结金额至用户钱包
+                $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_apply_amount;
+                $user_wallet->available_amount = $user_wallet->available_amount + $cash_apply_amount;
+                $user_wallet->save();
 
-            //冻结变动金额，为负数数
-            $change_freeze_amount = -$cash_apply_amount;
-            //可用金额增加
-            $change_available_amount = $cash_apply_amount;
-            //添加钱包明细
-            $user_wallet_log = UserWalletLog::createWalletLog($user_id, $change_available_amount, $change_freeze_amount, UserWalletLog::TYPE_CASH_THAW, app('translator')->get('wallet.cash_failure'));   
+                //冻结变动金额，为负数数
+                $change_freeze_amount = -$cash_apply_amount;
+                //可用金额增加
+                $change_available_amount = $cash_apply_amount;
+                //添加钱包明细
+                $user_wallet_log = UserWalletLog::createWalletLog($user_id, $change_available_amount, $change_freeze_amount, UserWalletLog::TYPE_CASH_THAW, app('translator')->get('wallet.cash_failure'));
+                $user_wallet_cash->refresh();
+                $user_wallet_cash->refunds_status = UserWalletCash::REFUNDS_STATUS_YES;
+                $user_wallet_cash->save();
+
+                $this->connection->commit();
+                return true;
+            } catch (Exception $e) {
+                //回滚事务
+                $this->connection->rollback();
+                return false;
+            } 
         } else{
             //未明确的错误码,不做其他操作，后续人工检查
+            return true;
         }
     }
 }

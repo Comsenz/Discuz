@@ -204,3 +204,48 @@ CREATE TABLE `mobile_codes` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+--用户钱包
+CREATE TABLE `user_wallets` (
+  `user_id` int(10) NOT NULL COMMENT '用户ID',
+  `available_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
+  `freeze_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '冻结金额',
+  `wallet_status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '钱包状态:0正常，1冻结提现',
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户钱包表';
+
+--用户提现
+CREATE TABLE `user_wallet_cash` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `cash_sn` bigint(20) UNSIGNED NOT NULL,
+  `cash_charge` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_actual_amount` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_apply_amount` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_status` tinyint(3) UNSIGNED NOT NULL COMMENT '提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败',
+  `remark` varchar(255) DEFAULT NULL,
+  `trade_time` datetime DEFAULT NULL COMMENT '交易时间',
+  `trade_no` varchar(64) DEFAULT NULL COMMENT '交易号',
+  `error_code` varchar(64) DEFAULT NULL COMMENT '错误代码',
+  `error_message` varchar(255) DEFAULT NULL COMMENT '交易失败原因',
+  `refunds_status` tinyint(3) UNSIGNED DEFAULT '0' COMMENT '返款状态，0未返款，1已返款',
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COLLATE=utf8mb4_unicode_ci;
+
+--用户钱包动账记录
+CREATE TABLE `user_wallet_logs` (
+  `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(10) UNSIGNED NOT NULL,
+  `change_available_amount` decimal(10,2) NOT NULL,
+  `change_freeze_amount` decimal(10,2) NOT NULL,
+  `change_type` smallint(5) UNSIGNED NOT NULL,
+  `change_desc` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

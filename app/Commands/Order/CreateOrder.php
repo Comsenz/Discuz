@@ -19,6 +19,7 @@ use Exception;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\User;
+use App\Models\Thread;
 
 class CreateOrder
 {
@@ -56,23 +57,47 @@ class CreateOrder
     public function handle(Validator $validator, ConnectionInterface $db)
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        // $this->assertCan($this->actor, 'createOrder');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'amount'   => 'required|numeric|min:0.01',
             'type'     => 'required|int',
-            'type_id'  => 'required|int',
-            'payee_id' => 'required|int',
+            'type_id'  => 'required_if:type,'. Order::ORDER_TYPE_REWARD. '|int',
+            'amount'  => 'required_if:type,'. Order::ORDER_TYPE_REWARD. '|numeric|min:0.01'
         ]);
 
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
-        //收款人
-        $payee_id = (int)$this->data->get('payee_id');
-        $payee_user = User::find($payee_id);
-        if (empty($payee_user)) {
-            throw new ErrorException(app('translator')->get('order.payee_not_found'), 500);
+        //订单类型
+        $order_type = (int)$this->data->get('type');
+
+        //收款款人
+        $payee_id = '';
+        //收款/付款金额
+        $amount = 0;
+        switch ($order_type) {
+            case Order::ORDER_TYPE_REGISTER:
+                //注册订单
+                $payee_id = Order::REGISTER_PAYEE_ID;
+                //订单金额处理
+                $amount = 0.03;//setting获取;
+                break;
+            case Order::ORDER_TYPE_REWARD:
+                //主题打赏订单
+                $type_id = (int)$this->data->get('type_id');
+                //主题
+                $thread = Thread::find($type_id);
+                if (empty($thread)) {
+                    throw new ErrorException(app('translator')->get('order.order_post_not_found'), 500);
+                } else {
+                    $payee_id = $thread->user_id;
+                    //打赏金额
+                    $amount = sprintf("%.2f", (float)$this->data->get('amount'));
+                }
+                break;
+            default:
+                throw new ErrorException(app('translator')->get('order.order_type_not_found'), 500);
+                break;
         }
         //开始事务
         $db->beginTransaction();
@@ -85,9 +110,6 @@ class CreateOrder
             $notify_id = $pay_notify->id;
 
             $order = new Order();
-            //订单金额处理
-            $amount = sprintf("%.2f", floatval($this->data->get('amount')));
-
             $order->payment_sn = $payment_sn;
             $order->order_sn   = $this->getOrderSn($notify_id);
             $order->amount     = $amount;
@@ -95,7 +117,7 @@ class CreateOrder
             $order->type       = $this->data->get('type');
             $order->type_id    = $this->data->get('type_id');
             $order->payee_id   = $payee_id;
-            $order->remark     = $this->data->get('remark');
+            $order->remark     = '';
             $order->status     = 0; //待支付
             // 保存订单
             $order->save();

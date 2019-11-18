@@ -271,6 +271,16 @@ class User extends Model
     }
 
     /**
+     * Define the relationship with the user's orders.
+     *
+     * @return HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * Define the relationship with the user's groups.
      *
      * @return BelongsToMany
@@ -300,6 +310,16 @@ class User extends Model
     public function likedPosts()
     {
         return $this->belongsToMany(Post::class);
+    }
+
+    /**
+     * Define the relationship with the user's wallet.
+     *
+     * @return hasOne
+     */
+    public function userWallet()
+    {
+        return $this->hasOne(UserWallet::class);
     }
 
     /*

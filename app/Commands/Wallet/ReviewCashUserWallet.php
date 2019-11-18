@@ -127,6 +127,7 @@ class ReviewCashUserWallet
                         $user_wallet_log = UserWalletLog::createWalletLog($user_id, $change_available_amount, $change_freeze_amount, UserWalletLog::TYPE_CASH_THAW, app('translator')->get('wallet.cash_review_failure'));
 
                         $cash_record->remark = Arr::get($this->data, 'remark');
+                        $cash_record->refunds_status = UserWalletCash::REFUNDS_STATUS_YES;
                         $cash_record->save();
                         $this->connection->commit();
                         return $status_result[$id] = 'success';

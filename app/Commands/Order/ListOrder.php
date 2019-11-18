@@ -14,7 +14,7 @@ use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
-use App\Models\Order;
+use App\Models\User;
 
 class ListOrder
 {
@@ -38,7 +38,7 @@ class ListOrder
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
      */
-    public function __construct($actor, $data)
+    public function __construct(User $actor, $data)
     {
         $this->actor = $actor;
         $this->data  = $data;
@@ -51,7 +51,7 @@ class ListOrder
     public function handle(Validator $validator)
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        // $this->assertCan($this->actor, 'listOrder');
         // 验证参数
         $validator_info = $validator->make($this->data, [
             'size' => 'sometimes|required|integer|min:1',
@@ -66,7 +66,7 @@ class ListOrder
             $page = 1;
         }
         $offset = $limit * ($page - 1);
-     	return Order::where('user_id', $this->actor->id)->orderBy('id', 'ASC')->offset($offset)->limit($limit)->get();
+        return $this->actor->orders()->orderBy('id', 'DESC')->offset($offset)->limit($limit)->get();
+     	//return Order::where('user_id', $this->actor->id)->get();
     }
-
 }
