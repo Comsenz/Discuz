@@ -191,7 +191,7 @@ export default {
           this.sideList = this.navList[2].submenu;
           this.sideSelect = this.navList[2].submenu[0].name;
           this.indexTitle = this.navList[2].submenu[0].title;
-          this.$router.push({path:'/admin/site-set'});
+          this.$router.push({path:'/admin/cont-class'});
           break;
         default :
           this.sideList = [];

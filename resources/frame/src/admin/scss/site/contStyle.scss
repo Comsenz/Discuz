@@ -4,6 +4,7 @@
 @import "../../../../static/css/admin/iconfont.css";
 @import "../modules/icon";
 
+//过渡效果样式
 .transition-box {
   margin-bottom: 10px;
   width: 200px;
@@ -59,6 +60,7 @@
   }
 }
 
+
 /*
   内容管理--主题搜索
 */
@@ -102,3 +104,375 @@
 
 
 }
+
+
+
+/*
+  内容审核
+*/
+
+/*搜索条件输入框标题*/
+.cont-review-header__lf-title{
+  min-width: 70PX;
+  line-height: 36PX;
+}
+
+.cont-review-box{
+  width: 100%;
+  height: 100%;
+  color: $titleColor;
+
+  .cont-review-header{
+    width: 100%;
+    height: 117PX;
+    padding: 15PX 0;
+    //display: flex;
+    //justify-content: space-between;
+
+    .cont-review-header__lf{
+      width: 39%;
+      display: inline-block;
+      margin-right: 10PX;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+          max-width: 400PX;
+        }
+
+        .el-select{
+          width: 100%;
+          max-width: 400PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    .cont-review-header__rt{
+      width: 59%;
+      display: inline-block;
+      //margin-left: 10PX;
+
+      div{
+        height: 36PX;
+        display: flex;
+
+        .content-contains-input{
+          width: 200PX;
+        }
+
+        .el-input--medium{
+          width: 200PX;
+        }
+
+        .el-checkbox{
+          line-height: 36PX;
+          margin-left: 40PX;
+        }
+
+        .el-select--medium{
+          //width: 140PX;
+          width: 22%;
+          margin-right: 10PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+  }
+
+  .cont-review-table{
+
+    .cont-review-table__side{
+
+      .el-checkbox-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-checkbox{
+          margin-right: 0;
+        }
+      }
+    }
+
+    .cont-review-table__header{
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      div{
+        flex-grow:1;
+        p:nth-of-type(2){
+          margin-top: 12PX;
+        }
+
+        .desc{
+          color: $descColor;
+        }
+      }
+
+      div:first-of-type{
+        flex-grow: 2;
+      }
+
+    }
+
+    .cont-review-table__main{
+      line-height: 20PX;
+    }
+    .cont-review-table__footer{
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+
+      &__lf{
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        margin-right: 66PX;
+
+        i{
+          height: 16PX;
+          width: 1PX;
+          display: inline-block;
+          background-color: #DCDFE6;
+          margin: 0 14PX;
+        }
+      }
+
+      &__rt{
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .el-input{
+          width: 140PX;
+          margin-right: 10PX;
+        }
+
+      }
+
+
+
+    }
+
+  }
+
+  .cont-review-footer{
+    margin-top: 30PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+
+/*
+  回复审核
+*/
+.reply-review-box{
+  width: 100%;
+  height: 100%;
+  color: $titleColor;
+
+  .cont-review-header{
+    width: 100%;
+    height: 117PX;
+    padding: 15PX 0;
+    //display: flex;
+    //justify-content: space-between;
+
+    .cont-review-header__lf{
+      width: 39%;
+      display: inline-block;
+      margin-right: 10PX;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+          max-width: 400PX;
+        }
+
+        .el-select{
+          width: 100%;
+          max-width: 400PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    .cont-review-header__rt{
+      width: 59%;
+      display: inline-block;
+      //margin-left: 10PX;
+
+      div{
+        height: 36PX;
+        display: flex;
+
+        .content-contains-input{
+          width: 200PX;
+        }
+
+        .el-input--medium{
+          width: 200PX;
+        }
+
+        .el-checkbox{
+          line-height: 36PX;
+          margin-left: 40PX;
+        }
+
+        .el-select--medium{
+          //width: 140PX;
+          width: 22%;
+          margin-right: 10PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+  }
+
+  .cont-review-table{
+
+    .cont-review-table__side{
+
+      .el-checkbox-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-checkbox{
+          margin-right: 0;
+        }
+      }
+    }
+
+    .cont-review-table__header{
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      div{
+        flex-grow:1;
+        p:nth-of-type(2){
+          margin-top: 12PX;
+        }
+
+        .desc{
+          color: $descColor;
+        }
+      }
+
+      div:first-of-type{
+        flex-grow: 2;
+      }
+
+    }
+
+    .cont-review-table__main{
+      line-height: 20PX;
+    }
+    .cont-review-table__footer{
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+
+      &__lf{
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        margin-right: 66PX;
+
+        i{
+          height: 16PX;
+          width: 1PX;
+          display: inline-block;
+          background-color: #DCDFE6;
+          margin: 0 14PX;
+        }
+      }
+
+      &__rt{
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .el-input{
+          width: 140PX;
+          margin-right: 10PX;
+        }
+
+      }
+
+
+
+    }
+
+  }
+
+  .cont-review-footer{
+    margin-top: 30PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+
+}
+
+
+/*
+  回收站
+*/
+.recycle-bin-box{
+
+
+
+}
+

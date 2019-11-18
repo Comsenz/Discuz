@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/common/cardRow.scss';
+import '../../../../scss/site/common/card/cardRow.scss';
 export default {
     name: "form-row"
 }

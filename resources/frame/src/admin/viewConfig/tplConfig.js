@@ -163,7 +163,18 @@ export default {
               name:'contReview',
               attribution:'内容'
             }
-          },'recycle-bin':{
+          },
+          'reply-review':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/replyReviewView'], resolve)
+            },
+            metaInfo: {
+              title: '回复审核',
+              name:'contReview',
+              attribution:'内容'
+            }
+          },
+          'recycle-bin':{
             comLoad: function (resolve) {
               require(['../view/site/cont/recycleBinView'], resolve)
             },
@@ -172,16 +183,8 @@ export default {
               name:'recycleBin',
               attribution:'内容'
             }
-          },'reply-review':{
-            comLoad: function (resolve) {
-              require(['../view/site/cont/replyReviewView'], resolve)
-            },
-            metaInfo: {
-              title: '回复审核',
-              name:'replyReview',
-              attribution:'内容'
-            }
-          },
+          }
+
         },
         metaInfo: {
           title: '后台架子'

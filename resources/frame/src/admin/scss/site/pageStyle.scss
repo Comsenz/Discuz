@@ -247,6 +247,8 @@
     height: 45PX;
     border-bottom: 1PX solid #EBEEF5;
     line-height: 45PX;
+    display: flex;
+    align-items: center;
     p{
       margin-left: 65PX;
       color: $main;
@@ -271,6 +273,8 @@ $tableHeaderColor:#FAFAFA;
     height: 45PX;
     border-bottom: 1PX solid #EBEEF5;
     line-height: 45PX;
+    display: flex;
+    align-items: center;
     p{
       margin-left: 65PX;
       color: $main;

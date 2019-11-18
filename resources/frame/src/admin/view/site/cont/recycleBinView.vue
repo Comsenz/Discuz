@@ -1,12 +1,17 @@
 <template>
-    <div>
-      回收站
+    <div class="recycle-bin-box">
+      <Card header="搜索"></Card>
+
+
+
     </div>
 </template>
 
 <script>
 import '../../../scss/site/contStyle.scss';
-  export default {
-    name: "recycle-bin-view"
+import recycleBinCon from '../../../controllers/site/cont/recycleBinCon'
+export default {
+    name: "recycle-bin-view",
+  ...recycleBinCon
 }
 </script>
