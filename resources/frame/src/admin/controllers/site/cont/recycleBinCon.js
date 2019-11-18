@@ -8,22 +8,90 @@ import Card from '../../../view/site/common/card/card';
 export default {
   data:function () {
     return {
+
       tableData: [{
-        className: '站长',
-        sort: '1',
-        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
+        checkList:['还原'],
+        theme:'1主题主题主题主题主题',
+        classification:"起舞弄清影",
+        author:"小虫",
+        replyView:"2/5",
+        lastReply:"admin",
+        operator:"admin",
+        theReason:"文不对题"
       }, {
-        className: '攻城狮',
-        sort: '2',
-        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
+        checkList:['删除'],
+        theme:'2主题主题主题主题主题',
+        classification:"起舞弄清影",
+        author:"小虫",
+        replyView:"3/5",
+        lastReply:"admin",
+        operator:"admin",
+        theReason:"文不对题"
       }, {
-        className: '版主',
-        sort: '3',
-        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
+        checkList:['还原'],
+        theme:'3主题主题主题主题主题',
+        classification:"起舞弄清影",
+        author:"小虫",
+        replyView:"1/5",
+        lastReply:"admin",
+        operator:"admin",
+        theReason:"文不对题"
       }],
 
-      deleteStatus:true,
-      multipleSelection:[]
+
+      deleteStatus: true,
+      multipleSelection: [],
+
+
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value: '',
+
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      value1: '',
+      value2: ''
+
+
     }
   },
 
@@ -38,6 +106,13 @@ export default {
       }
 
     },
+
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    }
 
   },
   components:{

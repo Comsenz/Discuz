@@ -22,6 +22,7 @@
   内容分类
   */
 .cont-class-box{
+  color: $titleColor;
 
   .cont-class-table{
     margin-top: 15PX;
@@ -48,6 +49,7 @@
   内容管理
   */
 .cont-manage-box{
+  color: $titleColor;
 
   .cont-manage-theme{
     margin-top: 15PX;
@@ -56,6 +58,7 @@
   .cont-manage-operating{
     p{
       padding: 25PX 0 15PX 0;
+      color: #606266;
     }
   }
 }
@@ -124,27 +127,26 @@
 
   .cont-review-header{
     width: 100%;
-    height: 117PX;
+    height: 100PX;       //根据设计图算的出来的效果不一样，写了一个大概
     padding: 15PX 0;
-    //display: flex;
+    display: flex;
     //justify-content: space-between;
 
-    .cont-review-header__lf{
-      width: 39%;
+    &__lf{
+      //width: 39%;
       display: inline-block;
-      margin-right: 10PX;
+      margin-right: 25PX;
+      flex-grow: 1;
       div{
         height: 36PX;
         display: flex;
 
         .el-input{
           width: 100%;
-          max-width: 400PX;
         }
 
         .el-select{
           width: 100%;
-          max-width: 400PX;
         }
       }
 
@@ -154,10 +156,10 @@
 
     }
 
-    .cont-review-header__rt{
-      width: 59%;
+    &__rt{
+      //width: 59%;
+      flex-grow: 1;
       display: inline-block;
-      //margin-left: 10PX;
 
       div{
         height: 36PX;
@@ -168,7 +170,8 @@
         }
 
         .el-input--medium{
-          width: 200PX;
+          //width: 200PX;
+          width: 100%;
         }
 
         .el-checkbox{
@@ -178,7 +181,7 @@
 
         .el-select--medium{
           //width: 140PX;
-          width: 22%;
+          width: 100%;
           margin-right: 10PX;
         }
       }
@@ -239,7 +242,7 @@
       &__lf{
         display: flex;
         align-items: center;
-        flex-grow: 1;
+        //flex-grow: 1;
         margin-right: 66PX;
 
         i{
@@ -252,9 +255,9 @@
       }
 
       &__rt{
-        flex-grow: 1;
+        //flex-grow: 1;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
 
         .el-input{
@@ -300,27 +303,26 @@
 
   .cont-review-header{
     width: 100%;
-    height: 117PX;
+    height: 100PX;
     padding: 15PX 0;
-    //display: flex;
+    display: flex;
     //justify-content: space-between;
 
-    .cont-review-header__lf{
-      width: 39%;
+    &__lf{
+      //width: 39%;
       display: inline-block;
-      margin-right: 10PX;
+      margin-right: 25PX;
+      flex-grow: 1;
       div{
         height: 36PX;
         display: flex;
 
         .el-input{
           width: 100%;
-          max-width: 400PX;
         }
 
         .el-select{
           width: 100%;
-          max-width: 400PX;
         }
       }
 
@@ -330,9 +332,10 @@
 
     }
 
-    .cont-review-header__rt{
-      width: 59%;
+    &__rt{
+      //width: 59%;
       display: inline-block;
+      flex-grow: 1;
       //margin-left: 10PX;
 
       div{
@@ -340,11 +343,13 @@
         display: flex;
 
         .content-contains-input{
-          width: 200PX;
+          //width: 200PX;
+          width: 100%;
         }
 
         .el-input--medium{
-          width: 200PX;
+          //width: 200PX;
+          width: 100%;
         }
 
         .el-checkbox{
@@ -354,7 +359,7 @@
 
         .el-select--medium{
           //width: 140PX;
-          width: 22%;
+          width: 100%;
           margin-right: 10PX;
         }
       }
@@ -415,7 +420,7 @@
       &__lf{
         display: flex;
         align-items: center;
-        flex-grow: 1;
+        //flex-grow: 1;
         margin-right: 66PX;
 
         i{
@@ -428,9 +433,9 @@
       }
 
       &__rt{
-        flex-grow: 1;
+        //flex-grow: 1;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
 
         .el-input{
@@ -471,8 +476,107 @@
   回收站
 */
 .recycle-bin-box{
+  color: $titleColor;
 
+  .recycle-bin-header{
+    width: 100%;
+    height: 100PX;
+    padding: 15PX 0;
 
+    &__lf{
+      width: 39%;
+      display: inline-block;
+      margin-right: 10PX;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+        }
+
+        .el-select{
+          width: 100%;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    &__rt{
+      width: 59%;
+      display: inline-block;
+
+      &-top{
+        margin-bottom: 15PX;
+        height: 36PX;
+        display: flex;
+
+        .el-input--medium{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        span:last-of-type{
+          margin-left: 10PX;
+        }
+
+      }
+
+      &-bottom{
+        height: 36PX;
+        display: flex;
+        justify-content: space-between;
+
+        .recycle-bin-header__rt-bottom__time-title{
+          width: 150PX;
+          line-height: 36PX;
+        }
+
+        .el-date-editor{
+          width: 90%;
+          margin-right: 15PX;
+        }
+
+      }
+
+      /*div{
+        height: 36PX;
+        display: flex;
+
+        .content-contains-input{
+          width: 200PX;
+        }
+
+        .el-input--medium{
+          width: 200PX;
+        }
+
+        .el-checkbox{
+          line-height: 36PX;
+          margin-left: 40PX;
+        }
+
+        .el-select--medium{
+          //width: 140PX;
+          width: 22%;
+          margin-right: 10PX;
+        }
+      }*/
+
+    }
+
+  }
+
+  .recycle-bin-table{
+    .recycle-bin-table-checkbox{
+      display: flex;
+      flex-direction: column;
+    }
+  }
 
 }
 

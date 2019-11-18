@@ -87,6 +87,11 @@ export default {
           id:2,
           title:'用户',
           name:'user',
+        },
+        {
+          id:3,
+          title:'内容',
+          name:'cont',
           submenu:[
             {
               id:0,
@@ -113,11 +118,6 @@ export default {
               icon:'iconhuishouzhan'
             }
           ]
-        },
-        {
-          id:3,
-          title:'内容',
-          name:'cont'
         },
         {
           id:4,
@@ -157,11 +157,11 @@ export default {
           this.sideList = this.navList[1].submenu;
           break;
         case '内容':
-          this.navSelect = this.navList[2].name;
+          this.navSelect = this.navList[3].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
-          this.sideList = this.navList[2].submenu;
+          this.sideList = this.navList[3].submenu;
           break;
         default :
           console.log("获取菜单出错");
@@ -187,10 +187,10 @@ export default {
           this.indexTitle = this.navList[1].submenu[0].title;
           this.$router.push({path:'/admin/site-set'});
           break;
-        case 'user':
-          this.sideList = this.navList[2].submenu;
-          this.sideSelect = this.navList[2].submenu[0].name;
-          this.indexTitle = this.navList[2].submenu[0].title;
+        case 'cont':
+          this.sideList = this.navList[3].submenu;
+          this.sideSelect = this.navList[3].submenu[0].name;
+          this.indexTitle = this.navList[3].submenu[0].title;
           this.$router.push({path:'/admin/cont-class'});
           break;
         default :
