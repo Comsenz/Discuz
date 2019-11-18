@@ -52,6 +52,11 @@ class ListPostsController extends AbstractListController
     protected $posts;
 
     /**
+     * @var int|null
+     */
+    protected $postCount;
+
+    /**
      * @param PostRepository $posts
      */
     public function __construct(PostRepository $posts)
@@ -65,10 +70,15 @@ class ListPostsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
+        $limit = $this->extractLimit($request);
         $include = $this->extractInclude($request);
 
         $posts = $this->getPosts($request);
+
+        $document->setMeta([
+            'postCount' => $this->postCount,
+            'pageCount' => ceil($this->postCount / $limit),
+        ]);
 
         return $posts->load($include);
     }
@@ -89,6 +99,8 @@ class ListPostsController extends AbstractListController
         $query = $this->posts->query();
 
         $this->applyFilters($query, $filter, $actor);
+
+        $this->postCount = $limit > 0 ? $query->count() : null;
 
         $query->skip($offset)->take($limit);
 

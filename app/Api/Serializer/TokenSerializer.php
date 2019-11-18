@@ -19,7 +19,6 @@ class TokenSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
-        dd($model);
         return [
             'token_type' => $model->token_type,
             'expires_in' => $model->expires_in,
