@@ -108,10 +108,10 @@ CREATE TABLE `pay_notify` (
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `password` char(60) CHARACTER SET utf8 NOT NULL,
-  `mobile` char(11) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `last_login_ip` varchar(15) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `password` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile` char(11) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `last_login_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
@@ -121,18 +121,18 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `user_wechats` (
-  `id` int(11) NOT NULL,
-  `openid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `nickname` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `province` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `city` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `country` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `headimgurl` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `privilege` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `unionid` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
-  `updatetime` int(10) NOT NULL DEFAULT '0',
+  `id` int(10) unsigned NOT NULL,
+  `openid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `nickname` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `sex` tinyint(1) NOT NULL DEFAULT '0',
+  `province` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `city` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `country` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `headimgurl` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `privilege` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `unionid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -187,8 +187,65 @@ CREATE TABLE `attachments` (
 CREATE TABLE `user_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `ip` varchar(15) CHARACTER SET utf8 DEFAULT '',
-  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '3' COMMENT '1男2女',
-  `icon` varchar(200) CHARACTER SET utf8 DEFAULT '',
+  `ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '3' COMMENT '1男2女',
+  `icon` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `mobile_codes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mobile` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '手机号',
+  `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '5位数字验证码',
+  `type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '默认0，登录：1',
+  `state` tinyint(1) NOT NULL DEFAULT '0',
+  `exception_at` datetime NOT NULL COMMENT '过期时间',
+  `created_at` datetime NOT NULL COMMENT '发送时间',
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+--用户钱包
+CREATE TABLE `user_wallets` (
+  `user_id` int(10) NOT NULL COMMENT '用户ID',
+  `available_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
+  `freeze_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '冻结金额',
+  `wallet_status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '钱包状态:0正常，1冻结提现',
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户钱包表';
+
+--用户提现
+CREATE TABLE `user_wallet_cash` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `cash_sn` bigint(20) UNSIGNED NOT NULL,
+  `cash_charge` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_actual_amount` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_apply_amount` decimal(10,2) UNSIGNED NOT NULL,
+  `cash_status` tinyint(3) UNSIGNED NOT NULL COMMENT '提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败',
+  `remark` varchar(255) DEFAULT NULL,
+  `trade_time` datetime DEFAULT NULL COMMENT '交易时间',
+  `trade_no` varchar(64) DEFAULT NULL COMMENT '交易号',
+  `error_code` varchar(64) DEFAULT NULL COMMENT '错误代码',
+  `error_message` varchar(255) DEFAULT NULL COMMENT '交易失败原因',
+  `refunds_status` tinyint(3) UNSIGNED DEFAULT '0' COMMENT '返款状态，0未返款，1已返款',
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COLLATE=utf8mb4_unicode_ci;
+
+--用户钱包动账记录
+CREATE TABLE `user_wallet_logs` (
+  `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(10) UNSIGNED NOT NULL,
+  `change_available_amount` decimal(10,2) NOT NULL,
+  `change_freeze_amount` decimal(10,2) NOT NULL,
+  `change_type` smallint(5) UNSIGNED NOT NULL,
+  `change_desc` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

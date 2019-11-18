@@ -15,6 +15,9 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Tobscure\JsonApi\Document;
 use App\Api\Serializer\OrderSerializer;
 use App\Commands\Order\ListOrder;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class ListOrderController extends AbstractListController
 {
@@ -29,24 +32,99 @@ class ListOrderController extends AbstractListController
     protected $bus;
 
     /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
+    /**
+     * @var int
+     */
+    protected $total;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $sort = [
+        'created_at' => 'desc',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $sortFields = [
+        'created_at',
+        'updated_at'
+    ];
+
+
+    /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(Dispatcher $bus, UrlGenerator $url)
     {
         $this->bus = $bus;
+        $this->url = $url;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'user',
+    ];
+
     /**
      * {@inheritdoc}
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
         $actor = $request->getAttribute('actor');
-        // 获取请求的参数
-        $query_inputs = $request->getQueryParams();
+        $filter = $this->extractFilter($request);
+        $sort = $this->extractSort($request);
+        $limit = $this->extractLimit($request);;
+        $offset = $this->extractOffset($request);
 
-        return $this->bus->dispatch(
-            new ListOrder($actor, $query_inputs)
+        $status = Arr::get($filter, 'status');
+        $orders = $this->getOrders($actor, $status, $limit, $offset, $sort);
+
+        $document->addPaginationLinks(
+            $this->url->route('order.list'),
+            $request->getQueryParams(),
+            $offset,
+            $limit,
+            $this->total
         );
+
+        $load = $this->extractInclude($request);
+        $orders = $orders->load($load);
+
+        return $orders;
     }
+
+    /**
+     * @param  $actor
+     * @param  $status
+     * @param  $limit
+     * @param  $offset
+     * @param  $sort
+     * @return Order
+     */
+    private function getOrders($actor, $status, $limit = 0, $offset = 0, $sort = [])
+    {
+        $query = $actor->orders();
+        $query->when($status, function($query) use ($status){
+                $query->where('status', $status);
+            });
+        $query->skip($offset)->take($limit);
+        if (empty($sort)) {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            foreach ((array) $sort as $field => $order) {
+                $query->orderBy(Str::snake($field), $order);
+            }
+        }
+        $this->total = $query->count();
+        return $query->get();
+    }
+
 }

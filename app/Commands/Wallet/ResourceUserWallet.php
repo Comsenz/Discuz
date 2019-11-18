@@ -10,6 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Wallet;
 
+use App\Models\User;
 use App\Models\UserWallet;
 
 class ResourceUserWallet
@@ -32,7 +33,7 @@ class ResourceUserWallet
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
      */
-    public function __construct($user_id, $actor)
+    public function __construct($user_id, User $actor)
     {
         $this->user_id = $user_id;
         $this->actor   = $actor;
@@ -46,8 +47,8 @@ class ResourceUserWallet
     public function handle()
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
-        return UserWallet::where('user_id', $this->user_id)->first();
+        //$this->assertAdmin($this->actor);
+        return UserWallet::find($this->user_id);
     }
 
 }

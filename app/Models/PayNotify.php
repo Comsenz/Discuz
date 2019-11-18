@@ -29,8 +29,8 @@ class PayNotify extends Model
     /**
      * 通知状态
      */
-    const NOTIFY_STATUS_PENDING = 0;//未收到通知
-    const NOTIFY_STATUS_RECEIVED = 1;//已收到通知
+    const NOTIFY_STATUS_PENDING  = 0; //未收到通知
+    const NOTIFY_STATUS_RECEIVED = 1; //已收到通知
 
     /**
      * 该模型是否被自动维护时间戳.
@@ -40,12 +40,12 @@ class PayNotify extends Model
     public $timestamps = true;
 
     /**
-     * 模型的「启动」方法.
+     * Define the relationship with the pay_notify's order.
      *
-     * @return void
+     * @return belongsTo
      */
-    public static function boot()
+    public function order()
     {
-        parent::boot();
+        return $this->belongsTo(Order::class, 'payment_sn', 'payment_sn');
     }
 }

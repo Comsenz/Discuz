@@ -11,6 +11,7 @@ declare (strict_types = 1);
 namespace App\Commands\Wallet;
 
 use App\Exceptions\ErrorException;
+use App\Models\User;
 use App\Models\UserWallet;
 use App\Models\UserWalletCash;
 use App\Models\UserWalletLog;
@@ -42,7 +43,7 @@ class CreateCashUserWallet
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
      */
-    public function __construct($actor, Collection $data)
+    public function __construct(User $actor, Collection $data)
     {
         $this->actor = $actor;
         $this->data  = $data;
@@ -62,7 +63,6 @@ class CreateCashUserWallet
             'cash_apply_amount' => 'required|numeric|min:0|max:5000',
             'remark'            => 'sometimes|max:255',
         ]);
-
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
@@ -70,8 +70,7 @@ class CreateCashUserWallet
         $db->beginTransaction();
         try {
             //获取用户钱包
-            $user_wallet = UserWallet::lockForUpdate()->find($this->actor->id);
-
+            $user_wallet = $this->actor->userWallet()->lockForUpdate()->first();
 
             //检查钱包是否允许提现,1:钱包已冻结
             if ($user_wallet->wallet_status == 1) {
@@ -106,7 +105,6 @@ class CreateCashUserWallet
 
             //添加钱包明细,
             $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
-
             //创建提现记录
             $cash = UserWalletCash::createCash(
                 $this->actor->id,

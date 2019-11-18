@@ -20,13 +20,6 @@ class UserWalletLog extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 与模型关联的数据表.
-     *
-     * @var string
-     */
-    protected $table = 'user_wallet_log';
-
-    /**
      * 该模型是否被自动维护时间戳.
      *
      * @var bool
@@ -36,22 +29,13 @@ class UserWalletLog extends Model
     /**
      * 钱包明细类型
      */
-    const TYPE_CASH_SFREEZE = 10;//提现冻结
-    const TYPE_CASH_SUCCESS = 11;//提现成功
-    const TYPE_CASH_THAW = 12;//提现解冻
+    const TYPE_CASH_SFREEZE = 10; //提现冻结
+    const TYPE_CASH_SUCCESS = 11; //提现成功
+    const TYPE_CASH_THAW    = 12; //提现解冻
 
-    const TYPE_INCOME_REWARD = 31;//打赏收入
-    const TYPE_INCOME_ARTIFICIAL = 32;//人工收入
-     
-    /**
-     * 模型的「启动」方法.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-    }
+    const TYPE_INCOME_REGISTER   = 30; //注册收入
+    const TYPE_INCOME_REWARD     = 31; //打赏收入
+    const TYPE_INCOME_ARTIFICIAL = 32; //人工收入
 
     /**
      * 创建钱包动账记录
@@ -78,4 +62,15 @@ class UserWalletLog extends Model
         $wallet_log->save();
         return $wallet_log;
     }
+
+    /**
+     * Define the relationship with the log's wallet.
+     *
+     * @return belongsTo
+     */
+    public function userWallet()
+    {
+        return $this->belongsTo(UserWallet::class, 'user_id', 'user_id');
+    }
+
 }

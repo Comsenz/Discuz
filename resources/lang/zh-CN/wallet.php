@@ -11,6 +11,7 @@ return [
     'cash_failure'           => '提现失败，退回',
     'cash_review_failure'           => '审核不通过，退回',
     'operate_forbidden' => '非法操作',
+    'register_income' => '注册收入',
     'reward_income' => '打赏收入',
     'artificial_income' => '人工收入',
 ];

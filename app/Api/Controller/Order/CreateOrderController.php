@@ -44,6 +44,7 @@ class CreateOrderController extends AbstractCreateController
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
+
         $inputs    = $request->getParsedBody();
 
         return $this->bus->dispatch(

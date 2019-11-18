@@ -42,6 +42,7 @@ class Rewarded extends Notification
     public function toDatabase($notifiable){
         return [
             'id' => $notifiable->id,
+            'user_name' => $notifiable->username,
         ];
     }
 }

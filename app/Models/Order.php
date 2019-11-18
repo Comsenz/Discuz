@@ -10,49 +10,46 @@ declare (strict_types = 1);
 
 namespace App\Models;
 
-use Discuz\Database\ScopeVisibilityTrait;
-use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use EventGeneratorTrait;
-    use ScopeVisibilityTrait;
-
-    /**
-     * 与模型关联的数据表.
-     *
-     * @var string
-     */
-    protected $table = 'orders';
-
-    /**
-     * 该模型是否被自动维护时间戳.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
 
     /**
      * 订单类型
      */
-    const ORDER_TYPE_REGISTER = 1;//注册
-    const ORDER_TYPE_REWARD = 2;//打赏
+    const ORDER_TYPE_REGISTER = 1; //注册
+    const ORDER_TYPE_REWARD   = 2; //打赏
 
     /**
      * 订单状态
      */
-    const ORDER_STATUS_PENDING = 0;//待付款
-    const ORDER_STATUS_PAID = 1;//已付款
-    const ORDER_STATUS_CANCEL = 2;//取消订单
+    const ORDER_STATUS_PENDING = 0; //待付款
+    const ORDER_STATUS_PAID    = 1; //已付款
+    const ORDER_STATUS_CANCEL  = 2; //取消订单
 
     /**
-     * 模型的「启动」方法.
-     *
-     * @return void
+     * 注册收款人ID
      */
-    public static function boot()
+    const REGISTER_PAYEE_ID = 0;
+
+    /**
+     * Define the relationship with the order's owner.
+     *
+     * @return belongsTo
+     */
+    public function user()
     {
-        parent::boot();
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the order's pay_notify.
+     *
+     * @return hasOne
+     */
+    public function payNotify()
+    {
+        return $this->hasOne(PayNotify::class, 'payment_sn', 'payment_sn');
     }
 }

@@ -66,6 +66,6 @@ class ListCashUserWallet
         }
         $offset = $limit * ($page - 1);
 
-        return UserWalletCash::where('user_id', $this->actor->id)->orderBy('id', 'ASC')->offset($offset)->limit($limit)->get();
+        return UserWalletCash::where('user_id', $this->actor->id)->orderBy('id', 'DESC')->offset($offset)->limit($limit)->get();
     }
 }

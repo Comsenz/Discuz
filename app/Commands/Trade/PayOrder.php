@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\UserWechat;
 
@@ -71,7 +72,7 @@ class PayOrder
      * @param User   $actor        执行操作的用户.
      * @param array  $data         请求的数据.
      */
-    public function __construct($order_sn, $actor, Collection $data)
+    public function __construct($order_sn, User $actor, Collection $data)
     {
         $this->actor    = $actor;
         $this->data     = $data;
@@ -89,7 +90,7 @@ class PayOrder
         $this->url     = $url;
 
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
+        // $this->assertCan($this->actor, 'payOrder');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'payment_type' => 'required',
@@ -98,20 +99,17 @@ class PayOrder
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
-        //订单展示权限
-        $order_info = Order::where('order_sn', $this->order_sn)->where('status', 0)->first();
+        //订单信息
+        $order_info = $this->actor->orders()->where('order_sn', $this->order_sn)->where('status', Order::ORDER_STATUS_PENDING)->firstOrFail();
 
         $payment_params     = '';
         $this->payment_type = (int) $this->data->get('payment_type');
-        if (!empty($order_info)) {
-            $order_info->body = '收款';
-            // 支付参数
-            $order_info->payment_params = $this->paymentParams($order_info->toArray());
-            if (!empty($order_info->payment_params)) {
-                Order::where('order_sn', $this->order_sn)->update(['payment_type' => $this->payment_type]);
-            }
+        $order_info->body = '收款';
+        // 支付参数
+        $order_info->payment_params = $this->paymentParams($order_info->toArray());
+        if (!empty($order_info->payment_params)) {
+            Order::where('order_sn', $this->order_sn)->update(['payment_type' => $this->payment_type]);
         }
-
         // 返回数据对象
         return $order_info;
     }
@@ -148,7 +146,7 @@ class PayOrder
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid
-                $user_wecaht = UserWechat::find($this->actor->id);
+                $user_wecaht = $this->actor->userWechats;
                 $extra                = [
                     'openid' => $user_wecaht->openid,
                 ];

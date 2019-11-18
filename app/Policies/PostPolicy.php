@@ -42,7 +42,7 @@ class PostPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->cannot('viewPosts')) {
+        if ($actor->cannot('viewThreads')) {
             $query->whereRaw('FALSE');
 
             return;
