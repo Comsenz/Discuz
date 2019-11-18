@@ -108,10 +108,10 @@ CREATE TABLE `pay_notify` (
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `password` char(60) CHARACTER SET utf8 NOT NULL,
-  `mobile` char(11) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `last_login_ip` varchar(15) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `password` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile` char(11) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `last_login_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
@@ -122,15 +122,15 @@ CREATE TABLE `users` (
 
 CREATE TABLE `user_wechats` (
   `id` int(11) NOT NULL,
-  `openid` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `nickname` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `province` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `city` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `country` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `headimgurl` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `privilege` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `unionid` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `openid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `nickname` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `province` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `city` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `country` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `headimgurl` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `privilege` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `unionid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -187,8 +187,20 @@ CREATE TABLE `attachments` (
 CREATE TABLE `user_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `ip` varchar(15) CHARACTER SET utf8 DEFAULT '',
-  `sex` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '3' COMMENT '1男2女',
-  `icon` varchar(200) CHARACTER SET utf8 DEFAULT '',
+  `ip` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '3' COMMENT '1男2女',
+  `icon` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `mobile_codes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `mobile` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '手机号',
+  `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '5位数字验证码',
+  `type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '默认0，登录：1',
+  `state` tinyint(1) NOT NULL DEFAULT '0',
+  `exception_at` datetime NOT NULL COMMENT '过期时间',
+  `created_at` datetime NOT NULL COMMENT '发送时间',
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
