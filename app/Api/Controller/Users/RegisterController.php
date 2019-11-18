@@ -9,8 +9,8 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Controller\Oauth2\AccessTokenController;
 use App\Api\Serializer\TokenSerializer;
+use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterUser;
 use App\Repositories\UserRepository;
 use Discuz\Api\Client;
@@ -46,21 +46,11 @@ class RegisterController extends AbstractCreateController
             new RegisterUser($request->getAttribute('actor'), $data)
         );
 
-        $username = Arr::get($data,'attributes.username', null);
-        $password = Arr::get($data,'attributes.password', null);
-
-        //创建 token
-        $param = [
-            'grant_type' => 'password',
-            'client_id' => '',
-            'client_secret' => '',
-            'scope' => '',
-            'username' => $username,
-            'password' => $password
+        $params = [
+            'username' => Arr::get($data,'attributes.username', null),
+            'password' => '',
         ];
 
-        $response = $this->apiClient->send(AccessTokenController::class, null, [], $param);
-
-        return json_decode((string)$response->getBody());
+        return $this->bus->dispatch(new GenJwtToken($params));
     }
 }
