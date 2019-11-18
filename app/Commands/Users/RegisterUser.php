@@ -76,7 +76,6 @@ class RegisterUser
 
         $user = User::register(
             Arr::get($this->data, 'attributes.username'),
-            Arr::get($this->data, 'attributes.mobile'),
             $password
         );
 

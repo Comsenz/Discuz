@@ -71,16 +71,14 @@ class User extends Model
      * Register a new user.
      *
      * @param string $username
-     * @param string $mobile
      * @param string $password
      * @return static
      */
-    public static function register($username, $mobile, $password)
+    public static function register($username, $password)
     {
         $user = new static;
 
         $user->username = $username;
-        $user->mobile = $mobile;
         $user->password = $password;
         $user->created_at = Carbon::now();
 
