@@ -71,9 +71,13 @@ class ListNotification
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
-
+        $type = Arr::get($this->data, 'type');
         $user = User::find($this->actor->id);
-        $notifications =  $user->notifications()->where('type', Arr::get($this->types , Arr::get($this->data, 'type')))->get();
+
+        $notifications =  $user->notifications();
+        $type && $notifications = $notifications->where('type', Arr::get($this->types , Arr::get($this->data, 'type')));
+        $notifications = $notifications->get();
+
         $user->unreadNotifications->markAsRead();
 
        return $notifications;
