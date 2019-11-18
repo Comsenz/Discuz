@@ -111,7 +111,7 @@ class CreateOrder
 
             $order = new Order();
             $order->payment_sn = $payment_sn;
-            $order->order_sn   = $this->getOrderSn($notify_id);
+            $order->order_sn   = $this->getOrderSn();
             $order->amount     = $amount;
             $order->user_id    = $this->actor->id;
             $order->type       = $this->data->get('type');
@@ -145,12 +145,11 @@ class CreateOrder
 
     /**
      * 生成订单编号
-     * @param int $notify_id 通知自增ID
-     * @return string
+     * @return string 22位字符串
      */
-    public function getOrderSn($notify_id)
+    public function getOrderSn()
     {
-        return (date('y', time()) % 9 + 1) . sprintf('%015d', $notify_id);
+        return date('YmdHis', time()).substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
 
 }
