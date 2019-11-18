@@ -240,7 +240,7 @@ export default {
           this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
           break;
         default:
-          alert("当前没有页面哦");
+          // alert("当前没有页面哦");
           // this.$router.push({path:'/admin/home'});
           console.log("没有当前页面，跳转404页面");
       }
