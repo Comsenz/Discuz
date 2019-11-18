@@ -61,6 +61,8 @@ $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersCont
 |--------------------------------------------------------------------------
 */
 $route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
+$route->post('/sms/verify', 'sms.verify', ApiController\Mobile\VerifyController::class);
+
 $route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
 $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);

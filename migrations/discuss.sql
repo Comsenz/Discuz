@@ -121,18 +121,18 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `user_wechats` (
-  `id` int(11) NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `openid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `nickname` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `sex` tinyint(1) NOT NULL DEFAULT '0',
   `province` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `city` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `country` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `headimgurl` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `headimgurl` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `privilege` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `unionid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
-  `updatetime` int(10) NOT NULL DEFAULT '0',
+  `unionid` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

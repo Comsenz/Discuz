@@ -6,10 +6,9 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
-class TokenSerializer extends AbstractSerializer
+class VerifyMobileSerializer extends AbstractSerializer
 {
-
-    protected $type = 'token';
+    protected $type = 'verifymobile';
 
     /**
      * Get the default set of serialized attributes for a model.
@@ -19,12 +18,8 @@ class TokenSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
-        dd($model);
         return [
-            'token_type' => $model->token_type,
-            'expires_in' => $model->expires_in,
-            'access_token' => $model->access_token,
-            'refresh_token' => $model->refresh_token,
+            'type' => $model['type']
         ];
     }
 
