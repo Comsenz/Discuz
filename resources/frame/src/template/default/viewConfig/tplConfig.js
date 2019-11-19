@@ -137,8 +137,7 @@ export default {
           require(['../view/m_site/management/circleInfoView'],resolve)
         },
         metaInfo:{
-          title:"圈子信息",
-          threeHeader: true
+          title:"圈子信息"
         }
       },
       'invite-join':{

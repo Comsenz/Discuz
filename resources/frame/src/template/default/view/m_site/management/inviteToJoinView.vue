@@ -2,34 +2,39 @@
 
 <template>
     <div>
-		<Header></Header>
+      <myInviteJoinHeader title="邀请加入"></myInviteJoinHeader>
 	    <div class="content">
-	        <table class="inviteTable">
-	        	<tr>
-	        		<th>编号</th>
-	        		<th>邀请为</th>
-	        		<th>链接状态</th>
-	        		<th>链接操作</th>
-	        	</tr>
-	        	<tr v-for="inviteLi in inviteList">
-	        		<td>{{inviteLi.number}}</td>
-	        		<td>{{inviteLi.role}}</td>
-	        		<td>{{inviteLi.hrefStatus}}</td>
-	        		<td>
-	        			<a href="javascript:;" class="copyA">复制</a>
-	        			<a href="javascript:;" class="invalidA">置为无效</a>
-	        		</td>
-	        	</tr>
-	        	<tr class="">
-	        		<td>1</td>
-	        		<td>合伙人</td>
-	        		<td>已失效</td>
-	        		<td>
-	        			<a href="javascript:;" class="copyA font9">复制</a>
-	        			<a href="javascript:;" class="invalidA font9">置为无效</a>
-	        		</td>
-	        	</tr>
-	        </table>
+        <div class="inviteBox">
+          <table class="inviteTable">
+          	<tr>
+          		<th>编号</th>
+          		<th>邀请为</th>
+          		<th>链接状态</th>
+          		<th>链接操作</th>
+          	</tr>
+          	<tr v-for="inviteLi in inviteList">
+          		<td>{{inviteLi.number}}</td>
+          		<td>{{inviteLi.role}}</td>
+          		<td>{{inviteLi.hrefStatus}}</td>
+          		<td>
+          			<a href="javascript:;" class="copyA">复制</a>
+          			<a href="javascript:;" class="invalidA">置为无效</a>
+          		</td>
+          	</tr>
+          	<tr class="">
+          		<td>1</td>
+          		<td>合伙人</td>
+          		<td>已失效</td>
+          		<td>
+          			<a href="javascript:;" class="copyA font9">复制</a>
+          			<a href="javascript:;" class="invalidA font9">置为无效</a>
+          		</td>
+          	</tr>
+          </table>
+
+
+        </div>
+
 	    </div>
 		<div class="manageFootFixed">
 			<div class="operaCho">
@@ -43,8 +48,8 @@
 			</div>
 			<button class="checkSubmit">提交</button>
 		</div>
-	    
-	    
+
+
     </div>
 </template>
 <style type="text/css" scoped>

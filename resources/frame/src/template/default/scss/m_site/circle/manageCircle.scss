@@ -130,6 +130,9 @@
 }
 
 //邀请加入
+.inviteBox {
+  @include px2rem(margin-left, 30);
+}
 .inviteTable {
 	border: none;
 	width: 100%;
@@ -144,7 +147,7 @@
 		font-weight: normal;
 		&:nth-child(1) {
 			@include px2rem(width, 110);
-			@include px2rem(padding-left, 30);
+			@include px2rem(padding-left, 22);
 		}
 		&:nth-child(2) {
 			@include px2rem(width, 150);
@@ -160,8 +163,9 @@
 		text-align: left;
 		@include px2rem(line-height, 90);
 		@include font-dpr(30);
+    border-bottom: 1px solid $corE5;
 		&:nth-child(1) {
-			@include px2rem(padding-left, 30);
+			@include px2rem(padding-left, 22);
 		}
 		&:nth-child(4) {
 			@include px2rem(padding-right, 30);

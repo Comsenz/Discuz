@@ -95,3 +95,21 @@
   }
 }
 
+/**
+  点赞我的
+ */
+.quote-reply {
+  @include px2rem(line-height,40);
+  span {
+    display: block;
+    @include px2rem(line-height,40);
+    color: #444444;
+    @include font-dpr(28);
+    }
+}
+.reference .reference-cont {
+  span {
+    display: block;
+    @include px2rem(line-height,40);
+  }
+}

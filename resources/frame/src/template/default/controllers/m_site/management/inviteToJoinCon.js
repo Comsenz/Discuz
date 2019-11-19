@@ -1,7 +1,7 @@
 /**
  * 移动端圈子管理页控制器
  */
-
+import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 export default {
 	data: function() {
 		return {
@@ -29,6 +29,9 @@ export default {
 			],
 			choiceRes: '选择操作'
 		}
+	},
+	components:{
+	  myInviteJoinHeader
 	},
 	 //用于数据初始化
     created: function(){
