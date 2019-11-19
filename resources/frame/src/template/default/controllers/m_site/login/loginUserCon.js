@@ -28,23 +28,10 @@ export default {
 
 
   mounted:function(){
-
   },
   methods:{
-    getCodeApi(state){//获取code
-         let urlNow=encodeURIComponent(window.location.href);
-         let scope='snsapi_userinfo';    //snsapi_userinfo   //静默授权 用户无感知
-         let appid='wx2aa96b3508831102';
-         let url=`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${urlNow}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
-         window.location.replace(url);
-    },
-    getUrlKey(name){//获取url 参数
-     return decodeURIComponent((new RegExp('[?|&]'+name+'='+'([^&;]+?)(&|#|;|$)').exec(location.href)||[,""])[1].replace(/\+/g,'%20'))||null;
-    },
+  
 
-    // ...mapMutations({
-    //   setStatus:'site/SET_STATUS'
-    // }),
 
     loginClick(){
       // this.btnLoading = true;
@@ -99,21 +86,6 @@ export default {
     if(isWeixin == true){
       //微信登录时
       alert('微信登录');
-      alert(this.getUrlKey("code"));
-      let code=this.getUrlKey("code");
-      // alert(code);
-      if(code){
-          this.$axios.get("/Wxopenid/getUserInfo?code="+code)
-          .then((res)=>{
-              console.log(res);
-              //跳转到手机绑定页
-              // this.$router.push({ path:'m_site/bind-phone'});
-          })
-      }else{
-            // alert('执行else');
-            this.getCodeApi("123");
-      }
-
 
 
     } else {
