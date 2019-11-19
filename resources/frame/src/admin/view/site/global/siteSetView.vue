@@ -71,13 +71,13 @@
       </Card>
 
       <Card header="网站备案信息：">
-        <CardRow description="你的Discuz!站点的 ICP 备案编号">
+        <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
           <el-input></el-input>
         </CardRow>
       </Card>
 
       <Card header="网站备案信息：">
-        <CardRow description="你的Discuz!网站的第三方统计代码">
+        <CardRow description="你的Discuz!Q 网站的第三方统计代码">
           <el-input
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 4}">
