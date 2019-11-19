@@ -13,6 +13,7 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\RegisterUser;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -41,8 +42,10 @@ class CreateUserController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
+
         return $this->bus->dispatch(
-            new RegisterUser($request->getAttribute('actor'), $request->getParsedBody()->get('data', []))
+            new RegisterUser($request->getAttribute('actor'), $attributes)
         );
     }
 }

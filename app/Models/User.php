@@ -42,8 +42,7 @@ class User extends Model
         'id',
         'username',
         'password',
-        'mobile',
-        'created_at'
+        'mobile'
     ];
 
     /**
@@ -70,18 +69,13 @@ class User extends Model
     /**
      * Register a new user.
      *
-     * @param string $username
-     * @param string $password
+     * @param array data
      * @return static
      */
-    public static function register($username, $password)
+    public static function register(array $data)
     {
         $user = new static;
-
-        $user->username = $username;
-        $user->password = $password;
-        $user->created_at = Carbon::now();
-
+        $user->attributes = $data;
         return $user;
     }
 
