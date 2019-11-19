@@ -54,16 +54,33 @@ class WeixinLoginController extends AbstractResourceController
 
         $weixinUser = UserWechat::where('openid', $user->id)->first();
 
-        if(is_null($weixinUser)) {
-            throw new NoUserException();
+        if(!$weixinUser) {
+            $user->user['privilege'] = serialize($user->user['privilege']);
+            UserWechat::create($user->user);
+
+            $this->error($user);
         }
 
-        //创建 token
-        $params = [
-            'username' => $weixinUser->user->username,
-            'password' => ''
-        ];
+        if($weixinUser->user) {
+            //创建 token
+            $params = [
+                'username' => $weixinUser->user->username,
+                'password' => ''
+            ];
 
-        return $this->bus->dispatch(new GenJwtToken($params));
+            return $this->bus->dispatch(new GenJwtToken($params));
+        }
+
+        $this->error($user);
+    }
+
+    /**
+     * @param $user
+     * @throws NoUserException
+     */
+    private function error($user) {
+        $e = new NoUserException();
+        $e->setUser($user->user);
+        throw $e;
     }
 }
