@@ -1,5 +1,5 @@
 
-import Card from '../../../view/site/common/card/card';
+import Card from '../../../../view/site/common/card/card';
 
 const cityOptions = ['站点信息', '注册与登录', '附件设置', '支付设置','后台用户管理','后台角色管理'];
 const userOptions = ['用户管理','站点信息','角色管理'];

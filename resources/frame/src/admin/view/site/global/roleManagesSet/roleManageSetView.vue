@@ -1,6 +1,6 @@
 <template>
     <div class="role-manage-set-box">
-      <div v-if="roleStatus === 'default'">
+      <div >
         <el-table
           ref="multipleTable"
           :data="tableData"
@@ -26,7 +26,7 @@
             label="角色"
           >
             <template slot-scope="scope">
-              <el-button type="text">权限编辑</el-button>
+              <el-button type="text" @click="$router.push({path:'/admin/role-manage-set/permission'})">权限编辑</el-button>
               <el-button type="text">删除</el-button>
             </template>
           </el-table-column>
@@ -41,13 +41,13 @@
         </div>
 
         <Card>
-          <el-button type="primary" si ze="medium" @click="roleStatus = 'roleEditing'">提交</el-button>
+          <el-button type="primary" si ze="medium" >提交</el-button>
           <el-button  size="medium" :disabled="deleteStatus" >删除</el-button>
         </Card>
 
       </div>
 
-      <div class="role-editing-box"  v-if="roleStatus === 'roleEditing'">
+      <!--<div class="role-editing-box"  v-if="roleStatus === 'roleEditing'">
 
         <Card header="角色一的权限编辑">
 
@@ -87,14 +87,14 @@
           <el-button type="primary" size="medium" @click="roleStatus = 'default'">提交</el-button>
         </Card>
 
-      </div>
+      </div>-->
 
     </div>
 </template>
 
 <script>
-import roleManageSetCon from '../../../controllers/site/global/roleManageSetCon';
-import '../../../scss/site/global.scss';
+import roleManageSetCon from '../../../../controllers/site/global/roleManageSet/roleManageSetCon';
+import '../../../../scss/site/global.scss';
 export default {
     name: "role-manage-set-view",
   ...roleManageSetCon

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loginStatus ==='default'" style="padding-top: 15PX">
+    <div style="padding-top: 15PX">
       <el-table
         :data="tableData"
         style="width: 100%">
@@ -52,7 +52,7 @@
       </el-table>
     </div>
 
-    <div v-if="loginStatus === 'yun'">
+   <!-- <div v-if="loginStatus === 'yun'">
       <Card header="云api配置"></Card>
 
       <Card header="APPID：">
@@ -78,9 +78,9 @@
         <el-button type="primary" size="medium" @click="loginStatus = 'default'" >提交</el-button>
       </Card>
 
-    </div>
+    </div>-->
 
-    <div v-if="loginStatus ==='dx'">
+   <!-- <div v-if="loginStatus ==='dx'">
       <Card header="短信配置"></Card>
 
       <Card header="短信验证码使用模板ID：">
@@ -102,14 +102,14 @@
         <el-button type="primary" size="medium" @click="loginStatus = 'default'" >提交</el-button>
       </Card>
 
-    </div>
+    </div>-->
 
   </div>
 </template>
 
 <script>
-import tencentCloudSetCon from '../../../controllers/site/global/tencentCloudSetCon';
-import '../../../scss/site/global.scss';
+import tencentCloudSetCon from '../../../../controllers/site/global/tencentCloundSet/tencentCloudSetCon';
+import '../../../../scss/site/global.scss';
 export default {
    name: "tencent-cloud-set-view",
   ...tencentCloudSetCon
