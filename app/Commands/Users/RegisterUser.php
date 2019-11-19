@@ -74,10 +74,7 @@ class RegisterUser
         //     $password = $password ?: Str::random(20);
         // }
 
-        $user = User::register(
-            Arr::get($this->data, 'attributes.username'),
-            $password
-        );
+        $user = User::register($this->data);
 
         $user->raise(new Registered($user, $this->actor, $this->data));
 

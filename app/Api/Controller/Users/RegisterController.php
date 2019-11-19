@@ -40,15 +40,14 @@ class RegisterController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $data = $request->getParsedBody()->get('data', []);
+        $attributes = $request->getParsedBody()->get('data.attributes', []);
 
         $this->bus->dispatch(
-            new RegisterUser($request->getAttribute('actor'), $data)
+            new RegisterUser($request->getAttribute('actor'), Arr::only($attributes, ['username', 'password']))
         );
 
-        $params = Arr::get($data,'attributes');
-        unset($params['password']);
+        unset($attributes['password']);
 
-        return $this->bus->dispatch(new GenJwtToken($params));
+        return $this->bus->dispatch(new GenJwtToken($attributes));
     }
 }
