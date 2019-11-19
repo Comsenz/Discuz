@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /**
- * manageCircle style 
+ * manageCircle style
  */
 @import "./../var";
 @import "./_app";
@@ -74,6 +74,11 @@
 		    right: 0;
 		    border-bottom: 1px solid $corE5;
 		}
+    &:last-child {
+      &:after {
+        border-bottom: none;
+      }
+    }
 	}
 	.searchMore {
 		color: $fontColor;
@@ -99,5 +104,6 @@
 		    border-bottom: 1px solid $corE5;
 		}
 	}
-}
 
+
+}

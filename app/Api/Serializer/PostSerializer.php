@@ -11,7 +11,6 @@ namespace App\Api\Serializer;
 
 use App\Models\Post;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Tobscure\JsonApi\Relationship;
 
 class PostSerializer extends AbstractSerializer

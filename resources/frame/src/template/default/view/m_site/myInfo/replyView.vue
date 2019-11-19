@@ -1,7 +1,7 @@
 <template>
   <div class="reply-my-box my-info-money-header">
     <ReplyHeader title="回复我的"></ReplyHeader>
-    <main class="reply-my-main">
+    <main class="reply-my-main content">
       <div class="reply-my-cont cell-crossing">
         <ContHeader
           :imgUrl="imgUrl"
@@ -56,6 +56,7 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import replyCon from '../../../controllers/m_site/myInfo/replyCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "reply",
   ...replyCon

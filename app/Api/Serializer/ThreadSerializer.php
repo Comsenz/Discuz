@@ -11,8 +11,8 @@ namespace App\Api\Serializer;
 
 use App\Models\Thread;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Tobscure\JsonApi\Relationship;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 class ThreadSerializer extends AbstractSerializer
 {
@@ -22,16 +22,28 @@ class ThreadSerializer extends AbstractSerializer
     protected $type = 'threads';
 
     /**
+     * @var Gate
+     */
+    protected $gate;
+
+    /**
+     * @param Gate $gate
+     */
+    public function __construct(Gate $gate)
+    {
+        $this->gate = $gate;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param Thread $model
      */
     public function getDefaultAttributes($model)
     {
+        $gate = $this->gate->forUser($this->actor);
+
         $attributes = [
-            // 'id'                    => (int) $model->id,
-            // 'user_id'               => (int) $model->user_id,
-            // 'last_posted_user_id'   => (int) $model->last_posted_user_id,
             'title'                 => $model->title,
             'price'                 => $model->price,
             'viewCount'             => (int) $model->view_count,
@@ -39,17 +51,20 @@ class ThreadSerializer extends AbstractSerializer
             'likeCount'             => (int) $model->like_count,
             'createdAt'             => $this->formatDate($model->created_at),
             'updatedAt'             => $this->formatDate($model->updated_at),
-            // 'deleted_at'            => $this->formatDate($model->deleted_at),
-            // 'deleted_user_id'       => (int) $model->deleted_user_id,
             'isApproved'            => (bool) $model->is_approved,
             'isSticky'              => (bool) $model->is_sticky,
             'isEssence'             => (bool) $model->is_essence,
+            'canApprove'            => $gate->allows('approve', $model),
+            'canSticky'             => $gate->allows('sticky', $model),
+            'canEssence'            => $gate->allows('essence', $model),
         ];
 
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
         }
+
+        Thread::setStateUser($this->actor);
 
         return $attributes;
     }

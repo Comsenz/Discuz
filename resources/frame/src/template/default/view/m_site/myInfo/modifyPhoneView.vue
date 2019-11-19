@@ -1,12 +1,7 @@
 <template>
     <div class="modify-phone-box">
-      <ModifyHeader></ModifyHeader>
-      <main class="modify-phone-main">
-        <div class="modify-phone-title-box">
-          <p class="modify-phone-title-p">修改手机号</p>
-        </div>
-
-
+      <ModifyHeader title="修改手机号"></ModifyHeader>
+      <main class="modify-phone-main content">
         <div class="modify-phone-form my-info-form">
           <van-cell-group>
 
@@ -52,6 +47,7 @@
 import '../../../scss/m_site/myInfo/myInfo.scss';
 import '../../../less/m_site/myInfo/myInfo.less';
 import modifyPhoneCon from '../../../controllers/m_site/myInfo/modifyPhoneCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "modify-phone-view",
   ...modifyPhoneCon

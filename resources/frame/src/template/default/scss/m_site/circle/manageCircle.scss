@@ -254,3 +254,10 @@
 	}
 
 }
+
+//圈子成员
+.cirMemberList {
+  &::after {
+    border: none !important;
+  }
+}

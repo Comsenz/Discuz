@@ -1,11 +1,7 @@
 <template>
     <div class="withdraw-box">
-      <WithdrawHeader></WithdrawHeader>
+      <WithdrawHeader title="提现"></WithdrawHeader>
       <main class="withdraw-main">
-        <div class="my-info-module-title-box">
-          <p class="my-info-module-title">提现</p>
-        </div>
-
         <div class="withdraw-form my-info-form">
           <van-cell-group>
 
@@ -86,7 +82,8 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
-import withdrawCon from '../../../controllers/m_site/myInfo/withdrawCon'
+import withdrawCon from '../../../controllers/m_site/myInfo/withdrawCon';
+import '../../../scss/m_site/myInfo/myInfo.scss';
 export default {
     name: "withdraw-view",
   ...withdrawCon

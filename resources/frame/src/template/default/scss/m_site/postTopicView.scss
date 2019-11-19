@@ -27,10 +27,20 @@ $postTopicColor:#336699;
     justify-content: space-between;
     align-items: center;
     @include px2rem(padding,0 32);
-
+     .postHeadTit {
+       font-weight: normal;
+       font-size: 18px;
+       line-height: 24px;
+       display: block;
+       text-align: center;
+       width: 100%;
+     }
     .van-button{
       min-width: 52px;
       height: 30px;
+      position: absolute;
+      right: 15px;
+      z-index: 9;
       &__text{
         font-size: 14px;
         line-height:20px;
@@ -110,4 +120,3 @@ $postTopicColor:#336699;
   }
 
 }
-

@@ -1,8 +1,7 @@
 <template>
     <div class="my-notice-box my-info-money-header">
       <MyNoticeHeader title="我的通知"></MyNoticeHeader>
-      <main class="my-notice-main">
-
+      <main class="my-notice-main content">
         <van-cell cless="my-notice-cell" @click="myJump('reply')" is-link>
           <template class="my-notice-cell-template" slot="title">
             <span class="custom-title" >回复我的</span>
@@ -30,6 +29,7 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import myNoticeCon from '../../../controllers/m_site/myInfo/myNoticeCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "my-notice",
   ...myNoticeCon
