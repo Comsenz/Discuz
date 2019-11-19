@@ -1,11 +1,10 @@
 
-import Card from '../../../view/site/common/card/card';
-import CardRow from '../../../view/site/common/card/cardRow';
+import Card from '../../../../view/site/common/card/card';
+import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
   data:function () {
     return {
-      loginStatus:'default',  //wx
       tableData:[{
           name: '微信支付',
           type: 'h5',
@@ -16,7 +15,7 @@ export default {
   },
   methods:{
     configClick(){
-      this.loginStatus = 'wx'
+      this.$router.push({path:'/admin/pay-config/wx'})
     }
   },
   components:{

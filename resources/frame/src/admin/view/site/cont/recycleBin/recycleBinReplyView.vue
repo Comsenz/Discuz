@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import '../../../scss/site/contStyle.scss';
-import recycleBinReplyCon from '../../../controllers/site/cont/recycleBinReplyCon'
+import '../../../../scss/site/contStyle.scss';
+import recycleBinReplyCon from '../../../../controllers/site/cont/recycleBinReplyCon'
 export default {
     name: "recycle-bin-reply-view",
   ...recycleBinReplyCon

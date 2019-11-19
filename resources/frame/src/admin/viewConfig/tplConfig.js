@@ -50,9 +50,10 @@ export default {
               attribution:'全局'
             }
           },
+
           'worth-mentioning-set': {
             comLoad: function (resolve) {
-              require(['../view/site/global/worthMentioningSetView'], resolve)
+              require(['../view/site/global/worthMentioningSet/worthMentioningSetView'], resolve)
             },
             metaInfo: {
               title: '第三方登录设置',
@@ -60,9 +61,40 @@ export default {
               attribution:'全局'
             }
           },
+          'worth-mentioning-config/h5wx':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/worthMentioningSet/worthMentioningConfigH5WxView'], resolve)
+            },
+            metaInfo: {
+              title: '第三方登录设置',
+              name:'worthMentioningSet',
+              attribution:'全局'
+            }
+          },
+          'worth-mentioning-config/applets':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/worthMentioningSet/worthMentioningConfigAppletsView'], resolve)
+            },
+            metaInfo: {
+              title: '第三方登录设置',
+              name:'worthMentioningSet',
+              attribution:'全局'
+            }
+          },
+          'worth-mentioning-config/pcwx':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/worthMentioningSet/worthMentioningConfigPcWxView'], resolve)
+            },
+            metaInfo: {
+              title: '第三方登录设置',
+              name:'worthMentioningSet',
+              attribution:'全局'
+            }
+          },
+
           'pay-set': {
             comLoad: function (resolve) {
-              require(['../view/site/global/paySetView'], resolve)
+              require(['../view/site/global/paySet/paySetView'], resolve)
             },
             metaInfo: {
               title: '支付设置',
@@ -70,6 +102,17 @@ export default {
               attribution:'全局'
             }
           },
+          'pay-config/wx':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/paySet/payConfigWxView'], resolve)
+            },
+            metaInfo: {
+              title: '支付设置',
+              name:'paySet',
+              attribution:'全局'
+            }
+          },
+
           'tencent-cloud-set': {
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudSetView'], resolve)
@@ -135,7 +178,7 @@ export default {
 
           'cont-manage':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/contManageView'], resolve)
+              require(['../view/site/cont/contManages/contManageView'], resolve)
             },
             metaInfo: {
               title: '内容管理',
@@ -146,7 +189,7 @@ export default {
           },
           'cont-manage/search':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/contManageSearchView'], resolve)
+              require(['../view/site/cont/contManages/contManageSearchView'], resolve)
             },
             metaInfo: {
               title: '内容管理',
@@ -181,7 +224,7 @@ export default {
 
           'recycle-bin':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/recycleBinView'], resolve)
+              require(['../view/site/cont/recycleBin/recycleBinView'], resolve)
             },
             metaInfo: {
               title: '回收站',
@@ -192,7 +235,7 @@ export default {
           },
           'recycle-bin-reply':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/recycleBinReplyView'], resolve)
+              require(['../view/site/cont/recycleBin/recycleBinReplyView'], resolve)
             },
             metaInfo: {
               title: '回收站',

@@ -1,6 +1,6 @@
 <template>
     <div class="worth-mention-box">
-      <div class="worth-mention__default" v-if="loginStatus === 'default'">
+      <div class="worth-mention__default" >
         <el-table
           :data="tableData"
           style="width: 100%">
@@ -52,7 +52,7 @@
         </el-table>
       </div>
 
-      <div class="worth-mention__h5" v-if="loginStatus === 'h5'">
+     <!-- <div class="worth-mention__h5" v-if="loginStatus === 'h5'">
         <Card header="H5微信授权登录"></Card>
 
         <Card header="APPID：">
@@ -121,14 +121,14 @@
         <Card >
           <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
         </Card>
-      </div>
+      </div>-->
 
     </div>
 </template>
 
 <script>
-import worthMentioningSetCon from '../../../controllers/site/global/worthMentioningSetCon';
-import '../../../scss/site/global.scss';
+import worthMentioningSetCon from '../../../../controllers/site/global/worthMentioningSet/worthMentioningSetCon';
+import '../../../../scss/site/global.scss';
 export default {
     name: "worth-mentioning-set-view",
   ...worthMentioningSetCon
