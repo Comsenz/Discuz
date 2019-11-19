@@ -6,10 +6,12 @@ namespace App\Commands\Sms;
 
 use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
+use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Models\MobileCode;
 use App\Models\User;
 use Discuz\Api\Client;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
 
 class VerifyMobile
@@ -36,6 +38,10 @@ class VerifyMobile
         return $this->{$this->mobileCode->type}();
     }
 
+    /**
+     * @return mixed
+     * @throws PermissionDeniedException
+     */
     protected function login() {
         if(!is_null($this->mobileCode->user))
         {
@@ -44,22 +50,21 @@ class VerifyMobile
                 'username' => $this->mobileCode->user->username,
                 'password' => ''
             ];
-            $response = $this->bus->dispatch(new GenJwtToken($params));
-            if($response->getStatusCode() === 200) {
-                $this->mobileCode->state = 1;
-                $this->mobileCode->save();
-            }
 
-            return $response;
+            return $this->bus->dispatch(new GenJwtToken($params));
         }
+
+        throw new PermissionDeniedException;
     }
 
-    protected function bind()
+    protected function bind() {
+        $this->controller->serializer = UserSerializer::class;
+        return $this->mobileCode->user;
+    }
+
+    protected function lostpwd()
     {
-//        if(is_null($this->mobileCode->user)) {
-//            $this->mobileCode->user->mobile = $this->mobileCode->mobile;
-//            $this->mobileCode->user->mobile_confirmed = 1;
-//            $this->mobileCode->user->save();
-//        }
+        $this->controller->serializer = UserSerializer::class;
+        return $this->mobileCode->user;
     }
 }

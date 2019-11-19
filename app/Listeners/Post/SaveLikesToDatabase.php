@@ -28,14 +28,18 @@ class SaveLikesToDatabase
         if ($post->exists && isset($data['attributes']['isLiked'])) {
             // $this->assertCan($actor, 'like', $post);
 
-            $isLiked = $actor->likedPosts()->where('post_id', $post->id)->exists();
+            $isLiked = $actor->likedPosts()->withTrashed()->where('post_id', $post->id)->exists();
 
-            if ($data['attributes']['isLiked'] && ! $isLiked) {
-                // 未喜欢且 isLiked 为 true 时，设为喜欢
-                $actor->likedPosts()->attach($post->id, ['created_at' => Carbon::now()]);
-            } elseif ($isLiked) {
+            if ($isLiked) {
                 // 已喜欢且 isLiked 为 false 时，取消喜欢
-                $actor->likedPosts()->detach($post->id);
+                if (!$data['attributes']['isLiked']) {
+                    $actor->likedPosts()->detach($post->id);
+                }
+            } else {
+                // 未喜欢且 isLiked 为 true 时，设为喜欢
+                if ($data['attributes']['isLiked']) {
+                    $actor->likedPosts()->attach($post->id, ['created_at' => Carbon::now()]);
+                }
             }
         }
     }

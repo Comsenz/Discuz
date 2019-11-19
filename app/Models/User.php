@@ -235,14 +235,9 @@ class User extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Define the relationship with the user's wechats.
-     *
-     * @return HasOne
-     */
-    public function userWechats()
+    public function wechat()
     {
-        return $this->hasOne("App\Models\UserWechat", "id", "id");
+        return $this->hasOne(UserWechat::class);
     }
 
     /**

@@ -46,10 +46,8 @@ class RegisterController extends AbstractCreateController
             new RegisterUser($request->getAttribute('actor'), $data)
         );
 
-        $params = [
-            'username' => Arr::get($data,'attributes.username', null),
-            'password' => '',
-        ];
+        $params = Arr::get($data,'attributes');
+        unset($params['password']);
 
         return $this->bus->dispatch(new GenJwtToken($params));
     }
