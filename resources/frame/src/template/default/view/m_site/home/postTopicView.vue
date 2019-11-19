@@ -3,7 +3,7 @@
 
       <header class="post-topic-header">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
-        <h2>{{headerTitle}}</h2>
+        <h2 class="postHeadTit">{{headerTitle}}</h2>
         <van-button type="primary" size="mini">发布</van-button>
       </header>
 
