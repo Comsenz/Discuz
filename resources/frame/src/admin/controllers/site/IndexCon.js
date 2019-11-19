@@ -153,7 +153,7 @@ export default {
                 },
                 {
                   id:32,
-                  title:'回帖 ',
+                  title:'回帖',
                   name:'recycleBin',
                   icon:'iconhuishouzhan',
                 }
@@ -342,6 +342,8 @@ export default {
 
       this.sideSubmenuSelect = title;
 
+      // console.log(title);
+
       switch (title){
         case '最新主题':
           this.$router.push({path:'/admin/cont-manage'});
@@ -359,7 +361,7 @@ export default {
           this.$router.push({path:'/admin/recycle-bin'});
           break;
         case '回帖':
-          // this.$router.push({path:'/admin/cont-manage/search'});
+          this.$router.push({path:'/admin/recycle-bin-reply'});
           break;
         default:
           alert("当前没有页面哦");

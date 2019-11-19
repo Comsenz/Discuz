@@ -29,10 +29,11 @@ class VerifyController extends AbstractResourceController
         $this->bus = $bus;
     }
 
+
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return array|mixed
+     * @return mixed
      * @throws SmsCodeVerifyException
      */
     protected function data(ServerRequestInterface $request, Document $document)
@@ -47,6 +48,9 @@ class VerifyController extends AbstractResourceController
         if(!$mobileCode || $mobileCode->code !== $code) {
             throw new SmsCodeVerifyException();
         }
+
+        $mobileCode->state = 1;
+        $mobileCode->save();
 
         //各种类型验证通过后，返回相关数据
         return $this->bus->dispatch(new VerifyMobile($this, $mobileCode, $request->getAttribute('actor')));
