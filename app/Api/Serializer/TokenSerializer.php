@@ -19,12 +19,18 @@ class TokenSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
-        return [
-            'token_type' => $model->token_type,
-            'expires_in' => $model->expires_in,
-            'access_token' => $model->access_token,
-            'refresh_token' => $model->refresh_token,
-        ];
+        if(isset($model['location'])) {
+            return [
+                'location' => $model['location']
+            ];
+        } else {
+            return [
+                'token_type' => $model->token_type,
+                'expires_in' => $model->expires_in,
+                'access_token' => $model->access_token,
+                'refresh_token' => $model->refresh_token,
+            ];
+        }
     }
 
     public function getId($model)
