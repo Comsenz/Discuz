@@ -20,7 +20,7 @@ export default {
             id:0,
             title:'管理中心首页',
             name:'controlCenter',
-            icon:'iconshouye'
+            icon:'iconshouye',
           }]
         },
         {
@@ -242,6 +242,7 @@ export default {
         default:
           // alert("当前没有页面哦");
           // this.$router.push({path:'/admin/home'});
+          this.sideSubmenu = [];
           console.log("没有当前页面，跳转404页面");
       }
 
@@ -257,18 +258,21 @@ export default {
           this.sideList = this.navList[0].submenu;
           this.sideSelect = this.navList[0].submenu[0].name;
           this.indexTitle = this.navList[0].submenu[0].title;
+          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
           this.$router.push({path:'/admin/home'});
           break;
         case 'global':
           this.sideList = this.navList[1].submenu;
           this.sideSelect = this.navList[1].submenu[0].name;
           this.indexTitle = this.navList[1].submenu[0].title;
+          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
           this.$router.push({path:'/admin/site-set'});
           break;
         case 'cont':
           this.sideList = this.navList[3].submenu;
           this.sideSelect = this.navList[3].submenu[0].name;
           this.indexTitle = this.navList[3].submenu[0].title;
+          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
           this.$router.push({path:'/admin/cont-class'});
           break;
         default :
@@ -341,8 +345,6 @@ export default {
     sideSubmenuClick(title){
 
       this.sideSubmenuSelect = title;
-
-      // console.log(title);
 
       switch (title){
         case '最新主题':
