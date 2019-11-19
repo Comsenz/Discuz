@@ -27,4 +27,9 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'   => $this->formatDate($model->updated_at),
         ];
     }
+
+    public function wechat($user)
+    {
+        return $this->hasOne($user, UserWechatSerializer::class);
+    }
 }

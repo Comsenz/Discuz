@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\Users\UserVerify;
+use App\Listeners\User\MobileBind;
 use App\Listeners\User\WeixinBind;
 use App\Policies\GroupPolicy;
 use App\Policies\StopWordPolicy;
@@ -13,7 +14,8 @@ class EventServiceProvider extends BaseEventServiceProvider
     protected $listen = [
         'App\Events\Users\Registered' => ['App\Listeners\Wallet\CreateUserWalletListener'],
         UserVerify::class => [
-            WeixinBind::class
+            WeixinBind::class,
+            MobileBind::class
         ]
     ];
 
