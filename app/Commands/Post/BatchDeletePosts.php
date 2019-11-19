@@ -4,19 +4,19 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: BatchDeleteThreads.php xxx 2019-10-21 14:22:00 LiuDongdong $
+ *      $Id: BatchDeletePosts.php xxx 2019-11-19 11:30:00 LiuDongdong $
  */
 
-namespace App\Commands\Thread;
+namespace App\Commands\Post;
 
-use App\Events\Thread\Deleted;
-use App\Events\Thread\Deleting;
+use App\Events\Post\Deleted;
+use App\Events\Post\Deleting;
 use App\Models\User;
-use App\Repositories\ThreadRepository;
+use App\Repositories\PostRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class BatchDeleteThreads
+class BatchDeletePosts
 {
     use EventsDispatchTrait;
 
@@ -55,39 +55,39 @@ class BatchDeleteThreads
 
     /**
      * @param Dispatcher $events
-     * @param ThreadRepository $threads
+     * @param PostRepository $posts
      * @return array
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads)
+    public function handle(Dispatcher $events, PostRepository $posts)
     {
         $this->events = $events;
 
         $result = ['data' => [], 'meta' => []];
 
         foreach ($this->ids as $id) {
-            $thread = $threads->query()->whereVisibleTo($this->actor)->find($id);
+            $post = $posts->query()->whereVisibleTo($this->actor)->find($id);
 
-            if (!$thread) {
+            if (!$post) {
                 $result['meta'][] = ['id' => $id, 'message' => 'model_not_found'];
                 continue;
             }
 
-            if ($this->actor->can('forceDelete', $thread)) {
+            if ($this->actor->can('forceDelete', $post)) {
                 try {
                     $this->events->dispatch(
-                        new Deleting($thread, $this->actor, $this->data)
+                        new Deleting($post, $this->actor, $this->data)
                     );
                 } catch (\Exception $e) {
                     $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
                     continue;
                 }
 
-                $thread->raise(new Deleted($thread));
-                $thread->forceDelete();
-                $result['data'][] = $thread;
+                $post->raise(new Deleted($post));
+                $post->forceDelete();
+                $result['data'][] = $post;
 
                 try {
-                    $this->dispatchEventsFor($thread, $this->actor);
+                    $this->dispatchEventsFor($post, $this->actor);
                 } catch (\Exception $e) {
                     $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
                     continue;

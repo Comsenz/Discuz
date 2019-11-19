@@ -89,7 +89,7 @@ $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceT
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/batch/{ids}', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
-$route->delete('/threads/batch/{ids}', 'threads.delete', ApiController\Threads\BatchDeleteThreadController::class);
+$route->delete('/threads/batch/{ids}', 'threads.delete', ApiController\Threads\BatchDeleteThreadsController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 
 /*
@@ -102,7 +102,7 @@ $route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::cl
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
 $route->patch('/posts/batch/{ids}', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
-$route->delete('/posts', 'posts.delete', ApiController\Posts\DeletePostController::class);
+$route->delete('/posts/batch/{ids}', 'posts.delete', ApiController\Posts\BatchDeletePostsController::class);
 $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
 
 /*
