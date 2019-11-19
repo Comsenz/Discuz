@@ -11,7 +11,7 @@ export default {
 	},
 	props: {
     themeList: { // 组件的list
-      type: Object
+      type: Array
       // default: () => {
       //   return [];
       // }

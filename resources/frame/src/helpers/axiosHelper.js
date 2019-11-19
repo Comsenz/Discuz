@@ -17,11 +17,13 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    if(codes.includes(error.response.status)) {
-      return error.response;
-  	} else {
-  		return Promise.reject(error)
-  	}
+   //  if(codes.includes(error.response.status)) {
+   //    return error.response;
+  	// } else {
+   //      alert('wert');
+   //      return Promise.reject(error)
+  	// }
+    return Promise.reject(error);
   }
 )
 
@@ -46,7 +48,7 @@ const getApi = function(key){
  * @param  {[type]} error   [请求失败回调方法]
  * @return {[type]}         [description]
  */
-const appFetch = function(params, success, error) {
+const appFetch = function(params, options) {
 	var oldUrl = params.url;
 
 	if(params === undefined) {
@@ -62,6 +64,7 @@ const appFetch = function(params, success, error) {
 
 	//如果是本地请求，就走接口代理
 	if(process.env.NODE_ENV === 'development') {
+		// console.log(appConfig.apis);
 		params.baseURL = "/api";
 		params.url = appConfig.apis[oldUrl];
 	} else {
@@ -93,14 +96,41 @@ const appFetch = function(params, success, error) {
 		delete params.data
 	}
 
-	return axios(params).then(function(response) {
-		let res = response.data || {};
-		success(response);
-	})
-	.catch(function(err) {
-		// console.error(err, 'API '+oldUrl);
-		error && error(err);
-	});
+	return axios(params).then(data => {return data.data}, errors => {
+      let requestError = errors.response;
+
+      let children;
+      switch (requestError.status) {
+        case 422:
+          children = requestError.data.errors
+            .map(error => [error.detail, '<br/>'])
+            .reduce((a, b) => a.concat(b), [])
+            .slice(0, -1);
+          break;
+
+        case 401:
+        case 403:
+          children = 'permission_denied_message';
+          break;
+
+        case 404:
+        case 410:
+          children = 'not_found_message';
+          break;
+
+        case 429:
+          children = 'rate_limit_exceeded_message';
+          break;
+
+        default:
+          children = 'generic_message';
+      }
+      // console.log(children.toString());
+      let msg = children.toString().replace(/,/g,'');
+      app.$toast({type: 'html', 'message': msg});
+
+      return Promise.reject(error);
+  });
 }
 
 Vue.prototype.appFetch = appFetch;

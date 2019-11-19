@@ -1,8 +1,7 @@
 <template>
     <div class="home-page-box">
       <HomePageHeader title="Eliza的个人主页"></HomePageHeader>
-      <main class="home-page-main">
-
+      <main class="home-page-main content">
         <div class="home-page-main-header">
           <div class="home-page-main-box">
             <img class="header-avatar avatar-img" src="../../../../../../static/images/mytx.png" alt="用户头像">
@@ -58,6 +57,7 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import homePageCon from '../../../controllers/m_site/myInfo/homePageCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "home-page-view",
   ...homePageCon

@@ -1,8 +1,7 @@
 <template>
   <div class="like-box my-info-money-header">
     <LikeHeader title="点赞我的"></LikeHeader>
-    <main class="like-main">
-
+    <main class="like-main content">
       <div class="like-cont cell-crossing">
         <ContHeader
           :imgUrl="imgUrl"
@@ -40,9 +39,10 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import likeCon from '../../../controllers/m_site/myInfo/likeCon';
+import  '../../../scss/m_site/myInfo/myInfo.scss';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "like-view",
   ...likeCon
 }
 </script>
-

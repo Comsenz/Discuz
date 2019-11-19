@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /**
- * manageCircle style 
+ * manageCircle style
  */
 @import "./../var";
 @import "./_app";
@@ -45,7 +45,7 @@
 	.resUser {
 		.resUserDet {
 			.resUserName {
-				@include px2rem(max-width, 300);	
+				@include px2rem(max-width, 300);
 			}
 			.memberCheck {
 				float: right;
@@ -53,7 +53,7 @@
 			}
 		}
 	}
-	
+
 }
 .manageFootFixed {
 	position: fixed;
@@ -113,7 +113,7 @@
 				}
 			}
 		}
-		
+
 	}
 	.checkSubmit {
 		float: right;
@@ -130,6 +130,9 @@
 }
 
 //邀请加入
+.inviteBox {
+  @include px2rem(margin-left, 30);
+}
 .inviteTable {
 	border: none;
 	width: 100%;
@@ -144,7 +147,7 @@
 		font-weight: normal;
 		&:nth-child(1) {
 			@include px2rem(width, 110);
-			@include px2rem(padding-left, 30);
+			@include px2rem(padding-left, 22);
 		}
 		&:nth-child(2) {
 			@include px2rem(width, 150);
@@ -160,8 +163,9 @@
 		text-align: left;
 		@include px2rem(line-height, 90);
 		@include font-dpr(30);
+    border-bottom: 1px solid $corE5;
 		&:nth-child(1) {
-			@include px2rem(padding-left, 30);
+			@include px2rem(padding-left, 22);
 		}
 		&:nth-child(4) {
 			@include px2rem(padding-right, 30);
@@ -213,7 +217,7 @@
 }
 .infoPower {
 	.powerList {
-		@include px2rem(padding, 0 30 36 30);
+		@include px2rem(padding, 24 30 36 30);
 		position: relative;
 		&:after {
 			position: absolute;
@@ -248,9 +252,5 @@
 			color: rgba(#000,0.5);
 		}
 	}
-	
+
 }
-
-
-
-

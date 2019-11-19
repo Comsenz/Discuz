@@ -1,7 +1,7 @@
 <template>
   <div class="reward-box my-info-money-header">
     <RewardHeader title="打赏我的"></RewardHeader>
-    <main class="reward-main">
+    <main class="reward-main content">
       <div class="reward-con cell-crossing">
         <ContHeader
           :imgUrl="imgUrl"
@@ -31,7 +31,8 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
-import rewardCon from '../../../controllers/m_site/myInfo/rewardCon'
+import rewardCon from '../../../controllers/m_site/myInfo/rewardCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "reward",
   ...rewardCon

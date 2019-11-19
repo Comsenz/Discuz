@@ -1,7 +1,7 @@
 
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-
+import User from '../../../../../common/models/User.js'
 export default {
   data:function () {
     return {
@@ -21,44 +21,55 @@ export default {
   methods:{
     signUpClick(){
       this.btnLoading = true;
-      this.appFetch({
-        url:'signUp',
-        method:'post',
-        data:{
-          "data": {
-          "type": "users",
-          "attributes": {
-              username:this.username,
-              password:this.password,
-              mobile: this.mobile
-          },
-          }
-        }
-      }, (res) => {
+      // var user = new User();
+      this.apiStore.createRecord('users').save({
+        username:this.username,
+        password:this.password
+      }).then(data => {
+        //注册成功跳转到绑定手机号
+        this.$router.push({path:'bind-phone'});
+      }, error => {
         this.btnLoading = false;
-        console.log(res);
-        if (res.status !== "201"){
-          //注册账号成功时
-          this.$toast({
-            type:'success',
-            message: "注册成功，正在跳转",
-          });
-          this.$router.push({path:'bind-phone'});
-          // this.error = false;
-          // this.errorMessage = '';
-        } else {
-          //注册失败时
-          this.$toast({
-            type:'fail',
-            message: "注册失败",
-          });
-          this.error = true;
-          this.errorMessage = res.errors[0].detail[0];
-        }
-
-      }, function(error) {
-        // console.log(error, 'eror')
       });
+
+      // this.appFetch({
+      //   url:'signUp',
+      //   method:'post',
+      //   data:{
+      //     "data": {
+      //     "type": "users",
+      //     "attributes": {
+      //         username:this.username,
+      //         password:this.password,
+      //         mobile: this.mobile
+      //     },
+      //     }
+      //   }
+      // }, (res) => {
+      //   this.btnLoading = false;
+      //   console.log(res);
+      //   if (res.status !== "201"){
+      //     //注册账号成功时
+      //     this.$toast({
+      //       type:'success',
+      //       message: "注册成功，正在跳转",
+      //     });
+      //     this.$router.push({path:'bind-phone'});
+      //     // this.error = false;
+      //     // this.errorMessage = '';
+      //   } else {
+      //     //注册失败时
+      //     this.$toast({
+      //       type:'fail',
+      //       message: "注册失败",
+      //     });
+      //     this.error = true;
+      //     this.errorMessage = res.errors[0].detail[0];
+      //   }
+
+      // }, function(error) {
+      //   // console.log(error, 'eror')
+      // });
 
     },
     //错误提示

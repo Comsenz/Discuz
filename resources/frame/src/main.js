@@ -15,6 +15,7 @@ import './template/default/less/m_site/modules/publicIndexB.less' //引入B公�
 import './extend/viewBase/vantuiInit';   //引入vant组件
 import '../static/js/rem'   //引入Rem配置
 
+
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
 import './admin/scss/modules/element-variables.scss'  //引入主题样式
@@ -26,7 +27,11 @@ import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
 import Store from "./common/Store";
-
+import Thread from './common/models/Thread';
+import User from './common/models/User';
+import Post from './common/models/Post';
+import moment from 'moment'//导入文件 momnet时间转换
+import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
 
@@ -36,7 +41,13 @@ import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 
 import axios from 'axios';
 Vue.prototype.axios = axios;
-Vue.prototype.sotre = new Store();
+Vue.prototype.$moment = moment;//时间转换-赋值使用
+moment.locale('zh-cn');//时间转换-需要汉化
+Vue.prototype.apiStore = new Store({
+  'threads': Thread,
+  'users': User,
+  'posts': Post
+});
 
 
 //实例化根目录
@@ -44,5 +55,8 @@ const appRouter = RConfig.init();
 const App = new Vue({
   	router: appRouter,
   	store: appStore,
+    moment: moment,
   	template: '<router-view></router-view>'
 }).$mount('#app');
+
+window.app = App;

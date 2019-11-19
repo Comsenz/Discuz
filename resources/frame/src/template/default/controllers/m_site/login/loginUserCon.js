@@ -25,41 +25,7 @@ export default {
     // Header
   },
 
-  created(){
-    let isWeixin =this.appCommonH.isWeixin().isWeixin;
-    if(isWeixin == true){
-      //微信登录时
-      alert('微信登录');
 
-      let code=this.getUrlKey("code");
-      if(code){
-          this.$axios.get("/Wxopenid/getUserInfo?code="+code)
-          .then((res)=>{
-              console.log(res);
-              //跳转到手机绑定页
-              this.$router.push({ path:'m_site/bind-phone'});
-          })
-      }else{
-             this.getCodeApi("123");
-      }
-
-
-
-    } else {
-      //手机浏览器登录时
-      console.log('手机浏览器登录');
-      // loginClick();
-
-
-
-    }
-
-
-
-
-
-
-  },
 
   mounted:function(){
 
@@ -90,24 +56,22 @@ export default {
           password:this.password
         }
       },(res)=>{
-        // console.log('123456');
         console.log(res);
 
         if (res.status === 200){
           this.$toast.success('登录成功');
-          console.log('登录成功');
+          // console.log('登录成功');
           this.paramsObj = {
             userId:this.userId
           };
-          let params = this.appCommonH.setGetUrl('bind-phone', this.paramsObj);
+          let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
           console.log(params);
           // this.$router.push({
-
           //   path:'m_site/bind-phone',
 
           //   });
           // this.$router.push({path: params});
-          this.$router.push({path: 'bind-phone'});
+          // this.$router.push({path: 'bind-phone'});
         } else{
           console.log('400');
         }
@@ -129,6 +93,42 @@ export default {
     },
 
 
-  }
+  },
+  created(){
+    let isWeixin =this.appCommonH.isWeixin().isWeixin;
+    if(isWeixin == true){
+      //微信登录时
+      alert('微信登录');
+      alert(this.getUrlKey("code"));
+      let code=this.getUrlKey("code");
+      // alert(code);
+      if(code){
+          this.$axios.get("/Wxopenid/getUserInfo?code="+code)
+          .then((res)=>{
+              console.log(res);
+              //跳转到手机绑定页
+              // this.$router.push({ path:'m_site/bind-phone'});
+          })
+      }else{
+            // alert('执行else');
+            this.getCodeApi("123");
+      }
+
+
+
+    } else {
+      //手机浏览器登录时
+      console.log('手机浏览器登录');
+      // loginClick();
+
+
+
+    }
+
+
+
+
+
+  },
 
 }

@@ -20,7 +20,7 @@ export default {
 				}
 
 			],
-      themeListCon:{
+      themeListCon:[
         // themeDataCon:[
           // {
           //   "type": "",
@@ -68,7 +68,7 @@ export default {
         // themeincludedCon:[
 
         // ]
-      },
+      ],
 
       currentData:{},
       replyTagShow: false,
@@ -79,9 +79,22 @@ export default {
   },
 	methods: {
     loadThemeList(){
+      // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
 
-      console.log(this.sotre.find('threads').then(data => console.log(data)))
+      const params = {};
+      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user';
+      this.apiStore.find('threads', params).then(data => {
+        // console.log(data[0].user().createdAt());
+        // console.log(data[0].firstPost().data.attributes.createdAt);
 
+        this.themeListCon = data;
+        console.log(this.themeListCon);
+
+      });
+
+      // const post = new Post();
+      // post.content = 'askdlfj';
+      // post.save();
 
       // this.appFetch({
       //   url:"threads",
@@ -169,7 +182,6 @@ export default {
 	    },
 
 	},
-
 	mounted: function() {
 		// this.getVote();
 		window.addEventListener('scroll', this.footFix, true);

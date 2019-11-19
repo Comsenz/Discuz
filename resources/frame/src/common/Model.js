@@ -157,9 +157,9 @@ export default class Model {
     const request = {data};
     if (options.meta) request.meta = options.meta;
 
-    return app.request(Object.assign({
+    return app.appFetch(Object.assign({
       method: this.exists ? 'PATCH' : 'POST',
-      url: app.forum.attribute('apiUrl') + this.apiEndpoint(),
+      url: this.apiEndpoint(),
       data: request
     }, options)).then(
       // If everything went well, we'll make sure the store knows that this
@@ -175,7 +175,6 @@ export default class Model {
       // old data! We'll revert to that and let others handle the error.
       response => {
         this.pushData(oldData);
-        m.lazyRedraw();
         throw response;
       }
     );
@@ -248,7 +247,7 @@ export default class Model {
         const relationship = this.data.relationships[name];
 
         if (relationship) {
-          return app.store.getById(relationship.data.type, relationship.data.id);
+          return app.apiStore.getById(relationship.data.type, relationship.data.id);
         }
       }
 
@@ -272,7 +271,7 @@ export default class Model {
         const relationship = this.data.relationships[name];
 
         if (relationship) {
-          return relationship.data.map(data => app.store.getById(data.type, data.id));
+          return relationship.data.map(data => app.apiStore.getById(data.type, data.id));
         }
       }
 

@@ -9,7 +9,7 @@ export default {
 		}
 	},
 	 //用于数据初始化
-    created: function(){
+  created: function(){
 	},
 	methods: {
 	 

@@ -4,25 +4,25 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: BatchUpdateThreadsController.php xxx 2019-10-21 14:08:00 LiuDongdong $
+ *      $Id: BatchDeletePostsController.php xxx 2019-11-19 11:20:00 LiuDongdong $
  */
 
-namespace App\Api\Controller\Threads;
+namespace App\Api\Controller\Posts;
 
-use App\Api\Serializer\ThreadSerializer;
-use App\Commands\Thread\BatchEditThreads;
+use App\Api\Serializer\PostSerializer;
+use App\Commands\Post\BatchDeletePosts;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class BatchUpdateThreadsController extends AbstractListController
+class BatchDeletePostsController extends AbstractListController
 {
     /**
      * {@inheritdoc}
      */
-    public $serializer = ThreadSerializer::class;
+    public $serializer = PostSerializer::class;
 
     /**
      * @var Dispatcher
@@ -44,10 +44,9 @@ class BatchUpdateThreadsController extends AbstractListController
     {
         $ids = explode(',', Arr::get($request->getQueryParams(), 'ids'));
         $actor = $request->getAttribute('actor');
-        $data = $request->getParsedBody()->get('data', []);
 
         $result = $this->bus->dispatch(
-            new BatchEditThreads($ids, $actor, $data)
+            new BatchDeletePosts($ids, $actor)
         );
 
         $document->setMeta($result['meta']);
