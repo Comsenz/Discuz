@@ -43,17 +43,6 @@ class LoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $body = Arr::get($request->getParsedBody(), 'data.attributes');
-
-        $username = Arr::get($body,'username', null);
-        $password = Arr::get($body,'password', null);
-
-        //创建 token
-        $params = [
-            'username' => $username,
-            'password' => $password
-        ];
-
-        return $this->bus->dispatch(new GenJwtToken($params));
+        return $this->bus->dispatch(new GenJwtToken(Arr::get($request->getParsedBody(), 'data.attributes')));
     }
 }
