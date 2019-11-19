@@ -89,7 +89,7 @@ $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceT
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/batch/{ids}', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
-$route->delete('/threads', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
+$route->delete('/threads/batch/{ids}', 'threads.delete', ApiController\Threads\BatchDeleteThreadController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 
 /*
