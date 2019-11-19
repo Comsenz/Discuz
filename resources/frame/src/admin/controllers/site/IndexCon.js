@@ -214,37 +214,40 @@ export default {
 
       let sideSubmenu = this.$router.history.current.meta.alias;
 
-      switch (sideSubmenu){
-        case '最新主题':
-          this.sideSubmenu = this.navList[3].submenu[1].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
-          break;
-        case "搜索":
-          this.sideSubmenu = this.navList[3].submenu[1].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[1].title;
-          break;
-        case "主题审核":
-          this.sideSubmenu = this.navList[3].submenu[2].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
-          break;
-        case "回复审核":
-          this.sideSubmenu = this.navList[3].submenu[2].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[1].title;
-          break;
-        case "主题":
-          this.sideSubmenu = this.navList[3].submenu[3].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
-          break;
-        case '回帖':
-          this.sideSubmenu = this.navList[3].submenu[3].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
-          break;
-        default:
-          // alert("当前没有页面哦");
-          // this.$router.push({path:'/admin/home'});
-          this.sideSubmenu = [];
-          console.log("没有当前页面，跳转404页面");
+      if (sideSubmenu){
+        switch (sideSubmenu){
+          case '最新主题':
+            this.sideSubmenu = this.navList[3].submenu[1].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
+            break;
+          case "搜索":
+            this.sideSubmenu = this.navList[3].submenu[1].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[1].title;
+            break;
+          case "主题审核":
+            this.sideSubmenu = this.navList[3].submenu[2].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
+            break;
+          case "回复审核":
+            this.sideSubmenu = this.navList[3].submenu[2].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[1].title;
+            break;
+          case "主题":
+            this.sideSubmenu = this.navList[3].submenu[3].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
+            break;
+          case '回帖':
+            this.sideSubmenu = this.navList[3].submenu[3].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
+            break;
+          default:
+            // alert("当前没有页面哦");
+            // this.$router.push({path:'/admin/home'});
+            this.sideSubmenu = [];
+            console.log("当下没有侧边栏子菜单");
+        }
       }
+
 
     },
 

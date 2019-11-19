@@ -115,7 +115,7 @@ export default {
 
           'tencent-cloud-set': {
             comLoad: function (resolve) {
-              require(['../view/site/global/tencentCloudSetView'], resolve)
+              require(['../view/site/global/tencentCloudConfig/tencentCloudSetView'], resolve)
             },
             metaInfo: {
               title: '腾讯云设置',
@@ -123,6 +123,27 @@ export default {
               attribution:'全局'
             }
           },
+          'tencent-cloud-config/cloud':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCloudView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+          'tencent-cloud-config/sms':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigSmsView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+
           'annex-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/annexSetView'], resolve)
@@ -153,12 +174,23 @@ export default {
               attribution:'全局'
             }
           },
+
           'role-manage-set':{
             comLoad: function (resolve) {
-              require(['../view/site/global/roleManageSetView'], resolve)
+              require(['../view/site/global/roleManagesSet/roleManageSetView'], resolve)
             },
             metaInfo: {
               title: '后台角色管理',
+              name:'roleManage',
+              attribution:'全局'
+            }
+          },
+          'role-manage-set/permission':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/roleManagesSet/roleManagePermissionEditingView'], resolve)
+            },
+            metaInfo: {
+              title: '后台角色管理权限编辑',
               name:'roleManage',
               attribution:'全局'
             }

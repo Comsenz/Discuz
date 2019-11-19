@@ -293,7 +293,7 @@ $tableHeaderColor:#FAFAFA;
     }
   }
 
-  .role-editing-box{
+  /*.role-editing-box{
 
     .card-box{
       border-bottom: 0;
@@ -322,7 +322,7 @@ $tableHeaderColor:#FAFAFA;
         }
       }
     }
-  }
+  }*/
 
   .card-box{
     padding-top: 0;
@@ -330,5 +330,38 @@ $tableHeaderColor:#FAFAFA;
 
 }
 
+/*
+  角色管理-权限编辑
+*/
+.role-editing-box{
+
+  .card-box{
+    border-bottom: 0;
+  }
+
+  .role-table{
+    width: 100%;
+    tr{
+      width: 100%;
+      border-bottom: 1PX solid #EBEEF5;
+
+      th{
+        background-color: #FAFAFA;
+        padding: 15PX 14PX 15PX 17PX;
+        line-height: 23PX;
+      }
+
+      td{
+        vertical-align: middle;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 15PX 17PX 15PX 17PX;
+        line-height: 23PX;
+        margin-right: 68PX;
+      }
+    }
+  }
+}
 
 
