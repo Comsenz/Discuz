@@ -2,18 +2,18 @@
 
 <template>
     <div>
-		<div class="foueHeadBox">
-			<div class="fourHeader">
-		        <span class="icon iconfont icon-back headBack" ></span>
-		        <h1 class="headTit">{{$route.meta.title}}</h1>
-		    </div>
-		    <div class="serBox">
-		    	<input type="text" name="" placeholder="搜索" class="serInp">
-		    	<i class="icon iconfont icon-search"></i>
-		    </div>
-		</div>
+      <div class="foueHeadBox">
+        <div class="fourHeader">
+              <span class="icon iconfont icon-back headBack" ></span>
+              <h1 class="headTit">{{$route.meta.title}}</h1>
+          </div>
+          <div class="serBox">
+            <input type="text" name="" placeholder="搜索" class="serInp">
+            <i class="icon iconfont icon-search"></i>
+          </div>
+      </div>
 	    <div class="searchRes">
-		  	<van-cell-group>
+		  	<van-cell-group class="cirMemberList">
 			    <van-cell
 			      class="resUser"
 			      v-for="(item, index) in list"
@@ -34,8 +34,7 @@
 	.bgEd { min-height: 100%; background: #EDEDED; }
 </style>
 <script>
-// import Header from '../../m_site/common/headerView';
-// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+import '../../../less/m_site/myInfo/myInfo.less';
 import mSiteCircleMembersCon from '../../../controllers/m_site/management/circleMembersCon';
 import  '../../../scss/m_site/mobileIndex.scss';
 
