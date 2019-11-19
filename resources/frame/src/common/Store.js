@@ -3,7 +3,7 @@
  * retrieve data from the API.
  */
 
-import axiosHelper from "../helpers/axiosHelper.js";
+import axiosHelper from "../helpers/axiosHelper";
 
 export default class Store {
   constructor(models) {
@@ -97,12 +97,8 @@ export default class Store {
     } else if (id) {
       url += '/' + id;
     }
-debugger;
-    console.log(axiosHelper)
 
-    return;
-
-    return axiosHelper.appFetch(Object.assign({
+    return axiosHelper(Object.assign({
       method: 'GET',
       url,
       data

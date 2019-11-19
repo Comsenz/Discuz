@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /**
- * index style 
+ * index style
  */
 @import "./../var";
 @import "./_app";
@@ -113,7 +113,7 @@ body {
 }
 .postPer {
 	float: left;
-	@include px2rem(max-width, 580);
+	@include px2rem(max-width, 560);
 	.postHead {
 		float: left;
 		@include px2rem(width, 80);
@@ -124,7 +124,7 @@ body {
 	.perDet {
 		float: left;
 		@include px2rem(height, 80);
-		@include px2rem(width, 480);
+		@include px2rem(width, 460);
 		.perName {
 			@include px2rem(line-height, 40);
 			color: $fontColor;
@@ -207,7 +207,7 @@ body {
 			@include font-dpr(28);
 		}
 	}
-	
+
 }
 .replyBox {
 	@include px2rem(padding, 16 18 0 18);
@@ -461,7 +461,7 @@ payCircle.view
 			color: rgba(#000,0.5);
 		}
 	}
-	
+
 }
 .payMoney {
 	@include font-dpr(28);
@@ -495,7 +495,7 @@ openCircleConView.vue
 			}
 		}
 	}
-	
+
 }
 
 .uploadFileList {
@@ -594,7 +594,7 @@ openCircleConView.vue
 			color: #444444;
 			@include px2rem(line-height, 40);
 		}
-		
+
 		.quotePostTop {
 			@include px2rem(padding-top, 20);
 			@include px2rem(margin-bottom, 22);
@@ -611,7 +611,7 @@ openCircleConView.vue
 			@include px2rem(line-height, 40);
 			color: #444444;
 		}
-		
+
 	}
 
 	.commentOpera {
@@ -682,7 +682,7 @@ details.vue
 */
 .marBfixed {
 	@include px2rem(margin-bottom, 104);
-	overflow: hidden;	
+	overflow: hidden;
 }
 .detailsFooter {
 	position: fixed;
@@ -763,11 +763,3 @@ details.vue
 		}
 	}
 }
-
-
-
-
-
-
-
-

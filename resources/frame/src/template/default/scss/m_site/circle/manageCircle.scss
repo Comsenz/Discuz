@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /**
- * manageCircle style 
+ * manageCircle style
  */
 @import "./../var";
 @import "./_app";
@@ -45,7 +45,7 @@
 	.resUser {
 		.resUserDet {
 			.resUserName {
-				@include px2rem(max-width, 300);	
+				@include px2rem(max-width, 300);
 			}
 			.memberCheck {
 				float: right;
@@ -53,7 +53,7 @@
 			}
 		}
 	}
-	
+
 }
 .manageFootFixed {
 	position: fixed;
@@ -113,7 +113,7 @@
 				}
 			}
 		}
-		
+
 	}
 	.checkSubmit {
 		float: right;
@@ -213,7 +213,7 @@
 }
 .infoPower {
 	.powerList {
-		@include px2rem(padding, 0 30 36 30);
+		@include px2rem(padding, 24 30 36 30);
 		position: relative;
 		&:after {
 			position: absolute;
@@ -248,9 +248,5 @@
 			color: rgba(#000,0.5);
 		}
 	}
-	
+
 }
-
-
-
-

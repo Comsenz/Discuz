@@ -1,17 +1,13 @@
 <template>
   <section>
-    <div class="cirPostCon" v-for="(items,key) in themeList.data" v-bind="themeList">
+    <div class="cirPostCon" v-for="(item,key) in themeList">
       <div class="">
         <div class="postTop">
           <div class="postPer">
-            <img :src="items.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
-
+            <img :src="item.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
             <div class="perDet">
-              <!-- <div class="perName">{{items.postName}}</div>
-              <div class="postTime">{{items.createdAt}}</div> -->
-
-              <div class="perName">名字</div>
-              <div class="postTime">{{items.attributes.createdAt}}</div>
+              <div class="perName">{{item.user().nickname()}}</div>
+              <div class="postTime">{{item.user().createdAt()|timeAgo}}</div>
             </div>
           </div>
           <div class="postOpera">
@@ -24,7 +20,7 @@
           </div>
         </div>
         <div class="postContent">
-          <a href="javascript:;">{{themeList.included[key].attributes.content}}</a>
+          <a href="javascript:;">{{item.firstPost().content()}}</a>
         </div>
       </div>
       <div class="operaBox">
@@ -37,14 +33,13 @@
           <a href="javascript:;" v-for="reward in themeList.themeData.rewardList">{{reward+','}}</a>
         </div> -->
         <div class="replyBox">
-          <!-- <div class="replyCon" v-for="reply in items.relationships"> -->
-          <div class="replyCon">
-            <a href="javascript:;">{{themeList.included[key].content}}</a>
-            <span class="font9" v-show="replyTag">回复</span>
-            <a href="javascript:;" v-show="replyTag">{{themeList.included[key].attributes.content}}</a>
-            <span>{{themeList.included[key].content}}</span>
+          <div class="replyCon" v-for="reply in item.lastThreePosts()">
+            <a href="javascript:;">{{reply.user().nickname()}}</a>
+            <span class="font9">回复</span>
+            <a href="javascript:;">{{reply.replyUser().nickname()}}</a>
+            <span>{{reply.content()}}</span>
           </div>
-          <!-- <a href="javascript;" class="allReply">全部27条回复<span class="icon iconfont icon-right-arrow"></span></a> -->
+          <a href="javascript;" class="allReply">全部{{item.postCount()-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
         </div>
       </div>
     </div>
