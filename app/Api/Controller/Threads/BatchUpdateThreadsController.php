@@ -12,7 +12,6 @@ namespace App\Api\Controller\Threads;
 use App\Api\Serializer\ThreadSerializer;
 use App\Commands\Thread\BatchEditThreads;
 use Discuz\Api\Controller\AbstractListController;
-use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
