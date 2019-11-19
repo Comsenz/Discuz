@@ -15,8 +15,8 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteThread
@@ -61,7 +61,7 @@ class DeleteThread
      * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @return Thread
-     * @throws Exception
+     * @throws PermissionDeniedException
      */
     public function handle(Dispatcher $events, ThreadRepository $threads)
     {
