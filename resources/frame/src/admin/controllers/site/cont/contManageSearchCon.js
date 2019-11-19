@@ -74,17 +74,12 @@ export default {
   },
   methods:{
     checkboxChange(str){
-      //优化：
-      //展开需要时间，没完全展开时，高度不同时，就移动了，就需要展开完整后再移动滚动条。
-      //不能随着滚动条变化而变化
-
       setTimeout(()=>{
         if (str){
           let gd =  document.getElementsByClassName('index-main-con__main')[0];
           gd.scrollTo(0,gd.scrollHeight);
         }
       },300);
-
     }
   },
   components:{
