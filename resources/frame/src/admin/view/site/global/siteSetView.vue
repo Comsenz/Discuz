@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import '../../../scss/site/pageStyle.scss';
+import '../../../scss/site/global.scss';
 import siteSetCon from '../../../controllers/site/global/siteSetCon';
 export default {
     name: "site-set-view",

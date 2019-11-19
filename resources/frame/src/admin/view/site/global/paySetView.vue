@@ -91,7 +91,7 @@
 
 <script>
 import paySetCon from '../../../controllers/site/global/paySetCon';
-import '../../../scss/site/pageStyle.scss';
+import '../../../scss/site/global.scss';
 export default {
     name: "pay-set-view",
   ...paySetCon
