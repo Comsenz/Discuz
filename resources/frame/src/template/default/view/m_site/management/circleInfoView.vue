@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header></Header>
+	    <comHeader title="圈子信息"></comHeader>
 	    <div class="content">
 	    	<div class="circlePL">
 		    	<div class="infoItem">
@@ -76,17 +76,9 @@
 
 <script>
 import mSiteCircleInfoCon from '../../../controllers/m_site/management/circleInfoCon';
-// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-// import Header from '../../m_site/common//headerView';
-import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common/headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleInfoView",
-    components:{
-    	Header
-    },
-    ...mSiteHeader,
     ...mSiteCircleInfoCon
 }
 
