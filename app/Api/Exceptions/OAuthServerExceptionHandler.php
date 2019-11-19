@@ -4,6 +4,7 @@
 namespace App\Api\Exceptions;
 
 
+use App\Api\ApiCode;
 use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
@@ -41,7 +42,7 @@ class OAuthServerExceptionHandler implements ExceptionHandlerInterface
 
         $data = [
             'status' => 500,
-            'code' => 100001,
+            'code' => ApiCode::OAUTH_SERVER_ERROR,
             'detail' => json_decode($response->getBody(), true)
         ];
 

@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Api\Serializer;
 
-use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Api\Serializer\AbstractSerializer; 
 
 class OrderSerializer extends AbstractSerializer
 {
@@ -23,5 +23,14 @@ class OrderSerializer extends AbstractSerializer
             'amount'   => $model->amount,
             'status'   => $model->status,
         ];
+    }
+
+    /**
+     * @param $orders
+     * @return Relationship
+     */
+    protected function user($order)
+    {
+        return $this->hasOne($order, UserSerializer::class);
     }
 }

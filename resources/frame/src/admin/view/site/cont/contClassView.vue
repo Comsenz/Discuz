@@ -52,7 +52,7 @@
         <div class="cont-class-table-add">
           <p>
             <span class="iconfont iconicon_add icon-add"></span>
-            <span>新增</span>
+            <span>添加内容分类</span>
           </p>
         </div>
 

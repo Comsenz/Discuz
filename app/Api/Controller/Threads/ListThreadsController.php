@@ -69,9 +69,9 @@ class ListThreadsController extends AbstractListController
     protected $url;
 
     /**
-     * @var bool
+     * @var int|null
      */
-    protected $hasMoreResults;
+    protected $threadCount;
 
     /**
      * @param ThreadRepository $threads
@@ -107,8 +107,13 @@ class ListThreadsController extends AbstractListController
             $request->getQueryParams(),
             $offset,
             $limit,
-            $this->hasMoreResults ? null : 0
+            $this->threadCount
         );
+
+        $document->setMeta([
+            'threadCount' => $this->threadCount,
+            'pageCount' => ceil($this->threadCount / $limit),
+        ]);
 
         Thread::setStateUser($actor);
 
@@ -153,7 +158,7 @@ class ListThreadsController extends AbstractListController
         //     });
         // }
 
-        $query->skip($offset)->take($limit + 1);
+        $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
@@ -162,14 +167,8 @@ class ListThreadsController extends AbstractListController
         // 搜索事件，给插件一个修改它的机会。
         // $this->events->dispatch(new Searching($search, $criteria));
 
-        $threads = $query->get();
+        $this->threadCount = $limit > 0 ? $query->count() : null;
 
-        $this->hasMoreResults = $limit > 0 && $threads->count() > $limit;
-
-        if ($this->hasMoreResults) {
-            $threads->pop();
-        }
-
-        return $threads;
+        return $query->get();
     }
 }

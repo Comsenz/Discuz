@@ -10,14 +10,14 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
-use App\Commands\Thread\BatchUpdateThreads;
-use Discuz\Api\Controller\AbstractResourceController;
+use App\Commands\Thread\BatchEditThreads;
+use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class BatchUpdateThreadsController extends AbstractResourceController
+class BatchUpdateThreadsController extends AbstractListController
 {
     /**
      * {@inheritdoc}
@@ -42,14 +42,16 @@ class BatchUpdateThreadsController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $ids = explode(',', Arr::get($request->getQueryParams(), 'ids'));
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
-        $ids = (array) Arr::get($data, 'attributes.ids', []);
 
-        $this->bus->dispatch(
-            new BatchUpdateThreads($ids, $actor, $data)
+        $result = $this->bus->dispatch(
+            new BatchEditThreads($ids, $actor, $data)
         );
 
-        return null;
+        $document->setMeta($result['meta']);
+
+        return $result['data'];
     }
 }

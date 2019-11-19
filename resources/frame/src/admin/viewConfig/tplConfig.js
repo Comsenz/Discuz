@@ -132,6 +132,7 @@ export default {
               attribution:'内容'
             }
           },
+
           'cont-manage':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contManageView'], resolve)
@@ -139,10 +140,10 @@ export default {
             metaInfo: {
               title: '内容管理',
               name:'contManage',
-              attribution:'内容'
+              attribution:'内容',
+              alias:'最新主题'
             }
           },
-
           'cont-manage/search':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contManageSearchView'], resolve)
@@ -150,7 +151,8 @@ export default {
             metaInfo: {
               title: '内容管理',
               name:'contManage',
-              attribution:'内容'
+              attribution:'内容',
+              alias:'搜索'
             }
           },
 
@@ -161,27 +163,34 @@ export default {
             metaInfo: {
               title: '内容审核',
               name:'contReview',
-              attribution:'内容'
+              attribution:'内容',
+              alias:'主题审核'
             }
-          },'recycle-bin':{
+          },
+          'reply-review':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/replyReviewView'], resolve)
+            },
+            metaInfo: {
+              title: '回复审核',
+              name:'contReview',
+              attribution:'内容',
+              alias:'回复审核'
+            }
+          },
+
+          'recycle-bin':{
             comLoad: function (resolve) {
               require(['../view/site/cont/recycleBinView'], resolve)
             },
             metaInfo: {
               title: '回收站',
               name:'recycleBin',
-              attribution:'内容'
+              attribution:'内容',
+              alias:'主题'
             }
-          },'reply-review':{
-            comLoad: function (resolve) {
-              require(['../view/site/cont/replyReviewView'], resolve)
-            },
-            metaInfo: {
-              title: '回复审核',
-              name:'replyReview',
-              attribution:'内容'
-            }
-          },
+          }
+
         },
         metaInfo: {
           title: '后台架子'

@@ -41,6 +41,14 @@ $route->post('/register', 'register', ApiController\Users\RegisterController::cl
 
 /*
 |--------------------------------------------------------------------------
+| Oauth client
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Users
 |--------------------------------------------------------------------------
 */
@@ -61,6 +69,8 @@ $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersCont
 |--------------------------------------------------------------------------
 */
 $route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
+$route->post('/sms/verify', 'sms.verify', ApiController\Mobile\VerifyController::class);
+
 $route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
 $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class);
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
@@ -77,7 +87,7 @@ $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesContro
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
-$route->patch('/threads/batch', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
+$route->patch('/threads/batch/{ids}', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
 $route->delete('/threads', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
@@ -90,7 +100,7 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 
 $route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::class);
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
-$route->patch('/posts/batch', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
+$route->patch('/posts/batch/{ids}', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 $route->delete('/posts', 'posts.delete', ApiController\Posts\DeletePostController::class);
 $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);

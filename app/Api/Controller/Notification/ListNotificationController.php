@@ -12,7 +12,6 @@ namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
 use App\Commands\Notification\ListNotification;
-use App\Models\User;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,13 +37,10 @@ class ListNotificationController extends AbstractListController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $user = User::find(1);
-        $user->notify(new TopicReplied());
-
-
         // 获取当前用户
         $actor = $request->getAttribute('actor');
         $actor->id = 1;
+
         // 获取请求的参数
         $inputs = $request->getQueryParams();
 

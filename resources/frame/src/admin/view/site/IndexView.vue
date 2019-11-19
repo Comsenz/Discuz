@@ -59,9 +59,8 @@
         <div class="index-main-con__main-title">
           <h1>{{indexTitle}}</h1>
           <div class="index-main-con__main-title__class">
-            <i></i>
-            <span class="is-active">最新主题</span>
-            <span>搜索</span>
+            <i v-if="sideSubmenu.length > 0"></i>
+            <span v-for="(item,index) in sideSubmenu" @click="sideSubmenuClick(item.title)" :class="item.title === sideSubmenuSelect?'is-active':''" :key="index">{{item.title}}</span>
           </div>
         </div>
 

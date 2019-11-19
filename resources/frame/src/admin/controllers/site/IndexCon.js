@@ -87,6 +87,11 @@ export default {
           id:2,
           title:'用户',
           name:'user',
+        },
+        {
+          id:3,
+          title:'内容',
+          name:'cont',
           submenu:[
             {
               id:0,
@@ -98,26 +103,63 @@ export default {
               id:1,
               title:'内容管理',
               name:'contManage',
-              icon:'iconneirongguanli'
+              icon:'iconneirongguanli',
+              submenu:[
+                {
+                  id:11,
+                  title:'最新主题',
+                  name:'contManage',
+                  icon:'iconneirongguanli',
+                },
+                {
+                  id:12,
+                  title:'搜索',
+                  name:'contManage',
+                  icon:'iconneirongguanli',
+                }
+              ]
             },
             {
               id:2,
               title:'内容审核',
               name:'contReview',
-              icon:'iconneirongshenhe'
+              icon:'iconneirongshenhe',
+              submenu:[
+                {
+                  id:21,
+                  title:'主题审核',
+                  name:'contReview',
+                  icon:'iconneirongshenhe',
+                },
+                {
+                  id:22,
+                  title:'回复审核',
+                  name:'contReview',
+                  icon:'iconneirongshenhe',
+                }
+              ]
             },
             {
               id:3,
               title:'回收站',
               name:'recycleBin',
-              icon:'iconhuishouzhan'
+              icon:'iconhuishouzhan',
+              submenu:[
+                {
+                  id:31,
+                  title:'主题',
+                  name:'recycleBin',
+                  icon:'iconhuishouzhan',
+                },
+                {
+                  id:32,
+                  title:'回帖 ',
+                  name:'recycleBin',
+                  icon:'iconhuishouzhan',
+                }
+              ]
             }
           ]
-        },
-        {
-          id:3,
-          title:'内容',
-          name:'cont'
         },
         {
           id:4,
@@ -128,7 +170,10 @@ export default {
       navSelect:'',  //导航选中
 
       sideList:[],    //侧边菜单
-      sideSelect:''    //侧边选中
+      sideSelect:'',    //侧边选中
+
+      sideSubmenu:[],   //侧边栏子菜单
+      sideSubmenuSelect:''    //侧边栏子菜单选中
 
     }
   },
@@ -157,14 +202,47 @@ export default {
           this.sideList = this.navList[1].submenu;
           break;
         case '内容':
-          this.navSelect = this.navList[2].name;
+          this.navSelect = this.navList[3].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
-          this.sideList = this.navList[2].submenu;
+          this.sideList = this.navList[3].submenu;
           break;
         default :
           console.log("获取菜单出错");
+      }
+
+      let sideSubmenu = this.$router.history.current.meta.alias;
+
+      switch (sideSubmenu){
+        case '最新主题':
+          this.sideSubmenu = this.navList[3].submenu[1].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
+          break;
+        case "搜索":
+          this.sideSubmenu = this.navList[3].submenu[1].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[1].title;
+          break;
+        case "主题审核":
+          this.sideSubmenu = this.navList[3].submenu[2].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
+          break;
+        case "回复审核":
+          this.sideSubmenu = this.navList[3].submenu[2].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[1].title;
+          break;
+        case "主题":
+          this.sideSubmenu = this.navList[3].submenu[3].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
+          break;
+        case '回帖':
+          this.sideSubmenu = this.navList[3].submenu[3].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
+          break;
+        default:
+          // alert("当前没有页面哦");
+          // this.$router.push({path:'/admin/home'});
+          console.log("没有当前页面，跳转404页面");
       }
 
     },
@@ -187,11 +265,11 @@ export default {
           this.indexTitle = this.navList[1].submenu[0].title;
           this.$router.push({path:'/admin/site-set'});
           break;
-        case 'user':
-          this.sideList = this.navList[2].submenu;
-          this.sideSelect = this.navList[2].submenu[0].name;
-          this.indexTitle = this.navList[2].submenu[0].title;
-          this.$router.push({path:'/admin/site-set'});
+        case 'cont':
+          this.sideList = this.navList[3].submenu;
+          this.sideSelect = this.navList[3].submenu[0].name;
+          this.indexTitle = this.navList[3].submenu[0].title;
+          this.$router.push({path:'/admin/cont-class'});
           break;
         default :
           this.sideList = [];
@@ -203,6 +281,8 @@ export default {
 
       this.sideSelect = item.name;
       this.indexTitle = item.title;
+
+      this.sideSubmenu = [];
 
       switch (item.name){
         case 'controlCenter':
@@ -240,17 +320,54 @@ export default {
           this.$router.push({path:'/admin/cont-class'});
           break;
         case 'contManage':
+          this.sideSubmenu = this.navList[3].submenu[1].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
           this.$router.push({path:'/admin/cont-manage'});
           break;
         case 'contReview':
+          this.sideSubmenu = this.navList[3].submenu[2].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
           this.$router.push({path:'/admin/cont-review'});
           break;
         case 'recycleBin':
+          this.sideSubmenu = this.navList[3].submenu[3].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
           this.$router.push({path:'/admin/recycle-bin'});
           break;
       }
 
     },
+
+    sideSubmenuClick(title){
+
+      this.sideSubmenuSelect = title;
+
+      switch (title){
+        case '最新主题':
+          this.$router.push({path:'/admin/cont-manage'});
+          break;
+        case '搜索':
+          this.$router.push({path:'/admin/cont-manage/search'});
+          break;
+        case '主题审核':
+          this.$router.push({path:'/admin/cont-review'});
+          break;
+        case '回复审核':
+          this.$router.push({path:'/admin/reply-review'});
+          break;
+        case '主题':
+          this.$router.push({path:'/admin/recycle-bin'});
+          break;
+        case '回帖':
+          // this.$router.push({path:'/admin/cont-manage/search'});
+          break;
+        default:
+          alert("当前没有页面哦");
+          // this.$router.push({path:'/admin/home'});
+          console.log("没有当前页面，跳转404页面");
+      }
+
+    }
 
   },
   created(){

@@ -10,14 +10,14 @@
 namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
-use App\Commands\Post\BatchUpdatePosts;
-use Discuz\Api\Controller\AbstractResourceController;
+use App\Commands\Post\BatchEditPosts;
+use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class BatchUpdatePostsController extends AbstractResourceController
+class BatchUpdatePostsController extends AbstractListController
 {
     /**
      * {@inheritdoc}
@@ -42,14 +42,16 @@ class BatchUpdatePostsController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $ids = explode(',', Arr::get($request->getQueryParams(), 'ids'));
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
-        $ids = (array) Arr::get($data, 'attributes.ids', []);
 
-        $this->bus->dispatch(
-            new BatchUpdatePosts($ids, $actor, $data)
+        $result = $this->bus->dispatch(
+            new BatchEditPosts($ids, $actor, $data)
         );
 
-        return null;
+        $document->setMeta($result['meta']);
+
+        return $result['data'];
     }
 }

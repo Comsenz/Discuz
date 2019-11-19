@@ -64,29 +64,23 @@ class ListStopWordsController extends AbstractListController
         $include = $this->extractInclude($request);
         $keyword = Arr::get($this->extractFilter($request), 'q');
 
-        $stopWords = $this->stopWords
+        $query = $this->stopWords
             ->query()
             ->with($include)
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('find', 'like', "%$keyword%");
-            })
-            ->limit($limit + 1)
-            ->offset($offset)
-            ->get();
+            });
 
-        $hasMoreResults = false;
+        $stopWordCount = $limit > 0 ? $query->count() : null;
 
-        if (count($stopWords) > $limit) {
-            $stopWords->pop();
-            $hasMoreResults = true;
-        }
+        $stopWords = $query->limit($limit)->offset($offset)->get();
 
         $document->addPaginationLinks(
             $this->url->route('stop-words.index'),
             $request->getQueryParams(),
             $offset,
             $limit,
-            $hasMoreResults ? null : 0
+            $stopWordCount
         );
 
         return $stopWords;

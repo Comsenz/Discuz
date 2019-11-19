@@ -36,27 +36,18 @@ class UserWalletCash extends Model
     /**
      * 提现状态
      */
-    const STATUS_REVIEW = 1; //待审核
-
-    const STATUS_REVIEWED = 2; //审核通过
-
-    const STATUS_REVIEW_FAILED = 3; //审核不通过
-
-    const STATUS_IN_PAYMENT = 4; //待打款
-
-    const STATUS_PAID = 5; //已打款
-
+    const STATUS_REVIEW          = 1; //待审核
+    const STATUS_REVIEWED        = 2; //审核通过
+    const STATUS_REVIEW_FAILED   = 3; //审核不通过
+    const STATUS_IN_PAYMENT      = 4; //待打款
+    const STATUS_PAID            = 5; //已打款
     const STATUS_PAYMENT_FAILURE = 6; //打款失败
 
     /**
-     * 模型的「启动」方法.
-     *
-     * @return void
+     * 返款状态
      */
-    public static function boot()
-    {
-        parent::boot();
-    }
+    const REFUNDS_STATUS_NO  = 0; //未返款
+    const REFUNDS_STATUS_YES = 1; //已返款
 
     /**
      * 创建提现申请
@@ -81,12 +72,32 @@ class UserWalletCash extends Model
         $cash->cash_charge        = $cash_charge;
         $cash->cash_actual_amount = $cash_actual_amount;
         $cash->cash_apply_amount  = $cash_apply_amount;
+        $cash->remark             = $remark;
         $cash->trade_no           = '';
         $cash->error_code         = '';
         $cash->error_message      = '';
-        $cash->remark             = $remark;
         $cash->cash_status        = 1; //待审核
         $cash->save();
         return $cash;
+    }
+
+    /**
+     * Define the relationship with the cash record's creator.
+     *
+     * @return belongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the cash record's wallet.
+     *
+     * @return belongsTo
+     */
+    public function userWallet()
+    {
+        return $this->belongsTo(UserWallet::class, 'user_id', 'user_id');
     }
 }
