@@ -76,6 +76,7 @@ class User extends Model
     {
         $user = new static;
         $user->attributes = $data;
+        $user->setPasswordAttribute($user->password);
         return $user;
     }
 
@@ -136,23 +137,6 @@ class User extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value ? static::$hasher->make($value) : '';
-    }
-
-    protected function setUserLoginPasswordAttr($value)
-    {
-        return md5($value);
-    }
-
-    protected function setUserPasswordAttr($value)
-    {
-        // return $this->hashManager->make($value);
-        return password_hash($value, PASSWORD_BCRYPT);
-    }
-
-    protected function unsetUserPasswordAttr($value,$userpwd)
-    {
-        // return $this->hashManager->check($value,$userpwd);
-        return password_verify($value,$userpwd);
     }
 
     /*
