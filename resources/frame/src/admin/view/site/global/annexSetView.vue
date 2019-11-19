@@ -27,7 +27,7 @@
 
 <script>
 import annexSetCon from '../../../controllers/site/global/annexSetCon';
-import '../../../scss/site/pageStyle.scss';
+import '../../../scss/site/global.scss';
 export default {
     name: "annex-set-view",
   ...annexSetCon

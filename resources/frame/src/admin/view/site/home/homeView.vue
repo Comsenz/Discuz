@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import '../../../scss/site/pageStyle.scss';
+import '../../../scss/site/global.scss';
 import homeCon from '../../../controllers/site/home/homeCon';
 export default {
     name: "home-view",

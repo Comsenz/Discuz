@@ -8,19 +8,23 @@
  */
 namespace App\Passport\Repositories;
 
+use App\Events\Users\UserVerify;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use App\Passport\Entities\UserEntity;
-use App\Models\User;
+use App\Repositories\UserRepository as RepositoriesUserRepository;
 
 class UserRepository implements UserRepositoryInterface
 {
 
     protected $users;
 
-    public function __construct(\App\Repositories\UserRepository $users)
+    protected static $user;
+
+    public function __construct(RepositoriesUserRepository $users)
     {
         $this->users = $users;
     }
@@ -41,7 +45,12 @@ class UserRepository implements UserRepositoryInterface
         if ($password && (! $user || ! $user->checkPassword($password))) {
             throw new PermissionDeniedException;
         }
+        static::$user = $user;
 
         return new UserEntity($user['id']);
+    }
+
+    public function getUser() {
+        return static::$user;
     }
 }

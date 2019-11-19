@@ -189,6 +189,17 @@ export default {
               attribution:'内容',
               alias:'主题'
             }
+          },
+          'recycle-bin-reply':{
+            comLoad: function (resolve) {
+              require(['../view/site/cont/recycleBinReplyView'], resolve)
+            },
+            metaInfo: {
+              title: '回收站',
+              name:'recycleBin',
+              attribution:'内容',
+              alias:'回帖'
+            }
           }
 
         },

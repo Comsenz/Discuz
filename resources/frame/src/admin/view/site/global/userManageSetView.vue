@@ -76,7 +76,7 @@
 
 <script>
 import userManageSetCon from '../../../controllers/site/global/userManageSetCon';
-import '../../../scss/site/pageStyle.scss';
+import '../../../scss/site/global.scss';
 export default {
     name: "user-manage-set-view",
   ...userManageSetCon

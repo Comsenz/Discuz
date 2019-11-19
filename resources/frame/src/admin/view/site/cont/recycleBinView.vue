@@ -58,7 +58,7 @@
           style="width: 100%">
           <el-table-column
             label="主题"
-            width="180">
+            width="230">
             <template slot-scope="scope">
               <el-checkbox-group class="recycle-bin-table-checkbox" v-model="scope.row.checkList">
                 <el-checkbox label="还原"></el-checkbox>
@@ -102,7 +102,9 @@
       </div>
 
       <div class="recycle-bin-footer">
-
+        <el-button type="primary">提交</el-button>
+        <el-button type="text">全部还原</el-button>
+        <el-button type="text">全部删除</el-button>
       </div>
 
     </div>

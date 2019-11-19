@@ -65,7 +65,7 @@ class RegisterUser
         //     $this->assertAdmin($this->actor);
         // }
 
-        $password = Arr::get($this->data, 'attributes.password');
+        $password = Arr::get($this->data, 'password');
 
         // 如果提供了有效的身份验证令牌作为属性，那么我们将不要求用户选择密码。
         // if (isset($data['attributes']['token'])) {
@@ -74,10 +74,7 @@ class RegisterUser
         //     $password = $password ?: Str::random(20);
         // }
 
-        $user = User::register(
-            Arr::get($this->data, 'attributes.username'),
-            $password
-        );
+        $user = User::register($this->data);
 
         $user->raise(new Registered($user, $this->actor, $this->data));
 

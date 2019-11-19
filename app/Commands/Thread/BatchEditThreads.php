@@ -9,13 +9,18 @@
 
 namespace App\Commands\Thread;
 
+use App\Events\Thread\Saving;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Carbon\Carbon;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class BatchEditThreads
 {
+    use EventsDispatchTrait;
+
     /**
      * The ID array of the threads to update.
      *
@@ -50,11 +55,14 @@ class BatchEditThreads
     }
 
     /**
+     * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @return array
      */
-    public function handle(ThreadRepository $threads)
+    public function handle(Dispatcher $events, ThreadRepository $threads)
     {
+        $this->events = $events;
+
         $attributes = Arr::get($this->data, 'attributes', []);
         $result = ['data' => [], 'meta' => []];
 
@@ -95,9 +103,9 @@ class BatchEditThreads
                 }
             }
 
-            if (isset($attributes['isDelete'])) {
+            if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('delete', $thread)) {
-                    if ($attributes['isDelete']) {
+                    if ($attributes['isDeleted']) {
                         $thread->deleted_at = Carbon::now();
                         $thread->deleted_user_id = $this->actor->id;
                     } else {
@@ -110,9 +118,25 @@ class BatchEditThreads
                 }
             }
 
+            try {
+                $this->events->dispatch(
+                    new Saving($thread, $this->actor, $this->data)
+                );
+            } catch (\Exception $e) {
+                $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
+                continue;
+            }
+
             $thread->save();
 
             $result['data'][] = $thread;
+
+            try {
+                $this->dispatchEventsFor($thread, $this->actor);
+            } catch (\Exception $e) {
+                $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
+                continue;
+            }
         }
 
         return $result;

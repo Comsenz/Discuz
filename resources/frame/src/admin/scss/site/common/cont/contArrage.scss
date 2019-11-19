@@ -53,6 +53,9 @@
         border-bottom: 1PX solid $tableBorderColor;
         padding: 15PX 21PX;
         line-height:20PX;
+        &:last-child{
+          border-bottom: 0;
+        }
       }
 
       &-footer{

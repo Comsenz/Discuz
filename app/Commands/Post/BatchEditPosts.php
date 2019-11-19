@@ -9,13 +9,18 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\Saving;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Carbon\Carbon;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class BatchEditPosts
 {
+    use EventsDispatchTrait;
+
     /**
      * The ID array of the posts to update.
      *
@@ -50,11 +55,14 @@ class BatchEditPosts
     }
 
     /**
+     * @param Dispatcher $events
      * @param PostRepository $posts
      * @return array
      */
-    public function handle(PostRepository $posts)
+    public function handle(Dispatcher $events, PostRepository $posts)
     {
+        $this->events = $events;
+
         $attributes = Arr::get($this->data, 'attributes', []);
         $result = ['data' => [], 'meta' => []];
 
@@ -77,9 +85,9 @@ class BatchEditPosts
                 }
             }
 
-            if (isset($attributes['isDelete'])) {
+            if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('delete', $post)) {
-                    if ($attributes['isDelete']) {
+                    if ($attributes['isDeleted']) {
                         $post->deleted_at = Carbon::now();
                         $post->deleted_user_id = $this->actor->id;
                     } else {
@@ -92,9 +100,25 @@ class BatchEditPosts
                 }
             }
 
+            try {
+                $this->events->dispatch(
+                    new Saving($post, $this->actor, $this->data)
+                );
+            } catch (\Exception $e) {
+                $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
+                continue;
+            }
+
             $post->save();
 
             $result['data'][] = $post;
+
+            try {
+                $this->dispatchEventsFor($post, $this->actor);
+            } catch (\Exception $e) {
+                $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
+                continue;
+            }
         }
 
         return $result;

@@ -84,6 +84,7 @@ class BatchDeleteThreads
 
                 $thread->raise(new Deleted($thread));
                 $thread->forceDelete();
+
                 $result['data'][] = $thread;
 
                 try {

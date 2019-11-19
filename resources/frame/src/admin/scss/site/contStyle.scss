@@ -475,7 +475,7 @@
 
 
 /*
-  回收站
+  回收站--主题
 */
 .recycle-bin-box{
   color: $titleColor;
@@ -545,40 +545,159 @@
 
       }
 
-      /*div{
-        height: 36PX;
-        display: flex;
-
-        .content-contains-input{
-          width: 200PX;
-        }
-
-        .el-input--medium{
-          width: 200PX;
-        }
-
-        .el-checkbox{
-          line-height: 36PX;
-          margin-left: 40PX;
-        }
-
-        .el-select--medium{
-          //width: 140PX;
-          width: 22%;
-          margin-right: 10PX;
-        }
-      }*/
-
     }
 
   }
 
   .recycle-bin-table{
+
+    .cell{
+      display: flex;
+      align-items: center;
+    }
+
     .recycle-bin-table-checkbox{
       display: flex;
       flex-direction: column;
+
+      .el-checkbox:last-of-type{
+        margin-top: 12PX;
+      }
     }
+
   }
+
+  .recycle-bin-footer{
+    margin-top: 30PX;
+
+    .el-button--primary{
+      width: 68PX;
+      height: 36PX;
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+/*
+  回收站--回帖
+*/
+.recycle-bin-reply-box{
+  color: $titleColor;
+
+  .recycle-bin-reply-header{
+    width: 100%;
+    height: 100PX;
+    padding: 15PX 0;
+
+    &__lf{
+      width: 39%;
+      display: inline-block;
+      margin-right: 10PX;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+        }
+
+        .el-select{
+          width: 100%;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    &__rt{
+      width: 59%;
+      display: inline-block;
+
+      &-top{
+        margin-bottom: 15PX;
+        height: 36PX;
+        display: flex;
+
+        .el-input--medium{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        span:last-of-type{
+          margin-left: 10PX;
+        }
+
+      }
+
+      &-bottom{
+        height: 36PX;
+        display: flex;
+        justify-content: space-between;
+
+        &__time-title{
+          width: 150PX;
+          line-height: 36PX;
+        }
+
+        .el-date-editor{
+          width: 90%;
+          margin-right: 15PX;
+        }
+
+      }
+
+    }
+
+  }
+
+  .recycle-bin-reply-table{
+
+    &__side{
+
+      .el-checkbox-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-checkbox{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__header{
+
+      &-bottom{
+        p{
+          span:first-of-type{
+            color: $commentColor;
+          }
+        }
+      }
+    }
+
+    &__main{
+      line-height: 20PX;
+    }
+
+
+
+  }
+
+  .recycle-bin-reply-footer{
+
+    margin-top: 20PX;
+  }
+
 
 }
 
