@@ -1,7 +1,7 @@
 <template>
     <div class="my-info-money-header">
       <walletDetailsHeader title="钱包明细"></walletDetailsHeader>
-      <main>
+      <main class="content">
         <Panenl title="小虫加入圈子“天涯杂谈“，圈主奶罩收益100元" num="0.00">
           <span slot="label">当前可用金额：0.00</span>
           <span slot="label">2019-08-10 20:30</span>
@@ -25,7 +25,8 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
-import walletDetailsCon from '../../../controllers/m_site/myInfo/walletDetailsCon'
+import walletDetailsCon from '../../../controllers/m_site/myInfo/walletDetailsCon';
+import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "wallet-details-view",
   ...walletDetailsCon

@@ -19,13 +19,14 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    @include px2rem(padding,0 30);
+    @include px2rem(padding,88 0 0 0);
     border-bottom: 1PX solid #E5E5E5;
     background-color: white;
 
     .modify-data-avatar{
       height: auto;
-      padding: 8px 0;
+      @include px2rem(padding,16 0 16 30);
+      box-sizing: border-box;
       .modify-data-avatar-img {
         img {
           width: 58px;
@@ -34,6 +35,12 @@
           position: relative;
           vertical-align: top;
         }
+      }
+      .iconfont {
+        display: inline-block;
+        @include px2rem(margin-right, 30);
+        position: relative;
+        @include px2rem(top, 44);
       }
     }
 
@@ -60,7 +67,7 @@
     width: 100%;
     height: calc(100% - 40px);
     //@include px2rem(padding,0 30);
-    padding: 0 29px;
+    padding: 44px 0 0 15px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -96,6 +103,12 @@
 }
 
 /**
+  修改密码
+ */
+.change-pwd-main {
+  padding-top: 44px;
+}
+/**
   点赞我的
  */
 .quote-reply {
@@ -111,5 +124,14 @@
   span {
     display: block;
     @include px2rem(line-height,40);
+  }
+}
+
+/**
+  提现
+ */
+.withdraw-box{
+  .withdraw-main{
+    @include px2rem(paddinh-top, 88);
   }
 }

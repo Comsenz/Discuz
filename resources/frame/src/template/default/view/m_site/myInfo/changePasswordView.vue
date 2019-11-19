@@ -1,11 +1,7 @@
 <template>
     <div class="change-pwd-box">
-      <ChangePWDHeader></ChangePWDHeader>
+      <ChangePWDHeader title="修改密码"></ChangePWDHeader>
       <main class="change-pwd-main">
-        <div class="my-info-module-title-box">
-          <p class="my-info-module-title">修改密码</p>
-        </div>
-
         <div class="change-pwd-form my-info-form">
           <van-cell-group>
             <van-field
@@ -36,7 +32,8 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
-import changePwdCon from '../../../controllers/m_site/myInfo/changePwdCon'
+import changePwdCon from '../../../controllers/m_site/myInfo/changePwdCon';
+import  '../../../scss/m_site/myInfo/myInfo.scss';
 export default {
     name: "change-password-view",
   ...changePwdCon
