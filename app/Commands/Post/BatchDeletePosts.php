@@ -84,6 +84,7 @@ class BatchDeletePosts
 
                 $post->raise(new Deleted($post));
                 $post->forceDelete();
+
                 $result['data'][] = $post;
 
                 try {

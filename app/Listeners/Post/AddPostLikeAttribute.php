@@ -18,12 +18,15 @@ class AddPostLikeAttribute
     {
         if ($event->isSerializer(PostSerializer::class)) {
             // 是否可以喜欢
-            // $event->attributes['canLike'] = (bool) $event->actor->can('like', $event->model);
+            $event->attributes['canLike'] = (bool) $event->actor->can('like', $event->model);
 
             // 是否喜欢
             $isLiked = $event->model->likedUsers()->where('user_id', $event->actor->id)->first();
 
-            $event->attributes['isLiked'] = $isLiked ? true : false;
+            if ($isLiked) {
+                $event->attributes['isLiked'] = $isLiked ? true : false;
+                $event->attributes['likedAt'] = $event->formatDate($isLiked->created_at);
+            }
         }
     }
 }
