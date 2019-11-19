@@ -1,6 +1,6 @@
 <template>
   <div class="pay-set-box">
-    <div class="pay-set__default" v-if="loginStatus === 'default'">
+    <div class="pay-set__default">
       <el-table
         :data="tableData"
         style="width: 100%">
@@ -54,7 +54,7 @@
       </el-table>
     </div>
 
-    <div v-if="loginStatus === 'wx'">
+    <!--<div v-if="loginStatus === 'wx'">
       <Card header="微信支付配置"></Card>
 
       <Card header="APPID：">
@@ -85,13 +85,13 @@
         <el-button type="primary" size="medium" @click="loginStatus = 'default'" >提交</el-button>
       </Card>
 
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
-import paySetCon from '../../../controllers/site/global/paySetCon';
-import '../../../scss/site/global.scss';
+import paySetCon from '../../../../controllers/site/global/paySet/paySetCon';
+import '../../../../scss/site/global.scss';
 export default {
     name: "pay-set-view",
   ...paySetCon

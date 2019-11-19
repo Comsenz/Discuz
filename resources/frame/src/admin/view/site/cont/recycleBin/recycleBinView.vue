@@ -111,8 +111,8 @@
 </template>
 
 <script>
-import '../../../scss/site/contStyle.scss';
-import recycleBinCon from '../../../controllers/site/cont/recycleBinCon'
+import '../../../../scss/site/contStyle.scss';
+import recycleBinCon from '../../../../controllers/site/cont/recycleBinCon'
 export default {
     name: "recycle-bin-view",
   ...recycleBinCon

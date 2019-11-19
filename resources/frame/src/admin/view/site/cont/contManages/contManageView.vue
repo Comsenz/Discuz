@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import '../../../scss/site/contStyle.scss';
-import contManageCon from '../../../controllers/site/cont/contManageCon'
+import '../../../../scss/site/contStyle.scss';
+import contManageCon from '../../../../controllers/site/cont/contManageCon'
 export default {
     name: "cont-manage-view",
   ...contManageCon

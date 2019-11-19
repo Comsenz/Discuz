@@ -1,6 +1,6 @@
 
-import Card from '../../../view/site/common/card/card';
-import CardRow from '../../../view/site/common/card/cardRow';
+import Card from '../../../../view/site/common/card/card';
+import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
   data:function () {
@@ -34,16 +34,20 @@ export default {
 
       switch (type){
         case 'h5':
-          this.loginStatus = 'h5';
+          this.$router.push({path:'/admin/worth-mentioning-config/h5wx'});
+          // this.loginStatus = 'h5';
           break;
         case 'applets':
-          this.loginStatus = 'applets';
+          this.$router.push({path:'/admin/worth-mentioning-config/applets'});
+          // this.loginStatus = 'applets';
           break;
         case 'pc':
-          this.loginStatus = 'pc';
+          this.$router.push({path:'/admin/worth-mentioning-config/pcwx'});
+          // this.loginStatus = 'pc';
           break;
         default:
-          this.loginStatus = 'default';
+          this.$router.push({path:'/admin/worth-mentioning-set'});
+          // this.loginStatus = 'default';
       }
     }
   }

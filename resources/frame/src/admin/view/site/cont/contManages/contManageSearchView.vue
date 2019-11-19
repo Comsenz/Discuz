@@ -94,8 +94,8 @@
 </template>
 
 <script>
-import '../../../scss/site/contStyle.scss'
-import contManageSearch from '../../../controllers/site/cont/contManageSearchCon'
+import '../../../../scss/site/contStyle.scss'
+import contManageSearch from '../../../../controllers/site/cont/contManageSearchCon'
 export default {
     name: "cont-manage-search-view",
   ...contManageSearch

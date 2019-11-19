@@ -24,7 +24,8 @@
                 show-password
                 clearable
                 v-model="form.password">
-                <span slot="prefix" class="iconfont iconpassword"></span>              </el-input>
+                <span slot="prefix" class="iconfont iconpassword"></span>
+              </el-input>
             </el-form-item>
 
             <el-form-item class="login-main-form__item">
