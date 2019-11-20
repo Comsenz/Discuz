@@ -19,7 +19,7 @@ class TokenSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
-        if(isset($model['location'])) {
+        if(is_array($model) && isset($model['location'])) {
             return [
                 'location' => $model['location']
             ];
