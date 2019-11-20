@@ -13,6 +13,7 @@ class NoUserException extends Exception
 
     public function setUser($user) {
         $this->user = $user;
+        return $this;
     }
 
     public function getUser() {
