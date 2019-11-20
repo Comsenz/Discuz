@@ -61,6 +61,7 @@ class VerifyMobile
         $this->controller->serializer = UserSerializer::class;
         if($this->actor->exists) {
             $this->actor->mobile = $this->mobileCode->mobile;
+            $this->actor->mobile_confirmed = 1;
             $this->actor->save();
             $this->mobileCode->user = $this->actor;
         }
