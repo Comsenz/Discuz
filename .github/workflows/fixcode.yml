@@ -12,9 +12,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
-
-    # - name: Run test suite
-    #   run: composer run-script test
+  
+    - name: Run Fix Code
+      run: composer run-script fix
+    - name: Push Code
+      run: composer run-scriopt commit
