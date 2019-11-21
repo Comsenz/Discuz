@@ -11,6 +11,7 @@ namespace App\Api\Serializer;
 
 use App\Models\Post;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
 class PostSerializer extends AbstractSerializer
@@ -21,27 +22,38 @@ class PostSerializer extends AbstractSerializer
     protected $type = 'posts';
 
     /**
+     * @var Gate
+     */
+    protected $gate;
+
+    /**
+     * @param Gate $gate
+     */
+    public function __construct(Gate $gate)
+    {
+        $this->gate = $gate;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param Post $model
      */
     public function getDefaultAttributes($model)
     {
+        $gate = $this->gate->forUser($this->actor);
+
         $attributes = [
-            // 'id'                => (int) $model->id,
-            // 'user_id'           => (int) $model->user_id,
-            // 'thread_id'         => (int) $model->thread_id,
-            // 'reply_id'          => (int) $model->reply_id,
             'content'           => $model->content,
             'ip'                => $model->ip,
             'replyCount'        => $model->reply_count,
             'likeCount'         => $model->like_count,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
-            // 'deletedAt'         => $this->formatDate($model->deleted_at),
-            // 'deleted_user_id'   => (int) $model->deleted_user_id,
             'isFirst'           => (bool) $model->is_first,
             'isApproved'        => (bool) $model->is_approved,
+            'canApprove'        => $gate->allows('approve', $model),
+            'canDelete'         => $gate->allows('delete', $model),
         ];
 
         if ($model->deleted_at) {
@@ -68,5 +80,14 @@ class PostSerializer extends AbstractSerializer
     protected function thread($post)
     {
         return $this->hasOne($post, ThreadSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    protected function likedUsers($post)
+    {
+        return $this->hasMany($post, UserSerializer::class);
     }
 }

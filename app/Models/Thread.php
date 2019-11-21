@@ -141,7 +141,7 @@ class Thread extends Model
      */
     public function firstPost()
     {
-        return $this->hasOne(Post::class)->where('is_first', true);
+        return $this->hasOne(Post::class)->withTrashed()->where('is_first', true);
     }
 
     /**
