@@ -10,15 +10,11 @@ declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Controller\Oauth2\AccessTokenController;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Exceptions\NoUserException;
 use App\Models\UserWechat;
-use App\Repositories\UserRepository;
-use Discuz\Api\Client;
 use Discuz\Api\Controller\AbstractResourceController;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,13 +40,19 @@ class WeixinLoginController extends AbstractResourceController
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return mixed
-     * @throws NoUserException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->socialite->setRequest($request);
 
-        $user = $this->socialite->driver('weixin')->user();
+        $driver = $this->socialite->driver('weixin');
+
+        if(!Arr::get($request->getQueryParams(), 'code')) {
+            $response = $driver->redirect();
+            return ['location' => $response->getHeaderLine('location')];
+        }
+
+        $user = $driver->user();
 
         $weixinUser = UserWechat::where('openid', $user->id)->first();
 
@@ -76,11 +78,8 @@ class WeixinLoginController extends AbstractResourceController
 
     /**
      * @param $user
-     * @throws NoUserException
      */
     private function error($user) {
-        $e = new NoUserException();
-        $e->setUser($user->user);
-        throw $e;
+        throw (new NoUserException())->setUser($user->user);
     }
 }
