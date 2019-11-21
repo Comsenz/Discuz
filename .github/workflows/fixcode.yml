@@ -1,9 +1,6 @@
 name: Fix Code
 
-on: 
- schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '41 12 * * *'
+on: [push]
 
 jobs:
   fixcode:
