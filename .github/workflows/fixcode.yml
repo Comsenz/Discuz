@@ -1,0 +1,20 @@
+name: Fix Code
+
+on: 
+ schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 18 * * *'
+
+jobs:
+  fixcode:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    # - name: Run test suite
+    #   run: composer run-script test
