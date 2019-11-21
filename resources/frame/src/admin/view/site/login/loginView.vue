@@ -8,8 +8,8 @@
         </header>
 
         <div class="login-main-form">
-          <el-form ref="form" v-model="form"  label-width="0px">
-            <el-form-item>
+          <el-form ref="form" :model="form" :rules="rules"  label-width="0px">
+            <el-form-item prop="user">
               <el-input
                 placeholder="请输入用户名"
                 clearable
@@ -33,7 +33,7 @@
             </el-form-item>
 
             <el-form-item class="login-main-form__item">
-              <el-button type="primary" @click="adminLogin">登录</el-button>
+              <el-button type="primary" @click="adminLogin('form')">登录</el-button>
             </el-form-item>
 
           </el-form>

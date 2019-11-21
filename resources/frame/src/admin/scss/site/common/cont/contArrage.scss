@@ -10,7 +10,7 @@
 
   .cont-arrange-main{
     width: 100%;
-    min-height: 149PX;
+    min-height: 100PX;
     border-top: 1PX solid $tableBorderColor;
     &:last-child{
       border-bottom: 1PX solid $tableBorderColor;
@@ -22,11 +22,10 @@
 
     .cont-arrange__lf-side{
       min-height: 100%;
-      min-width: 44PX;
+      min-width: 25PX;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 18PX;
       border-right: 1PX solid $tableBorderColor;
 
@@ -44,15 +43,39 @@
         border-bottom: 1PX solid $tableBorderColor;
         display: flex;
         align-items:center;
-        padding: 15PX 21PX;
+        padding: 18PX 20PX;
+
+        .rt-box{
+          color: $descColor;
+          margin-left: 20PX;
+        }
+
+        &__release{
+          flex: 1;
+          p{
+            display: inline-block;
+            color: $titleColor;
+          }
+          p:last-of-type{
+            margin-left: 14PX;
+          }
+          p:first-of-type{
+            margin-right: 14PX;
+          }
+          span{
+            color: $descColor;
+          }
+        }
+
       }
 
       &-box{
         flex: 1;
         //min-height: 70PX;
         border-bottom: 1PX solid $tableBorderColor;
-        padding: 15PX 21PX;
+        padding: 15PX 20PX;
         line-height:20PX;
+        color: $titleColor;
         &:last-child{
           border-bottom: 0;
         }

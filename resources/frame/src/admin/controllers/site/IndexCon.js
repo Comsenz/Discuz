@@ -6,8 +6,6 @@
 export default {
   data:function () {
     return {
-      // activeIndex: '1',
-
       indexTitle:"管理中心首页",  //页面内容标题  /顶部导航下面
       sideTitle:"首页", //左侧菜单标题
 

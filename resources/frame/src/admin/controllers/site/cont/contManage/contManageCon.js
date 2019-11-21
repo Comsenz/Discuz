@@ -2,30 +2,35 @@
 * 内容分类控制器
 * */
 
-import Card from '../../../view/site/common/card/card';
+import Card from '../../../../view/site/common/card/card';
+import ContArrange from '../../../../view/site/common/cont/contArrange';
 
+const cityOptions = ['上海', '北京', '广州', '深圳'];
 
 export default {
   data:function () {
     return {
       tableData: [{
-        theme:'主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容',
+        theme:'站长圈',
         author: '站长',
         prply: '1',
         browse:'12',
-        finalPost:'2018-11-11'
+        finalPost:'2018-11-11',
+        last:'奶罩'
       }, {
-        theme:'主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容',
+        theme:'站长圈',
         className: '攻城狮',
         prply: '2',
         browse:'12',
-        finalPost:'2019-11-11'
+        finalPost:'2019-11-11',
+        last:'奶罩'
       }, {
-        theme:'主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容',
+        theme:'主题内容',
         className: '版主',
         prply: '3',
         browse:'12',
-        finalPost:'2020-11-11'
+        finalPost:'2020-11-11',
+        last:'奶罩'
       }],
 
       deleteStatus:true,
@@ -67,26 +72,35 @@ export default {
 
       toppingRadio:1,  //是否置顶
 
-      essenceRadio:2   //是否精华
+      essenceRadio:2,   //是否精华
 
+      checkAll: false,
+      checkedCities: ['上海', '北京'],
+      cities: cityOptions,
+      isIndeterminate: true
     }
   },
 
   methods:{
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    /*handleCheckAllChange(val) {
+     /!* this.multipleSelection = val;
 
       if (this.multipleSelection.length >= 1){
         this.deleteStatus = false
       } else {
         this.deleteStatus = true
-      }
+      }*!/
+    },*/
 
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? cityOptions : [];
+      this.isIndeterminate = false;
     },
 
   },
   components:{
-    Card
+    Card,
+    ContArrange
   }
 
 }

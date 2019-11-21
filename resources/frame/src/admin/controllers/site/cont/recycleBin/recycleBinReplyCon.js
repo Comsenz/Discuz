@@ -1,47 +1,32 @@
 /*
-* 回收站控制器
+* 内容审核
 * */
 
-import Card from '../../../view/site/common/card/card';
+import Card from '../../../../view/site/common/card/card';
+import ContArrange from '../../../../view/site/common/cont/contArrange';
 
 
 export default {
   data:function () {
     return {
-
       tableData: [{
-        checkList:['还原'],
-        theme:'1主题主题主题主题主题',
-        classification:"起舞弄清影",
-        author:"小虫",
-        replyView:"2/5",
-        lastReply:"admin",
-        operator:"admin",
-        theReason:"文不对题"
+        className: '站长',
+        sort: '1',
+        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
       }, {
-        checkList:['删除'],
-        theme:'2主题主题主题主题主题',
-        classification:"起舞弄清影",
-        author:"小虫",
-        replyView:"3/5",
-        lastReply:"admin",
-        operator:"admin",
-        theReason:"文不对题"
+        className: '攻城狮',
+        sort: '2',
+        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
       }, {
-        checkList:['还原'],
-        theme:'3主题主题主题主题主题',
-        classification:"起舞弄清影",
-        author:"小虫",
-        replyView:"1/5",
-        lastReply:"admin",
-        operator:"admin",
-        theReason:"文不对题"
+        className: '版主',
+        sort: '3',
+        classIntroduction:'分类介绍分类介绍分类介绍分类介绍分类介绍分类介绍'
       }],
 
+      deleteStatus:true,
+      multipleSelection:[],
 
-      deleteStatus: true,
-      multipleSelection: [],
-
+      checkList: ['通过'],
 
       options: [{
         value: '选项1',
@@ -60,6 +45,8 @@ export default {
         label: '北京烤鸭'
       }],
       value: '',
+
+      checked:false,
 
       pickerOptions: {
         shortcuts: [{
@@ -89,8 +76,7 @@ export default {
         }]
       },
       value1: '',
-      value2: ''
-
+      value2: '',
 
     }
   },
@@ -107,16 +93,10 @@ export default {
 
     },
 
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
-    }
-
   },
   components:{
-    Card
+    Card,
+    ContArrange
   }
 
 }

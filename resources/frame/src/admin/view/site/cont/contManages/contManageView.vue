@@ -1,7 +1,7 @@
 <template>
     <div class="cont-manage-box">
       <div class="cont-manage-theme">
-        <el-table
+        <!--<el-table
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
@@ -14,12 +14,12 @@
           </el-table-column>
 
           <el-table-column
-            label="主题"
+            label="主题列表"
             prop="theme"
             min-width="250">
           </el-table-column>
 
-          <el-table-column
+          &lt;!&ndash;<el-table-column
             label="作者"
             prop="author">
           </el-table-column>
@@ -38,9 +38,37 @@
             label="最后回复"
             min-width="100"
             prop="finalPost">
-          </el-table-column>
+          </el-table-column>&ndash;&gt;
 
-        </el-table>
+        </el-table>-->
+
+        <div class="cont-manage-theme__table">
+          <div class="cont-manage-theme__table-header">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
+            <p class="cont-manage-theme__table-header__title">主题列表</p>
+          </div>
+
+          <ContArrange
+            author="小虫"
+            theme="站长圈"
+            prply="123"
+            browse="456"
+            last="奶罩"
+            finalPost="2019-1-1 12:00"
+          >
+
+            <div slot="side">
+              <el-checkbox ></el-checkbox>
+            </div>
+
+            <div style="line-height: 20PX" slot="main">
+              撒开绿灯解放立刻时间分厘卡即使的数据分就是克里夫纪录时刻监督分类就是开了房间昆仑山JFK了就是立刻发酵饲料看大家分厘卡撒酒疯开始数据的开发建设立刻搭街坊螺丝扣 上空的飞机谁看了大家受到警方开始就打发了空手道解放快老实交代联发科类
+            </div>
+          </ContArrange>
+
+        </div>
+
+
       </div>
 
       <div class="cont-manage-operating">
@@ -49,9 +77,9 @@
           :data="operatingList"
           tooltip-effect="dark"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
         >
           <el-table-column
+            label-class-name="cont-manage-operating__table-label"
             label="操作"
             prop="theme"
             min-width="250">
@@ -100,7 +128,7 @@
 
 <script>
 import '../../../../scss/site/contStyle.scss';
-import contManageCon from '../../../../controllers/site/cont/contManageCon'
+import contManageCon from '../../../../controllers/site/cont/contManage/contManageCon'
 export default {
     name: "cont-manage-view",
   ...contManageCon

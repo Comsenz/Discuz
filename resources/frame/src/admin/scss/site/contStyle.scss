@@ -53,21 +53,47 @@
 
   .cont-manage-theme{
     margin-top: 15PX;
+
+    &__table{
+      width: 100%;
+
+      &-header{
+        width: 100%;
+        height: 53PX;
+        background-color: $tableHeaderColor;
+        display: flex;
+        align-items: center;
+        padding-left: 27PX;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+
+        &__title{
+          margin-left: 20PX;
+          color:$commentColor ;
+        }
+
+      }
+
+    }
+
   }
 
   .cont-manage-operating{
     p{
       padding: 25PX 0 15PX 0;
-      color: #606266;
+      color: $commentColor;
     }
 
-    .el-table__header .el-table_2_column_7 .cell{
-      padding-left: 67PX;
+    .cont-manage-operating__table-label{
+      padding-left: 31PX;
     }
 
-    .el-table_2_column_7 .el-radio__label{
-      padding-left: 36PX;
+    .el-radio__label{
+      padding-left: 31PX;
     }
+
+
 
   }
 }
@@ -275,6 +301,11 @@
           margin-right: 10PX;
         }
 
+      }
+
+      &__bottom{
+        flex: 1;
+        text-align: right;
       }
 
 
@@ -490,121 +521,68 @@
   color: $titleColor;
 
   .recycle-bin-header{
+    //width: 100%;
+    //height: 100PX;
+    //padding: 15PX 0;
+
     width: 100%;
-    height: 100PX;
+    display: flex;
+    justify-content: flex-start;
     padding: 15PX 0;
 
-    &__lf{
-      width: 39%;
-      display: inline-block;
-      margin-right: 10PX;
+    .recycle-bin-header__section{
+      flex: 1;
+      margin-right: 20PX;
+
+      .section-top{
+        margin-bottom: 15PX;
+      }
+
       div{
-        height: 36PX;
         display: flex;
-
-        .el-input{
-          width: 100%;
-        }
-
+        align-items: center;
         .el-select{
           width: 100%;
         }
-      }
-
-      div:first-of-type{
-        margin-bottom: 15PX;
-      }
-
-    }
-
-    &__rt{
-      width: 59%;
-      display: inline-block;
-
-      &-top{
-        margin-bottom: 15PX;
-        height: 36PX;
-        display: flex;
-
-        .el-input--medium{
-          //width: 200PX;
+        .el-date-editor{
           width: 100%;
         }
-
-        span:last-of-type{
-          margin-left: 10PX;
-        }
-
       }
 
-      &-bottom{
-        height: 36PX;
+      &:last-of-type{
+        flex:0;
+        margin-right: 0;
         display: flex;
-        justify-content: space-between;
+        align-items: flex-end;
+      }
 
-        .recycle-bin-header__rt-bottom__time-title{
-          width: 150PX;
-          line-height: 36PX;
-        }
-
-        .el-date-editor{
-          width: 90%;
-          margin-right: 15PX;
-        }
-
+      .time-title{
+        min-width: 100PX;
       }
 
     }
 
-  }
+    div{
+      /*自适应*/
+      /* height: 40PX;
+       -webkit-box-flex: 1;
+       -webkit-flex: 1;
+       -ms-flex: 1;
+       flex: 1;
+       display: -ms-flexbox;
+       display: flex;
+       -webkit-box-align: center;
+       -ms-flex-align: center;
+       -webkit-flex-basis: 200PX;
+       -ms-flex-preferred-size: 200PX;
+       flex-basis: 200PX;
+       box-sizing: border-box;
+       margin-bottom: 10PX;
+       margin-right: 10PX;*/
 
-  .recycle-bin-table{
-
-    .cell{
-      display: flex;
-      align-items: center;
     }
 
-    .recycle-bin-table-checkbox{
-      display: flex;
-      flex-direction: column;
-
-      .el-checkbox:last-of-type{
-        margin-top: 12PX;
-      }
-    }
-
-  }
-
-  .recycle-bin-footer{
-    margin-top: 30PX;
-
-    .el-button--primary{
-      width: 68PX;
-      height: 36PX;
-      margin-right: 20PX;
-    }
-
-    .el-button--text{
-      margin-left: 20PX;
-    }
-
-  }
-
-}
-
-/*
-  回收站--回帖
-*/
-.recycle-bin-reply-box{
-  color: $titleColor;
-
-  .recycle-bin-reply-header{
-    width: 100%;
-    height: 100PX;
-    padding: 15PX 0;
-
-    &__lf{
+    /*&__lf{
       width: 39%;
       display: inline-block;
       margin-right: 10PX;
@@ -653,7 +631,7 @@
         justify-content: space-between;
 
         &__time-title{
-          width: 150PX;
+          width: 160PX;
           line-height: 36PX;
         }
 
@@ -663,6 +641,149 @@
         }
 
       }
+
+    }*/
+
+  }
+
+  .recycle-bin-table{
+
+    .cell{
+      display: flex;
+      align-items: center;
+    }
+
+    .recycle-bin-table-checkbox{
+      display: flex;
+      flex-direction: column;
+
+      .el-checkbox:last-of-type{
+        margin-top: 12PX;
+      }
+    }
+
+    &__side{
+      .el-checkbox-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-checkbox{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__main{
+      line-height: 20PX;
+    }
+
+    &__footer{
+      color: $commentColor;
+      div{
+        display: inline-block;
+      }
+      div:first-of-type{
+        margin-right: 40PX;
+      }
+    }
+
+  }
+
+  .recycle-bin-footer{
+    margin-top: 20PX;
+
+    .el-button--primary{
+      //width: 68PX;
+      //height: 36PX;
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+/*
+  回收站--回帖
+*/
+.recycle-bin-reply-box{
+   color: $titleColor;
+
+  .recycle-bin-reply-header{
+    /*自适应*/
+   /* width: 100%;
+    display: -ms-flexbox;
+    display: inline-flex;
+    -ms-flex-pack: start;
+    -ms-flex-align: center;
+    -ms-flex-line-pack: center;
+    -ms-flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-top: 15PX;*/
+
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 15PX 0;
+
+    .recycle-bin-reply-header__section{
+      flex: 1;
+      margin-right: 20PX;
+
+      .section-top{
+        margin-bottom: 15PX;
+      }
+
+      div{
+        display: flex;
+        align-items: center;
+        .el-select{
+          width: 100%;
+        }
+        .el-date-editor{
+          width: 100%;
+        }
+      }
+
+      &:last-of-type{
+        flex:0;
+        margin-right: 0;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .time-title{
+       min-width: 100PX;
+      }
+
+    }
+
+    div{
+      /*自适应*/
+     /* height: 40PX;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-flex-basis: 200PX;
+      -ms-flex-preferred-size: 200PX;
+      flex-basis: 200PX;
+      box-sizing: border-box;
+      margin-bottom: 10PX;
+      margin-right: 10PX;*/
 
     }
 
@@ -685,26 +806,49 @@
 
     &__header{
 
-      &-bottom{
+      /*&-bottom{
         p{
           span:first-of-type{
             color: $commentColor;
           }
         }
-      }
+      }*/
     }
 
     &__main{
       line-height: 20PX;
     }
 
-
+    &__footer{
+      color: $commentColor;
+      div{
+        display: inline-block;
+      }
+      div:first-of-type{
+        margin-right: 40PX;
+      }
+    }
 
   }
 
   .recycle-bin-reply-footer{
 
     margin-top: 20PX;
+
+    .el-button--primary{
+      //width: 68PX;
+      //height: 36PX;
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
   }
 
 
