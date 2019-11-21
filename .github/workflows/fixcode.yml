@@ -12,7 +12,7 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Clone discuz/core
-      run: git clone https://discuz-bot@github.com/Comsenz/framework.git
+      run: git clone https://discuz-bot:"$GITHUB_TOKEN"@github.com/Comsenz/framework.git
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
     - name: Run Fix Code
