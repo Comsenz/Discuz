@@ -20,6 +20,16 @@ export default {
           oneHeader: true
         }
       },
+      
+      
+      'wechat':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/wechatView'],resolve)
+        },
+        metaInfo:{
+          title:"微信"
+        }
+      },
       'index':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/indexView'],resolve)

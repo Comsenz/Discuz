@@ -33,11 +33,12 @@
 	    		<p class="powerChi">删帖</p>
 	    	</div>
 	    </div>
-		<div class="gap"></div>
-	    <div class="loginOpera">
-	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已加入，登录</a>
-	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
-	    </div>
+      <!-- <div class="gap"></div>
+      <div class="loginOpera">
+        <a href="javascript:;" @click="loginJump" class="mustLogin">已加入，登录</a>
+        <a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
+      </div> -->
+      <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录 / 注册</van-button>
     </div>
 </template>
 

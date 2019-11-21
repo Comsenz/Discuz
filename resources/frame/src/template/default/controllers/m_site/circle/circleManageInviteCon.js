@@ -10,6 +10,7 @@ export default {
 			// num: 0,
 			// voteInfo: {}
 			isfixNav: false,
+      loginBtnFix: true,
 			current:0,
             todos: [
 	            { text: '选项一111' },
@@ -23,35 +24,45 @@ export default {
         	]
 		}
 	},
-	
+
 	methods: {
+    logBtnFix() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if(scrollTop > 10){
+          this.loginBtnFix = false;
+        } else {
+          this.loginBtnFix = true;
+        };
+    },
+
+
 		//跳转到登录页
 		loginJump:function(){
-			this.$router.push({ path:'login-user'}) 
+			this.$router.push({ path:'login-user'})
 		},
 		//跳转到注册页
 		registerJump:function(){
-			this.$router.push({ path:'sign-up'}) 
+			this.$router.push({ path:'sign-up'})
 		},
 		/**
 		 * 给导航添加点击状态
 		 */
 		addClass:function(index,event){
-            this.current=index;
-             
-　　　　　　 //获取点击对象      
-           var el = event.currentTarget;
-           // alert("当前对象的内容："+el.innerHTML);
-        }
-		
+        this.current=index;
+
+　　　　　　 //获取点击对象
+       var el = event.currentTarget;
+       // alert("当前对象的内容："+el.innerHTML);
+    }
+
 	},
 
 	mounted: function() {
 		// this.getVote();
-		window.addEventListener('scroll', this.handleTabFix, true);
+		window.addEventListener('scroll', this.logBtnFix, true);
 	},
 	beforeRouteLeave (to, from, next) {
-	   window.removeEventListener('scroll', this.handleTabFix, true)
+	   window.removeEventListener('scroll', this.logBtnFix, true)
 	   next()
 	}
 }

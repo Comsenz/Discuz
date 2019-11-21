@@ -4,11 +4,11 @@
       <header class="post-topic-header">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
         <h2 class="postHeadTit">{{headerTitle}}</h2>
-        <van-button type="primary" size="mini">发布</van-button>
+        <van-button type="primary" size="mini" @click="publish">发布</van-button>
       </header>
 
       <div class="post-topic-form">
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic"   placeholder="请输入内容"></textarea>
+        <textarea class="reply-box" id="post-topic-form-text" name="post-topic"   placeholder="请输入内容" v-model="content"></textarea>
       </div>
 
       <footer class="post-topic-footer">
@@ -35,7 +35,7 @@
 <script>
 import '../../../../../../static/css/iconfont.css';
 import '../../../scss/m_site/postTopicView.scss'
-import postTopicCon from '../../../controllers/m_site/home/postTopic/postTopicCon'
+import postTopicCon from '../../../controllers/m_site/circle/postTopicCon'
 export default {
     name: "post-topic",
   ...postTopicCon,

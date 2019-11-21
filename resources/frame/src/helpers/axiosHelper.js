@@ -3,7 +3,6 @@
 import Vue from "vue";
 import axios from "axios";
 import appConfig from "../../config/appConfig";
-
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -24,9 +23,10 @@ axios.interceptors.response.use(
    //      return Promise.reject(error)
   	// }
     return Promise.reject(error);
-  }
-)
 
+  }
+
+)
 /**
  * 根据api key 获取api 地址
  * @param  {[type]} key [description]
@@ -98,7 +98,7 @@ const appFetch = function(params, options) {
 
 	return axios(params).then(data => {return data.data}, errors => {
       let requestError = errors.response;
-
+      // alert(requestError.status +'3456');
       let children;
       switch (requestError.status) {
         case 422:
@@ -106,6 +106,9 @@ const appFetch = function(params, options) {
             .map(error => [error.detail, '<br/>'])
             .reduce((a, b) => a.concat(b), [])
             .slice(0, -1);
+          break;
+        case 400:
+
           break;
 
         case 401:
@@ -121,15 +124,15 @@ const appFetch = function(params, options) {
         case 429:
           children = 'rate_limit_exceeded_message';
           break;
-
         default:
           children = 'generic_message';
       }
-      // console.log(children.toString());
-      let msg = children.toString().replace(/,/g,'');
-      app.$toast({type: 'html', 'message': msg});
 
-      return Promise.reject(error);
+      // console.log(children.toString());
+      // let msg = children.toString().replace(/,/g,'');
+      app.$toast({type: 'html', 'message': 'asdfsadfsdfsfd'});
+
+      return Promise.reject(requestError.data);
   });
 }
 

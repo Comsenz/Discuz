@@ -43,13 +43,17 @@ export default {
         url:"sendSms",
         method:"post",
         data:{
-          mobile:this.phoneNum,
-          type:this.bind
+          "data": {
+            "attributes": {
+              mobile:this.phoneNum,
+              type:this.bind
+            }
+          }
         }
       },(res)=>{
         console.log(res);
         if (res.status === 200){
-
+          this.aaa = res.interval
         } else{
           console.log('400');
         }
