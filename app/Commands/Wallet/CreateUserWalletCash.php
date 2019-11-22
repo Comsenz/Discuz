@@ -5,7 +5,7 @@ declare (strict_types = 1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CreateCashUserWallet.php XXX 2019-10-23 16:00 zhouzhou $
+ *      Id: CreateUserWalletCash.php XXX 2019-10-23 16:00 zhouzhou $
  */
 
 namespace App\Commands\Wallet;
@@ -22,7 +22,7 @@ use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use Exception;
 
-class CreateCashUserWallet
+class CreateUserWalletCash
 {
     /**
      * 执行操作的用户.
@@ -66,53 +66,45 @@ class CreateCashUserWallet
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
+        //提现金额
+        $cash_apply_amount = floatval(Arr::get($this->data, 'cash_apply_amount'));
+        $cash_apply_amount = sprintf("%.2f", $cash_apply_amount);
+        //计算手续费
+        $tax_ratio  = 0.01; //手续费率
+        $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
+        $tax_amount = sprintf("%.2f", ceil($tax_amount * 100) / 100); //格式化手续费
+
+        $remark = Arr::get($this->data, 'remark');
         //开始事务
         $db->beginTransaction();
         try {
             //获取用户钱包
             $user_wallet = $this->actor->userWallet()->lockForUpdate()->first();
-
             //检查钱包是否允许提现,1:钱包已冻结
             if ($user_wallet->wallet_status == 1) {
                 throw new Exception(app('translator')->get('wallet.status_cash_freeze'), 500);
             }
-
-            //提现金额
-            $cash_apply_amount = floatval(Arr::get($this->data, 'cash_apply_amount'));
-            $cash_apply_amount = sprintf("%.2f", $cash_apply_amount);
-
             //检查金额是否足够
             if ($user_wallet->available_amount < $cash_apply_amount) {
                 throw new Exception(app('translator')->get('wallet.available_amount_error'), 500);
             }
-
-            //计算手续费
-            $tax_ratio  = 0.01; //手续费率
-            $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
-            $tax_amount = sprintf("%.2f", ceil($tax_amount * 100) / 100); //格式化手续费
-
-            $user_id            = $this->actor->id;
             $cash_sn            = $this->getCashSn();
-            $cash_charge        = $tax_amount;
             $cash_actual_amount = $cash_apply_amount - $tax_amount;
             $cash_apply_amount  = $cash_apply_amount;
-            $remark             = Arr::get($this->data, 'remark');
-
-            //冻结钱包金额
-            $user_wallet->available_amount = $user_wallet->available_amount - $cash_apply_amount;
-            $user_wallet->freeze_amount    = $user_wallet->freeze_amount + $cash_apply_amount;
-            $user_wallet->save();
-
-            //添加钱包明细,
-            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
             //创建提现记录
             $cash = UserWalletCash::createCash(
                 $this->actor->id,
                 $cash_sn,
-                $cash_charge,
+                $tax_amount,
                 $cash_actual_amount,
                 $cash_apply_amount,
                 $remark);
+            //冻结钱包金额
+            $user_wallet->available_amount = $user_wallet->available_amount - $cash_apply_amount;
+            $user_wallet->freeze_amount    = $user_wallet->freeze_amount + $cash_apply_amount;
+            $user_wallet->save();
+            //添加钱包明细,
+            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, 10, app('translator')->get('wallet.cash_freeze_desc'));
             //提交事务
             $db->commit();
             return $cash;

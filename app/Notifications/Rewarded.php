@@ -18,31 +18,30 @@ class Rewarded extends Notification
 {
     use Queueable;
 
+    public $data;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed  $user
      * @return array
      */
-    public function via($notifiable)
+    public function via($user)
     {
         return ['database'];
     }
 
-    public function toDatabase($notifiable){
-        return [
-            'id' => $notifiable->id,
-            'user_name' => $notifiable->username,
-        ];
+    public function toDatabase($user){
+        return $this->data; 
     }
 }

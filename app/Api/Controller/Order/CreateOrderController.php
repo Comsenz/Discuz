@@ -23,6 +23,14 @@ class CreateOrderController extends AbstractCreateController
      * {@inheritdoc}
      */
     public $serializer = OrderSerializer::class;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public $include = [
+        'user',
+        'thread',
+    ];
 
     /**
      * @var Dispatcher

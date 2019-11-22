@@ -196,4 +196,14 @@ class Thread extends Model
     {
         static::$stateUser = $user;
     }
+
+    /**
+     * Define the relationship with the thread's orders.
+     *
+     * @return HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
