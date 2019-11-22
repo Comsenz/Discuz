@@ -294,7 +294,7 @@ export default {
           this.$router.push({path:'/admin/home'});
           break;
         case 'siteSet':
-          this.$router.push({path:'/admin/site-set'});
+          this.$router.push({path:'/admin/site-set',query:{name:'123'}});
           break;
         case 'signUpSet':
           this.$router.push({path:'/admin/sign-up-set'});
