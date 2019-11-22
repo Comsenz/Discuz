@@ -78,27 +78,27 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `orders` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_sn` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_sn` char(22) CHARACTER SET utf8mb4 NOT NULL,
   `payment_sn` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `payee_id` int(10) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `payee_id` bigint(20) UNSIGNED NOT NULL,
   `type` tinyint(3) UNSIGNED NOT NULL,
-  `type_id` int(10) UNSIGNED NOT NULL,
+  `thread_id` bigint(20) UNSIGNED DEFAULT NULL,
   `status` tinyint(3) NOT NULL DEFAULT '0',
   `platform` smallint(5) UNSIGNED DEFAULT NULL,
   `payment_type` smallint(5) DEFAULT NULL,
-  `remark` text,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `remark` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `pay_notify` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `payment_sn` bigint(20) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `trade_no` varchar(64) DEFAULT NULL,
   `status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `updated_at` timestamp NOT NULL,
@@ -208,7 +208,7 @@ CREATE TABLE `mobile_codes` (
 
 --用户钱包
 CREATE TABLE `user_wallets` (
-  `user_id` int(10) NOT NULL COMMENT '用户ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `available_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
   `freeze_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '冻结金额',
   `wallet_status` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '钱包状态:0正常，1冻结提现',
@@ -219,8 +219,8 @@ CREATE TABLE `user_wallets` (
 
 --用户提现
 CREATE TABLE `user_wallet_cash` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `cash_sn` bigint(20) UNSIGNED NOT NULL,
   `cash_charge` decimal(10,2) UNSIGNED NOT NULL,
   `cash_actual_amount` decimal(10,2) UNSIGNED NOT NULL,
@@ -239,8 +239,8 @@ CREATE TABLE `user_wallet_cash` (
 
 --用户钱包动账记录
 CREATE TABLE `user_wallet_logs` (
-  `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(10) UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `change_available_amount` decimal(10,2) NOT NULL,
   `change_freeze_amount` decimal(10,2) NOT NULL,
   `change_type` smallint(5) UNSIGNED NOT NULL,
