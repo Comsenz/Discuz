@@ -145,6 +145,28 @@ class Thread extends Model
     }
 
     /**
+     * Define the relationship with the thread's first post.
+     *
+     * @return hasMany
+     */
+    public function rewarded()
+    {
+        return $this->hasMany(Order::class, 'type_id')
+            ->where('type', 2)
+            ->where('status', 1);
+    }
+
+    /**
+     * Define the relationship with the thread's categories.
+     *
+     * @return BelongsTo
+     */
+    public function categories()
+    {
+        return $this->belongsTo(Classify::class, 'category_id');
+    }
+
+    /**
      * Define the relationship with the thread's author.
      *
      * @return BelongsTo

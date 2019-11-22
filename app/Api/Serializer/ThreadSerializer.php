@@ -83,6 +83,15 @@ class ThreadSerializer extends AbstractSerializer
      * @param $thread
      * @return Relationship
      */
+    protected function category($thread)
+    {
+        return $this->hasOne($thread, ClassifySerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function firstPost($thread)
     {
         return $this->hasOne($thread, PostSerializer::class);
@@ -104,6 +113,15 @@ class ThreadSerializer extends AbstractSerializer
     public function posts($thread)
     {
         return $this->hasMany($thread, PostSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function rewarded($thread)
+    {
+        return $this->hasMany($thread, OrderSerializer::class);
     }
 
     /**

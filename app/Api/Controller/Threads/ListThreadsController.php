@@ -155,7 +155,8 @@ class ListThreadsController extends AbstractListController
                     $query->whereNull('a.deleted_at');
                 })
                 ->orderBy('updated_at', 'desc')
-                ->get();
+                ->get()
+                ->take(3);
 
             $threads->map(function ($thread) use ($allLastThreePosts) {
                 $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id));
@@ -165,13 +166,15 @@ class ListThreadsController extends AbstractListController
         // 特殊关联：喜欢的人
         if (in_array('firstPost.likedUsers', $specialLoad)) {
             $firstPostIds = $threads->pluck('firstPost.id');
+            $likedLimit = Arr::get($filter, 'likedLimit', 10);
 
             $allLikes = PostUser::from('post_user', 'a')
                 ->leftJoin('users', 'a.user_id', '=', 'users.id')
-                ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [10])
+                ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$likedLimit])
                 ->whereIn('post_id', $firstPostIds)
                 ->orderBy('a.created_at', 'desc')
-                ->get();
+                ->get()
+                ->take($likedLimit);
 
             $threads->map(function ($thread) use ($allLikes) {
                 if ($thread->firstPost) {
@@ -183,15 +186,17 @@ class ListThreadsController extends AbstractListController
         // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $specialLoad)) {
             $threadIds = $threads->pluck('id');
+            $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
 
             $allRewardedUser = Order::from('orders', 'a')
                 ->leftJoin('users', 'a.user_id', '=', 'users.id')
-                ->whereRaw('( SELECT count( * ) FROM orders WHERE a.type_id = type_id AND a.created_at < created_at ) < ?', [10])
+                ->whereRaw('( SELECT count( * ) FROM orders WHERE a.type_id = type_id AND a.created_at < created_at ) < ?', [$rewardedLimit])
                 ->whereIn('type_id', $threadIds)
                 ->where('status', 1)
                 ->where('type', 2)
                 ->orderBy('a.created_at', 'desc')
-                ->get();
+                ->get()
+                ->take($rewardedLimit);
 
             $threads->map(function ($thread) use ($allRewardedUser) {
                 $thread->setRelation('rewardedUsers', $allRewardedUser->where('type_id', $thread->id));
