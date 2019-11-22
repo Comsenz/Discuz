@@ -82,6 +82,7 @@ class ResourceThreadController extends AbstractResourceController
 
         // 主题
         $thread = $this->thread->findOrFail($threadId, $actor);
+        $thread->increment('view_count');
 
         // 帖子及其关联模型
         if (in_array('posts', $include)) {
