@@ -3,7 +3,7 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ReviewCashUserWalletController.php xxx 2019-11-10 17:20:00 zhouzhou $
+ *      $Id: UserWalletCashReviewController.php xxx 2019-11-10 17:20:00 zhouzhou $
  */
 
 namespace App\Api\Controller\Wallet;
@@ -14,9 +14,9 @@ use Discuz\Api\JsonApiResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use App\Commands\Wallet\ReviewCashUserWallet;
+use App\Commands\Wallet\UserWalletCashReview;
 
-class ReviewCashUserWalletController implements RequestHandlerInterface
+class UserWalletCashReviewController implements RequestHandlerInterface
 {
     /**
      * @var Dispatcher
@@ -42,7 +42,7 @@ class ReviewCashUserWalletController implements RequestHandlerInterface
         // 获取请求的IP
         $ip_address = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
         $result = $this->bus->dispatch(
-            new ReviewCashUserWallet($actor, $request->getParsedBody(), $ip_address)
+            new UserWalletCashReview($actor, $request->getParsedBody(), $ip_address)
         );
         $data = [
             'type' => 'cash-review',

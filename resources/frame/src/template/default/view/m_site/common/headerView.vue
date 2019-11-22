@@ -1,8 +1,8 @@
 <template>
   <section>
-    <header v-if="$route.meta.twoHeader">
+    <!-- <header v-if="$route.meta.twoHeader"> -->
       <!-- 是否显示返回按钮或者使用第二套头部样式，可根据路由参数twoHeader判断 -->
-      <div class="" :class="{'fixedHead': isfixHead}">
+      <!-- <div class="" :class="{'fixedHead': isfixHead}">
         <div class="hederWrap">
           <img src="../../../../../../static/images/logo.png" class="logo headLogo">
           <div class="topRight">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </header>
-    <header>
+    <header> -->
       <!-- 是否显示悬浮导航，滚动后置顶导航 -->
       <!-- <div class="" :class="{'fixedHead': isfixHead}" v-if="showHeader">
         <div class="hederWrap">
@@ -23,15 +23,15 @@
           </div>
         </div>
       </div> -->
-    </header>
+    <!-- </header> -->
     <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数threeHeader判断 -->
-    <header id="headThree" v-if="$route.meta.threeHeader">
+    <!-- <header id="headThree" v-if="$route.meta.threeHeader">
       <div class="contentHead">
         <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
         <h1 class="headTit">{{$route.meta.title}}</h1>
       </div>
-    </header>
-
+    </header> -->
+    <!-- 侧边栏 -s -->
     <van-popup
       class="sidebarWrap"
       v-model="popupShow"
@@ -78,6 +78,9 @@
         </div>
       </div>
     </van-popup>
+    <!-- 侧边栏 -E -->
+
+
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
         <img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
@@ -97,12 +100,12 @@
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi">
-          <van-tab v-for="(todo, index) in todos" :title="todo.text" :key="index">
+          <van-tab v-for="(navChi, index) in themeNavList" :title="navChi.text" :key="index">
           </van-tab>
         </van-tabs>
         <!-- <div class="navBarBox">
           <ul class="navBarCon">
-            <li v-for="(todo, index) in todos" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ todo.text }}</li>
+            <li v-for="(navChi, index) in themeNavList" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ navChi.text }}</li>
           </ul>
         </div> -->
       </div>

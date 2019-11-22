@@ -24,6 +24,13 @@ class UpdateUserWalletController extends AbstractCreateController
     public $serializer = UserWalletSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = [
+        'user'
+    ];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;

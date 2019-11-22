@@ -91,8 +91,11 @@ a { color: $fontColor;}
 	position: fixed !important;
 	@include px2rem(bottom, 88);
 	left: 30%;
+  right: 30%;
 	z-index: 15;
 	width: 40%;
+  padding: 0;
+  min-width: auto;
 	opacity: 0.9;
 	box-sizing: border-box;
 }
@@ -310,8 +313,17 @@ a { color: $fontColor;}
 //toast
 .toast { position: fixed; z-index: 200; left: 50%; top:45%; transition:all .5s; -webkit-transform: translateX(-50%) translateY(-50%); -moz-transform: translateX(-50%) translateY(-50%); -ms-transform: translateX(-50%) translateY(-50%); -o-transform: translateX(-50%) translateY(-50%); transform: translateX(-50%) translateY(-50%); text-align: center; border-radius: 5px; color:#FFF; background: rgba(17, 17, 17, 0.7);      height: 45px; line-height: 45px; padding: 0 15px; max-width: 150px; }
 
-
-
-
-
-
+//微信授权
+.weLogo {
+  display: block;
+  @include px2rem(height, 68);
+  @include px2rem(margin-top, 258);
+  @include px2rem(margin-bottom, 166);
+  margin-left: auto;
+  margin-right: auto;
+}
+.weAuthorizeBtn {
+  display: block;
+  @include px2rem(margin-bottom, 166);
+  width: 100%;
+}

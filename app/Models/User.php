@@ -147,7 +147,7 @@ class User extends Model
     /**
      * 重载通知
      */
-    public function notify($instance){;
+    public function notify($instance){
         app(DiscuzChannelManager::class)->send($this, $instance);
     }
     /**

@@ -4,7 +4,7 @@ declare (strict_types = 1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CashUserWalletListner.php xxx 2019-11-12 11:14:00 zhouzhou $
+ *      $Id: CashTransfer.php xxx 2019-11-12 11:14:00 zhouzhou $
  */
 
 namespace App\Listeners\Wallet;
@@ -20,7 +20,7 @@ use App\Models\UserWalletLog;
 use App\Models\UserWallet;
 use Carbon\Carbon;
 
-class CashUserWallet
+class CashTransfer
 {
     /**
      * 配置信息
@@ -95,11 +95,12 @@ class CashUserWallet
                 'error_code' => $response['err_code'],//错误代码
                 'error_message' => $response['err_code_des'],
             ];
-            $is_thaw = true;
-            if ($response['err_code'] == 'SYSTEMERROR') {
-                //未明确的错误码,不做其他操作，后续人工检查
-                $is_thaw = false;
-            } 
+            //失败时统一由后台手动回退
+            $is_thaw = false;
+            // if ($response['err_code'] == 'SYSTEMERROR') {
+            //     //未明确的错误码,不做其他操作，后续人工检查
+            //     $is_thaw = false;
+            // } 
             $this->transferFailure($event->cash_record->id, $data_result, $is_thaw);
     	}
     }
@@ -152,7 +153,7 @@ class CashUserWallet
      * @param  array $data 结果数组
      * @param  $is_thaw 是否解冻提现金额
      */
-    public function transferFailure($cash_id, $data, bool $is_thaw = true)
+    public function transferFailure($cash_id, $data, bool $is_thaw = false)
     {
         $user_wallet_cash = UserWalletCash::find($cash_id);
         $cash_apply_amount = $user_wallet_cash->cash_apply_amount;//提现申请金额

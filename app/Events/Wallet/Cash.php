@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace App\Events\Wallet;
 
 use App\Models\UserWalletCash;
-use App\Models\User;
 
 class Cash
 {
@@ -34,7 +33,6 @@ class Cash
 
     /**
      * @param UserWalletCash $cash_record
-     * @param User $actor
      */
     public function __construct(UserWalletCash $cash_record, $ip_address, $transfer_type)
     {

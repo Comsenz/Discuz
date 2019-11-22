@@ -1,10 +1,17 @@
 <template>
-    <div class="reply-to-topic-box">
-      <header class="reply-to-topic-header">
+    <div class="reply-to-topic-box post-topic-box">
+      <!-- <header class="reply-to-topic-header">
         <span class="icon iconfont icon-back reply-to-topic-header-icon" ></span>
         <h2>{{headerTitle}}</h2>
         <van-button type="primary" class="reply-to-topic-release-btn" size="mini">发布</van-button>
-      </header>
+      </header> -->
+
+       <header class="post-topic-header">
+         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
+         <h2 class="postHeadTit">{{headerTitle}}</h2>
+         <van-button type="primary" size="mini" @click="publish">发布</van-button>
+       </header>
+
 
       <main class="reply-to-topic-main">
         <textarea class="reply-box" name="reply-to-topic-text" id="reply-to-topic-main-text" placeholder="请输入内容" ></textarea>
@@ -21,6 +28,7 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
+import '../../../scss/m_site/postTopicView.scss'
 import '../../../scss/m_site/themeDetails/themeDetails.scss';
 import replyToTopicCon from '../../../controllers/m_site/themeDetails/replyToTopicCon';
 export default {

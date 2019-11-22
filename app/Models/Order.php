@@ -40,6 +40,7 @@ class Order extends Model
      */
     public function user()
     {
+
         return $this->belongsTo(User::class);
     }
 
@@ -51,5 +52,15 @@ class Order extends Model
     public function payNotify()
     {
         return $this->hasOne(PayNotify::class, 'payment_sn', 'payment_sn');
+    }
+
+
+    /**
+     * @param $orders
+     * @return Relationship
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }

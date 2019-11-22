@@ -22,6 +22,13 @@ class ResourceUserWalletController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $serializer = UserWalletSerializer::class;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $include = [
+        'user'
+    ];
     
     /**
      * @var Dispatcher

@@ -37,6 +37,8 @@ class UserWalletLog extends Model
     const TYPE_INCOME_REWARD     = 31; //打赏收入
     const TYPE_INCOME_ARTIFICIAL = 32; //人工收入
 
+    const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
+
     /**
      * 创建钱包动账记录
      * @param  [type] $user_id                 [description]
@@ -71,6 +73,16 @@ class UserWalletLog extends Model
     public function userWallet()
     {
         return $this->belongsTo(UserWallet::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Define the relationship with the wallet log's owner.
+     *
+     * @return belongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

@@ -54,6 +54,8 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'posts.likedUsers',
+        'rewarded.user',
         // 'user',
         // 'lastPostedUser',
         // 'firstPost',
@@ -82,6 +84,8 @@ class ResourceThreadController extends AbstractResourceController
 
         // 主题
         $thread = $this->thread->findOrFail($threadId, $actor);
+        $thread->timestamps = false;
+        $thread->increment('view_count');
 
         // 帖子及其关联模型
         if (in_array('posts', $include)) {

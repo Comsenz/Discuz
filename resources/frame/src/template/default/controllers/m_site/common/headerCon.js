@@ -3,7 +3,7 @@
  */
 import {Bus} from '../../../store/bus.js';
 export default {
-  
+
 	data: function() {
 	    return {
 		    headBackShow: false,
@@ -101,15 +101,11 @@ export default {
 	      ],
 	      isfixNav: false,
 	      popupShow: false,
-			current:0,
-	        todos: [
-	            { text: '选项' },
-	            { text: '选项二' },
-	            { text: '选项三' },
-	            { text: '选项四dsdsddsd' },
-	            { text: '选项五' },
-	            { text: '选项六' }
-	    	]
+        current:0,
+	      // themeNavList: [
+	            // { text: '选项' },
+	            // { text: '选项二' }
+	    	// ]
 
 	    }
 	},
@@ -120,6 +116,10 @@ export default {
         //     return '';
         //   }
         // },
+        themeNavList:{
+          type:Array
+
+        },
         headFixed: { // 组件是否悬浮头部
           headFixed: false
           // default: () => {
@@ -131,7 +131,7 @@ export default {
         },
         searchIconShow: { // 组件是否显示搜索按钮
           searchIconShow: false
-          
+
         },
         menuIconShow: { // 组件是否显示菜单按钮
           menuIconShow: false
@@ -162,7 +162,6 @@ export default {
 	methods: {
 		//获取圈子主题数，成员数，圈主名称
 		getCircle(){
-			console.log('1234');
 			this.appFetch({
 		        url:'getCircle',
 		        method:'post',

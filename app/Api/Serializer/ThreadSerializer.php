@@ -44,19 +44,20 @@ class ThreadSerializer extends AbstractSerializer
         $gate = $this->gate->forUser($this->actor);
 
         $attributes = [
-            'title'                 => $model->title,
-            'price'                 => $model->price,
-            'viewCount'             => (int) $model->view_count,
-            'postCount'             => (int) $model->post_count,
-            'likeCount'             => (int) $model->like_count,
-            'createdAt'             => $this->formatDate($model->created_at),
-            'updatedAt'             => $this->formatDate($model->updated_at),
-            'isApproved'            => (bool) $model->is_approved,
-            'isSticky'              => (bool) $model->is_sticky,
-            'isEssence'             => (bool) $model->is_essence,
-            'canApprove'            => $gate->allows('approve', $model),
-            'canSticky'             => $gate->allows('sticky', $model),
-            'canEssence'            => $gate->allows('essence', $model),
+            'title'             => $model->title,
+            'price'             => $model->price,
+            'viewCount'         => (int) $model->view_count,
+            'postCount'         => (int) $model->post_count,
+            'likeCount'         => (int) $model->like_count,
+            'createdAt'         => $this->formatDate($model->created_at),
+            'updatedAt'         => $this->formatDate($model->updated_at),
+            'isApproved'        => (bool) $model->is_approved,
+            'isSticky'          => (bool) $model->is_sticky,
+            'isEssence'         => (bool) $model->is_essence,
+            'canApprove'        => $gate->allows('approve', $model),
+            'canSticky'         => $gate->allows('sticky', $model),
+            'canEssence'        => $gate->allows('essence', $model),
+            'canDelete'         => $gate->allows('delete', $model),
         ];
 
         if ($model->deleted_at) {
@@ -76,6 +77,15 @@ class ThreadSerializer extends AbstractSerializer
     protected function user($thread)
     {
         return $this->hasOne($thread, UserSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    protected function category($thread)
+    {
+        return $this->hasOne($thread, ClassifySerializer::class);
     }
 
     /**
@@ -103,5 +113,23 @@ class ThreadSerializer extends AbstractSerializer
     public function posts($thread)
     {
         return $this->hasMany($thread, PostSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function rewarded($thread)
+    {
+        return $this->hasMany($thread, OrderSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function rewardedUsers($thread)
+    {
+        return $this->hasMany($thread, UserSerializer::class);
     }
 }

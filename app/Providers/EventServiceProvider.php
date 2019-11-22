@@ -22,6 +22,7 @@ class EventServiceProvider extends BaseEventServiceProvider
     protected $subscribe = [
         GroupPolicy::class,
         StopWordPolicy::class,
-        'App\Listeners\Wallet\ReviewCashSubscriber',
+        'App\Listeners\Wallet\CashReviewSubscriber',
+        'App\Listeners\Order\OrderSubscriber',
     ];
 }

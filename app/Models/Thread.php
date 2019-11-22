@@ -141,7 +141,29 @@ class Thread extends Model
      */
     public function firstPost()
     {
-        return $this->hasOne(Post::class)->where('is_first', true);
+        return $this->hasOne(Post::class)->withTrashed()->where('is_first', true);
+    }
+
+    /**
+     * Define the relationship with the thread's first post.
+     *
+     * @return hasMany
+     */
+    public function rewarded()
+    {
+        return $this->hasMany(Order::class, 'type_id')
+            ->where('type', 2)
+            ->where('status', 1);
+    }
+
+    /**
+     * Define the relationship with the thread's categories.
+     *
+     * @return BelongsTo
+     */
+    public function categories()
+    {
+        return $this->belongsTo(Classify::class, 'category_id');
     }
 
     /**
@@ -195,5 +217,15 @@ class Thread extends Model
     public static function setStateUser(User $user)
     {
         static::$stateUser = $user;
+    }
+
+    /**
+     * Define the relationship with the thread's orders.
+     *
+     * @return HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

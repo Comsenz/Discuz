@@ -15,10 +15,14 @@ use App\Trade\NotifyTrade;
 use App\Trade\QeuryTrade;
 use App\Settings\SettingsRepository;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Contracts\Events\Dispatcher;
+use Discuz\Foundation\EventsDispatchTrait;
+use App\Events\Order\Updated;
 
 class WechatNotify
 {
     use NotifyTrait;
+    use EventsDispatchTrait;
 
     /**
      * 微信配置参数
@@ -38,7 +42,7 @@ class WechatNotify
      * 执行命令
      * @return mixed 返回给支付平台数据
      */
-    public function handle(SettingsRepository $setting, ConnectionInterface $connection)
+    public function handle(SettingsRepository $setting, ConnectionInterface $connection, Dispatcher $events)
     {   
         $this->config = $setting->tag('wxpay');
         $notify_result = NotifyTrade::notify(GatewayConfig::WECAHT_PAY_NOTIFY, $this->config);      
@@ -53,9 +57,12 @@ class WechatNotify
                 $connection->beginTransaction();
                 try {
                     //支付成功处理
-                    $result = $this->paymentSuccess($payment_sn, $trade_no);
+                    $order_info = $this->paymentSuccess($payment_sn, $trade_no);
                     $connection->commit();
-                    if ($result) {
+                    if ($order_info) {
+                        $events->dispatch(
+                            new Updated($order_info)
+                        );
                         return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
                     }
                 } catch (Exception $e) {

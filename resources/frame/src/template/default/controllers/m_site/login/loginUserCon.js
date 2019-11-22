@@ -16,6 +16,7 @@ export default {
       password:"",
       userId:'2',
       btnLoading:false
+      // attributes:'/login-user'
     }
   },
 
@@ -30,7 +31,7 @@ export default {
   mounted:function(){
   },
   methods:{
-  
+
 
 
     loginClick(){
@@ -39,36 +40,23 @@ export default {
         url:"login",
         method:"post",
         data:{
-          username:this.userName,
-          password:this.password
+          "data": {
+            "attributes": {
+              username:this.userName,
+              password:this.password,
+            },
+          }
         }
-      },(res)=>{
-        console.log(res);
-
-        if (res.status === 200){
+      }).then(res => {
           this.$toast.success('登录成功');
-          // console.log('登录成功');
-          this.paramsObj = {
-            userId:this.userId
-          };
-          let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
-          console.log(params);
-          // this.$router.push({
-          //   path:'m_site/bind-phone',
-
-          //   });
-          // this.$router.push({path: params});
-          // this.$router.push({path: 'bind-phone'});
-        } else{
-          console.log('400');
-        }
-
-        this.btnLoading = false;
-
-      },(err)=>{
-        console.log(err);
-        this.btnLoading = false;
-      })
+          // this.paramsObj = {
+          //   userId:this.userId
+          // };
+          // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
+          this.$router.push({
+            path:'bind-phone',
+          });
+       });
 
     },
 
@@ -84,8 +72,27 @@ export default {
   created(){
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
     if(isWeixin == true){
+      // const APPID = 'wx2aa96b3508831102';
+      // const REDIRECT_URI = window.location.host;
+      // const SCOPE = 'snsapi_base';
+      // const STATE = '123';
       //微信登录时
       alert('微信登录');
+      // let redirect_uris ="";
+      // let redirect_uri ="";
+      // let href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=' + SCOPE + '&state=' + STATE + '#wechat_redirect';
+
+      this.appFetch({
+        url:"weixin",
+        method:"get",
+        data:{
+          // attributes:this.attributes,
+        }
+      }).then(res=>{
+        console.log(res.data.attributes.location)
+        window.location.href = res.data.attributes.location;
+      });
+
 
 
     } else {
@@ -93,7 +100,13 @@ export default {
       console.log('手机浏览器登录');
       // loginClick();
 
-
+      console.log(this.appFetch({
+        url:"weixin",
+        method:"get",
+        data:{
+          // attributes:this.attributes,
+        }
+      }))
 
     }
 

@@ -5,7 +5,7 @@ declare (strict_types = 1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: ReviewCashUserWallet.php XXX 2019-11-10 10:00 zhouzhou $
+ *      Id: UserWalletCashReview.php XXX 2019-11-10 10:00 zhouzhou $
  */
 
 namespace App\Commands\Wallet;
@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 
-class ReviewCashUserWallet
+class UserWalletCashReview
 {
     /**
      * 执行操作的用户.
@@ -106,12 +106,12 @@ class ReviewCashUserWallet
                         return $status_result[$id] = 'success';
                     }
                 } elseif ($cash_status == UserWalletCash::STATUS_REVIEW_FAILED) {
+                    $cash_apply_amount = $cash_record->cash_apply_amount;//提现申请金额
+                    //审核不通过解冻金额
+                    $user_id = $cash_record->user_id;
                     //开始事务
                     $this->connection->beginTransaction();
                     try {
-                        $cash_apply_amount = $cash_record->cash_apply_amount;//提现申请金额
-                        //审核不通过解冻金额
-                        $user_id = $cash_record->user_id;
                         //获取用户钱包
                         $user_wallet = UserWallet::lockForUpdate()->find($user_id);
                         //返回冻结金额至用户钱包
