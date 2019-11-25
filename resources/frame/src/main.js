@@ -31,6 +31,7 @@ import User from './common/models/User';
 import Post from './common/models/Post';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
+import VueLazyload from 'vue-lazyload';       //图片懒加载
 
 import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
@@ -45,6 +46,11 @@ Vue.prototype.axios = axios;
 Vue.prototype.$moment = moment;//时间转换-赋值使用
 Vue.config.devtools = true;
 moment.locale('zh-cn');//时间转换-需要汉化
+
+Vue.use(VueLazyload, {
+  // loading: require('img/loading.png'),//加载中图片，一定要有，不然会一直重复加载占位图
+  // error: require('img/error.png')  //加载失败图片
+});
 Vue.prototype.apiStore = new Store({
   'threads': Thread,
   'users': User,

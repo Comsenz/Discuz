@@ -26,14 +26,12 @@ export default {
     // Header
   },
 
-
+  created:function(){
+  },
 
   mounted:function(){
   },
   methods:{
-
-
-
     loginClick(){
       // this.btnLoading = true;
       this.appFetch({
@@ -49,6 +47,10 @@ export default {
         }
       }).then(res => {
           this.$toast.success('登录成功');
+          console.log(res);
+          let token = res.data.attributes.access_token;
+          console.log(token)
+          // browserDb.setLItem('2222','123');
           // this.paramsObj = {
           //   userId:this.userId
           // };

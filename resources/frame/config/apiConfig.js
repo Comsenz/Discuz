@@ -7,6 +7,7 @@ module.exports = {
   'users': '/api/users',   //用户名注册
   'login':'/api/login',//用户名登录
   'sendSms':'/api/sms/send',  //发送验证码
+  'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
   'threads':'/api/threads',//主题
   'circleInfo':'/api/circleInfo', //站点信息

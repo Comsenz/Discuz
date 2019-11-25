@@ -327,3 +327,7 @@ a { color: $fontColor;}
   @include px2rem(margin-bottom, 166);
   width: 100%;
 }
+//绑定手机号
+.grayBg {
+  color: #999;
+}
