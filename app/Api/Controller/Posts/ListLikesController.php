@@ -4,16 +4,16 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: ListFavoritesController.php xxx 2019-11-12 15:32:00 LiuDongdong $
+ *      $Id: ListLikesController.php xxx 2019-11-25 16:57:00 LiuDongdong $
  */
 
-namespace App\Api\Controller\Threads;
+namespace App\Api\Controller\Posts;
 
 use Discuz\Auth\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class ListFavoritesController extends ListThreadsController
+class ListLikesController extends ListPostsController
 {
     use AssertPermissionTrait;
 
@@ -30,28 +30,28 @@ class ListFavoritesController extends ListThreadsController
         $offset = $this->extractOffset($request);
         $load = $this->extractInclude($request);
 
-        $query = $actor->favoriteThreads()
+        $query = $actor->likedPosts()
             ->skip($offset)
             ->take($limit)
-            ->orderBy('thread_user.created_at', 'desc');
+            ->orderBy('post_user.created_at', 'desc');
 
-        $this->threadCount = $limit > 0 ? $query->count() : null;
+        $this->postCount = $limit > 0 ? $query->count() : null;
 
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
             $request->getQueryParams(),
             $offset,
             $limit,
-            $this->threadCount
+            $this->postCount
         );
 
         $document->setMeta([
-            'threadCount' => $this->threadCount,
-            'pageCount' => ceil($this->threadCount / $limit),
+            'threadCount' => $this->postCount,
+            'pageCount' => ceil($this->postCount / $limit),
         ]);
 
-        $threads = $query->get()->load($load);
+        $posts = $query->get()->load($load);
 
-        return $threads;
+        return $posts;
     }
 }

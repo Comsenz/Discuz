@@ -114,14 +114,10 @@ class ListThreadsController extends AbstractListController
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 
-        // $criteria = new SearchCriteria($actor, $query, $sort);
-
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $load = array_merge($this->extractInclude($request), ['favoriteState']);
 
-        // 查主题
-        // $results = $this->searcher->search($criteria, $limit, $offset);
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
@@ -306,6 +302,17 @@ class ListThreadsController extends AbstractListController
                 $query->where('is_approved', false);
             } elseif ($isApproved == 'yes') {
                 $query->where('is_approved', true);
+            }
+        }
+
+        // 回收站
+        if ($isDeleted = Arr::get($filter, 'isDeleted')) {
+            if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+                // 包含回收站帖子
+                $query->withTrashed();
+            } elseif ($isDeleted == 'no') {
+                // 只看回收站帖子
+                $query->onlyTrashed();
             }
         }
 

@@ -85,7 +85,7 @@ class EditPost
         }
 
         if (isset($attributes['isApproved'])) {
-            $this->assertCan($this->actor, 'approved', $post);
+            $this->assertCan($this->actor, 'approve', $post);
 
             $post->is_approved = $attributes['isApproved'];
         }

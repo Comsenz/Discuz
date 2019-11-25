@@ -86,8 +86,14 @@ class EditThread
             $thread->timestamps = false;
         }
 
+        if (isset($attributes['categoryId'])) {
+            $this->assertCan($this->actor, 'categorize', $thread);
+
+            $thread->category_id = $attributes['categoryId'];
+        }
+
         if (isset($attributes['isApproved'])) {
-            $this->assertCan($this->actor, 'approved', $thread);
+            $this->assertCan($this->actor, 'approve', $thread);
 
             $thread->is_approved = $attributes['isApproved'];
         }

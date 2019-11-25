@@ -76,6 +76,15 @@ class BatchEditThreads
                 continue;
             }
 
+            if (isset($attributes['categoryId'])) {
+                if ($this->actor->can('categorize', $thread)) {
+                    $thread->category_id = $attributes['categoryId'];
+                } else {
+                    $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
+                    continue;
+                }
+            }
+
             if (isset($attributes['isApproved'])) {
                 if ($this->actor->can('approve', $thread)) {
                     $thread->is_approved = $attributes['isApproved'];
