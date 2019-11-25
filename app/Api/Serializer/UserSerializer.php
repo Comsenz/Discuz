@@ -17,6 +17,7 @@ class UserSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
+            'id' => $model->id,
             'username'    => $model->username,
 //            'nickname'    => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
             'mobile'      => $model->mobile,
