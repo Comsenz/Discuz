@@ -71,7 +71,5 @@ class DeleteNotification
         $notification = $notification->findOrFail($this->notificationId, $this->actor );
 
         $notification->forceDelete();
-
-        return $notification;
     }
 }

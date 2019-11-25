@@ -30,27 +30,27 @@ class ListFavoritesController extends ListThreadsController
         $offset = $this->extractOffset($request);
         $load = $this->extractInclude($request);
 
-        $threads = $actor->favoriteThreads()
+        $query = $actor->favoriteThreads()
             ->skip($offset)
-            ->take($limit + 1)
-            ->orderBy('thread_user.created_at', 'desc')
-            ->get();
+            ->take($limit)
+            ->orderBy('thread_user.created_at', 'desc');
 
-        $this->hasMoreResults = $limit > 0 && $threads->count() > $limit;
-
-        if ($this->hasMoreResults) {
-            $threads->pop();
-        }
+        $this->threadCount = $limit > 0 ? $query->count() : null;
 
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
             $request->getQueryParams(),
             $offset,
             $limit,
-            $this->hasMoreResults ? null : 0
+            $this->threadCount
         );
 
-        $threads = $threads->load($load);
+        $document->setMeta([
+            'threadCount' => $this->threadCount,
+            'pageCount' => ceil($this->threadCount / $limit),
+        ]);
+
+        $threads = $query->get()->load($load);
 
         return $threads;
     }

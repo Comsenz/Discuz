@@ -75,6 +75,7 @@ class User extends Model
     public static function register(array $data)
     {
         $user = new static;
+        unset($data['code']);
         $user->attributes = $data;
         $user->setPasswordAttribute($user->password);
         return $user;
@@ -147,7 +148,7 @@ class User extends Model
     /**
      * 重载通知
      */
-    public function notify($instance){;
+    public function notify($instance){
         app(DiscuzChannelManager::class)->send($this, $instance);
     }
     /**

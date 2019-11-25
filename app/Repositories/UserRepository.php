@@ -23,7 +23,7 @@ class UserRepository extends AbstractRepository
      *
      * @return Model|\Illuminate\Database\Eloquent\Builder
      */
-    public static function query()
+    public function query()
     {
         return User::query();
     }

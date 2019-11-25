@@ -6,7 +6,7 @@
 	    <div class="padB"></div>
         <div class="gap"></div>
 	    <div class="themeTitBox">
-	    	<span class="themeTit" @click="registerJump">全部主题</span>
+	    	<span class="themeTit">全部主题</span>
 	    	<div class="screen" @click="bindScreen">
 	    		<span>筛选</span>
 	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>

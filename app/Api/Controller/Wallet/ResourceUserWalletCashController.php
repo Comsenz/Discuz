@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use App\Commands\Wallet\ReasourseUserWalletCash;
 
-class ResourceCashUserWalletController extends AbstractResourceController
+class ResourceUserWalletCashController extends AbstractResourceController
 {
     /**
      * {@inheritdoc}

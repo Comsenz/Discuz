@@ -5,7 +5,7 @@ declare (strict_types = 1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: ListCashUserWallet.php XXX 2019-11-10 15:00 zhouzhou $
+ *      Id: ListUserWalletCash.php XXX 2019-11-10 15:00 zhouzhou $
  */
 
 namespace App\Commands\Wallet;
@@ -15,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Arr;
 use App\Models\UserWalletCash;
 
-class ListCashUserWallet
+class ListUserWalletCash
 {
     /**
      * 执行操作的用户.

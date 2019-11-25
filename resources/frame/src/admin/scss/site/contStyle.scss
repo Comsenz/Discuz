@@ -63,18 +63,21 @@
         background-color: $tableHeaderColor;
         display: flex;
         align-items: center;
-        padding-left: 27PX;
+        padding-left: 17PX;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
 
         &__title{
-          margin-left: 20PX;
+          margin-left: 30PX;
           color:$commentColor ;
         }
 
       }
 
+      &-side{
+        width: 100%;
+      }
     }
 
   }
@@ -149,7 +152,7 @@
   内容审核
 */
 
-/*搜索条件输入框标题*/
+/*搜索栏下标题*/
 .cont-review-header__lf-title{
   min-width: 70PX;
   line-height: 36PX;

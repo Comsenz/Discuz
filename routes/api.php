@@ -53,15 +53,17 @@ $route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController:
 |--------------------------------------------------------------------------
 */
 
-$route->get('/users', 'users.list', ApiController\ListUsersController::class);
+$route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
+//$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
 $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileController::class);
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
+
+$route->get('/profile', 'show.profile', ApiController\Users\ProfileController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -182,7 +184,7 @@ $route->post('/attachment', 'attachment.create', ApiController\Attachment\Create
  */
 $route->get('/order/{order_sn}', 'order.resource', ApiController\Order\ResourceOrderController::class);
 $route->post('/order', 'order.create', ApiController\Order\CreateOrderController::class);
-$route->get('/order', 'order.list', ApiController\Order\ListOrderController::class);
+$route->get('/order', 'order.list', ApiController\Order\ListOrdersController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -200,9 +202,11 @@ $route->post('/trade/pay/order/{order_sn}', 'trade.pay.order', ApiController\Tra
 $route->get('/wallet/user/{user_id}', 'wallet.user.resource', ApiController\Wallet\ResourceUserWalletController::class);
 $route->patch('/wallet/user/{user_id}', 'wallet.user.update', ApiController\Wallet\UpdateUserWalletController::class);
 
-$route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateCashUserWalletController::class);
-$route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListCashUserWalletController::class);
-$route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\ReviewCashUserWalletController::class);
+$route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateUserWalletCashController::class);
+$route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListUserWalletCashController::class);
+$route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\UserWalletCashReviewController::class);
+$route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalletLogsController::class);
+/*
 
 /*
 |--------------------------------------------------------------------------

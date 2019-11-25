@@ -13,14 +13,33 @@ class UserWalletCashSerializer extends AbstractSerializer
     {
         return [
             'id' => $model->id,
+            'user_id' => $model->user_id,
             'cash_sn' => $model->cash_sn,
             'cash_charge' => $model->cash_charge,
             'cash_actual_amount' => $model->cash_actual_amount,
             'cash_apply_amount' => $model->cash_apply_amount,
             'cash_status' => $model->cash_status,
             'remark' => $model->remark,
-            'updated_at' => $model->updated_at,
-            'created_at' => $model->created_at,
+            'updated_at' => $this->formatDate($model->updated_at),
+            'created_at' => $this->formatDate($model->created_at),
         ];
+    }
+
+    /**
+     * @param $cash
+     * @return Relationship
+     */
+    protected function user($cash)
+    {
+        return $this->hasOne($cash, UserSerializer::class);
+    }
+
+    /**
+     * @param $cash
+     * @return Relationship
+     */
+    protected function userWallet($cash)
+    {
+        return $this->hasOne($cash, UserWalletSerializer::class);
     }
 }

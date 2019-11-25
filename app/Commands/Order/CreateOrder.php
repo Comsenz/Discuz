@@ -10,16 +10,16 @@ declare (strict_types = 1);
 
 namespace App\Commands\Order;
 
+use App\Exceptions\ErrorException;
+use App\Models\Order;
+use App\Models\PayNotify;
+use App\Models\Thread;
+use App\Models\User;
+use Exception;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
-use App\Exceptions\ErrorException;
-use Exception;
-use App\Models\Order;
-use App\Models\PayNotify;
-use App\Models\User;
-use App\Models\Thread;
 
 class CreateOrder
 {
@@ -60,17 +60,17 @@ class CreateOrder
         // $this->assertCan($this->actor, 'createOrder');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'type'     => 'required|int',
-            'type_id'  => 'required_if:type,'. Order::ORDER_TYPE_REWARD. '|int',
-            'amount'  => 'required_if:type,'. Order::ORDER_TYPE_REWARD. '|numeric|min:0.01'
+            'type'      => 'required|int',
+            'thread_id' => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|int',
+            'amount'    => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
         ]);
 
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
         //订单类型
-        $order_type = (int)$this->data->get('type');
-
+        $order_type = (int) $this->data->get('type');
+        $thread_id = '';
         //收款款人
         $payee_id = '';
         //收款/付款金额
@@ -80,50 +80,52 @@ class CreateOrder
                 //注册订单
                 $payee_id = Order::REGISTER_PAYEE_ID;
                 //订单金额处理
-                $amount = 0.03;//setting获取;
+                $amount = 0.03; //setting获取;
                 break;
             case Order::ORDER_TYPE_REWARD:
                 //主题打赏订单
-                $type_id = (int)$this->data->get('type_id');
+                $thread_id =  $this->data->get('thread_id');
                 //主题
-                $thread = Thread::find($type_id);
+                $thread = Thread::find($thread_id);
                 if (empty($thread)) {
                     throw new ErrorException(app('translator')->get('order.order_post_not_found'), 500);
                 } else {
                     $payee_id = $thread->user_id;
                     //打赏金额
-                    $amount = sprintf("%.2f", (float)$this->data->get('amount'));
+                    $amount = sprintf("%.2f", (float) $this->data->get('amount'));
                 }
                 break;
             default:
                 throw new ErrorException(app('translator')->get('order.order_type_not_found'), 500);
                 break;
         }
+        //支付通知
+        $payment_sn             = $this->getPaymentSn();
+        $pay_notify             = new PayNotify();
+        $pay_notify->payment_sn = $payment_sn;
+        $pay_notify->user_id    = $this->actor->id;
+        //订单
+        $order             = new Order();
+        $order->payment_sn = $payment_sn;
+        $order->order_sn   = $this->getOrderSn();
+        $order->amount     = $amount;
+        $order->user_id    = $this->actor->id;
+        $order->type       = $order_type;
+        $order->thread_id  = $thread_id ? $thread_id : null;
+        $order->payee_id   = $payee_id;
+        $order->remark     = '';
+        $order->status     = 0; //待支付
+
         //开始事务
         $db->beginTransaction();
         try {
-            $payment_sn             = $this->getPaymentSn();
-            $pay_notify             = new PayNotify();
-            $pay_notify->payment_sn = $payment_sn;
-            $pay_notify->user_id    = $this->actor->id;
+            //保存通知数据
             $pay_notify->save();
-            $notify_id = $pay_notify->id;
-
-            $order = new Order();
-            $order->payment_sn = $payment_sn;
-            $order->order_sn   = $this->getOrderSn();
-            $order->amount     = $amount;
-            $order->user_id    = $this->actor->id;
-            $order->type       = $this->data->get('type');
-            $order->type_id    = $this->data->get('type_id');
-            $order->payee_id   = $payee_id;
-            $order->remark     = '';
-            $order->status     = 0; //待支付
-            // 保存订单
+            //保存订单
             $order->save();
             //提交事务
             $db->commit();
-            // 返回数据对象
+            //返回数据对象
             return $order;
         } catch (Exception $e) {
             //回滚事务
@@ -149,7 +151,7 @@ class CreateOrder
      */
     public function getOrderSn()
     {
-        return date('YmdHis', time()).substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        return date('YmdHis', time()) . substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
 
 }

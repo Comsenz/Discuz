@@ -24,14 +24,18 @@
         </div>
       </div>
       <div class="operaBox">
-        <!-- <div class="likeBox">
+        <div class="likeBox" v-if="item.firstPost().likedUsers().length>0">
           <span class="icon iconfont icon-praise-after"></span>
-          <i></i><a href="javascript:;" v-for="fabulous in in themeList.themeData.fabulousList">{{fabulous+','}}</a>&nbsp;等<span>{{items.fabulousNum}}</span>个人觉得很赞
-        </div> -->
-        <!-- <div class="reward">
+          <i></i><a href="javascript:;" v-for="like in item.firstPost().likedUsers()">{{like.username() + ','}}</a>&nbsp;等<span>{{item.firstPost().likeCount()}}</span>个人觉得很赞
+        </div>
+        <div class="likeBox" v-else="">
+        </div>
+        <div class="reward" v-if="item.rewardedUsers().length>0">
           <span class="icon iconfont icon-money"></span>
-          <a href="javascript:;" v-for="reward in themeList.themeData.rewardList">{{reward+','}}</a>
-        </div> -->
+          <a href="javascript:;" v-for="reward in item.rewardedUsers()">{{reward.username()+','}}</a>
+        </div>
+        <div class="reward" v-else="">
+        </div>
         <div class="replyBox">
           <div class="replyCon" v-for="reply in item.lastThreePosts()">
             <a href="javascript:;">{{reply.user().nickname()}}</a>
