@@ -16,8 +16,8 @@ class EventServiceProvider extends BaseEventServiceProvider
         UserVerify::class => [
             WeixinBind::class,
             MobileBind::class
-        ]
-        'App\Events\Users\Registered' => ['App\Listeners\User\BindInvite']
+        ],
+        'App\Events\Users\Registered' => ['App\Listeners\User\BindInvite'],
     ];
 
     protected $subscribe = [

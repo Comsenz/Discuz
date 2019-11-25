@@ -11,8 +11,8 @@ namespace App\Api\Serializer;
 
 use App\Models\Thread;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Tobscure\JsonApi\Relationship;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Tobscure\JsonApi\Relationship;
 
 class ThreadSerializer extends AbstractSerializer
 {

@@ -190,8 +190,8 @@ class ListThreadsController extends AbstractListController
 
             $allRewardedUser = Order::from('orders', 'a')
                 ->leftJoin('users', 'a.user_id', '=', 'users.id')
-                ->whereRaw('( SELECT count( * ) FROM orders WHERE a.type_id = type_id AND a.created_at < created_at ) < ?', [$rewardedLimit])
-                ->whereIn('type_id', $threadIds)
+                ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$rewardedLimit])
+                ->whereIn('thread_id', $threadIds)
                 ->where('status', 1)
                 ->where('type', 2)
                 ->orderBy('a.created_at', 'desc')
@@ -199,7 +199,7 @@ class ListThreadsController extends AbstractListController
                 ->take($rewardedLimit);
 
             $threads->map(function ($thread) use ($allRewardedUser) {
-                $thread->setRelation('rewardedUsers', $allRewardedUser->where('type_id', $thread->id));
+                $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id));
             });
         }
 
