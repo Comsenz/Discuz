@@ -31,13 +31,11 @@ class ListUsersController extends AbstractListController
 
     protected $users;
     protected $url;
-    protected $searcher;
 
-    public function __construct(UserRepository $users, UrlGenerator $url, UserSearcher $searcher)
+    public function __construct(UserRepository $users, UrlGenerator $url)
     {
         $this->users = $users;
         $this->url = $url;
-        $this->searcher = $searcher;
     }
 
 
