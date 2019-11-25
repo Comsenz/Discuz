@@ -192,7 +192,7 @@ class ListThreadsController extends AbstractListController
                 ->leftJoin('users', 'a.user_id', '=', 'users.id')
                 ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$rewardedLimit])
                 ->whereIn('thread_id', $threadIds)
-                ->where('status', 1)
+                ->where('a.status', 1)
                 ->where('type', 2)
                 ->orderBy('a.created_at', 'desc')
                 ->get()
