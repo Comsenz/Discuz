@@ -53,15 +53,17 @@ $route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController:
 |--------------------------------------------------------------------------
 */
 
-$route->get('/users', 'users.list', ApiController\ListUsersController::class);
+$route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
+//$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
 $route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 $route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
 $route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileController::class);
 $route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
 $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
+
+$route->get('/profile', 'show.profile', ApiController\Users\ProfileController::class);
 
 /*
 |--------------------------------------------------------------------------

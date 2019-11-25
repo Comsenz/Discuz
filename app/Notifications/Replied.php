@@ -18,14 +18,16 @@ class Replied extends Notification
 {
     use Queueable;
 
+    public $data;
+
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param array $data
      */
-    public function __construct()
+    public function __construct(array $data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -39,9 +41,8 @@ class Replied extends Notification
         return ['database'];
     }
 
-    public function toDatabase($notifiable){
-        return [
-            'id' => $notifiable->id,
-        ];
+    public function toDatabase()
+    {
+        return $this->data;
     }
 }

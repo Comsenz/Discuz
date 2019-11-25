@@ -112,6 +112,7 @@ CREATE TABLE `users` (
   `password` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mobile` char(11) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `last_login_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `thread_count` int(10) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',

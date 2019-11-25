@@ -9,7 +9,7 @@ use Discuz\Api\Serializer\AbstractSerializer;
 class UserWechatSerializer extends AbstractSerializer
 {
 
-    protected $type = 'userwechats';
+    protected $type = 'wechats';
 
     /**
      * Get the default set of serialized attributes for a model.
