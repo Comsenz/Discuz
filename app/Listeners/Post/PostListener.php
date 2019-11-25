@@ -25,7 +25,7 @@ class PostListener
 
         // 喜欢帖子
         $events->listen(Serializing::class, AddPostLikeAttribute::class);
-        $events->listen(Saving::class, SaveLikesToDatabase::class);
+        $events->subscribe(SaveLikesToDatabase::class);
     }
 
     /**

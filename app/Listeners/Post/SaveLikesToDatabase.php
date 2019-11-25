@@ -9,15 +9,34 @@
 
 namespace App\Listeners\Post;
 
+use App\Events\Post\Deleted;
 use App\Events\Post\Saving;
+use App\Notifications\Liked;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
+use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class SaveLikesToDatabase
 {
     use AssertPermissionTrait;
 
-    public function handle(Saving $event)
+    /**
+     * @param Dispatcher $events
+     */
+    public function subscribe(Dispatcher $events)
+    {
+        $events->listen(Saving::class, [$this, 'whenPostIsSaving']);
+        $events->listen(Deleted::class, [$this, 'whenPostIsDeleted']);
+    }
+
+    /**
+     * @param Saving $event
+     * @throws NotAuthenticatedException
+     * @throws PermissionDeniedException
+     */
+    public function whenPostIsSaving(Saving $event)
     {
         $post = $event->post;
         $actor = $event->actor;
@@ -26,7 +45,7 @@ class SaveLikesToDatabase
         $this->assertRegistered($actor);
 
         if ($post->exists && isset($data['attributes']['isLiked'])) {
-            // $this->assertCan($actor, 'like', $post);
+            $this->assertCan($actor, 'like', $post);
 
             $isLiked = $actor->likedPosts()->withTrashed()->where('post_id', $post->id)->exists();
 
@@ -39,8 +58,27 @@ class SaveLikesToDatabase
                 // 未喜欢且 isLiked 为 true 时，设为喜欢
                 if ($data['attributes']['isLiked']) {
                     $actor->likedPosts()->attach($post->id, ['created_at' => Carbon::now()]);
+
+                    // $post->raise(new PostWasLiked($post, $actor));
+                    $info = [
+                        'username' => $actor->username,
+                        'user_id' => $actor->id,
+                        'info' => '点赞了我的帖子',
+                        'post_id' => $post->id,
+                        'thread_id' => $post->thread_id,
+                        'post_content' => $post->content,
+                    ];
+                    $post->user->notify(new Liked($info));
                 }
             }
         }
+    }
+
+    /**
+     * @param Deleted $event
+     */
+    public function whenPostIsDeleted(Deleted $event)
+    {
+        $event->post->likedUsers()->detach();
     }
 }
