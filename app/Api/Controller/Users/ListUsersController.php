@@ -91,7 +91,7 @@ class ListUsersController extends AbstractListController
         //设置meta
         $document->setMeta([
             'total' => $count,
-            'size' => $this->limit
+            'size' => (int)$limit
         ]);
 
         return $data;
