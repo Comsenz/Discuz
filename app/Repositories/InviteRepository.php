@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: InviteRepository.php 28830 2019-10-12 15:58 chenkeke $
+ *      Id: InviteRepository.php 28830 2019-11-19 15:58 yanchen $
  */
 
 namespace App\Repositories;
@@ -46,5 +46,28 @@ class InviteRepository extends AbstractRepository
         return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
     }
 
+    /**
+     * Verify the invitation code is available
+     * @param $code
+     */
+    public function verifyCode($code){
 
+        return Invite::where([['code', '=', $code], ['to_user_id', '=', '0'], ['endtime', '>', time()], ['status', '=', '1']])->first();
+    }
+
+    /**
+     * Use the invitation code
+     * @param $user_id
+     * @param $to_user_id
+     */
+    public function useCode($user_id, $to_user_id){
+
+    }
+
+    /**
+     *
+     */
+    public function create(){
+
+    }
 }
