@@ -12,7 +12,7 @@ namespace App\Events\StopWord;
 use App\Models\StopWord;
 use App\Models\User;
 
-class Created
+class  Created
 {
     /**
      * @var StopWord
