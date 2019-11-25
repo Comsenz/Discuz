@@ -10,6 +10,7 @@
 namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
+use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -70,6 +71,7 @@ class ListPostsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $actor = $request->getAttribute('actor');
         $limit = $this->extractLimit($request);
         $include = $this->extractInclude($request);
 
@@ -79,6 +81,8 @@ class ListPostsController extends AbstractListController
             'postCount' => $this->postCount,
             'pageCount' => ceil($this->postCount / $limit),
         ]);
+
+        Post::setStateUser($actor);
 
         return $posts->load($include);
     }

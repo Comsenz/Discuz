@@ -61,6 +61,8 @@ class PostSerializer extends AbstractSerializer
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
         }
 
+        Post::setStateUser($this->actor);
+
         return $attributes;
     }
 

@@ -28,7 +28,7 @@ class UpdatePostController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $include = [
-        'editedUser',
+        'user',
         'thread'
     ];
 
@@ -50,12 +50,18 @@ class UpdatePostController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
+        $postId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
-            new EditPost($id, $actor, $data)
+        $post = $this->bus->dispatch(
+            new EditPost($postId, $actor, $data)
         );
+
+        $post->setStateUser($actor);
+
+        $post = $post->load(array_merge($this->include, ['user', 'likeState']));
+
+        return $post;
     }
 }
