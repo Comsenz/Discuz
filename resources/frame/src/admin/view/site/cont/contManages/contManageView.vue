@@ -1,47 +1,6 @@
 <template>
     <div class="cont-manage-box">
       <div class="cont-manage-theme">
-        <!--<el-table
-          ref="multipleTable"
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column
-            type="selection"
-            width="50">
-          </el-table-column>
-
-          <el-table-column
-            label="主题列表"
-            prop="theme"
-            min-width="250">
-          </el-table-column>
-
-          &lt;!&ndash;<el-table-column
-            label="作者"
-            prop="author">
-          </el-table-column>
-
-          <el-table-column
-            label="回复"
-            prop="prply">
-          </el-table-column>
-
-          <el-table-column
-            label="浏览"
-            prop="browse">
-          </el-table-column>
-
-          <el-table-column
-            label="最后回复"
-            min-width="100"
-            prop="finalPost">
-          </el-table-column>&ndash;&gt;
-
-        </el-table>-->
-
         <div class="cont-manage-theme__table">
           <div class="cont-manage-theme__table-header">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
@@ -100,8 +59,6 @@
           </ContArrange>
 
         </div>
-
-
       </div>
 
       <div class="cont-manage-operating">

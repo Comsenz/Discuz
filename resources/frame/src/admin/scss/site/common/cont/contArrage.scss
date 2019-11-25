@@ -85,7 +85,9 @@
         //min-height: 78PX;
         //flex: 1;
         //min-height: 70PX;
-        border-bottom: 1PX solid $tableBorderColor;
+
+        //border-bottom: 1PX solid $tableBorderColor;
+
         padding: 15PX 20PX;
         line-height:20PX;
         color: $titleColor;
@@ -112,6 +114,7 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         cursor: pointer;
+        border-top: 1PX solid $tableBorderColor;
         &:hover{
           background-color: aliceblue;
           box-shadow: 0 0 8PX 0 rgba(232,237,250,.6);
@@ -145,6 +148,7 @@
         padding: 15PX 21PX;
         display: flex;
         align-items:center;
+        border-top: 1PX solid $tableBorderColor;
       }
 
     }
