@@ -8,24 +8,9 @@ export default {
   },
 
   methods:{
-
-   /* contClick(){
-      let control = this.$refs.contControl;
-
-      let controlHeight = control.getBoundingClientRect().top;  //元素顶部到浏览器顶部距离
-      let windowHeight = window.innerHeight;  //获取浏览器可视高度
-
-      console.log(controlHeight);
-      console.log(windowHeight);
-    },*/
-
     showCont(){
       this.mainHeight = this.$slots.main[0].elm.offsetHeight;
-
       this.showContStatus = !this.showContStatus;
-
-      // console.log(this.$slots.main[0].elm.offsetHeight + this.$slots.main[0].elm.getBoundingClientRect().top);
-      // console.log(window.innerHeight);
 
       /*
       *  获取内容高度+内容高度距离顶部距离，总值大于可视范围就会吸底
@@ -41,27 +26,25 @@ export default {
         this.showBottomStatus = false
       }
 
-
-      // console.log(this.showBottomStatus);
-
     },
 
-    conlog(){
-      console.log(123);
-
-      console.log(this.$refs.contControl.scrollWidth);
-
-      // console.log(this.$refs.contMain.clientWidth);
-
+    /*
+    *   监听滚动条方法
+    * */
+    handleScroll(){
+      if (this.$slots.main[0].elm.offsetHeight + this.$slots.main[0].elm.getBoundingClientRect().top < window.innerHeight) {
+        this.showBottomStatus = false;
+      }else if (this.showContStatus){
+        this.showBottomStatus = true;
+      }
     }
 
   },
   mounted(){
     this.mainHeight = this.$slots.main[0].elm.offsetHeight;
 
-    window.addEventListener('resize', this.conlog);
-
-    // console.log(window.onresize);
+    /*添加滚动条监听事件*/
+    window.addEventListener('scroll', this.handleScroll,true)
 
   }
 

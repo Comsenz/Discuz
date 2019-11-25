@@ -45,7 +45,11 @@
             <slot  name="main"></slot>
           </div>
           <div ref="contControl" v-if="mainHeight > 78" class="cont-block-control" :class="showBottomStatus?'is-bottom-out':''" @click="showCont" >
-            <p>{{showContStatus?"隐藏内容":"显示内容"}}</p>
+            <p>
+
+              <span class="iconfont icondown-menu" :class="showBottomStatus?'show-down':''"></span>
+              {{showContStatus?"收起详情":"展开详情"}}
+            </p>
           </div>
           <div class="cont-arrange__rt-main-footer" v-if="$slots.footer">
             <slot name="footer"></slot>

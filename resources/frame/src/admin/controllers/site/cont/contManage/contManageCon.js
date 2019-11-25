@@ -95,9 +95,14 @@ export default {
     handleCheckAllChange(val) {
       this.checkedCities = val ? cityOptions : [];
       this.isIndeterminate = false;
-    },
+    }
 
   },
+
+  mounted(){
+
+  },
+
   components:{
     Card,
     ContArrange
