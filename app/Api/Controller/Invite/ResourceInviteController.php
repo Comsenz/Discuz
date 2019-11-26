@@ -12,6 +12,7 @@ namespace App\Api\Controller\Invite;
 
 
 use App\Api\Serializer\InviteSerializer;
+use App\Models\Invite;
 use App\Models\StopWord;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
@@ -30,6 +31,6 @@ class ResourceInviteController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return StopWord::findOrFail(Arr::get($request->getQueryParams(), 'id'));
+        return Invite::findOrFail(Arr::get($request->getQueryParams(), 'id'));
     }
 }

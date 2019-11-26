@@ -76,7 +76,6 @@ class User extends Model
     public static function register(array $data)
     {
         $user = new static;
-        unset($data['code']);
         $user->attributes = $data;
         $user->setPasswordAttribute($user->password);
         return $user;
