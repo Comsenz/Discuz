@@ -3,7 +3,7 @@
 import Vue from "vue";
 import axios from "axios";
 import appConfig from "../../config/appConfig";
-
+import browserDb from 'webDbHelper';
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -24,9 +24,10 @@ axios.interceptors.response.use(
    //      return Promise.reject(error)
   	// }
     return Promise.reject(error);
-  }
-)
 
+  }
+
+)
 /**
  * 根据api key 获取api 地址
  * @param  {[type]} key [description]
@@ -78,6 +79,8 @@ const appFetch = function(params, options) {
 	let defaultHeaders = {
 		// 'Content-Type': 'application/x-www-form-urlencoded',
     'Content-Type': 'application/json',
+    // 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiI1MGM3ZGQxNDFlMzAyMThhYjBiMDNmNGE1NDUyMWE1YWMzMmQxODQzN2U3MTg0OTM4NTE3ZmNhYzNkZGYwNWZmZTBkMGIwYTJhYmI1ZTlhMSIsImlhdCI6MTU3NDY2NzE4NCwibmJmIjoxNTc0NjY3MTg0LCJleHAiOjE1NzcyNTkxODQsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.FOz9DDw-WE0LoiEb0TeG9Y0xCW-SLNRJaYC91tmgJD-iGqXq7E-ijR9h2zwTk3hFG0uXOiyh9vZw6UeuxMHX_4jU1KejHWkgifgdXJtMR4LC3vNLkIaLZKouPzOU4q2gYYU7bIJHaeqh5we6kxG4w2vki6RGEw3oGNy9j5gP43yyIa3EvnUkwdugPElihh-5EDbcLC4S3ra3vgFDZ99ECC9DWVTKQXmVJdlSEqGEsxYJIsHRIs8J2tNhdTmI0YBUubPFzlE9jisInXtRjatYUuA2qGszkG5GCCE-eia0pTdzfF3qhwsrKAs7rr94c_AT55fcvXsGD55W_5LrHASeIw',
+    'Authorization':'Bearer ' + browserDb.getLItem('Authorization'),
     //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
 	};
 	if(params.headers) {
@@ -98,7 +101,7 @@ const appFetch = function(params, options) {
 
 	return axios(params).then(data => {return data.data}, errors => {
       let requestError = errors.response;
-
+      // alert(requestError.status +'3456');
       let children;
       switch (requestError.status) {
         case 422:
@@ -106,6 +109,9 @@ const appFetch = function(params, options) {
             .map(error => [error.detail, '<br/>'])
             .reduce((a, b) => a.concat(b), [])
             .slice(0, -1);
+          break;
+        case 400:
+
           break;
 
         case 401:
@@ -121,15 +127,15 @@ const appFetch = function(params, options) {
         case 429:
           children = 'rate_limit_exceeded_message';
           break;
-
         default:
           children = 'generic_message';
       }
-      // console.log(children.toString());
-      let msg = children.toString().replace(/,/g,'');
-      app.$toast({type: 'html', 'message': msg});
 
-      return Promise.reject(error);
+      // console.log(children.toString());
+      // let msg = children.toString().replace(/,/g,'');  //去掉字符串的逗号
+      app.$toast({type: 'html', 'message': children.toString()});
+
+      return Promise.reject(requestError.data);
   });
 }
 

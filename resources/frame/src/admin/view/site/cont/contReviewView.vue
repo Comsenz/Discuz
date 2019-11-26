@@ -61,7 +61,12 @@
     </div>
 
     <div class="cont-review-table">
-      <ContArrange >
+      <ContArrange
+        author="小虫"
+        theme="站长圈"
+        finalPost="2019-1-1 12:00"
+        ip="111.123.204.10"
+      >
         <div class="cont-review-table__side" slot="side">
           <el-checkbox-group v-model="checkList">
             <el-checkbox label="通过"></el-checkbox>
@@ -70,7 +75,7 @@
           </el-checkbox-group>
         </div>
 
-        <div class="cont-review-table__header" slot="header">
+        <!--<div class="cont-review-table__header" slot="header">
 
           <div>
             <p class="desc">
@@ -92,9 +97,11 @@
             <el-button type="text">编辑</el-button>
           </div>
 
-        </div>
+        </div>-->
 
         <div class="cont-review-table__main" slot="main">
+          就是肯定就是开绿灯解放了撒可见度分厘卡世界的士大夫胜多负少士大夫胜多负少分厘卡即使到了附件商店困了就睡了发商店了
+          就是肯定就是开绿灯解放了撒可见度分厘卡世界的士大夫胜多负少士大夫胜多负少分厘卡即使到了附件商店困了就睡了发商店了
           就是肯定就是开绿灯解放了撒可见度分厘卡世界的士大夫胜多负少士大夫胜多负少分厘卡即使到了附件商店困了就睡了发商店了
         </div>
 
@@ -119,6 +126,12 @@
               </el-option>
             </el-select>
           </div>
+
+          <div class="cont-review-table__footer__bottom">
+            <el-button type="text">查看</el-button>
+            <el-button type="text">编辑</el-button>
+          </div>
+
         </div>
 
       </ContArrange>

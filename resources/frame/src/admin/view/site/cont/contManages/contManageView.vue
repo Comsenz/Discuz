@@ -1,46 +1,64 @@
 <template>
     <div class="cont-manage-box">
       <div class="cont-manage-theme">
-        <el-table
-          ref="multipleTable"
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column
-            type="selection"
-            width="50">
-          </el-table-column>
+        <div class="cont-manage-theme__table">
+          <div class="cont-manage-theme__table-header">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
+            <p class="cont-manage-theme__table-header__title">主题列表</p>
+          </div>
 
-          <el-table-column
-            label="主题"
-            prop="theme"
-            min-width="250">
-          </el-table-column>
+          <ContArrange
+            author="小虫"
+            theme="站长圈"
+            prply="123"
+            browse="456"
+            last="奶罩"
+            finalPost="2019-1-1 12:00"
+          >
 
-          <el-table-column
-            label="作者"
-            prop="author">
-          </el-table-column>
+            <div class="cont-manage-theme__table-side" slot="side">
+              <el-checkbox ></el-checkbox>
+            </div>
 
-          <el-table-column
-            label="回复"
-            prop="prply">
-          </el-table-column>
+            <div style="line-height: 20PX;" slot="main">
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+            </div>
+          </ContArrange>
 
-          <el-table-column
-            label="浏览"
-            prop="browse">
-          </el-table-column>
-
-          <el-table-column
-            label="最后回复"
-            min-width="100"
-            prop="finalPost">
-          </el-table-column>
-
-        </el-table>
+        </div>
       </div>
 
       <div class="cont-manage-operating">
@@ -49,9 +67,9 @@
           :data="operatingList"
           tooltip-effect="dark"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
         >
           <el-table-column
+            label-class-name="cont-manage-operating__table-label"
             label="操作"
             prop="theme"
             min-width="250">
@@ -100,7 +118,7 @@
 
 <script>
 import '../../../../scss/site/contStyle.scss';
-import contManageCon from '../../../../controllers/site/cont/contManageCon'
+import contManageCon from '../../../../controllers/site/cont/contManage/contManageCon'
 export default {
     name: "cont-manage-view",
   ...contManageCon

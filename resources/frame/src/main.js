@@ -4,7 +4,6 @@
 import Vue from 'vue';
 import "babel-polyfill";
 import 'amfe-flexible/index.js'
-Vue.config.devtools = true;
 //将jquery 放入全局变量
 import jQuery from "jquery";
 window.$ = jQuery;
@@ -16,9 +15,9 @@ import './extend/viewBase/vantuiInit';   //引入vant组件
 import '../static/js/rem'   //引入Rem配置
 
 
-import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
-import './extend/viewBase/elementuiInit'; //引入element组件
-import './admin/scss/modules/element-variables.scss'  //引入主题样式
+// import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
+// import './extend/viewBase/elementuiInit'; //引入element组件
+// import './admin/scss/modules/element-variables.scss'  //引入主题样式
 
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
@@ -30,7 +29,10 @@ import Store from "./common/Store";
 import Thread from './common/models/Thread';
 import User from './common/models/User';
 import Post from './common/models/Post';
-import moment from 'moment'//导入文件 momnet时间转换
+import moment from 'moment';                  //导入文件 momnet时间转换
+import utils from "./common/urlGet";         //获取url参数
+import VueLazyload from 'vue-lazyload';       //图片懒加载
+
 import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
@@ -42,13 +44,19 @@ import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 import axios from 'axios';
 Vue.prototype.axios = axios;
 Vue.prototype.$moment = moment;//时间转换-赋值使用
+Vue.config.devtools = true;
 moment.locale('zh-cn');//时间转换-需要汉化
+
+Vue.use(VueLazyload, {
+  // loading: require('img/loading.png'),//加载中图片，一定要有，不然会一直重复加载占位图
+  // error: require('img/error.png')  //加载失败图片
+});
 Vue.prototype.apiStore = new Store({
   'threads': Thread,
   'users': User,
   'posts': Post
 });
-
+Vue.prototype.$utils = utils; //注册全局方法
 
 //实例化根目录
 const appRouter = RConfig.init();

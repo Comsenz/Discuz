@@ -54,7 +54,7 @@
         </div>
       </el-aside>
 
-      <el-main class="index-main-con__main">
+      <el-main ref="indexMainCon" class="index-main-con__main">
 
         <div class="index-main-con__main-title">
           <h1>{{indexTitle}}</h1>

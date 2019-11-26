@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Api\Serializer;
 
-use Discuz\Api\Serializer\AbstractSerializer; 
+use Discuz\Api\Serializer\AbstractSerializer;
 
 class OrderSerializer extends AbstractSerializer
 {
@@ -19,9 +19,13 @@ class OrderSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'order_sn' => $model->order_sn,
-            'amount'   => $model->amount,
-            'status'   => $model->status,
+            'order_sn'   => $model->order_sn,
+            'amount'     => $model->amount,
+            'status'     => $model->status,
+            'type'       => $model->type,
+            'thread_id'    => $model->thread_id,
+            'updated_at' => $this->formatDate($model->updated_at),
+            'created_at' => $this->formatDate($model->created_at),
         ];
     }
 
@@ -33,4 +37,14 @@ class OrderSerializer extends AbstractSerializer
     {
         return $this->hasOne($order, UserSerializer::class);
     }
+
+    /**
+     * @param $order
+     * @return Relationship
+     */
+    protected function thread($order)
+    {
+        return $this->hasOne($order, ThreadSerializer::class);
+    }
+
 }

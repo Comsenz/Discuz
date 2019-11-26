@@ -17,6 +17,7 @@ class CreateUserWalletListener
     public function handle(Registered $event)
     {
         $user_wallet = UserWallet::where('user_id', $event->user->id)->first();
+
         if (empty($user_wallet)) {
             UserWallet::createUserWallet($event->user->id);
         }

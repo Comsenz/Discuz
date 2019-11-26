@@ -56,4 +56,9 @@ class Group extends Model
     {
         return $this->hasMany(GroupPermission::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

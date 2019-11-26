@@ -1,3 +1,4 @@
+
 /**
  * 移动端圈子首页控制器
  */
@@ -8,6 +9,7 @@ export default {
 			loginBtnFix: true,
 			// footShow: true,
 			fourHeader: true,
+      isWx:'1',
       // replyTag: false,
 			themeChoList: [
 				{
@@ -69,28 +71,78 @@ export default {
 
         // ]
       ],
-
+      themeNavListCon:[
+        { text: '选项111' },
+        { text: '选项222' },
+        { text: '选项333' }
+      ],
       currentData:{},
       replyTagShow: false,
 		}
 	},
   created:function(){
     this.loadThemeList();
+    this.load();
   },
 	methods: {
+    load(){
+      let isWeixin =this.appCommonH.isWeixin().isWeixin;
+      if(isWeixin == true){
+        //微信登录时
+        // alert('微信登录');
+        this.isWx = 2;
+
+      } else {
+        //手机浏览器登录时
+        console.log('手机浏览器登录');
+        this.isWx = 1;
+      }
+      return this.isWx;
+    },
+
+
     loadThemeList(){
+      this.appFetch({
+        url:"classify",
+        method:"get",
+        data:{
+          "data": {
+            "attributes": {
+              username:this.userName,
+              password:this.password,
+            },
+          }
+        }
+      }).then(res => {
+          console.log(res);
+
+          // this.paramsObj = {
+          //   userId:this.userId
+          // };
+          // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
+       });
+
+
+
       // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
 
       const params = {};
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user';
+      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
         // console.log(data[0].user().createdAt());
         // console.log(data[0].firstPost().data.attributes.createdAt);
-
+        // console.log(data[0].firstPost());
+        // console.log(data[0].rewardedUsers()[0]);
         this.themeListCon = data;
         console.log(this.themeListCon);
 
       });
+      //请求主题导航列表
+      // this.apiStore.find('themeNavListCon', params).then(data => {
+      //   this.themeNavListCon = data;
+      //   console.log(this.themeNavListCon);
+
+      // });
 
       // const post = new Post();
       // post.content = 'askdlfj';
@@ -127,8 +179,8 @@ export default {
     },
 
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
-    	// 比较他们的大小来确定是否添加fixedHead样式
-    	// 比较他们的大小来确定是否添加fixedNavBar样式
+    // 比较他们的大小来确定是否添加fixedHead样式
+    // 比较他们的大小来确定是否添加fixedNavBar样式
 		footFix() {
 	    	// console.log(this.$route.meta.oneHeader);
 	    	if(this.$route.meta.oneHeader){
@@ -140,23 +192,38 @@ export default {
 		          this.loginBtnFix = true;
 		        };
 	    	}
-
 	    },
 
 	    choTheme() {
 	    	console.log('筛选');
 	    },
 	    //跳转到登录页
-	    loginJump:function(){
-	    	console.log(this.oneHeader);
-	    	// alert('跳转到登录页');
-	    	this.$router.push({ path:'login-user'});
-	    	// console.log(this.$router);
-	    },
-	    //跳转到注册页
-	    registerJump:function(){
-	    	// alert('跳转到注册页');
-	    	this.$router.push({ path:'sign-up'});
+	    loginJump:function(isWx){
+        let wxCode =this.load();
+
+        const that = this;
+        that.$router.push({
+          path:'wechat',
+        });
+        if(wxCode ==1){
+          this.$router.push({ path:'login-user'});
+        } else if(wxCode ==2){
+          this.appFetch({
+            url:"weixin",
+            method:"get",
+            data:{
+              // attributes:this.attributes,
+            }
+          }).then(res=>{
+            alert(1234);
+            // alert(this.showScreen);
+            // console.log(res.data.attributes.location);
+            // window.location.href = res.data.attributes.location;
+            this.$router.push({ path:'wechat'});
+          });
+
+        }
+
 	    },
 	    postTopic:function(){
 	    	// alert('跳转到发布主题页');
@@ -188,6 +255,6 @@ export default {
 	},
 	beforeRouteLeave (to, from, next) {
 	   window.removeEventListener('scroll', this.footFix, true)
-	   // next()
+	   next()
 	}
 }

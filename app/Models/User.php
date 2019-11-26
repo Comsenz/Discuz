@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Discuz\Auth\Guest;
+use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,6 +76,7 @@ class User extends Model
     public static function register(array $data)
     {
         $user = new static;
+        unset($data['code']);
         $user->attributes = $data;
         $user->setPasswordAttribute($user->password);
         return $user;
@@ -112,6 +114,13 @@ class User extends Model
         return $this;
     }
 
+    public function changeAvatarPath($path)
+    {
+        $this->avatar = $path;
+
+        return $this;
+    }
+
     /**
      * Check if a given password matches the user's password.
      *
@@ -139,6 +148,15 @@ class User extends Model
         $this->attributes['password'] = $value ? static::$hasher->make($value) : '';
     }
 
+    public function getAvatarAttribute($value)
+    {
+        if ($value && strpos($value, '://') === false) {
+            return app(UrlGenerator::class)->to('/storage/avatars/'.$value);
+        }
+
+        return $value;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | 常用方法
@@ -147,7 +165,7 @@ class User extends Model
     /**
      * 重载通知
      */
-    public function notify($instance){;
+    public function notify($instance){
         app(DiscuzChannelManager::class)->send($this, $instance);
     }
     /**

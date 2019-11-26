@@ -17,11 +17,13 @@ class UserSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
+            'id' => $model->id,
             'username'    => $model->username,
 //            'nickname'    => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
             'mobile'      => $model->mobile,
-            // 'avatarUrl'   => $model->avatar_url,
+             'avatarUrl'   => $model->avatar,
 //            'unionId'     => $model->union_id,
+            'threadCount' => $model->thread_count,
             'lastLoginIp' => $model->last_login_ip,
             'createdAt'   => $this->formatDate($model->created_at),
             'updatedAt'   => $this->formatDate($model->updated_at),
@@ -31,5 +33,10 @@ class UserSerializer extends AbstractSerializer
     public function wechat($user)
     {
         return $this->hasOne($user, UserWechatSerializer::class);
+    }
+
+    public function groups($user)
+    {
+        return $this->hasMany($user,GroupSerializer::class);
     }
 }

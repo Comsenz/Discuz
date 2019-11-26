@@ -21,12 +21,12 @@ trait NotifyTrait
 	 * 支付成功，后续操作
 	 * @param  string $payment_sn 订单编号
 	 * @param  string $trade_no 支付平台交易号
+     * @return Order
 	 */
 	public function paymentSuccess($payment_sn, $trade_no)
 	{
         //查询订单
         $order_info = Order::where('status', Order::ORDER_STATUS_PENDING)->where('payment_sn', $payment_sn)->first();
-
         if (!empty($order_info)) {
 	        //修改通知数据
 	        $pay_notify_result = PayNotify::where('payment_sn', $payment_sn)
@@ -36,7 +36,7 @@ trait NotifyTrait
 
             if ($order_info->type == Order::ORDER_TYPE_REGISTER) {
                 //注册时，返回支付成功。
-                return true;
+                return $order_info;
             }
             //订单金额
             $order_amount = $order_info->amount;
@@ -59,7 +59,9 @@ trait NotifyTrait
             $user_wallet_log = UserWalletLog::createWalletLog($payee_id, $payee_change_available_amount, 0, $change_type, app('translator')->get($change_type_lang));
 
         	//圈主分成
-        	return true;
+            //
+        	return $order_info;
         }
+        return false;
 	}
 }

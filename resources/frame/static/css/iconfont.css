@@ -111,3 +111,10 @@
 .icon-choice-item:before {
   content: "\e61f";
 }
+.icon-keyboard:before {
+  content: "\e620";
+}
+
+.icon-close:before {
+  content: "\e621";
+}

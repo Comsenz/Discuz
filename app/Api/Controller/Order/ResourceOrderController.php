@@ -27,6 +27,14 @@ class ResourceOrderController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
+    public $include = [
+        'user',
+        'thread'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $order_sn = Arr::get($request->getQueryParams(), 'order_sn');

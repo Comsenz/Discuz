@@ -26,7 +26,7 @@ class SaveFavoriteToDatabase
         $this->assertRegistered($actor);
 
         if ($thread->exists && isset($data['attributes']['isFavorite'])) {
-            // $this->assertCan($actor, 'favorite', $thread);
+            $this->assertCan($actor, 'favorite', $thread);
 
             $isFavorite = $actor->favoriteThreads()->withTrashed()->where('thread_id', $thread->id)->exists();
 

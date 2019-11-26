@@ -43,6 +43,9 @@ class WeixinLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+
+        $actor = $request->getAttribute('actor');
+
         $this->socialite->setRequest($request);
 
         $driver = $this->socialite->driver('weixin');
@@ -58,6 +61,9 @@ class WeixinLoginController extends AbstractResourceController
 
         if(!$weixinUser) {
             $user->user['privilege'] = serialize($user->user['privilege']);
+            if($actor->exists) {
+                $user->user['user_id'] = $actor->id;
+            }
             UserWechat::create($user->user);
 
             $this->error($user);

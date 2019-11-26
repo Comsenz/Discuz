@@ -6,8 +6,6 @@
 export default {
   data:function () {
     return {
-      // activeIndex: '1',
-
       indexTitle:"管理中心首页",  //页面内容标题  /顶部导航下面
       sideTitle:"首页", //左侧菜单标题
 
@@ -296,7 +294,7 @@ export default {
           this.$router.push({path:'/admin/home'});
           break;
         case 'siteSet':
-          this.$router.push({path:'/admin/site-set'});
+          this.$router.push({path:'/admin/site-set',query:{name:'123'}});
           break;
         case 'signUpSet':
           this.$router.push({path:'/admin/sign-up-set'});

@@ -13,8 +13,8 @@ Object.assign(Threads.prototype, {
   title: Model.attribute('title'),
   updatedAt: Model.attribute('updatedAt'),
   viewCount: Model.attribute('viewCount'),
-
   user:Model.hasOne('user'),
   firstPost: Model.hasOne('firstPost'),
-  lastThreePosts: Model.hasMany('lastThreePosts')
+  lastThreePosts: Model.hasMany('lastThreePosts'),
+  rewardedUsers:Model.hasMany('rewardedUsers')
 });

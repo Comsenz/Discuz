@@ -49,8 +49,8 @@ class UpdateUserWallet
     public function __construct($user_id, $actor, Collection $data)
     {
         $this->user_id = $user_id;
-        $this->actor     = $actor;
-        $this->data      = $data->toArray();
+        $this->actor   = $actor;
+        $this->data    = $data->toArray();
     }
 
     /**
@@ -60,60 +60,64 @@ class UpdateUserWallet
      */
     public function handle(Validator $validator, ConnectionInterface $db)
     {
-
         // 验证参数
         $validator_info = $validator->make($this->data, [
-            'operate_type' => 'sometimes|required|integer|between:1,2',//操作类型，1：增加；2：增加
-            'operate_amount' => 'sometimes|required|numeric|min:0.01',//操作金额
-            'wallet_status' => 'sometimes|required|integer|between:0,1',//钱包状态
+            'operate_type'   => 'sometimes|required|integer', //操作类型，1：增加；2：增加
+            'operate_amount' => 'sometimes|required|numeric|min:0.01', //操作金额
+            'wallet_status'  => 'sometimes|required|integer', //钱包状态
         ]);
 
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
+        $operate_type   = Arr::get($this->data, 'operate_type');
+        $operate_amount = Arr::get($this->data, 'operate_amount');
+        $operate_reason = Arr::get($this->data, 'operate_reason');
+        $wallet_status  = Arr::get($this->data, 'wallet_status');
+
+        if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
+            throw new ErrorException(app('translator')->get('wallet.operate_type_error'), 500);
+        }
+
+        if (!is_null($wallet_status) && !in_array($wallet_status, [UserWallet::WALLET_STATUS_NORMAL, UserWallet::WALLET_STATUS_FROZEN])) {
+            throw new ErrorException(app('translator')->get('wallet.operate_status_error'), 500);
+        }
+        //操作金额
+        $change_available_amount = sprintf("%.2f", floatval($operate_amount));
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'UpdateUserWallet');
         //开始事务
         $db->beginTransaction();
         try {
-            $user_wallet   = UserWallet::lockForUpdate()->findOrFail($this->user_id);
-            //是否有修改
-            $change_status = false;
-            //加减操作
-            if (isset($this->data['operate_type'])) {
-                $operate_amount = Arr::get($this->data, 'operate_amount');
-                if ($operate_amount <= 0) {
-                    throw new Exception(app('translator')->get('wallet.operate_amount_error'), 500);
-                }
-                $change_available_amount = sprintf("%.2f", floatval($operate_amount));
-                switch ($this->data['operate_type']) {
-                    case '1': //增加
-                        break;
-                    case '2': //减少
-                        if ($user_wallet->available_amount - $operate_amount < 0) {
-                            throw new Exception(app('translator')->get('wallet.available_amount_error'), 500);
-                        }
-                        $change_available_amount = -$change_available_amount;
-                        break;
-                    default:
-                        throw new Exception(app('translator')->get('wallet.operate_type_error'), 500);
-                        break;
-                }
-                $operate_reason = Arr::get($this->data, 'operate_reason');
-                //添加钱包明细
-                $user_wallet_log = UserWalletLog::createWalletLog($this->user_id, $change_available_amount, 0, 50, $operate_reason);
-                //修改钱包金额
-                $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
-                $change_status                 = true;
+            $user_wallet = UserWallet::lockForUpdate()->findOrFail($this->user_id);
+            switch ($operate_type) {
+                case UserWallet::OPERATE_ADD: //增加
+                    break;
+                case UserWallet::OPERATE_REDUCE: //减少
+                    if ($user_wallet->available_amount - $operate_amount < 0) {
+                        throw new Exception(app('translator')->get('wallet.available_amount_error'), 500);
+                    }
+                    $change_available_amount = -$change_available_amount;
+                    break;
+                default:
+                    throw new Exception(app('translator')->get('wallet.operate_type_error'), 500);
+                    break;
             }
+            //修改钱包金额
+            $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
             //钱包状态修改
-            if (isset($this->data['wallet_status'])) {
-                $change_status              = true;
-                $user_wallet->wallet_status = (int) $this->data['wallet_status'];
+            if (!is_null($wallet_status)) {
+                $user_wallet->wallet_status = (int) $wallet_status;
             }
-            if ($change_status) {
-                $user_wallet->save();
-            }
+            $user_wallet->save();
+            //添加钱包明细
+            $user_wallet_log = UserWalletLog::createWalletLog(
+                $this->user_id,
+                $change_available_amount,
+                0,
+                UserWalletLog::TYPE_EXPEND_ARTIFICIAL,
+                $operate_reason);
+
             //提交事务
             $db->commit();
             return $user_wallet;

@@ -18,4 +18,18 @@ class UserWalletSerializer extends AbstractSerializer
             'wallet_status'    => $model->wallet_status,
         ];
     }
+    
+    public function getId($model) 
+    {
+        return $model->user_id;
+    }
+
+    /**
+     * @param $user_wallet
+     * @return Relationship
+     */
+    protected function user($user_wallet)
+    {
+        return $this->hasOne($user_wallet, UserSerializer::class);
+    }
 }

@@ -6,7 +6,8 @@
     		<span class="icon iconfont icon-back headBack"></span>
     		<h1 class="headTit">详情</h1>
     	</div> -->
-    	<Header></Header>
+    	<!-- <Header></Header> -->
+		<comHeader title="详情"></comHeader>
     	<div class="content">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
@@ -116,11 +117,12 @@
 	    		<a class="icon iconfont icon-review"></a>
 	    	</div>
 	    </div>
-	    <div class="gap"></div>
-	    <div class="loginOpera">
+	    <!-- <div class="gap"></div> -->
+	    <!-- <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册</a>
-	    </div>
+	    </div> -->
+      <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录 / 注册</van-button>
     </div>
 </template>
 
@@ -128,13 +130,12 @@
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 // import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
 import mSiteOpenCircleConCon from '../../../controllers/m_site/circle/openCircleConCon';
-import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "openCircleConView",
     components:{
-    	Header
+    	comHeader
     },
     ...mSiteOpenCircleConCon
 }

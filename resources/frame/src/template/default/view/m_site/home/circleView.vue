@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true"></Header>
+	    <Header :searchIconShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon"></Header>
 	    <div class="padB"></div>
         <div class="gap"></div>
 	    <div class="themeTitBox">
@@ -104,7 +104,7 @@
 
       <ThemeDet :themeList="themeListCon"></ThemeDet>
       <div class="gap"></div>
-	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix">登录 / 注册</van-button>
+	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->
 	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">
 		    <transition name="fade">

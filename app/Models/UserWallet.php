@@ -39,6 +39,18 @@ class UserWallet extends Model
     public $timestamps = true;
 
     /**
+     * 操作钱包
+     */
+    const OPERATE_ADD = 1;//增加操作
+    const OPERATE_REDUCE = 2;//减少操作
+
+    /**
+     * 钱包状态
+     */
+    const WALLET_STATUS_NORMAL = 0;//正常
+    const WALLET_STATUS_FROZEN = 1;//冻结提现
+
+    /**
      * 创建用户钱包
      * @param  int $user_id 用户ID
      * @return UserWallet
@@ -69,7 +81,7 @@ class UserWallet extends Model
      *
      * @return hasMany
      */
-    public function userWallet()
+    public function userWalletCash()
     {
         return $this->hasMany(UserWalletCash::class, 'user_id', 'user_id');
     }

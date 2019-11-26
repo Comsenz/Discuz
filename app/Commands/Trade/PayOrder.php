@@ -104,7 +104,18 @@ class PayOrder
 
         $payment_params     = '';
         $this->payment_type = (int) $this->data->get('payment_type');
-        $order_info->body = '收款';
+        switch ($order_info->type) {
+            case Order::ORDER_TYPE_REGISTER:
+                $order_info->body = '注册';
+                break;
+            case Order::ORDER_TYPE_REWARD:
+                $order_info->body = '打赏';
+                break;
+            default:
+                $order_info->body = '';
+                break;
+        }
+        
         // 支付参数
         $order_info->payment_params = $this->paymentParams($order_info->toArray());
         if (!empty($order_info->payment_params)) {

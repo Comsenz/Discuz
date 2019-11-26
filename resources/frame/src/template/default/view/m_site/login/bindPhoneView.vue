@@ -44,7 +44,7 @@
               placeholder="请输入验证码"
               v-model="verifyNum"
             >
-              <van-button slot="button" @click="sendSmsCode()" size="small" type="default">{{ btnContent }}</van-button>
+              <van-button slot="button" @click="sendSmsCode()" :class="{'grayBg':isGray}" size="small" type="default">{{ btnContent }}</van-button>
             </van-field>
 
           </van-cell-group>
@@ -52,7 +52,7 @@
 
 
         <div class="bind-phone-btn">
-          <van-button type="primary">提交</van-button>
+          <van-button type="primary" @click="bindPhone()">提交</van-button>
         </div>
 
       </main>
@@ -62,6 +62,7 @@
 
 <script>
 import '../../../scss/m_site/login/loginSignUpModule.scss';
+import  '../../../scss/m_site/mobileIndex.scss';
 import bindPhoneCon from '../../../controllers/m_site/login/bindPhoneCon';
 export default {
     name: "bind-phone-view",
