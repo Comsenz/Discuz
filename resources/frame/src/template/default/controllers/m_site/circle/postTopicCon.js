@@ -1,7 +1,8 @@
 /**
  * 发布主题控制器
  */
-
+import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
     return {
@@ -12,6 +13,9 @@ export default {
       content:'',
       keyboard: false,
       expressionShow: false,
+      keywordsMax: 1000,
+      list: [],
+      footMove: false,
       // winHeight:window.innerHeight,
       images_jinri: [
               {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323031&di=3929e3b520f6481e305657c9974531c4&imgtype=0&src=http%3A%2F%2Fpics5.baidu.com%2Ffeed%2F5366d0160924ab189edfd7000e457ec87a890b7b.jpeg%3Ftoken%3D56b0caae9d228ba8aca8b93aceb5a658%26s%3D12705285C45AA7DC7CC9F5860300F085'},
@@ -27,33 +31,24 @@ export default {
     }
   },
 
-  // mounted(){
-  // //挂载浏览器高度获取方法
-  //   const that =this
-  //   window.onresize = () => {
-  //     return (() => {
-  //       that.winHeight = window.innerHeight
-  //       console.log(that.winHeight)
-
-  //     })()
-  //   }
-  //   // this.$refs.nav.style.height=this.winHeight+'px'
-  // },
-  // watch:{
-  //   //监控浏览器高度变化
-  //   winHeight(val){
-  //     this.winHeight =val;
-  //     console.log(this.winHeight)
-  //     // this.$refs.nav.style.height=this.winHeight+'px'
-  //   }
-  // },
-  // created(){
-  //   console.log(this.winHeight)
-  // },
+  mounted () {
+      this.$nextTick(() => {
+        let textarea = this.$refs.textarea;
+        textarea.focus();
+        let prevHeight = 300;
+        textarea && autoTextarea(textarea, 5, 0, (height) => {
+          height += 20;
+          if (height !== prevHeight) {
+            prevHeight = height;
+            let rem = height / rootFontSize;
+            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+          }
+        });
+      })
+  },
 
 
   methods: {
-
     publish(){
       this.appFetch({
         url:"threads",
@@ -75,9 +70,34 @@ export default {
         // console.log(err);
       })
     },
+    //输入框自适应高度
+    clearKeywords () {
+      this.keywords = '';
+      this.list = [];
+      let textarea = this.$refs.textarea;
+      let height = 40;
+      let rem = height / rootFontSize;
+      textarea.style.height = `${rem}rem`;
+      rem = (height + 20) / rootFontSize;
+      // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+      textarea.focus();
+    },
+    searchChange: debounce(function () {
+      let trim = this.keywords.trim();
+      if (!trim) {
+        this.list = [];
+        return;
+      }
+      const params = {
+        keywords: this.keywords
+      }
+      // 调api ...
+    }),
+
     addExpression(){
       this.keyboard = !this.keyboard;
       this.expressionShow = !this.expressionShow;
+      this.footMove = !this.footMove;
     },
     backClick() {
       this.$router.go(-1);

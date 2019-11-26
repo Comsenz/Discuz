@@ -6,7 +6,7 @@ import BindPhoneFooter from '../../../view/m_site/common/loginSignUpFooter/login
 export default {
   data:function () {
     return {
-      phoneNum:"18237597790", //手机号
+      phoneNum:"13524405426", //手机号
       verifyNum:"", //验证码
       btnContent:"获取验证码", //获取验证码按钮内文字
       time:1, //发送验证码间隔时间
@@ -53,7 +53,6 @@ export default {
         }
       }).then(res => {
           // console.log(res);
-          var time = this.time;
           this.insterVal = res.data.attributes.interval;
           // console.log(this.insterVal+'555555');
           this.time = this.insterVal;

@@ -8,20 +8,16 @@
       </header>
 
       <div class="post-topic-form">
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic"   placeholder="请输入内容" v-model="content"></textarea>
+        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"></textarea>
         <div class="uploadBox">
-          <div class="" v-model="fileList">
-            <img src="fileList" alt="">
-          </div>
+          <van-uploader v-model="fileList" multiple />
         </div>
       </div>
 
-      <footer class="post-topic-footer">
+      <footer class="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
-           <van-uploader>
-             <van-button icon="photo" type="primary"></van-button>
-           <span  class="icon iconfont icon-picture post-topic-header-icon" ></span></van-uploader>
+           <span  class="icon iconfont icon-picture post-topic-header-icon" ></span>
           <span  class="icon iconfont icon-enclosure post-topic-header-icon" ></span>
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
@@ -44,8 +40,10 @@
                <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
              </van-swipe-item>
           </van-swipe> -->
-          <van-swipe :autoplay="3000" :width="auto">
-            <van-swipe-item>1</van-swipe-item>
+          <van-swipe :autoplay="3000" :width="300">
+            <van-swipe-item>
+              <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
+            </van-swipe-item>
             <van-swipe-item>2</van-swipe-item>
             <van-swipe-item>3</van-swipe-item>
             <van-swipe-item>4</van-swipe-item>
@@ -63,7 +61,9 @@
 <script>
 import '../../../../../../static/css/iconfont.css';
 import '../../../scss/m_site/mobileIndex'
-import postTopicCon from '../../../controllers/m_site/circle/postTopicCon'
+import postTopicCon from '../../../controllers/m_site/circle/postTopicCon';
+import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
     name: "post-topic",
   ...postTopicCon,

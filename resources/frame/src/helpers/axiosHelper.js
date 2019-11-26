@@ -75,7 +75,6 @@ const appFetch = function(params, options) {
 
 	params.withCredentials = true;
   var authVal = browserDb.getLItem('Authorization');
-  console.log(authVal);
   let defaultHeaders;
   if(authVal != '' && authVal != null){
     // alert('bu');
