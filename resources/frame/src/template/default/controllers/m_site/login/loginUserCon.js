@@ -49,10 +49,12 @@ export default {
         }
       }).then(res => {
           this.$toast.success('登录成功');
-          console.log(res);
+          // console.log(res);
           let token = res.data.attributes.access_token;
-          console.log(token)
+          let tokenId = res.data.attributes.id;
+          // console.log(token)
           browserDb.setLItem('Authorization',token);
+          browserDb.setLItem('tokenId',tokenId);
           // console.log(browserDb.getLItem('Authorization'));
           // this.paramsObj = {
           //   userId:this.userId

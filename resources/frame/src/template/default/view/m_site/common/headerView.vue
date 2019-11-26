@@ -40,10 +40,11 @@
    >
       <div class="sideCon">
         <div class="sideUserBox">
-          <img src="../../../../../../static/images/noavatar.gif" class="userHead">
+          <!-- <img src="../../../../../../static/images/noavatar.gif" class="userHead"> -->
+          <img src="avatarUrl" alt="" class="userHead">
           <div class="userDet">
-            <div class="userName">jdhdskhfkdshfkdsh</div>
-            <div class="userPhone">183****0522</div>
+            <div class="userName">{{username}}</div>
+            <div class="userPhone">{{mobile}}</div>
           </div>
           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
         </div>
@@ -83,8 +84,9 @@
 
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
-        <img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
-        <div class="inviteName">Efhdkjfhk</div>
+        <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
+        <img src="avatarUrl" alt="" class="inviteHead">
+        <div class="inviteName">{{username}}</div>
         <p class="inviteWo">邀请您加入</p>
       </div>
       <div class="headOpe">
