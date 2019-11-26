@@ -24,6 +24,7 @@ class UserSerializer extends AbstractSerializer
              'avatarUrl'   => $model->avatar,
 //            'unionId'     => $model->union_id,
             'threadCount' => $model->thread_count,
+            'registerIp' => $model->register_ip,
             'lastLoginIp' => $model->last_login_ip,
             'createdAt'   => $this->formatDate($model->created_at),
             'updatedAt'   => $this->formatDate($model->updated_at),
