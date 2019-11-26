@@ -12,9 +12,12 @@ module.exports = {
   'classify':'/api/classify',   //分类
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表
-  'wallet':'/api/wallet/user/{user_id}',//查看用户钱包
+  'wallet':'/api/wallet/user/1',//查看用户钱包
   'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
+  'walletFrozen':'/api/wallet/log',//冻结金额
+  'orderList':'/api/order',//订单明细
+  'walletDetails':'/api/wallet/log' //钱包明细
   // 'getCircle': '/circle/getCircle', //获取circle信息
 }

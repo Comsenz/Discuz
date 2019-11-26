@@ -15,7 +15,9 @@ export default {
       // stateTitle:'点赞了我',
       // time:"5分钟前",
       // userName:'Elizabeth'
-      user_id:'2'
+      value:'',
+      valueFrozen:'2222',
+      user_id:'1'
     }
   },
   components:{
@@ -29,7 +31,7 @@ export default {
     // this.imgUrl = "../../../../../../../static/images/mytx.png"
   },
   mounted(){
-    // this.wallet()
+    this.wallet()
   },
   methods:{
     myWallet(str){
@@ -46,17 +48,20 @@ export default {
     },
     wallet(){
       this.appFetch({
-        url:' /api/wallet/user/{1}',
+        url:'wallet',
         method:'get',
-        // data:{
-        //   user_id:'1'
-        // }
+        data:{
+          user_id:this.user_id
+        }
       },(res)=>{
         if(res == '200'){
           console.log('成功')
         }else{
           console.log('400')
         }
+      }).then((res)=>{
+        this.value = res.data.attributes.available_amount;
+        this.valueFrozen = res.data.attributes.freeze_amount;
       })
     }
   },

@@ -13,7 +13,8 @@ export default {
       password:'',
       sms:'',
       newphone:'',
-      modifyState:true
+      modifyState:true,
+      bind:'找回密码'
     }
   },
 
@@ -28,11 +29,17 @@ export default {
     nextStep(){
       this.modifyState=!this.modifyState;
     },
-    // modifyPhone(){
+    // modifyPhone(){      //修改手机号
     //   this.appFetch({
-    //     url:'login',
+    //     url:'sendSms',
     //     method:'post',
     //     data:{
+    //       "data": {
+    //         "attributes": {
+    //           mobile:this.phone,
+    //           type:this.bind
+    //         }
+    //       }
 
     //     }
     //   })

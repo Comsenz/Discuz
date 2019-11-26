@@ -5,6 +5,10 @@ import Panenl from '../../../view/m_site/common/panel';
 export default {
   data:function () {
     return {
+      user_id:'1',
+      walletFrozenList:{
+        // date:'2019-08-10 20:30'
+      }
 
     }
   },
@@ -13,8 +17,20 @@ export default {
     FrozenAmountHeader,
     Panenl
   },
-
+  mounted(){
+    this.walletFrozen()
+  },
   methods:{
-
+    walletFrozen(){
+      this.appFetch({
+        url:"walletFrozen",
+        method:"get",
+        data:{
+          
+        }
+      }).then((res)=>{
+        this.walletFrozenList = res.data
+      })
+    }
   }
 }
