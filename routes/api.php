@@ -64,6 +64,7 @@ $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersContr
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
 
 $route->get('/profile', 'show.profile', ApiController\Users\ProfileController::class);
+$route->post('/upload/avatar', 'upload.avatar', ApiController\Users\UploadAvatarController::class);
 
 /*
 |--------------------------------------------------------------------------
