@@ -13,8 +13,8 @@
             </i>
           </div>
         </div>
-        <van-cell title="手机号" is-link value="18645****23" />
-        <van-cell title="密码" is-link value="********" />
+        <van-cell title="手机号" @click="myModify('modify-phone')" is-link value="18645****23" />
+        <van-cell title="密码" @click="myModify('change-pwd')" is-link value="********" />
         <van-cell title="微信" is-link value="小艾" />
       </main>
 

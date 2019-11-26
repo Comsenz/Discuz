@@ -1,5 +1,5 @@
 /**
- * 点赞我的
+ * 我的钱包
  */
 
 import myWalletHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
@@ -15,6 +15,7 @@ export default {
       // stateTitle:'点赞了我',
       // time:"5分钟前",
       // userName:'Elizabeth'
+      user_id:'2'
     }
   },
   components:{
@@ -23,10 +24,41 @@ export default {
     // ContMain,
     // ContFooter
   },
-  methods:{
-
-  },
+ 
   created(){
     // this.imgUrl = "../../../../../../../static/images/mytx.png"
-  }
+  },
+  mounted(){
+    // this.wallet()
+  },
+  methods:{
+    myWallet(str){
+      switch (str) {
+        case 'frozen-amount':
+          this.$router.push('/frozen-amount'); //冻结金额
+          break;
+        case 'withdrawals-record':
+          this.$router.push('/withdrawals-record'); //提现记录
+          break;
+        default:
+          this.$router.push('/');
+      }
+    },
+    wallet(){
+      this.appFetch({
+        url:' /api/wallet/user/{1}',
+        method:'get',
+        // data:{
+        //   user_id:'1'
+        // }
+      },(res)=>{
+        if(res == '200'){
+          console.log('成功')
+        }else{
+          console.log('400')
+        }
+      })
+    }
+  },
+  
 }

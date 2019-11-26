@@ -21,10 +21,22 @@ export default {
     ModifyHeader
   },
 
+  mounted(){
+    // this.modifyPhone()
+  },
   methods:{
     nextStep(){
       this.modifyState=!this.modifyState;
-    }
+    },
+    // modifyPhone(){
+    //   this.appFetch({
+    //     url:'login',
+    //     method:'post',
+    //     data:{
+
+    //     }
+    //   })
+    // }
   }
 
 }

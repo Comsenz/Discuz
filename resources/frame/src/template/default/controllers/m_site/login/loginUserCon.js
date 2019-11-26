@@ -53,6 +53,7 @@ export default {
           };
           let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
           console.log(params);
+          console.log(userId,'1111111111111')
           // this.$router.push({
           //   path:'m_site/bind-phone',
 

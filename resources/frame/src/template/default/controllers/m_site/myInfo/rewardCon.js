@@ -31,5 +31,8 @@ export default {
   },
   created(){
     this.imgUrl = '../../../../../../../static/images/mytx.png';
-  }
+  },
+  mounted:function(){
+
+  },
 }
