@@ -5,14 +5,15 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CreateInvite.php 28830 2019-10-12 15:52 chenkeke $
+ *      Id: CreateClassify.php 28830 2019-10-12 15:52 yanchen $
  */
 
-namespace App\Commands\Invite;
+namespace App\Commands\Emoji;
 
 
 use App\Events\Invite\Saving;
 use App\Models\Invite;
+use App\Models\StopWord;
 use Carbon\Carbon;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
@@ -21,7 +22,7 @@ use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
-class CreateInvite
+class CreateClassify
 {
     use EventsDispatchTrait;
 
@@ -64,35 +65,25 @@ class CreateInvite
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-         $this->assertCan($this->actor, 'createInvite');
-
-        // 生成邀请码
-        $code = Str::random(32);
-        $dateline = Carbon::now()->timestamp;
-        //7天有效期
-        $endtime  = Carbon::now()->addDay(7)->timestamp;
-
-        // 初始数据
-        $invite = Invite::creation(
-            Arr::get($this->data, 'attributes.group_id'),
-            $code,
-            $dateline,
-            $endtime,
-            $this->actor->id ?: 0
+         //$this->assertCan($this->actor, 'createInvite');
+        $stopWord = StopWord::build(
+            Arr::get($this->data, 'attributes.ugc'),
+            Arr::get($this->data, 'attributes.username'),
+            Arr::get($this->data, 'attributes.find'),
+            Arr::get($this->data, 'attributes.replacement'),
+            $this->actor
         );
 
-        // 触发钩子事件
         $this->events->dispatch(
-            new Saving($invite, $this->actor, $this->data)
+            new \App\Events\StopWord\Saving($stopWord, $this->actor, $this->data)
         );
 
-        // 保存
-        $invite->save();
+        $validator->valid($stopWord->getAttributes());
 
-        // 调用钩子事件
-        $this->dispatchEventsFor($invite);
+        $stopWord->save();
 
-        // 返回数据对象
-        return $invite;
+        $this->dispatchEventsFor($stopWord, $this->actor);
+
+        return $stopWord;
     }
 }

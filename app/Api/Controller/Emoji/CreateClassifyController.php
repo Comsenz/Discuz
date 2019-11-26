@@ -5,7 +5,7 @@ declare(strict_types=1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: CreateInviteController.php 28830 2019-10-12 15:43 yanchen $
+ *      Id: CreateClassifyController.php 28830 2019-10-12 15:43 yanchen $
  */
 
 namespace App\Api\Controller\Invite;
@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Contracts\Bus\Dispatcher;
 
-class CreateInviteController extends AbstractCreateController
+class CreateClassifyController extends AbstractCreateController
 {
     /**
      * 返回的数据字段和格式.
@@ -49,7 +49,7 @@ class CreateInviteController extends AbstractCreateController
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(
-            new CreateInvite($actor, $request->getParsedBody()->get('data', []))
+            new CreateC($actor, $request->getParsedBody()->get('data', []))
         );
 
         // 返回结果

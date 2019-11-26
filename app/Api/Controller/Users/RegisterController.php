@@ -45,7 +45,7 @@ class RegisterController extends AbstractCreateController
         $attributes['register_ip'] = $ip;
 
         $this->bus->dispatch(
-            new RegisterUser($request->getAttribute('actor'), $attributes)
+            new RegisterUser($request->getAttribute('actor'), Arr::only($attributes, ['username', 'password','code']))
         );
 
         unset($attributes['password']);
