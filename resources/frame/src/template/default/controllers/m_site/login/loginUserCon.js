@@ -2,8 +2,9 @@
  * 移动端登录控制器
  */
 
-import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
+import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter';
+import browserDb from '../../../../../helpers/webDbHelper';
 
 // import Header from '../../../view/m_site/common/headerView'
 
@@ -27,6 +28,7 @@ export default {
   },
 
   created:function(){
+    console.log(webDbHepler);
   },
 
   mounted:function(){
@@ -50,7 +52,8 @@ export default {
           console.log(res);
           let token = res.data.attributes.access_token;
           console.log(token)
-          // browserDb.setLItem('2222','123');
+          browserDb.setLItem('Authorization',token);
+          // console.log(browserDb.getLItem('Authorization'));
           // this.paramsObj = {
           //   userId:this.userId
           // };

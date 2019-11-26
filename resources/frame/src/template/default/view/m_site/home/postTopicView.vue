@@ -10,14 +10,18 @@
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic"   placeholder="请输入内容" v-model="content"></textarea>
         <div class="uploadBox">
-          <van-uploader v-model="fileList" multiple/>
+          <div class="" v-model="fileList">
+            <img src="fileList" alt="">
+          </div>
         </div>
       </div>
 
       <footer class="post-topic-footer">
         <div class="post-topic-footer-left">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
-           <van-uploader><span  class="icon iconfont icon-picture post-topic-header-icon" ></span></van-uploader>
+           <van-uploader>
+             <van-button icon="photo" type="primary"></van-button>
+           <span  class="icon iconfont icon-picture post-topic-header-icon" ></span></van-uploader>
           <span  class="icon iconfont icon-enclosure post-topic-header-icon" ></span>
         </div>
         <div @click="dClick"  class="post-topic-footer-right">

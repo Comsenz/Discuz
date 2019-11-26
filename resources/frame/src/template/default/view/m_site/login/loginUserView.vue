@@ -60,10 +60,10 @@
 import '../../../../../../static/css/iconfont.css';
 import '../../../scss/m_site/login/loginSignUpModule.scss';
 import loginCon from '../../../controllers/m_site/login/loginUserCon';
-import webDbHepler from '../../../../../helpers/webDbHelper'
+// import webDbHepler from '../../../../../helpers/webDbHelper';
 export default {
     name: "login-view",
-  ...loginCon,
-  ...webDbHepler
+  ...loginCon
+  // ...webDbHepler
 }
 </script>

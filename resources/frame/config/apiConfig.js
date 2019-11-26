@@ -9,6 +9,7 @@ module.exports = {
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
+  'classify':'/api/classify',   //分类
   'threads':'/api/threads',//主题
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表

@@ -3,6 +3,7 @@
 import Vue from "vue";
 import axios from "axios";
 import appConfig from "../../config/appConfig";
+import browserDb from 'webDbHelper';
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -79,7 +80,7 @@ const appFetch = function(params, options) {
 		// 'Content-Type': 'application/x-www-form-urlencoded',
     'Content-Type': 'application/json',
     // 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiI1MGM3ZGQxNDFlMzAyMThhYjBiMDNmNGE1NDUyMWE1YWMzMmQxODQzN2U3MTg0OTM4NTE3ZmNhYzNkZGYwNWZmZTBkMGIwYTJhYmI1ZTlhMSIsImlhdCI6MTU3NDY2NzE4NCwibmJmIjoxNTc0NjY3MTg0LCJleHAiOjE1NzcyNTkxODQsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.FOz9DDw-WE0LoiEb0TeG9Y0xCW-SLNRJaYC91tmgJD-iGqXq7E-ijR9h2zwTk3hFG0uXOiyh9vZw6UeuxMHX_4jU1KejHWkgifgdXJtMR4LC3vNLkIaLZKouPzOU4q2gYYU7bIJHaeqh5we6kxG4w2vki6RGEw3oGNy9j5gP43yyIa3EvnUkwdugPElihh-5EDbcLC4S3ra3vgFDZ99ECC9DWVTKQXmVJdlSEqGEsxYJIsHRIs8J2tNhdTmI0YBUubPFzlE9jisInXtRjatYUuA2qGszkG5GCCE-eia0pTdzfF3qhwsrKAs7rr94c_AT55fcvXsGD55W_5LrHASeIw',
-    'Authorization':this.browserDb.getLItem(key)
+    'Authorization':'Bearer ' + browserDb.getLItem('Authorization'),
     //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
 	};
 	if(params.headers) {

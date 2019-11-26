@@ -101,10 +101,29 @@ export default {
     },
 
 
-
-
-
     loadThemeList(){
+      this.appFetch({
+        url:"classify",
+        method:"get",
+        data:{
+          "data": {
+            "attributes": {
+              username:this.userName,
+              password:this.password,
+            },
+          }
+        }
+      }).then(res => {
+          console.log(res);
+
+          // this.paramsObj = {
+          //   userId:this.userId
+          // };
+          // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
+       });
+
+
+
       // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
 
       const params = {};

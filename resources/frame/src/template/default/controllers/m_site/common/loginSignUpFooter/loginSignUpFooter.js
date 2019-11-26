@@ -8,11 +8,11 @@ export default {
   methods:{
     //忘记密码？找回按钮
     retrieveClick(){
-      this.$router.push('/retrieve-pwd')
+      this.$router.push('retrieve-pwd')
     },
     //注册按钮
     signUpClick(){
-      this.$router.push('/sign-up')
+      this.$router.push('sign-up')
     },
     //注册，绑定微信新账号
     wxSignUpBdClick(){
