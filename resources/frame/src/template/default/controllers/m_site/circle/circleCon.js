@@ -75,6 +75,19 @@ export default {
         { text: '选项111' },
         { text: '选项222' },
         { text: '选项333' }
+        // {
+        //     "type": "classify",
+        //     "id": "6",
+        //     "attributes": {
+        //         "id": 6,
+        //         "name": "户外趣事2",
+        //         "icon": "",
+        //         "description": "户外活动，组织，趣事",
+        //         "property": 0,
+        //         "sort": 1,
+        //         "threads": 0
+        //     }
+        // },
       ],
       currentData:{},
       replyTagShow: false,
@@ -101,18 +114,38 @@ export default {
     },
 
 
-
-
-
     loadThemeList(){
+      this.appFetch({
+        url:"classify",
+        method:"get",
+        data:{
+          // "data": {
+          //   "attributes": {
+          //     username:this.userName,
+          //     password:this.password,
+          //   },
+          // }
+        }
+      }).then(res => {
+          console.log(res);
+
+          this.paramsObj = {
+            userId:this.userId
+          };
+          // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
+       });
+
+
+
       // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
 
       const params = {};
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user';
+      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
         // console.log(data[0].user().createdAt());
         // console.log(data[0].firstPost().data.attributes.createdAt);
-
+        // console.log(data[0].firstPost());
+        // console.log(data[0].rewardedUsers()[0]);
         this.themeListCon = data;
         console.log(this.themeListCon);
 
@@ -172,7 +205,6 @@ export default {
 		          this.loginBtnFix = true;
 		        };
 	    	}
-
 	    },
 
 	    choTheme() {
@@ -196,28 +228,15 @@ export default {
               // attributes:this.attributes,
             }
           }).then(res=>{
+            alert(1234);
             // alert(this.showScreen);
             // console.log(res.data.attributes.location);
             // window.location.href = res.data.attributes.location;
-            // debugger;
-
-            console.log(this.router);
-            console.log(this.$router)
-
-            this.$router.push({
-              path:'wechat',
-            });
+            this.$router.push({ path:'wechat'});
           });
 
         }
 
-	    },
-	    //跳转到注册页
-	    registerJump:function(){
-	    	// alert('跳转到注册页');
-        console.log(this.$router);
-
-	    	this.$router.push({ path:'sign-up'});
 	    },
 	    postTopic:function(){
 	    	// alert('跳转到发布主题页');
@@ -249,6 +268,6 @@ export default {
 	},
 	beforeRouteLeave (to, from, next) {
 	   window.removeEventListener('scroll', this.footFix, true)
-	   // next()
+	   next()
 	}
 }

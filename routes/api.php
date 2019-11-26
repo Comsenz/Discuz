@@ -64,6 +64,7 @@ $route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersContr
 $route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
 
 $route->get('/profile', 'show.profile', ApiController\Users\ProfileController::class);
+$route->post('/upload/avatar', 'upload.avatar', ApiController\Users\UploadAvatarController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -89,7 +90,7 @@ $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesContro
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
-$route->patch('/threads/batch/{ids}', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
+$route->patch('/threads/batch', 'threads.batch', ApiController\Threads\BatchUpdateThreadsController::class);
 $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThreadController::class);
 $route->delete('/threads/batch/{ids}', 'threads.delete', ApiController\Threads\BatchDeleteThreadsController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
@@ -100,9 +101,10 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 |--------------------------------------------------------------------------
 */
 
+$route->get('/likes', 'likes', ApiController\Posts\ListLikesController::class);
 $route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::class);
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
-$route->patch('/posts/batch/{ids}', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
+$route->patch('/posts/batch', 'posts.batch', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
 $route->delete('/posts/batch/{ids}', 'posts.delete', ApiController\Posts\BatchDeletePostsController::class);
 $route->delete('/posts/{id}', 'posts.delete', ApiController\Posts\DeletePostController::class);
@@ -232,3 +234,4 @@ $route->delete('/notification/{id}', 'notification.delete', ApiController\Notifi
 $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invite', 'invite.create', ApiController\Invite\CreateInviteController::class);
+$route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);

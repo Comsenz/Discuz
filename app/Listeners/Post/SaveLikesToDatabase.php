@@ -53,11 +53,15 @@ class SaveLikesToDatabase
                 // 已喜欢且 isLiked 为 false 时，取消喜欢
                 if (!$data['attributes']['isLiked']) {
                     $actor->likedPosts()->detach($post->id);
+
+                    $post->refreshLikeCount()->save();
                 }
             } else {
                 // 未喜欢且 isLiked 为 true 时，设为喜欢
                 if ($data['attributes']['isLiked']) {
                     $actor->likedPosts()->attach($post->id, ['created_at' => Carbon::now()]);
+
+                    $post->refreshLikeCount()->save();
 
                     // $post->raise(new PostWasLiked($post, $actor));
                     $info = [

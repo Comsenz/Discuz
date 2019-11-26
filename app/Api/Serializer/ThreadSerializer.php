@@ -51,7 +51,7 @@ class ThreadSerializer extends AbstractSerializer
             'likeCount'         => (int) $model->like_count,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
-            'isApproved'        => (bool) $model->is_approved,
+            'isApproved'        => (int) $model->is_approved,
             'isSticky'          => (bool) $model->is_sticky,
             'isEssence'         => (bool) $model->is_essence,
             'canApprove'        => $gate->allows('approve', $model),

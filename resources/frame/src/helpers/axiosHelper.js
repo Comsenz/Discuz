@@ -3,6 +3,7 @@
 import Vue from "vue";
 import axios from "axios";
 import appConfig from "../../config/appConfig";
+import browserDb from 'webDbHelper';
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -73,13 +74,28 @@ const appFetch = function(params, options) {
 	}
 
 	params.withCredentials = true;
-
+  var authVal = browserDb.getLItem('Authorization');
+  console.log(authVal);
+  let defaultHeaders;
+  if(authVal != '' && authVal != null){
+    // alert('bu');
+    defaultHeaders = {
+    	// 'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
+      'Authorization':'Bearer ' + authVal,
+      //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+    };
+  } else {
+    // alert('null');
+    defaultHeaders = {
+    	// 'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
+      'Authorization':'',
+      //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+    };
+  }
 	//设置默认header
-	let defaultHeaders = {
-		// 'Content-Type': 'application/x-www-form-urlencoded',
-    'Content-Type': 'application/json',
-    //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
-	};
+
 	if(params.headers) {
 		params.headers = {
 			...defaultHeaders,
@@ -129,8 +145,8 @@ const appFetch = function(params, options) {
       }
 
       // console.log(children.toString());
-      // let msg = children.toString().replace(/,/g,'');
-      app.$toast({type: 'html', 'message': 'asdfsadfsdfsfd'});
+      // let msg = children.toString().replace(/,/g,'');  //去掉字符串的逗号
+      app.$toast({type: 'html', 'message': children.toString()});
 
       return Promise.reject(requestError.data);
   });

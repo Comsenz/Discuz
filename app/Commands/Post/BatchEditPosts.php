@@ -22,13 +22,6 @@ class BatchEditPosts
     use EventsDispatchTrait;
 
     /**
-     * The ID array of the posts to update.
-     *
-     * @var array
-     */
-    public $ids;
-
-    /**
      * The user performing the action.
      *
      * @var User
@@ -43,13 +36,11 @@ class BatchEditPosts
     public $data;
 
     /**
-     * @param array $ids
      * @param User $actor
      * @param array $data
      */
-    public function __construct(array $ids, User $actor, array $data)
+    public function __construct(User $actor, array $data)
     {
-        $this->ids = $ids;
         $this->actor = $actor;
         $this->data = $data;
     }
@@ -63,10 +54,15 @@ class BatchEditPosts
     {
         $this->events = $events;
 
-        $attributes = Arr::get($this->data, 'attributes', []);
         $result = ['data' => [], 'meta' => []];
 
-        foreach ($this->ids as $id) {
+        foreach ($this->data as $data) {
+            if (isset($data['id'])) {
+                $id = $data['id'];
+            } else {
+                continue;
+            }
+
             $post = $posts->query()->whereVisibleTo($this->actor)->find($id);
 
             if ($post) {
@@ -76,7 +72,9 @@ class BatchEditPosts
                 continue;
             }
 
-            if (isset($attributes['isApproved'])) {
+            $attributes = Arr::get($data, 'attributes', []);
+
+            if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $post)) {
                     $post->is_approved = $attributes['isApproved'];
                 } else {
@@ -102,7 +100,7 @@ class BatchEditPosts
 
             try {
                 $this->events->dispatch(
-                    new Saving($post, $this->actor, $this->data)
+                    new Saving($post, $this->actor, $data)
                 );
             } catch (\Exception $e) {
                 $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];

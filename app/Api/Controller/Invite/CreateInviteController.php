@@ -46,7 +46,6 @@ class CreateInviteController extends AbstractCreateController
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');
-        $actor->id = 1;
 
         // 分发创建圈子的任务
         $data = $this->bus->dispatch(

@@ -64,6 +64,6 @@ export default {
 	},
 	beforeRouteLeave (to, from, next) {
 	   window.removeEventListener('scroll', this.logBtnFix, true)
-	   // next()
+	   next()
 	}
 }

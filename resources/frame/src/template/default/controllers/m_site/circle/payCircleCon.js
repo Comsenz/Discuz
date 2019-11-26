@@ -1,7 +1,6 @@
 /**
  * pc 端首页控制器
  */
-
 export default {
 	data: function() {
 		return {
@@ -38,10 +37,8 @@ export default {
 
 	mounted: function() {
 		// this.getVote();
-		window.addEventListener('scroll', this.handleTabFix, true);
+		
 	},
 	beforeRouteLeave (to, from, next) {
-	   window.removeEventListener('scroll', this.handleTabFix, true)
-	   next()
 	}
 }

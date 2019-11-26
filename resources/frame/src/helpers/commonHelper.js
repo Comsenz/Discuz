@@ -298,7 +298,7 @@ appCommonH.timeago = function(dateTimeStamp){
 
   } else{
 
-    result="刚刚"; 
+    result="刚刚";
   }
   return result;
 }

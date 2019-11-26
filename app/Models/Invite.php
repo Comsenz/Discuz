@@ -14,11 +14,13 @@ use App\Events\Invite\Created;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invite extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+    use SoftDeletes;
 
     /**
      * 与模型关联的数据表.

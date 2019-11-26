@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
+use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
 use App\Listeners\User\WeixinBind;
 use App\Policies\GroupPolicy;
@@ -18,7 +20,9 @@ class EventServiceProvider extends BaseEventServiceProvider
             WeixinBind::class,
             MobileBind::class
         ],
-        'App\Events\Users\Registered' => ['App\Listeners\User\BindInvite'],
+        Registered::class => [
+            InviteBind::class
+        ],
     ];
 
     protected $subscribe = [

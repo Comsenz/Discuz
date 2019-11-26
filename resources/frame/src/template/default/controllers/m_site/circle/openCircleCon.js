@@ -48,6 +48,6 @@ export default {
 	},
 	beforeRouteLeave (to, from, next) {
 	   // window.removeEventListener('scroll', this.handleTabFix, true)
-	   // next()
+	   next()
 	}
 }

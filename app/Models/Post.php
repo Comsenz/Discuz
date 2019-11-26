@@ -16,6 +16,8 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -47,7 +49,6 @@ class Post extends Model
      */
     protected $casts = [
         'is_first' => 'boolean',
-        'is_approved' => 'boolean',
     ];
 
     /**
@@ -58,6 +59,13 @@ class Post extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    /**
+     * The user for which the state relationship should be loaded.
+     *
+     * @var User
+     */
+    protected static $stateUser;
 
     /**
      * Create a new instance in reply to a thread.
@@ -87,6 +95,18 @@ class Post extends Model
         $post->raise(new Created($post));
 
         return $post;
+    }
+
+    /**
+     * Refresh the thread's post count.
+     *
+     * @return $this
+     */
+    public function refreshLikeCount()
+    {
+        $this->like_count = $this->likedUsers()->count();
+
+        return $this;
     }
 
     /**
@@ -127,5 +147,38 @@ class Post extends Model
     public function likedUsers()
     {
         return $this->belongsToMany(User::class)->withPivot('created_at');
+    }
+
+    /**
+     * Define the relationship with the post's attachments.
+     *
+     * @return HasMany
+     */
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
+    /**
+     * Define the relationship with the discussion's state for a particular user.
+     *
+     * @param User|null $user
+     * @return HasOne
+     */
+    public function likeState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne(PostUser::class)->where('user_id', $user ? $user->id : null);
+    }
+
+    /**
+     * Set the user for which the state relationship should be loaded.
+     *
+     * @param User $user
+     */
+    public static function setStateUser(User $user)
+    {
+        static::$stateUser = $user;
     }
 }
