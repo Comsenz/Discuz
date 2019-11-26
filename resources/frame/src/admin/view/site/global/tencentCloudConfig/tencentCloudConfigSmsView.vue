@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/global.scss';
+import '../../../../scss/site/globalStyle.scss';
 import tencentCloudConfigSmsCon from '../../../../controllers/site/global/tencentCloundSet/tencentCloudConfigSmsCon';
 export default {
     name: "tencent-cloud-config-sms-view",

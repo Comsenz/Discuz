@@ -109,6 +109,7 @@ class ListUserWalletCashController extends AbstractListController
      */
     private function getCashRecords($actor, $filter, $limit = 0, $offset = 0, $sort = [])
     {
+        $cash_user         = (int) Arr::get($filter, 'user'); //提现用户
         $cash_sn         = Arr::get($filter, 'cash_sn'); //提现流水号
         $cash_status     = Arr::get($filter, 'cash_status'); //提现状态
         $cash_username   = Arr::get($filter, 'username'); //提现人
@@ -116,6 +117,9 @@ class ListUserWalletCashController extends AbstractListController
         $cash_end_time   = Arr::get($filter, 'end_time'); //申请时间范围：结束
 
         $query = UserWalletCash::query();
+        $query->when($cash_user, function ($query) use ($cash_user) {
+            $query->where('user_id', $cash_user);
+        });
         $query->when($cash_sn, function ($query) use ($cash_sn) {
             $query->where('cash_sn', $cash_sn);
         });

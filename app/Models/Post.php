@@ -49,7 +49,6 @@ class Post extends Model
      */
     protected $casts = [
         'is_first' => 'boolean',
-        'is_approved' => 'boolean',
     ];
 
     /**
