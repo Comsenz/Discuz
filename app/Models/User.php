@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Discuz\Auth\Guest;
+use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,6 +114,13 @@ class User extends Model
         return $this;
     }
 
+    public function changeAvatarPath($path)
+    {
+        $this->avatar = $path;
+
+        return $this;
+    }
+
     /**
      * Check if a given password matches the user's password.
      *
@@ -138,6 +146,15 @@ class User extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value ? static::$hasher->make($value) : '';
+    }
+
+    public function getAvatarAttribute($value)
+    {
+        if ($value && strpos($value, '://') === false) {
+            return app(UrlGenerator::class)->to('/storage/avatars/'.$value);
+        }
+
+        return $value;
     }
 
     /*

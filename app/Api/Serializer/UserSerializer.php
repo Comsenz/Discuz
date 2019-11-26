@@ -21,7 +21,7 @@ class UserSerializer extends AbstractSerializer
             'username'    => $model->username,
 //            'nickname'    => $model->userWechats?$model->userWechats->nickname:$model->userWechats,
             'mobile'      => $model->mobile,
-            // 'avatarUrl'   => $model->avatar_url,
+             'avatarUrl'   => $model->avatar,
 //            'unionId'     => $model->union_id,
             'threadCount' => $model->thread_count,
             'lastLoginIp' => $model->last_login_ip,
