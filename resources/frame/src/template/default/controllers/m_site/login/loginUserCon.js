@@ -59,9 +59,9 @@ export default {
           //   userId:this.userId
           // };
           // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
-          // this.$router.push({
-          //   path:'bind-phone',
-          // });
+          this.$router.push({
+            path:'bind-phone',
+          });
        });
 
     },
