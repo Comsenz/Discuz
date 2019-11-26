@@ -92,7 +92,7 @@ class EditThread
             $thread->category_id = $attributes['categoryId'];
         }
 
-        if (isset($attributes['isApproved'])) {
+        if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
 
             $thread->is_approved = $attributes['isApproved'];

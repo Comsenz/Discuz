@@ -98,7 +98,6 @@ class User extends Model
     }
 
     /**
-     * TODO: 修改密码（预留）
      * Change the user's password.
      *
      * @param string $password
@@ -108,7 +107,7 @@ class User extends Model
     {
         $this->password = $password;
 
-        $this->raise(new PasswordChanged($this));
+//        $this->raise(new PasswordChanged($this));
 
         return $this;
     }
@@ -116,6 +115,20 @@ class User extends Model
     public function changeAvatarPath($path)
     {
         $this->avatar = $path;
+
+        return $this;
+    }
+
+    public function changeMobile($mobile)
+    {
+        $this->mobile = $mobile;
+
+        return $this;
+    }
+
+    public function changeStatus($status)
+    {
+        $this->status = $status;
 
         return $this;
     }

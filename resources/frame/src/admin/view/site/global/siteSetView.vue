@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import '../../../scss/site/global.scss';
+import '../../../scss/site/globalStyle.scss';
 import siteSetCon from '../../../controllers/site/global/siteSetCon';
 export default {
     name: "site-set-view",

@@ -49,7 +49,6 @@ class Thread extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'is_approved' => 'boolean',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
     ];

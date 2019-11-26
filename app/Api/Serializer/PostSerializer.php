@@ -51,7 +51,7 @@ class PostSerializer extends AbstractSerializer
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isFirst'           => (bool) $model->is_first,
-            'isApproved'        => (bool) $model->is_approved,
+            'isApproved'        => (int) $model->is_approved,
             'canApprove'        => $gate->allows('approve', $model),
             'canDelete'         => $gate->allows('delete', $model),
         ];

@@ -11,6 +11,12 @@ class TokenSerializer extends AbstractSerializer
 
     protected $type = 'token';
 
+    protected static $user;
+
+    public static function setUser($user) {
+        static::$user = $user;
+    }
+
     /**
      * Get the default set of serialized attributes for a model.
      *
@@ -35,6 +41,6 @@ class TokenSerializer extends AbstractSerializer
 
     public function getId($model)
     {
-        return 1;
+        return static::$user->id;
     }
 }

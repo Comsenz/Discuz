@@ -8,6 +8,7 @@
  */
 namespace App\Passport\Repositories;
 
+use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\UserVerify;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -46,6 +47,8 @@ class UserRepository implements UserRepositoryInterface
             throw new PermissionDeniedException;
         }
         static::$user = $user;
+
+        TokenSerializer::setUser($user);
 
         return new UserEntity($user['id']);
     }
