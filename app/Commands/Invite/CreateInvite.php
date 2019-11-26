@@ -40,13 +40,6 @@ class CreateInvite
     public $data;
 
     /**
-     * 请求来源的IP地址.
-     *
-     * @var string
-     */
-    public $ipAddress;
-
-    /**
      * 初始化命令参数
      *
      * @param User   $actor        执行操作的用户.

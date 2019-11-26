@@ -10,24 +10,33 @@ declare(strict_types=1);
 
 namespace App\Api\Controller\Invite;
 
-
+use App\Commands\Invite\DeleteInvite;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 
 class DeleteInviteController extends AbstractDeleteController
 {
 
     /**
-     * @param ServerRequestInterface $request
+     * @param Dispatcher $bus
      */
-    public function delete(ServerRequestInterface $request)
+    public function __construct(Dispatcher $bus)
     {
-
+        $this->bus = $bus;
     }
 
-    protected function data(ServerRequestInterface $request, Document $document)
+    /**
+     * {@inheritdoc}
+     */
+    protected function delete(ServerRequestInterface $request)
     {
-        // TODO: Implement data() method.
+        $id = Arr::get($request->getQueryParams(), 'id');
+        $actor = $request->getAttribute('actor');
+
+        $this->bus->dispatch(
+            new DeleteInvite($id, $actor)
+        );
     }
 }
