@@ -20,32 +20,40 @@ export default {
   },
   methods:{
     signUpClick(){
-      this.btnLoading = true;
-      // var user = new User();
-      this.apiStore.createRecord('users').save({
-        username:this.username,
-        password:this.password
-      }).then(data => {
-        //注册成功跳转到绑定手机号
-        this.$router.push({path:'bind-phone'});
-      }, error => {
-        this.btnLoading = false;
-      });
+      // this.btnLoading = true;
+      // // var user = new User();
+      // this.apiStore.createRecord('register').save({
+      //   alert();
+      //   username:this.username,
+      //   password:this.password
+      // }).then(data => {
+      //   //注册成功跳转到绑定手机号
+      //   this.$router.push({path:'bind-phone'});
+      // }, error => {
+      //   this.btnLoading = false;
+      // });
 
-      // this.appFetch({
-      //   url:'signUp',
-      //   method:'post',
-      //   data:{
-      //     "data": {
-      //     "type": "users",
-      //     "attributes": {
-      //         username:this.username,
-      //         password:this.password,
-      //         mobile: this.mobile
-      //     },
-      //     }
-      //   }
-      // }, (res) => {
+      this.appFetch({
+        url:'register',
+        method:'post',
+        data:{
+          "data": {
+          "type": "users",
+          "attributes": {
+              username:this.username,
+              password:this.password
+          },
+          }
+        }
+      }).then(res => {
+        this.$toast.success('注册成功');
+        // console.log(res);
+        let token = res.data.attributes.access_token;
+        //注册成功后,设置登录信息头
+        // browserDb.setLItem('Authorization',token);
+        this.$router.push({
+          path:'bind-phone',
+        });
       //   this.btnLoading = false;
       //   console.log(res);
       //   if (res.status !== "201"){
@@ -68,8 +76,8 @@ export default {
       //   }
 
       // }, function(error) {
-      //   // console.log(error, 'eror')
-      // });
+        // console.log(error, 'eror')
+      });
 
     },
     //错误提示

@@ -4,7 +4,7 @@
 
 module.exports = {
 	'getVote': '/commonvote/getvote', //获取单组投票数据
-  'users': '/api/users',   //用户名注册
+  'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证

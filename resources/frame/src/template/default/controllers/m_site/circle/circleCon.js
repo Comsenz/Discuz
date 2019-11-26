@@ -75,6 +75,19 @@ export default {
         { text: '选项111' },
         { text: '选项222' },
         { text: '选项333' }
+        // {
+        //     "type": "classify",
+        //     "id": "6",
+        //     "attributes": {
+        //         "id": 6,
+        //         "name": "户外趣事2",
+        //         "icon": "",
+        //         "description": "户外活动，组织，趣事",
+        //         "property": 0,
+        //         "sort": 1,
+        //         "threads": 0
+        //     }
+        // },
       ],
       currentData:{},
       replyTagShow: false,
@@ -106,20 +119,20 @@ export default {
         url:"classify",
         method:"get",
         data:{
-          "data": {
-            "attributes": {
-              username:this.userName,
-              password:this.password,
-            },
-          }
+          // "data": {
+          //   "attributes": {
+          //     username:this.userName,
+          //     password:this.password,
+          //   },
+          // }
         }
       }).then(res => {
           console.log(res);
 
-          // this.paramsObj = {
-          //   userId:this.userId
-          // };
-          // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
+          this.paramsObj = {
+            userId:this.userId
+          };
+          // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
        });
 
 
