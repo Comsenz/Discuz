@@ -22,13 +22,6 @@ class BatchEditThreads
     use EventsDispatchTrait;
 
     /**
-     * The ID array of the threads to update.
-     *
-     * @var array
-     */
-    public $ids;
-
-    /**
      * The user performing the action.
      *
      * @var User
