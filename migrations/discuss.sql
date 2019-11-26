@@ -113,6 +113,7 @@ CREATE TABLE `users` (
   `mobile` char(11) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `mobile_confirmed` tinyint(1) NOT NULL DEFAULT '0',
   `last_login_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `register_ip` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `thread_count` int(10) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

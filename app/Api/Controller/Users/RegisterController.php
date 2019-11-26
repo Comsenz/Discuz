@@ -41,9 +41,11 @@ class RegisterController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
+        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $attributes['register_ip'] = $ip;
 
         $this->bus->dispatch(
-            new RegisterUser($request->getAttribute('actor'), Arr::only($attributes, ['username', 'password']))
+            new RegisterUser($request->getAttribute('actor'), $attributes)
         );
 
         unset($attributes['password']);

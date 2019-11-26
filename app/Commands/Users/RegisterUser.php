@@ -66,6 +66,7 @@ class RegisterUser
         // }
 
         $password = Arr::get($this->data, 'password');
+        $password_confirmation = Arr::get($this->data, 'password_confirmation');
 
         // 如果提供了有效的身份验证令牌作为属性，那么我们将不要求用户选择密码。
         // if (isset($data['attributes']['token'])) {
@@ -74,7 +75,7 @@ class RegisterUser
         //     $password = $password ?: Str::random(20);
         // }
 
-        $user = User::register($this->data);
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip']));
 
         $user->raise(new Registered($user, $this->actor, $this->data));
 
@@ -82,7 +83,7 @@ class RegisterUser
             new Saving($user, $this->actor, $this->data)
         );
 
-        $validator->valid(array_merge($user->getAttributes(), compact('password')));
+        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation')));
 
         $user->save();
 

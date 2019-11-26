@@ -22,18 +22,9 @@ class UserValidator extends AbstractValidator
                 'required',
                 'regex:/^.*(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/',
                 'min:6',
-                'max:16'
+                'max:16',
+                'confirmed'
             ],
-            'loginusername' => [
-                'required',
-                'exists:users,username'
-            ],
-            'loginpwd' => [
-                'required'
-            ],
-            'mobile' => [
-                'unique:users,mobile'
-            ]
         ];
     }
 
