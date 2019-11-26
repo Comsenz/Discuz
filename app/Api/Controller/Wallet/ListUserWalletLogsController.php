@@ -87,7 +87,7 @@ class ListUserWalletLogsController extends AbstractListController
         $wallet_log = $this->getWalletLogs($actor, $filter, $limit, $offset, $sort);
 
         $document->addPaginationLinks(
-            $this->url->route('wallet.cash.list'),
+            $this->url->route('wallet.log.list'),
             $request->getQueryParams(),
             $offset,
             $limit,
@@ -110,6 +110,7 @@ class ListUserWalletLogsController extends AbstractListController
      */
     private function getWalletLogs($actor, $filter, $limit = 0, $offset = 0, $sort = [])
     {
+        $log_user    = (int) Arr::get($filter, 'user'); //用户
         $log_change_desc     = Arr::get($filter, 'change_desc'); //变动描述
         $log_change_type     = Arr::get($filter, 'change_type'); //变动类型
         $log_username   = Arr::get($filter, 'username'); //变动钱包所属人
@@ -117,6 +118,9 @@ class ListUserWalletLogsController extends AbstractListController
         $log_end_time   = Arr::get($filter, 'end_time'); //变动时间范围：结束
 
         $query = UserWalletLog::query();
+        $query->when($log_user, function ($query) use ($log_user) {
+            $query->where('user_id', $log_user);
+        });
         $query->when($log_change_desc, function ($query) use ($log_change_desc) {
             $query->where('change_desc', 'like', "%$log_change_desc%");
         });

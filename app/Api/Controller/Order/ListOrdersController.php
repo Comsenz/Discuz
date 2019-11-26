@@ -119,6 +119,7 @@ class ListOrdersController extends AbstractListController
      */
     private function getOrders($actor, $filter, $limit = 0, $offset = 0, $sort = [])
     {
+        $order_user           = (int) Arr::get($filter, 'user'); //订单所属用户
         $status           = Arr::get($filter, 'status'); //订单状态
         $order_sn         = Arr::get($filter, 'order_sn'); //订单编号
         $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
@@ -129,6 +130,9 @@ class ListOrdersController extends AbstractListController
         $query = Order::query();
         $query->when(!is_null($status), function ($query) use ($status) {
             $query->where('status', $status);
+        });
+        $query->when($order_user, function ($query) use ($order_user) {
+            $query->where('user_id', $order_user);
         });
         $query->when($order_sn, function ($query) use ($order_sn) {
             $query->where('order_sn', $order_sn);
