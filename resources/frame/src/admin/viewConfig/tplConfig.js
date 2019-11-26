@@ -275,6 +275,52 @@ export default {
               attribution:'内容',
               alias:'回帖'
             }
+          },
+
+          //财务分类
+          'fund-details':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/fundDetailsView'], resolve)
+            },
+            metaInfo: {
+              title: '资金明细',
+              name:'fundDetails',
+              attribution:'财务',
+              alias:'资金明细'
+            }
+          },
+          'order-record':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/orderRecordView'], resolve)
+            },
+            metaInfo: {
+              title: '订单记录',
+              name:'orderRecord',
+              attribution:'财务',
+              alias:'订单记录'
+            }
+          },
+          'withdrawal-application':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/withdrawMange/withdrawalApplicationView'], resolve)
+            },
+            metaInfo: {
+              title: '提现管理',
+              name:'withdrawMange',
+              attribution:'财务',
+              alias:'提现申请'
+            }
+          },
+          'withdrawal-setting':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/withdrawMange/withdrawalSettingView'], resolve)
+            },
+            metaInfo: {
+              title: '提现管理',
+              name:'withdrawMange',
+              attribution:'财务',
+              alias:'提现设置'
+            }
           }
 
         },

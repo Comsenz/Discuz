@@ -16,6 +16,7 @@ module.exports = [
 
 	//样式
 	path.resolve(__dirname, publicPath+'scss/'),
+  path.resolve(__dirname, publicPath+'../helpers'),
 
 	...require("../../extend/viewBase/baseSearch"),
 ];
