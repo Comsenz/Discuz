@@ -10,9 +10,9 @@
 namespace App\Commands\Thread;
 
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadWasApproved;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
-use Carbon\Carbon;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -86,6 +86,12 @@ class BatchEditThreads
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $thread)) {
                     $thread->is_approved = $attributes['isApproved'];
+
+                    $thread->raise(new ThreadWasApproved(
+                        $thread,
+                        $this->actor,
+                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+                    ));
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -111,13 +117,13 @@ class BatchEditThreads
             }
 
             if (isset($attributes['isDeleted'])) {
-                if ($this->actor->can('delete', $thread)) {
+                if ($this->actor->can('hide', $thread)) {
+
+                    $message = isset($attributes['message']) ? $attributes['message'] : '';
                     if ($attributes['isDeleted']) {
-                        $thread->deleted_at = Carbon::now();
-                        $thread->deleted_user_id = $this->actor->id;
+                        $thread->hide($this->actor, $message);
                     } else {
-                        $thread->deleted_at = null;
-                        $thread->deleted_user_id = null;
+                        $thread->restore($this->actor, $message);
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];

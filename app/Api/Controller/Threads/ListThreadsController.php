@@ -146,7 +146,6 @@ class ListThreadsController extends AbstractListController
             $allLastThreePosts = Post::from('posts', 'a')
                 ->whereRaw('( SELECT count( * ) FROM posts WHERE a.thread_id = thread_id AND a.id < id ) < ?', [3])
                 ->whereIn('thread_id', $threadIds)
-                ->withTrashed()
                 ->when($actor->can('viewTrashed'), function ($query) {
                     $query->whereNull('a.deleted_at');
                 })
@@ -308,11 +307,11 @@ class ListThreadsController extends AbstractListController
         // 回收站
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
             if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
-                // 包含回收站帖子
-                $query->withTrashed();
-            } elseif ($isDeleted == 'no') {
                 // 只看回收站帖子
-                $query->onlyTrashed();
+                $query->whereNotNull('deleted_at');
+            } elseif ($isDeleted == 'no') {
+                // 不看回收站帖子
+                $query->whereNull('deleted_at');
             }
         }
 

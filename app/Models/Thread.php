@@ -9,6 +9,8 @@
 
 namespace App\Models;
 
+use App\Events\Thread\Hidden;
+use app\Events\Thread\Restored;
 use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
@@ -18,12 +20,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
  * @property int $user_id
  * @property int $last_posted_user_id
+ * @property int $category_id
  * @property string $title
  * @property float $price
  * @property int $post_count
@@ -43,7 +45,6 @@ class Thread extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
-    use SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -68,6 +69,44 @@ class Thread extends Model
      * @var User
      */
     protected static $stateUser;
+
+    /**
+     * Hide the thread.
+     *
+     * @param User $actor
+     * @param string $message
+     * @return $this
+     */
+    public function hide(User $actor, $message = '')
+    {
+        if (! $this->deleted_at) {
+            $this->deleted_at = Carbon::now();
+            $this->deleted_user_id = $actor->id;
+
+            $this->raise(new Hidden($this, $actor, ['message' => $message]));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Restore the thread.
+     *
+     * @param User $actor
+     * @param string $message
+     * @return $this
+     */
+    public function restore(User $actor, $message = '')
+    {
+        if ($this->deleted_at !== null) {
+            $this->deleted_at = null;
+            $this->deleted_user_id = null;
+
+            $this->raise(new Restored($this, $actor, ['message' => $message]));
+        }
+
+        return $this;
+    }
 
     /**
      * Get the last three posts of the thread.
@@ -140,7 +179,7 @@ class Thread extends Model
      */
     public function firstPost()
     {
-        return $this->hasOne(Post::class)->withTrashed()->where('is_first', true);
+        return $this->hasOne(Post::class)->where('is_first', true);
     }
 
     /**
@@ -156,11 +195,11 @@ class Thread extends Model
     }
 
     /**
-     * Define the relationship with the thread's categories.
+     * Define the relationship with the thread's category.
      *
      * @return BelongsTo
      */
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Classify::class, 'category_id');
     }
@@ -183,6 +222,24 @@ class Thread extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Define the relationship with the thread's orders.
+     *
+     * @return HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Define the relationship with the thread's operation Log.
+     */
+    public function logs()
+    {
+        return $this->morphMany(OperationLog::class, 'log_able');
     }
 
     /**
@@ -216,15 +273,5 @@ class Thread extends Model
     public static function setStateUser(User $user)
     {
         static::$stateUser = $user;
-    }
-
-    /**
-     * Define the relationship with the thread's orders.
-     *
-     * @return HasMany
-     */
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
     }
 }
