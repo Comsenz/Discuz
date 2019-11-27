@@ -5,20 +5,20 @@ declare (strict_types = 1);
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      Id: ListNotification.php XXX 2019-11-15 11:20:00 yanchen $
+ *      Id: UnreadNotification.php XXX 2019-11-15 11:20:00 yanchen $
  */
 
 namespace App\Commands\Notification;
 
 use App\Exceptions\NoUserException;
 use App\Models\User;
+use Discuz\Api\JsonApiResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
-use Illuminate\Validation\ValidationException;
-use App\Models\Order;
+use Illuminate\Notifications\DatabaseNotification;
 
 
-class ListNotification
+class UnreadNotification
 {
     const TYPE_LIKE = 'App\\Notifications\\Liked';
     const TYPE_REPLIED = 'App\\Notifications\\Replied';
@@ -63,27 +63,29 @@ class ListNotification
     {
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCircle');
-        // 验证参数
-        $validator_info = $validator->make($this->data, [
-            'type' => 'filled',
-            'type'=>'in:1,2,3',
-        ]);
 
-        if ($validator_info->fails()) {
-            throw new ValidationException($validator_info);
-        }
-        $type = Arr::get($this->data, 'type');
         $user = User::find($this->actor->id);
         if (!$user)
             throw new NoUserException();
 
-        $notifications =  $user->notifications();
-        $type && $notifications = $notifications->where('type', Arr::get($this->types , Arr::get($this->data, 'type')));
-        $notifications = $notifications->get();
+        $notifications = DatabaseNotification::selectRaw('type,count(*) as count')
+            ->where('read_at', null)
+            ->where('notifiable_id', $this->actor->id)
+            ->groupBy('type')
+            ->pluck('count', 'type')
+            ->toArray();
+        
+        $data = [
+            1 => Arr::get($notifications, $this->types[1], 0),
+            2 => Arr::get($notifications, $this->types[2], 0),
+            3 => Arr::get($notifications, $this->types[3], 0),
+        ];
 
-        $user->unreadNotifications->markAsRead();
-
-       return $notifications;
+        return new JsonApiResponse([
+            'code' => '0',
+            'msg' => 'succ.',
+            'data'=> $data
+        ]);
     }
 
 }

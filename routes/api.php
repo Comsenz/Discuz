@@ -221,6 +221,7 @@ $route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\
 | Notification
 |--------------------------------------------------------------------------
 */
+$route->get('/notificationUnread', 'notification.unread', ApiController\Notification\UnreadNotificationController::class);
 $route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
 $route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
 $route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);
@@ -234,3 +235,12 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invite', 'invite.create', ApiController\Invite\CreateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Emoji
+|--------------------------------------------------------------------------
+*/
+$route->get('/emojiLoad', 'emoji.load', ApiController\Emoji\AutoloadEmojiController::class);
+$route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
+
