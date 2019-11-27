@@ -253,3 +253,13 @@ CREATE TABLE `user_wallet_logs` (
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `operation_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `action` char(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `log_able_id` int(10) unsigned NOT NULL,
+  `log_able_type` char(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

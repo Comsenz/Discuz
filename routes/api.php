@@ -9,8 +9,12 @@ use App\Api\Controller as ApiController;
 */
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
+$route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
+$route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
+
+$route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -55,16 +59,16 @@ $route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController:
 
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-//$route->get('/userslist', 'users.list', ApiController\Users\ListUsersController::class);
-$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
-$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
-$route->get('/users/{id}', 'user.profile', ApiController\Users\UserProfileController::class);
-$route->patch('/user/{id}', 'userprofile.update', ApiController\Users\UpdateUserProfileController::class);
-$route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
-$route->delete('/users', 'userpatch.delete', ApiController\Users\DeleteUsersController::class);
+$route->get('/users/{id}', 'users.profile', ApiController\Users\ProfileController::class);
+$route->patch('/users/{id}', 'users.update', ApiController\Users\UpdateProfileController::class);
+//$route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
+$route->delete('/users/{id}', 'users.delete', ApiController\Users\DeleteUsersController::class);
 
-$route->get('/profile', 'show.profile', ApiController\Users\ProfileController::class);
-$route->post('/upload/avatar', 'upload.avatar', ApiController\Users\UploadAvatarController::class);
+//$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
+//$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
+
+$route->post('/users/{id}/avatar', 'users.upload.avatar', ApiController\Users\UploadAvatarController::class);
+$route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -222,6 +226,7 @@ $route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\
 | Notification
 |--------------------------------------------------------------------------
 */
+$route->get('/notificationUnread', 'notification.unread', ApiController\Notification\UnreadNotificationController::class);
 $route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
 $route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
 $route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);
@@ -235,3 +240,12 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->post('/invite', 'invite.create', ApiController\Invite\CreateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Emoji
+|--------------------------------------------------------------------------
+*/
+$route->get('/emojiLoad', 'emoji.load', ApiController\Emoji\AutoloadEmojiController::class);
+$route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
+

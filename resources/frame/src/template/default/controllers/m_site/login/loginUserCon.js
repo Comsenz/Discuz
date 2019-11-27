@@ -16,7 +16,8 @@ export default {
       userName:"",
       password:"",
       userId:'2',
-      btnLoading:false
+      btnLoading:false,
+      wxLoginShow: false
       // attributes:'/login-user'
     }
   },
@@ -49,10 +50,11 @@ export default {
         }
       }).then(res => {
           this.$toast.success('登录成功');
-          console.log(res);
           let token = res.data.attributes.access_token;
-          console.log(token)
+          let tokenId = res.data.id;
+          // console.log(token)
           browserDb.setLItem('Authorization',token);
+          browserDb.setLItem('tokenId',tokenId);
           // console.log(browserDb.getLItem('Authorization'));
           // this.paramsObj = {
           //   userId:this.userId
@@ -76,6 +78,8 @@ export default {
   },
   created(){
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
+    let isPhone =this.appCommonH.isWeixin().isPhone;
+    console.log()
     if(isWeixin == true){
       // const APPID = 'wx2aa96b3508831102';
       // const REDIRECT_URI = window.location.host;
@@ -97,22 +101,21 @@ export default {
         console.log(res.data.attributes.location)
         window.location.href = res.data.attributes.location;
       });
-
-
-
-    } else {
+    } else if( isPhone == true) {
       //手机浏览器登录时
       console.log('手机浏览器登录');
-      // loginClick();
+      this.wxLoginShow = false;
+      // console.log(this.appFetch({
+      //   url:"weixin",
+      //   method:"get",
+      //   data:{
+      //     // attributes:this.attributes,
+      //   }
+      // }))
 
-      console.log(this.appFetch({
-        url:"weixin",
-        method:"get",
-        data:{
-          // attributes:this.attributes,
-        }
-      }))
+    } else {
 
+      console.log('pc登录');
     }
 
 

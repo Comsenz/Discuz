@@ -10,6 +10,7 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Models\MobileCode;
 use App\Models\User;
+use App\Validators\UserValidator;
 use Discuz\Api\Client;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -22,20 +23,24 @@ class VerifyMobile
     protected $apiClient;
     protected $actor;
     protected $bus;
+    protected $params;
+    protected $validator;
 
-    public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor)
+    public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor, $params = [])
     {
         $this->controller = $controller;
         $this->mobileCode = $mobileCode;
         $this->actor = $actor;
+        $this->params = $params;
     }
 
-    public function handle(Client $apiClient, Dispatcher $bus)
+    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator)
     {
         $this->apiClient = $apiClient;
         $this->bus = $bus;
+        $this->validator = $validator;
 
-        return $this->{$this->mobileCode->type}();
+        return call_user_func([$this, $this->mobileCode->type]);
     }
 
     /**
@@ -71,6 +76,13 @@ class VerifyMobile
     protected function lostpwd()
     {
         $this->controller->serializer = UserSerializer::class;
+        if($this->mobileCode->user && isset($this->params['password'])) {
+            $this->validator->valid([
+                'password' => $this->params['password']
+            ]);
+            $this->mobileCode->user->changePassword($this->params['password']);
+            $this->mobileCode->user->save();
+        }
         return $this->mobileCode->user;
     }
 }

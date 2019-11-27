@@ -26,7 +26,7 @@
       <div class="operaBox">
         <div class="likeBox" v-if="item.firstPost().likedUsers().length>0">
           <span class="icon iconfont icon-praise-after"></span>
-          <i></i><a href="javascript:;" v-for="like in item.firstPost().likedUsers()">{{like.username() + ','}}</a>&nbsp;等<span>{{item.firstPost().likeCount()}}</span>个人觉得很赞
+          <i></i><a href="javascript:;" v-for="like in item.firstPost().likedUsers()">{{like.id()}}{{like.username() + ','}}</a>&nbsp;等<span>{{item.firstPost().likeCount()}}</span>个人觉得很赞
         </div>
         <div class="likeBox" v-else="">
         </div>

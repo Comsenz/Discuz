@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Contracts\Bus\Dispatcher;
 
-class CreateClassifyController extends AbstractCreateController
+class CreateEmojiController extends AbstractCreateController
 {
     /**
      * 返回的数据字段和格式.

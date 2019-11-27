@@ -107,7 +107,7 @@ export default {
 
       } else {
         //手机浏览器登录时
-        console.log('手机浏览器登录');
+        // console.log('手机浏览器登录');
         this.isWx = 1;
       }
       return this.isWx;
@@ -115,25 +115,25 @@ export default {
 
 
     loadThemeList(){
-      this.appFetch({
-        url:"classify",
-        method:"get",
-        data:{
-          // "data": {
-          //   "attributes": {
-          //     username:this.userName,
-          //     password:this.password,
-          //   },
-          // }
-        }
-      }).then(res => {
-          console.log(res);
+      // this.appFetch({
+      //   url:"classify",
+      //   method:"get",
+      //   data:{
+      //     // "data": {
+      //     //   "attributes": {
+      //     //     username:this.userName,
+      //     //     password:this.password,
+      //     //   },
+      //     // }
+      //   }
+      // }).then(res => {
+      //     console.log(res);
 
-          this.paramsObj = {
-            userId:this.userId
-          };
-          // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
-       });
+      //     this.paramsObj = {
+      //       userId:this.userId
+      //     };
+      //     // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
+      //  });
 
 
 
@@ -147,7 +147,7 @@ export default {
         // console.log(data[0].firstPost());
         // console.log(data[0].rewardedUsers()[0]);
         this.themeListCon = data;
-        console.log(this.themeListCon);
+        // console.log(this.themeListCon);
 
       });
       //请求主题导航列表

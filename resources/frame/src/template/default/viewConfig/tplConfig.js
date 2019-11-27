@@ -20,8 +20,15 @@ export default {
           oneHeader: true
         }
       },
-      
-      
+      'text':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/text'],resolve)
+        },
+        metaInfo:{
+          title:"textarea"
+        }
+      },
+
       'wechat':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/wechatView'],resolve)

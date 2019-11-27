@@ -10,6 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Notification;
 
+use App\Exceptions\NoUserException;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
@@ -73,6 +74,8 @@ class ListNotification
         }
         $type = Arr::get($this->data, 'type');
         $user = User::find($this->actor->id);
+        if (!$user)
+            throw new NoUserException();
 
         $notifications =  $user->notifications();
         $type && $notifications = $notifications->where('type', Arr::get($this->types , Arr::get($this->data, 'type')));

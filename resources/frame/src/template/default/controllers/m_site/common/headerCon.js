@@ -2,6 +2,7 @@
  * 移动端header控制器
  */
 import {Bus} from '../../../store/bus.js';
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 
 	data: function() {
@@ -16,11 +17,11 @@ export default {
 		    isShow: false,
 		    isHeadShow: false,
 		    showHeader: false,
-	        showMask: false,
-	        title:'',
-	        // invitePerDet: false,
-	        // menuIconShow:false,
-	        // searchIconShow: false,
+	      showMask: false,
+	      title:'',
+	      // invitePerDet: false,
+	      // menuIconShow:false,
+	      // searchIconShow: false,
 		    // navShow: false,
 		    navActi:0,
 		    perDet:{
@@ -28,6 +29,10 @@ export default {
 		    	memberNum: '1222',
 		    	circleLeader: '圈主名称'
 		    },
+        avatarUr:'',
+        username:'',
+        mobile:'',
+        userId:'',
 		    sidebarList1: [
 	        {
 	          name: '我的资料',
@@ -102,6 +107,7 @@ export default {
 	      isfixNav: false,
 	      popupShow: false,
         current:0,
+        userDet:[],
 	      // themeNavList: [
 	            // { text: '选项' },
 	            // { text: '选项二' }
@@ -156,31 +162,38 @@ export default {
 	beforeDestroy () {
         // Bus.$off('setHeader');
     },
+    created(){
+      this.getCircle();
+    },
 	mounted: function() {
 		this.getCircle();
 	},
 	methods: {
 		//获取圈子主题数，成员数，圈主名称
 		getCircle(){
-			this.appFetch({
-		        url:'getCircle',
-		        method:'post',
-		        data:{
-		          themeNum:this.themeNum,
-		          memberNum:this.memberNum,
-		          circleLeader:this.circleLeader
-		        }
-		    }, (res) => {
-		        if (res== "200"){
-		          _this.perDet = res.data;
-		          console.log("报错")
-		        } else {
-		          console.error("获取圈子信息失败");
-		        }
+			// this.appFetch({
+		 //        url:'getCircle',
+		 //        method:'post',
+   //          // data:{
+   //          //   "data": {
+   //          //     "attributes": {
+   //          //       themeNum:this.themeNum,
+   //          //       memberNum:this.memberNum,
+   //          //       circleLeader:this.circleLeader
+   //          //     }
+   //          //   }
+   //          // }
+		 //    }).then(res => {
+		 //        console.log(res);
 
-		    }, function(error) {
-		        // console.log(error, 'error')
-		    });
+		 //    });
+        var userId = browserDb.getLItem('tokenId');
+        this.apiStore.find('users', userId).then(data => {
+          // console.log(data.data.attributes.username);
+          this.username = data.data.attributes.avatarUrl;
+          this.username = data.data.attributes.username;
+          this.mobile = data.data.attributes.mobile;
+        });
 		},
 
 		backUrl () {
@@ -189,7 +202,6 @@ export default {
 	    },
 		showPopup() {
 			//侧边栏显示
-	      	this.popupShow = true;
 	    },
 
 	 	/**

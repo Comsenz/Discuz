@@ -48,19 +48,29 @@ class ThreadPolicy extends AbstractPolicy
             return;
         }
 
-        if ($actor->hasPermission('thread.viewTrashed')) {
-            $this->events->dispatch(
-                new ScopeModelVisibility($query, $actor, 'viewTrashed')
-            );
+        // 回收站
+        if (! $actor->hasPermission('discussion.viewTrashed')) {
+            $query->where(function ($query) use ($actor) {
+                $query->whereNull('threads.hidden_at')
+                    ->orWhere('threads.user_id', $actor->id)
+                    ->orWhere(function ($query) use ($actor) {
+                        $this->events->dispatch(
+                            new ScopeModelVisibility($query, $actor, 'hide')
+                        );
+                    });
+            });
         }
     }
 
     /**
      * @param User $actor
-     * @param Builder $query
+     * @param Thread $thread
+     * @return bool|null
      */
-    public function findTrashed(User $actor, Builder $query)
+    public function hide(User $actor, Thread $thread)
     {
-        $query->withTrashed();
+        if ($thread->user_id == $actor->id && $actor->can('reply', $thread)) {
+            return true;
+        }
     }
 }

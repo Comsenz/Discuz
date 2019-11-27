@@ -132,4 +132,13 @@ class ThreadSerializer extends AbstractSerializer
     {
         return $this->hasMany($thread, UserSerializer::class);
     }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function logs($thread)
+    {
+        return $this->hasMany($thread, OperationLogSerializer::class);
+    }
 }

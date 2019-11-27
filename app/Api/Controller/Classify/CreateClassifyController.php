@@ -13,6 +13,7 @@ namespace App\Api\Controller\Classify;
 use Discuz\Api\Controller\AbstractCreateController;
 use App\Api\Serializer\ClassifySerializer;
 use App\Commands\Classify\CreateClassify;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -25,6 +26,19 @@ class CreateClassifyController extends AbstractCreateController
      * @var Serializer
      */
     public $serializer = ClassifySerializer::class;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
 
     /**
      * 数据操作.
