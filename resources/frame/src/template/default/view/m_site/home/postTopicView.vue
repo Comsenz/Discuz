@@ -1,6 +1,5 @@
 <template>
     <div class="post-topic-box">
-
       <header class="post-topic-header">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
         <h2 class="postHeadTit">{{headerTitle}}</h2>
@@ -8,7 +7,8 @@
       </header>
 
       <div class="post-topic-form">
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"></textarea>
+        <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
+        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false"></textarea>
         <div class="uploadBox">
           <van-uploader v-model="fileList" multiple />
         </div>
@@ -25,7 +25,8 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <div class="expressionBox" v-show="expressionShow">
+
+      <!-- <div class="expressionBox" v-show="expressionShow"> -->
           <!-- <van-swipe :autoplay="3000" :width="500">
               <van-swipe-item>
                   <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
@@ -40,15 +41,16 @@
                <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
              </van-swipe-item>
           </van-swipe> -->
-          <van-swipe :autoplay="3000" :width="300">
+          <!-- <van-swipe :autoplay="3000" :width="300">
             <van-swipe-item>
               <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
             </van-swipe-item>
             <van-swipe-item>2</van-swipe-item>
             <van-swipe-item>3</van-swipe-item>
             <van-swipe-item>4</van-swipe-item>
-          </van-swipe>
-      </div>
+          </van-swipe> -->
+      <!-- </div> -->
+      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
       <div class="popup">
         <van-popup v-model="showPopup" position="bottom" round :style="{ height: '50%' }" >
           <van-picker :columns="columns" show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm" />
@@ -60,12 +62,16 @@
 
 <script>
 import '../../../../../../static/css/iconfont.css';
-import '../../../scss/m_site/mobileIndex'
+import '../../../scss/m_site/mobileIndex';
 import postTopicCon from '../../../controllers/m_site/circle/postTopicCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+import Expression from '../../m_site/common/expressionView';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
     name: "post-topic",
-  ...postTopicCon,
+    components: {
+      Expression,
+    },
+  ...postTopicCon
 }
 </script>
