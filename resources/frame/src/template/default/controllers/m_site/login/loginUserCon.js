@@ -54,7 +54,7 @@ export default {
           // console.log(token)
           browserDb.setLItem('Authorization',token);
           browserDb.setLItem('tokenId',tokenId);
-          // console.log(browserDb.getLItem('Authorization'));
+          console.log(browserDb.getLItem('Authorization'));
           // this.paramsObj = {
           //   userId:this.userId
           // };

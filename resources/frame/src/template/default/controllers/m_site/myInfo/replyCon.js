@@ -14,7 +14,8 @@ export default {
       imgUrl:'',
       stateTitle:"回复我的",
       time:"十分钟前",
-      userName:"Elizabeth"
+      userName:"Elizabeth",
+      type:1,
     }
   },
   components:{
@@ -23,8 +24,19 @@ export default {
     ContMain,
     ContFooter
   },
+  mounted(){
+    this.myReply()
+  },
   methods:{
-
+    myReply(){
+      this.appFetch({
+        url:'notification',
+        method:'get',
+        data:{
+          type:'1'
+        }
+      })
+    }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"

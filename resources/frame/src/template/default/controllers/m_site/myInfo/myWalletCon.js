@@ -2,7 +2,8 @@
  * 我的钱包
  */
 
-import myWalletHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import myWalletHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import browserDb from '../../../../../helpers/webDbHelper';
 // import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
 // import ContMain from '../../../view/m_site/common/cont/contMainView'
 // import ContFooter from '../../../view/m_site/common/cont/contFooterView'
@@ -47,11 +48,12 @@ export default {
       }
     },
     wallet(){
+      // const tokenId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'wallet',
         method:'get',
         data:{
-          user_id:this.user_id
+          // user_id:this.user_id
         }
       },(res)=>{
         if(res == '200'){
