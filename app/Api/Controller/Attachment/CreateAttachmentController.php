@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,11 +9,10 @@ declare(strict_types=1);
 
 namespace App\Api\Controller\Attachment;
 
-
 use App\Api\Serializer\AttachmentSerializer;
 use App\Commands\Attachment\CreateAttachment;
-use App\Tools\AttachmentUploadTool;
 use Discuz\Api\Controller\AbstractCreateController;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -22,36 +20,34 @@ use Tobscure\JsonApi\Document;
 class CreateAttachmentController extends AbstractCreateController
 {
     /**
-     * 返回的数据字段和格式.
-     *
-     * @var Serializer
+     * {@inheritdoc}
      */
     public $serializer = AttachmentSerializer::class;
 
     /**
-     * 数据操作.
-     *
-     * @param ServerRequestInterface $request  注入http请求对象
-     * @param Document               $document 注入返回数据的文档
-     * @return mixed
+     * @var Dispatcher
+     */
+    protected $bus;
+
+    /**
+     * @param Dispatcher $bus
+     */
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
         $actor = $request->getAttribute('actor');
-
-        // 获取上传的图标
         $file = Arr::get($request->getUploadedFiles(), 'file');
-
-        // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        // 处理上传的圈子图片
-        $data = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new CreateAttachment($actor, $file, $ipAddress)
         );
-
-        // 返回结果
-        return $data;
     }
 }
