@@ -58,9 +58,9 @@ const appFetch = function(params, options) {
 	}
 
 	if(!appConfig.apis[oldUrl]) {
-		console.log("接口key："+oldUrl+" 未发现");
-
-		return false;
+		// console.log("接口key："+oldUrl+" 未发现");
+    appConfig.apis[oldUrl] = "/api/" + oldUrl;
+		// return false;
 	}
 
 	//如果是本地请求，就走接口代理
