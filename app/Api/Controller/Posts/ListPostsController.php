@@ -182,9 +182,7 @@ class ListPostsController extends AbstractListController
         // 关键词搜索
         $queryWord = Arr::get($filter, 'q');
         $query->when($queryWord, function ($query, $queryWord) {
-            $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
-                ->where('content', 'like', "%{$queryWord}%")
-                ->where('is_first', true);
+            $query->where('content', 'like', "%{$queryWord}%")->where('is_first', false);
         });
 
         // event(new ConfigurePostsQuery($query, $filter));

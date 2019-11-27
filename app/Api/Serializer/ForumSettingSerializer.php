@@ -6,10 +6,10 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
-class SettingSerializer extends AbstractSerializer
+class ForumSettingSerializer extends AbstractSerializer
 {
 
-    protected $type = 'settings';
+    protected $type = 'forum';
 
     /**
      * Get the default set of serialized attributes for a model.
@@ -19,11 +19,7 @@ class SettingSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
-            $model['tag'] => [
-                $model['key'] => $model['value']
-            ]
-        ];
+        return $model;
     }
 
     public function getId($model)

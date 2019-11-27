@@ -77,8 +77,7 @@ class UploadAvatar
             $avatarPath = Str::random() . '.png';
 
             $this->remove($user);
-
-            $user->avatar = $avatarPath;
+            $user->changeAvatar($avatarPath);
 
             $this->file->put($avatarPath, $encodedImage);
 
@@ -99,6 +98,6 @@ class UploadAvatar
             }
         });
 
-        $user->avatar = null;
+        $user->changeAvatar('');
     }
 }

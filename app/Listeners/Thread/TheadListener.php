@@ -11,8 +11,12 @@ namespace App\Listeners\Thread;
 
 use App\Events\Post\Created;
 use App\Events\Thread\Deleted;
+use App\Events\Thread\Hidden;
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadWasApproved;
+use App\Models\OperationLog;
 use App\Models\Post;
+use Carbon\Carbon;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -23,6 +27,12 @@ class ThreadListener
         // 发布帖子
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
 
+        // 审核主题
+        $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
+
+        // 隐藏主题
+        $events->listen(Hidden::class, [$this, 'whenThreadWasHidden']);
+
         // 删除主题
         $events->listen(Deleted::class, [$this, 'whenThreadWasDeleted']);
 
@@ -31,6 +41,11 @@ class ThreadListener
         $events->listen(Saving::class, SaveFavoriteToDatabase::class);
     }
 
+    /**
+     * 发布首帖时，更新主题回复数，最后回复 ID
+     *
+     * @param Created $event
+     */
     public function whenPostWasCreated(Created $event)
     {
         $thread = $event->post->thread;
@@ -40,6 +55,42 @@ class ThreadListener
             $thread->refreshLastPost();
             $thread->save();
         }
+    }
+
+    /**
+     * 隐藏主题时，记录操作
+     *
+     * @param Hidden $event
+     */
+    public function whenThreadWasHidden(Hidden $event)
+    {
+        $log = new OperationLog;
+        $log->action = 'hide';
+        $log->message = $event->data['message'];
+        $log->created_at = Carbon::now();
+        $event->thread->logs()->save($log);
+    }
+
+    /**
+     * 审核主题时，记录操作
+     *
+     * @param ThreadWasApproved $event
+     */
+    public function whenThreadWasApproved(ThreadWasApproved $event)
+    {
+        if ($event->thread->is_approved == 1) {
+            $action = 'approve';
+        } elseif ($event->thread->is_approved == 2) {
+            $action = 'ignore';
+        } else {
+            $action = 'disapprove';
+        }
+
+        $log = new OperationLog;
+        $log->action = $action;
+        $log->message = $event->data['message'];
+        $log->created_at = Carbon::now();
+        $event->thread->logs()->save($log);
     }
 
     /**

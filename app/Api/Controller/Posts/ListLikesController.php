@@ -46,7 +46,7 @@ class ListLikesController extends ListPostsController
         );
 
         $document->setMeta([
-            'threadCount' => $this->postCount,
+            'postCount' => $this->postCount,
             'pageCount' => ceil($this->postCount / $limit),
         ]);
 

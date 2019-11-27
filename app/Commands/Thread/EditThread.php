@@ -10,6 +10,7 @@
 namespace App\Commands\Thread;
 
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadWasApproved;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -96,6 +97,12 @@ class EditThread
             $this->assertCan($this->actor, 'approve', $thread);
 
             $thread->is_approved = $attributes['isApproved'];
+
+            $thread->raise(new ThreadWasApproved(
+                $thread,
+                $this->actor,
+                ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+            ));
         }
 
         if (isset($attributes['isSticky'])) {
@@ -111,14 +118,13 @@ class EditThread
         }
 
         if (isset($attributes['isDeleted'])) {
-            $this->assertCan($this->actor, 'delete', $thread);
+            $this->assertCan($this->actor, 'hide', $thread);
 
+            $message = isset($attributes['message']) ? $attributes['message'] : '';
             if ($attributes['isDeleted']) {
-                $thread->deleted_user_id = $this->actor->id;
-                $thread->delete();
+                $thread->hide($this->actor, $message);
             } else {
-                $thread->deleted_user_id = null;
-                $thread->restore();
+                $thread->restore($this->actor, $message);
             }
         }
 

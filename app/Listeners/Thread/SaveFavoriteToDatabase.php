@@ -28,7 +28,7 @@ class SaveFavoriteToDatabase
         if ($thread->exists && isset($data['attributes']['isFavorite'])) {
             $this->assertCan($actor, 'favorite', $thread);
 
-            $isFavorite = $actor->favoriteThreads()->withTrashed()->where('thread_id', $thread->id)->exists();
+            $isFavorite = $actor->favoriteThreads()->where('thread_id', $thread->id)->exists();
 
             if ($isFavorite) {
                 // 已收藏且 isFavorite 为 false 时，取消收藏

@@ -69,7 +69,7 @@ class UserProfile
         $userProfile= User::where('users.id',$this->id)
         ->leftjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
         ->leftjoin('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-        ->select('users.id as id',"username","adminid","users.unionid","mobile","users.createtime as createtime","users.login_ip","nickname","user_profiles.sex","icon")
+        ->select('users.id as id',"username","mobile","users.created_at as created_at","users.last_login_ip","nickname","user_profiles.sex","icon")
         ->first();
 
         // 触发钩子事件
