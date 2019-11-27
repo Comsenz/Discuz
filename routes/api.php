@@ -9,6 +9,8 @@ use App\Api\Controller as ApiController;
 */
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
+$route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
+$route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 
@@ -63,7 +65,8 @@ $route->delete('/users/{id}', 'users.delete', ApiController\Users\DeleteUsersCon
 //$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
 //$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
 
-$route->post('/upload/avatar', 'upload.avatar', ApiController\Users\UploadAvatarController::class);
+$route->post('/users/{id}/avatar', 'users.upload.avatar', ApiController\Users\UploadAvatarController::class);
+$route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 
 /*
 |--------------------------------------------------------------------------

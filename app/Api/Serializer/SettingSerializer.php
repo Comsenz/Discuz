@@ -20,14 +20,14 @@ class SettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'key' => $model->key,
-            'value' => $model->value,
-            'tag' => $model->tag
+            $model['tag'] => [
+                $model['key'] => $model['value']
+            ]
         ];
     }
 
     public function getId($model)
     {
-        return $model->key;
+        return 1;
     }
 }

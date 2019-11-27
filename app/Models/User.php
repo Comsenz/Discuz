@@ -112,7 +112,7 @@ class User extends Model
         return $this;
     }
 
-    public function changeAvatarPath($path)
+    public function changeAvatar($path)
     {
         $this->avatar = $path;
 

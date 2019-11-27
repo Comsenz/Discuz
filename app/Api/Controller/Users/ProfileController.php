@@ -4,11 +4,12 @@
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\UserSerializer;
-use App\Models\User;
+use App\Api\Serializer\UserProfileSerializer;
+use App\Models\Order;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -18,15 +19,18 @@ class ProfileController extends AbstractResourceController
 
     use AssertPermissionTrait;
 
-    public $serializer = UserSerializer::class;
+    public $serializer = UserProfileSerializer::class;
 
     public $optionalInclude = ['wechat', 'groups'];
 
     protected $users;
 
-    public function __construct(UserRepository $users)
+    protected $settings;
+
+    public function __construct(UserRepository $users, SettingsRepository $settings)
     {
         $this->users = $users;
+        $this->settings = $settings;
     }
 
 
@@ -46,7 +50,18 @@ class ProfileController extends AbstractResourceController
         $user = $this->users->findOrFail($id);
 
         if($actor->id !== $user->id) {
-            $this->assertCan($actor, 'profile', $user);
+            $this->assertCan($actor, 'edit', $user);
+        }
+
+        if($this->settings->get('siteMode') === 'pay') {
+            $user->payd = false;
+            if($order = $user->orders()->where([
+                ['type', Order::ORDER_TYPE_REGISTER],
+                ['status', Order::ORDER_STATUS_PAID]
+            ])->first()) {
+                $user->payd = true;
+                $user->payTime = $order->updated_at;
+            }
         }
 
         $include = $this->extractInclude($request);

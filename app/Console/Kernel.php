@@ -16,12 +16,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $schedule->call(function() {
-//            dump(1);
-//        })->everyMinute();
-//
-//        $schedule->call(function() {
-//            dump(5);
-//        })->everyFiveMinutes();
+        $schedule->call(function() {
+            file_put_contents('/tmp/aaa.txt', "asdf\r\n", FILE_APPEND);
+        })->everyMinute();
+
+        $schedule->call(function() {
+            file_put_contents('/tmp/aaa.txt', "ddddd\r\n", FILE_APPEND);
+        })->everyFiveMinutes();
     }
 }
