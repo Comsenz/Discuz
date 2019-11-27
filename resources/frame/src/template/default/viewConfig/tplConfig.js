@@ -25,10 +25,10 @@ export default {
           require(['../view/m_site/home/text'],resolve)
         },
         metaInfo:{
-          title:"textarea",
+          title:"textarea"
         }
       },
-      
+
       'wechat':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/wechatView'],resolve)

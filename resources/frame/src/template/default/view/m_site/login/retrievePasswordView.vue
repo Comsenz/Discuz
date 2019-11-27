@@ -51,7 +51,7 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="forgetSendSmsCode">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default" @click="forgetSendSmsCode" :class="{'grayBg':isGray}">{{ btnContent }}</van-button>
             </van-field>
 
             <van-field
@@ -65,7 +65,7 @@
 
 
         <div class="retrieve-password-btn">
-          <van-button type="primary">提交</van-button>
+          <van-button type="primary" @click="submissionPassword">提交</van-button>
         </div>
 
       </main>
@@ -74,6 +74,7 @@
 
 <script>
 import '../../../scss/m_site/login/loginSignUpModule.scss';
+import  '../../../scss/m_site/mobileIndex.scss';
 import retrievePasswordCon from '../../../controllers/m_site/login/retrievePasswordCon';
 export default {
     name: "retrieve-password-view",

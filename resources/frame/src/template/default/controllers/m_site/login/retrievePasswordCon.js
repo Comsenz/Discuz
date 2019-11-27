@@ -8,8 +8,8 @@ export default {
     return {
       newpwd:"",
       verifyNum:"",
-      phoneNum:"18237597790",
-      logpwd:' logpwd',
+      phoneNum:"13524405426",
+      lostpwd:'lostpwd',
       btnContent:"获取验证码", //获取验证码按钮内文字
       time:1, //发送验证码间隔时间
       disabled:false, //按钮状态
@@ -35,7 +35,7 @@ export default {
       if(!reg.test(phoneNum)){//手机号不合法
        this.$toast("您输入的手机号码不合法，请重新输入");
       }
-      // 获取验证码请求
+      //获取验证码请求
       this.appFetch({
         url:"sendSms",
         method:"post",
@@ -43,23 +43,19 @@ export default {
           "data": {
             "attributes": {
               mobile:this.phoneNum,
-              type:this.logpwd
+              type:this.lostpwd
             }
           }
         }
       }).then(res => {
           // console.log(res);
-          var time = this.time;
           this.insterVal = res.data.attributes.interval;
-          // console.log(this.insterVal+'555555');
           this.time = this.insterVal;
           this.timer();
        });
     },
     timer(){
-      // alert('执行');
       if(this.time>1){
-        // alert('2222');
        this.time--;
        this.btnContent = this.time+"s后重新获取";
        this.disabled = true;
@@ -82,14 +78,15 @@ export default {
             "attributes": {
               "mobile": this.phoneNum,
               "code": this.verifyNum,
-              "type": this.logpwd
+              "type": this.lostpwd,
+              'password':this.newpwd
             }
           }
         }
       }).then(res => {
           // console.log(res);
           this.$router.push({
-            path:'circle',
+            path:'login-user',
           });
 
        });

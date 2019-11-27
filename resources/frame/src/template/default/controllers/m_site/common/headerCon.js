@@ -2,6 +2,7 @@
  * 移动端header控制器
  */
 import {Bus} from '../../../store/bus.js';
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 
 	data: function() {
@@ -186,30 +187,13 @@ export default {
 		 //        console.log(res);
 
 		 //    });
-
-        // this.paramsObj = {
-        //   userId:this.userId
-        // };
-        // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
-        this.appFetch({
-              url:'users',
-              method:'get',
-              // data:{
-              //   "data": {
-              //     "attributes": {
-              //       avatarUr:this.avatarUr,
-              //       username:this.username,
-              //       mobile:this.mobile
-              //     }
-              //   }
-              // }
-          }).then(res => {
-            // avatarUr:this.avatarUr,
-            this.username = res.data.attributes.nickname;
-            this.mobile = res.data.attributes.mobile;
-              console.log(res);
-
-          });
+        var userId = browserDb.getLItem('tokenId');
+        this.apiStore.find('users', userId).then(data => {
+          // console.log(data.data.attributes.username);
+          this.username = data.data.attributes.avatarUrl;
+          this.username = data.data.attributes.username;
+          this.mobile = data.data.attributes.mobile;
+        });
 		},
 
 		backUrl () {
@@ -218,7 +202,6 @@ export default {
 	    },
 		showPopup() {
 			//侧边栏显示
-	      	this.popupShow = true;
 	    },
 
 	 	/**

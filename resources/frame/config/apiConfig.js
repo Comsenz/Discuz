@@ -1,12 +1,15 @@
 /**
  * 接口配置文件
  */
+// import browserDb from '../src/helpers/webDbHelper';
+// var nn =require ('../src/helpers/webDbHelper.js');
+// let userId = browserDb.getLItem('tokenId');
 
 module.exports = {
 	'getVote': '/commonvote/getvote', //获取单组投票数据
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
-  'users':'/api/users/1', //用户信息
+  'users':'/api/users', //用户信息
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
