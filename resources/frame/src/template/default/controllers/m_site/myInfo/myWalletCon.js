@@ -17,7 +17,7 @@ export default {
       // time:"5分钟前",
       // userName:'Elizabeth'
       value:'',
-      valueFrozen:'2222',
+      valueFrozen:'',
       user_id:'1'
     }
   },
@@ -29,7 +29,7 @@ export default {
   },
  
   created(){
-    // this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.wallet()
   },
   mounted(){
     this.wallet()
@@ -49,23 +49,27 @@ export default {
     },
     wallet(){
       // const tokenId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url:'wallet',
-        method:'get',
-        data:{
-          // user_id:this.user_id
-        }
-      },(res)=>{
-        if(res == '200'){
-          console.log('成功')
-        }else{
-          console.log('400')
-        }
-      }).then((res)=>{
+      // this.appFetch({
+      //   url:'wallet',
+      //   method:'get',
+      //   data:{
+      //     // user_id:this.user_id
+      //   }
+      // },(res)=>{
+      //   if(res == '200'){
+      //     console.log('成功')
+      //   }else{
+      //     console.log('400')
+      //   }
+      // }).then((res)=>{
+      //   this.value = res.data.attributes.available_amount;
+      //   this.valueFrozen = res.data.attributes.freeze_amount;
+      // })
+      let user_id = browserDb.getLItem('tokenId');
+      this.apiStore.find('wallet/user',user_id).then(res=>{
         this.value = res.data.attributes.available_amount;
         this.valueFrozen = res.data.attributes.freeze_amount;
       })
     }
   },
-  
 }

@@ -20,6 +20,9 @@ export default {
     WithdrawHeader,
     Panenl
   },
+  mounted(){
+    this.withdraw()
+  },
 
   methods:{
     onInput(value) {
@@ -27,6 +30,15 @@ export default {
     },
     onDelete() {
       console.log('删除');
+    },
+    withdraw(){
+      this.appFetch({
+        url:'cash',
+        methods:'post',
+        data:{
+          cash_apply_amount:this.withdrawalAmount
+        }
+      })
     }
   }
 }

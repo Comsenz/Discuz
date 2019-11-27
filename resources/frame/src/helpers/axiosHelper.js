@@ -38,8 +38,8 @@ const getApi = function(key){
     if(!uri) {
     	return "";
     }
-
-   	return appConfig.apiBaseUrl + uri;
+     return appConfig.apiBaseUrl + uri;
+     
 }
 
 /**
@@ -50,7 +50,8 @@ const getApi = function(key){
  * @return {[type]}         [description]
  */
 const appFetch = function(params, options) {
-	var oldUrl = params.url;
+  var oldUrl = params.url;
+
 
 	if(params === undefined) {
 		console.error("必须传递参数");
@@ -58,8 +59,10 @@ const appFetch = function(params, options) {
 	}
 
 	if(!appConfig.apis[oldUrl]) {
+    console.log(getApi());
 		// console.log("接口key："+oldUrl+" 未发现");
     appConfig.apis[oldUrl] = "/api/" + oldUrl;
+    // console.log("/api/" + oldUrl);
 		// return false;
 	}
 
@@ -67,7 +70,8 @@ const appFetch = function(params, options) {
 	if(process.env.NODE_ENV === 'development') {
 		// console.log(appConfig.apis);
 		params.baseURL = "/api";
-		params.url = appConfig.apis[oldUrl];
+    params.url = appConfig.apis[oldUrl];
+    // console.log(appConfig.apis[oldUrl]);
 	} else {
 		params.baseURL = "/";
 		params.url = appConfig.apiBaseUrl + appConfig.apis[oldUrl];

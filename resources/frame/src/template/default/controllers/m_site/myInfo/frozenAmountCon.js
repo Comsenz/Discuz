@@ -26,7 +26,7 @@ export default {
         url:"walletFrozen",
         method:"get",
         data:{
-          
+          type:'10'
         }
       }).then((res)=>{
         this.walletFrozenList = res.data
