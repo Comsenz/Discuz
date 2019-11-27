@@ -1,16 +1,13 @@
 @charset "utf-8";
 
-/**
-  全局变量
- */
-
-
-//载入后打包慢
+/*
+  elementUI-主题
+*/
 /* 改变主题色变量 */
 $--color-primary:#336699;
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
-//@import "~element-ui/packages/theme-chalk/src/index";
+@import "~element-ui/packages/theme-chalk/src/index";
 
 
 //多选、单选按钮颜色、副颜色
@@ -37,6 +34,7 @@ $selectFontColor:#303133;
 /*复选按钮*/
 .el-checkbox{
   font-weight: 400;
+  color: #303133;
 }
 .el-checkbox__input.is-checked .el-checkbox__inner{
   background-color: $selectColor;
@@ -100,12 +98,15 @@ $selectFontColor:#303133;
 
 }
 
-
 /*输入框*/
 .el-input__inner{
   border: 1PX solid #D8DCE6;
 }
 
+
+/*
+  全局变量
+*/
 
 $blue:#0054A5;
 
@@ -130,16 +131,15 @@ $tableBorderColor:#EBEEF5;    //表格边框线
 
 $tableHeaderColor:#FAFAFA;     //表格头部颜色
 
+$splitLine:#DCDFE6;     //竖分割线颜色
 
 /*后台界面规定元素默认属性*/
 *{
-  //font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;;
-  //font-size: 14PX;
   font:14PX/1 Lucida Grande,Lucida Sans Unicode,Helvetica Neue,Hiragino Sans GB,Microsoft Yahei,sans-serif;
   a{
     color: $main;
   }
-  /*p,span,li,ul,a{
-    font-size: 14PX;
-  }*/
 }
+
+
+

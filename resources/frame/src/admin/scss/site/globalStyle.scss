@@ -147,6 +147,7 @@
 
 }
 
+
 /*
   第三方登录设置配置
 */
@@ -185,7 +186,7 @@
       }
     }
 
-    .content-filter-set-table-add{
+    /*.content-filter-set-table-add{
       width: 100%;
       height: 45PX;
       border-bottom: 1PX solid #EBEEF5;
@@ -199,11 +200,11 @@
         //font-size:14PX;
         //font-weight:400;
       }
-    }
+    }*/
 
   }
 
-  .batch-set-box{
+  /*.batch-set-box{
 
     .el-radio-group{
       margin-top: 15PX;
@@ -216,21 +217,46 @@
 
     h2{
       font-size:18PX;
-      //font-weight:400;
       color:$titleColor;
       line-height:25PX;
       margin-bottom: 11PX;
     }
     p{
-      //font-size:14PX;
-      //font-weight:400;
       color:$commentColor;
       line-height:28PX;
     }
 
-  }
+  }*/
 
 }
+
+/*
+  批量添加本地敏感词
+*/
+.add-sensitive-words-box{
+
+  .el-radio-group{
+    margin-top: 15PX;
+
+    div:last-of-type{
+      margin-top: 22PX;
+    }
+
+  }
+
+  h2{
+    font-size:18PX;
+    color:$titleColor;
+    line-height:25PX;
+    margin-bottom: 11PX;
+  }
+  p{
+    color:$commentColor;
+    line-height:28PX;
+  }
+}
+
+
 
 /**
   支付设置
@@ -271,11 +297,10 @@
 /**
   角色管理
  */
-$tableHeaderColor:#FAFAFA;
 .role-manage-set-box{
   margin-top: 15PX;
 
-  .role-manage-set-table-add{
+  /*.role-manage-set-table-add{
     width: 100%;
     height: 45PX;
     border-bottom: 1PX solid #EBEEF5;
@@ -291,7 +316,7 @@ $tableHeaderColor:#FAFAFA;
         cursor: pointer;
       }
     }
-  }
+  }*/
 
   /*.role-editing-box{
 
@@ -324,11 +349,8 @@ $tableHeaderColor:#FAFAFA;
     }
   }*/
 
-  .card-box{
-    padding-top: 0;
-  }
-
 }
+
 
 /*
   角色管理-权限编辑
