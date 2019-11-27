@@ -6,6 +6,7 @@ namespace App\Commands\Users;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\User\AvatarUploader;
 use App\Validators\AvatarValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
@@ -22,8 +23,9 @@ class UploadAvatar
     protected $app;
     protected $validator;
     protected $users;
-    protected $file;
     protected $upload_file;
+
+    protected $avatarUploader;
 
     public function __construct(User $actor, $id, UploadedFile $upload_file)
     {
@@ -32,12 +34,12 @@ class UploadAvatar
         $this->upload_file = $upload_file;
     }
 
-    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, Factory $file) {
+    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader) {
 
         $this->app = $app;
         $this->users = $users;
         $this->validator = $validator;
-        $this->file = $file->disk('avatar');
+        $this->avatarUploader = $avatarUploader;
 
         return $this();
     }
@@ -68,18 +70,7 @@ class UploadAvatar
 
             $image = (new ImageManager())->make($tmpFile);
 
-            if (extension_loaded('exif')) {
-                $image->orientate();
-            }
-
-            $encodedImage = $image->fit(200, 200)->encode('png');
-
-            $avatarPath = Str::random() . '.png';
-
-            $this->remove($user);
-            $user->changeAvatar($avatarPath);
-
-            $this->file->put($avatarPath, $encodedImage);
+            $this->avatarUploader->upload($user, $image);
 
             $user->save();
         } finally {
@@ -87,17 +78,5 @@ class UploadAvatar
         }
 
         return $user;
-    }
-
-    private function remove(User $user) {
-        $avatarPath = $user->getOriginal('avatar');
-
-        $user->saved(function() use ($avatarPath) {
-            if($this->file->has($avatarPath)) {
-                $this->file->delete($avatarPath);
-            }
-        });
-
-        $user->changeAvatar('');
     }
 }
