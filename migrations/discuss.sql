@@ -203,6 +203,7 @@ CREATE TABLE `mobile_codes` (
   `code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '5位数字验证码',
   `type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '默认0，登录：1',
   `state` tinyint(1) NOT NULL DEFAULT '0',
+   `ip` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'ip',
   `exception_at` datetime NOT NULL COMMENT '过期时间',
   `created_at` datetime NOT NULL COMMENT '发送时间',
   `updated_at` datetime NOT NULL,

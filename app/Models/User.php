@@ -29,12 +29,16 @@ use App\Notifications\DiscuzChannelManager;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @package App\Models
+ *
  */
-class User extends Model
+class mobileUser extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
     use Notifiable;
+
+
+    const MOBILE_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -129,6 +133,13 @@ class User extends Model
     public function changeStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function changeMobileActive($active)
+    {
+        $this->mobile_confirmed = $active;
 
         return $this;
     }
