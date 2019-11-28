@@ -4,22 +4,22 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: Restored.php xxx 2019-11-27 14:46:00 LiuDongdong $
+ *      $Id: PostWasApproved.php xxx 2019-11-28 10:35:00 LiuDongdong $
  */
 
-namespace App\Events\Thread;
+namespace App\Events\Post;
 
-use App\Models\Thread;
+use App\Models\Post;
 use App\Models\User;
 
-class Restored
+class PostWasApproved
 {
     /**
-     * The thread that was restored.
+     * The post that was approved.
      *
-     * @var Thread
+     * @var Post
      */
-    public $thread;
+    public $post;
 
     /**
      * @var User
@@ -32,13 +32,13 @@ class Restored
     public $data;
 
     /**
-     * @param Thread $thread
+     * @param Post $post
      * @param User $actor
      * @param array $data
      */
-    public function __construct(Thread $thread, User $actor, array $data = [])
+    public function __construct(Post $post, User $actor, array $data = [])
     {
-        $this->thread = $thread;
+        $this->post = $post;
         $this->actor = $actor;
         $this->data = $data;
     }

@@ -9,10 +9,10 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saving;
 use App\Models\User;
 use App\Repositories\PostRepository;
-use Carbon\Carbon;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -77,6 +77,12 @@ class BatchEditPosts
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $post)) {
                     $post->is_approved = $attributes['isApproved'];
+
+                    $post->raise(new PostWasApproved(
+                        $post,
+                        $this->actor,
+                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+                    ));
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -85,12 +91,12 @@ class BatchEditPosts
 
             if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('delete', $post)) {
+                    $message = isset($attributes['message']) ? $attributes['message'] : '';
+
                     if ($attributes['isDeleted']) {
-                        $post->deleted_at = Carbon::now();
-                        $post->deleted_user_id = $this->actor->id;
+                        $post->hide($this->actor, $message);
                     } else {
-                        $post->deleted_at = null;
-                        $post->deleted_user_id = null;
+                        $post->restore($this->actor, $message);
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];

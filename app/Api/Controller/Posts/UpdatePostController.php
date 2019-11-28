@@ -33,6 +33,11 @@ class UpdatePostController extends AbstractResourceController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = ['logs'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -54,14 +59,8 @@ class UpdatePostController extends AbstractResourceController
         $postId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        $post = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new EditPost($postId, $actor, $data)
         );
-
-        $post->setStateUser($actor);
-
-        $post = $post->load(array_merge($this->include, ['user', 'likeState']));
-
-        return $post;
     }
 }

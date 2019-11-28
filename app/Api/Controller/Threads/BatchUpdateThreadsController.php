@@ -27,7 +27,7 @@ class BatchUpdateThreadsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $include = ['logs'];
+    public $optionalInclude = ['logs'];
 
     /**
      * @var Dispatcher

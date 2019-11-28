@@ -27,7 +27,7 @@ class UpdateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public $include = ['logs'];
+    public $optionalInclude = ['logs'];
 
     /**
      * @var Dispatcher

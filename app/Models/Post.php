@@ -10,6 +10,8 @@
 namespace App\Models;
 
 use App\Events\Post\Created;
+use App\Events\Post\Hidden;
+use App\Events\Post\Restored;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -18,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -42,7 +43,6 @@ class Post extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
-    use SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -98,6 +98,44 @@ class Post extends Model
     }
 
     /**
+     * Hide the post.
+     *
+     * @param User $actor
+     * @param string $message
+     * @return $this
+     */
+    public function hide(User $actor, $message = '')
+    {
+        if (! $this->deleted_at) {
+            $this->deleted_at = Carbon::now();
+            $this->deleted_user_id = $actor->id;
+
+            $this->raise(new Hidden($this, $actor, ['message' => $message]));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Restore the post.
+     *
+     * @param User $actor
+     * @param string $message
+     * @return $this
+     */
+    public function restore(User $actor, $message = '')
+    {
+        if ($this->deleted_at !== null) {
+            $this->deleted_at = null;
+            $this->deleted_user_id = null;
+
+            $this->raise(new Restored($this, $actor, ['message' => $message]));
+        }
+
+        return $this;
+    }
+
+    /**
      * Refresh the thread's post count.
      *
      * @return $this
@@ -140,6 +178,14 @@ class Post extends Model
     }
 
     /**
+     * Define the relationship with the thread's operation Log.
+     */
+    public function logs()
+    {
+        return $this->morphMany(OperationLog::class, 'log_able');
+    }
+
+    /**
      * Define the relationship with the post's liked users.
      *
      * @return BelongsToMany
@@ -160,7 +206,7 @@ class Post extends Model
     }
 
     /**
-     * Define the relationship with the discussion's state for a particular user.
+     * Define the relationship with the post's like state for a particular user.
      *
      * @param User|null $user
      * @return HasOne

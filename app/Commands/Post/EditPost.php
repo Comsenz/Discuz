@@ -9,6 +9,7 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\User;
@@ -88,17 +89,23 @@ class EditPost
             $this->assertCan($this->actor, 'approve', $post);
 
             $post->is_approved = $attributes['isApproved'];
+
+            $post->raise(new PostWasApproved(
+                $post,
+                $this->actor,
+                ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+            ));
         }
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'delete', $post);
 
+            $message = isset($attributes['message']) ? $attributes['message'] : '';
+
             if ($attributes['isDeleted']) {
-                $post->deleted_user_id = $this->actor->id;
-                $post->delete();
+                $post->hide($this->actor, $message);
             } else {
-                $post->deleted_user_id = null;
-                $post->restore();
+                $post->restore($this->actor, $message);
             }
         }
 

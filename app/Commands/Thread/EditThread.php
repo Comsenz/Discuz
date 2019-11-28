@@ -50,9 +50,9 @@ class EditThread
     public $data;
 
     /**
-     * @param int $threadId The ID of the discussion to edit.
+     * @param int $threadId The ID of the thread to edit.
      * @param User $actor The user performing the action.
-     * @param array $data The attributes to update on the discussion.
+     * @param array $data The attributes to update on the thread.
      */
     public function __construct($threadId, User $actor, array $data)
     {
@@ -121,6 +121,7 @@ class EditThread
             $this->assertCan($this->actor, 'hide', $thread);
 
             $message = isset($attributes['message']) ? $attributes['message'] : '';
+
             if ($attributes['isDeleted']) {
                 $thread->hide($this->actor, $message);
             } else {
