@@ -11,13 +11,13 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      collectionList:{
+      collectionList:[],
       // imgUrl:'',
       // stateTitle:'点赞了我',
       // time:"5分钟前",
       // userName:'Elizabeth',
-      // contText:"土豆哪里去挖？土豆一挖一麻袋。"
-      }
+      contText:"土豆哪里去挖？土豆一挖一麻袋。"
+      
     }
   },
   components:{
@@ -34,8 +34,9 @@ export default {
       const params = {};
       params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('collection', params).then(res=>{
-        this.collectionList = res.payload.data
-        console.log(res.payload.data);
+        this.collectionList = res
+        // console.log(res[0].user_id());
+        console.log(res,'1111111111111');
       })
     }
   },

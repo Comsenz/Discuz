@@ -5,14 +5,16 @@
       <div class="my-collection-main-cont" v-for="(item,index) in collectionList" :key="index">
 
         <div class="home-page-cont">
-          <ContHeader
+          <!-- <ContHeader
             :imgUrl="imgUrl"
             :stateTitle="stateTitle"
             :time="item.attributes.createdAt"
+            :user="item.user().id()"
+            :username222="item.user().username()"
             :userName="userName">
-          </ContHeader>
+          </ContHeader> -->
           <ContMain
-            :contText="contText">
+            :contText="item.contText">
           </ContMain>
           <ContFooter></ContFooter>
         </div>

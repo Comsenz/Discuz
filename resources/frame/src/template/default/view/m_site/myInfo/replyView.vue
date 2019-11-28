@@ -3,16 +3,16 @@
     <ReplyHeader title="回复我的"></ReplyHeader>
     <main class="reply-my-main content">
       <div class="reply-my-cont cell-crossing" v-for="(item,index) in replyList" :key="index">
-        <!-- <ContHeader
-          :imgUrl="item"
-          :stateTitle="stateTitle"
-          :time="time"
-          :userName="userName">
-          <div slot="operating">删除</div>
-        </ContHeader> -->
+        <ContHeader
+          :imgUrl='imgUrl'
+          :stateTitle="item.detail().thread_title"
+          :time="$moment(item.read_at()).startOf('hour').fromNow()"
+          :userName="item.detail().user_name">
+          <div slot="operating" @click="deleteReply">删除</div>
+        </ContHeader>
         <div class="reference">
           <div class="reference-cont">
-            <span>我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</span>
+            <span>{{item.detail().post_content}}</span>
           </div>
         </div>
         <div class="quote-reply">

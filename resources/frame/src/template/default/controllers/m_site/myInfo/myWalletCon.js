@@ -65,11 +65,11 @@ export default {
       //   this.value = res.data.attributes.available_amount;
       //   this.valueFrozen = res.data.attributes.freeze_amount;
       // })
-      let user_id = browserDb.getLItem('tokenId');
-      this.apiStore.find('wallet/user',user_id).then(res=>{
-        this.value = res.data.attributes.available_amount;
-        this.valueFrozen = res.data.attributes.freeze_amount;
-      })
+      // let user_id = browserDb.getLItem('tokenId');
+      // this.apiStore.find('wallet/user',user_id).then(res=>{
+      //   this.value = res.data.attributes.available_amount;
+      //   this.valueFrozen = res.data.attributes.freeze_amount;
+      // })
     }
   },
 }

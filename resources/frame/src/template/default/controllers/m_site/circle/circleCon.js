@@ -147,7 +147,7 @@ export default {
         // console.log(data[0].firstPost());
         // console.log(data[0].rewardedUsers()[0]);
         this.themeListCon = data;
-        // console.log(this.themeListCon);
+        console.log(this.themeListCon);
 
       });
       //请求主题导航列表
