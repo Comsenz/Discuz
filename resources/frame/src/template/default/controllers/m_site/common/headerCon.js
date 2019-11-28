@@ -171,22 +171,6 @@ export default {
 	methods: {
 		//获取圈子主题数，成员数，圈主名称
 		getCircle(){
-			// this.appFetch({
-		 //        url:'getCircle',
-		 //        method:'post',
-   //          // data:{
-   //          //   "data": {
-   //          //     "attributes": {
-   //          //       themeNum:this.themeNum,
-   //          //       memberNum:this.memberNum,
-   //          //       circleLeader:this.circleLeader
-   //          //     }
-   //          //   }
-   //          // }
-		 //    }).then(res => {
-		 //        console.log(res);
-
-		 //    });
         var userId = browserDb.getLItem('tokenId');
         this.apiStore.find('users', userId).then(data => {
           // console.log(data.data.attributes.username);
@@ -202,6 +186,7 @@ export default {
 	    },
 		showPopup() {
 			//侧边栏显示
+	      	this.popupShow = true;
 	    },
 
 	 	/**

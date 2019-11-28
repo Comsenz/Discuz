@@ -58,20 +58,6 @@ class ThreadListener
     }
 
     /**
-     * 隐藏主题时，记录操作
-     *
-     * @param Hidden $event
-     */
-    public function whenThreadWasHidden(Hidden $event)
-    {
-        $log = new OperationLog;
-        $log->action = 'hide';
-        $log->message = $event->data['message'];
-        $log->created_at = Carbon::now();
-        $event->thread->logs()->save($log);
-    }
-
-    /**
      * 审核主题时，记录操作
      *
      * @param ThreadWasApproved $event
@@ -88,6 +74,20 @@ class ThreadListener
 
         $log = new OperationLog;
         $log->action = $action;
+        $log->message = $event->data['message'];
+        $log->created_at = Carbon::now();
+        $event->thread->logs()->save($log);
+    }
+
+    /**
+     * 隐藏主题时，记录操作
+     *
+     * @param Hidden $event
+     */
+    public function whenThreadWasHidden(Hidden $event)
+    {
+        $log = new OperationLog;
+        $log->action = 'hide';
         $log->message = $event->data['message'];
         $log->created_at = Carbon::now();
         $event->thread->logs()->save($log);

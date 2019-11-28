@@ -118,8 +118,8 @@ class BatchEditThreads
 
             if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('hide', $thread)) {
-
                     $message = isset($attributes['message']) ? $attributes['message'] : '';
+
                     if ($attributes['isDeleted']) {
                         $thread->hide($this->actor, $message);
                     } else {

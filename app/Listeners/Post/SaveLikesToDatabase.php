@@ -47,7 +47,7 @@ class SaveLikesToDatabase
         if ($post->exists && isset($data['attributes']['isLiked'])) {
             $this->assertCan($actor, 'like', $post);
 
-            $isLiked = $actor->likedPosts()->withTrashed()->where('post_id', $post->id)->exists();
+            $isLiked = $actor->likedPosts()->where('post_id', $post->id)->exists();
 
             if ($isLiked) {
                 // 已喜欢且 isLiked 为 false 时，取消喜欢

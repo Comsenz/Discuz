@@ -20,12 +20,12 @@ export default {
           oneHeader: true
         }
       },
-      'text':{
+      'expression':{  //表情
         comLoad:function (resolve) {
-          require(['../view/m_site/home/text'],resolve)
+          require(['../view/m_site/common/expressionView'],resolve)
         },
         metaInfo:{
-          title:"textarea"
+          title:"expression"
         }
       },
 
@@ -191,14 +191,14 @@ export default {
 	      title:"主题详情"
 	    }
 	  },
-      'post-topic':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/home/postTopicView'],resolve)
-        },
-        metaInfo:{
-          title:"发布主题"
-        }
+    'post-topic':{
+      comLoad:function (resolve) {
+        require(['../view/m_site/home/postTopicView'],resolve)
       },
+      metaInfo:{
+        title:"发布主题"
+      }
+    },
 
       //登录、注册、微信绑定模块路由
       'login-user':{

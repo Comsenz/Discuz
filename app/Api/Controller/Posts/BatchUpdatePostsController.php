@@ -25,6 +25,11 @@ class BatchUpdatePostsController extends AbstractListController
     public $serializer = PostSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = ['logs'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -62,24 +67,8 @@ class BatchUpdatePostsController extends AbstractListController
 
             $posts = json_decode($response->getBody(), true);
 
-            $data = $posts['data'];
+            $data = $this->getBatchData($meta, $posts['data']);
             $resultMeta = $posts['meta'];
-
-            if ($meta['type'] == 'approve') {
-                $action = ['isApprove' => 1];   // 通过
-            } elseif ($meta['type'] == 'ignore') {
-                $action = ['isApprove' => 2];   // 忽略
-            } elseif ($meta['type'] == 'delete') {
-                $action = ['isDeleted' => true];   // 删除
-            } elseif ($meta['type'] == 'restore') {
-                $action = ['isDeleted' => false];   // 还原
-            } else {
-                $action = [];
-            }
-
-            foreach ($data as $key => $post) {
-                $data[$key]['attributes'] = $action;
-            }
         }
 
         $result = $this->bus->dispatch(
@@ -95,5 +84,31 @@ class BatchUpdatePostsController extends AbstractListController
         }
 
         return $result['data'];
+    }
+
+    /**
+     * @param $meta
+     * @param $posts
+     * @return mixed
+     */
+    protected function getBatchData($meta, $posts)
+    {
+        if ($meta['type'] == 'approve') {
+            $action = ['isApproved' => 1];   // 通过
+        } elseif ($meta['type'] == 'ignore') {
+            $action = ['isApproved' => 2];   // 忽略
+        } elseif ($meta['type'] == 'delete') {
+            $action = ['isDeleted' => true];   // 删除
+        } elseif ($meta['type'] == 'restore') {
+            $action = ['isDeleted' => false];   // 还原
+        } else {
+            $action = [];
+        }
+
+        foreach ($posts as $key => $post) {
+            $posts[$key]['attributes'] = $action;
+        }
+
+        return $posts;
     }
 }

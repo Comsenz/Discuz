@@ -36,6 +36,9 @@ class User extends Model
     use ScopeVisibilityTrait;
     use Notifiable;
 
+
+    const MOBILE_ACTIVE = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -129,6 +132,13 @@ class User extends Model
     public function changeStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function changeMobileActive($active)
+    {
+        $this->mobile_confirmed = $active;
 
         return $this;
     }
