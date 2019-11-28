@@ -23,7 +23,7 @@
 
           <el-table-column
             label="排序"
-            width="100"
+            width="120"
           >
             <template slot-scope="scope">
               <el-input  v-model="scope.row.sort" />
