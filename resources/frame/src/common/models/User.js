@@ -14,5 +14,6 @@ Object.assign(User.prototype, {
   unionId: Model.attribute('unionId'),
   updatedAt: Model.attribute('updatedAt'),
   username: Model.attribute('username'),
-  password: Model.attribute('password')
+  password: Model.attribute('password'),
+  avatarUrl: Model.attribute('avatarUrl'),
 });

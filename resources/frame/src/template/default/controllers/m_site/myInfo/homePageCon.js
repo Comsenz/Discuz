@@ -29,11 +29,12 @@ export default {
   },
   methods:{
     loadTheme(){
-    //   alert('初始化');
-      const params = {filter:{user:this.userId}};
+      const params = {
+        'filter[user]': this.userId
+      };
       params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
-        console.log(data[0]);
+        // console.log(data[0].user());
         this.OthersThemeList = data;
       });
     }

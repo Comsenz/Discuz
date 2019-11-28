@@ -116,16 +116,9 @@ export default {
 	  }
   },
 	props: {
-    // title: { // 组件的标题
-    //   type: String,
-    //   default: () => {
-    //     return '';
-    //   }
-    // },
-    // themeNavList:{
-    //   type:Array
-
-    // },
+    userInfoList: { // 组件的list
+      type: Array
+    },
     headFixed: { // 组件是否悬浮头部
       headFixed: false
     },
