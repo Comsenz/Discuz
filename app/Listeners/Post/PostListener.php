@@ -53,20 +53,18 @@ class PostListener
         $post = $event->post;
         $actor = $event->actor;
 
-        // 通知被回复的人
-        if ($event->post->reply_id) {
-            $replyPost = Post::find($post->reply_id);
+        // 如果当前用户不是主题作者，则通知主题作者
+        if ($post->thread->user_id != $actor->id) {
+            $post->thread->user->notify(new Replied($post));
+        }
 
-            $info = [
-                'username' => $actor->username,
-                'user_id' => $actor->id,
-                'info' => '回复了我的帖子',
-                'post_id' => $post->id,
-                'reply_id' => $post->reply_id,
-                'thread_id' => $post->thread_id,
-                'post_content' => $post->content,
-            ];
-            $replyPost->user->notify(new Replied($info));
+        // 如果被回复的用户不是当前用户，也不是主题作者，则通知被回复的人
+        if ($event->post->reply_id) {
+            $reply = Post::find($post->reply_id);
+
+            if ($reply->user_id != $actor->id && $reply->user_id != $post->thread->user_id) {
+                $reply->user->notify(new Replied($post));
+            }
         }
     }
 

@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_first
  * @property bool $is_approved
  * @property Thread $thread
+ * @property User $user
  * @package App\Models
  */
 class Post extends Model

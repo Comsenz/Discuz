@@ -24,6 +24,9 @@ use App\Notifications\DiscuzChannelManager;
  * @property string $username
  * @property string $mobile
  * @property string $password
+ * @property string $avatar
+ * @property int $status
+ * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
  * @property Carbon $created_at

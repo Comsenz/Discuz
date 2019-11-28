@@ -39,6 +39,19 @@ class PostPolicy extends AbstractPolicy
 
     /**
      * @param User $actor
+     * @param string $ability
+     * @param Post $post
+     * @return bool|null
+     */
+    public function can(User $actor, $ability, Post $post)
+    {
+        if ($actor->can($ability . 'Posts', $post->thread)) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
      * @param Builder $query
      */
     public function find(User $actor, Builder $query)
