@@ -2,7 +2,7 @@
   <div class="my-info-money-header">
     <orderDetailsHeader title="订单明细"></orderDetailsHeader>
     <main class="content">
-      <Panenl :title="type[item.attributes.type]" :num="item.attributes.amount" v-for="(item,index) in orderList":key="index">
+      <Panenl :title="type[item.attributes.type]" :num="item.attributes.amount" v-for="(item,index) in orderList" :key="index">
         <span slot="label">{{status[item.attributes.status]}}</span>
         <span slot="label">流水号 : {{item.attributes.order_sn}}</span>
         <span slot="label">{{$moment(item.attributes.created_at).format('YYY-MM-DD HH:mm')}}</span>

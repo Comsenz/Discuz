@@ -25,6 +25,7 @@ module.exports = {
   'invite':'/api/invite',
   'walletDetails':'/api/wallet/log' ,//钱包明细
   'updateWallet':'/api/wallet/user/',//更新用户钱包
-  'cash':'/wallet/cash',//提现
+  'cash':'/api/wallet/cash',//提现
+  'collection':'/api/favorites',//我的收藏
   // 'getCircle': '/circle/getCircle', //获取circle信息
 }

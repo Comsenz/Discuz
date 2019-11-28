@@ -2,13 +2,13 @@
   <div class="my-collection-box">
     <CollectionHeader title="我的收藏"></CollectionHeader>
     <main class="my-collection-main content">
-      <div class="my-collection-main-cont">
+      <div class="my-collection-main-cont" v-for="(item,index) in collectionList" :key="index">
 
         <div class="home-page-cont">
           <ContHeader
             :imgUrl="imgUrl"
             :stateTitle="stateTitle"
-            :time="time"
+            :time="item.attributes.createdAt"
             :userName="userName">
           </ContHeader>
           <ContMain
@@ -17,7 +17,7 @@
           <ContFooter></ContFooter>
         </div>
       </div>
-      <div class="my-collection-main-cont">
+      <!-- <div class="my-collection-main-cont">
         <div class="barrier"></div>
         <div class="home-page-cont">
           <ContHeader
@@ -31,7 +31,7 @@
           </ContMain>
           <ContFooter></ContFooter>
         </div>
-      </div>
+      </div> -->
     </main>
   </div>
 </template>

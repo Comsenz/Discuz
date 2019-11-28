@@ -11,11 +11,14 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      imgUrl:'',
-      stateTitle:"回复我的",
-      time:"十分钟前",
-      userName:"Elizabeth",
-      type:1,
+      replyList:{
+        // imgUrl:'',
+        // stateTitle:"回复我的",
+        // time:"十分钟前",
+        // userName:"Elizabeth",
+        // type:1,
+      }
+     
     }
   },
   components:{
@@ -35,6 +38,8 @@ export default {
         data:{
           type:'1'
         }
+      }).then((res)=>{
+        this.replyList = res.data
       })
     }
   },

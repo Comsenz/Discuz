@@ -34,11 +34,15 @@ export default {
     withdraw(){
       this.appFetch({
         url:'cash',
-        methods:'post',
+        method:"post",
         data:{
-          cash_apply_amount:this.withdrawalAmount
+          cash_apply_amount:'1'
         }
+      }).then((res)=>{
+        this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
+        this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
       })
+
     }
   }
 }
