@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,38 +9,47 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-
 
 class Rewarded extends Notification
 {
     use Queueable;
 
-    public $data;
+    public $order;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param Order $order
      */
-    public function __construct($data)
+    public function __construct(Order $order)
     {
-        $this->data = $data;
+        $this->order = $order;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $user
+     * @param  mixed  $notifiable
      * @return array
      */
-    public function via($user)
+    public function via($notifiable)
     {
         return ['database'];
     }
 
-    public function toDatabase($user){
-        return $this->data; 
+    public function toDatabase(){
+        return [
+            'order_id' => $this->order->id,
+            'thread_id' => $this->order->thread->id,
+            'thread_title' => $this->order->thread->title,
+            'content' => $this->order->thread->firstPost->content,
+            'amount' => $this->order->amount,
+            'user_id' => $this->order->user->id,
+            'user_name' => $this->order->user->username,
+            'user_avatar' => $this->order->user->avatar,
+        ];
     }
 }

@@ -25,28 +25,15 @@ class OrderSubscriber
 
     /**
      * 支付完成时
-     * @param  Updated $event [description]
-     * @return [type]         [description]
+     *
+     * @param Updated $event
      */
     public function whenReward(Updated $event)
     {
-        if ($event->order->type == Order::ORDER_TYPE_REWARD && $event->order->status == Order::ORDER_STATUS_PAID) {
-       		$order_info = Order::with('user')->with('thread')->find($event->order->id);
-        	$payee = User::find($event->order->payee_id);
-        	if (!empty($payee) && !empty($order_info)) {	
-        		$info = [
-        			'username' => $order_info->getRelation('user')->username,
-        			'user_id' => $order_info->user_id,
-	        		'info' => '打赏了我' . $order_info->amount . '元',
-	        		'post_content' => $order_info->thread->firstPost->content,
-	        		'thread_id' => $order_info->getRelation('thread')->id,
-	        		'extra' => [
-						'reward_amount' => $order_info->amount
-	        		]
-        		];
-        		$payee->notify(new Rewarded($info));
-        	}
-        }
+        $order = $event->order;
 
+        if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
+            $order->payee->notify(new Rewarded($order));
+        }
     }
 }
