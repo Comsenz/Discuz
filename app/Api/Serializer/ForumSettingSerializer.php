@@ -30,17 +30,17 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         $attributes = [
-            'siteMode' => $this->settings->get('site.mode'),
-            'logo' => $this->settings->get('site.logo'),
-            'siteName' => $this->settings->get('site.name'),
-            'siteIntroduction' => $this->settings->get('site.introduction'),
-            'siteInstall' => $this->settings->get('site.install'),
+            'siteMode' => $this->settings->get('site_mode'),
+            'logo' => $this->settings->get('site_logo'),
+            'siteName' => $this->settings->get('site_name'),
+            'siteIntroduction' => $this->settings->get('site_introduction'),
+            'siteInstall' => $this->settings->get('site_install'),
             'threads' => 0,
             'members' => 0,
-            'siteAuthor' => $this->settings->get('site.author')
-//            'users' => $this->settings->get('site.name'),
-//            'siteName' => $this->settings->get('site.name'),
-//            'siteName' => $this->settings->get('site.name'),
+            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->get(['id', 'username'])
+//            'users' => $this->settings->get('site_name'),
+//            'siteName' => $this->settings->get('site_name'),
+//            'siteName' => $this->settings->get('site_name'),
         ];
 
         if($this->actor->exists) {
