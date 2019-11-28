@@ -29,9 +29,8 @@ use App\Notifications\DiscuzChannelManager;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @package App\Models
- *
  */
-class mobileUser extends Model
+class User extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
