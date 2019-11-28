@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
 
 
+use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -12,8 +12,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Support\Arr;
-use App\Commands\UserProfile\UpdateUserProfile;
-use App\Commands\UserProfile\UserProfile;
 
 class UpdateProfileController extends AbstractResourceController
 {
@@ -31,6 +29,13 @@ class UpdateProfileController extends AbstractResourceController
         $this->validator = $validator;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|mixed
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws \Illuminate\Validation\ValidationException
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         // 获取当前用户
@@ -40,7 +45,9 @@ class UpdateProfileController extends AbstractResourceController
         $user = $this->users->findOrFail($id);
 
         $isSelf = $actor->id === $user->id;
-        $canEdit = $actor->can('edit', $user);
+        if(!$isSelf) {
+            $this->assertCan($actor, 'edit', $user);
+        }
 
         $validator = [];
 
@@ -48,7 +55,6 @@ class UpdateProfileController extends AbstractResourceController
         $attributes = Arr::get($body, 'data.attributes');
 
         if($newPassword = Arr::get($attributes, 'newPassword')) {
-            $this->assertPermission($canEdit);
             if($isSelf) {
                 $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
                 $this->assertPermission($verifyPwd);
@@ -65,6 +71,7 @@ class UpdateProfileController extends AbstractResourceController
         }
 
         if($status = Arr::get($body, 'data.attributes.status')) {
+            $this->assertCan($actor, 'edit.status', $user);
             $user->changeStatus($status);
         }
 
@@ -73,17 +80,5 @@ class UpdateProfileController extends AbstractResourceController
         $user->save();
 
         return $user;
-
-        // 获取请求的参数
-//        $inputs = $request->getParsedBody();
-        // 获取请求的IP
-//        $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
-//        $data = $this->bus->dispatch(
-//            new UpdateUserProfile($id,$actor, $inputs->toArray(), $ipAddress)
-//        );
-//        $data = $this->bus->dispatch(
-//            new UserProfile($id, $actor)
-//        );
-
     }
 }

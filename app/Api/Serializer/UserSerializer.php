@@ -26,6 +26,7 @@ class UserSerializer extends AbstractSerializer
             'threadCount' => $model->thread_count,
             'registerIp' => $model->register_ip,
             'lastLoginIp' => $model->last_login_ip,
+            'status' => $model->status,
             'createdAt'   => $this->formatDate($model->created_at),
             'updatedAt'   => $this->formatDate($model->updated_at),
         ];

@@ -25,6 +25,11 @@ class UpdateThreadController extends AbstractCreateController
     public $serializer = ThreadSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = ['logs'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -46,14 +51,8 @@ class UpdateThreadController extends AbstractCreateController
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        $thread = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new EditThread($threadId, $actor, $data)
         );
-
-        $thread->setStateUser($actor);
-
-        $thread = $thread->load(array_merge($this->include, ['user', 'favoriteState']));
-
-        return $thread;
     }
 }

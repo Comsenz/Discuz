@@ -72,13 +72,13 @@ export default {
             {
               id:7,
               title:'后台用户管理',
-              name:'userManage',
+              name:'adminUserManage',
               icon:'iconyonghuguanli'
             },
             {
               id:8,
               title:'后台角色管理',
-              name:'roleManage',
+              name:'adminRoleManage',
               icon:'iconjiaoseguanli'
             }]
         },
@@ -86,6 +86,20 @@ export default {
           id:2,
           title:'用户',
           name:'user',
+          submenu:[
+            {
+              id:20,
+              title:'用户管理',
+              name:'userManage',
+              icon:'iconyonghuguanli'
+            },
+            {
+              id:21,
+              title:'用户角色',
+              name:'userRol',
+              icon:'iconjiaoseguanli'
+            }
+          ]
         },
         {
           id:3,
@@ -234,6 +248,13 @@ export default {
           this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
           this.$router.push({path:'/admin/site-set'});
           break;
+        case 'user':
+          this.sideList = this.navList[2].submenu;
+          this.sideSelect = this.navList[2].submenu[0].name;
+          this.indexTitle = this.navList[2].submenu[0].title;
+          this.sideSubmenu = this.navList[2].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
+          this.$router.push({path:'/admin/user-manage'});
+          break;
         case 'cont':
           this.sideList = this.navList[3].submenu;
           this.sideSelect = this.navList[3].submenu[0].name;
@@ -290,12 +311,21 @@ export default {
         case 'tencentCloudSet':
           this.$router.push({path:'/admin/tencent-cloud-set'});
           break;
-        case 'userManage':
+        case 'adminUserManage':
           this.$router.push({path:'/admin/user-manage-set'});
           break;
-        case 'roleManage':
+        case 'adminRoleManage':
           this.$router.push({path:'/admin/role-manage-set'});
           break;
+
+
+        case 'userManage':
+          this.$router.push({path:'/admin/user-manage'});
+          break;
+        case 'userRol':
+          this.$router.push({path:'/admin/user-rol'});
+          break;
+
 
         case 'contClass':
           this.$router.push({path:'/admin/cont-class'});
@@ -405,6 +435,13 @@ export default {
           this.sideSelect = name;
           this.sideList = this.navList[1].submenu;
           break;
+        case '用户':
+          this.navSelect = this.navList[2].name;
+          this.indexTitle = title;
+          this.sideTitle = attribution;
+          this.sideSelect = name;
+          this.sideList = this.navList[2].submenu;
+          break;
         case '内容':
           this.navSelect = this.navList[3].name;
           this.indexTitle = title;
@@ -476,7 +513,6 @@ export default {
   },
   created(){
    this.setDataStatus();
-
   },
 
 }

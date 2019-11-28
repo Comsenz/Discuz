@@ -5,6 +5,7 @@ namespace App\Api\Controller\Users;
 
 
 use App\Api\Serializer\UserProfileSerializer;
+use App\Api\Serializer\UserSerializer;
 use App\Models\Order;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -19,7 +20,7 @@ class ProfileController extends AbstractResourceController
 
     use AssertPermissionTrait;
 
-    public $serializer = UserProfileSerializer::class;
+    public $serializer = UserSerializer::class;
 
     public $optionalInclude = ['wechat', 'groups'];
 
@@ -50,7 +51,9 @@ class ProfileController extends AbstractResourceController
         $user = $this->users->findOrFail($id);
 
         if($actor->id !== $user->id) {
-            $this->assertCan($actor, 'edit', $user);
+            $this->assertCan($actor, 'view', $user);
+        } else {
+            $this->serializer = UserProfileSerializer::class;
         }
 
         if($this->settings->get('siteMode') === 'pay') {

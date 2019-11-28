@@ -20,6 +20,7 @@ export default {
           require(['../view/site/IndexView'], resolve)
         },
         children:{
+          //全局
           'home':{
             comLoad: function (resolve) {
               require(['../view/site/home/homeView'], resolve)
@@ -156,7 +157,17 @@ export default {
           },
           'content-filter-set':{
             comLoad: function (resolve) {
-              require(['../view/site/global/contentFilteringSetView'], resolve)
+              require(['../view/site/global/contentFilteringSet/contentFilteringSetView'], resolve)
+            },
+            metaInfo: {
+              title: '内容过滤设置',
+              name:'contentFilteringSet',
+              attribution:'全局'
+            }
+          },
+          'add-sensitive-words':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/contentFilteringSet/addSensitiveWordsView'], resolve)
             },
             metaInfo: {
               title: '内容过滤设置',
@@ -195,6 +206,7 @@ export default {
               attribution:'全局'
             }
           },
+
 
           //内容分类
           'cont-class':{
@@ -277,6 +289,7 @@ export default {
             }
           },
 
+
           //财务分类
           'fund-details':{
             comLoad: function (resolve) {
@@ -286,7 +299,6 @@ export default {
               title: '资金明细',
               name:'fundDetails',
               attribution:'财务',
-              alias:'资金明细'
             }
           },
           'order-record':{
@@ -297,7 +309,6 @@ export default {
               title: '订单记录',
               name:'orderRecord',
               attribution:'财务',
-              alias:'订单记录'
             }
           },
           'withdrawal-application':{
@@ -321,7 +332,72 @@ export default {
               attribution:'财务',
               alias:'提现设置'
             }
+          },
+
+
+          //用户
+          'user-manage':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userManage/userManageView'],resolve)
+            },
+            metaInfo:{
+              title:'用户管理',
+              name:'userManage',
+              attribution:'用户'
+            }
+          },
+          'user-search-list':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userManage/userSearchList'],resolve)
+            },
+            metaInfo:{
+              title:'用户管理',
+              name:'userManage',
+              attribution:'用户'
+            }
+          },
+          'user-details':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userManage/userDetailsView'],resolve)
+            },
+            metaInfo:{
+              title:'用户管理',
+              name:'userManage',
+              attribution:'用户'
+            }
+          },
+          'wallet':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userManage/walletView'],resolve)
+            },
+            metaInfo:{
+              title:'用户管理',
+              name:'userManage',
+              attribution:'用户',
+            }
+          },
+
+          'user-rol':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userRol/userRolView'],resolve)
+            },
+            metaInfo:{
+              title:'用户角色',
+              name:'userRol',
+              attribution:'用户',
+            }
+          },
+          'rol-permission':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userRol/rolPermissionView'],resolve)
+            },
+            metaInfo:{
+              title:'用户角色',
+              name:'userRol',
+              attribution:'用户',
+            }
           }
+
 
         },
         metaInfo: {

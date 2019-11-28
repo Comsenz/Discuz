@@ -33,12 +33,14 @@
 
         </el-table>
 
-        <div class="role-manage-set-table-add">
+       <!-- <div class="role-manage-set-table-add">
           <p>
             <span class="iconfont iconicon_add icon-add"></span>
             <span>新增</span>
           </p>
-        </div>
+        </div>-->
+
+        <TableContAdd cont="新增"></TableContAdd>
 
         <Card>
           <el-button type="primary" si ze="medium" >提交</el-button>

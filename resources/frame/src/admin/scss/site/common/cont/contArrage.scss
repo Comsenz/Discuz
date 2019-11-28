@@ -1,5 +1,7 @@
+@charset "utf-8";
 /*
   内容处理模板架子
+  公共组件的颜色需要element-variables文件
 */
 
 @import "../../../modules/element-variables";
@@ -38,8 +40,6 @@
       flex-direction: column;
 
       &-header{
-        //flex: 1;
-        //height: 97PX;
         border-bottom: 1PX solid $tableBorderColor;
         display: flex;
         align-items:center;
@@ -82,23 +82,14 @@
       }
 
       &-box{
-        //min-height: 78PX;
-        //flex: 1;
-        //min-height: 70PX;
-
-        //border-bottom: 1PX solid $tableBorderColor;
-
         padding: 15PX 20PX;
         line-height:20PX;
         color: $titleColor;
         overflow: hidden;
-
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-
         transition: .5s;
-
         &:last-child{
           border-bottom: 0;
         }
@@ -144,7 +135,6 @@
 
       &-footer{
         flex: 1;
-        //height: 66PX;
         padding: 15PX 21PX;
         display: flex;
         align-items:center;
@@ -154,6 +144,5 @@
     }
 
   }
-
 
 }

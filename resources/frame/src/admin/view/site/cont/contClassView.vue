@@ -49,12 +49,14 @@
 
         </el-table>
 
-        <div class="cont-class-table-add">
+        <!--<div class="cont-class-table-add">
           <p>
             <span class="iconfont iconicon_add icon-add"></span>
             <span>添加内容分类</span>
           </p>
-        </div>
+        </div>-->
+
+        <TableContAdd @tableContAddClick="tableContAdd" cont="添加内容分类"></TableContAdd>
 
         <Card >
           <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>

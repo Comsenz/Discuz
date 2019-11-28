@@ -9,7 +9,9 @@
 
 namespace App\Api\Controller\Threads;
 
+use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -26,6 +28,7 @@ class ListFavoritesController extends ListThreadsController
 
         $this->assertRegistered($actor);
 
+        $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $load = $this->extractInclude($request);
@@ -50,7 +53,28 @@ class ListFavoritesController extends ListThreadsController
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
 
-        $threads = $query->get()->load($load);
+        Thread::setStateUser($actor);
+
+        $threads = $query->get()->load(array_diff($load, $this->specialInclude));
+
+        $specialLoad = array_intersect($this->specialInclude, $load);
+
+        // 特殊关联：最新三条回复
+        if (in_array('lastThreePosts', $specialLoad)) {
+            $threads = $this->loadLastThreePosts($threads);
+        }
+
+        // 特殊关联：喜欢的人
+        if (in_array('firstPost.likedUsers', $specialLoad)) {
+            $likedLimit = Arr::get($filter, 'likedLimit', 10);
+            $threads = $this->loadLikedUsers($threads, $likedLimit);
+        }
+
+        // 特殊关联：打赏的人
+        if (in_array('rewardedUsers', $specialLoad)) {
+            $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
+            $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+        }
 
         return $threads;
     }

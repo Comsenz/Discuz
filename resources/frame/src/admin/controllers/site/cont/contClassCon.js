@@ -3,6 +3,7 @@
 * */
 
 import Card from '../../../view/site/common/card/card';
+import TableContAdd from '../../../view/site/common/table/tableContAdd';
 
 
 export default {
@@ -39,9 +40,13 @@ export default {
 
     },
 
+    tableContAdd(){
+      console.log(123);
+    }
   },
   components:{
-    Card
+    Card,
+    TableContAdd
   }
 
 }

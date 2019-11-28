@@ -1,6 +1,9 @@
+/*
+* 批量添加敏感词
+* */
 
-import Card from '../../../view/site/common/card/card';
-import CardRow from '../../../view/site/common/card/cardRow';
+import Card from '../../../../view/site/common/card/card';
+import CardRow from '../../../../view/site/common/card/cardRow';
 
 
 export default {
@@ -61,8 +64,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-
-      // console.log(this.multipleSelection);
 
       if (this.multipleSelection.length >= 1){
         this.deleteStatus = false

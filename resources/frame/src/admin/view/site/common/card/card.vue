@@ -1,6 +1,6 @@
 <template>
   <div class="card-box">
-    <div class="card-box__header" :class="$slots.default?'':'not-main'" >
+    <div class="card-box__header"  v-if="$attrs.header" :class="$slots.default?'':'not-main'" >
       <header class="card-title" :class="$attrs.intercept?'card-intercept-title':''" >{{$attrs.header}}</header>
       <slot name="header"></slot>
     </div>

@@ -141,61 +141,19 @@ class ListThreadsController extends AbstractListController
 
         // 特殊关联：最新三条回复
         if (in_array('lastThreePosts', $specialLoad)) {
-            $threadIds = $threads->pluck('id');
-
-            $allLastThreePosts = Post::from('posts', 'a')
-                ->whereRaw('( SELECT count( * ) FROM posts WHERE a.thread_id = thread_id AND a.id < id ) < ?', [3])
-                ->whereIn('thread_id', $threadIds)
-                ->when($actor->can('viewTrashed'), function ($query) {
-                    $query->whereNull('a.deleted_at');
-                })
-                ->orderBy('updated_at', 'desc')
-                ->get()
-                ->take(3);
-
-            $threads->map(function ($thread) use ($allLastThreePosts) {
-                $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id));
-            });
+            $threads = $this->loadLastThreePosts($threads);
         }
 
         // 特殊关联：喜欢的人
         if (in_array('firstPost.likedUsers', $specialLoad)) {
-            $firstPostIds = $threads->pluck('firstPost.id');
             $likedLimit = Arr::get($filter, 'likedLimit', 10);
-
-            $allLikes = PostUser::from('post_user', 'a')
-                ->leftJoin('users', 'a.user_id', '=', 'users.id')
-                ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$likedLimit])
-                ->whereIn('post_id', $firstPostIds)
-                ->orderBy('a.created_at', 'desc')
-                ->get()
-                ->take($likedLimit);
-
-            $threads->map(function ($thread) use ($allLikes) {
-                if ($thread->firstPost) {
-                    $thread->firstPost->setRelation('likedUsers', $allLikes->where('post_id', $thread->firstPost->id));
-                }
-            });
+            $threads = $this->loadLikedUsers($threads, $likedLimit);
         }
 
         // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $specialLoad)) {
-            $threadIds = $threads->pluck('id');
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
-
-            $allRewardedUser = Order::from('orders', 'a')
-                ->leftJoin('users', 'a.user_id', '=', 'users.id')
-                ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$rewardedLimit])
-                ->whereIn('thread_id', $threadIds)
-                ->where('a.status', 1)
-                ->where('type', 2)
-                ->orderBy('a.created_at', 'desc')
-                ->get()
-                ->take($rewardedLimit);
-
-            $threads->map(function ($thread) use ($allRewardedUser) {
-                $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id));
-            });
+            $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
         }
 
         return $threads;
@@ -334,5 +292,85 @@ class ListThreadsController extends AbstractListController
         //         $join->on('threads.id', '=', 'posts.thread_id');
         //     });
         // }
+    }
+
+    /**
+     * 特殊关联：最新三条回复
+     *
+     * @param Collection $threads
+     * @return Collection
+     */
+    protected function loadLastThreePosts(Collection $threads)
+    {
+        $threadIds = $threads->pluck('id');
+
+        $allLastThreePosts = Post::from('posts', 'a')
+            ->whereRaw('( SELECT count( * ) FROM posts WHERE a.thread_id = thread_id AND a.id < id ) < ?', [3])
+            ->whereIn('thread_id', $threadIds)
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->take(3);
+
+        $threads->map(function ($thread) use ($allLastThreePosts) {
+            $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id));
+        });
+
+        return $threads;
+    }
+
+    /**
+     * 特殊关联：喜欢的人
+     *
+     * @param Collection $threads
+     * @param $limit
+     * @return Collection
+     */
+    protected function loadLikedUsers(Collection $threads, $limit)
+    {
+        $firstPostIds = $threads->pluck('firstPost.id');
+
+        $allLikes = PostUser::from('post_user', 'a')
+            ->leftJoin('users', 'a.user_id', '=', 'users.id')
+            ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$limit])
+            ->whereIn('post_id', $firstPostIds)
+            ->orderBy('a.created_at', 'desc')
+            ->get()
+            ->take($limit);
+
+        $threads->map(function ($thread) use ($allLikes) {
+            if ($thread->firstPost) {
+                $thread->firstPost->setRelation('likedUsers', $allLikes->where('post_id', $thread->firstPost->id));
+            }
+        });
+
+        return $threads;
+    }
+
+    /**
+     * 特殊关联：打赏的人
+     *
+     * @param Collection $threads
+     * @param $limit
+     * @return Collection
+     */
+    protected function loadRewardedUsers(Collection $threads, $limit)
+    {
+        $threadIds = $threads->pluck('id');
+
+        $allRewardedUser = Order::from('orders', 'a')
+            ->leftJoin('users', 'a.user_id', '=', 'users.id')
+            ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
+            ->whereIn('thread_id', $threadIds)
+            ->where('a.status', 1)
+            ->where('type', 2)
+            ->orderBy('a.created_at', 'desc')
+            ->get()
+            ->take($limit);
+
+        $threads->map(function ($thread) use ($allRewardedUser) {
+            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id));
+        });
+
+        return $threads;
     }
 }

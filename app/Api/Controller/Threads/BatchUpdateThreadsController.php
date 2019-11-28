@@ -25,6 +25,11 @@ class BatchUpdateThreadsController extends AbstractListController
     public $serializer = ThreadSerializer::class;
 
     /**
+     * {@inheritdoc}
+     */
+    public $include = ['logs'];
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -62,24 +67,8 @@ class BatchUpdateThreadsController extends AbstractListController
 
             $threads = json_decode($response->getBody(), true);
 
-            $data = $threads['data'];
+            $data = $this->getBatchData($meta, $threads['data']);
             $resultMeta = $threads['meta'];
-
-            if ($meta['type'] == 'approve') {
-                $action = ['isApprove' => 1];   // 通过
-            } elseif ($meta['type'] == 'ignore') {
-                $action = ['isApprove' => 2];   // 忽略
-            } elseif ($meta['type'] == 'delete') {
-                $action = ['isDeleted' => true];   // 删除
-            } elseif ($meta['type'] == 'restore') {
-                $action = ['isDeleted' => false];   // 还原
-            } else {
-                $action = [];
-            }
-
-            foreach ($data as $key => $thread) {
-                $data[$key]['attributes'] = $action;
-            }
         }
 
         $result = $this->bus->dispatch(
@@ -95,5 +84,31 @@ class BatchUpdateThreadsController extends AbstractListController
         }
 
         return $result['data'];
+    }
+
+    /**
+     * @param $meta
+     * @param $threads
+     * @return mixed
+     */
+    protected function getBatchData($meta, $threads)
+    {
+        if ($meta['type'] == 'approve') {
+            $action = ['isApproved' => 1];   // 通过
+        } elseif ($meta['type'] == 'ignore') {
+            $action = ['isApproved' => 2];   // 忽略
+        } elseif ($meta['type'] == 'delete') {
+            $action = ['isDeleted' => true];   // 删除
+        } elseif ($meta['type'] == 'restore') {
+            $action = ['isDeleted' => false];   // 还原
+        } else {
+            $action = [];
+        }
+
+        foreach ($threads as $key => $thread) {
+            $threads[$key]['attributes'] = $action;
+        }
+
+        return $threads;
     }
 }

@@ -1,5 +1,10 @@
+/*
+* 后台用户管理
+* */
 
 import Card from '../../../view/site/common/card/card';
+import TableContAdd from '../../../view/site/common/table/tableContAdd';
+
 
 export default {
   data:function () {
@@ -52,6 +57,7 @@ export default {
 
   },
   components:{
-    Card
+    Card,
+    TableContAdd
   }
 }

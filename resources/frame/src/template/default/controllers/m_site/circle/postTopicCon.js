@@ -11,11 +11,13 @@ export default {
       showPopup:false,
       columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
       content:'',
+      showFacePanel: false,
       keyboard: false,
-      expressionShow: false,
+      // expressionShow: false,
       keywordsMax: 1000,
       list: [],
       footMove: false,
+      faceData:[],
       // winHeight:window.innerHeight,
       images_jinri: [
               {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323031&di=3929e3b520f6481e305657c9974531c4&imgtype=0&src=http%3A%2F%2Fpics5.baidu.com%2Ffeed%2F5366d0160924ab189edfd7000e457ec87a890b7b.jpeg%3Ftoken%3D56b0caae9d228ba8aca8b93aceb5a658%26s%3D12705285C45AA7DC7CC9F5860300F085'},
@@ -23,10 +25,10 @@ export default {
               {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323048&di=48329d6ab9abeda00f382fb074dbac8b&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201806%2F19%2F20180619083354_totbw.jpg'}
             ],
       fileList: [
-        { url: 'https://img.yzcdn.cn/vant/leaf.jpg' },
+        { url: 'https://img.yzcdn.cn/vant/leaf.jpg' }
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        { url: 'https://cloud-image', isImage: true }
+        // { url: 'https://cloud-image', isImage: true }
       ]
     }
   },
@@ -93,10 +95,37 @@ export default {
       }
       // 调api ...
     }),
-
+    handleFaceChoose (face) {
+      const value = this.content
+      const el = this.$refs.textarea
+      const startPos = el.selectionStart
+      const endPos = el.selectionEnd
+      const newValue =
+        value.substring(0, startPos) +
+        face +
+        value.substring(endPos, value.length)
+      this.content = newValue
+      if (el.setSelectionRange) {
+        setTimeout(() => {
+          const index = startPos + face.length
+          el.setSelectionRange(index, index)
+        }, 0)
+      }
+    },
+    // handleKeyboardClick () {
+    //   // this.showFacePanel = false;
+    //   this.showFacePanel = true;
+    //   // this.$refs.textarea.focus()
+    // },
     addExpression(){
       this.keyboard = !this.keyboard;
-      this.expressionShow = !this.expressionShow;
+      this.apiStore.find('emojis').then(data => {
+        console.log(data);
+        this.faceData = data.payload.data;
+        // console.log(this.faceData);
+      });
+
+      this.showFacePanel = !this.showFacePanel;
       this.footMove = !this.footMove;
     },
     backClick() {
