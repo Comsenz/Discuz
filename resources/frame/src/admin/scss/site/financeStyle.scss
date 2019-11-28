@@ -12,14 +12,20 @@
 .fund-details-box{
 
   .fund-details__search-box{
-    padding: 15PX 0;
+    padding-top: 15PX;
     display: flex;
+    flex-wrap: wrap;
 
     .fund-details__search-condition{
       flex: 1;
       display: flex;
       align-items: center;
       margin-right: 30PX;
+      margin-bottom: 15PX;
+
+      .el-input{
+        min-width: 100PX;
+      }
 
       .el-date-editor.el-input__inner{
         width: 260PX;
@@ -57,6 +63,10 @@
       margin-right: 30PX;
       margin-bottom: 15PX;
 
+      .el-input{
+        min-width: 100PX;
+      }
+
       .el-date-editor.el-input__inner{
         width: 260PX;
       }
@@ -85,7 +95,8 @@
 .withdrawal-application-box{
 
   .withdrawal-application__search-box{
-    padding: 15PX 0;
+    //padding: 15PX 0;
+    padding-top: 15PX;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -96,6 +107,10 @@
       align-items: center;
       margin-right: 30PX;
       margin-bottom: 15PX;
+
+      .el-input{
+        min-width: 100PX;
+      }
 
       .el-date-editor.el-input__inner{
         width: 260PX;

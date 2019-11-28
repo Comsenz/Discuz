@@ -92,4 +92,13 @@ class PostSerializer extends AbstractSerializer
     {
         return $this->hasMany($post, UserSerializer::class);
     }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    public function logs($post)
+    {
+        return $this->hasMany($post, OperationLogSerializer::class);
+    }
 }

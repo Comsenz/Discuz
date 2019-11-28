@@ -157,6 +157,10 @@
     width: 100%;
   }
 
+  .el-button--text{
+    padding-bottom: 0;
+  }
+
 }
 
 
@@ -220,5 +224,11 @@
 */
 .rol-permission-box{
 
+  .card-row-box {
+
+    .card-row-rf {
+      padding-top: 0;
+    }
+  }
 }
 

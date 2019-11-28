@@ -94,8 +94,7 @@ export default {
           require(['../view/m_site/home/openCircleConView'],resolve)
         },
         metaInfo:{
-          title:"详情",
-          threeHeader: true
+          title:"详情"
         }
       },
       'details':{
@@ -357,12 +356,13 @@ export default {
           title:"我的收藏"
         }
       },
-      'home-page':{
+      'home-page/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/homePageView'],resolve)
         },
         metaInfo:{
-          title:"个人主页"
+          title:"用户主页",
+          oneHeader: true
         }
       },
       'reply':{

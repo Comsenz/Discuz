@@ -47,7 +47,7 @@ class SaveLikesToDatabase
         if ($post->exists && isset($data['attributes']['isLiked'])) {
             $this->assertCan($actor, 'like', $post);
 
-            $isLiked = $actor->likedPosts()->withTrashed()->where('post_id', $post->id)->exists();
+            $isLiked = $actor->likedPosts()->where('post_id', $post->id)->exists();
 
             if ($isLiked) {
                 // 已喜欢且 isLiked 为 false 时，取消喜欢
@@ -64,15 +64,10 @@ class SaveLikesToDatabase
                     $post->refreshLikeCount()->save();
 
                     // $post->raise(new PostWasLiked($post, $actor));
-                    $info = [
-                        'username' => $actor->username,
-                        'user_id' => $actor->id,
-                        'info' => '点赞了我的帖子',
-                        'post_id' => $post->id,
-                        'thread_id' => $post->thread_id,
-                        'post_content' => $post->content,
-                    ];
-                    $post->user->notify(new Liked($info));
+                    // 如果被点赞的用户不是当前用户，则通知被点赞的人
+                    if ($post->user->id != $actor->id) {
+                        $post->user->notify(new Liked($post));
+                    }
                 }
             }
         }

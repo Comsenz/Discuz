@@ -31,7 +31,7 @@ class SendController extends AbstractCreateController
 
     use QcloudTrait;
 
-    const CODE_EXCEPTION = 30; //单位：分钟
+    const CODE_EXCEPTION = 5; //单位：分钟
     const CODE_INTERVAL = 60; //单位：秒
 
     protected $validation;
@@ -55,32 +55,35 @@ class SendController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
 
+        $actor = $request->getAttribute('actor');
         $data = Arr::get($request->getParsedBody(), 'data.attributes');
+
+        $type = Arr::get($data, 'type');
+
+        if($type === 'verify')
+        {
+            $data['mobile'] = $actor->mobile;
+        }
 
         $this->validation->make($data, [
             'mobile' => 'required',
             'type' => 'required'
         ])->validate();
 
-        $mobile = Arr::get($data, 'mobile');
-        $type = Arr::get($data, 'type');
+        $mobileCode = $this->mobileCodeRepository->getSmsCode($data['mobile'], $type);
 
-        if(!is_null($this->cache->get($mobile, null))) {
-            throw new IntervalSmsSendException();
-        }
-
-        $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
+        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
 
         if(!is_null($mobileCode) && $mobileCode->exists) {
-            $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION);
+            $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION, $ip);
         } else {
-            $mobileCode = MobileCode::make($mobile, self::CODE_EXCEPTION, $type);
+            $mobileCode = MobileCode::make($data['mobile'], self::CODE_EXCEPTION, $type, $ip);
         }
 
-        $result = $this->smsSend($mobile, new SendCodeMessage(['code' => $mobileCode->code, 'expire' => self::CODE_EXCEPTION]));
+        $result = $this->smsSend($data['mobile'], new SendCodeMessage(['code' => $mobileCode->code, 'expire' => self::CODE_EXCEPTION]));
 
         if(isset($result['qcloud']['status']) && $result['qcloud']['status'] === 'success') {
-            $this->cache->put($mobile, 'send', Carbon::now()->addSeconds(self::CODE_INTERVAL));
+            $this->cache->put($data['mobile'], 'send', Carbon::now()->addSeconds(self::CODE_INTERVAL));
             $mobileCode->save();
         }
 

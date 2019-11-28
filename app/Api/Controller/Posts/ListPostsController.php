@@ -171,11 +171,11 @@ class ListPostsController extends AbstractListController
         // 回收站
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
             if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
-                // 包含回收站帖子
-                $query->withTrashed();
-            } elseif ($isDeleted == 'no') {
                 // 只看回收站帖子
-                $query->onlyTrashed();
+                $query->whereNotNull('deleted_at');
+            } elseif ($isDeleted == 'no') {
+                // 不看回收站帖子
+                $query->whereNull('deleted_at');
             }
         }
 

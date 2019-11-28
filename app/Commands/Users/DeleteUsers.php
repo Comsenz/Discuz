@@ -1,84 +1,65 @@
 <?php
-declare(strict_types=1);
-
 
 namespace App\Commands\Users;
 
 
-use App\Events\Users\Deleting;
 use App\Repositories\UserRepository;
-use Exception;
 use App\Models\User;
-use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Events\Dispatcher;
+use Discuz\Auth\AssertPermissionTrait;
 
 class DeleteUsers
 {
-    use EventsDispatchTrait;
+    use AssertPermissionTrait;
 
     /**
      * 执行操作的用户.
      *
      * @var User
      */
-    public $actor;
+    protected $actor;
 
-    /**
-     * 创建用户的数据.
-     *
-     * @var array
-     */
-    public $data;
+    protected $id;
 
+    protected $users;
     /**
      * 初始化命令参数
-     *
+     * @param id     $id
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($actor, array $data)
+    public function __construct($id, User $actor)
     {
+        $this->id = $id;
         $this->actor = $actor;
-        $this->data = $data;
     }
 
-    /**
-     * 执行命令
-     *
-     * @param BusDispatcher $bus
-     * @param EventDispatcher $events
-     * @return User
-     * @throws Exception
-     */
-    public function handle(Dispatcher $events,UserRepository $repository)
+    public function handle(UserRepository $users)
     {
-        $this->events = $events;
+        $this->users = $users;
+        return $this();
+    }
 
-        // 判断有没有权限执行此操作
-        //$this->assertCan($this->actor, 'classify.deleteClassify');
+    public function __invoke()
+    {
 
-        foreach ($this->data['user'] as $k => $v) {
 
-            $user=User::where('id',$v)->first();
-            if($user){
-                $repository->findOrFail($v,$this->actor);
-                $this->events->dispatch(
-                    new Deleting($user, $this->actor, ['$v'])
-                );
+        $data = null;
+        $id = $this->id;
+        $actor = $this->actor;
 
-                $user->delete();
-                // 调用钩子事件
-                $this->dispatchEventsFor($user);
-            }
+        try {
+            $user = $this->users->findOrFail($id);
 
+            $this->assertCan($actor, 'delete', $user);
+
+            $user->delete();
+
+            $data = $user;
+        } catch (\Exception $e) {
+            $data = new User(compact('id'));
+            $data->error = $e->getMessage();
         }
 
-        // 返回数据对象
-        return $user;
+        return $data;
     }
 }

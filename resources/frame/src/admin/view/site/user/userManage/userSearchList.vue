@@ -57,8 +57,8 @@
         </div>
 
         <Card>
-          <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
-          <el-button size="medium" :disabled="deleteStatus">删除</el-button>
+          <el-button type="primary" size="medium" @click="loginStatus = 'default'">删除</el-button>
+          <el-button size="medium" :disabled="deleteStatus">禁用</el-button>
         </Card>
 
       </div>

@@ -5,7 +5,6 @@ export default {
   data: function() {
       return {
 		 active: 0,
-     realmName:'http://2020.comsenz-service.com/',
 		 faceIndex: 0
 
     }

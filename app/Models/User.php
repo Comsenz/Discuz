@@ -24,6 +24,9 @@ use App\Notifications\DiscuzChannelManager;
  * @property string $username
  * @property string $mobile
  * @property string $password
+ * @property string $avatar
+ * @property int $status
+ * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
  * @property Carbon $created_at
@@ -35,6 +38,9 @@ class User extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
     use Notifiable;
+
+
+    const MOBILE_ACTIVE = 1;
 
     /**
      * {@inheritdoc}
@@ -129,6 +135,13 @@ class User extends Model
     public function changeStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function changeMobileActive($active)
+    {
+        $this->mobile_confirmed = $active;
 
         return $this;
     }

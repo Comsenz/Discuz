@@ -37,7 +37,7 @@ return [
         'default' => [
             'url' => '',
             'host' => '127.0.0.1',
-            'password' => null,
+            'password' => '123',
             'port' => 6379,
             'database' => 0
         ],
@@ -77,17 +77,22 @@ return [
                 'driver' => 'local',
                 'root' => storage_path('app'),
             ],
-            'attachment' => [
-                'driver' => 'local',
-                'root'   => storage_path('public/attachment'),
-                'url'    => 'attachment'
-            ],
-
             'public' => [
                 'driver' => 'local',
                 'root' => storage_path('app/public'),
-                'url' => 'storage',
+                'url' => 'public',
                 'visibility' => 'public',
+            ],
+            'avatar' => [
+                'driver' => 'local',
+                'root' => storage_path('app/public/avatars'),
+                'url' => 'avatar',
+                'visibility' => 'public',
+            ],
+            'attachment' => [
+                'driver' => 'local',
+                'root'   => storage_path('app/public/attachment'),
+                'url'    => 'attachment'
             ],
             'cos' => [
                 'driver' => 'cos',
@@ -103,12 +108,24 @@ return [
             ]
         ]
     ],
+    'queue' => [
+        'default' => 'redis',
+        'connections' => [
+            'redis' => [
+                'driver' => 'redis',
+                'connection' => 'default',
+                'queue' => 'REDIS_QUEUE',
+                'retry_after' => 90,
+                'block_for' => null,
+            ]
+        ]
+    ],
     //加载ServiceProvider
     'providers' => [
+//        App\Providers\EventServiceProvider::class
         App\Providers\EventServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
-        App\Providers\ThreadServiceProvider::class,
-        App\Providers\PostServiceProvider::class,
+        App\Providers\UserServiceProvider::class
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
@@ -130,9 +147,9 @@ return [
                 'file' => storage_path('log/easy-sms.log')
             ],
             'qcloud' => [
-                'sdk_app_id' => '{sdk_app_id}', // SDK APP ID
-                'app_key' => '{app_key}', // APP KEY
-                'sign_name' => '{sign_name}', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
+                'sdk_app_id' => '1400255781', // SDK APP ID
+                'app_key' => 'ba1fb474836fd933b39d9c612e1a46a1', // APP KEY
+                'sign_name' => 'zixunicom', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
             ],
         ],
     ]

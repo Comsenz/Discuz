@@ -38,6 +38,18 @@ class ThreadPolicy extends AbstractPolicy
 
     /**
      * @param User $actor
+     * @param string $ability
+     * @return bool|null
+     */
+    public function can(User $actor, $ability)
+    {
+        if ($actor->hasPermission('thread.' . $ability)) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
      * @param Builder $query
      */
     public function find(User $actor, Builder $query)
@@ -49,9 +61,9 @@ class ThreadPolicy extends AbstractPolicy
         }
 
         // 回收站
-        if (! $actor->hasPermission('discussion.viewTrashed')) {
+        if (! $actor->hasPermission('threads.viewTrashed')) {
             $query->where(function ($query) use ($actor) {
-                $query->whereNull('threads.hidden_at')
+                $query->whereNull('threads.deleted_at')
                     ->orWhere('threads.user_id', $actor->id)
                     ->orWhere(function ($query) use ($actor) {
                         $this->events->dispatch(

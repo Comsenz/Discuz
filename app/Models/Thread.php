@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
+ * @property User $user
  * @package App\Models
  */
 class Thread extends Model
@@ -253,7 +254,7 @@ class Thread extends Model
     }
 
     /**
-     * Define the relationship with the discussion's state for a particular user.
+     * Define the relationship with the thread's favorite state for a particular user.
      *
      * @param User|null $user
      * @return HasOne

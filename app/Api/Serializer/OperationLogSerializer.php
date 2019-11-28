@@ -7,7 +7,7 @@
  *      $Id: OperationLogSerializer.php xxx 2019-11-27 16:17:00 LiuDongdong $
  */
 
-namespace app\Api\Serializer;
+namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Support\Str;

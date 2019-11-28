@@ -65,8 +65,8 @@ class VerifyMobile
     protected function bind() {
         $this->controller->serializer = UserSerializer::class;
         if($this->actor->exists) {
-            $this->actor->mobile = $this->mobileCode->mobile;
-            $this->actor->mobile_confirmed = 1;
+            $this->actor->changeMobile($this->mobileCode->mobile);
+            $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();
             $this->mobileCode->user = $this->actor;
         }
@@ -83,6 +83,12 @@ class VerifyMobile
             $this->mobileCode->user->changePassword($this->params['password']);
             $this->mobileCode->user->save();
         }
+        return $this->mobileCode->user;
+    }
+
+    protected function verify()
+    {
+        $this->controller->serializer = UserSerializer::class;
         return $this->mobileCode->user;
     }
 }

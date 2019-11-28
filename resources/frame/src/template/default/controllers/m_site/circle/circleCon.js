@@ -134,21 +134,13 @@ export default {
       //     };
       //     // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
       //  });
-
-
-
       // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
-
       const params = {};
       params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
-        // console.log(data[0].user().createdAt());
-        // console.log(data[0].firstPost().data.attributes.createdAt);
-        // console.log(data[0].firstPost());
-        // console.log(data[0].rewardedUsers()[0]);
+        // console.log(data[0].user().id());
+        // console.log(data[0].user().username());
         this.themeListCon = data;
-        console.log(this.themeListCon);
-
       });
       //请求主题导航列表
       // this.apiStore.find('themeNavListCon', params).then(data => {
@@ -236,7 +228,6 @@ export default {
           });
 
         }
-
 	    },
 	    postTopic:function(){
 	    	// alert('跳转到发布主题页');
@@ -259,7 +250,8 @@ export default {
 	    hideScreen(){
 	        //是否显示筛选内容
 	        this.showScreen = false;
-	    },
+	    }
+
 
 	},
 	mounted: function() {

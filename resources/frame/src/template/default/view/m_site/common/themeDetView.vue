@@ -6,15 +6,13 @@
           <div class="postPer">
             <img :src="item.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
             <div class="perDet">
-              <div class="perName">{{item.user().nickname()}}</div>
+              <div class="perName">{{item.user().username()}}</div>
               <div class="postTime">{{item.user().createdAt()|timeAgo}}</div>
             </div>
           </div>
           <div class="postOpera">
-            <!-- <span class="icon iconfont icon-top" v-show="isTopShow"></span> -->
-            <span class="icon iconfont icon-top"></span>
-            <!-- <div class="moreCli" v-show="isMoreShow"> -->
-            <div class="moreCli">
+            <span class="icon iconfont icon-top" v-show="isTopShow"></span>
+            <div class="moreCli" v-show="isMoreShow">
               <span class="icon iconfont icon-more"></span>
             </div>
           </div>
@@ -24,9 +22,9 @@
         </div>
       </div>
       <div class="operaBox">
-        <div class="likeBox" v-if="item.firstPost().likedUsers().length>0">
+        <div class="likeBox" v-if="item.firstPost().likedUsers().length>0" v-for="">
           <span class="icon iconfont icon-praise-after"></span>
-          <i></i><a href="javascript:;" v-for="like in item.firstPost().likedUsers()">{{like.id()}}{{like.username() + ','}}</a>&nbsp;等<span>{{item.firstPost().likeCount()}}</span>个人觉得很赞
+          <i></i><a v-for="like in item.firstPost().likedUsers()" @click="jumpPerDet(like.id())">{{like.username() + ','}}</a>&nbsp;等<span>{{item.firstPost().likeCount()}}</span>个人觉得很赞
         </div>
         <div class="likeBox" v-else="">
         </div>

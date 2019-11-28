@@ -88,7 +88,7 @@
  */
 .site-set-box{
 
-  .site-set__logo{
+  /*.site-set__logo{
     i{
       height: 15PX;
       width: 1PX;
@@ -97,6 +97,35 @@
       vertical-align: text-top;
       margin: 0 20PX;
     }
+  }*/
+
+  /*头像上传样式*/
+  .avatar-uploader .el-upload {
+    border: 1PX dashed #d9d9d9;
+    border-radius: 6PX;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: $main;
+  }
+  .avatar-uploader-icon {
+    font-size: 28PX;
+    color: #8c939d;
+    width: 120PX;
+    height: 120PX;
+    line-height: 120PX;
+    text-align: center;
+  }
+  .avatar {
+    width: 120PX;
+    height: 120PX;
+    display: block;
+  }
+
+  .el-button--text{
+    padding-bottom: 0;
   }
 
   .proportion-box{

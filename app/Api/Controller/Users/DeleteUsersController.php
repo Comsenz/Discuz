@@ -1,42 +1,49 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
 
 
+use App\Api\Serializer\DeleteUserSerializer;
+use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\DeleteUsers;
-use Discuz\Api\Controller\AbstractDeleteController;
+use Discuz\Api\Controller\AbstractListController;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Zend\Diactoros\Response\EmptyResponse;
 
 
-class DeleteUsersController extends AbstractDeleteController
+class DeleteUsersController extends AbstractListController
 {
 
+    public $serializer = DeleteUserSerializer::class;
+
+    protected $bus;
+
+    public function __construct(Dispatcher $bus)
+    {
+        $this->bus = $bus;
+    }
+
+
     /**
+     * Get the data to be serialized and assigned to the response document.
+     *
      * @param ServerRequestInterface $request
      * @param Document $document
+     * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: Implement data() method.
-    }
+        $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
-    public function delete(ServerRequestInterface $request)
-    {
-        // TODO: Implement delete() method.
-        // 获取当前用户
-        $actor = $request->getAttribute('actor');
+        $data = collect();
+        foreach($attributes['id'] as $id) {
+            $data->push($this->bus->dispatch(
+                new DeleteUsers($id, $request->getAttribute('actor'))
+            ));
+        }
 
-        // 获取请求的参数
-        $inputs = $request->getParsedBody();
-
-        $this->bus->dispatch(
-            new DeleteUsers($actor, $inputs->toArray())
-        );
-
-        return new EmptyResponse(204);
-
+        return $data;
     }
 }
