@@ -63,10 +63,7 @@ $route->get('/users/{id}', 'users.profile', ApiController\Users\ProfileControlle
 $route->patch('/users/{id}', 'users.update', ApiController\Users\UpdateProfileController::class);
 //$route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users/{id}', 'user.delete', ApiController\Users\DeleteUserController::class);
-
-//$route->patch('/updatepwd', '', ApiController\Users\UpdatePwdUsersController::class);
-//$route->post('/access', 'access', ApiController\Users\AccessTockenController::class);
-
+$route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersController::class);
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 

@@ -42,12 +42,24 @@ class DeleteUsers
     public function __invoke()
     {
 
-        $user = $this->users->findOrFail($this->id);
 
-        $this->assertCan($this->actor, 'delete', $user);
+        $data = null;
+        $id = $this->id;
+        $actor = $this->actor;
 
-        $user->delete();
+        try {
+            $user = $this->users->findOrFail($id);
 
-        return $user;
+            $this->assertCan($actor, 'delete', $user);
+
+            $user->delete();
+
+            $data = $user;
+        } catch (\Exception $e) {
+            $data = new User(compact('id'));
+            $data->error = $e->getMessage();
+        }
+
+        return $data;
     }
 }
