@@ -36,6 +36,7 @@
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
+      <el-button type="text">删除</el-button>
     </Card>
 
     <Card header="新密码：">
