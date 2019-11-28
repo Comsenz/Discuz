@@ -130,7 +130,7 @@
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 // import mSiteCircleCon from '../../../controllers/m_site/circle/circleCon';
 import mSiteOpenCircleConCon from '../../../controllers/m_site/circle/openCircleConCon';
-import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "openCircleConView",

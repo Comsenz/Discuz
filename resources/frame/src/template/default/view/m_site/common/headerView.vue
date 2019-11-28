@@ -87,15 +87,15 @@
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
         <img src="avatarUrl" alt="" class="inviteHead">
         <div class="inviteName">{{username}}</div>
-        <p class="inviteWo">邀请您加入</p>
+        <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>
       <div class="headOpe">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" v-show="searchIconShow"></span>
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
-      <img src="../../../../../../static/images/logo.png" class="logo">
-      <div class="circleDet" v-model="perDet">
+      <img src="../../../../../../static/images/logo.png" class="logo" v-show="logoShow">
+      <div class="circleDet" v-model="perDet" v-show="perDetShow">
         <span v-model="perDet.themeNum">主题：{{perDet.themeNum}}</span>
         <span v-model="perDet.memberNum">成员：{{perDet.memberNum}}</span>
         <span v-model="perDet.circleLeader">圈主：{{perDet.circleLeader}}</span>

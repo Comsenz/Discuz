@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :navShow="true" :invitePerDet="true" :headFixed="false"></Header>
+	    <Header :navShow="true" :invitePerDet="true" :logoShow="true" :perDetShow="true" :headFixed="false"></Header>
 	    <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>

@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
+ * @property User $user
  * @package App\Models
  */
 class Thread extends Model

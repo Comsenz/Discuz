@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,24 +9,24 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-
 
 class Replied extends Notification
 {
     use Queueable;
 
-    public $data;
+    public $post;
 
     /**
      * Create a new notification instance.
      *
-     * @param array $data
+     * @param Post $post
      */
-    public function __construct(array $data)
+    public function __construct(Post $post)
     {
-        $this->data = $data;
+        $this->post = $post;
     }
 
     /**
@@ -43,6 +42,14 @@ class Replied extends Notification
 
     public function toDatabase()
     {
-        return $this->data;
+        return [
+            'thread_id' => $this->post->thread->id,
+            'thread_title' => $this->post->thread->title,
+            'post_id' => $this->post->id,
+            'post_content' => $this->post->content,
+            'user_id' => $this->post->user->id,
+            'user_name' => $this->post->user->username,
+            'user_avatar' => $this->post->user->avatar,
+        ];
     }
 }
