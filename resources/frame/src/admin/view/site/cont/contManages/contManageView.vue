@@ -72,7 +72,7 @@
             label-class-name="cont-manage-operating__table-label"
             label="操作"
             prop="theme"
-            min-width="250">
+            width="250">
             <template slot-scope="scope">
               <el-radio v-model="radio" label="1">{{scope.row.name}}</el-radio>
             </template>
