@@ -11,7 +11,7 @@
           :key="index">
           <a v-for="(item, j) in page"
             :key=j>
-            <img @click="onFaceClick(`[${item.title}]`)" :src='realmName+item.attributes.url' class="emoji">
+            <img @click="onFaceClick(`[${item.title}]`)" :src='item.attributes.url' class="emoji">
           </a>
         </div>
       </div>
