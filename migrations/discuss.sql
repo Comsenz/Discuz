@@ -18,11 +18,12 @@ CREATE TABLE `stop_words` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户组ID',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户组名称',
+  `type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '类型',
+  `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '颜色',
+  `icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'icon类',
+  `default` tinyint(1) NOT NULL COMMENT '是否为注册默认组',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -117,6 +118,7 @@ CREATE TABLE `users` (
   `thread_count` int(10) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `joind_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),

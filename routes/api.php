@@ -16,6 +16,8 @@ $route->get('/check', 'check', ApiController\CheckController::class);
 
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
 
+$route->get('/test', 'test', ApiController\TestController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Cloud APIs
