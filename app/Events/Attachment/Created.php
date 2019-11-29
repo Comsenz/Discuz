@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -11,6 +10,7 @@ declare(strict_types=1);
 namespace App\Events\Attachment;
 
 use App\Models\Attachment;
+use App\Models\User;
 
 class Created
 {
@@ -26,9 +26,9 @@ class Created
 
     /**
      * @param Attachment $attach
-     * @param User       $actor
+     * @param User $actor
      */
-    public function __construct(Attachment $attach, $actor = null)
+    public function __construct(Attachment $attach, User $actor = null)
     {
         $this->attach = $attach;
         $this->actor = $actor;

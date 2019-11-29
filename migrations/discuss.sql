@@ -175,19 +175,20 @@ CREATE TABLE `attachments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `post_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复ID',
+  `is_gallery` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否是帖子图片',
+  `is_remote` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
   `attachment` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件系统生成的名称',
   `file_path` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件路径',
   `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件原名称',
   `file_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `file_type` char(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件类型',
-  `remote` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建IP',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---用户详情
+-- 用户详情
 CREATE TABLE `user_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -211,7 +212,7 @@ CREATE TABLE `mobile_codes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
---用户钱包
+-- 用户钱包
 CREATE TABLE `user_wallets` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `available_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
@@ -222,7 +223,7 @@ CREATE TABLE `user_wallets` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户钱包表';
 
---用户提现
+-- 用户提现
 CREATE TABLE `user_wallet_cash` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,
@@ -242,7 +243,7 @@ CREATE TABLE `user_wallet_cash` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COLLATE=utf8mb4_unicode_ci;
 
---用户钱包动账记录
+-- 用户钱包动账记录
 CREATE TABLE `user_wallet_logs` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,

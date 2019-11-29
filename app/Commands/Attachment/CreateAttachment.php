@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,20 +9,24 @@ declare(strict_types=1);
 
 namespace App\Commands\Attachment;
 
+use App\Models\User;
 use App\Tools\AttachmentUploadTool;
 use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
 use App\Models\Attachment;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Discuz\Http\Exception\UploadVerifyException;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
 {
-    use EventsDispatchTrait;
     use AssertPermissionTrait;
+    use EventsDispatchTrait;
+
     /**
      * 执行操作的用户.
      *
@@ -46,20 +49,30 @@ class CreateAttachment
     public $ipAddress;
 
     /**
+     * 请求来源的IP地址.
+     *
+     * @var string
+     */
+    public $isGallery;
+
+    /**
      * 初始化命令参数
      *
      * @param User $actor 执行操作的用户.
      * @param UploadedFileInterface $file
      * @param string $ipAddress 请求来源的IP地址.
+     * @param int $isGallery    是否是帖子图片
      */
     public function __construct(
         $actor,
         UploadedFileInterface $file,
-        string $ipAddress
+        string $ipAddress,
+        int $isGallery = 0
     ) {
         $this->actor = $actor;
         $this->file = $file;
         $this->ipAddress = $ipAddress;
+        $this->isGallery = $isGallery;
     }
 
     /**
@@ -69,6 +82,8 @@ class CreateAttachment
      * @param AttachmentUploadTool $uploadTool
      * @return Attachment
      * @throws UploadException
+     * @throws PermissionDeniedException
+     * @throws UploadVerifyException
      */
     public function handle(EventDispatcher $events, AttachmentUploadTool $uploadTool)
     {
@@ -106,6 +121,7 @@ class CreateAttachment
         $attachment = Attachment::creation(
             $this->actor->id,
             0,
+            $this->isGallery,
             $uploadName,
             $uploadPath,
             $this->file->getClientFilename(),

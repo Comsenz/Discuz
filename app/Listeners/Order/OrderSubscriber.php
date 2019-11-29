@@ -12,7 +12,6 @@ namespace App\Listeners\Order;
 use App\Events\Order\Updated;
 use Illuminate\Contracts\Events\Dispatcher;
 use App\Models\Order;
-use App\Models\User;
 use App\Notifications\Rewarded;
 
 class OrderSubscriber
