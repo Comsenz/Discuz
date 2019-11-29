@@ -9,6 +9,7 @@
 
 namespace App\Commands\Thread;
 
+use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
@@ -17,10 +18,12 @@ use App\Models\User;
 use App\Validators\ThreadValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class CreateThread
@@ -65,20 +68,28 @@ class CreateThread
     /**
      * @param EventDispatcher $events
      * @param BusDispatcher $bus
-     * @param ThreadValidator $validator
+     * @param Censor $censor
      * @param Thread $thread
+     * @param ThreadValidator $validator
      * @return Thread
      * @throws ValidationException
+     * @throws PermissionDeniedException
      * @throws Exception
      */
-    public function handle(EventDispatcher $events, BusDispatcher $bus, ThreadValidator $validator, Thread $thread)
+    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator)
     {
         $this->events = $events;
 
         $this->assertCan($this->actor, 'createThread');
 
-        // TODO: 敏感词处理
-        // $this->data->put('content', $censor->check($this->data->get('content')));
+        // 敏感词校验
+        $content = $censor->check(Arr::get($this->data, 'attributes.content'));
+        Arr::set($this->data, 'attributes.content', $content);
+
+        // 存在审核敏感词时，将主题放入待审核
+        if ($censor->isMod) {
+            $thread->is_approved = 0;
+        }
 
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
