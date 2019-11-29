@@ -48,7 +48,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
-            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->get(['id', 'username'])
+            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username'])
 //            'users' => $this->settings->get('site_name'),
 //            'siteName' => $this->settings->get('site_name'),
 //            'siteName' => $this->settings->get('site_name'),
