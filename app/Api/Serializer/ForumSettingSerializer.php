@@ -12,16 +12,22 @@ use App\Models\Thread;
 use App\Models\User;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\Application;
+use Illuminate\Contracts\Filesystem\Factory;
+use Discuz\Http\UrlGenerator;
 
 class ForumSettingSerializer extends AbstractSerializer
 {
-    protected $type = 'forum';
+    protected $type = 'forums';
 
     protected $settings;
 
-    public function __construct(SettingsRepository $settings)
+    protected $url;
+
+    public function __construct(SettingsRepository $settings, UrlGenerator $url)
     {
         $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -36,7 +42,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'siteMode' => $this->settings->get('site_mode'), //pay public
             'price' => (int)$this->settings->get('price'),
             'day' => (int)$this->settings->get('day'),
-            'logo' => $this->settings->get('site_logo'),
+            'logo' => $this->logo($this->settings->get('logo')),
             'siteName' => $this->settings->get('site_name'),
             'siteIntroduction' => $this->settings->get('site_introduction'),
             'siteInstall' => $this->settings->get('site_install'),
@@ -68,5 +74,13 @@ class ForumSettingSerializer extends AbstractSerializer
     protected function users($model)
     {
         return $this->hasMany($model, UserSerializer::class);
+    }
+
+    private function logo($logo)
+    {
+        if($logo) {
+            return $this->url->to('/storage/' . $logo);
+        }
+        return '';
     }
 }
