@@ -2,7 +2,6 @@
 
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreateThreadUser extends Migration
 {

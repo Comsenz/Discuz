@@ -23,7 +23,7 @@ class CreateAttachments extends Migration
             $table->unsignedInteger('file_size')->default(0)->comment('文件大小');
             $table->char('file_type', 15)->default('')->comment('文件类型');
             $table->unsignedTinyInteger('is_remote')->default(0)->comment('是否远程附件');
-            $table->ipAddress('ip')->default('')->comment('创建IP');
+            $table->ipAddress('ip')->default('')->comment('ip 地址');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
@@ -36,6 +36,6 @@ class CreateAttachments extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attachments');
+        $this->schema()->dropIfExists('attachments');
     }
 }
