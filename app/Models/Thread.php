@@ -10,7 +10,7 @@
 namespace App\Models;
 
 use App\Events\Thread\Hidden;
-use app\Events\Thread\Restored;
+use App\Events\Thread\Restored;
 use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;

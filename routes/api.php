@@ -83,6 +83,16 @@ $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::
 
 /*
 |--------------------------------------------------------------------------
+| Categories
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/categories', 'categories.index', ApiController\Category\ListCategoryController::class);
+$route->get('/categories/{id}', 'categories.resource', ApiController\Category\ResourceCategoryController::class);
+$route->post('/categories', 'categories.create', ApiController\Category\CreateCategoryController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Threads
 |--------------------------------------------------------------------------
 */
