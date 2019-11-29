@@ -80,7 +80,6 @@
 
           <el-table-column
             label="选项"
-            prop="theme"
             min-width="250">
             <template slot-scope="scope">
 
@@ -93,12 +92,12 @@
                 </el-option>
               </el-select>
 
-              <el-radio-group v-if="scope.row.name === '批量置顶'" v-model="toppingRadio">
+              <el-radio-group class="cont-manage__option-select" v-if="scope.row.name === '批量置顶'" v-model="toppingRadio">
                 <el-radio :label="1">置顶</el-radio>
                 <el-radio :label="2">解除置顶</el-radio>
               </el-radio-group>
 
-              <el-radio-group v-if="scope.row.name === '批量设置精华'" v-model="essenceRadio">
+              <el-radio-group class="cont-manage__option-select" v-if="scope.row.name === '批量设置精华'" v-model="essenceRadio">
                 <el-radio :label="1">精华</el-radio>
                 <el-radio :label="2">取消精华</el-radio>
               </el-radio-group>
@@ -108,7 +107,7 @@
 
         </el-table>
 
-        <Card>
+        <Card class="footer-btn">
           <el-button type="primary">提交</el-button>
         </Card>
 

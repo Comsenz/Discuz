@@ -102,6 +102,14 @@ export default {
   mounted(){
 
   },
+  created(){
+    this.appFetch({
+      url:'threads',
+      method:'get'
+    }).then(res=>{
+      console.log(res);
+    })
+  },
 
   components:{
     Card,

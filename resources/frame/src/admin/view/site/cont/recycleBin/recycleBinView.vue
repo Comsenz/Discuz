@@ -152,7 +152,7 @@
 
       </div>
 
-      <div class="recycle-bin-footer">
+      <div class="recycle-bin-footer footer-btn">
         <el-button size="small" type="primary">提交</el-button>
         <el-button type="text">全部还原</el-button>
         <el-button type="text">全部删除</el-button>

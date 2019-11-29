@@ -110,7 +110,13 @@ $selectFontColor:#303133;
 
 $blue:#0054A5;
 
-$main:#336699;
+$main:#336699;  //主体颜色
+
+$titleColor:#303133;    //内容正文、标题字体颜色
+
+$descColor:#909399;   //内容副文、描述字体颜色
+
+$commentColor:#606266;    //副标题、注释字体颜色
 
 $inputPlaceholder:#B2B2B2;
 
@@ -120,12 +126,6 @@ $headerFontColorShallow:rgba(255,255,255 ,0.65);   //头部字体浅色
 $borderColor:#E5E5E5;    //边框颜色
 
 $contBorderColor:#F8F9F9;   //card边框、内容、子边框颜色
-
-$descColor:#909399;   //描述字体颜色
-
-$titleColor:#303133;    //标题字体颜色
-
-$commentColor:#606266;    //注释字体颜色
 
 $tableBorderColor:#EBEEF5;    //表格边框线
 
@@ -142,4 +142,12 @@ $splitLine:#DCDFE6;     //竖分割线颜色
 }
 
 
+/*
+  公共样式
+*/
 
+
+/*使用Card组件时，去掉底部边框*/
+.footer-btn{
+  border-bottom: 0;
+}

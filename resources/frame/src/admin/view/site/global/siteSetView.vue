@@ -19,11 +19,6 @@
 
       <Card header="站点LOGO：">
         <CardRow description="你的Discuz!Q 站点的LOGO">
-          <!--<div class="site-set__logo">
-            <el-button size="medium">上传</el-button>
-            <i></i>
-            <el-button type="text">删除</el-button>
-          </div>-->
           <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -117,7 +112,7 @@
         </div>
       </el-collapse-transition>
 
-      <Card >
+      <Card class="footer-btn">
         <el-button type="primary" size="medium">提交</el-button>
       </Card>
 

@@ -129,7 +129,7 @@
         </ContArrange>
       </div>
 
-      <div class="cont-review-footer">
+      <div class="cont-review-footer footer-btn">
         <el-button size="small" type="primary">提交</el-button>
         <el-button type="text">全部通过</el-button>
         <el-button type="text">全部删除</el-button>

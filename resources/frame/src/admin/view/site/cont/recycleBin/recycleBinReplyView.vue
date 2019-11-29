@@ -134,7 +134,7 @@
         </ContArrange>
       </div>
 
-      <div class="recycle-bin-reply-footer">
+      <div class="recycle-bin-reply-footer footer-btn">
         <el-button size="small" type="primary">提交</el-button>
         <el-button type="text">全部通过</el-button>
         <el-button type="text">全部删除</el-button>

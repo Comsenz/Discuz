@@ -23,9 +23,6 @@ $interceptHeaderColor:#909399;    //拦截标题
     margin-bottom: 14PX;
 
     .card-title{
-      font-size:14PX;
-      font-family:PingFangSC-Regular,PingFang SC;
-      font-weight:400;
       color:$fontColor;
       line-height:20PX;
     }
@@ -35,9 +32,6 @@ $interceptHeaderColor:#909399;    //拦截标题
     }
 
     .card-box__main{
-      font-size:14PX;
-      font-family:PingFangSC-Regular,PingFang SC;
-      font-weight:400;
       color:$titleColor;
       line-height:20PX;
     }
@@ -61,9 +55,6 @@ $interceptHeaderColor:#909399;    //拦截标题
         width: 40%;
         color: $descColor;
         vertical-align: top;
-        font-size:14PX;
-        font-family:PingFangSC-Regular,PingFang SC;
-        font-weight:400;
         line-height:20PX;
       }
 

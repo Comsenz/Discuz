@@ -60,16 +60,9 @@
 
       </el-table>
 
-      <!--<div class="user-manage-set-table-add">
-        <p>
-          <span class="iconfont iconicon_add icon-add"></span>
-          <span>新增</span>
-        </p>
-      </div>-->
-
       <TableContAdd cont="新增"></TableContAdd>
 
-      <Card >
+      <Card class="footer-btn">
         <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
         <el-button  size="medium" :disabled="deleteStatus" >删除</el-button>
       </Card>

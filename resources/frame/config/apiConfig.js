@@ -20,4 +20,9 @@ module.exports = {
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   // 'getCircle': '/circle/getCircle', //获取circle信息
+
+
+  /*后台*/
+  'siteinfo':'/api/siteinfo'    //首页-系统信息
+
 }
