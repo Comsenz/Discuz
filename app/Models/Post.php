@@ -45,6 +45,10 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    const UNAPPROVED = 0;
+    const APPROVED = 1;
+    const IGNORED = 2;
+
     /**
      * {@inheritdoc}
      */
