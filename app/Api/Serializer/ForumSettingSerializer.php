@@ -33,15 +33,15 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         $attributes = [
-            'siteMode' => $this->settings->get('site_mode'),
+            'siteMode' => $this->settings->get('site_mode'), //pay public
+            'price' => (int)$this->settings->get('price'),
+            'day' => (int)$this->settings->get('day'),
             'logo' => $this->settings->get('site_logo'),
             'siteName' => $this->settings->get('site_name'),
             'siteIntroduction' => $this->settings->get('site_introduction'),
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
-            'unapprovedThreads' => Thread::where('is_approved', Thread::UNAPPROVED)->count(),
-            'unapprovedPosts' => Post::where('is_approved', Post::UNAPPROVED)->count(),
             'siteAuthor' => User::where('id', $this->settings->get('site_author'))->get(['id', 'username'])
 //            'users' => $this->settings->get('site_name'),
 //            'siteName' => $this->settings->get('site_name'),
