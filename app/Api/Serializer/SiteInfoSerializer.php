@@ -5,6 +5,8 @@ namespace App\Api\Serializer;
 
 
 
+use App\Models\Post;
+use App\Models\Thread;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Foundation\Application;
 
@@ -37,7 +39,9 @@ class SiteInfoSerializer extends AbstractSerializer
             'storage_dir_writable' => $model['storage_dir_writable'],
             'cache_dir_writable' => $model['cache_dir_writable'],
             'app_size' => $model['app_size'],
-            'packages' => $model['packages']
+            'packages' => $model['packages'],
+            'unapprovedThreads' => Thread::where('is_approved', Thread::UNAPPROVED)->count(),
+            'unapprovedPosts' => Post::where('is_approved', Post::UNAPPROVED)->count(),
         ];
     }
 

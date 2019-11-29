@@ -2,7 +2,6 @@
 
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreateUsers extends Migration
 {
@@ -19,7 +18,7 @@ class CreateUsers extends Migration
             $table->string('mobile', 100)->unique()->comment('手机号');
             $table->string('password', 100)->comment('密码');
             $table->string('union_id', 100)->comment('union_id');
-            $table->string('last_login_ip', 45)->nullable()->comment('最后登录 ip 地址');
+            $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
             $table->dateTime('created_at')->comment('创建时间');
             $table->dateTime('updated_at')->comment('修改时间');
         });

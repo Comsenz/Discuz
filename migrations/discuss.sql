@@ -40,15 +40,15 @@ CREATE TABLE `group_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `threads` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
   `last_posted_user_id` int(10) unsigned DEFAULT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `post_count` int(10) unsigned NOT NULL DEFAULT '0',
   `view_count` int(10) unsigned NOT NULL DEFAULT '0',
   `like_count` int(10) unsigned NOT NULL DEFAULT '0',
-  `favorite_count` int(10) unsigned NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
