@@ -47,7 +47,7 @@
       <el-radio v-model="radio" label="2">冻结提现</el-radio>
     </Card>
 
-    <Card>
+    <Card class="footer-btn">
       <el-button type="primary" size="medium">提交</el-button>
     </Card>
 

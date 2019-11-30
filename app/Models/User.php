@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+
 use Discuz\Auth\Guest;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\DiscuzChannelManager;
+use Illuminate\Support\Carbon;
 
 
 /**
@@ -83,6 +84,7 @@ class User extends Model
     {
         $user = new static;
         $user->attributes = $data;
+        $user->joind_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
         return $user;
     }

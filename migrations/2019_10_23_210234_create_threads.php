@@ -2,7 +2,6 @@
 
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreateThreads extends Migration
 {
@@ -17,6 +16,7 @@ class CreateThreads extends Migration
             $table->increments('id')->comment('主题 id');
             $table->integer('user_id')->unsigned()->nullable()->comment('创建用户 id');
             $table->integer('last_posted_user_id')->unsigned()->nullable()->comment('最后回复用户 id');
+            $table->integer('category_id')->unsigned()->nullable()->comment('分类 id');
             $table->string('title')->default('')->comment('标题');
             $table->decimal('price')->unsigned()->default(0)->comment('价格');
             $table->integer('post_count')->unsigned()->default(0)->comment('回复数');

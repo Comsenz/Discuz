@@ -17,7 +17,7 @@
       </CardRow>
     </Card>
 
-    <Card >
+    <Card class="footer-btn">
       <el-button type="primary" size="medium" @click="$router.push({path:'/admin/worth-mentioning-set'})">提交</el-button>
     </Card>
   </div>

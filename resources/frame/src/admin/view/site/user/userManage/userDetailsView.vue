@@ -105,7 +105,7 @@
       <p>0000234897289374</p>
     </Card>
 
-    <Card>
+    <Card class="footer-btn">
       <el-button type="primary" size="medium">提交</el-button>
     </Card>
 

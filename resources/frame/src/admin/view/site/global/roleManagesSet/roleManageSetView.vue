@@ -42,7 +42,7 @@
 
         <TableContAdd cont="新增"></TableContAdd>
 
-        <Card>
+        <Card class="footer-btn">
           <el-button type="primary" si ze="medium" >提交</el-button>
           <el-button  size="medium" :disabled="deleteStatus" >删除</el-button>
         </Card>

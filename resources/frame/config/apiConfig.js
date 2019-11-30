@@ -21,4 +21,9 @@ module.exports = {
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   'notice':'/api/notification',
   // 'getCircle': '/circle/getCircle', //获取circle信息
+
+
+  /*后台*/
+  'siteinfo':'/api/siteinfo'    //首页-系统信息
+
 }

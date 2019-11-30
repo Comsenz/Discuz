@@ -2,7 +2,6 @@
 
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreatePosts extends Migration
 {
@@ -19,7 +18,7 @@ class CreatePosts extends Migration
             $table->integer('thread_id')->unsigned()->nullable()->comment('关联主题 id');
             $table->integer('reply_id')->unsigned()->nullable()->comment('关联回复 id');
             $table->text('content')->nullable()->comment('内容');
-            $table->string('ip', 45)->nullable()->comment('ip 地址');
+            $table->ipAddress('ip')->default('')->comment('ip 地址');
             $table->integer('reply_count')->unsigned()->default(0)->comment('关联回复数');
             $table->integer('like_count')->unsigned()->default(0)->comment('喜欢数');
             $table->dateTime('created_at')->comment('创建时间');

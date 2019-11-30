@@ -4,6 +4,8 @@
 namespace App\Providers;
 
 
+use App\Events\Users\Saving;
+use App\Listeners\User\AddDefaultGroup;
 use App\User\AvatarUploader;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
@@ -20,5 +22,11 @@ class UserServiceProvider extends ServiceProvider
             ->give(function(Application $app) {
                 return $app->make(Factory::class)->disk('avatar');
             });
+    }
+
+    public function boot() {
+        $events = $this->app->make('events');
+
+        $events->listen(Saving::class, AddDefaultGroup::class);
     }
 }
