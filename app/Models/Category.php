@@ -11,6 +11,7 @@ namespace App\Models;
 
 use App\Events\Category\Created;
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * {@inheritdoc}

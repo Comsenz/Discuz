@@ -7,15 +7,17 @@
 
 namespace App\Commands\Category;
 
+use App\Events\Category\Saving;
 use App\Models\Category;
 use App\Models\User;
+use App\Validators\CategoryValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use App\Events\Category\Saving;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class CreateCategory
 {
@@ -57,30 +59,32 @@ class CreateCategory
 
     /**
      * @param EventDispatcher $events
+     * @param CategoryValidator $validator
      * @return Category
      * @throws NotAuthenticatedException
      * @throws PermissionDeniedException
+     * @throws ValidationException
      */
-    public function handle(EventDispatcher $events)
+    public function handle(EventDispatcher $events, CategoryValidator $validator)
     {
         $this->events = $events;
 
         $this->assertRegistered($this->actor);
         $this->assertCan($this->actor, 'createCategory');
 
-        $attributes = Arr::get($this->data, 'attributes');
-
         $category = Category::build(
-            $attributes['name'],
-            $attributes['description'],
-            $attributes['sort'],
-            $attributes['icon'],
+            Arr::get($this->data, 'attributes.name'),
+            Arr::get($this->data, 'attributes.description'),
+            Arr::get($this->data, 'attributes.sort', 1),
+            Arr::get($this->data, 'attributes.icon', ''),
             $this->ip
         );
 
         $this->events->dispatch(
             new Saving($category, $this->actor, $this->data)
         );
+
+        $validator->valid($category->getAttributes());
 
         $category->save();
 

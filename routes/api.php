@@ -89,9 +89,10 @@ $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::
 |--------------------------------------------------------------------------
 */
 
-$route->get('/categories', 'categories.index', ApiController\Category\ListCategoryController::class);
-$route->get('/categories/{id}', 'categories.resource', ApiController\Category\ResourceCategoryController::class);
+$route->get('/categories', 'categories.index', ApiController\Category\ListCategoriesController::class);
 $route->post('/categories', 'categories.create', ApiController\Category\CreateCategoryController::class);
+$route->patch('/categories/{id}', 'categories.update', ApiController\Category\UpdateCategoryController::class);
+$route->delete('/categories/{id}', 'categories.delete', ApiController\Category\DeleteCategoryController::class);
 
 /*
 |--------------------------------------------------------------------------
