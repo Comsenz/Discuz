@@ -17,7 +17,7 @@ use App\Models\UserWalletCash;
 use App\Models\UserWalletLog;
 use App\Models\UserWallet;
 use App\Trade\Config\GatewayConfig;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -48,8 +48,9 @@ class UserWalletCashReview
 
     /**
      * 初始化命令参数
-     * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
+     * @param User $actor 执行操作的用户.
+     * @param Collection $data 请求的数据.
+     * @param $ip_address
      */
     public function __construct(User $actor, Collection $data, $ip_address)
     {
@@ -59,10 +60,14 @@ class UserWalletCashReview
     }
 
     /**
-     * 执行命令
+     * @param Validator $validator
+     * @param Dispatcher $events
+     * @param ConnectionInterface $connection
      * @return array 审核结果
+     * @throws ErrorException
+     * @throws ValidationException
      */
-    public function handle(Validator $validator, EventDispatcher $events, ConnectionInterface $connection)
+    public function handle(Validator $validator, Dispatcher $events, ConnectionInterface $connection)
     {
         $this->events = $events;
         $this->connection = $connection;

@@ -14,7 +14,7 @@ use App\Validators\CategoryValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -66,14 +66,14 @@ class EditCategory
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param CategoryRepository $categories
      * @param CategoryValidator $validator
      * @return mixed
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, CategoryRepository $categories, CategoryValidator $validator)
+    public function handle(Dispatcher $events, CategoryRepository $categories, CategoryValidator $validator)
     {
         $this->events = $events;
 

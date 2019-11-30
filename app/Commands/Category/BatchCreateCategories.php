@@ -15,7 +15,7 @@ use App\Models\User;
 use App\Validators\CategoryValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -58,11 +58,11 @@ class BatchCreateCategories
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param CategoryValidator $validator
      * @return array
      */
-    public function handle(EventDispatcher $events, CategoryValidator $validator)
+    public function handle(Dispatcher $events, CategoryValidator $validator)
     {
         $this->events = $events;
 
