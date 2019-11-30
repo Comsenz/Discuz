@@ -4,24 +4,24 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: BatchDeleteThreads.php xxx 2019-10-21 14:22:00 LiuDongdong $
+ *      $Id: BatchDeleteCategories.php xxx 2019-11-30 17:26:00 LiuDongdong $
  */
 
-namespace App\Commands\Thread;
+namespace App\Commands\Category;
 
-use App\Events\Thread\Deleted;
-use App\Events\Thread\Deleting;
+use App\Events\Category\Deleted;
+use App\Events\Category\Deleting;
 use App\Models\User;
-use App\Repositories\ThreadRepository;
+use App\Repositories\CategoryRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class BatchDeleteThreads
+class BatchDeleteCategories
 {
     use EventsDispatchTrait;
 
     /**
-     * The ID array of the threads to delete.
+     * The ID array of the categories to delete.
      *
      * @var array
      */
@@ -35,7 +35,7 @@ class BatchDeleteThreads
     public $actor;
 
     /**
-     * The attributes of the new thread.
+     * The attributes of the new categories.
      *
      * @var array
      */
@@ -55,40 +55,40 @@ class BatchDeleteThreads
 
     /**
      * @param Dispatcher $events
-     * @param ThreadRepository $threads
+     * @param CategoryRepository $categories
      * @return array
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads)
+    public function handle(Dispatcher $events, CategoryRepository $categories)
     {
         $this->events = $events;
 
         $result = ['data' => [], 'meta' => []];
 
         foreach ($this->ids as $id) {
-            $thread = $threads->query()->whereVisibleTo($this->actor)->find($id);
+            $category = $categories->query()->whereVisibleTo($this->actor)->find($id);
 
-            if (! $thread) {
+            if (! $category) {
                 $result['meta'][] = ['id' => $id, 'message' => 'model_not_found'];
                 continue;
             }
 
-            if ($this->actor->can('forceDelete', $thread)) {
+            if ($this->actor->can('delete', $category)) {
                 try {
                     $this->events->dispatch(
-                        new Deleting($thread, $this->actor, $this->data)
+                        new Deleting($category, $this->actor, $this->data)
                     );
                 } catch (\Exception $e) {
                     $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
                     continue;
                 }
 
-                $thread->raise(new Deleted($thread));
-                $thread->forceDelete();
+                $category->raise(new Deleted($category));
+                $category->forceDelete();
 
-                $result['data'][] = $thread;
+                $result['data'][] = $category;
 
                 try {
-                    $this->dispatchEventsFor($thread, $this->actor);
+                    $this->dispatchEventsFor($category, $this->actor);
                 } catch (\Exception $e) {
                     $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
                     continue;

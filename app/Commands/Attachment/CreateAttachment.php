@@ -109,7 +109,7 @@ class CreateAttachment
 
         $uploadFile = $uploadTool->save($type, $size);
 
-        if (!$uploadFile){
+        if (! $uploadFile){
             throw new UploadException();
         }
 

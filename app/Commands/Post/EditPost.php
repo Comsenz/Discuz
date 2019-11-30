@@ -18,7 +18,7 @@ use App\Validators\PostValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -61,14 +61,14 @@ class EditPost
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param PostRepository $posts
      * @param PostValidator $validator
      * @return Post
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, PostRepository $posts, PostValidator $validator)
+    public function handle(Dispatcher $events, PostRepository $posts, PostValidator $validator)
     {
         $this->events = $events;
 
