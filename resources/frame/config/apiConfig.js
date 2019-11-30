@@ -16,7 +16,7 @@ module.exports = {
   'emojis':'/api/emoji',      //表情接口
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
-  // 'wallet':'/api/wallet/user',//查看用户钱包
+  'wallet':`/api/wallet/user/${browserDb.default.getLItem('tokenId')}`,//查看用户钱包
   'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
@@ -28,6 +28,8 @@ module.exports = {
   'cash':'/api/wallet/cash',//提现
   'collection':'/api/favorites',//我的收藏
   'changePassword':`/api/users/${browserDb.default.getLItem('tokenId')}`,//修改密码
-  'noticeList':'/api/notificationUnread' //通知列表未读信息
+  'noticeList':'/api/notificationUnread', //通知列表未读信息
+  'searchUser':'/api/users', //用户搜索
+  'searchThreads':'/api/threads',//搜索
   // 'getCircle': '/circle/getCircle', //获取circle信息
 }
