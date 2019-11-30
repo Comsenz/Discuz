@@ -10,38 +10,34 @@
       <Card class="home-card-box" header="系统信息" intercept="true">
         <p>
           <span>Discuz!程序版本</span>
-          <span>Discuz! Q Bete 1.0.12.31</span>
+          <span>{{this.siteInfo.version}}</span>
         </p>
         <p>
           <span>服务器系统及PHP</span>
-          <span>WINNT/PHP v5.3.29</span>
+          <span>{{this.siteInfo.php_version}}</span>
         </p>
         <p>
           <span>服务器软件</span>
-          <span>Microsoft-IIS/7.5</span>
+          <span>{{this.siteInfo.server_software}}</span>
         </p>
         <p>
           <span>服务器MySQL版本</span>
-          <span>5.5.53</span>
+          <span></span>
         </p>
         <p>
           <span>上传许可</span>
-          <span>120M</span>
+          <span>{{this.siteInfo.upload_size}}</span>
         </p>
         <p>
           <span>当前数据库尺寸</span>
-          <span>3.36M</span>
-        </p>
-        <p>
-          <span>当前附件尺寸</span>
-          <span><a href="#">[详情]</a></span>
+          <span>{{this.siteInfo.db_size}}</span>
         </p>
       </Card>
 
       <Card class="home-card-box home-card__footer" header="相关链接">
-        <a href="/">Discuz!&nbsp;支持论坛</a>
-        <a href="/">腾讯云</a>
-        <a href="/">DNSPod</a>
+        <a href="https://www.discuz.net/" target="_blank">Discuz!&nbsp;支持论坛</a>
+        <a href="https://cloud.tencent.com/" target="_blank">腾讯云</a>
+        <a href="http://www.dnspod.cn/" target="_blank">DNSPod</a>
       </Card>
 
     </div>

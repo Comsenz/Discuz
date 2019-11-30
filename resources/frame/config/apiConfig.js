@@ -8,7 +8,7 @@ module.exports = {
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'users':'/api/users', //用户信息
-  'forum':'/api/forum',
+  'forum':'/api/forum', //站点信息
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
@@ -20,6 +20,7 @@ module.exports = {
   'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
+<<<<<<< HEAD
   'walletFrozen':'/api/wallet/log',//冻结金额
   'orderList':'/api/order',//订单明细
   'invite':'/api/invite',
@@ -31,5 +32,13 @@ module.exports = {
   'noticeList':'/api/notificationUnread', //通知列表未读信息
   'searchUser':'/api/users', //用户搜索
   'searchThreads':'/api/threads',//搜索
+=======
+  'notice':'/api/notification',
+>>>>>>> master
   // 'getCircle': '/circle/getCircle', //获取circle信息
+
+
+  /*后台*/
+  'siteinfo':'/api/siteinfo'    //首页-系统信息
+
 }

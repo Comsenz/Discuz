@@ -16,14 +16,13 @@ use Tobscure\JsonApi\Document;
 use App\Api\Serializer\OrderSerializer;
 use App\Commands\Order\CreateOrder;
 
-
 class CreateOrderController extends AbstractCreateController
 {
     /**
      * {@inheritdoc}
      */
     public $serializer = OrderSerializer::class;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -50,13 +49,11 @@ class CreateOrderController extends AbstractCreateController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-
-        $inputs    = $request->getParsedBody();
+        $body = $request->getParsedBody();
 
         return $this->bus->dispatch(
-            new CreateOrder($actor, $inputs)
+            new CreateOrder($actor, $body)
         );
     }
 }

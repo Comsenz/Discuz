@@ -20,6 +20,22 @@ export default {
           oneHeader: true
         }
       },
+      'header':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/headerView'],resolve)
+        },
+        metaInfo:{
+          title:"header"
+        }
+      },
+      'sidebar':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/sidebarView'],resolve)
+        },
+        metaInfo:{
+          title:"sidebar"
+        }
+      },
       'expression':{  //表情
         comLoad:function (resolve) {
           require(['../view/m_site/common/expressionView'],resolve)
@@ -97,7 +113,7 @@ export default {
           title:"详情"
         }
       },
-      'details':{
+      'details/:id':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/detailsView'],resolve)
         },
@@ -174,14 +190,7 @@ export default {
           oneHeader: true
         }
       },
-      'header':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/common/headerView'],resolve)
-        },
-        metaInfo:{
-          title:"header"
-        }
-      },
+      
 	  'theme-det':{
 	    comLoad:function (resolve) {
 	      require(['../view/m_site/common/themeDetView'],resolve)

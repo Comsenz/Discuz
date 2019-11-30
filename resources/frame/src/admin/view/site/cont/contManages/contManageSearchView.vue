@@ -83,7 +83,7 @@
         </div>
        </el-collapse-transition>
 
-      <Card>
+      <Card class="footer-btn">
         <el-button type="primary">提交</el-button>
         <el-checkbox v-model="checkedStatus" @change="checkboxChange">更多</el-checkbox>
       </Card>

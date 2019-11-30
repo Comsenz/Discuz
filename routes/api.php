@@ -16,6 +16,8 @@ $route->get('/check', 'check', ApiController\CheckController::class);
 
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
 
+$route->get('/test', 'test', ApiController\TestController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Cloud APIs
@@ -80,6 +82,17 @@ $route->post('/old-send', 'send', ApiController\Mobile\SendOldController::class)
 $route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
 $route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
 $route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Categories
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/categories', 'categories.index', ApiController\Category\ListCategoriesController::class);
+$route->post('/categories', 'categories.create', ApiController\Category\CreateCategoryController::class);
+$route->patch('/categories/{id}', 'categories.update', ApiController\Category\UpdateCategoryController::class);
+$route->delete('/categories/{id}', 'categories.delete', ApiController\Category\DeleteCategoryController::class);
 
 /*
 |--------------------------------------------------------------------------

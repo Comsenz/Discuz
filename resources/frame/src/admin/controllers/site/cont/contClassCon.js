@@ -44,6 +44,17 @@ export default {
       console.log(123);
     }
   },
+
+  created(){
+    this.appFetch({
+      url:'classify',
+      method:'get',
+      data:{}
+    }).then(res => {
+      console.log(res);
+    })
+  },
+
   components:{
     Card,
     TableContAdd

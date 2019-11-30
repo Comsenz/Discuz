@@ -22,7 +22,6 @@ use Illuminate\Validation\ValidationException;
 
 class RegisterUser
 {
-    use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     /**
@@ -49,31 +48,19 @@ class RegisterUser
         $this->data = $data;
     }
 
+
     /**
      * @param Dispatcher $events
-     * @param SettingsRepository $settings
      * @param UserValidator $validator
      * @return User
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, SettingsRepository $settings, UserValidator $validator)
+    public function handle(Dispatcher $events, UserValidator $validator)
     {
         $this->events = $events;
 
-        // 是否开放注册
-        // if (! $settings->get('allow_sign_up')) {
-        //     $this->assertAdmin($this->actor);
-        // }
-
         $password = Arr::get($this->data, 'password');
         $password_confirmation = Arr::get($this->data, 'password_confirmation');
-
-        // 如果提供了有效的身份验证令牌作为属性，那么我们将不要求用户选择密码。
-        // if (isset($data['attributes']['token'])) {
-        //     $token = RegistrationToken::validOrFail($data['attributes']['token']);
-        //
-        //     $password = $password ?: Str::random(20);
-        // }
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip']));
 
@@ -83,6 +70,7 @@ class RegisterUser
             new Saving($user, $this->actor, $this->data)
         );
 
+        //使用该验证可不传 password_confirmation参数不检测
         $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation')));
 
         $user->save();

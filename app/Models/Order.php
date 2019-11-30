@@ -1,5 +1,4 @@
 <?php
-declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,11 +9,33 @@ declare (strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $id
+ * @property string $order_sn
+ * @property string $payment_sn
+ * @property float $amount
+ * @property int $user_id
+ * @property int $payee_id
+ * @property int $type
+ * @property int $thread_id
+ * @property int $status
+ * @property int $platform
+ * @property int $payment_type
+ * @property string $remark
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Thread $thread
+ * @property User $user
+ * @property User $payee
+ * @package App\Models
+ */
 class Order extends Model
 {
-
     /**
      * 订单类型
      */
@@ -40,7 +61,16 @@ class Order extends Model
      */
     public function user()
     {
+        return $this->belongsTo(User::class);
+    }
 
+    /**
+     * Define the relationship with the order's payee.
+     *
+     * @return belongsTo
+     */
+    public function payee()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -54,10 +84,10 @@ class Order extends Model
         return $this->hasOne(PayNotify::class, 'payment_sn', 'payment_sn');
     }
 
-
     /**
-     * @param $orders
-     * @return Relationship
+     * Define the relationship with the order's thread.
+     *
+     * @return BelongsTo
      */
     public function thread()
     {

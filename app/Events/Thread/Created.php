@@ -30,9 +30,8 @@ class Created
      * @param Thread $thread
      * @param User $actor
      */
-    public function __construct(Thread $thread, $actor = null)
+    public function __construct(Thread $thread, User $actor = null)
     {
-        // TODO: User $actor
         $this->thread = $thread;
         $this->actor = $actor;
     }

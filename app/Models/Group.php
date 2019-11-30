@@ -37,6 +37,8 @@ class Group extends Model
      */
     const MEMBER_ID = 10;
 
+    const DEFAULT = 1;
+
     /**
      * @var bool
      */

@@ -33,6 +33,6 @@ class CreateInvites extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invites');
+        $this->schema()->dropIfExists('invites');
     }
 }

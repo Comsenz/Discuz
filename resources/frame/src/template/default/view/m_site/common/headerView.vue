@@ -6,54 +6,15 @@
       position="right"
       :style="{ height: '100%' }"
    >
-      <div class="sideCon">
-        <div class="sideUserBox">
-          <!-- <img src="../../../../../../static/images/noavatar.gif" class="userHead"> -->
-          <img src="avatarUrl" alt="" class="userHead">
-          <div class="userDet">
-            <div class="userName">{{username}}</div>
-            <div class="userPhone">{{mobile}}</div>
-          </div>
-          <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-        </div>
-      </div>
-      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">
-        <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-           <span class="itemTit">{{item.name}}</span>
-           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-        </div>
-      </div>
-      <div class="itemGap"></div>
-      <div class="sideConList">
-        <div class="sideCon" v-for="(item, i) in sidebarList2" :key="'list2'+i">
-          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-          <div class="sideItem" v-else @click="bindEvent(item.enentType)">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="itemGap"></div>
-      <div class="sideConList">
-        <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
-          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-        </div>
-      </div>
+      <sidebar :userAvatarUrl="avatarUr" :userName="username" :userMobile="mobile"></sidebar>
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
-      <div class="invitePerDet" v-show="invitePerDet" v-for="(item,key) in userInfoList">
+      <div class="invitePerDet" v-show="invitePerDet">
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
-        <img v-if="item.user().avatarUrl()" :src="item.user().avatarUrl()" alt="aaaa" class="inviteHead">
+        <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="aaaa" class="inviteHead" v-model="userInfoAvataUrl">
         <img v-else="" src="../../../../../../static/images/noavatar.gif" alt="ssss" class="inviteHead">
-        <div class="inviteName">{{item.user().username()}}</div>
+        <div class="inviteName" v-model="userInfoName">{{userInfoName}}</div>
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>
       <div class="headOpe">
@@ -83,10 +44,13 @@
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-
+import Sidebar from '../../m_site/common/sidebarView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",
+  components:{
+  	Sidebar
+  },
   ...mSiteHeader
 }
 

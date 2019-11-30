@@ -58,7 +58,7 @@
         </div>
       </el-collapse-transition>
 
-      <Card>
+      <Card class="footer-btn">
         <el-button @click="searchBtn" type="primary" size="medium">搜索</el-button>
         <el-checkbox v-model="checked" @change="checkedStatus">更多选项</el-checkbox>
       </Card>

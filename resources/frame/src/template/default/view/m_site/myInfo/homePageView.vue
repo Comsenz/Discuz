@@ -1,10 +1,11 @@
 <template>
     <div class="home-page-box">
-      <div v-for="(item,index) in OthersThemeList" :key="index">
-        <comHeader :title="item.user().username()+'的个人主页'"></comHeader>
-      </div>
+      <!-- <div :userInfo="headUserInfo"> -->
+        <!-- <comHeader :title="item.user().username()+'的个人主页'"></comHeader> -->
+        <!-- <comHeader :title="headUserName+'的个人主页'"></comHeader> -->
+      <!-- </div> -->
       <div class="content">
-        <Header :userInfoList="OthersThemeList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <Header :userInfoAvataUrl="userInfoAvataUrlCon" :userInfoName="userInfoNameCon" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
         <ThemeDet :themeList="OthersThemeList"></ThemeDet>
       </div>

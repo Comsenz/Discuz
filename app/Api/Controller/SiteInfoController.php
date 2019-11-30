@@ -25,6 +25,7 @@ class SiteInfoController extends AbstractResourceController
         $this->app = $app;
     }
 
+
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
@@ -33,14 +34,11 @@ class SiteInfoController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        //权限验证，只能是能进入后台人员查看.
-        $this->assertAdmin($request->getAttribute('actor'));
+        $this->assertCan($request->getAttribute('actor'), 'viewSiteInfo');
 
-        //获取相关信息
         $decomposer = new Decomposer($this->app, $request);
 
         return $decomposer->getSiteinfo();
     }
-
 
 }
