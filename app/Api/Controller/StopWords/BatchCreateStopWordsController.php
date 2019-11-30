@@ -4,7 +4,7 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: BatchCreateStopWordController.php xxx 2019-11-05 18:00:00 LiuDongdong $
+ *      $Id: BatchCreateStopWordsController.php xxx 2019-11-05 18:00:00 LiuDongdong $
  */
 
 namespace App\Api\Controller\StopWords;
@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class BatchCreateStopWordController implements RequestHandlerInterface
+class BatchCreateStopWordsController implements RequestHandlerInterface
 {
     /**
      * @var Dispatcher
