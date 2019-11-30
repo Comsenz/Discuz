@@ -2,12 +2,7 @@
 
 <template>
     <div class="circleCon">
-    	<!-- <div class="contentHead">
-    		<span class="icon iconfont icon-back headBack"></span>
-    		<h1 class="headTit">详情</h1>
-    		<span class="icon iconfont icon-Shape menuCli"></span>
-    	</div> -->
-    	<commonHeader title="详情"></commonHeader>
+    	<comHeader title="详情" :menuIconShow="true"></comHeader>
     	<div class="content">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
@@ -140,7 +135,7 @@
 	      position="bottom"
 	      :style="{ width: '100%' }"
 	    >
-	   		<span class="support">支持作者继续创作</span> 	
+	   		<span class="support">支持作者继续创作</span>
 	   		<div class="rewardMonBox">
 	   			<div class="moneyChi">
 	   				<span>1</span>元
@@ -176,15 +171,15 @@
 </template>
 
 <script>
-// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-// import commonHeader from '../../m_site/common/headerView';
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+// import comHeader from '../../m_site/common/headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "detailsView",
-    // components:{
-    // 	// commonHeader
-    // },
+    components:{
+    	comHeader
+    },
     // ...mSiteHeader,
     ...mSiteDetailsCon
 }

@@ -7,29 +7,30 @@
 	    	<div class="circlePL">
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">圈子名称</span>
-			    	<span class="infoItemRight">Discuz!Q</span>
+			    	<span class="infoItemRight">{{siteInfo.siteName()}}</span>
 			    </div>
 		    </div>
 		    <div class="circlePL">
 		    	<div class="circleLoBox">
 			    	<span class="circleIcon">圈子图标</span>
-			    	<img src="../../../../../../static/images/logo.png" class="circleLogo">
+            <img v-if="siteInfo.logo()" :src="siteInfo.logo()" class="circleLogo">
+            <img v-else="" src="../../../../../../static/images/logo.png" class="circleLogo">
 			    </div>
 		    </div>
 		    <div class="circleInfo padB0 lastBorNone">
 		    	<h1 class="cirInfoTit">圈子简介</h1>
-		    	<p class="cirInfoWord">Crossday Discuz! Board（简称 Discuz!）是北京康盛新创科技有限责任公司推出的一套通用的社区论坛软件系统。自2001年6月面世以来，Discuz!已拥有15年以上的应用历史和200多万网站用户案例，是全球成熟度最高、覆盖率最大的论坛软件系统之一。目前最新版本Discuz! X3.4正式版于2017年8月2日发布，去除</p>
+		    	<p class="cirInfoWord">{{siteInfo.siteIntroduction()}}</p>
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">创建时间</span>
-			    	<span class="infoItemRight">2018-1-1</span>
+			    	<span class="infoItemRight">{{siteInfo.siteInstall()}}</span>
 			    </div>
 			    <div class="infoItem">
 			    	<span class="infoItemLeft">加入方式</span>
-			    	<span class="infoItemRight">付费20元，有效期自加入起365天</span>
+			    	<span class="infoItemRight">付费{{siteInfo.price()}}元，有效期自加入起{{siteInfo.day()}}天</span>
 			    </div>
 			    <div class="infoItem">
 			    	<span class="infoItemLeft">圈主</span>
-			    	<span class="infoItemRight">我是凌凌漆</span>
+			    	<span class="infoItemRight">{{username}}</span>
 			    </div>
 			    <div class="infoItem">
 			    	<div class="overHide">
@@ -75,11 +76,17 @@
 </template>
 
 <script>
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import mSiteCircleInfoCon from '../../../controllers/m_site/management/circleInfoCon';
+
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleInfoView",
+    components:{
+      comHeader
+    },
     ...mSiteCircleInfoCon
+
 }
 
 

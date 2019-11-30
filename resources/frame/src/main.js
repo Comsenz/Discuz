@@ -30,6 +30,7 @@ import Thread from './common/models/Thread';
 import User from './common/models/User';
 import Post from './common/models/Post';
 import Emoji from './common/models/Emoji';
+import Forum from './common/models/Forum';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
@@ -56,7 +57,8 @@ Vue.prototype.apiStore = new Store({
   'threads': Thread,
   'users': User,
   'posts': Post,
-  'emoji': Emoji
+  'emoji': Emoji,
+  'forums': Forum
 });
 Vue.prototype.$utils = utils; //注册全局方法
 

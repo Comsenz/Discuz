@@ -37,6 +37,10 @@ export default {
 
   },
 	methods: {
+    //点击标题跳转到主题详情页
+    jumpThemeDet:function(id){
+      this.$router.push({ path:'details'+'/'+id});
+    },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
       this.$router.push({ path:'home-page'+'/'+id});
