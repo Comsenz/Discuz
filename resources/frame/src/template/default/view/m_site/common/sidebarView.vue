@@ -3,11 +3,11 @@
      <div class="sideCon">
        <div class="sideUserBox">
          <!-- <img src="../../../../../../static/images/noavatar.gif" class="userHead"> -->
-         <img src="userAvatarUrl" alt="" class="userHead" v-if="userAvatarUrl == '' && userAvatarUrl == null">
+         <img src="avatarUrl" alt="" class="userHead" v-if="avatarUrl == '' && avatarUrl == null">
          <img src="../../../../../../static/images/noavatar.gif" class="userHead" v-else="">
          <div class="userDet">
-           <div class="userName">{{userName}}</div>
-           <div class="userPhone">{{userMobile}}</div>
+           <div class="userName">{{username}}</div>
+           <div class="userPhone">{{mobile}}</div>
          </div>
          <span class="icon iconfont icon-right-arrow jumpJtr"></span>
        </div>

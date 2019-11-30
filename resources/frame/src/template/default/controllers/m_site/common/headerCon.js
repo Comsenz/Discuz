@@ -28,7 +28,7 @@ export default {
 		    	memberNum: '1222',
 		    	circleLeader: '圈主名称'
 		    },
-        avatarUr:'',
+        avatarUrl:'',
         username:'',
         mobile:'',
         userId:'',
@@ -78,19 +78,19 @@ export default {
     }
   },
   created: function() {
-    this.getUserInfo();
+    // this.getUserInfo();
   },
   methods:{
-  //获取用户信息
-    getUserInfo(){
-        var userId = browserDb.getLItem('tokenId');
-        this.apiStore.find('users', userId).then(data => {
-          console.log(data.data.attributes.mobile);
-          this.avatarUr = data.data.attributes.avatarUrl;
-          this.username = data.data.attributes.username;
-          this.mobile = data.data.attributes.mobile;
-        });
-    },
+    // //获取用户信息
+    // getUserInfo(){
+    //     var userId = browserDb.getLItem('tokenId');
+    //     this.apiStore.find('users', userId).then(data => {
+    //       console.log(data.data.attributes.mobile);
+    //       this.avatarUrl = data.data.attributes.avatarUrl;
+    //       this.username = data.data.attributes.username;
+    //       this.mobile = data.data.attributes.mobile;
+    //     });
+    // },
     backUrl () {
       // 返回上一级
       window.history.go(-1)

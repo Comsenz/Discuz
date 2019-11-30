@@ -6,7 +6,7 @@
       position="right"
       :style="{ height: '100%' }"
    >
-      <sidebar :userAvatarUrl="avatarUr" :userName="username" :userMobile="mobile"></sidebar>
+      <sidebar></sidebar>
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
