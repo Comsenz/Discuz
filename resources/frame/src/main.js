@@ -59,11 +59,8 @@ Vue.prototype.apiStore = new Store({
   'users': User,
   'posts': Post,
   'emoji': Emoji,
-<<<<<<< HEAD
-  'notification': Notification
-=======
+  'notification': Notification,
   'forums': Forum
->>>>>>> master
 });
 Vue.prototype.$utils = utils; //注册全局方法
 

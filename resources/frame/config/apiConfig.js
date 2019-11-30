@@ -20,7 +20,6 @@ module.exports = {
   'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
-<<<<<<< HEAD
   'walletFrozen':'/api/wallet/log',//冻结金额
   'orderList':'/api/order',//订单明细
   'invite':'/api/invite',
@@ -32,9 +31,7 @@ module.exports = {
   'noticeList':'/api/notificationUnread', //通知列表未读信息
   'searchUser':'/api/users', //用户搜索
   'searchThreads':'/api/threads',//搜索
-=======
   'notice':'/api/notification',
->>>>>>> master
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
 
