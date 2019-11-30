@@ -10,7 +10,7 @@ module.exports = {
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'users':'/api/users', //用户信息
-  'forum':'/api/forum',
+  'forum':'/api/forum', //站点信息
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
@@ -19,5 +19,6 @@ module.exports = {
   'threads':'/api/threads',//主题
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
+  'notice':'/api/notification',
   // 'getCircle': '/circle/getCircle', //获取circle信息
 }
