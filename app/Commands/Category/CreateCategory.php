@@ -39,7 +39,7 @@ class CreateCategory
     public $data;
 
     /**
-     * The IP address of the actor..
+     * The IP address of the actor.
      *
      * @var string
      */
