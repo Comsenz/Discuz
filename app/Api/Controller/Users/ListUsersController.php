@@ -6,7 +6,6 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
-use App\Searchs\Users\UserSearcher;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Str;
