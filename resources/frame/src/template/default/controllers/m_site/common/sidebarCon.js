@@ -6,7 +6,7 @@ import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
     return {
-        avatarUr:'',
+        avatarUrl:'',
         username:'',
         mobile:'',
         userId:'',
@@ -83,26 +83,21 @@ export default {
 	      ]
 	  }
   },
-	props: {
-    userAvatarUrl: { // 组件用户信息
-      type: String
-    },
-    userName: { // 组件用户名
-      type: String
-    },
-    userMobile: { // 组件用户手机号
-      type: String
-    }
-
-  },
   created: function() {
-    this.getCircle();
+    this.getUserInfo();
   },
   methods:{
-  //获取圈子主题数，成员数，圈主名称
-    getCircle(){
+  //获取用户信息
+  getUserInfo(){
+      var userId = browserDb.getLItem('tokenId');
+      this.apiStore.find('users', userId).then(data => {
+        console.log(data.data.attributes.mobile);
+        this.avatarUrl = data.data.attributes.avatarUrl;
+        this.username = data.data.attributes.username;
+        this.mobile = data.data.attributes.mobile;
+      });
+  },
 
-    }
   },
 
   mounted: function() {
