@@ -28,7 +28,8 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone()">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">发送验证码</van-button>
+              
             </van-field>
 
           </van-cell-group>
@@ -36,7 +37,7 @@
 
         <div class="modify-phone-operating">
           <van-button type="primary" v-if="modifyState" @click="nextStep" >下一步</van-button>
-          <van-button type="primary" v-else @click="bindNewPhone()">提交</van-button>
+          <van-button type="primary" v-else @click="bindNewPhone">提交</van-button>
         </div>
 
       </main>

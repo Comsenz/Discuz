@@ -25,7 +25,9 @@ export default {
 			searchUserList: [],
 			searchThemeList: [],
 			userLoadMoreStatus: true,
-			themeLoadMoreStatus: true
+			themeLoadMoreStatus: true,
+			userLoadMorePageChange: false,
+			themeLoadMorePageChange: false
 		}
   	},
 
@@ -50,13 +52,8 @@ export default {
 			}
 			this.handleSearchUser(true);
 
-			// this.themeParamd = {
-			// 	'filter[q]': this.searchVal,
-			// 	'page[limit]': 2,
-			// 	'page[number]': 1,
-			// }
 			this.themeParamd = {
-				'filter[q]': '',
+				'filter[q]': this.searchVal,
 				'page[limit]': 2,
 				'page[number]': 1,
 			}
@@ -66,41 +63,59 @@ export default {
 
 		},
 
-		handleSearchUser(initStatus = false){
+		async handleSearchUser(initStatus = false){
 			if(initStatus){
 				this.searchUserList = [];
 			}
-			const currentPageNum = this.userParams['page[number]'];
-			this.apiStore.find('searchUser', this.userParams).then(data=>{
-				this.searchUserList = this.searchUserList.concat(data);
-				this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
-				console.log(data,'user list data')
-			}).catch(err=>{
-				this.userParams['page[number]'] = currentPageNum - 1;
-			})
+			try{
+				const currentPageNum = this.userParams['page[number]'];
+				await this.apiStore.find('searchUser', this.userParams).then(data=>{
+					this.searchUserList = this.searchUserList.concat(data);
+					this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
+					console.log(data,'user list data')
+				}).catch(err=>{
+					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
+						this.userParams['page[number]'] = currentPageNum - 1;
+					}
+				})
+			} finally {
+				this.userLoadMorePageChange = false;
+				// this.userParams['page[limit]'] = 2;
+			}
 		},
 
 		handleLoadMoreUser(){
 			this.userParams['page[number]']++;
+			// this.userParams['page[limit]'] = 10;
+			this.userLoadMorePageChange = true;
 			this.handleSearchUser();
 		},
 
-		handleSearchTheme(initStatus = false){
+		async handleSearchTheme(initStatus = false){
 			if(initStatus){
 				this.searchThemeList = [];
 			}
-			const currentPageNum = this.themeParamd['page[number]']; 
-			this.apiStore.find('searchThreads', this.themeParamd).then(data=>{
-				this.searchThemeList = this.searchThemeList.concat(data);
-				this.themeLoadMoreStatus = data.length > this.themeParamd['page[limit]'];
-				console.log(data,'theme list data')
-			}).catch(err=>{
-				this.themeParamd['page[number]'] = currentPageNum - 1;
-			})
+			try {
+				const currentPageNum = this.themeParamd['page[number]']; 
+				await this.apiStore.find('searchThreads', this.themeParamd).then(data=>{
+					this.searchThemeList = this.searchThemeList.concat(data);
+					this.themeLoadMoreStatus = data.length > this.themeParamd['page[limit]'];
+					console.log(data,'theme list data')
+				}).catch(err=>{
+					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
+						this.themeParamd['page[number]'] = currentPageNum - 1;
+					}
+				})
+			} finally {
+				this.themeLoadMorePageChange = false;
+				// this.themeParamd['page[limit]'] = 2;
+			}
 		},
 
 		handleLoadMoreTheme(){
 			this.themeParamd['page[number]']++;
+			// this.themeParamd['page[limit]'] = 10;
+			this.themeLoadMorePageChange = true;
 			this.handleSearchTheme();
 		}
 
