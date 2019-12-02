@@ -9,7 +9,6 @@
 
 namespace App\Models;
 
-use App\Events\Post\Created;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use Carbon\Carbon;
@@ -96,8 +95,6 @@ class Post extends Model
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
-
-        $post->raise(new Created($post));
 
         return $post;
     }

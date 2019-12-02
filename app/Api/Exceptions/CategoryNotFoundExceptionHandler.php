@@ -4,24 +4,24 @@
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: CensorNotPassedExceptionHandler.php xxx 2019-10-18 16:13:00 LiuDongdong $
+ *      $Id: CategoryNotFoundExceptionHandler.php xxx 2019-12-02 11:12:00 LiuDongdong $
  */
 
 namespace App\Api\Exceptions;
 
-use App\Censor\CensorNotPassedException;
+use App\Exceptions\CategoryNotFoundException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
-class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
+class CategoryNotFoundExceptionHandler implements ExceptionHandlerInterface
 {
     /**
      * @inheritDoc
      */
     public function manages(Exception $e)
     {
-        return $e instanceof CensorNotPassedException;
+        return $e instanceof CategoryNotFoundException;
     }
 
     /**
@@ -32,7 +32,7 @@ class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
         $status = 500;
         $error = [
             'status' => (string) $status,
-            'code' => 'censor_not_passed',
+            'code' => 'category_not_found',
         ];
 
         return new ResponseBag($status, [$error]);

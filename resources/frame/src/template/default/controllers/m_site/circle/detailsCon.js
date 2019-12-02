@@ -14,7 +14,7 @@ export default {
 		}
 	},
   created(){
-    console.log(this.themeCon);
+    // console.log(this.themeCon);
       if(!this.themeCon){
       // console.log('1111');
       this.themeShow = false;
@@ -41,7 +41,7 @@ export default {
       this.apiStore.find(threads, params).then(data => {
         this.themeCon = data;
         this.themeShow = true;
-        console.log(data);
+        // console.log(data);
       });
     },
 
@@ -55,7 +55,6 @@ export default {
 	},
 
 	mounted: function() {
-    console.log('2345');
 	},
 	beforeRouteLeave (to, from, next) {
 
