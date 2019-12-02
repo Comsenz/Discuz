@@ -9,7 +9,7 @@ import ModifyHeader from '../../../view/m_site/common/loginSignUpHeader/loginSig
 export default {
   data:function () {
     return {
-      phoneNum:'15611727257',
+      phoneNum:'',
       password:'',
       sms:'',
       newphone:'',
@@ -72,6 +72,7 @@ export default {
       }).then((res)=>{
         // console.log(res);
         this.insterVal = res.data.attributes.interval;
+        this.phoneNum = res.data.attributes.mobile
         // console.log(this.insterVal+'555555');
         this.time = this.insterVal;
         this.timer();
@@ -98,21 +99,21 @@ export default {
     fillContent(){
       // console.log("fillContent");
     },
-    // bindNewPhone(){
-    //   this.appFetch({
-    //     url:"smsVerify",
-    //     method:"post",
-    //     data:{
-    //       "data": {
-    //         "attributes": {
-    //           "mobile": "this.phoneNum",
-    //           "code": "this.verifyNum",
-    //            "type":"绑定手机号"
-    //         }
-    //       }
-    //     }
-    //   }).then(res => {
-    //       // console.log(res)
-    //    });
-    // }
+    bindNewPhone(){
+      this.appFetch({
+        url:"smsVerify",
+        method:"post",
+        data:{
+          "data": {
+            "attributes": {
+              "mobile": "this.phoneNum",
+              "code": "this.verifyNum",
+               "type":"绑定手机号"
+            }
+          }
+        }
+      }).then(res => {
+          // console.log(res)
+       });
+    }
 }

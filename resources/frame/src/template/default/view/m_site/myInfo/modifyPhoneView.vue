@@ -36,7 +36,7 @@
 
         <div class="modify-phone-operating">
           <van-button type="primary" v-if="modifyState" @click="nextStep" >下一步</van-button>
-          <van-button type="primary" v-else @click="bindNewPhone">提交</van-button>
+          <van-button type="primary" v-else @click="bindNewPhone()">提交</van-button>
         </div>
 
       </main>
