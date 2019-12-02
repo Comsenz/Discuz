@@ -46,13 +46,7 @@ export default {
   },
 
   created(){
-    this.appFetch({
-      url:'classify',
-      method:'get',
-      data:{}
-    }).then(res => {
-      console.log(res);
-    })
+
   },
 
   components:{

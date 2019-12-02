@@ -1,6 +1,6 @@
 <template>
     <div class="cont-arrange-box">
-      <div class="cont-arrange-main">
+      <div  class="cont-arrange-main">
         <div class="cont-arrange__lf-side">
           <slot name="side"></slot>
         </div>
@@ -13,7 +13,7 @@
               <p>{{$attrs.theme}}</p>
             </div>
 
-            <div v-if="$attrs.prply && $attrs.browse" class="cont-arrange__rt-main-header__reply-view rt-box">
+            <div v-if="$attrs.prply >= 0 && $attrs.browse >= 0" class="cont-arrange__rt-main-header__reply-view rt-box">
               <span>回复/查看：</span>
               <span>{{$attrs.prply}}/{{$attrs.browse}}</span>
             </div>
@@ -40,14 +40,14 @@
 
             <slot name="header"></slot>
           </div>
-          <div class="cont-arrange__rt-main-box" ref="contMain" v-bind:style="{'height':showContStatus? mainHeight + 40 + 'px':mainHeight>78?'78PX':''}"
+          <div class="cont-arrange__rt-main-box" ref="contMain" v-bind:style="{'height':showContStatus? mainHeight + 30 + 'px':mainHeight>78?'78PX':''}"
           ><!--三元运算方法意思：高度不超过78PX也就是三行，不设置高度，高度自适应。如果超过78PX，则设置高度为78PX，显示'显示内容'组件。-->
             <slot  name="main"></slot>
           </div>
 
           <div ref="contControl" v-if="mainHeight > 78" class="cont-block-control" :class="showBottomStatus?'is-bottom-out':''" @click="showCont" >
             <p>
-              <span class="iconfont icondown-menu" :class="showBottomStatus?'show-down':''"></span>
+              <span class="iconfont icondown-menu" :class="showContStatus?'show-down':''"></span>
               {{showContStatus?"收起详情":"展开详情"}}
             </p>
           </div>
