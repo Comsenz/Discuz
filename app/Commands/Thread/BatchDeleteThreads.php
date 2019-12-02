@@ -42,11 +42,11 @@ class BatchDeleteThreads
     public $data;
 
     /**
-     * @param $ids
+     * @param array $ids
      * @param User $actor
      * @param array $data
      */
-    public function __construct($ids, User $actor, array $data = [])
+    public function __construct(array $ids, User $actor, array $data = [])
     {
         $this->ids = $ids;
         $this->actor = $actor;
@@ -67,7 +67,7 @@ class BatchDeleteThreads
         foreach ($this->ids as $id) {
             $thread = $threads->query()->whereVisibleTo($this->actor)->find($id);
 
-            if (!$thread) {
+            if (! $thread) {
                 $result['meta'][] = ['id' => $id, 'message' => 'model_not_found'];
                 continue;
             }

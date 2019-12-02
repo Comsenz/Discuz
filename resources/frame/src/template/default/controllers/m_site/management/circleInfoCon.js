@@ -1,21 +1,36 @@
 /**
  * 移动端圈子管理页控制器
  */
-import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+
+import Forum from '../../../../../common/models/Forum';
+
 export default {
 	data: function() {
 		return {
-
-		}
+      siteInfo: new Forum(),
+      username:''
+    }
 	},
-  components:{
-    comHeader
+  beforeCreate:function(){
   },
 	 //用于数据初始化
   created: function(){
-	},
-	methods: {
 
+    this.loadSite();
+
+	},
+  beforeMount(){
+
+  },
+	methods: {
+    loadSite(){
+      const params = {};
+       params.include='users';
+       this.apiStore.find('forum').then(data => {
+         this.siteInfo = data;
+         this.username = data.siteAuthor().username
+      });
+    }
 	},
 
 	mounted: function() {

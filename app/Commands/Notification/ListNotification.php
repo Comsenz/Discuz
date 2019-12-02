@@ -74,7 +74,7 @@ class ListNotification
         }
         $type = Arr::get($this->data, 'type');
         $user = User::find($this->actor->id);
-        if (!$user)
+        if (! $user)
             throw new NoUserException();
 
         $notifications =  $user->notifications();

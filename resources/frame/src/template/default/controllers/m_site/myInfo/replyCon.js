@@ -2,31 +2,49 @@
  * 回复我的
  */
 
-import ReplyHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
-import ContMain from '../../../view/m_site/common/cont/contMainView'
-import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 
 
 export default {
   data:function () {
     return {
-      imgUrl:'',
-      stateTitle:"回复我的",
-      time:"十分钟前",
-      userName:"Elizabeth"
+      replyList:[]
     }
   },
-  components:{
-    ReplyHeader,
-    ContHeader,
-    ContMain,
-    ContFooter
+  created(){
+    this.imgUrl = "../../../../../../../static/images/mytx.png";
+    this.loadTheme();
   },
   methods:{
-
-  },
-  created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png"
+    loadTheme(){
+      const params = {
+        type:'1'
+      };
+      // params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+      this.apiStore.find('notice', {type:1}).then(data => {
+        // console.log(data[0].user()username());
+        this.replyList = data;
+        console.log(data)
+      });
+    },
+    // myReply(){
+    //   this.apiStore.find('notice', {type:1}).then(res => {
+    //     this.replyList = res;
+    //     console.log(this.replyList)
+    //   });
+    //   // this.appFetch({
+    //   //   url:'notice',
+    //   //   method:'get',
+    //   //   data:{
+    //   //     type:'1'
+    //   //   }
+    //   // }).then((res)=>{
+    //   //   console.log(res);
+    //   //   // this.replyList = res.data
+    //   //   // console.log(res.data[0].attributes.data.user_name)
+    //   // })
+    // },
+    deleteReply(index){
+      this.replyList.splice(index,1)
+    }
   }
 }

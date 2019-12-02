@@ -2,7 +2,7 @@
   <div class="reward-box my-info-money-header">
     <RewardHeader title="打赏我的"></RewardHeader>
     <main class="reward-main content">
-      <div class="reward-con cell-crossing">
+      <div class="reward-con cell-crossing" v-for="(item,index) in rewardList" :key="index">
         <ContHeader
           :imgUrl="imgUrl"
           :stateTitle="stateTitle"
@@ -13,7 +13,7 @@
           :contText="contText">
         </ContMain>
       </div>
-      <div class="reward-con cell-crossing">
+      <!-- <div class="reward-con cell-crossing">
         <ContHeader
           :imgUrl="imgUrl"
           :stateTitle="stateTitle"
@@ -23,7 +23,7 @@
         <ContMain
           :contText="contText">
         </ContMain>
-      </div>
+      </div> -->
     </main>
     <footer class="my-info-money-footer"></footer>
   </div>

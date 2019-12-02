@@ -2,20 +2,16 @@
 
 <template>
     <div class="circleCon">
-    	<!-- <div class="contentHead">
-    		<span class="icon iconfont icon-back headBack"></span>
-    		<h1 class="headTit">详情</h1>
-    		<span class="icon iconfont icon-Shape menuCli"></span>
-    	</div> -->
-    	<commonHeader title="详情"></commonHeader>
-    	<div class="content">
+    	<comHeader title="详情" :menuIconShow="true"></comHeader>
+    	<div class="content" v-if="themeShow">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
 		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
+              <img :src="themeCon.user().avatarUrl()" alt="" class="postHead" v-if="themeCon.user().avatarUrl() == '' && themeCon.user().avatarUrl() == null">
+              <img src="../../../../../../static/images/noavatar.gif" class="postHead" v-else="">
 		    			<div class="perDet">
-		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
-		    				<div class="postTime">1小时前</div>
+		    				<div class="perName">{{themeCon.user().username()}}</div>
+		    				<div class="postTime">{{themeCon.user().createdAt()}}</div>
 		    			</div>
 		    		</div>
 		    		<div class="postOpera">
@@ -56,136 +52,138 @@
 		    		<a href="javascript:;" class="postDetR">分享</a>
 		    	</div>
 		    </div>
-	    </div>
-	    <div class="gap"></div>
-	    <div class="commentBox">
-	    	<div class="likeBox">
-    			<span class="icon iconfont icon-praise-after"></span>
-    			<a href="javascript:;">Elizabetch</a>，<a href="javascript:;">sdfdsfsd</a>，<a href="javascript:;">第三方第三方</a>，<a href="javascript:;">电风扇</a>，<a href="javascript:;">dfffss</a>&nbsp;等<span>21</span>个人觉得很赞
-    		</div>
-    		<div class="payPer">
-    			<span class="icon iconfont icon-money"></span>
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    		</div>
-    		<div class="commentPostDet">
-	    		<div class="postTop">
-		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
-		    			<div class="perDet">
-		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
-		    				<div class="postTime">1小时前</div>
-		    			</div>
-		    		</div>
-	    		</div>
-	    		<div class="postContent">
-		    		<a href="javascript:;">我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</a>
-		    	</div>
-		    </div>
-		    <div class="commentOpera padT22">
-	    		<a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
-	    		<a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
-	    		<a class="icon iconfont icon-review"></a>
-	    	</div>
-		    <div class="commentPostDet">
-		    	<div class="postTop quotePostTop">
-		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
-		    			<div class="perDet">
-		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
-		    				<div class="postTime">1小时前</div>
-		    			</div>
-		    		</div>
-	    		</div>
-	    		<div class="quoteCon">
-	    			我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。
-	    		</div>
-	    		<p class="viewPoint">我的观点不一样</p>
-	    	</div>
-	    	<div class="commentOpera afterNone">
-	    		<a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
-	    		<a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
-	    		<a class="icon iconfont icon-review"></a>
-	    	</div>
-	    </div>
-	    <div class="gap marBfixed"></div>
-	    <div class="detailsFooter">
-	    	<div class="footChi" @click="replayJump">
-	    		<span class="icon iconfont icon-review"></span>
-	    		回复
-	    	</div>
-	    	<div class="footChi">
-	    		<span class="icon iconfont icon-like"></span>
-	    		赞
-	    	</div>
-	    	<div class="footChi" @click="showRewardPopup">
-	    		<span class="icon iconfont icon-reward"></span>
-	    		打赏
-	    	</div>
-	    </div>
-	    <van-popup
-	      class="rewardPopup"
-	      v-model="rewardShow"
-	      closeable
-	      close-icon-position="top-right"
-	      position="bottom"
-	      :style="{ width: '100%' }"
-	    >
-	   		<span class="support">支持作者继续创作</span> 	
-	   		<div class="rewardMonBox">
-	   			<div class="moneyChi">
-	   				<span>1</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>2</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>5</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>10</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>20</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>50</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>88</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>128</span>元
-	   			</div>
-	   			<div class="moneyChi">
-	   				<span>666</span>元
-	   			</div>
-	   		</div>
 
-	   </van-popup>
+        <div class="gap"></div>
+        <div class="commentBox">
+          <div class="likeBox">
+            <span class="icon iconfont icon-praise-after"></span>
+            <a href="javascript:;">Elizabetch</a>，<a href="javascript:;">sdfdsfsd</a>，<a href="javascript:;">第三方第三方</a>，<a href="javascript:;">电风扇</a>，<a href="javascript:;">dfffss</a>&nbsp;等<span>21</span>个人觉得很赞
+          </div>
+          <div class="payPer">
+            <span class="icon iconfont icon-money"></span>
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+          </div>
+          <div class="commentPostDet">
+            <div class="postTop">
+              <div class="postPer">
+                <img src="../../../../../../static/images/noavatar.gif" class="postHead">
+                <div class="perDet">
+                  <div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
+                  <div class="postTime">1小时前</div>
+                </div>
+              </div>
+            </div>
+            <div class="postContent">
+              <a href="javascript:;">我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</a>
+            </div>
+          </div>
+          <div class="commentOpera padT22">
+            <a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
+            <a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
+            <a class="icon iconfont icon-review"></a>
+          </div>
+          <div class="commentPostDet">
+            <div class="postTop quotePostTop">
+              <div class="postPer">
+                <img src="../../../../../../static/images/noavatar.gif" class="postHead">
+                <div class="perDet">
+                  <div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
+                  <div class="postTime">1小时前</div>
+                </div>
+              </div>
+            </div>
+            <div class="quoteCon">
+              我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。
+            </div>
+            <p class="viewPoint">我的观点不一样</p>
+          </div>
+          <div class="commentOpera afterNone">
+            <a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
+            <a href=""><span class="icon iconfont icon-praise-after"></span>22</a>
+            <a class="icon iconfont icon-review"></a>
+          </div>
+        </div>
+        <div class="gap marBfixed"></div>
+        <div class="detailsFooter">
+          <div class="footChi" @click="replayJump">
+            <span class="icon iconfont icon-review"></span>
+            回复
+          </div>
+          <div class="footChi">
+            <span class="icon iconfont icon-like"></span>
+            赞
+          </div>
+          <div class="footChi" @click="showRewardPopup">
+            <span class="icon iconfont icon-reward"></span>
+            打赏
+          </div>
+        </div>
+        <van-popup
+          class="rewardPopup"
+          v-model="rewardShow"
+          closeable
+          close-icon-position="top-right"
+          position="bottom"
+          :style="{ width: '100%' }"
+        >
+          <span class="support">支持作者继续创作</span>
+          <div class="rewardMonBox">
+            <div class="moneyChi">
+              <span>1</span>元
+            </div>
+            <div class="moneyChi">
+              <span>2</span>元
+            </div>
+            <div class="moneyChi">
+              <span>5</span>元
+            </div>
+            <div class="moneyChi">
+              <span>10</span>元
+            </div>
+            <div class="moneyChi">
+              <span>20</span>元
+            </div>
+            <div class="moneyChi">
+              <span>50</span>元
+            </div>
+            <div class="moneyChi">
+              <span>88</span>元
+            </div>
+            <div class="moneyChi">
+              <span>128</span>元
+            </div>
+            <div class="moneyChi">
+              <span>666</span>元
+            </div>
+          </div>
+
+       </van-popup>
+     </div>
     </div>
 </template>
 
 <script>
-// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-// import commonHeader from '../../m_site/common/headerView';
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+// import comHeader from '../../m_site/common/headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "detailsView",
-    // components:{
-    // 	// commonHeader
-    // },
+    components:{
+    	comHeader
+    },
     // ...mSiteHeader,
+
     ...mSiteDetailsCon
 }
 

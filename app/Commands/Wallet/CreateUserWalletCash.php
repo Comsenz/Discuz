@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\UserWallet;
 use App\Models\UserWalletCash;
 use App\Models\UserWalletLog;
+use App\Settings\SettingsRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -54,7 +55,7 @@ class CreateUserWalletCash
      * @return model UserWallet
      * @throws Exception
      */
-    public function handle(Validator $validator, ConnectionInterface $db)
+    public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'createCash');
@@ -70,6 +71,7 @@ class CreateUserWalletCash
         $cash_apply_amount = floatval(Arr::get($this->data, 'cash_apply_amount'));
         $cash_apply_amount = sprintf("%.2f", $cash_apply_amount);
         //计算手续费
+        //$tax_ratio = $this->setting->tag('cash_tax_ratio');
         $tax_ratio  = 0.01; //手续费率
         $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
         $tax_amount = sprintf("%.2f", ceil($tax_amount * 100) / 100); //格式化手续费

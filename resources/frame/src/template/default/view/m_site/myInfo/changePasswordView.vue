@@ -23,7 +23,7 @@
         </div>
 
         <div class="change-pwd-operating">
-          <van-button type="primary" >提交</van-button>
+          <van-button type="primary" @click="subm()">提交</van-button>
         </div>
 
       </main>

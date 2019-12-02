@@ -18,7 +18,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 
@@ -78,14 +78,14 @@ class CreateAttachment
     /**
      * 执行命令
      *
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param AttachmentUploadTool $uploadTool
      * @return Attachment
      * @throws UploadException
      * @throws PermissionDeniedException
      * @throws UploadVerifyException
      */
-    public function handle(EventDispatcher $events, AttachmentUploadTool $uploadTool)
+    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool)
     {
         $this->events = $events;
 
@@ -109,7 +109,7 @@ class CreateAttachment
 
         $uploadFile = $uploadTool->save($type, $size);
 
-        if (!$uploadFile){
+        if (! $uploadFile){
             throw new UploadException();
         }
 

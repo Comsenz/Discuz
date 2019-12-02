@@ -9,20 +9,15 @@
 
 namespace App\Api\Exceptions;
 
+use App\Censor\CensorNotPassedException;
 use Exception;
-use Discuz\Censor\CensorNotPassedException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
 {
     /**
-     * If the exception handler is able to format a response for the provided exception,
-     * then the implementation should return true.
-     *
-     * @param Exception $e
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function manages(Exception $e)
     {
@@ -30,11 +25,7 @@ class CensorNotPassedExceptionHandler implements ExceptionHandlerInterface
     }
 
     /**
-     * Handle the provided exception.
-     *
-     * @param Exception $e
-     *
-     * @return ResponseBag
+     * @inheritDoc
      */
     public function handle(Exception $e)
     {

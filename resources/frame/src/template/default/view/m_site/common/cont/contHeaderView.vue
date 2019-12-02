@@ -8,7 +8,7 @@
 
     <div class="text-box">
       <h3 class="user-name">
-        <span class="user-name-text">Elizabeth</span>
+        <span class="user-name-text">{{this.$attrs.userName}}</span>
         <span class="text-status">{{this.$attrs.stateTitle}}</span>
       </h3>
       <h4 class="time">{{this.$attrs.time}}</h4>
