@@ -1,54 +1,14 @@
 <template>
   <div class="reply-my-box my-info-money-header">
-    <ReplyHeader title="回复我的"></ReplyHeader>
-    <main class="reply-my-main content">
-      <div class="reply-my-cont cell-crossing">
-        <ContHeader
-          :imgUrl="imgUrl"
-          :stateTitle="stateTitle"
-          :time="time"
-          :userName="userName">
-          <div slot="operating">删除</div>
-        </ContHeader>
-        <div class="reference">
-          <div class="reference-cont">
-            <span>我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</span>
-          </div>
-        </div>
-        <div class="quote-reply">
-          <span>我们的观点不一样</span>
-        </div>
-      </div>
-      <div class="reply-my-cont cell-crossing">
-        <ContHeader
-          :imgUrl="imgUrl"
-          :stateTitle="stateTitle"
-          :time="time"
-          :userName="userName">
-          <div slot="operating">删除</div>
-        </ContHeader>
-        <div class="quote-reply">
-          <span>我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</span>
-        </div>
-      </div>
-      <div class="reply-my-cont cell-crossing">
-        <ContHeader
-          :imgUrl="imgUrl"
-          :stateTitle="stateTitle"
-          :time="time"
-          :userName="userName">
-          <div slot="operating">删除</div>
-        </ContHeader>
-        <div class="reference">
-          <div class="reference-cont">
-            <span>我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</span>
-          </div>
-        </div>
-        <div class="quote-reply">
-          <span>我们的观点不一样</span>
-        </div>
-      </div>
-    </main>
+    <comHeader title="回复我的"></comHeader>
+    <div class="content">
+        <Header :userInfoList="replyList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <div class="gap"></div>
+        <ThemeDet :themeList="replyList"></ThemeDet>
+    </div>
+    <footer class="home-page-footer">
+      <p>上划加载更多</p>
+    </footer>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>
@@ -57,8 +17,17 @@
 import '../../../less/m_site/myInfo/myInfo.less';
 import replyCon from '../../../controllers/m_site/myInfo/replyCon';
 import  '../../../scss/m_site/mobileIndex.scss';
+import ThemeDet from '../../m_site/common/themeDetView';
+import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 export default {
   name: "reply",
+  components:{
+      comHeader,
+    	// Header,
+      ThemeDet,
+    },
+    ...mSiteThemeDet,
   ...replyCon
 }
 </script>

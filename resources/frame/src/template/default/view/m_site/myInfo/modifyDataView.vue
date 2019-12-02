@@ -7,14 +7,14 @@
             <p>头像</p>
           </div>
           <div class="modify-data-avatar-img">
-             <img  src="../../../../../../static/images/mytx.png" alt="我的头像">
+             <img  :src="headPortrait" alt="我的头像">
             <i>
               <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
             </i>
           </div>
         </div>
-        <van-cell title="手机号" is-link value="18645****23" />
-        <van-cell title="密码" is-link value="********" />
+        <van-cell title="手机号" @click="myModify('modify-phone')" is-link :value="modifyPhone" />
+        <van-cell title="密码" @click="myModify('change-pwd')" is-link value="********" />
         <van-cell title="微信" is-link value="小艾" />
       </main>
 

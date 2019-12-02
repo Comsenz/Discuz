@@ -6,11 +6,6 @@
 export default {
   data:function () {
     return {
-      // imgUrl:'',
-      // stateTitle:'点赞了我',
-      // time:"15分钟前",
-      // userName:'Elizabeth',
-      // contText:'我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。',
       OthersThemeList:[
         // 'aaa':'sdf'
       ],

@@ -11,10 +11,11 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      imgUrl:'',
-      stateTitle:'点赞了我',
-      time:"5分钟前",
-      userName:'Elizabeth'
+      likeList:[],
+      // imgUrl:'',
+      // stateTitle:'点赞了我',
+      // time:"5分钟前",
+      // userName:'Elizabeth'
     }
   },
   components:{
@@ -23,8 +24,16 @@ export default {
     ContMain,
     ContFooter
   },
+  mounted(){
+    this.myLike()
+  },
   methods:{
-
+    myLike(){
+      this.apiStore.find('notice',{type:2}).then(res=>{
+        console.log(res[0].user_id(), res[0].detail().post_content);
+        this.likeList = res
+      })
+    }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
