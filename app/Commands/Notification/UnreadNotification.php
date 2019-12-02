@@ -65,7 +65,7 @@ class UnreadNotification
         // $this->assertCan($this->actor, 'createCircle');
 
         $user = User::find($this->actor->id);
-        if (!$user)
+        if (! $user)
             throw new NoUserException();
 
         $notifications = DatabaseNotification::selectRaw('type,count(*) as count')
@@ -74,7 +74,7 @@ class UnreadNotification
             ->groupBy('type')
             ->pluck('count', 'type')
             ->toArray();
-        
+
         $data = [
             1 => Arr::get($notifications, $this->types[1], 0),
             2 => Arr::get($notifications, $this->types[2], 0),

@@ -15,7 +15,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -39,7 +39,7 @@ class CreateCategory
     public $data;
 
     /**
-     * The IP address of the actor..
+     * The IP address of the actor.
      *
      * @var string
      */
@@ -58,14 +58,14 @@ class CreateCategory
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param CategoryValidator $validator
      * @return Category
      * @throws NotAuthenticatedException
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, CategoryValidator $validator)
+    public function handle(Dispatcher $events, CategoryValidator $validator)
     {
         $this->events = $events;
 

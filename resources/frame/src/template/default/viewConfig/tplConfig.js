@@ -113,7 +113,7 @@ export default {
           title:"详情"
         }
       },
-      'details/:id':{
+      'details/:themeId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/detailsView'],resolve)
         },
@@ -138,7 +138,7 @@ export default {
           oneHeader: true
         }
       },
-      'management-circles':{
+      'management-circles/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/management/managementCirclesView'],resolve)
         },
@@ -164,7 +164,7 @@ export default {
         }
 
       },
-      'circle-info':{
+      'circle-info/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/management/circleInfoView'],resolve)
         },
@@ -190,7 +190,7 @@ export default {
           oneHeader: true
         }
       },
-      
+
 	  'theme-det':{
 	    comLoad:function (resolve) {
 	      require(['../view/m_site/common/themeDetView'],resolve)
@@ -349,7 +349,7 @@ export default {
           title:"提现记录"
         }
       },
-      'my-notice':{
+      'my-notice/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myNoticeView'],resolve)
         },
@@ -357,7 +357,7 @@ export default {
           title:"我的通知"
         }
       },
-      'my-collection':{
+      'my-collection/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myCollectionView'],resolve)
         },
@@ -398,7 +398,7 @@ export default {
           title:"点赞我的"
         }
       },
-      'my-wallet':{
+      'my-wallet/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myWalletView'],resolve)
         },

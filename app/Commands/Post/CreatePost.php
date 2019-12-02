@@ -17,7 +17,7 @@ use App\Validators\PostValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -78,14 +78,14 @@ class CreatePost
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @param PostValidator $validator
      * @return Post
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, ThreadRepository $threads, PostValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, PostValidator $validator)
     {
         $this->events = $events;
 
@@ -93,7 +93,7 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
-        if (!$isFirst) {
+        if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 

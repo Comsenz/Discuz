@@ -11,10 +11,7 @@ declare(strict_types=1);
 namespace App\Api\Controller\Invite;
 
 use App\Api\Serializer\InviteSerializer;
-use App\Models\Group;
 use App\Models\Invite;
-use App\Models\User;
-use App\Repositories\CategoryRepository;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,7 +24,7 @@ class ListInviteController extends AbstractListController
 
     public function __construct(InviteRepository $InviteRepository)
     {
-        $this->InviteRepository = $this->InviteRepository;
+        $this->InviteRepository = $InviteRepository;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)
