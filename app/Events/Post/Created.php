@@ -25,14 +25,21 @@ class Created
     public $actor;
 
     /**
+     * @var array
+     */
+    public $data;
+
+    /**
      * Created constructor.
      *
      * @param Post $post
      * @param User $actor
+     * @param array $data
      */
-    public function __construct(Post $post, User $actor = null)
+    public function __construct(Post $post, User $actor = null, array $data = [])
     {
         $this->post = $post;
         $this->actor = $actor;
+        $this->data = $data;
     }
 }

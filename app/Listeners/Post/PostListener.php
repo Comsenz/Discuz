@@ -13,6 +13,7 @@ use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
+use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\Thread;
@@ -20,6 +21,7 @@ use App\Notifications\Replied;
 use Carbon\Carbon;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class PostListener
 {
@@ -43,8 +45,7 @@ class PostListener
     }
 
     /**
-     * TODO: 绑定附件
-     * 发送通知
+     * 绑定附件 & 发送通知
      *
      * @param Created $event
      */
@@ -52,6 +53,13 @@ class PostListener
     {
         $post = $event->post;
         $actor = $event->actor;
+
+        // 绑定附件
+        if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
+            Attachment::where('user_id', $actor->id)
+                ->whereIn('id', array_column($attachments, 'id'))
+                ->update(['post_id' => $post->id]);
+        }
 
         // 如果当前用户不是主题作者，则通知主题作者
         if ($post->thread->user_id != $actor->id) {

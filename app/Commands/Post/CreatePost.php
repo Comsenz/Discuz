@@ -9,6 +9,7 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\Created;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\User;
@@ -113,6 +114,8 @@ class CreatePost
             $this->replyId,
             $isFirst
         );
+
+        $post->raise(new Created($post, $this->actor, $this->data));
 
         $this->events->dispatch(
             new Saving($post, $this->actor, $this->data)
