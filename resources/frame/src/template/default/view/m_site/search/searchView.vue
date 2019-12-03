@@ -6,7 +6,7 @@
           placeholder="搜索用户和主题"
           background="#f8f8f8"
           show-action
-          @search="onSearch"
+          @input="onSearch"
           @cancel="onCancel"
           class="searchCon"
         />
@@ -28,6 +28,7 @@
       </div>
       <div class="gap" v-show='searchThemeList.length > 0'></div>
       <div class="searchRes" v-show='searchThemeList.length > 0'>
+        <h2 class="resultTit">主题</h2>
         <div class="themeRes" v-for="(item, index) in searchThemeList" :key="index">
           <div class="postTop">
             <div class="postPer">

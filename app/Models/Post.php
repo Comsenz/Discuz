@@ -9,7 +9,6 @@
 
 namespace App\Models;
 
-use App\Events\Post\Created;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use Carbon\Carbon;
@@ -96,8 +95,6 @@ class Post extends Model
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
-
-        $post->raise(new Created($post));
 
         return $post;
     }
@@ -205,9 +202,19 @@ class Post extends Model
      *
      * @return HasMany
      */
+    public function images()
+    {
+        return $this->hasMany(Attachment::class)->where('is_gallery', true);
+    }
+
+    /**
+     * Define the relationship with the post's attachments.
+     *
+     * @return HasMany
+     */
     public function attachments()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->hasMany(Attachment::class)->where('is_gallery', false);
     }
 
     /**

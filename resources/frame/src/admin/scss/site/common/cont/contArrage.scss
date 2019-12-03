@@ -13,10 +13,8 @@
   .cont-arrange-main{
     width: 100%;
     min-height: 100PX;
-    border-top: 1PX solid $tableBorderColor;
-    &:last-child{
-      border-bottom: 1PX solid $tableBorderColor;
-    }
+    border-bottom: 1PX solid $tableBorderColor;
+
     display: flex;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

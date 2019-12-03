@@ -16,10 +16,11 @@ class UserWalletSerializer extends AbstractSerializer
             'available_amount' => $model->available_amount,
             'freeze_amount'    => $model->freeze_amount,
             'wallet_status'    => $model->wallet_status,
+            'cash_tax_ratio'   => $model->cash_tax_ratio,
         ];
     }
-    
-    public function getId($model) 
+
+    public function getId($model)
     {
         return $model->user_id;
     }

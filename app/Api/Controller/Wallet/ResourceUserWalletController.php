@@ -8,6 +8,7 @@
 
 namespace App\Api\Controller\Wallet;
 
+use App\Settings\SettingsRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletSerializer;
 use App\Commands\Wallet\ResourceUserWallet;
@@ -29,18 +30,24 @@ class ResourceUserWalletController extends AbstractResourceController
     public $include = [
         'user'
     ];
-    
+
     /**
      * @var Dispatcher
      */
     protected $bus;
 
     /**
+     * @var SettingsRepository
+     */
+    protected $setting;
+
+    /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(Dispatcher $bus, SettingsRepository $setting)
     {
         $this->bus = $bus;
+        $this->setting = $setting;
     }
 
     /**
@@ -53,8 +60,11 @@ class ResourceUserWalletController extends AbstractResourceController
 
         //用户ID
         $user_id = Arr::get($request->getQueryParams(), 'user_id');
-        return $this->bus->dispatch(
+        $return_data =  $this->bus->dispatch(
             new ResourceUserWallet($user_id, $actor)
         );
+        //$cash_tax_ratio = $this->setting->tag('cash_tax_ratio');
+        $return_data->cash_tax_ratio = 0.01;//税率
+        return $return_data;
     }
 }

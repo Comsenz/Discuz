@@ -6,7 +6,8 @@
         <van-cell title="可用余额" is-link :value="value+'元'"/>
         <van-cell title="冻结金额" @click="myWallet('frozen-amount')" is-link :value="valueFrozen+'元'"/>
         <van-cell title="提现记录" @click="myWallet('withdrawals-record')" is-link />
-        <van-cell title="可用余额" is-link />
+        <van-cell title="钱包明细" @click="myWallet('wallet-details')" is-link />
+        <van-cell title="订单明细" @click="myWallet('order-details')" is-link />
       </main>
       <footer class="my-info-money-footer"></footer>
     </div>

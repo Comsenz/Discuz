@@ -12,7 +12,7 @@ module.exports = {
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
-  'classify':'/api/classify',   //分类
+  'categories':'/api/categories',   //分类
   'emojis':'/api/emoji',      //表情接口
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
@@ -36,6 +36,9 @@ module.exports = {
   'posts':'/api/posts', //回复主题
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
+  'pay':'/api/trade/pay/order',    //支付订单
+
+  'batch':'/api/threads/batch',   //修改主题接口
 
   /*后台*/
   'siteinfo':'/api/siteinfo'    //首页-系统信息

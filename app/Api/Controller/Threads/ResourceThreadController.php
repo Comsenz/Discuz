@@ -10,12 +10,12 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Order;
 use App\Models\Thread;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -42,24 +42,23 @@ class ResourceThreadController extends AbstractResourceController
      */
     public $include = [
         'user',
+        'firstPost',
+        'firstPost.images',
+        'firstPost.attachments',
         'posts',
-        'posts.thread',
         'posts.user',
-        // 'posts.user.groups',
-        // 'posts.editedUser',
-        // 'posts.deletedUser'
+        'posts.thread',
+        'posts.images',
     ];
 
     /**
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'category',
+        'firstPost.likedUsers',
         'posts.likedUsers',
-        'rewarded.user',
-        // 'user',
-        // 'lastPostedUser',
-        // 'firstPost',
-        // 'lastPost'
+        'rewardedUsers',
     ];
 
     /**
@@ -94,10 +93,19 @@ class ResourceThreadController extends AbstractResourceController
             $this->includePosts($thread, $request, $postRelationships);
         }
 
+        // 打赏的用户
+        if (in_array('rewardedUsers', $include)) {
+            $allRewardedUser = Order::with('user')
+                ->where('thread_id', $thread->id)
+                ->where('type', 2)
+                ->where('status', 1)
+                ->get();
+
+            $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user'));
+        }
+
         // 主题关联模型
-        $thread->load(array_filter($include, function ($relationship) {
-            return ! Str::startsWith($relationship, 'posts');
-        }));
+        $thread->loadMissing($include);
 
         return $thread;
     }
@@ -116,6 +124,7 @@ class ResourceThreadController extends AbstractResourceController
 
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
+            ->where('is_first', false)
             ->orderBy('created_at')
             ->skip($offset)
             ->take($limit)

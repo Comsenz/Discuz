@@ -88,6 +88,24 @@ class PostSerializer extends AbstractSerializer
      * @param $post
      * @return Relationship
      */
+    protected function images($post)
+    {
+        return $this->hasMany($post, AttachmentSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    protected function attachments($post)
+    {
+        return $this->hasMany($post, AttachmentSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
     protected function likedUsers($post)
     {
         return $this->hasMany($post, UserSerializer::class);
