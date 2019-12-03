@@ -20,7 +20,7 @@ class ForumSettingsController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return [
-            'users' => User::limit(5)->get()
+            'users' => User::orderBy('created_at', 'desc')->limit(5)->get(['id', 'username', 'avatar'])
         ];
     }
 }

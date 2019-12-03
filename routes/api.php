@@ -62,9 +62,9 @@ $route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController:
 
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
-$route->get('/users/{id}', 'users.profile', ApiController\Users\ProfileController::class);
-$route->patch('/users/{id}', 'users.update', ApiController\Users\UpdateProfileController::class);
-//$route->patch('/users', 'userpatch.update', ApiController\Users\UpdateUsersController::class);
+$route->get('/users/{id}', 'user.resource', ApiController\Users\ProfileController::class);
+$route->patch('/users/{id}', 'user.update', ApiController\Users\UpdateUserController::class);
+$route->patch('/users', 'users.update', ApiController\Users\UpdateUsersController::class);
 $route->delete('/users/{id}', 'user.delete', ApiController\Users\DeleteUserController::class);
 $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersController::class);
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);

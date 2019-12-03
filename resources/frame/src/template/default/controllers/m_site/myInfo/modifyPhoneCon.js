@@ -10,12 +10,12 @@ import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
-      phoneNum:'15611727257',
+      phoneNum:'',
       password:'',
       sms:'',
       newphone:'',
       modifyState:true,
-      bind:'修改手机号',
+      bind:'bind',
       time:1, //发送验证码间隔时间
       insterVal:'',
       isGray: false
@@ -33,19 +33,19 @@ export default {
     userInformation(){
       var userId = browserDb.getLItem('tokenId');
       this.apiStore.find('users',userId).then(res=>{
-        // this.phoneNum = res.data.attributes.mobile
+        this.phoneNum = res.data.attributes.mobile
         // console.log(res.data.attributes.mobile)
       })
     },
     sendSmsCodePhone(){      //发送验证码
       console.log('11111111111111')
       var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
-      var phoneNum = this.phoneNum;
-      if(!phoneNum){//未输入手机号
+      var newphone = this.newphone;
+      if(!newphone){//未输入手机号
        this.$toast("请输入手机号码");
        return;
       }
-      if(!reg.test(phoneNum)){//手机号不合法
+      if(!reg.test(newphone)){//手机号不合法
        this.$toast("您输入的手机号码不合法，请重新输入");
       }
       var modifyState = this.modifyState
@@ -75,7 +75,8 @@ export default {
             "data": {
               "attributes": {
                 'mobile':this.newphone,
-                'type':this.bind
+                'type':this.bind,
+                'code':this.sms
               }
             }
           }
@@ -97,7 +98,7 @@ export default {
           "data": {
             "attributes": {
               "mobile": this.phoneNum,
-              "code": this.verifyNum,
+              "code": this.sms,
                "type":this.bind
             }
           }
@@ -132,8 +133,8 @@ export default {
             "data": {
               "attributes": {
                 "mobile": this.newphone,
-                "code": this.verifyNum,
-                 "type":'绑定手机号'
+                "code": this.sms,
+                'type':this.bind
               }
             }
           }

@@ -4,9 +4,9 @@
     <div class="bgEd">
 	    <Header></Header>
 	    <div class="content">
-	    	<van-cell title="成员管理" is-link url="/vant/mobile.html" />
-			<van-cell title="批量管理" is-link to="index" />
-			<van-cell title="邀请成员" is-link to="index" class="borNone"/>
+	    	<van-cell title="成员管理" @click="managementCircles('circle-members')" is-link url="/vant/mobile.html" />
+			<van-cell title="批量管理" @click="managementCircles('delete')" is-link to="index" />
+			<van-cell title="邀请成员"  @click="managementCircles('circle-manage-invite')"  is-link to="index" class="borNone"/>
 			<div class="lineE5"></div>
 	    </div>
 	    

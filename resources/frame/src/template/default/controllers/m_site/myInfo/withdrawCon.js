@@ -12,7 +12,8 @@ export default {
       handlingFee:'',
       actualCashWithdrawal:'',
       phone:"",
-      bind:'提现',
+      bind:'bind',
+      sms:'',
 
       show: false //数字键盘显示状态
     }
@@ -66,8 +67,9 @@ export default {
           "data": {
             "attributes": {
               "mobile": this.phone,
-              "code": this.verifyNum,
-               "type":this.bind
+              "code": this.sms,
+               "type":this.bind,
+
             }
           }
         }
