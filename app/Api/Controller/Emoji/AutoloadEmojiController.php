@@ -1,15 +1,20 @@
 <?php
-
+/**
+ *      Discuz & Tencent Cloud
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      Id: AutoloadEmojiController.php 28830 2019-12-03 15:37 yanchen $
+ */
 namespace App\Api\Controller\Emoji;
 
 use App\Commands\Emoji\LoadEmoji;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Foundation\EventsDispatchTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Zend\Diactoros\Response\XmlResponse;
 
 class AutoloadEmojiController implements RequestHandlerInterface
 {
@@ -31,10 +36,14 @@ class AutoloadEmojiController implements RequestHandlerInterface
     {
         $actor = $request->getAttribute('actor');
         //分类
-        $category = Arr::get($request->getQueryParams(), 'category','');
+        $category = Arr::get($request->getQueryParams(), 'category','all');
 
         $emoji = $this->bus->dispatch(
             new LoadEmoji($actor, $category)
         );
+
+        $body = "<xml>load emoji success</xml>";
+
+        return new XmlResponse($body);
     }
 }

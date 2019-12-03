@@ -135,6 +135,7 @@ class ListThreadsController extends AbstractListController
 
         Thread::setStateUser($actor);
 
+        // TODO: load -> loadMissing
         $threads = $threads->load(array_diff($load, $this->specialInclude));
 
         $specialLoad = array_intersect($this->specialInclude, $load);

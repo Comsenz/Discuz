@@ -42,9 +42,44 @@ export default {
       let userId = browserDb.getLItem('tokenId');
       this.apiStore.find('users',userId).then(res=>{
         this.modifyPhone = res.data.attributes.mobile;
-        this.headPortrait = res.data.attributes.avatarUr;
+        // this.headPortrait = res.data.attributes.avatarUr; //接口数据里头像为空
+        this.headPortrait = "../../../../../../../static/images/mytx.png";
         
       })
-    }
+    },
+      handleFile: function (e) {
+        let $target = e.target || e.srcElement
+        let file = $target.files[0]
+        console.log(file)
+        var reader = new FileReader()
+        reader.onload = (data) => {
+          let res = data.target || data.srcElement
+          this.headPortrait = res.result
+        }
+        reader.readAsDataURL(file)
+        console.log(reader.result)
+      //   let file = e.target.files[0];
+      //   console.log(e);
+
+      //   // 获取file
+      // // 实例化
+      //   let formdata = new FormData()
+      //   formdata.append('file', file)
+      //   console.log(formdata)
+
+
+
+      let userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url:'upload',
+        method:'post',
+        splice:userId+'/avatar',
+        data:{
+          avatar:reader
+        }
+      })
+      },
+     
+ 
   }
 }
