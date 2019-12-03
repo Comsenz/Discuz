@@ -27,6 +27,17 @@
 
           </ContArrange>
 
+          <div class="cont-manage-theme__table-footer">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPag"
+              :page-size="10"
+              layout="total, prev, pager, next,jumper"
+              :total="total">
+            </el-pagination>
+          </div>
+
         </div>
       </div>
 
