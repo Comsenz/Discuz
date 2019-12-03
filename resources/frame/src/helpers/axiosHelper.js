@@ -39,7 +39,7 @@ const getApi = function(key){
     	return "";
     }
      return appConfig.apiBaseUrl + uri;
-     
+
 }
 
 /**
@@ -51,37 +51,39 @@ const getApi = function(key){
  */
 const appFetch = function(params, options) {
   var oldUrl = params.url;
+  var apiUrl = appConfig.apis[oldUrl];
 
-
-	if(params === undefined) {
+  if(params === undefined) {
 		console.error("必须传递参数");
 		return false;
 	}
 
-	if(!appConfig.apis[oldUrl]) {
-    console.log(getApi());
-		// console.log("接口key："+oldUrl+" 未发现");
-    appConfig.apis[oldUrl] = "/api/" + oldUrl;
-    // console.log("/api/" + oldUrl);
-		// return false;
+	if(!apiUrl) {
+    apiUrl = "/api/" + oldUrl;
+    // return false;
 	}
+
+	/**
+	  * @param {[type]} splice [接收url后面拼接]
+    * @param splice:'/2019120310255349505652',
+	  */
+  if (params.splice){
+    apiUrl = apiUrl + params.splice;
+  }
 
 	//如果是本地请求，就走接口代理
 	if(process.env.NODE_ENV === 'development') {
-		// console.log(appConfig.apis);
 		params.baseURL = "/api";
-    params.url = appConfig.apis[oldUrl];
-    // console.log(appConfig.apis[oldUrl]);
+    params.url = apiUrl;
 	} else {
 		params.baseURL = "/";
-		params.url = appConfig.apiBaseUrl + appConfig.apis[oldUrl];
+		params.url = appConfig.apiBaseUrl + apiUrl;
 	}
 
 	params.withCredentials = true;
   var authVal = browserDb.getLItem('Authorization');
   let defaultHeaders;
   if(authVal != '' && authVal != null){
-    // alert('bu');
     defaultHeaders = {
     	// 'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/json',
@@ -89,7 +91,6 @@ const appFetch = function(params, options) {
       //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
     };
   } else {
-    // alert('null');
     defaultHeaders = {
     	// 'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/json',
@@ -117,7 +118,6 @@ const appFetch = function(params, options) {
 
 	return axios(params).then(data => {return data.data}, errors => {
       let requestError = errors.response;
-      // alert(requestError.status +'3456');
       let children;
       switch (requestError.status) {
         case 422:

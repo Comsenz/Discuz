@@ -34,6 +34,8 @@ module.exports = {
   'notice':'/api/notification',
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
+  'pay':'/api/trade/pay/order',    //支付订单
+
   'batch':'/api/threads/batch',   //修改主题接口
 
   /*后台*/
