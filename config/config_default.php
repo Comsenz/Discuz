@@ -128,7 +128,9 @@ return [
 //        App\Providers\EventServiceProvider::class
         App\Providers\EventServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
-        App\Providers\UserServiceProvider::class
+        App\Providers\UserServiceProvider::class,
+        App\Providers\ThreadServiceProvider::class,
+        App\Providers\PostServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

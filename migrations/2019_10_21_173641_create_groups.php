@@ -18,6 +18,7 @@ class CreateGroups extends Migration
             $table->string('type', 50)->default('')->comment('类型');
             $table->string('color', 20)->default('')->comment('颜色');
             $table->string('icon', 100)->default('')->comment('icon类');
+            $table->tinyInteger('default')->unsigned()->default(0)->comment('是否默认');
         });
     }
 
