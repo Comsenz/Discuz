@@ -36,6 +36,7 @@ $route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionCo
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'group.create', ApiController\Group\CreateGroupController::class);
+$route->delete('/groups/{id}', 'group.delete', ApiController\Group\DeleteGroupController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,7 @@ $route->delete('/users/{id}', 'user.delete', ApiController\Users\DeleteUserContr
 $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersController::class);
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
+$route->get('/user/export', 'user.export', ApiController\Users\ExportUserController::class);
 
 /*
 |--------------------------------------------------------------------------

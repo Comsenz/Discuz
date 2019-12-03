@@ -39,6 +39,7 @@ module.exports = {
   'pay':'/api/trade/pay/order',    //支付订单
 
   'batch':'/api/threads/batch',   //修改主题接口
+  'upload': '/api/users/',//上传头像
 
   /*后台*/
   'siteinfo':'/api/siteinfo'    //首页-系统信息

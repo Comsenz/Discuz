@@ -72,10 +72,12 @@ export default {
     },
 
     submitClick(){
+      let userId = '/123';
+
       this.appFetch({
         url:'pay',
         method:'post',
-        splice:'/2019120310255349505652',
+        splice:userId + '/avatar',
         data:{
           'payment_type':'10'
         }

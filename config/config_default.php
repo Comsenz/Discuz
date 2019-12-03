@@ -120,6 +120,9 @@ return [
             ]
         ]
     ],
+    'excel' => [
+        'root' => storage_path('public/exports')
+    ],
     //加载ServiceProvider
     'providers' => [
 //        App\Providers\EventServiceProvider::class

@@ -98,8 +98,12 @@ const appFetch = function(params, options) {
       //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
     };
   }
-	//设置默认header
 
+  console.log(params.method);
+
+  // if (params.method.)
+
+	//设置默认header
 	if(params.headers) {
 		params.headers = {
 			...defaultHeaders,

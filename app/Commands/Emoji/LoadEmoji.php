@@ -1,19 +1,17 @@
 <?php
-
+/**
+ *      Discuz & Tencent Cloud
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      Id: LoadEmoji.php 28830 2019-12-03 15:37 yanchen $
+ */
 namespace App\Commands\Emoji;
 
-use App\Events\Group\Saving;
 use App\Models\Emoji;
-use App\Models\Group;
 use App\Models\User;
-use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\NotAuthenticatedException;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 
 class LoadEmoji
 {
@@ -21,6 +19,8 @@ class LoadEmoji
     use EventsDispatchTrait;
 
     const EMOJI_PATH_NAME = 'emoji';
+    const LEFT_DELIMITER = ':';
+    const RIGHT_DELIMITER = ':';
 
     /**
      * The user performing the action.
@@ -60,15 +60,22 @@ class LoadEmoji
 //        $this->assertRegistered($this->actor);
 //        $this->assertCan($this->actor, 'emoji.loadEmoji');
 
+
         if ($this->category == 'all'){
             $emojies = $this->loadEmoji('emoji');
 
             if ($emojies){
-                $data = [];
+
                 foreach ($emojies as $category => $emojies_data){
-                    //todo 去重过滤
+                    //删除
+                    Emoji::where('category', '=', $category)->delete();
+
+                    $data = [];
+
                     foreach ($emojies_data as $emojy){
-                        $data[] = ['url' => $emojy, 'category' => $category, 'created_at'=>date('Y-m-d H:i:s', time()), 'updated_at'=>date('Y-m-d H:i:s', time())];
+                        $code_name = self::LEFT_DELIMITER . substr(basename($emojy),0,strrpos(basename($emojy),'.')) . self::RIGHT_DELIMITER;
+
+                        $data[] = ['url' => $emojy, 'code' => $code_name, 'category' => $category, 'created_at'=>date('Y-m-d H:i:s', time()), 'updated_at'=>date('Y-m-d H:i:s', time())];
                     }
                     Emoji::insert($data);
                 }
@@ -76,24 +83,35 @@ class LoadEmoji
         }else{
             if (is_dir('emoji'.DIRECTORY_SEPARATOR.$this->category)){
 
+                //删除
+                Emoji::where('category', '=', $this->category)->delete();
+
                 $emojies = $this->loadEmoji('emoji'.DIRECTORY_SEPARATOR.$this->category);
 
                 foreach ($emojies as $emojy){
-                    $data[] = ['url' => $emojy, 'category' => $this->category, 'created_at'=>date('Y-m-d H:i:s', time()), 'updated_at'=>date('Y-m-d H:i:s', time())];
+
+                    $code_name = self::LEFT_DELIMITER . substr(basename($emojy),0,strrpos(basename($emojy),'.')) . self::RIGHT_DELIMITER;
+
+                    $data[] = ['url' => $emojy, 'code' => $code_name, 'category' => $this->category, 'created_at'=>date('Y-m-d H:i:s', time()), 'updated_at'=>date('Y-m-d H:i:s', time())];
                 }
                 Emoji::insert($data);
             }
         }
     }
 
+
     /**
+     * load emoji files return array
      * @param $path
+     * @return array
      */
     private function loadEmoji($path){
         $files = [];
+
         if(is_dir($path)) {
             $basename = basename($path);
             $dirs = opendir($path);
+
             if($dirs) {
                 while(($file = readdir($dirs)) !== false) {
 

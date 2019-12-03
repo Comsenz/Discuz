@@ -8,8 +8,8 @@
 		        <h1 class="headTit">{{$route.meta.title}}</h1>
 		    </div>
 		    <div class="serBox">
-		    	<input type="text" name="" placeholder="搜索" class="serInp">
-		    	<i class="icon iconfont icon-search"></i>
+		    	<input type="text" name="" placeholder="搜索" class="serInp" v-model="searchName" @input="handleSearch">
+		    	<i v-show="searchName === ''" class="icon iconfont icon-search"></i>
 		    </div>
 		</div>
 	    <div class="searchRes memberCheckList">
@@ -17,18 +17,18 @@
 			  <van-cell-group>
 			    <van-cell
 			      class="resUser"
-			      v-for="(item, index) in list"
+			      v-for="(item, index) in userList"
 			      clickable
-			      :key="item"
+			      :key="item.username()"
 			      @click="toggle(index)"
 			    >
 			    <img src="../../../../../../static/images/noavatar.gif" class="resUserHead">
 			    <div class="resUserDet">
-		            <span class="resUserName">小<i>虫</i></span>
+		            <span class="resUserName">{{item.username()}}</span>
 		            <span class="userRole">合伙人</span>
 		            <van-checkbox
 		             class="memberCheck"
-			        :name="item"
+			        :name="item.username()"
 			        ref="checkboxes"
 			        slot="right-icon"
 			      />
@@ -40,7 +40,7 @@
 		<div class="manageFootFixed">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
-					<span v-model="choiceRes">{{choiceRes}}</span>
+					<span>{{choiceRes}}</span>
 					<i class="icon iconfont icon-choice-item"></i>
 				</div>
 				<ul class="operaChoList" v-if="choiceShow">

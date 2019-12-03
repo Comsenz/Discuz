@@ -18,11 +18,12 @@ class NotificationSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-        return [
+        
+        return array_merge([
             'id'            => $model->id,
             'user_id'       => $model->notifiable_id,
-            'data'          => $model->data,
             'read_at'       => $model->read_at,
-        ];
+        ],$model->data);
     }
+
 }

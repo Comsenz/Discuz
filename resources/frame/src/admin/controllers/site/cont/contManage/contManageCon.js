@@ -40,7 +40,9 @@ export default {
       checkedTheme:[],    //多选列表初始化
       isIndeterminate: false,   //全选不确定状态
 
-      themeList:[]    //主题列表
+      themeList:[],    //主题列表
+      currentPag: 1,   //当前页数
+      total:0        //主题列表总条数
     }
   },
 
@@ -115,10 +117,18 @@ export default {
 
       let themeData = [];     //操作主题数据
       let attributes = {};    //操作选项
+      let relationships = {
+        'category':{
+          'data':{
+            'id':''
+          }
+        }
+      };   //主题分类关系
+      let selectStatus = false;
 
       switch (this.operatingSelect){
         case 'class':
-          attributes.categoryId = this.categoryId;
+          relationships.category.data.id = this.categoryId;
           break;
         case 'sticky':
           attributes.isSticky = this.toppingRadio === 1? true : false;
@@ -130,44 +140,98 @@ export default {
           attributes.isEssence = this.essenceRadio === 1? true : false;
           break;
         default:
-          console.log('数据错误');
+          selectStatus = true;
+          console.log('操作选项错误，请重新选择或刷新页面(F5)');
       }
 
-      // console.log(attributes);
-
-      this.checkedTheme.forEach((item,index)=>{
-        console.log(item);
-        if (item.status === true){
-          themeData.push(
-            {
-              'type':'threads',
-              'id':item.id,
-              'attributes':attributes
-            }
-          )
-        }
-      });
+      if (this.operatingSelect === 'class'){
+        this.checkedTheme.forEach((item,index)=>{
+          if (item.status === true){
+            themeData.push(
+              {
+                'type':'threads',
+                'id':item.id,
+                'attributes':attributes,
+                'relationships':relationships
+              }
+            )
+          }
+        });
+      } else {
+        this.checkedTheme.forEach((item,index)=>{
+          if (item.status === true){
+            themeData.push(
+              {
+                'type':'threads',
+                'id':item.id,
+                'attributes':attributes,
+              }
+            )
+          }
+        });
+      }
 
       console.log(themeData);
 
-      this.appFetch({
-        url:'threads/batch',
-        method:'patch',
-        data:{data:themeData}
-      }).then(res=>{
-        console.log(res);
-      })
+      if (themeData.length < 1){
+        this.$message({
+          showClose: true,
+          message: '主题列表为空，请选择主题',
+          type: 'warning'
+        });
+      }else if (selectStatus){
+        this.$message({
+          showClose: true,
+          message: '操作选项错误，请重新选择或刷新页面(F5)',
+          type: 'warning'
+        });
+      } else {
+        this.appFetch({
+          url:'threads/batch',
+          method:'patch',
+          data:{data:themeData}
+        }).then(res=>{
+          if (res.meta && res.data){
+            this.$message.error('操作失败！');
+          }else {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      }
+
+
 
     },
+
+
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+
 
     /*
     * 请求接口
     * */
     getThemeList(){
-      const params = {};
+      const params = {
+        'filter[isDeleted]':'no',
+        'page[number]':1,
+        'page[size]':10
+      };
       params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
         this.themeList = data;
+        console.log(data);
+        this.total = data.payload.meta.threadCount;
 
         console.log(data.length);
 
@@ -197,14 +261,10 @@ export default {
 
     },
 
-    patchBatch(){
-
-    }
-
   },
 
   mounted(){
-    console.log(this.categoriesList);
+
   },
   created(){
     this.getThemeList();
