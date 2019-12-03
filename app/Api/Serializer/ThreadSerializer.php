@@ -85,7 +85,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     protected function category($thread)
     {
-        return $this->hasOne($thread, ClassifySerializer::class);
+        return $this->hasOne($thread, CategorySerializer::class);
     }
 
     /**

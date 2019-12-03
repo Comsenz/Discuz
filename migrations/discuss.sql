@@ -267,3 +267,5 @@ CREATE TABLE `operation_log` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `threads` ADD `category_id` INT(10) UNSIGNED NOT NULL AFTER `last_posted_user_id`;

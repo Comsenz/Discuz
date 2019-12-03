@@ -202,9 +202,19 @@ class Post extends Model
      *
      * @return HasMany
      */
+    public function images()
+    {
+        return $this->hasMany(Attachment::class)->where('is_gallery', true);
+    }
+
+    /**
+     * Define the relationship with the post's attachments.
+     *
+     * @return HasMany
+     */
     public function attachments()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->hasMany(Attachment::class)->where('is_gallery', false);
     }
 
     /**
