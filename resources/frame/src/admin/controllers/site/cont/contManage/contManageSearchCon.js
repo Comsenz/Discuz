@@ -5,34 +5,23 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',    //主题分类选择值
+      categoriesList: [],   //主题分类列表
+      categoryId: '',  //主题分类选中
 
-      pageOptions: [{
-        value: '选项1',
-        label: '每页显示10条'
-      }, {
-        value: '选项2',
-        label: '每页显示20条'
-      }, {
-        value: '选项3',
-        label: '每页显示30条'
-      }],
+
+
+      pageOptions: [
+        {
+          value: '选项1',
+          label: '每页显示10条'
+        }, {
+          value: '选项2',
+          label: '每页显示20条'
+        }, {
+          value: '选项3',
+          label: '每页显示30条'
+        }
+      ],
       pageSelect:'',    //每页显示数选择值
 
       checkedStatus:false,  //更多选项
@@ -80,7 +69,45 @@ export default {
           gd.scrollTo(0,gd.scrollHeight);
         }
       },300);
-    }
+    },
+
+    submitClick(){
+      this.appFetch({
+        url:'pay',
+        method:'post',
+        splice:'/2019120310255349505652',
+        data:{
+          'payment_type':'10'
+        }
+      }).then(res=>{
+        console.log(res);
+      })
+    },
+
+    /*
+    * 请求接口
+    * */
+    getCategories(){
+      this.appFetch({
+        url:'categories',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        res.data.forEach((item,index)=>{
+          this.categoriesList.push({
+            name:item.attributes.name,
+            id:item.id
+          })
+        });
+
+        // console.log(this.categoriesList);
+
+      })
+
+    },
+  },
+  created(){
+    this.getCategories();
   },
   components:{
     Card,

@@ -182,23 +182,6 @@ export default {
       });
     },
     getCategories(){
-      /*const params = {};
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-      this.apiStore.find('classify', params).then(data => {
-        this.themeList = data;
-
-        console.log(data.length);
-
-        /!*初始化主题多选框列表*!/
-        data.forEach(()=>{
-          this.checkedTheme.push({
-            id:'',
-            status:false
-          })
-        });
-
-      });*/
-
       this.appFetch({
         url:'categories',
         method:'get',
