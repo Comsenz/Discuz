@@ -57,6 +57,7 @@ class PostListener
         // 绑定附件
         if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
             Attachment::where('user_id', $actor->id)
+                ->where('post_id', 0)
                 ->whereIn('id', array_column($attachments, 'id'))
                 ->update(['post_id' => $post->id]);
         }

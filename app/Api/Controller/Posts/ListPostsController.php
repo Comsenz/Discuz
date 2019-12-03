@@ -123,6 +123,8 @@ class ListPostsController extends AbstractListController
 
         $this->applyFilters($query, $filter, $actor);
 
+        $this->postCount = $limit > 0 ? $query->count() : null;
+
         $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
@@ -131,8 +133,6 @@ class ListPostsController extends AbstractListController
 
         // 搜索事件，给插件一个修改它的机会。
         // $this->events->dispatch(new Searching($search, $criteria));
-
-        $this->postCount = $limit > 0 ? $query->count() : null;
 
         return $query->get();
     }

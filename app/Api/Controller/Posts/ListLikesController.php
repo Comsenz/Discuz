@@ -30,12 +30,11 @@ class ListLikesController extends ListPostsController
         $offset = $this->extractOffset($request);
         $load = $this->extractInclude($request);
 
-        $query = $actor->likedPosts()
-            ->skip($offset)
-            ->take($limit)
-            ->orderBy('post_user.created_at', 'desc');
+        $query = $actor->likedPosts();
 
         $this->postCount = $limit > 0 ? $query->count() : null;
+
+        $query->skip($offset)->take($limit)->orderBy('post_user.created_at', 'desc');
 
         $document->addPaginationLinks(
             $this->url->route('threads.index'),
