@@ -21,7 +21,8 @@ module.exports = {
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   'walletFrozen':'/api/wallet/log',//冻结金额
-  'orderList':'/api/order',//订单明细
+  'orderList':'/api/order',//订单明细,打赏支付
+  'orderPay':'/api/trade/pay/order',  //订单支付
   'invite':'/api/invite',
   'walletDetails':'/api/wallet/log' ,//钱包明细
   'updateWallet':'/api/wallet/user/',//更新用户钱包
@@ -32,6 +33,7 @@ module.exports = {
   'searchUser':'/api/users', //用户搜索
   'searchThreads':'/api/threads',//搜索
   'notice':'/api/notification',
+  'posts':'/api/posts', //回复主题
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
 
