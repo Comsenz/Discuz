@@ -7,7 +7,7 @@
             <p>头像</p>
           </div>
           <div class="modify-data-avatar-img">
-             <img  :src="headPortrait" alt="我的头像">
+             <img  :src="headPortrait" alt="我的头像" @click="modifyingHead()">
             <i>
               <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
             </i>

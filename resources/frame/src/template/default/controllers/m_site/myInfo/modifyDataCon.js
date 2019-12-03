@@ -45,6 +45,15 @@ export default {
         this.headPortrait = res.data.attributes.avatarUr;
         
       })
+    },
+    modifyingHead(){
+      this.appFetch({
+        url:'upload',
+        method:'post',
+        data:{
+          
+        }
+      })
     }
   }
 }

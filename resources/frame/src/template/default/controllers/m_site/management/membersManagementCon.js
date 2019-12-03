@@ -15,7 +15,8 @@ export default {
 				'禁用',
 				'解除禁用'
 			],
-			choiceRes: '选择操作'
+			choiceRes: '选择操作',
+			flag:true,
 		}
 	},
 	 //用于数据初始化
@@ -39,9 +40,16 @@ export default {
 		},
 		membersInformation(){  //成员信息
 			var userId = browserDb.getLItem('tokenId');
-			this.apiStore.find('users',userId).then(res=>{
+			var params = {};
+			params.include = 'groups,wechat'
+			this.apiStore.find('users',userId,params).then(res=>{
 			//   this.payee= res.data.attributes.username;
 			//   this.phone = res.data.attributes.mobile;
+			this.list = res.data;
+			if(list.length<0){
+				this.flag = false
+			}
+			console.log(this.list)
 			})
 
 		}

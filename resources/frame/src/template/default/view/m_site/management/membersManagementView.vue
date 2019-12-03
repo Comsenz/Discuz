@@ -12,7 +12,7 @@
 		    	<i class="icon iconfont icon-search"></i>
 		    </div>
 		</div>
-	    <div class="searchRes memberCheckList">
+	    <div class="searchRes memberCheckList" v-show="flag">
 	        <van-checkbox-group v-model="result">
 			  <van-cell-group>
 			    <van-cell
@@ -24,7 +24,7 @@
 			    >
 			    <img src="../../../../../../static/images/noavatar.gif" class="resUserHead">
 			    <div class="resUserDet">
-		            <span class="resUserName">小<i>虫</i></span>
+		            <span class="resUserName">{{item.user().username()}}</span>
 		            <span class="userRole">合伙人</span>
 		            <van-checkbox
 		             class="memberCheck"

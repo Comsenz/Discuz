@@ -35,6 +35,7 @@ module.exports = {
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
   'batch':'/api/threads/batch',   //修改主题接口
+  'upload': `/api/users/${browserDb.default.getLItem('tokenId')}/avatar`,//上传头像
 
   /*后台*/
   'siteinfo':'/api/siteinfo'    //首页-系统信息
