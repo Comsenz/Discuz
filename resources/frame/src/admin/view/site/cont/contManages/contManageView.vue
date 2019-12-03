@@ -8,54 +8,23 @@
           </div>
 
           <ContArrange
-            author="小虫"
+            v-for="(items,index) in  themeList"
+            :author="items.user().username()"
             theme="站长圈"
-            prply="123"
-            browse="456"
+            :prply="items.postCount()"
+            :browse="items.viewCount()"
             last="奶罩"
-            finalPost="2019-1-1 12:00"
+            :finalPost="formatDate(items.createdAt())"
+            :key="index"
           >
-
             <div class="cont-manage-theme__table-side" slot="side">
-              <el-checkbox ></el-checkbox>
+              <el-checkbox v-model="checkedTheme[index].status" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>
             </div>
 
             <div style="line-height: 20PX;" slot="main">
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              {{items.firstPost().content()}}
             </div>
+
           </ContArrange>
 
         </div>
@@ -74,7 +43,7 @@
             prop="theme"
             width="250">
             <template slot-scope="scope">
-              <el-radio v-model="radio" label="1">{{scope.row.name}}</el-radio>
+              <el-radio v-model="operatingSelect" :label="scope.row.label" >{{scope.row.name}}</el-radio>
             </template>
           </el-table-column>
 
@@ -83,12 +52,12 @@
             min-width="250">
             <template slot-scope="scope">
 
-              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="value" placeholder="选择圈子">
+              <el-select @change="selectChange" v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择圈子">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in categoriesList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
                 </el-option>
               </el-select>
 
@@ -108,7 +77,7 @@
         </el-table>
 
         <Card class="footer-btn">
-          <el-button type="primary">提交</el-button>
+          <el-button @click="submitClick" type="primary">提交</el-button>
         </Card>
 
       </div>

@@ -1,19 +1,21 @@
 <?php
 
+
 namespace App\Api\Controller\Users;
 
 
 use App\Api\Serializer\ErrorUserSerializer;
-use App\Commands\Users\DeleteUsers;
-use Discuz\Api\Controller\AbstractResourceController;
+use App\Commands\Users\UpdateUser;
+use App\Models\User;
+use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-
-class DeleteUserController extends AbstractResourceController
+class UpdateUsersController extends AbstractListController
 {
+
     public $serializer = ErrorUserSerializer::class;
 
     protected $bus;
@@ -25,8 +27,12 @@ class DeleteUserController extends AbstractResourceController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->bus->dispatch(
-            new DeleteUsers(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'))
-        );
+        $multipleData = Arr::get($request->getParsedBody(), 'data', []);
+        $list = collect();
+        foreach($multipleData as $data) {
+            $list->push($this->bus->dispatch(new UpdateUser(Arr::get($data, 'attributes.id'), ['data' => $data], $request->getAttribute('actor'))));
+        }
+
+        return $list;
     }
 }

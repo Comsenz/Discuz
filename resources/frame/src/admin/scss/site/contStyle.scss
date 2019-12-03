@@ -66,6 +66,7 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+        border-bottom: 1PX solid $tableBorderColor;
 
         &__title{
           margin-left: 30PX;
