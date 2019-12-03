@@ -6,7 +6,7 @@ export default {
 	data: function() {
 		return {
 			result: ['选中且禁用','复选框 A'],
-			list: ['a','b','c'],
+			userList: [],
 			choiceShow: false,
 			choList: [
 				'设为合伙人',
@@ -15,14 +15,24 @@ export default {
 				'禁用',
 				'解除禁用'
 			],
-			choiceRes: '选择操作',
-			flag:true,
+			searchName: '',
+			userParams: {
+				'filter[name]': '',
+				'filter[id]': '写获取到的用户id',
+				'filter[group_id]': [],
+				'filter[bind]': 1,
+				'page[limit]': 10,
+				'page[number]': 1,
+				'sort': '-createdAt',
+				'include': 'groups'
+			},
+			userLoadMoreStatus: true,
+			choiceRes: '选择操作'
 		}
 	},
 	 //用于数据初始化
     created: function(){
-		console.log(this.headOneShow);
-		this.membersInformation() //成员信息
+		this.handleSearch();
 	},
 	methods: {
 	    //选中复选框
@@ -38,20 +48,47 @@ export default {
             this.choiceShow = false;
             this.choiceRes=val;
 		},
-		membersInformation(){  //成员信息
-			var userId = browserDb.getLItem('tokenId');
-			var params = {};
-			params.include = 'groups,wechat'
-			this.apiStore.find('users',userId,params).then(res=>{
-			//   this.payee= res.data.attributes.username;
-			//   this.phone = res.data.attributes.mobile;
-			this.list = res.data;
-			if(list.length<0){
-				this.flag = false
-			}
-			console.log(this.list)
-			})
 
+		// 根据搜索进行请求
+		async getSearchValUserList(initStatus){
+			if(initStatus){
+				this.userList = [];
+			}
+			try{
+				const currentPageNum = this.userParams['page[number]'];
+				await this.apiStore.find('searchUser', this.userParams).then(data=>{
+					this.userList = this.userList.concat(data);
+					this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
+				}).catch(err=>{
+					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
+						this.userParams['page[number]'] = currentPageNum - 1;
+					}
+				})
+			} finally {
+				this.userLoadMorePageChange = false;
+			}
+		},
+
+		// 通过搜索获取用户列表
+		handleSearch(e){
+			if(e){
+				var value = e.target.value;
+				this.searchName = value;
+			} else {
+				this.searchName = '';
+			}
+
+			this.userParams = {
+				'filter[name]': this.searchName,
+				'filter[id]': 1,
+				'filter[group_id]': [],
+				'filter[bind]': 1,
+				'page[limit]': 10,
+				'page[number]': 1,
+				'sort': '-createdAt',
+				'include': 'groups'
+			}
+			this.getSearchValUserList(true);
 		}
 	},
 
