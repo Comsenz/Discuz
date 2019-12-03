@@ -1,12 +1,12 @@
 <template>
     <div class="cont-manage-search-box">
       <Card header="主题分类：">
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="categoryId" placeholder="请选择">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for="item in categoriesList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
           </el-option>
         </el-select>
       </Card>
@@ -84,7 +84,7 @@
        </el-collapse-transition>
 
       <Card class="footer-btn">
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="submitClick">提交</el-button>
         <el-checkbox v-model="checkedStatus" @change="checkboxChange">更多</el-checkbox>
       </Card>
 
