@@ -43,6 +43,12 @@ export default {
         case 'withdrawals-record':
           this.$router.push('/withdrawals-record'); //提现记录
           break;
+          case 'wallet-details':
+          this.$router.push('/wallet-details'); //钱包明细
+          break;
+          case 'order-details':
+          this.$router.push('/order-details'); //订单明细
+          break;
         default:
           this.$router.push('/');
       }

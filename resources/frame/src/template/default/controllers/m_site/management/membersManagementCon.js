@@ -1,7 +1,7 @@
 /**
  * 移动端圈子管理页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -20,7 +20,8 @@ export default {
 	},
 	 //用于数据初始化
     created: function(){
-		console.log(this.headOneShow)
+		console.log(this.headOneShow);
+		this.membersInformation() //成员信息
 	},
 	methods: {
 	    //选中复选框
@@ -35,7 +36,15 @@ export default {
 	    setSelectVal:function(val){
             this.choiceShow = false;
             this.choiceRes=val;
-        },
+		},
+		membersInformation(){  //成员信息
+			var userId = browserDb.getLItem('tokenId');
+			this.apiStore.find('users',userId).then(res=>{
+			//   this.payee= res.data.attributes.username;
+			//   this.phone = res.data.attributes.mobile;
+			})
+
+		}
 	},
 
 	mounted: function() {
