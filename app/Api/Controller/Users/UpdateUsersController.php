@@ -4,9 +4,8 @@
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\ErrorUserSerializer;
+use App\Api\Serializer\InfoSerializer;
 use App\Commands\Users\UpdateUser;
-use App\Models\User;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -16,7 +15,7 @@ use Tobscure\JsonApi\Document;
 class UpdateUsersController extends AbstractListController
 {
 
-    public $serializer = ErrorUserSerializer::class;
+    public $serializer = InfoSerializer::class;
 
     protected $bus;
 
