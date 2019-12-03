@@ -11,4 +11,6 @@ Object.assign(Forum.prototype, {
   siteAuthor: Model.attribute('siteAuthor'),
   price: Model.attribute('price'),
   day: Model.attribute('day'),
+  avatarUrl: Model.attribute('avatarUrl'),
+  user:Model.hasOne('user'),
 });

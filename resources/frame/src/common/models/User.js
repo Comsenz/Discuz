@@ -16,5 +16,6 @@ Object.assign(User.prototype, {
   username: Model.attribute('username'),
   password: Model.attribute('password'),
   avatarUrl: Model.attribute('avatarUrl'),
-  user_name:Model.attribute('user_name')
+  user_name:Model.attribute('user_name'),
+  groups: Model.hasMany('groups')
 });

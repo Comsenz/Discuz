@@ -600,7 +600,9 @@ openCircleConView.vue
 			@include px2rem(margin-bottom, 22);
 		}
 		.quoteCon {
+      display: block;
 			@include px2rem(padding, 16);
+      @include px2rem(margin-bottom, 16);
 			background: $corF7;
 			@include font-dpr(26);
 			color: $cor888;
@@ -728,7 +730,7 @@ details.vue
 	}
 }
 .rewardPopup {
-	@include px2rem(height, 530);
+	@include px2rem(height, 532);
 	.support {
 		display: block;
 		@include font-dpr(26);
@@ -738,7 +740,7 @@ details.vue
 	}
 	.rewardMonBox {
 		overflow: hidden;
-		@include px2rem(padding, 34 34 46 34);
+		@include px2rem(padding, 34 34 1 34);
 		.moneyChi {
 			float: left;
 			@include px2rem(height, 100);
@@ -762,6 +764,24 @@ details.vue
 			}
 		}
 	}
+}
+.qrCodeBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 12;
+  .qrCode {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    @include px2rem(width, 160);
+    @include px2rem(height, 160);
+    @include px2rem(margin-left, -80);
+    @include px2rem(margin-top, -80);
+  }
 }
 //发表主题
 $postTopicColor:#336699;

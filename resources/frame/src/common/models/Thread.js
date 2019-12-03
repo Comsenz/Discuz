@@ -15,6 +15,8 @@ Object.assign(Threads.prototype, {
   viewCount: Model.attribute('viewCount'),
   user:Model.hasOne('user'),
   firstPost: Model.hasOne('firstPost'),
+  posts: Model.hasMany('posts'),
   lastThreePosts: Model.hasMany('lastThreePosts'),
   rewardedUsers:Model.hasMany('rewardedUsers')
+  
 });
