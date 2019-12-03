@@ -11,9 +11,9 @@ use App\Models\MobileCode;
 use App\Repositories\MobileCodeRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -24,11 +24,13 @@ class VerifyController extends AbstractResourceController
 
     protected $mobileCodeRepository;
     protected $bus;
+    protected $validation;
 
-    public function __construct(MobileCodeRepository $mobileCodeRepository, Dispatcher $bus)
+    public function __construct(MobileCodeRepository $mobileCodeRepository, Dispatcher $bus, Factory $validation)
     {
         $this->mobileCodeRepository = $mobileCodeRepository;
         $this->bus = $bus;
+        $this->validation = $validation;
     }
 
 
@@ -52,6 +54,11 @@ class VerifyController extends AbstractResourceController
 
         $mobile = Arr::get($data, 'mobile');
         $code = Arr::get($data, 'code');
+
+        $this->validation->make($data, [
+            'type' => 'required',
+            'code' => 'required'
+        ])->validate();
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
 
