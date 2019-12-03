@@ -4,7 +4,7 @@
 namespace App\Api\Serializer;
 
 
-class ErrorUserSerializer extends UserSerializer
+class InfoSerializer extends UserSerializer
 {
 
     public function getDefaultAttributes($model)

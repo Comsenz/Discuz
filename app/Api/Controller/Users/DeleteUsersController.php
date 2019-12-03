@@ -3,7 +3,7 @@
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\ErrorUserSerializer;
+use App\Api\Serializer\InfoSerializer;
 use App\Commands\Users\DeleteUsers;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -15,7 +15,7 @@ use Tobscure\JsonApi\Document;
 class DeleteUsersController extends AbstractListController
 {
 
-    public $serializer = ErrorUserSerializer::class;
+    public $serializer = InfoSerializer::class;
 
     protected $bus;
 
