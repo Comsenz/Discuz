@@ -38,6 +38,7 @@ class ListThreadsController extends AbstractListController
     public $include = [
         'user',
         'firstPost',
+        'lastPostedUser',
         'category',
     ];
 
