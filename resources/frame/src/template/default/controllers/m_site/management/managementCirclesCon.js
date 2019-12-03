@@ -38,6 +38,6 @@ export default {
 		
 	},
 	beforeRouteLeave (to, from, next) {
-	   
+	   next()
 	}
 }
