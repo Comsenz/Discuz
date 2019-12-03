@@ -48,24 +48,24 @@ export default {
       })
     },
       handleFile: function (e) {
-        let $target = e.target || e.srcElement
-        let file = $target.files[0]
-        console.log(file)
-        var reader = new FileReader()
-        reader.onload = (data) => {
-          let res = data.target || data.srcElement
-          this.headPortrait = res.result
-        }
-        reader.readAsDataURL(file)
-        console.log(reader.result)
-      //   let file = e.target.files[0];
-      //   console.log(e);
+        // let $target = e.target || e.srcElement
+        // let file = $target.files[0]
+        // console.log(file)
+        // var reader = new FileReader()
+        // reader.onload = (data) => {
+        //   let res = data.target || data.srcElement
+        //   this.headPortrait = res.result
+        // }
+        // reader.readAsDataURL(file)
+        // console.log(this.headPortrait)
+        let file = e.target.files[0];
+        console.log(file);
 
-      //   // 获取file
-      // // 实例化
-      //   let formdata = new FormData()
-      //   formdata.append('file', file)
-      //   console.log(formdata)
+        // 获取file
+      // 实例化
+        let formdata = new FormData()
+        formdata.append('avatar', file)
+        console.log(formdata)
 
 
 
@@ -74,9 +74,9 @@ export default {
         url:'upload',
         method:'post',
         splice:userId+'/avatar',
-        data:{
-          avatar:reader
-        }
+        data:formdata
+      }).then(res=>{
+        this.headPortrait = res.data.attributes.avatarUrl;
       })
       },
      
