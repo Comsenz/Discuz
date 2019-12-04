@@ -20,7 +20,7 @@ class CreateOrders extends Migration
             $table->unsignedBigInteger('user_id')->comment('付款人ID');
             $table->unsignedBigInteger('payee_id')->comment('收款人ID');
             $table->unsignedTinyInteger('type')->default(0)->comment('交易类型：1注册、2打赏');
-            $table->unsignedInteger('type_id')->comment('主题ID');
+            $table->unsignedInteger('thread_id')->comment('主题ID');
             $table->unsignedTinyInteger('status')->default(0)->comment('订单状态：0待付款；1已付款；2.取消订单；3支付失败；');
             $table->unsignedSmallInteger('payment_type')->default(0)->comment('付款方式：微信（10：pc扫码，11：h5支付，12：微信内支付');
             $table->string('remark', 255)->comment('备注或原因');
