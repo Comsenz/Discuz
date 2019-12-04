@@ -20,7 +20,6 @@ class Invite extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
-    use SoftDeletes;
 
     /**
      * 与模型关联的数据表.
