@@ -79,6 +79,15 @@ class PostSerializer extends AbstractSerializer
      * @param $post
      * @return Relationship
      */
+    protected function replyUser($post)
+    {
+        return $this->hasOne($post, UserSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
     protected function thread($post)
     {
         return $this->hasOne($post, ThreadSerializer::class);

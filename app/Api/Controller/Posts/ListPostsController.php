@@ -156,7 +156,7 @@ class ListPostsController extends AbstractListController
 
         // 回复
         if ($replyId = Arr::get($filter, 'reply')) {
-            $query->where('reply_id', $replyId);
+            $query->where('reply_post_id', $replyId);
         }
 
         // 待审核
