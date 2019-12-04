@@ -13,6 +13,7 @@ use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
+use App\Events\Post\Revised;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
@@ -39,6 +40,9 @@ class PostListener
         // 删除首帖
         $events->listen(Deleted::class, [$this, 'whenPostWasDeleted']);
 
+        // 修改内容
+        $events->listen(Revised::class, [$this, 'whenPostWasRevised']);
+
         // 喜欢帖子
         $events->listen(Serializing::class, AddPostLikeAttribute::class);
         $events->subscribe(SaveLikesToDatabase::class);
@@ -57,6 +61,7 @@ class PostListener
         // 绑定附件
         if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
             Attachment::where('user_id', $actor->id)
+                ->where('post_id', 0)
                 ->whereIn('id', array_column($attachments, 'id'))
                 ->update(['post_id' => $post->id]);
         }
@@ -67,12 +72,12 @@ class PostListener
         }
 
         // 如果被回复的用户不是当前用户，也不是主题作者，则通知被回复的人
-        if ($event->post->reply_id) {
-            $reply = Post::find($post->reply_id);
-
-            if ($reply->user_id != $actor->id && $reply->user_id != $post->thread->user_id) {
-                $reply->user->notify(new Replied($post));
-            }
+        if (
+            $post->reply_post_id
+            && $post->reply_user_id != $actor->id
+            && $post->reply_user_id != $post->thread->user_id
+        ) {
+            $post->replyUser->notify(new Replied($post));
         }
     }
 
@@ -92,12 +97,12 @@ class PostListener
         }
 
         $log = new OperationLog;
+        $log->user_id = $event->actor->id;
         $log->action = $action;
         $log->message = $event->data['message'];
         $log->created_at = Carbon::now();
         $event->post->logs()->save($log);
     }
-
 
     /**
      * 隐藏主题时，记录操作
@@ -107,6 +112,7 @@ class PostListener
     public function whenPostWasHidden(Hidden $event)
     {
         $log = new OperationLog;
+        $log->user_id = $event->actor->id;
         $log->action = 'hide';
         $log->message = $event->data['message'];
         $log->created_at = Carbon::now();
@@ -126,5 +132,20 @@ class PostListener
 
             Post::where('thread_id', $event->post->thread_id)->forceDelete();
         }
+    }
+
+    /**
+     * 修改内容时，记录操作
+     *
+     * @param Revised $event
+     */
+    public function whenPostWasRevised(Revised $event)
+    {
+        $log = new OperationLog;
+        $log->user_id = $event->actor->id;
+        $log->action = 'revise';
+        $log->message = $event->actor->username . ' 修改了内容';
+        $log->created_at = Carbon::now();
+        $event->post->logs()->save($log);
     }
 }

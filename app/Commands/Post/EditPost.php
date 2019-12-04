@@ -79,7 +79,7 @@ class EditPost
         if (isset($attributes['content'])) {
             $this->assertCan($this->actor, 'edit', $post);
 
-            $post->content = $attributes['content'];
+            $post->revise($attributes['content'], $this->actor);
         } else {
             // 不修改内容时，不更新修改时间
             $post->timestamps = false;

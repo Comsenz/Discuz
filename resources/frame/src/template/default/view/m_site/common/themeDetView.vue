@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="postContent">
-          <a @click="jumpThemeDet(item.firstPost().id())">{{item.firstPost().content()}}</a>
+          <a @click="jumpThemeDet(item.id())">{{item.firstPost().content()}}</a>
         </div>
       </div>
       <div class="operaBox">

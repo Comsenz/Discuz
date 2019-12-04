@@ -21,65 +21,76 @@ export default {
 		return {
 			result: [],
 			showScreen: false,
-			themeList: [
-				{
-					postHead: '',
-					checked: false,
-					postName: '我的名称',
-					postTime: '11分钟前',
-					postCon: '标题标题',
-					fabulousList: ['aaaa','bbbbbbb','cc','ddddddddddd','eee','ffffffffffffffff'],
-					fabulousNum: '20',
-					rewardList: ['wert','dfggf','cc','retregvt','eee','hgfjhrthtrtrg','sdjgdsjfgsdgfdsfhdsjgfhdsjgfdsjgfdj'],
-					commentList: [
-						{
-							commentName:'我是第一个',
-							commentWo: '第一个评价的内容'
-						},
-						{
-							commentName:'我是第二个',
-							commentWo: '第二个评价的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
-						},
-					],
-					replyList: [
-						{
-							replyName:'aaaaaa',
-							commentsName:'bbb',
-							replyWo: '第一个回复的内容'
-						},
-						{
-							replyName:'cc',
-							commentsName:'dddddd',
-							replyWo: '第二个回复的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
-						}
-					],
+			// themeList: [
+				// {
+				// 	postHead: '',
+				// 	checked: false,
+				// 	postName: '我的名称',
+				// 	postTime: '11分钟前',
+				// 	postCon: '标题标题',
+				// 	fabulousList: ['aaaa','bbbbbbb','cc','ddddddddddd','eee','ffffffffffffffff'],
+				// 	fabulousNum: '20',
+				// 	rewardList: ['wert','dfggf','cc','retregvt','eee','hgfjhrthtrtrg','sdjgdsjfgsdgfdsfhdsjgfhdsjgfdsjgfdj'],
+				// 	commentList: [
+				// 		{
+				// 			commentName:'我是第一个',
+				// 			commentWo: '第一个评价的内容'
+				// 		},
+				// 		{
+				// 			commentName:'我是第二个',
+				// 			commentWo: '第二个评价的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
+				// 		},
+				// 	],
+				// 	replyList: [
+				// 		{
+				// 			replyName:'aaaaaa',
+				// 			commentsName:'bbb',
+				// 			replyWo: '第一个回复的内容'
+				// 		},
+				// 		{
+				// 			replyName:'cc',
+				// 			commentsName:'dddddd',
+				// 			replyWo: '第二个回复的内容内容内容，内容内容内容内容内容内容内容内容内容，内容内'
+				// 		}
+				// 	],
 
-				},
-				{
-					postHead: '',
-					checked: false,
-					postName: '名字2222',
-					postTime: '1个小时前',
-					postCon: '这是内容内容，这是内容内容这是内容，这是内容内容这是内容内容这是内容内容这是内容内容这',
-					fabulousList: ['aaaa','bbbbbbfcffffb','cc','ddddddd','eee','ffffffff'],
-					fabulousNum: '14',
-					rewardList: ['adasda','dsddddfggf','cc','regvt','eee','trtrg','dsdsadasd','sfsadasdsadsdddssasasasadasdsadsasadddddd']
-				}
-			],
+				// },
+			// 	{
+			// 		postHead: '',
+			// 		checked: false,
+			// 		postName: '名字2222',
+			// 		postTime: '1个小时前',
+			// 		postCon: '这是内容内容，这是内容内容这是内容，这是内容内容这是内容内容这是内容内容这是内容内容这',
+			// 		fabulousList: ['aaaa','bbbbbbfcffffb','cc','ddddddd','eee','ffffffff'],
+			// 		fabulousNum: '14',
+			// 		rewardList: ['adasda','dsddddfggf','cc','regvt','eee','trtrg','dsdsadasd','sfsadasdsadsdddssasasasadasdsadsasadddddd']
+			// 	}
+			// ],
+      themeListCon:[],
 			checked:null
 
 		}
 	},
 
 	created() {
-		// console.log(789);
-  //       Bus.$emit('setHeader',['标题标题333','fasle', 'false']);
-    },
-    mounted(){
-      
-    	Bus.$emit('setHeader',['标题标题3443453454ee','fasle', 'false']);
-    },
+		this.aaa();
+  },
+  mounted(){
+
+    Bus.$emit('setHeader',['标题标题3443453454ee','fasle', 'false']);
+  },
 	methods: {
+
+    aaa(){
+      console.log('1234');
+      const params = {};
+      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+      this.apiStore.find('threads', params).then(data => {
+        // console.log(data[0].firstPost().id());
+        // console.log(data[0].user().username());
+        this.themeListCon = data;
+      });
+    },
 
       	checkAll:function(checkAll){
       		this.checked = !this.checked;

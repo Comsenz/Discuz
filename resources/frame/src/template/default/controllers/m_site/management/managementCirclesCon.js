@@ -37,7 +37,7 @@ export default {
 	managementCircles(str){
 		switch (str) {
 		  case 'circle-members':
-			this.$router.push('/circle-members'); //成员管理
+			this.$router.push('/members-management'); //成员管理
 			break;
 		  case 'delete':
 			this.$router.push('/delete'); //批量管理

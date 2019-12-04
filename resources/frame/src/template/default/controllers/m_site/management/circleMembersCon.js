@@ -5,43 +5,71 @@
 export default {
 	data: function() {
 		return {
-			result: ['选中且禁用','复选框 A'],
-			list: ['a','b','c'],
-			choiceShow: false,
-			choList: [
-				'设为合伙人',
-				'设为嘉宾',
-				'设为成员',
-				'禁用',
-				'解除禁用'
-			],
-			choiceRes: '选择操作'
+      serHide:true,
+      serShow:false,
+			searchVal: '',
+			userParams: {
+				'filter[username]': '',
+			},
+			themeParamd: {
+				// 'filter[q]': '',
+				// 'page[limit]': 2,
+				// 'page[number]': 1,
+
+			},
+			searchUserList: [],
+      userLoadMoreStatus: true,
+      userLoadMorePageChange: false,
 		}
 	},
 	 //用于数据初始化
-    created: function(){
-		console.log(this.headOneShow)
+  created: function(){
+    // this.loadUserList();
+    this.onSearch();
 	},
 	methods: {
-	    //选中复选框
-	    toggle(index) {
-	      this.$refs.checkboxes[index].toggle();
+    //搜索框切换
+    serToggle(){
+      this.serHide = false;
+      this.serShow = true;
+      this.$refs.serInp.focus();
+    },
+	    onSearch(val) {
+	    	this.searchVal = val;
+	    	// console.log(val,'value')
+	    	this.userParams = {
+	    		'filter[username]': this.searchVal,
+	    	}
+	    	this.handleSearchUser(true);
+
 	    },
-	    //操作列表显示
-	    showChoice() {
-	    	this.choiceShow = !this.choiceShow;
+	    onCancel() {
 	    },
-	    //操作列表隐藏
-	    setSelectVal:function(val){
-            this.choiceShow = false;
-            this.choiceRes=val;
-        },
+      async handleSearchUser(initStatus = false){
+      	if(initStatus){
+      		this.searchUserList = [];
+      	}
+      	try{
+      		await this.apiStore.find('searchUser', this.userParams).then(data=>{
+      			this.searchUserList = this.searchUserList.concat(data);
+      			// console.log(data,'user list data')
+      		}).catch(err=>{
+      		})
+      	} finally {
+      		this.userLoadMorePageChange = false;
+      	}
+      },
+
+      handleLoadMoreUser(){
+      	this.userLoadMorePageChange = true;
+      	this.handleSearchUser();
+      }
 	},
 
-	mounted: function() {
-		
+	mounted () {
+
 	},
 	beforeRouteLeave (to, from, next) {
-	   
+    next();
 	}
 }

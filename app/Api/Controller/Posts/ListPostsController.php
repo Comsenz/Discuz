@@ -38,10 +38,8 @@ class ListPostsController extends AbstractListController
      */
     public $include = [
         'user',
-        // 'user.groups',
-        // 'editedUser',
-        // 'hiddenUser',
         'thread',
+        'images',
     ];
 
     /**
@@ -123,6 +121,8 @@ class ListPostsController extends AbstractListController
 
         $this->applyFilters($query, $filter, $actor);
 
+        $this->postCount = $limit > 0 ? $query->count() : null;
+
         $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
@@ -131,8 +131,6 @@ class ListPostsController extends AbstractListController
 
         // 搜索事件，给插件一个修改它的机会。
         // $this->events->dispatch(new Searching($search, $criteria));
-
-        $this->postCount = $limit > 0 ? $query->count() : null;
 
         return $query->get();
     }
@@ -144,6 +142,8 @@ class ListPostsController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
+        $query->where('is_first', false);
+
         // 作者
         if ($userId = Arr::get($filter, 'user')) {
             $query->where('user_id', $userId);
@@ -156,7 +156,7 @@ class ListPostsController extends AbstractListController
 
         // 回复
         if ($replyId = Arr::get($filter, 'reply')) {
-            $query->where('reply_id', $replyId);
+            $query->where('reply_post_id', $replyId);
         }
 
         // 待审核
@@ -172,10 +172,10 @@ class ListPostsController extends AbstractListController
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
             if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
                 // 只看回收站帖子
-                $query->whereNotNull('deleted_at');
+                $query->whereNotNull('posts.deleted_at');
             } elseif ($isDeleted == 'no') {
                 // 不看回收站帖子
-                $query->whereNull('deleted_at');
+                $query->whereNull('posts.deleted_at');
             }
         }
 

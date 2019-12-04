@@ -17,6 +17,8 @@ Object.assign(Threads.prototype, {
   lastPostedUser:Model.hasOne('lastPostedUser'),
   category:Model.hasOne('category'),
   firstPost: Model.hasOne('firstPost'),
+  posts: Model.hasMany('posts'),
   lastThreePosts: Model.hasMany('lastThreePosts'),
   rewardedUsers:Model.hasMany('rewardedUsers')
+  
 });

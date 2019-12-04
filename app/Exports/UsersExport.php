@@ -2,42 +2,20 @@
 namespace App\Exports;
 
 use App\Models\User;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 
 class UsersExport extends Export {
 
-    public function __construct($filename)
-    {
-        $this->filename = $filename;
-    }
+    public $columnMap = [
+        'id' => '用户ID',
+        'username' => '用户名',
+        'mobile' => '手机号',
+        'adminid' => '管理员id',
+        'last_login_ip' => '最后登陆ip',
+        'status' => '账号状态',
+        'sex' => '性别',
+        'created_at' => '注册时间',
+        'unionid' => '微信unionID',
+        'nickname' => '微信昵称',
+    ];
 
-    public function handle(){
-        $spreadsheet = new Spreadsheet();
-
-        $sheet = $spreadsheet->getActiveSheet();
-
-        $datas = User::leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')->get()->toArray();
-
-        foreach ($datas as $row => $data){
-
-            $keys = array_keys($data);
-            $values = array_values($data);
-
-            foreach ($values as $index => $item){
-
-                $sheet->setCellValue($this->cells[$index].($row+2), $item);
-            }
-        }
-        if ($keys){
-            foreach ($keys as $index => $key){
-                $sheet->setCellValue($this->cells[$index].'1', $key);
-            }
-        }
-
-        $writer = new Xlsx($spreadsheet);
-
-        $writer->save($this->filename);
-    }
 }

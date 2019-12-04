@@ -35,14 +35,14 @@
 			    <div class="infoItem">
 			    	<div class="overHide">
 			    		<span class="infoItemLeft">圈子成员</span>
-			    		<a href="javascript:;" class="infoItemRight lookMore">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
+			    		<a href="javascript:;" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
 			    	</div>
-			    	<div class="circleMemberList">
+			    	<div class="circleMemberList" v-for="(item,index) in siteInfo.user()" :key="index">
+              <img :src="item.avatarUrl()" alt="" class="postHead" v-if="item.avatarUrl() == '' && item.avatarUrl() == null">
+              <img src="../../../../../../static/images/noavatar.gif" class="postHead" v-else="">
+              <!-- <img src="../../../../../../static/images/noavatar.gif" class="circleMember">
 			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
+			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember"> -->
 			    	</div>
 			    </div>
 		    </div>

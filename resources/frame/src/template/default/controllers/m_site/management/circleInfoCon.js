@@ -3,33 +3,39 @@
  */
 
 import Forum from '../../../../../common/models/Forum';
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
-      siteInfo: new Forum(),
-      username:''
-    }
+		  siteInfo: new Forum(),
+		  username:''
+		}
 	},
   beforeCreate:function(){
   },
 	 //用于数据初始化
   created: function(){
-
     this.loadSite();
+    var userId = browserDb.getLItem('tokenId');
 
 	},
   beforeMount(){
 
   },
 	methods: {
+    //请求初始化圈子信息数据
     loadSite(){
       const params = {};
        params.include='users';
        this.apiStore.find('forum').then(data => {
          this.siteInfo = data;
-         this.username = data.siteAuthor().username
+         this.username = data.siteAuthor().username;
+         console.log(data.user());
       });
+    },
+    //查看更多圈子成员
+    moreCilrcleMembers(){
+      this.$router.push({path:'circle-members'});
     }
 	},
 

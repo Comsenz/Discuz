@@ -10,7 +10,7 @@ export default {
       canWithdraw:'',
       withdrawalAmount:'',
       handlingFee:'',
-      actualCashWithdrawal:'',
+      // actualCashWithdrawal:this.actual,
       phone:"",
       bind:'bind',
       sms:'',
@@ -26,9 +26,17 @@ export default {
   mounted(){
     this.withdrawUser()
   },
+  computed:{
+    actualCashWithdrawal(){
+      return this.withdrawalAmount *this.handlingFee
+    }
+   
+  },
 
   methods:{
     onInput(value) {
+      this.withdrawalAmount = value;
+      // this.actualCashWithdrawal = this.canWithdraw *this.handlingFee //实际提现金额
       console.log(value);
     },
     onDelete() {
@@ -44,7 +52,9 @@ export default {
         url:'wallet',
         method:'get',
       }).then(res=>{
-        this.canWithdraw = res.data.attributes.available_amount
+        this.canWithdraw = res.data.attributes.available_amount;
+         this.handlingFee = res.data.attributes.cash_tax_ratio;
+       
       })
     },
     withdraw(){
@@ -55,12 +65,12 @@ export default {
           cash_apply_amount:this.withdrawalAmount
         }
       }).then((res)=>{
-        this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
+        // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
         this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
         this.handlingFee = res.data.attributes.cash_charge;//提现手续费
       })
 
-      this.appFetch({
+      this.appFetch({  //提交后验证验证码
         url:'smsVerify',
         method:'post',
         data:{

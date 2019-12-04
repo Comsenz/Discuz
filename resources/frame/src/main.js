@@ -32,6 +32,7 @@ import Post from './common/models/Post';
 import Emoji from './common/models/Emoji';
 import Notification from './common/models/Notification';
 import Forum from './common/models/Forum';
+import Groups from './common/models/Groups';
 import Category from './common/models/Category';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
@@ -61,6 +62,8 @@ Vue.prototype.apiStore = new Store({
   'posts': Post,
   'emoji': Emoji,
   'notification': Notification,
+  'forums': Forum,
+  'groups':Groups
   'forums': Forum,
   'categories':Category
 });

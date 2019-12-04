@@ -25,31 +25,6 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-
-      <!-- <div class="expressionBox" v-show="expressionShow"> -->
-          <!-- <van-swipe :autoplay="3000" :width="500">
-              <van-swipe-item>
-                  <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-                  <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-                  <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-              </van-swipe-item>
-             <van-swipe-item>
-               <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-               <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-             </van-swipe-item>
-             <van-swipe-item>
-               <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-             </van-swipe-item>
-          </van-swipe> -->
-          <!-- <van-swipe :autoplay="3000" :width="300">
-            <van-swipe-item>
-              <img src="../../../../../../static/images/expre.png" alt="" class="expreChi">
-            </van-swipe-item>
-            <van-swipe-item>2</van-swipe-item>
-            <van-swipe-item>3</van-swipe-item>
-            <van-swipe-item>4</van-swipe-item>
-          </van-swipe> -->
-      <!-- </div> -->
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
       <div class="popup">
         <van-popup v-model="showPopup" position="bottom" round :style="{ height: '50%' }" >
@@ -61,12 +36,10 @@
 </template>
 
 <script>
-import '../../../../../../static/css/iconfont.css';
 import '../../../scss/m_site/mobileIndex';
 import postTopicCon from '../../../controllers/m_site/circle/postTopicCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';
-let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
     name: "post-topic",
     components: {

@@ -20,7 +20,6 @@ class Invite extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
-    use SoftDeletes;
 
     /**
      * 与模型关联的数据表.
@@ -72,6 +71,7 @@ class Invite extends Model
      */
     public static function creation(
         $group_id,
+        $type,
         $code,
         $dateline,
         $endtime,
@@ -82,6 +82,7 @@ class Invite extends Model
 
         // 设置模型属性值
         $invite->group_id = $group_id;
+        $invite->type = $type;
         $invite->code = $code;
         $invite->dateline = $dateline;
         $invite->endtime = $endtime;

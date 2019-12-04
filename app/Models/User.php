@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
+ * @property Carbon $joined_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @package App\Models
@@ -84,7 +85,7 @@ class User extends Model
     {
         $user = new static;
         $user->attributes = $data;
-        $user->joind_at = Carbon::now();
+        $user->joined_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
         return $user;
     }

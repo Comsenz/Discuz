@@ -64,7 +64,7 @@ class CreateInvite
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-         $this->assertCan($this->actor, 'createInvite');
+        // $this->assertCan($this->actor, 'createInvite');
 
         // 生成邀请码
         $code = Str::random(32);
@@ -75,6 +75,7 @@ class CreateInvite
         // 初始数据
         $invite = Invite::creation(
             Arr::get($this->data, 'attributes.group_id'),
+            2,
             $code,
             $dateline,
             $endtime,
