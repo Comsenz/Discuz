@@ -43,6 +43,8 @@ class ExportUserController implements RequestHandlerInterface
 
         $filename = $this->app->config('excel.root') . DIRECTORY_SEPARATOR . 'user_excel.xlsx';
 
+        //TODO 判断满足条件的excel是否存在,if exist 直接返回;
+
         $this->bus->dispatch(
             new UsersExport($filename, $data)
         );
@@ -52,7 +54,7 @@ class ExportUserController implements RequestHandlerInterface
 
     private function data($params = null){
 
-        return User::select('users.id as id', 'users.username',  'user_profiles.sex', 'users.mobile', 'users.adminid', 'users.last_login_ip', 'users.status')
+        return User::select('users.id as id', 'users.username',  'user_profiles.sex', 'users.mobile', 'users.last_login_ip', 'users.status')
             ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->orderBy('id', 'asc')
             ->get()
@@ -63,5 +65,9 @@ class ExportUserController implements RequestHandlerInterface
 
             })
             ->toArray();
+    }
+
+    private function createFilename($params){
+
     }
 }
