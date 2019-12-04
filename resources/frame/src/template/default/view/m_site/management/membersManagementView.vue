@@ -17,15 +17,15 @@
 			  <van-cell-group>
 			    <van-cell
 			      class="resUser"
-			      v-for="(item, index) in userList"
+			      v-for="item in userList"
 			      clickable
 			      :key="item.username()"
-			      @click="toggle(index)"
+			      @click="toggle(item.id())"
 			    >
-			    <img src="../../../../../../static/images/noavatar.gif" class="resUserHead">
+			    <img :src="item.avatarUrl()" alt="" class="resUserHead">
 			    <div class="resUserDet">
 		            <span class="resUserName">{{item.username()}}</span>
-		            <span class="userRole">合伙人</span>
+		            <span class="userRole">{{item.data.relationships.groups.data[0] ? getGroupNameById[item.data.relationships.groups.data[0].id] : ''}}</span>
 		            <van-checkbox
 		             class="memberCheck"
 			        :name="item.username()"
@@ -36,18 +36,22 @@
 			    </van-cell>
 			  </van-cell-group>
 			</van-checkbox-group>
+			<div class="searchMore" v-show="userLoadMoreStatus" @click="handleLoadMoreUser">
+				<i class="icon iconfont icon-search"></i>
+				搜索更多用户
+			</div>
 	    </div>
 		<div class="manageFootFixed">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
-					<span>{{choiceRes}}</span>
+					<span>{{choiceRes.attributes.name}}</span>
 					<i class="icon iconfont icon-choice-item"></i>
 				</div>
 				<ul class="operaChoList" v-if="choiceShow">
-					<li v-for="(item, index) in choList" :key="index"  v-on:click.stop="setSelectVal(item)" class="operaChoLi">{{item}}</li>
+					<li v-for="item in choList" :key="item.id"  v-on:click.stop="setSelectVal(item)" class="operaChoLi">{{item.attributes.name}}</li>
 				</ul>
 			</div>
-			<button class="checkSubmit">提交</button>
+			<button class="checkSubmit" @click="handleSubmit">提交</button>
 		</div>
 	    
 	    

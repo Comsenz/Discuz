@@ -9,18 +9,20 @@
 	    	<div class="screen" @click="bindScreen">
 	    		<span>筛选</span>
 	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>
-	    		<div class="themeList" v-if="showScreen">
+	    		<!-- <div class="themeList" v-if="showScreen">
 	    			<a href="javascript:;">全部主题</a>
 	    			<a href="javascript:;">精华主题</a>
-	    		</div>
+	    		</div> -->
 	    	</div>
 	    </div>
 	    <div class="memberCheckList">
-		    <van-checkbox-group v-model="result" ref="checkboxGroup" class="deleChi" v-for="(items,index) in themeList" :key="index">
-			    <div class="cirPostCon">
+        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
+		    <!-- <van-checkbox-group v-model="result" ref="checkboxGroup" class="deleChi" v-for="(items,index) in themeList" :key="index"> -->
+
+			    <!-- <div class="cirPostCon">
 			    	<div class="postTop">
 			    		<div class="postPer">
-			    			
+
 			    			<img :src="items.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
 			    			<div class="perDet">
 			    				<div class="perName">{{items.postName}}</div>
@@ -61,10 +63,10 @@
 			    		</div>
 			    	</div>
 					<van-checkbox v-model="items.checked"></van-checkbox>
-			    </div>
+			    </div> -->
 			    <div class="gap"></div>
 
-		    </van-checkbox-group>
+		    <!-- </van-checkbox-group> -->
 
 
 
@@ -84,14 +86,18 @@
 import mSiteDeleteCon from '../../../controllers/m_site/management/deleteCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
+import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
+import ThemeDet from '../../m_site/common/themeDetView';
 import  '../../../scss/m_site/mobileIndex.scss';
 
 export default {
     name: "circleView",
     components:{
-    	Header
+    	Header,
+      ThemeDet
     },
     ...mSiteHeader,
+    ...mSiteThemeDet,
     ...mSiteDeleteCon
 }
 
