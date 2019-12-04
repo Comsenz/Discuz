@@ -5,7 +5,7 @@
       <Panenl :title="type[item.attributes.type]" :num="item.attributes.amount" v-for="(item,index) in orderList" :key="index">
         <span slot="label">{{status[item.attributes.status]}}</span>
         <span slot="label">流水号 : {{item.attributes.order_sn}}</span>
-        <span slot="label">{{$moment(item.attributes.created_at).format('YYY-MM-DD HH:mm')}}</span>
+        <span slot="label">{{$moment(item.attributes.created_at).format('YYYY-MM-DD HH:mm')}}</span>
       </Panenl>
       <!-- <Panenl title="加入圈子“天涯杂谈”" num="-1000.00">
         <span slot="label">支付成功</span>
