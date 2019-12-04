@@ -1,4 +1,10 @@
 <?php
+/**
+ *      Discuz & Tencent Cloud
+ *      This is NOT a freeware, use is subject to license terms
+ *
+ *      Id: Export.php 28830 2019-12-04 09:47 yanchen $
+ */
 namespace App\Exports;
 
 use Illuminate\Support\Arr;
