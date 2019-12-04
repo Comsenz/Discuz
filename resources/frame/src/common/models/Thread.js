@@ -14,6 +14,8 @@ Object.assign(Threads.prototype, {
   updatedAt: Model.attribute('updatedAt'),
   viewCount: Model.attribute('viewCount'),
   user:Model.hasOne('user'),
+  lastPostedUser:Model.hasOne('lastPostedUser'),
+  category:Model.hasOne('category'),
   firstPost: Model.hasOne('firstPost'),
   lastThreePosts: Model.hasMany('lastThreePosts'),
   rewardedUsers:Model.hasMany('rewardedUsers')

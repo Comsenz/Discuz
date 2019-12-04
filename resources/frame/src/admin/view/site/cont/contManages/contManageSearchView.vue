@@ -24,13 +24,13 @@
 
       <Card header="主题作者：">
         <CardRow description="多用户名中间请用半角逗号“,”隔开">
-            <el-input></el-input>
+            <el-input placeholder="主题作者名称" clearable v-model="themeAuthor"></el-input>
         </CardRow>
       </Card>
 
       <Card header="主题关键词：">
         <CardRow description="多关键词中间请用半角逗号“,”隔开">
-          <el-input></el-input>
+          <el-input placeholder="主题关键词" clearable v-model="themeKeyWords"></el-input>
         </CardRow>
       </Card>
 
@@ -53,15 +53,15 @@
             </Card>
 
             <Card class="range-box" header="被浏览次数介于：">
-              <el-input></el-input>
+              <el-input v-model="viewedTimesMin" ></el-input>
               <i></i>
-              <el-input></el-input>
+              <el-input v-model="viewedTimesMax" ></el-input>
             </Card>
 
             <Card class="range-box" header="被回复数介于：">
-              <el-input></el-input>
+              <el-input v-model="numberOfRepliesMin" ></el-input>
               <i></i>
-              <el-input></el-input>
+              <el-input v-model="numberOfRepliesMax" ></el-input>
             </Card>
 
             <Card header="被回复数介于：">

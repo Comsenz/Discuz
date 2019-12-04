@@ -10,12 +10,12 @@
           <ContArrange
             v-for="(items,index) in  themeList"
             :author="items.user().username()"
-            theme="站长圈"
+            :theme="items.category().name()"
             :prply="items.postCount()"
             :browse="items.viewCount()"
-            last="奶罩"
+            :last="items.lastPostedUser().username()"
             :finalPost="formatDate(items.createdAt())"
-            :key="index"
+            :key="items.id()"
           >
             <div class="cont-manage-theme__table-side" slot="side">
               <el-checkbox v-model="checkedTheme[index].status" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>

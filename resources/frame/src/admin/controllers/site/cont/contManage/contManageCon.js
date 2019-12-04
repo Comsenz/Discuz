@@ -128,7 +128,11 @@ export default {
 
       switch (this.operatingSelect){
         case 'class':
-          relationships.category.data.id = this.categoryId;
+          if (this.categoryId){
+            relationships.category.data.id = this.categoryId;
+          } else {
+            selectStatus = true;
+          }
           break;
         case 'sticky':
           attributes.isSticky = this.toppingRadio === 1? true : false;
@@ -171,8 +175,6 @@ export default {
         });
       }
 
-      console.log(themeData);
-
       if (themeData.length < 1){
         this.$message({
           showClose: true,
@@ -194,6 +196,8 @@ export default {
           if (res.meta && res.data){
             this.$message.error('操作失败！');
           }else {
+            this.getThemeList(1);
+            this.isIndeterminate = false;
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -204,38 +208,37 @@ export default {
         })
       }
 
-
-
     },
-
 
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
 
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.isIndeterminate = false;
+      this.checkAll = false;
+      this.getThemeList(val);
     },
 
 
     /*
     * 请求接口
     * */
-    getThemeList(){
+    getThemeList(pageNumber){
       const params = {
         'filter[isDeleted]':'no',
-        'page[number]':1,
+        'page[number]':pageNumber,
         'page[size]':10
       };
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+      params.include = 'category,lastPostedUser,user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
         this.themeList = data;
-        console.log(data);
         this.total = data.payload.meta.threadCount;
 
         console.log(data.length);
 
         /*初始化主题多选框列表*/
+        this.checkedTheme = [];
         data.forEach(()=>{
           this.checkedTheme.push({
             id:'',
@@ -269,7 +272,6 @@ export default {
   created(){
     this.getThemeList();
     this.getCategories();
-
   },
 
   components:{
