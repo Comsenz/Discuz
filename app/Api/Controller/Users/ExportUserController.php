@@ -3,25 +3,17 @@
 namespace App\Api\Controller\Users;
 
 use App\Commands\Users\CreateUsers;
-use App\Models\Post;
-use App\Models\User;
-use App\Notifications\Replied;
 use App\Oauth\RefreshToken;
-use Carbon\Carbon;
 use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Routing\ResponseFactory;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use App\Exports\UsersExport;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\User;
 
 class ExportUserController implements RequestHandlerInterface
 {
@@ -42,12 +34,34 @@ class ExportUserController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+
+        $params = $request->getQueryParams();
+
+        $data = $this->data($params);
+
         $filename = $this->app->config('excel.root') . DIRECTORY_SEPARATOR . 'user_excel.xlsx';
 
         $this->bus->dispatch(
-            new UsersExport($filename)
+            new UsersExport($filename, $data)
         );
 
         return new FileResponse($filename);
+    }
+
+    private function data($params = null){
+
+        return User::select('users.id as id', 'users.username',  'user_profiles.sex', 'users.mobile', 'users.adminid', 'users.last_login_ip', 'users.status')
+            ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->orderBy('id', 'asc')
+            ->get()
+            ->each(function ($item, $key) {
+
+                $item->sex = ($item->sex == 1) ? '男' : '女';
+                $item->status = ($item->status == 1) ? '正常' : '禁用';
+
+            })
+            ->toArray();
     }
 }
