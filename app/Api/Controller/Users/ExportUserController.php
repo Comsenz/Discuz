@@ -3,25 +3,16 @@
 namespace App\Api\Controller\Users;
 
 use App\Commands\Users\CreateUsers;
-use App\Models\Post;
-use App\Models\User;
-use App\Notifications\Replied;
 use App\Oauth\RefreshToken;
-use Carbon\Carbon;
 use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Routing\ResponseFactory;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use App\Exports\UsersExport;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ExportUserController implements RequestHandlerInterface
 {

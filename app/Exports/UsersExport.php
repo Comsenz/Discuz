@@ -2,42 +2,30 @@
 namespace App\Exports;
 
 use App\Models\User;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 
 class UsersExport extends Export {
 
-    public function __construct($filename)
-    {
-        $this->filename = $filename;
-    }
+    public $columnMap = [
+        'id' => '用户ID',
+        'username' => '用户名',
+        'mobile' => '手机号',
+        'adminid' => '管理员id',
+        'last_login_ip' => '最后登陆ip',
+        'status' => '账号状态',
+        'sex' => '性别'];
 
-    public function handle(){
-        $spreadsheet = new Spreadsheet();
+    protected function data(){
 
-        $sheet = $spreadsheet->getActiveSheet();
+        return User::select('users.id as id', 'users.username',  'user_profiles.sex', 'users.mobile', 'users.adminid', 'users.last_login_ip', 'users.status')
+            ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->orderBy('id', 'asc')
+            ->get()
+            ->each(function ($item, $key) {
 
-        $datas = User::leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')->get()->toArray();
+                $item->sex = ($item->sex == 1) ? '男' : '女';
+                $item->status = ($item->status == 1) ? '正常' : '禁用';
 
-        foreach ($datas as $row => $data){
-
-            $keys = array_keys($data);
-            $values = array_values($data);
-
-            foreach ($values as $index => $item){
-
-                $sheet->setCellValue($this->cells[$index].($row+2), $item);
-            }
-        }
-        if ($keys){
-            foreach ($keys as $index => $key){
-                $sheet->setCellValue($this->cells[$index].'1', $key);
-            }
-        }
-
-        $writer = new Xlsx($spreadsheet);
-
-        $writer->save($this->filename);
+            })
+            ->toArray();
     }
 }
