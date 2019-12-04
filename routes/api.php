@@ -181,7 +181,7 @@ $route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCir
 
 $route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
-$route->post('/invites', 'invites.create', ApiController\Invite\CreateInviteController::class);
+$route->post('/invites', 'invites.create', ApiController\Invite\CreateAdminInviteController::class);
 $route->patch('/invites/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
 
@@ -253,7 +253,8 @@ $route->delete('/notification/{id}', 'notification.delete', ApiController\Notifi
 
 $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController::class);
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
-$route->post('/invite', 'invite.create', ApiController\Invite\CreateInviteController::class);
+$route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
+$route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
