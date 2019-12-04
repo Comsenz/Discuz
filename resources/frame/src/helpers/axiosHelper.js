@@ -99,10 +99,6 @@ const appFetch = function(params, options) {
     };
   }
 
-  console.log(params.method);
-
-  // if (params.method.)
-
 	//设置默认header
 	if(params.headers) {
 		params.headers = {

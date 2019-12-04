@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import moment from 'moment';
+import { mapState } from 'vuex';
 
 export default {
   data:function () {
@@ -45,6 +46,9 @@ export default {
       total:0        //主题列表总条数
     }
   },
+  computed:mapState({
+    searchData:state => state.admin.searchData
+  }),
 
   methods:{
 
@@ -128,7 +132,11 @@ export default {
 
       switch (this.operatingSelect){
         case 'class':
-          relationships.category.data.id = this.categoryId;
+          if (this.categoryId){
+            relationships.category.data.id = this.categoryId;
+          } else {
+            selectStatus = true;
+          }
           break;
         case 'sticky':
           attributes.isSticky = this.toppingRadio === 1? true : false;
@@ -171,8 +179,6 @@ export default {
         });
       }
 
-      console.log(themeData);
-
       if (themeData.length < 1){
         this.$message({
           showClose: true,
@@ -194,6 +200,8 @@ export default {
           if (res.meta && res.data){
             this.$message.error('操作失败！');
           }else {
+            this.getThemeList(1);
+            this.isIndeterminate = false;
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -204,38 +212,49 @@ export default {
         })
       }
 
-
-
     },
-
 
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
 
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.isIndeterminate = false;
+      this.checkAll = false;
+      this.getThemeList(val);
     },
 
 
     /*
     * 请求接口
     * */
-    getThemeList(){
+    getThemeList(pageNumber){
+      let searchData = this.searchData;
+      console.log(searchData.pageSelect);
       const params = {
         'filter[isDeleted]':'no',
-        'page[number]':1,
-        'page[size]':10
+        'filter[categoryId]':searchData.categoryId,
+        'page[number]':pageNumber,
+        'page[size]':searchData.pageSelect,
+        'filter[q]':searchData.themeKeyWords,
+        'filter[createdAtBegin]':searchData.dataValue[0],
+        'filter[createdAtEnd]':searchData.dataValue[1],
+        'filter[viewCountGt]':searchData.viewedTimesMin,
+        'filter[viewCountLt]':searchData.viewedTimesMax,
+        'filter[postCountGt]':searchData.numberOfRepliesMin,
+        'filter[postCountLt]':searchData.numberOfRepliesMax,
+        'filter[isEssence]':searchData.essentialTheme,
+        'filter[isSticky]':searchData.topType
       };
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+      params.include = 'category,lastPostedUser,user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
         this.themeList = data;
-        console.log(data);
         this.total = data.payload.meta.threadCount;
 
         console.log(data.length);
 
         /*初始化主题多选框列表*/
+        this.checkedTheme = [];
         data.forEach(()=>{
           this.checkedTheme.push({
             id:'',
@@ -267,9 +286,8 @@ export default {
 
   },
   created(){
-    this.getThemeList();
+    this.getThemeList(1);
     this.getCategories();
-
   },
 
   components:{
