@@ -38,10 +38,8 @@ class ListPostsController extends AbstractListController
      */
     public $include = [
         'user',
-        // 'user.groups',
-        // 'editedUser',
-        // 'hiddenUser',
         'thread',
+        'images',
     ];
 
     /**
@@ -144,6 +142,8 @@ class ListPostsController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
+        $query->where('is_first', false);
+
         // 作者
         if ($userId = Arr::get($filter, 'user')) {
             $query->where('user_id', $userId);
