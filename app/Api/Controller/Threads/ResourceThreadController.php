@@ -122,8 +122,19 @@ class ResourceThreadController extends AbstractResourceController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
+        $isDeleted = Arr::get($this->extractFilter($request), 'isDeleted');
+
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
+            ->when($isDeleted, function ($query, $isDeleted) use ($actor) {
+                if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+                    // 只看回收站帖子
+                    $query->whereNotNull('posts.deleted_at');
+                } elseif ($isDeleted == 'no') {
+                    // 不看回收站帖子
+                    $query->whereNull('posts.deleted_at');
+                }
+            })
             ->where('is_first', false)
             ->orderBy('created_at')
             ->skip($offset)

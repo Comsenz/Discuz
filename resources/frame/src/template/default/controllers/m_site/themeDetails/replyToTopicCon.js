@@ -26,10 +26,14 @@ export default {
     var replyQuote = this.$route.params.replyQuote;
     var replyId = this.$route.params.replyId;
     var themeId = this.$route.params.themeId;
-    console.log(replyQuote);
-    console.log(replyId);
-    console.log(themeId+'2222');
-    this.replyText = '<blockquote class="quoteCon">'+replyQuote+'</blockquote>';
+    // console.log(replyQuote);
+    // console.log(replyId);
+    // console.log(themeId+'2222');
+    if(replyId && replyQuote){
+      this.replyText = '<blockquote class="quoteCon">'+replyQuote+'</blockquote>';
+    } else {
+      this.replyText = '';
+    }
     this.replyId = replyId;
     this.themeId = themeId;
   },
@@ -79,6 +83,7 @@ export default {
           this.$router.push({path:'details'+'/'+this.themeId})
         })
       } else {
+        // alert('2222');
         this.appFetch({
           url:"posts",
           method:"post",

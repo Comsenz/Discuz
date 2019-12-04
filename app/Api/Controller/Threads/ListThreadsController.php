@@ -38,6 +38,7 @@ class ListThreadsController extends AbstractListController
     public $include = [
         'user',
         'firstPost',
+        'lastPostedUser',
         'category',
     ];
 
@@ -268,10 +269,10 @@ class ListThreadsController extends AbstractListController
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
             if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
                 // 只看回收站帖子
-                $query->whereNotNull('deleted_at');
+                $query->whereNotNull('threads.deleted_at');
             } elseif ($isDeleted == 'no') {
                 // 不看回收站帖子
-                $query->whereNull('deleted_at');
+                $query->whereNull('threads.deleted_at');
             }
         }
 

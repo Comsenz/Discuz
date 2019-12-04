@@ -68,12 +68,12 @@ class PostListener
         }
 
         // 如果被回复的用户不是当前用户，也不是主题作者，则通知被回复的人
-        if ($event->post->reply_id) {
-            $reply = Post::find($post->reply_id);
-
-            if ($reply->user_id != $actor->id && $reply->user_id != $post->thread->user_id) {
-                $reply->user->notify(new Replied($post));
-            }
+        if (
+            $post->reply_post_id
+            && $post->reply_user_id != $actor->id
+            && $post->reply_user_id != $post->thread->user_id
+        ) {
+            $post->replyUser->notify(new Replied($post));
         }
     }
 

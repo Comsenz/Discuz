@@ -40,7 +40,14 @@ class CreatePost
      *
      * @var int
      */
-    public $replyId;
+    public $replyPostId;
+
+    /**
+     * The id of the post waiting to be replied.
+     *
+     * @var int
+     */
+    public $replyUserId;
 
     /**
      * The user performing the action.
@@ -59,7 +66,7 @@ class CreatePost
     /**
      * The current ip address of the actor.
      *
-     * @var array
+     * @var string
      */
     public $ip;
 
@@ -72,7 +79,7 @@ class CreatePost
     public function __construct($threadId, User $actor, array $data, $ip = null)
     {
         $this->threadId = $threadId;
-        $this->replyId = Arr::get($data, 'attributes.replyId', null);
+        $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
@@ -99,8 +106,12 @@ class CreatePost
             $this->assertCan($this->actor, 'reply', $thread);
 
             // 回复另一条回复时，检查是否在同一主题下的
-            if (!empty($this->replyId)) {
-                if (Post::where([['id', $this->replyId], ['thread_id', $thread->id]])->doesntExist()) {
+            if (! empty($this->replyPostId)) {
+                $this->replyUserId = Post::where('id', $this->replyPostId)
+                    ->where('thread_id', $thread->id)
+                    ->value('user_id');
+
+                if (! $this->replyUserId) {
                     throw (new ModelNotFoundException);
                 }
             }
@@ -111,7 +122,8 @@ class CreatePost
             Arr::get($this->data, 'attributes.content'),
             $this->actor->id,
             $this->ip,
-            $this->replyId,
+            $this->replyPostId,
+            $this->replyUserId,
             $isFirst
         );
 

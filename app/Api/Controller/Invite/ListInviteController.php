@@ -30,12 +30,7 @@ class ListInviteController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $actor->id = 1;
 
-        return $this->InviteRepository->getInvitationCode();
-
-        return Invite::where([
-            ['user_id', '=', 1],
-            ['type', '=', '2']])->get();
+        return $this->InviteRepository->getAdminCodeList($actor);
     }
 }

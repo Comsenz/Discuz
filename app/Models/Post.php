@@ -24,7 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $id
  * @property int $user_id
  * @property int $thread_id
- * @property int $reply_id
+ * @property int $reply_post_id
+ * @property int $reply_user_id
  * @property string $content
  * @property string $ip
  * @property int $reply_count
@@ -37,6 +38,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property Thread $thread
  * @property User $user
+ * @property User $replyUser
+ * @property User $deletedUser
  * @package App\Models
  */
 class Post extends Model
@@ -74,15 +77,16 @@ class Post extends Model
     /**
      * Create a new instance in reply to a thread.
      *
-     * @param $threadId
+     * @param int $threadId
      * @param string $content
      * @param int $userId
-     * @param $ip
-     * @param $replyId
+     * @param string $ip
+     * @param int $replyPostId
+     * @param int $replyUserId
      * @param int $isFirst
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyId, $isFirst = 0)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst = 0)
     {
         $post = new static;
 
@@ -90,7 +94,8 @@ class Post extends Model
         $post->thread_id = $threadId;
         $post->user_id = $userId;
         $post->ip = $ip;
-        $post->reply_id = $replyId;
+        $post->reply_post_id = $replyPostId;
+        $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
 
         // Set content last, as the parsing may rely on other post attributes.
@@ -167,6 +172,16 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the post's reply user.
+     *
+     * @return BelongsTo
+     */
+    public function replyUser()
+    {
+        return $this->belongsTo(User::class, 'reply_user_id');
     }
 
     /**

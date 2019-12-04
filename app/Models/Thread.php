@@ -221,6 +221,16 @@ class Thread extends Model
     }
 
     /**
+     * Define the relationship with the thread's author.
+     *
+     * @return BelongsTo
+     */
+    public function lastPostedUser()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Define the relationship with the thread's posts.
      *
      * @return HasMany

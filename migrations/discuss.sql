@@ -118,7 +118,7 @@ CREATE TABLE `users` (
   `thread_count` int(10) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `joind_at` datetime NOT NULL,
+  `joined_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),

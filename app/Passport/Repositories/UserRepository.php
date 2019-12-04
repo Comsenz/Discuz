@@ -9,6 +9,7 @@
 namespace App\Passport\Repositories;
 
 use App\Api\Serializer\TokenSerializer;
+use App\Events\Users\Logind;
 use App\Events\Users\UserVerify;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -25,9 +26,12 @@ class UserRepository implements UserRepositoryInterface
 
     protected static $user;
 
-    public function __construct(RepositoriesUserRepository $users)
+    protected $events;
+
+    public function __construct(RepositoriesUserRepository $users, Dispatcher $dispatcher)
     {
         $this->users = $users;
+        $this->events = $dispatcher;
     }
 
 
@@ -46,6 +50,10 @@ class UserRepository implements UserRepositoryInterface
         if ($password && (! $user || ! $user->checkPassword($password))) {
             throw new PermissionDeniedException;
         }
+
+        // checkout
+        $this->events->dispatch(new Logind($user));
+
         static::$user = $user;
 
         TokenSerializer::setUser($user);
