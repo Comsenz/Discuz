@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import moment from 'moment';
+import { mapState } from 'vuex';
 
 export default {
   data:function () {
@@ -45,6 +46,9 @@ export default {
       total:0        //主题列表总条数
     }
   },
+  computed:mapState({
+    searchData:state => state.admin.searchData
+  }),
 
   methods:{
 
@@ -225,10 +229,22 @@ export default {
     * 请求接口
     * */
     getThemeList(pageNumber){
+      let searchData = this.searchData;
+      console.log(searchData.pageSelect);
       const params = {
         'filter[isDeleted]':'no',
+        'filter[categoryId]':searchData.categoryId,
         'page[number]':pageNumber,
-        'page[size]':10
+        'page[size]':searchData.pageSelect,
+        'filter[q]':searchData.themeKeyWords,
+        'filter[createdAtBegin]':searchData.dataValue[0],
+        'filter[createdAtEnd]':searchData.dataValue[1],
+        'filter[viewCountGt]':searchData.viewedTimesMin,
+        'filter[viewCountLt]':searchData.viewedTimesMax,
+        'filter[postCountGt]':searchData.numberOfRepliesMin,
+        'filter[postCountLt]':searchData.numberOfRepliesMax,
+        'filter[isEssence]':searchData.essentialTheme,
+        'filter[isSticky]':searchData.topType
       };
       params.include = 'category,lastPostedUser,user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
@@ -270,7 +286,7 @@ export default {
 
   },
   created(){
-    this.getThemeList();
+    this.getThemeList(1);
     this.getCategories();
   },
 

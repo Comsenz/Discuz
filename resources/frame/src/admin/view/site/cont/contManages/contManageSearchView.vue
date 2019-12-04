@@ -42,6 +42,7 @@
                 <el-date-picker
                   v-model="dataValue"
                   type="daterange"
+                  value-format="yyyy-MM-dd"
                   align="center"
                   unlink-panels
                   range-separator="至"
@@ -64,19 +65,19 @@
               <el-input v-model="numberOfRepliesMax" ></el-input>
             </Card>
 
-            <Card header="被回复数介于：">
-              <el-radio-group v-model="replyType">
-                <el-radio :label="3">包含</el-radio>
-                <el-radio :label="6">仅搜索</el-radio>
-                <el-radio :label="9">排除</el-radio>
+            <Card header="精华主题：">
+              <el-radio-group v-model="essentialTheme">
+                <el-radio label="">包含</el-radio>
+                <el-radio label="yes">仅搜索</el-radio>
+                <el-radio label="no">排除</el-radio>
               </el-radio-group>
             </Card>
 
             <Card header="置顶主题：">
               <el-radio-group v-model="topType">
-                <el-radio :label="3">包含</el-radio>
-                <el-radio :label="6">仅搜索</el-radio>
-                <el-radio :label="9">排除</el-radio>
+                <el-radio label="">包含</el-radio>
+                <el-radio label="yes">仅搜索</el-radio>
+                <el-radio label="no">排除</el-radio>
               </el-radio-group>
             </Card>
 

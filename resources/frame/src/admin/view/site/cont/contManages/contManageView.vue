@@ -27,12 +27,12 @@
 
           </ContArrange>
 
-          <div class="cont-manage-theme__table-footer">
+          <div class="cont-manage-theme__table-footer" v-if="themeList.length > 0">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPag"
-              :page-size="10"
+              :page-size="this.searchData.pageSelect"
               layout="total, prev, pager, next,jumper"
               :total="total">
             </el-pagination>
