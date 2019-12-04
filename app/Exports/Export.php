@@ -24,15 +24,19 @@ abstract class Export{
      */
     public $filename;
 
+    public $data;
+
     /**
      * 定义数据库中字段名与excel列名的对应关系
      * @var array
      */
     public $columnMap = [];
 
-    public function __construct($filename)
+    public function __construct($filename, $data)
     {
         $this->filename = $filename;
+
+        $this->data = $data;
 
         $this->handle();
     }
@@ -46,7 +50,7 @@ abstract class Export{
 
         $sheet = $spreadsheet->getActiveSheet();
 
-        $datas = $this->data();
+        $datas = $this->data;
 
         foreach ($datas as $row => $data){
 
@@ -70,11 +74,4 @@ abstract class Export{
         $writer->save($this->filename);
 
     }
-
-    /**
-     * 原始数据
-     * @return mixed
-     */
-    abstract protected function data();
-
 }
