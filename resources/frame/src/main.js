@@ -63,8 +63,7 @@ Vue.prototype.apiStore = new Store({
   'emoji': Emoji,
   'notification': Notification,
   'forums': Forum,
-  'groups':Groups
-  'forums': Forum,
+  'groups':Groups,
   'categories':Category
 });
 Vue.prototype.$utils = utils; //注册全局方法
