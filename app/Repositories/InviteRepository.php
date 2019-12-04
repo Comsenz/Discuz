@@ -56,18 +56,14 @@ class InviteRepository extends AbstractRepository
     }
 
     /**
-     * Use the invitation code
-     * @param $user_id
-     * @param $to_user_id
+     * get admin invite codes
+     * @param User $actor
+     * @return mixed
      */
-    public function useCode($user_id, $to_user_id){
+    public function getAdminCodeList(User $actor){
 
-    }
-
-    /**
-     *
-     */
-    public function create(){
-
+        return Invite::where([
+            ['user_id', '=', $actor->id],
+            ['type', '=', 2]])->get();
     }
 }

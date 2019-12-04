@@ -12,6 +12,10 @@ class UsersExport extends Export {
         'adminid' => '管理员id',
         'last_login_ip' => '最后登陆ip',
         'status' => '账号状态',
-        'sex' => '性别'];
+        'sex' => '性别',
+        'created_at' => '注册时间',
+        'unionid' => '微信unionID',
+        'nickname' => '微信昵称',
+    ];
 
 }

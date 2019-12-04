@@ -54,8 +54,9 @@ class ExportUserController implements RequestHandlerInterface
 
     private function data($params = null){
 
-        return User::select('users.id as id', 'users.username',  'user_profiles.sex', 'users.mobile', 'users.last_login_ip', 'users.status')
+        return User::select('users.id as id', 'users.username', 'user_profiles.sex', 'users.mobile', 'user_wechats.nickname', 'user_wechats.unionid', 'users.last_login_ip', 'users.created_at', 'users.status')
             ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')
             ->orderBy('id', 'asc')
             ->get()
             ->each(function ($item, $key) {
