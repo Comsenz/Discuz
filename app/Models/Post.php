@@ -11,6 +11,7 @@ namespace App\Models;
 
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
+use App\Events\Post\Revised;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -102,6 +103,24 @@ class Post extends Model
         $post->content = $content;
 
         return $post;
+    }
+
+    /**
+     * Revise the post's content.
+     *
+     * @param string $content
+     * @param User $actor
+     * @return $this
+     */
+    public function revise($content, User $actor)
+    {
+        if ($this->content !== $content) {
+            $this->content = $content;
+
+            $this->raise(new Revised($this, $actor));
+        }
+
+        return $this;
     }
 
     /**

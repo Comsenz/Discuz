@@ -25,12 +25,12 @@ class AttachmentSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'isGallery'         => (int) $model->is_gallery,
-            'isRemote'          => (int) $model->is_remote,
+            'isGallery'         => $model->is_gallery,
+            'isRemote'          => $model->is_remote,
             'attachment'        => $model->attachment,
             'fileName'          => $model->file_name,
             'filePath'          => $model->file_path,
-            'fileSize'          => $model->file_size,
+            'fileSize'          => (int) $model->file_size,
             'fileType'          => $model->file_type,
         ];
     }
