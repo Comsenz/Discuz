@@ -118,3 +118,6 @@
 .icon-close:before {
   content: "\e621";
 }
+.icon-wepay:before {
+  content: "\e622";
+}
