@@ -10,12 +10,12 @@
           <ContArrange
             v-for="(items,index) in  themeList"
             :author="items.user().username()"
-            theme="站长圈"
+            :theme="items.category().name()"
             :prply="items.postCount()"
             :browse="items.viewCount()"
-            last="奶罩"
+            :last="items.lastPostedUser().username()"
             :finalPost="formatDate(items.createdAt())"
-            :key="index"
+            :key="items.id()"
           >
             <div class="cont-manage-theme__table-side" slot="side">
               <el-checkbox v-model="checkedTheme[index].status" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>
@@ -27,12 +27,12 @@
 
           </ContArrange>
 
-          <div class="cont-manage-theme__table-footer">
+          <div class="cont-manage-theme__table-footer" v-if="themeList.length > 0">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPag"
-              :page-size="10"
+              :page-size="this.searchData.pageSelect"
               layout="total, prev, pager, next,jumper"
               :total="total">
             </el-pagination>

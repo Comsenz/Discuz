@@ -1,4 +1,5 @@
 import Model from '../Model';
+import computed from '../utils/computed';
 
 export default class Threads extends Model {}
 
@@ -14,9 +15,12 @@ Object.assign(Threads.prototype, {
   updatedAt: Model.attribute('updatedAt'),
   viewCount: Model.attribute('viewCount'),
   user:Model.hasOne('user'),
+  lastPostedUser:Model.hasOne('lastPostedUser'),
+  category:Model.hasOne('category'),
   firstPost: Model.hasOne('firstPost'),
   posts: Model.hasMany('posts'),
   lastThreePosts: Model.hasMany('lastThreePosts'),
-  rewardedUsers:Model.hasMany('rewardedUsers')
-  
+  rewardedUsers:Model.hasMany('rewardedUsers'),
+  canDelete: Model.attribute('canDelete'),
+  isDeleted: computed('isDeleted', isDeleted => !!isDeleted),
 });

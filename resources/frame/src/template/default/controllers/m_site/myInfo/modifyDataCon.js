@@ -41,10 +41,8 @@ export default {
     modifyData(){
       let userId = browserDb.getLItem('tokenId');
       this.apiStore.find('users',userId).then(res=>{
-        this.modifyPhone = res.data.attributes.mobile;
-        // this.headPortrait = res.data.attributes.avatarUr; //接口数据里头像为空
-        this.headPortrait = "../../../../../../../static/images/mytx.png";
-        
+        this.modifyPhone = res.data.attributes.mobile; //用户手机号
+        this.headPortrait = res.data.attributes.avatarUrl; //用户头像
       })
     },
       handleFile: function (e) {

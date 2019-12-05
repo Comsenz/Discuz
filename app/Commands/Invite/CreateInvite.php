@@ -75,6 +75,7 @@ class CreateInvite
         // 初始数据
         $invite = Invite::creation(
             Arr::get($this->data, 'attributes.group_id'),
+            2,
             $code,
             $dateline,
             $endtime,

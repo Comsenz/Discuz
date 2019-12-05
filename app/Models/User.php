@@ -41,8 +41,14 @@ class User extends Model
     use ScopeVisibilityTrait;
     use Notifiable;
 
+    const MOBILE_ACTIVE = true;
 
-    const MOBILE_ACTIVE = 1;
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'mobile_confirmed' => 'boolean',
+    ];
 
     /**
      * {@inheritdoc}

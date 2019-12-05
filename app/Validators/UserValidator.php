@@ -1,23 +1,41 @@
 <?php
+
 namespace App\Validators;
 
 
 use App\Models\User;
 use Discuz\Foundation\AbstractValidator;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Illuminate\Validation\Factory;
 
 class UserValidator extends AbstractValidator
 {
-
     protected $user;
+    protected $settings;
+
+    // 获取配置中的密码规则
+    protected $setReg = [
+        0 => '/\d+/',           // 数字
+        1 => '/[a-z]+/',        // 小写字母
+        2 => '/[^a-zA-z0-9]+/', // 符号
+        3 => '/[A-Z]+/',        // 大写字母
+    ];
+
+    public function __construct(Factory $validator, SettingsRepository $settings)
+    {
+        parent::__construct($validator);
+        $this->settings = $settings;
+    }
 
     public function setUser(User $user)
     {
         $this->user = $user;
     }
 
-
     protected function getRules()
     {
+        $str = $this->getSetting();
+
         $rules = [
             'username' => [
                 'required',
@@ -26,15 +44,10 @@ class UserValidator extends AbstractValidator
                 'max:15',
                 'unique:users'
             ],
-            'password' => [
-                'required',
-                'regex:/^.*(?=.*\d)(?=.*[A-Z])(?=.*[a-z]).*$/',
-                'min:6',
-                'max:16',
-            ],
+            'password' => 'required|max:50' . $str,
         ];
 
-        if($this->user) {
+        if ($this->user) {
             $rules['password'][] = 'confirmed';
         }
 
@@ -46,5 +59,25 @@ class UserValidator extends AbstractValidator
         return [
             'username.regex' => '不能有特殊字符',
         ];
+    }
+
+    protected function getSetting()
+    {
+        $res = ['length' => 6, 'regex' => ''];
+
+        if ($this->settings->get('password_length') > $res['length']) {
+            $res['length'] = $this->settings->get('password_length');
+        }
+        $reg = $this->settings->get('password_strength');
+        $regArr = explode(',', $reg);
+
+        // Splicing
+        for ($i = 0; $i < count($regArr); $i++) {
+            $res['regex'] .= '|regex:' . $this->setReg[$regArr[$i]];
+        }
+
+        $str = '|min:' . $res['length'] . $res['regex'];
+
+        return $str;
     }
 }

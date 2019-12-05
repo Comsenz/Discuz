@@ -16,6 +16,7 @@ class CreateUsers extends Migration
             $table->increments('id')->comment('用户 id');
             $table->string('username', 100)->unique()->comment('用户名');
             $table->string('mobile', 100)->default('')->comment('手机号');
+            $table->tinyInteger('mobile_confirmed')->unsigned()->default(0)->comment('手机号是否验证');
             $table->string('password', 100)->comment('密码');
             $table->string('union_id', 100)->default('')->comment('union_id');
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');

@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Contracts\Bus\Dispatcher;
 
-class CreateInviteController extends AbstractCreateController
+class CreateAdminInviteController extends AbstractCreateController
 {
     /**
      * 返回的数据字段和格式.

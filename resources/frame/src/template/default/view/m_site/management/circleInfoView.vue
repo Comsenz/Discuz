@@ -19,7 +19,7 @@
 		    </div>
 		    <div class="circleInfo padB0 lastBorNone">
 		    	<h1 class="cirInfoTit">圈子简介</h1>
-		    	<p class="cirInfoWord">{{siteInfo.siteIntroduction()}}</p>
+		    	<p class="cirInfoWord">{{siteInfo.siteIntroduction()}}{{}}</p>
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">创建时间</span>
 			    	<span class="infoItemRight">{{siteInfo.siteInstall()}}</span>

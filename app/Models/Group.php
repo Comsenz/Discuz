@@ -37,6 +37,8 @@ class Group extends Model
      */
     const MEMBER_ID = 10;
 
+    const BAN_ID = 5;
+
     const DEFAULT = 1;
 
     /**
