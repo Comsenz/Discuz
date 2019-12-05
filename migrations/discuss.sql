@@ -270,4 +270,7 @@ CREATE TABLE `operation_log` (
 
 ALTER TABLE `threads` ADD `category_id` INT(10) UNSIGNED NOT NULL AFTER `last_posted_user_id`;
 
+ALTER TABLE `posts` CHANGE `reply_id` `reply_post_id` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `posts` ADD `reply_user_id` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `reply_post_id`;
+
 ALTER TABLE `operation_log` ADD COLUMN `user_id` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作用户 id' AFTER `id`;

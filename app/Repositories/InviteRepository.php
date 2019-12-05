@@ -64,6 +64,20 @@ class InviteRepository extends AbstractRepository
 
         return Invite::where([
             ['user_id', '=', $actor->id],
-            ['type', '=', 2]])->get();
+            ['type', '=', 2]])->get()
+            ->each(function ($item, $key) {
+                if ($item->status == 1){
+
+                    $item->to_user_id && $item->status = 2;//已使用
+
+                    if (!$item->to_user_id && $item->endtime > time()){
+                        $item->status = 3;//未使用
+                    }
+                    if (!$item->to_user_id && $item->endtime < time()){
+                        $item->status = 4;//已过期
+                    }
+                }
+
+            });
     }
 }
