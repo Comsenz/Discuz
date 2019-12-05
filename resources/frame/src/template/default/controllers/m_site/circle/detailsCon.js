@@ -46,7 +46,8 @@ export default {
         }
 
       ],
-      showScreen: false
+      showScreen: false,
+      request:false
 		}
 	},
   created(){
@@ -75,7 +76,7 @@ export default {
       const params = {
         'filter[isDeleted]':'no'
       };
-      params.include = 'user,posts,posts.user,posts.likedUsers,firstPost,rewardedUsers';
+      params.include = 'user,posts,posts.user,posts.likedUsers,firstPost,rewardedUsers,category';
       let threads= 'threads/'+this.themeId;
       this.apiStore.find(threads, params).then(data => {
         this.themeCon = data;
@@ -90,49 +91,62 @@ export default {
         //是否显示筛选内容
         this.showScreen = !this.showScreen;
     },
-    themeOpera(themeId,clickType) {
-    	console.log(clickType);
+    themeOpera(postsId,clickType,cateId,content) {
       let attri = new Object();
        if(clickType == 1){
         attri.isFavorite = true;
-        themeOpeRequest(attri)
+        content ='';
+        this.themeOpeRequest(attri,cateId);
        } else if(clickType == 2){
-         themeOpeRequest(attri)
+         content ='';
+         this.themeOpeRequest(attri,cateId);
         attri.isEssence = true;
        } else if(clickType == 3){
+         content ='';
+         // request = true;
         attri.isSticky = true;
-        themeOpeRequest(attri)
+        this.themeOpeRequest(attri,cateId);
        } else if(clickType == 4){
         attri.isDeleted = true;
-        themeOpeRequest(attri)
+        content ='';
+        this.themeOpeRequest(attri,cateId);
        } else {
-        // attri.isDeleted = true;
+         // content = content
+         console.log(content);
+         //跳转到发帖页
+        this.$router.push({
+          path:'/post-topic',
+          name:'post-topic',
+          params: { themeId:this.themeId,postsId:postsId,themeContent:content}
+        })
        }
     },
     //主题操作接口请求
-    themeOpeRequest(attri){
-      console.log(attri);
-      let threads = 'threads/'+this.themeId;
-      this.appFetch({
-        url:threads,
-        method:'patch',
-        data:{
-          "data": {
-            "type": "threads",
-            "attributes": attri
-          },
-          "relationships": {
-              "category": {
-                  "data": {
-                      "type": "categories",
-                      "id": 4
-                  }
-              }
+    themeOpeRequest(attri,cateId){
+        // console.log(attri);
+        let threads = 'threads/'+this.themeId;
+        this.appFetch({
+          url:threads,
+          method:'patch',
+          data:{
+            "data": {
+              "type": "threads",
+              "attributes": attri
+            },
+            "relationships": {
+                "category": {
+                    "data": {
+                        "type": "categories",
+                        "id": cateId
+                    }
+                }
+            }
           }
-        }
-      }).then((res)=>{
-        // this.detailsLoad();
-      })
+        }).then((res)=>{
+
+        })
+
+
     },
     //点赞/删除
     replyOpera(postId,type){
@@ -182,7 +196,7 @@ export default {
               "amount":amount
         },
       }).then(data =>{
-        console.log(data.data.attributes.order_sn);
+        // console.log(data.data.attributes.order_sn);
         const orderSn = data.data.attributes.order_sn;
         this.orderPay(orderSn,amount);
 

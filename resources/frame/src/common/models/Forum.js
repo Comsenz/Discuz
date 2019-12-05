@@ -13,4 +13,6 @@ Object.assign(Forum.prototype, {
   day: Model.attribute('day'),
   avatarUrl: Model.attribute('avatarUrl'),
   user:Model.hasOne('user'),
+  threads:Model.attribute('threads'),
+  members:Model.attribute('members'),
 });

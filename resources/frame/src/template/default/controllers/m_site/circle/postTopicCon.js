@@ -2,6 +2,9 @@
  * 发布主题控制器
  */
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+import Store from '../../../../../common/Store.js';
+import Post from '../../../../../common/models/Post.js';
+
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
@@ -29,7 +32,10 @@ export default {
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
         // { url: 'https://cloud-image', isImage: true }
-      ]
+      ],
+
+      themeId:'',
+      postsId:''
     }
   },
 
@@ -48,29 +54,57 @@ export default {
         });
       })
   },
-
+  created(){
+    var themeId = this.$route.params.themeId;
+    var postsId = this.$route.params.postsId;
+    var themeContent = this.$route.params.themeContent;
+    console.log(themeId)
+    this.themeId = themeId;
+    this.postsId = postsId;
+    this.content = themeContent;
+  },
 
   methods: {
     publish(){
-      this.appFetch({
-        url:"threads",
-        method:"post",
-        data:{
-          content:this.content,
-        },
-      },(res)=>{
-        alert('234');
-        console.log(res);
-        if (res.status === 200){
-          console.log(res);
-        } else{
-          console.log('400');
-        }
+      if(this.postsId && this.content){
+        let posts = 'posts/'+this.postsId;
+        this.appFetch({
+          url:posts,
+          method:"PATCH",
+          data: {
+            "data": {
+              "type": "posts",
+              "attributes": {
+                  "content": this.content,
+                   'id':this.themeId
+              }
+            }
+          }
+        }).then((res)=>{
+          // this.$router.push({
+          //   path:'/details',
+          //   name:'details',
+          //   params: { themeId:this.themeId,postsId:postsId,themeContent:content}
+          // })
+          this.$router.push({ path:'details'+'/'+this.themeId});
+        })
+      } else {
+        this.appFetch({
+          url:"threads",
+          method:"post",
+          data:{
+            "data": {
+              "type": "threads",
+              "attributes": {
+                  "content": this.content,
+              }
+            }
+          },
+        }).then((res)=>{
 
-      },(err)=>{
-        alert('45656');
-        // console.log(err);
-      })
+        })
+
+      }
     },
     //输入框自适应高度
     clearKeywords () {
@@ -85,7 +119,7 @@ export default {
       textarea.focus();
     },
     searchChange: debounce(function () {
-      let trim = this.keywords.trim();
+      let trim = this.keywords && this.keywords.trim();
       if (!trim) {
         this.list = [];
         return;

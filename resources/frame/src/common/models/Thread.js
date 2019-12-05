@@ -23,5 +23,4 @@ Object.assign(Threads.prototype, {
   rewardedUsers:Model.hasMany('rewardedUsers'),
   canDelete: Model.attribute('canDelete'),
   isDeleted: computed('isDeleted', isDeleted => !!isDeleted),
-
 });

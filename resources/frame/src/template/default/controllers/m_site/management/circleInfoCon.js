@@ -27,10 +27,11 @@ export default {
     loadSite(){
       const params = {};
        params.include='users';
-       this.apiStore.find('forum').then(data => {
+       this.apiStore.find('forum',params).then(data => {
+         console.log(data.user());
          this.siteInfo = data;
          this.username = data.siteAuthor().username;
-         console.log(data.user());
+         // console.log(data.user().avatarUrl());
       });
     },
     //查看更多圈子成员
