@@ -1,7 +1,12 @@
 <template>
   <div class="like-box my-info-money-header">
-    <LikeHeader title="点赞我的"></LikeHeader>
-    <main class="like-main content">
+    <comHeader title="点赞我的"></comHeader>
+     <div class="content">
+        <Header :userInfoList="likeList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <div class="gap"></div>
+        <ThemeDet :themeList="likeList"></ThemeDet>
+    </div>
+    <!-- <main class="like-main content">
       <div class="like-cont cell-crossing" v-for="(item,index) in likeList" :key="index">
         <ContHeader
           :imgUrl="imgUrl"
@@ -12,7 +17,7 @@
         <div class="quote-reply">
           <span>{{item.detail().post_content}}</span>
         </div>
-      </div>
+      </div> -->
 
       <!-- <div class="like-cont cell-crossing">
         <ContHeader
@@ -31,7 +36,10 @@
         </div>
       </div> -->
 
-    </main>
+    <!-- </main> -->
+    <footer class="home-page-footer">
+      <p>上划加载更多</p>
+    </footer>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>
@@ -39,10 +47,17 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import likeCon from '../../../controllers/m_site/myInfo/likeCon';
+import ThemeDet from '../../m_site/common/themeDetView';
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import  '../../../scss/m_site/myInfo/myInfo.scss';
 import  '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "like-view",
+   components:{
+      comHeader,
+    	// Header,
+      ThemeDet,
+    },
   ...likeCon
 }
 </script>

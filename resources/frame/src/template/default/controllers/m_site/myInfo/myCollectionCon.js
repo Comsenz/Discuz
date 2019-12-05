@@ -34,7 +34,7 @@ export default {
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
     this.myCollection();
-    console.log(typeof this.aaa);
+    // console.log(typeof this.aaa);
   },
   methods:{
     myCollection(){
@@ -43,7 +43,7 @@ export default {
         };
         params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
         this.apiStore.find('collection', params).then(data => {
-          // console.log(data[0].user());
+          console.log(data[0].user());
           this.collectionList = data;
         });
       }
