@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import moment from 'moment';
+import webDb from 'webDbHelper';
 import { mapState } from 'vuex';
 
 export default {
@@ -28,22 +29,23 @@ export default {
           label:'marrow'
         }
       ],  //操作列表
-      operatingSelect:'',  //操作单选选择
+      operatingSelect:'',   //操作单选选择
 
       categoriesList: [],   //选择圈子列表
-      categoryId: '',  //选择圈子选中
+      categoryId: '',       //选择圈子选中
 
-      toppingRadio:2,  //是否置顶
-      essenceRadio:2,   //是否精华
+      toppingRadio:2,       //是否置顶
+      essenceRadio:2,       //是否精华
 
-      checkAll: false,    //全选状态
-      checkAllNum:0,      //多选打勾数
-      checkedTheme:[],    //多选列表初始化
+      checkAll: false,      //全选状态
+      checkAllNum:0,        //多选打勾数
+      checkedTheme:[],      //多选列表初始化
       isIndeterminate: false,   //全选不确定状态
 
-      themeList:[],    //主题列表
-      currentPag: 1,   //当前页数
-      total:0        //主题列表总条数
+      themeList:[],         //主题列表
+      currentPag: 1,        //当前页数
+      total:0,              //主题列表总条数
+      pageCount:1           //总页数
     }
   },
   computed:mapState({
@@ -113,21 +115,17 @@ export default {
       return moment(data).format('YYYY-MM-DD HH:mm')
     },
 
-    selectChange(){
-      console.log(this.categoryId);
-    },
-
     submitClick(){
 
-      let themeData = [];     //操作主题数据
-      let attributes = {};    //操作选项
+      let themeData = [];         //操作主题数据
+      let attributes = {};        //操作选项
       let relationships = {
         'category':{
           'data':{
             'id':''
           }
         }
-      };   //主题分类关系
+      };  //主题分类关系
       let selectStatus = false;
 
       switch (this.operatingSelect){
@@ -200,8 +198,14 @@ export default {
           if (res.meta && res.data){
             this.$message.error('操作失败！');
           }else {
-            this.getThemeList(1);
+            if (this.pageCount < 3){
+              this.currentPag = 1;
+              webDb.setLItem('currentPag',1);
+            }
+
+            this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
             this.isIndeterminate = false;
+            this.checkAll = false;
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -219,18 +223,17 @@ export default {
     },
 
     handleCurrentChange(val) {
+      webDb.setLItem('currentPag',val);
       this.isIndeterminate = false;
       this.checkAll = false;
       this.getThemeList(val);
     },
-
 
     /*
     * 请求接口
     * */
     getThemeList(pageNumber){
       let searchData = this.searchData;
-      console.log(searchData.pageSelect);
       const params = {
         'filter[isDeleted]':'no',
         'filter[categoryId]':searchData.categoryId,
@@ -250,8 +253,7 @@ export default {
       this.apiStore.find('threads', params).then(data => {
         this.themeList = data;
         this.total = data.payload.meta.threadCount;
-
-        console.log(data.length);
+        this.pageCount = data.payload.meta.pageCount;
 
         /*初始化主题多选框列表*/
         this.checkedTheme = [];
@@ -282,11 +284,20 @@ export default {
 
   },
 
+  beforeUpdate() {
+    webDb.setLItem('currentPag',this.currentPag);
+  },
+
+  beforeDestroy() {
+    webDb.setLItem('currentPag',1);
+  },
+
   mounted(){
 
   },
   created(){
-    this.getThemeList(1);
+    this.currentPag = Number(webDb.getLItem('currentPag'))||1;
+    this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
     this.getCategories();
   },
 

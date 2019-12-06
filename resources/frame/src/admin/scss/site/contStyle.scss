@@ -241,8 +241,9 @@
   }
 
   .cont-review-table{
+    border-top: 1PX solid $tableBorderColor;
 
-    .cont-review-table__side{
+    &__side{
 
       .el-checkbox-group{
         display: flex;
@@ -255,7 +256,7 @@
       }
     }
 
-    .cont-review-table__header{
+    &__header{
       width: 100%;
       display: flex;
       align-items: center;
@@ -277,19 +278,17 @@
 
     }
 
-    .cont-review-table__main{
+    &__main{
       line-height: 20PX;
     }
-    .cont-review-table__footer{
+    &__footer{
       width: 100%;
       height: 100%;
       display: flex;
 
-
       &__lf{
         display: flex;
         align-items: center;
-        //flex-grow: 1;
         margin-right: 66PX;
 
         i{
@@ -319,8 +318,11 @@
         text-align: right;
       }
 
+    }
 
-
+    &__table-footer{
+      padding: 15PX 0;
+      text-align: center;
     }
 
   }
@@ -425,6 +427,7 @@
   }
 
   .cont-review-table{
+    border-top: 1PX solid $tableBorderColor;
 
     .cont-review-table__side{
 
@@ -702,8 +705,6 @@
     margin-top: 20PX;
 
     .el-button--primary{
-      //width: 68PX;
-      //height: 36PX;
       margin-right: 20PX;
     }
 
@@ -844,8 +845,6 @@
     margin-top: 20PX;
 
     .el-button--primary{
-      //width: 68PX;
-      //height: 36PX;
       margin-right: 20PX;
     }
 

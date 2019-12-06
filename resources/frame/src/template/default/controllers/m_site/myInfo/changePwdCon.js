@@ -3,7 +3,8 @@
  */
 
 
-import ChangePWDHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import ChangePWDHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import browserDb from '../../../../../helpers/webDbHelper';
 
 
 export default {
@@ -23,9 +24,11 @@ export default {
   },
   methods:{
     subm(){
+      const userId = browserDb.getLItem('tokenId');
       this.appFetch({
-        url:'changePassword',
+        url:'users',
         method:'patch',
+        splice:'/'+userId,
         data:{
           "data": {
             "attributes": {

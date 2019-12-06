@@ -2,6 +2,7 @@
  * 移动端header控制器
  */
 import {Bus} from '../../../store/bus.js';
+import Forum from '../../../../../common/models/Forum';
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
@@ -29,19 +30,16 @@ export default {
 		    	circleLeader: '圈主名称'
 		    },
         avatarUrl:'',
-        username:'',
+        // username:'',
         mobile:'',
         userId:'',
 	      isfixNav: false,
 	      popupShow: false,
         current:0,
         userDet:[],
-	      themeNavList: [
-          { text: '选项' },
-          { text: '选项二' },
-          { text: '选项三' }
-	    	]
-
+        categories:[],
+        siteInfo: new Forum(),
+        username:''
 	  }
   },
 	props: {
@@ -79,8 +77,26 @@ export default {
   },
   created: function() {
     // this.getUserInfo();
+    this.loadCategories();
   },
   methods:{
+    //初始化请求分类接口
+    loadCategories(){
+      //请求站点信息
+      const params = {};
+       params.include='users';
+       this.apiStore.find('forum').then(data => {
+         console.log(data+'222');
+         this.siteInfo = data;
+         this.username = data.siteAuthor().username;
+         console.log(data.user());
+      });
+      this.apiStore.find('categories').then(data => {
+        console.log(data[0].name());
+        // console.log(data[0].user().username());
+        this.categories = data;
+      });
+    },
     // //获取用户信息
     // getUserInfo(){
     //     var userId = browserDb.getLItem('tokenId');
@@ -91,6 +107,7 @@ export default {
     //       this.mobile = data.data.attributes.mobile;
     //     });
     // },
+
     backUrl () {
       // 返回上一级
       window.history.go(-1)

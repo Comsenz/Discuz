@@ -131,6 +131,8 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
+
+        App\Emoji\EmojiServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

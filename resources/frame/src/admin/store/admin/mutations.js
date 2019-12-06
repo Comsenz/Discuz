@@ -23,8 +23,5 @@ export default {
     state.searchData.numberOfRepliesMax = payload.numberOfRepliesMax;
     state.searchData.essentialTheme =payload.essentialTheme;
     state.searchData.topType = payload.topType;
-
-    console.log(state.searchData.pageSelect);
-
   }
 }

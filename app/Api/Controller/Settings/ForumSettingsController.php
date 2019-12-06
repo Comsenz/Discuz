@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Api\Controller\Settings;
-
 
 use App\Api\Serializer\ForumSettingSerializer;
 use App\Models\User;
@@ -12,15 +10,27 @@ use Tobscure\JsonApi\Document;
 
 class ForumSettingsController extends AbstractResourceController
 {
-
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = ForumSettingSerializer::class;
 
+    /**
+     * {@inheritdoc}
+     */
     public $optionalInclude = ['users'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return [
-            'users' => User::orderBy('created_at', 'desc')->limit(5)->get(['id', 'username', 'avatar'])
-        ];
+        $data = [];
+
+        if (in_array('users', $this->extractInclude($request))) {
+            $data['users'] = User::orderBy('created_at', 'desc')->limit(5)->get(['id', 'username', 'avatar']);
+        }
+
+        return $data;
     }
 }

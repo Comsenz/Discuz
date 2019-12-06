@@ -52,10 +52,10 @@
             	<span>管理</span>
             	<span class="icon iconfont icon-down-menu jtGrayB"></span>
             	<div class="themeList" v-if="showScreen">
-            		<a href="javascript:;"  @click="themeOpera(themeCon.id(),cho.type)" v-for="(cho,index) in themeChoList" :key="index">{{cho.typeWo}}</a>
+            		<a href="javascript:;"  @click="themeOpera(themeCon.firstPost().id(),cho.type,themeCon.category().id(),themeCon.firstPost().content())" v-for="(cho,index) in themeChoList" :key="index">{{cho.typeWo}}</a>
             	</div>
             </div>
-		    		<a href="javascript:;" class="postDetR" @click="themeOpera(themeCon.id(),1)">收藏</a>
+		    		<a href="javascript:;" class="postDetR" @click="themeOpera(themeCon.firstPost().id(),1,themeCon.category().id(),themeCon.firstPost().content())">收藏</a>
 		    		<a href="javascript:;" class="postDetR">分享</a>
 		    	</div>
 		    </div>

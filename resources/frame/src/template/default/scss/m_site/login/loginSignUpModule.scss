@@ -129,17 +129,24 @@ body{
           display: flex;
           justify-content: space-between;
           .login-user-method-icon-ring{
+            display: block;
             @include px2rem(width,108);
             @include px2rem(height,108);
             @include px2rem(border-radius,100);
             border:1px solid rgba(229,229,229,1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            @include px2rem(margin,0 48);
+            text-align: center;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
             span{
-              @include font-dpr(50)
+              @include font-dpr(50);
+              @include px2rem(line-height,108);
             }
           }
+        }
+        .justifyCenter {
+          justify-content: center;
         }
 
       }

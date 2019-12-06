@@ -191,6 +191,11 @@ class User extends Model
         return $value;
     }
 
+    public function getMobileAttribute($value)
+    {
+        return $value ? substr_replace($value, '****', 3, 4) : '';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | 常用方法
