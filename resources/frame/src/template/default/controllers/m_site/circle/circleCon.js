@@ -138,7 +138,7 @@ export default {
       const params = {};
       params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
       this.apiStore.find('threads', params).then(data => {
-        // console.log(data[0].user().id());
+        // console.log(data[0].firstPost().id());
         // console.log(data[0].user().username());
         this.themeListCon = data;
       });

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -10,12 +9,11 @@ declare(strict_types=1);
 
 namespace App\Events\Attachment;
 
-
+use App\Models\User;
 use Psr\Http\Message\UploadedFileInterface;
 
 class Uploading
 {
-
     /**
      * @var User
      */
@@ -30,7 +28,7 @@ class Uploading
      * @param User $actor
      * @param UploadedFileInterface $file
      */
-    public function __construct($actor, UploadedFileInterface $file)
+    public function __construct(User $actor, UploadedFileInterface $file)
     {
         $this->actor = $actor;
         $this->file = $file;

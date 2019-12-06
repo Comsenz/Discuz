@@ -33,11 +33,8 @@ class ResourceNotificationController extends AbstractResourceController
 
         $actor = $request->getAttribute('actor');
         $notificationId = Arr::get($request->getQueryParams(), 'id');
-        //todo
-        $actor->id = 1;
-        $user = User::find(1);
 
-        $notification = $user->notifications->where('id', $notificationId)->first();
+        $notification = $actor->notifications->where('id', $notificationId)->first();
         $notification && $notification->markAsRead();
 
         return $notification;

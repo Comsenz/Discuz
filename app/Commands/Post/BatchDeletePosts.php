@@ -67,7 +67,7 @@ class BatchDeletePosts
         foreach ($this->ids as $id) {
             $post = $posts->query()->whereVisibleTo($this->actor)->find($id);
 
-            if (!$post) {
+            if (! $post) {
                 $result['meta'][] = ['id' => $id, 'message' => 'model_not_found'];
                 continue;
             }

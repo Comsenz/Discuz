@@ -3,7 +3,7 @@
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\DeleteUserSerializer;
+use App\Api\Serializer\ErrorUserSerializer;
 use App\Commands\Users\DeleteUsers;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -14,7 +14,7 @@ use Tobscure\JsonApi\Document;
 
 class DeleteUserController extends AbstractResourceController
 {
-    public $serializer = DeleteUserSerializer::class;
+    public $serializer = ErrorUserSerializer::class;
 
     protected $bus;
 
@@ -25,10 +25,8 @@ class DeleteUserController extends AbstractResourceController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $data = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new DeleteUsers(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'))
         );
-
-        return $data;
     }
 }

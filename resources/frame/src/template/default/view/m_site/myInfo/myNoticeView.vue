@@ -5,19 +5,21 @@
         <van-cell cless="my-notice-cell" @click="myJump('reply')" is-link>
           <template class="my-notice-cell-template" slot="title">
             <span class="custom-title" >回复我的</span>
+            <i class="custom-title-icon" type="danger" v-show ='this.numReply == 0 ? false:true'>{{numReply}}</i>
           </template>
         </van-cell>
 
         <van-cell cless="my-notice-cell" @click="myJump('reward')" is-link>
           <template class="my-notice-cell-template" slot="title">
             <span class="custom-title" >打赏我的</span>
+            <i class="custom-title-icon" type="danger" v-show ='this.numReward == 0 ? false:true'>{{numReward}}</i>
           </template>
         </van-cell>
 
         <van-cell cless="my-notice-cell" @click="myJump('like')" is-link>
           <template class="my-notice-cell-template" slot="title">
             <span class="custom-title" >点赞我的</span>
-            <i class="custom-title-icon" type="danger" >9</i>
+            <i class="custom-title-icon" type="danger" v-show ='this.num == 0 ? false:true'>{{num}}</i>
           </template>
         </van-cell>
 

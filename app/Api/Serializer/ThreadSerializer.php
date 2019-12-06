@@ -83,9 +83,18 @@ class ThreadSerializer extends AbstractSerializer
      * @param $thread
      * @return Relationship
      */
+    protected function lastPostedUser($thread)
+    {
+        return $this->hasOne($thread, UserSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     protected function category($thread)
     {
-        return $this->hasOne($thread, ClassifySerializer::class);
+        return $this->hasOne($thread, CategorySerializer::class);
     }
 
     /**

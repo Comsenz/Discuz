@@ -17,7 +17,8 @@ export default {
       password:"",
       userId:'2',
       btnLoading:false,
-      wxLoginShow: false
+      wxLoginShow: true,
+      isOne:false
       // attributes:'/login-user'
     }
   },
@@ -50,12 +51,13 @@ export default {
         }
       }).then(res => {
           this.$toast.success('登录成功');
+          
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
           // console.log(token)
           browserDb.setLItem('Authorization',token);
           browserDb.setLItem('tokenId',tokenId);
-          // console.log(browserDb.getLItem('Authorization'));
+          console.log(browserDb.getLItem('Authorization'));
           // this.paramsObj = {
           //   userId:this.userId
           // };
@@ -105,6 +107,7 @@ export default {
       //手机浏览器登录时
       console.log('手机浏览器登录');
       this.wxLoginShow = false;
+      this.isOne = true;
       // console.log(this.appFetch({
       //   url:"weixin",
       //   method:"get",

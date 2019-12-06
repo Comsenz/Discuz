@@ -11,12 +11,8 @@ declare(strict_types=1);
 namespace App\Api\Controller\Invite;
 
 use App\Api\Serializer\InviteSerializer;
-use App\Models\Group;
 use App\Models\Invite;
-use App\Models\User;
-use App\Repositories\ClassifyRepository;
 use App\Repositories\InviteRepository;
-use App\Searchs\Classify\ClassifySearch;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -28,18 +24,13 @@ class ListInviteController extends AbstractListController
 
     public function __construct(InviteRepository $InviteRepository)
     {
-        $this->InviteRepository = $this->InviteRepository;
+        $this->InviteRepository = $InviteRepository;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $actor->id = 1;
 
-        return $this->InviteRepository->getInvitationCode();
-
-        return Invite::where([
-            ['user_id', '=', 1],
-            ['type', '=', '2']])->get();
+        return $this->InviteRepository->getAdminCodeList($actor);
     }
 }

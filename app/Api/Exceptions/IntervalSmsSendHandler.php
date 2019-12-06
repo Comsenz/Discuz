@@ -3,8 +3,6 @@
 
 namespace App\Api\Exceptions;
 
-
-use App\Exceptions\IntervalSmsSend;
 use App\Exceptions\IntervalSmsSendException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;

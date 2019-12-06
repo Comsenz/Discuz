@@ -6,6 +6,7 @@ namespace App\Commands\Users;
 use App\Repositories\UserRepository;
 use App\Models\User;
 use Discuz\Auth\AssertPermissionTrait;
+use Exception;
 
 class DeleteUsers
 {
@@ -19,8 +20,6 @@ class DeleteUsers
     protected $actor;
 
     protected $id;
-
-    protected $users;
     /**
      * 初始化命令参数
      * @param id     $id
@@ -35,27 +34,31 @@ class DeleteUsers
 
     public function handle(UserRepository $users)
     {
-        $this->users = $users;
-        return $this();
+        return $this($users);
     }
 
-    public function __invoke()
+    /**
+     * @param $users
+     * @return User|null
+     */
+    public function __invoke($users)
     {
-
 
         $data = null;
         $id = $this->id;
         $actor = $this->actor;
 
         try {
-            $user = $this->users->findOrFail($id);
+            $user = $users->findOrFail($id);
 
             $this->assertCan($actor, 'delete', $user);
 
             $user->delete();
 
+            $user->succeed = true;
+
             $data = $user;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $data = new User(compact('id'));
             $data->error = $e->getMessage();
         }

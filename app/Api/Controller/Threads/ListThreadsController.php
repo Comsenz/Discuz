@@ -38,6 +38,8 @@ class ListThreadsController extends AbstractListController
     public $include = [
         'user',
         'firstPost',
+        'lastPostedUser',
+        'category',
     ];
 
     /**
@@ -135,6 +137,7 @@ class ListThreadsController extends AbstractListController
 
         Thread::setStateUser($actor);
 
+        // TODO: load -> loadMissing
         $threads = $threads->load(array_diff($load, $this->specialInclude));
 
         $specialLoad = array_intersect($this->specialInclude, $load);
@@ -174,6 +177,8 @@ class ListThreadsController extends AbstractListController
 
         $this->applyFilters($query, $filter, $actor);
 
+        $this->threadCount = $limit > 0 ? $query->count() : null;
+
         $query->skip($offset)->take($limit);
 
         foreach ((array) $sort as $field => $order) {
@@ -182,8 +187,6 @@ class ListThreadsController extends AbstractListController
 
         // 搜索事件，给插件一个修改它的机会。
         // $this->events->dispatch(new Searching($search, $criteria));
-
-        $this->threadCount = $limit > 0 ? $query->count() : null;
 
         return $query->get();
     }
@@ -266,10 +269,10 @@ class ListThreadsController extends AbstractListController
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
             if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
                 // 只看回收站帖子
-                $query->whereNotNull('deleted_at');
+                $query->whereNotNull('threads.deleted_at');
             } elseif ($isDeleted == 'no') {
                 // 不看回收站帖子
-                $query->whereNull('deleted_at');
+                $query->whereNull('threads.deleted_at');
             }
         }
 

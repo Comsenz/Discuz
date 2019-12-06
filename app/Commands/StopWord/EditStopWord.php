@@ -17,7 +17,7 @@ use App\Validators\StopWordValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -60,14 +60,14 @@ class EditStopWord
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param StopWordRepository $stopWords
      * @param StopWordValidator $validator
      * @return StopWord
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, StopWordRepository $stopWords, StopWordValidator $validator)
+    public function handle(Dispatcher $events, StopWordRepository $stopWords, StopWordValidator $validator)
     {
         $this->events = $events;
 

@@ -19,7 +19,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
@@ -62,7 +62,7 @@ class EditThread
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @param ThreadValidator $validator
      * @return Thread
@@ -70,7 +70,7 @@ class EditThread
      * @throws ValidationException
      * @throws Exception
      */
-    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, ThreadValidator $validator)
     {
         $this->events = $events;
 

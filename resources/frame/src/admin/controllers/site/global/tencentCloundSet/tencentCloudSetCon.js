@@ -20,13 +20,13 @@ export default {
         icon:'iconduanxin'
       }, {
         name: '图片内容安全',
-        type:'',
+        type:'img',
         description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
         status:true,
         icon:'icontupian'
       },{
         name: '文本内容安全',
-        type:'',
+        type:'text',
         description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
         status:true,
         icon:'iconwenben'

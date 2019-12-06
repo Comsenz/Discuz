@@ -7,6 +7,8 @@
 @import "/m_site/app";
 $fontColor: #336699;
 $cor888: #888888;
+$cor444: #444444;
+$cor333: #333333;
 $gap: #EDEDED;
 $font000: #000000;
 $cor999: #999999;
@@ -24,28 +26,9 @@ body{
   width: 100%;
   height: 100%;
   display: block;
-  overflow-x: hidden;
+  //overflow-x: hidden;
 }
 
-/*.weui-cells{
-  font-size: $fontSize;   //登录注册-表单输入
-}
-
-.weui-form__desc {
-  font-size: $fontSize;
-}
-
-.weui-form__title{
-  font-size: $fontSizeTitle;
-}
-
-.weui-btn{
-  font-weight: 500;
-}
-
-.weui-cells weui-cells_form{
-
-}*/
 
 
 /**

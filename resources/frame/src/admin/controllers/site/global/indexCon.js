@@ -12,7 +12,6 @@ export default {
       setLoading:'site/SET_LOADING'
     }),
 
-
     login(){
       this.$router.push('/login/loginview')
     },

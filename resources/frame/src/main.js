@@ -15,9 +15,9 @@ import './extend/viewBase/vantuiInit';   //引入vant组件
 import '../static/js/rem'   //引入Rem配置
 
 
-// import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
-// import './extend/viewBase/elementuiInit'; //引入element组件
-// import './admin/scss/modules/element-variables.scss'  //引入主题样式
+import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
+import './extend/viewBase/elementuiInit'; //引入element组件
+import './admin/scss/modules/element-variables.scss'  //引入主题样式
 
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
@@ -30,6 +30,10 @@ import Thread from './common/models/Thread';
 import User from './common/models/User';
 import Post from './common/models/Post';
 import Emoji from './common/models/Emoji';
+import Notification from './common/models/Notification';
+import Forum from './common/models/Forum';
+import Groups from './common/models/Groups';
+import Category from './common/models/Category';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
@@ -56,7 +60,11 @@ Vue.prototype.apiStore = new Store({
   'threads': Thread,
   'users': User,
   'posts': Post,
-  'emoji': Emoji
+  'emoji': Emoji,
+  'notification': Notification,
+  'forums': Forum,
+  'groups':Groups,
+  'categories':Category
 });
 Vue.prototype.$utils = utils; //注册全局方法
 

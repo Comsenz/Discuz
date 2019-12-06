@@ -18,11 +18,12 @@ CREATE TABLE `stop_words` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户组ID',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户组名称',
+  `type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '类型',
+  `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '颜色',
+  `icon` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'icon类',
+  `default` tinyint(1) NOT NULL COMMENT '是否为注册默认组',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -40,15 +41,15 @@ CREATE TABLE `group_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `threads` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
   `last_posted_user_id` int(10) unsigned DEFAULT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `post_count` int(10) unsigned NOT NULL DEFAULT '0',
   `view_count` int(10) unsigned NOT NULL DEFAULT '0',
   `like_count` int(10) unsigned NOT NULL DEFAULT '0',
-  `favorite_count` int(10) unsigned NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
@@ -117,6 +118,7 @@ CREATE TABLE `users` (
   `thread_count` int(10) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `joined_at` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
@@ -175,19 +177,20 @@ CREATE TABLE `attachments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `post_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复ID',
+  `is_gallery` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否是帖子图片',
+  `is_remote` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
   `attachment` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件系统生成的名称',
   `file_path` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件路径',
   `file_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件原名称',
   `file_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `file_type` char(15) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件类型',
-  `remote` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否远程附件',
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建IP',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---用户详情
+-- 用户详情
 CREATE TABLE `user_profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -211,7 +214,7 @@ CREATE TABLE `mobile_codes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
---用户钱包
+-- 用户钱包
 CREATE TABLE `user_wallets` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `available_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '可用金额',
@@ -222,7 +225,7 @@ CREATE TABLE `user_wallets` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户钱包表';
 
---用户提现
+-- 用户提现
 CREATE TABLE `user_wallet_cash` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,
@@ -242,7 +245,7 @@ CREATE TABLE `user_wallet_cash` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COLLATE=utf8mb4_unicode_ci;
 
---用户钱包动账记录
+-- 用户钱包动账记录
 CREATE TABLE `user_wallet_logs` (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,
@@ -264,3 +267,10 @@ CREATE TABLE `operation_log` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `threads` ADD `category_id` INT(10) UNSIGNED NOT NULL AFTER `last_posted_user_id`;
+
+ALTER TABLE `posts` CHANGE `reply_id` `reply_post_id` INT(10) UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE `posts` ADD `reply_user_id` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `reply_post_id`;
+
+ALTER TABLE `operation_log` ADD COLUMN `user_id` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作用户 id' AFTER `id`;

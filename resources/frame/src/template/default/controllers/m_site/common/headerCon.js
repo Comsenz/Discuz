@@ -2,6 +2,7 @@
  * 移动端header控制器
  */
 import {Bus} from '../../../store/bus.js';
+import Forum from '../../../../../common/models/Forum';
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
@@ -28,104 +29,26 @@ export default {
 		    	memberNum: '1222',
 		    	circleLeader: '圈主名称'
 		    },
-        avatarUr:'',
-        username:'',
+        avatarUrl:'',
+        // username:'',
         mobile:'',
         userId:'',
-		    sidebarList1: [
-	        {
-	          name: '我的资料',
-	          path: 'login', // 跳转路径
-	          query: { // 跳转参数
-	          index: 1
-	          },
-	            enentType: ''
-	        },
-	        {
-	          name: '我的钱包',
-	          path: 'wallent', // 跳转路径
-	          query: { // 跳转参数
-	          index: 2
-	          },
-	            enentType: ''
-	        },
-	        {
-	          name: '我的收藏',
-	          path: 'collection', // 跳转路径
-	          query: { // 跳转参数
-	          index: 3
-	          },
-	            enentType: ''
-	        },
-	        {
-	          name: '我的通知',
-	          path: 'notice', // 跳转路径
-	          query: { // 跳转参数
-	          index: 4
-	          },
-	            enentType: ''
-	        }
-	      ],
-	      sidebarList2: [
-	        {
-	          name: '圈子信息',
-	          path: 'login', // 跳转路径
-	          query: { // 跳转参数
-	          index: 1
-	          },
-	            enentType: ''
-	        },
-	        {
-	          name: '圈子管理',
-	          path: 'login', // 跳转路径
-	          query: { // 跳转参数
-	            index: 2
-	          },
-	          enentType: ''
-	        },
-	        {
-	          name: '退出登录',
-	          path: '', // 跳转路径
-	          query: { // 跳转参数
-	            index: 3
-	          },
-	          enentType: 1 // 事件类型
-	        }
-	      ],
-	      sidebarList3: [
-	        {
-	          name: '邀请朋友',
-	          path: 'login', // 跳转路径
-	          query: { // 跳转参数
-	          index: 1
-	          },
-	            enentType: ''
-	        }
-
-	      ],
 	      isfixNav: false,
 	      popupShow: false,
         current:0,
         userDet:[],
-	      themeNavList: [
-          { text: '选项' },
-          { text: '选项二' },
-          { text: '选项三' }
-	    	]
-
+        categories:[],
+        siteInfo: new Forum(),
+        username:''
 	  }
   },
 	props: {
-    // title: { // 组件的标题
-    //   type: String,
-    //   default: () => {
-    //     return '';
-    //   }
-    // },
-    // themeNavList:{
-    //   type:Array
-
-    // },
+    userInfoAvatarUrl: { // 组件用户信息
+      type: String
+    },
+    userInfoName: { // 组件用户信息
+      type: String
+    },
     headFixed: { // 组件是否悬浮头部
       headFixed: false
     },
@@ -153,20 +76,38 @@ export default {
     }
   },
   created: function() {
-    this.getCircle();
+    // this.getUserInfo();
+    this.loadCategories();
   },
   methods:{
-  //获取圈子主题数，成员数，圈主名称
-    getCircle(){
-      // alert(234);
-        var userId = browserDb.getLItem('tokenId');
-        this.apiStore.find('users', userId).then(data => {
-          // console.log(data.data.attributes.username);
-          // this.username = data.data.attributes.avatarUrl;
-          // this.username = data.data.attributes.username;
-          // this.mobile = data.data.attributes.mobile;
-        });
+    //初始化请求分类接口
+    loadCategories(){
+      //请求站点信息
+      const params = {};
+       params.include='users';
+       this.apiStore.find('forum').then(data => {
+         console.log(data+'222');
+         this.siteInfo = data;
+         this.username = data.siteAuthor().username;
+         console.log(data.user());
+      });
+      this.apiStore.find('categories').then(data => {
+        console.log(data[0].name());
+        // console.log(data[0].user().username());
+        this.categories = data;
+      });
     },
+    // //获取用户信息
+    // getUserInfo(){
+    //     var userId = browserDb.getLItem('tokenId');
+    //     this.apiStore.find('users', userId).then(data => {
+    //       console.log(data.data.attributes.mobile);
+    //       this.avatarUrl = data.data.attributes.avatarUrl;
+    //       this.username = data.data.attributes.username;
+    //       this.mobile = data.data.attributes.mobile;
+    //     });
+    // },
+
     backUrl () {
       // 返回上一级
       window.history.go(-1)

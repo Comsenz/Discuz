@@ -56,18 +56,28 @@ class InviteRepository extends AbstractRepository
     }
 
     /**
-     * Use the invitation code
-     * @param $user_id
-     * @param $to_user_id
+     * get admin invite codes
+     * @param User $actor
+     * @return mixed
      */
-    public function useCode($user_id, $to_user_id){
+    public function getAdminCodeList(User $actor){
 
-    }
+        return Invite::where([
+            ['user_id', '=', $actor->id],
+            ['type', '=', 2]])->get()
+            ->each(function ($item, $key) {
+                if ($item->status == 1){
 
-    /**
-     *
-     */
-    public function create(){
+                    $item->to_user_id && $item->status = 2;//已使用
 
+                    if (!$item->to_user_id && $item->endtime > time()){
+                        $item->status = 3;//未使用
+                    }
+                    if (!$item->to_user_id && $item->endtime < time()){
+                        $item->status = 4;//已过期
+                    }
+                }
+
+            });
     }
 }

@@ -9,7 +9,8 @@ export const SET_NUM = 'SET_NUM';
 //登录模块
 export const SET_LOGIN_STATE = 'SET_LOGIN_STATE';
 
-
+//admin后台模块
+export const SET_SEARCH_CONDITION = 'SET_SEARCH_CONDITION';
 
 
 

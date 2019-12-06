@@ -270,7 +270,6 @@ export default {
           this.$router.push({path:'/admin/fund-details'});
           break;
         default :
-
           this.sideList = [];
       }
 
@@ -514,5 +513,10 @@ export default {
   created(){
    this.setDataStatus();
   },
+  watch: {
+    $route () {
+      this.setDataStatus();
+    }
+  }
 
 }

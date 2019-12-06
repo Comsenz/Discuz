@@ -12,22 +12,13 @@
           		<th>链接状态</th>
           		<th>链接操作</th>
           	</tr>
-          	<tr v-for="inviteLi in inviteList">
-          		<td>{{inviteLi.number}}</td>
-          		<td>{{inviteLi.role}}</td>
-          		<td>{{inviteLi.hrefStatus}}</td>
+          	<tr v-for="(inviteLi, index) in inviteList" :key="index">
+          		<td>{{inviteLi.id()}}</td>
+          		<td>{{getGroupNameById[inviteLi.group_id()]}}</td>
+          		<td>{{inviteLi.status() === 0 ? '已失效' : '使用中'}}</td>
           		<td>
-          			<a href="javascript:;" class="copyA">复制</a>
-          			<a href="javascript:;" class="invalidA">置为无效</a>
-          		</td>
-          	</tr>
-          	<tr class="">
-          		<td>1</td>
-          		<td>合伙人</td>
-          		<td>已失效</td>
-          		<td>
-          			<a href="javascript:;" class="copyA font9">复制</a>
-          			<a href="javascript:;" class="invalidA font9">置为无效</a>
+          			<a href="javascript:;" :class="['copyA', inviteLi.status() === 0&&'font9']" @click="copyToClipBoard(inviteLi)">复制</a>
+          			<a href="javascript:;" :class="['invalidA', inviteLi.status() === 0&&'font9']" @click="resetDelete(inviteLi)">置为无效</a>
           		</td>
           	</tr>
           </table>
@@ -39,14 +30,14 @@
 		<div class="manageFootFixed">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
-					<span v-model="choiceRes">{{choiceRes}}</span>
+					<span>{{checkOperaStatus ? choiceRes.attributes.name + ' 邀请链接' : choiceRes.attributes.name}}</span>
 					<i class="icon iconfont icon-choice-item"></i>
 				</div>
 				<ul class="operaChoList" v-if="choiceShow">
-					<li v-for="(item, index) in choList" :key="index"  v-on:click.stop="setSelectVal(item)" class="operaChoLi">{{item}}</li>
+					<li v-for="(item, index) in choList" :key="index"  v-on:click.stop="setSelectVal(item)" class="operaChoLi">{{item.attributes.name}} 邀请链接</li>
 				</ul>
 			</div>
-			<button class="checkSubmit">提交</button>
+			<button class="checkSubmit" @click="checkSubmit">生成</button>
 		</div>
 
 

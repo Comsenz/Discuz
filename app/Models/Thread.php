@@ -10,7 +10,7 @@
 namespace App\Models;
 
 use App\Events\Thread\Hidden;
-use app\Events\Thread\Restored;
+use App\Events\Thread\Restored;
 use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
+ * @property Post $firstPost
  * @property User $user
  * @package App\Models
  */
@@ -46,6 +47,10 @@ class Thread extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+
+    const UNAPPROVED = 0;
+    const APPROVED = 1;
+    const IGNORED = 2;
 
     /**
      * {@inheritdoc}
@@ -202,7 +207,7 @@ class Thread extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Classify::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
@@ -211,6 +216,16 @@ class Thread extends Model
      * @return BelongsTo
      */
     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the thread's author.
+     *
+     * @return BelongsTo
+     */
+    public function lastPostedUser()
     {
         return $this->belongsTo(User::class);
     }

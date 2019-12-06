@@ -120,12 +120,17 @@ return [
             ]
         ]
     ],
+    'excel' => [
+        'root' => storage_path('public/exports')
+    ],
     //加载ServiceProvider
     'providers' => [
 //        App\Providers\EventServiceProvider::class
         App\Providers\EventServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
-        App\Providers\UserServiceProvider::class
+        App\Providers\UserServiceProvider::class,
+        App\Providers\ThreadServiceProvider::class,
+        App\Providers\PostServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

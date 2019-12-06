@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+
 use Discuz\Auth\Guest;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\DiscuzChannelManager;
+use Illuminate\Support\Carbon;
 
 
 /**
@@ -29,6 +30,7 @@ use App\Notifications\DiscuzChannelManager;
  * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
+ * @property Carbon $joined_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @package App\Models
@@ -39,8 +41,14 @@ class User extends Model
     use ScopeVisibilityTrait;
     use Notifiable;
 
+    const MOBILE_ACTIVE = true;
 
-    const MOBILE_ACTIVE = 1;
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'mobile_confirmed' => 'boolean',
+    ];
 
     /**
      * {@inheritdoc}
@@ -83,6 +91,7 @@ class User extends Model
     {
         $user = new static;
         $user->attributes = $data;
+        $user->joined_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
         return $user;
     }
@@ -180,6 +189,11 @@ class User extends Model
         }
 
         return $value;
+    }
+
+    public function getMobileAttribute($value)
+    {
+        return $value ? substr_replace($value, '****', 3, 4) : '';
     }
 
     /*

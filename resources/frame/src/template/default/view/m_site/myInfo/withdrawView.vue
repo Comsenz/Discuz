@@ -24,7 +24,7 @@
               clearable
               label="提现金额 "
               placeholder="请输入提现金额"
-              readonly
+              
               @touchstart.native.stop="show = true"
             />
 
@@ -63,17 +63,18 @@
 
             <van-field
               clearable
+              v-model="sms"
               label="验证码 "
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default" @click="sendVerificationCode">发送验证码</van-button>
             </van-field>
 
           </van-cell-group>
         </div>
 
         <div class="withdraw-operating">
-          <van-button type="primary" >提交</van-button>
+          <van-button type="primary" @click="withdraw">提交</van-button>
         </div>
 
       </main>

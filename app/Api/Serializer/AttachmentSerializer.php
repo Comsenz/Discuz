@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -11,23 +10,46 @@ declare(strict_types=1);
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
+use Tobscure\JsonApi\Relationship;
 
 class AttachmentSerializer extends AbstractSerializer
 {
-    protected $type = 'attachment';
+    /**
+     * {@inheritdoc}
+     */
+    protected $type = 'attachments';
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultAttributes($model)
     {
         return [
-            'id' => $model->id,
-            'user_id' => $model->user_id,
-            'post_id' => $model->post_id,
-            'attachment' => $model->attachment,
-            'file_name' => $model->file_name,
-            'file_path' => $model->file_path,
-            'file_size' => $model->file_size,
-            'file_type' => $model->file_type,
-            'remote' => $model->remote
+            'isGallery'         => $model->is_gallery,
+            'isRemote'          => $model->is_remote,
+            'attachment'        => $model->attachment,
+            'fileName'          => $model->file_name,
+            'filePath'          => $model->file_path,
+            'fileSize'          => (int) $model->file_size,
+            'fileType'          => $model->file_type,
         ];
+    }
+
+    /**
+     * @param $attachment
+     * @return Relationship
+     */
+    protected function user($attachment)
+    {
+        return $this->hasOne($attachment, UserSerializer::class);
+    }
+
+    /**
+     * @param $attachment
+     * @return Relationship
+     */
+    public function post($attachment)
+    {
+        return $this->hasOne($attachment, PostSerializer::class);
     }
 }

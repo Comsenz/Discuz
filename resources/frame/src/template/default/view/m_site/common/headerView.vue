@@ -1,92 +1,20 @@
 <template>
   <section>
-    <!-- <header v-if="$route.meta.twoHeader"> -->
-      <!-- 是否显示返回按钮或者使用第二套头部样式，可根据路由参数twoHeader判断 -->
-      <!-- <div class="" :class="{'fixedHead': isfixHead}">
-        <div class="hederWrap">
-          <img src="../../../../../../static/images/logo.png" class="logo headLogo">
-          <div class="topRight">
-            <span class="icon iconfont icon-search" @click="searchJump"></span>
-            <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
-          </div>
-        </div>
-      </div>
-    </header>
-    <header> -->
-      <!-- 是否显示悬浮导航，滚动后置顶导航 -->
-      <!-- <div class="" :class="{'fixedHead': isfixHead}" v-if="showHeader">
-        <div class="hederWrap">
-          <img src="../../../../../../static/images/logo.png" class="logo headLogo">
-          <div class="topRight">
-            <span class="icon iconfont icon-search" @click="searchJump"></span>
-            <span is-link @click="showPopup" class="icon iconfont icon-Shape"></span>
-          </div>
-        </div>
-      </div> -->
-    <!-- </header> -->
-    <!-- 是否显示返回按钮或者使用第三套头部样式，可根据路由参数threeHeader判断 -->
-    <!-- <header id="headThree" v-if="$route.meta.threeHeader">
-      <div class="contentHead">
-        <span class="icon iconfont icon-back headBack" @click="backUrl"></span>
-        <h1 class="headTit">{{$route.meta.title}}</h1>
-      </div>
-    </header> -->
-    <!-- 侧边栏 -s -->
     <van-popup
       class="sidebarWrap"
       v-model="popupShow"
       position="right"
       :style="{ height: '100%' }"
    >
-      <div class="sideCon">
-        <div class="sideUserBox">
-          <!-- <img src="../../../../../../static/images/noavatar.gif" class="userHead"> -->
-          <img src="avatarUrl" alt="" class="userHead">
-          <div class="userDet">
-            <div class="userName">{{username}}</div>
-            <div class="userPhone">{{mobile}}</div>
-          </div>
-          <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-        </div>
-      </div>
-      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">
-        <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-           <span class="itemTit">{{item.name}}</span>
-           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-        </div>
-      </div>
-      <div class="itemGap"></div>
-      <div class="sideConList">
-        <div class="sideCon" v-for="(item, i) in sidebarList2" :key="'list2'+i">
-          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-          <div class="sideItem" v-else @click="bindEvent(item.enentType)">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="itemGap"></div>
-      <div class="sideConList">
-        <div class="sideCon" v-for="(item, i) in sidebarList3" :key="'list3'+i">
-          <div class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path">
-             <span class="itemTit">{{item.name}}</span>
-             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
-          </div>
-        </div>
-      </div>
+      <sidebar></sidebar>
     </van-popup>
     <!-- 侧边栏 -E -->
-
-
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
-        <img src="avatarUrl" alt="" class="inviteHead">
-        <div class="inviteName">{{username}}</div>
+        <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="aaaa" class="inviteHead" v-model="userInfoAvataUrl">
+        <img v-else="" src="../../../../../../static/images/noavatar.gif" alt="ssss" class="inviteHead">
+        <div class="inviteName" v-model="userInfoName">{{userInfoName}}</div>
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>
       <div class="headOpe">
@@ -95,31 +23,29 @@
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
       <img src="../../../../../../static/images/logo.png" class="logo" v-show="logoShow">
-      <div class="circleDet" v-model="perDet" v-show="perDetShow">
-        <span v-model="perDet.themeNum">主题：{{perDet.themeNum}}</span>
-        <span v-model="perDet.memberNum">成员：{{perDet.memberNum}}</span>
-        <span v-model="perDet.circleLeader">圈主：{{perDet.circleLeader}}</span>
+      <div class="circleDet" v-show="perDetShow">
+        <span>主题：{{siteInfo.threads()}}</span>
+        <span>成员：{{siteInfo.members()}}</span>
+        <span>圈主：{{username}}</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi">
-          <van-tab v-for="(navChi, index) in themeNavList" :title="navChi.text" :key="index">
+          <van-tab v-for="(cateChi, index) in categories" :title="cateChi.name()" :key="index">
           </van-tab>
         </van-tabs>
-        <!-- <div class="navBarBox">
-          <ul class="navBarCon">
-            <li v-for="(navChi, index) in themeNavList" v-on:click="addClass(index,$event)" v-bind:class="{ navActi:index==current}">{{ navChi.text }}</li>
-          </ul>
-        </div> -->
       </div>
     </div>
   </section>
 </template>
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-
+import Sidebar from '../../m_site/common/sidebarView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
   name: "headerView",
+  components:{
+  	Sidebar
+  },
   ...mSiteHeader
 }
 

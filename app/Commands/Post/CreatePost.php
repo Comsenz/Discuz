@@ -9,6 +9,7 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\Created;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\User;
@@ -17,7 +18,7 @@ use App\Validators\PostValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -39,7 +40,14 @@ class CreatePost
      *
      * @var int
      */
-    public $replyId;
+    public $replyPostId;
+
+    /**
+     * The id of the post waiting to be replied.
+     *
+     * @var int
+     */
+    public $replyUserId;
 
     /**
      * The user performing the action.
@@ -58,7 +66,7 @@ class CreatePost
     /**
      * The current ip address of the actor.
      *
-     * @var array
+     * @var string
      */
     public $ip;
 
@@ -71,21 +79,21 @@ class CreatePost
     public function __construct($threadId, User $actor, array $data, $ip = null)
     {
         $this->threadId = $threadId;
-        $this->replyId = Arr::get($data, 'attributes.replyId', null);
+        $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
     }
 
     /**
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @param PostValidator $validator
      * @return Post
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, ThreadRepository $threads, PostValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, PostValidator $validator)
     {
         $this->events = $events;
 
@@ -93,13 +101,17 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
-        if (!$isFirst) {
+        if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 
             // 回复另一条回复时，检查是否在同一主题下的
-            if (!empty($this->replyId)) {
-                if (Post::where([['id', $this->replyId], ['thread_id', $thread->id]])->doesntExist()) {
+            if (! empty($this->replyPostId)) {
+                $this->replyUserId = Post::where('id', $this->replyPostId)
+                    ->where('thread_id', $thread->id)
+                    ->value('user_id');
+
+                if (! $this->replyUserId) {
                     throw (new ModelNotFoundException);
                 }
             }
@@ -110,9 +122,12 @@ class CreatePost
             Arr::get($this->data, 'attributes.content'),
             $this->actor->id,
             $this->ip,
-            $this->replyId,
+            $this->replyPostId,
+            $this->replyUserId,
             $isFirst
         );
+
+        $post->raise(new Created($post, $this->actor, $this->data));
 
         $this->events->dispatch(
             new Saving($post, $this->actor, $this->data)

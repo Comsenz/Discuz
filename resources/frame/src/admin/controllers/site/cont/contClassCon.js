@@ -44,6 +44,11 @@ export default {
       console.log(123);
     }
   },
+
+  created(){
+
+  },
+
   components:{
     Card,
     TableContAdd

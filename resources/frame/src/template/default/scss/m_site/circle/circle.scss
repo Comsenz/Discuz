@@ -51,58 +51,58 @@ body {
 		@include font-dpr(28);
 		@include px2rem(line-height, 48);
 	}
-	.screen {
-		float: right;
-		cursor: pointer;
-		@include font-dpr(28);
-		color: #888888;
-		@include px2rem(line-height, 48);
-		position: relative;
-		.themeList {
-			position: absolute;
-			@include px2rem(top, 60);
-			background: $corF7;
-			right: 0;
-			@include px2rem(min-width, 190);
-			@include px2rem(border-radius, 10);
-			border: 1px solid $corE5;
-			&:after {
-				content: '';
-				display: block;
-				border-width: 10px;
-				position: absolute;
-				top: -17px;
-				right: 10px;
-				border-style: solid dashed dashed;
-				border-color: transparent transparent $corF7;
-				font-size: 0;
-				line-height: 0;
-			}
-			&:before {
-				content: '';
-				display: block;
-				border-width: 10px;
-				position: absolute;
-				top: -18px;
-				right: 10px;
-				border-style: solid dashed dashed;
-				border-color: transparent transparent $corE5;
-				font-size: 0;
-				line-height: 0;
-			}
-			a {
-				display: block;
-				@include px2rem(padding, 22 30);
-				@include px2rem(line-height, 42);
-				color: $cor888;
-				@include font-dpr(30);
-				border-bottom: 1px solid $corE5;
-				&:last-child {
-					border: none;
-				}
-			}
-		}
-	}
+}
+.screen {
+  float: right;
+  cursor: pointer;
+  @include font-dpr(28);
+  color: #888888;
+  @include px2rem(line-height, 48);
+  position: relative;
+  .themeList {
+    position: absolute;
+    @include px2rem(top, 60);
+    background: $corF7;
+    right: 0;
+    @include px2rem(min-width, 190);
+    @include px2rem(border-radius, 10);
+    border: 1px solid $corE5;
+    &:after {
+      content: '';
+      display: block;
+      border-width: 10px;
+      position: absolute;
+      top: -17px;
+      right: 10px;
+      border-style: solid dashed dashed;
+      border-color: transparent transparent $corF7;
+      font-size: 0;
+      line-height: 0;
+    }
+    &:before {
+      content: '';
+      display: block;
+      border-width: 10px;
+      position: absolute;
+      top: -18px;
+      right: 10px;
+      border-style: solid dashed dashed;
+      border-color: transparent transparent $corE5;
+      font-size: 0;
+      line-height: 0;
+    }
+    a {
+      display: block;
+      @include px2rem(padding, 22 30);
+      @include px2rem(line-height, 42);
+      color: $cor888;
+      @include font-dpr(30);
+      border-bottom: 1px solid $corE5;
+      &:last-child {
+        border: none;
+      }
+    }
+  }
 }
 .cirPostCon {
 	@include px2rem(padding, 30 30 20 30);
@@ -537,7 +537,7 @@ openCircleConView.vue
 	@include px2rem(line-height, 40);
 	@include font-dpr(28);
 	color: $cor888;
-	overflow: hidden;
+	overflow: visible;
 	.readNum {
 		float: left;
 	}
@@ -551,6 +551,14 @@ openCircleConView.vue
 			@include font-dpr(28);
 		}
 	}
+  &:after {
+    display: block;
+    content: '';
+    width: 0;
+    height: 0;
+    zoom: 1;
+    clear: both;
+  }
 }
 .commentBox {
 	@include px2rem(padding, 28 0 0 0);
@@ -600,7 +608,9 @@ openCircleConView.vue
 			@include px2rem(margin-bottom, 22);
 		}
 		.quoteCon {
+      display: block;
 			@include px2rem(padding, 16);
+      @include px2rem(margin-bottom, 16);
 			background: $corF7;
 			@include font-dpr(26);
 			color: $cor888;
@@ -628,8 +638,9 @@ openCircleConView.vue
 			@include font-dpr(26);
 			color: $cor888;
 			@include px2rem(margin-left, 20);
+      @include px2rem(line-height, 36);
 			vertical-align: baseline;
-			.icon-praise-after {
+			.icon {
 				@include px2rem(margin-right, 8);
 			}
 		}
@@ -698,11 +709,13 @@ details.vue
 		text-align: center;
 		float: left;
 		width: 33.33%;
+    @include font-dpr(30);
 		@include px2rem(height, 104);
 		@include px2rem(line-height, 104);
 		.icon {
 			@include px2rem(margin-right, 16);
 			@include font-dpr(32);
+      @include px2rem(line-height, 104);
 
 		}
 		&:after {
@@ -728,7 +741,7 @@ details.vue
 	}
 }
 .rewardPopup {
-	@include px2rem(height, 530);
+	@include px2rem(height, 532);
 	.support {
 		display: block;
 		@include font-dpr(26);
@@ -738,7 +751,7 @@ details.vue
 	}
 	.rewardMonBox {
 		overflow: hidden;
-		@include px2rem(padding, 34 34 46 34);
+		@include px2rem(padding, 34 34 1 34);
 		.moneyChi {
 			float: left;
 			@include px2rem(height, 100);
@@ -762,6 +775,67 @@ details.vue
 			}
 		}
 	}
+}
+.qrCodeBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  @include px2rem(width, 580);
+  @include px2rem(height, 820);
+  .popupTit {
+  	display: block;
+  	@include font-dpr(26);
+  	@include px2rem(line-height, 36);
+  	color: $cor888;
+  	@include px2rem(padding, 36 0 0 0);
+    text-align: center;
+  }
+  .payNum {
+    @include px2rem(line-height, 84);
+    @include font-dpr(48);
+    @include px2rem(padding, 36 0);
+    @include px2rem(margin, 0 30 24 30);
+    border-bottom: 1px solid $corE5;
+    text-align: center;
+    span {
+      @include font-dpr(70);
+    }
+  }
+  .payType {
+    @include px2rem(margin, 0 30 34 30);
+    @include px2rem(line-height, 36);
+    @include font-dpr(26);
+    overflow: hidden;
+    .typeLeft {
+      float: left;
+      color: $cor888;
+    }
+    .typeRight {
+      float: right;
+      color: $cor444;
+      .icon {
+        @include font-dpr(30);
+        @include px2rem(margin-right, 15);
+        color: #09BB07;
+      }
+    }
+  }
+  .qrCode {
+    display: block;
+     @include px2rem(width, 380);
+     @include px2rem(height, 380);
+     @include px2rem(margin-top, 34);
+     @include px2rem(margin-bottom, 14);
+     margin-left: auto;
+     margin-right: auto;
+  }
+  .payTip {
+    @include font-dpr(30);
+    color: $cor333;
+    @include px2rem(line-height, 42);
+    @include px2rem(margin-top, 14);
+    text-align: center;
+  }
 }
 //发表主题
 $postTopicColor:#336699;

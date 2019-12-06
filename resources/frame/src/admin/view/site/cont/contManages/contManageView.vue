@@ -8,55 +8,35 @@
           </div>
 
           <ContArrange
-            author="小虫"
-            theme="站长圈"
-            prply="123"
-            browse="456"
-            last="奶罩"
-            finalPost="2019-1-1 12:00"
+            v-for="(items,index) in  themeList"
+            :author="items.user().username()"
+            :theme="items.category().name()"
+            :prply="items.postCount()"
+            :browse="items.viewCount()"
+            :last="items.lastPostedUser().username()"
+            :finalPost="formatDate(items.createdAt())"
+            :key="items.id()"
           >
-
             <div class="cont-manage-theme__table-side" slot="side">
-              <el-checkbox ></el-checkbox>
+              <el-checkbox v-model="checkedTheme[index].status" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>
             </div>
 
             <div style="line-height: 20PX;" slot="main">
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
-              主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容主题内容
+              {{items.firstPost().content()}}
             </div>
+
           </ContArrange>
+
+          <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPag"
+              :page-size="parseInt(searchData.pageSelect)"
+              layout="total, prev, pager, next,jumper"
+              :total="total">
+            </el-pagination>
+          </div>
 
         </div>
       </div>
@@ -72,33 +52,32 @@
             label-class-name="cont-manage-operating__table-label"
             label="操作"
             prop="theme"
-            min-width="250">
+            width="250">
             <template slot-scope="scope">
-              <el-radio v-model="radio" label="1">{{scope.row.name}}</el-radio>
+              <el-radio v-model="operatingSelect" :label="scope.row.label" >{{scope.row.name}}</el-radio>
             </template>
           </el-table-column>
 
           <el-table-column
             label="选项"
-            prop="theme"
             min-width="250">
             <template slot-scope="scope">
 
-              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="value" placeholder="选择圈子">
+              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择圈子">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in categoriesList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
                 </el-option>
               </el-select>
 
-              <el-radio-group v-if="scope.row.name === '批量置顶'" v-model="toppingRadio">
+              <el-radio-group class="cont-manage__option-select" v-if="scope.row.name === '批量置顶'" v-model="toppingRadio">
                 <el-radio :label="1">置顶</el-radio>
                 <el-radio :label="2">解除置顶</el-radio>
               </el-radio-group>
 
-              <el-radio-group v-if="scope.row.name === '批量设置精华'" v-model="essenceRadio">
+              <el-radio-group class="cont-manage__option-select" v-if="scope.row.name === '批量设置精华'" v-model="essenceRadio">
                 <el-radio :label="1">精华</el-radio>
                 <el-radio :label="2">取消精华</el-radio>
               </el-radio-group>
@@ -108,8 +87,8 @@
 
         </el-table>
 
-        <Card>
-          <el-button type="primary">提交</el-button>
+        <Card class="footer-btn">
+          <el-button @click="submitClick" type="primary">提交</el-button>
         </Card>
 
       </div>

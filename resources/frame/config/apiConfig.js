@@ -1,23 +1,50 @@
 /**
  * 接口配置文件
  */
-// import browserDb from '../src/helpers/webDbHelper';
-// var nn =require ('../src/helpers/webDbHelper.js');
-// let userId = browserDb.getLItem('tokenId');
+// var browserDb =require ('../src/helpers/webDbHelper.js');
 
 module.exports = {
 	'getVote': '/commonvote/getvote', //获取单组投票数据
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'users':'/api/users', //用户信息
-  'forum':'/api/forum',
+  'forum':'/api/forum', //站点信息
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
-  'classify':'/api/classify',   //分类
+  'categories':'/api/categories',   //分类
   'emojis':'/api/emoji',      //表情接口
   'threads':'/api/threads',//主题
+  'notice':'/api/notification',//通知列表(回复,点赞,打赏)
+  'wallet':'/api/wallet/user/',//查看用户钱包
+  'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
+  'walletFrozen':'/api/wallet/log',//冻结金额
+  'orderList':'/api/order',//订单明细,打赏支付
+  'orderPay':'/api/trade/pay/order',  //订单支付
+  'walletDetails':'/api/wallet/log' ,//钱包明细
+  'updateWallet':'/api/wallet/user/',//更新用户钱包
+  'cash':'/api/wallet/cash',//提现
+  'collection':'/api/favorites',//我的收藏
+  // 'changePassword':'api/users/',//修改密码
+  'noticeList':'/api/notificationUnread', //通知列表未读信息
+  // 'searchUser':'/api/users', //用户搜索
+  'searchThreads':'/api/threads',//搜索
+  'notice':'/api/notification',
+  'posts':'/api/posts', //回复主题
   // 'getCircle': '/circle/getCircle', //获取circle信息
+
+  'pay':'/api/trade/pay/order',    //支付订单
+
+  'batch':'/api/threads/batch',   //修改主题接口(批量)
+  'upload': '/api/users/',//上传头像
+  'invite':'/api/Invite',//创建邀请码
+  'groups':'/api/groups',//获取所有操作类型
+  'group-permission':'/api/group-permission', // 修改用户组权限
+
+
+  /*后台*/
+  'siteinfo':'/api/siteinfo'    //首页-系统信息
+
 }

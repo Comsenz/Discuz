@@ -3,10 +3,11 @@
     <myWalletHeader title="我的钱包"></myWalletHeader>
     <div class="content">
       <main class="like-main">
-        <van-cell title="可用余额" is-link value="6423.00元"/>
-        <van-cell title="冻结金额" is-link value="3054.23元"/>
-        <van-cell title="提现记录" is-link />
-        <van-cell title="可用余额" is-link />
+        <van-cell title="可用余额" @click="myWallet('withdraw')" is-link :value="value+'元'"/>
+        <van-cell title="冻结金额" @click="myWallet('frozen-amount')" is-link :value="valueFrozen+'元'"/>
+        <van-cell title="提现记录" @click="myWallet('withdrawals-record')" is-link />
+        <van-cell title="钱包明细" @click="myWallet('wallet-details')" is-link />
+        <van-cell title="订单明细" @click="myWallet('order-details')" is-link />
       </main>
       <footer class="my-info-money-footer"></footer>
     </div>
