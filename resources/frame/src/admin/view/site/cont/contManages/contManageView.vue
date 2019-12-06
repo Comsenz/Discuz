@@ -27,12 +27,12 @@
 
           </ContArrange>
 
-          <div class="cont-manage-theme__table-footer" v-if="themeList.length > 0">
+          <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPag"
-              :page-size="this.searchData.pageSelect"
+              :page-size="parseInt(searchData.pageSelect)"
               layout="total, prev, pager, next,jumper"
               :total="total">
             </el-pagination>
@@ -63,7 +63,7 @@
             min-width="250">
             <template slot-scope="scope">
 
-              <el-select @change="selectChange" v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择圈子">
+              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择圈子">
                 <el-option
                   v-for="item in categoriesList"
                   :key="item.id"

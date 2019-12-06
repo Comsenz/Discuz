@@ -5,7 +5,6 @@
 import Card from '../../../view/site/common/card/card';
 import ContArrange from '../../../view/site/common/cont/contArrange';
 
-
 export default {
   data:function () {
     return {
@@ -28,25 +27,124 @@ export default {
 
       checkList: ['通过'],
 
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',
+      showSensitiveWords:false,   //显示敏感词
 
-      checked:false
+      pageOptions: [
+        {
+          value: '10',
+          label: '每页显示10条'
+        }, {
+          value: '20',
+          label: '每页显示20条'
+        }, {
+          value: '30',
+          label: '每页显示30条'
+        }
+      ],
+      pageSelect:'10',            //每页显示数选择值选中
+
+      searchReview:[
+        {
+          value:0,
+          label:'未审核'
+        },
+        {
+          value:2,
+          label:'以忽略'
+        }
+      ],
+      searchReviewSelect:0,       //审核状态选中
+
+      searchCategory:[
+        {
+          value:1,
+          label:'所有帖子'
+        },
+        {
+          value:2,
+          label:'仅群组'
+        },
+        {
+          value:3,
+          label:'默认板块'
+        },
+        {
+          value:4,
+          label:'新板块名称'
+        },
+
+      ],
+      searchCategorySelect:1,     //搜索分类选中
+
+      searchData:[
+        {
+          value:1,
+          label:'全部'
+        },
+        {
+          value:2,
+          label:'一周'
+        },
+        {
+          value:3,
+          label:'一月'
+        },
+        {
+          value:4,
+          label:'三月'
+        }
+      ],
+      searchDataSelect:1,         //搜索时间选中
+
+      reasonForOperation:[
+        {
+          value:1,
+          label:'无'
+        },
+        {
+          value:0,
+          label:'--------'
+        },
+        {
+          value:2,
+          label:'广告/SPAM'
+        },
+        {
+          value:3,
+          label:'恶意灌水'
+        },
+        {
+          value:4,
+          label:'违规内容'
+        },
+        {
+          value:5,
+          label:'文不对题'
+        },
+        {
+          value:6,
+          label:'重复发帖'
+        },
+        {
+          value:7,
+          label:'我很赞同'
+        },
+        {
+          value:8,
+          label:'精品文章'
+        },
+        {
+          value:9,
+          label:'原创内容'
+        },
+        {
+          value:10,
+          label:''
+        }
+      ],
+      reasonForOperationSelect:1,    //操作理由选中
+
+      appleAll:false,
 
     }
   },

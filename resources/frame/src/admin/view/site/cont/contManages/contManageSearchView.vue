@@ -89,8 +89,6 @@
         <el-checkbox v-model="checkedStatus" @change="checkboxChange">更多</el-checkbox>
       </Card>
 
-
-
     </div>
 </template>
 

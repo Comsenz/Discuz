@@ -16,7 +16,7 @@ export default {
         viewedTimesMax:'',       //被浏览次数最大
         numberOfRepliesMin:'',   //被回复数最小
         numberOfRepliesMax:'',   //被回复数最大
-        essentialTheme:'',            //精华主题类型
+        essentialTheme:'',       //精华主题类型
         topType:''               //置顶主题类型
       }
     };
