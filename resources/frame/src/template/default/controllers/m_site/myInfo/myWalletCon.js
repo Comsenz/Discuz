@@ -54,10 +54,11 @@ export default {
       }
     },
     wallet(){
-      // const tokenId = browserDb.getLItem('tokenId');
+      const userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'wallet',
         method:'get',
+        splice:userId,
         data:{
           // user_id:this.user_id
         }

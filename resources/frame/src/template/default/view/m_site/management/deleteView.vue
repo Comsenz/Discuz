@@ -16,7 +16,7 @@
 	    	</div>
 	    </div>
 	    <div class="memberCheckList">
-        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
+        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick"></ThemeDet>
 		    <!-- <van-checkbox-group v-model="result" ref="checkboxGroup" class="deleChi" v-for="(items,index) in themeList" :key="index"> -->
 
 			    <!-- <div class="cirPostCon">
@@ -71,11 +71,11 @@
 
 
 	    </div>
-	    <div class="manageFootFixed choFixed">
+	    <!-- <div class="manageFootFixed choFixed">
           <a href="javascript:;" @click="checkAll">全选</a>
-			<a href="javascript:;" @click="signOutDele">退出批量删除</a>
+			<a href="javascript:;" @click="signOutDele">取消全选</a>
 			<button class="checkSubmit">删除选中</button>
-		</div>
+		</div> -->
 
     </div>
 </template>

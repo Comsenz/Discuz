@@ -47,8 +47,15 @@
 		    	</div>
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon.viewCount()}}&nbsp;阅读</span>
-		    		<a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a>
-		    		<a href="javascript:;" class="postDetR">收藏</a>
+		    		<!-- <a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a> -->
+            <div class="screen" @click="bindScreen">
+            	<span>管理</span>
+            	<span class="icon iconfont icon-down-menu jtGrayB"></span>
+            	<div class="themeList" v-if="showScreen">
+            		<a href="javascript:;"  @click="themeOpera(themeCon.firstPost().id(),cho.type,themeCon.category().id(),themeCon.firstPost().content())" v-for="(cho,index) in themeChoList" :key="index">{{cho.typeWo}}</a>
+            	</div>
+            </div>
+		    		<a href="javascript:;" class="postDetR" @click="themeOpera(themeCon.firstPost().id(),1,themeCon.category().id(),themeCon.firstPost().content())">收藏</a>
 		    		<a href="javascript:;" class="postDetR">分享</a>
 		    	</div>
 		    </div>
@@ -64,7 +71,7 @@
             <img v-for="reward in themeCon.rewardedUsers()" v-if="reward.avatarUrl()" :src="reward.avatarUrl()" class="payPerHead">
             <img v-else="" src="../../../../../../static/images/noavatar.gif" class="payPerHead">
           </div>
-          <div  v-for="item in themeCon.posts()">
+          <div v-for="item in themeCon.posts()">
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
@@ -82,8 +89,9 @@
               </div>
             </div>
             <div class="commentOpera padT22">
-              <a href="">管理<span class="icon iconfont icon-down-menu"></span></a>
-              <a href=""><span class="icon iconfont icon-praise-after"></span>{{item.likeCount()}}</a>
+              <a @click="replyOpera(item.id(),'1')">删除</a>
+              <a v-if="item.isLiked()" @click="replyOpera(item.id(),'2')"><span class="icon iconfont icon-praise-after"></span>{{item.likeCount()}}</a>
+              <a v-else="" @click="replyOpera(item.id(),'2')"><span class="icon iconfont icon-like"></span>{{item.likeCount()}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon.id(),item.id(),item.content())"></a>
             </div>
           </div>
@@ -93,7 +101,7 @@
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
-          <div class="footChi">
+          <div class="footChi" @click="replyOpera(themeCon.firstPost().id(),'2')">
             <span class="icon iconfont icon-like"></span>
             赞
           </div>
@@ -117,16 +125,28 @@
             </div>
           </div>
        </van-popup>
-       <div class="qrCodeBox" v-show="qrcodeShow">
-         <img :src="codeUrl" alt="" class="qrCode">
-       </div>
+       <van-popup
+       v-model="qrcodeShow"
+       round
+       close-icon-position="top-right"
+       closeable
+       class="qrCodeBox"
+       get-container="body">
+       <span class="popupTit">立即支付</span>
+        <div class="payNum">￥<span>{{amountNum}}</span></div>
+        <div class="payType">
+          <span class="typeLeft">支付方式</span>
+          <span class="typeRight"><i class="icon iconfont icon-wepay"></i>微信支付</span>
+        </div>
+        <img :src="codeUrl" alt="" class="qrCode">
+        <p class="payTip">微信识别二维码支付</p>
+       </van-popup>
      </div>
     </div>
 </template>
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-// import comHeader from '../../m_site/common/headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
@@ -134,8 +154,6 @@ export default {
     components:{
     	comHeader
     },
-    // ...mSiteHeader,
-
     ...mSiteDetailsCon
 }
 

@@ -36,14 +36,14 @@ export default {
 	// },
 	managementCircles(str){
 		switch (str) {
-		  case 'circle-members':
+		  case 'members-management':
 			this.$router.push('/members-management'); //成员管理
 			break;
 		  case 'delete':
 			this.$router.push('/delete'); //批量管理
 			break;
-			case 'circle-manage-invite':
-			this.$router.push('/circle-manage-invite'); //成员邀请
+			case 'invite-join':
+			this.$router.push('/invite-join'); //成员邀请
 			break;
 		  default:
 			// this.$router.push('/');

@@ -16,21 +16,20 @@ module.exports = {
   'emojis':'/api/emoji',      //表情接口
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
-  // 'wallet':`/api/wallet/user/${browserDb.default.getLItem('tokenId')}`,//查看用户钱包
+  'wallet':'/api/wallet/user/',//查看用户钱包
   'reflect':'/api/wallet/cash' ,//提现记录列表
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   'walletFrozen':'/api/wallet/log',//冻结金额
   'orderList':'/api/order',//订单明细,打赏支付
   'orderPay':'/api/trade/pay/order',  //订单支付
-  'invite':'/api/invite',
   'walletDetails':'/api/wallet/log' ,//钱包明细
   'updateWallet':'/api/wallet/user/',//更新用户钱包
   'cash':'/api/wallet/cash',//提现
   'collection':'/api/favorites',//我的收藏
-  // 'changePassword':`/api/users/${browserDb.default.getLItem('tokenId')}`,//修改密码
+  // 'changePassword':'api/users/',//修改密码
   'noticeList':'/api/notificationUnread', //通知列表未读信息
-  'searchUser':'/api/users', //用户搜索
+  // 'searchUser':'/api/users', //用户搜索
   'searchThreads':'/api/threads',//搜索
   'notice':'/api/notification',
   'posts':'/api/posts', //回复主题
@@ -38,8 +37,12 @@ module.exports = {
 
   'pay':'/api/trade/pay/order',    //支付订单
 
-  'batch':'/api/threads/batch',   //修改主题接口
+  'batch':'/api/threads/batch',   //修改主题接口(批量)
   'upload': '/api/users/',//上传头像
+  'invite':'/api/Invite',//创建邀请码
+  'groups':'/api/groups',//获取所有操作类型
+  'group-permission':'/api/group-permission', // 修改用户组权限
+
 
   /*后台*/
   'siteinfo':'/api/siteinfo'    //首页-系统信息

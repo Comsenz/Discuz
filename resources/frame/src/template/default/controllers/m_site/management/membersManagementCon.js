@@ -75,7 +75,7 @@ export default {
 		// 根据搜索进行请求
 		async getSearchValUserList(initStatus = false) {
 			try {
-				const response = await this.apiStore.find('searchUser', this.userParams)
+				const response = await this.apiStore.find('users', this.userParams)
 				if (initStatus) {
 					this.userList = [];
 				}

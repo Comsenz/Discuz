@@ -69,7 +69,7 @@ export default {
 			}
 			try{
 				const currentPageNum = this.userParams['page[number]'];
-				await this.apiStore.find('searchUser', this.userParams).then(data=>{
+				await this.apiStore.find('users', this.userParams).then(data=>{
 					this.searchUserList = this.searchUserList.concat(data);
 					this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
 					console.log(data,'user list data')

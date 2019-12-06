@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon"></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" ></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 	    <div class="themeTitBox">

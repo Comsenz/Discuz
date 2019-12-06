@@ -48,9 +48,11 @@ export default {
         this.payee= res.data.attributes.username;
         this.phone = res.data.attributes.mobile;
       })
+     
       this.appFetch({
         url:'wallet',
         method:'get',
+        splice:userId,
       }).then(res=>{
         this.canWithdraw = res.data.attributes.available_amount;
          this.handlingFee = res.data.attributes.cash_tax_ratio;

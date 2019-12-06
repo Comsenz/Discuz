@@ -8,7 +8,7 @@
           </div>
           <div class="modify-data-avatar-img">
             <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
-             <img  :src="headPortrait" alt="我的头像">
+             <img :src="headPortrait" alt="我的头像">
             <i>
               <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
             </i>
