@@ -3,7 +3,6 @@
 namespace App\Emoji;
 
 use Discuz\Foundation\AbstractServiceProvider;
-use Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContracts;
 
 class EmojiServiceProvider extends AbstractServiceProvider
 {
