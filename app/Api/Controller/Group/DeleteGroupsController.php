@@ -3,17 +3,17 @@
 namespace App\Api\Controller\Group;
 
 
-use App\Api\Serializer\GroupSerializer;
-use App\Commands\Group\UpdateGroup;
+use App\Api\Serializer\InfoSerializer;
+use App\Commands\Group\DeleteGroup;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Support\Arr;
 
-class UpdateGroupsController extends AbstractListController
+class DeleteGroupsController extends AbstractListController
 {
-    public $serializer = GroupSerializer::class;
+    public $serializer = InfoSerializer::class;
 
     protected $bus;
 
@@ -24,16 +24,15 @@ class UpdateGroupsController extends AbstractListController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $multipleData = Arr::get($request->getParsedBody(), 'data', []);
+        $multipleData = Arr::get($request->getParsedBody(), 'data.id', []);
 
         $list = collect();
-        foreach($multipleData as $data) {
+        foreach ($multipleData as $id) {
             $list->push(
                 $this->bus->dispatch(
-                    new UpdateGroup(
-                        Arr::get($data, 'attributes.id'),
-                        $request->getAttribute('actor'),
-                        $data
+                    new DeleteGroup(
+                        $id,
+                        $request->getAttribute('actor')
                     )
                 )
             );

@@ -11,7 +11,6 @@ use Exception;
 
 class DeleteGroup
 {
-
     use AssertPermissionTrait;
 
     protected $id;

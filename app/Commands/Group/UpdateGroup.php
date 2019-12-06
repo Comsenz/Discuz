@@ -43,6 +43,8 @@ class UpdateGroup
 
             $groupValidator->valid($attributes);
 
+            $group->name = $attributes['name'];
+
             $group->save();
 
             $group->succeed = true;
@@ -54,7 +56,6 @@ class UpdateGroup
             $data = $group;
         }
 
-//        dd($data->toArray());
         return $data;
     }
 }
