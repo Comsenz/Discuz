@@ -36,6 +36,68 @@ const getApi = function(key){
 }
 
 /**
+ * 解析数据
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+const analyzingData = function(data, included) {
+  included  = included ? included : [];
+
+  var newIncludes = {};
+  included.forEach(function(nowOne) {
+    newIncludes[nowOne.type+nowOne.id] = nowOne;
+  })
+
+  /**
+   * 获取一条数据真实数据
+   * @return {[type]} [description]
+   */
+    function getOneData(nowData) {
+      var result = {};
+
+      if(!nowData.attributes) {
+        nowData = newIncludes[nowData.type+nowData.id];
+      }
+
+      result._data = nowData.attributes;
+      if(nowData.relationships) {
+        var relationObj = {};
+
+        for(var relationKey in nowData.relationships) {
+          relationObj[relationKey] = getData(nowData.relationships[relationKey].data);
+        }
+
+        result = {...result, ...relationObj};
+      }
+
+      return result;    
+    }
+
+    /**
+     * 获取一条数据和一组数据
+     * @param  {[type]} nowData [description]
+     * @return {[type]}         [description]
+     */
+    function getData(nowData) {
+      var result = {};
+
+      if(nowData instanceof Array) {
+        result = [];
+
+        nowData.forEach(function(nowOne) {
+          result.push(getOneData(nowOne));
+        });
+      } else {
+        result = getOneData(nowData);
+      }
+
+      return result;
+    }
+
+  return getData(data, included);
+}
+
+/**
  * ajax 调用方法
  * @param  {[type]} params  [除了url参数的意义外，其他参数和axios参数一致]
  * @param  {[type]} success [请求成功回调方法]
@@ -132,6 +194,11 @@ const appFetch = function(params, options) {
           error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
         })         
       }     
+      
+      //处理后的结构数据
+      if(data.data.data) {
+        data.data.readdata = analyzingData(data.data.data, data.data.included);
+      }
 
       return data.data;
     } else {

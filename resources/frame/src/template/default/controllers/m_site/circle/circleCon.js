@@ -126,7 +126,7 @@ export default {
           }
         }
       }).then((res) => {
-        console.log(res, 'res');
+        console.log(res, 'res1111');
       })
       // this.appFetch({
       //   url:"classify",
