@@ -120,6 +120,12 @@ baseTpl.prototype.mergeArr = function(one, two) {
 }
 
 /**
+ * 支持的三大模块
+ * @type {Array}
+ */
+baseTpl.prototype.modules = ['m_site', 'p_site', 'admin_site'];
+
+/**
  * 加载路由和模板页面
  * @return {[type]} [description]
  */
@@ -133,8 +139,9 @@ baseTpl.prototype.loadRouter = function() {
 
 
   	for(var folder in template) {
-	    var nowModules = template[folder];
+  		if(!this.modules.includes(folder)) continue;
 
+	    var nowModules = template[folder];
 	    for(var mName in nowModules) {
 	    	if(['js', 'css'].includes(mName)) continue;
 
@@ -142,29 +149,41 @@ baseTpl.prototype.loadRouter = function() {
 	      	for (var childrenName in nowModules[mName].children){
 	        	var newChildren = {
 			            name: nowModules[mName].children[childrenName].metaInfo.title,
-			            path: (['m_site', 'admin_site'].includes(folder) ? '' : "/" + folder) + "/" + mName + "/" + childrenName,
+			            path: "/" + mName + "/" + childrenName,
 			            component: nowModules[mName].children[childrenName]['comLoad'],
 			            meta: {
 			            	...nowModules[mName].children[childrenName]['metaInfo'],
 							css: this.mergeArr(nowModules[mName].children[childrenName]['css'], nowModules['css']),
 				            js: this.mergeArr(nowModules[mName].children[childrenName]['js'], nowModules['js']),
-				            isMobile: folder == 'm_site'		            	
+				            isMobile: folder === 'm_site',
+				            isAdmin: folder === 'admin_site'		            	
 			            }
 		          	};
 
 	        	newChildrenList.push(newChildren);
 	      	}
 
+	      	if(newChildrenList.length) {
+	      		var defaultChildren = {};
+
+	      		defaultChildren.name = newChildrenList[0].name;
+	      		defaultChildren.path = "";
+				defaultChildren.component = newChildrenList[0].component;
+	      		defaultChildren.meta = newChildrenList[0].meta;	      		
+	      		newChildrenList.unshift(defaultChildren);
+	      	}
+
 	    	var nowRouterInfo = {
 					name: mName,
-			        path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
+			        path: '/' + mName,
 			        children:newChildrenList,
 					component: nowModules[mName]["comLoad"],
 					meta: {
 						...nowModules[mName]["metaInfo"],
 						css: this.mergeArr(nowModules[mName]["css"], nowModules['css']),
 						js: this.mergeArr(nowModules[mName]["js"], nowModules['js']),
-						isMobile: folder == 'm_site' 					
+						isMobile: folder === 'm_site',
+						isAdmin: folder === 'admin_site' 					
 					}
 					
 				};
@@ -177,7 +196,7 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView = {...{}, ...routes[0]};
 	defaultView.path = "*";
 	routes.push(defaultView);
-
+	console.log(routes);
   	return this.getBaseRouter(routes);
 }
 

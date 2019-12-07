@@ -91,6 +91,12 @@
 	3、在apache或者是nginx配置中配置，如果是爬虫访问则重定向到prerender服务。
 
 
+八、模块名称规划说明
+	前台手机端：m_site
+	前台pc端：p_site
+	后台：admin_site
+
+
 
 
 
