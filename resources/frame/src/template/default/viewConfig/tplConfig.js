@@ -11,6 +11,8 @@ export default {
    */
   template: {
     m_site:{
+      js: ['/js/rem.js'],
+      css: [],
       'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)

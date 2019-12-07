@@ -48,6 +48,8 @@ baseTpl.prototype.checkTemplate= function() {
 		var moduleInfo = this.template[moduleName];
 
 		for(var pageName in moduleInfo) {
+			if(['js', 'css'].includes(pageName)) continue;
+
 			var pageInfo = moduleInfo[pageName];
 
 			if(!pageInfo.comLoad || typeof pageInfo.comLoad != "function") {
@@ -110,6 +112,13 @@ baseTpl.prototype.getBaseRouter = function(routes) {
 	}
 }
 
+baseTpl.prototype.mergeArr = function(one, two) {
+	one = one ? one : [];
+	two = two ? two : [];
+
+	return [...one, ...two];
+}
+
 /**
  * 加载路由和模板页面
  * @return {[type]} [description]
@@ -127,30 +136,38 @@ baseTpl.prototype.loadRouter = function() {
 	    var nowModules = template[folder];
 
 	    for(var mName in nowModules) {
-	      	var newChildrenList = [];
+	    	if(['js', 'css'].includes(mName)) continue;
 
+	      	var newChildrenList = [];
 	      	for (var childrenName in nowModules[mName].children){
 	        	var newChildren = {
-		            name: nowModules[mName].children[childrenName].metaInfo.title,
-		            path: (['m_site', 'admin_site'].includes(folder) ? '' : "/" + folder) + "/" + mName + "/" + childrenName,
-		            component: nowModules[mName].children[childrenName]['comLoad'],
-		            meta: nowModules[mName].children[childrenName]['metaInfo'],
-		            css: nowModules[mName].children[childrenName]['css'],
-		            js: nowModules[mName].children[childrenName]['js']
+			            name: nowModules[mName].children[childrenName].metaInfo.title,
+			            path: (['m_site', 'admin_site'].includes(folder) ? '' : "/" + folder) + "/" + mName + "/" + childrenName,
+			            component: nowModules[mName].children[childrenName]['comLoad'],
+			            meta: {
+			            	...nowModules[mName].children[childrenName]['metaInfo'],
+							css: this.mergeArr(nowModules[mName].children[childrenName]['css'], nowModules['css']),
+				            js: this.mergeArr(nowModules[mName].children[childrenName]['js'], nowModules['js']),
+				            isMobile: folder == 'm_site'		            	
+			            }
 		          	};
 
 	        	newChildrenList.push(newChildren);
 	      	}
 
 	    	var nowRouterInfo = {
-				name: mName,
-        path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
-        children:newChildrenList,
-				component: nowModules[mName]["comLoad"],
-				meta: nowModules[mName]["metaInfo"],
-				css: nowModules[mName]["css"],
-				js: nowModules[mName]["js"]
-			};
+					name: mName,
+			        path: `${['m_site', 'admin_site'].includes(folder) ? '' : ('/'+folder )}${'/'+mName}`,
+			        children:newChildrenList,
+					component: nowModules[mName]["comLoad"],
+					meta: {
+						...nowModules[mName]["metaInfo"],
+						css: this.mergeArr(nowModules[mName]["css"], nowModules['css']),
+						js: this.mergeArr(nowModules[mName]["js"], nowModules['js']),
+						isMobile: folder == 'm_site' 					
+					}
+					
+				};
 
 			routes.push(nowRouterInfo);
 		}
@@ -161,8 +178,7 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView.path = "*";
 	routes.push(defaultView);
 
-	// console.log(routes, '1111');
-  return this.getBaseRouter(routes);
+  	return this.getBaseRouter(routes);
 }
 
 /**
@@ -201,8 +217,8 @@ baseTpl.prototype.loadOtherSource = function(Router) {
 		var nowRoute = to.matched[0].path == "*" ? Router.options.routes[0] : to;
 		var publicCss = _this.publicCss ? _this.publicCss : [],
 			publicJs = _this.publicJs ? _this.publicJs : [],
-			selfCss = nowRoute.css ? nowRoute.css : [],
-			selfJs = nowRoute.js ? nowRoute.js : [];
+			selfCss = nowRoute.meta.css ? nowRoute.meta.css : [],
+			selfJs = nowRoute.meta.js ? nowRoute.meta.js : [];
 
 		var sourceArrs = {
 			css: [...publicCss, ...selfCss],
@@ -243,12 +259,12 @@ baseTpl.prototype.getStyleCss = function(topath) {
 };
 
 /**
- * 获取当前访问链接的页面类型
- * @param  {[type]} topath [description]
- * @return {[type]}        [description]
+ * 获取页面类型
+ * @param  {[type]} to [description]
+ * @return {[type]}    [description]
  */
-baseTpl.prototype.getClientClass = function(topath) {
-	return commonHelper.getClientType(topath) ? "mobile" : "pc";
+baseTpl.prototype.getClientClass = function(to) {
+	return to.meta.isMobile ? 'mobile' : 'pc';
 }
 
 /**
@@ -259,7 +275,8 @@ baseTpl.prototype.getClientClass = function(topath) {
 baseTpl.prototype.registerSource = function(to, next) {
 	this.sourceCallBack = next;
 
-	var nowClientClass = this.getClientClass(to.path);
+	var nowClientClass = this.getClientClass(to);
+
 	this.ctype = nowClientClass;
 	this.loadCssSource(nowClientClass);
 	this.loadJsSource(nowClientClass);
