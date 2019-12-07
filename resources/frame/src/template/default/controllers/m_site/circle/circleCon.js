@@ -115,6 +115,19 @@ export default {
 
 
     loadThemeList(){
+      this.appFetch({
+        url: 'threads',
+        method: 'get',
+        data: {
+          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          page: {
+            offset: 20,
+            num: 3
+          }
+        }
+      }).then((res) => {
+        console.log(res, 'res');
+      })
       // this.appFetch({
       //   url:"classify",
       //   method:"get",

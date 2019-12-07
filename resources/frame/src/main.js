@@ -7,6 +7,7 @@ import 'amfe-flexible/index.js'
 //将jquery 放入全局变量
 import jQuery from "jquery";
 window.$ = jQuery;
+import "../config/languageConfig";
 
 import 'vant/lib/index.css'          //引入vant样式
 import './template/default/less/m_site/modules/publicIndex.less' //引入公共样式
@@ -76,5 +77,5 @@ const App = new Vue({
     moment: moment,
   	template: '<router-view></router-view>'
 }).$mount('#app');
-
 window.app = App;
+
