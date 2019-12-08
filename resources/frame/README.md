@@ -122,6 +122,58 @@
 
 	7、函数、属性、文件要加注释说明用途
 
+十、问题解决1
+	1、get 请求 include 传参封装
+		已处理
+	2、get 请求 filter、page、filed，需要传对象。
+		已处理
+
+	3、model数据解析
+		在返回的readdata中
+
+	1）将所有的数据都放到included中，data如果是对象就将其push到included中，如果不是将其合并到included中；
+	2）定义一个函数，将当前要获取的data和included传入其中；
+	3）判断data是数组还是对象，如果是数组说明这一级是多条数据，如果是对象，说明这一级只有一条数据；
+	4）初始化一个返回的data，初始值为数组。
+	5）循环遍历data，并在included中找到对应的数据，将数据返回到data中存储
+	6）如果是一条数据则返回data的下标0，如果是多条直接返回data；
+
+	4、>=200 && < 300，就是正确，其他是错误返回，按照错误返回处理
+		已处理
+	5、错误状态码列表由于雷提供，
+		Code信息已处理，于雷提供信息后补全到config中的languageConfig中
+
+	接口返回的字段：
+	data：正常或者部分正常时返回
+	meta: [
+	        {
+	            "id": "1",
+	            "message": "model_not_found"
+	        },
+	        {
+	            "id": "2",
+	            "message": "model_not_found"
+	        },
+	        {
+	            "id": "3",
+	            "message": "permission_denied"
+	        } ],//部分正常
+	error: [
+		{
+			code: "permission_denied" 		status: "401"
+		}
+	]//全部错误
+
+	6、后台路由跳转：/admin    不重定向到home
+		默认加载后台的第一个页面
+		
+	7、前后台区分路由守卫
+		路由守卫在tplConfig中
+		
+	8、前后台公共js和css的加载
+		js和css加载在tplConfig中
+
+
 
 
 
