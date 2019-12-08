@@ -15,6 +15,8 @@ export default {
 
     //后台模块
     admin_site:{
+      js: [],
+      css: [],
       admin:{
         comLoad: function (resolve) {
           require(['../view/site/IndexView'], resolve)
@@ -417,11 +419,13 @@ export default {
   },
 
   /**
-   * 不需要登陆的路径名称
-   * @type {Array}
+   * 后端路由守卫
+   * @param  {[type]}   to   [description]
+   * @param  {Function} next [description]
+   * @return {[type]}        [description]
    */
-  notNeedLogins: [
-    "admin/login",
-    ...tplConfig.notNeedLogins
-  ]
+  beforeEnter: function(to, form, next) {
+    next()
+    //console.log(to, form, next, 'admin');
+  }  
 };

@@ -9,6 +9,7 @@
 
 namespace App\Models;
 
+use App\Emoji\Bundle;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
@@ -74,6 +75,11 @@ class Post extends Model
      * @var User
      */
     protected static $stateUser;
+
+    public function getContentAttribute($value)
+    {
+        return Bundle::render(Bundle::parse($value));
+    }
 
     /**
      * Create a new instance in reply to a thread.

@@ -20,6 +20,7 @@ class CreateUsers extends Migration
             $table->string('password', 100)->comment('密码');
             $table->string('union_id', 100)->default('')->comment('union_id');
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
+            $table->string('avatar', 100)->default('');
             $table->dateTime('joined_at')->comment('付费加入时间');
             $table->dateTime('created_at')->comment('创建时间');
             $table->dateTime('updated_at')->comment('修改时间');

@@ -11,6 +11,8 @@ export default {
    */
   template: {
     m_site:{
+      js: ['/js/rem.js'],
+      css: [],
       'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
@@ -408,28 +410,17 @@ export default {
       }
 
 
-    },
-    site: {
-      index: {
-        comLoad: function (resolve) {
-          require(['../view/site/home/indexView'], resolve)
-        },
-        metaInfo: {
-          title: '首页'
-        }
-      },
-
     }
   },
 
   /**
-   * 不需要登陆的路径名称
-   * @type {Array}
+   * 前端路由守卫
+   * @param  {[type]}   to   [description]
+   * @param  {Function} next [description]
+   * @return {[type]}        [description]
    */
-  notNeedLogins: [
-    "site/index",
-    "m_site/index",
-    "m_site/login"
-  ]
-
+  beforeEnter: function(to, form, next) {
+    next();
+    //console.log(to, form, next, 'front');
+  }
 };

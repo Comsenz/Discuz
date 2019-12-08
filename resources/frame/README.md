@@ -91,6 +91,90 @@
 	3、在apache或者是nginx配置中配置，如果是爬虫访问则重定向到prerender服务。
 
 
+八、模块名称规划说明
+	前台手机端：m_site
+	前台pc端：p_site
+	后台：admin_site
+
+九、细节规范
+	1、后台页面和前台页面引用的公共样式都在一个文件里面，导致前后台冲突。
+	1）前后台分别定义各自的common.less，将前后台需要公共设置的样式在这面引入。
+	2）前后台应该定义各自的风格变量文件，前后台不可共用该文件。
+	3）浏览器默认css清除样式，应该放到前后台各自的common中。
+	4）* 等全局影响的样式在前后台各自的common中写。
+
+	2、模版中路径没有使用预定义的变量。
+		1）模板中的静态文件引入应该用全局变量中的路径拼接
+		:src="appConfig.staticBaseUrl+'/images/logo.png'"
+		2）后台文件的引入用search配置
+
+	3、css注意抽象。
+		1）不要直接复制代码蓝湖里面的样式。
+		2）各种统一参数找设计要。
+
+	4、引入第三方文件改成我们这边合理的名称。
+		1）外部引入第三方资源，改成一个合理的名称。
+
+	5、前台公共模板命名规则和加入search，不要在main.js 注册全局组件
+		模板文件夹名称+Common+模板名称：defaultCommonHeader
+
+	6、公共方法放到commonHelper中
+
+	7、函数、属性、文件要加注释说明用途
+
+十、问题解决1
+	1、get 请求 include 传参封装
+		已处理
+	2、get 请求 filter、page、filed，需要传对象。
+		已处理
+
+	3、model数据解析
+		在返回的readdata中
+
+	1）将所有的数据都放到included中，data如果是对象就将其push到included中，如果不是将其合并到included中；
+	2）定义一个函数，将当前要获取的data和included传入其中；
+	3）判断data是数组还是对象，如果是数组说明这一级是多条数据，如果是对象，说明这一级只有一条数据；
+	4）初始化一个返回的data，初始值为数组。
+	5）循环遍历data，并在included中找到对应的数据，将数据返回到data中存储
+	6）如果是一条数据则返回data的下标0，如果是多条直接返回data；
+
+	4、>=200 && < 300，就是正确，其他是错误返回，按照错误返回处理
+		已处理
+	5、错误状态码列表由于雷提供，
+		Code信息已处理，于雷提供信息后补全到config中的languageConfig中
+
+	接口返回的字段：
+	data：正常或者部分正常时返回
+	meta: [
+	        {
+	            "id": "1",
+	            "message": "model_not_found"
+	        },
+	        {
+	            "id": "2",
+	            "message": "model_not_found"
+	        },
+	        {
+	            "id": "3",
+	            "message": "permission_denied"
+	        } ],//部分正常
+	error: [
+		{
+			code: "permission_denied" 		status: "401"
+		}
+	]//全部错误
+
+	6、后台路由跳转：/admin    不重定向到home
+		默认加载后台的第一个页面
+		
+	7、前后台区分路由守卫
+		路由守卫在tplConfig中
+		
+	8、前后台公共js和css的加载
+		js和css加载在tplConfig中
+
+
+
 
 
 
