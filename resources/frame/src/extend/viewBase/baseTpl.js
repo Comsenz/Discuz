@@ -196,7 +196,7 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView = {...{}, ...routes[0]};
 	defaultView.path = "*";
 	routes.push(defaultView);
-	console.log(routes);
+	// console.log(routes);
   	return this.getBaseRouter(routes);
 }
 
