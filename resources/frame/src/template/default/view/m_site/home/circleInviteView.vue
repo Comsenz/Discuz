@@ -5,7 +5,7 @@
 	    <!-- <Header></Header> -->
 	    <div class="headerBox">
 	    	<div class="invitePerDet">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="inviteHead">
+	    		<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="inviteHead">
 		    	<div class="inviteName">Efhdkjfhk</div>
 		    	<p class="inviteWo">邀请您加入</p>
 	    	</div>

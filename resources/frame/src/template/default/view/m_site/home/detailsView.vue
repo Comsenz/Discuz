@@ -8,7 +8,7 @@
 		    	<div class="postTop">
 		    		<div class="postPer">
               <img :src="themeCon.user().avatarUrl()" alt="" class="postHead" v-if="themeCon.user().avatarUrl() == '' && themeCon.user().avatarUrl() == null">
-              <img src="../../../../../../static/images/noavatar.gif" class="postHead" v-else="">
+              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
 		    			<div class="perDet">
 		    				<div class="perName">{{themeCon.user().username()}}</div>
 		    				<div class="postTime">{{themeCon.user().createdAt()}}</div>
@@ -23,8 +23,8 @@
 		    	</div>
 		    	<div class="postImgBox">
 		    		<div class="postImgList">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postPictures">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postPictures">
 		    		</div>
 		    	</div>
 		    	<div class="uploadFileList">
@@ -69,14 +69,14 @@
           <div class="payPer" v-if="themeCon.rewardedUsers().length>0">
             <span class="icon iconfont icon-money"></span>
             <img v-for="reward in themeCon.rewardedUsers()" v-if="reward.avatarUrl()" :src="reward.avatarUrl()" class="payPerHead">
-            <img v-else="" src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
           </div>
           <div v-for="item in themeCon.posts()">
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
                   <img v-if="item.user().avatarUrl()" :src="item.user().avatarUrl()" class="postHead">
-                  <img v-else="" src="../../../../../../static/images/noavatar.gif" class="postHead">
+                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
                   <div class="perDet">
                     <div class="perName">{{item.user().username()}}</div>
                     <div class="postTime">{{item.updatedAt()}}</div>

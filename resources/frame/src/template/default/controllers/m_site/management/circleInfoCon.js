@@ -28,7 +28,7 @@ export default {
       const params = {};
        params.include='users';
        this.apiStore.find('forum',params).then(data => {
-         console.log(data.user());
+         // console.log(data.users());
          this.siteInfo = data;
          this.username = data.siteAuthor().username;
          // console.log(data.user().avatarUrl());
@@ -37,6 +37,11 @@ export default {
     //查看更多圈子成员
     moreCilrcleMembers(){
       this.$router.push({path:'circle-members'});
+    },
+    //点击圈子成员头像，跳转到用户主页
+    membersJump(userId){
+      console.log('2222');
+      this.$router.push({path:'/home-page/'+userId});
     }
 	},
 
@@ -44,6 +49,6 @@ export default {
 
 	},
 	beforeRouteLeave (to, from, next) {
-
+    next();
 	}
 }

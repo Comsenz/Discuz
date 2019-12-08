@@ -21,11 +21,7 @@
 	    		<a href="javascript:;" class="infoItemRight lookMore">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
 	    	</div>
 	    	<div class="circleMemberList">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-	    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
+	    		<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember">
 	    	</div>
 	    </div>
 	    <div class="loginOpera">

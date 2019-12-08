@@ -12,8 +12,8 @@
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
-        <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="aaaa" class="inviteHead" v-model="userInfoAvataUrl">
-        <img v-else="" src="../../../../../../static/images/noavatar.gif" alt="ssss" class="inviteHead">
+        <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="" class="inviteHead" v-model="userInfoAvataUrl">
+        <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt="ssss" class="inviteHead">
         <div class="inviteName" v-model="userInfoName">{{userInfoName}}</div>
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>

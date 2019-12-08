@@ -7,7 +7,8 @@
         <div class="">
           <div class="postTop">
             <div class="postPer">
-              <img :src="item.postHead" src="../../../../../../static/images/noavatar.gif" class="postHead">
+              <img :src="item.postHead" v-if="item.postHead" class="postHead">
+              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else="">
               <div class="perDet">
                 <div class="perName">{{item.user().username()}}</div>
                 <div class="postTime">{{item.user().createdAt()|timeAgo}}</div>
