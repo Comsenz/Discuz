@@ -2,7 +2,7 @@
     <div class="login-user-box">
       <comHeader></comHeader>
       <main class="login-user-box-main">
-        <img src="../../../../../../static/images/logo.png" class="logo weLogo">
+        <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo weLogo">
         <van-button type="primary" @click="getUrlCode" loading-text="授权中..." class="weAuthorizeBtn">去微信授权</van-button>
 
         <div class="login-user-method">

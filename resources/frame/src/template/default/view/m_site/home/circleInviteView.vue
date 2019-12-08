@@ -10,7 +10,7 @@
 		    	<p class="inviteWo">邀请您加入</p>
 	    	</div>
 
-	        <img src="../../../../../../static/images/logo.png" class="logo padTgap">
+	        <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo padTgap">
 	        <div class="circleDet">
 	          <span>主题：125</span>
 	          <span>成员：125</span>

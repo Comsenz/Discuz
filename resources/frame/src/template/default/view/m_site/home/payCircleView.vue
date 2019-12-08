@@ -6,7 +6,7 @@
 	    <div class="gap"></div>
 	    <div class="circleLoBox">
 	    	<span class="circleIcon">圈子图标</span>
-	    	<img src="../../../../../../static/images/logo.png" class="circleLogo">
+	    	<img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
 	    </div>
 	    <div class="circleInfo">
 	    	<h1 class="cirInfoTit">圈子简介</h1>
