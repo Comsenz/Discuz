@@ -53,7 +53,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'passwordStrength' => $this->settings->get('password_strength'),
             'allowRegister' => (int)$this->settings->get('allow_register'),
             'siteClose' => (int)$this->settings->get('site_close'),
-            'siteCloseMsg' => $this->settings->get('site_close_msg')
+            'siteCloseMsg' => $this->settings->get('site_close_msg'),
+            'supportImgExt' => $this->settings->get('support_img_ext'),
+            'supportFileExt' => $this->settings->get('support_file_ext'),
+            'supportMaxSize' => $this->settings->get('support_max_size'),
         ];
 
         if ($this->actor->exists) {
