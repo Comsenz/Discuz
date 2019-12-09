@@ -44,6 +44,9 @@ class UpdateGroup
             $groupValidator->valid($attributes);
 
             $group->name = $attributes['name'];
+            $group->type = $attributes['type'];
+            $group->color = $attributes['color'];
+            $group->icon = $attributes['icon'];
 
             $group->save();
 

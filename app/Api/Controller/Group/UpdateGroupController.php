@@ -25,7 +25,6 @@ class UpdateGroupController extends AbstractResourceController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        dd($request->getAttribute('actor'));
         $res = $this->bus->dispatch(
             new UpdateGroup(
                 Arr::get($request->getQueryParams(), 'id'),
