@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Order;
 
-use App\Exceptions\ErrorException;
+use App\Exceptions\OrderException;
 use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Thread;
@@ -88,7 +88,7 @@ class CreateOrder
                 //主题
                 $thread = Thread::find($thread_id);
                 if (empty($thread)) {
-                    throw new ErrorException(app('translator')->get('order.order_post_not_found'), 500);
+                    throw new OrderException('order_post_not_found');
                 } else {
                     $payee_id = $thread->user_id;
                     //打赏金额
@@ -96,7 +96,7 @@ class CreateOrder
                 }
                 break;
             default:
-                throw new ErrorException(app('translator')->get('order.order_type_not_found'), 500);
+                throw new OrderException('order_type_error');
                 break;
         }
         //支付通知
@@ -115,7 +115,6 @@ class CreateOrder
         $order->payee_id   = $payee_id;
         $order->remark     = '';
         $order->status     = 0; //待支付
-
         //开始事务
         $db->beginTransaction();
         try {
@@ -130,7 +129,7 @@ class CreateOrder
         } catch (Exception $e) {
             //回滚事务
             $db->rollback();
-            throw new ErrorException(app('translator')->get('order.create_failure'), 500);
+            throw new OrderException('order_create_failure');
         }
     }
 

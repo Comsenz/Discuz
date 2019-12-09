@@ -11,7 +11,7 @@ declare (strict_types = 1);
 namespace App\Commands\Wallet;
 
 use App\Events\Wallet\Cash;
-use App\Exceptions\ErrorException;
+use App\Exceptions\WalletException;
 use App\Models\User;
 use App\Models\UserWalletCash;
 use App\Models\UserWalletLog;
@@ -64,7 +64,7 @@ class UserWalletCashReview
      * @param Dispatcher $events
      * @param ConnectionInterface $connection
      * @return array 审核结果
-     * @throws ErrorException
+     * @throws WalletException
      * @throws ValidationException
      */
     public function handle(Validator $validator, Dispatcher $events, ConnectionInterface $connection)
@@ -88,7 +88,7 @@ class UserWalletCashReview
 
         //只允许修改为审核通过或审核不通过
         if (!in_array($cash_status, [UserWalletCash::STATUS_REVIEWED, UserWalletCash::STATUS_REVIEW_FAILED])) {
-            throw new ErrorException(app('translator')->get('wallet.operate_forbidden'), 500);
+            throw new WalletException('operate_forbidden');
         }
         $status_result = []; //结果数组
         $collection    = collect($ids)
@@ -139,7 +139,7 @@ class UserWalletCashReview
                     } catch (Exception $e) {
                         //回滚事务
                         $this->connection->rollback();
-                        throw new ErrorException($e->getMessage(), 500);
+                        throw new WalletException($e->getMessage(), 500);
                     }
 
                 }

@@ -38,6 +38,6 @@ class ResourceOrderController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $order_sn = Arr::get($request->getQueryParams(), 'order_sn');
-        return Order::where('order_sn', $order_sn)->first();
+        return Order::where('order_sn', $order_sn)->firstOrFail();
     }
 }
