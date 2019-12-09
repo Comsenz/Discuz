@@ -45,6 +45,7 @@ module.exports = {
 
 
   /*后台*/
-  'siteinfo':'/api/siteinfo'    //首页-系统信息
+  'siteinfo':'/api/siteinfo',    //首页-系统信息
+  'settings':'/api/settings',    //设置接口
 
 }

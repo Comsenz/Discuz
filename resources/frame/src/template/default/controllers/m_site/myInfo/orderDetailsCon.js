@@ -30,7 +30,10 @@ export default {
     order(){
       this.appFetch({
         url:'orderList',
-        method:'get'
+        method:'get',
+        data:{
+          include:''
+        }
       }).then((res)=>{
         this.orderList = res.data
       })

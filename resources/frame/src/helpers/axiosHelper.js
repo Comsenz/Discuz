@@ -57,9 +57,11 @@ const analyzingData = function(data, included) {
 
       if(!nowData.attributes) {
         nowData = newIncludes[nowData.type+nowData.id];
+      }else{
+        result._data = nowData.attributes;
       }
 
-      result._data = nowData.attributes;
+     
       if(nowData.relationships) {
         var relationObj = {};
 
