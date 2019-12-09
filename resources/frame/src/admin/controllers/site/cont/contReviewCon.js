@@ -17,7 +17,7 @@ export default {
       deleteStatus:true,
       multipleSelection:[],
 
-      checkList: [],
+      checkList: ['通过'],
 
       showSensitiveWords:false,   //显示敏感词
 

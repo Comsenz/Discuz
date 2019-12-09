@@ -69,10 +69,17 @@ export default {
 			}
 			try{
 				const currentPageNum = this.userParams['page[number]'];
-				await this.apiStore.find('users', this.userParams).then(data=>{
-					this.searchUserList = this.searchUserList.concat(data);
-					this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
-					console.log(data,'user list data')
+				await this.appFetch({
+					url:'users',
+					methods:'get',
+					data:{
+						currentPageNum:this.userParams
+					}
+				}).then(data=>{
+						this.searchUserList = this.searchUserList.concat(data.readdata);
+					    this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
+					console.log(data.readdata[0]._data.username,'user list data')
+					console.log(data.readdata[0])
 				}).catch(err=>{
 					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
 						this.userParams['page[number]'] = currentPageNum - 1;
@@ -97,10 +104,21 @@ export default {
 			}
 			try {
 				const currentPageNum = this.themeParamd['page[number]']; 
-				await this.apiStore.find('searchThreads', this.themeParamd).then(data=>{
-					this.searchThemeList = this.searchThemeList.concat(data);
-					this.themeLoadMoreStatus = data.length > this.themeParamd['page[limit]'];
-					console.log(data,'theme list data')
+				await this.appFetch({
+					url:'searchThreads',
+					method:'get',
+					data:{
+						currentPageNum :this.themeParamd
+					}
+				
+				// await this.apiStore.find('searchThreads', this.themeParamd).then(data=>{
+				// 	this.searchThemeList = this.searchThemeList.concat(data);
+				// 	this.themeLoadMoreStatus = data.length > this.themeParamd['page[limit]'];
+				// 	console.log(data,'theme list data')
+				}).then(data=>{
+					this.searchThemeList = this.searchThemeList.concat(data.readdata);
+					this.themeLoadMoreStatus = data.readdata.length > this.themeParamd['page[limit]'];
+					console.log(this.searchThemeList)
 				}).catch(err=>{
 					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
 						this.themeParamd['page[number]'] = currentPageNum - 1;

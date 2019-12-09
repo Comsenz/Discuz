@@ -161,13 +161,13 @@ export default {
 			try {
 				if (!this.checkOperaStatus) {
 					//提示为选择操作类型
-					console.log("未选择操作类型")
+					this.$toast("未选择操作类型");
 					return;
 				}
 
 				if (this.result.length === 0) {
 					// 提示未选择用户
-					console.log("未选择用户")
+					this.$toast("未选择用户")
 					return;
 				}
 

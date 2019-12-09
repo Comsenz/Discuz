@@ -53,6 +53,9 @@ export default {
         url:'wallet',
         method:'get',
         splice:userId,
+        data:{
+          include:'',
+        }
       }).then(res=>{
         this.canWithdraw = res.data.attributes.available_amount;
          this.handlingFee = res.data.attributes.cash_tax_ratio;
@@ -71,7 +74,16 @@ export default {
         this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
         this.handlingFee = res.data.attributes.cash_charge;//提现手续费
       })
-
+       
+      var withdrawalAmount = this.withdrawalAmount;
+      var sms = this.sms;
+      if(!withdrawalAmount){
+        this.$toast('请输入提现金额')
+        return
+      }
+      if(!sms){
+        this.$toast('请输入验证码')
+      }
       this.appFetch({  //提交后验证验证码
         url:'smsVerify',
         method:'post',

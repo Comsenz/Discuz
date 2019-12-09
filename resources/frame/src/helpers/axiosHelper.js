@@ -17,14 +17,7 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-   //  if(codes.includes(error.response.status)) {
-   //    return error.response;
-  	// } else {
-   //      alert('wert');
-   //      return Promise.reject(error)
-  	// }
-    return Promise.reject(error);
-
+    return error.response;
   }
 
 )
@@ -43,6 +36,71 @@ const getApi = function(key){
 }
 
 /**
+ * 解析数据
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+const analyzingData = function(data, included) {
+  included  = included ? included : [];
+
+  var newIncludes = {};
+  included.forEach(function(nowOne) {
+    newIncludes[nowOne.type+nowOne.id] = nowOne;
+  })
+
+  /**
+   * 获取一条数据真实数据
+   * @return {[type]} [description]
+   */
+    function getOneData(nowData) {
+      var result = {};
+
+    if(!nowData.attributes) {
+        nowData = newIncludes[nowData.type+nowData.id];
+      }else{
+        result._data = nowData.attributes;
+      }
+
+      result._data = nowData.attributes;
+    if(nowData.relationships) {
+        var relationObj = {};
+
+        for(var relationKey in nowData.relationships) {
+          relationObj[relationKey] = getData(nowData.relationships[relationKey].data);
+          relationObj.id = nowData.id;
+        }
+
+        result = {...result, ...relationObj};
+      }
+
+      return result;
+    }
+
+    /**
+     * 获取一条数据和一组数据
+     * @param  {[type]} nowData [description]
+     * @return {[type]}         [description]
+     */
+    function getData(nowData) {
+      var result = {};
+
+      if(nowData instanceof Array) {
+        result = [];
+
+        nowData.forEach(function(nowOne) {
+          result.push(getOneData(nowOne));
+        });
+      } else {
+        result = getOneData(nowData);
+      }
+
+      return result;
+    }
+
+  return getData(data, included);
+}
+
+/**
  * ajax 调用方法
  * @param  {[type]} params  [除了url参数的意义外，其他参数和axios参数一致]
  * @param  {[type]} success [请求成功回调方法]
@@ -58,6 +116,7 @@ const appFetch = function(params, options) {
 		return false;
 	}
 
+  params.method = params.method ? params.method : 'get';
 	if(!apiUrl) {
     apiUrl = "/api/" + oldUrl;
     // return false;
@@ -85,17 +144,13 @@ const appFetch = function(params, options) {
   let defaultHeaders;
   if(authVal != '' && authVal != null){
     defaultHeaders = {
-    	// 'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/json',
-      'Authorization':'Bearer ' + authVal,
-      //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+      'Authorization':'Bearer ' + authVal
     };
   } else {
     defaultHeaders = {
-    	// 'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/json',
-      'Authorization':'',
-      //'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'
+      'Authorization':''
     };
   }
 
@@ -113,45 +168,49 @@ const appFetch = function(params, options) {
 	if(params.method.toLowerCase() == 'get') {
 		params.params = params.data;
 
+    //如果传递include，处理成字符串
+    if(params.params.include && params.params.include instanceof Array) {
+      params.params.include = params.params.include.join(',');
+    }
+
+    //如果需要传递对象
+    ['filter', 'page', 'filed'].forEach(function(pName) {
+      if(params.params[pName] && params.params[pName] instanceof Object) {
+        var addObject = {};
+
+        Object.keys(params.params[pName]).forEach(function(nowKey) {
+          addObject[pName+'['+nowKey+']'] = params.params[pName][nowKey];
+        });
+
+        delete params.params[pName];
+        params.params = {...params.params, ...addObject}
+      }
+    })
+
 		delete params.data
 	}
 
-	return axios(params).then(data => {return data.data}, errors => {
-      let requestError = errors.response;
-      let children;
-      switch (requestError.status) {
-        case 422:
-          children = requestError.data.errors
-            .map(error => [error.detail, '<br/>'])
-            .reduce((a, b) => a.concat(b), [])
-            .slice(0, -1);
-          break;
-        case 400:
-
-          break;
-
-        case 401:
-        case 403:
-          children = 'permission_denied_message';
-          break;
-
-        case 404:
-        case 410:
-          children = 'not_found_message';
-          break;
-
-        case 429:
-          children = 'rate_limit_exceeded_message';
-          break;
-        default:
-          children = 'generic_message';
+	return axios(params).then(data => {
+    if(data.status >= 200 && data.status < 300) {
+      if(data.data.meta && data.data.meta instanceof Array) {
+        data.data.meta.forEach(function(error) {
+          error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
+        })
       }
 
-      // console.log(children.toString());
-      // let msg = children.toString().replace(/,/g,'');  //去掉字符串的逗号
-      app.$toast({type: 'html', 'message': children.toString()});
+      //处理后的结构数据
+      if(data.data.data) {
+        data.data.readdata = analyzingData(data.data.data, data.data.included);
+      }
 
-      return Promise.reject(requestError.data);
+      return data.data;
+    } else {
+      data.data.errors.forEach(function(error) {
+        error.code = Vue.prototype.getLang(error.code);
+      })
+
+      return data.data;
+    }
   });
 }
 

@@ -7,6 +7,7 @@ import 'amfe-flexible/index.js'
 //将jquery 放入全局变量
 import jQuery from "jquery";
 window.$ = jQuery;
+import "../config/languageConfig";
 
 import 'vant/lib/index.css'          //引入vant样式
 import './template/default/less/m_site/modules/publicIndex.less' //引入公共样式
@@ -17,7 +18,7 @@ import '../static/js/rem'   //引入Rem配置
 
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
-import './admin/scss/modules/element-variables.scss'  //引入主题样式
+// import './admin/scss/modules/element-variables.scss'  //引入主题样式
 
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
@@ -76,5 +77,5 @@ const App = new Vue({
     moment: moment,
   	template: '<router-view></router-view>'
 }).$mount('#app');
-
 window.app = App;
+
