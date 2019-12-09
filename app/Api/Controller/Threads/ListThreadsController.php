@@ -200,68 +200,74 @@ class ListThreadsController extends AbstractListController
     {
         // 分类
         if ($categoryId = Arr::get($filter, 'categoryId')) {
-            $query->where('category_id', $categoryId);
+            $query->where('threads.category_id', $categoryId);
         }
 
-        // 作者
-        if ($userId = Arr::get($filter, 'user')) {
-            $query->where('user_id', $userId);
+        // 作者 ID
+        if ($userId = Arr::get($filter, 'userId')) {
+            $query->where('threads.user_id', $userId);
+        }
+
+        // 作者用户名
+        if ($username = Arr::get($filter, 'username')) {
+            $query->leftJoin('users', 'users.id', '=', 'threads.user_id')
+                ->where('users.username', 'like', "%{$username}%");
         }
 
         // 发表于（开始时间）
         if ($createdAtBegin = Arr::get($filter, 'createdAtBegin')) {
-            $query->where('created_at', '>=', $createdAtBegin);
+            $query->where('threads.created_at', '>=', $createdAtBegin);
         }
 
         // 发表于（结束时间）
         if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
-            $query->where('created_at', '<=', $createdAtEnd);
+            $query->where('threads.created_at', '<=', $createdAtEnd);
         }
 
         // 浏览次数（大于）
         if ($viewCountGt = Arr::get($filter, 'viewCountGt')) {
-            $query->where('view_count', '>=', $viewCountGt);
+            $query->where('threads.view_count', '>=', $viewCountGt);
         }
 
         // 浏览次数（小于）
         if ($viewCountLt = Arr::get($filter, 'viewCountLt')) {
-            $query->where('view_count', '<=', $viewCountLt);
+            $query->where('threads.view_count', '<=', $viewCountLt);
         }
 
         // 回复数（大于）
         if ($postCountGt = Arr::get($filter, 'postCountGt')) {
-            $query->where('post_count', '>=', $postCountGt);
+            $query->where('threads.post_count', '>=', $postCountGt);
         }
 
         // 回复数（小于）
         if ($postCountLt = Arr::get($filter, 'postCountLt')) {
-            $query->where('post_count', '<=', $postCountLt);
+            $query->where('threads.post_count', '<=', $postCountLt);
         }
 
         // 精华帖
         if ($isEssence = Arr::get($filter, 'isEssence')) {
             if ($isEssence == 'yes') {
-                $query->where('is_essence', true);
+                $query->where('threads.is_essence', true);
             } elseif ($isEssence == 'no') {
-                $query->where('is_essence', false);
+                $query->where('threads.is_essence', false);
             }
         }
 
         // 置顶帖
         if ($isSticky = Arr::get($filter, 'isSticky')) {
             if ($isSticky == 'yes') {
-                $query->where('is_sticky', true);
+                $query->where('threads.is_sticky', true);
             } elseif ($isSticky == 'no') {
-                $query->where('is_sticky', false);
+                $query->where('threads.is_sticky', false);
             }
         }
 
         // 待审核
         if ($isApproved = Arr::get($filter, 'isApproved')) {
             if ($isApproved == 'no' && $actor->can('review')) {
-                $query->where('is_approved', false);
+                $query->where('threads.is_approved', false);
             } elseif ($isApproved == 'yes') {
-                $query->where('is_approved', true);
+                $query->where('threads.is_approved', true);
             }
         }
 
@@ -277,12 +283,11 @@ class ListThreadsController extends AbstractListController
         }
 
         // 关键词搜索
-        $queryWord = Arr::get($filter, 'q');
-        $query->when($queryWord, function ($query, $queryWord) {
+        if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
-                ->where('content', 'like', "%{$queryWord}%")
-                ->where('is_first', true);
-        });
+                ->where('posts.content', 'like', "%{$queryWord}%")
+                ->where('posts.is_first', true);
+        }
 
         // TODO: 关键词搜索 优化搜索
         // if ($queryWord) {
