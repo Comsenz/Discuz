@@ -128,6 +128,7 @@ return [
 //        App\Providers\EventServiceProvider::class
         App\Providers\EventServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
+        App\Providers\CategoryServiceProvider::class,
         App\Providers\UserServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
