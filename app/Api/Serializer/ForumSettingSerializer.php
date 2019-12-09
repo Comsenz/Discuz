@@ -48,10 +48,12 @@ class ForumSettingSerializer extends AbstractSerializer
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
-            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username'])
-//            'users' => $this->settings->get('site_name'),
-//            'siteName' => $this->settings->get('site_name'),
-//            'siteName' => $this->settings->get('site_name'),
+            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+            'passwordLength' => (int)$this->settings->get('password_length'),
+            'passwordStrength' => $this->settings->get('password_strength'),
+            'allowRegister' => (int)$this->settings->get('allow_register'),
+            'siteClose' => (int)$this->settings->get('site_close'),
+            'siteCloseMsg' => $this->settings->get('site_close_msg')
         ];
 
         if ($this->actor->exists) {
