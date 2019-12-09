@@ -55,24 +55,25 @@ const analyzingData = function(data, included) {
     function getOneData(nowData) {
       var result = {};
 
-      if(!nowData.attributes) {
+    if(!nowData.attributes) {
         nowData = newIncludes[nowData.type+nowData.id];
       }else{
         result._data = nowData.attributes;
       }
 
-     
-      if(nowData.relationships) {
+      result._data = nowData.attributes;
+    if(nowData.relationships) {
         var relationObj = {};
 
         for(var relationKey in nowData.relationships) {
           relationObj[relationKey] = getData(nowData.relationships[relationKey].data);
+          relationObj.id = nowData.id;
         }
 
         result = {...result, ...relationObj};
       }
 
-      return result;    
+      return result;
     }
 
     /**
@@ -194,9 +195,9 @@ const appFetch = function(params, options) {
       if(data.data.meta && data.data.meta instanceof Array) {
         data.data.meta.forEach(function(error) {
           error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
-        })         
-      }     
-      
+        })
+      }
+
       //处理后的结构数据
       if(data.data.data) {
         data.data.readdata = analyzingData(data.data.data, data.data.included);
