@@ -34,8 +34,8 @@
 
       <Card header="站点模式：">
         <CardRow description="你的Discuz!Q 站点的运行模式">
-          <el-radio @change="radioChange" v-model="radio" label="1">公开模型</el-radio>
-          <el-radio @change="radioChange" v-model="radio" label="2">付费模型</el-radio>
+          <el-radio @change="radioChange" v-model="radio" label="1">公开模式</el-radio>
+          <el-radio @change="radioChange" v-model="radio" label="2">付费模式</el-radio>
         </CardRow>
       </Card>
 
@@ -86,7 +86,7 @@
         </CardRow>
       </Card>
 
-      <Card header="网站备案信息：">
+      <Card header="第三方统计：">
         <CardRow description="你的Discuz!Q 网站的第三方统计代码">
           <el-input
             type="textarea"
