@@ -28,7 +28,7 @@ class UpdateUserProfile
     use EventsDispatchTrait;
 
     /**
-     * 圈子的ID.
+     * 站点的ID.
      *
      * @var string
      */
@@ -42,7 +42,7 @@ class UpdateUserProfile
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */
@@ -58,9 +58,9 @@ class UpdateUserProfile
     /**
      * 初始化命令参数
      *
-     * @param int    $circleId  圈子的ID.
+     * @param int    $circleId  站点的ID.
      * @param User   $actor     执行操作的用户.
-     * @param array  $data      创建圈子的数据.
+     * @param array  $data      创建站点的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
     public function __construct($userId, $actor, array $data, string $ipAddress)
@@ -130,7 +130,7 @@ class UpdateUserProfile
         if (isset($this->data['delete_wx'])=="true") {
             UserWechat::where('id',$this->userid)->delete();
         }
-        // 保存圈子扩展信息
+        // 保存站点扩展信息
         $userProfile->save();
         } catch (Exception $e) {
             throw $e;

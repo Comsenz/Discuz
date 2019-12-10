@@ -19,7 +19,7 @@
         >
           <template slot-scope="scope">
 
-            <span v-if="scope.row.role === '圈主'">{{scope.row.name}}</span>
+            <span v-if="scope.row.role === '站长'">{{scope.row.name}}</span>
 
             <el-input v-else-if="scope.row.name !== '新增'" v-model="scope.row.name" />
 
@@ -36,7 +36,7 @@
         >
           <template slot-scope="scope" v-if="scope.row.name !== '新增'">
 
-            <span v-if="scope.row.role === '圈主'">{{scope.row.role}}</span>
+            <span v-if="scope.row.role === '站长'">{{scope.row.role}}</span>
 
             <el-select v-else v-model="scope.row.role" placeholder="请选择">
               <el-option
@@ -53,7 +53,7 @@
           prop="address"
           align="center"
           label="">
-          <template slot-scope="scope" v-if="scope.row.name !== '新增' && scope.row.role !== '圈主'">
+          <template slot-scope="scope" v-if="scope.row.name !== '新增' && scope.row.role !== '站长'">
             <span style="color: #336699;">删除</span>
           </template>
         </el-table-column>

@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Api\Exceptions;
 
-use App\Exceptions\ErrorException;
+use App\Exceptions\WalletException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
@@ -29,7 +29,7 @@ class WalletExceptionHandler implements ExceptionHandlerInterface
     public function manages(Exception $e)
     {
         // TODO: Implement manages() method.
-        return $e instanceof ErrorException;
+        return $e instanceof WalletException;
     }
 
     /**
@@ -43,9 +43,9 @@ class WalletExceptionHandler implements ExceptionHandlerInterface
     {
         $status = $e->getCode();
         $error  = [
-            'status'  => (string) $e->getCode(),
-            'code'    => 'wallet_error',
-            'message' => $e->getMessage(),
+            'status'  => $status,
+            'code'    => $e->getMessage(),
+            'message' => app('translator')->get('wallet.'. $e->getMessage()),
         ];
         return new ResponseBag($status, [$error]);
     }

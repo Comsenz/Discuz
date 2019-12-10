@@ -22,7 +22,7 @@ class CreateUserProfile
     use EventsDispatchTrait;
 
     /**
-     * 圈子的ID.
+     * 站点的ID.
      *
      * @var string
      */
@@ -36,7 +36,7 @@ class CreateUserProfile
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */
@@ -52,9 +52,9 @@ class CreateUserProfile
     /**
      * 初始化命令参数
      *
-     * @param int    $circleId  圈子的ID.
+     * @param int    $circleId  站点的ID.
      * @param User   $actor     执行操作的用户.
-     * @param array  $data      创建圈子的数据.
+     * @param array  $data      创建站点的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
     public function __construct(int $userId, $actor, array $data, string $ipAddress)
@@ -80,7 +80,7 @@ class CreateUserProfile
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'circleExtend.createCircleExtend');
 
-        // 初始圈子扩展数据
+        // 初始站点扩展数据
         $userProfile = UserProfile::creation(
             $this->userId,
            '',
@@ -93,7 +93,7 @@ class CreateUserProfile
             new Saving($userProfile, $this->actor, $this->data)
         );
 
-        // 保存圈子扩展信息
+        // 保存站点扩展信息
         $userProfile->save();
 
         // 调用钩子事件

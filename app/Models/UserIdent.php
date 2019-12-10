@@ -65,7 +65,7 @@ class UserIdent extends Model
     }
 
     /**
-     * 创建圈子.
+     * 创建站点.
      *
      * @param $type        请求方式
      * @param $code        验证码参数
@@ -77,7 +77,7 @@ class UserIdent extends Model
         $code,
         $mobile
     ) {
-        // 实例一个圈子模型
+        // 实例一个站点模型
         $userIdent = new static;
 
         // 设置模型属性值
@@ -87,7 +87,7 @@ class UserIdent extends Model
         // 暂存需要执行的事件
         $userIdent->raise(new Created($userIdent));
 
-        // 返回圈子模型
+        // 返回站点模型
         return $userIdent;
     }
 

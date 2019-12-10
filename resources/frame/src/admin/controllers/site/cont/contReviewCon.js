@@ -1,9 +1,10 @@
 /*
-* 内容审核
+* 内容-主题审核控制器
 * */
 
 import Card from '../../../view/site/common/card/card';
 import ContArrange from '../../../view/site/common/cont/contArrange';
+import Page from '../../../view/site/common/page/page';
 import webDb from 'webDbHelper';
 import { mapState } from 'vuex';
 import moment from "moment/moment";
@@ -137,7 +138,7 @@ export default {
       appleAll:false,             //应用其他页面
 
       themeList:[],               //主题列表
-      currentPag: 1,              //当前页数
+      currentPaga: 1,              //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
 
@@ -196,15 +197,18 @@ export default {
       }
     },
 
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-
     handleCurrentChange(val) {
-      webDb.setLItem('currentPag',val);
       this.isIndeterminate = false;
       this.checkAll = false;
       this.getThemeList(val);
+    },
+
+    themeSearch(){
+      let data = {
+        'searchUserName' : this.searchUserName
+      }
+
+      console.log(data);
     },
 
     /*
@@ -252,15 +256,50 @@ export default {
           })
         });
       });
+
+      /*this.appFetch({
+        url:'threads',
+        method:'get',
+        data:{
+          'filter[isDeleted]':'no',
+          'filter[username]':searchData.themeAuthor,
+          'filter[categoryId]':searchData.categoryId,
+          'page[number]':pageNumber,
+          'page[size]':searchData.pageSelect,
+          'filter[q]':searchData.themeKeyWords,
+          'filter[createdAtBegin]':searchData.dataValue[0],
+          'filter[createdAtEnd]':searchData.dataValue[1],
+          'filter[viewCountGt]':searchData.viewedTimesMin,
+          'filter[viewCountLt]':searchData.viewedTimesMax,
+          'filter[postCountGt]':searchData.numberOfRepliesMin,
+          'filter[postCountLt]':searchData.numberOfRepliesMax,
+          'filter[isEssence]':searchData.essentialTheme,
+          'filter[isSticky]':searchData.topType
+        }
+      }).then(res=>{
+        this.themeList = res.readdata;
+        this.total = res.meta.threadCount;
+        this.pageCount = res.meta.pageCount;
+
+        this.themeListAll = [];
+        this.themeList.forEach((item,index)=>{
+          this.themeListAll.push(item.id);
+        });
+      }).catch(err=>{
+        console.log(err);
+      })*/
+
     },
   },
+
   created(){
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
-
   },
+
   components:{
     Card,
-    ContArrange
+    ContArrange,
+    Page
   }
 
 }

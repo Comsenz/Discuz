@@ -10,6 +10,7 @@
 namespace App\Commands\Attachment;
 
 use App\Models\User;
+use App\Settings\SettingsRepository;
 use App\Tools\AttachmentUploadTool;
 use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
@@ -80,12 +81,13 @@ class CreateAttachment
      *
      * @param Dispatcher $events
      * @param AttachmentUploadTool $uploadTool
+     * @param SettingsRepository $settings
      * @return Attachment
-     * @throws UploadException
      * @throws PermissionDeniedException
+     * @throws UploadException
      * @throws UploadVerifyException
      */
-    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool)
+    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool, SettingsRepository $settings)
     {
         $this->events = $events;
 
@@ -103,9 +105,9 @@ class CreateAttachment
             new Uploading($this->actor, $this->file)
         );
 
-        $type = [];
+        $type = explode(',', $settings->get('allowFileType', 'default', ''));
 
-        $size = 0;
+        $size = $settings->get('allowFileSize', 'default', 0);
 
         $uploadFile = $uploadTool->save($type, $size);
 

@@ -12,7 +12,13 @@ module.exports = {
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'weixin':'/api/oauth/weixin',  //微信接口
-  'categories':'/api/categories',   //分类
+
+  'categories':'/api/categories',   //分类列表
+  'categoriesDelete':'/api/categories',    //分类单个删除
+  'categoriesBatchDelete':'/api/categories/batch',    //分类批量删除
+  'createCategories':'/api/categories',   //创建分类
+  'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
+
   'emojis':'/api/emoji',      //表情接口
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)

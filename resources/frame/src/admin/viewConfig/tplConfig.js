@@ -177,7 +177,7 @@ export default {
               attribution:'全局'
             }
           },
-          'user-manage-set':{
+          /*'user-manage-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/userManageSetView'], resolve)
             },
@@ -207,7 +207,7 @@ export default {
               name:'roleManage',
               attribution:'全局'
             }
-          },
+          },*/
 
 
           //内容分类
@@ -427,5 +427,5 @@ export default {
   beforeEnter: function(to, form, next) {
     next()
     //console.log(to, form, next, 'admin');
-  }  
+  }
 };

@@ -15,4 +15,11 @@ class GroupValidator extends AbstractValidator
             'name' => ['required']
         ];
     }
+
+    protected function getMessages()
+    {
+        return [
+            'name.required' => '名称不能为空'
+        ];
+    }
 }

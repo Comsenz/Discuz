@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Wallet;
 
-use App\Exceptions\ErrorException;
+use App\Exceptions\WalletException;
 use App\Models\User;
 use App\Models\UserWallet;
 use App\Models\UserWalletCash;
@@ -84,11 +84,11 @@ class CreateUserWalletCash
             $user_wallet = $this->actor->userWallet()->lockForUpdate()->first();
             //检查钱包是否允许提现,1:钱包已冻结
             if ($user_wallet->wallet_status == 1) {
-                throw new Exception(app('translator')->get('wallet.status_cash_freeze'), 500);
+                throw new WalletException('status_cash_freeze');
             }
             //检查金额是否足够
             if ($user_wallet->available_amount < $cash_apply_amount) {
-                throw new Exception(app('translator')->get('wallet.available_amount_error'), 500);
+                throw new WalletException('available_amount_error');
             }
             $cash_sn            = $this->getCashSn();
             $cash_actual_amount = $cash_apply_amount - $tax_amount;
@@ -113,7 +113,7 @@ class CreateUserWalletCash
         } catch (Exception $e) {
             //回滚事务
             $db->rollback();
-            throw new ErrorException($e->getMessage(), 500);
+            throw new WalletException($e->getMessage(), 500);
         }
 
     }

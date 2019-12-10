@@ -64,9 +64,9 @@
       </CardRow>
     </Card>
 
-    <Card header="已加入的圈子：">
-      <span class="add-site">站长帮<i>（圈主）</i></span>
-      <span class="add-site">站长帮<i>（圈主）</i></span>
+    <Card header="已加入的站点：">
+      <span class="add-site">站长帮<i>（站长）</i></span>
+      <span class="add-site">站长帮<i>（站长）</i></span>
     </Card>
 
     <Card header="注册时间：">

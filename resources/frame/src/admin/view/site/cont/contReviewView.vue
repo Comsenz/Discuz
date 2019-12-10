@@ -6,7 +6,7 @@
       <div class="cont-review-header__lf">
         <div >
           <span class="cont-review-header__lf-title">用户名：</span>
-          <el-input size="medium" v-model="searchUserName"></el-input>
+          <el-input size="medium" placeholder="搜索用户名" v-model="searchUserName"></el-input>
         </div>
         <div >
           <span  class="cont-review-header__lf-title">每页显示：</span>
@@ -24,7 +24,7 @@
       <div class="cont-review-header__rt">
         <div>
           <span  class="cont-review-header__lf-title">内容包含：</span>
-          <el-input size="medium" class="content-contains-input" v-model="keyWords" ></el-input>
+          <el-input size="medium" class="content-contains-input" placeholder="搜索关键词" v-model="keyWords" ></el-input>
           <el-checkbox v-model="showSensitiveWords">显示敏感词</el-checkbox>
         </div>
 
@@ -54,7 +54,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button size="small" type="primary">搜索</el-button>
+          <el-button size="small" @click="themeSearch" type="primary">搜索</el-button>
         </div>
 
       </div>
@@ -62,7 +62,6 @@
 
     <div class="cont-review-table">
       <ContArrange
-
         v-for="(items,index) in  themeList"
         :author="items.user().username()"
         :theme="items.category().name()"
@@ -113,7 +112,7 @@
 
       </ContArrange>
 
-      <div class="cont-review-table__table-footer" v-if="pageCount > 1">
+      <!--<div class="cont-review-table__table-footer" v-if="pageCount > 1">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -122,7 +121,17 @@
           layout="total, prev, pager, next,jumper"
           :total="total">
         </el-pagination>
-      </div>
+      </div>-->
+
+      <Page
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPaga"
+        :currentPage="currentPaga"
+        :page-size="parseInt(searchData.pageSelect)"
+        :total="total">
+      </Page>
+
+
     </div>
 
     <div class="cont-review-footer footer-btn">

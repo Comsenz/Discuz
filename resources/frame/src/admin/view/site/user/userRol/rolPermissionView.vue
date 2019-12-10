@@ -22,7 +22,7 @@
     </Card>
 
 
-    <Card header="圈子前台管理："></Card>
+    <Card header="站点前台管理："></Card>
     <Card>
       <CardRow description="前台设置成员的角色、禁用成员的权限">
         <el-checkbox v-model="checked">成员管理</el-checkbox>

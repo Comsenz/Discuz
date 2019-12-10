@@ -69,18 +69,19 @@ export default {
               name:'tencentCloudSet',
               icon:'icontengxunyun'
             },
-            {
-              id:7,
-              title:'后台用户管理',
-              name:'adminUserManage',
-              icon:'iconyonghuguanli'
-            },
-            {
-              id:8,
-              title:'后台角色管理',
-              name:'adminRoleManage',
-              icon:'iconjiaoseguanli'
-            }]
+            // {
+            //   id:7,
+            //   title:'后台用户管理',
+            //   name:'adminUserManage',
+            //   icon:'iconyonghuguanli'
+            // },
+            // {
+            //   id:8,
+            //   title:'后台角色管理',
+            //   name:'adminRoleManage',
+            //   icon:'iconjiaoseguanli'
+            // }
+            ]
         },
         {
           id:2,
