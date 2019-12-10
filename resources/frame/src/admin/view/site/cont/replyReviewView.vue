@@ -103,6 +103,16 @@
           </div>
 
         </ContArrange>
+
+        <Page
+          @current-change="handleCurrentChange"
+          @created="createdFn"
+          :current-page.sync="currentPaga"
+          :currentPage="currentPaga"
+          :page-size="10"
+          :total="35">
+        </Page>
+
       </div>
 
       <div class="cont-review-footer footer-btn">

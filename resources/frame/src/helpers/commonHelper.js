@@ -5,6 +5,7 @@
 import Vue from "vue";
 import appFetch from "axiosHelper.js";
 import appConfig from "../../config/appConfig";
+import moment from "moment/moment";
 
 const appCommonH = {};
 
@@ -345,8 +346,16 @@ appCommonH.closePage = function() {
     window.parent.opener = "whocares";
     window.parent.close();
   }
-}
+};
 
+/**
+ * 格式化日期
+ * @param {[type]} data    [description]
+ * @param {[type]} format [description]
+ */
+appCommonH.formatDate = function(data,format){
+  return moment(data).format('YYYY-MM-DD HH:mm')
+};
 
 if(!Vue.prototype.appCommonH) {
 	Vue.prototype.appCommonH = appCommonH;

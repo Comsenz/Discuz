@@ -9,23 +9,28 @@
 
           <ContArrange
             v-for="(items,index) in  themeList"
-            :author="items.user().username()"
-            :theme="items.category().name()"
-            :prply="items.postCount()"
-            :browse="items.viewCount()"
-            :last="items.lastPostedUser().username()"
-            :finalPost="formatDate(items.createdAt())"
-            :key="items.id()"
+            :author="items.user._data.username"
+            :theme="items.category._data.name"
+            :prply="items._data.postCount"
+            :browse="items._data.viewCount"
+            :last="items.lastPostedUser._data.username"
+            :finalPost="formatDate(items.lastPostedUser._data.createdAt)"
+            :key="index"
           >
             <div class="cont-manage-theme__table-side" slot="side">
-              <el-checkbox v-model="checkedTheme[index].status" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>
+              <!--<el-checkbox v-model="checkedTheme" :label="index" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>-->
+              <el-checkbox v-model="checkedTheme" :label="items.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
             <div style="line-height: 20PX;" slot="main">
-              {{items.firstPost().content()}}
+              {{items.firstPost._data.content}}
             </div>
 
           </ContArrange>
+
+          <div v-if="themeList.length < 1" class="cont-manage-theme__table-no-data">
+            <p>暂无数据</p>
+          </div>
 
           <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
             <el-pagination

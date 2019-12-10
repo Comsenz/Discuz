@@ -9,7 +9,9 @@
 
             <div class="cont-arrange__rt-main-header__release">
               <p>{{$attrs.author}}</p>
-              <span>发布于</span>
+              <p>{{$attrs.replyBy}}</p>
+              <span v-if="$attrs.author">发布于</span>
+              <span v-if="$attrs.replyBy">回复主题</span>
               <p>{{$attrs.theme}}</p>
             </div>
 

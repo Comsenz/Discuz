@@ -1,0 +1,13 @@
+@charset "utf-8";
+/*
+  分页器
+  公共组件的颜色需要element-variables文件
+*/
+
+@import "../../../modules/element-variables";
+
+
+.page-box{
+  padding: 15PX 0;
+  text-align: center;
+}

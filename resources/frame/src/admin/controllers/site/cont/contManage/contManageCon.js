@@ -39,6 +39,7 @@ export default {
 
       checkAll: false,      //全选状态
       checkAllNum:0,        //多选打勾数
+      themeListAll : [],    //主题列表全部
       checkedTheme:[],      //多选列表初始化
       isIndeterminate: false,   //全选不确定状态
 
@@ -55,7 +56,7 @@ export default {
   methods:{
 
     handleCheckAllChange(val) {
-      if (val){
+      /*if (val){
         this.checkedTheme.forEach((item,index)=>{
           this.checkedTheme[index].id = this.themeList[index].id();
           this.checkedTheme[index].status = true;
@@ -68,43 +69,51 @@ export default {
           this.checkAllNum = 0;
         })
       }
+      this.isIndeterminate = false;
+      */
 
+      this.checkedTheme = val ? this.themeListAll : [];
       this.isIndeterminate = false;
     },
 
     handleCheckedCitiesChange(index,id,status) {
 
-      this.checkedTheme[index].id = id;
+      let checkedCount = this.checkedTheme.length;
+      this.checkAll = checkedCount === this.themeListAll.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.themeListAll.length;
+
+      /*this.checkedTheme[index].id = id;
 
       let checkLength = this.checkedTheme.length;
 
-      /*
+      /!*
       * 统计多选打勾数
-      * */
-      this.checkAllNum = status ? this.checkAllNum + 1 : this.checkAllNum - 1;
+      * *!/
+      this.checkAllNum = status
+        ? this.checkAllNum + 1 : this.checkAllNum - 1;
 
-      /*
+      /!*
       * 如果打勾数大于 0 或小于 主题列表长度，则全选不确定状态打开
-      * */
+      * *!/
       if (this.checkAllNum > 0 && this.checkAllNum < checkLength){
         this.isIndeterminate = true;
       }
 
-      /*
+      /!*
       * 如果打勾数等于主题列表长度，则全选状态打开，不确定状态关闭
-      * */
+      * *!/
       if (this.checkAllNum === checkLength){
         this.checkAll = true;
         this.isIndeterminate = false;
       }
 
-      /*
+      /!*
       * 如果打勾数小于1，则全选状态、不确定状态都关闭
-      * */
+      * *!/
       if (this.checkAllNum < 1){
         this.isIndeterminate = false;
         this.checkAll = false;
-      }
+      }*/
 
     },
 
@@ -148,32 +157,33 @@ export default {
         default:
           selectStatus = true;
           console.log('操作选项错误，请重新选择或刷新页面(F5)');
+          this.$message({
+            showClose: true,
+            message: '操作选项错误，请重新选择或刷新页面(F5)',
+            type: 'warning'
+          });
       }
 
       if (this.operatingSelect === 'class'){
         this.checkedTheme.forEach((item,index)=>{
-          if (item.status === true){
             themeData.push(
               {
                 'type':'threads',
-                'id':item.id,
+                'id':item,
                 'attributes':attributes,
                 'relationships':relationships
               }
             )
-          }
         });
       } else {
         this.checkedTheme.forEach((item,index)=>{
-          if (item.status === true){
             themeData.push(
               {
                 'type':'threads',
-                'id':item.id,
+                'id':item,
                 'attributes':attributes,
               }
             )
-          }
         });
       }
 
@@ -196,16 +206,17 @@ export default {
           data:{data:themeData}
         }).then(res=>{
           if (res.meta && res.data){
+            this.checkedTheme = [];
             this.$message.error('操作失败！');
           }else {
             if (this.pageCount < 3){
               this.currentPag = 1;
               webDb.setLItem('currentPag',1);
             }
-
             this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
             this.isIndeterminate = false;
             this.checkAll = false;
+            this.checkedTheme = [];
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -234,7 +245,7 @@ export default {
     * */
     getThemeList(pageNumber){
       let searchData = this.searchData;
-      const params = {
+     /* const params = {
         'filter[isDeleted]':'no',
         'filter[categoryId]':searchData.categoryId,
         'page[number]':pageNumber,
@@ -244,7 +255,7 @@ export default {
         'filter[createdAtEnd]':searchData.dataValue[1],
         'filter[viewCountGt]':searchData.viewedTimesMin,
         'filter[viewCountLt]':searchData.viewedTimesMax,
-        'filter[postCountGt]':searchData.numberOfRepliesMin,
+        'filter[postCountGt]':searchD  ata.numberOfRepliesMin,
         'filter[postCountLt]':searchData.numberOfRepliesMax,
         'filter[isEssence]':searchData.essentialTheme,
         'filter[isSticky]':searchData.topType
@@ -255,7 +266,7 @@ export default {
         this.total = data.payload.meta.threadCount;
         this.pageCount = data.payload.meta.pageCount;
 
-        /*初始化主题多选框列表*/
+        /!*初始化主题多选框列表*!/
         this.checkedTheme = [];
         data.forEach(()=>{
           this.checkedTheme.push({
@@ -264,7 +275,41 @@ export default {
           })
         });
 
-      });
+      });*/
+
+     this.appFetch({
+       url:'threads',
+       method:'get',
+       data:{
+         'filter[isDeleted]':'no',
+         'filter[username]':searchData.themeAuthor,
+         'filter[categoryId]':searchData.categoryId,
+         'page[number]':pageNumber,
+         'page[size]':searchData.pageSelect,
+         'filter[q]':searchData.themeKeyWords,
+         'filter[createdAtBegin]':searchData.dataValue[0],
+         'filter[createdAtEnd]':searchData.dataValue[1],
+         'filter[viewCountGt]':searchData.viewedTimesMin,
+         'filter[viewCountLt]':searchData.viewedTimesMax,
+         'filter[postCountGt]':searchData.numberOfRepliesMin,
+         'filter[postCountLt]':searchData.numberOfRepliesMax,
+         'filter[isEssence]':searchData.essentialTheme,
+         'filter[isSticky]':searchData.topType
+       }
+     }).then(res=>{
+       this.themeList = res.readdata;
+       this.total = res.meta.threadCount;
+       this.pageCount = res.meta.pageCount;
+
+       this.themeListAll = [];
+       this.themeList.forEach((item,index)=>{
+         this.themeListAll.push(item.id);
+       });
+     }).catch(err=>{
+       console.log(err);
+     })
+
+
     },
     getCategories(){
       this.appFetch({
@@ -278,6 +323,8 @@ export default {
             id:item.id
           })
         })
+      }).catch(err=>{
+        console.log(err);
       })
 
     },
@@ -292,9 +339,6 @@ export default {
     webDb.setLItem('currentPag',1);
   },
 
-  mounted(){
-
-  },
   created(){
     this.currentPag = Number(webDb.getLItem('currentPag'))||1;
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
