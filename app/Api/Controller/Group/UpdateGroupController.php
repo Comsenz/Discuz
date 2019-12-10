@@ -27,9 +27,11 @@ class UpdateGroupController extends AbstractResourceController
     {
         $res = $this->bus->dispatch(
             new UpdateGroup(
-                Arr::get($request->getQueryParams(), 'id'),
-                $request->getAttribute('actor'),
-                $request->getParsedBody()->get('data', [])
+                Arr::get(
+                    $request->getQueryParams(), 'id'),
+                    $request->getAttribute('actor'),
+                    $request->getParsedBody()->get('data', []
+                )
             )
         );
 

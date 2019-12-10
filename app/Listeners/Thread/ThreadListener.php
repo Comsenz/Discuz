@@ -9,7 +9,8 @@
 
 namespace App\Listeners\Thread;
 
-use App\Events\Post\Created;
+use App\Events\Post\Created as PostCreated;
+use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Saving;
@@ -29,7 +30,8 @@ class ThreadListener
     {
         // 发布帖子
         $events->listen(Saving::class, [$this, 'categorizeThread']);
-        $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+        $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
+        $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
@@ -69,9 +71,9 @@ class ThreadListener
     /**
      * 发布首帖时，更新主题回复数，最后回复 ID
      *
-     * @param Created $event
+     * @param PostCreated $event
      */
-    public function whenPostWasCreated(Created $event)
+    public function whenPostWasCreated(PostCreated $event)
     {
         $thread = $event->post->thread;
 
@@ -80,6 +82,16 @@ class ThreadListener
             $thread->refreshLastPost();
             $thread->save();
         }
+    }
+
+    /**
+     * 主题发布后 增加分类主题数量
+     * @param ThreadCreated $event
+     */
+    public function threadCreated(ThreadCreated $event)
+    {
+        $event->thread->category->thread_count += 1;
+        $event->thread->category->save();
     }
 
     /**

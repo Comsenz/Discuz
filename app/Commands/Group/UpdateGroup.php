@@ -9,6 +9,7 @@ use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class UpdateGroup
 {
@@ -29,7 +30,7 @@ class UpdateGroup
         return $this($groups, $groupValidator);
     }
 
-    public function __invoke(GroupRepository $groups,GroupValidator $groupValidator)
+    public function __invoke(GroupRepository $groups, GroupValidator $groupValidator)
     {
         $id = $this->id;
         $data = null;
@@ -39,19 +40,20 @@ class UpdateGroup
 
             $this->assertCan($this->actor, 'edit', $group);
 
-            $attributes = Arr::get($this->data, 'attributes', []);
+            $group->name = Arr::get($this->data, 'attributes.name', '');
+            $group->type = Arr::get($this->data, 'attributes.type', '');
+            $group->color = Arr::get($this->data, 'attributes.color', '');
+            $group->icon = Arr::get($this->data, 'attributes.icon', '');
 
-            $groupValidator->valid($attributes);
-
-            $group->name = $attributes['name'];
-            $group->type = $attributes['type'];
-            $group->color = $attributes['color'];
-            $group->icon = $attributes['icon'];
+            // 修改时调用脏数据Dirty
+            $groupValidator->valid($group->getDirty());
 
             $group->save();
 
             $group->succeed = true;
             $data = $group;
+        } catch (ValidationException $v) {
+            throw $v;
         } catch (Exception $e) {
             $group = new Group();
             $group->id = $id;

@@ -76,10 +76,10 @@ class Post extends Model
      */
     protected static $stateUser;
 
-    public function getContentAttribute($value)
-    {
-        return Bundle::render(Bundle::parse($value));
-    }
+//    public function getContentAttribute($value)
+//    {
+//        return Bundle::render(Bundle::parse($value));
+//    }
 
     /**
      * Create a new instance in reply to a thread.
