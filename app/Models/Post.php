@@ -9,10 +9,10 @@
 
 namespace App\Models;
 
-use App\Emoji\Bundle;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
+use App\Formatter\Formatter;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -76,10 +76,34 @@ class Post extends Model
      */
     protected static $stateUser;
 
-//    public function getContentAttribute($value)
-//    {
-//        return Bundle::render(Bundle::parse($value));
-//    }
+
+    /**
+     * The text formatter instance.
+     *
+     * @var Formatter
+     */
+    protected static $formatter;
+
+    /**
+     * Unparse the parsed content.
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getContentAttribute($value)
+    {
+        return static::$formatter->render($value);
+    }
+
+    /**
+     * Parse the content before it is saved to the database.
+     *
+     * @param string $value
+     */
+    public function setContentAttribute($value)
+    {
+        $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+    }
 
     /**
      * Create a new instance in reply to a thread.
@@ -278,5 +302,25 @@ class Post extends Model
     public static function setStateUser(User $user)
     {
         static::$stateUser = $user;
+    }
+
+    /**
+     * Get the text formatter instance.
+     *
+     * @return Formatter
+     */
+    public static function getFormatter()
+    {
+        return static::$formatter;
+    }
+
+    /**
+     * Set the text formatter instance.
+     *
+     * @param Formatter $formatter
+     */
+    public static function setFormatter(Formatter $formatter)
+    {
+        static::$formatter = $formatter;
     }
 }

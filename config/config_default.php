@@ -125,15 +125,13 @@ return [
     ],
     //加载ServiceProvider
     'providers' => [
-//        App\Providers\EventServiceProvider::class
+        App\Formatter\FormatterServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         App\Providers\CategoryServiceProvider::class,
         App\Providers\UserServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
-
-        App\Emoji\EmojiServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
