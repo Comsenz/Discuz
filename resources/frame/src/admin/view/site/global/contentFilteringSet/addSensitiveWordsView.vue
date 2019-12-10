@@ -4,6 +4,7 @@
       <el-input
         type="textarea"
         :autosize="{ minRows: 5, maxRows: 5}"
+        v-model="textarea"
         placeholder="敏感词">
       </el-input>
 
@@ -19,7 +20,7 @@
     </Card>
 
     <Card >
-      <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
+      <el-button type="primary" size="medium" @click="loginStatus">提交</el-button>
     </Card>
 
     <Card>

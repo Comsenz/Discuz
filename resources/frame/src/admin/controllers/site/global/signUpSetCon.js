@@ -11,14 +11,30 @@ export default {
     }
   },
   created(){
-
+    this.signUpSet()//获取前台信息
   },
   methods:{
+    signUpSet(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{
+
+        }
+      }).then(res=>{
+        this.pwdLength = res.readdata._data.passwordLength
+        console.log(res)
+      })
+    },
     submission(){ //提交注册信息接口
       var reg = /^\d+$|^\d+[.]?\d+$/;
       var pwdLength = this.pwdLength;
+      if(pwdLength === ''){
+        return
+      }
       if (!reg.test(pwdLength)) { //密码只能输入数字
-        this.$toast("您输入的密码格式错误，请重新输入");
+        this.$message("密码只能输入数字");
+        return
       }
       this.appFetch({
         url:'settings',
@@ -30,7 +46,9 @@ export default {
         }
       }).then(data=>{
         console.log(data)
+        this.$message('提交成功');
       })
+      
     }
   },
   components:{

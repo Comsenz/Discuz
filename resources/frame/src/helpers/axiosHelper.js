@@ -61,8 +61,8 @@ const analyzingData = function(data, included) {
         result._data = nowData.attributes;
       }
 
-      result._data = nowData.attributes;
-    if(nowData.relationships) {
+      // result._data = nowData.attributes;
+    if(nowData && nowData.relationships) {
         var relationObj = {};
 
         for(var relationKey in nowData.relationships) {
@@ -165,7 +165,7 @@ const appFetch = function(params, options) {
 	}
 
 	//get 方式需要把参数传给params
-	if(params.method.toLowerCase() == 'get') {
+	if(params.method.toLowerCase() == 'get'&& params.data) {
 		params.params = params.data;
 
     //如果传递include，处理成字符串

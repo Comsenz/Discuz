@@ -2,19 +2,19 @@
   <div class="annex-set-box">
     <Card header="支持的图片扩展名：">
       <CardRow description="多个请用,隔开，例如 png,gif,jpg">
-        <el-input></el-input>
+        <el-input v-model="picture"></el-input>
       </CardRow>
     </Card>
 
     <Card header="支持的文件扩展名：">
       <CardRow description="多个请用,隔开，例如 doc,docx,pdf,zip">
-        <el-input></el-input>
+        <el-input v-model="fileExtension"></el-input>
       </CardRow>
     </Card>
 
     <Card header="支持的最大尺寸：">
       <CardRow description="单位：MB">
-        <el-input></el-input>
+        <el-input v-model="maximumSize"></el-input>
       </CardRow>
     </Card>
 

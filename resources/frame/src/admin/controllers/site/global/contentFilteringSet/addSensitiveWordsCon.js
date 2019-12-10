@@ -47,8 +47,9 @@ export default {
 
       checked:false,
       radio2:"1",
-      loginStatus:'default',  //default  batchSet
-      deleteStatus:true
+      // loginStatus:'default',  //default  batchSet
+      deleteStatus:true,
+      textarea:''
 
     }
   },
@@ -71,7 +72,26 @@ export default {
         this.deleteStatus = true;
       }
 
-    }
+    },
+    loginStatus(){
+      this.appFetch({
+        url:'batchSubmit',
+        method:'post',
+        data:{
+          "data": {
+            "type": "stop-words",
+            "words": [
+                "2=2121222113111",
+                "eqwe1e=adw",
+                "123={MOD}|ds,",
+                "MOD=111"
+            ]
+        }
+        }
+      }).then(res=>{
+
+      })
+    },
   },
   components:{
     Card,

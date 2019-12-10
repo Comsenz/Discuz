@@ -39,7 +39,7 @@ module.exports = {
 
   'batch':'/api/threads/batch',   //修改主题接口(批量)
   'upload': '/api/users/',//上传头像
-  'invite':'/api/Invite',//创建邀请码
+  'invite':'/api/invite',//创建邀请码
   'groups':'/api/groups',//获取所有操作类型
   'group-permission':'/api/group-permission', // 修改用户组权限
 
@@ -47,5 +47,9 @@ module.exports = {
   /*后台*/
   'siteinfo':'/api/siteinfo',    //首页-系统信息
   'settings':'/api/settings',    //设置接口
+  'forum':'/api/forum',          //获取前台配置接口
+  'batchSubmit':'/api/stop-words/batch', //创建敏感词接口[批量]
+  'serachWords':'/api/stop-words', //查询敏感词接口[列表]
+  'exportWords':'/api/stop-words/export',//导出敏感词
 
 }

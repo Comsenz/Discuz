@@ -8,7 +8,21 @@ export default {
   data:function () {
     return {
       num:[
-
+        {
+          title: '回复我的',
+          typeId: 1,
+          number: 0
+        },
+        {
+          title: '打赏我的',
+          typeId: 3,
+          number: 0
+        },
+        {
+          title: '点赞我的',
+          typeId: 2,
+          number: 0
+        },
       ],
       
     }
@@ -33,7 +47,6 @@ export default {
       }
     },
     notice(){
-      console.log("1111111111")
       this.appFetch({
         url:'noticeList',
         method:'get',
@@ -42,10 +55,10 @@ export default {
           include:''
         }
       }).then(res=>{
-        this.num = [];
-        res.data.forEach((item)=>{
-          this.num.push(item.index+1)
-          console.log(this.num)
+        const DATA = res.data;
+        this.num = this.num.map((val)=>{
+          val.number = DATA[val.typeId];
+          return val;
         })
       })
     },
