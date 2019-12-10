@@ -27,7 +27,7 @@ class UpdateCircle
     use EventsDispatchTrait;
 
     /**
-     * 执行操作的圈子id.
+     * 执行操作的站点id.
      *
      * @var int
      */
@@ -41,7 +41,7 @@ class UpdateCircle
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */
@@ -57,9 +57,9 @@ class UpdateCircle
     /**
      * 初始化命令参数
      *
-     * @param int $circleId 执行操作的圈子id
+     * @param int $circleId 执行操作的站点id
      * @param User $actor 执行操作的用户.
-     * @param array $data 创建圈子的数据.
+     * @param array $data 创建站点的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
     public function __construct($circleId, User $actor, array $data, string $ipAddress)
@@ -101,7 +101,7 @@ class UpdateCircle
             new Saving($circle, $this->actor, $this->data)
         );
 
-        // 分发创建圈子扩展信息的任务
+        // 分发创建站点扩展信息的任务
         $bus->dispatch(
             new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
         );
@@ -109,7 +109,7 @@ class UpdateCircle
         // 验证参数
         $validator->assertValid($circle->getDirty());
 
-        // 保存圈子
+        // 保存站点
         $circle->save();
 
         // 调用钩子事件

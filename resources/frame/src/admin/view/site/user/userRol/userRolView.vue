@@ -34,7 +34,7 @@
           <el-table-column
             min-width="115">
             <template slot-scope="scope">
-              <el-radio v-model="radio" label="1">设为加入圈子的默认级别</el-radio>
+              <el-radio v-model="radio" label="1">设为加入站点的默认级别</el-radio>
             </template>
           </el-table-column>
 

@@ -26,7 +26,7 @@
       <div class="circleDet" v-show="perDetShow">
         <span>主题：{{siteInfo.threads()}}</span>
         <span>成员：{{siteInfo.members()}}</span>
-        <span>圈主：{{username}}</span>
+        <span>站长：{{username}}</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi">

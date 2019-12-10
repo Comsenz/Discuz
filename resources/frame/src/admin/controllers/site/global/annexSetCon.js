@@ -9,7 +9,17 @@ export default {
     }
   },
   methods:{
+    submi(){ //提交附件信息
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          
+        }
+      }).then(data=>{
 
+      })
+    }
   },
   components:{
     Card,

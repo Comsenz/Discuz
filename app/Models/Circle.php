@@ -16,10 +16,10 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property 圈子名称 name
- * @property 圈子图标 icon
- * @property 圈子介绍 description
- * @property 圈子属性 property
+ * @property 站点名称 name
+ * @property 站点图标 icon
+ * @property 站点介绍 description
+ * @property 站点属性 property
  * @property 创建的IP地址 ip
  */
 class Circle extends Model
@@ -73,12 +73,12 @@ class Circle extends Model
     }
 
     /**
-     * 创建圈子.
+     * 创建站点.
      *
-     * @param $name        圈子名称
-     * @param $icon        圈子图标
-     * @param $description 圈子介绍
-     * @param $property    圈子属性
+     * @param $name        站点名称
+     * @param $icon        站点图标
+     * @param $description 站点介绍
+     * @param $property    站点属性
      * @param $ipAddress   创建的IP地址
      * @return static
      */
@@ -89,7 +89,7 @@ class Circle extends Model
         $property,
         $ipAddress
     ) {
-        // 实例一个圈子模型
+        // 实例一个站点模型
         $circle = new static;
 
         // 设置模型属性值
@@ -102,7 +102,7 @@ class Circle extends Model
         // 暂存需要执行的事件
         $circle->raise(new Created($circle));
 
-        // 返回圈子模型
+        // 返回站点模型
         return $circle;
     }
 

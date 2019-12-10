@@ -31,8 +31,8 @@ export default {
       ],  //操作列表
       operatingSelect:'',   //操作单选选择
 
-      categoriesList: [],   //选择圈子列表
-      categoryId: '',       //选择圈子选中
+      categoriesList: [],   //选择站点列表
+      categoryId: '',       //选择站点选中
 
       toppingRadio:2,       //是否置顶
       essenceRadio:2,       //是否精华

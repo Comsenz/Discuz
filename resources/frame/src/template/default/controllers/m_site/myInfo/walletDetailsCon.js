@@ -31,7 +31,10 @@ export default {
     walletDetails(){
       this.appFetch({
         url:'walletDetails',
-        method:'get'
+        method:'get',
+        data:{
+          include:''
+        }
       }).then((res)=>{
         this.walletDetailsList = res.data
       })

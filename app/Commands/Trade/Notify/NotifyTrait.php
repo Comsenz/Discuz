@@ -58,7 +58,7 @@ trait NotifyTrait
             //添加钱包明细
             $user_wallet_log = UserWalletLog::createWalletLog($payee_id, $payee_change_available_amount, 0, $change_type, app('translator')->get($change_type_lang));
 
-        	//圈主分成
+        	//站长分成
             //
         	return $order_info;
         }

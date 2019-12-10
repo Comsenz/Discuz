@@ -36,7 +36,10 @@ $route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionCo
 $route->get('/groups', 'groups.list', ApiController\Group\ListGroupsController::class);
 $route->get('/groups/{id}', 'groups.resource', ApiController\Group\ResourceGroupsController::class);
 $route->post('/groups', 'group.create', ApiController\Group\CreateGroupController::class);
+$route->patch('/groups/{id}', 'group.update', ApiController\Group\UpdateGroupController::class);
+$route->patch('/groups', 'group.update', ApiController\Group\UpdateGroupsController::class);
 $route->delete('/groups/{id}', 'group.delete', ApiController\Group\DeleteGroupController::class);
+$route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsController::class);
 
 /*
 |--------------------------------------------------------------------------

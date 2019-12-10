@@ -1,6 +1,6 @@
 
 /**
- * 移动端圈子首页控制器
+ * 移动端站点首页控制器
  */
 export default {
 	data: function() {

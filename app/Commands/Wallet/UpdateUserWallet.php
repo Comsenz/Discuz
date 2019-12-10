@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Wallet;
 
-use App\Exceptions\ErrorException;
+use App\Exceptions\WalletException;
 use App\Models\UserWallet;
 use App\Models\UserWalletLog;
 use Exception;
@@ -76,11 +76,11 @@ class UpdateUserWallet
         $wallet_status  = Arr::get($this->data, 'wallet_status');
 
         if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
-            throw new ErrorException(app('translator')->get('wallet.operate_type_error'), 500);
+            throw new WalletException('operate_type_error');
         }
 
         if (!is_null($wallet_status) && !in_array($wallet_status, [UserWallet::WALLET_STATUS_NORMAL, UserWallet::WALLET_STATUS_FROZEN])) {
-            throw new ErrorException(app('translator')->get('wallet.operate_status_error'), 500);
+            throw new WalletException('wallet_status_error');
         }
         //操作金额
         $change_available_amount = sprintf("%.2f", floatval($operate_amount));
@@ -95,12 +95,12 @@ class UpdateUserWallet
                     break;
                 case UserWallet::OPERATE_REDUCE: //减少
                     if ($user_wallet->available_amount - $operate_amount < 0) {
-                        throw new Exception(app('translator')->get('wallet.available_amount_error'), 500);
+                        throw new Exception('available_amount_error');
                     }
                     $change_available_amount = -$change_available_amount;
                     break;
                 default:
-                    throw new Exception(app('translator')->get('wallet.operate_type_error'), 500);
+                    throw new Exception('operate_type_error');
                     break;
             }
             //修改钱包金额
@@ -124,7 +124,7 @@ class UpdateUserWallet
         } catch (Exception $e) {
             //回滚事务
             $db->rollback();
-            throw new ErrorException($e->getMessage(), 500);
+            throw new WalletException($e->getMessage(), 500);
         }
     }
 }

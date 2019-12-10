@@ -14,7 +14,7 @@ export default {
       deleteStatus:true,
       tableData: [{
         name: '奶罩',
-        role: '圈主',
+        role: '站长',
         value:'不处理'
       }, {
         name: '小虫',

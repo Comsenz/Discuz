@@ -24,6 +24,9 @@ class CreateCategories extends Migration
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
+
+        $this->schema()->getConnection()->table('categories')
+            ->insert(['name' => '默认分类', 'description' => '默认分类']);
     }
 
     /**

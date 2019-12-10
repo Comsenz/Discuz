@@ -32,7 +32,7 @@
     </Card>-->
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium">提交</el-button>
+      <el-button type="primary" size="medium" @click="submission">提交</el-button>
     </Card>
 
   </div>

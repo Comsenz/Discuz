@@ -1,4 +1,4 @@
-<!--移动端付费圈子模板-->
+<!--移动端付费站点模板-->
 
 <template>
     <div class="circleCon">

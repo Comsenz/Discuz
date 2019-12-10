@@ -1,10 +1,9 @@
 <?php
 
 return [
-    'operate_type_error'     => '操作方式不存在',
-    'operate_status_error'     => '钱包状态不存在',
-    'operate_amount_error'   => '操作金额必须大于零',
-    'available_amount_error' => '可用金额不足',
+    'operate_type_error'     => '操作类型不存在',
+    'wallet_status_error'     => '钱包状态有误',
+    'available_amount_error' => '钱包可用金额不足',
     'update_failure'         => '钱包更新失败',
     'status_cash_freeze'     => '钱包已冻结提现',
     'cash_freeze_desc'       => '提现冻结',

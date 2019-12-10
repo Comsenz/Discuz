@@ -48,10 +48,15 @@ class ForumSettingSerializer extends AbstractSerializer
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
-            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username'])
-//            'users' => $this->settings->get('site_name'),
-//            'siteName' => $this->settings->get('site_name'),
-//            'siteName' => $this->settings->get('site_name'),
+            'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+            'passwordLength' => (int)$this->settings->get('password_length'),
+            'passwordStrength' => $this->settings->get('password_strength'),
+            'allowRegister' => (bool)$this->settings->get('allow_register'),
+            'siteClose' => (bool)$this->settings->get('site_close'),
+            'siteCloseMsg' => $this->settings->get('site_close_msg'),
+            'supportImgExt' => $this->settings->get('support_img_ext'),
+            'supportFileExt' => $this->settings->get('support_file_ext'),
+            'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
         ];
 
         if ($this->actor->exists) {

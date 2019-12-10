@@ -40,7 +40,7 @@ class UpdateInviteController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
 
-        // 分发创建圈子的任务
+        // 分发创建站点的任务
         $data = $this->bus->dispatch(
             new UpdateInvite()
         );

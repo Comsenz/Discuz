@@ -27,7 +27,7 @@ export default {
 		    perDet:{
 		    	themeNum: '1222',
 		    	memberNum: '1222',
-		    	circleLeader: '圈主名称'
+		    	circleLeader: '站长名称'
 		    },
         avatarUrl:'',
         // username:'',
@@ -68,10 +68,10 @@ export default {
     invitationShow: { // 组件是否显示邀请这几个字
       invitationShow: false
     },
-    perDetShow: { //组件是否显示圈子信息
+    perDetShow: { //组件是否显示站点信息
       perDet: false
     },
-    logoShow: { //组件是否显示圈子图标
+    logoShow: { //组件是否显示站点图标
       logoShow: false
     }
   },

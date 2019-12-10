@@ -1,5 +1,5 @@
 /**
- * 付费圈子-已支付-未登录控制器
+ * 付费站点-已支付-未登录控制器
  */
 import Header from '../../../view/m_site/common/headerView'
 export default {

@@ -9,7 +9,9 @@
 
 namespace App\Providers;
 
+use App\Formatter\Formatter;
 use App\Listeners\Post\PostListener;
+use App\Models\Post;
 use App\Policies\PostPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -32,6 +34,8 @@ class PostServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
+        Post::setFormatter($this->app->make(Formatter::class));
+
         // 事件处理类
         $events = $this->app->make('events');
 

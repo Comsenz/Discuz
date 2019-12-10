@@ -1,11 +1,11 @@
-<!--移动端圈子管理里的邀请模板-->
+<!--移动端站点管理里的邀请模板-->
 
 <template>
     <div class="circleCon">
 	    <Header :invitePerDet="true"></Header>
 	    <div class="gap"></div>
 	    <div class="circleInfo padB0">
-	    	<h1 class="cirInfoTit">圈子简介</h1>
+	    	<h1 class="cirInfoTit">站点简介</h1>
 	    	<p class="cirInfoWord borNone">Crossday Discuz! Board（简称 Discuz!）是北京康盛新创科技有限责任公司推出的一套通用的社区论坛软件系统。自2001年6月面世以来，Discuz!已拥有15年以上的应用历史和200多万网站用户案例，是全球成熟度最高、覆盖率最大的论坛软件系统之一。目前最新版本Discuz! X3.4正式版于2017年8月2日发布，去除</p>
 	    </div>
 	    <div class="gap"></div>
@@ -20,8 +20,8 @@
 	    		<p class="powerChi">回帖</p>
 	    	</div>
 	    	<div class="powerList">
-	    		<div class="powerClassify">圈子前台管理</div>
-	    		<p class="powerChi">编辑圈子</p>
+	    		<div class="powerClassify">站点前台管理</div>
+	    		<p class="powerChi">编辑站点</p>
 	    		<p class="powerChi">邀请加入</p>
 	    		<p class="powerChi">标签管理</p>
 	    		<p class="powerChi">用户管理</p>

@@ -33,7 +33,7 @@
               v-model="withdrawalAmount"
               :show="show"
               theme="custom"
-              title="圈子金额键盘"
+              title="站点金额键盘"
               extra-key="."
               close-button-text="完成"
               @blur="show = false"
