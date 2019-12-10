@@ -1,24 +1,24 @@
-<!--移动端付费圈子模板-->
+<!--移动端付费站点模板-->
 
 <template>
     <div class="circleCon">
-	    <comHeader title="圈子信息"></comHeader>
+	    <comHeader title="站点信息"></comHeader>
 	    <div class="content">
 	    	<div class="circlePL">
 		    	<div class="infoItem">
-			    	<span class="infoItemLeft">圈子名称</span>
+			    	<span class="infoItemLeft">站点名称</span>
 			    	<span class="infoItemRight">{{siteInfo.siteName()}}</span>
 			    </div>
 		    </div>
 		    <div class="circlePL">
 		    	<div class="circleLoBox">
-			    	<span class="circleIcon">圈子图标</span>
+			    	<span class="circleIcon">站点图标</span>
             <img v-if="siteInfo.logo()" :src="siteInfo.logo()" class="circleLogo">
             <img v-else="" src="../../../../../../static/images/logo.png" class="circleLogo">
 			    </div>
 		    </div>
 		    <div class="circleInfo padB0 lastBorNone">
-		    	<h1 class="cirInfoTit">圈子简介</h1>
+		    	<h1 class="cirInfoTit">站点简介</h1>
 		    	<p class="cirInfoWord">{{siteInfo.siteIntroduction()}}{{}}</p>
 		    	<div class="infoItem">
 			    	<span class="infoItemLeft">创建时间</span>
@@ -29,12 +29,12 @@
 			    	<span class="infoItemRight">付费{{siteInfo.price()}}元，有效期自加入起{{siteInfo.day()}}天</span>
 			    </div>
 			    <div class="infoItem">
-			    	<span class="infoItemLeft">圈主</span>
+			    	<span class="infoItemLeft">站长</span>
 			    	<span class="infoItemRight">{{username}}</span>
 			    </div>
 			    <div class="infoItem">
 			    	<div class="overHide">
-			    		<span class="infoItemLeft">圈子成员</span>
+			    		<span class="infoItemLeft">站点成员</span>
 			    		<a href="javascript:;" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
 			    	</div>
 			    	<div class="circleMemberList" v-for="(item,index) in siteInfo.user()" :key="index">

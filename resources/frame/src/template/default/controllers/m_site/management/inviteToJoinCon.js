@@ -1,5 +1,5 @@
 /**
- * 移动端圈子管理页控制器
+ * 移动端站点管理页控制器
  */
 import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 export default {

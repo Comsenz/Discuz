@@ -71,7 +71,7 @@
                 <el-input class="" size="small" ></el-input>
               </div>
               <div class="proportion-box">
-                <span>平台(圈主)</span>
+                <span>平台(站长)</span>
                 <el-input size="small" ></el-input>
               </div>
             </CardRow>

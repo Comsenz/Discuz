@@ -18,7 +18,7 @@ export default {
           require(['../view/m_site/home/circleView'],resolve)
         },
         metaInfo:{
-          title:"圈子首页",
+          title:"站点首页",
           oneHeader: true
         }
       },
@@ -76,7 +76,7 @@ export default {
           require(['../view/m_site/home/payCircleView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-首页-未登录",
+          title:"付费站点-首页-未登录",
           oneHeader: true
         }
       },
@@ -85,7 +85,7 @@ export default {
           require(['../view/m_site/home/payCircleLoginView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子-已登录-未付费",
+          title:"付费站点-已登录-未付费",
           oneHeader: true
         }
       },
@@ -94,7 +94,7 @@ export default {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子，内容页的分享",
+          title:"付费站点，内容页的分享",
           oneHeader: true
         }
       },
@@ -103,7 +103,7 @@ export default {
           require(['../view/m_site/home/openCircleView'],resolve)
         },
         metaInfo:{
-          title:"公开的圈子，菜单栏内的邀请",
+          title:"公开的站点，菜单栏内的邀请",
           oneHeader: true
         }
       },
@@ -128,7 +128,7 @@ export default {
           require(['../view/m_site/home/circleInviteView'],resolve)
         },
         metaInfo:{
-          title:"付费圈子，菜单栏内的邀请"
+          title:"付费站点，菜单栏内的邀请"
         }
       },
       'circle-manage-invite':{
@@ -136,7 +136,7 @@ export default {
           require(['../view/m_site/home/circleManageInviteView'],resolve)
         },
         metaInfo:{
-          title:"圈子管理里的邀请",
+          title:"站点管理里的邀请",
           oneHeader: true
         }
       },
@@ -145,7 +145,7 @@ export default {
           require(['../view/m_site/management/managementCirclesView'],resolve)
         },
         metaInfo:{
-          title:"管理圈子",
+          title:"管理站点",
           threeHeader: true
         }
       },
@@ -162,7 +162,7 @@ export default {
           require(['../view/m_site/management/circleMembersView'],resolve)
         },
         metaInfo:{
-          title:"圈子成员"
+          title:"站点成员"
         }
 
       },
@@ -171,7 +171,7 @@ export default {
           require(['../view/m_site/management/circleInfoView'],resolve)
         },
         metaInfo:{
-          title:"圈子信息"
+          title:"站点信息"
         }
       },
       'invite-join':{

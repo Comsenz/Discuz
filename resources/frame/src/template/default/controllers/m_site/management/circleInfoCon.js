@@ -1,5 +1,5 @@
 /**
- * 移动端圈子管理页控制器
+ * 移动端站点管理页控制器
  */
 
 import Forum from '../../../../../common/models/Forum';
@@ -23,7 +23,7 @@ export default {
 
   },
 	methods: {
-    //请求初始化圈子信息数据
+    //请求初始化站点信息数据
     loadSite(){
       const params = {};
        params.include='users';
@@ -34,11 +34,11 @@ export default {
          // console.log(data.user().avatarUrl());
       });
     },
-    //查看更多圈子成员
+    //查看更多站点成员
     moreCilrcleMembers(){
       this.$router.push({path:'circle-members'});
     },
-    //点击圈子成员头像，跳转到用户主页
+    //点击站点成员头像，跳转到用户主页
     membersJump(userId){
       console.log('2222');
       this.$router.push({path:'/home-page/'+userId});

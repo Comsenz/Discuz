@@ -52,7 +52,7 @@ class UpdateGroupPermission
      *
      * @param $groupId
      * @param User $actor 执行操作的用户.
-     * @param array $data 创建圈子的数据.
+     * @param array $data 创建站点的数据.
      */
     public function __construct($groupId, $actor, array $data)
     {

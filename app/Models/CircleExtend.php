@@ -16,18 +16,18 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property 圈子ID circle_id
+ * @property 站点ID circle_id
  * @property 收费类型 type
  * @property 收费金额 price
  * @property 分成规则 share_rule
  * @property 创建的IP地址 ip
  * @property 分成规则 indate_type
  * @property 有效时间 indate_time
- * @property 加入圈子站长分成比例 join_circle_ratio_master
+ * @property 加入站点站长分成比例 join_circle_ratio_master
  * @property 看帖站长分成比例 read_thread_ratio_master
- * @property 看帖圈主分成比例 read_thread_ratio_admin
+ * @property 看帖站长分成比例 read_thread_ratio_admin
  * @property 打赏帖子站长分成比例 give_thread_ratio_master
- * @property 打赏帖子圈主分成比例 give_thread_ratio_admin
+ * @property 打赏帖子站长分成比例 give_thread_ratio_admin
  */
 class CircleExtend extends Model
 {
@@ -80,18 +80,18 @@ class CircleExtend extends Model
     }
 
     /**
-     * 创建圈子扩展数据.
+     * 创建站点扩展数据.
      *
-     * @param $circle_id 圈子ID
+     * @param $circle_id 站点ID
      * @param $type 收费类型
      * @param $price 收费金额
      * @param $indate_type 有效期类型
      * @param $indate_time 有效时间
-     * @param $join_circle_ratio_master 加入圈子站长分成比例
+     * @param $join_circle_ratio_master 加入站点站长分成比例
      * @param $read_thread_ratio_master 看帖站长分成比例
-     * @param $read_thread_ratio_admin 看帖圈主分成比例
+     * @param $read_thread_ratio_admin 看帖站长分成比例
      * @param $give_thread_ratio_master 打赏帖子站长分成比例
-     * @param $give_thread_ratio_admin 打赏帖子圈主分成比例
+     * @param $give_thread_ratio_admin 打赏帖子站长分成比例
      * @param $ipAddress 创建的IP地址
      * @return static
      */
@@ -108,7 +108,7 @@ class CircleExtend extends Model
         $give_thread_ratio_admin,
         $ipAddress
     ) {
-        // 实例一个圈子扩展模型
+        // 实例一个站点扩展模型
         $circleExtend = new static;
 
         // 设置模型属性值
@@ -127,7 +127,7 @@ class CircleExtend extends Model
         // 暂存需要执行的事件
         $circleExtend->raise(new Created($circleExtend));
 
-        // 返回圈子扩展模型
+        // 返回站点扩展模型
         return $circleExtend;
     }
 }

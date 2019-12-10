@@ -37,7 +37,7 @@ class UseInvite
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */

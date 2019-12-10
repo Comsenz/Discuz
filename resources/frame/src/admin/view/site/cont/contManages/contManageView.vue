@@ -63,7 +63,7 @@
             min-width="250">
             <template slot-scope="scope">
 
-              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择圈子">
+              <el-select v-if="scope.row.name === '批量移动到分类'" v-model="categoryId" placeholder="选择站点">
                 <el-option
                   v-for="item in categoriesList"
                   :key="item.id"
