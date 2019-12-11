@@ -94,8 +94,9 @@ export default {
           }
         }
       }).then((res) => {
-        console.log(res, 'res1111');
+        // console.log(res, 'res232323');
         this.siteInfo = res.readdata;
+        // this.username = data.readdata.siteAuthor.username;
       })
       this.appFetch({
         url: 'categories',
@@ -108,8 +109,8 @@ export default {
           // }
         }
       }).then((res) => {
-        console.log(res, 'res3333');
-        this.themeListCon = res.readdata;
+        // console.log(res, 'res44444');
+        this.categories = res.readdata;
       })
 
 

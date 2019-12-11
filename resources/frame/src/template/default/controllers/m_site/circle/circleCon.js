@@ -120,83 +120,16 @@ export default {
         method: 'get',
         data: {
           include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-          page: {
-            offset: 20,
-            num: 3
-          }
+          // page: {
+          //   offset: 20,
+          //   num: 3
+          // },
         }
       }).then((res) => {
-        console.log(res.readdata, 'res1111');
-        // console.log(res.readdata[0].user._data.username, 'res222');
-        // console.log(res.readdata[1].firstPost.likedUsers[0]._data.username);
+        // console.log(res, 'res1111');
         this.themeListCon = res.readdata;
       })
-      // this.appFetch({
-      //   url:"classify",
-      //   method:"get",
-      //   data:{
-      //     // "data": {
-      //     //   "attributes": {
-      //     //     username:this.userName,
-      //     //     password:this.password,
-      //     //   },
-      //     // }
-      //   }
-      // }).then(res => {
-      //     console.log(res);
 
-      //     this.paramsObj = {
-      //       userId:this.userId
-      //     };
-      //     // let params = this.appCommonH.setGetUrl('/api/classify', this.paramsObj);
-      //  });
-      // console.log(this.appCommonH.getStrTime('y-m-d','2019-11-13T00:00:00+08:00'));
-      const params = {};
-      params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-      this.apiStore.find('threads', params).then(data => {
-        // console.log(data[0].firstPost().id());
-        // console.log(data[0].user().username());
-        // this.themeListCon = data;
-      });
-      //请求主题导航列表
-      // this.apiStore.find('themeNavListCon', params).then(data => {
-      //   this.themeNavListCon = data;
-      //   console.log(this.themeNavListCon);
-
-      // });
-
-      // const post = new Post();
-      // post.content = 'askdlfj';
-      // post.save();
-
-      // this.appFetch({
-      //   url:"threads",
-      //   method:"get",
-      //   data:{
-      //     include:'user,firstPost,lastThreePosts,lastThreePosts.user'
-      //   }
-      // },(res)=>{
-      //   if (res.status === 200){
-      //     // console.log(res);
-      //     this.themeListCon = res.data; //是个对象
-      //     console.log(this.themeListCon);
-      //     // for(var i=0; i<this.themeListCon.length;i++){
-      //     //   this.currentData = this.themeListCon[i];
-      //     //   var lastThreePostsLen = this.currentData.relationships.lastThreePosts.data.length;
-      //     //   // console.log(lastThreePosts);
-      //     //   if(lastThreePostsLen == 0){
-      //     //     // console.log(lastThreePosts.length);
-      //     //     this.replyTagShow = false;
-      //     //   } else {
-      //     //     this.replyTagShow = true;
-      //     //   }
-      //     // }
-      //   } else{
-      //     console.log('400');
-      //   }
-      // },(err)=>{
-      //   console.log(err);
-      // })
     },
 
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离

@@ -24,13 +24,13 @@
       </div>
       <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" v-show="logoShow">
       <div class="circleDet" v-show="perDetShow">
-        <span>主题：{{siteInfo.threads()}}</span>
-        <span>成员：{{siteInfo.members()}}</span>
-        <span>站长：{{username}}</span>
+        <span>主题：{{siteInfo._data.threads}}</span>
+        <span>成员：{{siteInfo._data.members}}</span>
+        <span>站长：{{siteInfo._data.siteAuthor.username}}</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi">
-          <van-tab v-for="(cateChi, index) in categories" :title="cateChi.name()" :key="index">
+          <van-tab v-for="(cateChi, index) in categories" :title="cateChi._data.name" :key="index">
           </van-tab>
         </van-tabs>
       </div>
