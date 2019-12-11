@@ -53,10 +53,12 @@ export default {
       this.appFetch({
         url:'noticeList',
         method:'get',
+        standard:false,
         data:{
           include:[]
         }
       }).then(res=>{
+        console.log(res)
         const DATA = res.data;
         this.num = this.num.map((val)=>{
           val.number = DATA[val.typeId];
