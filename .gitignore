@@ -3,8 +3,6 @@
 /composer.lock
 /.idea
 /config/config.php
-/config/private.key
-/config/public.key
 /storage
 .project
 .settings

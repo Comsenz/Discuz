@@ -49,6 +49,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
     ];
 
@@ -59,6 +60,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
     ];
 
@@ -264,10 +266,14 @@ class ListThreadsController extends AbstractListController
 
         // 待审核
         if ($isApproved = Arr::get($filter, 'isApproved')) {
-            if ($isApproved == 'no' && $actor->can('review')) {
-                $query->where('threads.is_approved', false);
-            } elseif ($isApproved == 'yes') {
-                $query->where('threads.is_approved', true);
+            if ($isApproved == 'yes') {
+                $query->where('threads.is_approved', Thread::APPROVED);
+            } elseif ($actor->can('approvePosts')) {
+                if ($isApproved == 'no') {
+                    $query->where('threads.is_approved', Thread::UNAPPROVED);
+                } elseif ($isApproved == 'ignore') {
+                    $query->where('threads.is_approved', Thread::IGNORED);
+                }
             }
         }
 
