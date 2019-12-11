@@ -1,4 +1,4 @@
-<!--移动端付费圈子-菜单栏内的邀请模板-->
+<!--移动端付费站点-菜单栏内的邀请模板-->
 
 <template>
     <div class="circleCon">
@@ -14,12 +14,12 @@
 	        <div class="circleDet">
 	          <span>主题：125</span>
 	          <span>成员：125</span>
-	          <span>圈主：我是谁</span>
+	          <span>站长：我是谁</span>
 	        </div>
       	</div>
 	    <div class="gap"></div>
 	    <div class="circleInfo padB0">
-	    	<h1 class="cirInfoTit">圈子简介</h1>
+	    	<h1 class="cirInfoTit">站点简介</h1>
 	    	<p class="cirInfoWord borNone">Crossday Discuz! Board（简称 Discuz!）是北京康盛新创科技有限责任公司推出的一套通用的社区论坛软件系统。自2001年6月面世以来，Discuz!已拥有15年以上的应用历史和200多万网站用户案例，是全球成熟度最高、覆盖率最大的论坛软件系统之一。目前最新版本Discuz! X3.4正式版于2017年8月2日发布，去除</p>
 	    </div>
 	    <div class="gap"></div>

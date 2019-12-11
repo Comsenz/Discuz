@@ -55,22 +55,25 @@ const analyzingData = function(data, included) {
     function getOneData(nowData) {
       var result = {};
 
-      if(!nowData.attributes) {
+    if(!nowData.attributes) {
         nowData = newIncludes[nowData.type+nowData.id];
+      }else{
+        result._data = nowData.attributes;
       }
 
-      result._data = nowData.attributes;
-      if(nowData.relationships) {
+      // result._data = nowData.attributes;
+    if(nowData && nowData.relationships) {
         var relationObj = {};
 
         for(var relationKey in nowData.relationships) {
           relationObj[relationKey] = getData(nowData.relationships[relationKey].data);
+          relationObj.id = nowData.id;
         }
 
         result = {...result, ...relationObj};
       }
 
-      return result;    
+      return result;
     }
 
     /**
@@ -162,7 +165,7 @@ const appFetch = function(params, options) {
 	}
 
 	//get 方式需要把参数传给params
-	if(params.method.toLowerCase() == 'get') {
+	if(params.method.toLowerCase() == 'get'&& params.data) {
 		params.params = params.data;
 
     //如果传递include，处理成字符串
@@ -192,9 +195,9 @@ const appFetch = function(params, options) {
       if(data.data.meta && data.data.meta instanceof Array) {
         data.data.meta.forEach(function(error) {
           error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
-        })         
-      }     
-      
+        })
+      }
+
       //处理后的结构数据
       if(data.data.data) {
         data.data.readdata = analyzingData(data.data.data, data.data.included);

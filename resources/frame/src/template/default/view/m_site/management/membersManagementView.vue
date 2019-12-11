@@ -19,16 +19,16 @@
 			      class="resUser"
 			      v-for="item in userList"
 			      clickable
-			      :key="item.username()"
-			      @click="toggle(item.id())"
+			      :key="item._data.username"
+			      @click="toggle(item._data.id)"
 			    >
-			    <img :src="item.avatarUrl()" alt="" class="resUserHead">
+			    <img :src="item._data.avatarUrl" alt="" class="resUserHead">
 			    <div class="resUserDet">
-		            <span class="resUserName">{{item.username()}}</span>
-		            <span class="userRole">{{item.data.relationships.groups.data[0] ? getGroupNameById[item.data.relationships.groups.data[0].id] : ''}}</span>
+		            <span class="resUserName">{{item._data.username}}</span>
+		            <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span>
 		            <van-checkbox
 		             class="memberCheck"
-			        :name="item.username()"
+			        :name="item._data.username"
 			        ref="checkboxes"
 			        slot="right-icon"
 			      />
@@ -38,7 +38,7 @@
 			</van-checkbox-group>
 			<div class="searchMore" v-show="userLoadMoreStatus" @click="handleLoadMoreUser">
 				<i class="icon iconfont icon-search"></i>
-				搜索更多用户
+				打开更多用户
 			</div>
 	    </div>
 		<div class="manageFootFixed">

@@ -38,7 +38,7 @@ class UpdateInvite
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */
@@ -56,7 +56,7 @@ class UpdateInvite
      *
      * @param int $inviteId 执行操作的id
      * @param User $actor 执行操作的用户.
-     * @param array $data 创建圈子的数据.
+     * @param array $data 创建站点的数据.
      * @param string $ipAddress 请求来源的IP地址.
      */
     public function __construct($inviteId, User $actor, array $data, string $ipAddress)
@@ -101,7 +101,7 @@ class UpdateInvite
         // 验证参数
         $validator->assertValid($invite->getDirty());
 
-        // 保存圈子
+        // 保存站点
         $invite->save();
 
         // 调用钩子事件

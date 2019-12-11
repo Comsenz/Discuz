@@ -7,15 +7,28 @@ import MyNoticeHeader from '../../../view/m_site/common/loginSignUpHeader/loginS
 export default {
   data:function () {
     return {
-      num:'',
-      numReply:'',
-      numReward:'',
+      num:[
+        {
+          title: '回复我的',
+          typeId: 1,
+          number: 0
+        },
+        {
+          title: '打赏我的',
+          typeId: 3,
+          number: 0
+        },
+        {
+          title: '点赞我的',
+          typeId: 2,
+          number: 0
+        },
+      ],
+      
     }
   },
   mounted(){
     this.notice()//我的通知里点赞我的
-    this.noticeReply()//我的通知里回复我的
-    this.noticeReward()//我的通知里打赏我的
   },
   methods:{
     myJump(str){
@@ -38,64 +51,23 @@ export default {
         url:'noticeList',
         method:'get',
         data:{
-          describe:'2' //我的通知页面里点赞我的
-        },
-      },(res)=>{
-        console.log(res)
-      }).then((res)=>{
-        this.data = res.data;
-        if(this.data.length > 0){
-          this.num = res.data.length
-        }else{
-          this.num = 0
+          describe:'', //我的通知页面里点赞我的
+          include:''
         }
-        console.log(this.num)
+      }).then(res=>{
+        const DATA = res.data;
+        this.num = this.num.map((val)=>{
+          val.number = DATA[val.typeId];
+          return val;
+        })
       })
     },
-
-    noticeReply(){
-      this.appFetch({
-        url:'noticeList',
-        method:'get',
-        data:{
-          describe:'1' //我的通知页面里回复我的
-        },
-      },(res)=>{
-        console.log(res)
-      }).then((res)=>{
-        this.data = res.data;
-        if(this.data.length > 0){
-          this.numReply = res.data.length
-        }else{
-          this.numReply = 0
-        }
-        console.log(this.numReply)
-      })
-    },
-
-    noticeReward(){
-      this.appFetch({
-        url:'noticeList',
-        method:'get',
-        data:{
-          describe:'3' //我的通知页面里打赏我的
-        },
-      },(res)=>{
-        console.log(res)
-      }).then((res)=>{
-        this.data = res.data;
-        if(this.data.length > 0){
-          this.numReward = res.data.length
-        }else{
-          this.numReward = 0
-        }
-        console.log(this.numReward)
-      })
-    }
+  
   },
-
   components:{
     MyNoticeHeader
   },
 
-}
+
+  }
+

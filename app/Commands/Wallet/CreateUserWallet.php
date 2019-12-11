@@ -10,7 +10,7 @@ declare (strict_types = 1);
 
 namespace App\Commands\Wallet;
 
-use App\Exceptions\ErrorException;
+use App\Exceptions\OrderException;
 use App\Models\UserWallet;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -57,7 +57,7 @@ class CreateUserWallet
         } else {
         	return $user_wallet;
         }
-    	
+
     }
 
 }

@@ -18,8 +18,8 @@
           <div class="resUserDet">
             <!-- <span class="resUserName">多少分接<i>你</i>口的是否健康的首付款觉得第三方第三方是的是的是的所舒服的</span> -->
             <!-- <span class="resUserName">{{item.username().slice(0,item.username().indexOf(searchVal))}}<i>{{searchVal}}</i>{{item.username().substr(item.username().indexOf(searchVal) + 1)}}</span> -->
-            <span class="resUserName">{{item.username().replace(searchVal,'222'+searchVal+'333')}}</span>
-            <span class="userRole">{{item.nickname()}}</span>
+             <span class="resUserName" v-html="item._data.username.replace(searchVal,'<i>'+searchVal+'</i>')"></span>
+            <!-- <span class="userRole">{{item.groups[0].get()._data.name}}</span> -->
           </div>
         </div>
         <div class="searchMore" v-show='userLoadMoreStatus' @click="handleLoadMoreUser">
@@ -35,13 +35,13 @@
             <div class="postPer">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
               <div class="perDet">
-                <div class="perName">{{item.title()}}</div>
-                <div class="postTime">{{$moment(item.createdAt()).startOf('hour').fromNow()}}</div>
+                <div class="perName">{{item._data.title}}</div>
+                <div class="postTime">{{$moment(item._data.createdAt).startOf('hour').fromNow()}}</div>
               </div>
             </div>
           </div>
           <div class="postContent">
-            <a href="javascript:;">{{item.firstPost().content()}}</a>
+            <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
         </div>
         <div class="searchMore" @click="handleLoadMoreTheme">

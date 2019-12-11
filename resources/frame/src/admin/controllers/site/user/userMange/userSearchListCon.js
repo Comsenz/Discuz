@@ -12,22 +12,22 @@ export default {
       tableData: [{
         number: '00220',
         userName: '王小虎',
-        publishTopic: '科技',
+        publishTopic: '112',
         userGroup:'管理员'
       }, {
         number: '00220',
         userName: '王小虎',
-        publishTopic: '网络',
+        publishTopic: '200',
         userGroup:'成员'
       }, {
         number: '00220',
         userName: '王小虎',
-        publishTopic: '禁用',
+        publishTopic: '6',
         userGroup:'管理员'
       }, {
         number: '00220',
         userName: '王小虎',
-        publishTopic: '科技',
+        publishTopic: '210',
         userGroup:'管理员'
       }],
 

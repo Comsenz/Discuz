@@ -1,5 +1,5 @@
 /**
- * 移动端圈子管理页控制器
+ * 移动端站点管理页控制器
  */
 import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 export default {
@@ -45,26 +45,30 @@ export default {
 					method: 'get'
 				})
 				this.choList = response.data;
-				console.log(this.choList,'this.choList');
 				for(let val of this.choList){
 					this.getGroupNameById[val.id] = val.attributes.name;
 				}
 			} catch(err){
 				console.log(err,'membersManagementCon.js getOperaType');
 				// 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
-			} finally{
-
+				this.$toast("邀请码类型获取失败，请刷新重试");
 			}
 		},
 
 		// 获取邀请码列表
 		async getInviteList(){
 			try{
-				const response = await this.apiStore.find('invite', this.userParams)
-				this.inviteList = response;
-				console.log(response)
+				// const response = await this.apiStore.find('invite', this.userParams)
+				const response = await this.appFetch({
+					method: 'get',
+					url: 'invite',
+					data: this.userParams
+				})
+				this.inviteList = response.readdata;
+				console.log(response,'invite response')
 			} catch(err){
-				console.error(err, '邀请码列表获取失败')
+				console.error(err, '邀请码列表获取失败');
+				this.$toast("邀请列表获取失败");
 			}
 		},
 
@@ -75,7 +79,6 @@ export default {
 				return;
 			}
 			try{
-				console.log(this.appFetch)
 				await this.appFetch({
 					url: 'invite',
 					method: 'post',
@@ -95,14 +98,14 @@ export default {
 		},
 
 		copyToClipBoard(inviteItem) {
-			if(inviteItem.status === 0){
+			if(inviteItem._data.status === 0){
 				return;
 			}
 			var textarea = document.createElement('textarea');
 			textarea.style.position = 'absolute';
 			textarea.style.opacity = '0';
 			textarea.style.height = '0';
-			textarea.textContent = inviteItem.code();
+			textarea.textContent = inviteItem._data.code;
 		  
 			document.body.appendChild(textarea);
 			textarea.select();
@@ -116,20 +119,19 @@ export default {
 
 		// 置为无效的点击事件
 		async resetDelete(inviteItem){
-			if(inviteItem.status === 0){
-				// return;
+			if(inviteItem._data.status === 0){
+				return;
 			}
-			console.log(inviteItem,inviteItem.id())
-			const id = inviteItem.id()
+			const id = inviteItem._data.id;
 			try{
-				// await this.appFetch({
-				// 	url: 'invite',
-				// 	method: 'delete',
-				// 	splice: `/${id}`
-				// })
+				await this.appFetch({
+					url: 'invite',
+					method: 'delete',
+					splice: `/${id}`
+				})
 				this.checkSubmit();
 			} catch(err){
-
+				this.$toast("邀请码操作失败！");
 			}
 			
 		}

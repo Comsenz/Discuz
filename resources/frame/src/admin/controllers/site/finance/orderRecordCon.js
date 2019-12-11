@@ -20,7 +20,7 @@ export default {
       }, {
         orderNumber: '201911251639398878',
         operatingUser: '超超',
-        productName:"加入圈子“天涯杂谈”",
+        productName:"加入站点“天涯杂谈”",
         amount:'+100.00',
         orderTime:'2018-11-1 13:11',
         status:'支付成功'

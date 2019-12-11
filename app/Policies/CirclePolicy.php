@@ -44,13 +44,13 @@ class CirclePolicy extends AbstractPolicy
      */
     public function findVisibility(User $actor, Builder $query)
     {
-        // 当前用户是否有权限查看圈子
+        // 当前用户是否有权限查看站点
         if ($actor->cannot('viewDiscussions')) {
             $query->whereRaw('FALSE');
             return;
         }
 
-        // 隐藏私密圈子，除非他们是圈子成员或当前用户具有查看私密圈子的权限。
+        // 隐藏私密站点，除非他们是站点成员或当前用户具有查看私密站点的权限。
         if (!$actor->hasPermission('circles.private')) {
             $query->where(function ($query) use ($actor) {
                 $query->whereIn('circles.property', [0, 1])

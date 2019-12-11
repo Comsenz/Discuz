@@ -12,13 +12,13 @@ export default {
         changeTime: '2016-05-02',
         amountAvailable:"+200.00",
         frozenAmount:'0',
-        changeDescription:'管理小虫加入圈子“天涯杂谈”，圈主奶罩收益100元'
+        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
       }, {
         user: '辣椒',
         changeTime: '2016-05-02',
         amountAvailable:"+100.00",
         frozenAmount:'0',
-        changeDescription:'小虫加入圈子“天涯杂谈”，圈主奶罩收益100元'
+        changeDescription:'小虫加入站点“天涯杂谈”，站长奶罩收益100元'
       }, {
         user: '铁军',
         changeTime: '2016-05-02',
@@ -30,7 +30,7 @@ export default {
         changeTime: '2016-05-02',
         amountAvailable:"+200.00",
         frozenAmount:'0',
-        changeDescription:'管理小虫加入圈子“天涯杂谈”，圈主奶罩收益100元'
+        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
       }],
       pickerOptions: {
         shortcuts: [{

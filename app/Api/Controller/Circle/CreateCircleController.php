@@ -44,7 +44,7 @@ class CreateCircleController extends AbstractCreateController
         // 获取请求的IP
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        // 分发创建圈子的任务
+        // 分发创建站点的任务
         $data = $this->bus->dispatch(
             new CreateCircle($actor, $inputs->toArray(), $ipAddress)
         );

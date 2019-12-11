@@ -7,6 +7,7 @@ namespace App\Api\Serializer;
 
 use App\Models\Post;
 use App\Models\Thread;
+use App\Models\UserWalletCash;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Foundation\Application;
 
@@ -42,6 +43,7 @@ class SiteInfoSerializer extends AbstractSerializer
             'packages' => $model['packages'],
             'unapprovedThreads' => Thread::where('is_approved', Thread::UNAPPROVED)->count(),
             'unapprovedPosts' => Post::where('is_approved', Post::UNAPPROVED)->count(),
+            'unapprovedMoneys' => UserWalletCash::where('cash_status', UserWalletCash::STATUS_REVIEW)->count(),
         ];
     }
 

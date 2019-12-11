@@ -82,30 +82,36 @@ export default {
 	},
 	methods: {
 
-		deleteAllClick(value) {
-			console.log(value);
-			this.appFetch({
+		async deleteAllClick(value) {
+			let data = [];
+
+			for (let i = 0; i < value.length; i++) {
+				console.log(value[i]);
+				data.push({
+					"type": "threads",
+					"id": value[i],
+					"attributes": {
+						"isDeleted": true,
+					}
+				});
+			}
+
+			await this.appFetch({
 				url:'batch',
 				method:'patch',
 				data:{
-				'data':[
-					{
-						"type": "threads",
-						"id": value,
-						"attributes": {
-							"isDeleted": true,
-						},
-					}
-				]
+					'data':data
 				}
 			})
+			this.deleteList()
 
 		},
 
 		deleteList() {
 			console.log('1234');
-			const params = {};
+			const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
 			params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+			// params.filter['isDeleted'] = 'no';
 			this.apiStore.find('threads', params).then(data => {
 				// console.log(data[0].firstPost().id());
 				// console.log(data[0].user().username());

@@ -1,16 +1,16 @@
-<template>
+<template>                
     <div class="content-filter-set-box">
       <div class="content-filter-set__search">
         <Card>
-          <el-input  size="medium" class="el-cascader__search-input"></el-input>
-          <el-button size="medium" class="content-filter-set__search-button">搜索</el-button>
+          <el-input  size="medium" class="el-cascader__search-input" v-model="serachVal" clearable placeholder="搜索过滤词"></el-input>
+          <el-button size="medium" class="content-filter-set__search-button"  @click="onSearch" >搜索</el-button>
         </Card>
       </div>
 
       <main class="content-filter-set-main">
         <p class="list-set-box">
           <span  @click="$router.push({path:'/admin/add-sensitive-words'})" >批量添加</span>
-          <span>导出过滤词库</span>
+          <a href="https://2020.comsenz-service.com/api/stop-words/export">导出过滤词库</a>
         </p>
 
         <div>
@@ -29,12 +29,7 @@
               label="过滤词"
             >
               <template slot-scope="scope">
-              <span v-if="scope.row.name !== '新增'">
-                {{ scope.row.name }}
-              </span>
-                <span v-else style="color: #336699;">
-                +{{ scope.row.name }}
-              </span>
+                {{ scope.row._data.find }}
               </template>
 
             </el-table-column>
@@ -42,8 +37,8 @@
             <el-table-column
               label="主题和回复处理方式"
             >
-              <template slot-scope="scope" v-if="scope.row.name !== '新增'">
-                <el-select v-model="scope.row.method" placeholder="请选择">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row._data.username" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -57,15 +52,23 @@
             <el-table-column
               prop="address"
               label="用户名处理方式">
-              <template slot-scope="scope" v-if="scope.row.name !== '新增'">
-                <el-select v-model="scope.row.value" placeholder="请选择">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row._data.ugc" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
                   </el-option>
-                </el-select>
+                </el-select>          
+              </template>
+            </el-table-column>
+
+        <el-table-column
+              prop="address"
+              label="过滤词替换">
+              <template slot-scope="scope" v-if="scope.row.name !== '新增'">
+                <el-input v-model="input" placeholder="请输入替换内容" clearable v-show="replace"></el-input>   
               </template>
             </el-table-column>
 
@@ -84,7 +87,7 @@
         </div>
 
         <Card class="footer-btn">
-          <el-button type="primary" size="medium" @click="loginStatus = 'default'">提交</el-button>
+          <el-button type="primary" size="medium" @click="loginStatus">提交</el-button>
           <el-button size="medium" :disabled="deleteStatus">删除</el-button>
         </Card>
 

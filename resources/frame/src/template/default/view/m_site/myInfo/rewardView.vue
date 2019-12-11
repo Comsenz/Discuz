@@ -1,6 +1,6 @@
 <template>
   <div class="reply-my-box my-info-money-header">
-    <!-- <comHeader title="打赏我的"></comHeader>
+    <comHeader title="打赏我的"></comHeader>
     <div class="content">
         <Header :userInfoList="rewardList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
@@ -9,7 +9,7 @@
     <footer class="home-page-footer">
       <p>上划加载更多</p>
     </footer>
-    <footer class="my-info-money-footer"></footer> -->
+    <footer class="my-info-money-footer"></footer>
   </div>
 </template>
     <!-- <RewardHeader title="打赏我的"></RewardHeader> -->

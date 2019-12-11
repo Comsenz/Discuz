@@ -34,7 +34,7 @@ class CreateCircle
     public $actor;
 
     /**
-     * 创建圈子的数据.
+     * 创建站点的数据.
      *
      * @var array
      */
@@ -51,7 +51,7 @@ class CreateCircle
      * 初始化命令参数
      *
      * @param User   $actor        执行操作的用户.
-     * @param array  $data         创建圈子的数据.
+     * @param array  $data         创建站点的数据.
      * @param string $ipAddress    请求来源的IP地址.
      */
     public function __construct($actor, array $data, string $ipAddress)
@@ -77,7 +77,7 @@ class CreateCircle
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'circle.createCircle');
 
-        // 初始圈子数据
+        // 初始站点数据
         $circle = Circle::creation(
             $this->data['name'],
             '',
@@ -91,10 +91,10 @@ class CreateCircle
             new Saving($circle, $this->actor, $this->data)
         );
 
-        // 保存圈子
+        // 保存站点
         $circle->save();
 
-        // 分发创建圈子扩展信息的任务
+        // 分发创建站点扩展信息的任务
         try {
             $bus->dispatch(
                 new CreateCircleExtend($circle->id, $this->actor, $this->data, $this->ipAddress)
@@ -108,14 +108,14 @@ class CreateCircle
             $uploadTool->setFile($this->data['file']);
             $uploadTool->setSingleData($circle);
 
-            // 处理上传的圈子图片
+            // 处理上传的站点图片
             $attachment = $bus->dispatch(
                 new CreateAttachment($actor = [], $uploadTool, $this->ipAddress)
             );
             dd($attachment);
             $circle->icon = $uploadTool->getFullName();
 
-            // 保存圈子
+            // 保存站点
             $circle->save();
         }
 

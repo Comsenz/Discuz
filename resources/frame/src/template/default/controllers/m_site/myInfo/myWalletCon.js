@@ -40,6 +40,9 @@ export default {
         case 'withdraw':
           this.$router.push('/withdraw'); //提现申请
           break;
+          case 'frozen-amount':
+          this.$router.push('/frozen-amount'); //冻结金额
+          break;
         case 'withdrawals-record':
           this.$router.push('/withdrawals-record'); //提现记录
           break;

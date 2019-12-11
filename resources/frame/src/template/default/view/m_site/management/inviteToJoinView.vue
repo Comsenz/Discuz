@@ -13,12 +13,12 @@
           		<th>链接操作</th>
           	</tr>
           	<tr v-for="(inviteLi, index) in inviteList" :key="index">
-          		<td>{{inviteLi.id()}}</td>
-          		<td>{{getGroupNameById[inviteLi.group_id()]}}</td>
-          		<td>{{inviteLi.status() === 0 ? '已失效' : '使用中'}}</td>
+          		<td>{{inviteLi._data.id}}</td>
+          		<td>{{getGroupNameById[inviteLi._data.group_id]}}</td>
+          		<td>{{inviteLi._data.status === 0 ? '已失效' : '使用中'}}</td>
           		<td>
-          			<a href="javascript:;" :class="['copyA', inviteLi.status() === 0&&'font9']" @click="copyToClipBoard(inviteLi)">复制</a>
-          			<a href="javascript:;" :class="['invalidA', inviteLi.status() === 0&&'font9']" @click="resetDelete(inviteLi)">置为无效</a>
+          			<a href="javascript:;" :class="['copyA', inviteLi._data.status === 0 && 'font9']" @click="copyToClipBoard(inviteLi)">复制</a>
+          			<a href="javascript:;" :class="['invalidA', inviteLi._data.status === 0 && 'font9']" @click="resetDelete(inviteLi)">置为无效</a>
           		</td>
           	</tr>
           </table>

@@ -47,7 +47,7 @@ class CreateAdminInviteController extends AbstractCreateController
         // 获取当前用户
         $actor = $request->getAttribute('actor');
 
-        // 分发创建圈子的任务
+        // 分发创建站点的任务
         $data = $this->bus->dispatch(
             new CreateInvite($actor, $request->getParsedBody()->get('data', []))
         );

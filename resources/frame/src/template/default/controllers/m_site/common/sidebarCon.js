@@ -53,7 +53,7 @@ export default {
 	      ],
 	      sidebarList2: [
 	        {
-            text:'圈子信息',
+            text:'站点信息',
 	          name: 'circle-info',
 	          path: '/circle-info', // 跳转路径
 	          // query:{
@@ -62,7 +62,7 @@ export default {
 	          enentType: ''
 	        },
 	        {
-            text:'圈子管理',
+            text:'站点管理',
 	          name: 'management-circles',
 	          path: '/management-circles', // 跳转路径
 	          // query:{

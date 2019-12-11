@@ -199,7 +199,7 @@
 	}
 }
 
-//圈子信息
+//站点信息
 .circlePL {
 	@include px2rem(padding-left, 30);
 	.circleLoBox {
@@ -255,7 +255,7 @@
 
 }
 
-//圈子成员
+//站点成员
 .cirMemberList {
   &::after {
     border: none !important;

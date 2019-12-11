@@ -4,6 +4,7 @@
 
 import Card from '../../../view/site/common/card/card';
 import ContArrange from '../../../view/site/common/cont/contArrange';
+import Page from '../../../view/site/common/page/page';
 
 export default {
   data:function () {
@@ -146,6 +147,10 @@ export default {
 
       appleAll:false,
 
+      reasonForOperationInput:'',
+
+      currentPaga: 1,
+
     }
   },
 
@@ -160,11 +165,59 @@ export default {
       }
 
     },
+    reasonForOperationChange(val){
+      switch (val){
+        case 1:
+          this.reasonForOperationInput = '无';
+          break;
+        case 2:
+          this.reasonForOperationInput = '广告/SPAM';
+          break;
+        case 3:
+          this.reasonForOperationInput = '恶意灌水';
+          break;
+        case 4:
+          this.reasonForOperationInput = '违规内容';
+          break;
+        case 5:
+          this.reasonForOperationInput = '文不对题';
+          break;
+        case 6:
+          this.reasonForOperationInput = '重复发帖';
+          break;
+        case 7:
+          this.reasonForOperationInput = '我很赞同';
+          break;
+        case 8:
+          this.reasonForOperationInput = '精品文章';
+          break;
+        case 9:
+          this.reasonForOperationInput = '原创内容';
+          break;
+        case 10:
+          this.reasonForOperationInput = '其他';
+          break;
+      }
+    },
+
+    handleCurrentChange(val) {
+      console.log(val);
+      // webDb.setLItem('currentPag',val);
+      // this.isIndeterminate = false;
+      // this.checkAll = false;
+      // this.getThemeList(val);
+    },
+
+    createdFn(page){
+      return page
+    },
 
   },
+
   components:{
     Card,
-    ContArrange
+    ContArrange,
+    Page
   }
 
 }
