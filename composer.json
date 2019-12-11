@@ -16,8 +16,9 @@
 		"endroid/qr-code": "^3.6",
 		"league/omnipay": "^3.0",
 		"lokielse/omnipay-wechatpay": "^3.0",
-		"s9e/text-formatter": "^2.3"
-	},
+		"s9e/text-formatter": "^2.3",
+        "ext-pdo": "*"
+    },
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",
