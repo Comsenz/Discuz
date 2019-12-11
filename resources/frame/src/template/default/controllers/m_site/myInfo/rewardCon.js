@@ -24,11 +24,22 @@ export default {
   },
   methods:{
     myReward(){
-      console.log('2222222222')
-      this.apiStore.find('notice', {type:3}).then(res=>{
-        this.rewardList = res
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          type:3
+        }
+      }).then(res=>{
+        this.rewardList = res.readdata
         console.log(res)
       })
+      // console.log('2222222222')
+      // this.apiStore.find('notice', {type:3}).then(res=>{
+      //   this.rewardList = res
+      //   console.log(res)
+      // })
     }
   },
  

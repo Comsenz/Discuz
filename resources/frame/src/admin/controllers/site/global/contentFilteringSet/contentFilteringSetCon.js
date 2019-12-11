@@ -42,10 +42,10 @@ export default {
 
       options: [{
         value: '选项1',
-        label: '不处理'
+        label: '审核'
       }, {
         value: '选项2',
-        label: '处理'
+        label: '禁用'
       },{
         value: '选项3',
         label: '替换'

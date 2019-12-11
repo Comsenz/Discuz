@@ -38,14 +38,23 @@ export default {
   },
   methods:{
     myCollection(){
-        const params = {
-          // 'filter[user]': this.userId
-        };
-        params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-        this.apiStore.find('collection', params).then(data => {
-          console.log(data[0].user());
-          this.collectionList = data;
-        });
+      this.appFetch({
+        url:'user',
+        method:'get',
+        data:{
+          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+        }
+      }).then(data=>{
+        this.collectionList = data.readdata;
+      })
+        // const params = {
+        //   // 'filter[user]': this.userId
+        // };
+        // params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+        // this.apiStore.find('collection', params).then(data => {
+        //   console.log(data[0].user());
+        //   this.collectionList = data;
+        // });
       }
     
   }

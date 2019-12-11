@@ -54,8 +54,7 @@ export default {
         url:'noticeList',
         method:'get',
         data:{
-          describe:'', //我的通知页面里点赞我的
-          include:''
+          include:[]
         }
       }).then(res=>{
         const DATA = res.data;
