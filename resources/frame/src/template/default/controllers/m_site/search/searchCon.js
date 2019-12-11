@@ -118,7 +118,8 @@ export default {
 				}).then(data=>{
 					this.searchThemeList = this.searchThemeList.concat(data.readdata);
 					this.themeLoadMoreStatus = data.readdata.length > this.themeParamd['page[limit]'];
-					console.log(this.searchThemeList)
+					console.log(this.searchThemeList,'11111111111111111111111')
+					// console.log(data.readdata.firstPost._data.content)
 				}).catch(err=>{
 					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
 						this.themeParamd['page[number]'] = currentPageNum - 1;

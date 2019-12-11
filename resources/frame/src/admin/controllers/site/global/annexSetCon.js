@@ -40,9 +40,11 @@ export default {
     }
     if(!fileExtension){
       this.$toast('请您输入文件扩展名')
+      return
     }
     if(!maximumSize){
       this.$toast('请您输入支持的最大尺寸')
+      return
     }
     if(!reg.test(picture)){
       this.$toast('请输入正确的扩展名格式')
@@ -59,9 +61,9 @@ export default {
           support_max_size:this.maximumSize
         }
       }).then(data=>{
-        this.$toast('提交成功')
-      }).error({
-
+        this.$message('提交成功')
+      }).catch(error=>{
+        
       })
     }
   },

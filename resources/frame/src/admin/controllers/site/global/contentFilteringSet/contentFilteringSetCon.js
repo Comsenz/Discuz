@@ -53,23 +53,16 @@ export default {
     ],
       serachVal:'',
       checked:false,
-      input:'',
       searchData :[],//搜索后的数据
       replace:true,
       radio2:"1",
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,
-      // loginStatus:'',  //default  batchSet
       deleteStatus:true,
-      // contentParams: {
-      //   'filter[p]': '',
-      //   'page[number]': 1,
-			// }
-
     }
   },
   created(){
-    this.contentFilterList()  //初始化页面数据
+    this.handleSearchUser(true);  //初始化页面数据
   },
   methods:{
     toggleSelection(rows) {
@@ -83,7 +76,7 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-
+      console.log(this.multipleSelection,'this.multipleSelection')
       if (this.multipleSelection.length >= 1){
         this.deleteStatus = false
       } else {
@@ -91,18 +84,7 @@ export default {
       }
 
     },
-    contentFilterList(){
-      this.appFetch({
-        url:'serachWords',
-        method:'get',
-        data:{}
-      }).then(res=>{
-        console.log(res)
-        console.log(res.readdata[0]._data.find)
-        this.tableData = res.readdata;
-        console.log(this.tableData,'1111111111111111111')
-      })
-    },
+
     onSearch(val) {
       this.searchVal = val;
       // console.log(val,'value')
@@ -114,21 +96,27 @@ export default {
 
     },
     async handleSearchUser(initStatus = false){
-      if(initStatus){
-        this.tableData = [];
-      }
+      
       try{
-        await this.appFetch({
+        const response = await this.appFetch({
           url:'serachWords',
           method:'get',
           data:{
             'filter[q]':this.serachVal
           }
-        }).then(res=>{
-          this.tableData = this.tableData.concat(res);
-        }).catch(err=>{
-
         })
+        if(initStatus){
+          this.tableData = [];
+        }
+        this.tableData = this.tableData.concat(response.readdata).map((v)=>{
+          if(v._data.inputVal === undefined){
+            v._data.inputVal = '';
+          }
+          return v;
+        });
+        console.log(this.tableData)
+      } catch(err){
+
       } finally {
         this.userLoadMorePageChange = false;
       }
@@ -139,24 +127,35 @@ export default {
       this.handleSearchUser();
     },
     
-    loginStatus(){  //批量提交接口
-      this.appFetch({
-        url:'batchSubmit',
-        method:'post',
-        data:{
-          "data": {
-            "type": "stop-words",
-            "words": [
-                "2=2121222113111",
-                "eqwe1e=adw",
-                "123={MOD}|ds,",
-                "MOD=111"
-            ]
+    async loginStatus(){  //批量提交接口
+
+      try{
+        if(this.multipleSelection.length === 0){
+          return;
         }
-        }
-      }).then(res=>{
-        console.log(res)
-      })
+
+        let words = [];
+
+        this.multipleSelection.forEach((v,i)=>{
+          const _data = v._data;
+          words.push(`${_data.find}=${_data.inputVal}`)
+        })
+
+        await this.appFetch({
+          url:'batchSubmit',
+          method:'post',
+          data:{
+            "data": {
+              "type": "stop-words",
+              "words": words
+          }
+          }
+        })
+
+      } catch(err){
+        console.error(err,'function loginStatus error')
+      }
+      
     },
   
   },

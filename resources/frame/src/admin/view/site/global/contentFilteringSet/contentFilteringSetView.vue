@@ -68,7 +68,7 @@
               prop="address"
               label="过滤词替换">
               <template slot-scope="scope" v-if="scope.row.name !== '新增'">
-                <el-input v-model="input" placeholder="请输入替换内容" clearable v-show="replace"></el-input>   
+                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" clearable v-show="replace"></el-input>   
               </template>
             </el-table-column>
 
