@@ -54,6 +54,6 @@ export default {
       ThemeDet,
     },
   ...rewardCon,
-  ...mSiteThemeDet,
+  // ...mSiteThemeDet,
 }
 </script>

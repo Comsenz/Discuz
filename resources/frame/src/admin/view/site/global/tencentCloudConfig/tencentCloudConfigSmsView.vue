@@ -1,6 +1,13 @@
 <template>
     <div>
-      <Card header="短信配置"></Card>
+      <Card header="短信配置">
+        <CardRow description="SDK AppID：SDK AppID是短信应用的唯一标识，调用短信API接口时，需要提供该参数">
+          <el-input></el-input>
+        </CardRow>
+        <CardRow description="App Key：App Key是用来校验短信发送合法性的密码，与SDK AppID对应">
+          <el-input></el-input>
+        </CardRow>
+      </Card>
 
       <Card header="短信验证码使用模板ID：">
         <CardRow description="填写在腾讯云已配置并审核通过的短信验证码的模板的ID">
