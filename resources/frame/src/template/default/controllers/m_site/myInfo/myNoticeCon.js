@@ -50,6 +50,7 @@ export default {
       this.appFetch({
         url:'noticeList',
         method:'get',
+        standard: false,
         data:{
           describe:'', //我的通知页面里点赞我的
           include:''
