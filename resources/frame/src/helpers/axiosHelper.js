@@ -116,6 +116,9 @@ const appFetch = function(params, options) {
   var oldUrl = params.url;
   var apiUrl = appConfig.apis[oldUrl];
 
+  //是不是标准接口
+  params.standard = params.standard !== undefined ? params.standard : true;
+
   if(params === undefined) {
     console.error("必须传递参数");
     return false;
@@ -197,15 +200,17 @@ const appFetch = function(params, options) {
 
   return axios(params).then(data => {
     if(data.status >= 200 && data.status < 300) {
-      if(data.data.meta && data.data.meta instanceof Array) {
-        data.data.meta.forEach(function(error) {
-          error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
-        })         
-      }     
-      
-      //处理后的结构数据
-      if(data.data.data) {
-        data.data.readdata = analyzingData(data.data.data, data.data.included);
+      if(params.standard) {
+        if(data.data.meta && data.data.meta instanceof Array) {
+          data.data.meta.forEach(function(error) {
+            error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
+          })         
+        }     
+        
+        //处理后的结构数据
+        if(data.data.data) {
+          data.data.readdata = analyzingData(data.data.data, data.data.included);
+        }
       }
 
       return data.data;
