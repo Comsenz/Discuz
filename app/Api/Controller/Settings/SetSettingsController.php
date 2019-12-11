@@ -11,6 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Zend\Diactoros\Response\EmptyResponse;
+use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
@@ -39,8 +40,9 @@ class SetSettingsController implements RequestHandlerInterface
         $this->assertAdmin($request->getAttribute('actor'));
         $settings = $request->getParsedBody();
 
-        foreach ($settings as $key => $value) {
-            $this->settings->set($key, $value);
+
+        foreach ($settings->get('data', []) as $setting) {
+            $this->settings->set(Arr::get($setting, 'attributes.key'), Arr::get($setting, 'attributes.value'), Arr::get($setting, 'attributes.tag'));
         }
 
         $this->siteRevManifest->put('settings', $this->settings->all());

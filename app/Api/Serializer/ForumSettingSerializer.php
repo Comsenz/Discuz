@@ -44,11 +44,15 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         $attributes = [
             'siteMode' => $this->settings->get('site_mode'), //pay public
-            'price' => (int)$this->settings->get('price'),
-            'day' => (int)$this->settings->get('day'),
             'logo' => $this->logo($this->settings->get('logo')),
             'siteName' => $this->settings->get('site_name'),
             'siteIntroduction' => $this->settings->get('site_introduction'),
+            'siteStat' => $this->settings->get('site_stat'),
+            'siteRecord' => $this->settings->get('site_record'),
+            'sitePrice' => $this->settings->get('site_price'),
+            'siteExpire' => $this->settings->get('site_expire'),
+            'siteAuthorScale' => $this->settings->get('site_author_scale'),
+            'siteMasterScale' => $this->settings->get('site_master_scale'),
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
@@ -62,6 +66,9 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportFileExt' => $this->settings->get('support_file_ext'),
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
             'qcloud' => (bool)$this->settings->get('qcloud'),
+            'qcloudCmsImage' => (bool)$this->settings->get('qcloud_cms_image'),
+            'qcloudCmsText' => (bool)$this->settings->get('qcloud_cms_text'),
+            'qcloudSms' => (bool)$this->settings->get('qcloud_sms'),
             'qcloudSecretId' => $this->decrypt($this->settings->get('secretId', 'qcloud')),
             'qcloudSecretKey' => $this->decrypt($this->settings->get('secretKey', 'qcloud')),
             'qcloudToken' => $this->decrypt($this->settings->get('token', 'qcloud', '')),
