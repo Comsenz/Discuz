@@ -44,13 +44,15 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         $attributes = [
             'siteMode' => $this->settings->get('site_mode'), //pay public
-            'price' => (int)$this->settings->get('price'),
-            'day' => (int)$this->settings->get('day'),
             'logo' => $this->logo($this->settings->get('logo')),
             'siteName' => $this->settings->get('site_name'),
             'siteIntroduction' => $this->settings->get('site_introduction'),
             'siteStat' => $this->settings->get('site_stat'),
             'siteRecord' => $this->settings->get('site_record'),
+            'sitePrice' => $this->settings->get('site_price'),
+            'siteExpire' => $this->settings->get('site_expire'),
+            'siteAuthorScale' => $this->settings->get('site_author_scale'),
+            'siteMasterScale' => $this->settings->get('site_master_scale'),
             'siteInstall' => $this->settings->get('site_install'),
             'threads' => Thread::count(),
             'members' => User::count(),
