@@ -126,7 +126,10 @@ export default {
           }
         }
       }).then((res) => {
-        console.log(res, 'res1111');
+        console.log(res.readdata, 'res1111');
+        // console.log(res.readdata[0].user._data.username, 'res222');
+        console.log(res.readdata[1].firstPost.likedUsers[0]._data.username);
+        this.themeListCon = res.readdata;
       })
       // this.appFetch({
       //   url:"classify",
@@ -153,7 +156,7 @@ export default {
       this.apiStore.find('threads', params).then(data => {
         // console.log(data[0].firstPost().id());
         // console.log(data[0].user().username());
-        this.themeListCon = data;
+        // this.themeListCon = data;
       });
       //请求主题导航列表
       // this.apiStore.find('themeNavListCon', params).then(data => {
