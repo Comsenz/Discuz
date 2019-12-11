@@ -128,7 +128,7 @@ export default {
       }).then((res) => {
         console.log(res.readdata, 'res1111');
         // console.log(res.readdata[0].user._data.username, 'res222');
-        console.log(res.readdata[1].firstPost.likedUsers[0]._data.username);
+        // console.log(res.readdata[1].firstPost.likedUsers[0]._data.username);
         this.themeListCon = res.readdata;
       })
       // this.appFetch({

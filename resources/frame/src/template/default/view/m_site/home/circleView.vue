@@ -15,7 +15,7 @@
 	    		</div>
 	    	</div>
 	    </div>
-      <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
+      <!-- <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet> -->
       <div class="gap"></div>
 	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->
