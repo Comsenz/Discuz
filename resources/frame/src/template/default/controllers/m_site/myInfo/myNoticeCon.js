@@ -53,7 +53,7 @@ export default {
       this.appFetch({
         url:'noticeList',
         method:'get',
-        standard:false,
+        standard: false,
         data:{
           include:[]
         }
