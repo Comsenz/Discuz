@@ -22,7 +22,7 @@
         <span class="icon iconfont icon-search" v-show="searchIconShow"></span>
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
-      <img src="../../../../../../static/images/logo.png" class="logo" v-show="logoShow">
+      <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" v-show="logoShow">
       <div class="circleDet" v-show="perDetShow">
         <span>主题：{{siteInfo.threads()}}</span>
         <span>成员：{{siteInfo.members()}}</span>

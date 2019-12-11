@@ -1,10 +1,8 @@
 <?php
 
 $header = <<<'EOF'
-
 Discuz & Tencent Cloud
 This is NOT a freeware, use is subject to license terms
-
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
@@ -13,15 +11,18 @@ $finder = PhpCsFixer\Finder::create()
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PHP56Migration' => true,
-        '@PHPUnit60Migration:risky' => true,
-        '@PhpCsFixer' => true,
-        '@PhpCsFixer:risky' => true,
-        'header_comment' => ['header' => $header],
-        'list_syntax' => ['syntax' => 'long'],
-        'array_syntax' => ['syntax' => 'short'],
-        'declare_strict_types' => false,
-        'concat_space' => ['spacing'=>'one'],
+        '@PSR2' => true,
+        'header_comment' => [
+            'commentType' => 'PHPDoc',
+            'header' => $header,
+        ],
+        'array_syntax' => [
+            'syntax' => 'short'
+        ],
+        'single_quote' => true,
+        'class_attributes_separation' => true,
+        'no_unused_imports' => true,
+        'standardize_not_equals' => true,
     ])
     ->setFinder($finder)
 ;

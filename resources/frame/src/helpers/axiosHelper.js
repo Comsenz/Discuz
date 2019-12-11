@@ -29,7 +29,7 @@ axios.interceptors.response.use(
 const getApi = function(key){
     var uri = appConfig.apis[key];
     if(!uri) {
-    	return "";
+      return "";
     }
      return appConfig.apiBaseUrl + uri;
 
@@ -55,7 +55,10 @@ const analyzingData = function(data, included) {
     function getOneData(nowData) {
       var result = {};
 
-    if(!nowData.attributes) {
+      //没有值时返回空对象
+      if(!nowData) return result;
+
+      if(!nowData.attributes) {
         nowData = newIncludes[nowData.type+nowData.id];
       }
       // else{
@@ -63,18 +66,19 @@ const analyzingData = function(data, included) {
       // }
 
       result._data = nowData.attributes;
-    if(nowData && nowData.relationships) {
+      if(nowData.id) result._data.id = nowData.id; //有id时将id加入_data
+
+      if(nowData.relationships) {
         var relationObj = {};
 
         for(var relationKey in nowData.relationships) {
           relationObj[relationKey] = getData(nowData.relationships[relationKey].data);
-          relationObj.id = nowData.id;
         }
 
         result = {...result, ...relationObj};
       }
 
-      return result;
+      return result;    
     }
 
     /**
@@ -113,34 +117,34 @@ const appFetch = function(params, options) {
   var apiUrl = appConfig.apis[oldUrl];
 
   if(params === undefined) {
-		console.error("必须传递参数");
-		return false;
-	}
+    console.error("必须传递参数");
+    return false;
+  }
 
   params.method = params.method ? params.method : 'get';
-	if(!apiUrl) {
+  if(!apiUrl) {
     apiUrl = "/api/" + oldUrl;
     // return false;
-	}
+  }
 
-	/**
-	  * @param {[type]} splice [接收url后面拼接]
+  /**
+    * @param {[type]} splice [接收url后面拼接]
     * @param splice:'/2019120310255349505652',
-	  */
+    */
   if (params.splice){
     apiUrl = apiUrl + params.splice;
   }
 
-	//如果是本地请求，就走接口代理
-	if(process.env.NODE_ENV === 'development') {
-		params.baseURL = "/api";
+  //如果是本地请求，就走接口代理
+  if(process.env.NODE_ENV === 'development') {
+    params.baseURL = "/api";
     params.url = apiUrl;
-	} else {
-		params.baseURL = "/";
-		params.url = appConfig.apiBaseUrl + apiUrl;
-	}
+  } else {
+    params.baseURL = "/";
+    params.url = appConfig.apiBaseUrl + apiUrl;
+  }
 
-	params.withCredentials = true;
+  params.withCredentials = true;
   var authVal = browserDb.getLItem('Authorization');
   let defaultHeaders;
   if(authVal != '' && authVal != null){
@@ -155,19 +159,19 @@ const appFetch = function(params, options) {
     };
   }
 
-	//设置默认header
-	if(params.headers) {
-		params.headers = {
-			...defaultHeaders,
-			...params.headers
-		};
-	} else {
-		params.headers = defaultHeaders;
-	}
+  //设置默认header
+  if(params.headers) {
+    params.headers = {
+      ...defaultHeaders,
+      ...params.headers
+    };
+  } else {
+    params.headers = defaultHeaders;
+  }
 
-	//get 方式需要把参数传给params
-	if(params.method.toLowerCase() == 'get'&& params.data) {
-		params.params = params.data;
+  //get 方式需要把参数传给params
+  if(params.method.toLowerCase() == 'get') {
+    params.params = params.data ? params.data : params.params;
 
     //如果传递include，处理成字符串
     if(params.params.include && params.params.include instanceof Array) {
@@ -188,17 +192,17 @@ const appFetch = function(params, options) {
       }
     })
 
-		delete params.data
-	}
+    if(params.data) delete params.data
+  }
 
-	return axios(params).then(data => {
+  return axios(params).then(data => {
     if(data.status >= 200 && data.status < 300) {
       if(data.data.meta && data.data.meta instanceof Array) {
         data.data.meta.forEach(function(error) {
           error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
-        })
-      }
-
+        })         
+      }     
+      
       //处理后的结构数据
       if(data.data.data) {
         data.data.readdata = analyzingData(data.data.data, data.data.included);

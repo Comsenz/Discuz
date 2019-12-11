@@ -12,7 +12,8 @@ Object.assign(Forum.prototype, {
   price: Model.attribute('price'),
   day: Model.attribute('day'),
   avatarUrl: Model.attribute('avatarUrl'),
-  user:Model.hasOne('user'),
   threads:Model.attribute('threads'),
   members:Model.attribute('members'),
+  
+  users:Model.hasMany('users'),
 });

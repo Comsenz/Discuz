@@ -12,14 +12,14 @@ return [
     'database' =>
         [
             'driver' => 'mysql',
-            'host' => 'localhost',
-            'port' => '3306',
-            'database' => 'discuss',
-            'username' => 'root',
-            'password' => '123',
+            'host' => 'DummyDbHost',
+            'port' => 'DummyDbPort',
+            'database' => 'DummyDbDatabase',
+            'username' => 'DummyDbUsername',
+            'password' => 'DummyDbPassword',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
+            'prefix' => 'DummyDbPrefix',
             'prefix_indexes' => true,
             'strict' => true,
             'options' => extension_loaded('pdo_mysql') ? array_filter([

@@ -44,8 +44,7 @@ class AccessTokenController implements RequestHandlerInterface
         $refreshTokenRepository = new RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
 
         // Path to public and private keys
-        $privateKey = $this->app->configPath('private.key');
-        //$privateKey = new CryptKey('file://path/to/private.key', 'passphrase'); // if private key has a pass phrase
+        $privateKey = storage_path('cert/private.key');
 
         if(Str::startsWith($this->app->config('key'), 'base64:')) {
             $encryptionKey = substr($this->app->config('key'), 7); // generate using base64_encode(random_bytes(32))

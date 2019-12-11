@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controller;
-use App\Api\Controller as ApiController;
+use App\Install\Controller as InstallController;
 
-$route->get('/', 'index', Controller\IndexController::class);
+$route->get('/install', 'install.index', InstallController\IndexController::class);
+$route->post('/install', 'install', InstallController\InstallController::class);
 
