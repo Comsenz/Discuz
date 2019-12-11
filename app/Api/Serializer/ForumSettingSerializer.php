@@ -13,6 +13,7 @@ use App\Models\User;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Filesystem\Factory;
 use Discuz\Http\UrlGenerator;
 
@@ -24,10 +25,13 @@ class ForumSettingSerializer extends AbstractSerializer
 
     protected $url;
 
-    public function __construct(SettingsRepository $settings, UrlGenerator $url)
+    protected $encrypter;
+
+    public function __construct(SettingsRepository $settings, UrlGenerator $url, Encrypter $encrypter)
     {
         $this->settings = $settings;
         $this->url = $url;
+        $this->encrypter = $encrypter;
     }
 
     /**
@@ -57,6 +61,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportImgExt' => $this->settings->get('support_img_ext'),
             'supportFileExt' => $this->settings->get('support_file_ext'),
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
+            'qcloud' => (bool)$this->settings->get('qcloud'),
+            'qcloudSecretId' => $this->decrypt($this->settings->get('secretId', 'qcloud')),
+            'qcloudSecretKey' => $this->decrypt($this->settings->get('secretKey', 'qcloud')),
+            'qcloudToken' => $this->decrypt($this->settings->get('token', 'qcloud', '')),
         ];
 
         if ($this->actor->exists) {
@@ -87,5 +95,10 @@ class ForumSettingSerializer extends AbstractSerializer
             return $this->url->to('/storage/' . $logo);
         }
         return '';
+    }
+
+    private function decrypt($value = '')
+    {
+        return $value ? $this->encrypter->decrypt($value) : '';
     }
 }
