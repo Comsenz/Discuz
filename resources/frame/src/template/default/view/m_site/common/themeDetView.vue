@@ -34,16 +34,16 @@
           </div>
           <div class="reward" v-if="item.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward.username+','}}</a>
+            <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
           </div>
           <div class="reward" v-else="">
           </div>
           <div class="replyBox">
             <div class="replyCon" v-if="" v-for="reply in item.lastThreePosts">
-              <a href="javascript:;">{{reply.user.nickname}}</a>
+              <a href="javascript:;">{{reply.user._data.username}}</a>
               <span class="font9">回复</span>
-              <a href="javascript:;">{{reply.nickname}}</a>
-              <span>{{reply.content}}</span>
+              <a href="javascript:;">{{reply.user._data.username}}</a>
+              <span>{{reply._data.content}}</span>
             </div>
             <a href="javascript;" class="allReply">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
           </div>
