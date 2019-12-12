@@ -92,6 +92,15 @@ class ThreadSerializer extends AbstractSerializer
      * @param $thread
      * @return Relationship
      */
+    protected function deletedUser($thread)
+    {
+        return $this->hasOne($thread, UserSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     protected function category($thread)
     {
         return $this->hasOne($thread, CategorySerializer::class);
@@ -149,5 +158,14 @@ class ThreadSerializer extends AbstractSerializer
     public function logs($thread)
     {
         return $this->hasMany($thread, OperationLogSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function lastDeletedLog($thread)
+    {
+        return $this->hasOne($thread, OperationLogSerializer::class);
     }
 }
