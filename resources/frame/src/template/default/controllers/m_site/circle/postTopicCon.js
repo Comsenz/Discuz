@@ -82,16 +82,6 @@ export default {
           }
         }).then((res)=>{
           let a = this.apiStore.pushPayload(res);
-          // console.log(a);
-          // console.log(a.user());
-          // console.log(a.user().id());
-          // console.log(a.thread());
-          // console.log(a.thread().id());
-          // this.$router.push({
-          //   path:'/details',
-          //   name:'details',
-          //   params: { themeId:this.themeId,postsId:postsId,themeContent:content}
-          // })
           this.$router.push({ path:'details'+'/'+this.themeId});
         })
       } else {
@@ -136,14 +126,11 @@ export default {
       // 调api ...
     }),
     handleFaceChoose (face) {
-      const value = this.content
-      const el = this.$refs.textarea
-      const startPos = el.selectionStart
-      const endPos = el.selectionEnd
-      const newValue =
-        value.substring(0, startPos) +
-        face +
-        value.substring(endPos, value.length)
+      const value = this.content;
+      const el = this.$refs.textarea;
+      const startPos = el.selectionStart;
+      const endPos = el.selectionEnd;
+      const newValue = value.substring(0, startPos) + face + value.substring(endPos, value.length)
       this.content = newValue
       if (el.setSelectionRange) {
         setTimeout(() => {
@@ -153,18 +140,26 @@ export default {
       }
     },
     // handleKeyboardClick () {
-    //   // this.showFacePanel = false;
-    //   this.showFacePanel = true;
-    //   // this.$refs.textarea.focus()
+    //   this.showFacePanel = false;
+    //   this.$refs.textarea.focus();
+    //   this.footMove = false;
     // },
     addExpression(){
       this.keyboard = !this.keyboard;
-      this.apiStore.find('emojis').then(data => {
-        console.log(data);
-        this.faceData = data.payload.data;
-        // console.log(this.faceData);
-      });
-
+      this.appFetch({
+        url: 'emojis',
+        method: 'get',
+        data: {
+          include: '',
+          // page: {
+          //   offset: 20,
+          //   num: 3
+          // },
+        }
+      }).then((data) => {
+        // console.log(data, 'res1111');
+        this.faceData = data.readdata;
+      })
       this.showFacePanel = !this.showFacePanel;
       this.footMove = !this.footMove;
     },
