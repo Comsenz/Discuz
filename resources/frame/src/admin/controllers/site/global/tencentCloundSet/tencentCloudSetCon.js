@@ -35,6 +35,7 @@ export default {
       ]
     }
   },
+
   methods:{
     configClick(type){
 
@@ -50,7 +51,8 @@ export default {
         default:
           this.loginStatus = 'default';
       }
-    }
+    },
+ 
   },
   components:{
     Card,

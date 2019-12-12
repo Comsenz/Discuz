@@ -6,59 +6,40 @@ import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 import TableContAdd from '../../../../view/site/common/table/tableContAdd';
 
-
 export default {
   data:function () {
     return {
-      tableData: [
-      //   {
-      //   name: '张三',
-      //   method: '处理',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   value:'不处理'
-      // }, {
-      //   name: '李四',
-      //   method: '不处理',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   value:'处理'
-      // }, {
-      //   name: '王五',
-      //   method: '处理',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   value:'不处理'
-      // }, {
-      //   name: '赵六',
-      //   method: '不处理',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   value:'处理'
-      // }, {
-      //   name: '田七',
-      //   method: '处理',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   value:'不处理'
-      // }
-    ],
+      tableData: [],
       multipleSelection: [],
+      tableDataLength:'',
+      createCategoriesStatus:false,   //添加分类状态
 
       options: [{
-        value: '选项1',
-        label: '审核'
-      }, {
-        value: '选项2',
-        label: '禁用'
-      },{
-        value: '选项3',
-        label: '替换'
-      }
-    ],
+          value: '{MOD}',
+          label: '{MOD}'
+        }, {
+          value: '{BANNED}',
+          label: '{BANNED}'
+        },{
+          value: '{REPLACE}',
+          label: '{REPLACE}'
+        }
+      ],
       serachVal:'',
       checked:false,
       searchData :[],//搜索后的数据
       replace:true,
+      inputFind:false,
       radio2:"1",
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,
+      // loginStatus:'',  //default  batchSet
       deleteStatus:true,
+      // contentParams: {
+      //   'filter[p]': '',
+      //   'page[number]': 1,
+			// }
+
     }
   },
   created(){
@@ -96,7 +77,6 @@ export default {
 
     },
     async handleSearchUser(initStatus = false){
-      
       try{
         const response = await this.appFetch({
           url:'serachWords',
@@ -108,6 +88,7 @@ export default {
         if(initStatus){
           this.tableData = [];
         }
+        
         this.tableData = this.tableData.concat(response.readdata).map((v)=>{
           if(v._data.inputVal === undefined){
             v._data.inputVal = '';
@@ -126,6 +107,15 @@ export default {
       this.userLoadMorePageChange = true;
       this.handleSearchUser();
     },
+
+    selectChange(scope){
+      console.log(scope,'scope');
+      if(scope){
+        if(scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'){
+          this.tableData[scope.$index]._data.inputVal = '';
+        }
+      }
+    },
     
     async loginStatus(){  //批量提交接口
 
@@ -136,14 +126,35 @@ export default {
 
         let words = [];
 
-        this.multipleSelection.forEach((v,i)=>{
-          const _data = v._data;
-          words.push(`${_data.find}=${_data.inputVal}`)
-        })
+        for(let i = 0,len = this.multipleSelection.length; i < len; i++){
+          const _data = this.multipleSelection[i]._data;
+          const { ugc, username, find, inputVal} = _data;
+          if(inputVal === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
+            continue;
+          }
+          let item = '';
+
+          if(ugc === '{REPLACE}' && username === '{REPLACE}'){
+            item = `${find}=${inputVal}`
+          } else if(ugc === '{REPLACE}' && username !== '{REPLACE}'){
+            item = `${find}=${username}|${inputVal}`
+          } else if(username === '{REPLACE}' && ugc !== '{REPLACE}'){
+            item = `${find}=${inputVal}|${ugc}`
+          } else if(username !== '{REPLACE}' && ugc !== '{REPLACE}'){
+            item = `${find}=${username}|${ugc}`
+          }
+
+          words.push(item);
+        }
+
+        if(words.length === 0){
+          return;
+        }
 
         await this.appFetch({
           url:'batchSubmit',
           method:'post',
+          standard: false,
           data:{
             "data": {
               "type": "stop-words",
@@ -151,11 +162,21 @@ export default {
           }
           }
         })
-
+        this.handleSearchUser(true);
       } catch(err){
         console.error(err,'function loginStatus error')
       }
       
+    },
+    tableContAdd(){
+      this.inputFind  = true;
+        this.tableData.push({
+          _data:{
+            find:"",
+            username:"",
+            ugc:"",
+          }
+        })
     },
   
   },

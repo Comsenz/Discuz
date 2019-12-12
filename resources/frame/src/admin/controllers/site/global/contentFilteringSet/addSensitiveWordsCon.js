@@ -74,24 +74,25 @@ export default {
 
     },
     loginStatus(){
-      this.appFetch({
-        url:'batchSubmit',
-        method:'post',
-        data:{
-          "data": {
-            "type": "stop-words",
-            "words": [
-                "2=2121222113111",
-                "eqwe1e=adw",
-                "123={MOD}|ds,",
-                "MOD=111"
-            ]
-        }
-        }
-      }).then(res=>{
-
-      })
-    },
+       if(this.textarea.trim() === ''){
+           return;
+       }
+      let wordsArr = this.textarea.split('\n')
+         this.appFetch({
+         url:'batchSubmit',
+         method:'post',
+         standard:false,
+          data:{
+           "data": 
+                {
+                  "type": "stop-words",
+                  "words": wordsArr
+              }
+              }
+            }).then(res=>{
+      
+            })
+          },
   },
   components:{
     Card,

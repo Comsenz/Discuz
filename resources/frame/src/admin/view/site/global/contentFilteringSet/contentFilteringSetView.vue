@@ -30,6 +30,7 @@
             >
               <template slot-scope="scope">
                 {{ scope.row._data.find }}
+                <el-input splaceholder="请输入过滤词" clearable v-show="inputFind"></el-input> 
               </template>
 
             </el-table-column>
@@ -38,7 +39,7 @@
               label="主题和回复处理方式"
             >
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.username" placeholder="请选择">
+                <el-select v-model="scope.row._data.username" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -53,7 +54,7 @@
               prop="address"
               label="用户名处理方式">
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.ugc" placeholder="请选择">
+                <el-select v-model="scope.row._data.ugc" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -67,15 +68,16 @@
         <el-table-column
               prop="address"
               label="过滤词替换">
-              <template slot-scope="scope" v-if="scope.row.name !== '新增'">
-                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" clearable v-show="replace"></el-input>   
+              <template slot-scope="scope">
+                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>   
               </template>
             </el-table-column>
 
           </el-table>
 
 
-          <TableContAdd cont="新增"></TableContAdd>
+          
+        <TableContAdd @tableContAddClick="tableContAdd" cont="新增"></TableContAdd>
 
           <!--<div class="content-filter-set-table-add">
             <p>
