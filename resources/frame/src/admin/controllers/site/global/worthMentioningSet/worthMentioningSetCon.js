@@ -68,7 +68,6 @@ export default {
       });
     },
     loginSetting(index,type,status){
-      console.log('提示：'+status);
       if(type == 'wechat_h5') {
         this.changeSettings('wechat_h5',status);
       } else if( type == 'wechat_min'){
@@ -78,7 +77,6 @@ export default {
       }
     },
     changeSettings(typeVal,statusVal){
-      console.log(statusVal);
       //登录设置状态修改
       this.appFetch({
         url:'settings',

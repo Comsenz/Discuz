@@ -87,8 +87,7 @@ export default {
         });
       })
     }
-  }
-  ,
+  },
   components:{
     Card,
     CardRow
