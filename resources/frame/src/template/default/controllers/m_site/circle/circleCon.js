@@ -119,7 +119,7 @@ export default {
         url: 'threads',
         method: 'get',
         data: {
-          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           // page: {
           //   offset: 20,
           //   num: 3

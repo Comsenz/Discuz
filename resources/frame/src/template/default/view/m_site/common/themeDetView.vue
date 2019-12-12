@@ -43,7 +43,7 @@
               <a href="javascript:;">{{reply.user._data.username}}</a>
               <span class="font9">回复</span>
               <a href="javascript:;">{{reply.user._data.username}}</a>
-              <span>{{reply._data.content}}</span>
+              <span>{{reply.replyUser._data.username}}</span>
             </div>
             <a href="javascript;" class="allReply">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
           </div>
