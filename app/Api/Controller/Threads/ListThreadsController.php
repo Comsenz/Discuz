@@ -46,10 +46,13 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'deletedUser',
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
+        'lastDeletedLog',
     ];
 
     /**
@@ -59,7 +62,9 @@ class ListThreadsController extends AbstractListController
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
+        'lastDeletedLog',
     ];
 
     /**
@@ -159,6 +164,33 @@ class ListThreadsController extends AbstractListController
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
         }
 
+        // 特殊关联：最后一次删除的日志
+        if (in_array('lastDeletedLog', $specialLoad)) {
+            $threads->map(function ($thread) {
+                $log = $thread->logs()
+                    ->with('user')
+                    ->where('action', 'hide')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                $thread->setRelation('lastDeletedLog', $log);
+            });
+        }
+
+        // 付费主题，不返回内容
+        if (! $actor->isAdmin()) {
+            $allRewardedThreads = $actor->orders()
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->pluck('thread_id');
+
+            $threads->map(function ($thread) use ($allRewardedThreads) {
+                if ($thread->price > 0 && $allRewardedThreads->contains($thread->id)) {
+                    $thread->firstPost->content = 'TODO: 付费主题无权查看提示语';
+                }
+            });
+        }
+
         return $threads;
     }
 
@@ -210,8 +242,19 @@ class ListThreadsController extends AbstractListController
 
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
-            $query->leftJoin('users', 'users.id', '=', 'threads.user_id')
-                ->where('users.username', 'like', "%{$username}%");
+            $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
+                ->where('users1.username', 'like', "%{$username}%");
+        }
+
+        // 操作删除者 ID
+        if ($deletedUserId = Arr::get($filter, 'deletedUserId')) {
+            $query->where('threads.deleted_user_id', $deletedUserId);
+        }
+
+        // 操作删除者用户名
+        if ($deletedUsername = Arr::get($filter, 'deletedUsername')) {
+            $query->leftJoin('users as users2', 'users2.id', '=', 'threads.deleted_user_id')
+                ->where('users2.username', 'like', "%{$deletedUsername}%");
         }
 
         // 发表于（开始时间）
@@ -222,6 +265,16 @@ class ListThreadsController extends AbstractListController
         // 发表于（结束时间）
         if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
             $query->where('threads.created_at', '<=', $createdAtEnd);
+        }
+
+        // 删除于（开始时间）
+        if ($deletedAtBegin = Arr::get($filter, 'deletedAtBegin')) {
+            $query->where('threads.deleted_at', '>=', $deletedAtBegin);
+        }
+
+        // 删除于（结束时间）
+        if ($deletedAtEnd = Arr::get($filter, 'deletedAtEnd')) {
+            $query->where('threads.deleted_at', '<=', $deletedAtEnd);
         }
 
         // 浏览次数（大于）
@@ -263,11 +316,14 @@ class ListThreadsController extends AbstractListController
         }
 
         // 待审核
-        if ($isApproved = Arr::get($filter, 'isApproved')) {
-            if ($isApproved == 'no' && $actor->can('review')) {
-                $query->where('threads.is_approved', false);
-            } elseif ($isApproved == 'yes') {
-                $query->where('threads.is_approved', true);
+        $isApproved = Arr::get($filter, 'isApproved');
+        if ($isApproved === '1') {
+            $query->where('threads.is_approved', Thread::APPROVED);
+        } elseif ($actor->can('approvePosts')) {
+            if ($isApproved === '0') {
+                $query->where('threads.is_approved', Thread::UNAPPROVED);
+            } elseif ($isApproved === '2') {
+                $query->where('threads.is_approved', Thread::IGNORED);
             }
         }
 
@@ -369,8 +425,8 @@ class ListThreadsController extends AbstractListController
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
             ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('thread_id', $threadIds)
-            ->where('a.status', 1)
-            ->where('type', 2)
+            ->where('a.status', Order::ORDER_STATUS_PAID)
+            ->where('type', Order::ORDER_TYPE_REWARD)
             ->orderBy('a.created_at', 'desc')
             ->get()
             ->take($limit);

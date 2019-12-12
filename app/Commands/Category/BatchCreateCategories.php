@@ -79,7 +79,7 @@ class BatchCreateCategories
             $category = Category::build(
                 $name,
                 Arr::get($data, 'attributes.description'),
-                Arr::get($data, 'attributes.sort', 1),
+                (int) Arr::get($data, 'attributes.sort', 0),
                 Arr::get($data, 'attributes.icon', ''),
                 $this->ip
             );

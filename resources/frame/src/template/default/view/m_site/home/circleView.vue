@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <!-- <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" ></Header> -->
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" ></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 	    <div class="themeTitBox">
@@ -15,7 +15,7 @@
 	    		</div>
 	    	</div>
 	    </div>
-      <!-- <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet> -->
+      <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       <div class="gap"></div>
 	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->

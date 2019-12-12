@@ -57,5 +57,7 @@ module.exports = {
   'batchSubmit':'/api/stop-words/batch', //创建敏感词接口[批量]
   'serachWords':'/api/stop-words', //查询敏感词接口[列表]
   'exportWords':'/api/stop-words/export',//导出敏感词
+  'logo':'/api/settings/logo',   //上传站点logo
+  'siteinfo':'api/siteinfo',  //站点基本信息
 
 }

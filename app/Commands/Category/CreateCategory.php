@@ -75,7 +75,7 @@ class CreateCategory
         $category = Category::build(
             Arr::get($this->data, 'attributes.name'),
             Arr::get($this->data, 'attributes.description'),
-            Arr::get($this->data, 'attributes.sort', 1),
+            (int) Arr::get($this->data, 'attributes.sort', 0),
             Arr::get($this->data, 'attributes.icon', ''),
             $this->ip
         );

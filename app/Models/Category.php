@@ -41,14 +41,14 @@ class Category extends Model
     /**
      * Create a new category.
      *
-     * @param $name
-     * @param $description
-     * @param $sort
+     * @param string $name
+     * @param string $description
+     * @param int $sort
      * @param string $icon
      * @param string $ip
      * @return static
      */
-    public static function build($name, $description, $sort, $icon = '', $ip = '')
+    public static function build(string $name, string $description, int $sort, string $icon = '', string $ip = '')
     {
         $category = new static;
 

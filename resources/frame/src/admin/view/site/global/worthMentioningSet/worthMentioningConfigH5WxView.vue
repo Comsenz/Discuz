@@ -1,10 +1,10 @@
 <template>
   <div class="worth-mentioning-config-h5-box">
-    <Card header="H5微信授权登录"></Card>
+    <Card header="公众号接口配置"></Card>
 
     <Card header="APPID：">
-      <CardRow description="填写申请H5微信授权登录后，你获得的APPID">
-        <el-input></el-input>
+      <CardRow description="填写申请公众号后，你获得的APPID">
+        <el-input v-model="appId"></el-input>
 
         <template #tail>
           <span  style="color: #336699;margin-left: 15PX;cursor: pointer;" >未申请？点此申请</span>
@@ -14,13 +14,14 @@
 
 
     <Card header="App secret：">
-      <CardRow description="填写申请H5微信授权登陆后，你获得的App secret">
-        <el-input></el-input>
+      <CardRow description="填写申请公众号后，你获得的App secret">
+        <el-input v-model="appSecret"></el-input>
       </CardRow>
     </Card>
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium" @click="$router.push({path:'/admin/worth-mentioning-set'})" >提交</el-button>
+      <!-- <el-button type="primary" size="medium" @click="$router.push({path:'/admin/worth-mentioning-set'})" >提交</el-button> -->
+      <el-button type="primary" size="medium" @click="submitConfiguration" >提交</el-button>
     </Card>
   </div>
 </template>

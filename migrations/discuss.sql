@@ -274,3 +274,7 @@ ALTER TABLE `posts` CHANGE `reply_id` `reply_post_id` INT(10) UNSIGNED NULL DEFA
 ALTER TABLE `posts` ADD `reply_user_id` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `reply_post_id`;
 
 ALTER TABLE `operation_log` ADD COLUMN `user_id` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作用户 id' AFTER `id`;
+
+-- 2019-12-11
+ALTER TABLE `orders`
+	CHANGE COLUMN `order_sn` `order_sn` CHAR(22) NOT NULL DEFAULT '0' COMMENT '订单编号' AFTER `id`;
