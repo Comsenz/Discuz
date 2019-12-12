@@ -81,6 +81,12 @@ export default {
             }
           }
         }).then((res)=>{
+          let a = this.apiStore.pushPayload(res);
+          // console.log(a);
+          // console.log(a.user());
+          // console.log(a.user().id());
+          // console.log(a.thread());
+          // console.log(a.thread().id());
           // this.$router.push({
           //   path:'/details',
           //   name:'details',

@@ -82,7 +82,7 @@ export default {
 	},
 	methods: {
 
-		deleteAllClick(value) {
+		async deleteAllClick(value) {
 			let data = [];
 
 			for (let i = 0; i < value.length; i++) {
@@ -96,13 +96,14 @@ export default {
 				});
 			}
 
-			this.appFetch({
+			await this.appFetch({
 				url:'batch',
 				method:'patch',
 				data:{
 					'data':data
 				}
 			})
+			this.deleteList()
 
 		},
 

@@ -10,7 +10,6 @@ export default {
 			choiceShow: false,
 			checkOperaStatus: false,
 			choList: [],
-			getGroupNameById: {},
 			searchName: '',
 			userParams: {
 				'filter[name]': '',
@@ -34,12 +33,12 @@ export default {
 			if (listLen === 0) return;
 			var checkList = [];
 			for (let i = 0; i < listLen; i++) {
-				let checkid = this.userList[i].id();
+				let checkid = this.userList[i]._data.id;
 				if (checkid === id) {
 					this.userList[i].checkStatus = !this.userList[i].checkStatus;
 				}
 				if (this.userList[i].checkStatus) {
-					checkList.push(this.userList[i].username());
+					checkList.push(this.userList[i]._data.username);
 				}
 			}
 			this.result = checkList;
@@ -75,11 +74,16 @@ export default {
 		// 根据搜索进行请求
 		async getSearchValUserList(initStatus = false) {
 			try {
-				const response = await this.apiStore.find('users', this.userParams)
+				const response = await this.appFetch({
+					method: 'get',
+					url: 'users',
+					data: this.userParams
+				})
 				if (initStatus) {
 					this.userList = [];
 				}
-				this.userList = this.userList.concat(response).map((v, i) => {
+
+				this.userList = this.userList.concat(response.readdata).map((v, i) => {
 					var obj = v;
 					obj.checkStatus = false;
 					return obj
@@ -105,11 +109,6 @@ export default {
 					method: 'get'
 				})
 				this.choList = response.data;
-				console.log(this.choList);
-				for (let val of this.choList) {
-					this.getGroupNameById[val.id] = val.attributes.name;
-				}
-				console.log(this.getGroupNameById)
 			} catch (err) {
 				console.log(err, 'membersManagementCon.js getOperaType');
 				// 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
@@ -119,43 +118,6 @@ export default {
 		},
 
 		// 提交按钮的点击事件
-		// handleSubmit(){
-
-		// 	if(!this.checkOperaStatus){
-		// 		//提示为选择操作类型
-		// 		console.log("未选择操作类型")
-		// 		return;
-		// 	}
-
-		// 	if(this.result.length === 0){
-		// 		// 提示未选择用户
-		// 		console.log("未选择用户")
-		// 		return;
-		// 	}
-
-		// 	let data = [];
-		// 	const groupId = this.choiceRes.id;
-		// 	for(let i = 0, len = this.userList.length; i < len; i++){
-		// 		if(this.userList[i].checkStatus){
-		// 			data.push({
-		// 				"attributes": {
-		// 					id: this.userList[i].id(),
-		// 					groupId
-		// 				}
-		// 			})
-		// 		}
-		// 	}
-
-		// 	this.appFetch({
-		// 		url: 'users',
-		// 		method: 'PATCH',
-		// 		data: {
-		// 			data
-		// 		}
-		// 	})
-		// },
-
-
 		async handleSubmit() {
 
 			try {
@@ -177,7 +139,7 @@ export default {
 					if (this.userList[i].checkStatus) {
 						data.push({
 							"attributes": {
-								id: this.userList[i].id(),
+								id: this.userList[i]._data.id,
 								groupId
 							}
 						})
@@ -193,7 +155,8 @@ export default {
 				})
 				this.getSearchValUserList(true);
 			} catch (err) {
-				console.error('handleSubmit error')
+				console.error(err, 'handleSubmit error');
+				this.$toast("修改成员状态失败");
 			}
 
 		},

@@ -38,6 +38,7 @@ class ListPostsController extends AbstractListController
      */
     public $include = [
         'user',
+        'replyUser',
         'thread',
         'images',
     ];
@@ -142,29 +143,32 @@ class ListPostsController extends AbstractListController
      */
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
-        $query->where('is_first', false);
+        $query->where('posts.is_first', false);
 
         // 作者
         if ($userId = Arr::get($filter, 'user')) {
-            $query->where('user_id', $userId);
+            $query->where('posts.user_id', $userId);
         }
 
         // 主题
         if ($threadId = Arr::get($filter, 'thread')) {
-            $query->where('thread_id', $threadId);
+            $query->where('posts.thread_id', $threadId);
         }
 
         // 回复
         if ($replyId = Arr::get($filter, 'reply')) {
-            $query->where('reply_post_id', $replyId);
+            $query->where('posts.reply_post_id', $replyId);
         }
 
         // 待审核
-        if ($isApproved = Arr::get($filter, 'isApproved')) {
-            if ($isApproved == 'no' && $actor->can('review')) {
-                $query->where('is_approved', false);
-            } elseif ($isApproved == 'yes') {
-                $query->where('is_approved', true);
+        $isApproved = Arr::get($filter, 'isApproved');
+        if ($isApproved === '1') {
+            $query->where('posts.is_approved', Post::APPROVED);
+        } elseif ($actor->can('approvePosts')) {
+            if ($isApproved === '0') {
+                $query->where('posts.is_approved', Post::UNAPPROVED);
+            } elseif ($isApproved === '2') {
+                $query->where('posts.is_approved', Post::IGNORED);
             }
         }
 

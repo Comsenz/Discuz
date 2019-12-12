@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="postContent">
-            <a href="javascript:;">{{item.firstPost._data.content}}</a>
+            <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
         </div>
         <div class="searchMore" @click="handleLoadMoreTheme">

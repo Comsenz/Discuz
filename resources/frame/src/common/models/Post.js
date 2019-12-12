@@ -13,6 +13,7 @@ Object.assign(Post.prototype, {
   replyCount: Model.attribute('replyCount'),
   updatedAt: Model.attribute('updatedAt'),
   user:Model.hasOne('user'),
+  thread:Model.hasOne('thread'),
   replyUser:Model.hasOne('user'),
   likedUsers:Model.hasMany('likedUsers')
 });

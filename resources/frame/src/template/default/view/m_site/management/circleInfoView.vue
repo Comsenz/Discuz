@@ -14,7 +14,7 @@
 		    	<div class="circleLoBox">
 			    	<span class="circleIcon">站点图标</span>
             <img v-if="siteInfo.logo()" :src="siteInfo.logo()" class="circleLogo">
-            <img v-else="" src="../../../../../../static/images/logo.png" class="circleLogo">
+            <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
 			    </div>
 		    </div>
 		    <div class="circleInfo padB0 lastBorNone">
@@ -37,12 +37,9 @@
 			    		<span class="infoItemLeft">站点成员</span>
 			    		<a href="javascript:;" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
 			    	</div>
-			    	<div class="circleMemberList" v-for="(item,index) in siteInfo.user()" :key="index">
-              <img :src="item.avatarUrl()" alt="" class="postHead" v-if="item.avatarUrl() == '' && item.avatarUrl() == null">
-              <img src="../../../../../../static/images/noavatar.gif" class="postHead" v-else="">
-              <!-- <img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember">
-			    		<img src="../../../../../../static/images/noavatar.gif" class="circleMember"> -->
+			    	<div class="circleMemberList">
+              <img v-for="(item,index) in siteInfo.users()" :key="index" :src="item.avatarUrl()" alt="" class="circleMember" v-if="item.avatarUrl() == '' && item.avatarUrl() == null" @click="membersJump(item.id())">
+              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else="" @click="membersJump(item.id())">
 			    	</div>
 			    </div>
 		    </div>

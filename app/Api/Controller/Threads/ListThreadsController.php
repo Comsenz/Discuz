@@ -49,6 +49,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
     ];
 
@@ -59,6 +60,7 @@ class ListThreadsController extends AbstractListController
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
+        'lastThreePosts.replyUser',
         'rewardedUsers',
     ];
 
@@ -157,6 +159,20 @@ class ListThreadsController extends AbstractListController
         if (in_array('rewardedUsers', $specialLoad)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+        }
+
+        // 付费主题，不返回内容
+        if (! $actor->isAdmin()) {
+            $allRewardedThreads = $actor->orders()
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->pluck('thread_id');
+
+            $threads->map(function ($thread) use ($allRewardedThreads) {
+                if ($thread->price > 0 && $allRewardedThreads->contains($thread->id)) {
+                    $thread->firstPost->content = 'TODO: 付费主题无权查看提示语';
+                }
+            });
         }
 
         return $threads;
@@ -263,11 +279,14 @@ class ListThreadsController extends AbstractListController
         }
 
         // 待审核
-        if ($isApproved = Arr::get($filter, 'isApproved')) {
-            if ($isApproved == 'no' && $actor->can('review')) {
-                $query->where('threads.is_approved', false);
-            } elseif ($isApproved == 'yes') {
-                $query->where('threads.is_approved', true);
+        $isApproved = Arr::get($filter, 'isApproved');
+        if ($isApproved === '1') {
+            $query->where('threads.is_approved', Thread::APPROVED);
+        } elseif ($actor->can('approvePosts')) {
+            if ($isApproved === '0') {
+                $query->where('threads.is_approved', Thread::UNAPPROVED);
+            } elseif ($isApproved === '2') {
+                $query->where('threads.is_approved', Thread::IGNORED);
             }
         }
 
@@ -369,8 +388,8 @@ class ListThreadsController extends AbstractListController
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
             ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('thread_id', $threadIds)
-            ->where('a.status', 1)
-            ->where('type', 2)
+            ->where('a.status', Order::ORDER_STATUS_PAID)
+            ->where('type', Order::ORDER_TYPE_REWARD)
             ->orderBy('a.created_at', 'desc')
             ->get()
             ->take($limit);

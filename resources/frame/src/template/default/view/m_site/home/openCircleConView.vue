@@ -12,7 +12,7 @@
 		    <div class="cirPostCon">
 		    	<div class="postTop">
 		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
 		    			<div class="perDet">
 		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 		    				<div class="postTime">1小时前</div>
@@ -27,8 +27,8 @@
 		    	</div>
 		    	<div class="postImgBox">
 		    		<div class="postImgList">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postPictures">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postPictures">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postPictures">
 		    		</div>
 		    	</div>
 		    	<div class="uploadFileList">
@@ -65,22 +65,15 @@
     		</div>
     		<div class="payPer">
     			<span class="icon iconfont icon-money"></span>
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
-    			<img src="../../../../../../static/images/noavatar.gif" class="payPerHead">
+    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
+    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
+    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
+    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
     		</div>
     		<div class="commentPostDet">
 	    		<div class="postTop">
 		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
 		    			<div class="perDet">
 		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 		    				<div class="postTime">1小时前</div>
@@ -99,7 +92,7 @@
 		    <div class="commentPostDet">
 		    	<div class="postTop quotePostTop">
 		    		<div class="postPer">
-		    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
+		    			<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
 		    			<div class="perDet">
 		    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
 		    				<div class="postTime">1小时前</div>

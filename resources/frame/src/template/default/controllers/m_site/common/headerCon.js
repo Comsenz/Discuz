@@ -83,19 +83,52 @@ export default {
     //初始化请求分类接口
     loadCategories(){
       //请求站点信息
-      const params = {};
-       params.include='users';
-       this.apiStore.find('forum').then(data => {
-         console.log(data+'222');
-         this.siteInfo = data;
-         this.username = data.siteAuthor().username;
-         console.log(data.user());
-      });
-      this.apiStore.find('categories').then(data => {
-        console.log(data[0].name());
-        // console.log(data[0].user().username());
-        this.categories = data;
-      });
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {
+          include: ['users'],
+          page: {
+            offset: 20,
+            num: 3
+          }
+        }
+      }).then((res) => {
+        // console.log(res, 'res232323');
+        this.siteInfo = res.readdata;
+        // this.username = data.readdata.siteAuthor.username;
+      })
+      this.appFetch({
+        url: 'categories',
+        method: 'get',
+        data: {
+          include: [],
+          // page: {
+          //   offset: 20,
+          //   num: 3
+          // }
+        }
+      }).then((res) => {
+        // console.log(res, 'res44444');
+        this.categories = res.readdata;
+      })
+
+
+
+
+      // const params = {};
+      //  params.include='users';
+      //  this.apiStore.find('forum').then(data => {
+      //    console.log(data.readdata+'222');
+      //    this.siteInfo = data.readdata;
+      //    // this.username = data.readdata.siteAuthor.username;
+      //    // console.log(data.user());
+      // });
+      // this.apiStore.find('categories').then(data => {
+      //   console.log(data[0].name());
+      //   // console.log(data[0].user().username());
+      //   this.categories = data;
+      // });
     },
     // //获取用户信息
     // getUserInfo(){

@@ -2,7 +2,7 @@
     <div class="worth-mention-box">
       <div class="worth-mention__default" >
         <el-table
-          :data="tableData"
+          :data="settingStatus"
           style="width: 100%">
           <el-table-column
             prop="date"
@@ -39,12 +39,14 @@
                 >配置</el-button>
                 <el-button
                   size="mini"
+                  @click.native.prevent="loginSetting(scope.$index,scope.row.type,'0')"
                 >关闭</el-button>
               </div>
 
               <el-button
                 v-else
                 size="mini"
+                @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
               >开启</el-button>
 
             </template>
