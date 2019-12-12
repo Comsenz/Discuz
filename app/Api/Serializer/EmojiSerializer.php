@@ -1,22 +1,30 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Api\Serializer;
 
+use App\Models\Emoji;
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class EmojiSerializer extends AbstractSerializer
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $type = 'emoji';
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param Emoji $model
+     */
     public function getDefaultAttributes($model)
     {
         return [
-            'id' => $model->id,
-            'category' => $model->category,
-            'url' => $model->url,
-            'code' => $model->code,
-            'order' => $model->order,
+            'category'          => $model->category,
+            // 'url'               => $model->url,
+            'url'               => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/' . $model->url,
+            'code'              => $model->code,
+            'order'             => $model->order,
         ];
     }
 }
