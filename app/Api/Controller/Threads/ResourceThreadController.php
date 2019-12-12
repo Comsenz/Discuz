@@ -83,6 +83,21 @@ class ResourceThreadController extends AbstractResourceController
 
         // 主题
         $thread = $this->thread->findOrFail($threadId, $actor);
+
+        // 付费帖子
+        if (! $actor->isAdmin()) {
+            $order = Order::where('user_id', $actor->id)
+                ->where('thread_id', $thread->id)
+                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->exists();
+
+            if (! $order) {
+                throw new OrderException('order_post_not_found');
+            }
+        }
+
+        // 更新浏览量
         $thread->timestamps = false;
         $thread->increment('view_count');
 
