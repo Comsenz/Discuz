@@ -161,15 +161,14 @@ class ListPostsController extends AbstractListController
         }
 
         // 待审核
-        if ($isApproved = Arr::get($filter, 'isApproved')) {
-            if ($isApproved == 'yes') {
-                $query->where('threads.is_approved', Post::APPROVED);
-            } elseif ($actor->can('approvePosts')) {
-                if ($isApproved == 'no') {
-                    $query->where('posts.is_approved', Post::UNAPPROVED);
-                } elseif ($isApproved == 'ignore') {
-                    $query->where('posts.is_approved', Post::IGNORED);
-                }
+        $isApproved = Arr::get($filter, 'isApproved');
+        if ($isApproved === '1') {
+            $query->where('posts.is_approved', Post::APPROVED);
+        } elseif ($actor->can('approvePosts')) {
+            if ($isApproved === '0') {
+                $query->where('posts.is_approved', Post::UNAPPROVED);
+            } elseif ($isApproved === '2') {
+                $query->where('posts.is_approved', Post::IGNORED);
             }
         }
 
