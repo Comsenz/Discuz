@@ -19,13 +19,15 @@ use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
 use App\Models\OperationLog;
 use App\Models\Post;
-use Carbon\Carbon;
+use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class ThreadListener
 {
+    use ThreadTrait;
+
     public function subscribe(Dispatcher $events)
     {
         // 发布帖子
@@ -86,48 +88,39 @@ class ThreadListener
 
     /**
      * 主题发布后 增加分类主题数量
+     *
      * @param ThreadCreated $event
+     * @throws \App\Exceptions\ThreadException
      */
     public function threadCreated(ThreadCreated $event)
     {
-        $event->thread->category->thread_count += 1;
-        $event->thread->category->save();
+        $this->action($event->thread, 'create');
     }
 
     /**
      * 审核主题时，记录操作
      *
      * @param ThreadWasApproved $event
+     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
-        if ($event->thread->is_approved == 1) {
-            $action = 'approve';
-        } elseif ($event->thread->is_approved == 2) {
-            $action = 'ignore';
-        } else {
-            $action = 'disapprove';
-        }
+        $this->action($event->thread, $event->thread->is_approved, $action);
 
-        $log = new OperationLog;
-        $log->action = $action;
-        $log->message = $event->data['message'];
-        $log->created_at = Carbon::now();
-        $event->thread->logs()->save($log);
+        OperationLog::writeLog($event->thread->user, $action, $event->data['message']);
     }
 
     /**
      * 隐藏主题时，记录操作
      *
      * @param Hidden $event
+     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasHidden(Hidden $event)
     {
-        $log = new OperationLog;
-        $log->action = 'hide';
-        $log->message = $event->data['message'];
-        $log->created_at = Carbon::now();
-        $event->thread->logs()->save($log);
+        $this->action($event->thread, 'hide', $action);
+
+        OperationLog::writeLog($event->thread->user, $action, $event->data['message']);
     }
 
     /**
