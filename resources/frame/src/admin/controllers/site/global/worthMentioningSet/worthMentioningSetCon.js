@@ -7,15 +7,15 @@ export default {
     return {
       loginStatus:'default',   //default h5 applets pc
       settingStatus: [{
-        name: 'H5微信授权登录',
+        name: '公众号接口配置',
         type: 'wechat_h5',
-        description: '用户在电脑网页使用微信扫码登录或微信内的H5、小程序使用微信授权登录',
+        description: '用户在微信内使用微信授权登录',
         status:'',
         icon:'iconH'
       }, {
         name: '小程序微信授权登录',
         type:'wechat_min',
-        description: '用户在电脑网页使用微信扫码登录或微信内的H5、小程序使用微信授权登录',
+        description: '用户在小程序使用微信授权登录',
         status:'',
         icon:'iconxiaochengxu'
       }, {
