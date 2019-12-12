@@ -14,12 +14,12 @@
             :prply="items._data.postCount"
             :browse="items._data.viewCount"
             :last="items.lastPostedUser._data.username"
-            :finalPost="formatDate(items.lastPostedUser._data.createdAt)"
-            :key="index"
+            :finalPost="formatDate(items._data.createdAt)"
+            :key="items._data.id"
           >
             <div class="cont-manage-theme__table-side" slot="side">
               <!--<el-checkbox v-model="checkedTheme" :label="index" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>-->
-              <el-checkbox v-model="checkedTheme" :label="items.id" @change="handleCheckedCitiesChange()"></el-checkbox>
+              <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
             <div style="line-height: 20PX;" slot="main">

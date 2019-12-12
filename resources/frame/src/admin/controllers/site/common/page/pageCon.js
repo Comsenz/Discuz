@@ -25,9 +25,7 @@ export default {
     },
   },
   methods:{
-    handleSizeChange(val){
-      this.$parent.$emit('size-change', val);
-    },
+
     handleCurrentChange(val){
       webDb.setLItem('currentPag',val);
       this.$emit('current-change', val);
