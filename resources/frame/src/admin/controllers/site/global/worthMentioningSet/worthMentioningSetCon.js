@@ -6,49 +6,105 @@ export default {
   data:function () {
     return {
       loginStatus:'default',   //default h5 applets pc
-      tableData: [{
+      settingStatus: [{
         name: 'H5微信授权登录',
-        type: 'h5',
+        type: 'wechat_h5',
         description: '用户在电脑网页使用微信扫码登录或微信内的H5、小程序使用微信授权登录',
-        status:true,
+        status:'',
         icon:'iconH'
       }, {
         name: '小程序微信授权登录',
-        type:'applets',
+        type:'wechat_min',
         description: '用户在电脑网页使用微信扫码登录或微信内的H5、小程序使用微信授权登录',
-        status:false,
+        status:'',
         icon:'iconxiaochengxu'
       }, {
         name: 'PC端微信扫码登录',
-        type:'pc',
+        type:'wechat_pc',
         description: '用户在PC的网页使用微信扫码登录',
-        status:true,
+        status:'',
         icon:'iconweixin'
       }]
+      // settingStatus:{}
     }
   },
+  created:function(){
+    this.loadStatus();
+  },
   methods:{
+    loadStatus(){
+      //初始化登录设置状态
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{
+        }
+      }).then(data=>{
+        if(data.readdata._data.wechat_h5){
+          this.settingStatus[0].status = true;
+        } else {
+          this.settingStatus[0].status = false;
+        }
+        if(data.readdata._data.wechat_min){
+          this.settingStatus[1].status = true;
+        } else {
+          this.settingStatus[1].status = false;
+        }
+        if(data.readdata._data.wechat_pc){
+          this.settingStatus[2].status = true;
+        } else {
+          this.settingStatus[2].status = false;
+        }
+        // this.$message('提交成功');
+      }).catch(error=>{
+        // console.log('失败');
+      })
+    },
+
     configClick(type){
-
-      console.log(type);
-
-      switch (type){
-        case 'h5':
-          this.$router.push({path:'/admin/worth-mentioning-config/h5wx'});
-          // this.loginStatus = 'h5';
-          break;
-        case 'applets':
-          this.$router.push({path:'/admin/worth-mentioning-config/applets'});
-          // this.loginStatus = 'applets';
-          break;
-        case 'pc':
-          this.$router.push({path:'/admin/worth-mentioning-config/pcwx'});
-          // this.loginStatus = 'pc';
-          break;
-        default:
-          this.$router.push({path:'/admin/worth-mentioning-set'});
-          // this.loginStatus = 'default';
+      this.$router.push({
+        path:'/admin/worth-mentioning-config/h5wx',
+        query: {type:type}
+      });
+    },
+    loginSetting(index,type,status){
+      console.log('提示：'+status);
+      if(type == 'wechat_h5') {
+        this.changeSettings('wechat_h5',status);
+      } else if( type == 'wechat_min'){
+        this.changeSettings('wechat_min',status);
+      } else {
+        this.changeSettings('wechat_pc',status);
       }
+    },
+    changeSettings(typeVal,statusVal){
+      console.log(statusVal);
+      //登录设置状态修改
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          "data":[
+            {
+             "attributes":{
+              "key":typeVal,
+              "value":statusVal,
+              "tag": typeVal
+             }
+            }
+           ]
+
+        }
+      }).then(data=>{
+        // console.log(data)
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        });
+        this.loadStatus();
+      }).catch(error=>{
+        cthis.$message.error('修改失败');
+      })
     }
   }
   ,

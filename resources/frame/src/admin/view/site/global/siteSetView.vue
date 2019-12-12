@@ -1,19 +1,20 @@
 <template>
     <div class="site-set-box">
-
       <Card header="站点名称：">
         <CardRow description="你的Discuz!Q 站点的名称">
-          <el-input placeholder="站点名称"></el-input>
+            <el-input placeholder="站点名称" v-model="siteName"></el-input>
         </CardRow>
       </Card>
 
       <Card header="站点介绍：">
         <CardRow description="你的Discuz!Q 站点的介绍">
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4}"
-            placeholder="站点介绍">
-          </el-input>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 4}"
+              placeholder="站点介绍"
+              v-model="siteIntroduction"
+              >
+            </el-input>
         </CardRow>
       </Card>
 
@@ -21,7 +22,7 @@
         <CardRow description="你的Discuz!Q 站点的LOGO">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="#"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
@@ -34,8 +35,8 @@
 
       <Card header="站点模式：">
         <CardRow description="你的Discuz!Q 站点的运行模式">
-          <el-radio @change="radioChange" v-model="radio" label="1">公开模式</el-radio>
-          <el-radio @change="radioChange" v-model="radio" label="2">付费模式</el-radio>
+          <el-radio @change="radioChange(1)" v-model="radio" label="1">公开模式</el-radio>
+          <el-radio @change="radioChange(2)" v-model="radio" label="2">付费模式</el-radio>
         </CardRow>
       </Card>
 
@@ -43,7 +44,7 @@
         <div v-show="radio === '2'">
           <Card  header="加入价格（元）：">
             <CardRow description="付费模式下，付费成为站点默认角色，需支付的金额">
-              <el-input placeholder="加入价格"></el-input>
+              <el-input placeholder="加入价格" v-model="sitePrice"></el-input>
             </CardRow>
           </Card>
 
@@ -55,7 +56,9 @@
                   <el-input
                     style="height: 36PX;width: 80PX"
                     clearable
-                    placeholder="天数">
+                    placeholder="天数"
+                    v-model="siteExpire"
+                    >
                   </el-input>
                   天后
                 </el-radio>
@@ -68,11 +71,11 @@
             <CardRow description="主题打赏的分成比例设置">
               <div class="proportion-box">
                 <span>作者</span>
-                <el-input class="" size="small" ></el-input>
+                <el-input class="" size="small" v-model="siteAuthorScale"></el-input>
               </div>
               <div class="proportion-box">
                 <span>平台(站长)</span>
-                <el-input size="small" ></el-input>
+                <el-input size="small" v-model="siteMasterScale"></el-input>
               </div>
             </CardRow>
           </Card>
@@ -82,7 +85,7 @@
 
       <Card header="网站备案信息：">
         <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
-          <el-input></el-input>
+          <el-input v-model='siteRecord'></el-input>
         </CardRow>
       </Card>
 
@@ -90,7 +93,9 @@
         <CardRow description="你的Discuz!Q 网站的第三方统计代码">
           <el-input
             type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4}">
+            :autosize="{ minRows: 4, maxRows: 4}"
+              v-model='siteStat'
+            >
           </el-input>
         </CardRow>
       </Card>
@@ -106,16 +111,15 @@
         <div v-show="radio2 === '1'">
           <Card  header="关闭提示信息：">
             <CardRow description="站点关闭时出现的提示信息">
-              <el-input></el-input>
+              <el-input v-model="siteCloseMsg"></el-input>
             </CardRow>
           </Card>
         </div>
       </el-collapse-transition>
 
       <Card class="footer-btn">
-        <el-button type="primary" size="medium">提交</el-button>
+        <el-button type="primary" size="medium" @click="siteSetPost">提交</el-button>
       </Card>
-
     </div>
 </template>
 
