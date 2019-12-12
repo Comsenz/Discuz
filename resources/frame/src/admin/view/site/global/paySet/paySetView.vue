@@ -2,7 +2,7 @@
   <div class="pay-set-box">
     <div class="pay-set__default">
       <el-table
-        :data="tableData"
+        :data="settingStatus"
         style="width: 100%">
         <el-table-column
           prop="date"
@@ -35,10 +35,11 @@
             <div v-if="scope.row.status">
               <el-button
                 size="mini"
-                @click="configClick"
+                @click="configClick(scope.row.type)"
               >配置</el-button>
               <el-button
                 size="mini"
+                @click.native.prevent="loginSetting(scope.$index,scope.row.type,'0')"
               >关闭</el-button>
             </div>
 
@@ -47,6 +48,7 @@
               size="mini"
               type="primary"
               plain
+              @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
             >开启</el-button>
 
           </template>

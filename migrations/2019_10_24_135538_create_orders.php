@@ -14,7 +14,7 @@ class CreateOrders extends Migration
     {
         $this->schema()->create('orders', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('订单ID');
-            $table->unsignedBigInteger('order_sn')->default(0)->comment('订单编号');
+            $table->char('order_sn', 22)->default('')->comment('订单编号');
             $table->unsignedBigInteger('payment_sn')->default(0)->comment('支付编号');
             $table->unsignedDecimal('amount', 10, 2);
             $table->unsignedBigInteger('user_id')->comment('付款人ID');

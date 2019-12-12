@@ -72,6 +72,11 @@ class ForumSettingSerializer extends AbstractSerializer
             'qcloudSecretId' => $this->decrypt($this->settings->get('secretId', 'qcloud')),
             'qcloudSecretKey' => $this->decrypt($this->settings->get('secretKey', 'qcloud')),
             'qcloudToken' => $this->decrypt($this->settings->get('token', 'qcloud', '')),
+
+            // 登陆配置
+            'wechat_h5'     => (bool) $this->settings->get('wechat_h5', 'wechat_h5'),
+            'wechat_min'    => (bool) $this->settings->get('wechat_min', 'wechat_min'),
+            'wechat_pc'     => (bool) $this->settings->get('wechat_pc', 'wechat_pc'),
         ];
 
         if ($this->actor->exists) {
