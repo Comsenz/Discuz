@@ -9,6 +9,7 @@
 
 namespace App\Api\Controller\Threads;
 
+use App\Models\Order;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
@@ -73,6 +74,20 @@ class ListFavoritesController extends ListThreadsController
         if (in_array('rewardedUsers', $specialLoad)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+        }
+
+        // 付费主题，不返回内容
+        if (! $actor->isAdmin()) {
+            $allRewardedThreads = $actor->orders()
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->pluck('thread_id');
+
+            $threads->map(function ($thread) use ($allRewardedThreads) {
+                if ($thread->price > 0 && $allRewardedThreads->contains($thread->id)) {
+                    $thread->firstPost->content = 'TODO: 付费主题无权查看提示语';
+                }
+            });
         }
 
         return $threads;

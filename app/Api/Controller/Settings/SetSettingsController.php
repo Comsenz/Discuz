@@ -2,7 +2,6 @@
 
 namespace App\Api\Controller\Settings;
 
-use App\Models\Setting;
 use App\Settings\SettingsRepository;
 use App\Settings\SiteRevManifest;
 use Discuz\Auth\AssertPermissionTrait;
@@ -15,7 +14,6 @@ use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
-
     use AssertPermissionTrait;
 
     protected $cache;
@@ -36,13 +34,15 @@ class SetSettingsController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-
         $this->assertAdmin($request->getAttribute('actor'));
-        $settings = $request->getParsedBody();
+        $settings = $request->getParsedBody()->get('data', []);
 
-
-        foreach ($settings->get('data', []) as $setting) {
-            $this->settings->set(Arr::get($setting, 'attributes.key'), Arr::get($setting, 'attributes.value'), Arr::get($setting, 'attributes.tag'));
+        foreach ($settings as $setting) {
+            $this->settings->set(
+                Arr::get($setting, 'attributes.key'),
+                Arr::get($setting, 'attributes.value'),
+                Arr::get($setting, 'attributes.tag')
+            );
         }
 
         $this->siteRevManifest->put('settings', $this->settings->all());
