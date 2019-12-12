@@ -29,8 +29,9 @@
               label="过滤词"
             >
               <template slot-scope="scope">
-                {{ scope.row._data.find }}
-                <el-input splaceholder="请输入过滤词" clearable v-show="inputFind"></el-input> 
+                {{ !scope.row._data.addInputFlag ? scope.row._data.find : ''}}
+                <el-input splaceholder="请输入过滤词" clearable v-model="scope.row._data.find" v-show="scope.row._data.addInputFlag"> 
+                </el-input> 
               </template>
 
             </el-table-column>

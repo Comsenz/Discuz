@@ -9,32 +9,18 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      tableData: [{
-        number: '00220',
-        userName: '王小虎',
-        publishTopic: '112',
-        userGroup:'管理员'
-      }, {
-        number: '00220',
-        userName: '王小虎',
-        publishTopic: '200',
-        userGroup:'成员'
-      }, {
-        number: '00220',
-        userName: '王小虎',
-        publishTopic: '6',
-        userGroup:'管理员'
-      }, {
-        number: '00220',
-        userName: '王小虎',
-        publishTopic: '210',
-        userGroup:'管理员'
-      }],
-
+      tableData: [],
+      getRoleNameById: {},
       multipleSelection:[],
 
-      deleteStatus:true
+      deleteStatus:true,
+      pageLimit: 20,
+      pageNum: 1
     }
+  },
+
+  created(){
+    this.handleGetUserList();
   },
   methods:{
     handleSelectionChange(val) {
@@ -46,7 +32,35 @@ export default {
         this.deleteStatus = true;
       }
 
-    }
+    },
+
+    async handleGetUserList(initStatus){
+      try{
+        const {
+          username,
+          userUID,
+          userRole,
+          userPhone,
+          radio1,
+        } = this.$route.query;
+        const response = await this.appFetch({
+          method: "get",
+          url: 'users',
+          data: {
+            "filter[username]": username,
+            "filter[id]": userUID,
+            "filter[group_id]": userRole,
+            "filter[bind]": radio1 === '1' ? 'wechat':'',
+            "page[limit]": this.pageLimit,
+            "page[number]": this.pageNum
+          }
+        })
+
+        console.log(response,'response')
+      } catch(err){
+
+      }
+    },
   },
   components:{
     Card,

@@ -8,27 +8,18 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',
+      options: [],
+      username: '',
+      userUID: '',
+      userRole: [],
       checked:false,
-      radio1:'2',
-      radio2:'2'
+      userPhone: '',
+      radio1:'0',
     }
+  },
+
+  created(){
+    this.getUserList();
   },
 
   methods:{
@@ -41,8 +32,47 @@ export default {
       },300);
     },
     searchBtn(){
-      this.$router.push({path:'/admin/user-search-list'})
-    }
+      let query = {
+        username: this.username.trim(),
+        userUID: this.userUID.trim(),
+        userRole: this.userRole,
+        userPhone: this.userPhone.trim(),
+        radio1: this.radio1,
+      };
+      if(!this.checked){
+        this.userPhone = '';
+        this.radio1 = '0';
+
+        if(query.username + query.userUID + query.userRole === ''){
+          query = {};
+        } else {
+          delete query.userPhone;
+          delete query.radio1;
+        }
+      }
+
+      console.log(query)
+      this.$router.push({path:'/admin/user-search-list', query})
+    },
+
+    async getUserList(){
+      try{
+        const response = await this.appFetch({
+          method: 'get',
+          url: 'groups'
+        })
+        const data = response.data;
+        this.options = data.map((v)=>{
+          return {
+              value: v.id,
+              label: v.attributes.name
+          }
+        })
+      } catch(err){
+
+      }
+    },
+
   },
 
   components:{

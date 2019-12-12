@@ -41,6 +41,7 @@
               </el-button>
 
               <el-button
+              
                 size="mini">
                 关闭
               </el-button>
@@ -50,6 +51,7 @@
             <el-button
               v-else
               size="mini"
+             
             >开启</el-button>
 
           </template>

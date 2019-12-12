@@ -35,12 +35,12 @@ export default {
       ]
     }
   },
-
+  created(){
+    this.tencentCloudStatus() 
+  },
   methods:{
     configClick(type){
-
       console.log(type);
-
       switch (type){
         case 'cloud':
           this.$router.push({path:'/admin/tencent-cloud-config/cloud'});
@@ -51,6 +51,25 @@ export default {
         default:
           this.loginStatus = 'default';
       }
+    },
+    tencentCloudStatus(){
+      this.appFetch({
+        url:'userList',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res)
+        if(res.readdata._data.qcloud){
+          this.tableData[0].status = true
+        }else{
+          this.tableData[0].status = false
+        }
+        if(res.readdata._data.qcloudCmsImage){
+          this.tableData[1].status = true
+        }else{
+          this.tableData[1].status = false
+        }
+      })
     },
  
   },

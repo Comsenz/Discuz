@@ -169,12 +169,12 @@ export default {
       
     },
     tableContAdd(){
-      this.inputFind  = true;
         this.tableData.push({
           _data:{
             find:"",
             username:"",
             ugc:"",
+            addInputFlag:true,
           }
         })
     },

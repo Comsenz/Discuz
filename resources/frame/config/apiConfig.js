@@ -59,5 +59,6 @@ module.exports = {
   'exportWords':'/api/stop-words/export',//导出敏感词
   'logo':'/api/settings/logo',   //上传站点logo
   'siteinfo':'api/siteinfo',  //站点基本信息
+  'users':'/api/users',       //用户信息
 
 }
