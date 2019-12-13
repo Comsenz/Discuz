@@ -6,6 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Encryption\Encrypter;
 
+/**
+ * @method static create(array $array)
+ * @method static updateOrCreate(array $array)
+ * @method truncate()
+ * @method static insert()
+ */
 class Setting extends Model
 {
     protected $fillable = ['key', 'value', 'tag'];

@@ -175,6 +175,9 @@ body {
 	@include px2rem(padding, 16 0 20 0);
 	@include px2rem(margin-top, 20);
 	color: #444;
+  .isrelation {
+    border-bottom: 1px solid $corE5;
+  }
 	.likeBox {
 		@include font-dpr(28);
 		@include px2rem(padding, 0 18 0 18);
@@ -211,7 +214,6 @@ body {
 }
 .replyBox {
 	@include px2rem(padding, 16 18 0 18);
-	border-top: 1px solid $corE5;
 	@include px2rem(line-height, 40);
 	.replyCon {
 		@include px2rem(line-height, 40);

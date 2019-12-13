@@ -34,7 +34,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon $joined_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed register_ip
  * @package App\Models
+ * @method truncate()
  */
 class User extends Model
 {

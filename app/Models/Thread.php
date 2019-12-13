@@ -232,6 +232,16 @@ class Thread extends Model
     }
 
     /**
+     * Define the relationship with the user who hid the post.
+     *
+     * @return BelongsTo
+     */
+    public function deletedUser()
+    {
+        return $this->belongsTo(User::class, 'deleted_user_id');
+    }
+
+    /**
      * Define the relationship with the thread's posts.
      *
      * @return HasMany

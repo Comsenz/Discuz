@@ -19,7 +19,8 @@
 		    		</div>
 		    	</div>
 		    	<div class="postContent">
-		    		<a href="javascript:;">{{themeCon.firstPost().content()}}</a>
+		    		<a href="javascript:;" v-html="themeCon.firstPost().content()"></a>
+             
 		    	</div>
 		    	<div class="postImgBox">
 		    		<div class="postImgList">

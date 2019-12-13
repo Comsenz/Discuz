@@ -50,11 +50,6 @@
     </div>
 
     <div class="FormField">
-      <label>管理员 邮箱</label>
-      <input name="adminEmail">
-    </div>
-
-    <div class="FormField">
       <label>管理员 密码</label>
       <input type="password" name="adminPassword">
     </div>
@@ -70,7 +65,7 @@
   </div>
 </form>
 
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="assets/js/jquery.min.js"></script>
 <script>
 $(function() {
   $('form :input:first').select();
@@ -83,8 +78,9 @@ $(function() {
       .prop('disabled', true);
 
     $.post('', $(this).serialize())
-      .done(function() {
-        window.location.reload();
+      .done(function(data) {
+          localStorage.setItem('officeDb_Authorization', data.token);
+          window.location.href = '/';
       })
       .fail(function(data) {
         $('#error').show().text('安装出错:\n\n' + data.responseText);

@@ -29,8 +29,11 @@
         <span>站长：{{siteInfo._data.siteAuthor.username}}</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
-        <van-tabs v-model="navActi">
-          <van-tab v-for="(cateChi, index) in categories" :title="cateChi._data.name" :key="index">
+        <van-tabs v-model="navActi" >
+          <van-tab v-for="(cateChi, index) in categories" :key="index">
+            <span slot="title" v-on:click="categoriesCho(cateChi._data.id)">
+                {{cateChi._data.name}}
+            </span>
           </van-tab>
         </van-tabs>
       </div>

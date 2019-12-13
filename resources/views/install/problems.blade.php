@@ -8,7 +8,7 @@
 <div class="Problems">
     @foreach($problems as $problem)
         <div class="Problem">
-            <h3 class="Problem-message">{{$problem['message']}}</h3>
+            <h3 class="Problem-message">{!! $problem['message'] !!}</h3>
             @isset($problem['detail'])
                 <p class="Problem-detail">{{$problem['detail']}}</p>
             @endisset
