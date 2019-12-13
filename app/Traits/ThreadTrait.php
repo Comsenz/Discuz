@@ -50,7 +50,7 @@ trait ThreadTrait
      */
     public function behavior($thread)
     {
-        if (!array_key_exists(OperationLog::behavior(), $thread->is_approved)) {
+        if (!array_key_exists($thread->is_approved, OperationLog::behavior())) {
             $this->ThreadException('behavior_fail');
         }
 
@@ -94,21 +94,18 @@ trait ThreadTrait
                     $this->increments($thread);
                 }
                 break;
-            case 'revise':
-                dd('此处有打印');
-                break;
         }
     }
 
     public function increments(Model $thread)
     {
-        $thread->category->increment('thread_count');
-        $thread->user->increment('thread_count');
+//        $thread->category->increment('thread_count');
+//        $thread->user->increment('thread_count');
     }
 
     public function decrement(Model $thread)
     {
-        $thread->category->decrement('thread_count');
-        $thread->user->decrement('thread_count');
+//        $thread->category->decrement('thread_count');
+//        $thread->user->decrement('thread_count');
     }
 }

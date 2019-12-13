@@ -59,13 +59,15 @@ class ThreadListener
     {
         $categoryId = Arr::get($event->data, 'relationships.category.data.id');
 
-        // 如果接收到可用的分类，则设置分类
-        if ($categoryId = Category::where('id', $categoryId)->value('id')) {
-            $event->thread->category_id = $categoryId;
+        if ($event->thread->category_id != $categoryId) {
+            // 如果接收到可用的分类，则设置分类
+            if ($categoryId = Category::where('id', $categoryId)->value('id')) {
+                $event->thread->category_id = $categoryId;
+            }
         }
 
         // 如果没有分类，则抛出异常
-        if (! $event->thread->category_id) {
+        if (! $categoryId) {
             throw new CategoryNotFoundException;
         }
     }

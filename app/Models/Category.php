@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -61,5 +62,30 @@ class Category extends Model
         $category->raise(new Created($category));
 
         return $category;
+    }
+
+    /**
+     * Refresh the thread's comments count.
+     *
+     * @return $this
+     */
+    public function refreshThreadCount()
+    {
+        $this->thread_count = $this->threads()
+            ->where('is_approved', 1)
+            ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
+    /**
+     * Define the relationship with the category's threads.
+     *
+     * @return HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class);
     }
 }
