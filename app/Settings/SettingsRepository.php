@@ -18,8 +18,6 @@ class SettingsRepository implements ContractsSettingRepository
 
     protected $settings = null;
 
-    protected $encrypter;
-
     public function __construct(Factory $cache)
     {
         $this->cache = $cache;
