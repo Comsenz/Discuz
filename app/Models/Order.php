@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Discuz\Database\ScopeVisibilityTrait;
 
 /**
  * @property int $id
@@ -36,6 +37,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Order extends Model
 {
+    use ScopeVisibilityTrait;
+    
     /**
      * 订单类型
      */
