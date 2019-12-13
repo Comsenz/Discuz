@@ -13,6 +13,9 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use App\Passport\Entities\AccessTokenEntity;
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
+    const TOKEN_EXP = 'P1D';
+    const REFER_TOKEN_EXP = 'P2D';
+
     /**
      * {@inheritdoc}
      */

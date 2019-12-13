@@ -16,6 +16,8 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @package App\Models
+ *
  * @property int $id
  * @property string $name
  * @property string $description
@@ -26,7 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string ip
  * @property Carbon updated_at
  * @property Carbon created_at
- * @package App\Models
+ * @method truncate()
+ * @method insert(array $array)
  */
 class Category extends Model
 {

@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property 用户组ID group_id
  * @property 权限名称 permission
+ * @method truncate()
+ * @method insert(array $array)
  */
 class GroupPermission extends Model
 {
