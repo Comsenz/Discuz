@@ -16,7 +16,7 @@ class SettingsTableSeeder extends Seeder
         $settings->truncate();
         $settings->insert([
             [
-                'key' => 'allow_register',
+                'key' => 'register_close',
                 'value' => '1'
             ]
         ]);
