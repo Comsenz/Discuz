@@ -247,7 +247,7 @@ export default {
 
           'cont-review':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/contReviewView'], resolve)
+              require(['../view/site/cont/contModeration/contReviewView'], resolve)
             },
             metaInfo: {
               title: '内容审核',
@@ -258,7 +258,7 @@ export default {
           },
           'reply-review':{
             comLoad: function (resolve) {
-              require(['../view/site/cont/replyReviewView'], resolve)
+              require(['../view/site/cont/contModeration/replyReviewView'], resolve)
             },
             metaInfo: {
               title: '回复审核',

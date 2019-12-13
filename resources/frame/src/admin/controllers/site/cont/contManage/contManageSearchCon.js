@@ -102,6 +102,7 @@ export default {
     },
 
     submitClick(){
+      this.dataValue = this.dataValue == null?['','']:this.dataValue;
       /*
       * 调用方法可以在里面传值，对应mutations里对应方法形参payload
       * */

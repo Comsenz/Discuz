@@ -257,11 +257,11 @@
 
     &__side{
 
-      .el-checkbox-group{
+      .el-radio-group{
         display: flex;
         flex-direction: column;
 
-        .el-checkbox{
+        .el-radio{
           margin-right: 0;
           margin-bottom: 12PX;
         }
@@ -556,6 +556,10 @@
       flex: 1;
       margin-right: 20PX;
 
+      &:nth-child(3){
+        flex-grow: 1.5;
+      }
+
       .section-top{
         margin-bottom: 15PX;
       }
@@ -669,7 +673,7 @@
   }
 
   .recycle-bin-table{
-
+    border-top: 1PX solid $tableBorderColor;
     .cell{
       display: flex;
       align-items: center;
@@ -685,11 +689,11 @@
     }
 
     &__side{
-      .el-checkbox-group{
+      .el-radio-group{
         display: flex;
         flex-direction: column;
 
-        .el-checkbox{
+        .el-radio{
           margin-right: 0;
           margin-bottom: 12PX;
         }

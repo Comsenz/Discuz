@@ -22,7 +22,7 @@ export default {
     faces: function () {
       const { faceData, faceIndex } = this
       const list = faceData;
-      console.log(list);
+      // console.log(list);
       let n = 0
       let listGrouped = []
       while (n * 28 < list.length) {
@@ -97,7 +97,8 @@ export default {
     //   this.active = 0
     // },
     onFaceClick (face) {
-      this.$emit('onFaceChoose', face)
+      // console.log(face);
+      this.$emit('onFaceChoose', face);
     }
   }
 

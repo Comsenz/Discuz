@@ -28,13 +28,11 @@ export default {
         if(data.readdata._data.wechat_h5){
           this.settingStatus[0].status = true;
         } else {
-          // this.settingStatus[0].status = false;
-          this.settingStatus[0].status = true;
+          this.settingStatus[0].status = false;
         }
       })
     },
     loginSetting(index,type,status){
-      // console.log('提示：'+status);
       if(type == 'wechat_h5') {
         this.changeSettings('wechat_h5',status);
       } else if( type == 'wechat_min'){
@@ -44,7 +42,7 @@ export default {
       }
     },
     changeSettings(typeVal,statusVal){
-      console.log(statusVal);
+      // console.log(statusVal);
       //登录设置状态修改
       this.appFetch({
         url:'settings',
@@ -62,7 +60,6 @@ export default {
 
         }
       }).then(data=>{
-        // console.log(data)
         this.$message({
           message: '修改成功',
           type: 'success'
@@ -78,7 +75,6 @@ export default {
         query: {type:type}
       });
     },
-
   },
   components:{
     Card,

@@ -3,7 +3,11 @@
 namespace App\Install\Controller;
 
 use App\Console\Commands\KeyGenerate;
+use App\Console\Commands\RsaCertGenerate;
+use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
+use Illuminate\Database\Console\Migrations\MigrateCommand;
+use Illuminate\Database\Migrations\DatabaseMigrationRepository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use PDO;
@@ -12,8 +16,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
 use SplStack;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\Response\JsonResponse;
 
@@ -21,11 +28,11 @@ class InstallController implements RequestHandlerInterface
 {
     protected $app;
     protected $keyGenerate;
+    protected $certGenerate;
 
-    public function __construct(Application $app, KeyGenerate $keyGenerate)
+    public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->keyGenerate = $keyGenerate;
     }
 
     /**
@@ -35,11 +42,14 @@ class InstallController implements RequestHandlerInterface
     {
         $input = $request->getParsedBody();
 
-
-//        $this->installDatabase($input);
-
-        $this->installKeyGenerate();
-
+        //创建数据库
+        $this->installDatabase($input);
+        //创建配置文件
+        $this->installConfig($input);
+        //生成站点唯一key
+        $this->installKeyAndCertGenerate();
+        //初始化数据
+        $this->installInitData($input);
 
         return new EmptyResponse();
     }
@@ -48,27 +58,32 @@ class InstallController implements RequestHandlerInterface
         $host = Arr::get($input, 'mysqlHost');
         $port = 3306;
 
+        $mysqlConfig = [
+            'driver' => 'mysql',
+            'host' => $host,
+            'port' => $port,
+            'database' => '',
+            'username' => Arr::get($input, 'mysqlUsername'),
+            'password' => Arr::get($input, 'mysqlPassword'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ];
+
+
         $db = $this->app->make('db');
         $this->app['config']->set('database.connections',[
-                'mysql' => [
-                    'driver' => 'mysql',
-                    'host' => $host,
-                    'port' => $port,
-                    'database' => '',
-                    'username' => Arr::get($input, 'mysqlUsername'),
-                    'password' => Arr::get($input, 'mysqlPassword'),
-                    'charset' => 'utf8mb4',
-                    'collation' => 'utf8mb4_unicode_ci',
-                    'prefix' => '',
-                    'prefix_indexes' => true,
-                    'strict' => true,
-                    'engine' => null,
-                    'options' => extension_loaded('pdo_mysql') ? array_filter([
-                        PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-                    ]) : [],
-                ]
+                'mysql' => $mysqlConfig,
+                'discuz_mysql' => array_merge($mysqlConfig, ['database' => Arr::get($input, 'mysqlDatabase')])
             ]
         );
+
         $pdo = $db->connection('mysql')->getPdo();
 
         $version = $pdo->query('SELECT VERSION()')->fetchColumn();
@@ -85,8 +100,13 @@ class InstallController implements RequestHandlerInterface
 
         $pdo->query('CREATE DATABASE IF NOT EXISTS '.Arr::get($input, 'mysqlDatabase'))->execute();
 
-        $defaultConfigFile = file_get_contents($this->app->configPath('config_default.php'));
+    }
 
+    private function installConfig($input) {
+        $host = Arr::get($input, 'mysqlHost');
+        $port = 3306;
+
+        $defaultConfigFile = file_get_contents($this->app->configPath('config_default.php'));
 
         if (Str::contains($host, ':')) {
             list($host, $port) = explode(':', $host, 2);
@@ -105,15 +125,34 @@ class InstallController implements RequestHandlerInterface
             Arr::get($input, 'mysqlDatabase'),
             Arr::get($input, 'mysqlUsername'),
             Arr::get($input, 'mysqlPassword'),
-            Arr::get($input, 'tablePrefix'),
+            Arr::get($input, 'tablePrefix', ''),
         ], $defaultConfigFile);
 
         file_put_contents($this->app->configPath('config.php'), $stub);
     }
 
-    private function installKeyGenerate() {
+    private function installKeyAndCertGenerate() {
         $input = new ArrayInput([]);
         $output = new BufferedOutput();
-        $this->keyGenerate->run($input, $output);
+        //站点唯一key
+        $this->app->make(KeyGenerate::class)->run($input, $output);
+        //证书
+        $this->app->make(RsaCertGenerate::class)->run($input, $output);
+    }
+
+    private function installInitData($input)
+    {
+        $console = $this->app->make(Kernel::class);
+
+
+
+//        $this->app['config']->set('database.connections.mysql.database', Arr::get($input, 'mysqlDatabase'));
+//        $this->app['db']->reconnection('mysql');
+
+//        dd($this->app['config']->get('database'));
+
+        $aaa = $console->call('migrate', ['--force' => true, '--database' => 'discuz_mysql']);
+
+        dd($aaa);
     }
 }

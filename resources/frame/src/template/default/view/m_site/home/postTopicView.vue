@@ -8,7 +8,7 @@
 
       <div class="post-topic-form">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false"></textarea>
+        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <div class="uploadBox">
           <van-uploader v-model="fileList" multiple />
         </div>
@@ -27,8 +27,8 @@
       </footer>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
       <div class="popup">
-        <van-popup v-model="showPopup" position="bottom" round :style="{ height: '50%' }" >
-          <van-picker :columns="columns" show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm" />
+        <van-popup v-model="showPopup" position="bottom"  round :style="{ height: '50%' }">
+          <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
     </div>
