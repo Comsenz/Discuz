@@ -22,6 +22,7 @@ export default {
 				}
 
 			],
+      // themeListCon:false,
       themeListCon:[
         // themeDataCon:[
           // {
@@ -72,9 +73,9 @@ export default {
         // ]
       ],
       themeNavListCon:[
-        { text: '选项111' },
-        { text: '选项222' },
-        { text: '选项333' }
+        // { text: '选项111' },
+        // { text: '选项222' },
+        // { text: '选项333' }
         // {
         //     "type": "classify",
         //     "id": "6",
@@ -126,7 +127,8 @@ export default {
           // },
         }
       }).then((res) => {
-        // console.log(res, 'res1111');
+        console.log(res.readdata[0], 'res1111');
+        console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
         this.themeListCon = res.readdata;
       })
 

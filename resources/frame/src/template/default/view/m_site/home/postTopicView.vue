@@ -27,8 +27,8 @@
       </footer>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
       <div class="popup">
-        <van-popup v-model="showPopup" position="bottom" round :style="{ height: '50%' }" >
-          <van-picker :columns="columns" show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm" />
+        <van-popup v-model="showPopup" position="bottom"  round :style="{ height: '50%' }">
+          <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
     </div>
