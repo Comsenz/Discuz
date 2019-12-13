@@ -14,28 +14,20 @@ export default {
     return {
       searchUserName:'',  //用户名
       keyWords:'',        //关键词
-
-      deleteStatus:true,
-      multipleSelection:[],
-
-      checkList: ['通过'],
-
       showSensitiveWords:false,   //显示敏感词
-
       pageOptions: [
         {
-          value: '10',
+          value: 10,
           label: '每页显示10条'
         }, {
-          value: '20',
+          value: 20,
           label: '每页显示20条'
         }, {
-          value: '30',
+          value: 30,
           label: '每页显示30条'
         }
       ],
-      pageSelect:'10',            //每页显示数选择值选中
-
+      pageSelect:10,              //每页显示数选择值选中
       searchReview:[
         {
           value:0,
@@ -43,32 +35,12 @@ export default {
         },
         {
           value:2,
-          label:'以忽略'
+          label:'已忽略'
         }
       ],
       searchReviewSelect:0,       //审核状态选中
-
-      searchCategory:[
-        {
-          value:1,
-          label:'所有帖子'
-        },
-        {
-          value:2,
-          label:'仅群组'
-        },
-        {
-          value:3,
-          label:'默认板块'
-        },
-        {
-          value:4,
-          label:'新板块名称'
-        },
-
-      ],
-      searchCategorySelect:1,     //搜索分类选中
-
+      categoriesList:[],
+      categoriesListSelect:'',    //搜索分类选中
       searchTime:[
         {
           value:1,
@@ -76,60 +48,61 @@ export default {
         },
         {
           value:2,
-          label:'一周'
+          label:'最近一周'
         },
         {
           value:3,
-          label:'一月'
+          label:'最近一个月'
         },
         {
           value:4,
-          label:'三月'
+          label:'最近三个月'
         }
       ],
       searchTimeSelect:1,         //搜索时间选中
+      relativeTime:['',''],                  //搜索相对时间转换
 
-      reasonForOperationInput:"",   //操作理由输入框
+      submitForm:[],    //操作理由表单
 
       reasonForOperation:[
         {
-          value:1,
+          value:'无',
           label:'无'
         },
         {
-          value:2,
+          value:'广告/SPAM',
           label:'广告/SPAM'
         },
         {
-          value:3,
+          value:'恶意灌水',
           label:'恶意灌水'
         },
         {
-          value:4,
+          value:'违规内容',
           label:'违规内容'
         },
         {
-          value:5,
+          value:'文不对题',
           label:'文不对题'
         },
         {
-          value:6,
+          value:'重复发帖',
           label:'重复发帖'
         },
         {
-          value:7,
+          value:'我很赞同',
           label:'我很赞同'
         },
         {
-          value:8,
+          value:'精品文章',
           label:'精品文章'
         },
         {
-          value:9,
+          value:'原创内容',
           label:'原创内容'
         },
         {
-          value:10,
+          value:'其他',
           label:'其他'
         }
       ],
@@ -138,32 +111,21 @@ export default {
       appleAll:false,             //应用其他页面
 
       themeList:[],               //主题列表
-      currentPaga: 1,              //当前页数
+      currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
 
-      checkedTheme:[],            //多选列表初始化
+      //未审核0，已审核\通过1，已忽略2
 
     }
   },
-  computed:mapState({
-    searchData:state => state.admin.searchData
-  }),
+  // computed:mapState({
+  //   searchData:state => state.admin.searchData
+  // }),
 
   methods:{
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-
-      if (this.multipleSelection.length >= 1){
-        this.deleteStatus = false
-      } else {
-        this.deleteStatus = true
-      }
-
-    },
-
-    reasonForOperationChange(val){
-      switch (val){
+    reasonForOperationChange(event,index){
+      /*switch (val){
         case 1:
           this.reasonForOperationInput = '无';
           break;
@@ -194,7 +156,8 @@ export default {
         case 10:
           this.reasonForOperationInput = '其他';
           break;
-      }
+      }*/
+      this.submitForm[index].message = event;
     },
 
     handleCurrentChange(val) {
@@ -204,18 +167,116 @@ export default {
     },
 
     themeSearch(){
-      let data = {
-        'searchUserName' : this.searchUserName
+      this.getThemeList();
+    },
+
+    searchTimeChange(val){
+      let end = new Date();
+      let start = new Date();
+      this.relativeTime = [];
+
+      switch (val){
+        case 1:
+          this.relativeTime.push('','');
+          break;
+        case 2:
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+          this.relativeTime.push(this.formatDate(end),this.formatDate(start));
+          break;
+        case 3:
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+          this.relativeTime.push(this.formatDate(end),this.formatDate(start));
+          break;
+        case 4:
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+          this.relativeTime.push(this.formatDate(end),this.formatDate(start));
+          break;
+        default:
+          this.$message.error('搜索日期选择错误，请重新选择！或 刷新页面（F5）');
       }
 
-      console.log(data);
+      console.log('相对时间：'+this.relativeTime);
+
+    },
+
+    submitClick() {
+      console.log(this.submitForm);
+      this.patchThreadsBatch(this.submitForm);
+    },
+
+    radioChange(event,index){
+      switch (event){
+        case 0:
+          this.submitForm[index].attributes.isApproved = 1;
+          break;
+        case 1:
+          this.submitForm[index].attributes.isDeleted = true;
+          break;
+        case 2:
+          this.submitForm[index].attributes.isApproved = 2;
+          break;
+      }
+    },
+
+    allOperationsSubmit(val){
+      switch (val){
+        case 1:
+          this.submitForm.forEach((item,index)=>{
+              this.submitForm[index].attributes.isApproved = 1;
+          });
+          break;
+        case 2:
+          this.submitForm.forEach((item,index)=>{
+            this.submitForm[index].attributes.isDeleted = true;
+          });
+          break;
+        case 3:
+          this.submitForm.forEach((item,index)=>{
+            this.submitForm[index].attributes.isApproved = 2;
+          });
+          break;
+      }
+      this.patchThreadsBatch(this.submitForm);
+    },
+
+    singleOperationSubmit(val,categoryId,themeId){
+      let data = {
+        "type": "threads",
+        "attributes": {
+          "isApproved": 1,
+          'isDeleted':false
+        },
+        "relationships": {
+          "category": {
+            "data": {
+              "type": "categories",
+              "id": categoryId
+            }
+          }
+        }
+      };
+      switch (val){
+        case 1:
+          data.attributes.isApproved = 1;
+          this.patchThreads(data,themeId);
+          break;
+        case 2:
+          data.attributes.isDeleted = true;
+          this.patchThreads(data,themeId);
+          break;
+        case 3:
+          data.attributes.isApproved = 2;
+          this.patchThreads(data,themeId);
+          break;
+        default:
+          console.log("系统错误，请刷新页面");
+      }
     },
 
     /*
     * 格式化日期
     * */
     formatDate(data){
-      // console.log(this.appCommonH.getStrTime('y',data));
       return moment(data).format('YYYY-MM-DD HH:mm')
     },
 
@@ -223,76 +284,122 @@ export default {
     * 请求接口
     * */
     getThemeList(pageNumber){
-      let searchData = this.searchData;
-      const params = {
-        'filter[isDeleted]':'no',
-        'filter[categoryId]':searchData.categoryId,
-        'page[number]':pageNumber,
-        'page[size]':searchData.pageSelect,
-        'filter[q]':searchData.themeKeyWords,
-        'filter[createdAtBegin]':searchData.dataValue[0],
-        'filter[createdAtEnd]':searchData.dataValue[1],
-        'filter[viewCountGt]':searchData.viewedTimesMin,
-        'filter[viewCountLt]':searchData.viewedTimesMax,
-        'filter[postCountGt]':searchData.numberOfRepliesMin,
-        'filter[postCountLt]':searchData.numberOfRepliesMax,
-        'filter[isEssence]':searchData.essentialTheme,
-        'filter[isSticky]':searchData.topType
-      };
-      params.include = 'category,lastPostedUser,user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-      this.apiStore.find('threads', params).then(data => {
-        this.themeList = data;
-        this.total = data.payload.meta.threadCount;
-        this.pageCount = data.payload.meta.pageCount;
-
-        /*初始化主题多选框列表*/
-        this.checkedTheme = [];
-        data.forEach(()=>{
-          this.checkedTheme.push({
-            id:'',
-            passing:false,
-            delete:false,
-            ignore:false
-          })
-        });
-      });
-
-      /*this.appFetch({
+      this.appFetch({
         url:'threads',
         method:'get',
         data:{
           'filter[isDeleted]':'no',
-          'filter[username]':searchData.themeAuthor,
-          'filter[categoryId]':searchData.categoryId,
+          'filter[username]':this.searchUserName,
           'page[number]':pageNumber,
-          'page[size]':searchData.pageSelect,
-          'filter[q]':searchData.themeKeyWords,
-          'filter[createdAtBegin]':searchData.dataValue[0],
-          'filter[createdAtEnd]':searchData.dataValue[1],
-          'filter[viewCountGt]':searchData.viewedTimesMin,
-          'filter[viewCountLt]':searchData.viewedTimesMax,
-          'filter[postCountGt]':searchData.numberOfRepliesMin,
-          'filter[postCountLt]':searchData.numberOfRepliesMax,
-          'filter[isEssence]':searchData.essentialTheme,
-          'filter[isSticky]':searchData.topType
+          'page[size]':this.pageSelect,
+          'filter[q]':this.keyWords,
+          'filter[isApproved]':this.searchReviewSelect,
+          'filter[createdAtBegin]':this.relativeTime[1],
+          'filter[createdAtEnd]':this.relativeTime[0],
+          'filter[categoryId]':this.categoriesListSelect
         }
       }).then(res=>{
+        console.log(res);
+        this.themeList=[];
+        this.submitForm = [];
         this.themeList = res.readdata;
         this.total = res.meta.threadCount;
         this.pageCount = res.meta.pageCount;
 
-        this.themeListAll = [];
         this.themeList.forEach((item,index)=>{
-          this.themeListAll.push(item.id);
+          this.submitForm.push({
+            message:'',
+            Select:'无',
+            radio:'',
+            type:'threads',
+            id:item._data.id,
+            attributes: {
+              isApproved: 0,
+              isDeleted:false
+            },
+            relationships: {
+              category: {
+                data: {
+                  type: "categories",
+                  id: item.category._data.id
+                }
+              }
+            }
+          })
         });
       }).catch(err=>{
         console.log(err);
-      })*/
+      })
 
     },
+    getCategories(){
+      this.appFetch({
+        url:'categories',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        this.categoriesList = [];
+        res.data.forEach((item,index)=>{
+          this.categoriesList.push({
+            name:item.attributes.name,
+            id:item.id
+          })
+        })
+      }).catch(err=>{
+        console.log(err);
+      })
+
+    },
+    patchThreadsBatch(data){
+      this.appFetch({
+        url:'threadsBatch',
+        method:'patch',
+        data:{
+          data
+        }
+      }).then(res=>{
+        if (res.meta && res.data){
+          this.$message.error('操作失败！');
+        }else {
+          this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+        }
+        console.log(res);
+      }).catch(err=>{
+
+      })
+    },
+    patchThreads(data,id){
+      this.appFetch({
+        url:'threads',
+        method:'patch',
+        splice:'/' + id,
+        data:{
+          data
+        }
+      }).then(res=>{
+        if (res.meta && res.data){
+          this.checkedTheme = [];
+          this.$message.error('操作失败！');
+        }else {
+          this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+
   },
 
   created(){
+    this.getCategories();
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
   },
 

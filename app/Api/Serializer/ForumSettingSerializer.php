@@ -65,13 +65,15 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportImgExt' => $this->settings->get('support_img_ext'),
             'supportFileExt' => $this->settings->get('support_file_ext'),
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
+
+            // 腾讯云设置
             'qcloud' => (bool)$this->settings->get('qcloud'),
-            'qcloudCmsImage' => (bool)$this->settings->get('qcloud_cms_image'),
-            'qcloudCmsText' => (bool)$this->settings->get('qcloud_cms_text'),
-            'qcloudSms' => (bool)$this->settings->get('qcloud_sms'),
-            'qcloudSecretId' => $this->decrypt($this->settings->get('secretId', 'qcloud')),
-            'qcloudSecretKey' => $this->decrypt($this->settings->get('secretKey', 'qcloud')),
-            'qcloudToken' => $this->decrypt($this->settings->get('token', 'qcloud', '')),
+            'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image'),
+            'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text'),
+            'qcloud_sms' => (bool)$this->settings->get('qcloud_sms'),
+            'qcloud_secret_id' => $this->decrypt($this->settings->get('qcloud_secret_id')),
+            'qcloud_secret_key' => $this->decrypt($this->settings->get('qcloud_secret_key')),
+            'qcloud_token' => $this->decrypt($this->settings->get('qcloud_token')),
 
             // 登陆配置
             'wechat_h5'     => (bool) $this->settings->get('wechat_h5', 'wechat_h5'),

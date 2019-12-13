@@ -1,9 +1,8 @@
 <template>
     <div class="page-box">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPags"
+        :current-page="currentPags"
         :page-size="pageSize"
         layout="total, prev, pager, next,jumper"
         :total="total">

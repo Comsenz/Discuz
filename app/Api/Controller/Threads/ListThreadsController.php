@@ -46,11 +46,13 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'deletedUser',
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
         'rewardedUsers',
+        'lastDeletedLog',
     ];
 
     /**
@@ -62,6 +64,7 @@ class ListThreadsController extends AbstractListController
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
         'rewardedUsers',
+        'lastDeletedLog',
     ];
 
     /**
@@ -161,6 +164,19 @@ class ListThreadsController extends AbstractListController
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
         }
 
+        // 特殊关联：最后一次删除的日志
+        if (in_array('lastDeletedLog', $specialLoad)) {
+            $threads->map(function ($thread) {
+                $log = $thread->logs()
+                    ->with('user')
+                    ->where('action', 'hide')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                $thread->setRelation('lastDeletedLog', $log);
+            });
+        }
+
         // 付费主题，不返回内容
         if (! $actor->isAdmin()) {
             $allRewardedThreads = $actor->orders()
@@ -226,8 +242,19 @@ class ListThreadsController extends AbstractListController
 
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
-            $query->leftJoin('users', 'users.id', '=', 'threads.user_id')
-                ->where('users.username', 'like', "%{$username}%");
+            $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
+                ->where('users1.username', 'like', "%{$username}%");
+        }
+
+        // 操作删除者 ID
+        if ($deletedUserId = Arr::get($filter, 'deletedUserId')) {
+            $query->where('threads.deleted_user_id', $deletedUserId);
+        }
+
+        // 操作删除者用户名
+        if ($deletedUsername = Arr::get($filter, 'deletedUsername')) {
+            $query->leftJoin('users as users2', 'users2.id', '=', 'threads.deleted_user_id')
+                ->where('users2.username', 'like', "%{$deletedUsername}%");
         }
 
         // 发表于（开始时间）
@@ -238,6 +265,16 @@ class ListThreadsController extends AbstractListController
         // 发表于（结束时间）
         if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
             $query->where('threads.created_at', '<=', $createdAtEnd);
+        }
+
+        // 删除于（开始时间）
+        if ($deletedAtBegin = Arr::get($filter, 'deletedAtBegin')) {
+            $query->where('threads.deleted_at', '>=', $deletedAtBegin);
+        }
+
+        // 删除于（结束时间）
+        if ($deletedAtEnd = Arr::get($filter, 'deletedAtEnd')) {
+            $query->where('threads.deleted_at', '<=', $deletedAtEnd);
         }
 
         // 浏览次数（大于）

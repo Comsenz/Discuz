@@ -72,6 +72,8 @@ export default {
       this.isIndeterminate = false;
       */
 
+      console.log(this.themeListAll);
+      console.log(val);
       this.checkedTheme = val ? this.themeListAll : [];
       this.isIndeterminate = false;
     },
@@ -245,69 +247,39 @@ export default {
     * */
     getThemeList(pageNumber){
       let searchData = this.searchData;
-     /* const params = {
-        'filter[isDeleted]':'no',
-        'filter[categoryId]':searchData.categoryId,
-        'page[number]':pageNumber,
-        'page[size]':searchData.pageSelect,
-        'filter[q]':searchData.themeKeyWords,
-        'filter[createdAtBegin]':searchData.dataValue[0],
-        'filter[createdAtEnd]':searchData.dataValue[1],
-        'filter[viewCountGt]':searchData.viewedTimesMin,
-        'filter[viewCountLt]':searchData.viewedTimesMax,
-        'filter[postCountGt]':searchD  ata.numberOfRepliesMin,
-        'filter[postCountLt]':searchData.numberOfRepliesMax,
-        'filter[isEssence]':searchData.essentialTheme,
-        'filter[isSticky]':searchData.topType
-      };
-      params.include = 'category,lastPostedUser,user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-      this.apiStore.find('threads', params).then(data => {
-        this.themeList = data;
-        this.total = data.payload.meta.threadCount;
-        this.pageCount = data.payload.meta.pageCount;
 
-        /!*初始化主题多选框列表*!/
-        this.checkedTheme = [];
-        data.forEach(()=>{
-          this.checkedTheme.push({
-            id:'',
-            status:false
-          })
-        });
+       this.appFetch({
+         url:'threads',
+         method:'get',
+         data:{
+           'filter[isDeleted]':'no',
+           'filter[isApproved]':'1',
+           'filter[username]':searchData.themeAuthor,
+           'filter[categoryId]':searchData.categoryId,
+           'page[number]':pageNumber,
+           'page[size]':searchData.pageSelect,
+           'filter[q]':searchData.themeKeyWords,
+           'filter[createdAtBegin]':searchData.dataValue[0],
+           'filter[createdAtEnd]':searchData.dataValue[1],
+           'filter[viewCountGt]':searchData.viewedTimesMin,
+           'filter[viewCountLt]':searchData.viewedTimesMax,
+           'filter[postCountGt]':searchData.numberOfRepliesMin,
+           'filter[postCountLt]':searchData.numberOfRepliesMax,
+           'filter[isEssence]':searchData.essentialTheme,
+           'filter[isSticky]':searchData.topType
+         }
+       }).then(res=>{
+         this.themeList = res.readdata;
+         this.total = res.meta.threadCount;
+         this.pageCount = res.meta.pageCount;
 
-      });*/
-
-     this.appFetch({
-       url:'threads',
-       method:'get',
-       data:{
-         'filter[isDeleted]':'no',
-         'filter[username]':searchData.themeAuthor,
-         'filter[categoryId]':searchData.categoryId,
-         'page[number]':pageNumber,
-         'page[size]':searchData.pageSelect,
-         'filter[q]':searchData.themeKeyWords,
-         'filter[createdAtBegin]':searchData.dataValue[0],
-         'filter[createdAtEnd]':searchData.dataValue[1],
-         'filter[viewCountGt]':searchData.viewedTimesMin,
-         'filter[viewCountLt]':searchData.viewedTimesMax,
-         'filter[postCountGt]':searchData.numberOfRepliesMin,
-         'filter[postCountLt]':searchData.numberOfRepliesMax,
-         'filter[isEssence]':searchData.essentialTheme,
-         'filter[isSticky]':searchData.topType
-       }
-     }).then(res=>{
-       this.themeList = res.readdata;
-       this.total = res.meta.threadCount;
-       this.pageCount = res.meta.pageCount;
-
-       this.themeListAll = [];
-       this.themeList.forEach((item,index)=>{
-         this.themeListAll.push(item.id);
-       });
-     }).catch(err=>{
-       console.log(err);
-     })
+         this.themeListAll = [];
+         this.themeList.forEach((item,index)=>{
+           this.themeListAll.push(item._data.id);
+         });
+       }).catch(err=>{
+         console.log(err);
+       })
 
 
     },
