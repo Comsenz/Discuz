@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Api\Controller\Emoji;
 
@@ -11,13 +10,16 @@ use Tobscure\JsonApi\Document;
 
 class ListEmojiController extends AbstractListController
 {
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = EmojiSerializer::class;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
-        $actor->id = 1;
-
         return Emoji::all();
     }
 }

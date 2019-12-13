@@ -3,20 +3,10 @@
 
 namespace App\Console\Commands;
 
-use Discuz\Console\AbstractCommand;
-use Discuz\Foundation\Application;
+use Illuminate\Console\Command;
 
-class StorageLinkCommand extends AbstractCommand
+class StorageLinkCommand extends Command
 {
-    protected $app;
-
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-
-        parent::__construct();
-    }
-
     /**
      * The console command signature.
      *
@@ -29,7 +19,7 @@ class StorageLinkCommand extends AbstractCommand
      *
      * @var string
      */
-    protected $description = '创建 "storage/app/public" 的软连接到 "public/storage"';
+    protected $description = 'Create a symbolic link from "public/storage" to "storage/app/public"';
 
     /**
      * Execute the console command.
@@ -38,15 +28,16 @@ class StorageLinkCommand extends AbstractCommand
      */
     public function handle()
     {
-        if (file_exists(base_path('public/storage'))) {
-            return $this->error('"public/storage" 目录已存在.');
+        if (file_exists(public_path('storage'))) {
+            return $this->error('The "public/storage" directory already exists.');
         }
 
-        $this->app->make('files')->link(
-            storage_path('app/public'), base_path('public/storage')
+        $this->laravel->make('files')->link(
+            storage_path('app/public'), public_path('storage')
         );
 
-        $this->info('目录 [public/storage] 已创建成功.');
+        $this->info('The [public/storage] directory has been linked.');
     }
 }
+
 

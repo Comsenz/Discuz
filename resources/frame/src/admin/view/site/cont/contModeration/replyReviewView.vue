@@ -127,8 +127,8 @@
 </template>
 
 <script>
-import '../../../scss/site/contStyle.scss';
-import replyReviewCon from '../../../controllers/site/cont/replyReviewCon'
+import '../../../../scss/site/contStyle.scss';
+import replyReviewCon from '../../../../controllers/site/cont/replyReviewCon'
 export default {
     name: "reply-review-view",
   ...replyReviewCon
