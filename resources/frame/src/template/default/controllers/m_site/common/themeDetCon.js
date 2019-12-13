@@ -32,7 +32,7 @@ export default {
     },
     ischeckShow:{ //组件是否有选择按钮
       ischeckShow:false
-    }
+    },
   },
   watch:{
   },

@@ -28,7 +28,7 @@ export default {
         url:'notice',
         method:'get',
         data:{
-          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          // include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
           type:3
         }
       }).then(res=>{

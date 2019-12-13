@@ -38,13 +38,15 @@ export default {
   },
   methods:{
     myCollection(){
+      console.log('33333333333333333333333')
       this.appFetch({
-        url:'user',
+        url:'collection',
         method:'get',
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
         }
       }).then(data=>{
+        console.log(data)
         this.collectionList = data.readdata;
       })
         // const params = {

@@ -17,10 +17,20 @@ export default {
   },
   methods:{
     myLike(){
-      this.apiStore.find('notice',{type:2}).then(res=>{
-        // console.log(res[0].user_id(), res[0].detail().post_content);
-        this.likeList = res
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          // include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          type:2
+        }
+      }).then(res=>{
+        this.likeList = res.readdata;
       })
+      // this.apiStore.find('notice',{type:2}).then(res=>{
+      //   // console.log(res[0].user_id(), res[0].detail().post_content);
+      //   this.likeList = res
+      // })
     }
   },
   created(){

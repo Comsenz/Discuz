@@ -50,8 +50,6 @@ export default {
           delete query.radio1;
         }
       }
-
-      console.log(query)
       this.$router.push({path:'/admin/user-search-list', query})
     },
 
@@ -69,7 +67,7 @@ export default {
           }
         })
       } catch(err){
-
+        console.error(err, 'getUserList')
       }
     },
 

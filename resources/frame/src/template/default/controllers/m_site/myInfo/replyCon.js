@@ -19,12 +19,13 @@ export default {
       this.appFetch({
         url:'notice',
         method:'get',
-        data:{include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+        data:{
+          // include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
           type:1
         }
       }).then(res=>{
         this.replyList = res.readdata;
-        console.log(res.readdata)
+        console.log(res)
         console.log(this.replyList)
       })
       // const params = {

@@ -1,10 +1,10 @@
 <template>
   <div class="user-details-box">
     <div class="details-wallet-header">
-      <p class="details-wallet-header__name">admin（UID：13）</p>
+      <p class="details-wallet-header__name">{{this.userInfo.username}}（UID：{{this.userInfo.id}}）</p>
       <i class="details-wallet-header__i"></i>
       <span class="details-wallet-header__details">详情</span>
-      <span @click="$router.push({path:'/admin/wallet'})">钱包</span>
+      <span @click="$router.push({path:'/admin/wallet', query: query})">钱包</span>
     </div>
 
     <Card>
@@ -36,7 +36,7 @@
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <el-button type="text">删除</el-button>
+      <el-button type="text" @click="deleteImage">删除</el-button>
     </Card>
 
     <Card header="新密码：">
@@ -47,13 +47,13 @@
 
     <Card header="手机号：">
       <CardRow>
-        <el-input></el-input>
+        <el-input v-model="userInfo.mobile"></el-input>
       </CardRow>
     </Card>
 
     <Card header="状态：">
       <CardRow >
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="userInfo.status" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -70,23 +70,23 @@
     </Card>
 
     <Card header="注册时间：">
-      <p>2011-1-1 13:19</p>
+      <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="注册IP：">
-      <p>192.168.0.1</p>
+      <p>{{userInfo.registerIp}}</p>
     </Card>
 
     <Card header="最后登录时间：">
-      <p>2011-1-1 13:19</p>
+      <p>{{$moment(userInfo.updatedAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="最后登录IP：">
-      <p>122.122.231.231</p>
+      <p>{{userInfo.lastLoginIp}}</p>
     </Card>
 
     <Card header="注册时间：">
-      <p>2011-1-1 13:19</p>
+      <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="微信昵称：">

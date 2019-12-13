@@ -2,7 +2,7 @@
   <div class="reply-my-box my-info-money-header">
     <comHeader title="打赏我的"></comHeader>
     <div class="content">
-        <Header :userInfoList="rewardList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <Header :userInfoList="rewardList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false"  :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
         <ThemeDet :themeList="rewardList"></ThemeDet>
     </div>
