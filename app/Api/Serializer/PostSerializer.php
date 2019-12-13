@@ -88,6 +88,15 @@ class PostSerializer extends AbstractSerializer
      * @param $post
      * @return Relationship
      */
+    protected function deletedUser($post)
+    {
+        return $this->hasOne($post, UserSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
     protected function thread($post)
     {
         return $this->hasOne($post, ThreadSerializer::class);
@@ -127,5 +136,14 @@ class PostSerializer extends AbstractSerializer
     public function logs($post)
     {
         return $this->hasMany($post, OperationLogSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    public function lastDeletedLog($post)
+    {
+        return $this->hasOne($post, OperationLogSerializer::class);
     }
 }
