@@ -8,19 +8,19 @@ export default {
       loginStatus:'default',   //default h5 applets pc
       settingStatus: [{
         name: '公众号接口配置',
-        type: 'wechat_h5',
+        type: 'offiaccount_close',
         description: '用户在微信内使用微信授权登录',
         status:'',
         icon:'iconH'
       }, {
         name: '小程序微信授权登录',
-        type:'wechat_min',
+        type:'miniprogram_close',
         description: '用户在小程序使用微信授权登录',
         status:'',
         icon:'iconxiaochengxu'
       }, {
         name: 'PC端微信扫码登录',
-        type:'wechat_pc',
+        type:'oplatform_close',
         description: '用户在PC的网页使用微信扫码登录',
         status:'',
         icon:'iconweixin'
@@ -40,22 +40,23 @@ export default {
         data:{
         }
       }).then(data=>{
-        if(data.readdata._data.wechat_h5){
-          this.settingStatus[0].status = true;
-        } else {
+        console.log(data.readdata._data.passport);
+        if(data.readdata._data.passport.offiaccount_close == '0'){
           this.settingStatus[0].status = false;
-        }
-        if(data.readdata._data.wechat_min){
-          this.settingStatus[1].status = true;
         } else {
+          this.settingStatus[0].status = true;
+        }
+        if(data.readdata._data.passport.miniprogram_close == '0'){
           this.settingStatus[1].status = false;
-        }
-        if(data.readdata._data.wechat_pc){
-          this.settingStatus[2].status = true;
         } else {
-          this.settingStatus[2].status = false;
+          this.settingStatus[1].status = true;
         }
-        // this.$message('提交成功');
+        if(data.readdata._data.passport.oplatform_close == '0'){
+          this.settingStatus[2].status = false;
+        } else {
+          this.settingStatus[2].status = true;
+        }
+        // this.$message({'修改成功'});
       }).catch(error=>{
         // console.log('失败');
       })
@@ -67,16 +68,18 @@ export default {
         query: {type:type}
       });
     },
+    //修改配置状态
     loginSetting(index,type,status){
-      if(type == 'wechat_h5') {
-        this.changeSettings('wechat_h5',status);
-      } else if( type == 'wechat_min'){
-        this.changeSettings('wechat_min',status);
+      if(type == 'offiaccount_close') {
+        this.changeSettings('offiaccount_close',status,'wx_offiaccount');
+      } else if( type == 'miniprogram_close'){
+        this.changeSettings('miniprogram_close',status,'wx_miniprogram');
       } else {
-        this.changeSettings('wechat_pc',status);
+        this.changeSettings('oplatform_close',status,'wx_oplatform');
       }
     },
-    changeSettings(typeVal,statusVal){
+    //修改配置时请求接口
+    changeSettings(typeVal,statusVal,TagVal){
       //登录设置状态修改
       this.appFetch({
         url:'settings',
@@ -87,14 +90,12 @@ export default {
              "attributes":{
               "key":typeVal,
               "value":statusVal,
-              "tag": typeVal
+              "tag": TagVal
              }
             }
            ]
-
         }
       }).then(data=>{
-        // console.log(data)
         this.$message({
           message: '修改成功',
           type: 'success'

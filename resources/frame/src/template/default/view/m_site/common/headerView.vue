@@ -6,7 +6,7 @@
       position="right"
       :style="{ height: '100%' }"
    >
-      <sidebar></sidebar>
+    <sidebar :isPayVal = "isPayVal"></sidebar>
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
@@ -23,14 +23,17 @@
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
       <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" v-show="logoShow">
-      <div class="circleDet" v-show="perDetShow">
+      <div class="circleDet" v-show="perDetShow" v-model="siteInfo">
         <span>主题：{{siteInfo._data.threads}}</span>
         <span>成员：{{siteInfo._data.members}}</span>
         <span>站长：{{siteInfo._data.siteAuthor.username}}</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
-        <van-tabs v-model="navActi">
-          <van-tab v-for="(cateChi, index) in categories" :title="cateChi._data.name" :key="index">
+        <van-tabs v-model="navActi" >
+          <van-tab v-for="(cateChi, index) in categories" :key="index">
+            <span slot="title" v-on:click="categoriesCho(cateChi._data.id)">
+                {{cateChi._data.name}}
+            </span>
           </van-tab>
         </van-tabs>
       </div>

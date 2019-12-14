@@ -128,7 +128,8 @@ export default {
           require(['../view/m_site/home/circleInviteView'],resolve)
         },
         metaInfo:{
-          title:"付费站点，菜单栏内的邀请"
+          title:"付费站点，菜单栏内的邀请",
+          oneHeader: true
         }
       },
       'circle-manage-invite':{
@@ -140,7 +141,7 @@ export default {
           oneHeader: true
         }
       },
-      'management-circles/:userId':{
+      'management-circles':{
         comLoad:function (resolve) {
           require(['../view/m_site/management/managementCirclesView'],resolve)
         },
@@ -166,7 +167,7 @@ export default {
         }
 
       },
-      'circle-info/:userId':{
+      'circle-info':{
         comLoad:function (resolve) {
           require(['../view/m_site/management/circleInfoView'],resolve)
         },
@@ -351,7 +352,7 @@ export default {
           title:"提现记录"
         }
       },
-      'my-notice/:userId':{
+      'my-notice':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myNoticeView'],resolve)
         },
@@ -359,7 +360,7 @@ export default {
           title:"我的通知"
         }
       },
-      'my-collection/:userId':{
+      'my-collection':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myCollectionView'],resolve)
         },
@@ -400,7 +401,7 @@ export default {
           title:"点赞我的"
         }
       },
-      'my-wallet/:userId':{
+      'my-wallet':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myWalletView'],resolve)
         },

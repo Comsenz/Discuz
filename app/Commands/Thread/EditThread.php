@@ -9,8 +9,11 @@
 
 namespace App\Commands\Thread;
 
+use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
+use App\Events\Users\UserRefreshCount;
+use App\Models\Category;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -87,12 +90,6 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        if (isset($attributes['categoryId'])) {
-            $this->assertCan($this->actor, 'categorize', $thread);
-
-            $thread->category_id = $attributes['categoryId'];
-        }
-
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
 
@@ -138,6 +135,11 @@ class EditThread
         $thread->save();
 
         $this->dispatchEventsFor($thread, $this->actor);
+
+//        $this->events->dispatch(
+//            new UserRefreshCount($thread->user),
+//            new CategoryRefreshCount($thread->category)
+//        );
 
         return $thread;
     }

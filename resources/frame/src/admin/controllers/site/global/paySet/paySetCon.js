@@ -7,7 +7,7 @@ export default {
     return {
       settingStatus:[{
           name: '微信支付',
-          type: 'wechat_h5',
+          type: 'wxpay_close',
           description: '用户在电脑网页使用微信扫码支付 或  微信外的手机浏览器、微信内h5、小程序使用微信支付',
           status:''
         }]
@@ -25,23 +25,20 @@ export default {
         data:{
         }
       }).then(data=>{
-        if(data.readdata._data.wechat_h5){
-          this.settingStatus[0].status = true;
-        } else {
+        // console.log(data);
+        if(data.readdata._data.wxpay_close == '0'){
           this.settingStatus[0].status = false;
+        } else {
+          this.settingStatus[0].status = true;
         }
       })
     },
     loginSetting(index,type,status){
-      if(type == 'wechat_h5') {
-        this.changeSettings('wechat_h5',status);
-      } else if( type == 'wechat_min'){
-        this.changeSettings('wechat_min',status);
-      } else {
-        this.changeSettings('wechat_pc',status);
+      if(type == 'wxpay_close') {
+        this.changeSettings('wxpay_close',status,'wxpay');
       }
     },
-    changeSettings(typeVal,statusVal){
+    changeSettings(typeVal,statusVal,TagVal){
       // console.log(statusVal);
       //登录设置状态修改
       this.appFetch({
@@ -53,7 +50,7 @@ export default {
              "attributes":{
               "key":typeVal,
               "value":statusVal,
-              "tag": typeVal
+              "tag": TagVal
              }
             }
            ]
