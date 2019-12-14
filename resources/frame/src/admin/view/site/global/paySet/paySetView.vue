@@ -24,7 +24,7 @@
         >
           <template slot-scope="scope">
             <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
-            <span v-else class="iconfont iconicon_"  ></span>
+            <span v-else class="iconfont iconicon_"></span>
           </template>
         </el-table-column>
         <el-table-column
