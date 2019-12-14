@@ -67,21 +67,22 @@
             </CardRow>
           </Card>
 
-          <Card  header="主题打赏金额分成比例：">
-            <CardRow description="主题打赏的分成比例设置">
-              <div class="proportion-box">
-                <span>作者</span>
-                <el-input class="" size="small" v-model="siteAuthorScale"></el-input>
-              </div>
-              <div class="proportion-box">
-                <span>平台(站长)</span>
-                <el-input size="small" v-model="siteMasterScale"></el-input>
-              </div>
-            </CardRow>
-          </Card>
         </div>
 
       </el-collapse-transition>
+
+      <Card  header="主题打赏金额分成比例：">
+        <CardRow description="主题打赏的分成比例设置">
+          <div class="proportion-box">
+            <span>作者</span>
+            <el-input class="" size="small" v-model="siteAuthorScale"></el-input>
+          </div>
+          <div class="proportion-box">
+            <span>平台(站长)</span>
+            <el-input size="small" v-model="siteMasterScale"></el-input>
+          </div>
+        </CardRow>
+      </Card>
 
       <Card header="网站备案信息：">
         <CardRow description="你的Discuz!Q 站点的 ICP 备案编号">
