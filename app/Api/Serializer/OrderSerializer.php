@@ -46,5 +46,13 @@ class OrderSerializer extends AbstractSerializer
     {
         return $this->hasOne($order, ThreadSerializer::class);
     }
-
+    
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function firstPost($order)
+    {
+        return $this->hasOne($order, PostSerializer::class);
+    }
 }

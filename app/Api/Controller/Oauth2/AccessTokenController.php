@@ -66,11 +66,11 @@ class AccessTokenController implements RequestHandlerInterface
             $refreshTokenRepository
         );
 
-        $grant->setRefreshTokenTTL(new DateInterval('P2M')); // refresh tokens will expire after 2 month
+        $grant->setRefreshTokenTTL(new DateInterval(AccessTokenRepository::REFER_TOKEN_EXP)); // refresh tokens will expire after 2 month
 
         $server->enableGrantType(
             $grant,
-            new DateInterval('P1M') // access tokens will expire after 1 mouth
+            new DateInterval(AccessTokenRepository::TOKEN_EXP) // access tokens will expire after 1 mouth
         );
 
         $response = new Response();

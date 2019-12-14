@@ -34,7 +34,6 @@ class GroupPolicy extends AbstractPolicy
      */
     public function findVisibility(User $actor, Builder $query)
     {
-        dd($query);
         // 当前用户是否有权限查看用户组
         if ($actor->cannot($this->getAbility('viewGroup'))) {
             // $query->whereRaw('FALSE');

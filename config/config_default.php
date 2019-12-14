@@ -132,6 +132,7 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
+        App\Providers\OrderServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

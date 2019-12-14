@@ -2,6 +2,7 @@
 
 namespace App\Install\Controller;
 
+use App\Settings\SettingsRepository;
 use Discuz\Web\Controller\AbstractWebController;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\View\Factory;
@@ -70,6 +71,12 @@ class IndexController extends AbstractWebController
 
         if(!$configDirWritable) {
             $problems->push(['message' => 'config 目录不可写']);
+        }
+
+        if($this->app->isInstall()) {
+            $url = $this->app->make(UrlGenerator::class);
+            $setting = $this->app->make(SettingsRepository::class);
+            $problems->push(['message' => '您已安装过站点，请直接访问 <a href="'.$url->to('/').'">'.$setting->get('site_name').'</a>']);
         }
 
         return $problems;

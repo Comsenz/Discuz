@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" ></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 	    <div class="themeTitBox">
@@ -11,14 +11,14 @@
 	    		<span>筛选</span>
 	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>
 	    		<div class="themeList" v-if="showScreen">
-	    			<a href="javascript:;"  @click="choTheme" v-for="(item,index) in themeChoList" :key="index">{{item.typeWo}}</a>
+	    			<a href="javascript:;"  @click="choTheme(item.themeType)" v-for="(item,index) in themeChoList" :key="index">{{item.typeWo}}</a>
 	    		</div>
 	    	</div>
 	    </div>
       <div v-if="themeListCon">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
-      
+
 	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->
 	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">

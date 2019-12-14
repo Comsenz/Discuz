@@ -34,7 +34,6 @@ class EventServiceProvider extends BaseEventServiceProvider
         GroupPolicy::class,
         StopWordPolicy::class,
         UserPolicy::class,
-        'App\Listeners\Wallet\CashReviewSubscriber',
-        'App\Listeners\Order\OrderSubscriber',
+        'App\Listeners\Wallet\CashReviewSubscriber'
     ];
 }
