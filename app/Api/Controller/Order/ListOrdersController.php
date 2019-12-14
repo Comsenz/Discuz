@@ -65,6 +65,7 @@ class ListOrdersController extends AbstractListController
     public $optionalInclude = [
         'thread',
         'user',
+        'thread.firstPost',
     ];
 
     /* The relationships that are included by default.

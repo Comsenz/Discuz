@@ -2,37 +2,49 @@
 
 namespace App\Install\Controller;
 
+use App\Api\Controller\Oauth2\AccessTokenController;
 use App\Console\Commands\KeyGenerate;
 use App\Console\Commands\RsaCertGenerate;
+use App\Models\Group;
+use App\Models\Setting;
+use App\Models\User;
+use App\Passport\Entities\AccessTokenEntity;
+use App\Passport\Entities\ClientEntity;
+use App\Passport\Repositories\AccessTokenRepository;
+use App\Settings\SettingsRepository;
+use DateInterval;
+use DateTimeImmutable;
+use Discuz\Api\Client;
 use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
-use Illuminate\Database\Console\Migrations\MigrateCommand;
-use Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use League\OAuth2\Server\CryptKey;
 use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
-use SplStack;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\NullOutput;
 use Zend\Diactoros\Response\EmptyResponse;
+use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
     protected $app;
-    protected $keyGenerate;
-    protected $certGenerate;
+    protected $input;
+    protected $output;
+    protected $console;
+    protected $apiClient;
 
-    public function __construct(Application $app)
+
+    public function __construct(Application $app, Client $apiClient)
     {
         $this->app = $app;
+        $this->apiClient = $apiClient;
     }
 
     /**
@@ -41,17 +53,33 @@ class InstallController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $input = $request->getParsedBody();
+        $input['ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        //创建数据库
-        $this->installDatabase($input);
-        //创建配置文件
-        $this->installConfig($input);
-        //生成站点唯一key
-        $this->installKeyAndCertGenerate();
-        //初始化数据
-        $this->installInitData($input);
+        try {
+            //创建数据库
+            $this->installDatabase($input);
+            //创建配置文件
+            $this->installConfig($input);
+            //生成站点唯一key和jwt cert
+            $this->installKeyAndCertGenerate();
+            //初始化表
+            $this->installInitMigrate();
+            //初始化默认数据
+            $this->installInItData();
+            //站点名称设置
+            $this->installSiteName($input);
+            //创建管理员用户
+            $this->installAdminUser($input);
+            //auto login Admin user
+            $token = $this->installAutoLogin($input);
+        } catch (Exception $e) {
+            return new HtmlResponse($e->getMessage(), 500);
+        }
 
-        return new EmptyResponse();
+
+        return new JsonResponse([
+            'token' => $token
+        ]);
     }
 
     private function installDatabase($input) {
@@ -80,7 +108,10 @@ class InstallController implements RequestHandlerInterface
         $db = $this->app->make('db');
         $this->app['config']->set('database.connections',[
                 'mysql' => $mysqlConfig,
-                'discuz_mysql' => array_merge($mysqlConfig, ['database' => Arr::get($input, 'mysqlDatabase')])
+                'discuz_mysql' => array_merge($mysqlConfig, [
+                    'database' => Arr::get($input, 'mysqlDatabase'),
+                    'prefix' => Arr::get($input, 'tablePrefix')
+                ])
             ]
         );
 
@@ -132,27 +163,62 @@ class InstallController implements RequestHandlerInterface
     }
 
     private function installKeyAndCertGenerate() {
-        $input = new ArrayInput([]);
-        $output = new BufferedOutput();
+        $this->input = new ArrayInput([]);
+        $this->output = new BufferedOutput();
         //站点唯一key
-        $this->app->make(KeyGenerate::class)->run($input, $output);
+        $this->app->make(KeyGenerate::class)->run($this->input, $this->output);
         //证书
-        $this->app->make(RsaCertGenerate::class)->run($input, $output);
+        $this->app->make(RsaCertGenerate::class)->run($this->input, $this->output);
     }
 
-    private function installInitData($input)
+    private function installInitMigrate()
     {
-        $console = $this->app->make(Kernel::class);
-
-
-
-//        $this->app['config']->set('database.connections.mysql.database', Arr::get($input, 'mysqlDatabase'));
-//        $this->app['db']->reconnection('mysql');
-
-//        dd($this->app['config']->get('database'));
-
-        $aaa = $console->call('migrate', ['--force' => true, '--database' => 'discuz_mysql']);
-
-        dd($aaa);
+        $this->getConsole()->call('migrate', ['--force' => true, '--database' => 'discuz_mysql']);
     }
+
+    private function installInItData()
+    {
+        $this->getConsole()->call('db:seed', ['--force' => true, '--database' => 'discuz_mysql']);
+    }
+
+    private function installSiteName($input)
+    {
+        $this->app->make(SettingsRepository::class)->set('site_name', Arr::get($input, 'forumTitle'));
+    }
+
+    private function installAdminUser(&$input)
+    {
+        if($input['adminPasswordConfirmation'] !== $input['adminPassword']) {
+            throw new Exception('管理员两次密码不一致');
+        }
+
+        $user = new User();
+        $user->truncate();
+        $user->username = Arr::get($input, 'adminUsername');
+        $user->password = Arr::get($input, 'adminPassword');
+        $user->last_login_ip = Arr::get($input, 'ip');
+        $user->register_ip = Arr::get($input, 'ip');
+        $user->save();
+        $input['user_id'] = $user->id;
+
+        $user->groups()->sync(Group::ADMINISTRATOR_ID);
+    }
+
+    private function installAutoLogin($input)
+    {
+        $token = new AccessTokenEntity();
+
+        $token->setPrivateKey(new CryptKey(storage_path('cert/private.key')));
+        $token->setClient(new ClientEntity());
+        $token->setIdentifier($input['user_id']);
+        $token->setExpiryDateTime((new DateTimeImmutable())->add(new DateInterval(AccessTokenRepository::TOKEN_EXP)));
+
+        return $token->__toString();
+    }
+
+
+    private function getConsole() {
+        return $this->console ?? $console = $this->app->make(Kernel::class);
+    }
+
 }

@@ -4,50 +4,41 @@
 import {Bus} from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
+  //接收站点是否收费的值
+  props: {
+    isPayVal: String,
+    required: true
+  },
 	data: function() {
     return {
         avatarUrl:'',
         username:'',
         mobile:'',
         // userId:'',
+        userInfo:{},
 		    sidebarList1: [
 	        {
             text:'我的资料',
 	          name: '我的资料',
 	          path: 'login', // 跳转路径
-	          // query: { // 跳转参数
-           //    index: 1
-	          // },
-            // query:{
-            //   userId:''
-            // },
 	          enentType: ''
 	        },
 	        {
             text:'我的钱包',
 	          name: 'my-wallet',
 	          path: '/my-wallet', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: ''
 	        },
 	        {
             text:'我的收藏',
 	          name: 'my-collection',
 	          path: '/my-collection', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: ''
 	        },
 	        {
             text:'我的通知',
 	          name: 'my-notice',
 	          path: '/my-notice', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: ''
 	        }
 	      ],
@@ -56,64 +47,80 @@ export default {
             text:'站点信息',
 	          name: 'circle-info',
 	          path: '/circle-info', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: ''
 	        },
 	        {
             text:'站点管理',
 	          name: 'management-circles',
 	          path: '/management-circles', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: ''
 	        },
 	        {
             text:'退出登录',
 	          name: 'login-user',
 	          path: '/login-user', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
 	          enentType: 1 // 事件类型
 	        }
 	      ],
 	      sidebarList3: [
 	        {
             text:'邀请朋友',
-	          name: 'invite-join',
-	          path: '/invite-join', // 跳转路径
-	          // query:{
-	          //   userId:''
-	          // },
-	          enentType: ''
+	          name: '',
+	          path: '', // 跳转路径
+	          enentType: '2'
 	        }
 
-	      ]
+	      ],
+        isPayValue:this.isPayVal
 	  }
   },
   created: function() {
+    this.isPayValue = this.isPayVal;
     this.getUserInfo();
+    // console.log(this.isPayValue);
   },
   methods:{
   //获取用户信息
   getUserInfo(){
     var userId = browserDb.getLItem('tokenId');
-      this.apiStore.find('users', userId).then(data => {
-        // console.log(data.data.attributes.mobile);
-        this.avatarUrl = data.data.attributes.avatarUrl;
-        this.username = data.data.attributes.username;
-        this.mobile = data.data.attributes.mobile;
-      });
+      this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice:'/'+userId,
+        data: {
+          include: '',
+        }
+      }).then((res) => {
+        this.userInfo = res.readdata;
+        this.avatarUrl = res.readdata._data.avatarUrl;
+        this.username = res.readdata._data.username;
+        this.mobile = res.readdata._data.mobile;
+      })
+
   },
   sidebarUrl(url,enentType){
     var userId = browserDb.getLItem('tokenId');
     if(enentType == 1){
+      browserDb.removeLItem('tokenId');
+      browserDb.removeLItem('Authorization');
       this.$router.push({ path:url});
+    } else if(enentType == 2){
+      let circlePath = this.sidebarList3[0].path;
+      if(this.isPayValue == 'pay'){
+        //如果是付费的站点
+        // console.log('付费');
+        this.sidebarList3[0].name = 'circle-invite';
+        circlePath = '/circle-invite';
+        this.$router.push({ path:circlePath});
+      } else {
+        //如果是公开的站点
+        // console.log('公开');
+        this.sidebarList3[0].name = 'open-circle';
+        circlePath = '/open-circle';
+        this.$router.push({ path:url});
+      }
     } else {
-      this.$router.push({ path:url+'/'+userId});
+      this.$router.push({ path:url});
     }
   }
 

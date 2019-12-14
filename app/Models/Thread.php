@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_essence
  * @property Post $firstPost
  * @property User $user
+ * @property Category $category
  * @package App\Models
  */
 class Thread extends Model

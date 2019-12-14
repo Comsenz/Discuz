@@ -26,16 +26,20 @@ class SettingsRepository implements ContractsSettingRepository
     public function all()
     {
         $settings = $this->settings ?? $this->cache->get($this->key);
+
         if(true || !$settings) {
             $settings = [];
-            foreach(Setting::all() as $setting) {
+
+            Setting::all()->each(function ($setting) use (&$settings) {
                 $tag = $setting['tag'] ?? 'default';
                 $settings[$tag][$setting['key']] = $setting['value'];
-            }
+            });
+
             $settings = collect($settings);
             $this->cache->put($this->key, $settings);
             $this->settings = $settings;
         }
+
         return $settings;
     }
 
@@ -57,6 +61,10 @@ class SettingsRepository implements ContractsSettingRepository
         Arr::set($settings, $tag.'.'.$key, $value);
 
         $query = Setting::where([['key', $key], ['tag', $tag]]);
+
+        // 加密
+        Setting::setValue($key, $value);
+
         $method = $query->exists() ? 'update' : 'insert';
         $query->$method(compact('key', 'value', 'tag'));
 

@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header></Header>
+	    <!-- <Header></Header> -->
 	    <div class="gap"></div>
 	    <div class="circleLoBox">
 	    	<span class="circleIcon">站点图标</span>
@@ -35,14 +35,14 @@
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+// import Header from '../../m_site/common//headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
-    components:{
-    	Header
-    },
-    ...mSiteHeader,
+    // components:{
+    // 	Header
+    // },
+    // ...mSiteHeader,
     ...mSitePayCircleCon
 }
 

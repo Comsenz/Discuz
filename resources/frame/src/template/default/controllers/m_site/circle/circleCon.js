@@ -14,81 +14,19 @@ export default {
 			themeChoList: [
 				{
 					typeWo: '全部主题',
-					type:'1'
+					type:'1',
+          themeType:''
 				},
 				{
 					typeWo: '精华主题',
-					type:'2'
+					type:'2',
+          themeType:'isEssence'
 				}
 
 			],
-      themeListCon:[
-        // themeDataCon:[
-          // {
-          //   "type": "",
-          //   "id": "",
-          //   "attributes": {
-          //       "avatarUrl":"",
-          //       "title": "",
-          //       "price": "",
-          //       "viewCount": 0,
-          //       "postCount": 0,
-          //       "likeCount": 0,
-          //       "createdAt": "2019-11-12T17:11:00+08:00",
-          //       "updatedAt": "2019-11-12T17:11:00+08:00",
-          //       "isApproved": true,
-          //       "isSticky": false,
-          //       "isEssence": false,
-          //       "isFavorite": false
-          //   },
-            // "rewardList":[
-            //   'bbb',
-            //   'ccccccccc'
-            // ],
-            // "fabulousList":[
-            //   'ddddddddd',
-            //   'ee',
-            //   'ffff'
-            // ],
-          //   "relationships": {
-          //       "user": {
-          //           "data": {
-          //               "type": "users",
-          //               "id": "1"
-          //           }
-          //       },
-          //       "firstPost": {
-          //           "data": {
-          //               "type": "Posts",
-          //               "id": "32"
-          //           }
-          //       }
-          //   }
-          // }
-
-        // ],
-        // themeincludedCon:[
-
-        // ]
-      ],
-      themeNavListCon:[
-        { text: '选项111' },
-        { text: '选项222' },
-        { text: '选项333' }
-        // {
-        //     "type": "classify",
-        //     "id": "6",
-        //     "attributes": {
-        //         "id": 6,
-        //         "name": "户外趣事2",
-        //         "icon": "",
-        //         "description": "户外活动，组织，趣事",
-        //         "property": 0,
-        //         "sort": 1,
-        //         "threads": 0
-        //     }
-        // },
-      ],
+      // themeListCon:false,
+      themeListCon:[],
+      themeNavListCon:[],
       currentData:{},
       replyTagShow: false,
 		}
@@ -112,26 +50,60 @@ export default {
       }
       return this.isWx;
     },
+    // //接收站点是否收费的值
+    // isPayFn (data) {
+    //   // if (data == 'log') {
+    //     console.log(data);
+    //     // this.isPay = data;
+    //   // }
+    // },
+    //初始化请求主题列表数据
+    loadThemeList(filterCondition,filterVal){
+      if(filterCondition == 'isEssence'){
+        this.appFetch({
+          url: 'threads',
+          method: 'get',
+          data: {
+            'filter[isEssence]':filterVal,
+            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+          }
+        }).then((res) => {
+          this.themeListCon = res.readdata;
+        })
 
+      } else if(filterCondition == 'categoryId') {
+        this.appFetch({
+          url: 'threads',
+          method: 'get',
+          data: {
+            'filter[categoryId]':filterVal,
+            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+          }
+        }).then((res) => {
+          this.themeListCon = res.readdata;
+        })
+      } else {
+        this.appFetch({
+          url: 'threads',
+          method: 'get',
+          data: {
+            filterValue:filterVal,
+            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
 
-    loadThemeList(){
-      this.appFetch({
-        url: 'threads',
-        method: 'get',
-        data: {
-          include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-          // page: {
-          //   offset: 20,
-          //   num: 3
-          // },
-        }
-      }).then((res) => {
-        // console.log(res, 'res1111');
-        this.themeListCon = res.readdata;
-      })
+            // page: {
+            //   offset: 20,
+            //   num: 3
+            // },
+          }
+        }).then((res) => {
+          console.log(res.readdata[0], 'res1111');
+          // console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
+          this.themeListCon = res.readdata;
+        })
+      }
+
 
     },
-
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
@@ -147,10 +119,16 @@ export default {
 		        };
 	    	}
 	    },
-
-	    choTheme() {
-	    	console.log('筛选');
+      //筛选
+	    choTheme(themeType) {
+        this.loadThemeList('isEssence',themeType);
+	    	// console.log('筛选');
 	    },
+      //点击分类
+      categoriesChoice(cateId) {
+        // console.log(cateId);
+        this.loadThemeList('categoryId',cateId);
+      },
 	    //跳转到登录页
 	    loginJump:function(isWx){
         let wxCode =this.load();
@@ -200,8 +178,6 @@ export default {
 	        //是否显示筛选内容
 	        this.showScreen = false;
 	    }
-
-
 	},
 	mounted: function() {
 		// this.getVote();

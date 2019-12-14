@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Collection $users
  * @property Collection $permissions
+ * @method truncate()
+ * @method create(array $array)
+ * @method insert(array $array)
  */
 class Group extends Model
 {
@@ -49,7 +52,7 @@ class Group extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'type', 'color', 'icon'];
+    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
 
     /**
      * Define the relationship with the group's permissions.

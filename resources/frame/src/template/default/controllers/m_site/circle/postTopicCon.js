@@ -12,7 +12,9 @@ export default {
       headerTitle:"发布主题",
       selectSort:'选择分类',
       showPopup:false,
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      categories: [],
+      categoriesId: [],
+      cateId:'',
       content:'',
       showFacePanel: false,
       keyboard: false,
@@ -21,12 +23,6 @@ export default {
       list: [],
       footMove: false,
       faceData:[],
-      // winHeight:window.innerHeight,
-      // images_jinri: [
-      //         {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323031&di=3929e3b520f6481e305657c9974531c4&imgtype=0&src=http%3A%2F%2Fpics5.baidu.com%2Ffeed%2F5366d0160924ab189edfd7000e457ec87a890b7b.jpeg%3Ftoken%3D56b0caae9d228ba8aca8b93aceb5a658%26s%3D12705285C45AA7DC7CC9F5860300F085'},
-      //         {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323048&di=80e49646b75febfa1d1c17dc6fbea2b8&imgtype=0&src=http%3A%2F%2Fwx3.sinaimg.cn%2Fbmiddle%2F005Ll667ly1g8gcdaeo4sj30k00f00tg.jpg'},
-      //         {url:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574602323048&di=48329d6ab9abeda00f382fb074dbac8b&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201806%2F19%2F20180619083354_totbw.jpg'}
-      //       ],
       fileList: [
         { url: 'https://img.yzcdn.cn/vant/leaf.jpg' }
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -55,13 +51,17 @@ export default {
       })
   },
   created(){
-    var themeId = this.$route.params.themeId;
-    var postsId = this.$route.params.postsId;
-    var themeContent = this.$route.params.themeContent;
-    console.log(themeId)
-    this.themeId = themeId;
-    this.postsId = postsId;
-    this.content = themeContent;
+    if(this.$route.params.themeId){
+      var themeId = this.$route.params.themeId;
+      var postsId = this.$route.params.postsId;
+      var themeContent = this.$route.params.themeContent;
+      // console.log(themeId)
+      this.themeId = themeId;
+      this.postsId = postsId;
+      this.content = themeContent;
+    }
+    //初始化请求分类接口
+    this.loadCategories();
   },
 
   methods: {
@@ -70,7 +70,7 @@ export default {
         let posts = 'posts/'+this.postsId;
         this.appFetch({
           url:posts,
-          method:"PATCH",
+          method:"post",
           data: {
             "data": {
               "type": "posts",
@@ -81,17 +81,8 @@ export default {
             }
           }
         }).then((res)=>{
+          console.log('2222');
           let a = this.apiStore.pushPayload(res);
-          // console.log(a);
-          // console.log(a.user());
-          // console.log(a.user().id());
-          // console.log(a.thread());
-          // console.log(a.thread().id());
-          // this.$router.push({
-          //   path:'/details',
-          //   name:'details',
-          //   params: { themeId:this.themeId,postsId:postsId,themeContent:content}
-          // })
           this.$router.push({ path:'details'+'/'+this.themeId});
         })
       } else {
@@ -103,11 +94,35 @@ export default {
               "type": "threads",
               "attributes": {
                   "content": this.content,
+              },
+              "relationships": {
+                  "category": {
+                      "data": {
+                          "type": "categories",
+                          "id": this.cateId
+                      }
+                  },
+                  // "attachments": {
+                  //     "data": [
+                  //         {
+                  //             "type": "attachments",
+                  //             "id": 1
+                  //         },
+                  //         {
+                  //             "type": "attachments",
+                  //             "id": 2
+                  //         }
+                  //     ]
+                  // }
               }
+
             }
           },
         }).then((res)=>{
-
+          // console.log(res.readdata._data.id);
+          // console.log('456');
+          var postThemeId = res.readdata._data.id;
+          this.$router.push({ path:'details'+'/'+postThemeId});
         })
 
       }
@@ -136,14 +151,11 @@ export default {
       // 调api ...
     }),
     handleFaceChoose (face) {
-      const value = this.content
-      const el = this.$refs.textarea
-      const startPos = el.selectionStart
-      const endPos = el.selectionEnd
-      const newValue =
-        value.substring(0, startPos) +
-        face +
-        value.substring(endPos, value.length)
+      const value = this.content;
+      const el = this.$refs.textarea;
+      const startPos = el.selectionStart;
+      const endPos = el.selectionEnd;
+      const newValue = value.substring(0, startPos) + face + value.substring(endPos, value.length)
       this.content = newValue
       if (el.setSelectionRange) {
         setTimeout(() => {
@@ -153,18 +165,21 @@ export default {
       }
     },
     // handleKeyboardClick () {
-    //   // this.showFacePanel = false;
-    //   this.showFacePanel = true;
-    //   // this.$refs.textarea.focus()
+    //   this.showFacePanel = false;
+    //   this.$refs.textarea.focus();
+    //   this.footMove = false;
     // },
     addExpression(){
       this.keyboard = !this.keyboard;
-      this.apiStore.find('emojis').then(data => {
-        console.log(data);
-        this.faceData = data.payload.data;
-        // console.log(this.faceData);
-      });
-
+      this.appFetch({
+        url: 'emojis',
+        method: 'get',
+        data: {
+          include: '',
+        }
+      }).then((data) => {
+        this.faceData = data.readdata;
+      })
       this.showFacePanel = !this.showFacePanel;
       this.footMove = !this.footMove;
     },
@@ -174,10 +189,40 @@ export default {
     dClick() {
       this.showPopup = true;
     },
-    onConfirm(value, index) {
+    onConfirm( value, index) {
+      console.log(value);
+      var id = value.id;
+      this.cateId = id;
+      console.log(this.cateId);
+      var text = value.text;
       this.showPopup = false;
-      this.selectSort = value;
-      // Toast(`当前值：${value}, 当前索引：${index}`);
+      this.selectSort = value.text;
+    },
+
+    loadCategories(){
+      this.appFetch({
+        url: 'categories',
+        method: 'get',
+        data: {
+          include: '',
+        }
+      }).then((res) => {
+        console.log(res, 'res1111');
+        var newCategories = [];
+        newCategories = res.readdata;
+        console.log(res.readdata);
+        for(let j = 0,len=newCategories.length; j < len; j++) {
+          // console.log(newCategories[j]._data);
+          this.categories.push(
+            {
+              'text': newCategories[j]._data.name,
+              'id':newCategories[j]._data.id
+            }
+          );
+          // console.log(this.categories)
+          this.categoriesId.push(newCategories[j]._data.id);
+        }
+      })
     },
     onCancel() {
       this.showPopup = false;

@@ -30,10 +30,13 @@ use Illuminate\Support\Carbon;
  * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
+ * @property int $thread_count
  * @property Carbon $joined_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property mixed register_ip
  * @package App\Models
+ * @method truncate()
  */
 class User extends Model
 {
@@ -201,6 +204,22 @@ class User extends Model
     | 常用方法
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Refresh the thread's comments count.
+     *
+     * @return $this
+     */
+    public function refreshThreadCount()
+    {
+        $this->thread_count = $this->threads()
+            ->where('is_approved', 1)
+            ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
     /**
      * 重载通知
      */

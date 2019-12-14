@@ -46,6 +46,16 @@ class ListPostsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
+    public $optionalInclude = [
+        'thread.category',
+        'thread.firstPost',
+        'deletedUser',
+        'lastDeletedLog',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public $sortFields = ['createdAt'];
 
     /**
@@ -90,7 +100,7 @@ class ListPostsController extends AbstractListController
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
-            $this->url->route('threads.index'),
+            $this->url->route('posts.index'),
             $request->getQueryParams(),
             $offset,
             $limit,
@@ -104,7 +114,20 @@ class ListPostsController extends AbstractListController
 
         Post::setStateUser($actor);
 
-        return $posts->load($load);
+        // 特殊关联：最后一次删除的日志
+        if (in_array('lastDeletedLog', $load)) {
+            $posts->map(function ($thread) {
+                $log = $thread->logs()
+                    ->with('user')
+                    ->where('action', 'hide')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                $thread->setRelation('lastDeletedLog', $log);
+            });
+        }
+
+        return $posts->loadMissing($load);
     }
 
     /**
@@ -130,7 +153,7 @@ class ListPostsController extends AbstractListController
             $query->orderBy(Str::snake($field), $order);
         }
 
-        // 搜索事件，给插件一个修改它的机会。
+        // TODO: 搜索事件，给插件一个修改它的机会。
         // $this->events->dispatch(new Searching($search, $criteria));
 
         return $query->get();
@@ -145,9 +168,32 @@ class ListPostsController extends AbstractListController
     {
         $query->where('posts.is_first', false);
 
-        // 作者
-        if ($userId = Arr::get($filter, 'user')) {
+        // 作者 ID
+        if ($userId = Arr::get($filter, 'userId')) {
             $query->where('posts.user_id', $userId);
+        }
+
+        // 作者用户名
+        if ($username = Arr::get($filter, 'username')) {
+            $query->leftJoin('users as users1', 'users1.id', '=', 'posts.user_id')
+                ->where('users1.username', 'like', "%{$username}%");
+        }
+
+        // 操作删除者 ID
+        if ($deletedUserId = Arr::get($filter, 'deletedUserId')) {
+            $query->where('posts.deleted_user_id', $deletedUserId);
+        }
+
+        // 操作删除者用户名
+        if ($deletedUsername = Arr::get($filter, 'deletedUsername')) {
+            $query->leftJoin('users as users2', 'users2.id', '=', 'posts.deleted_user_id')
+                ->where('users2.username', 'like', "%{$deletedUsername}%");
+        }
+
+        // 分类
+        if ($categoryId = Arr::get($filter, 'categoryId')) {
+            $query->leftJoin('threads', 'threads.id', '=', 'posts.thread_id')
+                ->where('threads.category_id', $categoryId);
         }
 
         // 主题

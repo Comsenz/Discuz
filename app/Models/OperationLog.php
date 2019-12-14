@@ -43,6 +43,68 @@ class OperationLog extends Model
     protected $dates = ['created_at'];
 
     /**
+     * 状态改变
+     * (键要对应数据库)
+     * @var array
+     */
+    public static $behavior = [
+        0 => 'disapprove',  // 放入待审核
+        1 => 'approve',     // 审核通过
+        2 => 'ignore',      // 审核忽略
+    ];
+
+    /**
+     * 操作行为
+     * @var array
+     */
+    public static $actionType = [
+        'create',      // 创建
+        'hide',        // 放入回收站
+        'restore',     // 还原
+        'revise',      // 修改内容
+    ];
+
+    /**
+     * get array [behavior]
+     *
+     * @return array
+     */
+    public static function behavior()
+    {
+        return self::$behavior;
+    }
+
+    /**
+     * get array [actionType]
+     *
+     * @return array
+     */
+    public static function actionType()
+    {
+        return self::$actionType;
+    }
+
+    /**
+     * 写入操作日志
+     *
+     * @param User $actor
+     * @param Model $model
+     * @param string $action
+     * @param string $message
+     */
+    public static function writeLog(User $actor, Model $model, string $action, string $message = '')
+    {
+        $log = new static;
+
+        $log->id = $actor->id;
+        $log->action = $action;
+        $log->message = $message;
+        $log->created_at = Carbon::now();
+
+        $model->logs()->save($log);
+    }
+
+    /**
      * @return MorphTo
      */
     public function logFor()
