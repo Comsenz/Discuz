@@ -88,10 +88,11 @@ class OperationLog extends Model
      * 写入操作日志
      *
      * @param User $actor
+     * @param Model $model
      * @param string $action
      * @param string $message
      */
-    public static function writeLog(User $actor, string $action, string $message = '')
+    public static function writeLog(User $actor, Model $model, string $action, string $message = '')
     {
         $log = new static;
 
@@ -100,7 +101,7 @@ class OperationLog extends Model
         $log->message = $message;
         $log->created_at = Carbon::now();
 
-        $log->save();
+        $model->logs()->save($log);
     }
 
     /**

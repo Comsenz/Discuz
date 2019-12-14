@@ -109,7 +109,7 @@ class ThreadListener
     {
         $this->action($event->thread, $event->thread->is_approved, $action);
 
-        OperationLog::writeLog($event->thread->user, $action, $event->data['message']);
+        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
     }
 
     /**
@@ -122,7 +122,7 @@ class ThreadListener
     {
         $this->action($event->thread, 'hide', $action);
 
-        OperationLog::writeLog($event->thread->user, $action, $event->data['message']);
+        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
     }
 
     /**

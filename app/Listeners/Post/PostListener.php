@@ -19,7 +19,6 @@ use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Notifications\Replied;
-use Carbon\Carbon;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -96,12 +95,7 @@ class PostListener
             $action = 'disapprove';
         }
 
-        $log = new OperationLog;
-        $log->user_id = $event->actor->id;
-        $log->action = $action;
-        $log->message = $event->data['message'];
-        $log->created_at = Carbon::now();
-        $event->post->logs()->save($log);
+        OperationLog::writeLog($event->actor, $event->post, $action, $event->data['message']);
     }
 
     /**
@@ -111,12 +105,7 @@ class PostListener
      */
     public function whenPostWasHidden(Hidden $event)
     {
-        $log = new OperationLog;
-        $log->user_id = $event->actor->id;
-        $log->action = 'hide';
-        $log->message = $event->data['message'];
-        $log->created_at = Carbon::now();
-        $event->post->logs()->save($log);
+        OperationLog::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
     }
 
     /**
@@ -141,11 +130,11 @@ class PostListener
      */
     public function whenPostWasRevised(Revised $event)
     {
-        $log = new OperationLog;
-        $log->user_id = $event->actor->id;
-        $log->action = 'revise';
-        $log->message = $event->actor->username . ' 修改了内容';
-        $log->created_at = Carbon::now();
-        $event->post->logs()->save($log);
+        OperationLog::writeLog(
+            $event->actor,
+            $event->post,
+            'revise',
+            $event->actor->username . ' 修改了内容'
+        );
     }
 }
