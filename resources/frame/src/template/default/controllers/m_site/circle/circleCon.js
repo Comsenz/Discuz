@@ -97,7 +97,7 @@ export default {
           }
         }).then((res) => {
           console.log(res.readdata[0], 'res1111');
-          console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
+          // console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
           this.themeListCon = res.readdata;
         })
       }
@@ -126,7 +126,7 @@ export default {
 	    },
       //点击分类
       categoriesChoice(cateId) {
-        console.log(cateId);
+        // console.log(cateId);
         this.loadThemeList('categoryId',cateId);
       },
 	    //跳转到登录页
