@@ -1,5 +1,5 @@
 /*
-* 回收站控制器
+* 回收站-主题控制器
 * */
 
 import Card from '../../../../view/site/common/card/card';
@@ -50,12 +50,10 @@ export default {
       deleteStatusList:[],        //硬删除列表
 
       appleAll:false,             //应用其他页面
-
-      themeList:[],               //主题列表
+      themeList:[],               //主题列
       currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
-
       submitForm:[],              //提交操作表单
     }
   },
@@ -94,22 +92,22 @@ export default {
       this.submitForm.forEach((item,index)=>{
         if (item.hardDelete){
           this.deleteStatusList.push(item.id);
-        };
+        }
         if (!item.attributes.isDeleted){
           isDeleted.push(item.id)
-        };
-      });
-
-      this.deleteStatusList.forEach((item,index)=>{
-        if (index < this.deleteStatusList.length-1){
-          deleteStr = deleteStr + item + ','
-        }else {
-          deleteStr = deleteStr + item
         }
       });
 
+      // this.deleteStatusList.forEach((item,index)=>{
+      //   if (index < this.deleteStatusList.length-1){
+      //     deleteStr = deleteStr + item + ','
+      //   }else {
+      //     deleteStr = deleteStr + item
+      //   }
+      // });
+
       if (this.deleteStatusList.length > 0){
-        this.deleteThreadsBatch(deleteStr);
+        this.deleteThreadsBatch(deleteStr.join(','));
       }
       if (isDeleted.length > 0){
         this.patchThreadsBatch(this.submitForm);
@@ -160,7 +158,7 @@ export default {
         url:'threads',
         method:'get',
         data:{
-          include: ['user','firstPost','category'],
+          include: ['user','firstPost','category','deletedUser','lastDeletedLog'],
           'filter[isDeleted]':'yes',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,

@@ -8,11 +8,13 @@
           <div class="cont-arrange__rt-main-header">
 
             <div class="cont-arrange__rt-main-header__release">
-              <p>{{$attrs.author}}</p>
-              <p>{{$attrs.replyBy}}</p>
+              <p v-if="$attrs.author" ref="userName">{{$attrs.author}}</p>
+              <p v-if="$attrs.replyBy" ref="userName">{{$attrs.replyBy}}</p>
               <span v-if="$attrs.author">发布于</span>
               <span v-if="$attrs.replyBy">回复主题</span>
-              <p>{{$attrs.theme}}</p>
+              <p v-if="$attrs.theme">{{$attrs.theme}}</p>
+              <!--:style="{left:themeNameLeft + 'PX' ,}"-->
+              <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >123{{$attrs.themeName}}</p>
             </div>
 
             <div v-if="$attrs.prply >= 0 && $attrs.browse >= 0" class="cont-arrange__rt-main-header__reply-view rt-box">

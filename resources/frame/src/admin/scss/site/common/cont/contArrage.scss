@@ -64,6 +64,7 @@
           align-items: baseline;
           white-space: nowrap;
           min-width: 130PX;
+          position: relative;
           p{
             display: inline-block;
             color: $titleColor;
@@ -79,6 +80,11 @@
           }
           span{
             color: $descColor;
+          }
+          .themeName{
+            position: absolute;
+            //width: calc(100% - 140PX);
+            //left: 111PX;
           }
         }
 
