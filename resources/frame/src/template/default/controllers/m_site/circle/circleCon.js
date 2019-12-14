@@ -25,7 +25,6 @@ export default {
 
 			],
       // themeListCon:false,
-      themeTypeVal:'',
       themeListCon:[],
       themeNavListCon:[],
       currentData:{},
@@ -51,6 +50,13 @@ export default {
       }
       return this.isWx;
     },
+    // //接收站点是否收费的值
+    // isPayFn (data) {
+    //   // if (data == 'log') {
+    //     console.log(data);
+    //     // this.isPay = data;
+    //   // }
+    // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal){
       if(filterCondition == 'isEssence'){
@@ -62,8 +68,6 @@ export default {
             include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
-          console.log(res.readdata[0], 'res1111');
-          console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
           this.themeListCon = res.readdata;
         })
 
@@ -76,8 +80,6 @@ export default {
             include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
-          console.log(res.readdata[0], 'res1111');
-          console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
           this.themeListCon = res.readdata;
         })
       } else {
@@ -119,9 +121,8 @@ export default {
 	    },
       //筛选
 	    choTheme(themeType) {
-        // this.themeTypeVal = themeType;
         this.loadThemeList('isEssence',themeType);
-	    	console.log('筛选');
+	    	// console.log('筛选');
 	    },
       //点击分类
       categoriesChoice(cateId) {

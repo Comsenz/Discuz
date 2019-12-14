@@ -38,8 +38,9 @@ export default {
         current:0,
         userDet:[],
         categories:[],
-        siteInfo: new Forum(),
-        username:''
+        siteInfo: {},
+        username:'',
+        isPayVal:''
 	  }
   },
 	props: {
@@ -80,7 +81,7 @@ export default {
     this.loadCategories();
   },
   methods:{
-    //初始化请求分类接口
+    //初始化请站点信息和分类接口
     loadCategories(){
       //请求站点信息
       this.appFetch({
@@ -88,25 +89,18 @@ export default {
         method: 'get',
         data: {
           include: ['users'],
-          page: {
-            offset: 20,
-            num: 3
-          }
         }
       }).then((res) => {
-        // console.log(res, 'res232323');
         this.siteInfo = res.readdata;
-        // this.username = data.readdata.siteAuthor.username;
+        //把站点是否收费的值存储起来，以便于传到父页面
+        this.isPayVal = res.readdata._data.siteMode;
       })
+      //请求分类接口
       this.appFetch({
         url: 'categories',
         method: 'get',
         data: {
           include: [],
-          // page: {
-          //   offset: 20,
-          //   num: 3
-          // }
         }
       }).then((res) => {
         this.categories = res.readdata;

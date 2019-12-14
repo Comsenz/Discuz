@@ -6,7 +6,7 @@
       position="right"
       :style="{ height: '100%' }"
    >
-      <sidebar></sidebar>
+    <sidebar :isPayVal = "isPayVal"></sidebar>
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
@@ -23,7 +23,7 @@
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
       <img :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" v-show="logoShow">
-      <div class="circleDet" v-show="perDetShow">
+      <div class="circleDet" v-show="perDetShow" v-model="siteInfo">
         <span>主题：{{siteInfo._data.threads}}</span>
         <span>成员：{{siteInfo._data.members}}</span>
         <span>站长：{{siteInfo._data.siteAuthor.username}}</span>

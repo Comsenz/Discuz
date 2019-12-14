@@ -1,13 +1,13 @@
 <template>
    <div class="sidebarCon">
      <div class="sideCon">
-       <div class="sideUserBox">
+       <div class="sideUserBox" v-model="userInfo">
          <!-- <img src="appConfig.staticBaseUrl/static/images/noavatar.gif" class="userHead"> -->
-         <img :src="avatarUrl" alt="" class="userHead" v-if="avatarUrl == '' && avatarUrl == null">
+        <img :src="avatarUrl" alt="" class="userHead" v-if="avatarUrl != '' && avatarUrl != null ">
          <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else="">
          <div class="userDet">
-           <div class="userName">{{username}}</div>
-           <div class="userPhone">{{mobile}}</div>
+           <div class="userName" v-if="username != undefined">{{username}}</div>
+           <div class="userPhone" v-if="mobile != undefined">{{mobile}}</div>
          </div>
          <span class="icon iconfont icon-right-arrow jumpJtr"></span>
        </div>
