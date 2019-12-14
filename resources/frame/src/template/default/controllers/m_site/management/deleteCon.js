@@ -83,6 +83,7 @@ export default {
 	methods: {
 
 		async deleteAllClick(value) {
+			 console.log(value)
 			let data = [];
 
 			for (let i = 0; i < value.length; i++) {

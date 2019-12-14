@@ -91,7 +91,7 @@
 
         <Card class="footer-btn">
           <el-button type="primary" size="medium" @click="loginStatus">提交</el-button>
-          <el-button size="medium" :disabled="deleteStatus">删除</el-button>
+          <el-button size="medium" :disabled="deleteStatus" @click="deleteWords">删除</el-button>
         </Card>
 
       </main>

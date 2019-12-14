@@ -173,7 +173,7 @@ const appFetch = function(params, options) {
   }
 
   //get 方式需要把参数传给params
-  if(params.method.toLowerCase() == 'get') {
+  if(params.method.toLowerCase() == 'get'&& params.data) {
     params.params = params.data ? params.data : params.params;
 
     //如果传递include，处理成字符串

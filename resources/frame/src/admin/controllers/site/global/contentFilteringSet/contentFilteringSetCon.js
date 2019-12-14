@@ -38,7 +38,9 @@ export default {
       // contentParams: {
       //   'filter[p]': '',
       //   'page[number]': 1,
-			// }
+      // }
+      
+      deleteList:[]
 
     }
   },
@@ -178,6 +180,25 @@ export default {
           }
         })
     },
+    deleteWords(){
+      this.deleteList = []
+      for(var i =0;i<this.multipleSelection.length;i++){
+        this.deleteList.push(this.multipleSelection[i]._data.id)
+      }
+      console.log(this.deleteList.join(","))
+      this.appFetch({
+        url:'deleteWords',
+        method:'delete',
+        splice:this.deleteList.join(","),
+        data:{
+          
+        }
+      }).then(res=>{
+        this.handleSearchUser(true);
+        console.log(res)
+      })
+      
+    }
   
   },
   components:{

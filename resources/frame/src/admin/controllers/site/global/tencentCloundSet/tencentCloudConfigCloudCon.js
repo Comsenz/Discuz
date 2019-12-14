@@ -8,11 +8,14 @@ export default {
     return {
       secretId:'',
       secretKey:'',
-      appId:''
+      appId:'',
+      type:''
     }
   },
   created(){
     this.tencentCloudList()//初始化云api配置
+    var type = this.$route.query.type;
+    this.type = type;
   },
   methods:{
     configClick(type){
