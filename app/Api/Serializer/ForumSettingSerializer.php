@@ -65,18 +65,9 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportImgExt' => $this->settings->get('support_img_ext'),
             'supportFileExt' => $this->settings->get('support_file_ext'),
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
-//            'qcloud' => (bool)$this->settings->get('qcloud'),
-//            'qcloudCmsImage' => (bool)$this->settings->get('qcloud_cms_image'),
-//            'qcloudCmsText' => (bool)$this->settings->get('qcloud_cms_text'),
-//            'qcloudSms' => (bool)$this->settings->get('qcloud_sms'),
-//            'qcloudSecretId' => $this->decrypt($this->settings->get('secretId', 'qcloud')),
-//            'qcloudSecretKey' => $this->decrypt($this->settings->get('secretKey', 'qcloud')),
-//            'qcloudToken' => $this->decrypt($this->settings->get('token', 'qcloud', '')),
 
-            // 登陆配置
-            'wechat_h5'     => (bool) $this->settings->get('wechat_h5', 'wechat_h5'),
-            'wechat_min'    => (bool) $this->settings->get('wechat_min', 'wechat_min'),
-            'wechat_pc'     => (bool) $this->settings->get('wechat_pc', 'wechat_pc'),
+            // 支付设置
+            'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
 
             // 第三方登陆设置
             'passport' => [

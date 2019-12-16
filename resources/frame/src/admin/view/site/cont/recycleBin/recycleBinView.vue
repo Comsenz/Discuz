@@ -78,7 +78,6 @@
           :deleTime="formatDate(items._data.deletedAt)"
           :key="items._data.id"
         >
-
           <div class="recycle-bin-table__side" slot="side">
             <el-radio-group @change="radioChange($event,index)" v-model="submitForm[index].radio">
               <el-radio label="还原"></el-radio>
@@ -93,12 +92,12 @@
           <div class="recycle-bin-table__footer" slot="footer">
             <div class="recycle-bin-table__footer-operator">
               <span>操作者：</span>
-              <span>小虫</span>
+              <span>{{items.deletedUser._data.username}}</span>
             </div>
 
             <div class="recycle-bin-table__footer-reason">
               <span>原因：</span>
-              <span>文不对题</span>
+              <span>{{items.lastDeletedLog._data.message}}</span>
             </div>
 
           </div>

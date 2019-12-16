@@ -3,35 +3,12 @@
 * */
 
 import Card from '../../../view/site/common/card/card';
+import moment from 'moment';
 
 export default {
   data:function () {
     return {
-      tableData: [{
-        user: '奶罩',
-        changeTime: '2016-05-02',
-        amountAvailable:"+200.00",
-        frozenAmount:'0',
-        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }, {
-        user: '辣椒',
-        changeTime: '2016-05-02',
-        amountAvailable:"+100.00",
-        frozenAmount:'0',
-        changeDescription:'小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }, {
-        user: '铁军',
-        changeTime: '2016-05-02',
-        amountAvailable:"-100.00",
-        frozenAmount:'0',
-        changeDescription:'铁军提现失败，退回可用余额100元'
-      }, {
-        user: '王小虎',
-        changeTime: '2016-05-02',
-        amountAvailable:"+200.00",
-        frozenAmount:'0',
-        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }],
+      tableData: [],
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -59,11 +36,58 @@ export default {
           }
         }]
       },
-      value1: '',
+
+      userName:'',
+      changeTime:['',''],
+      changeDescription:'',
     }
   },
   methods:{
 
+    searchClick(){
+      if (this.changeTime == null){
+        this.changeTime = ['','']
+      } else if(this.changeTime[0] !== '' && this.changeTime[1] !== ''){
+        this.changeTime[0] = this.changeTime[0] + '-00-00-00';
+        this.changeTime[1] = this.changeTime[1] + '-24-00-00';
+      }
+      this.getFundingDetailsList();
+    },
+
+    /*
+    * 格式化日期
+    * */
+    formatDate(data){
+      return moment(data).format('YYYY-MM-DD HH:mm')
+    },
+
+
+    /*
+    * 接口请求
+    * */
+    getFundingDetailsList(){
+      this.appFetch({
+        url:'walletDetails',
+        method:'get',
+        data:{
+          include:['user','userWallet'],
+          'filter[username]' : this.userName,
+          'filter[change_desc]' : this.changeDescription,
+          'filter[start_time]' : this.changeTime[0],
+          'filter[end_time]' : this.changeTime[1]
+        }
+      }).then(res=>{
+        console.log(res);
+        this.tableData = [];
+        this.tableData = res.readdata
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+
+  },
+  created(){
+    this.getFundingDetailsList();
   },
   components:{
     Card

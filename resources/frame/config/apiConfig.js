@@ -38,7 +38,9 @@ module.exports = {
   // 'searchUser':'/api/users', //用户搜索
   'searchThreads':'/api/threads',//搜索
   'notice':'/api/notification',
-  'posts':'/api/posts', //回复主题
+  'posts':'/api/posts', //回复审核修改-单条
+  'postsBatch':'/api/posts/batch',  //回复主题修改-批量
+
   // 'getCircle': '/circle/getCircle', //获取circle信息
 
   'pay':'/api/trade/pay/order',    //支付订单

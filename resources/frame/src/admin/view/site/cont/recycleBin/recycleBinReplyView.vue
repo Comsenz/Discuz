@@ -6,16 +6,16 @@
         <div class="recycle-bin-reply-header__section">
           <div class="section-top">
             <span class="cont-review-header__lf-title">作者：</span>
-            <el-input size="medium"></el-input>
+            <el-input size="medium" v-model="searchUserName" clearable placeholder="搜索作者"></el-input>
           </div>
           <div>
             <span class="cont-review-header__lf-title">搜索范围：</span>
-            <el-select v-model="value" size="medium" placeholder="请选择">
+            <el-select v-model="categoriesListSelect" clearable  size="medium" placeholder="选择主题分类">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in categoriesList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
               </el-option>
             </el-select>
           </div>
@@ -24,11 +24,11 @@
         <div class="recycle-bin-reply-header__section">
          <div class="section-top">
             <span class="cont-review-header__lf-title">内容包含：</span>
-            <el-input size="medium"></el-input>
+           <el-input size="medium" v-model="keyWords" clearable placeholder="搜索内容包含"></el-input>
          </div>
          <div>
             <span class="cont-review-header__lf-title">操作人：</span>
-            <el-input size="medium"></el-input>
+           <el-input size="medium" v-model="operator" clearable placeholder="搜索操作人"></el-input>
          </div>
         </div>
 
@@ -37,7 +37,8 @@
             <span class="cont-review-header__lf-title time-title">发布时间范围：</span>
 
             <el-date-picker
-              v-model="value2"
+              v-model="releaseTime"
+              value-format="yyyy-MM-dd"
               type="daterange"
               align="right"
               unlink-panels
@@ -52,7 +53,8 @@
             <span class="cont-review-header__lf-title time-title">删除时间范围：</span>
 
             <el-date-picker
-              v-model="value2"
+              v-model="deleteTime"
+              value-format="yyyy-MM-dd"
               type="daterange"
               align="right"
               unlink-panels
@@ -66,79 +68,60 @@
         </div>
 
         <div class="recycle-bin-reply-header__section">
-          <el-button size="small" type="primary">搜索</el-button>
+          <el-button size="small" type="primary" @click="searchClick">搜索</el-button>
         </div>
 
       </div>
 
       <div class="recycle-bin-reply-table">
         <ContArrange
-          author="小虫"
-          theme="站长圈"
-          finalPost="2019-1-1 12:00"
-          deleTime="2019-12-12 13:00"
+          v-for="(items,index) in  themeList"
+          :replyBy="items.user._data.username"
+          :themeName="items.thread.firstPost._data.content"
+          :finalPost="formatDate(items._data.createdAt)"
+          :ip="items._data.ip"
+          :key="items._data.id"
         >
           <div class="recycle-bin-reply-table__side" slot="side">
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="还原"></el-checkbox>
-              <el-checkbox label="删除"></el-checkbox>
-            </el-checkbox-group>
+            <el-radio-group @change="radioChange($event,index)" v-model="submitForm[index].radio">
+              <el-radio label="还原"></el-radio>
+              <el-radio label="删除"></el-radio>
+            </el-radio-group>
           </div>
 
-          <!--<div class="recycle-bin-reply-table__header" slot="header">
-            <p>
-              <span>默认分类 > </span>
-              <span>12312312323</span>
-            </p>
-            <div class="recycle-bin-reply-table__header-bottom">
-              <p>
-                <span>作者：</span>
-                <span>xy60cn</span>
-              </p>
-              <p>
-                <span>时间：</span>
-                <span>2019-10-10</span>
-              </p>
-              <p>
-                <span>IP：</span>
-                <span>111.111.111.111</span>
-              </p>
-              <p>
-                <span>操作人：</span>
-                <span>小虫</span>
-              </p>
-              <p>
-                <span>原因：</span>
-                <span>文不对题</span>
-              </p>
-            </div>
-          </div>-->
-
           <div class="recycle-bin-reply-table__main" slot="main">
-            就是肯定就是开绿灯解放了撒可见度分厘卡世界的士大夫胜多负少士大夫胜多负少分厘卡即使到了附件商店困了就睡了发商店了
+            {{items._data.content}}
           </div>
 
           <div class="recycle-bin-reply-table__footer" slot="footer">
             <div class="recycle-bin-reply-table__footer-operator">
               <span>操作者：</span>
-              <span>小虫</span>
+              <span>{{items.deletedUser._data.username}}</span>
             </div>
 
             <div class="recycle-bin-reply-table__footer-reason">
               <span>原因：</span>
-              <span>文不对题</span>
+              <span>{{items.lastDeletedLog._data.message}}</span>
             </div>
 
           </div>
 
         </ContArrange>
+
+        <Page
+          v-if="pageCount > 1"
+          @current-change="handleCurrentChange"
+          :current-page="currentPaga"
+          :page-size="10"
+          :total="total">
+        </Page>
       </div>
 
       <div class="recycle-bin-reply-footer footer-btn">
-        <el-button size="small" type="primary">提交</el-button>
-        <el-button type="text">全部通过</el-button>
-        <el-button type="text">全部删除</el-button>
-        <el-checkbox v-model="checked">将操作应用到其他所有页面</el-checkbox>
+        <el-button size="small" type="primary" @click="submitClick">提交</el-button>
+        <el-button type="text" @click="allOperationsSubmit(1)">全部还原</el-button>
+        <el-button type="text" @click="allOperationsSubmit(2)">全部删除</el-button>
+        <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox>
       </div>
 
     </div>
