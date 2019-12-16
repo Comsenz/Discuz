@@ -38,11 +38,11 @@ class UserRepository extends AbstractRepository
      * @return \Illuminate\Database\Eloquent\Builder|Model
      *
      */
-    public function findOrFail($id, User $actor = null, $ability = 'find')
+    public function findOrFail($id, User $actor = null)
     {
-        $query = user::where('id', $id);
+        $query = User::where('id', $id);
 
-        return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
+        return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 
     /**

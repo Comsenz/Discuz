@@ -5,6 +5,7 @@ namespace App\Policies;
 
 
 use App\Models\User;
+use Discuz\Api\Events\ScopeModelVisibility;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -24,15 +25,11 @@ class UserPolicy extends AbstractPolicy
         }
     }
 
-    public function find(User $actor, Builder $query) {
-
-        if($actor->isAdmin())
-        {
-            return;
-        }
-
-        if($actor->cannot('viewUserList')) {
+    public function find(User $actor, Builder $query)
+    {
+        if(!$actor->hasPermission('user.view')) {
             $query->whereRaw('FALSE');
         }
+
     }
 }
