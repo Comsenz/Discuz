@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Api\Controller\Users;
-
 
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
@@ -11,10 +9,10 @@ use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Exception;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ProfileController extends AbstractResourceController
 {
@@ -35,13 +33,11 @@ class ProfileController extends AbstractResourceController
         $this->settings = $settings;
     }
 
-
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return mixed
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
-     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @throws InvalidParameterException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -51,17 +47,17 @@ class ProfileController extends AbstractResourceController
 
         $user = $this->users->findOrFail($id, $actor);
 
-        if($actor->id === $user->id) {
+        if ($actor->id === $user->id) {
             $this->serializer = UserProfileSerializer::class;
         }
 
         if($this->settings->get('siteMode') === 'pay') {
-            $user->payd = false;
+            $user->paid = false;
             if($order = $user->orders()->where([
                 ['type', Order::ORDER_TYPE_REGISTER],
                 ['status', Order::ORDER_STATUS_PAID]
             ])->first()) {
-                $user->payd = true;
+                $user->paid = true;
                 $user->payTime = $order->updated_at;
             }
         }
