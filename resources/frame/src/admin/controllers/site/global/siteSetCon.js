@@ -7,12 +7,12 @@ export default {
     return {
       radio:'1',
       radio2:'2',
-      fileList:[],
+      // fileList:[],
       imageUrl: '',
       loading: true,
       fullscreenLoading: false,
-      siteName:'aaa',
-      siteIntroduction:'站点介绍站点介绍站点介绍站点介绍站点介绍',
+      siteName:'',
+      siteIntroduction:'',
       siteMode:'1', //站点模式选择
       sitePrice:'',
       siteExpire:'',
@@ -20,64 +20,105 @@ export default {
       siteMasterScale:'',
       siteClose:'1',  //关闭站点选择
       siteLogoFile: {},
+      siteLogoFile: [],
       siteRecord:'',
       siteStat:'',
-      siteCloseMsg:''
-
+      siteCloseMsg:'',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      fileList:[]
     }
   },
+
+  created:function(){
+    //初始化请求设置
+    this.loadStatus();
+  },
   methods:{
+    loadStatus(){
+      //初始化设置
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{
+        }
+      }).then(data=>{
+        // console.log(data.readdata._data);
+        this.siteName = data.readdata._data.siteName;
+        this.siteIntroduction = data.readdata._data.siteIntroduction;
+        this.siteMode = data.readdata._data.siteMode;
+        this.sitePrice = data.readdata._data.sitePrice;
+        this.siteExpire = data.readdata._data.siteExpire;
+        this.siteAuthorScale = data.readdata._data.siteAuthorScale;
+        this.siteMasterScale = data.readdata._data.siteMasterScale;
+        this.siteLogoFile = data.readdata._data.siteLogoFile;
+        this.siteRecord = data.readdata._data.siteRecord;
+        this.siteStat = data.readdata._data.siteStat;
+        this.siteCloseMsg = data.readdata._data.siteCloseMsg;
+        // this.$message({'修改成功'});
+      }).catch(error=>{
+        // console.log('失败');
+      })
+    },
+    //删除已上传logo
+    handleRemove(file, fileList) {
+      // console.log(file);
+      let logoFormData = new FormData()
+      logoFormData.append('logo', file.raw);
+      // this.uploaderLogo(logoFormData);
+      this.appFetch({
+        url:'logo',
+        method:'delete',
+        data:logoFormData,
+      }).then(data=>{
+        this.$message('删除成功');
+      }).catch(error=>{
+        console.log('上传失败');
+      })
+      // console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     radioChange(siteMode){
       this.siteMode = siteMode;
       console.log(this.radio);
     },
 
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.MessageBox.confirm(`确定移除 ${ file.name }？`);
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      this.siteLogoFile = file;
-      // console.log(file);
-      let _this = this;
-      this.siteLogoFile.splice(0, 1);
-      setTimeout(function(){
-          _this.siteLogoFile = [{name: file.name, file: file, url:''}];
-      }, 1500);
-      // return false;
-      let formData = new FormData();
-      formData.append('logo',file);
+    //上传时，判断文件的类型及大小是否符合规则
+　　beforeAvatarUpload(file) {
+　　　　const isJPG =file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
+　　　　const isLt2M = file.size / 1024 / 1024 < 2
+　　　　if (!isJPG) {
+　　　　　　this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
+　　　　　　return isJPG
+　　　　}
+　　　　if (!isLt2M) {
+　　　　　　this.$message.warning('上传头像图片大小不能超过 2MB!')
+　　　　　　return isLt2M
+　　　　}
+　　　　this.multfileImg = file
+　　　　return isJPG && isLt2M
+　　　},
+    uploaderLogo(e) {
+      console.log(e);
+      let logoFormData = new FormData()
+      logoFormData.append('logo', e.file);
+      console.log(logoFormData);
+      // this.uploaderLogo(logoFormData);
       this.appFetch({
         url:'logo',
         method:'post',
-        data:formData,
+        data:logoFormData,
       }).then(data=>{
-        console.log(data)
-        this.$message('提交成功');
+        // this.$message('上传成功');
       }).catch(error=>{
-        console.log('失败');
+        console.log('上传失败');
       })
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
-      }
-      return isJPG && isLt2M;
+    },
+    errorFile(){
+      console.log(this.fileList);
     },
     siteSetPost(){
       this.appFetch({
