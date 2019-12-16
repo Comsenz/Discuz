@@ -8,6 +8,16 @@ export default {
       mainHeight:0,    //内容主题高度
       windowWidth:0,    //浏览器宽度
       // listDatas:this.listData   //列表数据
+
+      themeNameLeft:70,   //回复主题距离左侧距离
+      themeNameStyle:{
+        left:'70',
+        width:'calc(100% - '    //calc(100% - 140+)
+      },
+      styleobj:{
+        color: 'red',
+        background:'red'
+      }
     }
   },
   props:{
@@ -93,6 +103,13 @@ export default {
     removeScrollHandler(){
       window.removeEventListener('scroll', this.handleScroll,true);
       window.removeEventListener('resize', this.browserSize,true);
+    },
+
+    themeStyle(){
+      this.themeNameStyle.left = '70';
+      this.themeNameStyle.width = 'calc(100% - ';
+      this.themeNameStyle.left = 70 + this.$refs.userName.clientWidth + 'px';
+      this.themeNameStyle.width = this.themeNameStyle.width + (100+this.$refs.userName.clientWidth) + 'px)';
     }
 
   },
@@ -107,6 +124,15 @@ export default {
 
     //获取当前浏览器宽度
     this.windowWidth = window.innerWidth;
+
+    this.themeStyle();
+
+    // if (this.$attrs.themeName){
+    //   this.themeStyle();
+    //   // this.$refs.themeName.style.left = `${this.themeNameStyle.left}`;
+    //   // this.$refs.themeName.style.width = `${this.themeNameStyle.width}`;
+    // }
+
   },
   beforeDestroy() {
     this.removeScrollHandler();

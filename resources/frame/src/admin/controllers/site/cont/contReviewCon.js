@@ -1,12 +1,11 @@
 /*
-* 内容-主题审核控制器
+* 内容审核-主题审核控制器
 * */
 
 import Card from '../../../view/site/common/card/card';
 import ContArrange from '../../../view/site/common/cont/contArrange';
 import Page from '../../../view/site/common/page/page';
 import webDb from 'webDbHelper';
-import { mapState } from 'vuex';
 import moment from "moment/moment";
 
 export default {
@@ -63,7 +62,6 @@ export default {
       relativeTime:['',''],                  //搜索相对时间转换
 
       submitForm:[],    //操作理由表单
-
       reasonForOperation:[
         {
           value:'无',
@@ -107,57 +105,21 @@ export default {
         }
       ],
       reasonForOperationSelect:1,   //操作理由选中
-
       appleAll:false,             //应用其他页面
-
       themeList:[],               //主题列表
       currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
+      ignoreStatus:true,         //全部忽略是否显示
 
       //未审核0，已审核\通过1，已忽略2
-
     }
   },
-  // computed:mapState({
-  //   searchData:state => state.admin.searchData
-  // }),
 
   methods:{
     reasonForOperationChange(event,index){
-      /*switch (val){
-        case 1:
-          this.reasonForOperationInput = '无';
-          break;
-        case 2:
-          this.reasonForOperationInput = '广告/SPAM';
-          break;
-        case 3:
-          this.reasonForOperationInput = '恶意灌水';
-          break;
-        case 4:
-          this.reasonForOperationInput = '违规内容';
-          break;
-        case 5:
-          this.reasonForOperationInput = '文不对题';
-          break;
-        case 6:
-          this.reasonForOperationInput = '重复发帖';
-          break;
-        case 7:
-          this.reasonForOperationInput = '我很赞同';
-          break;
-        case 8:
-          this.reasonForOperationInput = '精品文章';
-          break;
-        case 9:
-          this.reasonForOperationInput = '原创内容';
-          break;
-        case 10:
-          this.reasonForOperationInput = '其他';
-          break;
-      }*/
-      this.submitForm[index].message = event;
+      this.submitForm[index].attributes.message = event;
+      console.log(this.submitForm[index]);
     },
 
     handleCurrentChange(val) {
@@ -167,6 +129,7 @@ export default {
     },
 
     themeSearch(){
+      this.ignoreStatus = this.searchReviewSelect === 2?false:true;
       this.getThemeList();
     },
 
@@ -239,11 +202,11 @@ export default {
       this.patchThreadsBatch(this.submitForm);
     },
 
-    singleOperationSubmit(val,categoryId,themeId){
+    singleOperationSubmit(val,categoryId,themeId,index){
       let data = {
         "type": "threads",
         "attributes": {
-          "isApproved": 1,
+          "isApproved": 0,
           'isDeleted':false
         },
         "relationships": {
@@ -262,6 +225,7 @@ export default {
           break;
         case 2:
           data.attributes.isDeleted = true;
+          data.attributes.message = this.submitForm[index].attributes.message;
           this.patchThreads(data,themeId);
           break;
         case 3:
@@ -308,14 +272,14 @@ export default {
 
         this.themeList.forEach((item,index)=>{
           this.submitForm.push({
-            message:'',
             Select:'无',
             radio:'',
             type:'threads',
             id:item._data.id,
             attributes: {
               isApproved: 0,
-              isDeleted:false
+              isDeleted:false,
+              message:'',
             },
             relationships: {
               category: {
