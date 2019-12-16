@@ -74,7 +74,7 @@
           <el-radio-group v-model="submitForm[index].radio" @change="radioChange($event,index)">
             <el-radio :label="0">通过</el-radio>
             <el-radio :label="1">删除</el-radio>
-            <el-radio :label="2" :disabled="items._data.isApproved === 2">忽略</el-radio>
+            <el-radio :label="2" v-if="items._data.isApproved !== 2" :disabled="items._data.isApproved === 2">忽略</el-radio>
           </el-radio-group>
         </div>
 
@@ -86,14 +86,14 @@
           <div class="cont-review-table__footer__lf">
             <el-button type="text" @click="singleOperationSubmit(1,items.category._data.id,items._data.id)">通过</el-button>
             <i></i>
-            <el-button type="text" @click="singleOperationSubmit(2,items.category._data.id,items._data.id)">删除</el-button>
+            <el-button type="text" @click="singleOperationSubmit(2,items.category._data.id,items._data.id,index)">删除</el-button>
             <i></i>
-            <el-button type="text" @click="singleOperationSubmit(3,items.category._data.id,items._data.id)">忽略</el-button>
+            <el-button type="text" v-if="items._data.isApproved !== 2" @click="singleOperationSubmit(3,items.category._data.id,items._data.id)">忽略</el-button>
           </div>
 
           <div class="cont-review-table__footer__rt">
             <span>操作理由：</span>
-            <el-input size="medium" clearable v-model="submitForm[index].message" ></el-input>
+            <el-input size="medium" clearable v-model="submitForm[index].attributes.message" ></el-input>
             <el-select size="medium" @change="reasonForOperationChange($event,index)" v-model="submitForm[index].Select" placeholder="选择操作理由">
               <el-option
                 v-for="item in reasonForOperation"
@@ -128,7 +128,7 @@
       <el-button size="small" type="primary" @click="submitClick">提交</el-button>
       <el-button type="text" @click="allOperationsSubmit(1)" >全部通过</el-button>
       <el-button type="text" @click="allOperationsSubmit(2)" >全部删除</el-button>
-      <el-button type="text" @click="allOperationsSubmit(3)" >全部忽略</el-button>
+      <el-button type="text" v-show="ignoreStatus" @click="allOperationsSubmit(3)" >全部忽略</el-button>
       <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox>
     </div>
 

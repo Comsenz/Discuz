@@ -74,15 +74,6 @@ class BatchEditThreads
 
             $attributes = Arr::get($data, 'attributes', []);
 
-            if (isset($attributes['categoryId'])) {
-                if ($this->actor->can('categorize', $thread)) {
-                    $thread->category_id = $attributes['categoryId'];
-                } else {
-                    $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
-                    continue;
-                }
-            }
-
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $thread)) {
                     $thread->is_approved = $attributes['isApproved'];

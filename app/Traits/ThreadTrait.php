@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Exceptions\ThreadException;
 use App\Models\OperationLog;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 trait ThreadTrait
