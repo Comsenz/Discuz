@@ -104,6 +104,10 @@ class ListOrdersController extends AbstractListController
             $this->total
         );
 
+        $document->setMeta([
+            'count' => $this->total,
+            'pageCount' => ceil($this->total / $limit),
+        ]);
         $load = $this->extractInclude($request);
 
         $orders = $orders->load($load);
@@ -128,7 +132,7 @@ class ListOrdersController extends AbstractListController
         $order_username   = Arr::get($filter, 'username'); //订单创建人
         $order_product    = Arr::get($filter, 'product'); //商品
 
-        $query = Order::query();
+        $query = Order::query()->whereVisibleTo($actor);
         $query->when(!is_null($status), function ($query) use ($status) {
             $query->where('status', $status);
         });

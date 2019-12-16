@@ -92,7 +92,10 @@ class ListUserWalletCashController extends AbstractListController
             $limit,
             $this->total
         );
-
+        $document->setMeta([
+            'count' => $this->total,
+            'pageCount' => ceil($this->total / $limit),
+        ]);
         $load         = $this->extractInclude($request);
         $cash_records = $cash_records->load($load);
 
