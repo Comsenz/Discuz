@@ -10,7 +10,7 @@
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <div class="uploadBox" v-show="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*"  v-model="fileList">
+          <van-uploader :max-count="12" :after-read="handleFile" :before-delete="deleteFile" accept="image/*"  v-model="fileList">
           </van-uploader>
           <div class="enclosure">
             <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">

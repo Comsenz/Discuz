@@ -75,11 +75,13 @@ export default {
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
+    //删除图片
     deleteFile(){
-      alert('刪除');
-      // if(this.fileList.length<=1){
-      //   this.uploadShow = false;
-      // }
+      // alert('刪除');
+      if(this.fileList.length<=1){
+        this.uploadShow = false;
+      }
+      //调接口
     },
     //这里写接口，上传
     uploaderEnclosure(file,isFoot){

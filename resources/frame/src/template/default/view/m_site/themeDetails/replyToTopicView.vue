@@ -11,7 +11,7 @@
          <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="replyText" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
 
         <div class="uploadBox" v-show="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" :delete="deleteFile" accept="image/*"  v-model="fileList">
+          <van-uploader :max-count="12" :after-read="handleFile" :before-delete="deleteFile" accept="image/*"  v-model="fileList">
           </van-uploader>
         </div>
       </div>

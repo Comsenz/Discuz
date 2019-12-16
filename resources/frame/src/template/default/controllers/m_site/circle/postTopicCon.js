@@ -99,6 +99,14 @@ export default {
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
+    //删除图片
+    deleteFile(){
+      // alert('刪除');
+      if(this.fileList.length<=1){
+        this.uploadShow = false;
+      }
+       //调接口
+    },
     //上传附件
     handleEnclosure(e){
       let file = e.target.files[0];
