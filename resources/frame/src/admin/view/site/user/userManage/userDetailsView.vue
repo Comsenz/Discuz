@@ -41,7 +41,7 @@
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input></el-input>
+        <el-input v-model='newPassword' clearable></el-input>
       </CardRow>
     </Card>
 
@@ -106,7 +106,7 @@
     </Card>
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium">提交</el-button>
+      <el-button type="primary" size="medium" @click="submission">提交</el-button>
     </Card>
 
   </div>

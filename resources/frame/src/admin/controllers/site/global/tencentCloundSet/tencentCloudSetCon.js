@@ -8,17 +8,19 @@ export default {
 
       tableData: [{
         name: '云api',
-        type: 'qcloud_close	',
+        type: 'qcloud_close',
         description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
         status:'',
         icon:'iconAPI'
-      },, {
+      },
+      {
         name: '图片内容安全',
         type:'qcloud_cms_image',
         description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
         status:'',
         icon:'icontupian'
-      },{
+      },
+      {
         name: '文本内容安全',
         type:'qcloud_cms_text',
         description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
@@ -42,11 +44,11 @@ export default {
     configClick(type){
       console.log(type);
       switch (type){
-        case 'cloud':
-          this.$router.push({path:'/admin/tencent-cloud-config/cloud'});
+        case 'qcloud_close':
+          this.$router.push({path:'/admin/tencent-cloud-config/cloud',query: {type:type}});
           break;
-        case 'sms':
-          this.$router.push({path:'/admin/tencent-cloud-config/sms'});
+        case 'qcloud_sms':
+          this.$router.push({path:'/admin/tencent-cloud-config/sms',query: {type:type}});
           break;
         default:
           this.loginStatus = 'default';
@@ -59,34 +61,37 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        console.log(res.readdata._data.qcloud);
-        if(res.readdata._data.qcloud_close){
-          
+        // console.log(res.readdata._data.qcloud);
+        // console.log(res.readdata._data.qcloud.qcloud_close)
+        if(res.readdata._data.qcloud.qcloud_close){ 
           this.tableData[0].status = true
         }else{
           this.tableData[0].status = false
         }
-        if(res.readdata._data.qcloud_cms_image){
+        if(res.readdata._data.qcloud.qcloud_cms_image){
           this.tableData[1].status = true
         }else{
-          // this.tableData[1].status = false
+          this.tableData[1].status = false
         }
-        if(res.readdata._data.qcloud_cms_text){
+        if(res.readdata._data.qcloud.qcloud_cms_text){
           this.tableData[2].status = true
         }else{
           this.tableData[2].status = false
         }
-        if(res.readdata._data.qcloud_sms){
+        if(res.readdata._data.qcloud.qcloud_sms){
           this.tableData[3].status = true
         }else{
           this.tableData[3].status = false
         }
+
+        console.log(this.tableData)
       })
     },
     loginSetting(index,type,status){
-      
+      console.log(type)
       if(type == 'qcloud_close') {
-        this.changeSettings('qclqcloud_closeoud',status);
+        console.log('333333333333333333s')
+        this.changeSettings('qcloud_close',status);
       } else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
@@ -94,6 +99,8 @@ export default {
       }else if(type == 'qcloud_sms'){
         this.changeSettings('qcloud_sms',status);
       }
+
+
     },
     changeSettings(typeVal,statusVal){
       console.log(typeVal);
@@ -108,14 +115,14 @@ export default {
              "attributes":{
               "key":typeVal,
               "value":statusVal,
-              "tag": typeVal
+              "tag": 'qcloud'
              }
             }
            ]
 
         }
       }).then(data=>{
-        // console.log(data)
+        console.log(data)
         this.$message({
           message: '修改成功',
           type: 'success'

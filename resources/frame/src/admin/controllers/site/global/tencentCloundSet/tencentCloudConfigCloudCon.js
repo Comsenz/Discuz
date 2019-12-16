@@ -8,11 +8,14 @@ export default {
     return {
       secretId:'',
       secretKey:'',
-      appId:''
+      appId:'',
+      type:''
     }
   },
   created(){
     this.tencentCloudList()//初始化云api配置
+    var type = this.$route.query.type;
+    this.type = type;
   },
   methods:{
     configClick(type){
@@ -27,8 +30,9 @@ export default {
         }
       }).then(res=>{
         console.log(res)
-        this.secretId = res.readdata._data.qcloudSecretId
-        this.secretKey = res.readdata._data.qcloudSecretKey
+        this.appId = res.readdata._data.qcloud.qcloud_app_id
+        this.secretId = res.readdata._data.qcloud.qcloud_secret_id
+        this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
       })
     }
   },

@@ -81,12 +81,10 @@ export default {
 		Bus.$emit('setHeader', ['标题标题3443453454ee', 'fasle', 'false']);
 	},
 	methods: {
-
 		async deleteAllClick(value) {
+		console.log(value)
 			let data = [];
-
 			for (let i = 0; i < value.length; i++) {
-				console.log(value);
 				data.push({
 					"type": "threads",
 					"id": value[i],
@@ -97,7 +95,7 @@ export default {
 			}
 
 			await this.appFetch({
-				url:'batch',
+				url:'threadsBatch',
 				method:'patch',
 				data:{
 					'data':data

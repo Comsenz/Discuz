@@ -17,7 +17,7 @@
 	    </div>
 	    <div class="memberCheckList">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick"></ThemeDet>
-			    <div class="gap"></div>
+		<div class="gap"></div>
 	    </div>
 	    <!-- <div class="manageFootFixed choFixed">
           <a href="javascript:;" @click="checkAll">全选</a>

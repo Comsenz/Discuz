@@ -22,8 +22,10 @@ export default {
 
         }
       }).then(res=>{
+      
+        // this.pwdLength = res.readdata._data.setreg.password_length
         this.pwdLength = res.readdata._data.passwordLength
-        console.log(res)
+        console.log( res)
       })
     },
     submission(){ //提交注册信息接口
@@ -40,7 +42,7 @@ export default {
         url:'settings',
         method:'post',
         data:{
-          "allow_register": this.checked,
+          "register_close": this.checked,
           "password_length":this.pwdLength,
           
         }

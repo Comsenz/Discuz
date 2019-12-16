@@ -2,38 +2,42 @@
  * 点赞我的
  */
 
+import LikeHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
+import ContMain from '../../../view/m_site/common/cont/contMainView'
+import ContFooter from '../../../view/m_site/common/cont/contFooterView'
+
+
 export default {
   data:function () {
     return {
-      likeList:[],
-      // imgUrl:'',
-      // stateTitle:'点赞了我',
-      // time:"5分钟前",
-      // userName:'Elizabeth'
+      likeList:[
+        
+      ]
     }
   },
-  mounted(){
-    this.myLike()
+  components:{
+    LikeHeader,
+    ContHeader,
+    ContMain,
+    ContFooter
   },
   methods:{
-    myLike(){
+    myLikeList(){
       this.appFetch({
         url:'notice',
         method:'get',
         data:{
-          // include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-          type:2
+          type:'2'
         }
       }).then(res=>{
+        console.log(res)
         this.likeList = res.readdata;
       })
-      // this.apiStore.find('notice',{type:2}).then(res=>{
-      //   // console.log(res[0].user_id(), res[0].detail().post_content);
-      //   this.likeList = res
-      // })
     }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.myLikeList()
   }
 }

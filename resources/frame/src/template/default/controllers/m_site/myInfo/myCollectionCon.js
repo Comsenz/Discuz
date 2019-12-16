@@ -19,7 +19,11 @@ export default {
       // aaa:[],
       collectionList:[
         
-      ]
+      ],
+      list: [],
+      loading: false,
+      finished: false,
+      isLoading: false,
     }
   },
   // components:{
@@ -57,6 +61,26 @@ export default {
         //   console.log(data[0].user());
         //   this.collectionList = data;
         // });
+      },
+      onLoad(){
+        setTimeout(()=>{
+      
+          // for(let i = 0;i<10;i++){
+          //   this.collectionList.push(this.collectionList.length + 1)
+          // }
+          // 加载状态结束
+        this.loading = false;
+            // 数据全部加载完成
+            if (this.collectionList.length >= 40) {
+              this.finished = true;
+            }
+        },200)
+      },
+      onRefresh(){
+        setTimeout(()=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+        },200)
       }
     
   }

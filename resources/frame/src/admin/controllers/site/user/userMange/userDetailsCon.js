@@ -4,6 +4,7 @@
 
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
+import browserDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
@@ -11,6 +12,7 @@ export default {
       fileList:[],
       imageUrl: '',
       userInfo: {},
+      newPassword:'',
       options: [
         {
           value: 0,
@@ -75,6 +77,21 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
+    },
+    submission(){
+      const userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url:'users',
+        method:'patch',
+        splice:'/'+userId,
+        data:{
+          'newPassword':this.newPassword,
+          'mobile':this.userInfo.mobile,
+          'status':this.userInfo.status
+        }
+      }).then(res=>{
+        console.log(res)
+      })
     }
   },
 
