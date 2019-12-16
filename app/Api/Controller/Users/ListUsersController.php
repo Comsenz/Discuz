@@ -7,6 +7,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,6 +16,7 @@ use Illuminate\Support\Arr;
 
 class ListUsersController extends AbstractListController
 {
+    use AssertPermissionTrait;
 
     public $serializer = UserSerializer::class;
 
@@ -43,6 +45,7 @@ class ListUsersController extends AbstractListController
      * @param Document $document
      * @return mixed
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -50,7 +53,9 @@ class ListUsersController extends AbstractListController
         $actor = $request->getAttribute('actor');
 
         //权限控制
-        $query = $this->users->query()->whereVisibleTo($actor);;
+        $this->assertPermission($actor->can('viewUserList'));
+
+        $query = $this->users->query();
 
         $sorts = $this->extractSort($request);
         $offset = $this->extractOffset($request);

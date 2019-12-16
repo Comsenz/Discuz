@@ -11,6 +11,7 @@ use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Exception;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -48,11 +49,9 @@ class ProfileController extends AbstractResourceController
 
         $id = Arr::get($request->getQueryParams(), 'id');
 
-        $user = $this->users->findOrFail($id);
+        $user = $this->users->findOrFail($id, $actor);
 
-        if($actor->id !== $user->id) {
-            $this->assertCan($actor, 'view', $user);
-        } else {
+        if($actor->id === $user->id) {
             $this->serializer = UserProfileSerializer::class;
         }
 
