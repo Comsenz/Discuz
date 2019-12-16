@@ -543,6 +543,10 @@ openCircleConView.vue
 	.readNum {
 		float: left;
 	}
+  .screen {
+    @include px2rem(margin-left, 40);
+    @include px2rem(line-height, 40);
+  }
 	.postDetR {
 		float: right;
 		@include px2rem(margin-left, 40);
@@ -846,8 +850,6 @@ $postTopicColor:#336699;
   width: 100%;
   height: 100%;
   color: #000;
-
-
   .post-topic-header{
     width: 100%;
     @include px2rem(height,88);
@@ -936,7 +938,20 @@ $postTopicColor:#336699;
         color: #4C4C4C;
         @include font-dpr(48);
       }
-
+      .uploadIcon {
+        position: relative;
+        .hiddenInput {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+        }
+      }
+    }
+    .reply-topic-footer-left {
+        width: 20%;
     }
 
     .post-topic-footer-right{
@@ -947,7 +962,7 @@ $postTopicColor:#336699;
 
       .post-topic-footer-right-sort{
         color: rgba(136, 136, 136, 1);
-        @include font-dpr(28)
+        @include font-dpr(28);
       }
     }
 
@@ -960,6 +975,54 @@ $postTopicColor:#336699;
   }
 
 }
+.enclosure {
+  @include px2rem(padding-top, 28);
+  .enclosureChi {
+    @include px2rem(line-height, 40);
+    vertical-align: center;
+    .icon {
+      float: left;
+      @include font-dpr(34);
+    }
+    .icon-word {
+      color: #548DFE;
+    }
+    .icon-pdf {
+      color: #FF5562;
+    }
+    .icon-rar {
+      color: #FFA88E;
+    }
+    .encName {
+      float: left;
+      @include px2rem(margin-left, 10);
+      @include font-dpr(30);
+      color: $fontColor;
+      @include px2rem(max-width, 400);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .encDelete {
+      display: inline-block;
+      @include px2rem(width, 32);
+      @include px2rem(height, 32);
+      @include px2rem(line-height, 32);
+      @include px2rem(margin-left, 28);
+      background: #FC6A6A;
+      border-radius: 50%;
+      text-align: center;
+      color: #fff;
+      @include font-dpr(16);
+      .icon {
+        @include font-dpr(16);
+        color: $corFff;
+      }
+    }
+  }
+}
+
+
 .expressionBox {
   position: fixed;
   bottom: 0;
