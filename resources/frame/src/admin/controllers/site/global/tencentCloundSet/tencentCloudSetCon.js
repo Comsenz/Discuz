@@ -8,7 +8,7 @@ export default {
 
       tableData: [{
         name: '云api',
-        type: 'qcloud_close	',
+        type: 'qcloud_close',
         description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
         status:'',
         icon:'iconAPI'
@@ -88,8 +88,9 @@ export default {
       })
     },
     loginSetting(index,type,status){
-      
+      console.log(type)
       if(type == 'qcloud_close') {
+        console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
       } else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);

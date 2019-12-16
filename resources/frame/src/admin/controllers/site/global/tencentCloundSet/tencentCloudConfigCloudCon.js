@@ -30,8 +30,9 @@ export default {
         }
       }).then(res=>{
         console.log(res)
-        this.secretId = res.readdata._data.qcloudSecretId
-        this.secretKey = res.readdata._data.qcloudSecretKey
+        this.appId = res.readdata._data.qcloud.qcloud_app_id
+        this.secretId = res.readdata._data.qcloud.qcloud_secret_id
+        this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
       })
     }
   },

@@ -55,10 +55,9 @@
             <van-checkbox
                 v-if="ischeckShow"
                 class="memberCheck"
-                :name="item.id"
+                :name="item._data.id"
                 ref="checkboxes"
             />
-
           </div>
           <div class="gap"></div>
         </div>

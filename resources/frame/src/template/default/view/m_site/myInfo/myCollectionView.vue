@@ -46,15 +46,21 @@
   <!-- </div> -->
    <div class="reply-my-box my-info-money-header">
     <comHeader title="我的收藏"></comHeader>
-    <div class="content">
-        <Header :userInfoList="collectionList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
-        <div class="gap"></div>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    finished-text="没有更多了"
+    @load="onLoad"
+>
+   <div class="content">
+        <!-- <Header :userInfoList="collectionList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header> -->
+    <div class="gap"></div>
         <ThemeDet :themeList="collectionList"></ThemeDet>
     </div>
-    <footer class="home-page-footer">
-      <p>上划加载更多</p>
-    </footer>
-    <footer class="my-info-money-footer"></footer>
+</van-list>
+</van-pull-refresh>
+    <!-- <footer class="my-info-money-footer"></footer> -->
   </div>
 </template>
 

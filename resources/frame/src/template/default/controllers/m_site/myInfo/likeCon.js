@@ -11,7 +11,9 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      likeList:[]
+      likeList:[
+        
+      ]
     }
   },
   components:{
