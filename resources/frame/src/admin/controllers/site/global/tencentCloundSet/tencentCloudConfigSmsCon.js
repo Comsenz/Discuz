@@ -38,10 +38,36 @@ export default {
         url:'settings',
         method:'post',
         data:{
-          'qcloud_sms_app_id':this.sdkAppId,
-          'qcloud_sms_app_key':this.appKey,
-          'qcloud_sms_template_id':this.smsId,
-          'qcloud_sms_sign':this.smsSignature
+          "data":[
+            {
+              "attributes":{
+                "key":'qcloud_sms_app_id',
+                "value":this.sdkAppId,
+                "tag": "qcloud"
+              }
+            },
+            {
+              "attributes":{
+                "key":'qcloud_sms_app_key',
+                "value":this.appKey,
+                "tag": "qcloud",
+              }
+              },
+              {
+                "attributes":{
+                  "key":'qcloud_sms_template_id',
+                  "value":this.smsId,
+                  "tag": "qcloud",
+                }
+              },{
+                "attributes":{
+                  "key":'qcloud_sms_sign',
+                  "value":this.smsSignature,
+                  "tag": "qcloud",
+                }
+              }
+            
+          ]
         }
       }).then(res=>{
         this.$message('提交成功');
