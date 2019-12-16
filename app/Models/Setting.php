@@ -10,7 +10,7 @@ use Illuminate\Contracts\Encryption\Encrypter;
  * @method static create(array $array)
  * @method static updateOrCreate(array $array)
  * @method truncate()
- * @method static insert()
+ * @method insert(array $array)
  */
 class Setting extends Model
 {
