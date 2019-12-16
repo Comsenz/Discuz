@@ -7,6 +7,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\Category\CategoryListener;
 use App\Policies\CategoryPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -34,5 +35,6 @@ class CategoryServiceProvider extends AbstractServiceProvider
 
         // 订阅事件
         $events->subscribe(CategoryPolicy::class);
+        $events->subscribe(CategoryListener::class);
     }
 }

@@ -7,6 +7,7 @@
 
 namespace App\Listeners\User;
 
+use App\Models\User;
 use App\Events\Users\UserRefreshCount;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -18,8 +19,10 @@ class UserListener
         $events->listen(UserRefreshCount::class, [$this, 'refreshCount']);
     }
 
-    public function refreshCount()
+    public function refreshCount(UserRefreshCount $event)
     {
-        dd(889008);
+        $event->user->refreshThreadCount();
+
+        $event->user->save();
     }
 }
