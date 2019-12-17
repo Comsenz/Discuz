@@ -21,6 +21,10 @@ class UpdateUser
 
     protected $actor;
 
+    protected $users;
+
+    protected $validator;
+
     public function __construct($id, $data, User $actor)
     {
         $this->id = $id;
@@ -28,70 +32,64 @@ class UpdateUser
         $this->actor = $actor;
     }
 
-    public function handle(UserRepository $users, UserValidator $userValidator) {
-        return $this($users, $userValidator);
+    public function handle(UserRepository $users, UserValidator $validator) {
+        $this->users = $users;
+        $this->validator = $validator;
+        return call_user_func([$this, '__invoke']);
     }
 
+
     /**
-     * @param $users
+     * @return mixed
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function __invoke($users, $userValidator)
+    public function __invoke()
     {
 
-        $data = null;
-        $id = $this->id;
+        $user = $this->users->findOrFail($this->id, $this->actor);
 
-        try {
-            $user = $users->findOrFail($id);
+        $isSelf = $this->actor->id === $user->id;
 
-            $isSelf = $this->actor->id === $user->id;
-
-            if (!$isSelf) {
-                $this->assertCan($this->actor, 'edit', $user);
-            }
-
-            $validator = [];
-
-            $attributes = Arr::get($this->data, 'data.attributes');
-
-            if ($newPassword = Arr::get($attributes, 'newPassword')) {
-
-                if ($isSelf) {
-                    $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                    $this->assertPermission($verifyPwd);
-
-                    $userValidator->setUser($user);
-                    $validator['password_confirmation'] = Arr::get($attributes, 'password_confirmation');
-                }
-                $user->changePassword($newPassword);
-                $validator['password'] = $newPassword;
-            }
-
-            if ($mobile = Arr::get($this->data, 'data.attributes.mobile')) {
-                $user->changeMobile($mobile);
-            }
-
-            if ($status = Arr::get($this->data, 'data.attributes.status')) {
-                $this->assertCan($this->actor, 'edit.status', $user);
-                $user->changeStatus($status);
-            }
-
-            if ($groupId = Arr::get($this->data, 'data.attributes.groupId')) {
-                $this->assertCan($this->actor, 'edit.group', $user);
-                $user->groups()->sync($groupId);
-            }
-
-            $userValidator->valid($validator);
-
-            $user->save();
-
-            $user->succeed = true;
-            $data = $user;
-        } catch (Exception $e) {
-            $data = new User(compact('id'));
-            $data->error = $e->getMessage();
+        if (!$isSelf) {
+            $this->assertCan($this->actor, 'edit', $user);
         }
 
-        return $data;
+        $validator = [];
+
+        $attributes = Arr::get($this->data, 'data.attributes');
+
+        if ($newPassword = Arr::get($attributes, 'newPassword')) {
+
+            if ($isSelf) {
+                $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
+                $this->assertPermission($verifyPwd);
+
+                $this->validator->setUser($user);
+                $validator['password_confirmation'] = Arr::get($attributes, 'password_confirmation');
+            }
+            $user->changePassword($newPassword);
+            $validator['password'] = $newPassword;
+        }
+
+        if ($mobile = Arr::get($attributes, 'mobile')) {
+            $this->assertCan($this->actor, 'edit.mobile', $user);
+            $user->changeMobile($mobile);
+        }
+
+        if ($status = Arr::get($attributes, 'status')) {
+            $this->assertCan($this->actor, 'edit.status', $user);
+            $user->changeStatus($status);
+        }
+
+        if ($groupId = Arr::get($attributes, 'groupId')) {
+            $this->assertCan($this->actor, 'edit.group', $user);
+            $user->groups()->sync($groupId);
+        }
+
+        $this->validator->valid($validator);
+
+        $user->save();
+
+        return $user;
     }
 }

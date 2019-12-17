@@ -24,14 +24,16 @@ class CreateGroup
      *
      * @var User
      */
-    public $actor;
+    protected $actor;
 
     /**
      * The attributes of the new group.
      *
      * @var array
      */
-    public $data;
+    protected $data;
+
+    protected $validator;
 
     /**
      * @param User $actor The user performing the action.
@@ -43,35 +45,38 @@ class CreateGroup
         $this->data = $data;
     }
 
-    /**
-     * @param Dispatcher $events
-     * @param GroupValidator $validator
-     * @return Group
-     * @throws NotAuthenticatedException
-     * @throws PermissionDeniedException
-     * @throws ValidationException
-     */
+
     public function handle(Dispatcher $events, GroupValidator $validator)
     {
         $this->events = $events;
+        $this->validator = $validator;
 
-        $this->assertRegistered($this->actor);
-        $this->assertCan($this->actor, 'group.createGroup');
+        return call_user_func([$this, '__invoke']);
+    }
+
+    /**
+     * @return Group
+     * @throws PermissionDeniedException
+     */
+    public function __invoke()
+    {
+        $this->assertCan($this->actor, 'create');
 
         $attributes = Arr::get($this->data, 'attributes', []);
 
         $group = new Group();
 
-        $group->name = $attributes['name'];
-        $group->type = $attributes['type'];
-        $group->color = $attributes['color'];
-        $group->icon = $attributes['icon'];
+        $group->name = Arr::get($attributes, 'name');
+        $group->type = Arr::get($attributes, 'type', '');
+        $group->color = Arr::get($attributes, 'color', '');
+        $group->icon = Arr::get($attributes, 'icon', '');
+        $group->default = Arr::get($attributes, 'default', 0);
 
         $this->events->dispatch(
             new Saving($group, $this->actor, $this->data)
         );
 
-        $validator->valid($group->getAttributes());
+        $this->validator->valid($group->getAttributes());
 
         $group->save();
 

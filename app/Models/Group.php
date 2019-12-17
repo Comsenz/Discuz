@@ -16,10 +16,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Collection $users
  * @property Collection $permissions
+ * @property int default
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)
  * @method static find(int $GUEST_ID)
+ * @method static where(string $string, int $id)
  */
 class Group extends Model
 {
@@ -60,7 +62,7 @@ class Group extends Model
      *
      * @return HasMany
      */
-    public function groupPermission()
+    public function permission()
     {
         return $this->hasMany(GroupPermission::class);
     }

@@ -10,6 +10,7 @@ use App\Api\Controller as ApiController;
 
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
+$route->get('/settings/tags', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
 $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
@@ -74,6 +75,7 @@ $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersControll
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->get('/user/export', 'user.export', ApiController\Users\ExportUserController::class);
+$route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
 
 /*
 |--------------------------------------------------------------------------

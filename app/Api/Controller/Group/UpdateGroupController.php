@@ -25,7 +25,7 @@ class UpdateGroupController extends AbstractResourceController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $res = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new UpdateGroup(
                 Arr::get(
                     $request->getQueryParams(), 'id'),
@@ -34,7 +34,5 @@ class UpdateGroupController extends AbstractResourceController
                 )
             )
         );
-
-        return $res;
     }
 }

@@ -22,7 +22,7 @@ class DeleteUsers
     protected $id;
     /**
      * 初始化命令参数
-     * @param id     $id
+     * @param int     $id
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
@@ -34,35 +34,20 @@ class DeleteUsers
 
     public function handle(UserRepository $users)
     {
-        return $this($users);
+        return call_user_func([$this, '__invoke'], $users);
     }
 
+
     /**
-     * @param $users
-     * @return User|null
+     * @param UserRepository $users
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function __invoke($users)
+    public function __invoke(UserRepository $users)
     {
+        $user = $users->findOrFail($this->id, $this->actor);
 
-        $data = null;
-        $id = $this->id;
-        $actor = $this->actor;
+        $this->assertCan($this->actor, 'delete', $user);
 
-        try {
-            $user = $users->findOrFail($id);
-
-            $this->assertCan($actor, 'delete', $user);
-
-            $user->delete();
-
-            $user->succeed = true;
-
-            $data = $user;
-        } catch (Exception $e) {
-            $data = new User(compact('id'));
-            $data->error = $e->getMessage();
-        }
-
-        return $data;
+        $user->delete();
     }
 }

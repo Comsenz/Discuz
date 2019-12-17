@@ -3,7 +3,7 @@
 namespace App\Api\Controller\Users;
 
 
-use App\Api\Serializer\InfoSerializer;
+use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\UpdateUser;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -13,7 +13,7 @@ use Illuminate\Support\Arr;
 
 class UpdateUserController extends AbstractResourceController
 {
-    public $serializer = InfoSerializer::class;
+    public $serializer = UserProfileSerializer::class;
 
     protected $bus;
 
