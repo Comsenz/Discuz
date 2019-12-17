@@ -28,7 +28,9 @@
       }
 
       .el-date-editor.el-input__inner{
-        width: 260PX;
+        width: 0;
+        flex: 1;
+        min-width: 200PX;
       }
 
       &__title{

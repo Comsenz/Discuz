@@ -92,19 +92,18 @@ export default {
 
     deleteAllClick(){
       let id = '';
-      this.multipleSelection.forEach((item,index)=>{
+      /*this.multipleSelection.forEach((item,index)=>{
         if (index < this.multipleSelection.length - 1){
           id =  id + item.id + ','
         } else {
           id =  id + item.id
         }
-      });
-      this.batchDeleteCategories(id).then(()=>{
+      });*/
+      this.batchDeleteCategories(id.join(',')).then(()=>{
         this.getCategories();
       });
       this.visible = false;
     },
-
 
     /*
     * 接口请求

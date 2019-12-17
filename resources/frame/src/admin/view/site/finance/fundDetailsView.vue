@@ -68,6 +68,14 @@
           </el-table-column>
 
         </el-table>
+
+        <Page
+          v-if="pageCount > 1"
+          @current-change="handleCurrentChange"
+          :current-page="currentPaga"
+          :page-size="10"
+          :total="total">
+        </Page>
       </div>
 
     </div>
