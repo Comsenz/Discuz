@@ -53,26 +53,39 @@
         </el-table-column>
 
         <el-table-column
-          prop="productName"
-          label="商品名称">
+          prop="thread.firstPost._data.content"
+          show-overflow-tooltip
+          label="商品名称"
+          min-width="150">
         </el-table-column>
 
         <el-table-column
           prop="_data.amount"
-          label="金额">
+          label="金额"
+          width="100">
         </el-table-column>
 
         <el-table-column
           prop="_data.created_at"
           label="订单时间">
+          <template slot-scope="scope">{{ formatDate(scope.row._data.created_at) }}</template>
         </el-table-column>
 
         <el-table-column
-          label="状态">
-          <template slot-scope="scope">{{ scope.row._data.status }}</template>
+          label="状态"
+          width="100">
+          <template slot-scope="scope">{{ cashStatus(scope.row._data.status) }}</template>
         </el-table-column>
 
       </el-table>
+
+      <Page
+        v-if="pageCount > 1"
+        @current-change="handleCurrentChange"
+        :current-page="currentPaga"
+        :page-size="10"
+        :total="total">
+      </Page>
     </div>
 
   </div>

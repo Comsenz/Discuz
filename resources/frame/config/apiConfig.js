@@ -1,10 +1,9 @@
 /**
  * 接口配置文件
  */
-// var browserDb =require ('../src/helpers/webDbHelper.js');
 
 module.exports = {
-	'getVote': '/commonvote/getvote', //获取单组投票数据
+  'getVote': '/commonvote/getvote', //获取单组投票数据
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'users':'/api/users', //用户信息
@@ -25,6 +24,7 @@ module.exports = {
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',//查看用户钱包
   'reflect':'/api/wallet/cash' ,//提现记录列表
+  'review':'/api/wallet/cash/review',     //提现审核
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   'walletFrozen':'/api/wallet/log',//冻结金额

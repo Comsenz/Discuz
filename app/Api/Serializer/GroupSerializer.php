@@ -25,7 +25,8 @@ class GroupSerializer extends AbstractSerializer
             'name'  => $model->name,
             'type'  => $model->type,
             'color' => $model->color,
-            'icon'  => $model->icon
+            'icon'  => $model->icon,
+            'default' => $model->default
         ];
     }
 
@@ -33,7 +34,7 @@ class GroupSerializer extends AbstractSerializer
      * @param $group
      * @return Relationship
      */
-    public function groupPermission($group)
+    public function permission($group)
     {
         return $this->hasMany($group, GroupPermissionSerializer::class);
     }

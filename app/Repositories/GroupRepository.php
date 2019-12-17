@@ -35,15 +35,14 @@ class GroupRepository extends AbstractRepository
      *
      * @param int $id
      * @param User $actor
-     * @param string $ability
      * @return \Illuminate\Database\Eloquent\Builder|Model
      *
      */
-    public function findOrFail($id, User $actor = null, $ability = 'find')
+    public function findOrFail($id, User $actor = null)
     {
         $query = Group::where('id', $id);
 
-        return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
+        return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 
 

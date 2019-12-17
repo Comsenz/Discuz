@@ -99,16 +99,16 @@ export default {
         };
       });
 
-      this.deleteStatusList.forEach((item,index)=>{
+      /*this.deleteStatusList.forEach((item,index)=>{
         if (index < this.deleteStatusList.length-1){
           deleteStr = deleteStr + item + ','
         }else {
           deleteStr = deleteStr + item
         }
-      });
+      });*/
 
       if (this.deleteStatusList.length > 0){
-        this.deleteThreadsBatch(deleteStr);
+        this.deleteThreadsBatch(deleteStr.join(','));
       }
       if (isDeleted.length > 0){
         this.patchPostsBatch(this.submitForm);

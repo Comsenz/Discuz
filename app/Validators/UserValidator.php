@@ -48,7 +48,7 @@ class UserValidator extends AbstractValidator
         ];
 
         if ($this->user) {
-            $rules['password'][] = 'confirmed';
+            $rules['password'] = '|confirmed';
         }
 
         return $rules;

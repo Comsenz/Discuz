@@ -8,63 +8,97 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      tableData: [{
-        user: '奶罩',
-        changeTime: '2016-05-02',
-        amountAvailable:"+200.00",
-        frozenAmount:'0',
-        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }, {
-        user: '辣椒',
-        changeTime: '2016-05-02',
-        amountAvailable:"+100.00",
-        frozenAmount:'0',
-        changeDescription:'小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }, {
-        user: '铁军',
-        changeTime: '2016-05-02',
-        amountAvailable:"-100.00",
-        frozenAmount:'0',
-        changeDescription:'铁军提现失败，退回可用余额100元'
-      }, {
-        user: '王小虎',
-        changeTime: '2016-05-02',
-        amountAvailable:"+200.00",
-        frozenAmount:'0',
-        changeDescription:'管理小虫加入站点“天涯杂谈”，站长奶罩收益100元'
-      }],
-      pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value1: '',
+      withdrawalInterval:'',   //提现间隔时间
+      withdrawalFee:'',        //提现手续费率
+      minAmount:'',            //最小金额
+      maxAmount:'',            //最大金额
+      amountCap:''             //金额上限
     }
   },
   methods:{
+    submitClick(){
+      this.postWithdrawalSettings();
+    },
 
+    /*
+    * 请求接口
+    * */
+    postWithdrawalSettings(){
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          data:[
+            {
+              "attributes":{
+                "key":"cash_interval_time",
+                "value":this.withdrawalInterval,
+                "tag": "cash"
+              }
+            },
+            {
+              "attributes":{
+                "key":"cash_rate",
+                "value":this.withdrawalFee,
+                "tag": "cash"
+              }
+            },
+            {
+              "cash_min_sum":{
+                "key":"cash_interval_time",
+                "value":this.minAmount,
+                "tag": "cash"
+              }
+            },
+            {
+              "attributes":{
+                "key":"cash_max_sum",
+                "value":this.maxAmount,
+                "tag": "cash"
+              }
+            },
+            {
+              "attributes":{
+                "key":"cash_sum_limit",
+                "value":this.amountCap,
+                "tag": "cash"
+              }
+            }
+          ]
+        }
+      }).then(res=>{
+        this.$message({
+          message: '提交成功',
+          type: 'success'
+        });
+        this.getForum();
+
+      }).catch(err=>{
+        console.log(err);
+        this.$message.error('操作失败！');
+      })
+    },
+    getForum(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        let formData = res.data.attributes.setcash;
+        this.withdrawalInterval = formData.cash_interval_time;
+        this.withdrawalFee = formData.cash_rate;
+        this.minAmount = formData.cash_min_sum;
+        this.maxAmount = formData.cash_max_sum;
+        this.amountCap = formData.cash_sum_limit;
+      }).catch(err=>{
+        console.log(err);
+        this.$message.error('初始化失败！请重新刷新页面（F5）');
+      })
+    }
+
+  },
+  created(){
+    this.getForum();
   },
   components:{
     Card,

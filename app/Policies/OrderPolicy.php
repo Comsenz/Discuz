@@ -40,13 +40,9 @@ class OrderPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->can('order.view')) {
+        if ($actor->cannot('order.viewList')) {
+            $query->where('user_id', $actor->id);
             return;
-        } else {
-            $order = $query->firstOrFail();
-            if ($order->user_id != $actor->id) {
-                $query->whereRaw('FALSE');
-            }
         }
     }
 }

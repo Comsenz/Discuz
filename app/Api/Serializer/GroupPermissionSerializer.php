@@ -16,7 +16,7 @@ use Discuz\Api\Serializer\AbstractSerializer;
 class GroupPermissionSerializer extends AbstractSerializer
 {
 
-    protected $type = 'group-permission';
+    protected $type = 'permissions';
 
     /**
      * Get the default set of serialized attributes for a model.
@@ -37,6 +37,6 @@ class GroupPermissionSerializer extends AbstractSerializer
      */
     public function getId($model)
     {
-        return hexdec(substr(md5($model->group_id.$model->permission), -3));
+        return hash('crc32b',$model->group_id.$model->permission);
     }
 }

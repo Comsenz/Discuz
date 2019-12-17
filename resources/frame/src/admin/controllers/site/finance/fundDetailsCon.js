@@ -3,6 +3,7 @@
 * */
 
 import Card from '../../../view/site/common/card/card';
+import Page from '../../../view/site/common/page/page';
 import moment from 'moment';
 
 export default {
@@ -36,10 +37,13 @@ export default {
           }
         }]
       },
-
       userName:'',
       changeTime:['',''],
       changeDescription:'',
+
+      total:0,                    //总数
+      pageCount:0,                //总页数
+      currentPaga:1               //第几页
     }
   },
   methods:{
@@ -51,6 +55,12 @@ export default {
         this.changeTime[0] = this.changeTime[0] + '-00-00-00';
         this.changeTime[1] = this.changeTime[1] + '-24-00-00';
       }
+      this.getFundingDetailsList();
+    },
+
+    handleCurrentChange(val){
+      console.log(val);
+      this.currentPaga = val;
       this.getFundingDetailsList();
     },
 
@@ -71,6 +81,8 @@ export default {
         method:'get',
         data:{
           include:['user','userWallet'],
+          'page[number]':this.currentPaga,
+          'page[size]':10,
           'filter[username]' : this.userName,
           'filter[change_desc]' : this.changeDescription,
           'filter[start_time]' : this.changeTime[0],
@@ -79,7 +91,9 @@ export default {
       }).then(res=>{
         console.log(res);
         this.tableData = [];
-        this.tableData = res.readdata
+        this.tableData = res.readdata;
+        this.total = res.meta.total;
+        this.pageCount = res.meta.pageCount;
       }).catch(err=>{
         console.log(err);
       })
@@ -90,6 +104,7 @@ export default {
     this.getFundingDetailsList();
   },
   components:{
-    Card
+    Card,
+    Page
   }
 }
