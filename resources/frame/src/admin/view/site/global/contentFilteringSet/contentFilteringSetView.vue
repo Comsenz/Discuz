@@ -86,7 +86,7 @@
               新增
             </p>
           </div>-->
-
+    <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum"  />
         </div>
 
         <Card class="footer-btn">

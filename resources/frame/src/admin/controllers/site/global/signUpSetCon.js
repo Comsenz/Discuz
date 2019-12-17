@@ -25,12 +25,15 @@ export default {
       
         // this.pwdLength = res.readdata._data.setreg.password_length
         this.pwdLength = res.readdata._data.passwordLength
+        this.checkList = res.readdata._data.passwordStrength.split(',')
+        console.log(this.checkList)
         console.log( res)
       })
     },
     submission(){ //提交注册信息接口
       var reg = /^\d+$|^\d+[.]?\d+$/;
       var pwdLength = this.pwdLength;
+      var passwordStrength = this.checkList.join(",")
       if(pwdLength === ''){
         return
       }
@@ -42,8 +45,29 @@ export default {
         url:'settings',
         method:'post',
         data:{
-          "register_close": this.checked,
-          "password_length":this.pwdLength,
+          "data":[
+            {
+             "attributes":{
+              "key":'register_close',
+              "value":this.checked,
+              "tag": 'default'
+             }
+            },{
+              "attributes":{
+                "key":'password_length',
+                "value":this.pwdLength,
+                "tag": 'default'
+               }
+            },{
+              "attributes":{
+                "key":'password_strength',
+                "value":passwordStrength,
+                "tag": 'default'
+               }
+            }
+           ]
+          // "register_close": this.checked,
+          // "password_length":this.pwdLength,
           
         }
       }).then(data=>{

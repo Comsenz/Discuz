@@ -4,6 +4,8 @@
 
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
+import Page from '../../../../view/site/common/page/page';
+import webDb from 'webDbHelper';
 
 
 export default {
@@ -14,9 +16,10 @@ export default {
       multipleSelection:[],
 
       deleteStatus:true,
-      pageLimit: 20,
+      pageLimit: 15,
       pageNum: 1,
       query: {},
+      total: 0,
     }
   },
 
@@ -27,7 +30,6 @@ export default {
   methods:{
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(this.multipleSelection)
       if (this.multipleSelection.length >= 1){
         this.deleteStatus = false
       } else {
@@ -36,7 +38,7 @@ export default {
 
     },
 
-    async handleGetUserList(initStatus = false){
+    async handleGetUserList(){
       try{
         const {
           username,
@@ -57,20 +59,19 @@ export default {
             "page[number]": this.pageNum
           }
         })
-
-        if(initStatus){
-          this.tableData = [];
-        }
-        this.tableData = this.tableData.concat(response.readdata);
-        console.log(response,'response')
+        console.log(response)
+        this.total = response.meta ? response.meta.total : 0;
+        this.tableData = response.readdata;
       } catch(err){
 
       }
     },
 
-    handleReGetList(){
-      this.handleGetUserList(true);
-    },
+    // handleCurrentChange(val){
+    //   this.pageNum = val;
+    //   webDb.setLItem('currentPag',val);
+    //   this.handleGetUserList();
+    // },
 
     async exporUserInfo(){
       try{
@@ -115,7 +116,7 @@ export default {
           }
         })
 
-        this.handleGetUserList(true);
+        this.handleGetUserList();
       } catch(err){
         console.error(err,'deleteBatch');
       }
@@ -127,7 +128,6 @@ export default {
       }
       try{
         let dataList = [];
-        console.log(this.multipleSelection,'multipleSelection')
         this.multipleSelection.forEach((v)=>{
 
           dataList.push({
@@ -147,7 +147,7 @@ export default {
           }
         })
 
-        this.handleGetUserList(true);
+        this.handleGetUserList();
       } catch(err){
         console.error(err, 'disabledBatch');
       }
@@ -178,6 +178,7 @@ export default {
   },
   components:{
     Card,
-    CardRow
+    CardRow,
+    Page
   }
 }

@@ -3,6 +3,7 @@
 <template>
     <div class="circleCon">
 	    <comHeader title="站点信息"></comHeader>
+		<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <div class="content">
 	    	<div class="circlePL">
 		    	<div class="infoItem">
@@ -69,6 +70,7 @@
 		    	</div>
 		    </div>
 	    </div>
+		</van-pull-refresh>
     </div>
 </template>
 

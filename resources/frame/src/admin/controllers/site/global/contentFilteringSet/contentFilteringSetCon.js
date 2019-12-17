@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 import TableContAdd from '../../../../view/site/common/table/tableContAdd';
+import Page from '../../../../view/site/common/page/page';
 
 export default {
   data:function () {
@@ -13,6 +14,7 @@ export default {
       multipleSelection: [],
       tableDataLength:'',
       createCategoriesStatus:false,   //添加分类状态
+      total:0,
 
       options: [{
           value: '{MOD}',
@@ -31,6 +33,8 @@ export default {
       replace:true,
       inputFind:false,
       radio2:"1",
+      pageLimit: 15,
+      pageNum: 1,
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,
       // loginStatus:'',  //default  batchSet
@@ -84,7 +88,9 @@ export default {
           url:'serachWords',
           method:'get',
           data:{
-            'filter[q]':this.serachVal
+            'filter[q]':this.serachVal,
+            "page[limit]": this.pageLimit,
+            "page[number]": this.pageNum
           }
         })
         if(initStatus){
@@ -95,6 +101,8 @@ export default {
           if(v._data.inputVal === undefined){
             v._data.inputVal = '';
           }
+          console.log(response)
+          this.total = response.meta ? response.meta.stopWordCount : 0;
           return v;
         });
         console.log(this.tableData)
@@ -204,6 +212,7 @@ export default {
   components:{
     Card,
     CardRow,
-    TableContAdd
+    TableContAdd,
+    Page
   }
 }

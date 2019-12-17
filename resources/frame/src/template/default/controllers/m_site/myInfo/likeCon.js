@@ -11,9 +11,10 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      likeList:[
-        
-      ]
+      likeList:[],
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
     }
   },
   components:{
@@ -24,7 +25,7 @@ export default {
   },
   methods:{
     myLikeList(){
-      this.appFetch({
+     return this.appFetch({
         url:'notice',
         method:'get',
         data:{
@@ -34,6 +35,36 @@ export default {
         console.log(res)
         this.likeList = res.readdata;
       })
+    },
+    onLoad(){    //上拉加载
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'2'
+        }
+      }).then(res=>{
+        // 加载状态结束
+        this.loading = false;
+        if(res.readdata === ''){
+          this.finished = false; //数据全部加载完成
+        }else{
+          this.finished = true
+        }
+
+      console.log(this.finished,'00000000000000000000')
+
+      })
+    },
+    onRefresh(){
+      setTimeout(()=>{
+        this.myLikeList().then(()=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true;
+        })
+        
+      },200)
     }
   },
   created(){

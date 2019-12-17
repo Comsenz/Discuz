@@ -13,6 +13,12 @@
 		    </div>
 		</div>
 	    <div class="searchRes memberCheckList">
+			<!-- <van-list
+    		v-model="loading"
+    		:finished="finished"
+    		finished-text="没有更多了"
+    		@load="onLoad"
+    ><van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
 	        <van-checkbox-group v-model="result">
 			  <van-cell-group>
 			    <van-cell
@@ -40,6 +46,8 @@
 				<i class="icon iconfont icon-search"></i>
 				打开更多用户
 			</div>
+			<!-- </van-pull-refresh>
+			</van-list> -->
 	    </div>
 		<div class="manageFootFixed">
 			<div class="operaCho">

@@ -21,9 +21,11 @@ export default {
         
       ],
       list: [],
-      loading: false,
-      finished: false,
-      isLoading: false,
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageSize:'',//每页的条数
+      pageIndex:'',//页码
     }
   },
   // components:{
@@ -43,7 +45,7 @@ export default {
   methods:{
     myCollection(){
       console.log('33333333333333333333333')
-      this.appFetch({
+      return this.appFetch({
         url:'collection',
         method:'get',
         data:{
@@ -52,6 +54,7 @@ export default {
       }).then(data=>{
         console.log(data)
         this.collectionList = data.readdata;
+        console.log(data.meta.pageCount)
       })
         // const params = {
         //   // 'filter[user]': this.userId
@@ -62,24 +65,45 @@ export default {
         //   this.collectionList = data;
         // });
       },
-      onLoad(){
-        setTimeout(()=>{
-      
-          // for(let i = 0;i<10;i++){
-          //   this.collectionList.push(this.collectionList.length + 1)
-          // }
+      onLoad(){    //上拉加载
+        this.appFetch({
+          url:'collection',
+          method:'get',
+          data:{
+            include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          }
+        }).then(res=>{
+          // this.pageSize = res.meta.threadCount;
+          // this.pageIndex = res.meta.pageCount;
+          // this.collectionList = res.readdata;
           // 加载状态结束
-        this.loading = false;
-            // 数据全部加载完成
-            if (this.collectionList.length >= 40) {
-              this.finished = true;
-            }
-        },200)
+          this.loading = false;
+          if(res.readdata === ''){
+            this.finished = false; //数据全部加载完成
+          }else{
+            this.finished = true
+          }
+
+        console.log(this.finished,'00000000000000000000')
+
+        })
+        // setTimeout(()=>{
+          
+        // this.loading = false;
+        //     // 数据全部加载完成
+        //     if (this.collectionList.length >= 40) {
+        //       this.finished = true;
+        //     }
+        // },200)
       },
       onRefresh(){
         setTimeout(()=>{
-          this.$toast('刷新成功');
-          this.isLoading = false;
+          this.myCollection().then(()=>{
+            this.$toast('刷新成功');
+            this.isLoading = false;
+            this.finished = true;
+          })
+          
         },200)
       }
     

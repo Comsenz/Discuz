@@ -6,7 +6,7 @@
 
         <div class="user-search-list__table-title">
           <p>共搜索到 {{tableData.length}} 名符合条件的用户</p>
-          <el-button type="text" @click="handleReGetList">重新搜索</el-button>
+          <el-button type="text" @click="$router.push({path: '/admin/user-manage'})">重新搜索</el-button>
           <el-button type="text" @click="exporUserInfo">导出用户信息</el-button>
         </div>
 
@@ -54,6 +54,7 @@
             </el-table-column>
 
           </el-table>
+          <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum"  />
         </div>
 
         <Card class="footer-btn">

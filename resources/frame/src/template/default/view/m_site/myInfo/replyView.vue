@@ -1,6 +1,13 @@
 <template>
   <div class="reply-my-box my-info-money-header">
     <ReplyHeader title="回复我的"></ReplyHeader>
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    finished-text="没有更多了"
+    @load="onLoad"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="reply-my-main">
       <div class="reply-my-cont cell-crossing" v-for='(item,index) in replyList' :key='index'>
         <ContHeader
@@ -8,7 +15,7 @@
           :stateTitle="item._data.thread_title"
           :time="$moment(item._data.created_at).startOf('hour').fromNow()"
           :userName="item._data.user_name">
-          <div slot="operating">删除</div>
+          <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
         <div class="reference">
           <div class="reference-cont">
@@ -20,6 +27,8 @@
         </div>
       </div>
     </main>
+    </van-pull-refresh>    
+    </van-list>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>

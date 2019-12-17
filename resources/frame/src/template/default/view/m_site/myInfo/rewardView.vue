@@ -1,6 +1,13 @@
 <template>
   <div class="reward-box my-info-money-header">
     <RewardHeader title="打赏我的"></RewardHeader>
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    finished-text="没有更多了"
+    @load="onLoad"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="reward-main">
       <div class="reward-con cell-crossing" v-for='(item,index) in rewardList' :key='index'>
         <ContHeader
@@ -19,6 +26,8 @@
         </ContMain> -->
       </div>
     </main>
+    </van-pull-refresh>    
+  </van-list>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>

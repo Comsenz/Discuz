@@ -19,6 +19,11 @@ export default {
 			userLoadMoreStatus: false,
 			userLoadMorePageChange: false,
 			choiceRes: { attributes: { name: '选择操作' } },
+			loading: false,  //是否处于加载状态
+			finished: false, //是否已加载完所有数据
+			isLoading: false, //是否处于下拉刷新状态
+			pageSize:'',//每页的条数
+			pageIndex:'',//页码
 		}
 	},
 	//用于数据初始化
@@ -165,13 +170,52 @@ export default {
 			this.userParams['page[number]']++;
 			this.userLoadMorePageChange = true;
 			this.getSearchValUserList();
-		}
+		},
+		onLoad(){    //上拉加载
+			this.appFetch({
+			  url:'users',
+			  method:'get',
+			  data:{
+				
+			  }
+			}).then(res=>{
+			  this.pageSize = res.meta.threadCount;
+			  this.pageIndex = res.meta.pageCount;
+			  this.userList = res.readdata;
+			  // 加载状态结束
+			  this.loading = false;
+			  if(this.userList.length>=this.pageSize){
+				this.finished = true; //数据全部加载完成
+			  }
+	
+			console.log(this.finished,'00000000000000000000')
+	
+			})
+			// setTimeout(()=>{
+			  
+			// this.loading = false;
+			//     // 数据全部加载完成
+			//     if (this.collectionList.length >= 40) {
+			//       this.finished = true;
+			//     }
+			// },200)
+		  },
+		onRefresh(){
+			setTimeout(()=>{
+			  this.handleSearch().then(()=>{
+				this.$toast('刷新成功');
+				this.isLoading = false;
+				this.finished = true;
+			  })
+			  
+			},200)
+		  }
 	},
 
 	mounted: function () {
 
 	},
 	beforeRouteLeave(to, from, next) {
-
+		
 	}
 }

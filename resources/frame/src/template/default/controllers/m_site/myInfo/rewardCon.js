@@ -13,9 +13,10 @@ import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 export default {
   data:function () {
     return {
-      rewardList:[
-       
-      ]
+      rewardList:[],
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
     
     }
   },
@@ -31,7 +32,7 @@ export default {
   },
   methods:{
     myRewardList(){
-      this.appFetch({
+     return this.appFetch({
         url:'notice',
         method:'get',
         data:{
@@ -42,6 +43,47 @@ export default {
         this.rewardList = res.readdata;
         
       })
+    },
+    onLoad(){    //上拉加载
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'3'
+        }
+      }).then(res=>{
+        // this.pageSize = res.meta.threadCount;
+        // this.pageIndex = res.meta.pageCount;
+        // this.collectionList = res.readdata;
+        // 加载状态结束
+        this.loading = false;
+        if(res.readdata === ''){
+          this.finished = false; //数据全部加载完成
+        }else{
+          this.finished = true
+        }
+
+      console.log(this.finished,'00000000000000000000')
+
+      })
+      // setTimeout(()=>{
+        
+      // this.loading = false;
+      //     // 数据全部加载完成
+      //     if (this.collectionList.length >= 40) {
+      //       this.finished = true;
+      //     }
+      // },200)
+    },
+    onRefresh(){
+      setTimeout(()=>{
+        this.myRewardList().then(()=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true;
+        })
+        
+      },200)
     }
   },
 

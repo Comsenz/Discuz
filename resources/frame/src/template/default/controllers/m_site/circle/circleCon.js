@@ -10,6 +10,7 @@ export default {
 			// footShow: true,
 			fourHeader: true,
       isWx:'1',
+      isLoading: false,
       // replyTag: false,
 			themeChoList: [
 				{
@@ -177,7 +178,14 @@ export default {
 	    hideScreen(){
 	        //是否显示筛选内容
 	        this.showScreen = false;
-	    }
+      },
+      onRefresh(){
+        setTimeout(()=>{
+          this.loadThemeList()
+          this.$toast('刷新成功');
+          this.isLoading = false;
+        },200)
+      }
 	},
 	mounted: function() {
 		// this.getVote();

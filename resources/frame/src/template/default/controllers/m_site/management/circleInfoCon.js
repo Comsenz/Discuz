@@ -8,7 +8,8 @@ export default {
 	data: function() {
 		return {
 		  siteInfo: new Forum(),
-		  username:''
+      username:'',
+      isLoading: false, //是否处于下拉刷新状态
 		}
 	},
   beforeCreate:function(){
@@ -42,6 +43,14 @@ export default {
     membersJump(userId){
       console.log('2222');
       this.$router.push({path:'/home-page/'+userId});
+    },
+    onRefresh(){
+      setTimeout(()=>{
+          this.loadSite()
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true; 
+      },200)
     }
 	},
 

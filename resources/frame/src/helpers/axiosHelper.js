@@ -214,7 +214,8 @@ const appFetch = function(params, options) {
       }
 
       return data.data;
-    } else {
+    } 
+    else {
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       })
