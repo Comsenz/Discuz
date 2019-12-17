@@ -7,8 +7,6 @@ namespace App\Policies;
 use App\Models\Group;
 use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class GroupPolicy extends AbstractPolicy
 {

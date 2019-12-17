@@ -9,7 +9,8 @@ class GroupPermissionTableSeeder extends Seeder
     protected $permissions = [
         'user.view' => [7, 10],
         'user.edit' => [],
-        'viewUserList' => [7, 10]
+        'viewUserList' => [7, 10],
+        'group.delete' => []
     ];
 
     /**
