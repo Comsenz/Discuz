@@ -7,6 +7,7 @@
 
 namespace App\Listeners\Category;
 
+use App\Models\Category;
 use App\Events\Category\CategoryRefreshCount;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -18,8 +19,18 @@ class CategoryListener
         $events->listen(CategoryRefreshCount::class, [$this, 'refreshCount']);
     }
 
-    public function refreshCount()
+    /**
+     * @param CategoryRefreshCount $event
+     */
+    public function refreshCount(CategoryRefreshCount $event)
     {
-        dd(889);
+        if ($event->original_id != $event->category->id) {
+            $originalCate = Category::where('id', $event->original_id)->first();
+            $originalCate->refreshThreadCount();
+            $originalCate->save();
+        }
+
+        $event->category->refreshThreadCount();
+        $event->category->save();
     }
 }

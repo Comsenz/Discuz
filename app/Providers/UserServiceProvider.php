@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Events\Users\Saving;
 use App\Listeners\User\AddDefaultGroup;
+use App\Listeners\User\UserListener;
 use App\User\AvatarUploader;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
@@ -28,5 +29,8 @@ class UserServiceProvider extends ServiceProvider
         $events = $this->app->make('events');
 
         $events->listen(Saving::class, AddDefaultGroup::class);
+
+        // 订阅事件
+        $events->subscribe(UserListener::class);
     }
 }

@@ -41,6 +41,7 @@ class RegisterController extends AbstractCreateController
 
     /**
      * {@inheritdoc}
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {

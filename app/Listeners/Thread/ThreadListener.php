@@ -89,7 +89,7 @@ class ThreadListener
     }
 
     /**
-     * 主题发布后 增加分类主题数量
+     * 主题发布后，增加分类主题数量
      *
      * @param ThreadCreated $event
      * @throws \App\Exceptions\ThreadException
@@ -107,7 +107,7 @@ class ThreadListener
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
-        $this->action($event->thread, $event->thread->is_approved, $action);
+        $action = $this->transLogAction($event->thread->is_approved);
 
         OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
     }
@@ -120,7 +120,7 @@ class ThreadListener
      */
     public function whenThreadWasHidden(Hidden $event)
     {
-        $this->action($event->thread, 'hide', $action);
+        $action = 'hide';
 
         OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
     }

@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupTableSeeder::class);
         $this->call(GroupPermissionTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
+        $this->call(EmojiTableSeeder::class);
     }
 }

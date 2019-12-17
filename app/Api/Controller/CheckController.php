@@ -4,28 +4,27 @@
 namespace App\Api\Controller;
 
 
-use App\Api\Serializer\QcloudCheckSerializer;
-use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
-use Discuz\Qcloud\QcloudClient;
 use Discuz\Qcloud\QcloudTrait;
-use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Tobscure\JsonApi\Document;
 
 class CheckController implements RequestHandlerInterface
 {
-    use QcloudTrait;
+    use QcloudTrait,AssertPermissionTrait;
+
 
     /**
-     * Handles a request and produces a response.
-     *
-     * May call other collaborating code to generate the response.
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $this->assertCan($request->getAttribute('actor'), 'checkVersion');
+
         //使用Qcloud查询余额看是否能请求通过，能通过刚表明配置正确，不能刚直接异常
         $this->describeAccountBalance();
 

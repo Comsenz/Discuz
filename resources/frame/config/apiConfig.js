@@ -1,10 +1,9 @@
 /**
  * 接口配置文件
  */
-// var browserDb =require ('../src/helpers/webDbHelper.js');
 
 module.exports = {
-	'getVote': '/commonvote/getvote', //获取单组投票数据
+  'getVote': '/commonvote/getvote', //获取单组投票数据
   'register': '/api/register',   //用户名注册
   'login':'/api/login',//用户名登录
   'users':'/api/users', //用户信息
@@ -20,10 +19,12 @@ module.exports = {
   'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
 
   'emojis':'/api/emoji',      //表情接口
+  'attachment':'/api/attachment', //上传附件、图片
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',//查看用户钱包
   'reflect':'/api/wallet/cash' ,//提现记录列表
+  'review':'/api/wallet/cash/review',     //提现审核
   'circleInfo':'/api/circleInfo', //站点信息
   'themeNavListCon':'/api/themeNavListCon', //主题列表
   'walletFrozen':'/api/wallet/log',//冻结金额
@@ -48,7 +49,7 @@ module.exports = {
   'threadsBatch':'/api/threads/batch',   //修改主题接口(批量)
   'upload': '/api/users/',//上传头像
   'invite':'/api/invite',//创建邀请码
-  'groups':'/api/groups',//获取所有操作类型
+  'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'group-permission':'/api/group-permission', // 修改用户组权限
 
 

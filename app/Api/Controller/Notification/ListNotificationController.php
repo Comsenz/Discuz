@@ -1,75 +1,92 @@
 <?php
-declare (strict_types = 1);
 
 /**
  *      Discuz & Tencent Cloud
  *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: NotificationController.php xxx 2019-11-06 18:24:00 yanchen $
  */
 
 namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
-use App\Commands\Notification\ListNotification;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Http\UrlGenerator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Discuz\Http\UrlGenerator;
 
 class ListNotificationController extends AbstractListController
 {
     use AssertPermissionTrait;
 
-    const TYPE_LIKE = 'App\\Notifications\\Liked';
+    /**
+     * 点赞通知
+     */
+    const TYPE_LIKED = 'App\\Notifications\\Liked';
+
+    /**
+     * 回复通知
+     */
     const TYPE_REPLIED = 'App\\Notifications\\Replied';
+
+    /**
+     * 打赏通知
+     */
     const TYPE_REWARDED = 'App\\Notifications\\Rewarded';
 
     private $types = [
         1 => self::TYPE_REPLIED,
-        2 => self::TYPE_LIKE,
+        2 => self::TYPE_LIKED,
         3 => self::TYPE_REWARDED,
     ];
-
-    public $notification;
-
-    public $url;
-
-    public $notificationCount;
-
-    /**
-     * @param Dispatcher $bus
-     */
-    public function __construct(NotificationRepository $notification, UrlGenerator $url)
-    {
-
-        $this->notification = $notification;
-        $this->url = $url;
-    }
 
     /**
      * {@inheritdoc}
      */
     public $serializer = NotificationSerializer::class;
 
+    /**
+     * @var NotificationRepository
+     */
+    protected $notifications;
+
+    /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
+    /**
+     * @var int|null
+     */
+    public $notificationCount;
+
+    /**
+     * @param NotificationRepository $notifications
+     * @param UrlGenerator $url
+     */
+    public function __construct(NotificationRepository $notifications, UrlGenerator $url)
+    {
+        $this->notifications = $notifications;
+        $this->url = $url;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-
-        // 获取当前用户
         $actor = $request->getAttribute('actor');
-        $actor = User::find(1);
+
+        $this->assertRegistered($actor);
 
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
         $notifications = $this->search($actor, $filter, $limit, $offset);
-
 
         $document->addPaginationLinks(
             $this->url->route('notification.list'),
@@ -80,27 +97,35 @@ class ListNotificationController extends AbstractListController
         );
 
         $document->setMeta([
-            'threadCount' => $this->notificationCount,
-            'pageCount' => ceil($this->notificationCount / $limit),
+            'total' => $this->notificationCount,
+            'size' => $limit,
         ]);
 
         return $notifications;
-
     }
 
-    public function search($actor, $filter, $limit = null, $offset = 0)
+    /**
+     * @param User $actor
+     * @param array $filter
+     * @param null $limit
+     * @param int $offset
+     * @return Collection
+     */
+    public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $notifications =  $actor->notifications();
+        $type = Arr::get($this->types , Arr::get($filter, 'type'), '');
 
-        $type = Arr::get($filter, 'type');
+        $query = $actor->notifications()
+            ->when($type, function ($query, $type) {
+                return $query->where('type', $type);
+            });
 
-        $type && $notifications = $notifications->where('type', Arr::get($this->types , $type))->skip($offset)->take($limit);
-        $notifications = $notifications->get();
+        $this->notificationCount = $limit > 0 ? $query->count() : null;
 
-        $this->notificationCount = $limit > 0 ? ($type ? $actor->notifications()->where('type', Arr::get($this->types , $type))->count() :$actor->notifications()->count() ) : null;
+        $query->skip($offset)->take($limit);
 
         $actor->unreadNotifications->markAsRead();
 
-        return $notifications;
+        return $query->get();
     }
 }

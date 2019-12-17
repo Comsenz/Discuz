@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @property mixed register_ip
  * @package App\Models
  * @method truncate()
+ * @method static find($id)
  */
 class User extends Model
 {

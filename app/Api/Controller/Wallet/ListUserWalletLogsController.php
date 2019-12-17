@@ -93,7 +93,10 @@ class ListUserWalletLogsController extends AbstractListController
             $limit,
             $this->total
         );
-
+        $document->setMeta([
+            'total' => $this->total,
+            'pageCount' => ceil($this->total / $limit),
+        ]);
         $load         = $this->extractInclude($request);
         $wallet_log = $wallet_log->load($load);
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
+use DomainException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,9 +17,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Collection $users
  * @property Collection $permissions
+ * @property int default
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)
+ * @method static find(int $GUEST_ID)
+ * @method static where(string $string, int $id)
  */
 class Group extends Model
 {
@@ -54,12 +58,23 @@ class Group extends Model
      */
     protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function(self $group) {
+            if (in_array($group->id, [self::GUEST_ID, self::ADMINISTRATOR_ID, self::MEMBER_ID])) {
+                throw new DomainException('Cannot delete the default group');
+            }
+        });
+    }
+
     /**
      * Define the relationship with the group's permissions.
      *
      * @return HasMany
      */
-    public function groupPermission()
+    public function permission()
     {
         return $this->hasMany(GroupPermission::class);
     }

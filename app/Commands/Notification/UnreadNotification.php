@@ -20,13 +20,13 @@ use Illuminate\Notifications\DatabaseNotification;
 
 class UnreadNotification
 {
-    const TYPE_LIKE = 'App\\Notifications\\Liked';
+    const TYPE_LIKED = 'App\\Notifications\\Liked';
     const TYPE_REPLIED = 'App\\Notifications\\Replied';
     const TYPE_REWARDED = 'App\\Notifications\\Rewarded';
 
     private $types = [
         1 => self::TYPE_REPLIED,
-        2 => self::TYPE_LIKE,
+        2 => self::TYPE_LIKED,
         3 => self::TYPE_REWARDED,
     ];
 

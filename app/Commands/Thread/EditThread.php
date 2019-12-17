@@ -126,6 +126,9 @@ class EditThread
             }
         }
 
+        // 原分类ID
+        $cateId = $thread->category_id;
+
         $this->events->dispatch(
             new Saving($thread, $this->actor, $this->data)
         );
@@ -136,10 +139,15 @@ class EditThread
 
         $this->dispatchEventsFor($thread, $this->actor);
 
-//        $this->events->dispatch(
-//            new UserRefreshCount($thread->user),
-//            new CategoryRefreshCount($thread->category)
-//        );
+        /**
+         * 更改统计数
+         */
+        $this->events->dispatch(
+            new UserRefreshCount($thread->user)
+        );
+        $this->events->dispatch(
+            new CategoryRefreshCount($thread->category, $cateId)
+        );
 
         return $thread;
     }

@@ -95,6 +95,8 @@ class ForumSettingSerializer extends AbstractSerializer
                 'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
                 'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
+                'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
+                'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
                 'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),
                 'qcloud_sms_sign' => $this->settings->get('qcloud_sms_sign', 'qcloud'),
             ],
@@ -103,7 +105,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'setcash' => [
                 'cash_interval_time' => $this->settings->get('cash_interval_time', 'cash'),
                 'cash_rate' => $this->settings->get('cash_rate', 'cash'),
-                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash'),
+                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: "",
                 'cash_max_sum' => $this->settings->get('cash_max_sum', 'cash'),
                 'cash_sum_limit' => $this->settings->get('cash_sum_limit', 'cash'),
             ],

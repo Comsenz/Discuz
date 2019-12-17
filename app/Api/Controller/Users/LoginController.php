@@ -43,12 +43,9 @@ class LoginController extends AbstractResourceController
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return array|mixed
-     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $data = $this->bus->dispatch(new GenJwtToken(Arr::get($request->getParsedBody(), 'data.attributes')));
-        $data->users = $this->app->make(PassportUserRepository::class)->getUser();
-        return $data;
+        return $this->bus->dispatch(new GenJwtToken(Arr::get($request->getParsedBody(), 'data.attributes')));
     }
 }

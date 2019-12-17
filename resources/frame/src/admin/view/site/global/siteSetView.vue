@@ -20,16 +20,45 @@
 
       <Card header="站点LOGO：">
         <CardRow description="你的Discuz!Q 站点的LOGO">
-          <el-upload
+          <!-- <el-upload
             class="avatar-uploader"
             action="#"
-            :show-file-list="false"
+            :limit="1"
+            :show-file-list="true"
             :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
+            :before-upload="beforeAvatarUpload"
+            :file-list="siteLogoFile">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload> -->
+         <!-- <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            :limit="1"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload> -->
+          <!-- <el-dialog :visible.sync="dialogVisible" size="tiny">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog> -->
+          <!-- <el-button type="text">删除</el-button> -->
+
+          <el-upload
+            action=""
+            :http-request="uploaderLogo"
+            list-type="picture-card"
+            :limit="1"
+            :on-error="errorFile"
+            :file-list="fileList"
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeAvatarUpload"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
           </el-upload>
-          <el-button type="text">删除</el-button>
+          <el-dialog :visible.sync="dialogVisible" size="tiny">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
         </CardRow>
       </Card>
 
