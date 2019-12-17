@@ -49,7 +49,7 @@ module.exports = {
   'threadsBatch':'/api/threads/batch',   //修改主题接口(批量)
   'upload': '/api/users/',//上传头像
   'invite':'/api/invite',//创建邀请码
-  'groups':'/api/groups',//获取所有操作类型
+  'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'group-permission':'/api/group-permission', // 修改用户组权限
 
 

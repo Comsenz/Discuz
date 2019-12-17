@@ -45,7 +45,7 @@ export default {
 
     submitClick(){
 
-      if (this.createCategoriesStatus &&  this.multipleSelection.length > 0){
+      if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
           message: '新增内容分类未提交！请先提交，再勾选其他分类',
