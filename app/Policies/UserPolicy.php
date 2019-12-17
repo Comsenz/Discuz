@@ -27,9 +27,6 @@ class UserPolicy extends AbstractPolicy
 
     public function find(User $actor, Builder $query)
     {
-        if(!$actor->hasPermission('user.view')) {
-            $query->whereRaw('FALSE');
-        }
-
+        return true;
     }
 }

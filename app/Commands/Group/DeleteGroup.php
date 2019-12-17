@@ -23,30 +23,20 @@ class DeleteGroup
     }
 
     public function handle(GroupRepository $groups) {
-        return $this($groups);
+        return call_user_func([$this, '__invoke'], $groups);
     }
 
+    /**
+     * @param GroupRepository $groups
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws Exception
+     */
     public function __invoke(GroupRepository $groups)
     {
-        $id = $this->id;
-        $data = null;
-        try {
-            $group = $groups->findOrFail($id, $this->actor);
+        $group = $groups->findOrFail($this->id, $this->actor);
 
-            $this->assertCan($this->actor, 'delete', $group);
+        $this->assertCan($this->actor, 'delete', $group);
 
-            $group->delete();
-
-            $group->succeed = true;
-
-            $data = $group;
-        } catch (Exception $e) {
-            $group = new Group();
-            $group->id = $id;
-            $group->error = $e->getMessage();
-            $data = $group;
-        }
-
-        return $data;
+        $group->delete();
     }
 }

@@ -33,16 +33,18 @@ class UpdateUser
     }
 
     /**
-     * @param $users
+     * @param UserRepository $users
+     * @param UserValidator $userValidator
+     * @return User|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null
      */
-    public function __invoke($users, $userValidator)
+    public function __invoke(UserRepository $users, UserValidator $userValidator)
     {
 
         $data = null;
         $id = $this->id;
 
         try {
-            $user = $users->findOrFail($id);
+            $user = $users->findOrFail($id, $this->actor);
 
             $isSelf = $this->actor->id === $user->id;
 
@@ -79,6 +81,13 @@ class UpdateUser
             if ($groupId = Arr::get($this->data, 'data.attributes.groupId')) {
                 $this->assertCan($this->actor, 'edit.group', $user);
                 $user->groups()->sync($groupId);
+            }
+
+            if($action = Arr::get($this->data, 'data.attributes.action')) {
+                dd($action);
+                if($isSelf) {
+                    $user->wechat->delete();
+                }
             }
 
             $userValidator->valid($validator);
