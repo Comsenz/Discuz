@@ -9,16 +9,31 @@
       <div class="post-topic-form">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox">
-          <van-uploader v-model="fileList" multiple />
+        <div class="uploadBox" v-show="uploadShow">
+          <van-uploader :max-count="12" :after-read="handleFile" :before-delete="deleteFile" accept="image/*"  v-model="fileList">
+          </van-uploader>
+          <div class="enclosure">
+            <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">
+              <span v-if="enc.type='doc'" class="icon iconfont icon-word"></span>
+              <span v-if="enc.type='pdf'" class="icon iconfont icon-pdf"></span>
+              <span v-if="enc.type='rar'" class="icon iconfont icon-rar"></span>
+              <span class="encName">{{enc.name}}</span>
+              <!-- <i class="encDelete"><span class="icon iconfont icon-close"></span></i> -->
+              <i class="encDelete">X</i>
+            </div>
+          </div>
         </div>
       </div>
 
       <footer class="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
-           <span  class="icon iconfont icon-picture post-topic-header-icon" ></span>
-          <span  class="icon iconfont icon-enclosure post-topic-header-icon" ></span>
+          <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
+            <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
+          </span>
+          <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon">
+            <input type="file" accept="image/*" @change="handleEnclosure" class="hiddenInput"/>
+          </span>
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
           <span class="post-topic-footer-right-sort">{{selectSort}}</span>

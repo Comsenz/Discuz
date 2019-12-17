@@ -19,7 +19,7 @@ class OrderSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'order_sn'   => $model->order_sn,
+            'order_sn'   => (string)$model->order_sn,
             'amount'     => $model->amount,
             'status'     => $model->status,
             'type'       => $model->type,

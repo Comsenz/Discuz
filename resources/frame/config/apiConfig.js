@@ -19,6 +19,7 @@ module.exports = {
   'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
 
   'emojis':'/api/emoji',      //表情接口
+  'attachment':'/api/attachment', //上传附件、图片
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',//查看用户钱包

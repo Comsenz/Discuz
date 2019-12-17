@@ -63,7 +63,7 @@ trait ThreadTrait
             }
         }
 
-        return OperationLog::behavior()[$thread->is_approved];
+        return $this->transLogAction($thread->is_approved);
     }
 
     /**
@@ -98,13 +98,24 @@ trait ThreadTrait
 
     public function increments(Model $thread)
     {
-//        $thread->category->increment('thread_count');
-//        $thread->user->increment('thread_count');
+        $thread->category->increment('thread_count');
+        $thread->user->increment('thread_count');
     }
 
     public function decrement(Model $thread)
     {
-//        $thread->category->decrement('thread_count');
-//        $thread->user->decrement('thread_count');
+        $thread->category->decrement('thread_count');
+        $thread->user->decrement('thread_count');
+    }
+
+    /**
+     * 转义 action 操作
+     *
+     * @param $isApproved
+     * @return mixed
+     */
+    public function transLogAction($isApproved)
+    {
+        return OperationLog::behavior()[$isApproved];
     }
 }

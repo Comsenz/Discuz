@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)
+ * @method static find(int $GUEST_ID)
  */
 class Group extends Model
 {
