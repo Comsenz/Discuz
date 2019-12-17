@@ -47,10 +47,13 @@ class UpdateGroup
         $group->type = Arr::get($this->data, 'attributes.type', '');
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
+        $group->default = Arr::get($this->data, 'attributes.default', 0);
 
         // 修改时调用脏数据Dirty
         $this->validator->valid($group->getDirty());
 
         $group->save();
+
+        return $group;
     }
 }

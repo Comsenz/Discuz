@@ -57,7 +57,7 @@ $route->post('/register', 'register', ApiController\Users\RegisterController::cl
 |--------------------------------------------------------------------------
 */
 
-$route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController::class);
+$route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 
 /*
 |--------------------------------------------------------------------------
