@@ -7,10 +7,21 @@ class GroupPermissionTableSeeder extends Seeder
 {
 
     protected $permissions = [
+        // 用户
         'user.view' => [7, 10],
         'user.edit' => [],
         'viewUserList' => [7, 10],
-        'group.delete' => []
+
+        // 用户组
+        'group.delete' => [],
+
+        // 主题
+        'viewThreads' => [7, 10],
+        'createThread' => [10],
+        'thread.reply' => [10],
+
+        // 回复
+        'deletePosts' => [10],
     ];
 
     /**
