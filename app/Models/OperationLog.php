@@ -96,7 +96,7 @@ class OperationLog extends Model
     {
         $log = new static;
 
-        $log->id = $actor->id;
+        $log->user_id = $actor->id;
         $log->action = $action;
         $log->message = $message;
         $log->created_at = Carbon::now();

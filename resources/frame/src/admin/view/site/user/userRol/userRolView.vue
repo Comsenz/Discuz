@@ -7,52 +7,46 @@
           @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
-            width="55">
+            width="55"
+            :selectable="checkSelectable">
           </el-table-column>
 
           <el-table-column
             label="级别名称">
             <template slot-scope="scope">
-              <el-input></el-input>
+              <el-input v-model="scope.row._data.name"></el-input>
             </template>
           </el-table-column>
 
-          <el-table-column
+          <!--<el-table-column
             label="排序">
             <template slot-scope="scope">
               <el-input></el-input>
             </template>
-          </el-table-column>
+          </el-table-column>-->
 
           <el-table-column>
             <template slot-scope="scope">
-              <el-button type="text" @click="$router.push({path:'/admin/rol-permission'})">设置权限</el-button>
-              <el-button type="text">删除</el-button>
+              <el-button v-if="scope.row._data.id !== '1'" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id}})">设置权限</el-button>
+              <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '7' && scope.row._data.id !== '10'" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
             </template>
           </el-table-column>
 
           <el-table-column
             min-width="115">
             <template slot-scope="scope">
-              <el-radio v-model="radio" label="1">设为加入站点的默认级别</el-radio>
+              <el-radio v-model="radio" @change="radioChange(scope.row)" v-if="scope.row._data.id != 1" :label="scope.row._data.id">设为加入站点的默认级别</el-radio>
             </template>
           </el-table-column>
 
         </el-table>
       </div>
 
-      <TableContAdd cont="新增"></TableContAdd>
-
-      <!--<div class="user-rol-table-add">
-        <p>
-          <span class="iconfont iconicon_add icon-add"></span>
-          <span>新增</span>
-        </p>
-      </div>-->
+      <TableContAdd cont="新增" @tableContAddClick="addList"></TableContAdd>
 
       <Card class="footer-btn">
-        <el-button type="primary" size="medium" >提交</el-button>
-        <el-button  size="medium" :disabled="deleteStatus" >删除</el-button>
+        <el-button type="primary" size="medium" @click="submitClick" >提交</el-button>
+        <el-button  size="medium" :disabled="deleteStatus" @click="deleteClick" >删除</el-button>
       </Card>
 
     </div>

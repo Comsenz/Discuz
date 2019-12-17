@@ -54,7 +54,6 @@ class ResourceOrderController extends AbstractResourceController
     {
         $actor = $request->getAttribute('actor');
         $order_sn = Arr::get($request->getQueryParams(), 'order_sn');
-        //return $this->order->findOrderOrFail($order_sn, $actor);
-        return Order::where('order_sn', $order_sn)->firstOrFail();
+        return $this->order->findOrderOrFail($order_sn, $actor);
     }
 }

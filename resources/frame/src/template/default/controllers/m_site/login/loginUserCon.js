@@ -51,16 +51,11 @@ export default {
         }
       }).then(res => {
           this.$toast.success('登录成功');
-          
+
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
-          // console.log(token)
           browserDb.setLItem('Authorization',token);
           browserDb.setLItem('tokenId',tokenId);
-          console.log(browserDb.getLItem('Authorization'));
-          // this.paramsObj = {
-          //   userId:this.userId
-          // };
           // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
           this.$router.push({
             path:'bind-phone',

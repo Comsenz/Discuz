@@ -10,7 +10,7 @@ use Illuminate\Contracts\Encryption\Encrypter;
  * @method static create(array $array)
  * @method static updateOrCreate(array $array)
  * @method truncate()
- * @method static insert()
+ * @method insert(array $array)
  */
 class Setting extends Model
 {
@@ -42,19 +42,29 @@ class Setting extends Model
     ];
 
     /**
+     * each data decrypt
+     */
+    public function existDecrypt()
+    {
+        if (in_array($this->key, self::$encrypt)) {
+            return;
+        }
+    }
+
+    /**
      * 解密数据
      *
-     * @param $key
+     * @param $value
      * @return mixed
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function getKeyAttribute($key)
+    public function getValueAttribute($value)
     {
-        if (in_array($key, self::$encrypt)) {
-            $this->value = app()->make('encrypter')->decrypt($this->value);
+        if (in_array($this->key, self::$encrypt)) {
+            $value = app()->make('encrypter')->decrypt($value);
         }
 
-        return $key;
+        return $value;
     }
 
     /**

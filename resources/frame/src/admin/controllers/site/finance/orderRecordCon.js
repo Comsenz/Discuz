@@ -3,6 +3,7 @@
 * */
 
 import Card from '../../../view/site/common/card/card';
+import Page from '../../../view/site/common/page/page';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 
@@ -42,10 +43,28 @@ export default {
       orderNumber:'',
       operationUser:'',
       commodity:'',
-      orderTime:['','']
+      orderTime:['',''],
+
+      pageCount:0,
+      currentPaga:1,
+      total:0
     }
   },
   methods:{
+
+    cashStatus(status){
+      switch (status){
+        case 0:
+          return "待付款";
+          break;
+        case 1:
+          return "已付款";
+          break;
+        default:
+          console.log("获取状态失败，请刷新页面！");
+          return "未知状态";
+      }
+    },
 
     searchClick(){
       if (this.orderTime == null){
@@ -57,6 +76,19 @@ export default {
       this.getOrderList();
     },
 
+    handleCurrentChange(val){
+      console.log(val);
+      this.currentPaga = val;
+      this.getOrderList();
+    },
+
+    /*
+    * 格式化日期
+    * */
+    formatDate(data){
+      return moment(data).format('YYYY-MM-DD HH:mm')
+    },
+
     /*
     * 请求接口
     * */
@@ -65,7 +97,9 @@ export default {
         url:'orderList',
         method:'get',
         data:{
-          include:['user','thread',''],
+          include:['user','thread','thread.firstPost'],
+          'page[number]':this.currentPaga,
+          'page[size]':10,
           'filter[order_sn]':this.orderNumber,
           'filter[product]':this.commodity,
           'filter[username]':this.operationUser,
@@ -76,6 +110,9 @@ export default {
         console.log(res);
         this.tableData = [];
         this.tableData = res.readdata;
+
+        this.pageCount = res.meta.pageCount;
+        this.total = res.meta.total;
       }).catch(err=>{
         console.log(err);
       })
@@ -85,6 +122,7 @@ export default {
     this.getOrderList();
   },
   components:{
-    Card
+    Card,
+    Page
   }
 }

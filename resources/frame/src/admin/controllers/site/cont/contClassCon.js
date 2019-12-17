@@ -45,7 +45,7 @@ export default {
 
     submitClick(){
 
-      if (this.createCategoriesStatus &&  this.multipleSelection.length > 0){
+      if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
           message: '新增内容分类未提交！请先提交，再勾选其他分类',
@@ -92,19 +92,18 @@ export default {
 
     deleteAllClick(){
       let id = '';
-      this.multipleSelection.forEach((item,index)=>{
+      /*this.multipleSelection.forEach((item,index)=>{
         if (index < this.multipleSelection.length - 1){
           id =  id + item.id + ','
         } else {
           id =  id + item.id
         }
-      });
-      this.batchDeleteCategories(id).then(()=>{
+      });*/
+      this.batchDeleteCategories(id.join(',')).then(()=>{
         this.getCategories();
       });
       this.visible = false;
     },
-
 
     /*
     * 接口请求
