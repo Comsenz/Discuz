@@ -44,7 +44,7 @@ class CreateAttachmentController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $file = Arr::get($request->getUploadedFiles(), 'file');
-        $isGallery = Arr::get($request->getParsedBody(), 'isGallery', 0);
+        $isGallery = Arr::get($request->getParsedBody(), 'isGallery', false);
         $ipAddress = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
         return $this->bus->dispatch(

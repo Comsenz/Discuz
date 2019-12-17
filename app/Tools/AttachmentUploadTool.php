@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -15,12 +14,30 @@ use Discuz\Foundation\AbstractUploadTool;
 class AttachmentUploadTool extends AbstractUploadTool
 {
     /**
-     * @var type
+     * @var array
      */
-    protected $fileType = [];
+    protected $fileType = [
+        'txt',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'ppt',
+        'pptx',
+        'pdf',
+        'jpg',
+        'jpeg',
+        'png',
+        'tiff',
+        'swf',
+        'mp3',
+        'mp4',
+        'rar',
+        'zip',
+    ];
 
     /**
-     * @var type
+     * @var int
      */
-    protected $fileSize = 5*1024*1024;
+    protected $fileSize = 5 * 1024 * 1024;
 }
