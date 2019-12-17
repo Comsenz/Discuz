@@ -27,7 +27,7 @@ class ResourceGroupsController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['groupPermission'];
+    public $include = ['permission'];
 
     /**
      * {@inheritdoc}

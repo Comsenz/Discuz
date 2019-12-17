@@ -60,7 +60,7 @@ class Group extends Model
      *
      * @return HasMany
      */
-    public function groupPermission()
+    public function permission()
     {
         return $this->hasMany(GroupPermission::class);
     }

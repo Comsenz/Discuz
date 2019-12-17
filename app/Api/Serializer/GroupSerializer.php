@@ -33,7 +33,7 @@ class GroupSerializer extends AbstractSerializer
      * @param $group
      * @return Relationship
      */
-    public function groupPermission($group)
+    public function permission($group)
     {
         return $this->hasMany($group, GroupPermissionSerializer::class);
     }
