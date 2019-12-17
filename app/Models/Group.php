@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Collection $users
  * @property Collection $permissions
+ * @property int default
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)

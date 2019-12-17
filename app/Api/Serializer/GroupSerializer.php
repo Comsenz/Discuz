@@ -25,7 +25,8 @@ class GroupSerializer extends AbstractSerializer
             'name'  => $model->name,
             'type'  => $model->type,
             'color' => $model->color,
-            'icon'  => $model->icon
+            'icon'  => $model->icon,
+            'default' => $model->default
         ];
     }
 
