@@ -15,6 +15,7 @@ class DeleteGroup
 
     protected $id;
     protected $actor;
+    protected $groups;
 
     public function __construct($id, $actor)
     {
@@ -23,17 +24,17 @@ class DeleteGroup
     }
 
     public function handle(GroupRepository $groups) {
-        return call_user_func([$this, '__invoke'], $groups);
+        $this->groups = $groups;
+        return call_user_func([$this, '__invoke']);
     }
 
+
     /**
-     * @param GroupRepository $groups
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
-     * @throws Exception
      */
-    public function __invoke(GroupRepository $groups)
+    public function __invoke()
     {
-        $group = $groups->findOrFail($this->id, $this->actor);
+        $group = $this->groups->findOrFail($this->id, $this->actor);
 
         $this->assertCan($this->actor, 'delete', $group);
 

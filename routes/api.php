@@ -75,6 +75,7 @@ $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersControll
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->get('/user/export', 'user.export', ApiController\Users\ExportUserController::class);
+$route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
 
 /*
 |--------------------------------------------------------------------------

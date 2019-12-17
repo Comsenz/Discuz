@@ -25,18 +25,13 @@ class TokenSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
-        if(is_array($model) && isset($model['location'])) {
-            return [
-                'location' => $model['location']
-            ];
-        } else {
-            return [
-                'token_type' => $model->token_type,
-                'expires_in' => $model->expires_in,
-                'access_token' => $model->access_token,
-                'refresh_token' => $model->refresh_token,
-            ];
-        }
+        return [
+            'token_type' => $model->token_type,
+            'expires_in' => $model->expires_in,
+            'access_token' => $model->access_token,
+            'refresh_token' => $model->refresh_token,
+        ];
+
     }
 
     public function getId($model)
@@ -45,6 +40,6 @@ class TokenSerializer extends AbstractSerializer
     }
 
     public function users($model) {
-        return $this->hasOne($model, UserSerializer::class);
+        return $this->hasOne(['users' => static::$user], UserSerializer::class);
     }
 }

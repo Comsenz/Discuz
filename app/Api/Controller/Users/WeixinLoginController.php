@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
 
+use App\Api\Serializer\LocationSerializer;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Exceptions\NoUserException;
@@ -40,6 +41,7 @@ class WeixinLoginController extends AbstractResourceController
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return mixed
+     * @throws NoUserException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -52,6 +54,7 @@ class WeixinLoginController extends AbstractResourceController
 
         if(!Arr::get($request->getQueryParams(), 'code')) {
             $response = $driver->redirect();
+            $this->serializer = LocationSerializer::class;
             return ['location' => $response->getHeaderLine('location')];
         }
 
@@ -84,6 +87,7 @@ class WeixinLoginController extends AbstractResourceController
 
     /**
      * @param $user
+     * @throws NoUserException
      */
     private function error($user) {
         throw (new NoUserException())->setUser($user->user);
