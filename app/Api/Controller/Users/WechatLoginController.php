@@ -11,11 +11,14 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\LocationSerializer;
 use App\Api\Serializer\TokenSerializer;
+use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Exceptions\NoUserException;
+use App\Models\User;
 use App\Models\UserWechat;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -25,12 +28,13 @@ class WechatLoginController extends AbstractResourceController
 {
     protected $socialite;
     protected $bus;
+    protected $cache;
 
-
-    public function __construct(Factory $socialite, Dispatcher $bus)
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
+        $this->cache = $cache;
     }
 
     public $serializer = TokenSerializer::class;
@@ -45,7 +49,7 @@ class WechatLoginController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
 
-        $actor = $request->getAttribute('actor');
+        $request = $request->withAttribute('cache', $this->cache);
 
         $this->socialite->setRequest($request);
 
@@ -59,13 +63,20 @@ class WechatLoginController extends AbstractResourceController
 
         $user = $driver->user();
 
+        $state = Arr::get($request->getQueryParams(), 'state');
+
+        $actor = User::find($state);
+
         $wechatUser = UserWechat::where('openid', $user->id)->first();
 
+        $this->wechatSaved($user);
+
         if(!$wechatUser) {
-            if($actor->exists) {
+            if($actor->id) {
                 $user->user['user_id'] = $actor->id;
             }
             UserWechat::create($user->user);
+            return $actor;
         }
 
         if($wechatUser->user) {
@@ -78,7 +89,24 @@ class WechatLoginController extends AbstractResourceController
             return $this->bus->dispatch(new GenJwtToken($params));
         }
 
+        if($actor->id) {
+            $wechatUser->user_id = $actor->id;
+            $wechatUser->save();
+            return $actor;
+        }
+
         $this->error($user);
+    }
+
+    protected function wechatSaved($user)
+    {
+        UserWechat::saved(function() use ($user) {
+            if(isset($user['user_id'])) {
+                $this->serializer = UserProfileSerializer::class;
+            } else {
+                $this->error($user);
+            }
+        });
     }
 
     /**
