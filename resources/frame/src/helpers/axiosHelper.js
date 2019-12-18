@@ -216,10 +216,11 @@ const appFetch = function(params, options) {
       return data.data;
     } 
     else {
+      console.log(data)
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       })
-
+    
       return data.data;
     }
   });

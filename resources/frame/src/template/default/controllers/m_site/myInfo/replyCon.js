@@ -57,6 +57,7 @@ export default {
     },
     onRefresh(){           //下拉刷新
       setTimeout(()=>{
+        this.pageIndex = 1;
         this.myReplyList().then(()=>{
           this.$toast('刷新成功');
           this.isLoading = false;
@@ -70,30 +71,19 @@ export default {
         method:'get',
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          'page[number]': this.pageIndex,
+          'page[limit]': 1
         }
       }).then(res=>{
-        // this.pageSize = res.meta.threadCount;
-        // this.pageIndex = res.meta.pageCount;
-        // this.collectionList = res.readdata;
-        // 加载状态结束
-        this.loading = false;
-        if(res.readdata === ''){
-          this.finished = false; //数据全部加载完成
-        }else{
-          this.finished = true
-        }
-
-      console.log(this.finished,'00000000000000000000')
-
+          this.loading = false;
+          if(res.readdata.length > 0){
+            this.replyList = this.replyList.concat(res.readdata);
+            this.pageIndex++;
+            this.finished = false; //数据全部加载完成
+          }else{
+            this.finished = true
+          }
       })
-      // setTimeout(()=>{
-        
-      // this.loading = false;
-      //     // 数据全部加载完成
-      //     if (this.collectionList.length >= 40) {
-      //       this.finished = true;
-      //     }
-      // },200)
     },
   },
 

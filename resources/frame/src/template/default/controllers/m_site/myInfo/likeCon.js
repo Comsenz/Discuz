@@ -44,20 +44,20 @@ export default {
           type:'2'
         }
       }).then(res=>{
-        // 加载状态结束
         this.loading = false;
-        if(res.readdata === ''){
+        if(res.readdata.length > 0){
+          this.likeList = this.likeList.concat(res.readdata);
+          this.pageIndex++;
           this.finished = false; //数据全部加载完成
         }else{
           this.finished = true
         }
 
-      console.log(this.finished,'00000000000000000000')
-
       })
     },
     onRefresh(){
       setTimeout(()=>{
+        this.pageIndex = 1
         this.myLikeList().then(()=>{
           this.$toast('刷新成功');
           this.isLoading = false;

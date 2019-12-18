@@ -82,7 +82,7 @@ export default {
           ]
         }
       }).then(data=>{
-        this.$message('提交成功')
+        this.$message({ message: '提交成功', type: 'success' });
       }).catch(error=>{
         
       })

@@ -34,13 +34,13 @@ export default {
       var reg = /^\d+$|^\d+[.]?\d+$/;
       var pwdLength = this.pwdLength;
       var passwordStrength = this.checkList.join(",")
-      if(pwdLength === ''){
-        return
-      }
-      if (!reg.test(pwdLength)) { //密码只能输入数字
-        this.$message("密码只能输入数字");
-        return
-      }
+      // if(pwdLength === ''){
+      //   return
+      // }
+      // if (!reg.test(pwdLength)) { //密码只能输入数字
+      //   this.$message("密码只能输入数字");
+      //   return
+      // }
       this.appFetch({
         url:'settings',
         method:'post',
@@ -72,7 +72,7 @@ export default {
         }
       }).then(data=>{
         console.log(data)
-        this.$message('提交成功');
+        this.$message({ message: '提交成功', type: 'success' });
       })
       
     }

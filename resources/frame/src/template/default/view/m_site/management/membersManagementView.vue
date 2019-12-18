@@ -12,13 +12,15 @@
 		    	<i v-show="searchName === ''" class="icon iconfont icon-search"></i>
 		    </div>
 		</div>
+		<van-list
+		v-model="loading"
+		:finished="finished"
+		:offset="offset"
+		finished-text="没有更多了"
+		@load="onLoad"
+		>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <div class="searchRes memberCheckList">
-			<!-- <van-list
-    		v-model="loading"
-    		:finished="finished"
-    		finished-text="没有更多了"
-    		@load="onLoad"
-    ><van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
 	        <van-checkbox-group v-model="result">
 			  <van-cell-group>
 			    <van-cell
@@ -49,6 +51,8 @@
 			<!-- </van-pull-refresh>
 			</van-list> -->
 	    </div>
+ 	</van-pull-refresh>    
+  	</van-list>
 		<div class="manageFootFixed">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">

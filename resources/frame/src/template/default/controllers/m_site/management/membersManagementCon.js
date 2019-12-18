@@ -23,7 +23,9 @@ export default {
 			finished: false, //是否已加载完所有数据
 			isLoading: false, //是否处于下拉刷新状态
 			pageSize:'',//每页的条数
-			pageIndex:'',//页码
+			pageIndex: 1,//页码
+			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+			searchTimeout:null
 		}
 	},
 	//用于数据初始化
@@ -73,7 +75,10 @@ export default {
 				'page[limit]': 15,
 				'page[number]': 1,
 			}
-			this.getSearchValUserList(true);
+			clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(()=>{
+                this.getSearchValUserList(true);
+            },300)
 		},
 
 		// 根据搜索进行请求
@@ -176,38 +181,29 @@ export default {
 			  url:'users',
 			  method:'get',
 			  data:{
-				
+				'filter[name]': this.searchName,
+				'page[number]': this.pageIndex,
+				'page[limit]': 1
 			  }
 			}).then(res=>{
-			  this.pageSize = res.meta.threadCount;
-			  this.pageIndex = res.meta.pageCount;
-			  this.userList = res.readdata;
-			  // 加载状态结束
+			  console.log(res.readdata)
 			  this.loading = false;
-			  if(this.userList.length>=this.pageSize){
-				this.finished = true; //数据全部加载完成
+			  if(res.readdata.length > 0){
+				this.userList = this.userList.concat(res.readdata);
+				this.pageIndex++;
+				this.finished = false; //数据全部加载完成
+			  }else{
+				this.finished = true
 			  }
-	
-			console.log(this.finished,'00000000000000000000')
-	
 			})
-			// setTimeout(()=>{
-			  
-			// this.loading = false;
-			//     // 数据全部加载完成
-			//     if (this.collectionList.length >= 40) {
-			//       this.finished = true;
-			//     }
-			// },200)
 		  },
 		onRefresh(){
 			setTimeout(()=>{
-			  this.handleSearch().then(()=>{
+				this.pageIndex = 1;
+			  	this.handleSearch()
 				this.$toast('刷新成功');
 				this.isLoading = false;
-				this.finished = true;
-			  })
-			  
+				this.finished = true;  
 			},200)
 		  }
 	},

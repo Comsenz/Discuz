@@ -26,7 +26,8 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       // pageSize:'',//每页的条数
       pageIndex: 1,//页码
-      offset: 100
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      flag:false
     }
   },
   // components:{
@@ -79,30 +80,21 @@ export default {
           console.log(res.readdata)
           this.loading = false;
           if(res.readdata.length > 0){
-            // console.log(this.collectionList)
             this.collectionList = this.collectionList.concat(res.readdata);
-            // console.log(this.collectionList)
             this.pageIndex++;
             this.finished = false; //数据全部加载完成
           }else{
             this.finished = true
           }
         })
-        // setTimeout(()=>{
-          
-        // this.loading = false;
-        //     // 数据全部加载完成
-        //     if (this.collectionList.length >= 40) {
-        //       this.finished = true;
-        //     }
-        // },200)
       },
-      onRefresh(){
+      onRefresh(){    //下拉刷新
         setTimeout(()=>{
+          this.pageIndex = 1;
           this.myCollection().then(()=>{
             this.$toast('刷新成功');
             this.isLoading = false;
-            this.finished = true;
+            this.finished = false;
           })
           
         },200)

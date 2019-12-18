@@ -21,7 +21,9 @@ export default {
 	  userLoadMorePageChange: false,
 	  loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
-      isLoading: false, //是否处于下拉刷新状态
+	  isLoading: false, //是否处于下拉刷新状态
+	  pageIndex: 1,//页码
+	  offset: 100,
 		}
 	},
 	 //用于数据初始化
@@ -52,17 +54,18 @@ export default {
       		this.searchUserList = [];
       	}
       	try{
-			  const params = this.userParams['filter[username]']
+			//   const params = this.userParams['filter[username]']
 			  await this.appFetch({
 				  url:'users',
 				  method:'get',
 				  data:{
-					params:this.userParams
+					'filter[username]': this.searchVal,
+					'page[number]': this.pageIndex,
+          			'page[limit]': 15
 				  }
 			  }).then(data=>{
 				this.searchUserList = this.searchUserList.concat(data.readdata);
-				console.log(data,'9999999999')
-				console.log(this.searchUserList)
+				this.pageIndex++;
 			  })
       		// await this.apiStore.find('users', this.userParams).then(data=>{
       		// 	this.searchUserList = this.searchUserList.concat(data);
@@ -80,17 +83,21 @@ export default {
       	this.handleSearchUser();
 	  },
 	  onLoad(){    //上拉加载
-		const params = this.userParams['filter[username]']
+		// const params = this.userParams['filter[username]']
         this.appFetch({
           url:'users',
           method:'get',
           data:{
-			params:this.userParams
+			'filter[username]': this.searchVal,
+			'page[number]': this.pageIndex,
+            'page[limit]': 15
           }
         }).then(res=>{
-          this.loading = false;
-          if(res.readdata === ''){
-            this.finished = false; //数据全部加载完成
+			this.loading = false;
+			if(res.readdata.length > 0){
+			  this.searchUserList = this.searchUserList.concat(res.readdata);
+			  this.pageIndex++;
+			  this.finished = false; //数据全部加载完成
           }else{
             this.finished = true
           }
@@ -101,10 +108,11 @@ export default {
       },
       onRefresh(){
         setTimeout(()=>{
+			this.pageIndex = 1
 			this.handleSearchUser();
             this.$toast('刷新成功');
             this.isLoading = false;
-            this.finished = true;
+            this.finished = false;
           
         },200)
       }
