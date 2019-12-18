@@ -7,8 +7,10 @@ import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
-		  siteInfo: new Forum(),
-		  username:''
+		  siteInfo: false,
+		  username:'',
+		  joinedAt:'',
+		  roleList:[]
 		}
 	},
   beforeCreate:function(){
@@ -25,13 +27,34 @@ export default {
 	methods: {
     //请求初始化站点信息数据
     loadSite(){
-      const params = {};
-       params.include='users';
-       this.apiStore.find('forum',params).then(data => {
-         // console.log(data.users());
-         this.siteInfo = data;
-         this.username = data.siteAuthor().username;
-         // console.log(data.user().avatarUrl());
+      var userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice:'/'+userId,
+        data: {
+          include: 'groups',
+        }
+      }).then((res) => {
+        this.roleList = res.readdata.groups;
+        if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
+          this.joinedAt = res.readdata._data.createdAt;
+        } else {
+          this.joinedAt = res.readdata._data.joinedAt;
+        }
+      })
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {
+          include: ['users'],
+        }
+      }).then((res) => {
+        console.log(res);
+        this.siteInfo = res.readdata;
+        this.username = res.readdata._data.siteAuthor.username;
+
+
       });
     },
     //查看更多站点成员
