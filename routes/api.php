@@ -197,7 +197,7 @@ $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInv
 |--------------------------------------------------------------------------
 */
 
-$route->get('/attachments/{id}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
+$route->get('/attachments/{uuid}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
 $route->post('/attachments', 'attachments.create', ApiController\Attachment\CreateAttachmentController::class);
 $route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
 
