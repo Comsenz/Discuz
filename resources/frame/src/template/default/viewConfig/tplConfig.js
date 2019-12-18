@@ -112,7 +112,7 @@ export default {
           require(['../view/m_site/home/openCircleConView'],resolve)
         },
         metaInfo:{
-          title:"详情"
+          title:"公开站点，内容页的分享"
         }
       },
       'details/:themeId':{
@@ -120,7 +120,8 @@ export default {
           require(['../view/m_site/home/detailsView'],resolve)
         },
         metaInfo:{
-          title:"主题详情页"
+          title:"主题详情页",
+          oneHeader: true
         }
       },
       'circle-invite':{

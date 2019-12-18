@@ -12,6 +12,7 @@ class GroupPermissionTableSeeder extends Seeder
     protected $permissions = [
         // 用户
         'user.view' => [7, 10],     //查看某个用户信息权限
+        'user.view.mobile' => [],   //是否能查看用户真实手机号
         'user.edit' => [],          //编辑某个用户信息权限，除自己以外
         'user.delete' => [],        //删除某个用户信息权限
         'viewUserList' => [7, 10],  //查看用户列表权限

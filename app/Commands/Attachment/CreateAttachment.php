@@ -20,7 +20,6 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
 use Illuminate\Contracts\Events\Dispatcher;
-use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment

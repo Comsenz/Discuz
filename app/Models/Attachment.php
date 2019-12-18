@@ -14,8 +14,10 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
+ * @property string $uuid
  * @property int $user_id
  * @property int $post_id
  * @property int $is_gallery
@@ -73,6 +75,7 @@ class Attachment extends Model
         $attach = new static;
 
         // 设置模型属性值
+        $attach->uuid = Str::uuid();
         $attach->user_id = $user_id;
         $attach->post_id = $post_id;
         $attach->is_gallery = $isGallery;

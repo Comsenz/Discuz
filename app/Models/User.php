@@ -57,6 +57,16 @@ class User extends Model
     /**
      * {@inheritdoc}
      */
+    protected $dates = [
+        'joined_at',
+        'expired_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'id',
         'username',
