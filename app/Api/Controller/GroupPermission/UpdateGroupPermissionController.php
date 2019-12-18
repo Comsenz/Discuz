@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -12,15 +11,19 @@ namespace App\Api\Controller\GroupPermission;
 
 
 use App\Api\Serializer\GroupPermissionSerializer;
-use App\Commands\GroupPermission\UpdateGroupPermission;
+use App\Models\Permission;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Zend\Diactoros\Response\EmptyResponse;
 
 class UpdateGroupPermissionController extends AbstractListController
 {
+
+    use AssertPermissionTrait;
 
     public $serializer = GroupPermissionSerializer::class;
 
@@ -37,24 +40,31 @@ class UpdateGroupPermissionController extends AbstractListController
         $this->bus = $bus;
     }
 
+
     /**
-     * Get the data to be serialized and assigned to the response document.
-     *
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return mixed
+     * @return mixed|EmptyResponse
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
-        $actor = $request->getAttribute('actor');
+        $this->assertCan($request->getAttribute('actor'), 'group.edit');
 
-        // 获取请求的参数
-        $body = $request->getQueryParams();
-        $inputs = $request->getParsedBody();
+        $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
-            new UpdateGroupPermission($body['id'], $actor, $inputs->toArray())
-        );
+        $permissions = Arr::get($data, 'attributes.permissions');
+        $groupId = Arr::get($data, 'attributes.groupId');
+
+        Permission::where('group_id', $groupId)->delete();
+
+        Permission::insert(array_map(function ($permission) use ($groupId) {
+            return [
+                'permission' => $permission,
+                'group_id' => $groupId
+            ];
+        }, $permissions));
+
+        return new EmptyResponse();
     }
 }

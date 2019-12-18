@@ -240,7 +240,7 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 |--------------------------------------------------------------------------
 */
 
-$route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------
