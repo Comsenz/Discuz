@@ -2,28 +2,73 @@
  * 点赞我的
  */
 
+import LikeHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
+import ContMain from '../../../view/m_site/common/cont/contMainView'
+import ContFooter from '../../../view/m_site/common/cont/contFooterView'
+
+
 export default {
   data:function () {
     return {
       likeList:[],
-      // imgUrl:'',
-      // stateTitle:'点赞了我',
-      // time:"5分钟前",
-      // userName:'Elizabeth'
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
     }
   },
-  mounted(){
-    this.myLike()
+  components:{
+    LikeHeader,
+    ContHeader,
+    ContMain,
+    ContFooter
   },
   methods:{
-    myLike(){
-      this.apiStore.find('notice',{type:2}).then(res=>{
-        // console.log(res[0].user_id(), res[0].detail().post_content);
-        this.likeList = res
+    myLikeList(){
+     return this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'2'
+        }
+      }).then(res=>{
+        console.log(res)
+        this.likeList = res.readdata;
       })
+    },
+    onLoad(){    //上拉加载
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'2'
+        }
+      }).then(res=>{
+        // 加载状态结束
+        this.loading = false;
+        if(res.readdata === ''){
+          this.finished = false; //数据全部加载完成
+        }else{
+          this.finished = true
+        }
+
+      console.log(this.finished,'00000000000000000000')
+
+      })
+    },
+    onRefresh(){
+      setTimeout(()=>{
+        this.myLikeList().then(()=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true;
+        })
+        
+      },200)
     }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.myLikeList()
   }
 }

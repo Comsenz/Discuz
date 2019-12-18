@@ -5,7 +5,6 @@ namespace App\Api\Controller\Group;
 
 use App\Api\Serializer\GroupSerializer;
 use App\Commands\Group\UpdateGroup;
-use App\Models\Thread;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;

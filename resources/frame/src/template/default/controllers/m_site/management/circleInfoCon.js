@@ -10,7 +10,10 @@ export default {
 		  siteInfo: false,
 		  username:'',
 		  joinedAt:'',
+      isLoading: false, //是否处于下拉刷新状态
 		  roleList:[]
+      
+
 		}
 	},
   beforeCreate:function(){
@@ -65,6 +68,14 @@ export default {
     membersJump(userId){
       console.log('2222');
       this.$router.push({path:'/home-page/'+userId});
+    },
+    onRefresh(){
+      setTimeout(()=>{
+          this.loadSite()
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true; 
+      },200)
     }
 	},
 

@@ -29,7 +29,9 @@
               label="过滤词"
             >
               <template slot-scope="scope">
-                {{ scope.row._data.find }}
+                {{ !scope.row._data.addInputFlag ? scope.row._data.find : ''}}
+                <el-input splaceholder="请输入过滤词" clearable v-model="scope.row._data.find" v-show="scope.row._data.addInputFlag"> 
+                </el-input> 
               </template>
 
             </el-table-column>
@@ -38,7 +40,7 @@
               label="主题和回复处理方式"
             >
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.username" placeholder="请选择">
+                <el-select v-model="scope.row._data.username" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -53,7 +55,7 @@
               prop="address"
               label="用户名处理方式">
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.ugc" placeholder="请选择">
+                <el-select v-model="scope.row._data.ugc" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -67,15 +69,16 @@
         <el-table-column
               prop="address"
               label="过滤词替换">
-              <template slot-scope="scope" v-if="scope.row.name !== '新增'">
-                <el-input v-model="input" placeholder="请输入替换内容" clearable v-show="replace"></el-input>   
+              <template slot-scope="scope">
+                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>   
               </template>
             </el-table-column>
 
           </el-table>
 
 
-          <TableContAdd cont="新增"></TableContAdd>
+          
+        <TableContAdd @tableContAddClick="tableContAdd" cont="新增"></TableContAdd>
 
           <!--<div class="content-filter-set-table-add">
             <p>
@@ -83,12 +86,12 @@
               新增
             </p>
           </div>-->
-
+    <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum"  />
         </div>
 
         <Card class="footer-btn">
           <el-button type="primary" size="medium" @click="loginStatus">提交</el-button>
-          <el-button size="medium" :disabled="deleteStatus">删除</el-button>
+          <el-button size="medium" :disabled="deleteStatus" @click="deleteWords">删除</el-button>
         </Card>
 
       </main>

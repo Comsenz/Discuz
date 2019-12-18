@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  *      Discuz & Tencent Cloud
@@ -14,18 +13,23 @@ use App\Events\Attachment\Created;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
- * @property int user_id
- * @property int post_id
- * @property int $is_gallery ;
- * @property string attachment
- * @property string file_path
- * @property string file_name
- * @property int file_size
- * @property string file_type
- * @property int is_remote
- * @property string ip
+ * @property string $uuid
+ * @property int $user_id
+ * @property int $post_id
+ * @property int $is_gallery
+ * @property string $attachment
+ * @property string $file_path
+ * @property string $file_name
+ * @property int $file_size
+ * @property string $file_type
+ * @property int $is_remote
+ * @property string $ip
+ * @property User $user
+ * @property Post $post
  */
 class Attachment extends Model
 {
@@ -71,6 +75,7 @@ class Attachment extends Model
         $attach = new static;
 
         // 设置模型属性值
+        $attach->uuid = Str::uuid();
         $attach->user_id = $user_id;
         $attach->post_id = $post_id;
         $attach->is_gallery = $isGallery;
@@ -87,5 +92,25 @@ class Attachment extends Model
 
         // 返回附件模型
         return $attach;
+    }
+
+    /**
+     * Define the relationship with the attachment's author.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Define the relationship with the attachment's post.
+     *
+     * @return BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
     }
 }

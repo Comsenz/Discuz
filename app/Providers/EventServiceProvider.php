@@ -9,6 +9,7 @@ use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
 use App\Listeners\User\WeixinBind;
+use App\Policies\AttachmentPolicy;
 use App\Policies\GroupPolicy;
 use App\Policies\StopWordPolicy;
 use App\Policies\UserPolicy;
@@ -31,6 +32,7 @@ class EventServiceProvider extends BaseEventServiceProvider
     ];
 
     protected $subscribe = [
+        AttachmentPolicy::class,
         GroupPolicy::class,
         StopWordPolicy::class,
         UserPolicy::class,

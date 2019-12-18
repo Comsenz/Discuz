@@ -4,36 +4,55 @@
 
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
+import browserDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
     return {
       fileList:[],
       imageUrl: '',
-
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: ''
+      userInfo: {},
+      newPassword:'',
+      options: [
+        {
+          value: 0,
+          label: '正常'
+        }, 
+        {
+          value: 1,
+          label: '禁用'
+        }
+      ],
+      value: '',
+      query: {}
     }
   },
 
+  created(){
+    this.query = this.$route.query;
+    this.getUserDetail();
+  },
+
   methods:{
+    async getUserDetail(){
+      try{
+        const response = await this.appFetch({
+          method: 'get',
+          url: 'users',
+          splice: `/${this.query.id}`
+        })
+        console.log(response,'response');
+        this.userInfo = response.readdata._data;
+        this.imageUrl = this.userInfo.avatarUrl;
+      } catch(err){
+        console.error(err, 'getUserDetail')
+      }
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+    },
+    deleteImage(){
+      this.imageUrl = '';
     },
     handlePreview(file) {
       console.log(file);
@@ -58,6 +77,21 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       return isJPG && isLt2M;
+    },
+    submission(){
+      const userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url:'users',
+        method:'patch',
+        splice:'/'+userId,
+        data:{
+          'newPassword':this.newPassword,
+          'mobile':this.userInfo.mobile,
+          'status':this.userInfo.status
+        }
+      }).then(res=>{
+        console.log(res)
+      })
     }
   },
 

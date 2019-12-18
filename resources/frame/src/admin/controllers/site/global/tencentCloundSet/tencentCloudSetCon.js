@@ -8,48 +8,131 @@ export default {
 
       tableData: [{
         name: '云api',
-        type: 'cloud',
+        type: 'qcloud_close',
         description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
-        status:true,
+        status:'',
         icon:'iconAPI'
-      }, {
-        name: '短信',
-        type:'sms',
-        description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
-        status:true,
-        icon:'iconduanxin'
-      }, {
+      },
+      {
         name: '图片内容安全',
-        type:'img',
+        type:'qcloud_cms_image',
         description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
-        status:true,
+        status:'',
         icon:'icontupian'
-      },{
+      },
+      {
         name: '文本内容安全',
-        type:'text',
+        type:'qcloud_cms_text',
         description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
-        status:true,
+        status:'',
         icon:'iconwenben'
+      },
+      {
+        name: '短信',
+        type:'qcloud_sms',
+        description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+        status:'',
+        icon:'iconduanxin'
       }
       ]
     }
   },
+  created(){
+    this.tencentCloudStatus() 
+  },
   methods:{
     configClick(type){
-
       console.log(type);
-
       switch (type){
-        case 'cloud':
-          this.$router.push({path:'/admin/tencent-cloud-config/cloud'});
+        case 'qcloud_close':
+          this.$router.push({path:'/admin/tencent-cloud-config/cloud',query: {type:type}});
           break;
-        case 'sms':
-          this.$router.push({path:'/admin/tencent-cloud-config/sms'});
+        case 'qcloud_sms':
+          this.$router.push({path:'/admin/tencent-cloud-config/sms',query: {type:type}});
           break;
         default:
           this.loginStatus = 'default';
       }
+    },
+    tencentCloudStatus(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        // console.log(res.readdata._data.qcloud);
+        // console.log(res.readdata._data.qcloud.qcloud_close)
+        if(res.readdata._data.qcloud.qcloud_close){ 
+          this.tableData[0].status = true
+        }else{
+          this.tableData[0].status = false
+        }
+        if(res.readdata._data.qcloud.qcloud_cms_image){
+          this.tableData[1].status = true
+        }else{
+          this.tableData[1].status = false
+        }
+        if(res.readdata._data.qcloud.qcloud_cms_text){
+          this.tableData[2].status = true
+        }else{
+          this.tableData[2].status = false
+        }
+        if(res.readdata._data.qcloud.qcloud_sms){
+          this.tableData[3].status = true
+        }else{
+          this.tableData[3].status = false
+        }
+
+        console.log(this.tableData)
+      })
+    },
+    loginSetting(index,type,status){
+      console.log(type)
+      if(type == 'qcloud_close') {
+        console.log('333333333333333333s')
+        this.changeSettings('qcloud_close',status);
+      } else if( type == 'qcloud_cms_image'){
+        this.changeSettings('qcloud_cms_image',status);
+      } else if(type == 'qcloud_cms_text') {
+        this.changeSettings('qcloud_cms_text',status);
+      }else if(type == 'qcloud_sms'){
+        this.changeSettings('qcloud_sms',status);
+      }
+
+
+    },
+    changeSettings(typeVal,statusVal){
+      console.log(typeVal);
+      console.log(statusVal+'ddd2345');
+      //登录设置状态修改
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          "data":[
+            {
+             "attributes":{
+              "key":typeVal,
+              "value":statusVal,
+              "tag": 'qcloud'
+             }
+            }
+           ]
+
+        }
+      }).then(data=>{
+        console.log(data)
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        });
+        this.tencentCloudStatus();
+      }).catch(error=>{
+        // cthis.$message.error('修改失败');
+      })
     }
+ 
   },
   components:{
     Card,

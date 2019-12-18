@@ -22,7 +22,7 @@ export default {
         }
       }).then(res=>{
         this.picture = res.readdata._data.supportImgExt;
-        this.fileExtension = res.readdata._data.fileExtension;
+        this.fileExtension = res.readdata._data.supportFileExt;
         this.maximumSize = res.readdata._data.supportMaxSize;
         console.log(res)
       })
@@ -40,9 +40,11 @@ export default {
     }
     if(!fileExtension){
       this.$toast('请您输入文件扩展名')
+      return
     }
     if(!maximumSize){
       this.$toast('请您输入支持的最大尺寸')
+      return
     }
     if(!reg.test(picture)){
       this.$toast('请输入正确的扩展名格式')
@@ -54,14 +56,35 @@ export default {
         url:'settings',
         method:'post',
         data:{
-          support_img_ext:this.picture,
-          support_file_ext:this.fileExtension,
-          support_max_size:this.maximumSize
+          "data":[
+            {
+              "attributes":{
+                "key":'support_img_ext',
+                "value":this.picture,
+                "tag": "default"
+              }
+            },
+            {
+              "attributes":{
+                "key":'support_file_ext',
+                "value":this.fileExtension,
+                "tag": "default",
+              }
+              },
+              {
+                "attributes":{
+                  "key":'support_max_size',
+                  "value":this.maximumSize,
+                  "tag": "default",
+                }
+              },
+            
+          ]
         }
       }).then(data=>{
-        this.$toast('提交成功')
-      }).error({
-
+        this.$message('提交成功')
+      }).catch(error=>{
+        
       })
     }
   },

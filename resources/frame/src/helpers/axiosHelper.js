@@ -61,6 +61,9 @@ const analyzingData = function(data, included) {
       if(!nowData.attributes) {
         nowData = newIncludes[nowData.type+nowData.id];
       }
+      // else{
+      //   result._data = nowData.attributes;
+      // }
 
       result._data = nowData.attributes;
       if(nowData.id) result._data.id = nowData.id; //有id时将id加入_data
@@ -170,7 +173,7 @@ const appFetch = function(params, options) {
   }
 
   //get 方式需要把参数传给params
-  if(params.method.toLowerCase() == 'get') {
+  if(params.method.toLowerCase() == 'get'&& params.data) {
     params.params = params.data ? params.data : params.params;
 
     //如果传递include，处理成字符串
@@ -211,7 +214,8 @@ const appFetch = function(params, options) {
       }
 
       return data.data;
-    } else {
+    } 
+    else {
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       })

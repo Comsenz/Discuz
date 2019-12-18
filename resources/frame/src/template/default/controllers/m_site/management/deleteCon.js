@@ -81,12 +81,10 @@ export default {
 		Bus.$emit('setHeader', ['标题标题3443453454ee', 'fasle', 'false']);
 	},
 	methods: {
-
 		async deleteAllClick(value) {
+		console.log(value)
 			let data = [];
-
 			for (let i = 0; i < value.length; i++) {
-				console.log(value[i]);
 				data.push({
 					"type": "threads",
 					"id": value[i],
@@ -97,7 +95,7 @@ export default {
 			}
 
 			await this.appFetch({
-				url:'batch',
+				url:'threadsBatch',
 				method:'patch',
 				data:{
 					'data':data
@@ -108,15 +106,27 @@ export default {
 		},
 
 		deleteList() {
-			console.log('1234');
-			const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
-			params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-			// params.filter['isDeleted'] = 'no';
-			this.apiStore.find('threads', params).then(data => {
-				// console.log(data[0].firstPost().id());
-				// console.log(data[0].user().username());
-				this.themeListCon = data;
-			});
+			this.appFetch({
+				url:'threads',
+				method:'get',
+				data:{
+					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers'],
+					'filter[isDeleted]':'no',
+					'filter[categoryId]':''
+				}
+			}).then(res=>{
+				console.log(res.readdata)
+				this.themeListCon = res.readdata;
+			})
+			// console.log('1234');
+			// const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
+			// params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+			// // params.filter['isDeleted'] = 'no';
+			// this.apiStore.find('threads', params).then(data => {
+			// 	// console.log(data[0].firstPost().id());
+			// 	// console.log(data[0].user().username());
+			// 	this.themeListCon = data;
+			// });
 		},
 
 		checkAll: function (checkAll) {

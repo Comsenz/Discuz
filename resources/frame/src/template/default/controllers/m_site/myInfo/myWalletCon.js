@@ -18,7 +18,8 @@ export default {
       // userName:'Elizabeth'
       value:'',
       valueFrozen:'',
-      user_id:'1'
+      user_id:'1',
+      isLoading: false, //是否处于下拉刷新状态
     }
   },
   components:{
@@ -80,6 +81,14 @@ export default {
       //   this.value = res.data.attributes.available_amount;
       //   this.valueFrozen = res.data.attributes.freeze_amount;
       // })
+    },
+    onRefresh(){
+      setTimeout(()=>{
+          this.wallet()
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true;   
+      },200)
     }
   },
 }

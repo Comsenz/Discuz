@@ -41,6 +41,7 @@
               </el-button>
 
               <el-button
+              @click.native.prevent="loginSetting(scope.$index,scope.row.type,'0')"
                 size="mini">
                 关闭
               </el-button>
@@ -50,6 +51,7 @@
             <el-button
               v-else
               size="mini"
+              @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
             >开启</el-button>
 
           </template>

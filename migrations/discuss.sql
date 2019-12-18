@@ -278,3 +278,9 @@ ALTER TABLE `operation_log` ADD COLUMN `user_id` INT UNSIGNED NOT NULL DEFAULT '
 -- 2019-12-11
 ALTER TABLE `orders`
 	CHANGE COLUMN `order_sn` `order_sn` CHAR(22) NOT NULL DEFAULT '0' COMMENT '订单编号' AFTER `id`;
+
+-- 2019-12-18 11:42:37
+ALTER TABLE `attachments` ADD `uuid` VARCHAR(100)  NOT NULL  DEFAULT ''  AFTER `id`;
+
+-- 2019-12-18 15:52:08
+ALTER TABLE `users` ADD `expired_at` DATETIME  NULL  AFTER `joined_at`;

@@ -78,7 +78,7 @@ class ListFavoritesController extends ListThreadsController
 
         // 付费主题，不返回内容
         if (! $actor->isAdmin()) {
-            $allRewardedThreads = $actor->orders()
+            $allRewardedThreads = Order::where('user_id', $actor->id)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->where('type', Order::ORDER_TYPE_REWARD)
                 ->pluck('thread_id');

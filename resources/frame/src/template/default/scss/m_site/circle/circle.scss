@@ -164,6 +164,7 @@ body {
 .postContent {
 	@include font-dpr(30);
 	@include px2rem(line-height, 40);
+	@include px2rem(margin-bottom, 20);
 	a {
 		display: block;
 		@include px2rem(line-height, 40);
@@ -172,49 +173,56 @@ body {
 }
 .operaBox {
 	background: $corF7;
-	@include px2rem(padding, 16 0 20 0);
-	@include px2rem(margin-top, 20);
-	color: #444;
-  .isrelation {
-    border-bottom: 1px solid $corE5;
-  }
-	.likeBox {
-		@include font-dpr(28);
-		@include px2rem(padding, 0 18 0 18);
-		vertical-align: middle;
-		@include px2rem(margin-bottom, 8);
-		word-break: break-all;
-		.icon {
-			@include font-dpr(28);
-			color: $fontColor;
-		}
-		a {
-			color: $fontColor;
-			@include px2rem(line-height, 36);
-			@include font-dpr(28);
-		}
-	}
-	.reward {
-		@include px2rem(padding, 0 18 0 18);
-		vertical-align: middle;
-		@include px2rem(padding-bottom, 16);
-		@include font-dpr(28);
-		word-break: break-all;
-		.icon {
-			@include font-dpr(28);
-			color: #FF5453;
-		}
-		a {
-			color: $fontColor;
-			@include px2rem(line-height, 36);
-			@include font-dpr(28);
-		}
-	}
-
 }
+.isrelationGap {
+	@include px2rem(padding-top, 16);
+	background: $corF7;
+}
+.isrelationLine {
+	border-bottom: 1px solid $corE5;
+}
+.likeBox {
+	@include font-dpr(28);
+	background: $corF7;
+	@include px2rem(padding, 0 18 8 18);
+	vertical-align: middle;
+	word-break: break-all;
+	color: #444;
+	.icon {
+		@include font-dpr(28);
+		color: $fontColor;
+	}
+	a {
+		color: $fontColor;
+		@include px2rem(line-height, 36);
+		@include font-dpr(28);
+	}
+}
+.reward {
+	background: $corF7;
+	@include px2rem(padding, 0 18 0 18);
+	vertical-align: middle;
+	@include px2rem(padding-bottom, 16);
+	@include font-dpr(28);
+	word-break: break-all;
+	color: #444;
+	.icon {
+		@include font-dpr(28);
+		color: #FF5453;
+	}
+	a {
+		color: $fontColor;
+		@include px2rem(line-height, 36);
+		@include font-dpr(28);
+	}
+}
+
+
 .replyBox {
-	@include px2rem(padding, 16 18 0 18);
+	@include px2rem(padding, 16 18 20 18);
 	@include px2rem(line-height, 40);
+	background: $corF7;
+	color: #444;
 	.replyCon {
 		@include px2rem(line-height, 40);
 		@include px2rem(margin-bottom, 8);

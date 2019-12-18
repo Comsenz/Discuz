@@ -36,6 +36,7 @@ export default {
       * *!/
       this.$parent.$emit('created',Number(webDb.getLItem('currentPag'))||1);
     },*/
+    
   },
 
   beforeUpdate() {

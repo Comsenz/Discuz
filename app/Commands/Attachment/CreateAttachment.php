@@ -20,7 +20,6 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
 use Illuminate\Contracts\Events\Dispatcher;
-use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
@@ -62,13 +61,13 @@ class CreateAttachment
      * @param User $actor 执行操作的用户.
      * @param UploadedFileInterface $file
      * @param string $ipAddress 请求来源的IP地址.
-     * @param int $isGallery    是否是帖子图片
+     * @param bool $isGallery    是否是帖子图片
      */
     public function __construct(
         $actor,
         UploadedFileInterface $file,
         string $ipAddress,
-        int $isGallery = 0
+        bool $isGallery = false
     ) {
         $this->actor = $actor;
         $this->file = $file;
@@ -105,7 +104,8 @@ class CreateAttachment
             new Uploading($this->actor, $this->file)
         );
 
-        $type = explode(',', $settings->get('allowFileType', 'default', ''));
+        $type = $settings->get('allowFileType', 'default', '');
+        $type = $type ? explode(',', $type) : [];
 
         $size = $settings->get('allowFileSize', 'default', 0);
 

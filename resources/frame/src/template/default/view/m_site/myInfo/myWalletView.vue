@@ -1,6 +1,7 @@
 <template>
   <div class="bgEd">
     <myWalletHeader title="我的钱包"></myWalletHeader>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <div class="content">
       <main class="like-main">
         <van-cell title="可用余额" @click="myWallet('withdraw')" is-link :value="value+'元'"/>
@@ -11,7 +12,7 @@
       </main>
       <footer class="my-info-money-footer"></footer>
     </div>
-
+    </van-pull-refresh>
   </div>
 </template>
 
