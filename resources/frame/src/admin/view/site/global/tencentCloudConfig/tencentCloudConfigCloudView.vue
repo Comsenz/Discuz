@@ -5,24 +5,24 @@
       <Card header="APPID：">
         <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的appid。若使用子账号，权限需覆盖所使用
 的服务">
-          <el-input></el-input>
+          <el-input v-model="appId" clearable></el-input>
         </CardRow>
       </Card>
 
       <Card header="Secretid：">
         <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的SecretId">
-          <el-input></el-input>
+          <el-input v-model="secretId" clearable></el-input>
         </CardRow>
       </Card>
 
       <Card header="SecretKey：">
         <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的SecretKey">
-          <el-input></el-input>
+          <el-input v-model="secretKey" clearable></el-input>
         </CardRow>
       </Card>
 
       <Card class="footer-btn">
-        <el-button type="primary" size="medium"@click="$router.push({path:'/admin/tencent-cloud-set'})" >提交</el-button>
+        <el-button type="primary" size="medium" @click="$router.push({path:'/admin/tencent-cloud-set'})" >提交</el-button>
       </Card>
 
     </div>

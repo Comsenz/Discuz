@@ -2,19 +2,19 @@
     <div class="user-manage-box">
       <Card header="用户名：">
         <CardRow description="可使用通配符 *，多个用户名用半角逗号 ',' 隔开">
-          <el-input></el-input>
+          <el-input v-model="username"></el-input>
         </CardRow>
       </Card>
 
       <Card header="用户 UID：">
         <CardRow>
-          <el-input></el-input>
+          <el-input v-model="userUID"></el-input>
         </CardRow>
       </Card>
 
       <Card header="用户角色：">
-        <CardRow description="设置允许参与搜索的用户组，可以按住 CTRL 多选">
-          <el-select v-model="value" multiple  placeholder="请选择">
+        <CardRow description="设置允许参与搜索的用户组，可多选">
+          <el-select v-model="userRole" multiple  placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -29,30 +29,13 @@
         <div v-show="checked">
           <Card header="手机号：">
             <CardRow>
-              <el-input></el-input>
+              <el-input v-model="userPhone"></el-input>
             </CardRow>
           </Card>
 
           <Card header="是否绑定微信：">
             <el-radio v-model="radio1" label="1">是</el-radio>
-            <el-radio v-model="radio1" label="2">否</el-radio>
-          </Card>
-
-          <Card header="是否实名认证：">
-            <el-radio v-model="radio2" label="1">是</el-radio>
-            <el-radio v-model="radio2" label="2">否</el-radio>
-          </Card>
-
-          <Card header="实名认证姓名：">
-            <CardRow>
-              <el-input></el-input>
-            </CardRow>
-          </Card>
-
-          <Card header="实名认证身份证号：">
-            <CardRow>
-              <el-input></el-input>
-            </CardRow>
+            <el-radio v-model="radio1" label="0">否</el-radio>
           </Card>
 
         </div>

@@ -13,6 +13,24 @@ export default {
   },
   methods:{
 
+    /*
+    * 接口请求
+    * */
+    getGroupResource(){
+      this.appFetch({
+        url:"groups",
+        method:'get',
+        splice: '/' + this.$route.query.id,
+        data:{}
+      }).then(res=>{
+        console.log(res);
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+  },
+  created(){
+    this.getGroupResource();
   },
   components:{
     Card,

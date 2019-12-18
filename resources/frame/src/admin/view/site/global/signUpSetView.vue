@@ -16,10 +16,10 @@
     <Card header="密码字符类型：">
       <CardRow description="新用户注册时密码中必须存在所选字符类型，不选则为无限制">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="数字">数字</el-checkbox>
-          <el-checkbox label="小写字母">小写字母</el-checkbox>
-          <el-checkbox label="符号">符号</el-checkbox>
-          <el-checkbox label="大写字母">大写字母</el-checkbox>
+          <el-checkbox label=0>数字</el-checkbox>
+          <el-checkbox label=1>小写字母</el-checkbox>
+          <el-checkbox label=2>符号</el-checkbox>
+          <el-checkbox label=3>大写字母</el-checkbox>
         </el-checkbox-group>
       </CardRow>
     </Card>

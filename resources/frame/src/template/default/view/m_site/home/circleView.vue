@@ -5,6 +5,7 @@
 	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
+	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
 	    	<div class="screen" @click="bindScreen">
@@ -18,7 +19,7 @@
       <div v-if="themeListCon">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
-
+	</van-pull-refresh>
 	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
 	    <!-- <div class="gap"></div> -->
 	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">

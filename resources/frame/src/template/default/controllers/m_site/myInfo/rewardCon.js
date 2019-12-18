@@ -4,32 +4,87 @@
 
 //问题：打赏我的字体，应该跟发布的主题内容一致吧。直接打赏的是主题，并不是引用回复这种。
 
-// import RewardHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-// import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
-// import ContMain from '../../../view/m_site/common/cont/contMainView'
-// import ContFooter from '../../../view/m_site/common/cont/contFooterView'
+import RewardHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import ContHeader from '../../../view/m_site/common/cont/contHeaderView'
+import ContMain from '../../../view/m_site/common/cont/contMainView'
+import ContFooter from '../../../view/m_site/common/cont/contFooterView'
 
 
 export default {
   data:function () {
     return {
       rewardList:[],
-      imgUrl:'',
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+    
     }
+  },
+  components:{
+    RewardHeader,
+    ContHeader,
+    ContMain,
+    ContFooter
   },
   created(){
     this.imgUrl = '../../../../../../../static/images/mytx.png';
-    this.myReward()
-    console.log('33333333333')
+    this.myRewardList()
   },
   methods:{
-    myReward(){
-      console.log('2222222222')
-      this.apiStore.find('notice', {type:3}).then(res=>{
-        this.rewardList = res
+    myRewardList(){
+     return this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'3'
+        }
+      }).then(res=>{
         console.log(res)
+        this.rewardList = res.readdata;
+        
       })
+    },
+    onLoad(){    //上拉加载
+      this.appFetch({
+        url:'notice',
+        method:'get',
+        data:{
+          type:'3'
+        }
+      }).then(res=>{
+        // this.pageSize = res.meta.threadCount;
+        // this.pageIndex = res.meta.pageCount;
+        // this.collectionList = res.readdata;
+        // 加载状态结束
+        this.loading = false;
+        if(res.readdata === ''){
+          this.finished = false; //数据全部加载完成
+        }else{
+          this.finished = true
+        }
+
+      console.log(this.finished,'00000000000000000000')
+
+      })
+      // setTimeout(()=>{
+        
+      // this.loading = false;
+      //     // 数据全部加载完成
+      //     if (this.collectionList.length >= 40) {
+      //       this.finished = true;
+      //     }
+      // },200)
+    },
+    onRefresh(){
+      setTimeout(()=>{
+        this.myRewardList().then(()=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = true;
+        })
+        
+      },200)
     }
   },
- 
+
 }

@@ -26,6 +26,8 @@ class UserSerializer extends AbstractSerializer
             'registerIp'        => $model->register_ip,
             'lastLoginIp'       => $model->last_login_ip,
             'status'            => $model->status,
+            'joinedAt'          => $this->formatDate($model->joined_at),
+            'expiredAt'         => $this->formatDate($model->expired_at),
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
         ];

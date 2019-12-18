@@ -11,17 +11,20 @@ export default {
         {
           title: '回复我的',
           typeId: 1,
-          number: 0
+          number: 0,
+          routerName: 'reply'
         },
         {
           title: '打赏我的',
           typeId: 3,
-          number: 0
+          number: 0,
+          routerName: 'reward'
         },
         {
           title: '点赞我的',
           typeId: 2,
-          number: 0
+          number: 0,
+          routerName: 'like'
         },
       ],
       
@@ -52,13 +55,14 @@ export default {
         method:'get',
         standard: false,
         data:{
-          describe:'', //我的通知页面里点赞我的
-          include:''
+          // include:[]
         }
       }).then(res=>{
+        console.log(res)
         const DATA = res.data;
         this.num = this.num.map((val)=>{
           val.number = DATA[val.typeId];
+          console.log(val.number)
           return val;
         })
       })

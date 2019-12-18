@@ -57,7 +57,7 @@ $route->post('/register', 'register', ApiController\Users\RegisterController::cl
 |--------------------------------------------------------------------------
 */
 
-$route->get('/oauth/weixin', 'login', ApiController\Users\WeixinLoginController::class);
+$route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +75,7 @@ $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersControll
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->get('/user/export', 'user.export', ApiController\Users\ExportUserController::class);
+$route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -196,7 +197,9 @@ $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInv
 |--------------------------------------------------------------------------
 */
 
-$route->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
+$route->get('/attachments/{uuid}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
+$route->post('/attachments', 'attachments.create', ApiController\Attachment\CreateAttachmentController::class);
+$route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -237,7 +240,7 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 |--------------------------------------------------------------------------
 */
 
-$route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------

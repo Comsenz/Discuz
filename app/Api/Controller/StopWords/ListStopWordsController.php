@@ -83,6 +83,11 @@ class ListStopWordsController extends AbstractListController
             $stopWordCount
         );
 
+        $document->setMeta([
+            'total' => $stopWordCount,
+            'pageCount' => ceil($stopWordCount / $limit),
+        ]);
+
         return $stopWords;
     }
 }

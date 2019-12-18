@@ -8,30 +8,79 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: [
+        {
+          value: 1,
+          label: '增加余额'
+        }, 
+        {
+          value: 2,
+          label: '减少余额'
+        }
+      ],
+      walletInfo: {
+        user:{
+          _data:{}
+        },
+        _data: {}
+      },
+      operateType: 1,
+      operateAmount: '',
       value: '',
-      radio:'',
-      textarea:''
+      textarea:'',
+      query: {}
     }
   },
 
-  methods:{
+  created(){
+    this.query = this.$route.query;
+    this.getWalletDet();
+  },
 
+  methods:{
+    async getWalletDet(){
+      try{
+        if(this.query.id === undefined){
+          throw new Error('not found user id');
+        }
+        const response = await this.appFetch({
+          method: 'get',
+          url: 'wallet',
+          splice: `${this.query.id ? this.query.id : ''}`
+        })
+        console.log(response,'wallet response')
+        this.walletInfo = response.readdata;
+      }catch(err){
+        console.error(err, 'getWalletDet');
+      }
+    },
+
+    operaAmountInput(val){
+      this.operateAmount = val.replace(/[^0-9^\.]/g,'');
+    },
+
+    async handleSubmit(){
+      try{
+        if(this.query.id === undefined){
+          return;
+        }
+        await this.appFetch({
+          method: 'patch',
+          url: 'wallet',
+          splice: this.query.id,
+          data: {
+            user_id: Number(this.query.id),
+            operate_type: this.operateType,
+            operate_amount: parseFloat(this.operateAmount),
+            operate_reason: this.textarea,
+            wallet_status: this.walletInfo._data.wallet_status
+          }
+        })
+
+      } catch(err){
+        console.error(err,'handleSubmit ')
+      }
+    }
   },
 
   components:{

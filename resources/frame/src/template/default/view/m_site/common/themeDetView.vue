@@ -9,7 +9,7 @@
                 <div class="postPer">
                   <img :src="item.postHead" v-if="item.postHead" class="postHead">
                   <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
-                  <div class="perDet">
+                  <div class="perDet" v-if="item.user">
                     <div class="perName">{{item.user._data.username}}</div>
                     <div class="postTime">{{item._data.createdAt|timeAgo}}</div>
                   </div>
@@ -21,29 +21,54 @@
                   </div>
                 </div>
               </div>
-              <div class="postContent">
+              <div class="postContent" v-if="item.firstPost">
                 <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
               </div>
-            </div>
-            <div class="operaBox"v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0 || item.lastThreePosts.length>0">
-              <div class="isrelation" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
-                <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
-                  <span class="icon iconfont icon-praise-after"></span>
-                  <i></i><a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a>&nbsp;等<span>{{item._data.likeCount}}</span>个人觉得很赞
+              <div class="themeImgBox">
+                <div class="themeImgList" v-if="item.firstPost.images.length<=1">
+                  <van-image
+                    fit="cover"
+                    lazy-load
+                    v-for="(image,index)  in item.firstPost.images"
+                    src="image._data.fileName"
+                    @click="imageSwiper"
+                    class="themeOneImgChild"
+                  />
                 </div>
-                <div class="" v-else="">
-                </div>
-                <div class="reward" v-if="item.rewardedUsers.length>0">
-                  <span class="icon iconfont icon-money"></span>
-                  <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
-                </div>
-                <div class="" v-else="">
+                <div class="themeImgList moreImg" v-else="">
+                  <van-image
+                    width="113px"
+                    height="113px"
+                    fit="cover"
+                    lazy-load
+                    v-for="(image,index)  in item.firstPost.images"
+                    src="image._data.fileName"
+                    @click="imageSwiper(index)"
+                    class="themeImgChild"
+                  />
                 </div>
               </div>
+            </div>
+            <div class="operaBox">
+            <div class="isrelationGap" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
+            </div>
+            <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
+              <span class="icon iconfont icon-praise-after"></span>
+              <i></i>
+              <a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a>&nbsp;等<span>{{item._data.likeCount}}</span>个人觉得很赞
+            </div>
+            
+            <div class="reward" v-if="item.rewardedUsers.length>0">
+              <span class="icon iconfont icon-money"></span>
+              <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
+            </div>
+          
+            <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
+            </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
                 <div class="replyCon" v-for="reply in item.lastThreePosts">
-                  <a href="javascript:;">{{reply.user._data.username}}</a>
+                  <a href="javascript:;" v-if="reply.user">{{reply.user._data.username}}</a>
                   <span class="font9" v-if="reply.replyUser">回复</span>
                   <a href="javascript:;" v-if="reply.replyUser">{{reply.replyUser._data.username}}</a>
                   <span>{{reply._data.content}}</span>
@@ -51,13 +76,12 @@
                 <a href="javascript;" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
               </div>
             </div>
-            <!-- <van-checkbox
+            <van-checkbox
                 v-if="ischeckShow"
                 class="memberCheck"
-                :name="item.id"
+                :name="item._data.id"
                 ref="checkboxes"
-            /> -->
-
+            />
           </div>
           <div class="gap"></div>
         </div>
@@ -67,8 +91,15 @@
 			    <button class="checkSubmit" @click="deleteAllClick" >删除选中</button>
 		    </div>
      </van-checkbox-group>
-
     </div>
+
+    <van-image-preview
+      v-model="imageShow"
+      :images="priview"
+      @change="onChange"
+    >
+      <template v-slot:index>第{{ index }}页</template>
+    </van-image-preview>
   </section>
 </template>
 <script>

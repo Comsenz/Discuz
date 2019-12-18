@@ -6,6 +6,7 @@ namespace App\Api\Controller\Group;
 use App\Api\Serializer\GroupSerializer;
 use App\Commands\Group\UpdateGroup;
 use Discuz\Api\Controller\AbstractListController;
+use Exception;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -26,19 +27,27 @@ class UpdateGroupsController extends AbstractListController
     {
         $multipleData = Arr::get($request->getParsedBody(), 'data', []);
 
-        $list = collect();
-        foreach($multipleData as $data) {
-            $list->push(
-                $this->bus->dispatch(
+        $list = collect($multipleData)->reduce(function($carry, $item) use ($request) {
+            $carry = $carry ? $carry : ['data' => [], 'meta' => []];
+            try {
+                $group = $this->bus->dispatch(
                     new UpdateGroup(
-                        Arr::get($data, 'attributes.id'),
+                        Arr::get($item, 'attributes.id'),
                         $request->getAttribute('actor'),
-                        $data
+                        $item
                     )
-                )
-            );
-        }
+                );
+                $carry['data'][] = $group;
+                return $carry;
+            } catch (Exception $e) {
+                $item['attributes']['message'] = $e->getMessage();
+                $carry['meta'][] = Arr::get($item, 'attributes');
+                return $carry;
+            }
+        });
 
-        return $list;
+        $document->setMeta($list['meta']);
+
+        return $list['data'];
     }
 }

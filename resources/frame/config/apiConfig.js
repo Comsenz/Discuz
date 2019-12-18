@@ -49,8 +49,9 @@ module.exports = {
   'threadsBatch':'/api/threads/batch',   //修改主题接口(批量)
   'upload': '/api/users/',//上传头像
   'invite':'/api/invite',//创建邀请码
-  'groups':'/api/groups',//获取所有操作类型
+  'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'group-permission':'/api/group-permission', // 修改用户组权限
+  'deleteNotification':'/api/notification', //删除通知里的回复我的
 
 
   /*后台*/
@@ -62,5 +63,7 @@ module.exports = {
   'exportWords':'/api/stop-words/export',//导出敏感词
   'logo':'/api/settings/logo',   //上传站点logo
   'siteinfo':'api/siteinfo',  //站点基本信息
+  'users':'/api/users',       //用户信息
+ 'deleteWords':'/api/stop-words/',//删除敏感词
 
 }

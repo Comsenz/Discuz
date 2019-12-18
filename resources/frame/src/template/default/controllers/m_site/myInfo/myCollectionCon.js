@@ -19,7 +19,13 @@ export default {
       // aaa:[],
       collectionList:[
         
-      ]
+      ],
+      list: [],
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageSize:'',//每页的条数
+      pageIndex:'',//页码
     }
   },
   // components:{
@@ -38,14 +44,67 @@ export default {
   },
   methods:{
     myCollection(){
-        const params = {
-          // 'filter[user]': this.userId
-        };
-        params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-        this.apiStore.find('collection', params).then(data => {
-          console.log(data[0].user());
-          this.collectionList = data;
-        });
+      console.log('33333333333333333333333')
+      return this.appFetch({
+        url:'collection',
+        method:'get',
+        data:{
+          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+        }
+      }).then(data=>{
+        console.log(data)
+        this.collectionList = data.readdata;
+        console.log(data.meta.pageCount)
+      })
+        // const params = {
+        //   // 'filter[user]': this.userId
+        // };
+        // params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
+        // this.apiStore.find('collection', params).then(data => {
+        //   console.log(data[0].user());
+        //   this.collectionList = data;
+        // });
+      },
+      onLoad(){    //上拉加载
+        this.appFetch({
+          url:'collection',
+          method:'get',
+          data:{
+            include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          }
+        }).then(res=>{
+          // this.pageSize = res.meta.threadCount;
+          // this.pageIndex = res.meta.pageCount;
+          // this.collectionList = res.readdata;
+          // 加载状态结束
+          this.loading = false;
+          if(res.readdata === ''){
+            this.finished = false; //数据全部加载完成
+          }else{
+            this.finished = true
+          }
+
+        console.log(this.finished,'00000000000000000000')
+
+        })
+        // setTimeout(()=>{
+          
+        // this.loading = false;
+        //     // 数据全部加载完成
+        //     if (this.collectionList.length >= 40) {
+        //       this.finished = true;
+        //     }
+        // },200)
+      },
+      onRefresh(){
+        setTimeout(()=>{
+          this.myCollection().then(()=>{
+            this.$toast('刷新成功');
+            this.isLoading = false;
+            this.finished = true;
+          })
+          
+        },200)
       }
     
   }

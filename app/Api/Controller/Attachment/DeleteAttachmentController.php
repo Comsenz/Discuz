@@ -1,31 +1,38 @@
 <?php
 
-namespace App\Api\Controller\Users;
+namespace App\Api\Controller\Attachment;
 
-
-use App\Commands\Users\DeleteUsers;
+use App\Commands\Attachment\DeleteAttachment;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 
-
-class DeleteUserController extends AbstractDeleteController
+class DeleteAttachmentController extends AbstractDeleteController
 {
+    /**
+     * @var Dispatcher
+     */
     protected $bus;
 
+    /**
+     * @param Dispatcher $bus
+     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function delete(ServerRequestInterface $request)
     {
+        $id = Arr::get($request->getQueryParams(), 'id');
+        $actor = $request->getAttribute('actor');
+
         $this->bus->dispatch(
-            new DeleteUsers(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'))
+            new DeleteAttachment($id, $actor)
         );
     }
 }

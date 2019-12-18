@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create($user)
+ * @method static where(...$params)
+ */
 class UserWechat extends Model {
 
     protected $primaryKey = 'user_id';

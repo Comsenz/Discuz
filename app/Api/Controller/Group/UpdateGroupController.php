@@ -5,7 +5,6 @@ namespace App\Api\Controller\Group;
 
 use App\Api\Serializer\GroupSerializer;
 use App\Commands\Group\UpdateGroup;
-use App\Models\Thread;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,7 +24,7 @@ class UpdateGroupController extends AbstractResourceController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $res = $this->bus->dispatch(
+        return $this->bus->dispatch(
             new UpdateGroup(
                 Arr::get(
                     $request->getQueryParams(), 'id'),
@@ -34,7 +33,5 @@ class UpdateGroupController extends AbstractResourceController
                 )
             )
         );
-
-        return $res;
     }
 }
