@@ -24,8 +24,9 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageSize:'',//每页的条数
-      pageIndex:'',//页码
+      // pageSize:'',//每页的条数
+      pageIndex: 1,//页码
+      offset: 100
     }
   },
   // components:{
@@ -44,17 +45,17 @@ export default {
   },
   methods:{
     myCollection(){
-      console.log('33333333333333333333333')
       return this.appFetch({
         url:'collection',
         method:'get',
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          'page[number]': this.pageIndex,
+          'page[limit]': 1
         }
       }).then(data=>{
-        console.log(data)
         this.collectionList = data.readdata;
-        console.log(data.meta.pageCount)
+        this.pageIndex++;
       })
         // const params = {
         //   // 'filter[user]': this.userId
@@ -71,21 +72,21 @@ export default {
           method:'get',
           data:{
             include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+            'page[number]': this.pageIndex,
+            'page[limit]': 1
           }
         }).then(res=>{
-          // this.pageSize = res.meta.threadCount;
-          // this.pageIndex = res.meta.pageCount;
-          // this.collectionList = res.readdata;
-          // 加载状态结束
+          console.log(res.readdata)
           this.loading = false;
-          if(res.readdata === ''){
+          if(res.readdata.length > 0){
+            // console.log(this.collectionList)
+            this.collectionList = this.collectionList.concat(res.readdata);
+            // console.log(this.collectionList)
+            this.pageIndex++;
             this.finished = false; //数据全部加载完成
           }else{
             this.finished = true
           }
-
-        console.log(this.finished,'00000000000000000000')
-
         })
         // setTimeout(()=>{
           
