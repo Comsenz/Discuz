@@ -10,7 +10,7 @@ use App\Api\Controller as ApiController;
 
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
-$route->get('/settings/tags', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
+$route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
 $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
