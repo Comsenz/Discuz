@@ -17,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use App\Models\Order;
+use App\Repositories\OrderRepository;
 use App\Models\Thread;
 use App\Models\Post;
 use App\Models\User;
@@ -38,6 +38,11 @@ class ListOrdersController extends AbstractListController
      * @var UrlGenerator
      */
     protected $url;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $order;
 
     /**
      * @var int
@@ -77,10 +82,11 @@ class ListOrdersController extends AbstractListController
     /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus, UrlGenerator $url)
+    public function __construct(Dispatcher $bus, UrlGenerator $url, OrderRepository $order)
     {
         $this->bus = $bus;
         $this->url = $url;
+        $this->order = $order;
     }
 
     /**
@@ -132,7 +138,7 @@ class ListOrdersController extends AbstractListController
         $order_username   = Arr::get($filter, 'username'); //订单创建人
         $order_product    = Arr::get($filter, 'product'); //商品
 
-        $query = Order::query()->whereVisibleTo($actor);
+        $query = $this->order->query()->whereVisibleTo($actor);
         $query->when(!is_null($status), function ($query) use ($status) {
             $query->where('status', $status);
         });
@@ -154,13 +160,13 @@ class ListOrdersController extends AbstractListController
         $query->when($order_product, function ($query) use ($order_product) {
            $query->whereIn('orders.thread_id', Thread::whereIn('threads.id', Post::where('content', 'like', "%$order_product%")->select('posts.thread_id')->groupBy('posts.thread_id')->get())->select('threads.id')->get());
         });
-        $query->skip($offset)->take($limit);
-
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
         }
-
         $this->total = $query->count();
+
+        $query->skip($offset)->take($limit);
+ 
         return $query->get();
     }
 
