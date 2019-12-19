@@ -8,76 +8,97 @@ import browserDb from '../../../../../helpers/webDbHelper';
 
 // import Header from '../../../view/m_site/common/headerView'
 
-import { mapMutations } from 'vuex';
+import {mapMutations,mapState} from 'vuex';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      userName:"",
-      password:"",
-      userId:'2',
-      btnLoading:false,
+      userName: "",
+      password: "",
+      userId: '2',
+      btnLoading: false,
       wxLoginShow: true,
-      isOne:false
+      isOne: false
       // attributes:'/login-user'
     }
   },
+  /*
+  * 映射appSiteModule/state内定义的属性
+  * */
+  computed:mapState({
+    status:state => state.appSiteModule.status,
+  }),
 
-  components:{
-    LoginHeader,
-    LoginFooter,
-    // Header
+  mounted(){
+
   },
 
-  created:function(){
-    console.log(webDbHepler);
-  },
+  methods: {
+    /*
+    * 映射mutation内方法
+    * */
+    ...mapMutations({
+      setStatus:'appSiteModule/SET_STATUS'
+    }),
 
-  mounted:function(){
-  },
-  methods:{
-    loginClick(){
+
+
+    loginClick() {
       // this.btnLoading = true;
-      this.appFetch({
-        url:"login",
-        method:"post",
-        data:{
+
+      // console.log(this.status);
+
+      this.setStatus('啊啦啦啦');
+
+      console.log(this.status);
+
+      /*this.appFetch({
+        url: "login",
+        method: "post",
+        data: {
           "data": {
             "attributes": {
-              username:this.userName,
-              password:this.password,
+              username: this.userName,
+              password: this.password,
             },
           }
         }
       }).then(res => {
-          this.$toast.success('登录成功');
+        console.log(res);
 
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
-          browserDb.setLItem('Authorization',token);
-          browserDb.setLItem('tokenId',tokenId);
+          browserDb.setLItem('Authorization', token);
+          browserDb.setLItem('tokenId', tokenId);
           // let params = this.appCommonH.setGetUrl('/api/login', this.paramsObj);
           this.$router.push({
-            path:'bind-phone',
+            path: 'bind-phone',
           });
-       });
+        }
+
+      }).catch(err => {
+        console.log(err);
+      })*/
 
     },
 
-    loginWxClick(){
-      this.$router.push({path:'/wx-login-bd'})
+    loginWxClick() {
+      this.$router.push({path: '/wx-login-bd'})
     },
-    loginPhoneClick(){
-      this.$router.push({path:'/login-phone'})
+    loginPhoneClick() {
+      this.$router.push({path: '/login-phone'})
     },
-
 
   },
-  created(){
-    let isWeixin =this.appCommonH.isWeixin().isWeixin;
-    let isPhone =this.appCommonH.isWeixin().isPhone;
+  created() {
+    let isWeixin = this.appCommonH.isWeixin().isWeixin;
+    let isPhone = this.appCommonH.isWeixin().isPhone;
     console.log()
-    if(isWeixin == true){
+    if (isWeixin == true) {
       // const APPID = 'wx2aa96b3508831102';
       // const REDIRECT_URI = window.location.host;
       // const SCOPE = 'snsapi_base';
@@ -89,16 +110,16 @@ export default {
       // let href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + APPID + '&redirect_uri=' + REDIRECT_URI + '&response_type=code&scope=' + SCOPE + '&state=' + STATE + '#wechat_redirect';
 
       this.appFetch({
-        url:"weixin",
-        method:"get",
-        data:{
+        url: "weixin",
+        method: "get",
+        data: {
           // attributes:this.attributes,
         }
-      }).then(res=>{
+      }).then(res => {
         console.log(res.data.attributes.location)
         window.location.href = res.data.attributes.location;
       });
-    } else if( isPhone == true) {
+    } else if (isPhone == true) {
       //手机浏览器登录时
       console.log('手机浏览器登录');
       this.wxLoginShow = false;
@@ -117,9 +138,10 @@ export default {
     }
 
 
-
-
-
   },
-
+  components: {
+    LoginHeader,
+    LoginFooter,
+    // Header
+  },
 }
