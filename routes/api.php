@@ -10,7 +10,7 @@ use App\Api\Controller as ApiController;
 
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
-$route->get('/settings/tags', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
+$route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
 $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
@@ -197,7 +197,9 @@ $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInv
 |--------------------------------------------------------------------------
 */
 
-$route->post('/attachment', 'attachment.create', ApiController\Attachment\CreateAttachmentController::class);
+$route->get('/attachments/{uuid}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
+$route->post('/attachments', 'attachments.create', ApiController\Attachment\CreateAttachmentController::class);
+$route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -238,7 +240,7 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 |--------------------------------------------------------------------------
 */
 
-$route->patch('/group-permission/{id}', 'groupPermission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------

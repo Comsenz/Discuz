@@ -10,6 +10,7 @@
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
 class AttachmentSerializer extends AbstractSerializer
@@ -27,7 +28,9 @@ class AttachmentSerializer extends AbstractSerializer
         return [
             'isGallery'         => $model->is_gallery,
             'isRemote'          => $model->is_remote,
+            'uuid'              => $model->uuid,
             'attachment'        => $model->attachment,
+            'extension'         => Str::afterLast($model->attachment, '.'),
             'fileName'          => $model->file_name,
             'filePath'          => $model->file_path,
             'fileSize'          => (int) $model->file_size,

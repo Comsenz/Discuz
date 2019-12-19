@@ -38,7 +38,7 @@ export default {
         current:0,
         userDet:[],
         categories:[],
-        siteInfo: {},
+        siteInfo: false,
         username:'',
         isPayVal:''
 	  }

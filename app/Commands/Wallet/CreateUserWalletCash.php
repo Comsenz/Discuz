@@ -22,9 +22,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use Exception;
+use Discuz\Auth\AssertPermissionTrait;
 
 class CreateUserWalletCash
 {
+    use AssertPermissionTrait;
+    
     /**
      * 执行操作的用户.
      *
@@ -58,7 +61,7 @@ class CreateUserWalletCash
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCash');
+        $this->assertCan($this->actor, 'cash.create');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'cash_apply_amount' => 'required|numeric|min:0|max:5000',
