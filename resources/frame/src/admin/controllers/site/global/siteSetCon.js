@@ -59,7 +59,14 @@ export default {
         this.siteLogoFile = data.readdata._data.siteLogoFile;
         this.siteRecord = data.readdata._data.siteRecord;
         this.siteStat = data.readdata._data.siteStat;
+        this.siteClose = data.readdata._data.siteClose;
+        if(this.siteClose == true){
+           this.radio2 = '1';
+        } else {
+          this.radio2 = '2';
+        }
         this.siteCloseMsg = data.readdata._data.siteCloseMsg;
+
         // this.$message({'修改成功'});
       }).catch(error=>{
         // console.log('失败');
@@ -89,6 +96,13 @@ export default {
     radioChange(siteMode){
       this.siteMode = siteMode;
       // console.log(this.radio);
+    },
+    radioChangeClose(closeVal){
+      if(closeVal == '1'){
+        this.siteClose = true;
+      } else {
+        this.siteClose = false;
+      }
     },
 
     //上传时，判断文件的类型及大小是否符合规则
