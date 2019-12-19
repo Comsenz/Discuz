@@ -69,6 +69,13 @@ class ForumSettingSerializer extends AbstractSerializer
             // 支付设置
             'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
 
+            // 注册设置
+            'setreg' => [
+                'register_close' => (bool)$this->settings->get('register_close'),
+                'password_length' => (int)$this->settings->get('password_length'),
+                'password_strength' => $this->settings->get('password_strength'),
+            ],
+
             // 第三方登陆设置
             'passport' => [
                 // - 微信 h5
