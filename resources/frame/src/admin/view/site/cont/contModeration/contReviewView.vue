@@ -105,8 +105,8 @@
           </div>
 
           <div class="cont-review-table__footer__bottom">
-            <el-button type="text">查看</el-button>
-            <el-button type="text">编辑</el-button>
+            <el-button type="text" @click="viewClick(items._data.id)">查看</el-button>
+            <el-button type="text" @click="editClick(items._data.id)">编辑</el-button>
           </div>
 
         </div>

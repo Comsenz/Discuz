@@ -51,6 +51,7 @@ module.exports = {
   'invite':'/api/invite',//创建邀请码
   'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'group-permission':'/api/group-permission', // 修改用户组权限
+  'groupPermission':'/api/group-permission', // 修改用户组权限
   'deleteNotification':'/api/notification', //删除通知里的回复我的
 
 
