@@ -31,7 +31,21 @@ class GroupPermissionTableSeeder extends Seeder
 
         //站点
         'viewSiteInfo' => [],       //查看站点信息权限
-        'checkVersion' => []        //检查是否有新版权限
+        'checkVersion' => [],       //检查是否有新版权限
+
+        //订单
+        'order.create' => [7, 10],//创建订单
+        'order.viewList' => [],//订单总列表
+
+        //钱包
+        'wallet.update' => [],//更新钱包
+        'wallet.viewList' => [],//总钱包信息列表
+        'wallet.logs.viewList' => [],//钱包动账记录总列表
+
+        //提现
+        'cash.create' => [7, 10],//申请提现
+        'cash.review' => [],//提现审核
+        'cash.viewList' => [],//提现总列表
     ];
 
     /**

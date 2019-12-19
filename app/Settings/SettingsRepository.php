@@ -54,9 +54,10 @@ class SettingsRepository implements ContractsSettingRepository
 
     public function set($key, $value = '', $tag = 'default')
     {
-        if(!is_string($value)) {
+        if(is_array($value)) {
             return false;
         }
+
         $settings = $this->all()->toArray();
         Arr::set($settings, $tag.'.'.$key, $value);
 
@@ -66,6 +67,7 @@ class SettingsRepository implements ContractsSettingRepository
         Setting::setValue($key, $value);
 
         $method = $query->exists() ? 'update' : 'insert';
+
         $query->$method(compact('key', 'value', 'tag'));
 
         return $this->cache->put($this->key, collect($settings));
