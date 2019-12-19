@@ -46,11 +46,11 @@ class CheckLogin
 
         $expire = Carbon::parse($time)->addMinute(self::LIMIT_TIME);
         if ($userLoginFailureNum > 4 && $expire > Carbon::now()){
-            $this->cache->put(self::CACHE_NAME.$event->user->id,1,$expire);
+            $this->cache->put(self::CACHE_NAME.$event->user->id,1, $expire);
             throw new LoginFailuresTimesToplimitException;
         }
         if ($event->password && ! $event->user->checkPassword($event->password) ) {
-            UserLoginLog::writeLog($event->user->id,$event->user->username,1);
+            UserLoginLog::writeLog($_SERVER['REMOTE_ADDR'], $event->user->id, $event->user->username,1);
             throw new PermissionDeniedException;
         }
     }

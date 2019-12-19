@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
+ * @property string $ip
  * @property int $user_id
  * @property string $username
  * @property string $type
@@ -41,14 +42,16 @@ class UserLoginLog extends Model
     /**
      * write user login log.
      *
+     * @param $ip
      * @param $user_id
      * @param $username
      * @param $type
      */
-    public static function writeLog($user_id,$username,$type)
+    public static function writeLog($ip, $user_id, $username, $type)
     {
         $log = new static;
 
+        $log->ip = $ip;
         $log->user_id = $user_id;
         $log->username = $username;
         $log->type = $type;

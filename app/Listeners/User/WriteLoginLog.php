@@ -25,6 +25,6 @@ class WriteLoginLog
     public function handle(Logind $event)
     {
         $this->cache->delete(self::CACHE_NAME.$event->user->id);
-        UserLoginLog::writeLog($event->user->id,$event->user->username,0);
+        UserLoginLog::writeLog($_SERVER['REMOTE_ADDR'], $event->user->id, $event->user->username,0);
     }
 }

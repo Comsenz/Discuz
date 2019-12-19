@@ -14,9 +14,10 @@ class CreateUserLoginLog extends Migration
     {
         $this->schema()->create('user_login_log', function (Blueprint $table) {
             $table->increments('id')->comment('日志 id');
-            $table->integer('user_id')->unsigned()->default(0)->comment('用户 id');
-            $table->string('username')->default('')->comment('用户名');
-            $table->tinyInteger('type')->comment('类型(0正常1密码错误2账号错误)');
+            $table->ipAddress('ip')->default('')->comment('ip 地址');
+            $table->unsignedBigInteger('user_id')->default(0)->index()->comment('用户 id');
+            $table->string('username', 100)->nullable()->comment('用户名');
+            $table->tinyInteger('type')->default(0)->comment('类型(0正常1密码错误)');
             $table->dateTime('created_at')->comment('创建时间');
         });
     }
