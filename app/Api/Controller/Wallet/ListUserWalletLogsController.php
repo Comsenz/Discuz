@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\UserWalletLog;
+use App\Repositories\UserWalletLogsRepository;
 
 class ListUserWalletLogsController extends AbstractListController
 {
@@ -35,6 +36,11 @@ class ListUserWalletLogsController extends AbstractListController
      * @var UrlGenerator
      */
     protected $url;
+
+     /**
+     * @var UserWalletLogsRepository
+     */
+    protected $wallet_log_repository;
 
     /**
      * @var int
@@ -67,10 +73,11 @@ class ListUserWalletLogsController extends AbstractListController
     /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus, UrlGenerator $url)
+    public function __construct(Dispatcher $bus, UrlGenerator $url, UserWalletLogsRepository $wallet_log_repository)
     {
         $this->bus = $bus;
         $this->url = $url;
+        $this->wallet_log_repository = $wallet_log_repository;
     }
 
     /**
@@ -120,7 +127,7 @@ class ListUserWalletLogsController extends AbstractListController
         $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
         $log_end_time   = Arr::get($filter, 'end_time'); //变动时间范围：结束
 
-        $query = UserWalletLog::query();
+        $query = $this->wallet_log_repository->query()->whereVisibleTo($actor);
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
         });
@@ -139,11 +146,11 @@ class ListUserWalletLogsController extends AbstractListController
         $query->when($log_username, function ($query) use ($log_username) {
             $query->whereIn('user_wallet_log.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
-        $query->skip($offset)->take($limit);
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
         }
         $this->total = $query->count();
+        $query->skip($offset)->take($limit);
         return $query->get();
     }
 }

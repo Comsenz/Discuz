@@ -23,9 +23,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
+use Discuz\Auth\AssertPermissionTrait;
 
 class UserWalletCashReview
 {
+    use AssertPermissionTrait;
+
     /**
      * 执行操作的用户.
      *
@@ -72,7 +75,7 @@ class UserWalletCashReview
         $this->events = $events;
         $this->connection = $connection;
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'ReviewCashUserWallet');
+        $this->assertCan($this->actor, 'cash.review');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'ids'         => 'required|array',

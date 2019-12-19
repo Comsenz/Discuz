@@ -20,9 +20,11 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
+use Discuz\Auth\AssertPermissionTrait;
 
 class CreateOrder
 {
+    use AssertPermissionTrait;
 
     /**
      * 执行操作的用户.
@@ -57,7 +59,7 @@ class CreateOrder
     public function handle(Validator $validator, ConnectionInterface $db)
     {
         // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createOrder');
+        $this->assertCan($this->actor, 'order.create');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'type'      => 'required|int',

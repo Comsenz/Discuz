@@ -19,9 +19,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
+use Discuz\Auth\AssertPermissionTrait;
 
 class UpdateUserWallet
 {
+    use AssertPermissionTrait;
+
     /**
      * 钱包用户ID
      * @var int
@@ -60,6 +63,7 @@ class UpdateUserWallet
      */
     public function handle(Validator $validator, ConnectionInterface $db)
     {
+        $this->assertCan($this->actor, 'wallet.update');
         // 验证参数
         $validator_info = $validator->make($this->data, [
             'operate_type'   => 'sometimes|required|integer', //操作类型，1：增加；2：增加
