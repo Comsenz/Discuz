@@ -47,12 +47,13 @@ export default {
       // this.btnLoading = true;
 
       // console.log(this.status);
+      //登录清除，不然携带token请求
 
       this.setStatus('啊啦啦啦');
 
       console.log(this.status);
 
-      /*this.appFetch({
+      this.appFetch({
         url: "login",
         method: "post",
         data: {
@@ -82,7 +83,7 @@ export default {
 
       }).catch(err => {
         console.log(err);
-      })*/
+      })
 
     },
 
