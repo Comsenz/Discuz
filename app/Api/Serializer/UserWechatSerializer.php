@@ -20,7 +20,8 @@ class UserWechatSerializer extends AbstractSerializer
     protected function getDefaultAttributes($model)
     {
         return [
-            'openid' => $model->openid
+            'openid'            => $model->openid,
+            'nickname'          => $model->nickname,
         ];
     }
 

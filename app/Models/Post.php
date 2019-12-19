@@ -76,7 +76,6 @@ class Post extends Model
      */
     protected static $stateUser;
 
-
     /**
      * The text formatter instance.
      *
@@ -92,7 +91,17 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        return static::$formatter->render($value);
+        return static::$formatter->unparse($value);
+    }
+
+    /**
+     * Get the parsed/raw content.
+     *
+     * @return string
+     */
+    public function getParsedContentAttribute()
+    {
+        return $this->attributes['content'];
     }
 
     /**
@@ -103,6 +112,26 @@ class Post extends Model
     public function setContentAttribute($value)
     {
         $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+    }
+
+    /**
+     * Set the parsed/raw content.
+     *
+     * @param string $value
+     */
+    public function setParsedContentAttribute($value)
+    {
+        $this->attributes['content'] = $value;
+    }
+
+    /**
+     * Get the content rendered as HTML.
+     *
+     * @return string
+     */
+    public function formatContent()
+    {
+        return static::$formatter->render($this->attributes['content']);
     }
 
     /**

@@ -45,6 +45,7 @@ class PostSerializer extends AbstractSerializer
 
         $attributes = [
             'content'           => $model->content,
+            'contentHtml'       => $model->formatContent(),
             'ip'                => $model->ip,
             'replyCount'        => $model->reply_count,
             'likeCount'         => $model->like_count,
@@ -52,6 +53,7 @@ class PostSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isFirst'           => (bool) $model->is_first,
             'isApproved'        => (int) $model->is_approved,
+            'canEdit'           => $gate->allows('edit', $model),
             'canApprove'        => $gate->allows('approve', $model),
             'canDelete'         => $gate->allows('delete', $model),
         ];
