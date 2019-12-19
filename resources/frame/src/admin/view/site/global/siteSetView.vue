@@ -64,8 +64,8 @@
 
       <Card header="站点模式：">
         <CardRow description="你的Discuz!Q 站点的运行模式">
-          <el-radio @change="radioChange(1)" v-model="radio" label="1">公开模式</el-radio>
-          <el-radio @change="radioChange(2)" v-model="radio" label="2">付费模式</el-radio>
+          <el-radio @change="radioChange('public')" v-model="radio" label="1">公开模式</el-radio>
+          <el-radio @change="radioChange('pay')" v-model="radio" label="2">付费模式</el-radio>
         </CardRow>
       </Card>
 
