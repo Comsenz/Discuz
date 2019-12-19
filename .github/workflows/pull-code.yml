@@ -1,0 +1,15 @@
+name: pull-code
+
+on:
+  push:
+#  schedule:
+#    - cron: '0 18 * * *'
+
+jobs:
+  pullcode:
+    runs-on: self-hosted
+    steps:
+      - name: pull code
+        run: cd /home/wwwroot/discuss && git pull
+
+
