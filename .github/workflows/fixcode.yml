@@ -12,7 +12,7 @@ jobs:
       - name: pull code
         run: |
           cd /home/wwwroot/discuss-github && git pull
-      - uses: action@checkout
+      - uses: actions/checkout@v1
       - name: fix code
         run: sh .github/bin/.php-cs-fixer.sh
         env:
