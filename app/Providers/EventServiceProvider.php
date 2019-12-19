@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Events\Users\Logind;
+use App\Events\Users\Logining;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
 use App\Listeners\User\ChckoutSite;
+use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
 use App\Listeners\User\WeixinBind;
+use App\Listeners\User\WriteLoginLog;
 use App\Policies\AttachmentPolicy;
 use App\Policies\GroupPolicy;
 use App\Policies\StopWordPolicy;
@@ -26,8 +29,12 @@ class EventServiceProvider extends BaseEventServiceProvider
         Registered::class => [
             InviteBind::class
         ],
+        Logining::class => [
+            CheckLogin::class
+        ],
         Logind::class => [
-            ChckoutSite::class
+            ChckoutSite::class,
+            WriteLoginLog::class
         ],
     ];
 
