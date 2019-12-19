@@ -69,6 +69,31 @@ class ForumSettingSerializer extends AbstractSerializer
             // 支付设置
             'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
 
+            // 站点设置v2版
+            'setsite' => [
+                'site_name' => $this->settings->get('site_name'),
+                'site_introduction' => $this->settings->get('site_introduction'),
+                'site_mode' => $this->settings->get('site_mode'), //pay public
+                'site_price' => $this->settings->get('site_price'),
+                'site_expire' => $this->settings->get('site_expire'),
+                'site_author_scale' => $this->settings->get('site_author_scale'),
+                'site_master_scale' => $this->settings->get('site_master_scale'),
+                'site_icp' => $this->settings->get('site_icp'),
+                'site_stat' => $this->settings->get('site_stat'),
+                'site_close' => (bool)$this->settings->get('site_close'),
+                'site_close_msg' => $this->settings->get('site_close_msg'),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+//                'site_logo' => $this->logo($this->settings->get('site_logo')),
+//                'site_install' => $this->settings->get('site_install'),
+            ],
+
+            // 注册设置
+            'setreg' => [
+                'register_close' => (bool)$this->settings->get('register_close'),
+                'password_length' => (int)$this->settings->get('password_length'),
+                'password_strength' => $this->settings->get('password_strength'),
+            ],
+
             // 第三方登陆设置
             'passport' => [
                 // - 微信 h5

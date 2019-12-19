@@ -4,7 +4,7 @@
 
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-
+import {mapState} from 'vuex';
 
 export default {
   data:function () {
@@ -19,6 +19,10 @@ export default {
     LoginFooter
   },
 
+  computed:mapState({
+    status:state => state.appSiteModule.status,
+  }),
+
   methods:{
     loginUserClick(){
       this.$router.push({path:'/login-user'})
@@ -30,6 +34,14 @@ export default {
     getYZ(){
       console.log(123);
     }
+
+  },
+
+  mounted(){
+    console.log(this.status);
+  },
+
+  created(){
 
   }
 

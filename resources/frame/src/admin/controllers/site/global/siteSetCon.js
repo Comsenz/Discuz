@@ -47,6 +47,11 @@ export default {
         this.siteName = data.readdata._data.siteName;
         this.siteIntroduction = data.readdata._data.siteIntroduction;
         this.siteMode = data.readdata._data.siteMode;
+        if(this.siteMode == 'pay'){
+          this.radio = '2';
+        } else {
+          this.radio = '1';
+        }
         this.sitePrice = data.readdata._data.sitePrice;
         this.siteExpire = data.readdata._data.siteExpire;
         this.siteAuthorScale = data.readdata._data.siteAuthorScale;

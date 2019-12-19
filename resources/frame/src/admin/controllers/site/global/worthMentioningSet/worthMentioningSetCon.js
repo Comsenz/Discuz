@@ -9,18 +9,21 @@ export default {
       settingStatus: [{
         name: '公众号接口配置',
         type: 'offiaccount_close',
+        tag: 'wx_offiaccount',
         description: '用户在微信内使用微信授权登录',
         status:'',
         icon:'iconH'
       }, {
         name: '小程序微信授权登录',
         type:'miniprogram_close',
+        tag: 'wx_miniprogram',
         description: '用户在小程序使用微信授权登录',
         status:'',
         icon:'iconxiaochengxu'
       }, {
         name: 'PC端微信扫码登录',
         type:'oplatform_close',
+        tag: 'wx_oplatform',
         description: '用户在PC的网页使用微信扫码登录',
         status:'',
         icon:'iconweixin'

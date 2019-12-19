@@ -17,7 +17,7 @@ use Tobscure\JsonApi\Document;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Models\UserWalletCash;
+use App\Repositories\UserWalletCashRepository;
 
 class ListUserWalletCashController extends AbstractListController
 {
@@ -34,6 +34,11 @@ class ListUserWalletCashController extends AbstractListController
      * @var UrlGenerator
      */
     protected $url;
+
+    /**
+     * @var UserWalletCashRepository
+     */
+    protected $cash;
 
     /**
      * @var int
@@ -66,10 +71,11 @@ class ListUserWalletCashController extends AbstractListController
     /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus, UrlGenerator $url)
+    public function __construct(Dispatcher $bus, UrlGenerator $url, UserWalletCashRepository $cash)
     {
         $this->bus = $bus;
         $this->url = $url;
+        $this->cash = $cash;
     }
 
     /**
@@ -119,7 +125,7 @@ class ListUserWalletCashController extends AbstractListController
         $cash_start_time = Arr::get($filter, 'start_time'); //申请时间范围：开始
         $cash_end_time   = Arr::get($filter, 'end_time'); //申请时间范围：结束
 
-        $query = UserWalletCash::query();
+        $query = $this->cash->query()->whereVisibleTo($actor);
         $query->when($cash_user, function ($query) use ($cash_user) {
             $query->where('user_id', $cash_user);
         });
@@ -138,11 +144,12 @@ class ListUserWalletCashController extends AbstractListController
         $query->when($cash_username, function ($query) use ($cash_username) {
             $query->whereIn('user_wallet_cash.user_id', User::where('users.username', $cash_username)->select('id', 'username')->get());
         });
-        $query->skip($offset)->take($limit);
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
         }
         $this->total = $query->count();
+        $query->skip($offset)->take($limit);
+
         return $query->get();
     }
 }

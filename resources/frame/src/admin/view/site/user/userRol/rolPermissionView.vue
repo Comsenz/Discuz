@@ -4,131 +4,131 @@
 
     <Card header="前台操作权限："></Card>
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">查看帖子列表</el-checkbox>
+      <CardRow description="查看主题列表页的权限">
+        <el-checkbox v-model="checked" label="viewThreads">查看帖子列表</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">查看帖子详情</el-checkbox>
+      <CardRow description="查看主题的详情页的权限">
+        <el-checkbox v-model="checked" label="viewThreads">查看帖子详情</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">发表帖子</el-checkbox>
+      <CardRow description="发布主题的权限">
+        <el-checkbox v-model="checked" label="createThread">发表帖子</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">回复帖子</el-checkbox>
+      <CardRow description="回复主题的权限">
+        <el-checkbox v-model="checked" label="thread.reply">回复帖子</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="发布主题时上传附件的权限">
         <el-checkbox v-model="checked">上传附件</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="发布主题时上传图片的权限">
         <el-checkbox v-model="checked">上传图片</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="查看主题的详情页中的附件的权限">
         <el-checkbox v-model="checked">查看附件</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="查看主题的详情页中的图片的权限">
         <el-checkbox v-model="checked">查看图片</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">站点会员列表</el-checkbox>
+      <CardRow description="查看站点成员列表、搜索成员的权限">
+        <el-checkbox v-model="checked" label="viewUserList">站点会员列表</el-checkbox>
       </CardRow>
     </Card>
 
 
     <Card header="前台管理权限："></Card>
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">删帖</el-checkbox>
+      <CardRow description="前台删除单个主题的权限">
+        <el-checkbox v-model="checked" label="deletePosts">删帖</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台置顶、取消置顶主题的权限">
         <el-checkbox v-model="checked">置顶</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台精华、取消精华主题的权限">
         <el-checkbox v-model="checked">加精</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台单个主题的编辑权限">
         <el-checkbox v-model="checked">编辑</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台批量删除主题的权限">
         <el-checkbox v-model="checked">批量删除帖子</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台按用户组邀请成员的权限">
         <el-checkbox v-model="checked">管理-邀请加入</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
+      <CardRow description="前台更改成员所属用户组的权限">
         <el-checkbox v-model="checked">编辑用户组</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="">
-        <el-checkbox v-model="checked">编辑用户状态（例如：禁用）</el-checkbox>
+      <CardRow description="前台更改成员禁用状态的权限">
+        <el-checkbox v-model="checked">编辑用户状态</el-checkbox>
       </CardRow>
     </Card>
 
     <Card header="默认权限："></Card>
     <Card>
       <CardRow description="">
-        <el-checkbox v-model="checked">站点信息</el-checkbox>
+        <p style="margin-left: 24PX">站点信息</p>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="">
-        <el-checkbox v-model="checked">帖子点赞</el-checkbox>
+        <p style="margin-left: 24PX">帖子点赞</p>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="">
-        <el-checkbox v-model="checked">帖子收藏</el-checkbox>
+        <p style="margin-left: 24PX">帖子收藏</p>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="">
-        <el-checkbox v-model="checked">帖子打赏</el-checkbox>
+        <p style="margin-left: 24PX">帖子打赏</p>
       </CardRow>
     </Card>
 
@@ -146,7 +146,7 @@
     </Card>-->
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium">提交</el-button>
+      <el-button type="primary" @click="submitClick" size="medium">提交</el-button>
     </Card>
 
   </div>

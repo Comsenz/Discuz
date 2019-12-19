@@ -13,7 +13,7 @@ use App\Api\Serializer\UserWalletCashSerializer;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use App\Commands\Wallet\ReasourseUserWalletCash;
+use App\Repositories\UserWalletCashRepository;
 
 class ResourceUserWalletCashController extends AbstractResourceController
 {
@@ -23,16 +23,16 @@ class ResourceUserWalletCashController extends AbstractResourceController
     public $serializer = UserWalletCashSerializer::class;
 
     /**
-     * @var Dispatcher
+     * @var UserWalletCashRepository
      */
-    protected $bus;
+    protected $cash;
 
     /**
-     * @param Dispatcher $bus
+     * @param UserWalletCashRepository $cash [description]
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(UserWalletCashRepository $cash)
     {
-        $this->bus = $bus;
+        $this->cash = $cash;
     }
 
     /**
@@ -42,9 +42,7 @@ class ResourceUserWalletCashController extends AbstractResourceController
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');
-        return $this->bus->dispatch(
-            new ReasourseUserWalletCash($actor)
-        );
-
+        $id = Arr::get($request->getQueryParams(), 'id');
+        return $this->cash->findCashOrFail($id);
     }
 }
