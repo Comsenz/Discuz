@@ -26,7 +26,7 @@ class UserWalletRepository extends AbstractRepository
 
     public function findWalletOrFail($user_id, User $actor = null)
     {
-        $query = $this->query()->where('user_id', $user_id);        
+        $query = $this->query();
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 }
