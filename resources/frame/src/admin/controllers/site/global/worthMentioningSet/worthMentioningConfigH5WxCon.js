@@ -14,8 +14,27 @@ export default {
   created(){
     var type = this.$route.query.type;
     this.type = type;
+    console.log(this.type);
+    this.loadStatus();
   },
   methods:{
+    loadStatus(){
+      console.log(this.type);
+      //初始化配置参数
+      this.appFetch({
+        url:'tags',
+        method:'get',
+        splice:'/'+this.type,
+        data:{
+        }
+      }).then(data=>{
+          // console.log(data);
+          this.appId = data.readdata[0]._data.app_id;
+          this.appSecret = data.readdata[0]._data.app_secret;
+      }).catch(error=>{
+        // console.log('失败');
+      })
+    },
     submitConfiguration(){
       this.appFetch({
         url:'settings',
