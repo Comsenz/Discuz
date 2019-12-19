@@ -16,6 +16,10 @@ class SettingTags extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        $collModel = collect($model);
+
+        $model = $collModel->pluck('value', 'key')->toArray();
+
         return $model;
     }
 
