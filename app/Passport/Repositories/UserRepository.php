@@ -10,7 +10,7 @@ namespace App\Passport\Repositories;
 
 use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\Logind;
-use App\Events\Users\UserVerify;
+use App\Events\Users\Logining;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -47,9 +47,10 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->users->findByIdentification(compact('username'));
 
-        if ($password && (! $user || ! $user->checkPassword($password))) {
+        if (! $user){
             throw new PermissionDeniedException;
         }
+        $this->events->dispatch(new Logining($user, $username, $password));
 
         // checkout
         $this->events->dispatch(new Logind($user));

@@ -10,6 +10,7 @@
 namespace App\Commands\Post;
 
 use App\Events\Post\PostWasApproved;
+use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\User;
 use App\Repositories\PostRepository;
@@ -114,6 +115,8 @@ class BatchEditPosts
             }
 
             $post->save();
+
+            $post->raise(new Saved($post, $this->actor, $data));
 
             $result['data'][] = $post;
 

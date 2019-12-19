@@ -10,6 +10,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Exceptions\OrderException;
 use App\Models\Order;
 use App\Models\Thread;
 use App\Repositories\PostRepository;
@@ -74,6 +75,7 @@ class ResourceThreadController extends AbstractResourceController
     /**
      * {@inheritdoc}
      * @throws InvalidParameterException
+     * @throws OrderException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -85,7 +87,7 @@ class ResourceThreadController extends AbstractResourceController
         $thread = $this->thread->findOrFail($threadId, $actor);
 
         // 付费帖子
-        if (! $actor->isAdmin()) {
+        if ($thread->price > 0 && ! $actor->isAdmin()) {
             $order = Order::where('user_id', $actor->id)
                 ->where('thread_id', $thread->id)
                 ->where('type', Order::ORDER_TYPE_REWARD)

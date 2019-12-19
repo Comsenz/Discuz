@@ -284,3 +284,16 @@ ALTER TABLE `attachments` ADD `uuid` VARCHAR(100)  NOT NULL  DEFAULT ''  AFTER `
 
 -- 2019-12-18 15:52:08
 ALTER TABLE `users` ADD `expired_at` DATETIME  NULL  AFTER `joined_at`;
+
+-- 2019-12-18 15:50:00 登陆密码错误次数记录表
+CREATE TABLE `user_login_fail_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '日志 id',
+  `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'ip 地址',
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户 id',
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户名',
+  `count` tinyint(4) NOT NULL DEFAULT '1' COMMENT '错误次数',
+  `updated_at` datetime NOT NULL COMMENT '更新时间',
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `user_login_fail_log_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登陆密码错误次数记录表';

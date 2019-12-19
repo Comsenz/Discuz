@@ -19,7 +19,7 @@ module.exports = {
   'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
 
   'emojis':'/api/emoji',      //表情接口
-  'attachment':'/api/attachment', //上传附件、图片
+  'attachment':'/api/attachments', //上传附件、图片
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',//查看用户钱包
@@ -64,6 +64,7 @@ module.exports = {
   'logo':'/api/settings/logo',   //上传站点logo
   'siteinfo':'api/siteinfo',  //站点基本信息
   'users':'/api/users',       //用户信息
- 'deleteWords':'/api/stop-words/',//删除敏感词
+  'deleteWords':'/api/stop-words/',//删除敏感词
+  'tags':'/api/settings',    //指定Tag配置接口
 
 }

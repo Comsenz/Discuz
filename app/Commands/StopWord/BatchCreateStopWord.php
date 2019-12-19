@@ -57,6 +57,8 @@ class BatchCreateStopWord
         $this->assertRegistered($this->actor);
         $this->assertCan($this->actor, 'stopWord.createStopWord');
 
+        $overwrite = Arr::get($this->data, 'overwrite', false);
+
         $result = collect(Arr::get($this->data, 'words'))
             ->unique()
             ->map(function ($word) {
@@ -64,16 +66,30 @@ class BatchCreateStopWord
             })
             ->filter()
             ->unique('find')
-            ->map(function ($word) {
-                $word['user_id'] = $this->actor->id;
-                $stopWord = StopWord::updateOrCreate(['find' => $word['find']], $word);
-                if ($stopWord->wasRecentlyCreated) {
-                    return 'created';
-                } elseif ($stopWord->wasChanged()) {
-                    return 'updated';
-                } else {
-                    return 'unique';
-                }
+            ->when($overwrite, function ($collection) {
+                return $collection->map(function ($word) {
+                    $word['user_id'] = $this->actor->id;
+                    $stopWord = StopWord::updateOrCreate(['find' => $word['find']], $word);
+                    if ($stopWord->wasRecentlyCreated) {
+                        return 'created';
+                    } elseif ($stopWord->wasChanged()) {
+                        return 'updated';
+                    } else {
+                        return 'unique';
+                    }
+                });
+            }, function ($collection) {
+                return $collection->map(function ($word) {
+                    $word['user_id'] = $this->actor->id;
+                    $stopWord = StopWord::firstOrCreate(['find' => $word['find']], $word);
+                    if ($stopWord->wasRecentlyCreated) {
+                        return 'created';
+                    } elseif ($stopWord->wasChanged()) {
+                        return 'updated';
+                    } else {
+                        return 'unique';
+                    }
+                });
             })
             ->countBy();
 

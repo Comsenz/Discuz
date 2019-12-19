@@ -1,7 +1,8 @@
 /**
  * 模板配置
  */
-
+import browserDb from '../../../helpers/webDbHelper';
+import appFetch from '../../../helpers/axiosHelper';
 export default {
   /**
    * [路由器模板配置]
@@ -422,7 +423,97 @@ export default {
    * @return {[type]}        [description]
    */
   beforeEnter: function(to, form, next) {
+    // console.log(to.fullPath);
+
+    let authVal = browserDb.getLItem('Authorization');
+    let siteMode = '';
+      var pro = new Promise(function(resolve, reject){
+        //请求站点信息接口，判断站点是否付费
+        appFetch({
+          url: 'forum',
+          method: 'get',
+          data: {
+            include: ['users'],
+          }
+        }).then((res) => {
+          console.log(res);
+          siteMode = res.readdata._data.siteMode;
+          console.log(siteMode);
+          resolve();
+        });
+      })
+      pro.then(function(resolve){
+
+
+    // if(siteMode == '' || siteMode == null){ return}
+    console.log(siteMode+'6666');
+    console.log(authVal)
+    // if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+        console.log(authVal+'sssss');
+        if(authVal){ //判断本地是否存在access_token
+          console.log('已登录，token已存在');
+          //请求站点信息，用于判断站点是否是付费站点
+          console.log(siteMode+'23232323');
+           if(siteMode == 'pay'){
+             //站点为付费站点时
+             console.log('已登录，未付费')
+                next({
+                  path:'/pay-circle'
+                });
+           } else if(siteMode == 'public'){
+             //站点为公开站点时
+             console.log('公开站点，已登录')
+              next({
+                path:'/circle'
+              });
+           } else {
+
+           }
+
+          next();
+        }else {
+          console.log('未登录，token不存在');
+           //请求站点信息，用于判断站点是否是付费站点
+            if(siteMode == 'pay'){
+              //站点为付费站点时，跳转到付费站点
+              next({
+                path:'/pay-circle'
+              });
+            } else if(siteMode == 'public'){
+              //站点为公开站点时
+
+            } else {
+
+            }
+
+
+          next({
+            path:'/login-user'
+          })
+        }
+      }
+      // else {
+      //   next();
+      // };
+      })
+
+
+
+      /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
+      if(to.fullPath == "/login-user"){
+        if(authVal){
+          next({
+            path:from.fullPath
+          });
+        }else {
+          next();
+        }
+      }
     next();
     //console.log(to, form, next, 'front');
-  }
+
+
+
+  },
+
 };

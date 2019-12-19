@@ -88,7 +88,7 @@ export default {
     },
     radioChange(siteMode){
       this.siteMode = siteMode;
-      console.log(this.radio);
+      // console.log(this.radio);
     },
 
     //上传时，判断文件的类型及大小是否符合规则
@@ -147,7 +147,7 @@ export default {
             },
             {
              "attributes":{
-              "key":"site_modea",
+              "key":"site_mode",
               "value":this.siteMode,
               "tag": "default"
              }
