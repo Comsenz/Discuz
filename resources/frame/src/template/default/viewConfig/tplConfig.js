@@ -443,12 +443,7 @@ export default {
         });
       })
       pro.then(function(resolve){
-
-
-    // if(siteMode == '' || siteMode == null){ return}
-    console.log(siteMode+'6666');
-    console.log(authVal)
-    // if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+        console.log(siteMode+'6666');
         console.log(authVal+'sssss');
         if(authVal){ //判断本地是否存在access_token
           console.log('已登录，token已存在');
@@ -464,7 +459,7 @@ export default {
              //站点为公开站点时
              console.log('公开站点，已登录')
               next({
-                path:'/circle'
+                path:to.fullPath
               });
            } else {
 
@@ -490,11 +485,8 @@ export default {
           next({
             path:'/login-user'
           })
-        }
-      }
-      // else {
-      //   next();
-      // };
+        };
+
       })
 
 
