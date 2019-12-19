@@ -76,7 +76,6 @@ class Post extends Model
      */
     protected static $stateUser;
 
-
     /**
      * The text formatter instance.
      *
@@ -92,7 +91,17 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        return static::$formatter->render($value);
+        return static::$formatter->unparse($value);
+    }
+
+    /**
+     * Get the parsed/raw content.
+     *
+     * @return string
+     */
+    public function getParsedContentAttribute()
+    {
+        return $this->attributes['content'];
     }
 
     /**
@@ -103,6 +112,26 @@ class Post extends Model
     public function setContentAttribute($value)
     {
         $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+    }
+
+    /**
+     * Set the parsed/raw content.
+     *
+     * @param string $value
+     */
+    public function setParsedContentAttribute($value)
+    {
+        $this->attributes['content'] = $value;
+    }
+
+    /**
+     * Get the content rendered as HTML.
+     *
+     * @return string
+     */
+    public function formatContent()
+    {
+        return static::$formatter->render($this->attributes['content']);
     }
 
     /**
@@ -199,6 +228,24 @@ class Post extends Model
     public function refreshLikeCount()
     {
         $this->like_count = $this->likedUsers()->count();
+
+        return $this;
+    }
+
+    /**
+     * Refresh the post's reply count.
+     *
+     * @return $this
+     */
+    public function refreshReplyCount()
+    {
+        $this->reply_count = $this
+            ->where([
+                'reply_post_id' => $this->id,
+                'is_approved' => 1
+            ])
+            ->whereNull('deleted_at')
+            ->count();
 
         return $this;
     }

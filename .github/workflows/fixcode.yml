@@ -1,23 +1,18 @@
 name: Fix Code
 
 on:
-  schedule:
-    - cron: '0 18 * * *'
+  push:
+#  schedule:
+#    - cron: '0 18 * * *'
 
 jobs:
   fixcode:
-
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v1
+    - name: pull code
+      run: |
+        cd /home/wwwroot/discuss-github && git pull
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Clone discuz/core
-      run: git clone https://discuz-bot:${{ secrets.test }}@github.com/Comsenz/framework.git
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
-    - name: Run Fix Code
-      run: composer run-script fix
-    - name: Push Code
-      run: composer run-scriopt commit
+
+    
