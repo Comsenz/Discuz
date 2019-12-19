@@ -204,6 +204,32 @@ class Post extends Model
     }
 
     /**
+     * Refresh the post's reply count.
+     *
+     * @return $this
+     */
+    public function refreshReplyCount()
+    {
+//        $a = $this
+//            ->where([
+//                'reply_post_id' => $this->id,
+//                'is_approved' => 1
+//            ])
+//            ->whereNull('deleted_at')
+//            ->get()->toArray();
+//dd($a);
+        $this->reply_count = $this
+            ->where([
+                'reply_post_id' => $this->id,
+                'is_approved' => 1
+            ])
+            ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
+    /**
      * Define the relationship with the post's thread.
      *
      * @return BelongsTo

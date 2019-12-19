@@ -38,9 +38,9 @@ class ListSettingsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
-//dd(123, $request->getQueryParams());
+
         $filter = $this->extractFilter($request);
-//dd($filter);
+
         $key = Arr::get($filter, 'key', '');
         $tag = Arr::get($filter, 'tag', 'default');
 

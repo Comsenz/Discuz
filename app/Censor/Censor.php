@@ -54,6 +54,11 @@ class Censor
         $this->isTurnOn = $setting->get('censor', 'default', true) == 'true';
     }
 
+    /**
+     * @param $content
+     * @param string $type
+     * @return string
+     */
     public function check($content, $type = 'ugc') {
         // 设置关闭时，直接返回原内容
         if (! $this->isTurnOn) {
