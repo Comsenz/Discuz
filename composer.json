@@ -32,7 +32,8 @@
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
 	"require-dev" : {
-		"symfony/var-dumper" : "^4.3"
+		"symfony/var-dumper" : "^4.3",
+        "friendsofphp/php-cs-fixer": "^2.16"
 	},
 	"autoload" : {
 		"psr-4" : {
