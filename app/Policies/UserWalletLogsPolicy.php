@@ -7,17 +7,17 @@
 
 namespace App\Policies;
 
-use App\Models\Order;
+use App\Models\UserWalletLog;
 use App\Models\User;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
 
-class OrderPolicy extends AbstractPolicy
+class UserWalletLogsPolicy extends AbstractPolicy
 {
     /**
      * {@inheritdoc}
      */
-    protected $model = Order::class;
+    protected $model = UserWalletLog::class;
 
     /**
      * @param User $actor
@@ -25,7 +25,7 @@ class OrderPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->cannot('order.viewList')) {
+        if ($actor->cannot('wallet.logs.viewList')) {
             $query->where('user_id', $actor->id);
             return;
         }

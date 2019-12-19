@@ -17,7 +17,6 @@ use Illuminate\Support\Arr;
 use Discuz\Auth\AssertPermissionTrait;
 use App\Repositories\OrderRepository;
 use App\Api\Serializer\OrderSerializer;
-use App\Models\Order;
 
 class ResourceOrderController extends AbstractResourceController
 {

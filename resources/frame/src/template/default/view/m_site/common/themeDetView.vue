@@ -24,6 +24,30 @@
               <div class="postContent" v-if="item.firstPost">
                 <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
               </div>
+              <div class="themeImgBox">
+                <div class="themeImgList" v-if="item.firstPost.images.length<=1">
+                  <van-image
+                    fit="cover"
+                    lazy-load
+                    v-for="(image,index)  in item.firstPost.images"
+                    src="image._data.fileName"
+                    @click="imageSwiper"
+                    class="themeOneImgChild"
+                  />
+                </div>
+                <div class="themeImgList moreImg" v-else="">
+                  <van-image
+                    width="113px"
+                    height="113px"
+                    fit="cover"
+                    lazy-load
+                    v-for="(image,index)  in item.firstPost.images"
+                    src="image._data.fileName"
+                    @click="imageSwiper(index)"
+                    class="themeImgChild"
+                  />
+                </div>
+              </div>
             </div>
             <div class="operaBox">
             <div class="isrelationGap" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
@@ -67,8 +91,15 @@
 			    <button class="checkSubmit" @click="deleteAllClick" >删除选中</button>
 		    </div>
      </van-checkbox-group>
-
     </div>
+
+    <van-image-preview
+      v-model="imageShow"
+      :images="priview"
+      @change="onChange"
+    >
+      <template v-slot:index>第{{ index }}页</template>
+    </van-image-preview>
   </section>
 </template>
 <script>

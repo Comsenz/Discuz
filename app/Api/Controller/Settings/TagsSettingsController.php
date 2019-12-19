@@ -38,9 +38,11 @@ class TagsSettingsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $tags = $request->getParsedBody()->get('data', []);
+        $tags = Arr::get($request->getQueryParams(), 'tags');
 
-        $settings = collect($tags)->map(function ($tag) {
+        $tagsArr = explode(',', $tags);
+
+        $settings = collect($tagsArr)->map(function ($tag) {
             return Setting::where('tag', $tag)->get()->toArray();
         })->filter();
 

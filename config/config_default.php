@@ -133,6 +133,9 @@ return [
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
+        App\Providers\UserWalletLogsServiceProvider::class,
+        App\Providers\UserWalletCashServiceProvider::class,
+        App\Providers\UserWalletServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

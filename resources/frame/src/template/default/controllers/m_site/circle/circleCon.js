@@ -30,6 +30,7 @@ export default {
       themeNavListCon:[],
       currentData:{},
       replyTagShow: false,
+      firstpostImageListCon:[]
 		}
 	},
   created:function(){
@@ -66,7 +67,7 @@ export default {
           method: 'get',
           data: {
             'filter[isEssence]':filterVal,
-            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
           this.themeListCon = res.readdata;
@@ -78,7 +79,7 @@ export default {
           method: 'get',
           data: {
             'filter[categoryId]':filterVal,
-            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
           this.themeListCon = res.readdata;
@@ -89,7 +90,7 @@ export default {
           method: 'get',
           data: {
             filterValue:filterVal,
-            include: ['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
 
             // page: {
             //   offset: 20,
@@ -97,13 +98,35 @@ export default {
             // },
           }
         }).then((res) => {
-          console.log(res.readdata[0], 'res1111');
-          // console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
+          // console.log(res.readdata, 'res1111');
+          // console.log(res.readdata[1].firstPost.images.length, 'res22222');
           this.themeListCon = res.readdata;
+          // this.pushImgArray();
+
         })
       }
 
 
+    },
+    //把图片url取出，组成一个新的数组（用户主题图片预览）
+    pushImgArray(){
+      //   var themeListLen = this.themeListCon.length;
+      //   var firstpostImage = [];
+      //   for (let h = 0; h < themeListLen; h++) {
+      //     var firstpostImageLen = this.themeListCon[h].firstPost.images.length;
+      //     firstpostImage.push(h,this.themeListCon[h]);
+      //     console.log(this.themeListCon[h].firstPost.images);
+      //     // console.log(this.themeListCon[h].firstPost.images);
+      //     // if (firstpostImageLen === 0) return;
+      //     // for (let i = 0; i < firstpostImageLen; i++) {
+      //     //   firstpostImage.push(this.themeListCon[h].firstPost.images[i]._data.fileName);
+      //     //   console.log(firstpostImage+'3333');
+      //     //   // firstpostImage.push('https://img.yzcdn.cn/2.jpg');
+      //     // }
+      //   }
+      // console.log(firstpostImage+'343434');
+      // this.firstpostImageListCon = firstpostImage;
+      // console.log(this.firstpostImageListCon+'5555');
     },
 		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
