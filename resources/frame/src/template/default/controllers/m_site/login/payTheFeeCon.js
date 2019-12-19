@@ -14,7 +14,7 @@ export default {
 
   methods:{
     leapFrogClick(){
-      this.$router.push({path:'/'})
+      this.$router.push({path:'pay-circle-login'})
     }
   }
 }
