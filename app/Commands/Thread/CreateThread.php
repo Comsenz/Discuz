@@ -92,6 +92,7 @@ class CreateThread
         }
 
         $thread->user_id = $this->actor->id;
+        $thread->price = Arr::get($this->data, 'attributes.price', 0);
         $thread->created_at = Carbon::now();
 
         $thread->setRelation('user', $this->actor);

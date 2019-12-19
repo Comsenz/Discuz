@@ -5,6 +5,7 @@
 import Card from '../../../view/site/common/card/card';
 import Page from '../../../view/site/common/page/page';
 import moment from 'moment';
+import webDb from 'webDbHelper';
 
 export default {
   data:function () {
@@ -101,7 +102,8 @@ export default {
 
   },
   created(){
-    this.getFundingDetailsList();
+    this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
+    this.getFundingDetailsList(Number(webDb.getLItem('currentPag'))||1);
   },
   components:{
     Card,

@@ -119,7 +119,8 @@ export default {
     }
   },
   created(){
-    this.getOrderList();
+    this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
+    this.getOrderList(Number(webDb.getLItem('currentPag'))||1);
   },
   components:{
     Card,

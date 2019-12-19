@@ -14,6 +14,7 @@ use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
+use App\Events\Post\Saved;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
@@ -21,6 +22,7 @@ use App\Models\Thread;
 use App\Notifications\Replied;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 class PostListener
@@ -45,6 +47,28 @@ class PostListener
         // 喜欢帖子
         $events->listen(Serializing::class, AddPostLikeAttribute::class);
         $events->subscribe(SaveLikesToDatabase::class);
+
+        // 添加完数据后
+        $events->listen(Saved::class, [$this, 'whenPostWasSaved']);
+    }
+
+    /**
+     * 在添加完成后触发此事件
+     *
+     * @param Saved $event
+     */
+    public function whenPostWasSaved(Saved $event)
+    {
+        // 要添加回复数的ID
+        $replyId = $event->post->reply_post_id;
+
+        // 为null是Created，不需要刷新
+        if ($replyId) {
+            // 回复以及修改、批量修改 全都刷新回复数
+            $post = Post::find($replyId);
+            $post->refreshReplyCount();
+            $post->save();
+        }
     }
 
     /**

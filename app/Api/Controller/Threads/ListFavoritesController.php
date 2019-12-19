@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -84,8 +85,8 @@ class ListFavoritesController extends ListThreadsController
                 ->pluck('thread_id');
 
             $threads->map(function ($thread) use ($allRewardedThreads) {
-                if ($thread->price > 0 && $allRewardedThreads->contains($thread->id)) {
-                    $thread->firstPost->content = 'TODO: 付费主题无权查看提示语';
+                if ($thread->price > 0 && ! $allRewardedThreads->contains($thread->id)) {
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, 50);
                 }
             });
         }
