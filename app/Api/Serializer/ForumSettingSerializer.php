@@ -83,8 +83,8 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_close_msg' => $this->settings->get('site_close_msg'),
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
-                'site_logo' => $this->logo($this->settings->get('site_logo')),
-                'site_install' => $this->settings->get('site_install'),
+//                'site_logo' => $this->logo($this->settings->get('site_logo')),
+//                'site_install' => $this->settings->get('site_install'),
             ],
 
             // 注册设置
