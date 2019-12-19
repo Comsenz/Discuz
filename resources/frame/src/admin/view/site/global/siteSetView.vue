@@ -78,10 +78,8 @@
           </Card>
 
           <Card  header="到期时间：">
-            <CardRow description="付费模式下，付费成为站点默认角色，可维持的时间">
-              <el-radio-group text-color="#67C23A" fill="#67C23A" v-model="radio2">
-                <el-radio  label="1">无到期时间</el-radio>
-                <el-radio  label="2">有到期时间，加入起
+            <CardRow description="付费模式下，付费成为站点默认角色，可维持的时间,不填或为0时不限制">
+               加入起
                   <el-input
                     style="height: 36PX;width: 80PX"
                     clearable
@@ -90,8 +88,6 @@
                     >
                   </el-input>
                   天后
-                </el-radio>
-              </el-radio-group>
 
             </CardRow>
           </Card>
