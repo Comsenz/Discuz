@@ -10,7 +10,8 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: pull code
-      run: git pull
+      run: |
+        cd /home/wwwroot/discuss-github && git pull
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
