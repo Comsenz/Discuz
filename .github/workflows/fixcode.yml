@@ -9,10 +9,13 @@ jobs:
   fixcode:
     runs-on: self-hosted
     steps:
-    - name: pull code
-      run: |
-        cd /home/wwwroot/discuss-github && git pull
-      env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: pull code
+        run: |
+          cd /home/wwwroot/discuss-github && git pull
+      - uses: action@checkout
+      - name: fix code
+        run: sh .github/bin/.php-cs-fixer.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    
+
