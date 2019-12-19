@@ -186,8 +186,8 @@ class ListThreadsController extends AbstractListController
                 ->pluck('thread_id');
 
             $threads->map(function ($thread) use ($allRewardedThreads) {
-                if ($thread->price > 0 && $allRewardedThreads->contains($thread->id)) {
-                    $thread->firstPost->content = 'TODO: 付费主题无权查看提示语';
+                if ($thread->price > 0 && ! $allRewardedThreads->contains($thread->id)) {
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, 50);
                 }
             });
         }
@@ -339,24 +339,13 @@ class ListThreadsController extends AbstractListController
             }
         }
 
+        // TODO: 关键词搜索 优化搜索
         // 关键词搜索
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
                 ->where('posts.content', 'like', "%{$queryWord}%")
                 ->where('posts.is_first', true);
         }
-
-        // TODO: 关键词搜索 优化搜索
-        // if ($queryWord) {
-        //     $subQuery = Post::whereVisibleTo($actor)
-        //         ->select('posts.thread_id')
-        //         ->where('content', 'like', "%{$queryWord}%")
-        //         ->where('is_first', true);
-        //
-        //     $query->leftJoinSub($subQuery, 'posts', function ($join) {
-        //         $join->on('threads.id', '=', 'posts.thread_id');
-        //     });
-        // }
     }
 
     /**

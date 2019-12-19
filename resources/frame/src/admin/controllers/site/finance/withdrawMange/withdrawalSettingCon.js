@@ -44,8 +44,8 @@ export default {
               }
             },
             {
-              "cash_min_sum":{
-                "key":"cash_interval_time",
+              "attributes":{
+                "key":"cash_min_sum",
                 "value":this.minAmount,
                 "tag": "cash"
               }

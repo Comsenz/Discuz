@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Api\Controller\Users;
-
 
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
@@ -39,7 +37,6 @@ class ListUsersController extends AbstractListController
         $this->url = $url;
     }
 
-
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
@@ -49,11 +46,9 @@ class ListUsersController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
         $actor = $request->getAttribute('actor');
 
-        //权限控制
-        $this->assertPermission($actor->can('viewUserList'));
+        $this->assertCan($actor, 'viewUserList');
 
         $query = $this->users->query();
 
@@ -99,9 +94,7 @@ class ListUsersController extends AbstractListController
         ]);
 
         return $data;
-
     }
-
 
     private function applyFilters($query, $filter)
     {

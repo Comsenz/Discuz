@@ -40,12 +40,12 @@ class OAuthServerExceptionHandler implements ExceptionHandlerInterface
 
         $response = $e->generateHttpResponse(new Response());
 
-        $data = [
-            'status' => 500,
-            'code' => ApiCode::OAUTH_SERVER_ERROR,
+        $error = [
+            'status' => $e->getHttpStatusCode(),
+            'code' => $e->getErrorType(),
             'detail' => json_decode($response->getBody(), true)
         ];
 
-        return new ResponseBag(500, $data);
+        return new ResponseBag($e->getHttpStatusCode(), [$error]);
     }
 }
