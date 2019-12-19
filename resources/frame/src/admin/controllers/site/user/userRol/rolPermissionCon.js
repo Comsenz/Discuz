@@ -46,10 +46,14 @@ export default {
     patchGroupPermission(){
       this.appFetch({
         url:'groupPermission',
-        method:'patch',
-        splice: '/' + this.$route.query.id,
+        method:'post',
         data:{
-          'permissions':this.checked
+          data: {
+            "attributes": {
+              "groupId": this.$route.query.id,
+              "permissions": this.checked
+            }
+          }
         }
       }).then(res=>{
         console.log(res);
