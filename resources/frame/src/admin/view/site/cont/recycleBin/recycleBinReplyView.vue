@@ -76,7 +76,7 @@
       <div class="recycle-bin-reply-table">
         <ContArrange
           v-for="(items,index) in  themeList"
-          :replyBy="items.user._data.username"
+          :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :ip="items._data.ip"
@@ -96,12 +96,12 @@
           <div class="recycle-bin-reply-table__footer" slot="footer">
             <div class="recycle-bin-reply-table__footer-operator">
               <span>操作者：</span>
-              <span>{{items.deletedUser._data.username}}</span>
+              <span>{{!items.deletedUser?'操作者被禁止或删除':items.deletedUser._data.name}}</span>
             </div>
 
             <div class="recycle-bin-reply-table__footer-reason">
               <span>原因：</span>
-              <span>{{items.lastDeletedLog._data.message}}</span>
+              <span>{{!items.deletedUser?'操作者被禁止或删除':items.deletedUser._data.message}}</span>
             </div>
 
           </div>
