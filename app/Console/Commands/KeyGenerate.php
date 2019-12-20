@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Console\Commands;
-
 
 use Discuz\Console\AbstractCommand;
 use Discuz\Foundation\Application;
@@ -10,7 +13,6 @@ use Illuminate\Encryption\Encrypter;
 
 class KeyGenerate extends AbstractCommand
 {
-
     protected $app;
 
     public function __construct(Application $app)
@@ -54,7 +56,7 @@ class KeyGenerate extends AbstractCommand
     protected function generateRandomKey()
     {
         return 'base64:'.base64_encode(
-                Encrypter::generateKey($this->app->config('cipher'))
-            );
+            Encrypter::generateKey($this->app->config('cipher'))
+        );
     }
 }

@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Api\Controller\Users;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Api\Controller\Users;
 
 use App\Commands\Users\DeleteUsers;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-
 
 class DeleteUserController extends AbstractDeleteController
 {

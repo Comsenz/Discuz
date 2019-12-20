@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: WechatNotify.php XXX 2019-10-18 14:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Trade\Notify;
@@ -35,7 +33,6 @@ class WechatNotify
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -43,9 +40,9 @@ class WechatNotify
      * @return mixed 返回给支付平台数据
      */
     public function handle(SettingsRepository $setting, ConnectionInterface $connection, Dispatcher $events)
-    {   
+    {
         $this->config = $setting->tag('wxpay');
-        $notify_result = NotifyTrade::notify(GatewayConfig::WECAHT_PAY_NOTIFY, $this->config);      
+        $notify_result = NotifyTrade::notify(GatewayConfig::WECAHT_PAY_NOTIFY, $this->config);
         if (isset($notify_result['result_code']) && $notify_result['result_code'] == 'SUCCESS') {
             //支付成功
             if ($this->queryOrderStatus($notify_result['transaction_id'])) {
@@ -85,9 +82,8 @@ class WechatNotify
         $query_result = QeuryTrade::query(GatewayConfig::WECAHT_PAY_QUERY, $transaction_id, $this->config);
         if (isset($query_result['return_code'])
             && isset($query_result['result_code'])
-            && $query_result['return_code'] == "SUCCESS"
-            && $query_result['result_code'] == "SUCCESS") {
-
+            && $query_result['return_code'] == 'SUCCESS'
+            && $query_result['result_code'] == 'SUCCESS') {
             return true;
         }
         return false;

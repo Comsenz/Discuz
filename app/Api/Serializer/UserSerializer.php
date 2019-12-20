@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
@@ -40,6 +45,6 @@ class UserSerializer extends AbstractSerializer
 
     public function groups($user)
     {
-        return $this->hasMany($user,GroupSerializer::class);
+        return $this->hasMany($user, GroupSerializer::class);
     }
 }

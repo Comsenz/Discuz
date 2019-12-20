@@ -1,13 +1,12 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Listeners\User;
 
-use App\Models\User;
 use App\Events\Users\UserRefreshCount;
 use Illuminate\Contracts\Events\Dispatcher;
 

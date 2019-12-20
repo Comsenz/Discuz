@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Commands\Group;
 
 use App\Events\Group\Saving;
@@ -7,12 +12,10 @@ use App\Models\Group;
 use App\Models\User;
 use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 
 class CreateGroup
 {
@@ -44,7 +47,6 @@ class CreateGroup
         $this->actor = $actor;
         $this->data = $data;
     }
-
 
     public function handle(Dispatcher $events, GroupValidator $validator)
     {

@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: Censor.php xxx 2019-10-15 16:47:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Censor;
@@ -59,7 +57,8 @@ class Censor
      * @param string $type
      * @return string
      */
-    public function check($content, $type = 'ugc') {
+    public function check($content, $type = 'ugc')
+    {
         // 设置关闭时，直接返回原内容
         if (! $this->isTurnOn) {
             return $content;
@@ -91,7 +90,7 @@ class Censor
                     if (preg_match($find, $content, $matches)) {
                         $this->isMod = true;
                     }
-                } else if ($word->{$type} == self::BANNED) {
+                } elseif ($word->{$type} == self::BANNED) {
                     if (preg_match($find, $content, $matches)) {
                         throw new CensorNotPassedException('content_banned');
                     }

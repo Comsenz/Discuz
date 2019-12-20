@@ -1,14 +1,16 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Settings;
-
 
 use App\Models\Setting;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingRepository;
 use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 class SettingsRepository implements ContractsSettingRepository
 {
@@ -27,7 +29,7 @@ class SettingsRepository implements ContractsSettingRepository
     {
         $settings = $this->settings ?? $this->cache->get($this->key);
 
-        if(true || !$settings) {
+        if (true || !$settings) {
             $settings = [];
 
             Setting::all()->each(function ($setting) use (&$settings) {
@@ -48,13 +50,14 @@ class SettingsRepository implements ContractsSettingRepository
         return Arr::get($this->all(), $tag.'.'.$key, $default);
     }
 
-    public function tag($tag = 'default') {
+    public function tag($tag = 'default')
+    {
         return Arr::get($this->all(), $tag);
     }
 
     public function set($key, $value = '', $tag = 'default')
     {
-        if(is_array($value)) {
+        if (is_array($value)) {
             return false;
         }
 

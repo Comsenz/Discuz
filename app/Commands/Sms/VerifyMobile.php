@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Sms;
-
 
 use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
@@ -17,13 +20,18 @@ use Illuminate\Contracts\Bus\Dispatcher;
 
 class VerifyMobile
 {
-
     protected $controller;
+
     protected $mobileCode;
+
     protected $apiClient;
+
     protected $actor;
+
     protected $bus;
+
     protected $params;
+
     protected $validator;
 
     public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor, $params = [])
@@ -47,9 +55,9 @@ class VerifyMobile
      * @return mixed
      * @throws PermissionDeniedException
      */
-    protected function login() {
-        if(!is_null($this->mobileCode->user))
-        {
+    protected function login()
+    {
+        if (!is_null($this->mobileCode->user)) {
             $this->controller->serializer = TokenSerializer::class;
             $params = [
                 'username' => $this->mobileCode->user->username,
@@ -62,9 +70,10 @@ class VerifyMobile
         throw new PermissionDeniedException;
     }
 
-    protected function bind() {
+    protected function bind()
+    {
         $this->controller->serializer = UserSerializer::class;
-        if($this->actor->exists) {
+        if ($this->actor->exists) {
             $this->actor->changeMobile($this->mobileCode->mobile);
             $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();
@@ -76,7 +85,7 @@ class VerifyMobile
     protected function lostpwd()
     {
         $this->controller->serializer = UserSerializer::class;
-        if($this->mobileCode->user && isset($this->params['password'])) {
+        if ($this->mobileCode->user && isset($this->params['password'])) {
             $this->validator->valid([
                 'password' => $this->params['password']
             ]);

@@ -1,14 +1,16 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Validators;
-
 
 use Discuz\Foundation\AbstractValidator;
 
 class AvatarValidator extends AbstractValidator
 {
-
     /**
      * @return array
      */

@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Providers;
-
 
 use App\Events\Users\Saving;
 use App\Listeners\User\AddDefaultGroup;
@@ -15,17 +18,17 @@ use Illuminate\Support\ServiceProvider;
 
 class UserServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->app->when(AvatarUploader::class)
             ->needs(Filesystem::class)
-            ->give(function(Application $app) {
+            ->give(function (Application $app) {
                 return $app->make(Factory::class)->disk('avatar');
             });
     }
 
-    public function boot() {
+    public function boot()
+    {
         $events = $this->app->make('events');
 
         $events->listen(Saving::class, AddDefaultGroup::class);

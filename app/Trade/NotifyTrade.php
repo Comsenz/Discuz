@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: NotifyTrade.php xxx 2019-10-16 11:10 zhouzhou
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Trade;
@@ -22,7 +20,7 @@ class NotifyTrade
      * @param  mixed $extra       其他参数
      * @return mixed            支付验证结果
      */
-    public static function notify($notify_type, $config, $extra = array())
+    public static function notify($notify_type, $config, $extra = [])
     {
         $result = [];
         switch ($notify_type) {

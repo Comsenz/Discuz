@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Models;
 
 use Discuz\Database\ScopeVisibilityTrait;
@@ -62,7 +67,7 @@ class Group extends Model
     {
         parent::boot();
 
-        static::deleting(function(self $group) {
+        static::deleting(function (self $group) {
             if (in_array($group->id, [self::GUEST_ID, self::ADMINISTRATOR_ID, self::MEMBER_ID])) {
                 throw new DomainException('Cannot delete the default group');
             }

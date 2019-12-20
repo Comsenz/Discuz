@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Jobs;
-
 
 use Discuz\Foundation\Bus\Dispatchable;
 use Exception;
@@ -40,5 +43,4 @@ class TestJob implements ShouldQueue
     {
         // 给用户发送任务失败的通知，等等……
     }
-
 }

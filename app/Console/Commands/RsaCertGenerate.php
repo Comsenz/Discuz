@@ -1,15 +1,17 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Console\Commands;
-
 
 use Discuz\Console\AbstractCommand;
 use Discuz\Foundation\Application;
 
 class RsaCertGenerate extends AbstractCommand
 {
-
     protected $app;
 
     protected $signature = 'rsa:gen';
@@ -17,13 +19,13 @@ class RsaCertGenerate extends AbstractCommand
     protected $description = '生成 OAUTH2 private.key 和 public.key ';
 
     protected $dn = [
-        "countryName" => "GB",
-        "stateOrProvinceName" => "Somerset",
-        "localityName" => "Glastonbury",
-        "organizationName" => "The Brain Room Limited",
-        "organizationalUnitName" => "PHP Documentation Team",
-        "commonName" => "Wez Furlong",
-        "emailAddress" => "wez@example.com"
+        'countryName' => 'GB',
+        'stateOrProvinceName' => 'Somerset',
+        'localityName' => 'Glastonbury',
+        'organizationName' => 'The Brain Room Limited',
+        'organizationalUnitName' => 'PHP Documentation Team',
+        'commonName' => 'Wez Furlong',
+        'emailAddress' => 'wez@example.com'
     ];
 
     public function __construct(string $name = null, Application $app)
@@ -38,7 +40,6 @@ class RsaCertGenerate extends AbstractCommand
      */
     protected function handle()
     {
-
         $privateKey = openssl_pkey_new([
             'private_key_bits' => 2048
         ]);

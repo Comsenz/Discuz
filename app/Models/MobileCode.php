@@ -1,20 +1,20 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
 class MobileCode extends Model
 {
-
     const USED_STATE = 1;
 
-    protected $fillable = ['mobile', 'code', 'type', 'exception_at'];
-
+    protected $fillable = ['mobile', 'code', 'type', 'expired_at'];
 
     /**
      * @param $mobile
@@ -24,20 +24,22 @@ class MobileCode extends Model
      * @return MobileCode
      * @throws \Exception
      */
-    public static function make($mobile, $exception, $type, $ip) {
+    public static function make($mobile, $exception, $type, $ip)
+    {
         $mobileCode = new static();
         $mobileCode->mobile = $mobile;
         $mobileCode->code = static::genCode();
         $mobileCode->ip = $ip;
-        $mobileCode->exception_at = Carbon::now()->addMinutes($exception);
+        $mobileCode->expired_at = Carbon::now()->addMinutes($exception);
         $mobileCode->type = $type;
         return $mobileCode;
     }
 
-    public function refrecode($exception, $ip) {
+    public function refrecode($exception, $ip)
+    {
         $this->code = static::genCode();
         $this->ip = $ip;
-        $this->exception_at = Carbon::now()->addMinutes($exception);
+        $this->expired_at = Carbon::now()->addMinutes($exception);
         return $this;
     }
 
@@ -45,10 +47,10 @@ class MobileCode extends Model
      * @return int
      * @throws \Exception
      */
-    protected static function genCode() {
+    protected static function genCode()
+    {
         return random_int(10000, 50000);
     }
-
 
     public function user()
     {

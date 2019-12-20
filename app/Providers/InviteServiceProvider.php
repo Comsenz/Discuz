@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: InviteServiceProvider.php 28830 2019-10-12 15:59 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Providers;
-
 
 use App\Policies\InvitePolicy;
 use Discuz\Foundation\AbstractServiceProvider;
@@ -23,7 +19,6 @@ class InviteServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-
     }
 
     /**
@@ -40,7 +35,5 @@ class InviteServiceProvider extends AbstractServiceProvider
 
         // 订阅事件
         $events->subscribe(InvitePolicy::class);
-
     }
-
 }

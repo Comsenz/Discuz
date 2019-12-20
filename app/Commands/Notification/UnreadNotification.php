@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UnreadNotification.php XXX 2019-11-15 11:20:00 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Notification;
@@ -17,11 +15,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Notifications\DatabaseNotification;
 
-
 class UnreadNotification
 {
     const TYPE_LIKED = 'App\\Notifications\\Liked';
+
     const TYPE_REPLIED = 'App\\Notifications\\Replied';
+
     const TYPE_REWARDED = 'App\\Notifications\\Rewarded';
 
     private $types = [
@@ -65,8 +64,9 @@ class UnreadNotification
         // $this->assertCan($this->actor, 'createCircle');
 
         $user = User::find($this->actor->id);
-        if (! $user)
+        if (! $user) {
             throw new NoUserException();
+        }
 
         $notifications = DatabaseNotification::selectRaw('type,count(*) as count')
             ->where('read_at', null)
@@ -87,5 +87,4 @@ class UnreadNotification
             'data'=> $data
         ]);
     }
-
 }

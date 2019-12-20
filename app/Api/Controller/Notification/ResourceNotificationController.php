@@ -1,18 +1,13 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: ResourceNotificationController.php 28830 2019-10-12 15:46 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
-use App\Models\StopWord;
-use App\Models\User;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,7 +25,6 @@ class ResourceNotificationController extends AbstractResourceController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-
         $actor = $request->getAttribute('actor');
         $notificationId = Arr::get($request->getQueryParams(), 'id');
 

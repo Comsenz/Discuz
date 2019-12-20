@@ -1,24 +1,29 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Group;
 
-use App\Models\Group;
 use App\Repositories\GroupRepository;
 use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
-use Exception;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 
 class UpdateGroup
 {
     use AssertPermissionTrait;
 
     protected $id;
+
     protected $actor;
+
     protected $data;
+
     protected $groups;
+
     protected $validator;
 
     public function __construct($id, $actor, $data)
@@ -28,7 +33,8 @@ class UpdateGroup
         $this->data = $data;
     }
 
-    public function handle(GroupRepository $groups, GroupValidator $validator) {
+    public function handle(GroupRepository $groups, GroupValidator $validator)
+    {
         $this->groups = $groups;
         $this->validator = $validator;
         return call_user_func([$this, '__invoke']);

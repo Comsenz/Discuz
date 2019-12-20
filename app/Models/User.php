@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Models;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Models;
 
 use Discuz\Auth\Guest;
 use Discuz\Http\UrlGenerator;
@@ -18,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\DiscuzChannelManager;
 use Illuminate\Support\Carbon;
-
 
 /**
  * @property int $id
@@ -234,9 +237,11 @@ class User extends Model
     /**
      * 重载通知
      */
-    public function notify($instance){
+    public function notify($instance)
+    {
         app(DiscuzChannelManager::class)->send($this, $instance);
     }
+
     /**
      * TODO: 用户未读消息数
      * Get the number of unread notifications for the user.
@@ -399,7 +404,8 @@ class User extends Model
      *
      * @return Builder
      */
-    public function permissions() {
+    public function permissions()
+    {
         $groupIds = $this->groups->pluck('id')->all();
 
         return Permission::whereIn('group_id', $groupIds);

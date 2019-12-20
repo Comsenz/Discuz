@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Oauth2;
-
 
 use App\Passport\Repositories\AccessTokenRepository;
 use App\Passport\Repositories\ClientRepository;
@@ -46,7 +49,7 @@ class AccessTokenController implements RequestHandlerInterface
         // Path to public and private keys
         $privateKey = storage_path('cert/private.key');
 
-        if(Str::startsWith($this->app->config('key'), 'base64:')) {
+        if (Str::startsWith($this->app->config('key'), 'base64:')) {
             $encryptionKey = substr($this->app->config('key'), 7); // generate using base64_encode(random_bytes(32))
         } else {
             $encryptionKey = base64_encode(random_bytes(32));
@@ -74,7 +77,7 @@ class AccessTokenController implements RequestHandlerInterface
         );
 
         $response = new Response();
-        if($request->getParsedBody() instanceof Collection) {
+        if ($request->getParsedBody() instanceof Collection) {
             $request = $request->withParsedBody($request->getParsedBody()->toArray());
         }
 

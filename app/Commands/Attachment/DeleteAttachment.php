@@ -1,10 +1,14 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Commands\Attachment;
 
 use App\Events\Attachment\Deleted;
 use App\Events\Attachment\Deleting;
-use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\AttachmentRepository;
 use Discuz\Auth\AssertPermissionTrait;

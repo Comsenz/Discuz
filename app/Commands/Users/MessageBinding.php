@@ -1,9 +1,11 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -33,7 +35,9 @@ class MessageBinding
      * @var array
      */
     public $data;
+
     public $bus;
+
     public $userValidator;
 
     /**
@@ -42,15 +46,11 @@ class MessageBinding
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($actor, array $data ,BusDispatcher $bus)
+    public function __construct($actor, array $data, BusDispatcher $bus)
     {
         $this->actor = $actor;
         $this->data = $data;
         $this->bus = $bus;
-
     }
 
     /**
@@ -61,13 +61,13 @@ class MessageBinding
      * @return ResponseBag
      * @throws Exception
      */
-    public function handle(Dispatcher $events,UserValidator $userValidator,UserRepository $repository)
+    public function handle(Dispatcher $events, UserValidator $userValidator, UserRepository $repository)
     {
         $this->events = $events;
         $this->userValidator =$userValidator;
         // 判断有没有权限执行此操作
         //$this->assertCan($this->actor, 'classify.deleteClassify');
-        if($this->data['type']=='new'){
+        if ($this->data['type']=='new') {
             $where=[
                 'id'=>$this->data['id'],
                 'type'=>'update',
@@ -81,13 +81,12 @@ class MessageBinding
         );
         $data->delete();
         try {
-            $objuser = $repository->findOrFail(24,$this->actor);
-            if($objuser->mobile !=$this->data['mobile']){
+            $objuser = $repository->findOrFail(24, $this->actor);
+            if ($objuser->mobile !=$this->data['mobile']) {
                 //$this->userValidator->valid(['mobile' => $this->data['mobile']]);
                 $objuser->mobile = $this->data['mobile'];
             }
             $objuser->save();
-            
         } catch (Exception $e) {
             throw $e;
         }

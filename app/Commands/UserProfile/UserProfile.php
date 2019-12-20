@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleExtend.phpnd.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\UserProfile;
-
 
 use App\Events\UserProfile\Saving;
 use App\Repositories\UserRepository;
@@ -18,6 +14,7 @@ use App\Models\User;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+
 class UserProfile
 {
     use EventsDispatchTrait;
@@ -42,10 +39,7 @@ class UserProfile
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($id,$actor)
+    public function __construct($id, $actor)
     {
         $this->actor = $actor;
         $this->id = $id;
@@ -59,22 +53,22 @@ class UserProfile
      * @return user
      * @throws Exception
      */
-    public function handle(BusDispatcher $bus, EventDispatcher $events,UserRepository $repository)
+    public function handle(BusDispatcher $bus, EventDispatcher $events, UserRepository $repository)
     {
         $this->events = $events;
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'circle.createCircle');
 
         //验证数据
-        $userProfile= User::where('users.id',$this->id)
+        $userProfile= User::where('users.id', $this->id)
         ->leftjoin('user_wechats', 'user_wechats.id', '=', 'users.id')
         ->leftjoin('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-        ->select('users.id as id',"username","mobile","users.created_at as created_at","users.last_login_ip","nickname","user_profiles.sex","icon")
+        ->select('users.id as id', 'username', 'mobile', 'users.created_at as created_at', 'users.last_login_ip', 'nickname', 'user_profiles.sex', 'icon')
         ->first();
 
         // 触发钩子事件
         $this->events->dispatch(
-            new Saving($userProfile,$this->actor,[$this->id])
+            new Saving($userProfile, $this->actor, [$this->id])
         );
 
         // 调用钩子事件

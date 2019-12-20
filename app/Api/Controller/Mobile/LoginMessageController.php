@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleController.php 28830 2019-09-26 09:47 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Mobile;
@@ -27,7 +24,7 @@ class LoginMessageController implements RequestHandlerInterface
      */
     protected $bus;
 
-    public function __construct( BusDispatcher $bus)
+    public function __construct(BusDispatcher $bus)
     {
         $this->bus = $bus;
     }
@@ -49,7 +46,7 @@ class LoginMessageController implements RequestHandlerInterface
         //生成jwt
         /** @var TYPE_NAME $actor */
         $jwt = $this->bus->dispatch(
-            new Password($data->id,$request,$data->username,$data->password)
+            new Password($data->id, $request, $data->username, $data->password)
         );
         // 返回结果
         return $jwt;

@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateOrder.php XXX 2019-10-16 16:52 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Order;
@@ -94,7 +92,7 @@ class CreateOrder
                 } else {
                     $payee_id = $thread->user_id;
                     //打赏金额
-                    $amount = sprintf("%.2f", (float) $this->data->get('amount'));
+                    $amount = sprintf('%.2f', (float) $this->data->get('amount'));
                 }
                 break;
             default:
@@ -154,5 +152,4 @@ class CreateOrder
     {
         return date('YmdHis', time()) . substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
-
 }
