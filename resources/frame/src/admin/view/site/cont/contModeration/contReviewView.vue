@@ -62,11 +62,11 @@
     <div class="cont-review-table">
       <ContArrange
         v-for="(items,index) in  themeList"
-        :author="items.user._data.username"
+        :author="!items.user?'该用户被删除':items.user._data.username"
         :theme="items.category._data.name"
         :prply="items._data.postCount"
         :browse="items._data.viewCount"
-        :last="items.lastPostedUser._data.username"
+        :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
         :finalPost="formatDate(items._data.createdAt)"
         :key="items._data.id"
       >
@@ -79,7 +79,7 @@
         </div>
 
         <div class="cont-review-table__main" slot="main">
-          {{items.firstPost._data.content}}
+          {{!items.user?'作者被禁止或删除，内容自动屏蔽':items.firstPost._data.content}}
         </div>
 
         <div class="cont-review-table__footer" slot="footer">

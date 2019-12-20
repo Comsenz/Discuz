@@ -2,11 +2,13 @@
 /**
  * 移动端站点首页控制器
  */
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
 			showScreen: false,
-			loginBtnFix: true,
+			loginBtnFix: false,
+      loginHide:false,
 			// footShow: true,
 			fourHeader: true,
       isWx:'1',
@@ -30,14 +32,129 @@ export default {
       themeNavListCon:[],
       currentData:{},
       replyTagShow: false,
-      firstpostImageListCon:[]
+      firstpostImageListCon:[],
+      situation1:true,  //付费站点 已登录且已付费
+      situation2:false,  //付费站点 已登录但未付费
+      situation3:false,  //付费站点 ，未登录
+      situation4:false,   //公开站点 未登录
+      situation5:false,  //公开站点 已登录
 		}
 	},
   created:function(){
     this.loadThemeList();
+    this.getInfo();
     this.load();
   },
 	methods: {
+
+    getInfo(){
+      //请求站点信息，用于判断站点是否是付费站点
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {
+          include: ['users'],
+        }
+      }).then((res) => {
+        console.log(res);
+        this.siteInfo = res.readdata;
+        console.log(res.readdata._data.siteMode+'请求');
+        // this.siteUsername = res.readdata._data.siteAuthor.username;
+        this.sitePrice = res.readdata._data.sitePrice
+        //把站点是否收费的值存储起来，以便于传到父页面
+        this.isPayVal = res.readdata._data.siteMode;
+        if(this.isPayVal != null && this.isPayVal != ''){
+          this.isPayVal = res.readdata._data.siteMode;
+          //判断站点信息是否付费，用户是否登录，用户是否已支付
+          this.detailIf(this.isPayVal,false);
+        }
+      });
+    },
+    //请求用户信息
+    getUser(){
+    //初始化请求User信息，用于判断当前用户是否已付费
+      var userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice:'/'+userId,
+        data: {
+          include: 'groups',
+        }
+      }).then((res) => {
+        // console.log(res.readdata._data.username);
+        this.username = res.readdata._data.username;
+        this.isPaid = res.readdata._data.paid;
+        this.roleList = res.readdata.groups;
+        if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
+          this.joinedAt = res.readdata._data.createdAt;
+        } else {
+          this.joinedAt = res.readdata._data.joinedAt;
+        }
+        if(this.isPaid != null && this.isPaid != ''){
+          this.detailIf(this.isPayVal,false);
+        }
+        // this.detailIf(false,this.isPaid);
+      })
+
+    },
+
+    //首页，逻辑判断
+    detailIf(isPayVal,isPaid){
+      // // console.log(isPayVal+'090909');
+      // var token = browserDb.getLItem('Authorization',token);
+      // // console.log(isPayVal+'3333');
+      // // console.log(isPaid+'44444');
+      // if(isPayVal == 'pay'){
+      // //当站点为付费站点时
+      // console.log('付费');
+      //   if(token != '' && token !== null){
+      //     //当用户已登录时
+      //     console.log('已登录');
+      //     //请求用户接口
+      //     this.getUser();
+      //     if(isPaid){
+      //       // console.log('已付费');
+      //       //当用户已登录且已付费时
+      //       console.log('当用户已登录且已付费时');
+      //       this.situation1 = true;
+      //       this.loadThemeList();
+      //     } else {
+      //       //当用户已登录未付费时
+      //       console.log('当前用户已登录未付费ddddd');
+      //        // this.situation2 = true;
+      //     }
+      //   } else {
+      //     //付费站点，当前用户未登录时
+      //     console.log('付费站点，但用户未登录');
+      //     this.situation2 = false;
+      //     this.situation3 = true;
+      //     this.loadThemeList();
+      //   }
+
+      // } else {
+      //   //当站点为公开站点时
+      //   console.log('公开');
+      //     if(token){
+      //       console.log('公开，已登录');
+      //       //当用户已登录时
+      //       this.loadThemeList();
+      //       this.loginBtnFix = false;
+      //       this.loginHide = true;
+      //       this.situation1 = true;
+      //     }  else {
+      //       console.log('公开，未登录');
+      //       // this.loadThemeList();
+      //       // //当用户未登录时
+      //       this.loginBtnFix = true;
+      //       this.loginHide = false;
+      //       this.situation1 = true;
+      //     }
+      // }
+    },
+
+
+    //初始化请求主题列表数据
     load(){
       let isWeixin =this.appCommonH.isWeixin().isWeixin;
       if(isWeixin == true){
@@ -133,15 +250,23 @@ export default {
     // 比较他们的大小来确定是否添加fixedNavBar样式
 		footFix() {
 	    	// console.log(this.$route.meta.oneHeader);
-	    	if(this.$route.meta.oneHeader){
-	    		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+	    	// if(this.$route.meta.oneHeader){
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
-		        if(scrollTop > offsetTop){
-		          this.loginBtnFix = false;
-		        } else {
-		          this.loginBtnFix = true;
-		        };
-	    	}
+              if(this.loginBtnFix == true){
+                this.loginHide = true;
+                console.log(scrollTop+'1111');
+                console.log(offsetTop+'2222');
+                if(scrollTop > offsetTop){
+                  console.log('大于');
+                  this.loginHide = true;
+                  console.log(this.loginHide);
+                } else {
+                  console.log('小于');
+                  this.loginHide = false;
+                }
+		        }
+	    	// }
 	    },
       //筛选
 	    choTheme(themeType) {

@@ -15,10 +15,7 @@ $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\Up
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
-
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
-
-$route->get('/test', 'test', ApiController\TestController::class);
 
 /*
 |--------------------------------------------------------------------------

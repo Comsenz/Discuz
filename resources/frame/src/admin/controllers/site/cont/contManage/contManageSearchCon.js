@@ -60,7 +60,7 @@ export default {
           }
         }]
       }, //快捷选择时间
-      dataValue:'',         //发表时间范围
+      dataValue:['',''],         //发表时间范围
 
       viewedTimesMin:'',    //被浏览次数最小
       viewedTimesMax:'',    //被浏览次数最大
@@ -103,6 +103,14 @@ export default {
 
     submitClick(){
       this.dataValue = this.dataValue == null?['','']:this.dataValue;
+
+      console.log(this.dataValue);
+
+      this.dataValue[0] = this.dataValue[0] == ''?this.dataValue[0]:this.dataValue[0] + '-00-00-00';
+      this.dataValue[1] = this.dataValue[1] == ''?this.dataValue[1]:this.dataValue[1] + '-23-59-59';
+
+      console.log(this.dataValue);
+
       /*
       * 调用方法可以在里面传值，对应mutations里对应方法形参payload
       * */
