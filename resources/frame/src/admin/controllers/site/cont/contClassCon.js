@@ -69,7 +69,9 @@ export default {
             }
           })
         });
-        this.batchUpdateCategories(data);
+        this.batchUpdateCategories(data).then(()=>{
+          this.getCategories();
+        });
       } else {
         this.$message({
           showClose: true,
@@ -91,14 +93,13 @@ export default {
     },
 
     deleteAllClick(){
-      let id = '';
-      /*this.multipleSelection.forEach((item,index)=>{
-        if (index < this.multipleSelection.length - 1){
-          id =  id + item.id + ','
-        } else {
-          id =  id + item.id
+      let id = [];
+      this.multipleSelection.forEach((item,index)=>{
+        if (index < this.multipleSelection.length){
+          id.push(item.id)
         }
-      });*/
+      });
+
       this.batchDeleteCategories(id.join(',')).then(()=>{
         this.getCategories();
       });
