@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: ListCircleController.php 28830 2019-09-25 11:13 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Circle;
@@ -23,7 +21,7 @@ class ListCircleController extends AbstractListController
     {
         // TODO: Implement data() method.
         $res = $this->bus->dispatch(
-            new CreateThread('aaa','bb',array('cc'))
+            new CreateThread('aaa', 'bb', ['cc'])
         );
         dd($res);
         return $res;

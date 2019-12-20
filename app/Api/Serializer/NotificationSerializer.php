@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: NotificationSerializer.php 28830 2019-11-06 18:17:00 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;
@@ -18,12 +15,10 @@ class NotificationSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-        
         return array_merge([
             'id'            => $model->id,
             'user_id'       => $model->notifiable_id,
             'read_at'       => $model->read_at,
-        ],$model->data);
+        ], $model->data);
     }
-
 }

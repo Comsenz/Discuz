@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateUserWalletCash.php XXX 2019-10-23 16:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Wallet;
@@ -72,12 +70,12 @@ class CreateUserWalletCash
         }
         //提现金额
         $cash_apply_amount = floatval(Arr::get($this->data, 'cash_apply_amount'));
-        $cash_apply_amount = sprintf("%.2f", $cash_apply_amount);
+        $cash_apply_amount = sprintf('%.2f', $cash_apply_amount);
         //计算手续费
         //$tax_ratio = $this->setting->tag('cash_tax_ratio');
         $tax_ratio  = 0.01; //手续费率
         $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
-        $tax_amount = sprintf("%.2f", ceil($tax_amount * 100) / 100); //格式化手续费
+        $tax_amount = sprintf('%.2f', ceil($tax_amount * 100) / 100); //格式化手续费
 
         $remark = Arr::get($this->data, 'remark');
         //开始事务
@@ -103,7 +101,8 @@ class CreateUserWalletCash
                 $tax_amount,
                 $cash_actual_amount,
                 $cash_apply_amount,
-                $remark);
+                $remark
+            );
             //冻结钱包金额
             $user_wallet->available_amount = $user_wallet->available_amount - $cash_apply_amount;
             $user_wallet->freeze_amount    = $user_wallet->freeze_amount + $cash_apply_amount;
@@ -118,7 +117,6 @@ class CreateUserWalletCash
             $db->rollback();
             throw new WalletException($e->getMessage(), 500);
         }
-
     }
 
     /**
@@ -131,5 +129,4 @@ class CreateUserWalletCash
         . str_pad(strval(mt_rand(1, 99)), 2, '0', STR_PAD_LEFT)
         . substr(implode(null, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
-
 }

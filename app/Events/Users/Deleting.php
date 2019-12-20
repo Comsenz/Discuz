@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Deleting.php 28830 2019-10-14 13:54 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Events\Users;
-
 
 use App\Models\User;
 

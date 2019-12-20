@@ -1,17 +1,13 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateClassifyController.php 28830 2019-10-12 15:43 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Invite;
 
-
 use App\Api\Serializer\InviteSerializer;
-use App\Commands\Invite\CreateInvite;
 use Discuz\Api\Controller\AbstractCreateController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;

@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Models;
 
@@ -90,5 +93,4 @@ class UserIdent extends Model
         // 返回站点模型
         return $userIdent;
     }
-
 }

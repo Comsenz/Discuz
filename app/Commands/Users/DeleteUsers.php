@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Commands\Users;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Commands\Users;
 
 use App\Repositories\UserRepository;
 use App\Models\User;
 use Discuz\Auth\AssertPermissionTrait;
-use Exception;
 
 class DeleteUsers
 {
@@ -20,6 +23,7 @@ class DeleteUsers
     protected $actor;
 
     protected $id;
+
     /**
      * 初始化命令参数
      * @param int     $id
@@ -36,7 +40,6 @@ class DeleteUsers
     {
         return call_user_func([$this, '__invoke'], $users);
     }
-
 
     /**
      * @param UserRepository $users

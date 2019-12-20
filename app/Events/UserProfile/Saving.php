@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Saving.php 28830 2019-09-26 17:51 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Events\UserProfile;

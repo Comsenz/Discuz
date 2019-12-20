@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Mobile;
 
@@ -23,9 +26,8 @@ class MessageBindingController extends AbstractCreateController
 
 
         $data = $this->bus->dispatch(
-            new MessageBinding($actor, $inputs->toArray(),$this->bus)
+            new MessageBinding($actor, $inputs->toArray(), $this->bus)
         );
         return $data;
-
     }
 }

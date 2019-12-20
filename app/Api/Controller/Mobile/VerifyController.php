@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Mobile;
-
 
 use App\Api\Serializer\VerifyMobileSerializer;
 use App\Commands\Sms\VerifyMobile;
@@ -19,11 +22,12 @@ use Tobscure\JsonApi\Document;
 
 class VerifyController extends AbstractResourceController
 {
-
     public $serializer = VerifyMobileSerializer::class;
 
     protected $mobileCodeRepository;
+
     protected $bus;
+
     protected $validation;
 
     public function __construct(MobileCodeRepository $mobileCodeRepository, Dispatcher $bus, Factory $validation)
@@ -32,7 +36,6 @@ class VerifyController extends AbstractResourceController
         $this->bus = $bus;
         $this->validation = $validation;
     }
-
 
     /**
      * @param ServerRequestInterface $request
@@ -47,8 +50,7 @@ class VerifyController extends AbstractResourceController
 
         $type = Arr::get($data, 'type');
 
-        if($type === 'verify')
-        {
+        if ($type === 'verify') {
             $data['mobile'] = $actor->mobile;
         }
 
@@ -62,7 +64,7 @@ class VerifyController extends AbstractResourceController
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
 
-        if(!$mobileCode || $mobileCode->code !== $code || $mobileCode->expired_at < Carbon::now()) {
+        if (!$mobileCode || $mobileCode->code !== $code || $mobileCode->expired_at < Carbon::now()) {
             throw new SmsCodeVerifyException();
         }
 

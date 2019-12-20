@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CircleSerializer.php 28830 2019-09-26 09:50 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;

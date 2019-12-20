@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: NotificationSerializer.php 28830 2019-11-06 18:17:00 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;

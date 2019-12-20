@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: PayOrder.php XXX 2019-10-17 10:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Trade;
@@ -14,13 +12,11 @@ use App\Settings\SettingsRepository;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\PayTrade;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Order;
-use App\Models\UserWechat;
 
 class PayOrder
 {
@@ -168,5 +164,4 @@ class PayOrder
         }
         return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
     }
-
 }

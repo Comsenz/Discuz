@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Exceptions;
 
@@ -10,7 +14,6 @@ use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class IntervalSmsSendHandler implements ExceptionHandlerInterface
 {
-
     /**
      * If the exception handler is able to format a response for the provided exception,
      * then the implementation should return true.

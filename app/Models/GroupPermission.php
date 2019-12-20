@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: GroupPermission.php 28830 2019-10-23 11:11 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
-
 
 use App\Events\GroupPermission\Created;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -82,5 +78,4 @@ class GroupPermission extends Model
         // 返回模型
         return $groupPermission;
     }
-
 }

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserProfileSerializer;
@@ -16,7 +21,6 @@ use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ProfileController extends AbstractResourceController
 {
-
     use AssertPermissionTrait;
 
     public $serializer = UserSerializer::class;
@@ -51,9 +55,9 @@ class ProfileController extends AbstractResourceController
             $this->serializer = UserProfileSerializer::class;
         }
 
-        if($this->settings->get('siteMode') === 'pay') {
+        if ($this->settings->get('siteMode') === 'pay') {
             $user->paid = false;
-            if($order = $user->orders()->where([
+            if ($order = $user->orders()->where([
                 ['type', Order::ORDER_TYPE_REGISTER],
                 ['status', Order::ORDER_STATUS_PAID]
             ])->first()) {

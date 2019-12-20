@@ -1,11 +1,13 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Policies;
 
-
 use App\Models\User;
-use Discuz\Api\Events\ScopeModelVisibility;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
 

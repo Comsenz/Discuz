@@ -1,18 +1,13 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleController.php 28830 2019-09-26 09:47 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Users;
 
 use App\Oauth\RefreshToken;
-use App\Commands\Users\CreateUsers;
-use Discuz\Foundation\Application;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,7 +23,7 @@ class AccessTockenController implements RequestHandlerInterface
      */
     protected $bus;
 
-    public function __construct( BusDispatcher $bus)
+    public function __construct(BusDispatcher $bus)
     {
         $this->bus = $bus;
     }
@@ -46,7 +41,7 @@ class AccessTockenController implements RequestHandlerInterface
         //生成jwt
         /** @var TYPE_NAME $actor */
         $jwt = $this->bus->dispatch(
-            new RefreshToken($actor,$request)
+            new RefreshToken($actor, $request)
         );
         // 返回结果
         return $jwt;

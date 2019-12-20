@@ -1,21 +1,16 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: GroupPermissionSerializer.php 28830 2019-10-23 11:06 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;
-
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class GroupPermissionSerializer extends AbstractSerializer
 {
-
     protected $type = 'permissions';
 
     /**
@@ -37,6 +32,6 @@ class GroupPermissionSerializer extends AbstractSerializer
      */
     public function getId($model)
     {
-        return hash('crc32b',$model->group_id.$model->permission);
+        return hash('crc32b', $model->group_id.$model->permission);
     }
 }

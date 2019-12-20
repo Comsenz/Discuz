@@ -1,16 +1,12 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CircleServiceProvider.php 28830 2019-09-26 14:16 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Providers;
 
-use Discuz\Repository\RepositoryInterface;
 use Discuz\Foundation\AbstractServiceProvider;
 use App\Policies\CirclePolicy;
 
@@ -23,7 +19,6 @@ class CircleServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-
     }
 
     /**
@@ -45,7 +40,5 @@ class CircleServiceProvider extends AbstractServiceProvider
         // $events->listen(
         //     Renamed::class, DiscussionRenamedLogger::class
         // );
-
     }
-
 }

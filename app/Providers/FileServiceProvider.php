@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: FileServiceProvider.phphp 28830 2019-09-29 18:04 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Providers;
@@ -14,7 +11,6 @@ use Discuz\Foundation\AbstractServiceProvider;
 use App\Commands\File\Upload;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory;
-use League\Flysystem\FilesystemInterface;
 
 class FileServiceProvider extends AbstractServiceProvider
 {
@@ -59,5 +55,4 @@ class FileServiceProvider extends AbstractServiceProvider
 //            ->needs(Factory::class)
 //            ->give($filesystem);
     }
-
 }

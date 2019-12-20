@@ -1,10 +1,12 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Exceptions;
 
-
-use App\Api\ApiCode;
 use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
@@ -13,7 +15,6 @@ use Zend\Diactoros\Response;
 
 class OAuthServerExceptionHandler implements ExceptionHandlerInterface
 {
-
     /**
      * If the exception handler is able to format a response for the provided exception,
      * then the implementation should return true.

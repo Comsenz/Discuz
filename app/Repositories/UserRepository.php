@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: ClassifyRepository.php 28830 2019-10-14 11:49 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
-
 
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
@@ -17,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends AbstractRepository
 {
-
     /**
      * Get a new query builder for the posts table.
      *

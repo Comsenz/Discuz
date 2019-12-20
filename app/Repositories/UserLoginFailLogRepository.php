@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UserLoginFailLogRepository.php  2019-12-18 11:49 Xinghailong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
-
 
 use App\Models\UserLoginFailLog;
 use Discuz\Foundation\AbstractRepository;
@@ -17,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserLoginFailLogRepository extends AbstractRepository
 {
-
     /**
      * Get a new query builder for the user login log table.
      *
@@ -33,8 +28,9 @@ class UserLoginFailLogRepository extends AbstractRepository
      * @param $ip
      * @return
      */
-    public function getDataByIp($ip){
-         return $this->query()
+    public function getDataByIp($ip)
+    {
+        return $this->query()
             ->where(['ip'=>$ip])
             ->value('count');
     }
@@ -45,7 +41,8 @@ class UserLoginFailLogRepository extends AbstractRepository
      * @param $ip
      * @return string
      */
-    public function getLastFailTime($ip){
+    public function getLastFailTime($ip)
+    {
         return $this->query()
             ->where(['ip'=>$ip])
             ->max('updated_at');

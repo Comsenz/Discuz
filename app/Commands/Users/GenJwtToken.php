@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Api\Controller\Oauth2\AccessTokenController;
 use App\Events\Users\UserVerify;
@@ -21,7 +24,8 @@ class GenJwtToken
         $this->data = $data;
     }
 
-    public function handle(Client $apiClient, Application $app, Dispatcher $events) {
+    public function handle(Client $apiClient, Application $app, Dispatcher $events)
+    {
         $param = [
             'grant_type' => 'password',
             'client_id' => '',

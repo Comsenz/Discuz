@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UserWalletCashReview.php XXX 2019-11-10 10:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Wallet;
@@ -144,7 +142,6 @@ class UserWalletCashReview
                         $this->connection->rollback();
                         throw new WalletException($e->getMessage(), 500);
                     }
-
                 }
                 return $status_result[$id] = 'failure';
             });

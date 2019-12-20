@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Notifications\Channels;
 
 use Illuminate\Support\Arr;
@@ -114,7 +119,8 @@ class MailChannel
         return [
             '__laravel_notification' => get_class($notification),
             '__laravel_notification_queued' => in_array(
-                ShouldQueue::class, class_implements($notification)
+                ShouldQueue::class,
+                class_implements($notification)
             ),
         ];
     }

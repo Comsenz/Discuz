@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Mobile;
 
@@ -25,6 +28,5 @@ class GetMessageController extends AbstractCreateController
             new GetMessage($actor, $inputs->toArray())
         );
         return $data;
-
     }
 }

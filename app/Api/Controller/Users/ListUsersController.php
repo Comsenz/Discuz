@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserSerializer;
@@ -29,6 +34,7 @@ class ListUsersController extends AbstractListController
     public $optionalInclude = ['wechat'];
 
     protected $users;
+
     protected $url;
 
     public function __construct(UserRepository $users, UrlGenerator $url)
@@ -99,22 +105,22 @@ class ListUsersController extends AbstractListController
     private function applyFilters($query, $filter)
     {
         //条件搜索
-        if($username = Arr::get($filter, 'username')) {
+        if ($username = Arr::get($filter, 'username')) {
             $query->where('username', 'like', '%'.$username.'%');
         }
 
         //uid 查找
-        if($id = Arr::get($filter, 'id')) {
+        if ($id = Arr::get($filter, 'id')) {
             $query->where('id', $id);
         }
 
         //用户组搜索
-        if($group_id = Arr::get($filter, 'group_id')) {
+        if ($group_id = Arr::get($filter, 'group_id')) {
             $query->join('group_user', 'users.id', '=', 'group_user.user_id')->whereIn('group_id', $group_id);
         }
 
         //是否绑定微信
-        if($bind = Arr::get($filter, 'bind')) {
+        if ($bind = Arr::get($filter, 'bind')) {
             in_array($bind, $this->optionalInclude) && $query->has($bind);
         }
     }

@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: DeleteInviteController.php 28830 2019-10-12 15:47 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Invite;
@@ -18,7 +15,6 @@ use Illuminate\Support\Arr;
 
 class DeleteInviteController extends AbstractDeleteController
 {
-
     /**
      * @param Dispatcher $bus
      */

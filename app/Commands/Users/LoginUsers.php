@@ -1,24 +1,20 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleExtend.phpnd.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Users;
 
-
 use App\Events\Users\Saving;
 use Exception;
 use App\Models\User;
-use App\Commands\UserProfile\CreateUserProfile;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use App\Validators\UserValidator;
+
 class LoginUsers
 {
     use EventsDispatchTrait;
@@ -43,12 +39,14 @@ class LoginUsers
      * @var string
      */
     public $ipAddress;
+
     /**
      *  验证请求
      *
      * @var Validator
      */
     protected $userValidator;
+
     /**
      * 初始化命令参数
      *
@@ -56,15 +54,12 @@ class LoginUsers
      * @param array  $data         创建用户的数据.
      * @param string $ipAddress    请求来源的IP地址.
      */
-
-
-
     public function __construct($actor, array $data, string $ipAddress)
-{
-    $this->actor = $actor;
-    $this->data = $data;
-    $this->ipAddress = $ipAddress;
-}
+    {
+        $this->actor = $actor;
+        $this->data = $data;
+        $this->ipAddress = $ipAddress;
+    }
 
     /**
      * 执行命令
@@ -89,7 +84,7 @@ class LoginUsers
         ];
         $user = User::where($where)->first();
         try {
-            User::unsetUserPasswordAttr($this->data['password'],$user->password);
+            User::unsetUserPasswordAttr($this->data['password'], $user->password);
             $objuser = User::findOrFail($user->id);
             $objuser->login_ip = $this->ipAddress;
             $objuser->save();

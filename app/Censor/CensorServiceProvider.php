@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: CensorServiceProvider.php xxx 2019-10-15 15:41:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Censor;
@@ -43,7 +41,7 @@ class CensorServiceProvider extends ServiceProvider
         return [Censor::class];
     }
 
-    public function boot() {
-
+    public function boot()
+    {
     }
 }

@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleExtend.phpnd.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Circle;
-
 
 use Exception;
 use App\Models\Circle;

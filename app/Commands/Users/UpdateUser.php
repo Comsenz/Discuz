@@ -1,14 +1,16 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
-use Exception;
 use Illuminate\Support\Arr;
 
 class UpdateUser
@@ -32,12 +34,12 @@ class UpdateUser
         $this->actor = $actor;
     }
 
-    public function handle(UserRepository $users, UserValidator $validator) {
+    public function handle(UserRepository $users, UserValidator $validator)
+    {
         $this->users = $users;
         $this->validator = $validator;
         return call_user_func([$this, '__invoke']);
     }
-
 
     /**
      * @return mixed
@@ -45,7 +47,6 @@ class UpdateUser
      */
     public function __invoke()
     {
-
         $user = $this->users->findOrFail($this->id, $this->actor);
 
         $isSelf = $this->actor->id === $user->id;
@@ -59,7 +60,6 @@ class UpdateUser
         $attributes = Arr::get($this->data, 'data.attributes');
 
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
-
             if ($isSelf) {
                 $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
                 $this->assertPermission($verifyPwd);

@@ -1,19 +1,22 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Serializer;
-
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class TokenSerializer extends AbstractSerializer
 {
-
     protected $type = 'token';
 
     protected static $user;
 
-    public static function setUser($user) {
+    public static function setUser($user)
+    {
         static::$user = $user;
     }
 
@@ -31,7 +34,6 @@ class TokenSerializer extends AbstractSerializer
             'access_token' => $model->access_token,
             'refresh_token' => $model->refresh_token,
         ];
-
     }
 
     public function getId($model)
@@ -39,7 +41,8 @@ class TokenSerializer extends AbstractSerializer
         return static::$user->id;
     }
 
-    public function users($model) {
+    public function users($model)
+    {
         return $this->hasOne(['users' => static::$user], UserSerializer::class);
     }
 }

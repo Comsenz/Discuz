@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\User;
-
 
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -18,7 +21,8 @@ class AvatarUploader
         $this->file = $file;
     }
 
-    public function upload(User $user, Image $image) {
+    public function upload(User $user, Image $image)
+    {
         if (extension_loaded('exif')) {
             $image->orientate();
         }
@@ -33,11 +37,12 @@ class AvatarUploader
         $this->file->put($avatarPath, $encodedImage);
     }
 
-    public function remove(User $user) {
+    public function remove(User $user)
+    {
         $avatarPath = $user->getOriginal('avatar');
 
-        $user->saved(function() use ($avatarPath) {
-            if($this->file->has($avatarPath)) {
+        $user->saved(function () use ($avatarPath) {
+            if ($this->file->has($avatarPath)) {
                 $this->file->delete($avatarPath);
             }
         });

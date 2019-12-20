@@ -1,9 +1,8 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ListUserWalletCashController.php xxx 2019-11-10 157:20:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Wallet;
@@ -25,6 +24,7 @@ class ListUserWalletCashController extends AbstractListController
      * {@inheritdoc}
      */
     public $serializer = UserWalletCashSerializer::class;
+
     /**
      * @var Dispatcher
      */

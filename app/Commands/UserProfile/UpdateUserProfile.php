@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleExtend.phpnd.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\UserProfile;
@@ -87,51 +84,51 @@ class UpdateUserProfile
         // $this->assertCan($this->actor, 'circleExtend.createCircleExtend');
         $userProfile = $repository->findOrFail($this->userid, $this->actor);
         try {
-        if (isset($this->data['username'])&& $userProfile->username!=$this->data['username']) {
-            $validator->valid(['username' => $this->data['username']]);
-            $userProfile->username = $this->data['username'];
-        }
-        if (isset($this->data['password'])&& is_array($this->data['password'])) {
-            $validator->valid(['password' => $this->data['password']['password']]);
-            $data = $bus->dispatch(
+            if (isset($this->data['username'])&& $userProfile->username!=$this->data['username']) {
+                $validator->valid(['username' => $this->data['username']]);
+                $userProfile->username = $this->data['username'];
+            }
+            if (isset($this->data['password'])&& is_array($this->data['password'])) {
+                $validator->valid(['password' => $this->data['password']['password']]);
+                $data = $bus->dispatch(
                 new UpdatePwd($this->userid, $this->actor, $this->data['password'], $userProfile->password)
             );
-        }else if (isset($this->data['password'])){
-            //$this->assertCan($this->actor, 'circleExtend.createCircleExtend');
-            $userProfile->password = User::setUserPasswordAttr($this->data['password']);
-        }
+            } elseif (isset($this->data['password'])) {
+                //$this->assertCan($this->actor, 'circleExtend.createCircleExtend');
+                $userProfile->password = User::setUserPasswordAttr($this->data['password']);
+            }
 
-        if (isset($this->data['mobile'])&& is_array($this->data['mobile'])) {
-            $data = $bus->dispatch(
-                new MessageBinding($this->actor, $this->data['mobile'],$bus)
+            if (isset($this->data['mobile'])&& is_array($this->data['mobile'])) {
+                $data = $bus->dispatch(
+                new MessageBinding($this->actor, $this->data['mobile'], $bus)
             );
-        }else if (isset($this->data['mobile'])){
-            //$this->assertCan($this->actor, 'circleExtend.createCircleExtend');
-            $userProfile->mobile = $this->data['mobile'];
-        }
+            } elseif (isset($this->data['mobile'])) {
+                //$this->assertCan($this->actor, 'circleExtend.createCircleExtend');
+                $userProfile->mobile = $this->data['mobile'];
+            }
 
-        $userProfile->save();
-        $profile = UserProfile::where('user_id',$this->userid)->first();
-        if($profile){
-            $profile_id=$profile->id;
-        }else{
-            // dd($data['profile']);
-            $userprofile=UserProfile::create(["user_id"=>$this->userid]);
-            $profile_id=$userprofile->id;
-        }
-        $objprofile = UserProfile::findOrFail($profile_id);
-        if (isset($this->data['delete_icon'])=="true") {
-            $objprofile->icon = '';
-        }
-        if (isset($this->data['sex'])) {
-            $objprofile->sex = $this->data['sex'];
-        }
-        $objprofile->save();
-        if (isset($this->data['delete_wx'])=="true") {
-            UserWechat::where('id',$this->userid)->delete();
-        }
-        // 保存站点扩展信息
-        $userProfile->save();
+            $userProfile->save();
+            $profile = UserProfile::where('user_id', $this->userid)->first();
+            if ($profile) {
+                $profile_id=$profile->id;
+            } else {
+                // dd($data['profile']);
+                $userprofile=UserProfile::create(['user_id'=>$this->userid]);
+                $profile_id=$userprofile->id;
+            }
+            $objprofile = UserProfile::findOrFail($profile_id);
+            if (isset($this->data['delete_icon'])=='true') {
+                $objprofile->icon = '';
+            }
+            if (isset($this->data['sex'])) {
+                $objprofile->sex = $this->data['sex'];
+            }
+            $objprofile->save();
+            if (isset($this->data['delete_wx'])=='true') {
+                UserWechat::where('id', $this->userid)->delete();
+            }
+            // 保存站点扩展信息
+            $userProfile->save();
         } catch (Exception $e) {
             throw $e;
         }

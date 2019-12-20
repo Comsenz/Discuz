@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UserWalletLog.php xxx 2019-10-22 16:33 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -30,11 +28,15 @@ class UserWalletLog extends Model
      * 钱包明细类型
      */
     const TYPE_CASH_SFREEZE = 10; //提现冻结
+
     const TYPE_CASH_SUCCESS = 11; //提现成功
+
     const TYPE_CASH_THAW    = 12; //提现解冻
 
     const TYPE_INCOME_REGISTER   = 30; //注册收入
+
     const TYPE_INCOME_REWARD     = 31; //打赏收入
+
     const TYPE_INCOME_ARTIFICIAL = 32; //人工收入
 
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
@@ -53,7 +55,8 @@ class UserWalletLog extends Model
         $change_available_amount,
         $change_freeze_amount,
         $change_type,
-        $change_desc) {
+        $change_desc
+    ) {
         $wallet_log                          = new static;
         $wallet_log->user_id                 = $user_id;
         $wallet_log->change_available_amount = $change_available_amount;
@@ -84,5 +87,4 @@ class UserWalletLog extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

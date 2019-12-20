@@ -1,21 +1,16 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Prototype.php 28830 2019-09-26 13:54 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
-
 
 use Illuminate\Database\Eloquent\Model;
 
 class Prototype extends Model
 {
-
     /**
      * 与模型关联的数据表
      *
@@ -75,31 +70,38 @@ class Prototype extends Model
         parent::boot();
 
         // 检索现有模型时触发
-        static::retrieved(function(){});
+        static::retrieved(function () {
+        });
 
         // 保存新模型前触发
-        static::creating(function(){});
+        static::creating(function () {
+        });
 
         // 保存新模型后触发
-        static::created(function(){});
+        static::created(function () {
+        });
 
         // 修改模型前触发
-        static::updating(function(){});
+        static::updating(function () {
+        });
 
         // 修改模型后触发
-        static::updated(function(){});
+        static::updated(function () {
+        });
 
         // 创建或修改前触发
-        static::saving(function(){});
+        static::saving(function () {
+        });
 
         // 删除模型前触发
-        static::deleting(function(){});
+        static::deleting(function () {
+        });
 
         // 删除模型后触发
-        static::deleted(function(){});
+        static::deleted(function () {
+        });
 
         // 全局作用域
         // static::addGlobalScope();
     }
-
 }

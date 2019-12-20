@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UserWallet.php xxx 2019-10-22 16:32 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -42,12 +40,14 @@ class UserWallet extends Model
      * 操作钱包
      */
     const OPERATE_ADD = 1;//增加操作
+
     const OPERATE_REDUCE = 2;//减少操作
 
     /**
      * 钱包状态
      */
     const WALLET_STATUS_NORMAL = 0;//正常
+
     const WALLET_STATUS_FROZEN = 1;//冻结提现
 
     /**
@@ -95,5 +95,4 @@ class UserWallet extends Model
     {
         return $this->hasMany(UserWalletLog::class, 'user_id', 'user_id');
     }
-
 }

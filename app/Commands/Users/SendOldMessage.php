@@ -1,11 +1,12 @@
 <?php
 
-
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
 
-
-use App\Repositories\UserRepository;
 use Exception;
 use App\Models\User;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -32,22 +33,21 @@ class SendOldMessage
     public $data;
 
     public $bus;
+
     /**
      * 创建用户的ip
      *
      * @var qcloud
      */
     public $qcloud;
+
     /**
      * 初始化命令参数
      *
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($actor, array $data,$qcloud)
+    public function __construct($actor, array $data, $qcloud)
     {
         $this->actor = $actor;
         $this->data = $data;
@@ -62,7 +62,7 @@ class SendOldMessage
      * @return UserIdent
      * @throws Exception
      */
-    public function handle(Dispatcher $events,BusDispatcher $bus)
+    public function handle(Dispatcher $events, BusDispatcher $bus)
     {
         $this->events = $events;
         $this->bus = $bus;

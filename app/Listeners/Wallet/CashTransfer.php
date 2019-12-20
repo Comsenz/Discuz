@@ -1,10 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: CashTransfer.php xxx 2019-11-12 11:14:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Listeners\Wallet;
@@ -26,7 +25,7 @@ class CashTransfer
      * 配置信息
      * @var SettingsRepository
      */
-	protected $settings;
+    protected $settings;
 
     /**
      * 数据库连接
@@ -34,21 +33,21 @@ class CashTransfer
      */
     protected $connection;
 
-	public function __construct(SettingsRepository $settings, ConnectionInterface $connection)
-	{
-		$this->settings = $settings;
+    public function __construct(SettingsRepository $settings, ConnectionInterface $connection)
+    {
+        $this->settings = $settings;
         $this->connection = $connection;
-	}
+    }
 
     public function handle(Cash $event)
     {
-    	switch ($event->transfer_type) {
-    		case GatewayConfig::WECAHT_TRANSFER://微信企业付款
-    			$result = $this->wecahtTransfer($event);
-    			break;
-    		default:
-    			break;
-    	}
+        switch ($event->transfer_type) {
+            case GatewayConfig::WECAHT_TRANSFER://微信企业付款
+                $result = $this->wecahtTransfer($event);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -56,40 +55,40 @@ class CashTransfer
      * @param  Cash   $event 事件参数
      */
     public function wecahtTransfer(Cash $event)
-    { 	
-    	//获取用户openid
-    	$user_id = $event->cash_record->user_id;
-    	$user_wecaht = UserWechat::find($user_id);
-    	$openid = $user_wecaht->openid;
+    {
+        //获取用户openid
+        $user_id = $event->cash_record->user_id;
+        $user_wecaht = UserWechat::find($user_id);
+        $openid = $user_wecaht->openid;
 
-    	//获取微信配置
-    	$config = $this->settings->tag('wxpay');
-    	//微信证书
-    	$config['cert_path'] = storage_path().'/cert/apiclient_cert.pem';
-    	$config['key_path'] = storage_path().'/cert/apiclient_key.pem';
-    	//微信金额单位为分
-    	$cash_amount = bcmul((string) $event->cash_record->cash_actual_amount, '100', 0);
-    	$cash_sn = $event->cash_record->cash_sn;
-    	$data = [
-    		'partner_trade_no' => $cash_sn,//商户订单号
-    		'openid' => $openid,//用户openid
-    		'amount' => $cash_amount,
-    		'desc' => '提现',//备注
-    		'spbill_create_ip' => $event->ip_address,
-    		'check_name' => 'NO_CHECK',//NO_CHECK：不校验真实姓名 FORCE_CHECK：强校验真实姓名
-    		//'re_user_name' => '',//收款用户真实姓名
-    	];
-    	//企业付款
-    	TransferTrade::transfer($event->transfer_type, $config, $data);
-    	$response = TransferTrade::getTransferRespone();
-    	if (TransferTrade::getTransferStatus()) {
+        //获取微信配置
+        $config = $this->settings->tag('wxpay');
+        //微信证书
+        $config['cert_path'] = storage_path().'/cert/apiclient_cert.pem';
+        $config['key_path'] = storage_path().'/cert/apiclient_key.pem';
+        //微信金额单位为分
+        $cash_amount = bcmul((string) $event->cash_record->cash_actual_amount, '100', 0);
+        $cash_sn = $event->cash_record->cash_sn;
+        $data = [
+            'partner_trade_no' => $cash_sn,//商户订单号
+            'openid' => $openid,//用户openid
+            'amount' => $cash_amount,
+            'desc' => '提现',//备注
+            'spbill_create_ip' => $event->ip_address,
+            'check_name' => 'NO_CHECK',//NO_CHECK：不校验真实姓名 FORCE_CHECK：强校验真实姓名
+            //'re_user_name' => '',//收款用户真实姓名
+        ];
+        //企业付款
+        TransferTrade::transfer($event->transfer_type, $config, $data);
+        $response = TransferTrade::getTransferRespone();
+        if (TransferTrade::getTransferStatus()) {
             $data_result = [
                 'trade_time' => Carbon::parse($response['payment_time'])->format('Y-m-d H:i:s'),//交易时间
                 'payment_no' => $response['payment_no'],//交易号
                 'cash_sn' => $response['partner_trade_no'],//商户交易号
             ];
             $this->transferSuccess($event->cash_record->id, $data_result);
-    	} else {
+        } else {
             $data_result = [
                 'trade_time' => Carbon::now(),//交易时间
                 'error_code' => $response['err_code'],//错误代码
@@ -100,9 +99,9 @@ class CashTransfer
             // if ($response['err_code'] == 'SYSTEMERROR') {
             //     //未明确的错误码,不做其他操作，后续人工检查
             //     $is_thaw = false;
-            // } 
+            // }
             $this->transferFailure($event->cash_record->id, $data_result, $is_thaw);
-    	}
+        }
     }
 
     /**
@@ -128,7 +127,7 @@ class CashTransfer
             try {
                 //获取用户钱包
                 $user_wallet = UserWallet::lockForUpdate()->find($user_id);
-                //去除冻结金额  
+                //去除冻结金额
                 $user_wallet->freeze_amount = $user_wallet->freeze_amount - $cash_apply_amount;
                 $user_wallet->save();
                 //冻结变动金额，为负数
@@ -144,7 +143,6 @@ class CashTransfer
                 return false;
             }
         }
-       
     }
 
     /**
@@ -192,8 +190,8 @@ class CashTransfer
                 //回滚事务
                 $this->connection->rollback();
                 return false;
-            } 
-        } else{
+            }
+        } else {
             //未明确的错误码,不做其他操作，后续人工检查
             return true;
         }

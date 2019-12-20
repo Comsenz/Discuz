@@ -1,11 +1,8 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Circle.php 28830 2019-09-25 14:49 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -105,5 +102,4 @@ class Circle extends Model
         // 返回站点模型
         return $circle;
     }
-
 }

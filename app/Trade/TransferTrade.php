@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: TransferTrade.php xxx 2019-11-11 10:10 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Trade;
@@ -34,7 +32,7 @@ class TransferTrade
      * @param  array  $extra      其他参数
      * @return mixed              付款信息
      */
-    public static function transfer($transfer_type, $config, $extra = array())
+    public static function transfer($transfer_type, $config, $extra = [])
     {
         $result = []; //返回参数
         switch ($transfer_type) {
@@ -46,13 +44,14 @@ class TransferTrade
         }
         return $result;
     }
+
     /**
      * 微信企业付款
      * @param  array $config        支付配置
      * @param  array  $extra        其他参数
      * @return mixed                交易结果
      */
-    public static function wechatTransfer($config, $extra = array())
+    public static function wechatTransfer($config, $extra = [])
     {
         $gateway = Omnipay::create(GatewayConfig::WECAHT_TRANSFER);
         $gateway->setAppId($config['app_id']);

@@ -1,14 +1,15 @@
 <?php
 
-
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Validators\UserValidator;
 use Exception;
 use App\Models\User;
-use App\Models\UserIdent;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
@@ -26,15 +27,17 @@ class UpdatePwd
      */
     public $actor;
 
-
     /**
      * 创建用户的数据.
      *
      * @var array
      */
     public $pwd;
+
     public $data;
+
     public $userid;
+
     public $userValidator;
 
     /**
@@ -43,16 +46,12 @@ class UpdatePwd
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($userid,$actor, array $data ,$pwd)
+    public function __construct($userid, $actor, array $data, $pwd)
     {
         $this->actor = $actor;
         $this->userid = $userid;
         $this->data = $data;
         $this->pwd=$pwd;
-
     }
 
     /**
@@ -63,7 +62,7 @@ class UpdatePwd
      * @return ResponseBag
      * @throws Exception
      */
-    public function handle(Dispatcher $events,UserValidator $userValidator)
+    public function handle(Dispatcher $events, UserValidator $userValidator)
     {
         $this->events = $events;
         $this->userValidator =$userValidator;
@@ -73,12 +72,11 @@ class UpdatePwd
         try {
             $where=[
                 'id'=>$this->userid,
-                'password'=>User::unsetUserPasswordAttr($this->data['oldpwd'],$this->pwd)?$this->pwd:""
+                'password'=>User::unsetUserPasswordAttr($this->data['oldpwd'], $this->pwd)?$this->pwd:''
             ];
             $objuser = User::where($where)->firstOrFail();
             $objuser->password = User::setUserPasswordAttr($this->data['password']);
             $objuser->save();
-
         } catch (Exception $e) {
             throw $e;
         }

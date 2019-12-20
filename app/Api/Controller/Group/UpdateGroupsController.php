@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Api\Controller\Group;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Api\Controller\Group;
 
 use App\Api\Serializer\GroupSerializer;
 use App\Commands\Group\UpdateGroup;
@@ -27,7 +31,7 @@ class UpdateGroupsController extends AbstractListController
     {
         $multipleData = Arr::get($request->getParsedBody(), 'data', []);
 
-        $list = collect($multipleData)->reduce(function($carry, $item) use ($request) {
+        $list = collect($multipleData)->reduce(function ($carry, $item) use ($request) {
             $carry = $carry ? $carry : ['data' => [], 'meta' => []];
             try {
                 $group = $this->bus->dispatch(

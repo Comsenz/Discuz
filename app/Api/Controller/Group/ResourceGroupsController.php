@@ -1,15 +1,11 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: ResourceGroupsController.php 28830 2019-10-23 16:29 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Group;
-
 
 use App\Api\Serializer\GroupSerializer;
 use App\Repositories\GroupRepository;

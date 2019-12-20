@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+declare(strict_types = 1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UserWalletCash.php xxx 2019-10-22 16:32 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -37,16 +35,22 @@ class UserWalletCash extends Model
      * 提现状态
      */
     const STATUS_REVIEW          = 1; //待审核
+
     const STATUS_REVIEWED        = 2; //审核通过
+
     const STATUS_REVIEW_FAILED   = 3; //审核不通过
+
     const STATUS_IN_PAYMENT      = 4; //待打款
+
     const STATUS_PAID            = 5; //已打款
+
     const STATUS_PAYMENT_FAILURE = 6; //打款失败
 
     /**
      * 返款状态
      */
     const REFUNDS_STATUS_NO  = 0; //未返款
+
     const REFUNDS_STATUS_YES = 1; //已返款
 
     /**
@@ -65,7 +69,8 @@ class UserWalletCash extends Model
         $cash_charge,
         $cash_actual_amount,
         $cash_apply_amount,
-        $remark) {
+        $remark
+    ) {
         $cash                     = new static;
         $cash->user_id            = $user_id;
         $cash->cash_sn            = $cash_sn;

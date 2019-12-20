@@ -1,11 +1,10 @@
 <?php
+
 /**
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
- * @license     http://mit-license.org/
- *
- * @link        https://github.com/thephpleague/oauth2-server
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
+
 namespace App\Passport\Repositories;
 
 use App\Passport\Entities\ClientEntity;

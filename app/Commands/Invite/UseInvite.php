@@ -1,22 +1,14 @@
 <?php
 
-
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UseInvite.php 28830 2019-11-19 17:16 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Invite;
 
-use App\Events\Invite\Saving;
 use App\Models\User;
-use App\Repositories\InviteRepository;
-use App\Validators\InviteValidator;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 
 class UseInvite
 {
@@ -46,7 +38,7 @@ class UseInvite
     /**
      * 执行命令
      */
-    public function handle() {
-
+    public function handle()
+    {
     }
 }

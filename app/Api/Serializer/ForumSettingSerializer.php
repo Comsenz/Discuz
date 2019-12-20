@@ -7,14 +7,11 @@
 
 namespace App\Api\Serializer;
 
-use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Foundation\Application;
 use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Contracts\Filesystem\Factory;
 use Discuz\Http\UrlGenerator;
 
 class ForumSettingSerializer extends AbstractSerializer
@@ -130,7 +127,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'setcash' => [
                 'cash_interval_time' => $this->settings->get('cash_interval_time', 'cash'),
                 'cash_rate' => $this->settings->get('cash_rate', 'cash'),
-                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: "",
+                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: '',
                 'cash_max_sum' => $this->settings->get('cash_max_sum', 'cash'),
                 'cash_sum_limit' => $this->settings->get('cash_sum_limit', 'cash'),
             ],
@@ -158,7 +155,7 @@ class ForumSettingSerializer extends AbstractSerializer
 
     private function logo($logo)
     {
-        if($logo) {
+        if ($logo) {
             return $this->url->to('/storage/' . $logo);
         }
         return '';

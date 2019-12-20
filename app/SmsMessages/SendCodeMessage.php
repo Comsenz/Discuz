@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\SmsMessages;
-
 
 use Overtrue\EasySms\Contracts\GatewayInterface;
 use Overtrue\EasySms\Message;
@@ -11,7 +14,9 @@ use Overtrue\EasySms\Strategies\OrderStrategy;
 class SendCodeMessage extends Message
 {
     protected $data;                           //传进来的数据
+
     protected $strategy = OrderStrategy::class;           // 定义本短信的网关使用策略，覆盖全局配置中的 `default.strategy`
+
     protected $gateways = ['qcloud']; // 定义本短信的适用平台，覆盖全局配置中的 `default.gateways`
 
     public function __construct($data)

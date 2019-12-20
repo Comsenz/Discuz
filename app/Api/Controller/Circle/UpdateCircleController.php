@@ -1,15 +1,12 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateCircleController.php 28830 2019-09-26 10:04 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Circle;
 
-use App\Models\User;
 use Discuz\Api\Controller\AbstractCreateController;
 use App\Api\Serializer\CircleSerializer;
 use App\Commands\Circle\UpdateCircle;
