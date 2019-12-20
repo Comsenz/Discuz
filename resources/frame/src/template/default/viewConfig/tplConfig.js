@@ -425,7 +425,7 @@ export default {
   beforeEnter: function(to, form, next) {
     // console.log(to.fullPath);
 
-    let authVal = browserDb.getLItem('Authorization');
+   /* let authVal = browserDb.getLItem('Authorization');
     let siteMode = '';
       var pro = new Promise(function(resolve, reject){
         //请求站点信息接口，判断站点是否付费
@@ -496,7 +496,7 @@ export default {
 
 
 
-      /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
+      /!*如果本地 存在 token 则 不允许直接跳转到 登录页面*!/
       if(to.fullPath == "/login-user"){
         if(authVal){
           next({
@@ -505,7 +505,7 @@ export default {
         }else {
           next();
         }
-      }
+      }*/
     next();
     //console.log(to, form, next, 'front');
 
