@@ -33,11 +33,6 @@ export default {
       currentData:{},
       replyTagShow: false,
       firstpostImageListCon:[],
-      situation1:true,  //付费站点 已登录且已付费
-      situation2:false,  //付费站点 已登录但未付费
-      situation3:false,  //付费站点 ，未登录
-      situation4:false,   //公开站点 未登录
-      situation5:false,  //公开站点 已登录
 		}
 	},
   created:function(){
@@ -111,14 +106,12 @@ export default {
           this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
-          this.situation1 = true;
         }  else {
           console.log('公开，未登录');
           // this.loadThemeList();
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
-          this.situation1 = true;
         }
       }
     },
