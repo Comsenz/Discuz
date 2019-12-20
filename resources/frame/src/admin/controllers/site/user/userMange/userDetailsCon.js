@@ -56,6 +56,15 @@ export default {
     },
     deleteImage(){
       this.imageUrl = '';
+      let userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url:'deleteAvatar',
+        method:'delete',
+        splice: `/${this.query.id}`+'/avatar',
+        data:{
+
+        }
+      })
     },
     handlePreview(file) {
       console.log(file);
@@ -67,7 +76,10 @@ export default {
       return this.MessageBox.confirm(`确定移除 ${ file.name }？`);
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    handleFile(){
+
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
@@ -79,8 +91,23 @@ export default {
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
+      if(isJPG && isLt2M == true){
+       let userId = browserDb.getLItem('tokenId');
+        let formData = new FormData()
+        formData.append('avatar', file)
+          console.log(formData)
+          this.appFetch({
+            url:'upload',
+            method:'post',
+            splice: `/${this.query.id}`+'/avatar',
+            data:formData
+          }).then(res=>{
+            this.imageUrl = res.readdata._data.avatarUrl;
+          })
+      }
       return isJPG && isLt2M;
     },
+    
     submission(){
       const userId = browserDb.getLItem('tokenId');
       this.appFetch({
@@ -95,7 +122,8 @@ export default {
       }).then(res=>{
         console.log(res)
       })
-    }
+    },
+
   },
 
   components:{
