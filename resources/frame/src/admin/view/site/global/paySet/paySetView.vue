@@ -35,7 +35,7 @@
             <div v-if="scope.row.status">
               <el-button
                 size="mini"
-                @click="configClick(scope.row.type)"
+                @click="configClick(scope.row.tag)"
               >配置</el-button>
               <el-button
                 size="mini"
