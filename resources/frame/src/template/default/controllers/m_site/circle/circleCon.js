@@ -100,57 +100,27 @@ export default {
     },
 
     //首页，逻辑判断
-    detailIf(isPayVal,isPaid){
-      // // console.log(isPayVal+'090909');
-      // var token = browserDb.getLItem('Authorization',token);
-      // // console.log(isPayVal+'3333');
-      // // console.log(isPaid+'44444');
-      // if(isPayVal == 'pay'){
-      // //当站点为付费站点时
-      // console.log('付费');
-      //   if(token != '' && token !== null){
-      //     //当用户已登录时
-      //     console.log('已登录');
-      //     //请求用户接口
-      //     this.getUser();
-      //     if(isPaid){
-      //       // console.log('已付费');
-      //       //当用户已登录且已付费时
-      //       console.log('当用户已登录且已付费时');
-      //       this.situation1 = true;
-      //       this.loadThemeList();
-      //     } else {
-      //       //当用户已登录未付费时
-      //       console.log('当前用户已登录未付费ddddd');
-      //        // this.situation2 = true;
-      //     }
-      //   } else {
-      //     //付费站点，当前用户未登录时
-      //     console.log('付费站点，但用户未登录');
-      //     this.situation2 = false;
-      //     this.situation3 = true;
-      //     this.loadThemeList();
-      //   }
-
-      // } else {
-      //   //当站点为公开站点时
-      //   console.log('公开');
-      //     if(token){
-      //       console.log('公开，已登录');
-      //       //当用户已登录时
-      //       this.loadThemeList();
-      //       this.loginBtnFix = false;
-      //       this.loginHide = true;
-      //       this.situation1 = true;
-      //     }  else {
-      //       console.log('公开，未登录');
-      //       // this.loadThemeList();
-      //       // //当用户未登录时
-      //       this.loginBtnFix = true;
-      //       this.loginHide = false;
-      //       this.situation1 = true;
-      //     }
-      // }
+    detailIf(isPayVal){
+      if(isPayVal == 'public'){
+        //当站点为公开站点时
+        console.log('公开');
+        var token = browserDb.getLItem('Authorization',token);
+        if(token){
+          console.log('公开，已登录');
+          //当用户已登录时
+          this.loadThemeList();
+          this.loginBtnFix = false;
+          this.loginHide = true;
+          this.situation1 = true;
+        }  else {
+          console.log('公开，未登录');
+          // this.loadThemeList();
+          // //当用户未登录时
+          this.loginBtnFix = true;
+          this.loginHide = false;
+          this.situation1 = true;
+        }
+      }
     },
 
 
