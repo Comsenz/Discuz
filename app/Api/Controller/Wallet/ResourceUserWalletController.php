@@ -1,9 +1,8 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ResourceUserWalletController.php xxx 2019-10-22 17:20:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Wallet;
@@ -11,7 +10,6 @@ namespace App\Api\Controller\Wallet;
 use App\Settings\SettingsRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletSerializer;
-use App\Commands\Wallet\ResourceUserWallet;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;

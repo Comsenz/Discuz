@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: PayTrade.php xxx 2019-10-16 11:10 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Trade;
@@ -24,7 +22,7 @@ class PayTrade
      * @param  mixed $extra         其他参数
      * @return array                支付参数
      */
-    public static function pay($order_info, $payment_type, $config, $extra = array())
+    public static function pay($order_info, $payment_type, $config, $extra = [])
     {
         $payment_params = []; //返回参数
         switch ($payment_type) {

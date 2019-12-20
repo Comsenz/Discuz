@@ -1,14 +1,11 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateGroupPermissionController.php 28830 2019-10-23 11:06 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\GroupPermission;
-
 
 use App\Api\Serializer\GroupPermissionSerializer;
 use App\Models\Permission;
@@ -22,7 +19,6 @@ use Zend\Diactoros\Response\EmptyResponse;
 
 class UpdateGroupPermissionController extends AbstractListController
 {
-
     use AssertPermissionTrait;
 
     public $serializer = GroupPermissionSerializer::class;
@@ -39,7 +35,6 @@ class UpdateGroupPermissionController extends AbstractListController
     {
         $this->bus = $bus;
     }
-
 
     /**
      * @param ServerRequestInterface $request

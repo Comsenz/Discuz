@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -10,8 +13,6 @@ use App\User\AvatarUploader;
 use App\Validators\AvatarValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
-use Illuminate\Contracts\Filesystem\Factory;
-use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Zend\Diactoros\UploadedFile;
@@ -21,8 +22,11 @@ class UploadAvatar
     use AssertPermissionTrait;
 
     protected $app;
+
     protected $validator;
+
     protected $users;
+
     protected $upload_file;
 
     protected $avatarUploader;
@@ -34,8 +38,8 @@ class UploadAvatar
         $this->upload_file = $upload_file;
     }
 
-    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader) {
-
+    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader)
+    {
         $this->app = $app;
         $this->users = $users;
         $this->validator = $validator;

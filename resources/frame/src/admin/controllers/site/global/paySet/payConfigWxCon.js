@@ -17,8 +17,28 @@ export default {
     var type = this.$route.query.type;
     console.log(type);
     this.type = type;
+    this.loadStatus();
   },
   methods:{
+    loadStatus(){
+      console.log('初始化');
+      //初始化
+      this.appFetch({
+        url:'tags',
+        method:'get',
+        splice:'/'+this.type,
+        data:{
+        }
+      }).then(data=>{
+          // console.log(data);
+          this.appId = data.readdata[0]._data.app_id;
+          this.mchId = data.readdata[0]._data.mch_id;
+          this.apiKey = data.readdata[0]._data.api_key;
+          this.appSecret = data.readdata[0]._data.app_secret;
+      }).catch(error=>{
+        // console.log('ʧ��');
+      })
+    },
     submitConfiguration(){
       this.appFetch({
         url:'settings',

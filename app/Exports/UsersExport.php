@@ -1,10 +1,14 @@
 <?php
+
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Exports;
 
-use App\Models\User;
-
-class UsersExport extends Export {
-
+class UsersExport extends Export
+{
     public $columnMap = [
         'id' => '用户ID',
         'username' => '用户名',
@@ -17,5 +21,4 @@ class UsersExport extends Export {
         'unionid' => '微信unionID',
         'nickname' => '微信昵称',
     ];
-
 }

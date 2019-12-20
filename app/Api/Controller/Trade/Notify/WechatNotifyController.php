@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: WechatNotifyController.php xxx 2019-10-16 00:00:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Trade\Notify;
@@ -19,7 +17,6 @@ use Zend\Diactoros\Response\XmlResponse;
 
 class WechatNotifyController extends AbstractResourceController
 {
-
     /**
      * @var Dispatcher
      */

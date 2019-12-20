@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Validators;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Validators;
 
 use App\Models\User;
 use Discuz\Foundation\AbstractValidator;
@@ -11,6 +15,7 @@ use Illuminate\Validation\Factory;
 class UserValidator extends AbstractValidator
 {
     protected $user;
+
     protected $settings;
 
     // 获取配置中的密码规则

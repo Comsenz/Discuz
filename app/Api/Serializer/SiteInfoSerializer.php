@@ -1,19 +1,19 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Serializer;
-
-
 
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\UserWalletCash;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Discuz\Foundation\Application;
 
 class SiteInfoSerializer extends AbstractSerializer
 {
-
     protected $type = 'siteinfo';
 
     /**

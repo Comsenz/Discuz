@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Users;
-
 
 use App\Api\Serializer\UserProfileSerializer;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -13,11 +16,9 @@ use Tobscure\JsonApi\Document;
 
 class UnbindWechatController extends AbstractResourceController
 {
-
     use AssertPermissionTrait;
 
     public $serializer = UserProfileSerializer::class;
-
 
     /**
      * @param ServerRequestInterface $request

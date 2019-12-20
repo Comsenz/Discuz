@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleController.php 28830 2019-09-26 09:47 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Users;
@@ -27,7 +25,9 @@ use Discuz\Contracts\Socialite\Factory;
 class WechatLoginController extends AbstractResourceController
 {
     protected $socialite;
+
     protected $bus;
+
     protected $cache;
 
     public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache)
@@ -39,7 +39,6 @@ class WechatLoginController extends AbstractResourceController
 
     public $serializer = TokenSerializer::class;
 
-
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
@@ -48,14 +47,13 @@ class WechatLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-
         $request = $request->withAttribute('cache', $this->cache);
 
         $this->socialite->setRequest($request);
 
         $driver = $this->socialite->driver('wechat');
 
-        if(!Arr::get($request->getQueryParams(), 'code')) {
+        if (!Arr::get($request->getQueryParams(), 'code')) {
             $response = $driver->redirect();
             $this->serializer = LocationSerializer::class;
             return ['location' => $response->getHeaderLine('location')];
@@ -71,15 +69,15 @@ class WechatLoginController extends AbstractResourceController
 
         $this->wechatSaved($user);
 
-        if(!$wechatUser) {
-            if($actor->id) {
+        if (!$wechatUser) {
+            if ($actor->id) {
                 $user->user['user_id'] = $actor->id;
             }
             UserWechat::create($user->user);
             return $actor;
         }
 
-        if($wechatUser->user) {
+        if ($wechatUser->user) {
             //创建 token
             $params = [
                 'username' => $wechatUser->user->username,
@@ -89,7 +87,7 @@ class WechatLoginController extends AbstractResourceController
             return $this->bus->dispatch(new GenJwtToken($params));
         }
 
-        if($actor->id) {
+        if ($actor->id) {
             $wechatUser->user_id = $actor->id;
             $wechatUser->save();
             return $actor;
@@ -100,8 +98,8 @@ class WechatLoginController extends AbstractResourceController
 
     protected function wechatSaved($user)
     {
-        UserWechat::saved(function() use ($user) {
-            if(isset($user['user_id'])) {
+        UserWechat::saved(function () use ($user) {
+            if (isset($user['user_id'])) {
                 $this->serializer = UserProfileSerializer::class;
             } else {
                 $this->error($user);
@@ -113,7 +111,8 @@ class WechatLoginController extends AbstractResourceController
      * @param $user
      * @throws NoUserException
      */
-    private function error($user) {
+    private function error($user)
+    {
         throw (new NoUserException())->setUser($user->user);
     }
 }

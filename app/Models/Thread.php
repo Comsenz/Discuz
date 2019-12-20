@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: Threads.php xxx 2019-10-09 20:14:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -50,7 +48,9 @@ class Thread extends Model
     use ScopeVisibilityTrait;
 
     const UNAPPROVED = 0;
+
     const APPROVED = 1;
+
     const IGNORED = 2;
 
     /**

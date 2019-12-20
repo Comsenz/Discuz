@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateUserInviteController.php 28830 2019-10-12 15:46 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Invite;
@@ -25,8 +22,9 @@ class UserInviteCodeController implements RequestHandlerInterface
     {
         $actor = $request->getAttribute('actor');
 
-        if (!$actor)
+        if (!$actor) {
             throw new NoUserException();
+        }
 
         $encrypter = app('encrypter');
         $code = $encrypter->encryptString($actor->id);

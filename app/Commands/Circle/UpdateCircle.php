@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateCircle.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Circle;
@@ -13,12 +10,10 @@ namespace App\Commands\Circle;
 use App\Models\User;
 use App\Repositories\CircleRepository;
 use App\Validators\CircleValidator;
-use Exception;
 use App\Models\Circle;
 use App\Events\Circle\Saving;
 use App\Commands\CircleExtend\CreateCircleExtend;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 
@@ -33,11 +28,11 @@ class UpdateCircle
      */
     public $circleId;
 
-   /**
-     * 执行操作的用户.
-     *
-     * @var User
-     */
+    /**
+      * 执行操作的用户.
+      *
+      * @var User
+      */
     public $actor;
 
     /**

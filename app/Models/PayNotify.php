@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: PayNotify.php xxx 2019-10-18 15:36 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -30,6 +28,7 @@ class PayNotify extends Model
      * 通知状态
      */
     const NOTIFY_STATUS_PENDING  = 0; //未收到通知
+
     const NOTIFY_STATUS_RECEIVED = 1; //已收到通知
 
     /**

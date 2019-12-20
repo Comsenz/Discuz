@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Api\Controller\Group;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Api\Controller\Group;
 
 use App\Api\Serializer\GroupSerializer;
 use App\Commands\Group\UpdateGroup;
@@ -27,10 +31,14 @@ class UpdateGroupController extends AbstractResourceController
         return $this->bus->dispatch(
             new UpdateGroup(
                 Arr::get(
-                    $request->getQueryParams(), 'id'),
-                    $request->getAttribute('actor'),
-                    $request->getParsedBody()->get('data', []
-                )
+                    $request->getQueryParams(),
+                    'id'
+                ),
+                $request->getAttribute('actor'),
+                $request->getParsedBody()->get(
+                        'data',
+                        []
+                    )
             )
         );
     }

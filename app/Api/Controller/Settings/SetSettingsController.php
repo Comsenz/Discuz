@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\Settings;
 
 use App\Settings\SettingsRepository;
@@ -17,7 +22,9 @@ class SetSettingsController implements RequestHandlerInterface
     use AssertPermissionTrait;
 
     protected $cache;
+
     protected $settings;
+
     protected $siteRevManifest;
 
     public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest)

@@ -1,17 +1,12 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateCircle.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\CircleExtend;
 
-
-use App\Repositories\CircleExtendRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class UpdateCircleExtend
@@ -56,7 +51,6 @@ class UpdateCircleExtend
      */
     public function handle(Dispatcher $events, CircleRepository $repository)
     {
-
         $circle = $repository->getdata($this->data);
 
         return $circle;

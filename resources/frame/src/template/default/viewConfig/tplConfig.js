@@ -444,7 +444,7 @@ export default {
       })
       pro.then(function(resolve){
         console.log(siteMode+'6666');
-        console.log(authVal+'sssss');
+        // console.log(authVal+'sssss');
         if(authVal){ //判断本地是否存在access_token
           console.log('已登录，token已存在');
           //请求站点信息，用于判断站点是否是付费站点
@@ -471,10 +471,17 @@ export default {
           console.log('未登录，token不存在');
            //请求站点信息，用于判断站点是否是付费站点
             if(siteMode == 'pay'){
-              //站点为付费站点时，跳转到付费页
-              next({
-                path:'/login-user'
-              });
+              //站点为付费站点时，跳转到付费页，如果是登录注册页，跳转到登录注册
+              if(to.fullPath.indexOf("login") != -1 || to.fullPath.indexOf("sign") != -1){
+                next({
+                  path:to.fullPath
+                });
+              } else {
+                console.log('首页');
+                next({
+                  path:'/pay-circle'
+                });
+              }
             } else if(siteMode == 'public'){
               //站点为公开站点时
               //当用户未登录，且站点为公开站点时，进入到路由页面

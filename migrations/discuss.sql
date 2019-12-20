@@ -297,3 +297,6 @@ CREATE TABLE `user_login_fail_log` (
   PRIMARY KEY (`id`),
   KEY `user_login_fail_log_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登陆密码错误次数记录表';
+
+-- 2019-12-19 验证码过期时间字段
+ALTER TABLE `mobile_codes` CHANGE `exception_at` `expired_at` DATETIME NOT NULL COMMENT '过期时间';

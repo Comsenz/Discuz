@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: QeuryTrade.php xxx 2019-10-16 11:10 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Trade;
@@ -23,7 +21,7 @@ class QeuryTrade
      * @param  array  $extra      其他参数
      * @return mixed              支付信息
      */
-    public static function query($query_type, $config, $trade_no, $extra = array())
+    public static function query($query_type, $config, $trade_no, $extra = [])
     {
         $result = []; //返回参数
         switch ($query_type) {
@@ -36,7 +34,7 @@ class QeuryTrade
         return $result;
     }
 
-    public static function wechatQuery($config, $trade_no, $extra = array())
+    public static function wechatQuery($config, $trade_no, $extra = [])
     {
         $gateway = Omnipay::create(GatewayConfig::WECAHT_PAY_QUERY);
         $gateway->setAppId($config['app_id']);
@@ -49,7 +47,6 @@ class QeuryTrade
         if ($response->isSuccessful()) {
             return $response->getData();
         } else {
-
         }
     }
 }

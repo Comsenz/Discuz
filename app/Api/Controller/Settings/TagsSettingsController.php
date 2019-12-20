@@ -1,11 +1,15 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\Settings;
 
 use App\Api\Serializer\SettingTags;
 use App\Models\Setting;
 use Discuz\Api\Controller\AbstractListController;
-use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;

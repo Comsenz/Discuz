@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateGroupPermissionExceptionHandler.php 28830 2019-10-23 16:04 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Exceptions;
-
 
 use App\Exceptions\UploadException;
 use Exception;
@@ -18,7 +14,6 @@ use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class UpdateGroupPermissionExceptionHandler implements ExceptionHandlerInterface
 {
-
     /**
      * If the exception handler is able to format a response for the provided exception,
      * then the implementation should return true.
