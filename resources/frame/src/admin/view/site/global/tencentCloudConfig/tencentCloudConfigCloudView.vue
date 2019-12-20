@@ -22,7 +22,7 @@
       </Card>
 
       <Card class="footer-btn">
-        <el-button type="primary" size="medium" @click="$router.push({path:'/admin/tencent-cloud-set'})" >提交</el-button>
+        <el-button type="primary" size="medium" @click='Submission'>提交</el-button>
       </Card>
 
     </div>

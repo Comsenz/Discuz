@@ -131,7 +131,7 @@ export default {
       }).catch(error=>{
         // cthis.$message.error('修改失败');
       })
-    }
+    },
  
   },
   components:{
