@@ -57,7 +57,7 @@ class SendController extends AbstractCreateController
         $type = Arr::get($data, 'type');
 
         if ($type === 'verify') {
-            $data['mobile'] = $actor->mobile;
+            $data['mobile'] = $actor->getOriginal('mobile');
         }
 
         $this->validation->make($data, [

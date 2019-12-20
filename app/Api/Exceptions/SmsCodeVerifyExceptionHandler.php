@@ -41,8 +41,7 @@ class SmsCodeVerifyExceptionHandler implements ExceptionHandlerInterface
 
         $data = [
             'status' => $status,
-            'code' => ApiCode::SMS_VERIFY_ERROR,
-            'message' => 'sms_verify_error'
+            'code' => 'sms_verify_error',
         ];
 
         return new ResponseBag($status, $data);

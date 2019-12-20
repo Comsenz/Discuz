@@ -425,7 +425,7 @@ export default {
   beforeEnter: function(to, form, next) {
     // console.log(to.fullPath);
 
-   /* let authVal = browserDb.getLItem('Authorization');
+   let authVal = browserDb.getLItem('Authorization');
     let siteMode = '';
     let isPaid = '';
     var pro1 = new Promise(function(resolve, reject){
@@ -455,39 +455,37 @@ export default {
         }).then((res) => {
           isPaid = res.readdata._data.paid;
           resolve();
-          console.log(isPaid+'000000');
+          // console.log(isPaid+'000000');
         })
       });
 
       // pro.then(askSiteInfo).then(askUser).then(function(resolve){
         Promise.all([pro1, pro2]).then(function (results) {
-        console.log(siteMode+'6666');
-        console.log(isPaid+'7777')
+        // console.log(siteMode+'6666');
+        // console.log(isPaid+'7777')
         // console.log(authVal+'sssss');
         if(authVal){ //判断本地是否存在access_token
-          console.log('已登录，token已存在');
+          // console.log('已登录，token已存在');
           //请求站点信息，用于判断站点是否是付费站点
           console.log(siteMode+'23232323');
            if(siteMode == 'pay'){
              //站点为付费站点时
-             console.log(isPaid+'45678')
              if(isPaid == true){
                 //当用户已付费时
                 console.log(to);
-                console.log('当前用户已登录已付费时');
+                // console.log('当前用户已登录已付费时');
                 next({
                   path:to.fullPath
                 });
              } else {
-               console.log('已登录，未付费ssssss')
+               // console.log('已登录，未付费ssssss')
                 next({
                   path:'/pay-circle-login'
                 });
              }
-
            } else if(siteMode == 'public'){
              //站点为公开站点时
-             console.log('公开站点，已登录');
+             // console.log('公开站点，已登录');
              //当用户已登录，且站点为公开站点时，进入到路由页面
               next({
                 path:to.fullPath
@@ -495,31 +493,30 @@ export default {
            } else {
 
            }
-
           next();
-        }else {
-          console.log('未登录，token不存在');
-          console.log(siteMode+'123456')
+        } else {
+          // console.log('未登录，token不存在');
+          // console.log(siteMode+'123456')
            //请求站点信息，用于判断站点是否是付费站点
             if(siteMode == 'pay'){
-              console.log(7777);
-              console.log(to);
-              console.log(8888);
+              // console.log(7777);
+              // console.log(to);
+              // console.log(8888);
               //站点为付费站点时，跳转到付费页，如果是登录注册页，跳转到登录注册
               var ifLogin = to.fullPath.indexOf("login");
               var ifSign = to.fullPath.indexOf("sign");
               if(ifLogin != -1){
-                console.log('d登录页');
+                // console.log('d登录页');
                 next({
                   path:'/login-user'
                 });
               } else if(ifSign != -1){
-                console.log('注册页');
+                // console.log('注册页');
                 next({
                   path:'/sign-up'
                 });
               } else {
-                console.log('首页');
+                // console.log('首页');
                 next({
                   path:'/pay-circle'
                 });
@@ -527,8 +524,8 @@ export default {
             } else if(siteMode == 'public'){
               //站点为公开站点时
               //当用户未登录，且站点为公开站点时，进入到路由页面
-              console.log('当用户未登录，且站点为公开站点时，进入到路由页面');
-              console.log(to.fullPath)
+              // console.log('当用户未登录，且站点为公开站点时，进入到路由页面');
+              // console.log(to.fullPath)
                next({
                  path:to.fullPath
                });
@@ -536,11 +533,7 @@ export default {
               //当siteMode为其他值（undefined,null）
 
             }
-
-
-
         };
-
       })
 
       /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
