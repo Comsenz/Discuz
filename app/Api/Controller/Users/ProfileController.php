@@ -56,7 +56,7 @@ class ProfileController extends AbstractResourceController
         }
 
         // 付费模式是否过期
-        if ($this->settings->get('siteMode') === 'pay') {
+        if ($this->settings->get('site_mode') === 'pay') {
             $user->paid = ! ($user->expired_at && $user->expired_at < Carbon::now());
         }
 
