@@ -46,40 +46,44 @@ export default {
       ischeckShow:false
     },
   },
-  watch:{
-  },
 	created(){
-    // this.loadPriviewImgList();
+    this.loadPriviewImgList();
     // this.getCircle();
   },
 	beforeDestroy () {
 
   },
- watch:{
-      //监听得到的数据
-      themeList(newData,prevData){
-        this.themeListResult = newData;
-      }
-    },
+  watch:{
+    //监听得到的数据
+    themeList(newData,prevData){
+      this.themeListResult = newData;
+      this.loadPriviewImgList();
+    }
+  },
 	methods: {
     loadPriviewImgList(){
-      // console.log(themeList);
-      var themeListLen = this.themeListResult.length;
-      console.log(this.themeListResult);
-      var firstpostImage = new Array();;
-      for (let h = 0; h < themeListLen; h++) {
-        console.log(this.themeListResult[h].firstPost.images);
-        firstpostImage.push(this.themeListResult[h].firstPost.images);
+      var themeListLen = this.themeList.length;
+
+      if(this.themeList =='' || this.themeList == null){
+        return false;
+      } else {
+        for (let h = 0; h < themeListLen; h++) {
+          // 图片地址
+          let src = 'https://2020.comsenz-service.com/api/attachments/';
+          let imageList = [];
+          for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
+            imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+          }
+          this.themeListResult[h].firstPost.imageList = imageList;
+        }
       }
-      console.log(firstpostImage+'6666');
-      this.firstpostImageListResult = firstpostImage;
     },
 
     //主题详情图片放大轮播
     imageSwiper(index){
       this.loadPriviewImgList()
       this.imageShow = true;
-      this.priview = this.firstpostImageListResult[index];
+      // this.priview = this.firstpostImageListResult[index];
       console.log(this.priview);
     },
     //主题详情图片放大轮播index值监听

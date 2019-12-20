@@ -19,7 +19,7 @@ module.exports = {
   'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
 
   'emojis':'/api/emoji',      //表情接口
-  'attachment':'/api/attachment', //上传附件、图片
+  'attachment':'/api/attachments', //上传附件、图片
   'threads':'/api/threads',//主题
   'notice':'/api/notification',//通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',//查看用户钱包
@@ -50,7 +50,7 @@ module.exports = {
   'upload': '/api/users/',//上传头像
   'invite':'/api/invite',//创建邀请码
   'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
-  'group-permission':'/api/group-permission', // 修改用户组权限
+  'groupPermission':'/api/permission', // 修改用户组权限
   'deleteNotification':'/api/notification', //删除通知里的回复我的
   'wechat':'/api/users/' ,//修改资料里的解绑微信
   'wechatBind':'api/oauth/wechat',//去绑定微信
@@ -66,6 +66,7 @@ module.exports = {
   'logo':'/api/settings/logo',   //上传站点logo
   'siteinfo':'api/siteinfo',  //站点基本信息
   'users':'/api/users',       //用户信息
- 'deleteWords':'/api/stop-words/',//删除敏感词
+  'deleteWords':'/api/stop-words/',//删除敏感词
+  'tags':'/api/settings',    //指定Tag配置接口
 
 }

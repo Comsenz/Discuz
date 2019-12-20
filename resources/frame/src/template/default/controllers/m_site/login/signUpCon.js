@@ -1,7 +1,8 @@
 
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-import User from '../../../../../common/models/User.js'
+import  '../../../scss/m_site/mobileIndex.scss';
+
 export default {
   data:function () {
     return {
@@ -10,7 +11,10 @@ export default {
       mobile:'13434900053',
       btnLoading:false, //注册按钮状态
       error:false,    //错误状态
-      errorMessage:"" //错误信息
+      errorMessage:"", //错误信息
+
+      phoneStatus:'',    //绑定手机号状态
+      siteMode:'',       //站点是否付费
     }
   },
 
@@ -20,20 +24,8 @@ export default {
   },
   methods:{
     signUpClick(){
-      // this.btnLoading = true;
-      // // var user = new User();
-      // this.apiStore.createRecord('register').save({
-      //   alert();
-      //   username:this.username,
-      //   password:this.password
-      // }).then(data => {
-      //   //注册成功跳转到绑定手机号
-      //   this.$router.push({path:'bind-phone'});
-      // }, error => {
-      //   this.btnLoading = false;
-      // });
 
-      this.appFetch({
+      /*this.appFetch({
         url:'register',
         method:'post',
         data:{
@@ -46,38 +38,30 @@ export default {
           }
         }
       }).then(res => {
-        this.$toast.success('注册成功');
-        // console.log(res);
-        let token = res.data.attributes.access_token;
-        //注册成功后,设置登录信息头
-        // browserDb.setLItem('Authorization',token);
-        this.$router.push({
-          path:'bind-phone',
-        });
-      //   this.btnLoading = false;
-      //   console.log(res);
-      //   if (res.status !== "201"){
-      //     //注册账号成功时
-      //     this.$toast({
-      //       type:'success',
-      //       message: "注册成功，正在跳转",
-      //     });
-      //     this.$router.push({path:'bind-phone'});
-      //     // this.error = false;
-      //     // this.errorMessage = '';
-      //   } else {
-      //     //注册失败时
-      //     this.$toast({
-      //       type:'fail',
-      //       message: "注册失败",
-      //     });
-      //     this.error = true;
-      //     this.errorMessage = res.errors[0].detail[0];
-      //   }
+        console.log(res);
 
-      // }, function(error) {
-        // console.log(error, 'eror')
-      });
+      }).catch(err=>{
+        console.log(err);
+      })*/
+
+
+      this.getSiteSetting().then(()=>{
+        // if (res.errors){
+        //   this.$toast.fail(res.errors[0].code)
+        // } else {
+          this.$toast.success('注册成功');
+          // let token = res.data.attributes.access_token;
+
+          if (this.phoneStatus){
+            this.$router.push({path:'bind-phone'});
+          } else if (this.siteMode === 'pay'){
+            this.$router.push({path:'pay-the-fee'});
+          } else if (this.siteMode === 'public'){
+            this.$router.push({path:'/'});
+          }
+
+        // }
+      })
 
     },
     //错误提示
@@ -95,8 +79,27 @@ export default {
         default:
           this.error = false;
       };
+    },
+
+    /*
+    * 接口请求
+    * */
+    getSiteSetting(){
+      return this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+      }).catch(err=>{
+        console.log(err);
+      })
     }
 
+  },
+  created(){
+    this.getSiteSetting();
   }
 
 }

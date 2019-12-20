@@ -78,7 +78,7 @@ const analyzingData = function(data, included) {
         result = {...result, ...relationObj};
       }
 
-      return result;    
+      return result;
     }
 
     /**
@@ -149,8 +149,21 @@ const appFetch = function(params, options) {
 
   params.withCredentials = true;
   var authVal = browserDb.getLItem('Authorization');
+
+  //统一不需要toke的路由列表
+  let requireAuth = [
+    'login-user',
+    'login-phone',
+    'wx-login-bd',
+    'wx-sign-up-bd',
+    'sign-up',
+    'bind-phone',
+    'retrieve-pwd',
+    'pay-the-fee'
+  ];
+
   let defaultHeaders;
-  if(authVal != '' && authVal != null){
+  if(authVal != '' && authVal != null && !requireAuth.includes(this.$router.history.current.name)){
     defaultHeaders = {
       'Content-Type': 'application/json',
       'Authorization':'Bearer ' + authVal
@@ -204,9 +217,9 @@ const appFetch = function(params, options) {
         if(data.data.meta && data.data.meta instanceof Array) {
           data.data.meta.forEach(function(error) {
             error.code = error.code ? Vue.prototype.getLang(error.code) : Vue.prototype.getLang(error.message);
-          })         
-        }     
-        
+          })
+        }
+
         //处理后的结构数据
         if(data.data.data) {
           data.data.readdata = analyzingData(data.data.data, data.data.included);
@@ -214,7 +227,7 @@ const appFetch = function(params, options) {
       }
 
       return data.data;
-    } 
+    }
     else {
       console.log(data)
       data.data.errors.forEach(function(error) {

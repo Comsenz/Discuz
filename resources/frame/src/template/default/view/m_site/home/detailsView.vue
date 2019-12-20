@@ -27,8 +27,8 @@
               <van-image
                 fit="none"
                 lazy-load
-                v-for="(image,index)  in themeCon.firstPost.images"
-                src="image._data.fileName"
+                v-for="(image,index)  in firstpostImageList"
+                :src="image"
                 @click="imageSwiper"
               />
             </div>

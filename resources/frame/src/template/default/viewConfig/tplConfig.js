@@ -1,7 +1,8 @@
 /**
  * 模板配置
  */
-
+import browserDb from '../../../helpers/webDbHelper';
+import appFetch from '../../../helpers/axiosHelper';
 export default {
   /**
    * [路由器模板配置]
@@ -422,7 +423,94 @@ export default {
    * @return {[type]}        [description]
    */
   beforeEnter: function(to, form, next) {
+    // console.log(to.fullPath);
+
+    let authVal = browserDb.getLItem('Authorization');
+    let siteMode = '';
+      var pro = new Promise(function(resolve, reject){
+        //请求站点信息接口，判断站点是否付费
+        appFetch({
+          url: 'forum',
+          method: 'get',
+          data: {
+            include: ['users'],
+          }
+        }).then((res) => {
+          console.log(res);
+          siteMode = res.readdata._data.siteMode;
+          console.log(siteMode);
+          resolve();
+        });
+      })
+      pro.then(function(resolve){
+        console.log(siteMode+'6666');
+        console.log(authVal+'sssss');
+        if(authVal){ //判断本地是否存在access_token
+          console.log('已登录，token已存在');
+          //请求站点信息，用于判断站点是否是付费站点
+          console.log(siteMode+'23232323');
+           if(siteMode == 'pay'){
+             //站点为付费站点时
+             console.log('已登录，未付费')
+              next({
+                path:'/pay-circle'
+              });
+           } else if(siteMode == 'public'){
+             //站点为公开站点时
+             console.log('公开站点，已登录');
+             //当用户已登录，且站点为公开站点时，进入到路由页面
+              next({
+                path:to.fullPath
+              });
+           } else {
+
+           }
+
+          next();
+        }else {
+          console.log('未登录，token不存在');
+           //请求站点信息，用于判断站点是否是付费站点
+            if(siteMode == 'pay'){
+              //站点为付费站点时，跳转到付费页
+              next({
+                path:'/login-user'
+              });
+            } else if(siteMode == 'public'){
+              //站点为公开站点时
+              //当用户未登录，且站点为公开站点时，进入到路由页面
+               next({
+                 path:to.fullPath
+               });
+            } else {
+              //当siteMode为其他值（undefined,null）
+
+            }
+
+
+          next({
+            path:'/login-user'
+          })
+        };
+
+      })
+
+
+
+      /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
+      if(to.fullPath == "/login-user"){
+        if(authVal){
+          next({
+            path:from.fullPath
+          });
+        }else {
+          next();
+        }
+      }
     next();
     //console.log(to, form, next, 'front');
-  }
+
+
+
+  },
+
 };

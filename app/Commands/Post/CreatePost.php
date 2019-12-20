@@ -9,7 +9,9 @@
 
 namespace App\Commands\Post;
 
+use App\Censor\Censor;
 use App\Events\Post\Created;
+use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\User;
@@ -89,11 +91,13 @@ class CreatePost
      * @param Dispatcher $events
      * @param ThreadRepository $threads
      * @param PostValidator $validator
+     * @param Censor $censor
+     * @param Post $post
      * @return Post
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, PostValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, PostValidator $validator, Censor $censor, Post $post)
     {
         $this->events = $events;
 
@@ -105,9 +109,18 @@ class CreatePost
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 
+            // 敏感词校验
+            $content = $censor->check(Arr::get($this->data, 'attributes.content'));
+            Arr::set($this->data, 'attributes.content', $content);
+
+            // 存在审核敏感词时，将回复内容放入待审核
+            if ($censor->isMod) {
+                $post->is_approved = 0;
+            }
+
             // 回复另一条回复时，检查是否在同一主题下的
             if (! empty($this->replyPostId)) {
-                $this->replyUserId = Post::where('id', $this->replyPostId)
+                $this->replyUserId = $post->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
                     ->value('user_id');
 
@@ -117,7 +130,7 @@ class CreatePost
             }
         }
 
-        $post = Post::reply(
+        $post = $post->reply(
             $thread->id,
             Arr::get($this->data, 'attributes.content'),
             $this->actor->id,
@@ -136,6 +149,10 @@ class CreatePost
         $validator->valid($post->getAttributes());
 
         $post->save();
+
+        $post->raise(new Saved($post, $this->actor, $this->data));
+
+        $post->raise(new Created($post, $this->actor, $this->data));
 
         // TODO: 通知相关用户，在给定的整个持续时间内，每位用户只能收到一个通知
         // $this->notifications->onePerUser(function () use ($post, $actor) {

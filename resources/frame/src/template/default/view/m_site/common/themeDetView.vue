@@ -25,25 +25,27 @@
                 <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
               </div>
               <div class="themeImgBox">
-                <!-- <div class="themeImgList" v-if="item.firstPost.images.length<=1">
+                <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
-                    lazy-load
-                    v-for="(image,index)  in item.firstPost.images"
-                    src="image._data.fileName"
-                    @click="imageSwiper"
-                    class="themeOneImgChild"
-                  />
-                </div> -->
-                <!-- <div class="themeImgList moreImg" v-else="">
-                  <van-image
                     width="113px"
                     height="113px"
-                    fit="cover"
                     lazy-load
-                    v-for="(image,index)  in item.firstPost.images"
-                    src="image._data.fileName"
-                    @click="imageSwiper(index)"
+                    v-for="(image,index)  in item.firstPost.imageList"
+                    :src="image"
+                    @click="imageSwiper"
+                    class=""
+                  />
+                </div> -->
+                <div class="themeImgList moreImg">
+                  <van-image
+                    fit="cover"
+                    width="113px"
+                    height="113px"
+                    lazy-load
+                    v-for="(image,index)  in item.firstPost.imageList"
+                    :src="image"
+                    @click="imageSwiper"
                     class="themeImgChild"
                   />
                 </div> -->
@@ -57,12 +59,12 @@
               <i></i>
               <a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a>&nbsp;等<span>{{item._data.likeCount}}</span>个人觉得很赞
             </div>
-            
+
             <div class="reward" v-if="item.rewardedUsers.length>0">
               <span class="icon iconfont icon-money"></span>
               <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
             </div>
-          
+
             <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
             </div>
 
