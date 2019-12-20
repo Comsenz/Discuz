@@ -36,9 +36,7 @@ class DeleteNotificationController extends AbstractDeleteController
         $ids = explode(',', Arr::get($request->getQueryParams(), 'id'));
 
         $actor = $request->getAttribute('actor');
-        $actor->id = 1;
 
-        //todo  optimization n+1
         foreach ($ids as $id) {
             $this->bus->dispatch(
                 new DeleteNotification($id, $actor)
