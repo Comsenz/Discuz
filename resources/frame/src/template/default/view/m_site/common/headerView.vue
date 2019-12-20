@@ -26,7 +26,8 @@
       <div class="circleDet" v-show="perDetShow" v-if="siteInfo">
         <span>主题：{{siteInfo._data.threads}}</span>
         <span>成员：{{siteInfo._data.members}}</span>
-        <span>站长：{{siteInfo._data.siteAuthor.username}}</span>
+        <span v-if="siteInfo._data.siteAuthor">站长：{{siteInfo._data.siteAuthor.username}}</span>
+        <span v-else="">站长：无</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi" >
