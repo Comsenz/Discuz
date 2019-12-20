@@ -13,7 +13,7 @@ class MobileCode extends Model
 
     const USED_STATE = 1;
 
-    protected $fillable = ['mobile', 'code', 'type', 'exception_at'];
+    protected $fillable = ['mobile', 'code', 'type', 'expired_at'];
 
 
     /**
@@ -29,7 +29,7 @@ class MobileCode extends Model
         $mobileCode->mobile = $mobile;
         $mobileCode->code = static::genCode();
         $mobileCode->ip = $ip;
-        $mobileCode->exception_at = Carbon::now()->addMinutes($exception);
+        $mobileCode->expired_at = Carbon::now()->addMinutes($exception);
         $mobileCode->type = $type;
         return $mobileCode;
     }
@@ -37,7 +37,7 @@ class MobileCode extends Model
     public function refrecode($exception, $ip) {
         $this->code = static::genCode();
         $this->ip = $ip;
-        $this->exception_at = Carbon::now()->addMinutes($exception);
+        $this->expired_at = Carbon::now()->addMinutes($exception);
         return $this;
     }
 

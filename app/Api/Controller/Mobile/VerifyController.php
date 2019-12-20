@@ -62,7 +62,7 @@ class VerifyController extends AbstractResourceController
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
 
-        if(!$mobileCode || $mobileCode->code !== $code || $mobileCode->exception_at < Carbon::now()) {
+        if(!$mobileCode || $mobileCode->code !== $code || $mobileCode->expired_at < Carbon::now()) {
             throw new SmsCodeVerifyException();
         }
 
