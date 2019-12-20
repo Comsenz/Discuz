@@ -452,12 +452,13 @@ export default {
            if(siteMode == 'pay'){
              //站点为付费站点时
              console.log('已登录，未付费')
-                next({
-                  path:'/pay-circle'
-                });
+              next({
+                path:'/pay-circle'
+              });
            } else if(siteMode == 'public'){
              //站点为公开站点时
-             console.log('公开站点，已登录')
+             console.log('公开站点，已登录');
+             //当用户已登录，且站点为公开站点时，进入到路由页面
               next({
                 path:to.fullPath
               });
@@ -470,14 +471,18 @@ export default {
           console.log('未登录，token不存在');
            //请求站点信息，用于判断站点是否是付费站点
             if(siteMode == 'pay'){
-              //站点为付费站点时，跳转到付费站点
+              //站点为付费站点时，跳转到付费页
               next({
-                path:'/pay-circle'
+                path:'/login-user'
               });
             } else if(siteMode == 'public'){
               //站点为公开站点时
-
+              //当用户未登录，且站点为公开站点时，进入到路由页面
+               next({
+                 path:to.fullPath
+               });
             } else {
+              //当siteMode为其他值（undefined,null）
 
             }
 
