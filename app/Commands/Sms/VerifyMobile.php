@@ -11,12 +11,15 @@ use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
+use App\Exceptions\SmsCodeVerifyException;
 use App\Models\MobileCode;
 use App\Models\User;
+use App\Repositories\MobileCodeRepository;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Carbon;
 
 class VerifyMobile
 {
@@ -34,6 +37,8 @@ class VerifyMobile
 
     protected $validator;
 
+    protected $mobileCodeRepository;
+
     public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor, $params = [])
     {
         $this->controller = $controller;
@@ -42,11 +47,12 @@ class VerifyMobile
         $this->params = $params;
     }
 
-    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator)
+    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator, MobileCodeRepository $mobileCodeRepository)
     {
         $this->apiClient = $apiClient;
         $this->bus = $bus;
         $this->validator = $validator;
+        $this->mobileCodeRepository = $mobileCodeRepository;
 
         return call_user_func([$this, $this->mobileCode->type]);
     }
@@ -99,5 +105,16 @@ class VerifyMobile
     {
         $this->controller->serializer = UserSerializer::class;
         return $this->mobileCode->user;
+    }
+
+    protected function rebind()
+    {
+        $verify = $this->mobileCodeRepository->getSmsCode($this->actor->getOriginal('mobile'), 'verify', 1);
+
+        if($verify && $verify->expired_at < Carbon::now()) {
+            return $this->bind();
+        }
+
+        throw new SmsCodeVerifyException();
     }
 }
