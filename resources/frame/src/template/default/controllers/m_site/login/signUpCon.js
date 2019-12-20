@@ -58,6 +58,8 @@ export default {
             this.$router.push({path:'pay-the-fee'});
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'});
+          } else {
+            console.log("缺少参数，请刷新页面");
           }
 
         // }
@@ -92,6 +94,7 @@ export default {
       }).then(res=>{
         console.log(res);
         this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+        this.siteMode = res.readdata._data.setsite.site_mode;
       }).catch(err=>{
         console.log(err);
       })
