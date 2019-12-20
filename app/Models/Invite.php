@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Invite.php 28830 2019-10-12 15:36 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -14,7 +11,6 @@ use App\Events\Invite\Created;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invite extends Model
 {
@@ -96,5 +92,4 @@ class Invite extends Model
         // 返回模型
         return $invite;
     }
-
 }

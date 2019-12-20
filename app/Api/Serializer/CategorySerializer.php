@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: CategorySerializer.php xxx 2019-11-29 15:28:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;

@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: PostUser.php xxx 2019-11-21 17:13:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;

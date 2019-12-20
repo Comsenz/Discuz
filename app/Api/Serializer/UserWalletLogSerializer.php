@@ -1,12 +1,16 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class UserWalletLogSerializer extends AbstractSerializer
 {
-
     protected $type = 'user_wallet_log';
 
     public function getDefaultAttributes($model)

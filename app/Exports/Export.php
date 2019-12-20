@@ -1,17 +1,18 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Export.php 28830 2019-12-04 09:47 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
+
 namespace App\Exports;
 
 use Illuminate\Support\Arr;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-abstract class Export{
+abstract class Export
+{
     /**
      * excel cells
      * @var array
@@ -44,34 +45,30 @@ abstract class Export{
     /**
      * handle function
      */
-    public function handle(){
-
+    public function handle()
+    {
         $spreadsheet = new Spreadsheet();
 
         $sheet = $spreadsheet->getActiveSheet();
 
         $datas = $this->data;
 
-        foreach ($datas as $row => $data){
-
+        foreach ($datas as $row => $data) {
             $keys = array_keys($data);
             $values = array_values($data);
 
-            foreach ($values as $index => $item){
-
+            foreach ($values as $index => $item) {
                 $sheet->setCellValue($this->cells[$index].($row+2), $item);
             }
         }
-        if ($keys){
-            foreach ($keys as $index => $key){
-
-                $sheet->setCellValue($this->cells[$index].'1',  Arr::get($this->columnMap, $key , $key));
+        if ($keys) {
+            foreach ($keys as $index => $key) {
+                $sheet->setCellValue($this->cells[$index].'1', Arr::get($this->columnMap, $key, $key));
             }
         }
 
         $writer = new Xlsx($spreadsheet);
 
         $writer->save($this->filename);
-
     }
 }

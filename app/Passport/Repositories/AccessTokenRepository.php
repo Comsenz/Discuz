@@ -1,19 +1,21 @@
 <?php
+
 /**
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
- * @license     http://mit-license.org/
- *
- * @link        https://github.com/thephpleague/oauth2-server
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
+
 namespace App\Passport\Repositories;
+
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use App\Passport\Entities\AccessTokenEntity;
+
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
     const TOKEN_EXP = 'P1D';
+
     const REFER_TOKEN_EXP = 'P2D';
 
     /**
@@ -23,6 +25,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         // Some logic here to save the access token to a database
     }
+
     /**
      * {@inheritdoc}
      */
@@ -30,6 +33,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         // Some logic here to revoke the access token
     }
+
     /**
      * {@inheritdoc}
      */
@@ -37,6 +41,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         return false; // Access token hasn't been revoked
     }
+
     /**
      * {@inheritdoc}
      */

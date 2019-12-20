@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
@@ -22,18 +27,18 @@ class InviteBind
     {
         $code = Arr::get($event->data, 'code', '');
 
-        if ($code){
-            $len = mb_strlen($code, "utf-8");
+        if ($code) {
+            $len = mb_strlen($code, 'utf-8');
 
-            if($len == 32){
+            if ($len == 32) {
                 //用户吗32位长度为管理员邀请
                 $invite = $this->InviteRepository->verifyCode($code);
 
-                if($invite){
+                if ($invite) {
                     $invite->to_user_id = $event->user->id;
                     $invite->save();
                 }
-            }else{
+            } else {
                 $encrypter = app('encrypter');
 
                 try {

@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: Rewarded 28830 2019-11-08 14:52 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Notifications;
@@ -40,7 +38,8 @@ class Rewarded extends Notification
         return ['database'];
     }
 
-    public function toDatabase(){
+    public function toDatabase()
+    {
         return [
             'order_id' => $this->order->id,
             'thread_id' => $this->order->thread->id,

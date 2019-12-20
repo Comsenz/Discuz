@@ -1,11 +1,10 @@
 <?php
+
 /**
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
- * @license     http://mit-license.org/
- *
- * @link        https://github.com/thephpleague/oauth2-server
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
+
 namespace App\Passport\Repositories;
 
 use App\Api\Serializer\TokenSerializer;
@@ -21,7 +20,6 @@ use App\Repositories\UserRepository as RepositoriesUserRepository;
 
 class UserRepository implements UserRepositoryInterface
 {
-
     protected $users;
 
     protected static $user;
@@ -33,7 +31,6 @@ class UserRepository implements UserRepositoryInterface
         $this->users = $users;
         $this->events = $dispatcher;
     }
-
 
     /**
      * @param string $username
@@ -47,7 +44,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->users->findByIdentification(compact('username'));
 
-        if (! $user){
+        if (! $user) {
             throw new PermissionDeniedException;
         }
         $this->events->dispatch(new Logining($user, $username, $password));
@@ -62,7 +59,8 @@ class UserRepository implements UserRepositoryInterface
         return new UserEntity($user['id']);
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return static::$user;
     }
 }

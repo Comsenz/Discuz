@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Settings;
-
 
 use App\Api\Serializer\SettingSerializer;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -20,15 +23,18 @@ use Tobscure\JsonApi\Document;
 
 class UploadLogoController extends AbstractResourceController
 {
-
     use AssertPermissionTrait;
 
     public $serializer = SettingSerializer::class;
 
     protected $app;
+
     protected $validator;
+
     protected $filesystem;
+
     protected $settings;
+
     protected $url;
 
     public function __construct(Application $app, Factory $validator, FileFactory $filesystem, SettingsRepository $settings, UrlGenerator $url)
@@ -39,7 +45,6 @@ class UploadLogoController extends AbstractResourceController
         $this->settings = $settings;
         $this->url = $url;
     }
-
 
     /**
      * @param ServerRequestInterface $request
@@ -104,6 +109,5 @@ class UploadLogoController extends AbstractResourceController
             'value' => $this->url->to('/storage/'.$fileName),
             'tag' => 'default'
         ];
-
     }
 }

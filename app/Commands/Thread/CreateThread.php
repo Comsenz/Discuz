@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: CreateThread.php xxx 2019-10-11 11:47:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Thread;

@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateAttachmentAttachment.php 28830 2019-09-29 16:52 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Attachment;
@@ -94,7 +92,7 @@ class CreateAttachment
         $this->assertCan($this->actor, 'attachment.createAttachment');
 
         // 判断上传的文件是否正常
-        if ($this->file->getError()){
+        if ($this->file->getError()) {
             throw new UploadException();
         }
 
@@ -111,7 +109,7 @@ class CreateAttachment
 
         $uploadFile = $uploadTool->save($type, $size);
 
-        if (! $uploadFile){
+        if (! $uploadFile) {
             throw new UploadException();
         }
 

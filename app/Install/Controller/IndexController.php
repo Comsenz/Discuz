@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Install\Controller;
 
 use App\Settings\SettingsRepository;
@@ -10,14 +15,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class IndexController extends AbstractWebController
 {
-
     public function render(ServerRequestInterface $request, Factory $view)
     {
         $url = $this->app->make(UrlGenerator::class);
 
         $viewPath = 'install.problems';
         $problems = $this->preRequireSite();
-        if(!$problems->count()) {
+        if (!$problems->count()) {
             $viewPath = 'install.install';
         }
 
@@ -28,14 +32,14 @@ class IndexController extends AbstractWebController
         ];
 
         return $view->make($viewPath)->with($data);
-
     }
 
-    private function preRequireSite() {
+    private function preRequireSite()
+    {
         $problems = collect();
         $defaultPhpVersion = '7.2.0';
         $phpversion = version_compare(PHP_VERSION, $defaultPhpVersion, '>=');
-        if(!$phpversion) {
+        if (!$phpversion) {
             $problems->push(['message' => 'PHP 版本必须大于'.$defaultPhpVersion]);
         }
 
@@ -47,7 +51,7 @@ class IndexController extends AbstractWebController
             'openssl',
             'pdo_mysql',
             'fileinfo'
-        ])->reject(function($extension) {
+        ])->reject(function ($extension) {
             return extension_loaded($extension);
         })->map(function ($extension) {
             return [
@@ -61,19 +65,19 @@ class IndexController extends AbstractWebController
         $cacheDirWritable = is_writable(storage_path('cache'));
         $configDirWritable = is_writable($this->app->configPath());
 
-        if(!$storageDirWritable) {
+        if (!$storageDirWritable) {
             $problems->push(['message' => 'storage 目录不可写']);
         }
 
-        if(!$cacheDirWritable) {
+        if (!$cacheDirWritable) {
             $problems->push(['message' => 'storage/cache 目录不可写']);
         }
 
-        if(!$configDirWritable) {
+        if (!$configDirWritable) {
             $problems->push(['message' => 'config 目录不可写']);
         }
 
-        if($this->app->isInstall()) {
+        if ($this->app->isInstall()) {
             $url = $this->app->make(UrlGenerator::class);
             $setting = $this->app->make(SettingsRepository::class);
             $problems->push(['message' => '您已安装过站点，请直接访问 <a href="'.$url->to('/').'">'.$setting->get('site_name').'</a>']);

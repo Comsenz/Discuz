@@ -1,8 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
@@ -26,7 +26,7 @@ class UserWalletCashRepository extends AbstractRepository
 
     public function findCashOrFail($id, User $actor = null)
     {
-        $query = $this->query()->where('id', $id);        
+        $query = $this->query()->where('id', $id);
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 }

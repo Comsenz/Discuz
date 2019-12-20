@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Console\Commands;
 
@@ -33,11 +37,10 @@ class StorageLinkCommand extends Command
         }
 
         $this->laravel->make('files')->link(
-            storage_path('app/public'), public_path('storage')
+            storage_path('app/public'),
+            public_path('storage')
         );
 
         $this->info('The [public/storage] directory has been linked.');
     }
 }
-
-

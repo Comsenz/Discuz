@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Install\Controller;
 
-use App\Api\Controller\Oauth2\AccessTokenController;
 use App\Console\Commands\KeyGenerate;
 use App\Console\Commands\RsaCertGenerate;
 use App\Models\Group;
-use App\Models\Setting;
 use App\Models\User;
 use App\Passport\Entities\AccessTokenEntity;
 use App\Passport\Entities\ClientEntity;
@@ -28,18 +31,20 @@ use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
     protected $app;
-    protected $input;
-    protected $output;
-    protected $console;
-    protected $apiClient;
 
+    protected $input;
+
+    protected $output;
+
+    protected $console;
+
+    protected $apiClient;
 
     public function __construct(Application $app, Client $apiClient)
     {
@@ -82,7 +87,8 @@ class InstallController implements RequestHandlerInterface
         ]);
     }
 
-    private function installDatabase($input) {
+    private function installDatabase($input)
+    {
         $host = Arr::get($input, 'mysqlHost');
         $port = 3306;
 
@@ -106,7 +112,9 @@ class InstallController implements RequestHandlerInterface
 
 
         $db = $this->app->make('db');
-        $this->app['config']->set('database.connections',[
+        $this->app['config']->set(
+            'database.connections',
+            [
                 'mysql' => $mysqlConfig,
                 'discuz_mysql' => array_merge($mysqlConfig, [
                     'database' => Arr::get($input, 'mysqlDatabase'),
@@ -130,10 +138,10 @@ class InstallController implements RequestHandlerInterface
         }
 
         $pdo->query('CREATE DATABASE IF NOT EXISTS '.Arr::get($input, 'mysqlDatabase'))->execute();
-
     }
 
-    private function installConfig($input) {
+    private function installConfig($input)
+    {
         $host = Arr::get($input, 'mysqlHost');
         $port = 3306;
 
@@ -162,7 +170,8 @@ class InstallController implements RequestHandlerInterface
         file_put_contents($this->app->configPath('config.php'), $stub);
     }
 
-    private function installKeyAndCertGenerate() {
+    private function installKeyAndCertGenerate()
+    {
         $this->input = new ArrayInput([]);
         $this->output = new BufferedOutput();
         //站点唯一key
@@ -188,7 +197,7 @@ class InstallController implements RequestHandlerInterface
 
     private function installAdminUser(&$input)
     {
-        if($input['adminPasswordConfirmation'] !== $input['adminPassword']) {
+        if ($input['adminPasswordConfirmation'] !== $input['adminPassword']) {
             throw new Exception('管理员两次密码不一致');
         }
 
@@ -216,9 +225,8 @@ class InstallController implements RequestHandlerInterface
         return $token->__toString();
     }
 
-
-    private function getConsole() {
+    private function getConsole()
+    {
         return $this->console ?? $console = $this->app->make(Kernel::class);
     }
-
 }

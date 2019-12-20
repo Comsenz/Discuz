@@ -1,10 +1,10 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CheckLogin.php  2019-12-18 15:49 Xinghailong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
+
 namespace App\Listeners\User;
 
 use App\Events\Users\Logining;
@@ -17,12 +17,13 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 
 class CheckLogin
 {
-
     protected $userLoginFailLog;
-    protected $cache;
-    const LIMIT_TIME = 15;
-    const CACHE_NAME = 'user_login_fail_limit_';
 
+    protected $cache;
+
+    const LIMIT_TIME = 15;
+
+    const CACHE_NAME = 'user_login_fail_limit_';
 
     public function __construct(UserLoginFailLogRepository $userLoginFailLog, CacheRepository $cache)
     {
@@ -46,21 +47,21 @@ class CheckLogin
         $maxTime = $this->userLoginFailLog->getLastFailTime($_SERVER['REMOTE_ADDR']);
 
         //password not match
-        if ($event->password && ! $event->user->checkPassword($event->password) ) {
-            if($userLoginFailCount){
+        if ($event->password && ! $event->user->checkPassword($event->password)) {
+            if ($userLoginFailCount) {
                 //check fail count & login time limit
                 $expire = Carbon::parse($maxTime)->addMinutes(self::LIMIT_TIME);
-                if ($userLoginFailCount > 4 && ($expire > Carbon::now())){
-                    $this->cache->put(self::CACHE_NAME.$_SERVER['REMOTE_ADDR'],1, $expire);
+                if ($userLoginFailCount > 4 && ($expire > Carbon::now())) {
+                    $this->cache->put(self::CACHE_NAME.$_SERVER['REMOTE_ADDR'], 1, $expire);
                     throw new LoginFailuresTimesToplimitException;
-                }else if($userLoginFailCount > 4 && ($expire < Carbon::now())){
+                } elseif ($userLoginFailCount > 4 && ($expire < Carbon::now())) {
                     //reset fail count
                     UserLoginFailLog::reSetFailCountByIp($_SERVER['REMOTE_ADDR']);
-                }else{
+                } else {
                     //add fail count
                     UserLoginFailLog::setFailCountByIp($_SERVER['REMOTE_ADDR']);
                 }
-            }else{
+            } else {
                 UserLoginFailLog::writeLog($_SERVER['REMOTE_ADDR'], $event->user->id, $event->user->username);
             }
             throw new PermissionDeniedException;

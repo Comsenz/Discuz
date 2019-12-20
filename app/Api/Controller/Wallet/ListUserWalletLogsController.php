@@ -1,9 +1,8 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ListUserWalletLogsController.php xxx 2019-10-22 17:20:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Wallet;
@@ -37,9 +36,9 @@ class ListUserWalletLogsController extends AbstractListController
      */
     protected $url;
 
-     /**
-     * @var UserWalletLogsRepository
-     */
+    /**
+    * @var UserWalletLogsRepository
+    */
     protected $wallet_log_repository;
 
     /**

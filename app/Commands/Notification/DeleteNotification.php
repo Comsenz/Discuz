@@ -1,16 +1,12 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: DeleteNotification.php xxx 2019-11-11 11:37:00 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Notification;
 
-use App\Events\Post\Deleted;
-use App\Events\Post\Deleting;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
@@ -68,7 +64,7 @@ class DeleteNotification
     {
         $this->events = $events;
 
-        $notification = $notification->findOrFail($this->notificationId, $this->actor );
+        $notification = $notification->findOrFail($this->notificationId, $this->actor);
 
         $notification->forceDelete();
     }

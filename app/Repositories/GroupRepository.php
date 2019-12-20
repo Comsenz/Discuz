@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: GroupRepository.php 28830 2019-10-23 11:40 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
-
 
 use App\Models\Group;
 use App\Models\User;
@@ -18,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GroupRepository extends AbstractRepository
 {
-
     /**
      * Get a new query builder for the posts table.
      *
@@ -44,6 +39,4 @@ class GroupRepository extends AbstractRepository
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
-
-
 }

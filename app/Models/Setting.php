@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Encryption\Encrypter;
 
 /**
  * @method static create(array $array)
@@ -15,7 +18,9 @@ use Illuminate\Contracts\Encryption\Encrypter;
 class Setting extends Model
 {
     protected $fillable = ['key', 'value', 'tag'];
+
     protected $primaryKey = ['key', 'tag'];
+
     protected $keyType = 'string';
 
     public $incrementing = false;
@@ -81,5 +86,4 @@ class Setting extends Model
             $value = app()->make('encrypter')->encrypt($value);
         }
     }
-
 }

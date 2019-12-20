@@ -72,7 +72,7 @@
       <div class="recycle-bin-table">
         <ContArrange
           v-for="(items,index) in themeList"
-          :author="items.user._data.username"
+          :author="!items.user?'该用户被删除':items.user._data.username"
           :theme="items.category._data.name"
           :finalPost="formatDate(items._data.createdAt)"
           :deleTime="formatDate(items._data.deletedAt)"
@@ -86,18 +86,18 @@
           </div>
 
           <div class="recycle-bin-table__main" slot="main">
-            {{items.firstPost._data.content}}
+            {{!items.user?'作者被禁止或删除，内容自动屏蔽':items.firstPost._data.content}}
           </div>
 
           <div class="recycle-bin-table__footer" slot="footer">
             <div class="recycle-bin-table__footer-operator">
               <span>操作者：</span>
-              <span>{{items.deletedUser._data.username}}</span>
+              <span>{{!items.user?'操作者被禁止或删除':items.deletedUser._data.username}}</span>
             </div>
 
             <div class="recycle-bin-table__footer-reason">
               <span>原因：</span>
-              <span>{{items.lastDeletedLog._data.message}}</span>
+              <span>{{!items.user?'操作者被禁止或删除':items.deletedUser._data.message}}</span>
             </div>
 
           </div>

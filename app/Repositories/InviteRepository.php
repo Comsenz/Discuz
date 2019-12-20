@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: InviteRepository.php 28830 2019-11-19 15:58 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
-
 
 use App\Models\Invite;
 use App\Models\User;
@@ -18,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class InviteRepository extends AbstractRepository
 {
-
     /**
      * Get a new query builder for the posts table.
      *
@@ -50,8 +45,8 @@ class InviteRepository extends AbstractRepository
      * Verify the invitation code is available
      * @param $code
      */
-    public function verifyCode($code){
-
+    public function verifyCode($code)
+    {
         return Invite::where([['code', '=', $code], ['to_user_id', '=', '0'], ['endtime', '>', time()], ['status', '=', '1']])->first();
     }
 
@@ -60,24 +55,22 @@ class InviteRepository extends AbstractRepository
      * @param User $actor
      * @return mixed
      */
-    public function getAdminCodeList(User $actor){
-
+    public function getAdminCodeList(User $actor)
+    {
         return Invite::where([
             ['user_id', '=', $actor->id],
             ['type', '=', 2]])->get()
             ->each(function ($item, $key) {
-                if ($item->status == 1){
-
+                if ($item->status == 1) {
                     $item->to_user_id && $item->status = 2;//已使用
 
-                    if (!$item->to_user_id && $item->endtime > time()){
+                    if (!$item->to_user_id && $item->endtime > time()) {
                         $item->status = 3;//未使用
                     }
-                    if (!$item->to_user_id && $item->endtime < time()){
+                    if (!$item->to_user_id && $item->endtime < time()) {
                         $item->status = 4;//已过期
                     }
                 }
-
             });
     }
 }

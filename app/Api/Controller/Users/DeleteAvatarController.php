@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Users;
-
 
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
@@ -15,12 +18,12 @@ use Tobscure\JsonApi\Document;
 
 class DeleteAvatarController extends AbstractResourceController
 {
-
     use AssertPermissionTrait;
 
     public $serializer = UserSerializer::class;
 
     protected $users;
+
     protected $avatarUploader;
 
     public function __construct(UserRepository $users, AvatarUploader $avatarUploader)
@@ -28,7 +31,6 @@ class DeleteAvatarController extends AbstractResourceController
         $this->users = $users;
         $this->avatarUploader = $avatarUploader;
     }
-
 
     /**
      * @param ServerRequestInterface $request

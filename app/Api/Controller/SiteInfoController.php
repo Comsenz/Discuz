@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller;
-
 
 use App\Api\Serializer\SiteInfoSerializer;
 use Discuz\Auth\AssertPermissionTrait;
@@ -25,7 +28,6 @@ class SiteInfoController extends AbstractResourceController
         $this->app = $app;
     }
 
-
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
@@ -40,5 +42,4 @@ class SiteInfoController extends AbstractResourceController
 
         return $decomposer->getSiteinfo();
     }
-
 }

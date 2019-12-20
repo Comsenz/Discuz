@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ListThreadsController.php xxx 2019-10-09 20:08:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Threads;
@@ -244,7 +242,12 @@ class ListThreadsController extends AbstractListController
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
             $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
-                ->where('users1.username', 'like', "%{$username}%");
+                ->where(function ($query) use ($username) {
+                    $username = explode(',', $username);
+                    foreach ($username as $name) {
+                        $query->orWhere('users1.username', 'like', "%{$name}%");
+                    }
+                });
         }
 
         // 操作删除者 ID
@@ -340,11 +343,15 @@ class ListThreadsController extends AbstractListController
         }
 
         // TODO: 关键词搜索 优化搜索
-        // 关键词搜索
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
-                ->where('posts.content', 'like', "%{$queryWord}%")
-                ->where('posts.is_first', true);
+                ->where('posts.is_first', true)
+                ->where(function ($query) use ($queryWord) {
+                    $queryWord = explode(',', $queryWord);
+                    foreach ($queryWord as $word) {
+                        $query->orWhere('posts.content', 'like', "%{$word}%");
+                    }
+                });
         }
     }
 

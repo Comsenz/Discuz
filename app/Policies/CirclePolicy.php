@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CirclePolicy.php 28830 2019-10-10 16:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Policies;
@@ -68,5 +65,4 @@ class CirclePolicy extends AbstractPolicy
             });
         }
     }
-
 }

@@ -1,14 +1,16 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\Users;
 
-use App\Commands\Users\CreateUsers;
-use App\Oauth\RefreshToken;
 use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Routing\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -26,7 +28,7 @@ class ExportUserController implements RequestHandlerInterface
 
     protected $app;
 
-    public function __construct( BusDispatcher $bus, Application $app)
+    public function __construct(BusDispatcher $bus, Application $app)
     {
         $this->bus = $bus;
         $this->app = $app;
@@ -52,23 +54,21 @@ class ExportUserController implements RequestHandlerInterface
         return new FileResponse($filename);
     }
 
-    private function data($params = null){
-
+    private function data($params = null)
+    {
         return User::select('users.id as id', 'users.username', 'user_profiles.sex', 'users.mobile', 'user_wechats.nickname', 'user_wechats.unionid', 'users.last_login_ip', 'users.created_at', 'users.status')
             ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')
             ->orderBy('id', 'asc')
             ->get()
             ->each(function ($item, $key) {
-
                 $item->sex = ($item->sex == 1) ? '男' : '女';
                 $item->status = ($item->status == 1) ? '正常' : '禁用';
-
             })
             ->toArray();
     }
 
-    private function createFilename($params){
-
+    private function createFilename($params)
+    {
     }
 }

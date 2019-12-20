@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Api\Controller\Users;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\UpdateUser;
@@ -21,7 +25,6 @@ class UpdateUserController extends AbstractResourceController
     {
         $this->bus = $bus;
     }
-
 
     protected function data(ServerRequestInterface $request, Document $document)
     {

@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: RegisterUser.php xxx 2019-11-11 18:22:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Users;
@@ -13,8 +11,6 @@ use App\Events\Users\Registered;
 use App\Events\Users\Saving;
 use App\Models\User;
 use App\Validators\UserValidator;
-use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -47,7 +43,6 @@ class RegisterUser
         $this->actor = $actor;
         $this->data = $data;
     }
-
 
     /**
      * @param Dispatcher $events

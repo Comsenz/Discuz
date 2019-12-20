@@ -189,19 +189,21 @@ export default {
         });
       }
 
+      /*if (selectStatus){
+        this.$message({
+          showClose: true,
+          message: '操作选项错误，请重新选择或刷新页面(F5)',
+          type: 'warning'
+        });
+      }*/
+
       if (themeData.length < 1){
         this.$message({
           showClose: true,
           message: '主题列表为空，请选择主题',
           type: 'warning'
         });
-      }else if (selectStatus){
-        this.$message({
-          showClose: true,
-          message: '操作选项错误，请重新选择或刷新页面(F5)',
-          type: 'warning'
-        });
-      } else {
+      }else if(!selectStatus) {
         this.appFetch({
           url:'threads/batch',
           method:'patch',
@@ -269,6 +271,7 @@ export default {
            'filter[isSticky]':searchData.topType
          }
        }).then(res=>{
+         console.log(res);
          this.themeList = res.readdata;
          this.total = res.meta.threadCount;
          this.pageCount = res.meta.pageCount;
@@ -277,6 +280,7 @@ export default {
          this.themeList.forEach((item,index)=>{
            this.themeListAll.push(item._data.id);
          });
+         console.log('完车给');
        }).catch(err=>{
          console.log(err);
        })

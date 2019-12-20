@@ -63,7 +63,7 @@
       <div class="cont-review-table">
         <ContArrange
           v-for="(items,index) in  themeList"
-          :replyBy="items.user._data.username"
+          :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :ip="items._data.ip"

@@ -1,20 +1,23 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Group;
 
-
-use App\Models\Group;
 use App\Repositories\GroupRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use Exception;
 
 class DeleteGroup
 {
     use AssertPermissionTrait;
 
     protected $id;
+
     protected $actor;
+
     protected $groups;
 
     public function __construct($id, $actor)
@@ -23,11 +26,11 @@ class DeleteGroup
         $this->actor = $actor;
     }
 
-    public function handle(GroupRepository $groups) {
+    public function handle(GroupRepository $groups)
+    {
         $this->groups = $groups;
         return call_user_func([$this, '__invoke']);
     }
-
 
     /**
      * @throws \Discuz\Auth\Exception\PermissionDeniedException

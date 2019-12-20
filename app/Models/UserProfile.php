@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Models;
 
 use Discuz\Database\ScopeVisibilityTrait;
@@ -7,7 +12,8 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\UserProfile\Created;
 
-class UserProfile extends Model {
+class UserProfile extends Model
+{
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 

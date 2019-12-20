@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ThreadUser.php xxx 2019-11-13 16:55:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -23,5 +21,4 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class ThreadUser extends Pivot
 {
-
 }

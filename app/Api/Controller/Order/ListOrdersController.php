@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: CreateOrderController.php xxx 2019-10-24 11:20:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Order;
@@ -158,7 +156,7 @@ class ListOrdersController extends AbstractListController
             $query->whereIn('orders.user_id', User::where('users.username', $order_username)->select('id', 'username')->get());
         });
         $query->when($order_product, function ($query) use ($order_product) {
-           $query->whereIn('orders.thread_id', Thread::whereIn('threads.id', Post::where('content', 'like', "%$order_product%")->select('posts.thread_id')->groupBy('posts.thread_id')->get())->select('threads.id')->get());
+            $query->whereIn('orders.thread_id', Thread::whereIn('threads.id', Post::where('content', 'like', "%$order_product%")->select('posts.thread_id')->groupBy('posts.thread_id')->get())->select('threads.id')->get());
         });
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
@@ -169,5 +167,4 @@ class ListOrdersController extends AbstractListController
  
         return $query->get();
     }
-
 }

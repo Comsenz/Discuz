@@ -1,19 +1,14 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: InvitePolicy.php 28830 2019-10-12 16:00 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Policies;
 
-
 use App\Models\Invite;
 use App\Models\User;
-use Discuz\Api\Events\ScopeModelVisibility;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -63,5 +58,4 @@ class InvitePolicy extends AbstractPolicy
             $query->where('invites.user_id', $actor->id);
         }
     }
-
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Category;
@@ -69,6 +69,11 @@ class DeleteCategory
         $category = $categories->findOrFail($this->categoryId, $this->actor);
 
         $this->assertCan($this->actor, 'delete', $category);
+
+        // 分类下有主题时不能删除
+        if ($category->threads()->first('id')) {
+            throw new Exception('cannot_delete_category_with_threads');
+        }
 
         $this->events->dispatch(
             new Deleting($category, $this->actor, $this->data)
