@@ -1,5 +1,9 @@
 <p align="center"><img src="http://www.discuz.net/static/image/common/logo.png"></p>
 
+<p align="center">
+  <a href="https://github.com/Comsenz/Discuz"><img alt="GitHub Actions status" src="https://github.com/Comsenz/Discuz/workflows/pull-code/badge.svg"></a>
+</p>
+
 ## 关于 Discuz！2020
 
 **[Discuz 官方](http://www.discuz.net/)**
