@@ -30,7 +30,6 @@
       <el-upload
         class="avatar-uploader"
         action=""
-        :http-request="uploaderLogo"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         @change="handleFile" 
