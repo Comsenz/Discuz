@@ -1,9 +1,11 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\SmsMessages\SendCodeMessage;
 use Exception;
@@ -30,22 +32,21 @@ class SendMessage
      * @var array
      */
     public $data;
+
     /**
      * 创建用户的ip
      *
      * @var qcloud
      */
     public $qcloud;
+
     /**
      * 初始化命令参数
      *
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($actor, array $data,$qcloud)
+    public function __construct($actor, array $data, $qcloud)
     {
         $this->actor = $actor;
         $this->data = $data;
@@ -68,12 +69,13 @@ class SendMessage
         //$this->assertCan($this->actor, 'classify.deleteClassify');
 
         //生成验证码
-        $code=rand(100000,999999);
+        $code=rand(100000, 999999);
         $userIdent = UserIdent::creation(
             $this->data['type'],
             $code,
             $this->data['mobile']
-        );;
+        );
+        ;
         $userIdent->save();
         try {
             $this->qcloud->service('sms')->send($this->data['mobile'], new SendCodeMessage(['code' => $code, 'expire' => '5']));

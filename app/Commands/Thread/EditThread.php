@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: EditThread.php xxx 2019-10-17 17:44:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Thread;
@@ -13,7 +11,6 @@ use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
-use App\Models\Category;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;

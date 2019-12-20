@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Group;
-
 
 use App\Api\Serializer\InfoSerializer;
 use App\Commands\Group\DeleteGroup;
@@ -21,7 +24,6 @@ class DeleteGroupController extends AbstractDeleteController
     {
         $this->bus = $bus;
     }
-
 
     /**
      * @inheritDoc

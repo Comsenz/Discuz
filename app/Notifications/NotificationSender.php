@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Notifications;
 
 use Illuminate\Support\Str;
@@ -100,7 +105,6 @@ class NotificationSender
                 $notificationId = Str::uuid()->toString();
                 foreach ((array) $viaChannels as $channel) {
                     $this->sendToNotifiable($notifiable, $notificationId, clone $original, $channel);
-
                 }
             });
         }

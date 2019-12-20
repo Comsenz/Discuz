@@ -1,9 +1,11 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use Exception;
 use App\Models\UserIdent;
@@ -37,9 +39,6 @@ class GetMessage
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
     public function __construct($actor, array $data)
     {
         $this->actor = $actor;
@@ -69,7 +68,6 @@ class GetMessage
             ];
 
             $userIdent =  UserIdent::where($where)->firstOrFail();
-
         } catch (Exception $e) {
             throw $e;
         }

@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Api\Controller\Users;
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
+namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\InfoSerializer;
 use App\Commands\Users\DeleteUsers;
@@ -11,10 +15,8 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-
 class DeleteUsersController extends AbstractListController
 {
-
     public $serializer = InfoSerializer::class;
 
     protected $bus;
@@ -23,7 +25,6 @@ class DeleteUsersController extends AbstractListController
     {
         $this->bus = $bus;
     }
-
 
     /**
      * Get the data to be serialized and assigned to the response document.
@@ -37,7 +38,7 @@ class DeleteUsersController extends AbstractListController
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $data = collect();
-        foreach($attributes['id'] as $id) {
+        foreach ($attributes['id'] as $id) {
             $data->push($this->bus->dispatch(
                 new DeleteUsers($id, $request->getAttribute('actor'))
             ));

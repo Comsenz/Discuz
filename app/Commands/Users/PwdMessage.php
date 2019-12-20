@@ -1,16 +1,16 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Commands\Users;
-
 
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Exception;
 use App\Models\User;
-use App\Models\UserIdent;
-use Illuminate\Support\Arr;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
@@ -34,7 +34,9 @@ class PwdMessage
      * @var array
      */
     public $data;
+
     public $bus;
+
     public $userValidator;
 
     /**
@@ -43,15 +45,11 @@ class PwdMessage
      * @param User   $actor        执行操作的用户.
      * @param array  $data         创建用户的数据.
      */
-
-
-
-    public function __construct($actor, array $data ,BusDispatcher $bus)
+    public function __construct($actor, array $data, BusDispatcher $bus)
     {
         $this->actor = $actor;
         $this->data = $data;
         $this->bus = $bus;
-
     }
 
     /**
@@ -62,7 +60,7 @@ class PwdMessage
      * @return ResponseBag
      * @throws Exception
      */
-    public function handle(Dispatcher $events,UserValidator $userValidator,UserRepository $repository)
+    public function handle(Dispatcher $events, UserValidator $userValidator, UserRepository $repository)
     {
         $this->events = $events;
         $this->userValidator =$userValidator;
@@ -74,10 +72,9 @@ class PwdMessage
         );
 
         try {
-
             $this->userValidator->valid(['password' => $this->data['password']]);
 
-            $objuser = User::where('mobile',$this->data['mobile'])->firstOrFail();
+            $objuser = User::where('mobile', $this->data['mobile'])->firstOrFail();
             $objuser->password = User::setUserPasswordAttr($this->data['password']);
             $objuser->save();
             $data->delete();

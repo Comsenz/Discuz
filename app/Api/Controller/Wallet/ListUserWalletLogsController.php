@@ -1,9 +1,8 @@
 <?php
+
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ListUserWalletLogsController.php xxx 2019-10-22 17:20:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Wallet;
@@ -37,9 +36,9 @@ class ListUserWalletLogsController extends AbstractListController
      */
     protected $url;
 
-     /**
-     * @var UserWalletLogsRepository
-     */
+    /**
+    * @var UserWalletLogsRepository
+    */
     protected $wallet_log_repository;
 
     /**
@@ -144,7 +143,7 @@ class ListUserWalletLogsController extends AbstractListController
             $query->where('created_at', '<=', $log_end_time);
         });
         $query->when($log_username, function ($query) use ($log_username) {
-            $query->whereIn('user_wallet_log.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
+            $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);

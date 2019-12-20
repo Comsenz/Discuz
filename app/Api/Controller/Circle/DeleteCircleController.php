@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: DeleteCircleController.php 28830 2019-09-26 10:05 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Circle;
@@ -16,13 +13,11 @@ use Tobscure\JsonApi\Document;
 
 class DeleteCircleController extends AbstractDeleteController
 {
-
     /**
      * @param ServerRequestInterface $request
      */
     public function delete(ServerRequestInterface $request)
     {
-
     }
 
     protected function data(ServerRequestInterface $request, Document $document)

@@ -1,8 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Notification;
@@ -113,7 +113,7 @@ class ListNotificationController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $type = Arr::get($this->types , Arr::get($filter, 'type'), '');
+        $type = Arr::get($this->types, Arr::get($filter, 'type'), '');
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {

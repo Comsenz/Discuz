@@ -1,8 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
@@ -34,7 +34,7 @@ class OrderRepository extends AbstractRepository
      */
     public function findOrderOrFail($order_sn, User $actor = null)
     {
-        $query = $this->query()->where('order_sn', $order_sn);        
+        $query = $this->query()->where('order_sn', $order_sn);
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 }

@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller;
-
 
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
@@ -14,7 +17,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CheckController implements RequestHandlerInterface
 {
     use QcloudTrait,AssertPermissionTrait;
-
 
     /**
      * @param ServerRequestInterface $request

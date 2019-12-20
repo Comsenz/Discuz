@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Controller\StopWords;
 
 use App\Models\StopWord;
@@ -37,7 +42,7 @@ class ExportStopWordsController implements RequestHandlerInterface
             file_put_contents($filename, $stopWord . "\r\n", FILE_APPEND | LOCK_EX);
         }
 
-        return new FileResponse($filename, 200 , [
+        return new FileResponse($filename, 200, [
             'Content-Disposition' => 'attachment;filename=' . basename($filename),
         ]);
     }

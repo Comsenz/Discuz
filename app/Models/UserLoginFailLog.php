@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: UserLoginFailLog.php  2019-12-18 11:14:00 Xinghailong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
@@ -24,12 +22,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserLoginFailLog extends Model
 {
-
     /**
      * {@inheritdoc}
      */
     protected $table = 'user_login_fail_log';
-
 
     /**
      * {@inheritdoc}
@@ -65,7 +61,8 @@ class UserLoginFailLog extends Model
      * @param $log
      * @param $ip
      */
-    public static function setFailCountByIp($ip){
+    public static function setFailCountByIp($ip)
+    {
         $log = self::getDataByIp($ip);
         $log->increment('count');
     }
@@ -74,11 +71,11 @@ class UserLoginFailLog extends Model
      * refresh fail count
      * @param $ip
      */
-    public static function reSetFailCountByIp($ip){
+    public static function reSetFailCountByIp($ip)
+    {
         $log = self::getDataByIp($ip);
         $log->count = 1;
         $log->update();
-
     }
 
     /**
@@ -86,7 +83,8 @@ class UserLoginFailLog extends Model
      * @param $ip
      * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
      */
-    public static function getDataByIp($ip){
+    public static function getDataByIp($ip)
+    {
         return self::query()
             ->where(['ip'=>$ip])
             ->first();

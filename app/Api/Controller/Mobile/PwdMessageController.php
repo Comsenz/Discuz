@@ -1,6 +1,9 @@
 <?php
-declare(strict_types=1);
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Mobile;
 
@@ -22,9 +25,8 @@ class PwdMessageController extends AbstractCreateController
         $inputs = $request->getParsedBody();
 
         $data = $this->bus->dispatch(
-            new PwdMessage($actor, $inputs->toArray(),$this->bus)
+            new PwdMessage($actor, $inputs->toArray(), $this->bus)
         );
         return $data;
-
     }
 }

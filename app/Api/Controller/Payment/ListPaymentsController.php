@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Payment;
-
 
 use App\Api\Serializer\PaymentSerializer;
 use App\Settings\SettingsRepository;

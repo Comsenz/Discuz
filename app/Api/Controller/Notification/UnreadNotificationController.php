@@ -1,18 +1,14 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UnreadNotificationController.php xxx 2019-11-06 18:24:00 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Controller\Notification;
 
 use App\Commands\Notification\UnreadNotification;
-use Discuz\Api\JsonApiResponse;
-use Discuz\Foundation\Application;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -27,12 +23,13 @@ class UnreadNotificationController implements RequestHandlerInterface
      */
     protected $bus;
 
-    public function __construct( BusDispatcher $bus)
+    public function __construct(BusDispatcher $bus)
     {
         $this->bus = $bus;
     }
 
-    public function handle(ServerRequestInterface $request): ResponseInterface {
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
 
         // 获取当前用户
         $actor = $request->getAttribute('actor');
@@ -45,6 +42,5 @@ class UnreadNotificationController implements RequestHandlerInterface
         return $this->bus->dispatch(
             new UnreadNotification($actor, $inputs)
         );
-
     }
 }

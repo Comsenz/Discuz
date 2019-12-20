@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateCircleExtend.phpnd.php 28830 2019-09-26 10:09 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\UserProfile;
@@ -83,7 +80,7 @@ class CreateUserProfile
         // 初始站点扩展数据
         $userProfile = UserProfile::creation(
             $this->userId,
-           '',
+            '',
             '',
             $this->ipAddress
         );

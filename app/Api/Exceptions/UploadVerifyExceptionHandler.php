@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Exceptions;
 
 use Discuz\Http\Exception\UploadVerifyException;
@@ -9,7 +14,6 @@ use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
 class UploadVerifyExceptionHandler implements ExceptionHandlerInterface
 {
-
     /**
      * {@inheritdoc}
      */

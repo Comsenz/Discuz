@@ -1,15 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CircleUser.php 28830 2019-10-11 12:00 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Models;
-
 
 use App\Events\Circle\Created;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -99,5 +95,4 @@ class CircleUser extends Model
         // 返回站点模型
         return $circle;
     }
-
 }

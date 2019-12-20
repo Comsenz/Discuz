@@ -1,8 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Category;
@@ -30,11 +30,11 @@ class EditCategory
      */
     public $categoryId;
 
-   /**
-    * The user performing the action.
-     *
-     * @var User
-     */
+    /**
+     * The user performing the action.
+      *
+      * @var User
+      */
     public $actor;
 
     /**

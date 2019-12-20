@@ -1,25 +1,18 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CreateClassify.php 28830 2019-10-12 15:52 yanchen $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Emoji;
 
-
-use App\Events\Invite\Saving;
 use App\Models\Invite;
 use App\Models\StopWord;
-use Carbon\Carbon;
 use Discuz\Foundation\EventsDispatchTrait;
 use Exception;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
 class CreateClassify
@@ -65,7 +58,7 @@ class CreateClassify
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-         //$this->assertCan($this->actor, 'createInvite');
+        //$this->assertCan($this->actor, 'createInvite');
         $stopWord = StopWord::build(
             Arr::get($this->data, 'attributes.ugc'),
             Arr::get($this->data, 'attributes.username'),

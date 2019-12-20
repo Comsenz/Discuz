@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: UpdateUserWallet.php XXX 2019-10-23 10:00 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Commands\Wallet;
@@ -30,6 +28,7 @@ class UpdateUserWallet
      * @var int
      */
     public $user_id;
+
     /**
      * 执行操作的用户.
      *
@@ -87,7 +86,7 @@ class UpdateUserWallet
             throw new WalletException('wallet_status_error');
         }
         //操作金额
-        $change_available_amount = sprintf("%.2f", floatval($operate_amount));
+        $change_available_amount = sprintf('%.2f', floatval($operate_amount));
         // 判断有没有权限执行此操作
         // $this->assertCan($this->actor, 'UpdateUserWallet');
         //开始事务
@@ -108,7 +107,7 @@ class UpdateUserWallet
                     break;
             }
             //修改钱包金额
-            $user_wallet->available_amount = sprintf("%.2f", ($user_wallet->available_amount + $change_available_amount));
+            $user_wallet->available_amount = sprintf('%.2f', ($user_wallet->available_amount + $change_available_amount));
             //钱包状态修改
             if (!is_null($wallet_status)) {
                 $user_wallet->wallet_status = (int) $wallet_status;
@@ -120,7 +119,8 @@ class UpdateUserWallet
                 $change_available_amount,
                 0,
                 UserWalletLog::TYPE_EXPEND_ARTIFICIAL,
-                $operate_reason);
+                $operate_reason
+            );
 
             //提交事务
             $db->commit();

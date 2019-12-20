@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: CircleRepository.php 28830 2019-09-25 11:45 chenkeke $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Repositories;
@@ -17,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CircleRepository extends AbstractRepository
 {
-
     /**
      * Get a new query builder for the posts table.
      *
@@ -44,6 +40,4 @@ class CircleRepository extends AbstractRepository
 
         return $this->scopeVisibleTo($query, $actor, $ability)->firstOrFail();
     }
-
-
 }

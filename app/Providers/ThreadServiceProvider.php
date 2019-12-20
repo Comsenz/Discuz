@@ -1,10 +1,8 @@
 <?php
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      $Id: ThreadServiceProvider.php xxx 2019-10-18 13:28:00 LiuDongdong $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Providers;
@@ -22,7 +20,6 @@ class ThreadServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-
     }
 
     /**

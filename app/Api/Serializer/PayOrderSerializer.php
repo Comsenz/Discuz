@@ -1,11 +1,9 @@
 <?php
-declare (strict_types = 1);
+
 
 /**
- *      Discuz & Tencent Cloud
- *      This is NOT a freeware, use is subject to license terms
- *
- *      Id: PayOrderSerializer.php   2019-10-15 10:56 zhouzhou $
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
  */
 
 namespace App\Api\Serializer;
@@ -23,6 +21,5 @@ class PayOrderSerializer extends AbstractSerializer
         } else {
             return '';
         }
-
     }
 }
