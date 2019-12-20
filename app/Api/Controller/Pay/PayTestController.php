@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php 
 namespace App\Api\Controller\Pay;
 
 use Psr\Http\Message\ServerRequestInterface;
