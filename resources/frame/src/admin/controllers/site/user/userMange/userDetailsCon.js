@@ -92,24 +92,25 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
       if(isJPG && isLt2M == true){
-       let userId = browserDb.getLItem('tokenId');
-        let formData = new FormData()
-        formData.append('avatar', file)
+      }
+      return isJPG && isLt2M;
+    },
+    uploaderLogo(file){
+      console.log(file,'000000000000000')
+      let formData = new FormData()
+        formData.append('avatar', file.file)
           console.log(formData)
           this.appFetch({
             url:'upload',
             method:'post',
-            splice: `/${this.query.id}`+'/avatar',
+            splice: `${this.query.id}`+'/avatar',
             data:formData
           }).then(res=>{
             this.imageUrl = res.readdata._data.avatarUrl;
           })
-      }
-      return isJPG && isLt2M;
     },
     
     submission(){
-      const userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'users',
         method:'patch',
