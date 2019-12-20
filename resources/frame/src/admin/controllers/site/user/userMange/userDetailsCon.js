@@ -39,7 +39,10 @@ export default {
         const response = await this.appFetch({
           method: 'get',
           url: 'users',
-          splice: `/${this.query.id}`
+          splice: `/${this.query.id}`,
+          data:{
+            include:'wechat'
+          }
         })
         console.log(response,'response');
         this.userInfo = response.readdata._data;

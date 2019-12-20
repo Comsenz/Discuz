@@ -104,13 +104,14 @@ export default {
           })
         }    
       },
-      wechatBind(){
+      wechatBind(){    //去绑定微信
         this.appFetch({
           url:'wechatBind',
-          method:'patch',
+          method:'get',
           data:{}
         }).then(res=>{
-          console.log(res)
+          console.log(res.readdata._data.location)
+          window.location.href = res.readdata._data.location
         })
       }
      

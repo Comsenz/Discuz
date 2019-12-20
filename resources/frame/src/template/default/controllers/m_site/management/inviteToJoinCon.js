@@ -11,6 +11,12 @@ export default {
 			choList: [],
 			getGroupNameById: {},
 			choiceRes: {attributes:{name: '选择操作'}},
+			loading: false,  //是否处于加载状态
+			finished: false, //是否已加载完所有数据
+			isLoading: false, //是否处于下拉刷新状态
+			// pageSize:'',//每页的条数
+			pageIndex: 1,//页码
+			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
 		}
 	},
 	components:{
@@ -134,7 +140,43 @@ export default {
 				this.$toast("邀请码操作失败！");
 			}
 			
-		}
+		},
+		onLoad(){    //上拉加载
+			this.appFetch({
+			  url:'invite',
+			  method:'get',
+			  data:{
+				data: {
+					type: "invite",
+					attributes: {
+						group_id: parseInt(this.choiceRes.id)
+					}
+				},
+				'page[number]': this.pageIndex,
+				'page[limit]': 15
+			  }
+			}).then(res=>{
+			  console.log(res.readdata)
+			  this.loading = false;
+			  if(res.readdata.length > 0){
+				this.inviteList = this.inviteList.concat(res.readdata);
+				this.pageIndex++;
+				this.finished = false; //数据全部加载完成
+			  }else{
+				this.finished = true
+			  }
+			})
+		  },
+		  onRefresh(){    //下拉刷新
+			setTimeout(()=>{
+			  this.pageIndex = 1;
+			  this.getInviteList()
+				this.$toast('刷新成功');
+				this.isLoading = false;
+				this.finished = false;
+			  
+			},200)
+		  }
 	},
 
 	mounted: function() {

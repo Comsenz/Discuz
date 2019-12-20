@@ -54,7 +54,7 @@
             </el-table-column>
 
           </el-table>
-          <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum"  />
+          <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />
         </div>
 
         <Card class="footer-btn">

@@ -5,7 +5,7 @@ import CardRow from '../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      checked:true,
+      checked:'',
       pwdLength:'',   //密码长度
       checkList:[],   //密码规则
     }
@@ -24,8 +24,9 @@ export default {
       }).then(res=>{
       
         // this.pwdLength = res.readdata._data.setreg.password_length
-        this.pwdLength = res.readdata._data.passwordLength
-        this.checkList = res.readdata._data.passwordStrength.split(',')
+        this.checked = res.readdata._data.setreg.register_close
+        this.pwdLength = res.readdata._data.setreg.password_length
+        this.checkList = res.readdata._data.setreg.password_strength.split(',')
         console.log(this.checkList)
         console.log( res)
       })

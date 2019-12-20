@@ -68,7 +68,13 @@ export default {
 			// 	}
 			// ],
 			themeListCon: [],
-			checked: null
+			checked: null,
+			loading: false,  //是否处于加载状态
+			finished: false, //是否已加载完所有数据
+			isLoading: false, //是否处于下拉刷新状态
+			// pageSize:'',//每页的条数
+			pageIndex: 1,//页码
+			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
 
 		}
 	},
@@ -106,17 +112,20 @@ export default {
 		},
 
 		deleteList() {
-			this.appFetch({
+			return this.appFetch({
 				url:'threads',
 				method:'get',
 				data:{
 					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers'],
 					'filter[isDeleted]':'no',
-					'filter[categoryId]':''
+					'filter[categoryId]':'',
+					'page[number]': this.pageIndex,
+					'page[limit]': 1
 				}
 			}).then(res=>{
 				console.log(res.readdata)
 				this.themeListCon = res.readdata;
+				this.pageIndex++;
 			})
 			// console.log('1234');
 			// const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
@@ -167,6 +176,40 @@ export default {
 			//是否显示筛选内容
 			this.showScreen = false;
 		},
+		onLoad(){    //上拉加载
+			this.appFetch({
+			  url:'threads',
+			  method:'get',
+			  data:{
+				include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+				'filter[isDeleted]':'no',
+				'filter[categoryId]':'',
+				'page[number]': this.pageIndex,
+				'page[limit]': 5
+			  }
+			}).then(res=>{
+			  console.log(res.readdata)
+			  this.loading = false;
+			  if(res.readdata.length > 0){
+				this.themeListCon = this.themeListCon.concat(res.readdata);
+				this.pageIndex++;
+				this.finished = false; //数据全部加载完成
+			  }else{
+				this.finished = true
+			  }
+			})
+		  },
+		  onRefresh(){    //下拉刷新
+			setTimeout(()=>{
+			  this.pageIndex = 1;
+			  this.deleteList().then(()=>{
+				this.$toast('刷新成功');
+				this.isLoading = false;
+				this.finished = false;
+			  })
+			  
+			},200)
+		  }
 
 	},
 

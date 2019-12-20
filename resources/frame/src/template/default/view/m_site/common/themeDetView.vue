@@ -25,7 +25,7 @@
                 <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
               </div>
               <div class="themeImgBox">
-                <div class="themeImgList" v-if="item.firstPost.images.length<=1">
+                <!-- <div class="themeImgList" v-if="item.firstPost.images.length<=1">
                   <van-image
                     fit="cover"
                     lazy-load
@@ -34,8 +34,8 @@
                     @click="imageSwiper"
                     class="themeOneImgChild"
                   />
-                </div>
-                <div class="themeImgList moreImg" v-else="">
+                </div> -->
+                <!-- <div class="themeImgList moreImg" v-else="">
                   <van-image
                     width="113px"
                     height="113px"
@@ -46,7 +46,7 @@
                     @click="imageSwiper(index)"
                     class="themeImgChild"
                   />
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="operaBox">

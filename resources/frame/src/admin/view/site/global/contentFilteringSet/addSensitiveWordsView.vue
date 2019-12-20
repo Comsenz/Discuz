@@ -10,10 +10,10 @@
 
       <el-radio-group text-color="#67C23A" fill="#67C23A" v-model="radio2">
         <div>
-          <el-radio  label="1">不导入已经存在的词语</el-radio>
+          <el-radio  label=false>不导入已经存在的词语</el-radio>
         </div>
         <div>
-          <el-radio  label="2">使用新的设置覆盖已经存在的词语</el-radio>
+          <el-radio  label=true>使用新的设置覆盖已经存在的词语</el-radio>
         </div>
       </el-radio-group>
 

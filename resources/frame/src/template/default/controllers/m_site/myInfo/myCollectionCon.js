@@ -41,7 +41,7 @@ export default {
   // },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
-    this.myCollection();
+    // this.myCollection();
     // console.log(typeof this.aaa);
   },
   methods:{
@@ -52,41 +52,34 @@ export default {
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
           'page[number]': this.pageIndex,
-          'page[limit]': 1
+          'page[limit]': 10
         }
       }).then(data=>{
         this.collectionList = data.readdata;
         this.pageIndex++;
+
       })
-        // const params = {
-        //   // 'filter[user]': this.userId
-        // };
-        // params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-        // this.apiStore.find('collection', params).then(data => {
-        //   console.log(data[0].user());
-        //   this.collectionList = data;
-        // });
       },
       onLoad(){    //上拉加载
-        this.appFetch({
-          url:'collection',
-          method:'get',
-          data:{
-            include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': 1
-          }
-        }).then(res=>{
-          console.log(res.readdata)
-          this.loading = false;
-          if(res.readdata.length > 0){
-            this.collectionList = this.collectionList.concat(res.readdata);
-            this.pageIndex++;
-            this.finished = false; //数据全部加载完成
-          }else{
-            this.finished = true
-          }
-        })
+          this.appFetch({
+            url:'collection',
+            method:'get',
+            data:{
+              include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+              'page[number]': this.pageIndex,
+              'page[limit]': 10
+            }
+          }).then(res=>{
+            console.log(res.readdata)
+            this.loading = false;
+            if(res.readdata.length > 0){
+              this.collectionList = this.collectionList.concat(res.readdata);
+              this.pageIndex++;
+              this.finished = false; //数据全部加载完成
+            }else{
+              this.finished = true
+            }
+          })
       },
       onRefresh(){    //下拉刷新
         setTimeout(()=>{

@@ -15,6 +15,8 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
+      pageIndex: 1,//页码
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
      
     }
   },
@@ -25,8 +27,8 @@ export default {
     ContFooter
   },
   created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png",
-    this.myReplyList()
+    this.imgUrl = "../../../../../../../static/images/mytx.png"
+    // this.myReplyList()
   },
   methods:{
     myReplyList(){
@@ -72,7 +74,7 @@ export default {
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
           'page[number]': this.pageIndex,
-          'page[limit]': 1
+          'page[limit]': 20
         }
       }).then(res=>{
           this.loading = false;

@@ -3,7 +3,7 @@
 <template>
     <div>
       <div class="foueHeadBox">
-        <div class="fourHeader">
+        <div class="fourHeader" headFixed="true">
             <span class="icon iconfont icon-back headBack" ></span>
             <h1 class="headTit">{{$route.meta.title}}</h1>
         </div>
