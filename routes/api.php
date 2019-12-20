@@ -86,11 +86,6 @@ $route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\U
 $route->post('/sms/send', 'sms.send', ApiController\Mobile\SendController::class);
 $route->post('/sms/verify', 'sms.verify', ApiController\Mobile\VerifyController::class);
 
-$route->post('/get-message', 'send', ApiController\Mobile\MessageBindingController::class);
-$route->post('/message', 'send', ApiController\Mobile\GetMessageController::class);
-$route->post('/message-login', 'send', ApiController\Mobile\LoginMessageController::class);
-$route->post('/pwd-message', 'send', ApiController\Mobile\PwdMessageController::class);
-
 /*
 |--------------------------------------------------------------------------
 | Categories
