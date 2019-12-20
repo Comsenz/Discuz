@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @property string $last_login_ip
  * @property int $thread_count
  * @property Carbon $joined_at
+ * @property Carbon $expired_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property mixed register_ip

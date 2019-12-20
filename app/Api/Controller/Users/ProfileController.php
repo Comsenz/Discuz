@@ -9,8 +9,8 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
-use App\Models\Order;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -55,15 +55,9 @@ class ProfileController extends AbstractResourceController
             $this->serializer = UserProfileSerializer::class;
         }
 
+        // 付费模式是否过期
         if ($this->settings->get('siteMode') === 'pay') {
-            $user->paid = false;
-            if ($order = $user->orders()->where([
-                ['type', Order::ORDER_TYPE_REGISTER],
-                ['status', Order::ORDER_STATUS_PAID]
-            ])->first()) {
-                $user->paid = true;
-                $user->payTime = $order->updated_at;
-            }
+            $user->paid = $user->expired_at && $user->expired_at < Carbon::now();
         }
 
         $include = $this->extractInclude($request);
