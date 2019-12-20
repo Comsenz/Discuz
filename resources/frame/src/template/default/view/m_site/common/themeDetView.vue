@@ -9,8 +9,9 @@
                 <div class="postPer">
                   <img :src="item.postHead" v-if="item.postHead" class="postHead">
                   <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
-                  <div class="perDet" v-if="item.user">
-                    <div class="perName">{{item.user._data.username}}</div>
+                  <div class="perDet">
+                    <div class="perName" v-if="item.user">{{item.user._data.username}}</div>
+                    <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{item._data.createdAt|timeAgo}}</div>
                   </div>
                 </div>
@@ -71,8 +72,11 @@
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
                 <div class="replyCon" v-for="reply in item.lastThreePosts">
                   <a href="javascript:;" v-if="reply.user">{{reply.user._data.username}}</a>
+                  <a href="javascript:;" v-else="">该用户已被删除</a>
                   <span class="font9" v-if="reply.replyUser">回复</span>
+                  <span class="font9" v-else=""></span>
                   <a href="javascript:;" v-if="reply.replyUser">{{reply.replyUser._data.username}}</a>
+                  <a href="javascript:;" v-else="">该用户已被删除</a>
                   <span>{{reply._data.content}}</span>
                 </div>
                 <a href="javascript;" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
