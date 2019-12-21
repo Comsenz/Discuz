@@ -18,7 +18,7 @@
         <div class="inviteName" v-else="">该用户已被删除</div>
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>
-      <div class="headOpe">
+      <div class="headOpe" v-if="searchIconShow || menuIconShow">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" v-show="searchIconShow"></span>
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
