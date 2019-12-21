@@ -53,7 +53,7 @@ class BatchCreateStopWord
     public function handle()
     {
         $this->assertRegistered($this->actor);
-        $this->assertCan($this->actor, 'stopWord.createStopWord');
+        $this->assertCan($this->actor, 'create');
 
         $overwrite = Arr::get($this->data, 'overwrite', false);
 

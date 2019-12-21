@@ -61,7 +61,7 @@ class CreateStopWord
         $this->events = $events;
 
         $this->assertRegistered($this->actor);
-        $this->assertCan($this->actor, 'stopWord.createStopWord');
+        $this->assertCan($this->actor, 'create');
 
         $stopWord = StopWord::build(
             Arr::get($this->data, 'attributes.ugc'),
