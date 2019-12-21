@@ -14,7 +14,8 @@
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
         <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="" class="inviteHead" v-model="userInfoAvataUrl">
         <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt="ssss" class="inviteHead">
-        <div class="inviteName" v-model="userInfoName">{{userInfoName}}</div>
+        <div class="inviteName" v-if="userInfoName" v-model="userInfoName">{{userInfoName}}</div>
+        <div class="inviteName" v-else="">该用户已被删除</div>
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
       </div>
       <div class="headOpe">

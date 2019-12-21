@@ -116,7 +116,7 @@ class ResourceThreadController extends AbstractResourceController
                 ->where('status', 1)
                 ->get();
 
-            $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user'));
+            $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user')->filter());
         }
 
         // 主题关联模型

@@ -418,8 +418,9 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
-        $allRewardedUser = Order::from('orders', 'a')
-            ->leftJoin('users', 'a.user_id', '=', 'users.id')
+        $allRewardedUser = User::from('orders', 'a')
+            ->join('users', 'a.user_id', '=', 'users.id')
+            ->select('a.thread_id', 'users.*')
             ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)

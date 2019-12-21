@@ -445,6 +445,7 @@ export default {
       });
     var pro2 = new Promise(function(resolve, reject){
       var userId = browserDb.getLItem('tokenId');
+      console.log(browserDb.getLItem('tokenId'));
         appFetch({
           url: 'users',
           method: 'get',
