@@ -302,6 +302,7 @@ payCircle.view
 		@include px2rem(padding-bottom, 28);
 		@include px2rem(padding-right, 30);
 		border-bottom: 1px solid $corE5;
+    word-break: break-all;
 	}
 }
 .infoItem {

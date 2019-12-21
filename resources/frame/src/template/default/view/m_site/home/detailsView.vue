@@ -63,11 +63,11 @@
 
         <div class="gap"></div>
         <div class="commentBox">
-          <div class="likeBox" v-if="themeCon.firstPost.likedUsers">
+          <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
             <span class="icon iconfont icon-praise-after"></span>
             <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a>&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞
           </div>
-          <div class="payPer" v-if="themeCon.rewardedUsers">
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
             <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">

@@ -41,6 +41,7 @@
             <span class="itemTit">{{item.text}}</span>
             <span class="icon iconfont icon-right-arrow jumpJtr"></span>
          </div>
+         <input type="button" hidden value="点击复制代码" />
        </div>
      </div>
     </div>
