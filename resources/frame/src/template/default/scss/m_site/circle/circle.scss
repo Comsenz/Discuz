@@ -687,6 +687,7 @@ openCircleConView.vue
 }
 .themeImgBox {
   @include px2rem(padding-top, 16);
+  @include px2rem(padding-bottom, 20);
 }
 .themeImgList {
 
