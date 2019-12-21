@@ -1,11 +1,9 @@
 <template>
     <div class="home-page-box">
-      <!-- <div :userInfo="headUserInfo"> -->
-        <!-- <comHeader :title="item.user().username()+'的个人主页'"></comHeader> -->
-        <!-- <comHeader :title="headUserName+'的个人主页'"></comHeader> -->
-      <!-- </div> -->
+      <comHeader v-if="username" :title="username+'的个人主页'"></comHeader>
+      <!-- <comHeader v-else="" title="该用户已被删除的个人主页"></comHeader> -->
       <div class="content">
-        <Header :userInfoAvataUrl="userInfoAvataUrlCon" :userInfoName="userInfoNameCon" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <Header :userInfoAvataUrl="userAvatar" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
         <ThemeDet :themeList="OthersThemeList"></ThemeDet>
       </div>
