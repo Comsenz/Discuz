@@ -34,11 +34,21 @@
               />
             </div>
 		    	</div>
-		    	<div class="uploadFileList" v-for="(attachment,index)  in themeCon.firstPost.attachments" :key="index">
+		    	<div class="uploadFileList" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
 		    		<a href="javascript:;" class="fileChi">
-		    			<span class="icon iconfont icon-pdf"></span>
-		    		  <!-- <span v-if="attachment._data.fileType = rar" class="icon iconfont icon-rar"></span>
-		    		  <span class="icon iconfont icon-word"></span> -->
+		    		  <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
+		    		  <span v-else-if="attachment._data.extension === 'word'" class="icon iconfont icon-word"></span>
+              <span v-else-if="attachment._data.extension === 'pdf'" class="icon iconfont icon-pdf"></span>
+              <span v-else-if="attachment._data.extension === 'jpg'" class="icon iconfont icon-jpg"></span>
+              <span v-else-if="attachment._data.extension === 'mp3'" class="icon iconfont icon-mp3"></span>
+              <span v-else-if="attachment._data.extension === 'mp4'" class="icon iconfont icon-mp4"></span>
+              <span v-else-if="attachment._data.extension === 'PNG'" class="icon iconfont icon-PNG"></span>
+              <span v-else-if="attachment._data.extension === 'ppt'" class="icon iconfont icon-ppt"></span>
+              <span v-else-if="attachment._data.extension === 'swf'" class="icon iconfont icon-swf"></span>
+              <span v-else-if="attachment._data.extension === 'TIFF'" class="icon iconfont icon-TIFF"></span>
+              <span v-else-if="attachment._data.extension === 'txt'" class="icon iconfont icon-txt"></span>
+              <span v-else-if="attachment._data.extension === 'xls'" class="icon iconfont icon-xls"></span>
+              <span v-else="" class="icon iconfont icon-doubt"></span>
 		    			<span class="fileName">{{attachment._data.fileName}}</span>
 		    		</a>
 		    	</div>

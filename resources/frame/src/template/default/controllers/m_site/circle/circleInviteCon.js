@@ -7,8 +7,7 @@ export default {
 		return {
 			isfixNav: false,
       siteInfo: false,
-      username:'',
-      siteInfo: false
+      username:''
 		}
 	},
 	//用于数据初始化
@@ -18,7 +17,7 @@ export default {
 
 	},
 	methods: {
-    //请求初始化站点信息数据
+    //请求初始化用户信息数据
     loadSite(){
       var userId = browserDb.getLItem('tokenId');
       this.appFetch({
@@ -36,6 +35,7 @@ export default {
           this.joinedAt = res.readdata._data.joinedAt;
         }
       })
+      //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
         method: 'get',
@@ -60,11 +60,11 @@ export default {
 
 		//跳转到登录页
 		loginJump:function(){
-			this.$router.push({ path:'/login-user'})
+			this.$router.push({ path:'/login-user'});
 		},
 		//跳转到注册页
 		registerJump:function(){
-			this.$router.push({ path:'/sign-up'})
+			this.$router.push({ path:'/sign-up'});
 		},
 		/**
 		 * 给导航添加点击状态

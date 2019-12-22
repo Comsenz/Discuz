@@ -5,27 +5,58 @@
 export default {
 	data: function() {
 		return {
-			// title: "纯净版框架22222",
-			// description: "vue + webpack + vue-router + vuex + sass + prerender + axios ",
-			// num: 0,
-			// voteInfo: {}
 			isfixNav: false,
       loginBtnFix: true,
-			current:0,
-            todos: [
-	            { text: '选项一111' },
-	            { text: '选项二' },
-	            { text: '选项三' },
-	            { text: '选项四' },
-	            { text: '选项五' },
-	            { text: '选项六' },
-	            { text: '选项七' },
-	            { text: '选项八' }
-        	]
+			siteInfo: false,
+      roleId:'',
+      roleResult:''
 		}
 	},
-
+  //用于数据初始化
+  created: function(){
+    // var roleId = this.$route.query.groupId;
+    var roleId = '10';
+    this.roleId = roleId;
+    console.log(roleId);
+    // if(role == '1'){
+    //   this.roleResult="管理员";
+    // } else if(role == '7'){
+    //   this.roleResult="游客";
+    // } else if(role == '10'){
+    //   this.roleResult="普通成员";
+    // } else {
+    //   this.roleResult="其他";
+    // }
+    this.loadSite();
+  },
 	methods: {
+    loadSite(){
+      //请求初始化站点信息数据
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {
+          include: ['users'],
+        }
+      }).then((res) => {
+        // console.log(res);
+        this.siteInfo = res.readdata;
+        // console.log(res.readdata._data.siteIntroduction);
+      });
+
+      //请求初始化角色信息数据
+      this.appFetch({
+        url: 'groups',
+        method: 'get',
+        splice:'/' + this.roleId,
+        data: {
+        }
+      }).then((res) => {
+        // console.log(res);
+        this.roleResult = res.readdata._data.name;
+      });
+    },
+
     logBtnFix() {
       var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if(scrollTop > 10){
