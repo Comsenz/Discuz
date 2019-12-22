@@ -17,6 +17,8 @@ export default {
 			// pageSize:'',//每页的条数
 			pageIndex: 1,//页码
 			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+			query: {},
+			type:''
 		}
 	},
 	components:{
@@ -26,6 +28,8 @@ export default {
     created: async function(){
 		// console.log(this.headOneShow)
 		await this.getOperaType();
+		this.query = this.$route.query
+		console.log(this.query)
 	},
 	methods: {
 	    //选中复选框
@@ -53,6 +57,7 @@ export default {
 				this.choList = response.data;
 				for(let val of this.choList){
 					this.getGroupNameById[val.id] = val.attributes.name;
+					// console.log(this.choList)
 				}
 			} catch(err){
 				console.log(err,'membersManagementCon.js getOperaType');
@@ -70,7 +75,10 @@ export default {
 					url: 'invite',
 					data: this.userParams
 				})
+				console.log(response,'9999999999999999999999')
 				this.inviteList = response.readdata;
+				this.type = response.readdata[0]._data.group_id
+				console.log(this.type)
 				console.log(response,'invite response')
 			} catch(err){
 				console.error(err, '邀请码列表获取失败');
@@ -103,7 +111,8 @@ export default {
 			}
 		},
 
-		copyToClipBoard(inviteItem) {
+		copyToClipBoard(inviteItem) {     //复制
+			console.log(inviteItem,'是你吗')
 			if(inviteItem._data.status === 0){
 				return;
 			}
@@ -114,8 +123,8 @@ export default {
 			textarea.textContent = inviteItem._data.code;
 		  
 			document.body.appendChild(textarea);
-			textarea.select();
-		  
+			textarea.select(textarea,'链接链接');
+		  console.log()
 			try {
 			  	return document.execCommand('copy');
 			} finally {

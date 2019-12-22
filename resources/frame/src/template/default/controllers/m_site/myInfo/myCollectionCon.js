@@ -24,7 +24,6 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      // pageSize:'',//每页的条数
       pageIndex: 1,//页码
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       flag:false

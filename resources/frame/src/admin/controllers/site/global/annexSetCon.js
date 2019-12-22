@@ -48,9 +48,11 @@ export default {
     }
     if(!reg.test(picture)){
       this.$toast('请输入正确的扩展名格式')
+      return
     }
     if(!regs.test(maximumSize)){
       this.$toast('请输入正确的支持最大尺寸格式')
+      return
     }
       this.appFetch({
         url:'settings',
