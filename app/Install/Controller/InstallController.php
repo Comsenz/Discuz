@@ -59,6 +59,7 @@ class InstallController implements RequestHandlerInterface
     {
         $input = $request->getParsedBody();
         $input['ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
         try {
             //创建数据库
@@ -158,6 +159,7 @@ class InstallController implements RequestHandlerInterface
             'DummyDbUsername',
             'DummyDbPassword',
             'DummyDbPrefix',
+            'DummySiteUrl',
         ], [
             $host,
             $port,
@@ -165,6 +167,7 @@ class InstallController implements RequestHandlerInterface
             Arr::get($input, 'mysqlUsername'),
             Arr::get($input, 'mysqlPassword'),
             Arr::get($input, 'tablePrefix', ''),
+            Arr::get($input, 'siteUrl'),
         ], $defaultConfigFile);
 
         file_put_contents($this->app->configPath('config.php'), $stub);
@@ -193,6 +196,7 @@ class InstallController implements RequestHandlerInterface
     private function installSiteName($input)
     {
         $this->app->make(SettingsRepository::class)->set('site_name', Arr::get($input, 'forumTitle'));
+        $this->app->make(SettingsRepository::class)->set('site_url', Arr::get($input, 'siteUrl'));
     }
 
     private function installAdminUser(&$input)
