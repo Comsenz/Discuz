@@ -6,15 +6,15 @@ export default {
 	data: function() {
 		return {
       thread:false,
-      themeId:'',
       sitePrice:''   //加入价格
 		}
 	},
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
+  },
   created(){
-    // themeId: function(){
-    //     return this.$route.params.themeId;
-    // },
-    this.themeId = "140";
     this.myThread();
     this.getInfo();
   },

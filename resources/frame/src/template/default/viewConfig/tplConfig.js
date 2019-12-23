@@ -90,7 +90,7 @@ export default {
           oneHeader: true
         }
       },
-      'pay-circle-con':{
+      'pay-circle-con/:themeId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
