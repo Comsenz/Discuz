@@ -33,6 +33,12 @@ export default {
       currentData:{},
       replyTagShow: false,
       firstpostImageListCon:[],
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      pageLimit: 20,
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
 		}
 	},
   created:function(){
@@ -140,21 +146,33 @@ export default {
     //   // }
     // },
     //初始化请求主题列表数据
-    loadThemeList(filterCondition,filterVal){
+    loadThemeList(filterCondition,filterVal,initStatus = false){
       if(filterCondition == 'isEssence'){
-        this.appFetch({
+      return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
             'filter[isEssence]':filterVal,
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            'page[number]': this.pageIndex,
+            'page[limit]': this.pageLimit
           }
         }).then((res) => {
-          this.themeListCon = res.readdata;
+          if(initStatus){
+            this.themeListCon = []
+          }
+          this.themeListCon =this.themeListCon.concat(res.readdata);
+          this.loading = false;
+          this.finished = res.data.length < this.pageLimit;
+        }).catch((err)=>{
+          if(this.loading && this.pageIndex !== 1){
+            this.pageIndex--;
+          }
+          this.loading = false;
         })
 
       } else if(filterCondition == 'categoryId') {
-        this.appFetch({
+        return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
@@ -162,15 +180,28 @@ export default {
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
-          this.themeListCon = res.readdata;
+          if(initStatus){
+            this.themeListCon = []
+          }
+          this.themeListCon =this.themeListCon.concat(res.readdata);
+          this.loading = false;
+          this.finished = res.data.length < this.pageLimit;
+        }).catch((err)=>{
+          if(this.loading && this.pageIndex !== 1){
+            this.pageIndex--;
+          }
+          this.loading = false;
         })
+        
       } else {
-        this.appFetch({
+        return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
             filterValue:filterVal,
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            'page[number]': this.pageIndex,
+            'page[limit]': this.pageLimit
 
             // page: {
             //   offset: 20,
@@ -178,12 +209,19 @@ export default {
             // },
           }
         }).then((res) => {
-          // console.log(res.readdata, 'res1111');
-          // console.log(res.readdata[1].firstPost.images.length, 'res22222');
-          this.themeListCon = res.readdata;
-          // this.pushImgArray();
-
+          if(initStatus){
+            this.themeListCon = []
+          }
+          this.themeListCon =this.themeListCon.concat(res.readdata);
+          this.loading = false;
+          this.finished = res.data.length < this.pageLimit;
+        }).catch((err)=>{
+          if(this.loading && this.pageIndex !== 1){
+            this.pageIndex--;
+          }
+          this.loading = false;
         })
+      
       }
 
 
@@ -290,12 +328,21 @@ export default {
 	        //是否显示筛选内容
 	        this.showScreen = false;
       },
-      onRefresh(){
-        setTimeout(()=>{
-          this.loadThemeList()
-          this.$toast('刷新成功');
-          this.isLoading = false;
-        },200)
+      onLoad(){    //上拉加载
+        this.loading = true;
+        this.pageIndex++;
+        this.loadThemeList();
+      },
+      onRefresh(){    //下拉刷新
+          this.pageIndex = 1;
+          this.loadThemeList(true).then(()=>{
+            this.$toast('刷新成功');
+            this.finished = false;
+            this.isLoading = false;
+          }).catch((err)=>{
+            this.$toast('刷新失败');
+            this.isLoading = false;
+          })
       }
 	},
 	mounted: function() {

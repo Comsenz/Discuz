@@ -1,6 +1,15 @@
 <template>
   <div class="my-info-money-header">
     <orderDetailsHeader title="订单明细"></orderDetailsHeader>
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="content">
       <Panenl :title="type[item.attributes.type]" :num="item.attributes.amount" v-for="(item,index) in orderList" :key="index">
         <span slot="label">{{status[item.attributes.status]}}</span>
@@ -13,6 +22,8 @@
         <span slot="label">2019-08-10 20:30</span>
       </Panenl> -->
     </main>
+    </van-pull-refresh>    
+  </van-list>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>

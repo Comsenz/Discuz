@@ -25,8 +25,8 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
+      pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      flag:false
     }
   },
   // components:{
@@ -40,56 +40,49 @@ export default {
   // },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
-    // this.myCollection();
+    this.myCollection();
     // console.log(typeof this.aaa);
   },
   methods:{
-    myCollection(){
+    myCollection(initStatus = false){
       return this.appFetch({
         url:'collection',
         method:'get',
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
           'page[number]': this.pageIndex,
-          'page[limit]': 10
+          'page[limit]': this.pageLimit
         }
       }).then(data=>{
-        this.collectionList = data.readdata;
-        this.pageIndex++;
+        if(initStatus){
+          this.collectionList = []
+        }
+        this.collectionList =this.collectionList.concat(data.readdata);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;
 
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
       })
       },
       onLoad(){    //上拉加载
-          this.appFetch({
-            url:'collection',
-            method:'get',
-            data:{
-              include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-              'page[number]': this.pageIndex,
-              'page[limit]': 10
-            }
-          }).then(res=>{
-            console.log(res.readdata)
-            this.loading = false;
-            if(res.readdata.length > 0){
-              this.collectionList = this.collectionList.concat(res.readdata);
-              this.pageIndex++;
-              this.finished = false; //数据全部加载完成
-            }else{
-              this.finished = true
-            }
-          })
+        this.loading = true;
+        this.pageIndex++;
+        this.myCollection();
       },
       onRefresh(){    //下拉刷新
-        setTimeout(()=>{
           this.pageIndex = 1;
-          this.myCollection().then(()=>{
+          this.myCollection(true).then(()=>{
             this.$toast('刷新成功');
-            this.isLoading = false;
             this.finished = false;
+            this.isLoading = false;
+          }).catch((err)=>{
+            this.$toast('刷新失败');
+            this.isLoading = false;
           })
-          
-        },200)
       }
     
   }

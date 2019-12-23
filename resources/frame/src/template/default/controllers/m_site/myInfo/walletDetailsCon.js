@@ -62,15 +62,16 @@ export default {
       this.walletDetails();
   },
   onRefresh(){    //下拉刷新
-    setTimeout(()=>{
       this.pageIndex = 1;
       this.walletDetails(true).then(()=>{
         this.$toast('刷新成功');
         this.isLoading = false;
         this.finished = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
       })
       
-    },200)
   }
   }
 }

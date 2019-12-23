@@ -22,7 +22,6 @@ export default {
       pageIndex: 1, //页码
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       query: {},
-      type: '',
       pageLimit: 15,
     }
   },

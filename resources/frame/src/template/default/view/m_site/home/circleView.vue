@@ -5,6 +5,14 @@
 	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
+	   <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
 	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
@@ -20,6 +28,7 @@
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
       </van-pull-refresh>
+	    </van-list>
 	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
     </div>
 

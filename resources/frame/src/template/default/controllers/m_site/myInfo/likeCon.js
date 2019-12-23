@@ -12,9 +12,12 @@ export default {
   data:function () {
     return {
       likeList:[],
-      loading: false,  //是否处于加载状态
-      finished: false, //是否已加载完所有数据
-      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,
+      pageLimit: 20,
+      loading: false,
+      finished: false,
+      offset: 100,
+      isLoading: false,
     }
   },
   components:{
@@ -24,7 +27,7 @@ export default {
     ContFooter
   },
   methods:{
-    myLikeList(){
+    myLikeList(initStatus =false){
      return this.appFetch({
         url:'notice',
         method:'get',
@@ -32,39 +35,36 @@ export default {
           type:'2'
         }
       }).then(res=>{
+        if(initStatus){
+          this.likeList=[]
+        }
         console.log(res)
-        this.likeList = res.readdata;
+        this.likeList = this.likeList.concat(res.readdata);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
       })
     },
     onLoad(){    //上拉加载
-      this.appFetch({
-        url:'notice',
-        method:'get',
-        data:{
-          type:'2'
-        }
-      }).then(res=>{
-        this.loading = false;
-        if(res.readdata.length > 0){
-          this.likeList = this.likeList.concat(res.readdata);
-          this.pageIndex++;
-          this.finished = false; //数据全部加载完成
-        }else{
-          this.finished = true
-        }
-
-      })
+      this.loading = true;
+      this.pageIndex++;
+      this.myLikeList();
+  
     },
     onRefresh(){
-      setTimeout(()=>{
         this.pageIndex = 1
-        this.myLikeList().then(()=>{
+        this.myLikeList(true).then((res)=>{
           this.$toast('刷新成功');
           this.isLoading = false;
-          this.finished = true;
+          this.finished = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
         })
-        
-      },200)
     }
   },
   created(){
