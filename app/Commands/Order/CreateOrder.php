@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use Discuz\Auth\AssertPermissionTrait;
+use App\Settings\SettingsRepository;
 
 class CreateOrder
 {
@@ -54,7 +55,7 @@ class CreateOrder
      * @return order
      * @throws Exception
      */
-    public function handle(Validator $validator, ConnectionInterface $db)
+    public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
         // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'order.create');
@@ -75,12 +76,19 @@ class CreateOrder
         $payee_id = '';
         //收款/付款金额
         $amount = 0;
+
         switch ($order_type) {
             case Order::ORDER_TYPE_REGISTER:
                 //注册订单
                 $payee_id = Order::REGISTER_PAYEE_ID;
                 //订单金额处理
-                $amount = 0.03; //setting获取;
+                //订单金额处理
+                $site_price      = $setting->get('site_price'); //配置信息
+                $site_price = sprintf("%.2f", (float) $site_price);
+                if ($site_price <= 0) {
+                   throw new OrderException('order_amount_error');
+                }
+                $amount = $site_price;
                 break;
             case Order::ORDER_TYPE_REWARD:
                 //主题打赏订单

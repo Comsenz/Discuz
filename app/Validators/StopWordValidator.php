@@ -17,8 +17,8 @@ class StopWordValidator extends AbstractValidator
     protected function getRules()
     {
         return [
-            'ugc' => 'required|in:{MOD},{BANNED},{REPLACE}',
-            'username' => 'required|in:{MOD},{BANNED},{REPLACE}',
+            'ugc' => 'required|in:{IGNORE},{MOD},{BANNED},{REPLACE}',
+            'username' => 'required|in:{IGNORE},{BANNED}',
             'find' => 'required|string|unique:stop_words,find|between:1,200',
             'replacement' => 'string|between:1,200',
         ];

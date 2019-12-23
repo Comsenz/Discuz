@@ -13,9 +13,9 @@ use Discuz\Contracts\Setting\SettingsRepository;
 class Censor
 {
     /**
-     * 替换
+     * 忽略、不处理
      */
-    const REPLACE = '{REPLACE}';
+    const IGNORE = '{IGNORE}';
 
     /**
      * 审核
@@ -26,6 +26,11 @@ class Censor
      * 禁用
      */
     const BANNED = '{BANNED}';
+
+    /**
+     * 替换
+     */
+    const REPLACE = '{REPLACE}';
 
     /**
      * 开关
@@ -41,12 +46,30 @@ class Censor
      */
     public $isMod = false;
 
-    public $wordBanned = [];
-
-    public $wordMod = [];
-
+    /**
+     * 触发的替换词
+     *
+     * @var array
+     */
     public $wordReplace = [];
 
+    /**
+     * 触发的审核词
+     *
+     * @var array
+     */
+    public $wordMod = [];
+
+    /**
+     * 触发的禁用词
+     *
+     * @var array
+     */
+    public $wordBanned = [];
+
+    /**
+     * @param SettingsRepository $setting
+     */
     public function __construct(SettingsRepository $setting)
     {
         $this->isTurnOn = $setting->get('censor', 'default', true) == 'true';
@@ -54,10 +77,11 @@ class Censor
 
     /**
      * @param $content
-     * @param string $type
+     * @param string $type 'ugc' or 'username'
+     * @param bool $onlyMod
      * @return string
      */
-    public function check($content, $type = 'ugc')
+    public function check($content, $type = 'ugc', $onlyMod = false)
     {
         // 设置关闭时，直接返回原内容
         if (! $this->isTurnOn) {
@@ -65,7 +89,7 @@ class Censor
         }
 
         // 本地敏感词校验
-        $content = $this->localStopWordsCheck($content, $type);
+        $content = $this->localStopWordsCheck($content, $type, $onlyMod);
 
         // 腾讯云敏感词校验
         $content = $this->tencentCloudCheck($content);
@@ -75,12 +99,15 @@ class Censor
 
     /**
      * @param $content
-     * @param $type
+     * @param string $type 'ugc' or 'username'
+     * @param bool $onlyMod
      * @return string
      */
-    public function localStopWordsCheck($content, $type)
+    public function localStopWordsCheck($content, $type, $onlyMod = false)
     {
-        StopWord::orderBy($type)->cursor()->tapEach(function ($word) use (&$content, $type) {
+        StopWord::when($onlyMod, function ($query) use ($type) {
+            return $query->where($type, self::MOD);
+        })->cursor()->tapEach(function ($word) use (&$content, $type) {
             $find = '/' . addcslashes($word->find, '/') . '/i';
 
             if ($word->{$type} == self::REPLACE) {
@@ -88,6 +115,8 @@ class Censor
             } else {
                 if ($word->{$type} == self::MOD) {
                     if (preg_match($find, $content, $matches)) {
+                        array_push($this->wordMod, $find);
+
                         $this->isMod = true;
                     }
                 } elseif ($word->{$type} == self::BANNED) {
@@ -97,7 +126,7 @@ class Censor
                 }
             }
         })->each(function ($word) {
-            // 触发 tapEach
+            // tapEach 尚未真正开始处理，在此处触发 tapEach
         });
 
         return $content;
