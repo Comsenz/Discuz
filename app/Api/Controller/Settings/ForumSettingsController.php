@@ -10,6 +10,8 @@ namespace App\Api\Controller\Settings;
 use App\Api\Serializer\ForumSettingSerializer;
 use App\Models\User;
 use Discuz\Api\Controller\AbstractResourceController;
+//use Discuz\Http\UrlGenerator;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
