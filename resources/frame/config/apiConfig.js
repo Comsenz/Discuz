@@ -10,7 +10,7 @@ module.exports = {
   'forum':'/api/forum', //站点信息
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
-  'weixin':'/api/oauth/weixin',  //微信接口
+  'weixin':'/api/oauth/wechat',  //微信接口
 
   'categories':'/api/categories',   //分类列表
   'categoriesDelete':'/api/categories',    //分类单个删除
