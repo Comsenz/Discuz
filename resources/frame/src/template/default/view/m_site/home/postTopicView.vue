@@ -9,28 +9,34 @@
       <div class="post-topic-form">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox" v-show="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" :before-delete="deleteFile" accept="image/*"  v-model="fileList">
+        <div class="uploadBox" v-if="uploadShow" v-for="(file,fileIndex) in fileList" :key="fileIndex">
+          <!-- <div class="posting-uploader-item" v-for="(file,fileIndex) in fileList" :key="fileIndex">
+            <img :src="file.url" alt="图片" class="imgPreview">
+            <van-icon name="close" @click="deleteEnclosure(file.uuid,'img')" class="delte"/>
+          </div> -->
+          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileList">
           </van-uploader>
-          <div class="enclosure">
-            <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">
-              <span v-if="enc._data.type === 'rar'" class="icon iconfont icon-rar"></span>
-              <span v-else-if="enc._data.type === 'word'" class="icon iconfont icon-word"></span>
-              <span v-else-if="enc._data.type === 'pdf'" class="icon iconfont icon-pdf"></span>
-              <span v-else-if="enc._data.type === 'jpg'" class="icon iconfont icon-jpg"></span>
-              <span v-else-if="enc._data.type === 'mp'" class="icon iconfont icon-mp3"></span>
-              <span v-else-if="enc._data.type === 'mp1'" class="icon iconfont icon-mp4"></span>
-              <span v-else-if="enc._data.type === 'PNG'" class="icon iconfont icon-PNG"></span>
-              <span v-else-if="enc._data.type === 'ppt'" class="icon iconfont icon-ppt"></span>
-              <span v-else-if="enc._data.type === 'swf'" class="icon iconfont icon-swf"></span>
-              <span v-else-if="enc._data.type === 'TIFF'" class="icon iconfont icon-TIFF"></span>
-              <span v-else-if="enc._data.type === 'txt'" class="icon iconfont icon-txt"></span>
-              <span v-else-if="enc._data.type === 'xls'" class="icon iconfont icon-xls"></span>
-              <span v-else="" class="icon iconfont icon-doubt"></span>
-              <span class="encName">{{enc.name}}</span>
-              <!-- <i class="encDelete"><span class="icon iconfont icon-close"></span></i> -->
-              <i class="encDelete">X</i>
-            </div>
+          <!-- <van-uploader :max-count="12" :after-read="handleFile" :delete="deleteEnclosure(file.uuid,'img')" accept="image/*" v-model="fileList">
+          </van-uploader> -->
+        </div>
+        <div class="enclosure" v-if="enclosureShow">
+          <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">
+            <span v-if="enc.type === 'rar'" class="icon iconfont icon-rar"></span>
+            <span v-else-if="enc.type === 'word'" class="icon iconfont icon-word"></span>
+            <span v-else-if="enc.type === 'pdf'" class="icon iconfont icon-pdf"></span>
+            <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
+            <span v-else-if="enc.type === 'mp'" class="icon iconfont icon-mp3"></span>
+            <span v-else-if="enc.type === 'mp1'" class="icon iconfont icon-mp4"></span>
+            <span v-else-if="enc.type === 'PNG'" class="icon iconfont icon-PNG"></span>
+            <span v-else-if="enc.type === 'ppt'" class="icon iconfont icon-ppt"></span>
+            <span v-else-if="enc.type === 'swf'" class="icon iconfont icon-swf"></span>
+            <span v-else-if="enc.type === 'TIFF'" class="icon iconfont icon-TIFF"></span>
+            <span v-else-if="enc.type === 'txt'" class="icon iconfont icon-txt"></span>
+            <span v-else-if="enc.type === 'xls'" class="icon iconfont icon-xls"></span>
+            <span v-else="" class="icon iconfont icon-doubt"></span>
+            <span class="encName">{{enc.name}}</span>
+            <!-- <i class="encDelete"><span class="icon iconfont icon-close"></span></i> -->
+            <i class="encDelete" @click="deleteEnclosure(enc.uuid,"enclosure")">X</i>
           </div>
         </div>
       </div>

@@ -73,11 +73,11 @@
                 <div class="replyCon" v-for="reply in item.lastThreePosts">
                   <a href="javascript:;" v-if="reply.user">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
-                  <span class="font9" v-if="reply.replyUser">回复</span>
-                  <span class="font9" v-else=""></span>
-                  <a href="javascript:;" v-if="reply.replyUser">{{reply.replyUser._data.username}}</a>
-                  <a href="javascript:;" v-else="">该用户已被删除</a>
-                  <span>{{reply._data.content}}</span>
+                  <span class="font9" v-if="reply._data.replyUserId">回复</span>
+                  <!-- <span class="font9" v-else=""></span> -->
+                  <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser">{{reply.replyUser._data.username}}</a>
+                  <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
+                  <span v-html="reply._data.content"></span>
                 </div>
                 <a href="javascript;" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
               </div>
