@@ -40,8 +40,8 @@
 		    		  <span v-else-if="attachment._data.extension === 'word'" class="icon iconfont icon-word"></span>
               <span v-else-if="attachment._data.extension === 'pdf'" class="icon iconfont icon-pdf"></span>
               <span v-else-if="attachment._data.extension === 'jpg'" class="icon iconfont icon-jpg"></span>
-              <span v-else-if="attachment._data.extension === 'mp3'" class="icon iconfont icon-mp3"></span>
-              <span v-else-if="attachment._data.extension === 'mp4'" class="icon iconfont icon-mp4"></span>
+              <span v-else-if="attachment._data.extension === 'mp'" class="icon iconfont icon-mp3"></span>
+              <span v-else-if="attachment._data.extension === 'mp1'" class="icon iconfont icon-mp4"></span>
               <span v-else-if="attachment._data.extension === 'PNG'" class="icon iconfont icon-PNG"></span>
               <span v-else-if="attachment._data.extension === 'ppt'" class="icon iconfont icon-ppt"></span>
               <span v-else-if="attachment._data.extension === 'swf'" class="icon iconfont icon-swf"></span>

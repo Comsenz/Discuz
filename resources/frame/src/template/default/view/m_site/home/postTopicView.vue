@@ -15,17 +15,17 @@
           <div class="enclosure">
             <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">
               <span v-if="enc._data.type === 'rar'" class="icon iconfont icon-rar"></span>
-              <span v-else-if="enc.type === 'word'" class="icon iconfont icon-word"></span>
-              <span v-else-if="enc.type === 'pdf'" class="icon iconfont icon-pdf"></span>
-              <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
-              <span v-else-if="enc.type === 'mp3'" class="icon iconfont icon-mp3"></span>
-              <span v-else-if="enc.type === 'mp4'" class="icon iconfont icon-mp4"></span>
-              <span v-else-if="enc.type === 'PNG'" class="icon iconfont icon-PNG"></span>
-              <span v-else-if="enc.type === 'ppt'" class="icon iconfont icon-ppt"></span>
-              <span v-else-if="enc.type === 'swf'" class="icon iconfont icon-swf"></span>
-              <span v-else-if="enc.type === 'TIFF'" class="icon iconfont icon-TIFF"></span>
-              <span v-else-if="enc.type === 'txt'" class="icon iconfont icon-txt"></span>
-              <span v-else-if="enc.type === 'xls'" class="icon iconfont icon-xls"></span>
+              <span v-else-if="enc._data.type === 'word'" class="icon iconfont icon-word"></span>
+              <span v-else-if="enc._data.type === 'pdf'" class="icon iconfont icon-pdf"></span>
+              <span v-else-if="enc._data.type === 'jpg'" class="icon iconfont icon-jpg"></span>
+              <span v-else-if="enc._data.type === 'mp'" class="icon iconfont icon-mp3"></span>
+              <span v-else-if="enc._data.type === 'mp1'" class="icon iconfont icon-mp4"></span>
+              <span v-else-if="enc._data.type === 'PNG'" class="icon iconfont icon-PNG"></span>
+              <span v-else-if="enc._data.type === 'ppt'" class="icon iconfont icon-ppt"></span>
+              <span v-else-if="enc._data.type === 'swf'" class="icon iconfont icon-swf"></span>
+              <span v-else-if="enc._data.type === 'TIFF'" class="icon iconfont icon-TIFF"></span>
+              <span v-else-if="enc._data.type === 'txt'" class="icon iconfont icon-txt"></span>
+              <span v-else-if="enc._data.type === 'xls'" class="icon iconfont icon-xls"></span>
               <span v-else="" class="icon iconfont icon-doubt"></span>
               <span class="encName">{{enc.name}}</span>
               <!-- <i class="encDelete"><span class="icon iconfont icon-close"></span></i> -->

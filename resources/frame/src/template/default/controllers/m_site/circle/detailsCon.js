@@ -185,17 +185,14 @@ export default {
             include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
           }
         }).then((res) => {
-          console.log('pppp');
           console.log(res);
-
           this.themeShow = true;
           this.themeCon = res.readdata;
-          console.log(res.readdata.firstPost.attachments[0]._data.extension);
-          console.log(res.readdata.firstPost.attachments[1]._data.extension);
-          console.log(res.readdata.firstPost.attachments[2]._data.extension);
-          console.log(res.readdata.firstPost.attachments[3]._data.extension);
-          console.log(res.readdata.firstPost.attachments[4]._data.extension);
-          console.log('8888');
+          // console.log(res.readdata.firstPost.attachments[0]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[1]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[2]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[3]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[4]._data.extension);
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
           var firstpostImage = [];
