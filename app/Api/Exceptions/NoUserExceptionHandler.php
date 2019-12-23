@@ -40,8 +40,8 @@ class NoUserExceptionHandler implements ExceptionHandlerInterface
         // TODO: Implement handle() method.
         $status = 400;
         $error = [
-            'status' => ApiCode::OAUTH_NO_BIND_USER,
-            'code' => 'No bind user',
+            'status' => $status,
+            'code' => 'no_bind_user',
             'user' => $e->getUser()
         ];
 

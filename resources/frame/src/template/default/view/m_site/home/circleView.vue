@@ -30,6 +30,9 @@
       </van-pull-refresh>
 	    </van-list>
 	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
+      <div class="fixedEdit" v-if="canEdit">
+        <span class="icon iconfont icon-publish"></span>
+      </div>
     </div>
 
 </template>

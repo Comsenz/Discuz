@@ -39,6 +39,7 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      canEdit:false
 		}
 	},
   created:function(){
@@ -112,6 +113,7 @@ export default {
           this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
+          this.canEdit = true;
         }  else {
           console.log('公开，未登录');
           // this.loadThemeList();

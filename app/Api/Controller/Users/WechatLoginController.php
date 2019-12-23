@@ -63,14 +63,17 @@ class WechatLoginController extends AbstractResourceController
 
         $state = Arr::get($request->getQueryParams(), 'state');
 
-        $actor = User::find($state);
+        $actor = null;
+        if($state) {
+            $actor = User::find($state);
+        }
 
         $wechatUser = UserWechat::where('openid', $user->id)->first();
 
         $this->wechatSaved($user);
 
         if (!$wechatUser) {
-            if ($actor->id) {
+            if (!is_null($actor)) {
                 $user->user['user_id'] = $actor->id;
             }
             UserWechat::create($user->user);
@@ -87,7 +90,7 @@ class WechatLoginController extends AbstractResourceController
             return $this->bus->dispatch(new GenJwtToken($params));
         }
 
-        if ($actor->id) {
+        if (!is_null($actor)) {
             $wechatUser->user_id = $actor->id;
             $wechatUser->save();
             return $actor;
