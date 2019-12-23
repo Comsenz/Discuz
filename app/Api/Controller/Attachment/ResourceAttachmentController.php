@@ -12,6 +12,8 @@ use App\Exceptions\OrderException;
 use App\Models\Attachment;
 use App\Models\Order;
 use App\Repositories\AttachmentRepository;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Http\FileResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -22,6 +24,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ResourceAttachmentController implements RequestHandlerInterface
 {
+    use AssertPermissionTrait;
+
     /**
      * @var AttachmentRepository
      */
@@ -86,10 +90,13 @@ class ResourceAttachmentController implements RequestHandlerInterface
      * @param $actor
      * @return Attachment|null
      * @throws OrderException
+     * @throws PermissionDeniedException
      */
     protected function getAttachment($attachmentUuid, $actor)
     {
         $attachment = $this->attachments->findOrFail($attachmentUuid, $actor);
+
+        $this->assertCan($actor, 'view.' . $attachment->is_gallery, $attachment);
 
         // 附件是否被绑定到帖子上
         $post = $attachment->post;

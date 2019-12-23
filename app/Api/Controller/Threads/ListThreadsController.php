@@ -117,6 +117,9 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $this->assertCan($actor, 'viewThreadList');
+
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 
