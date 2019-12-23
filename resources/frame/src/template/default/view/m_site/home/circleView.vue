@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" @categoriesChoice="categoriesChoice"></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -19,18 +19,13 @@
       <div v-if="themeListCon">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
-	</van-pull-refresh>
-	    <van-button type="primary" v-show="loginBtnFix" class="loginBtnFix" @click="loginJump(1)">登录 / 注册</van-button>
-	    <!-- <div class="gap"></div> -->
-	    <!-- <div class="" :class="{'fixedFoot': isfixFoot}">
-		    <transition name="fade">
-			    <div class="loginOpera" v-if="footShow">
-			    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
-			    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
-			    </div>
-		    </transition>
-	    </div> -->
+      </van-pull-refresh>
+	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
+      <div class="fixedEdit" v-if="canEdit">
+        <span class="icon iconfont icon-publish"></span>
+      </div>
     </div>
+
 </template>
 
 <script>

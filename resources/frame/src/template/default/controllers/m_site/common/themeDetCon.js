@@ -62,9 +62,9 @@ export default {
   },
 	methods: {
     loadPriviewImgList(){
-      var themeListLen = this.themeList.length;
+      var themeListLen = this.themeListResult.length;
 
-      if(this.themeList =='' || this.themeList == null){
+      if(this.themeListResult =='' || this.themeListResult == null){
         return false;
       } else {
         for (let h = 0; h < themeListLen; h++) {

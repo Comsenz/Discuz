@@ -7,12 +7,9 @@
 
 namespace App\Commands\Notification;
 
-use App\Models\Post;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
-use App\Repositories\PostRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -43,7 +40,7 @@ class DeleteNotification
     public $data;
 
     /**
-     * @param int $postId
+     * @param $notificationId
      * @param User $actor
      * @param array $data
      */
@@ -56,9 +53,8 @@ class DeleteNotification
 
     /**
      * @param Dispatcher $events
-     * @param PostRepository $posts
-     * @return Post
-     * @throws PermissionDeniedException
+     * @param NotificationRepository $notification
+     * @return void
      */
     public function handle(Dispatcher $events, NotificationRepository $notification)
     {

@@ -19,6 +19,46 @@ body,html {
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
+//附件颜色定义
+.icon-pdf {
+  color: #FF5562 !important;
+}
+.icon-word {
+  color: #548DFE !important;;
+}
+.icon-rar {
+  color: #FFA88E !important;;
+}
+.icon-doubt {
+  color: #BBBBBB !important;;
+}
+.icon-jpg {
+  color: #F10012 !important;;
+}
+.icon-mp {
+  color: #FF8D4A !important;;
+}
+.icon-mp1 {
+  color: #9765C7 !important;;
+}
+.icon-PNG {
+  color: #FFB100 !important;;
+}
+.icon-ppt {
+  color: #FF6B55 !important;;
+}
+.icon-swf {
+  color: #D63621 !important;;
+}
+.icon-TIFF {
+  color: #4D6FB9 !important;;
+}
+.icon-txt {
+  color: #2BD4AE !important;;
+}
+.icon-xls {
+  color: #4CCC7D !important;;
+}
 .bgEd { min-height: 100%; background: #EDEDED; }
 * {	margin: 0; padding: 0;}
 a { color: $fontColor;}
@@ -26,6 +66,7 @@ a { color: $fontColor;}
 .borNone { border: none !important;}
 .padB0 { padding-bottom: 0 !important;}
 .overHide { overflow: hidden;}
+.hide { display: none;}
 .headOpe {
 	text-align: right;
 	@include px2rem(padding, 28 30 14 30);
@@ -331,4 +372,3 @@ a { color: $fontColor;}
 .grayBg {
   color: #999;
 }
-

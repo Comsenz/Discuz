@@ -117,6 +117,9 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $this->assertCan($actor, 'viewThreadList');
+
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 
@@ -242,7 +245,12 @@ class ListThreadsController extends AbstractListController
         // 作者用户名
         if ($username = Arr::get($filter, 'username')) {
             $query->leftJoin('users as users1', 'users1.id', '=', 'threads.user_id')
-                ->where('users1.username', 'like', "%{$username}%");
+                ->where(function ($query) use ($username) {
+                    $username = explode(',', $username);
+                    foreach ($username as $name) {
+                        $query->orWhere('users1.username', 'like', "%{$name}%");
+                    }
+                });
         }
 
         // 操作删除者 ID
@@ -338,11 +346,15 @@ class ListThreadsController extends AbstractListController
         }
 
         // TODO: 关键词搜索 优化搜索
-        // 关键词搜索
         if ($queryWord = Arr::get($filter, 'q')) {
             $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
-                ->where('posts.content', 'like', "%{$queryWord}%")
-                ->where('posts.is_first', true);
+                ->where('posts.is_first', true)
+                ->where(function ($query) use ($queryWord) {
+                    $queryWord = explode(',', $queryWord);
+                    foreach ($queryWord as $word) {
+                        $query->orWhere('posts.content', 'like', "%{$word}%");
+                    }
+                });
         }
     }
 
@@ -381,7 +393,7 @@ class ListThreadsController extends AbstractListController
     {
         $firstPostIds = $threads->pluck('firstPost.id');
 
-        $allLikes = PostUser::from('post_user', 'a')
+        $allLikes = User::from('post_user', 'a')
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
             ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('post_id', $firstPostIds)
@@ -409,8 +421,9 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
-        $allRewardedUser = Order::from('orders', 'a')
-            ->leftJoin('users', 'a.user_id', '=', 'users.id')
+        $allRewardedUser = User::from('orders', 'a')
+            ->join('users', 'a.user_id', '=', 'users.id')
+            ->select('a.thread_id', 'users.*')
             ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)

@@ -10,6 +10,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
+/**
+ * @property mixed user
+ */
 class MobileCode extends Model
 {
     const USED_STATE = 1;

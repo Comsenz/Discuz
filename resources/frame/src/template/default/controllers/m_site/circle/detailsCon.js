@@ -1,11 +1,12 @@
 /**
  * wap详情页控制器
  */
-import {Bus} from '../../../store/bus.js';
-import Thread from '../../../../../common/models/Thread';
+import appConfig from "../../../../../../../frame/config/appConfig";
+// import {Bus} from '../../../store/bus.js';
+// import Thread from '../../../../../common/models/Thread';
 // import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
-import Forum from '../../../../../common/models/Forum';
+// import Forum from '../../../../../common/models/Forum';
 export default {
 	data: function() {
 		return {
@@ -28,25 +29,6 @@ export default {
       qrcodeShow:false,
       amountNum:'',
       codeUrl:'',
-      // themeChoList: [
-      // 	{
-      // 		typeWo: '加精',
-      // 		type:'2'
-      // 	},
-      // 	{
-      // 		typeWo: '置顶',
-      // 		type:'3'
-      // 	},
-      //   {
-      //   	typeWo: '删除',
-      //   	type:'4'
-      //   },
-      //   {
-      //   	typeWo: '编辑',
-      //   	type:'5'
-      //   }
-
-      // ],
       showScreen: false,
       request:false,
       isliked:'',
@@ -59,11 +41,9 @@ export default {
       ],
       isPayVal:'',
       isPaid:'',
-      situation1:false,  //付费站点 已登录已付费
-      situation2:false,  //付费站点 已登录但未付费
-      situation3:false,   //付费站点 未登录
-      situation4:false,  //公开站点 已登录
-      situation5:false,   //公开站点 未登录
+      situation1:false,
+      loginBtnFix: false,
+      loginHide:false,
       siteInfo: false,
       siteUsername:'',  //站长
       joinedAt:'',    //加入时间
@@ -74,7 +54,7 @@ export default {
 	},
   created(){
     this.getInfo();
-
+    this.detailsLoad();
     if(!this.themeCon){
       this.themeShow = false;
     } else {
@@ -100,16 +80,16 @@ export default {
       }).then((res) => {
         console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteMode+'请求');
-        this.siteUsername = res.readdata._data.siteAuthor.username;
-        this.sitePrice = res.readdata._data.sitePrice
+        // console.log(res.readdata._data.siteMode+'请求');
+        // this.siteUsername = res.readdata._data.siteAuthor.username;
+        // this.sitePrice = res.readdata._data.sitePrice
         //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.siteMode;
-        if(this.isPayVal != null && this.isPayVal != ''){
-          this.isPayVal = res.readdata._data.siteMode;
-          //判断站点信息是否付费，用户是否登录，用户是否已支付
-          this.detailIf(this.isPayVal,false);
-        }
+        // this.isPayVal = res.readdata._data.siteMode;
+        // if(this.isPayVal != null && this.isPayVal != ''){
+        //   this.isPayVal = res.readdata._data.siteMode;
+        //   //判断站点信息是否付费，用户是否登录，用户是否已支付
+        //   this.detailIf(this.isPayVal,false);
+        // }
       });
     },
     //请求用户信息
@@ -140,61 +120,43 @@ export default {
       })
 
     },
-    detailIf(isPayVal,isPaid){
-      // console.log(isPayVal+'090909');
-      var token = browserDb.getLItem('Authorization',token);
-      // console.log(isPayVal+'3333');
-      // console.log(isPaid+'44444');
-      if(isPayVal == 'pay'){
-      //当站点为付费站点时
-      // console.log('付费');
-        if(token != '' && token !== null){
-          //当用户已登录时
-          // console.log('已登录');
-          //请求用户接口
-          this.getUser();
-          if(isPaid){
-            // console.log('已付费');
-            //当用户已登录且已付费时
-            // console.log('当用户已登录且已付费时');
-            this.situation1 = true;
-            this.detailsLoad();
-          } else {
-            //当用户已登录未付费时
-            // console.log('当前用户已登录未付费');
-             this.situation2 = true;
-          }
-        } else {
-          //付费站点，当前用户未登录时
-          // console.log('付费站点，但用户未未登录');
-          this.situation2 = false;
-          this.situation3 = true;
-          this.detailsLoad();
-        }
-
-      } else {
+    detailIf(isPayVal){
+      if(isPayVal == 'public'){
         //当站点为公开站点时
         console.log('公开');
-          if(token){
-            // console.log('公开，已登录');
-            //当用户已登录时
-            this.detailsLoad();
-            this.situation1 = true;
-          }  else {
-            //当用户未登录时
-            // console.log('公开，未登录');
-            this.detailsLoad();
-            this.situation5 = true;
-          }
+        var token = browserDb.getLItem('Authorization',token);
+        if(token){
+          console.log('公开，已登录');
+          //当用户已登录时
+          this.loadThemeList();
+          this.loginBtnFix = false;
+          this.loginHide = true;
+        }  else {
+          console.log('公开，未登录');
+          // this.loadThemeList();
+          // //当用户未登录时
+          this.loginBtnFix = true;
+          this.loginHide = false;
+        }
+      }
+    },
+    footFix() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      if(this.loginBtnFix == true){
+        this.loginHide = true;
+        // console.log(scrollTop+'1111');
+        if(scrollTop > 80){
+          // console.log('大于');
+          this.loginHide = true;
+          // console.log(this.loginHide);
+        } else {
+          // console.log('小于');
+          this.loginHide = false;
+        }
       }
     },
 
-    //查看更多站点成员
-    moreCilrcleMembers(){
-      this.$router.push({path:'circle-members'});
-    },
-
-    //初始化请求主题列表数据
+    //初始化请求主题详情数据
     detailsLoad(){
         let threads = 'threads/'+this.themeId;
         this.appFetch({
@@ -205,6 +167,8 @@ export default {
             include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
           }
         }).then((res) => {
+          console.log(res);
+          console.log('1234');
           this.themeShow = true;
           this.themeCon = res.readdata;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
@@ -228,7 +192,7 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme(){
-        var Url= location.href;
+        var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.themeId;
         var oInput = document.createElement('input');
         oInput.value = Url;
         document.body.appendChild(oInput);

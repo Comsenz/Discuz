@@ -42,6 +42,7 @@ class PostSerializer extends AbstractSerializer
         $gate = $this->gate->forUser($this->actor);
 
         $attributes = [
+            'replyUserId'       => $model->reply_user_id,
             'content'           => $model->content,
             'contentHtml'       => $model->formatContent(),
             'ip'                => $model->ip,

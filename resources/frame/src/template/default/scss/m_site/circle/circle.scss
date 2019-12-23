@@ -302,6 +302,7 @@ payCircle.view
 		@include px2rem(padding-bottom, 28);
 		@include px2rem(padding-right, 30);
 		border-bottom: 1px solid $corE5;
+    word-break: break-all;
 	}
 }
 .infoItem {
@@ -520,15 +521,7 @@ openCircleConView.vue
 			float: left;
 			@include font-dpr(36);
 		}
-		.icon-pdf {
-			color: #FF5562;
-		}
-		.icon-word {
-			color: #548DFE;
-		}
-		.icon-rar {
-			color: #FFA88E;
-		}
+    
 		.fileName {
 			display: block;
 			box-sizing: border-box;
@@ -687,6 +680,7 @@ openCircleConView.vue
 }
 .themeImgBox {
   @include px2rem(padding-top, 16);
+  @include px2rem(padding-bottom, 20);
 }
 .themeImgList {
 

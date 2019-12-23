@@ -37,13 +37,10 @@ class AttachmentPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->cannot('viewAttachments')) {
-            $query->whereRaw('FALSE');
-
-            return;
-        }
-
-        // 已绑定到帖子上的附件
-        $query->where('post_id', '<>', 0);
+        // if ($actor->cannot('viewAttachments')) {
+        //     $query->whereRaw('FALSE');
+        //
+        //     return;
+        // }
     }
 }

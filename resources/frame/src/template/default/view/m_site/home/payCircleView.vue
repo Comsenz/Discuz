@@ -1,48 +1,63 @@
 <!--移动端付费站点模板-->
 
 <template>
-    <div class="circleCon">
-	    <!-- <Header></Header> -->
-	    <div class="gap"></div>
-	    <div class="circleLoBox">
-	    	<span class="circleIcon">站点图标</span>
-	    	<img src="../../../../../../static/images/logo.png" class="circleLogo">
-	    </div>
-	    <div class="circleInfo">
-	    	<h1 class="cirInfoTit">站点简介</h1>
-	    	<p class="cirInfoWord">Crossday Discuz! Board（简称 Discuz!）是北京康盛新创科技有限责任公司推出的一套通用的社区论坛软件系统。自2001年6月面世以来，Discuz!已拥有15年以上的应用历史和200多万网站用户案例，是全球成熟度最高、覆盖率最大的论坛软件系统之一。目前最新版本Discuz! X3.4正式版于2017年8月2日发布，去除</p>
-	    </div>
-	    <van-cell title="创建时间" value="2018-1-1"/>
-    	<van-cell title="加入方式" value="我是凌凌漆"/>
-    	<van-cell title="站长" value="我是凌凌漆"/>
-    	<div class="infoItem memberItem">
-	    	<div class="overHide">
-	    		<span class="infoItemLeft">站点成员</span>
-	    		<a href="javascript:;" class="infoItemRight lookMore">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
-	    	</div>
-	    	<div class="circleMemberList">
-	    		<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember">
-	    	</div>
-	    </div>
-	    <div class="loginOpera">
-	    	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
-	    	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
-	    </div>
+  <div class="circleCon" v-else-if="situation2">
+    <div v-if="siteInfo">
+      <Header :logoShow="true" :perDetShow="true"></Header>
+      <div class="gap"></div>
+      <div class="circlePL">
+      	<div class="circleLoBox">
+        	<span class="circleIcon">站点图标</span>
+          <img v-if="siteInfo.logo" :src="siteInfo._data.logo" class="circleLogo">
+          <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
+        </div>
+      </div>
+      <div class="circleInfo padB0 lastBorNone">
+      	<h1 class="cirInfoTit">站点简介</h1>
+      	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}{{}}</p>
+      	<div class="infoItem">
+        	<span class="infoItemLeft">创建时间</span>
+        	<span class="infoItemRight">{{siteInfo._data.siteInstall}}</span>
+        </div>
+        <div class="infoItem">
+        	<span class="infoItemLeft">加入方式</span>
+        	<span class="infoItemRight">付费{{siteInfo._data.price}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
+        </div>
+        <div class="infoItem">
+        	<span class="infoItemLeft">站长</span>
+        	<span class="infoItemRight">{{siteUsername}}</span>
+        </div>
+        <div class="infoItem">
+        	<div class="overHide">
+        		<span class="infoItemLeft">站点成员</span>
+        	</div>
+        	<div class="circleMemberList">
+            <img v-for="(item,index) in siteInfo.users" :key="index" :src="item._data.avatarUrl" alt="" class="circleMember" v-if="item._data.avatarUrl == '' && item._data.avatarUrl == null">
+            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else="">
+        	</div>
+        </div>
+      </div>
+      <div class="gap"></div>
+      <div class="loginOpera">
+      	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
+      	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-// import Header from '../../m_site/common//headerView';
+import Header from '../../m_site/common//headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
-    // components:{
-    // 	Header
-    // },
-    // ...mSiteHeader,
+    components:{
+    	Header
+    },
+    ...mSiteHeader,
     ...mSitePayCircleCon
 }
 

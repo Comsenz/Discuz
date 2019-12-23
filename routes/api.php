@@ -15,10 +15,7 @@ $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\Up
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
-
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
-
-$route->get('/test', 'test', ApiController\TestController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -194,7 +191,7 @@ $route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInv
 
 $route->get('/attachments/{uuid}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
 $route->post('/attachments', 'attachments.create', ApiController\Attachment\CreateAttachmentController::class);
-$route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
+$route->delete('/attachments/{uuid}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
 
 /*
  |--------------------------------------------------------------------------

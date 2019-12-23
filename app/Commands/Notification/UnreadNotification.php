@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -8,19 +7,30 @@
 
 namespace App\Commands\Notification;
 
-use App\Exceptions\NoUserException;
 use App\Models\User;
 use Discuz\Api\JsonApiResponse;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\Factory as Validator;
 use Illuminate\Notifications\DatabaseNotification;
 
 class UnreadNotification
 {
+    use AssertPermissionTrait;
+
+    /**
+     * 点赞通知
+     */
     const TYPE_LIKED = 'App\\Notifications\\Liked';
 
+    /**
+     * 回复通知
+     */
     const TYPE_REPLIED = 'App\\Notifications\\Replied';
 
+    /**
+     * 打赏通知
+     */
     const TYPE_REWARDED = 'App\\Notifications\\Rewarded';
 
     private $types = [
@@ -30,43 +40,27 @@ class UnreadNotification
     ];
 
     /**
-     * 执行操作的用户.
+     * The user performing the action.
      *
      * @var User
      */
     public $actor;
 
     /**
-     * 请求的数据.
-     *
-     * @var array
+     * @param User $actor
      */
-    public $data;
-
-    /**
-     * 初始化命令参数
-     * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
-     */
-    public function __construct($actor, $data)
+    public function __construct(User $actor)
     {
         $this->actor = $actor;
-        $this->data  = $data;
     }
 
     /**
-     * 执行命令
-     * @return order
+     * @return JsonApiResponse
+     * @throws NotAuthenticatedException
      */
-    public function handle(Validator $validator)
+    public function handle()
     {
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createCircle');
-
-        $user = User::find($this->actor->id);
-        if (! $user) {
-            throw new NoUserException();
-        }
+        $this->assertRegistered($this->actor);
 
         $notifications = DatabaseNotification::selectRaw('type,count(*) as count')
             ->where('read_at', null)
