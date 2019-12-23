@@ -22,6 +22,26 @@ class BatchCreateStopWord
     use EventsDispatchTrait;
 
     /**
+     * 忽略、不处理
+     */
+    const IGNORE = '{IGNORE}';
+
+    /**
+     * 审核
+     */
+    const MOD = '{MOD}';
+
+    /**
+     * 禁用
+     */
+    const BANNED = '{BANNED}';
+
+    /**
+     * 替换
+     */
+    const REPLACE = '{REPLACE}';
+
+    /**
      * The user performing the action.
      *
      * @var User
@@ -122,25 +142,26 @@ class BatchCreateStopWord
             }
 
             // 区分 ugc 与 username
-            $method = ['{MOD}', '{BANNED}', '{REPLACE}'];
+            $method = [self::IGNORE, self::MOD, self::BANNED, self::REPLACE];
             if (strpos($replacement, '|') === false) {
                 if (in_array($replacement, $method)) {
-                    $ugc = $username = $replacement;
+                    $ugc = $replacement;
                     $replacement = '**';
                 } else {
-                    $ugc = $username = '{REPLACE}';
+                    $ugc = self::REPLACE;
                 }
+
+                $username = self::IGNORE;
             } else {
                 list($ugc, $username) = array_map('trim', explode('|', $replacement));
 
-                if (!in_array($ugc, $method)) {
+                if (! in_array($ugc, $method)) {
                     $replacement = $ugc;
-                    $ugc = '{REPLACE}';
+                    $ugc = self::REPLACE;
                 }
 
-                if (!in_array($username, $method)) {
-                    $replacement = $username;
-                    $username = '{REPLACE}';
+                if ($username !== self::BANNED) {
+                    $username = self::IGNORE;
                 }
 
                 $replacement = strpos($replacement, '|') === false ? $replacement : '**';
