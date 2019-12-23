@@ -1,30 +1,23 @@
 
 import BindPhoneHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import BindPhoneFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-
+import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
     return {
-      phoneNum:"13524405426", //手机号
-      verifyNum:"", //验证码
-      btnContent:"获取验证码", //获取验证码按钮内文字
-      time:1, //发送验证码间隔时间
-      disabled:false, //按钮状态
+      phoneNum:"17633330168",    //手机号
+      verifyNum:"",              //验证码
+      btnContent:"获取验证码",     //获取验证码按钮内文字
+      time:1,                    //发送验证码间隔时间
+      disabled:false,            //按钮状态
       login:'login',
-      bind:'bind',
       insterVal:'',
-      isGray: false
+      isGray: false,
+      siteMode:'',               //站点模式
     }
   },
 
-  components:{
-    BindPhoneHeader,
-    BindPhoneFooter
-  },
-  created:function(){
-    // console.log(this.time);
-  },
   methods:{
     //获取验证码
     sendSmsCode(){
@@ -38,7 +31,6 @@ export default {
        this.$toast("您输入的手机号码不合法，请重新输入");
       }
 
-
       // 获取验证码请求
       this.appFetch({
         url:"sendSms",
@@ -47,7 +39,7 @@ export default {
           "data": {
             "attributes": {
               mobile:this.phoneNum,
-              type:this.bind
+              type:'bind'
             }
           }
         }
@@ -89,9 +81,8 @@ export default {
     //    console.log(response.body);
     //   });
     // },
-     fillContent(){
-      // console.log("fillContent");
-    },
+
+
     //绑定手机号
     bindPhone(){
       this.appFetch({
@@ -102,19 +93,35 @@ export default {
             "attributes": {
               "mobile": this.phoneNum,
               "code": this.verifyNum,
-              "type": this.bind
+              "type": 'bind'
             }
           }
         }
       }).then(res => {
-          // console.log(res);
-          this.$router.push({
-            path:'circle',
-          });
+        console.log(res);
 
-       });
+        if(!res.errors){
+          if(this.siteMode === 'pay'){
+            this.$router.push({path:'pay-the-fee'});
+          }else if(this.siteMode === 'public'){
+            this.$router.push({path:'/'});
+          }
+        }
+
+       }).catch(err=>{
+        console.log(err);
+      })
     }
 
-  }
+  },
 
+  created(){
+    // console.log(this.time);
+    this.siteMode = webDb.getLItem('siteInfo')._data.setsite.site_mode;
+  },
+
+  components:{
+    BindPhoneHeader,
+    BindPhoneFooter
+  }
 }
