@@ -76,7 +76,7 @@ export default {
       logoShow: false
     }
   },
-  created: function() {
+  created(){
     // this.getUserInfo();
     this.loadCategories();
   },
