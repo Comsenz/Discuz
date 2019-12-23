@@ -81,7 +81,7 @@ export default {
             },300)
 		},
 
-		// 根据搜索进行请求
+		// 接口请求
 		async getSearchValUserList(initStatus = false) {
 			try {
 				const response = await this.appFetch({
@@ -89,6 +89,7 @@ export default {
 					url: 'users',
 					data: this.userParams
 				})
+
 				if (initStatus) {
 					this.userList = [];
 				}
@@ -98,8 +99,8 @@ export default {
 					obj.checkStatus = false;
 					return obj
 				});
-				console.log(this.userList, 'userList')
-				this.userLoadMoreStatus = response.length >= this.userParams['page[limit]'];
+
+				this.finished = response.readdata.length < this.userParams['page[limit]'];
 			} catch (err) {
 				console.error(err, 'membersManagementCon.js getSearchValUserList');
 				const currentPageNum = this.userParams['page[number]'];
@@ -120,7 +121,7 @@ export default {
 				})
 				this.choList = response.data;
 			} catch (err) {
-				console.log(err, 'membersManagementCon.js getOperaType');
+				console.error(err, 'membersManagementCon.js getOperaType');
 				// 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
 			} finally {
 
@@ -163,6 +164,7 @@ export default {
 						data
 					}
 				})
+				this.result = [];
 				this.getSearchValUserList(true);
 			} catch (err) {
 				console.error(err, 'handleSubmit error');
@@ -171,40 +173,32 @@ export default {
 
 		},
 
-		handleLoadMoreUser() {
-			this.userParams['page[number]']++;
-			this.userLoadMorePageChange = true;
-			this.getSearchValUserList();
-		},
-		onLoad(){    //上拉加载
-			this.appFetch({
-			  url:'users',
-			  method:'get',
-			  data:{
-				'filter[name]': this.searchName,
-				'page[number]': this.pageIndex,
-				'page[limit]': 1
-			  }
-			}).then(res=>{
-			  console.log(res.readdata)
-			  this.loading = false;
-			  if(res.readdata.length > 0){
-				this.userList = this.userList.concat(res.readdata);
-				this.pageIndex++;
-				this.finished = false; //数据全部加载完成
-			  }else{
-				this.finished = true
-			  }
-			})
+		// handleLoadMoreUser() {
+		// 	this.userParams['page[number]']++;
+		// 	this.userLoadMorePageChange = true;
+		// 	this.getSearchValUserList();
+		// },
+		async onLoad(){    //上拉加载
+			try{
+				console.log(this.finished,'finished')
+				this.userLoadMorePageChange = true;
+				this.loading = true;
+				this.userParams['page[number]']++;
+				await this.getSearchValUserList();
+				
+			} catch(err){
+
+			} finally{
+				this.loading = false;
+			}
 		  },
 		onRefresh(){
-			setTimeout(()=>{
-				this.pageIndex = 1;
-			  	this.handleSearch()
-				this.$toast('刷新成功');
-				this.isLoading = false;
-				this.finished = true;  
-			},200)
+			this.pageIndex = 1;
+			this.result = [];
+			this.getSearchValUserList(true);
+			this.$toast('刷新成功');
+			this.isLoading = false;
+			this.finished = false;  
 		  }
 	},
 

@@ -1,63 +1,62 @@
 /**
  * pc 端首页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   	data: function () {
 		return {
 			searchVal: '',
 			userParams: {
 				'filter[name]': '',
-				'filter[id]': '写获取到的用户id',
+				'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
-				'page[limit]': 2,
+				'page[limit]': 5,
 				'page[number]': 1,
 				'sort': '-createdAt',
 				'include': 'groups'
 			},
 			themeParamd: {
 				'filter[q]': '',
-				'page[limit]': 2,
+				'page[limit]': 5,
 				'page[number]': 1,
 
 			},
+			firstComeIn: true, // 是否首次进入页面
 			searchUserList: [],
 			searchThemeList: [],
-			userLoadMoreStatus: true,
-			themeLoadMoreStatus: true,
+			userLoadMoreStatus: false,
+			themeLoadMoreStatus: false, // 是否还有更多主题
 			userLoadMorePageChange: false,
-			themeLoadMorePageChange: false
+			themeLoadMorePageChange: false, // 主题加载更多事件触发
+			userLoading: false,
+			themeLoading: false,
+			timerSearch: null, // 延迟器
 		}
   	},
 
 	methods: {
 		onSearch(val) {
+			clearTimeout(this.timerSearch);
 			this.searchVal = val;
+			console.log(val,'valvalvalval')
 			if(this.searchVal === ''){
 				this.searchUserList = [];
 				this.searchThemeList = [];
 				return;
 			}
-			console.log(val,'value')
-			this.userParams = {
-				'filter[name]': this.searchVal,
-				'filter[id]': 1,
-				'filter[group_id]': [],
-				'filter[bind]': 1,
-				'page[limit]': 2,
-				'page[number]': 1,
-				'sort': '-createdAt',
-				'include': 'groups'
-			}
-			this.handleSearchUser(true);
+			this.timerSearch = setTimeout(()=>{
 
-			this.themeParamd = {
-				'filter[q]': this.searchVal,
-				'page[limit]': 2,
-				'page[number]': 1,
-			}
-			this.handleSearchTheme(true);
+				this.firstComeIn = false;
+
+				this.userParams['filter[name]'] = this.searchVal
+
+				this.handleSearchUser(true);
+
+				this.themeParamd['filter[q]'] = this.searchVal;
+				this.handleSearchTheme(true);
+
+			},200)
 		},
 		onCancel() {
 
@@ -67,19 +66,22 @@ export default {
 			if(initStatus){
 				this.searchUserList = [];
 			}
+			if(this.userLoading){
+				return;
+			}
+			this.userLoading = true;
 			try{
 				const currentPageNum = this.userParams['page[number]'];
 				await this.appFetch({
 					url:'users',
 					methods:'get',
-					data:{
-						currentPageNum:this.userParams
-					}
+					// data:{
+					// 	currentPageNum:this.userParams
+					// }
+					data: this.userParams
 				}).then(data=>{
 						this.searchUserList = this.searchUserList.concat(data.readdata);
-					    this.userLoadMoreStatus = data.length > this.userParams['page[limit]'];
-					console.log(data.readdata[0]._data.username,'user list data')
-					console.log(data.readdata[0])
+					    this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
 				}).catch(err=>{
 					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
 						this.userParams['page[number]'] = currentPageNum - 1;
@@ -87,6 +89,7 @@ export default {
 				})
 			} finally {
 				this.userLoadMorePageChange = false;
+				this.userLoading = false;
 				// this.userParams['page[limit]'] = 2;
 			}
 		},
@@ -102,24 +105,23 @@ export default {
 			if(initStatus){
 				this.searchThemeList = [];
 			}
+			if(this.themeLoading){
+				return;
+			}
+			this.themeLoading = true;
 			try {
 				const currentPageNum = this.themeParamd['page[number]']; 
 				await this.appFetch({
 					url:'searchThreads',
 					method:'get',
-					data:{
-						currentPageNum :this.themeParamd
-					}
-				
-				// await this.apiStore.find('searchThreads', this.themeParamd).then(data=>{
-				// 	this.searchThemeList = this.searchThemeList.concat(data);
-				// 	this.themeLoadMoreStatus = data.length > this.themeParamd['page[limit]'];
-				// 	console.log(data,'theme list data')
+					// data:{
+					// 	currentPageNum :this.themeParamd
+					// }
+					data: this.themeParamd
 				}).then(data=>{
+					console.log(data,'datadatadata')
 					this.searchThemeList = this.searchThemeList.concat(data.readdata);
-					this.themeLoadMoreStatus = data.readdata.length > this.themeParamd['page[limit]'];
-					console.log(this.searchThemeList,'11111111111111111111111')
-					// console.log(data.readdata.firstPost._data.content)
+					this.themeLoadMoreStatus = data.readdata.length < this.themeParamd['page[limit]'];
 				}).catch(err=>{
 					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
 						this.themeParamd['page[number]'] = currentPageNum - 1;
@@ -127,6 +129,7 @@ export default {
 				})
 			} finally {
 				this.themeLoadMorePageChange = false;
+				this.themeLoading = false;
 				// this.themeParamd['page[limit]'] = 2;
 			}
 		},

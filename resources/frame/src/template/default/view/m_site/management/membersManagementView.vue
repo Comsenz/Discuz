@@ -44,10 +44,10 @@
 			    </van-cell>
 			  </van-cell-group>
 			</van-checkbox-group>
-			<div class="searchMore" v-show="userLoadMoreStatus" @click="handleLoadMoreUser">
+			<!-- <div class="searchMore" v-show="userLoadMoreStatus" @click="handleLoadMoreUser">
 				<i class="icon iconfont icon-search"></i>
 				打开更多用户
-			</div>
+			</div> -->
 			<!-- </van-pull-refresh>
 			</van-list> -->
 	    </div>
@@ -71,6 +71,12 @@
 </template>
 <style type="text/css" scoped>
 	.bgEd { min-height: 100%; background: #EDEDED; }
+	.van-list{
+		padding-bottom: 1.2rem;
+	}
+	.memberCheckList{
+		padding-bottom:0;
+	}
 </style>
 <script>
 // import Header from '../../m_site/common/headerView';

@@ -5,9 +5,7 @@ import Panenl from '../../../view/m_site/common/panel';
 export default {
   data:function () {
     return {
-      walletDetailsList:{
-
-      },
+      walletDetailsList:[],
       type:{
         10:'提现冻结',
         11:'提现成功',
@@ -21,6 +19,7 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
+      pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
     }
   },
@@ -33,45 +32,39 @@ export default {
     this.walletDetails()
   },
   methods:{
-    walletDetails(){
-    return  this.appFetch({
+    walletDetails(initStatus = false){
+    return this.appFetch({
         url:'walletDetails',
         method:'get',
         data:{
           include:'',
           'page[number]': this.pageIndex,
-          'page[limit]': 20
+          'page[limit]': this.pageLimit
         }
       }).then((res)=>{
-        this.walletDetailsList = res.data
-        this.pageIndex++
+        if(initStatus){
+          this.walletDetailsList = [];
+        }
+        this.walletDetailsList = this.walletDetailsList.concat(res.data);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;
+
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
       })
     },
     onLoad(){    //上拉加载
-      this.appFetch({
-        url:'walletDetails',
-        method:'get',
-        data:{
-          include:'',
-          'page[number]': this.pageIndex,
-          'page[limit]': 20
-        }
-      }).then(res=>{
-        console.log(res.readdata)
-        this.loading = false;
-        if(res.data.length > 0){
-          this.walletDetailsList = this.walletDetailsList.concat(res.data);
-          this.pageIndex++;
-          this.finished = false; //数据全部加载完成
-        }else{
-          this.finished = true
-        }
-      })
+      this.loading = true;
+      this.pageIndex++;
+      this.walletDetails();
   },
   onRefresh(){    //下拉刷新
     setTimeout(()=>{
       this.pageIndex = 1;
-      this.walletDetails().then(()=>{
+      this.walletDetails(true).then(()=>{
         this.$toast('刷新成功');
         this.isLoading = false;
         this.finished = false;
