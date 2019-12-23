@@ -42,8 +42,5 @@ class AttachmentPolicy extends AbstractPolicy
 
             return;
         }
-
-        // 已绑定到帖子上的附件
-        $query->where('post_id', '<>', 0);
     }
 }
