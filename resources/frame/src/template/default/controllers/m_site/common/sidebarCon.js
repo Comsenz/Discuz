@@ -3,6 +3,7 @@
  */
 import {Bus} from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
+import appConfig from "../../../../../../../frame/config/appConfig";
 export default {
   //接收站点是否收费的值
   props: {
@@ -75,6 +76,7 @@ export default {
 	  }
   },
   created: function() {
+    // console.log(appConfig.devApiUrl);
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
     // console.log(this.isPayValue);
@@ -99,6 +101,7 @@ export default {
 
   },
   sidebarUrl(url,enentType){
+
     var userId = browserDb.getLItem('tokenId');
     if(enentType == 1){
       browserDb.removeLItem('tokenId');
@@ -107,17 +110,38 @@ export default {
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
       if(this.isPayValue == 'pay'){
-        //如果是付费的站点
-        // console.log('付费');
-        this.sidebarList3[0].name = 'circle-invite';
-        circlePath = '/circle-invite';
-        this.$router.push({ path:circlePath});
+        //复制邀请链接
+        var shareUrl= 'http://10.0.10.210:8883/circle-invite';
+        // var shareUrl= appConfig.devApiUrl+'/circle-invite';
+        var oInput = document.createElement('input');
+        oInput.value = shareUrl;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy");
+        // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display='none';
+        // alert('复制成功');
+        this.$toast.success('邀请链接已复制成功');
       } else {
         //如果是公开的站点
         // console.log('公开');
-        this.sidebarList3[0].name = 'open-circle';
-        circlePath = '/open-circle';
-        this.$router.push({ path:url});
+        //复制邀请链接
+        var shareUrl= 'http://10.0.10.210:8883/open-circle';
+        // var shareUrl= appConfig.devApiUrl+'/open-circle';
+        var oInput = document.createElement('input');
+        oInput.value = shareUrl;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy");
+        // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display='none';
+        // alert('复制成功');
+        this.$toast.success('邀请链接已复制成功');
+        // this.sidebarList3[0].name = 'open-circle';
+        // circlePath = '/open-circle';
+        // this.$router.push({ path:url});
       }
     } else {
       this.$router.push({ path:url});
