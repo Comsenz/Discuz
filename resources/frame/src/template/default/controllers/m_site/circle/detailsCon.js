@@ -62,10 +62,6 @@ export default {
       situation1:false,
       loginBtnFix: false,
       loginHide:false,
-      // situation2:false,  //付费站点 已登录但未付费
-      // situation3:false,   //付费站点 未登录
-      // situation4:false,  //公开站点 已登录
-      // situation5:false,   //公开站点 未登录
       siteInfo: false,
       siteUsername:'',  //站长
       joinedAt:'',    //加入时间
@@ -194,6 +190,11 @@ export default {
 
           this.themeShow = true;
           this.themeCon = res.readdata;
+          console.log(res.readdata.firstPost.attachments[0]._data.extension);
+          console.log(res.readdata.firstPost.attachments[1]._data.extension);
+          console.log(res.readdata.firstPost.attachments[2]._data.extension);
+          console.log(res.readdata.firstPost.attachments[3]._data.extension);
+          console.log(res.readdata.firstPost.attachments[4]._data.extension);
           console.log('8888');
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;

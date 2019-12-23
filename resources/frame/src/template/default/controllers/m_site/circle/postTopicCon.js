@@ -364,7 +364,7 @@ export default {
             }
           },
         }).then((res)=>{
-          // console.log(res.readdata._data.id);
+          // console.log(res);
           // console.log('456');
           var postThemeId = res.readdata._data.id;
           this.$router.push({ path:'details'+'/'+postThemeId});

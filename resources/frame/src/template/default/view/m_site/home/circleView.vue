@@ -2,7 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" :themeNavList="themeNavListCon" @categoriesChoice="categoriesChoice"></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">

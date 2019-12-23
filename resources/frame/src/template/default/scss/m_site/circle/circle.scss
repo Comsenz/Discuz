@@ -302,6 +302,7 @@ payCircle.view
 		@include px2rem(padding-bottom, 28);
 		@include px2rem(padding-right, 30);
 		border-bottom: 1px solid $corE5;
+    word-break: break-all;
 	}
 }
 .infoItem {
@@ -529,6 +530,39 @@ openCircleConView.vue
 		.icon-rar {
 			color: #FFA88E;
 		}
+
+
+    //附件颜色定义
+    .icon-doubt {
+    	color: #FFA88E;
+    }
+    .icon-jpg {
+    	color: #FFA88E;
+    }
+    .icon-mp3 {
+    	color: #FFA88E;
+    }
+    .icon-mp4 {
+    	color: #FFA88E;
+    }
+    .icon-PNG {
+    	color: #FFA88E;
+    }
+    .icon-ppt {
+    	color: #FFA88E;
+    }
+    .icon-swf {
+    	color: #FFA88E;
+    }
+    .icon-TIFF {
+    	color: #FFA88E;
+    }
+    .icon-txt {
+    	color: #FFA88E;
+    }
+    .icon-xls {
+    	color: #FFA88E;
+    }
 		.fileName {
 			display: block;
 			box-sizing: border-box;

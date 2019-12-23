@@ -9,6 +9,7 @@ return [
     'timezone' => 'Asia/Shanghai',
     'key' => 'base64:JtNRiS14Mopb+HNi3ztxi6259im9DTDBJXOzLDbcquw=',
     'cipher' => 'AES-256-CBC',
+    'site_url' => 'DummySiteUrl',
     'database' =>
         [
             'driver' => 'mysql',
