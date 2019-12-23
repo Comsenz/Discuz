@@ -2,10 +2,7 @@
 
 <template>
     <div class="circleCon">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
-	    <div class="padB"></div>
-      <div class="gap"></div>
-	   <van-list
+    <van-list
     v-model="loading"
     :finished="finished"
     :offset="offset"
@@ -14,6 +11,10 @@
     :immediate-check="false"
     >
 	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
+	    <div class="padB"></div>
+      <div class="gap"></div>
+
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
 	    	<div class="screen" @click="bindScreen">
@@ -27,12 +28,12 @@
       <div v-if="themeListCon">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
-      </van-pull-refresh>
-	    </van-list>
 	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
       <div class="fixedEdit" v-if="canEdit">
         <span class="icon iconfont icon-publish"></span>
       </div>
+      </van-pull-refresh>
+	    </van-list>
     </div>
 
 </template>

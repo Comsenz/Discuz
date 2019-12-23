@@ -56,7 +56,6 @@ export default {
     },
     deleteImage(){
       this.imageUrl = '';
-      let userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'deleteAvatar',
         method:'delete',

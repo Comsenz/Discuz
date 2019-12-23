@@ -2,6 +2,7 @@
 
 <template>
     <div class="circleCon">
+	    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <Header></Header>
 	    <div class="gap"></div>
 	    <div class="cirPostCon">
@@ -38,7 +39,7 @@
 	    	</div>
 	    </div>
 
-
+    </van-pull-refresh> 
     </div>
 </template>
 

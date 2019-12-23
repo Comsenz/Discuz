@@ -2,6 +2,7 @@
 
 <template>
     <div class="circleCon" v-if="siteInfo">
+		<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <Header :searchIconShow="false" :perDetShow="true" :logoShow="true" :menuIconShow="false" :navShow="false" :invitePerDet="true"></Header>
       <div class="gap"></div>
       <div class="circleInfo padB0 lastBorNone">
@@ -43,6 +44,7 @@
         <a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
         <p class="payMoney">￥{{siteInfo._data.sitePrice}} / 永久有效</p>
       </div>
+	</van-pull-refresh>  
     </div>
 </template>
 

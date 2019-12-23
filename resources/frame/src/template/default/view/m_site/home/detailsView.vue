@@ -4,6 +4,15 @@
     <!-- 付费站点 已登录且当前用户已付费 -->
     <div class="circleCon">
     	<comHeader title="详情" :menuIconShow="true"></comHeader>
+       <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
@@ -163,7 +172,8 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
-
+    </van-pull-refresh>    
+  </van-list>
     </div>
 </template>
 

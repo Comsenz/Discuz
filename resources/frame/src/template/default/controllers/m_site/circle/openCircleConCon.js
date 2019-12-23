@@ -49,7 +49,12 @@ export default {
       showScreen: false,
       request:false,
       isliked:'',
-      likedClass:''
+      likedClass:'',
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      pageLimit: 20,
 		}
 	},
   created(){
@@ -74,9 +79,9 @@ export default {
   },
 	methods: {
     //初始化请求主题列表数据
-    detailsLoad(){
+    detailsLoad(initStatus =false){
         let threads = 'threads/'+this.themeId;
-        this.appFetch({
+      return  this.appFetch({
           url: threads,
           method: 'get',
           data: {
@@ -84,10 +89,13 @@ export default {
             include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'firstPost','firstPost.likedUsers', 'rewardedUsers', 'category'],
           }
         }).then((res) => {
+          if(initStatus){
+            this.themeCon = []
+          }
           console.log(res, 'res1111');
           // console.log(res.readdata[0].lastThreePosts[0].replyUser._data.username, 'res1111');
           this.themeShow = true;
-          this.themeCon = res.readdata;
+          this.themeCon =this.themeCon.concat(res.readdata);
           // console.log(this.themeCon.firstPost._data.content);
         })
     },
@@ -311,7 +319,18 @@ export default {
         }
 
       })
-    }
+    },
+    onRefresh(){    //下拉刷新
+      this.pageIndex = 1;
+      this.detailsLoad(true).then(()=>{
+        this.$toast('刷新成功');
+        this.finished = false;
+        this.isLoading = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
+  }
 
 
 	},

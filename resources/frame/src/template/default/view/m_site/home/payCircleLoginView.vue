@@ -2,6 +2,7 @@
 
 <template>
   <div class="circleCon" v-else-if="situation2">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <div v-if="siteInfo">
       <Header :logoShow="true" :perDetShow="true"></Header>
       <div class="gap"></div>
@@ -44,6 +45,7 @@
       	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
       </div>
     </div>
+ </van-pull-refresh> 
   </div>
 
 </template>
