@@ -30,7 +30,7 @@
 		    		</div>
 		    	</div>
 		    	<div class="postContent">
-		    		<a href="javascript:;" v-if="themeCon.firstPost._data.content" v-html="themeCon.firstPost._data.content">22222</a>
+		    		<a href="javascript:;" v-if="themeCon.firstPost._data.content" v-html="themeCon.firstPost._data.content"></a>
 		    	</div>
 		    	<div class="postImgBox">
             <div class="postImgList">
@@ -64,14 +64,14 @@
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.viewCount}}&nbsp;阅读</span>
 		    		<!-- <a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a> -->
-            <div class="screen" @click="bindScreen" v-if="">
+            <div class="screen" @click="bindScreen" v-if="themeCon._data.canEssence || themeCon._data.canSticky || themeCon._data.canDelete || themeCon._data.canEdit">
             	<span>管理</span>
             	<span class="icon iconfont icon-down-menu jtGrayB"></span>
             	<div class="themeList" v-if="showScreen">
             		<a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,2,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canEssence">加精</a>
                 <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,3,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canSticky">置顶</a>
                 <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,4,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canDelete">删除</a>
-                <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,5,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="">编辑</a>
+                <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,5,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon.firstPost._data.canEdit">编辑</a>
             	</div>
             </div>
 		    		<a href="javascript:;" class="postDetR" @click="themeOpera(themeCon.firstPost._data.id,1,themeCon.category._data.id,themeCon.firstPost._data.content)">收藏</a>

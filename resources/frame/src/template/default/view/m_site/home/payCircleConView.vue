@@ -4,27 +4,46 @@
     <div class="circleCon">
 	    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <Header></Header>
+	    <!-- <Header :logoShow="true" :perDetShow="true" :userInfoName="false" :invitationShow="false" @categoriesChoice=""></Header> -->
+      <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false"></Header>
 	    <div class="gap"></div>
 	    <div class="cirPostCon">
+
+        <!-- <main class="reward-main">
+          <div class="reward-con cell-crossing" v-model="thread">
+            <ContHeader
+              :imgUrl="thread"
+              :stateTitle=""
+              :time="$moment(thread.firstPost._data.createdAt).startOf('hour').fromNow()"
+              :userName="thread.firstPost._data.user_name">
+            </ContHeader>
+              <div class="reference">
+              <div class="reference-cont">
+                <span>{{thread.firstPost._data.content}}</span>
+              </div>
+            </div>
+          </div>
+        </main> -->
 		    <div class="postTop">
 	    		<div class="postPer">
-	    			<img src="../../../../../../static/images/noavatar.gif" class="postHead">
+            <img :src="thread.user._data.avatarUrl" alt="" class="postHead" v-if="thread.user && themeCon.user._data.avatarUrl == '' && thread.user._data.avatarUrl == null">
+            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
 	    			<div class="perDet">
-	    				<div class="perName">ElizabethElizabethElizabethElizabethElizabethElizabeth</div>
-	    				<div class="postTime">1小时前</div>
+	    				<div class="perName" v-if="thread.user">{{thread.user._data.username}}</div>
+	    			  <div class="perName" v-else="">该用户已被删除</div>
+	    				<div class="postTime">{{thread._data.createdAt}}</div>
 	    			</div>
 	    		</div>
-
 	    	</div>
 	    	<div class="postContent">
-	    		<a href="javascript:;">我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。</a>
+	    		<a href="javascript:;" v-if="thread.firstPost._data.content" v-html="thread.firstPost._data.content"></a>
 	    	</div>
     	</div>
     	<div class="gap"></div>
 	    <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">立即注册并加入</a>
-	    	<p class="payMoney">￥20.00 / 永久有效</p>
+	    	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
 	    </div>
 	    <div class="gap"></div>
 	    <div class="powerListBox">

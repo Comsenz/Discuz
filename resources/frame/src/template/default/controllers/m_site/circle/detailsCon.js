@@ -28,25 +28,6 @@ export default {
       qrcodeShow:false,
       amountNum:'',
       codeUrl:'',
-      // themeChoList: [
-      // 	{
-      // 		typeWo: '加精',
-      // 		type:'2'
-      // 	},
-      // 	{
-      // 		typeWo: '置顶',
-      // 		type:'3'
-      // 	},
-      //   {
-      //   	typeWo: '删除',
-      //   	type:'4'
-      //   },
-      //   {
-      //   	typeWo: '编辑',
-      //   	type:'5'
-      //   }
-
-      // ],
       showScreen: false,
       request:false,
       isliked:'',
@@ -197,6 +178,7 @@ export default {
             this.themeCon=[]
           }
           console.log(res);
+          console.log('1234');
           this.themeShow = true;
           this.themeCon = res.readdata
           this.themeCon =this.themeCon.concat(res.readdata);
@@ -207,6 +189,7 @@ export default {
           // console.log(res.readdata.firstPost.attachments[2]._data.extension);
           // console.log(res.readdata.firstPost.attachments[3]._data.extension);
           // console.log(res.readdata.firstPost.attachments[4]._data.extension);
+          this.themeCon = res.readdata;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
           var firstpostImage = [];

@@ -45,6 +45,7 @@ export default {
       headerImage: null,
       picValue: null,
       upImgUrl:'',
+      enclosureShow: false
     }
   },
 
@@ -100,13 +101,39 @@ export default {
       this.uploadShow = true;
     },
     //删除图片
-    deleteFile(){
-      // alert('刪除');
+    // deleteFile(uuid){
+    //   // alert('刪除');
+    //   if(this.fileList.length<=1){
+    //     this.uploadShow = false;
+    //   }
+    //    //调接口
+    // },
+    //删除附件
+    deleteEnclosure(uuid,type){
       if(this.fileList.length<=1){
         this.uploadShow = false;
       }
-       //调接口
+      this.appFetch({
+        url:'attachment',
+        method:'delete',
+        splice:'/'+uuid
+
+      }).then(data=>{
+        if(type == "img"){
+          var newArr = this.fileList.filter(item => item.uuid !== uuid);
+          this.fileList = newArr;
+        } else {
+          var newArr = this.enclosureList.filter(item => item.uuid !== uuid);
+          this.enclosureList = newArr;
+        }
+
+        this.$message('删除成功');
+      }).catch(error=>{
+        this.$message('失败');
+      })
     },
+
+
     //上传附件
     handleEnclosure(e){
       let file = e.target.files[0];
@@ -293,14 +320,18 @@ export default {
              data:file,
 
            }).then(data=>{
-             // console.log(data);
+             console.log(data);
+             // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName});
+              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
+              console.log(this.fileList);
+              console.log('333');
              }
               if(enclosure){
-                console.log(data.readdata._data);
-                this.enclosureList.push({type:'',name:data.readdata._data.fileName});
+                this.enclosureShow = true
+                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
+
               }
              this.$message('提交成功');
            }).catch(error=>{
