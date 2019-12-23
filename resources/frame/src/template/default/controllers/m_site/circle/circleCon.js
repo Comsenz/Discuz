@@ -33,6 +33,7 @@ export default {
       currentData:{},
       replyTagShow: false,
       firstpostImageListCon:[],
+      canEdit:false
 		}
 	},
   created:function(){
@@ -106,6 +107,7 @@ export default {
           this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
+          this.canEdit = true;
         }  else {
           console.log('公开，未登录');
           // this.loadThemeList();
