@@ -432,16 +432,22 @@ export default {
   if (isWeixin == true) {
     //微信登录时
     console.log(to);
-    console.log(next());
+    console.log('微信登录');
 
     if (!browserDb.getLItem('Authorization') && !browserDb.getLItem('tokenId')){
+      if(to.name === 'wx-login-bd') {
+        next();
+        return
+      }
       next({path:'/wx-login-bd'});
       console.log('未登录');
-      next();
     } else {
-      next('/');
+      if(to.path === '/'){
+        next();
+        return
+      }
+      next({path:'/'});
       console.log('已经登录');
-      next();
     }
 
   } else if(isPhone == true) {
@@ -676,16 +682,6 @@ export default {
         }
       };
     })
-    next();
-
-
-
-
-
-
-
-
-
 
     console.log('pc登录');
   }
