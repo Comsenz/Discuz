@@ -161,12 +161,12 @@ const appFetch = function(params, options) {
     'retrieve-pwd'
   ];
 
-// && !requireAuth.includes(this.$router.history.current.name)
+// && !requireAuth.includes(window.location.pathname)
 
-  // console.log(this.$router.history.current.name);
+  // console.log(window.location.pathname);
 
   let defaultHeaders;
-  if(authVal != '' && authVal != null){
+  if(authVal != '' && authVal != null && !requireAuth.includes(window.location.pathname)){
     defaultHeaders = {
       'Content-Type': 'application/json',
       'Authorization':'Bearer ' + authVal
@@ -232,11 +232,10 @@ const appFetch = function(params, options) {
       return data.data;
     }
     else {
-      console.log(data)
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       })
-    
+
       return data.data;
     }
   });
