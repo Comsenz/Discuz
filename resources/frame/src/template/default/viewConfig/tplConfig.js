@@ -431,42 +431,18 @@ export default {
 
   if (isWeixin == true) {
     //微信登录时
-    console.log(to.query);
-      if(to.query.code){
-        appFetch({
-          url: "wechat",
-          method: "get",
-          data: {
-            code:to.query.code,
-            state:to.query.state
-          }
-        }).then(res => {
-          console.log(res);
-        });
-      } else {
-        appFetch({
-          url: "wechat",
-          method: "get",
-          data: {
-          }
-        }).then(res => {
-          console.log(res);
+    console.log(to);
+    console.log(next());
 
-          // window.location.href = res.data.attributes.location;
-
-          let url = 'http://10.0.10.166:8883/pay-circle';
-
-          console.log(encodeURIComponent(url));
-
-          window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba449971e7a27c1c&redirect_uri=${encodeURIComponent(url)}&response_type=code&scope=snsapi_userinfo&state=0`
-
-          // window.location.href =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba449971e7a27c1c&redirect_uri=http%3A%2F%2F10.0.10.166%3A8883%2Flogin-user&response_type=code&scope=snsapi_userinfo&state=0"
-
-          // https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba449971e7a27c1c&redirect_uri=http%3A%2F%2F10.0.10.166%3A8883%2Flogin-user&response_type=code&scope=snsapi_userinfo&state=0&connect_redirect=1&uin=MjU1NTA0NzkzMQ%3D%3D&key=142d66df0172e41e41694c52d559255423e130f9bc4682e38ef3d19bd1e34047752fc4c3b5df6f5b6f356d2603326676&pass_ticket=jdCjTq31YaFNfhesTJYS3yUu6qJ8v4+C6xGlDRqvYHt+3yvEAOawF9uFXIqlTRHbLJ6paHp+h+Ik8xfS36B+7w==
-
-        });
-      }
-
+    if (!browserDb.getLItem('Authorization') && !browserDb.getLItem('tokenId')){
+      next({path:'/wx-login-bd'});
+      console.log('未登录');
+      next();
+    } else {
+      next('/');
+      console.log('已经登录');
+      next();
+    }
 
   } else if(isPhone == true) {
     //手机浏览器登录时
