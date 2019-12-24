@@ -49,7 +49,7 @@
                     @click="imageSwiper"
                     class="themeImgChild"
                   />
-                </div> -->
+                </div>
               </div>
             </div>
             <div class="operaBox">
