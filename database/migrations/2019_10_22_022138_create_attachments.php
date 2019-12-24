@@ -18,6 +18,7 @@ class CreateAttachments extends Migration
             $table->unsignedInteger('user_id')->comment('用户 ID');
             $table->unsignedInteger('post_id')->default(0)->comment('帖子 ID');
             $table->tinyInteger('is_gallery')->unsigned()->default(0)->comment('是否是帖子图片');
+            $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('是否合法');
             $table->string('attachment')->default('')->comment('文件系统生成的名称');
             $table->string('file_path')->default('')->comment('文件路径');
             $table->string('file_name')->default('')->comment('文件原名称');

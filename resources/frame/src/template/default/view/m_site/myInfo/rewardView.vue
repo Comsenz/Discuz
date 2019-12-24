@@ -12,7 +12,8 @@
       <div class="reward-con cell-crossing" v-for='(item,index) in rewardList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"
-          :stateTitle="item._data.thread_title"
+          :stateTitle="stateTitle"
+          :amount="item._data.amount"
           :time="$moment(item._data.created_at).startOf('hour').fromNow()"
           :userName="item._data.user_name">
         </ContHeader>

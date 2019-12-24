@@ -30,7 +30,9 @@ export default {
         url:"groups",
         method:'get',
         splice: '/' + this.$route.query.id,
-        data:{}
+        data:{
+          include:['permission']
+        }
       }).then(res=>{
         console.log(res);
         let data = res.readdata.permission;

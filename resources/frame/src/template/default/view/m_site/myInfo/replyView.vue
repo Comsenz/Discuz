@@ -14,19 +14,26 @@
       <div class="reply-my-cont cell-crossing" v-for='(item,index) in replyList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"
-          :stateTitle="item._data.thread_title"
+          :stateTitle="stateTitle"
           :time="$moment(item._data.created_at).startOf('hour').fromNow()"
           :userName="item._data.user_name">
           <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
-        <div class="reference">
+        <div class="likePostContent">
+          <a href="javascript:;" v-html="item._data.post_content"></a>
+          <!-- <a href="javascript:;">
+            <blockquote class="quoteCon">asdasdsadasdasdasdasdaasdadasd</blockquote>
+            我们的观点不一样
+          </a> -->
+        </div>
+        <!-- <div class="reference">
           <div class="reference-cont">
             <span>{{item._data.post_content}}</span>
           </div>
         </div>
         <div class="quote-reply">
           <span>我们的观点不一样</span>
-        </div>
+        </div> -->
       </div>
     </main>
     </van-pull-refresh>    
@@ -37,6 +44,7 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../scss/m_site/mobileIndex.scss';
 import replyCon from '../../../controllers/m_site/myInfo/replyCon';
 export default {
   name: "reply",

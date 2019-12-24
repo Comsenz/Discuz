@@ -11,6 +11,7 @@ module.exports = {
   'sendSms':'/api/sms/send',  //发送验证码
   'smsVerify':'/api/sms/verify',  //短信验证
   'wechat':'/api/oauth/wechat',  //微信接口
+  'authority':'/api/groups',      //权限列表
 
   'categories':'/api/categories',   //分类列表
   'categoriesDelete':'/api/categories',    //分类单个删除

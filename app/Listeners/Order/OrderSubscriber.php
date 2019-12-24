@@ -8,6 +8,7 @@
 namespace App\Listeners\Order;
 
 use App\Events\Order\Updated;
+use App\Models\Group;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -33,10 +34,14 @@ class OrderSubscriber
     {
         $order = $event->order;
 
-        // 付费加入站点的订单，支付成功后修改用户过期时间
+        // 付费加入站点的订单，支付成功后修改用户信息
         if ($order->type == Order::ORDER_TYPE_REGISTER && $order->status == Order::ORDER_STATUS_PAID) {
             $day = app()->make(SettingsRepository::class)->get('site_expire');
 
+            // 将用户移到普通会员
+            $order->user->groups()->sync([Group::MEMBER_ID]);
+
+            // 修改用户过期时间
             $order->user->expired_at = Carbon::now()->addDays($day);
             $order->user->save();
         }

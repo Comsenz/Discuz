@@ -19,6 +19,7 @@ export default {
       wxLoginShow: true,
       phoneStatus:'',
       isOne: false,
+      siteMode:''
     }
   },
 
@@ -103,15 +104,66 @@ export default {
           browserDb.setLItem('Authorization', token);
           browserDb.setLItem('tokenId', tokenId);
 
-          if (this.siteMode === 'pay'){
+          this.getUsers(tokenId).then(res=>{
+            if (res.readdata._data.paid){
+              this.$router.push({path:'/'})
+            } else {
+              if (this.siteMode === 'pay'){
+                this.$router.push({path:'pay-circle-login'});
+              } else if (this.siteMode === 'public'){
+                this.$router.push({path:'/'});
+              } else {
+                console.log("缺少参数，请刷新页面");
+              }
+            }
+
+          })
+
+          /*if (this.siteMode === 'pay'){
             this.$router.push({path:'pay-circle-login'});
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'});
           } else {
             console.log("缺少参数，请刷新页面");
-          }
+          }*/
         }
 
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+
+
+    /*
+    * 接口请求
+    * */
+    getForum(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+        this.siteMode = res.readdata._data.setsite.site_mode;
+        browserDb.setLItem('siteInfo',res.readdata);
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getUsers(id){
+      return this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + id,
+        headers:{'Authorization': 'Bearer ' + browserDb.getLItem('Authorization')},
+        data:{
+          include:['groups']
+        }
+      }).then(res=>{
+        console.log(res);
+        return res;
+        //paid
       }).catch(err=>{
         console.log(err);
       })
@@ -126,6 +178,8 @@ export default {
   created(){
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
+
+   this.getForum();
 
     if (isWeixin === true) {
       console.log('微信登录');
@@ -142,6 +196,7 @@ export default {
 
       // this.getWatchHref();
     }
+
   }
 
 }

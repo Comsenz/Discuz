@@ -92,7 +92,8 @@ export default {
       if(type == 'qcloud_close') {
         console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
-      } else if( type == 'qcloud_cms_image'){
+      } 
+      else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
         this.changeSettings('qcloud_cms_text',status);

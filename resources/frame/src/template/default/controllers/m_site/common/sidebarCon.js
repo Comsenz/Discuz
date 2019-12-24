@@ -21,7 +21,7 @@ export default {
 	        {
             text:'我的资料',
 	          name: '我的资料',
-	          path: 'login', // 跳转路径
+	          path: '/modify-data', // 跳转路径
 	          enentType: ''
 	        },
 	        {

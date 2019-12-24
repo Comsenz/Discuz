@@ -46,6 +46,11 @@ export default {
           } else {
             this.$toast.success('注册成功');
             let token = res.data.attributes.access_token;
+            let tokenId = res.data.id;
+
+            browserDb.setLItem('Authorization', token);
+            browserDb.setLItem('tokenId', tokenId);
+            console.log(this.phoneStatus);
 
             if (this.phoneStatus){
               this.$router.push({path:'bind-phone'});

@@ -45,7 +45,8 @@ export default {
       //   'page[number]': 1,
       // }
       
-      deleteList:[]
+      deleteList:[],
+      tableAdd:false,
 
     }
   },
@@ -134,15 +135,21 @@ export default {
     
     async loginStatus(){  //批量提交接口
 
+      let result = this.tableData.filter((v)=>{
+        return v._data.addInputFlag;
+      })
+
+      result = result.concat(this.multipleSelection);
+
       try{
-        if(this.multipleSelection.length === 0){
+        if(result.length === 0){
           return;
         }
 
         let words = [];
 
-        for(let i = 0,len = this.multipleSelection.length; i < len; i++){
-          const _data = this.multipleSelection[i]._data;
+        for(let i = 0,len = result.length; i < len; i++){
+          const _data = result[i]._data;
           const { ugc, username, find, inputVal} = _data;
           if(inputVal === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
             continue;
@@ -189,9 +196,11 @@ export default {
             find:"",
             username:"",
             ugc:"",
+            inputVal: "",
             addInputFlag:true,
           }
         })
+        this.tableAdd = true
     },
     deleteWords(){
       this.deleteList = []
