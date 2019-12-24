@@ -131,7 +131,7 @@ export default {
         console.log(err);
       })
     },
-    getWatchHref(code,state){
+    /*getWatchHref(code,state){
       this.appFetch({
         url:'wechat',
         method:'get',
@@ -159,7 +159,7 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
-    },
+    },*/
     getUsers(id){
       return this.appFetch({
         url:'users',
@@ -180,6 +180,8 @@ export default {
 
   },
   created() {
+    // localStorage.clear();
+
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
