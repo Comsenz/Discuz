@@ -308,3 +308,9 @@ CREATE TABLE `post_mod` (
   PRIMARY KEY (`post_id`),
   CONSTRAINT `post_mod_post_id_foreign` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 2019-12-24 16:03:07 腾讯云敏感图片-附件判断
+alter table attachments add column is_approved tinyint(1) not null default '0' comment '是否合法' after is_gallery;
+
+-- 2019-12-25 01:07:15 上一次头像上传时间 防刷敏感图
+alter table `users` add column avatar_at datetime null comment '头像修改时间' after avatar;

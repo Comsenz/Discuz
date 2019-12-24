@@ -12,6 +12,7 @@ export default {
   data:function () {
     return {
       likeList:[],
+      stateTitle:'点赞了我',
       pageIndex: 1,
       pageLimit: 20,
       loading: false,
@@ -36,7 +37,9 @@ export default {
         url:'notice',
         method:'get',
         data:{
-          type:'2'
+          'page[number]': this.pageIndex,
+          'page[limit]': this.pageLimit,
+          'filter[type]': 2
         }
       }).then(res=>{
         if(initStatus){

@@ -150,8 +150,6 @@ class CreatePost
 
         $post->raise(new Saved($post, $this->actor, $this->data));
 
-        $post->raise(new Created($post, $this->actor, $this->data));
-
         // TODO: 通知相关用户，在给定的整个持续时间内，每位用户只能收到一个通知
         // $this->notifications->onePerUser(function () use ($post, $actor) {
         $this->dispatchEventsFor($post, $this->actor);

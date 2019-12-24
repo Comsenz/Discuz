@@ -372,3 +372,24 @@ a { color: $fontColor;}
 .grayBg {
   color: #999;
 }
+//
+.likePostContent {
+	@include font-dpr(30);
+	@include px2rem(line-height, 40);
+	@include px2rem(margin-bottom, 20);
+	@include px2rem(padding, 0 30 28 30);
+	a {
+		display: block;
+		@include px2rem(line-height, 40);
+		color: $font000;
+	}
+	.quoteCon {
+		display: block;
+			  @include px2rem(padding, 16);
+		@include px2rem(margin-bottom, 16);
+			  background: $corF7;
+			  @include font-dpr(26);
+			  color: $cor888;
+		  }
+}
+
