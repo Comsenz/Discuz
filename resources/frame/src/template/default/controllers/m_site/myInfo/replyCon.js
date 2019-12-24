@@ -38,9 +38,9 @@ export default {
         url:'notice',
         method:'get',
         data:{
-          type:'1',
           'page[number]': this.pageIndex,
-          'page[limit]': this.pageLimit
+          'page[limit]': this.pageLimit,
+          'filter[type]': 1
         }
       }).then(res=>{
         if(initStatus){

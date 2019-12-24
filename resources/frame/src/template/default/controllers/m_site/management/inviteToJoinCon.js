@@ -93,10 +93,10 @@ export default {
         })
       } catch (err) {
         console.error(err, '邀请码列表获取失败');
-		this.$toast("邀请列表获取失败");
-		if(this.loading && this.pageIndex !== 1){
-			this.pageIndex--;
-		}
+		    this.$toast("邀请列表获取失败");
+		    if(this.loading && this.pageIndex !== 1){
+			  this.pageIndex--;
+		  }
       }
     },
 
@@ -136,7 +136,7 @@ export default {
       textarea.style.position = 'absolute';
       textarea.style.opacity = '0';
       textarea.style.height = '0';
-	  textarea.textContent = `${window.location.href}?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
+	    textarea.textContent = `${window.location.href}?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
 	  
 
       document.body.appendChild(textarea);
