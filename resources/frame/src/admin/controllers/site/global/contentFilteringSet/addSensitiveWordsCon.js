@@ -46,7 +46,7 @@ export default {
       }],
 
       checked:false,
-      radio2:"1",
+      radio2:false,
       // loginStatus:'default',  //default  batchSet
       deleteStatus:true,
       textarea:''
@@ -86,7 +86,8 @@ export default {
            "data": 
                 {
                   "type": "stop-words",
-                  "words": wordsArr
+                  "words": wordsArr,
+                  "overwrite":this.radio2 === 'true'?true:false
               }
               }
             }).then(res=>{

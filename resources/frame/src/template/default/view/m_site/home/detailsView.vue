@@ -4,6 +4,7 @@
     <!-- 付费站点 已登录且当前用户已付费 -->
     <div class="circleCon">
     	<comHeader title="详情" :menuIconShow="true"></comHeader>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
 		    	<div class="postTop">
@@ -82,6 +83,14 @@
             <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
           </div>
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
           <div v-for="item in themeCon.posts">
             <div class="commentPostDet">
               <div class="postTop">
@@ -107,6 +116,7 @@
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
           </div>
+            </van-list>
         </div>
         <div class="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
@@ -163,23 +173,22 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
+    </van-pull-refresh>    
 
     </div>
 </template>
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+// import Header from '../../m_site/common//headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "detailsView",
     components:{
     	comHeader,
-      Header
     },
-    ...mSiteHeader,
     ...mSiteDetailsCon
 }
 

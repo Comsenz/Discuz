@@ -6,6 +6,7 @@ import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 import TableContAdd from '../../../../view/site/common/table/tableContAdd';
 import Page from '../../../../view/site/common/page/page';
+import webDb from '../../../../../helpers/webDbHelper'
 
 export default {
   data:function () {
@@ -14,7 +15,6 @@ export default {
       multipleSelection: [],
       tableDataLength:'',
       createCategoriesStatus:false,   //添加分类状态
-      total:0,
 
       options: [{
           value: '{MOD}',
@@ -33,8 +33,9 @@ export default {
       replace:true,
       inputFind:false,
       radio2:"1",
-      pageLimit: 15,
-      pageNum: 1,
+      total:0, //总条数
+      pageLimit: 5, //每页多少条
+      pageNum:0, //当前页
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,
       // loginStatus:'',  //default  batchSet
@@ -50,6 +51,8 @@ export default {
   },
   created(){
     this.handleSearchUser(true);  //初始化页面数据
+    this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+    this.handleSearchUser(Number(webDb.getLItem('currentPag'))||1);
   },
   methods:{
     toggleSelection(rows) {
@@ -102,7 +105,9 @@ export default {
             v._data.inputVal = '';
           }
           console.log(response)
-          this.total = response.meta ? response.meta.stopWordCount : 0;
+          this.total = response.meta.total;
+          this.pageNum = response.meta.pageCount;
+          // this.total = response.meta ? response.meta.total : 0;
           return v;
         });
         console.log(this.tableData)
@@ -206,6 +211,10 @@ export default {
         console.log(res)
       })
       
+    },
+    handleCurrentChange(val){
+      this.pageNum = val
+      this.handleSearchUser(true)
     }
   
   },

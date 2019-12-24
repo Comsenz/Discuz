@@ -1,3 +1,6 @@
+import appConfig from "../../../../../../../../frame/config/appConfig";
+
+
 export default {
   data:function () {
     return {
@@ -16,12 +19,11 @@ export default {
       this.imgUrl = "appConfig.staticBaseUrl+'/images/noavatar.gif'";
     } else {
       if (this.$attrs.imgUrl.length < 1) {
-        this.imgUrl = "appConfig.staticBaseUrl+'/images/noavatar.gif'"
+        this.imgUrl = appConfig.staticBaseUrl+'/images/noavatar.gif';
       } else {
         this.imgUrl = this.$attrs.imgUrl;
       }
     }
-
 
     // console.log(this.$attrs,this.$listeners);
   }

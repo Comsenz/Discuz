@@ -23,7 +23,7 @@ export default {
     WithdrawHeader,
     Panenl
   },
-  mounted(){
+  created(){
     this.withdrawUser()
   },
   computed:{
@@ -44,7 +44,12 @@ export default {
     },
     withdrawUser(){
       var userId = browserDb.getLItem('tokenId');
-      this.apiStore.find('users',userId).then(res=>{
+      this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/'+userId
+      }).then(res=>{
+        console.log(res)
         this.payee= res.data.attributes.username;
         this.phone = res.data.attributes.mobile;
       })

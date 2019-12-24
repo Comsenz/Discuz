@@ -83,12 +83,14 @@ export default {
       // })
     },
     onRefresh(){
-      setTimeout(()=>{
-          this.wallet()
-          this.$toast('刷新成功');
-          this.isLoading = false;
-          this.finished = true;   
-      },200)
+          this.wallet().then(res=>{
+            this.$toast('刷新成功');
+            this.finished = false;
+            this.isLoading = false;
+          }).catch((err)=>{
+            this.$toast('刷新失败');
+            this.isLoading = false;
+          }) 
     }
   },
 }

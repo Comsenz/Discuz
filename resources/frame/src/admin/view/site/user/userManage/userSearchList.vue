@@ -36,7 +36,7 @@
 
             <el-table-column
               prop="_data.threadCount"
-              label="发布主题">
+              label="主题数">
             </el-table-column>
 
             <el-table-column
@@ -54,7 +54,7 @@
             </el-table-column>
 
           </el-table>
-          <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum"  />
+          <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />
         </div>
 
         <Card class="footer-btn">

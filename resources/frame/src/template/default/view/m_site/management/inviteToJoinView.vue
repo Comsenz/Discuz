@@ -4,6 +4,14 @@
     <div>
       <myInviteJoinHeader title="邀请加入"></myInviteJoinHeader>
 	    <div class="content">
+		<van-list
+		v-model="loading"
+		:finished="finished"
+		:offset="offset"
+		finished-text="没有更多了"
+		@load="onLoad"
+		>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <div class="inviteBox">
           <table class="inviteTable">
           	<tr>
@@ -25,7 +33,8 @@
 
 
         </div>
-
+      </van-pull-refresh>    	
+  </van-list>
 	    </div>
 		<div class="manageFootFixed">
 			<div class="operaCho">
