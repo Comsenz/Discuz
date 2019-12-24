@@ -15,8 +15,8 @@
           <div class="circlePL">
           	<div class="circleLoBox">
             	<span class="circleIcon">站点图标</span>
-              <img v-if="siteInfo.logo" :src="siteInfo._data.logo" class="circleLogo">
-              <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
+              <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
+              <!-- <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo"> -->
             </div>
           </div>
           <div class="circleInfo padB0 lastBorNone">
@@ -32,7 +32,8 @@
             </div>
             <div class="infoItem">
             	<span class="infoItemLeft">站长</span>
-            	<span class="infoItemRight">{{username}}</span>
+            	<span class="infoItemRight" v-if="siteInfo._data.siteAuthor">{{username}}</span>
+              <span class="infoItemRight" v-else="">当前用户已删除</span>
             </div>
             <div class="infoItem">
             	<div class="overHide">

@@ -12,7 +12,7 @@ export default {
 		  joinedAt:'',
       isLoading: false, //是否处于下拉刷新状态
 		  roleList:[]
-      
+
 		}
 	},
   beforeCreate:function(){
@@ -54,7 +54,11 @@ export default {
       }).then((res) => {
         console.log(res);
         this.siteInfo = res.readdata;
-        this.username = res.readdata._data.siteAuthor.username;
+        console.log(this.siteInfo._data.logo);
+        if(res.readdata._data.siteAuthor){
+          this.username = res.readdata._data.siteAuthor.username;
+        }
+
 
 
       });
@@ -72,11 +76,11 @@ export default {
           this.loadSite().then((res)=>{
             this.$toast('刷新成功');
             this.isLoading = false;
-            this.finished = true; 
+            this.finished = true;
           }).catch((err)=>{
             this.$toast('刷新失败');
             this.isLoading = false;
-          })    
+          })
     }
 	},
 
