@@ -45,11 +45,19 @@ class SetSettingsController implements RequestHandlerInterface
         $settings = $request->getParsedBody()->get('data', []);
 
         foreach ($settings as $setting) {
-            $this->settings->set(
-                Arr::get($setting, 'attributes.key'),
-                Arr::get($setting, 'attributes.value'),
-                Arr::get($setting, 'attributes.tag')
-            );
+            $key = Arr::get($setting, 'attributes.key');
+            $value = Arr::get($setting, 'attributes.value');
+            $tag = Arr::get($setting, 'attributes.tag');
+
+            // 分成比例相加必须为 10
+            if ($key == 'site_author_scale' && $tag == 'default') {
+                $this->settings->set('site_master_scale', 10 - $value, $tag);
+            }
+            if ($key == 'site_master_scale' && $tag == 'default') {
+                $this->settings->set('site_author_scale', 10 - $value, $tag);
+            }
+
+            $this->settings->set($key, $value, $tag);
         }
 
         $this->siteRevManifest->put('settings', $this->settings->all());
