@@ -36,7 +36,7 @@
 
             <el-table-column
               prop="_data.threadCount"
-              label="发布主题">
+              label="主题数">
             </el-table-column>
 
             <el-table-column

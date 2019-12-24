@@ -2,6 +2,15 @@
 
 <template>
     <div class="circleCon">
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <Header :searchIconShow="true" :menuIconShow="true" navShow="true" headFixed="true"></Header>
         <div class="gap"></div>
 	    <div class="themeTitBox">
@@ -16,14 +25,6 @@
 	    	</div>
 	    </div>
 
-	<van-list
-    v-model="loading"
-    :finished="finished"
-    :offset="offset"
-    finished-text="没有更多了"
-    @load="onLoad"
-    >
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <div class="memberCheckList">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick"></ThemeDet>
 		<div class="gap"></div>
