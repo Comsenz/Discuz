@@ -26,6 +26,10 @@ export default {
     ContMain,
     ContFooter
   },
+  created(){
+    this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.myLikeList()
+  },
   methods:{
     myLikeList(initStatus =false){
      return this.appFetch({
@@ -67,8 +71,5 @@ export default {
         })
     }
   },
-  created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png"
-    this.myLikeList()
-  }
+
 }

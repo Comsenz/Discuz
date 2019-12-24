@@ -1,3 +1,4 @@
+
 export default {
   data:function () {
     return {
@@ -10,7 +11,7 @@ export default {
   },
 
   created(){
-
+    // this.url = require('../../../../../../../static/images/mytx.png') 
     //判断头像是否传过来，不然使用默认头像
     if (this.$attrs.imgUrl === undefined || this.$attrs.imgUrl === null){
       this.imgUrl = "appConfig.staticBaseUrl+'/images/noavatar.gif'";

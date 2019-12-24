@@ -181,7 +181,7 @@ export default {
           console.log('1234');
           this.themeShow = true;
           this.themeCon = res.readdata
-          this.themeCon =this.themeCon.concat(res.readdata);
+          this.themeCon =this.themeCon.concat(res.readdata.posts);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
           // console.log(res.readdata.firstPost.attachments[0]._data.extension);

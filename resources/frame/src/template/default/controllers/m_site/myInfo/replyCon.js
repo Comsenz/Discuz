@@ -29,7 +29,7 @@ export default {
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/mytx.png"
-    // this.myReplyList()
+    this.myReplyList()
   },
   methods:{
     myReplyList(initStatus = false){
