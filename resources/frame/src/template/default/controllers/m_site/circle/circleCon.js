@@ -149,12 +149,13 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus = false){
+      console.log(filterCondition);
       if(filterCondition == 'isEssence'){
       return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
-            'filter[isEssence]':filterVal,
+            'filter[isEssence]':'isEssence',
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
@@ -163,6 +164,7 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
+          this.themeListCon = res.readdata;
           this.themeListCon =this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
@@ -185,7 +187,8 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
+          this.themeListCon = res.readdata;
+          this.themeListCon = this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
         }).catch((err)=>{
@@ -194,7 +197,7 @@ export default {
           }
           this.loading = false;
         })
-        
+
       } else {
         return  this.appFetch({
           url: 'threads',
@@ -223,7 +226,7 @@ export default {
           }
           this.loading = false;
         })
-      
+
       }
 
 
@@ -273,7 +276,7 @@ export default {
 	    },
       //筛选
 	    choTheme(themeType) {
-        this.loadThemeList('isEssence',themeType);
+        this.loadThemeList(themeType);
 	    	// console.log('筛选');
 	    },
       //点击分类

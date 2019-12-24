@@ -114,14 +114,31 @@ class ListPostsController extends AbstractListController
 
         // 特殊关联：最后一次删除的日志
         if (in_array('lastDeletedLog', $load)) {
-            $posts->map(function ($thread) {
-                $log = $thread->logs()
+            $posts->map(function ($post) {
+                $log = $post->logs()
                     ->with('user')
                     ->where('action', 'hide')
                     ->orderBy('created_at', 'desc')
                     ->first();
 
-                $thread->setRelation('lastDeletedLog', $log);
+                $post->setRelation('lastDeletedLog', $log);
+            });
+        }
+
+        // 高亮敏感词
+        if (Arr::get($filter, 'highlight') == 'yes') {
+            $posts->load('stopWords');
+
+            $posts->map(function ($post) {
+                if ($post->stopWords) {
+                    $stopWords = explode(',', $post->stopWords->stop_word);
+                    $replaceWords = array_map(function ($word) {
+                        return '<span class="highlight">' . $word . '</span>';
+                    }, $stopWords);
+
+                    $content = str_replace($stopWords, $replaceWords, $post->content);
+                    $post->content = $content;
+                }
             });
         }
 

@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property User $user
  * @property User $replyUser
  * @property User $deletedUser
+ * @property PostMod $stopWords
  * @package App\Models
  */
 class Post extends Model
