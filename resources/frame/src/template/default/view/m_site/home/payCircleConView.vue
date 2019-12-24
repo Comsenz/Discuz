@@ -59,7 +59,8 @@
 	    	</div>
 	    </div>
 
-    </van-pull-refresh> 
+    </div>
+	</van-pull-refresh> 
     </div>
 </template>
 
