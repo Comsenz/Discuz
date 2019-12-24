@@ -104,11 +104,11 @@ class UserWalletCashReview
                 $cash_record->cash_status = $cash_status;
                 if ($cash_status == UserWalletCash::STATUS_REVIEWED) {
                     //审核通过
-                    //触发提现钩子事件
-                    $this->events->dispatch(
-                        new Cash($cash_record, $this->ip_address, GatewayConfig::WECAHT_TRANSFER)
-                    );
                     if ($cash_record->save()) {
+                        //触发提现钩子事件
+                        $this->events->dispatch(
+                            new Cash($cash_record, $this->ip_address, GatewayConfig::WECAHT_TRANSFER)
+                        );
                         return $status_result[$id] = 'success';
                     }
                 } elseif ($cash_status == UserWalletCash::STATUS_REVIEW_FAILED) {
