@@ -434,7 +434,7 @@ export default {
     console.log(to.query);
       if(to.query.code){
         appFetch({
-          url: "weixin",
+          url: "wechat",
           method: "get",
           data: {
             code:to.query.code,
@@ -445,12 +445,19 @@ export default {
         });
       } else {
           appFetch({
-            url: "weixin",
+            url: "wechat",
             method: "get",
             data: {}
           }).then(res => {
             console.log(res);
-            window.location.href = res.data.attributes.location;
+            // window.location.href = res.data.attributes.location;
+            let url = 'http://10.0.10.210:8883/pay-circle';
+            // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba449971e7a27c1c&redirect_uri=${encodeURIComponent(url)}&response_type=code&scope=snsapi_userinfo&state=0`
+
+            // console.log(encodeURIComponent(url);
+
+            window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxba449971e7a27c1c&redirect_uri=http%3A%2F%2F10.0.10.210%3A8883%2Fpay-circle&response_type=code&scope=snsapi_userinfo&state=0";
+
           });
         }
 
