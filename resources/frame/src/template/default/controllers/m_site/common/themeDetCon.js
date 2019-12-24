@@ -71,9 +71,12 @@ export default {
           // 图片地址
           let src = 'https://2020.comsenz-service.com/api/attachments/';
           let imageList = [];
-          for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
-            imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+          if(this.themeListResult[h].firstPost.images){
+            for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
+              imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+            }
           }
+          
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }
