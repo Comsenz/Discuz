@@ -11,6 +11,7 @@ use App\Censor\Censor;
 use App\Commands\Post\CreatePost;
 use App\Events\Thread\Created;
 use App\Events\Thread\Saving;
+use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
 use App\Validators\ThreadValidator;
@@ -113,6 +114,14 @@ class CreateThread
             $thread->delete();
 
             throw $e;
+        }
+
+        // 记录触发的审核词
+        if ($thread->is_approved == 0) {
+            $stopWords = new PostMod;
+            $stopWords->stop_word = implode(',', $censor->wordMod);
+
+            $post->stopWords()->save($stopWords);
         }
 
         $thread->setRawAttributes($post->thread->getAttributes(), true);
