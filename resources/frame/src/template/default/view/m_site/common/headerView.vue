@@ -10,7 +10,7 @@
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
-      <div class="invitePerDet">
+      <div class="invitePerDet" v-show="invitePerDet">
         <!-- <div class="invitePerDet" v-show="invitePerDet"> -->
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
         <div class="" v-if="personInfo">
