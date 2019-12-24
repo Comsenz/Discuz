@@ -163,7 +163,7 @@ const appFetch = function(params, options) {
 
 // && !requireAuth.includes(this.$router.history.current.name)
 
-  console.log(this.$router.history.current.name);
+  // console.log(this.$router.history.current.name);
 
   let defaultHeaders;
   if(authVal != '' && authVal != null){
