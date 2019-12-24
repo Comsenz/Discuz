@@ -182,6 +182,23 @@ class ListThreadsController extends AbstractListController
             });
         }
 
+        // 高亮敏感词
+        if (Arr::get($filter, 'highlight') == 'yes') {
+            $threads->load('firstPost.stopWords');
+
+            $threads->map(function ($thread) {
+                if ($thread->firstPost->stopWords) {
+                    $stopWords = explode(',', $thread->firstPost->stopWords->stop_word);
+                    $replaceWords = array_map(function ($word) {
+                        return '<span class="highlight">' . $word . '</span>';
+                    }, $stopWords);
+
+                    $content = str_replace($stopWords, $replaceWords, $thread->firstPost->content);
+                    $thread->firstPost->content = $content;
+                }
+            });
+        }
+
         // 付费主题，不返回内容
         if (! $actor->isAdmin()) {
             $allRewardedThreads = Order::where('user_id', $actor->id)
