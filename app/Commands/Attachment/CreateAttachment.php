@@ -7,6 +7,7 @@
 
 namespace App\Commands\Attachment;
 
+use App\Censor\Censor;
 use App\Models\User;
 use App\Settings\SettingsRepository;
 use App\Tools\AttachmentUploadTool;
@@ -54,6 +55,13 @@ class CreateAttachment
     public $isGallery;
 
     /**
+     * 是否合法 0合法 1不合法
+     *
+     * @var int
+     */
+    public $isApproved = 0;
+
+    /**
      * 初始化命令参数
      *
      * @param User $actor 执行操作的用户.
@@ -84,7 +92,7 @@ class CreateAttachment
      * @throws UploadException
      * @throws UploadVerifyException
      */
-    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool, SettingsRepository $settings)
+    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool, SettingsRepository $settings, Censor $censor)
     {
         $this->events = $events;
 
@@ -113,6 +121,12 @@ class CreateAttachment
             throw new UploadException();
         }
 
+        // 检测敏感图
+        $censor->checkImage($uploadFile->getPathname());
+        if ($censor->isMod) {
+            $this->isApproved = 1;
+        }
+
         $uploadPath = $uploadTool->getUploadPath();
 
         $uploadName = $uploadTool->getUploadName();
@@ -122,6 +136,7 @@ class CreateAttachment
             $this->actor->id,
             0,
             $this->isGallery,
+            $this->isApproved,
             $uploadName,
             $uploadPath,
             $this->file->getClientFilename(),

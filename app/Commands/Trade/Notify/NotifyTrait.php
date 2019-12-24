@@ -30,7 +30,9 @@ trait NotifyTrait
             $pay_notify_result = PayNotify::where('payment_sn', $payment_sn)
                 ->update(['status' => PayNotify::NOTIFY_STATUS_RECEIVED, 'trade_no' => $trade_no]);
             //修改订单,已支付
-            Order::where('payment_sn', $payment_sn)->update(['status' => Order::ORDER_STATUS_PAID]);
+            // Order::where('payment_sn', $payment_sn)->update(['status' => Order::ORDER_STATUS_PAID]);
+            $order_info->status = Order::ORDER_STATUS_PAID;
+            $order_info->save();
 
             if ($order_info->type == Order::ORDER_TYPE_REGISTER) {
                 //注册时，返回支付成功。

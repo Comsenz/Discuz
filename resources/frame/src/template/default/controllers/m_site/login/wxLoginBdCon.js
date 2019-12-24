@@ -1,8 +1,10 @@
+/*
+* 微信登录绑定控制器
+* */
 
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDB from '../../../../../helpers/webDbHelper';
-import {mapState} from 'vuex';
 
 export default {
   data:function () {
@@ -10,7 +12,8 @@ export default {
       userName:'',    //用户名
       password:'',    //密码
       siteMode:'',    //站点信息
-      openid:''       //微信openid
+      openid:'',       //微信openid
+      wxurl:''
     }
   },
 
@@ -18,9 +21,6 @@ export default {
     LoginHeader,
     LoginFooter
   },
-  computed:mapState({
-    openidX:state => state.appSiteModule.openid
-  }),
 
   methods:{
     loginBdClick(){
@@ -32,7 +32,7 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              openid:this.openidX
+              openid:this.openid
             },
           }
         }
@@ -48,13 +48,30 @@ export default {
           webDB.setLItem('Authorization', token);
           webDB.setLItem('tokenId', tokenId);
 
-          if(this.siteMode === 'pay'){
+          this.$router.push({path:webDB.getSItem('beforeVisiting')});
+
+          this.getUsers(tokenId).then(res=>{
+            if (res.readdata._data.paid){
+              this.$router.push({path:'/'})
+            } else {
+              if (this.siteMode === 'pay'){
+                this.$router.push({path:'pay-circle-login'});
+              } else if (this.siteMode === 'public'){
+                this.$router.push({path:'/'});
+              } else {
+                console.log("缺少参数，请刷新页面");
+              }
+            }
+
+          })
+
+          /*if(this.siteMode === 'pay'){
             this.$router.push({path:'pay-circle-login'})
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'})
           } else {
             console.log("缺少参数，请刷新页面");
-          }
+          }*/
 
           /*if (this.phoneStatus){
             this.$router.push({path:'bind-phone'});
@@ -87,29 +104,86 @@ export default {
         console.log(res);
         if (res.errors){
           console.log(res.errors[0].status);
-          this.wxStatus = res.errors[0].status;
+          console.log(res.errors[0].user.openid);
+
+          let wxStatus = res.errors[0].status;
           let openid = res.errors[0].user.openid;
 
-          if (this.wxStatus == 400){
+          if (wxStatus == 400){
             console.log('微信跳转');
-            this.setOpenId(openid);
-            this.$router.push({path: '/wx-login-bd'})
+            this.openid = openid;
+            webDB.setLItem('openid',openid);
+            this.$router.push({path: '/wx-login-bd'});
           }
+        } else if (res.data.attributes.location) {
+          console.log(res.data.attributes.loscation);
+          console.log('获取地址');
+          this.wxurl = res.data.attributes.location;
+          window.location.href = res.data.attributes.location
+        } else if (res.data.attributes.access_token){
+
+          this.$toast.success('登录成功');
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
+          webDB.setLItem('Authorization', token);
+          webDB.setLItem('tokenId', tokenId);
+          this.$router.push({path:'/'});
+
         } else {
-          this.$router.push({path:'/'})
+          console.log('任何情况都不符合');
+          console.log(res.data.attributes.location);
         }
-        // this.isCodeState = false;
-        this.wxHref = res.data.attributes.location;
       }).catch(err=>{
         console.log(err);
       })
     },
+    getForum(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        this.siteMode = res.readdata._data.setsite.site_mode;
+        webDB.setLItem('siteInfo',res.readdata);
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getUsers(id){
+      return this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + id,
+        headers:{'Authorization': 'Bearer ' + webDB.getLItem('Authorization')},
+        data:{
+          include:['groups']
+        }
+      }).then(res=>{
+        console.log(res);
+        return res;
+        //paid
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
   },
   created(){
-    console.log(this.openidX);
+    let code = this.$router.history.current.query.code;
+    let state = this.$router.history.current.query.state;
 
-    this.getWatchHref(this.$router.qurey.code);
+    console.log(code);
+    console.log(state);
 
-    this.siteMode = webDB.getLItem('siteInfo')._data.setsite.site_mode;
+    webDB.setLItem('code',code);
+    webDB.setLItem('state',state);
+
+    if (!code && !state){
+      this.getWatchHref()
+    } else {
+      this.getWatchHref(code,state);
+    }
+
+    this.getForum();
   }
 }
