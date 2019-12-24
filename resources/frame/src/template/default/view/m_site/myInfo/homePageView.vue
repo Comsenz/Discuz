@@ -2,13 +2,24 @@
     <div class="home-page-box">
       <comHeader v-if="username" :title="username+'的个人主页'"></comHeader>
       <!-- <comHeader v-else="" title="该用户已被删除的个人主页"></comHeader> -->
+      <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="content">
         <Header :userInfoAvataUrl="userAvatar" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
         <ThemeDet :themeList="OthersThemeList"></ThemeDet>
       </div>
+    </van-pull-refresh>    
+  </van-list>
       <footer class="home-page-footer">
-        <p>上划加载更多</p>
+        <!-- <p>上划加载更多</p> -->
       </footer>
     </div>
 </template>

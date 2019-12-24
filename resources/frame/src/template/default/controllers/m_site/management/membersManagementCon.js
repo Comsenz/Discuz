@@ -23,7 +23,9 @@ export default {
 			finished: false, //是否已加载完所有数据
 			isLoading: false, //是否处于下拉刷新状态
 			pageSize:'',//每页的条数
-			pageIndex:'',//页码
+			pageIndex: 1,//页码
+			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+			searchTimeout:null
 		}
 	},
 	//用于数据初始化
@@ -73,10 +75,13 @@ export default {
 				'page[limit]': 15,
 				'page[number]': 1,
 			}
-			this.getSearchValUserList(true);
+			clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(()=>{
+                this.getSearchValUserList(true);
+            },300)
 		},
 
-		// 根据搜索进行请求
+		// 接口请求
 		async getSearchValUserList(initStatus = false) {
 			try {
 				const response = await this.appFetch({
@@ -84,6 +89,7 @@ export default {
 					url: 'users',
 					data: this.userParams
 				})
+
 				if (initStatus) {
 					this.userList = [];
 				}
@@ -93,8 +99,8 @@ export default {
 					obj.checkStatus = false;
 					return obj
 				});
-				console.log(this.userList, 'userList')
-				this.userLoadMoreStatus = response.length >= this.userParams['page[limit]'];
+
+				this.finished = response.readdata.length < this.userParams['page[limit]'];
 			} catch (err) {
 				console.error(err, 'membersManagementCon.js getSearchValUserList');
 				const currentPageNum = this.userParams['page[number]'];
@@ -115,7 +121,7 @@ export default {
 				})
 				this.choList = response.data;
 			} catch (err) {
-				console.log(err, 'membersManagementCon.js getOperaType');
+				console.error(err, 'membersManagementCon.js getOperaType');
 				// 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
 			} finally {
 
@@ -158,6 +164,7 @@ export default {
 						data
 					}
 				})
+				this.result = [];
 				this.getSearchValUserList(true);
 			} catch (err) {
 				console.error(err, 'handleSubmit error');
@@ -166,49 +173,32 @@ export default {
 
 		},
 
-		handleLoadMoreUser() {
-			this.userParams['page[number]']++;
-			this.userLoadMorePageChange = true;
-			this.getSearchValUserList();
-		},
-		onLoad(){    //上拉加载
-			this.appFetch({
-			  url:'users',
-			  method:'get',
-			  data:{
+		// handleLoadMoreUser() {
+		// 	this.userParams['page[number]']++;
+		// 	this.userLoadMorePageChange = true;
+		// 	this.getSearchValUserList();
+		// },
+		async onLoad(){    //上拉加载
+			try{
+				console.log(this.finished,'finished')
+				this.userLoadMorePageChange = true;
+				this.loading = true;
+				this.userParams['page[number]']++;
+				await this.getSearchValUserList();
 				
-			  }
-			}).then(res=>{
-			  this.pageSize = res.meta.threadCount;
-			  this.pageIndex = res.meta.pageCount;
-			  this.userList = res.readdata;
-			  // 加载状态结束
-			  this.loading = false;
-			  if(this.userList.length>=this.pageSize){
-				this.finished = true; //数据全部加载完成
-			  }
-	
-			console.log(this.finished,'00000000000000000000')
-	
-			})
-			// setTimeout(()=>{
-			  
-			// this.loading = false;
-			//     // 数据全部加载完成
-			//     if (this.collectionList.length >= 40) {
-			//       this.finished = true;
-			//     }
-			// },200)
+			} catch(err){
+
+			} finally{
+				this.loading = false;
+			}
 		  },
 		onRefresh(){
-			setTimeout(()=>{
-			  this.handleSearch().then(()=>{
-				this.$toast('刷新成功');
-				this.isLoading = false;
-				this.finished = true;
-			  })
-			  
-			},200)
+			this.pageIndex = 1;
+			this.result = [];
+			this.getSearchValUserList(true);
+			this.$toast('刷新成功');
+			this.isLoading = false;
+			this.finished = false;  
 		  }
 	},
 

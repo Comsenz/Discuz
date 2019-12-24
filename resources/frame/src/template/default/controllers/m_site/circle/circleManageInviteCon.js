@@ -9,7 +9,11 @@ export default {
       loginBtnFix: true,
 			siteInfo: false,
       roleId:'',
-      roleResult:''
+      roleResult:'',
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      pageLimit: 20,
 		}
 	},
   //用于数据初始化
@@ -30,7 +34,7 @@ export default {
     this.loadSite();
   },
 	methods: {
-    loadSite(){
+    loadSite(initStatus = false){
       //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
@@ -39,13 +43,15 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        // console.log(res);
+       if(initStatus){
+        this.siteInfo = []
+       }
         this.siteInfo = res.readdata;
         // console.log(res.readdata._data.siteIntroduction);
       });
 
       //请求初始化角色信息数据
-      this.appFetch({
+    return  this.appFetch({
         url: 'groups',
         method: 'get',
         splice:'/' + this.roleId,
@@ -84,7 +90,19 @@ export default {
 　　　　　　 //获取点击对象
        var el = event.currentTarget;
        // alert("当前对象的内容："+el.innerHTML);
-    }
+    },
+
+    onRefresh(){    //下拉刷新
+      this.pageIndex = 1;
+      this.loadSite(true).then(()=>{
+        this.$toast('刷新成功');
+        this.finished = false;
+        this.isLoading = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
+  }
 
 	},
 

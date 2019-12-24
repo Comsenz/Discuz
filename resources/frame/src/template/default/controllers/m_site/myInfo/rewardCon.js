@@ -14,9 +14,12 @@ export default {
   data:function () {
     return {
       rewardList:[],
-      loading: false,  //是否处于加载状态
-      finished: false, //是否已加载完所有数据
-      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,
+      pageLimit: 20,
+      loading: false,
+      finished: false,
+      offset: 100,
+      isLoading: false,
     
     }
   },
@@ -31,59 +34,45 @@ export default {
     this.myRewardList()
   },
   methods:{
-    myRewardList(){
+    myRewardList(initStatus=false){
      return this.appFetch({
         url:'notice',
         method:'get',
         data:{
-          type:'3'
+          type:'3',
+          'page[number]': this.pageIndex,
+          'page[limit]': this.pageLimit
         }
       }).then(res=>{
         console.log(res)
-        this.rewardList = res.readdata;
-        
+        if(initStatus){
+          this.rewardList = []
+        }
+        this.rewardList =this.rewardList.concat(res.readdata);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;s
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
       })
     },
     onLoad(){    //上拉加载
-      this.appFetch({
-        url:'notice',
-        method:'get',
-        data:{
-          type:'3'
-        }
-      }).then(res=>{
-        // this.pageSize = res.meta.threadCount;
-        // this.pageIndex = res.meta.pageCount;
-        // this.collectionList = res.readdata;
-        // 加载状态结束
-        this.loading = false;
-        if(res.readdata === ''){
-          this.finished = false; //数据全部加载完成
-        }else{
-          this.finished = true
-        }
-
-      console.log(this.finished,'00000000000000000000')
-
-      })
-      // setTimeout(()=>{
-        
-      // this.loading = false;
-      //     // 数据全部加载完成
-      //     if (this.collectionList.length >= 40) {
-      //       this.finished = true;
-      //     }
-      // },200)
+      this.loading = true;
+      this.pageIndex++;
+      this.myRewardList();
     },
     onRefresh(){
-      setTimeout(()=>{
-        this.myRewardList().then(()=>{
+        this.pageIndex = 1
+        this.myRewardList(true).then(()=>{
           this.$toast('刷新成功');
           this.isLoading = false;
-          this.finished = true;
+          this.finished = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
         })
-        
-      },200)
     }
   },
 

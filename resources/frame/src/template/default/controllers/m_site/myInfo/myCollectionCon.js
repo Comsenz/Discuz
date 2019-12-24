@@ -24,8 +24,9 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageSize:'',//每页的条数
-      pageIndex:'',//页码
+      pageIndex: 1,//页码
+      pageLimit: 20,
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
     }
   },
   // components:{
@@ -43,68 +44,45 @@ export default {
     // console.log(typeof this.aaa);
   },
   methods:{
-    myCollection(){
-      console.log('33333333333333333333333')
+    myCollection(initStatus = false){
       return this.appFetch({
         url:'collection',
         method:'get',
         data:{
           include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          'page[number]': this.pageIndex,
+          'page[limit]': this.pageLimit
         }
       }).then(data=>{
-        console.log(data)
-        this.collectionList = data.readdata;
-        console.log(data.meta.pageCount)
+        if(initStatus){
+          this.collectionList = []
+        }
+        this.collectionList =this.collectionList.concat(data.readdata);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;
+
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
       })
-        // const params = {
-        //   // 'filter[user]': this.userId
-        // };
-        // params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
-        // this.apiStore.find('collection', params).then(data => {
-        //   console.log(data[0].user());
-        //   this.collectionList = data;
-        // });
       },
       onLoad(){    //上拉加载
-        this.appFetch({
-          url:'collection',
-          method:'get',
-          data:{
-            include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-          }
-        }).then(res=>{
-          // this.pageSize = res.meta.threadCount;
-          // this.pageIndex = res.meta.pageCount;
-          // this.collectionList = res.readdata;
-          // 加载状态结束
-          this.loading = false;
-          if(res.readdata === ''){
-            this.finished = false; //数据全部加载完成
-          }else{
-            this.finished = true
-          }
-
-        console.log(this.finished,'00000000000000000000')
-
-        })
-        // setTimeout(()=>{
-          
-        // this.loading = false;
-        //     // 数据全部加载完成
-        //     if (this.collectionList.length >= 40) {
-        //       this.finished = true;
-        //     }
-        // },200)
+        this.loading = true;
+        this.pageIndex++;
+        this.myCollection();
       },
-      onRefresh(){
-        setTimeout(()=>{
-          this.myCollection().then(()=>{
+      onRefresh(){    //下拉刷新
+          this.pageIndex = 1;
+          this.myCollection(true).then(()=>{
             this.$toast('刷新成功');
+            this.finished = false;
             this.isLoading = false;
-            this.finished = true;
+          }).catch((err)=>{
+            this.$toast('刷新失败');
+            this.isLoading = false;
           })
-          
-        },200)
       }
     
   }

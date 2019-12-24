@@ -47,11 +47,13 @@ module.exports = {
   'pay':'/api/trade/pay/order',    //支付订单
 
   'threadsBatch':'/api/threads/batch',   //修改主题接口(批量)
-  'upload': '/api/users/',//上传头像
+  'upload': '/api/users/',//上传头像(原接口是'/api/users/{id}/avatar')
   'invite':'/api/invite',//创建邀请码
   'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'groupPermission':'/api/permission', // 修改用户组权限
   'deleteNotification':'/api/notification', //删除通知里的回复我的
+  'wechat':'/api/users/' ,//修改资料里的解绑微信
+  'wechatBind':'api/oauth/wechat',//去绑定微信
 
 
   /*后台*/
@@ -66,5 +68,7 @@ module.exports = {
   'users':'/api/users',       //用户信息
   'deleteWords':'/api/stop-words/',//删除敏感词
   'tags':'/api/settings',    //指定Tag配置接口
+  'deleteAvatar':'/api/users',//删除用户头像
+  'exportUser':'/api/user/export',//用户信息导出
 
 }

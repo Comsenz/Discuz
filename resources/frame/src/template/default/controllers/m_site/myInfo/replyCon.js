@@ -15,6 +15,9 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
+      pageIndex: 1,
+      pageLimit: 20,
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
      
     }
   },
@@ -25,20 +28,32 @@ export default {
     ContFooter
   },
   created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png",
+    this.imgUrl = "../../../../../../../static/images/mytx.png"
     this.myReplyList()
   },
   methods:{
-    myReplyList(){
+    myReplyList(initStatus = false){
       return this.appFetch({
         url:'notice',
         method:'get',
         data:{
-          type:'1'
+          type:'1',
+          'page[number]': this.pageIndex,
+          'page[limit]': this.pageLimit
         }
       }).then(res=>{
+        if(initStatus){
+          this.replyList = []
+        }
         console.log(res)
-        this.replyList = res.readdata;
+        this.replyList = this.replyList.concat(res.readdata);
+        this.loading = false;
+        this.finished = res.data.length < this.pageLimit;
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+            this.pageIndex--
+        }
+        this.loading = false;
       })
     },
     deleteReply(replyId){    //删除回复
@@ -56,44 +71,21 @@ export default {
       })
     },
     onRefresh(){           //下拉刷新
-      setTimeout(()=>{
-        this.myReplyList().then(()=>{
+        this.pageIndex = 1;
+        this.myReplyList(true).then(()=>{
           this.$toast('刷新成功');
           this.isLoading = false;
-          this.finished = true;
-        }) 
-      },200)
+          this.finished = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
+        })
     },
-    onLoad(){    //上拉加载
-      this.appFetch({
-        url:'collection',
-        method:'get',
-        data:{
-          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
-        }
-      }).then(res=>{
-        // this.pageSize = res.meta.threadCount;
-        // this.pageIndex = res.meta.pageCount;
-        // this.collectionList = res.readdata;
-        // 加载状态结束
-        this.loading = false;
-        if(res.readdata === ''){
-          this.finished = false; //数据全部加载完成
-        }else{
-          this.finished = true
-        }
-
-      console.log(this.finished,'00000000000000000000')
-
-      })
-      // setTimeout(()=>{
-        
-      // this.loading = false;
-      //     // 数据全部加载完成
-      //     if (this.collectionList.length >= 40) {
-      //       this.finished = true;
-      //     }
-      // },200)
+    onLoad(){
+      console.log('onLoadonLoadonLoad')
+      this.loading = true;
+      this.pageIndex++;
+      this.myReplyList();
     },
   },
 

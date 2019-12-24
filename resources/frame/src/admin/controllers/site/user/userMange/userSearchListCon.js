@@ -26,6 +26,8 @@ export default {
   created(){
     this.query = this.$route.query;
     this.handleGetUserList();
+    this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+    this.handleGetUserList(Number(webDb.getLItem('currentPag'))||1);
   },
   methods:{
     handleSelectionChange(val) {
@@ -60,6 +62,8 @@ export default {
           }
         })
         console.log(response)
+        this.total = response.meta.total;
+        this.pageNum = response.meta.pageCount;
         this.total = response.meta ? response.meta.total : 0;
         this.tableData = response.readdata;
       } catch(err){
@@ -175,6 +179,10 @@ export default {
         console.error(err, 'handleDisable');
       }
     },
+    handleCurrentChange(val){
+      this.pageNum = val
+      this.handleGetUserList();
+    }
   },
   components:{
     Card,

@@ -13,7 +13,6 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
 		  roleList:[]
       
-
 		}
 	},
   beforeCreate:function(){
@@ -46,7 +45,7 @@ export default {
           this.joinedAt = res.readdata._data.joinedAt;
         }
       })
-      this.appFetch({
+    return  this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
@@ -70,12 +69,14 @@ export default {
       this.$router.push({path:'/home-page/'+userId});
     },
     onRefresh(){
-      setTimeout(()=>{
-          this.loadSite()
-          this.$toast('刷新成功');
-          this.isLoading = false;
-          this.finished = true; 
-      },200)
+          this.loadSite().then((res)=>{
+            this.$toast('刷新成功');
+            this.isLoading = false;
+            this.finished = true; 
+          }).catch((err)=>{
+            this.$toast('刷新失败');
+            this.isLoading = false;
+          })    
     }
 	},
 

@@ -2,6 +2,15 @@
 
 <template>
     <div class="circleCon">
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    :immediate-check="false"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
      <Header :searchIconShow="false" :perDetShow="true" :logoShow="true" :menuIconShow="false" :navShow="true" :invitePerDet="true" :headFixed="false" @categoriesChoice="categoriesChoice"></Header>
 	    <div class="gap"></div>
       <div class="themeTitBox">
@@ -28,6 +37,8 @@
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
 	    </div>
+  </van-pull-refresh>    
+  </van-list>
     </div>
 </template>
 
