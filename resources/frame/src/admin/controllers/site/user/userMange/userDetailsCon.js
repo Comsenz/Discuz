@@ -39,7 +39,10 @@ export default {
         const response = await this.appFetch({
           method: 'get',
           url: 'users',
-          splice: `/${this.query.id}`
+          splice: `/${this.query.id}`,
+          data:{
+            include:'wechat'
+          }
         })
         console.log(response,'response');
         this.userInfo = response.readdata._data;
@@ -53,6 +56,14 @@ export default {
     },
     deleteImage(){
       this.imageUrl = '';
+      this.appFetch({
+        url:'deleteAvatar',
+        method:'delete',
+        splice: `/${this.query.id}`+'/avatar',
+        data:{
+
+        }
+      })
     },
     handlePreview(file) {
       console.log(file);
@@ -64,7 +75,10 @@ export default {
       return this.MessageBox.confirm(`确定移除 ${ file.name }？`);
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    handleFile(){
+
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
@@ -76,10 +90,26 @@ export default {
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!');
       }
+      if(isJPG && isLt2M == true){
+      }
       return isJPG && isLt2M;
     },
+    uploaderLogo(file){
+      console.log(file,'000000000000000')
+      let formData = new FormData()
+        formData.append('avatar', file.file)
+          console.log(formData)
+          this.appFetch({
+            url:'upload',
+            method:'post',
+            splice: `${this.query.id}`+'/avatar',
+            data:formData
+          }).then(res=>{
+            this.imageUrl = res.readdata._data.avatarUrl;
+          })
+    },
+    
     submission(){
-      const userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'users',
         method:'patch',
@@ -92,7 +122,8 @@ export default {
       }).then(res=>{
         console.log(res)
       })
-    }
+    },
+
   },
 
   components:{

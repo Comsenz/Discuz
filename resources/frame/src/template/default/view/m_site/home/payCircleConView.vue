@@ -1,6 +1,11 @@
 <!--移动端付费站点模板-->
 
 <template>
+    <div class="circleCon">
+	    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+	    <Header></Header>
+	    <!-- <Header :logoShow="true" :perDetShow="true" :userInfoName="false" :invitationShow="false" @categoriesChoice=""></Header> -->
+      <!-- <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false"></Header> -->
     <div class="circleCon" v-if="thread">
       <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false" :personInfo="false"></Header>
 	    <div class="gap"></div>
@@ -54,7 +59,8 @@
 	    	</div>
 	    </div>
 
-
+    </div>
+	</van-pull-refresh> 
     </div>
 </template>
 

@@ -49,7 +49,13 @@ export default {
       joinedAt:'',    //加入时间
       sitePrice:'',   //加入价格
       username:'',    //当前用户名
-      roleList:[]
+      roleList:[],
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      pageLimit: 20,
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
 		}
 	},
   created(){
@@ -157,19 +163,33 @@ export default {
     },
 
     //初始化请求主题详情数据
-    detailsLoad(){
+    detailsLoad(initStatus = false){
         let threads = 'threads/'+this.themeId;
-        this.appFetch({
+     return this.appFetch({
           url: threads,
           method: 'get',
           data: {
             'filter[isDeleted]':'no',
             include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
+            'page[number]': this.pageIndex,
+            'page[limit]': this.pageLimit
           }
         }).then((res) => {
+          if(initStatus){
+            this.themeCon=[]
+          }
           console.log(res);
           console.log('1234');
           this.themeShow = true;
+          this.themeCon = res.readdata
+          this.themeCon =this.themeCon.concat(res.readdata.posts);
+          this.loading = false;
+          this.finished = res.data.length < this.pageLimit;
+          // console.log(res.readdata.firstPost.attachments[0]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[1]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[2]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[3]._data.extension);
+          // console.log(res.readdata.firstPost.attachments[4]._data.extension);
           this.themeCon = res.readdata;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
@@ -180,6 +200,11 @@ export default {
           }
           this.firstpostImageList = firstpostImage;
           console.log(1, this.firstpostImageList);
+        }).catch((err)=>{
+          if(this.loading && this.pageIndex !== 1){
+            this.pageIndex--;
+          }
+          this.loading = false;
         })
     },
     //主题详情图片放大轮播
@@ -424,6 +449,22 @@ export default {
         }
 
       })
+    },
+    onLoad(){    //上拉加载
+      this.loading = true;
+      this.pageIndex++;
+      this.detailsLoad();
+    },
+    onRefresh(){    //下拉刷新
+        this.pageIndex = 1;
+        this.detailsLoad(true).then(()=>{
+          this.$toast('刷新成功');
+          this.finished = false;
+          this.isLoading = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
+        })
     }
 
 

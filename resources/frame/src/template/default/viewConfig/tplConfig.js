@@ -431,31 +431,18 @@ export default {
 
   if (isWeixin == true) {
     //微信登录时
-    console.log(to.query);
-      if(to.query.code){
-        appFetch({
-          url: "wechat",
-          method: "get",
-          data: {
-            code:to.query.code,
-            state:to.query.state
-          }
-        }).then(res => {
-          console.log(res);
-        });
-      } else {
-        appFetch({
-          url: "wechat",
-          method: "get",
-          data: {
-          }
-        }).then(res => {
-          console.log(res);
-          window.location.href = res.data.attributes.location;
-        });
-        next();
-      }
+    console.log(to);
+    console.log(next());
 
+    if (!browserDb.getLItem('Authorization') && !browserDb.getLItem('tokenId')){
+      next({path:'/wx-login-bd'});
+      console.log('未登录');
+      next();
+    } else {
+      next('/');
+      console.log('已经登录');
+      next();
+    }
 
   } else if(isPhone == true) {
     //手机浏览器登录时

@@ -34,6 +34,40 @@ export default {
         this.secretId = res.readdata._data.qcloud.qcloud_secret_id
         this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
       })
+    },
+    Submission(){
+      this.appFetch({
+        url:'settings',
+        method:'post',
+        data:{
+          "data":[
+            {
+              "attributes":{
+                "key":'qcloud_app_id',
+                "value":this.appId,
+                "tag": "qcloud"
+              }
+            },
+            {
+              "attributes":{
+                "key":'qcloud_secret_id',
+                "value":this.secretId,
+                "tag": "qcloud",
+              }
+              },
+              {
+                "attributes":{
+                  "key":'qcloud_secret_key',
+                  "value":this.secretKey,
+                  "tag": "qcloud",
+                }
+              }
+            
+          ]
+        }
+      }).then(res=>{
+        this.$message('提交成功');
+      })
     }
   },
   components:{

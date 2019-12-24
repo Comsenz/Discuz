@@ -24,6 +24,7 @@ export default {
         this.imgUrl = this.$attrs.imgUrl;
       }
     }
+
     // console.log(this.$attrs,this.$listeners);
   }
 }

@@ -2,6 +2,7 @@
 
 <template>
     <div class="circleCon">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     	<comHeader title="详情" :menuIconShow="true"></comHeader>
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
@@ -140,6 +141,7 @@
         <p class="payTip">微信识别二维码支付</p>
        </van-popup> -->
      </div>
+    </van-pull-refresh> 
     </div>
 </template>
 

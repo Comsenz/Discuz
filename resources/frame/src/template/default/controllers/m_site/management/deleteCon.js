@@ -68,7 +68,13 @@ export default {
 			// 	}
 			// ],
 			themeListCon: [],
-			checked: null
+			checked: null,
+			pageIndex: 1,
+			pageLimit: 20,
+			loading: false,
+			finished: false,
+			offset: 100,
+			isLoading: false,
 
 		}
 	},
@@ -105,19 +111,31 @@ export default {
 
 		},
 
-		deleteList() {
-			this.appFetch({
+		deleteList(initStatus = false) {
+			return this.appFetch({
 				url:'threads',
 				method:'get',
 				data:{
 					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers'],
 					'filter[isDeleted]':'no',
-					'filter[categoryId]':''
+					'filter[categoryId]':'',
+					'page[number]': this.pageIndex,
+					'page[limit]': this.pageLimit
 				}
 			}).then(res=>{
+				if(initStatus){
+				this.themeListCon
+				}
 				console.log(res.readdata)
-				this.themeListCon = res.readdata;
-			})
+				this.themeListCon =this.themeListCon.concat(res.readdata);
+				this.loading = false;
+				this.finished = res.readdata.length < this.pageLimit;
+			}).catch((err)=>{
+				if(this.loading && this.pageIndex !== 1){
+				  this.pageIndex--;
+				}
+				this.loading = false;
+			  })
 			// console.log('1234');
 			// const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
 			// params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
@@ -167,6 +185,24 @@ export default {
 			//是否显示筛选内容
 			this.showScreen = false;
 		},
+		onLoad(){
+			console.log('onLoadonLoadonLoad')
+			this.loading = true;
+			this.pageIndex++;
+			this.deleteList();
+		  },
+	  
+		  onRefresh(){
+			this.pageIndex = 1;
+			this.deleteList(true).then((res)=>{
+			  this.$toast('刷新成功');
+			  this.finished = false;
+			  this.isLoading = false;
+			}).catch((err)=>{
+			  this.$toast('刷新失败');
+			  this.isLoading = false;
+			})
+		  }
 
 	},
 

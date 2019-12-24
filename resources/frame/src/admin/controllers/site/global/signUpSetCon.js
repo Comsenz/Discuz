@@ -5,7 +5,7 @@ import CardRow from '../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      checked:true,
+      checked:'',
       pwdLength:'',   //密码长度
       checkList:[],   //密码规则
     }
@@ -24,8 +24,9 @@ export default {
       }).then(res=>{
       
         // this.pwdLength = res.readdata._data.setreg.password_length
-        this.pwdLength = res.readdata._data.passwordLength
-        this.checkList = res.readdata._data.passwordStrength.split(',')
+        this.checked = res.readdata._data.setreg.register_close
+        this.pwdLength = res.readdata._data.setreg.password_length
+        this.checkList = res.readdata._data.setreg.password_strength.split(',')
         console.log(this.checkList)
         console.log( res)
       })
@@ -34,13 +35,13 @@ export default {
       var reg = /^\d+$|^\d+[.]?\d+$/;
       var pwdLength = this.pwdLength;
       var passwordStrength = this.checkList.join(",")
-      if(pwdLength === ''){
-        return
-      }
-      if (!reg.test(pwdLength)) { //密码只能输入数字
-        this.$message("密码只能输入数字");
-        return
-      }
+      // if(pwdLength === ''){
+      //   return
+      // }
+      // if (!reg.test(pwdLength)) { //密码只能输入数字
+      //   this.$message("密码只能输入数字");
+      //   return
+      // }
       this.appFetch({
         url:'settings',
         method:'post',
@@ -72,7 +73,7 @@ export default {
         }
       }).then(data=>{
         console.log(data)
-        this.$message('提交成功');
+        this.$message({ message: '提交成功', type: 'success' });
       })
       
     }

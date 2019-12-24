@@ -1,6 +1,14 @@
 <template>
     <div class="my-info-money-header">
       <walletDetailsHeader title="钱包明细"></walletDetailsHeader>
+    <van-list
+    v-model="loading"
+    :finished="finished"
+    :offset="offset"
+    finished-text="没有更多了"
+    @load="onLoad"
+    >
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <main class="content">
         <Panenl :title="type[item.attributes.change_type]" :num="item.attributes.change_freeze_amount" v-for="(item,index) in walletDetailsList" :key="index">
           <span slot="label">当前可用金额：{{item.attributes.change_freeze_amount}}</span>
@@ -20,6 +28,8 @@
         </Panenl> -->
       </main>
       <footer class="my-info-money-footer"></footer>
+</van-pull-refresh>    
+  </van-list>
     </div>
 </template>
 

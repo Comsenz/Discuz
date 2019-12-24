@@ -22,7 +22,7 @@
             <!-- <span class="userRole">{{item.groups[0].get()._data.name}}</span> -->
           </div>
         </div>
-        <div class="searchMore" v-show='userLoadMoreStatus' @click="handleLoadMoreUser">
+        <div class="searchMore" v-show='!userLoadMoreStatus' @click="handleLoadMoreUser">
           <i class="icon iconfont icon-search"></i>
           搜索更多用户
         </div>
@@ -44,11 +44,14 @@
             <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
         </div>
-        <div class="searchMore" @click="handleLoadMoreTheme">
+        <div class="searchMore" v-show="!themeLoadMoreStatus" @click="handleLoadMoreTheme">
           <i class="icon iconfont icon-search"></i>
-          搜索更多用户
+          搜索更多主题
         </div>
       </div>
+      <!-- <div v-show="searchThemeList.length === 0 && searchUserList.length === 0 && !firstComeIn">
+        暂无用户
+      </div> -->
     </div>
 </template>
 <style type="text/css" scoped>

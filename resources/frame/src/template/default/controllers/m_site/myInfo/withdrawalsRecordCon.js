@@ -5,15 +5,7 @@ import Panenl from '../../../view/m_site/common/panel';
 export default {
   data:function () {
     return {
-      withdrawalsList:[
-        // {
-        //   cash_status:"审核通过，打款中",
-        //   cash_apply_amount:"-1809",
-        //   cash_sn:'',
-        //   created_at:'',
-        // },
-       
-      ],
+      withdrawalsList:[],
       cashStatusObj:{
         1:'待审核',
         2:'审核通过',
@@ -21,7 +13,14 @@ export default {
         4:'待打款',
         5:'已打款',
         6:'打款失败'
-      }
+      },
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      immediateCheck:false ,//是否在初始化时立即执行滚动位置检查
+      pageLimit:20,
     }
   },
 
@@ -29,23 +28,53 @@ export default {
     WithdrawHeader,
     Panenl
   },
-  mounted(){
+  created(){
     this.reflect()
   },
   methods:{
-    reflect(){
-      this.appFetch({
-        url:'reflect',
-        method:'get',
-        data:{
-          include:''
+    async reflect(initStatus = false){
+      this.loading = true;
+      try{
+        const response = await this.appFetch({
+          url:'reflect',
+          method:'get',
+          data:{
+            include:'',
+            'page[number]': this.pageIndex,
+            'page[limit]': this.pageLimit
+          }
+        })
+        if(initStatus){
+          this.withdrawalsList = [];
         }
-      },(res)=>{
 
-      }).then((res)=>{
-        this.withdrawalsList = res.data;
-        console.log(this.withdrawalsList)
-      })
+        this.finished = response.data.length < this.pageLimit;
+        this.withdrawalsList = this.withdrawalsList.concat(response.data);
+
+      } catch(err){
+
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex --;
+        }
+
+      } finally {
+        this.loading = false;
+      }
+    },
+    onLoad(){    //上拉加载
+      this.loading = true;
+      this.pageIndex++;
+      this.reflect()
+    },
+    async onRefresh(){    //下拉刷新
+      try{
+        this.pageIndex = 1;
+        await this.reflect(true)
+        this.$toast('刷新成功');
+        this.isLoading = false;
+      } catch(err){
+        this.$toast('刷新失败');
+      }
     }
   }
-  }
+}

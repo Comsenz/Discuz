@@ -29,9 +29,11 @@
       </div>-->
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action=""
+        :http-request="uploaderLogo"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
+        @change="handleFile" 
         :before-upload="beforeAvatarUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -64,10 +66,10 @@
       </CardRow>
     </Card>
 
-    <Card header="已加入的站点：">
+    <!-- <Card header="已加入的站点：">
       <span class="add-site">站长帮<i>（站长）</i></span>
       <span class="add-site">站长帮<i>（站长）</i></span>
-    </Card>
+    </Card> -->
 
     <Card header="注册时间：">
       <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
@@ -96,14 +98,14 @@
     <Card header="性别：">
       <p>男</p>
     </Card>
-
+<!-- 
     <Card header="实名认证姓名：">
       <p>大虫</p>
     </Card>
 
     <Card header="实名认证身份证号：">
       <p>0000234897289374</p>
-    </Card>
+    </Card> -->
 
     <Card class="footer-btn">
       <el-button type="primary" size="medium" @click="submission">提交</el-button>

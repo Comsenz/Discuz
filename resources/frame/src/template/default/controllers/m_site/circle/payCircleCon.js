@@ -24,22 +24,30 @@ export default {
       siteUsername:'',  //站长
       joinedAt:'',    //加入时间
       sitePrice:'',   //加入价格
-      username:''    //当前用户名
+      username:'' , //当前用户名
+      loading: false,  //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      isLoading: false, //是否处于下拉刷新状态
+      pageIndex: 1,//页码
+      pageLimit: 20,
 		}
 	},
 	created(){
 	  this.getInfo();
 	},
 	methods: {
-    getInfo(){
+    getInfo(initStatus = false){
       //请求站点信息，用于判断站点是否是付费站点
-      this.appFetch({
+    return this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
           include: ['users'],
         }
       }).then((res) => {
+        if(initStatus){
+          this.siteInfo = []
+        }
         console.log(res);
         this.siteInfo = res.readdata;
         console.log(res.readdata._data.siteMode+'请求');
@@ -65,7 +73,18 @@ export default {
 		//跳转到注册页
 		registerJump:function(){
 			this.$router.push({ path:'/sign-up'})
-		}
+    },
+    onRefresh(){    //下拉刷新
+      this.pageIndex = 1;
+      this.getInfo(true).then(()=>{
+        this.$toast('刷新成功');
+        this.finished = false;
+        this.isLoading = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
+  }
 
 	},
 
