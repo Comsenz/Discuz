@@ -98,7 +98,10 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
+          // console.log(res);
+          this.$router.push({
+            path:'/circle',
+          });
 
         if(!res.errors){
           if(this.siteMode === 'pay'){
