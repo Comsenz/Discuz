@@ -309,6 +309,16 @@ class Post extends Model
     }
 
     /**
+     * Define the relationship with the post's stop words.
+     *
+     * @return HasOne
+     */
+    public function stopWords()
+    {
+        return $this->hasOne(PostMod::class);
+    }
+
+    /**
      * Define the relationship with the post's attachments.
      *
      * @return HasMany

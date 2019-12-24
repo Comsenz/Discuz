@@ -166,7 +166,7 @@ const appFetch = function(params, options) {
   console.log(this.$router.history.current.name);
 
   let defaultHeaders;
-  if(authVal != '' && authVal != null && !requireAuth.includes(this.$router.history.current.name)){
+  if(authVal != '' && authVal != null){
     defaultHeaders = {
       'Content-Type': 'application/json',
       'Authorization':'Bearer ' + authVal
