@@ -17,11 +17,14 @@ use Illuminate\Contracts\Bus\Dispatcher;
 class CreateAdminInviteController extends AbstractCreateController
 {
     /**
-     * 返回的数据字段和格式.
-     *
-     * @var Serializer
+     * {@inheritdoc}
      */
     public $serializer = InviteSerializer::class;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $bus;
 
     /**
      * @param Dispatcher $bus
@@ -32,23 +35,12 @@ class CreateAdminInviteController extends AbstractCreateController
     }
 
     /**
-     * 数据操作.
-     *
-     * @param ServerRequestInterface $request  注入http请求对象
-     * @param Document               $document 注入返回数据的文档
-     * @return mixed
+     * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
-        $actor = $request->getAttribute('actor');
-
-        // 分发创建站点的任务
-        $data = $this->bus->dispatch(
-            new CreateInvite($actor, $request->getParsedBody()->get('data', []))
+        return $this->bus->dispatch(
+            new CreateInvite($request->getAttribute('actor'), $request->getParsedBody()->get('data', []))
         );
-
-        // 返回结果
-        return $data;
     }
 }
