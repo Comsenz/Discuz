@@ -7,7 +7,8 @@ export default{
 	namespaced: true,
 	state: function() {
 		return {
-      status:0
+      status:0,
+      openid:''
 		};
 	},
 	getters,

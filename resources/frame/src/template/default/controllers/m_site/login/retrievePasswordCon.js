@@ -8,7 +8,7 @@ export default {
     return {
       newpwd:"",
       verifyNum:"",
-      phoneNum:"13524405426",
+      phoneNum:"",
       lostpwd:'lostpwd',
       btnContent:"获取验证码", //获取验证码按钮内文字
       time:1, //发送验证码间隔时间
