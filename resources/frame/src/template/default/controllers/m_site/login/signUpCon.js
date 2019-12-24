@@ -2,6 +2,7 @@
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import  '../../../scss/m_site/mobileIndex.scss';
+import browserDb from "../../../../../helpers/webDbHelper";
 
 export default {
   data:function () {
@@ -25,7 +26,7 @@ export default {
   methods:{
     signUpClick(){
 
-      /*this.appFetch({
+      this.appFetch({
         url:'register',
         method:'post',
         data:{
@@ -39,30 +40,27 @@ export default {
         }
       }).then(res => {
         console.log(res);
+        this.getForum().then(()=>{
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code)
+          } else {
+            this.$toast.success('注册成功');
+            let token = res.data.attributes.access_token;
 
+            if (this.phoneStatus){
+              this.$router.push({path:'bind-phone'});
+            } else if (this.siteMode === 'pay'){
+              this.$router.push({path:'pay-the-fee'});
+            } else if (this.siteMode === 'public'){
+              this.$router.push({path:'/'});
+            } else {
+              console.log("缺少参数，请刷新页面");
+            }
+
+          }
+        })
       }).catch(err=>{
         console.log(err);
-      })*/
-
-
-      this.getSiteSetting().then(()=>{
-        // if (res.errors){
-        //   this.$toast.fail(res.errors[0].code)
-        // } else {
-          this.$toast.success('注册成功');
-          // let token = res.data.attributes.access_token;
-
-          if (this.phoneStatus){
-            this.$router.push({path:'bind-phone'});
-          } else if (this.siteMode === 'pay'){
-            this.$router.push({path:'pay-the-fee'});
-          } else if (this.siteMode === 'public'){
-            this.$router.push({path:'/'});
-          } else {
-            console.log("缺少参数，请刷新页面");
-          }
-
-        // }
       })
 
     },
@@ -86,7 +84,7 @@ export default {
     /*
     * 接口请求
     * */
-    getSiteSetting(){
+    getForum(){
       return this.appFetch({
         url:'forum',
         method:'get',
@@ -95,6 +93,7 @@ export default {
         console.log(res);
         this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
         this.siteMode = res.readdata._data.setsite.site_mode;
+        browserDb.setLItem('siteInfo',res.readdata);
       }).catch(err=>{
         console.log(err);
       })
@@ -102,7 +101,7 @@ export default {
 
   },
   created(){
-    this.getSiteSetting();
+    this.getForum();
   }
 
 }

@@ -38,8 +38,8 @@
           </div>
 
           <div class="login-user-method-icon">
-            <div class="login-user-method-icon-box" :class="{'justifyCenter':isOne}">
-              <i @click="loginPhoneClick" class="login-user-method-icon-ring iconfont">
+            <div class="login-user-method-icon-box" :class="{'justifyCenter':isOne}" >
+              <i @click="loginPhoneClick" class="login-user-method-icon-ring iconfont" v-if="phoneStatus">
                 <span class="icon iconfont icon-shouji" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
 

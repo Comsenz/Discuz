@@ -158,8 +158,7 @@ const appFetch = function(params, options) {
     'wx-sign-up-bd',
     'sign-up',
     'bind-phone',
-    'retrieve-pwd',
-    'pay-the-fee'
+    'retrieve-pwd'
   ];
 
   let defaultHeaders;
