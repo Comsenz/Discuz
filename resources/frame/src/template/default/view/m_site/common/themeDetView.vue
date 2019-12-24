@@ -16,7 +16,7 @@
                   </div>
                 </div>
                 <div class="postOpera">
-                  <span class="icon iconfont icon-top" v-show="isTopShow"></span>
+                  <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
                   <div class="moreCli" v-show="isMoreShow">
                     <span class="icon iconfont icon-more"></span>
                   </div>
