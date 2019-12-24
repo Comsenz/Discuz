@@ -234,7 +234,22 @@ export default {
       }).catch(error=>{
         console.log('失败');
       })
-    }
+    },
+    onblurFun(){
+      if(this.siteAuthorScale == null || this.siteAuthorScale == ''){
+        this.siteAuthorScale = 0;
+      }
+      if(this.siteMasterScale == null || this.siteMasterScale == ''){
+        this.siteMasterScale = 0;
+      }
+      var countRes = parseFloat(this.siteAuthorScale) + parseFloat(this.siteMasterScale);
+      if(countRes != 10){
+        this.$message({
+          message: '比例相加必须为10',
+          type: 'error'
+        });
+      }
+    },
 
   },
   components:{
