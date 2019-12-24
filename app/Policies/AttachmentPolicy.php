@@ -37,10 +37,10 @@ class AttachmentPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->cannot('viewAttachments')) {
-            $query->whereRaw('FALSE');
-
-            return;
-        }
+        // if ($actor->cannot('viewAttachments')) {
+        //     $query->whereRaw('FALSE');
+        //
+        //     return;
+        // }
     }
 }

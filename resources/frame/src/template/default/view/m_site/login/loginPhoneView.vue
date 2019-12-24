@@ -21,14 +21,14 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default">发送验证码</van-button>
+              <van-button slot="button" size="small" :disabled="disabled" :class="{'grayBg':isGray}" type="default" @click="getCode">{{btnContent}}</van-button>
             </van-field>
 
           </van-cell-group>
         </div>
 
         <div class="login-phone-btn">
-          <van-button type="primary">登录</van-button>
+          <van-button type="primary" @click="phoneLoginClick">登录</van-button>
         </div>
 
         <div class="login-phone-method">
@@ -37,16 +37,13 @@
           </div>
 
           <div class="login-phone-method-icon">
-            <div class="login-phone-method-icon-box">
-
+            <div class="login-phone-method-icon-box" :class="{'justifyCenter':isOne}">
               <i @click="loginUserClick" class="login-phone-method-icon-ring iconfont">
                 <span class="icon iconfont icon-yonghu" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
-
-              <i @click="wxLoginClick" class="login-phone-method-icon-ring iconfont">
+              <i @click="wxLoginClick" class="login-phone-method-icon-ring iconfont" v-show="wxLoginShow">
                 <span class="icon iconfont icon-weixin" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
-
             </div>
           </div>
         </div>

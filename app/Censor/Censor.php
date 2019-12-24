@@ -85,10 +85,9 @@ class Censor
     /**
      * @param $content
      * @param string $type 'ugc' or 'username'
-     * @param bool $onlyMod
      * @return string
      */
-    public function check($content, $type = 'ugc', $onlyMod = false)
+    public function check($content, $type = 'ugc')
     {
         // 设置关闭时，直接返回原内容
         if (! $this->isTurnOn) {
@@ -96,7 +95,7 @@ class Censor
         }
 
         // 本地敏感词校验
-        $content = $this->localStopWordsCheck($content, $type, $onlyMod);
+        $content = $this->localStopWordsCheck($content, $type);
 
         // 腾讯云敏感词校验
         $content = $this->tencentCloudCheck($content);
@@ -107,22 +106,24 @@ dd($content);
     /**
      * @param $content
      * @param string $type 'ugc' or 'username'
-     * @param bool $onlyMod
      * @return string
      */
-    public function localStopWordsCheck($content, $type, $onlyMod = false)
+    public function localStopWordsCheck($content, $type)
     {
-        StopWord::when($onlyMod, function ($query) use ($type) {
-            return $query->where($type, self::MOD);
+        // 处理指定类型非忽略的敏感词
+        StopWord::when(in_array($type, ['ugc', 'username']), function ($query) use ($type) {
+            return $query->where($type, '<>', self::IGNORE);
         })->cursor()->tapEach(function ($word) use (&$content, $type) {
-            $find = '/' . addcslashes($word->find, '/') . '/i';
+            // 转义元字符并生成正则
+            $find = '/' . addcslashes($word->find, '\/^$()[]{}|+?.*') . '/i';
 
             if ($word->{$type} == self::REPLACE) {
                 $content = preg_replace($find, $word->replacement, $content);
             } else {
                 if ($word->{$type} == self::MOD) {
                     if (preg_match($find, $content, $matches)) {
-                        array_push($this->wordMod, $find);
+                        // 记录触发的审核词
+                        array_push($this->wordMod, $word->find);
 
                         $this->isMod = true;
                     }

@@ -15,6 +15,7 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -25,6 +26,8 @@ use Tobscure\JsonApi\Document;
 
 class ListThreadsController extends AbstractListController
 {
+    use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -117,6 +120,9 @@ class ListThreadsController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $this->assertCan($actor, 'viewThreadList');
+
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 

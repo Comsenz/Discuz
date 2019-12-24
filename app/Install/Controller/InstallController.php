@@ -22,6 +22,7 @@ use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use League\OAuth2\Server\CryptKey;
 use PDO;
@@ -73,7 +74,7 @@ class InstallController implements RequestHandlerInterface
             //初始化默认数据
             $this->installInItData();
             //站点名称设置
-            $this->installSiteName($input);
+            $this->installSiteSetting($input);
             //创建管理员用户
             $this->installAdminUser($input);
             //auto login Admin user
@@ -167,7 +168,7 @@ class InstallController implements RequestHandlerInterface
             Arr::get($input, 'mysqlUsername'),
             Arr::get($input, 'mysqlPassword'),
             Arr::get($input, 'tablePrefix', ''),
-            Arr::get($input, 'siteUrl'),
+            Arr::get($input, 'site_url'),
         ], $defaultConfigFile);
 
         file_put_contents($this->app->configPath('config.php'), $stub);
@@ -193,10 +194,11 @@ class InstallController implements RequestHandlerInterface
         $this->getConsole()->call('db:seed', ['--force' => true, '--database' => 'discuz_mysql']);
     }
 
-    private function installSiteName($input)
+    private function installSiteSetting($input)
     {
         $this->app->make(SettingsRepository::class)->set('site_name', Arr::get($input, 'forumTitle'));
-        $this->app->make(SettingsRepository::class)->set('site_url', Arr::get($input, 'siteUrl'));
+        $this->app->make(SettingsRepository::class)->set('site_url', Arr::get($input, 'site_url'));
+        $this->app->make(SettingsRepository::class)->set('site_install', Carbon::now());
     }
 
     private function installAdminUser(&$input)
@@ -206,7 +208,9 @@ class InstallController implements RequestHandlerInterface
         }
 
         $user = new User();
+        $this->app['db']->statement('SET FOREIGN_KEY_CHECKS=0;');
         $user->truncate();
+        $this->app['db']->statement('SET FOREIGN_KEY_CHECKS=1;');
         $user->username = Arr::get($input, 'adminUsername');
         $user->password = Arr::get($input, 'adminPassword');
         $user->last_login_ip = Arr::get($input, 'ip');

@@ -158,12 +158,15 @@ const appFetch = function(params, options) {
     'wx-sign-up-bd',
     'sign-up',
     'bind-phone',
-    'retrieve-pwd',
-    'pay-the-fee'
+    'retrieve-pwd'
   ];
 
+// && !requireAuth.includes(this.$router.history.current.name)
+
+  console.log(this.$router.history.current.name);
+
   let defaultHeaders;
-  if(authVal != '' && authVal != null && !requireAuth.includes(this.$router.history.current.name)){
+  if(authVal != '' && authVal != null){
     defaultHeaders = {
       'Content-Type': 'application/json',
       'Authorization':'Bearer ' + authVal

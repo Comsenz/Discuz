@@ -114,3 +114,68 @@ body{
     }
   }
 }
+
+/*
+  微信支付二维码
+*/
+.qrCodeBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  @include px2rem(width, 580);
+  @include px2rem(height, 820);
+  .popupTit {
+    display: block;
+    @include font-dpr(26);
+    @include px2rem(line-height, 36);
+    color: $cor888;
+    @include px2rem(padding, 36 0 0 0);
+    text-align: center;
+  }
+  .payNum {
+    @include px2rem(line-height, 84);
+    @include font-dpr(48);
+    @include px2rem(padding, 36 0);
+    @include px2rem(margin, 0 30 24 30);
+    border-bottom: 1px solid $corE5;
+    text-align: center;
+    span {
+      @include font-dpr(70);
+    }
+  }
+  .payType {
+    @include px2rem(margin, 0 30 34 30);
+    @include px2rem(line-height, 36);
+    @include font-dpr(26);
+    overflow: hidden;
+    .typeLeft {
+      float: left;
+      color: $cor888;
+    }
+    .typeRight {
+      float: right;
+      color: $cor444;
+      .icon {
+        @include font-dpr(30);
+        @include px2rem(margin-right, 15);
+        color: #09BB07;
+      }
+    }
+  }
+  .qrCode {
+    display: block;
+    @include px2rem(width, 380);
+    @include px2rem(height, 380);
+    @include px2rem(margin-top, 34);
+    @include px2rem(margin-bottom, 14);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .payTip {
+    @include font-dpr(30);
+    color: $cor333;
+    @include px2rem(line-height, 42);
+    @include px2rem(margin-top, 14);
+    text-align: center;
+  }
+}

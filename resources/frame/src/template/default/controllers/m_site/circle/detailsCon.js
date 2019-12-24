@@ -1,11 +1,12 @@
 /**
  * wap详情页控制器
  */
-import {Bus} from '../../../store/bus.js';
-import Thread from '../../../../../common/models/Thread';
+import appConfig from "../../../../../../../frame/config/appConfig";
+// import {Bus} from '../../../store/bus.js';
+// import Thread from '../../../../../common/models/Thread';
 // import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
-import Forum from '../../../../../common/models/Forum';
+// import Forum from '../../../../../common/models/Forum';
 export default {
 	data: function() {
 		return {
@@ -28,25 +29,6 @@ export default {
       qrcodeShow:false,
       amountNum:'',
       codeUrl:'',
-      // themeChoList: [
-      // 	{
-      // 		typeWo: '加精',
-      // 		type:'2'
-      // 	},
-      // 	{
-      // 		typeWo: '置顶',
-      // 		type:'3'
-      // 	},
-      //   {
-      //   	typeWo: '删除',
-      //   	type:'4'
-      //   },
-      //   {
-      //   	typeWo: '编辑',
-      //   	type:'5'
-      //   }
-
-      // ],
       showScreen: false,
       request:false,
       isliked:'',
@@ -186,13 +168,9 @@ export default {
           }
         }).then((res) => {
           console.log(res);
+          console.log('1234');
           this.themeShow = true;
           this.themeCon = res.readdata;
-          // console.log(res.readdata.firstPost.attachments[0]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[1]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[2]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[3]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[4]._data.extension);
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
           var firstpostImage = [];
@@ -214,7 +192,7 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme(){
-        var Url= location.href;
+        var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.themeId;
         var oInput = document.createElement('input');
         oInput.value = Url;
         document.body.appendChild(oInput);
