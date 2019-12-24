@@ -6,8 +6,8 @@
         <div class="pay-the-fee-titel">
           <h2>支付费用</h2>
         </div>
-        <van-button type="primary">立即付费,获得权限</van-button>
-        <p class="pay-the-fee-title-footer">￥20.00 / 永久有效</p>
+        <van-button type="primary" @click="payClick">立即付费,获得权限</van-button>
+        <p class="pay-the-fee-title-footer">￥{{sitePrice}} / {{siteExpire}}</p>
       </main>
 
       <div class="pay-the-fee-permission">
@@ -23,6 +23,23 @@
           <p @click="leapFrogClick">跳过，进入首页</p>
         </div>
       </div>
+
+      <van-popup
+        v-model="qrcodeShow"
+        round
+        close-icon-position="top-right"
+        closeable
+        class="qrCodeBox"
+        get-container="body">
+        <span class="popupTit">立即支付</span>
+        <div class="payNum">￥<span>{{amountNum}}</span></div>
+        <div class="payType">
+          <span class="typeLeft">支付方式</span>
+          <span class="typeRight"><i class="icon iconfont icon-wepay"></i>微信支付</span>
+        </div>
+        <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
+        <p class="payTip">微信识别二维码支付</p>
+      </van-popup>
     </div>
 </template>
 

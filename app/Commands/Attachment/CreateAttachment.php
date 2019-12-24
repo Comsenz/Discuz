@@ -89,7 +89,7 @@ class CreateAttachment
         $this->events = $events;
 
         // 判断有没有权限执行此操作
-        $this->assertCan($this->actor, 'attachment.createAttachment');
+        $this->assertCan($this->actor, 'attachment.create.' . (int) $this->isGallery);
 
         // 判断上传的文件是否正常
         if ($this->file->getError()) {

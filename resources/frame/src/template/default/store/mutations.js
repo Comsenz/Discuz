@@ -2,7 +2,7 @@
 
 import Vue from "vue";
 import {
-	SET_STATUS
+	SET_STATUS,SET_OPENID
 } from "./mutationTypes";
 
 export default {
@@ -12,6 +12,12 @@ export default {
   [SET_STATUS](state,payload){
     console.log(state);
     state.status += 1;
+  },
+  [SET_OPENID](state,payload){
+    console.log(state);
+    console.log(payload);
+    state.openid = payload;
   }
+
 }
 

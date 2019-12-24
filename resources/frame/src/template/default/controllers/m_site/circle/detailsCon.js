@@ -1,11 +1,12 @@
 /**
  * wap详情页控制器
  */
-import {Bus} from '../../../store/bus.js';
-import Thread from '../../../../../common/models/Thread';
+import appConfig from "../../../../../../../frame/config/appConfig";
+// import {Bus} from '../../../store/bus.js';
+// import Thread from '../../../../../common/models/Thread';
 // import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
-import Forum from '../../../../../common/models/Forum';
+// import Forum from '../../../../../common/models/Forum';
 export default {
 	data: function() {
 		return {
@@ -216,7 +217,7 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme(){
-        var Url= location.href;
+        var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.themeId;
         var oInput = document.createElement('input');
         oInput.value = Url;
         document.body.appendChild(oInput);

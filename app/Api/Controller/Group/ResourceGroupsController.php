@@ -23,17 +23,13 @@ class ResourceGroupsController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-//    public $include = ['permission'];
+    public $optionalInclude = ['permission'];
 
     /**
      * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        // 获取当前用户
-        $actor = $request->getAttribute('actor');
-
-        // 获取请求的参数
         $inputs = $request->getQueryParams();
 
         $query = GroupRepository::query();

@@ -7,20 +7,23 @@ export default {
 		return {
       thread:{},
       themeId:'',
-	  sitePrice:'',   //加入价格
-	  loading: false,  //是否处于加载状态
+	    sitePrice:'',   //加入价格
+	    loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      thread:false,
+      sitePrice:''   //加入价格
 		}
 	},
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
+  },
   created(){
-    // themeId: function(){
-    //     return this.$route.params.themeId;
-    // },
-    this.themeId = "140";
     this.myThread();
     this.getInfo();
   },
@@ -45,8 +48,9 @@ export default {
         this.sitePrice = res.readdata._data.sitePrice
       });
     },
+
     myThread(initStatus = false){
-     return this.appFetch({
+     this.appFetch({
         url:'threads',
         method:'get',
         splice:'/'+this.themeId,
@@ -60,7 +64,8 @@ export default {
         console.log('123');
         console.log(res)
         this.thread = res.readdata;
-
+        console.log(this.thread._data.createdAt);
+        console.log('567');
       })
     },
 		//跳转到登录页

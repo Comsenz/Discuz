@@ -44,6 +44,9 @@ export default {
 	  }
   },
 	props: {
+    personInfo: { // 组件用户信息
+      type: false
+    },
     userInfoAvatarUrl: { // 组件用户信息
       type: String
     },
