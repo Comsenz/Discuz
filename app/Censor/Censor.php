@@ -9,6 +9,7 @@ namespace App\Censor;
 
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\Application;
 
 class Censor
 {
@@ -68,11 +69,17 @@ class Censor
     public $wordBanned = [];
 
     /**
+     * @var
+     */
+    public $app;
+
+    /**
      * @param SettingsRepository $setting
      */
-    public function __construct(SettingsRepository $setting)
+    public function __construct(SettingsRepository $setting, Application $app)
     {
         $this->isTurnOn = $setting->get('censor', 'default', true) == 'true';
+        $this->app = $app;
     }
 
     /**
@@ -93,7 +100,7 @@ class Censor
 
         // 腾讯云敏感词校验
         $content = $this->tencentCloudCheck($content);
-
+dd($content);
         return $content;
     }
 
@@ -138,6 +145,11 @@ class Censor
      */
     public function tencentCloudCheck($content)
     {
+        dump($content);
+        $qcloud = $this->app->make('qcloud');
+        $result = $qcloud->service('cms')->TextModeration($content);
+        dd($result);
+
         return $content;
     }
 }
