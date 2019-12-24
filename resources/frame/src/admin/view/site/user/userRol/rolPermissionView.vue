@@ -5,13 +5,13 @@
     <Card header="前台操作权限："></Card>
     <Card>
       <CardRow description="查看主题列表页的权限">
-        <el-checkbox v-model="checked" label="viewThreads">查看帖子列表</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThreadList">查看主题列表</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="查看主题的详情页的权限">
-        <el-checkbox v-model="checked" label="viewThreads">查看帖子详情</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThread">查看主题详情</el-checkbox>
       </CardRow>
     </Card>
 
@@ -23,31 +23,31 @@
 
     <Card>
       <CardRow description="回复主题的权限">
-        <el-checkbox v-model="checked" label="thread.reply">回复帖子</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.reply">回复主题</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="发布主题时上传附件的权限">
-        <el-checkbox v-model="checked">上传附件</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.create.0">上传附件</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="发布主题时上传图片的权限">
-        <el-checkbox v-model="checked">上传图片</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.create.1">上传图片</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="查看主题的详情页中的附件的权限">
-        <el-checkbox v-model="checked">查看附件</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.view.0">查看附件</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="查看主题的详情页中的图片的权限">
-        <el-checkbox v-model="checked">查看图片</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.view.1">查看图片</el-checkbox>
       </CardRow>
     </Card>
 
@@ -61,31 +61,31 @@
     <Card header="前台管理权限："></Card>
     <Card>
       <CardRow description="前台删除单个主题的权限">
-        <el-checkbox v-model="checked" label="deletePosts">删帖</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.deletePosts">删帖</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台置顶、取消置顶主题的权限">
-        <el-checkbox v-model="checked">置顶</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.sticky">置顶</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台精华、取消精华主题的权限">
-        <el-checkbox v-model="checked">加精</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.essence">加精</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台单个主题的编辑权限">
-        <el-checkbox v-model="checked">编辑</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.editPosts">编辑</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台批量删除主题的权限">
-        <el-checkbox v-model="checked">批量删除帖子</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.hide">批量删除主题</el-checkbox>
       </CardRow>
     </Card>
 
@@ -97,13 +97,13 @@
 
     <Card>
       <CardRow description="前台更改成员所属用户组的权限">
-        <el-checkbox v-model="checked">编辑用户组</el-checkbox>
+        <el-checkbox v-model="checked" label="group.edit">编辑用户组</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台更改成员禁用状态的权限">
-        <el-checkbox v-model="checked">编辑用户状态</el-checkbox>
+        <el-checkbox v-model="checked" label="user.edit">编辑用户状态</el-checkbox>
       </CardRow>
     </Card>
 
@@ -116,19 +116,19 @@
 
     <Card>
       <CardRow description="">
-        <p style="margin-left: 24PX">帖子点赞</p>
+        <p style="margin-left: 24PX">主题点赞</p>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="">
-        <p style="margin-left: 24PX">帖子收藏</p>
+        <p style="margin-left: 24PX">主题收藏</p>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="">
-        <p style="margin-left: 24PX">帖子打赏</p>
+        <p style="margin-left: 24PX">主题打赏</p>
       </CardRow>
     </Card>
 
