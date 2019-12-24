@@ -79,7 +79,7 @@
         </div>
 
         <div class="cont-review-table__main" slot="main">
-          {{!items.user?'作者被禁止或删除，内容自动屏蔽':items.firstPost._data.content}}
+          {{items.firstPost._data.content}}
         </div>
 
         <div class="cont-review-table__footer" slot="footer">

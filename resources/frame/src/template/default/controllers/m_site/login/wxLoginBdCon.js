@@ -70,10 +70,46 @@ export default {
         console.log(err);
       })
 
-    }
+    },
+
+    /*
+    * 接口请求
+    * */
+    getWatchHref(code,state){
+      this.appFetch({
+        url:'wechat',
+        method:'get',
+        data:{
+          code:code,
+          state:state
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          console.log(res.errors[0].status);
+          this.wxStatus = res.errors[0].status;
+          let openid = res.errors[0].user.openid;
+
+          if (this.wxStatus == 400){
+            console.log('微信跳转');
+            this.setOpenId(openid);
+            this.$router.push({path: '/wx-login-bd'})
+          }
+        } else {
+          this.$router.push({path:'/'})
+        }
+        // this.isCodeState = false;
+        this.wxHref = res.data.attributes.location;
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
   },
   created(){
     console.log(this.openidX);
+
+    this.getWatchHref(this.$router.qurey.code);
+
     this.siteMode = webDB.getLItem('siteInfo')._data.setsite.site_mode;
   }
 }

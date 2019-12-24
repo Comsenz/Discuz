@@ -97,27 +97,16 @@ export default {
     },
 
     loginWxClick() {
-      /*if (this.isPC){
+      if (this.isPC){
         this.$message({
           message: 'PC端暂不支持微信登录，请在微信客户端打开',
           type: 'warning'
         });
       }else {
-      }*/
 
-      // if (this.isCodeState <= 2){
-      //   this.isCodeState =+1;
-      // }
-      //
-      // alert(this.isCodeState);
+      }
 
-      window.location.href = this.wxHref;
-
-     /* if (this.wxStatus == 400){
-        console.log('微信跳转');
-        this.$router.push({path: '/wx-login-bd'})
-      }*/
-
+      // window.location.href = this.wxHref;
     },
 
     loginPhoneClick() {
@@ -207,11 +196,12 @@ export default {
       // const STATE = '123';
       //微信登录时
       console.log('微信登录');
+      // this.getWatchHref();
 
-      this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
-      if (this.$router.history.current.query.code && this.$router.history.current.query.state){
-        this.$router.push({path:'/login-user'});
-      }
+      // this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
+      // if (this.$router.history.current.query.code && this.$router.history.current.query.state){
+      //   this.$router.push({path:'/login-user'});
+      // }
     } else if (isPhone === true) {
       console.log('手机浏览器登录');
 
@@ -221,7 +211,7 @@ export default {
       console.log('pc登录');
 
       this.isPC = true;
-      this.getWatchHref();
+      // this.getWatchHref();
     }
 
     this.getForum();

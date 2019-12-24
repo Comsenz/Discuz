@@ -161,6 +161,10 @@ const appFetch = function(params, options) {
     'retrieve-pwd'
   ];
 
+// && !requireAuth.includes(this.$router.history.current.name)
+
+  console.log(this.$router.history.current.name);
+
   let defaultHeaders;
   if(authVal != '' && authVal != null){
     defaultHeaders = {
