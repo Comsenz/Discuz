@@ -37,6 +37,9 @@ export default {
     if (this.pageName === 'modify-data'){
       this.headerTitle="修改资料"
     }*/
+  },
+  beforeRouteLeave (to, from, next) {
+    next()
   }
 
 }
