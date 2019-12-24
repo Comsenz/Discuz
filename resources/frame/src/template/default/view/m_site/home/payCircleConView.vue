@@ -47,20 +47,21 @@
 	    	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
 	    </div>
 	    <div class="gap"></div>
-	    <div class="powerListBox">
-	    	<div class="powerTit">作为成员，您将获得以下权限</div>
+	    <div class="powerListBox" v-if="limitList">
+	    	<div class="powerTit">作为{{limitList._data.name}}，您将获得以下权限</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">帖子操作</div>
-	    		<p class="powerChi">查看主题</p>
-	    		<p class="powerChi">发图文帖</p>
+	    		<p class="powerChi" v-for="(limit,index) in limitList.permission">{{limit._data.permission}}</p>
+          <!-- <p class="powerChi" v-if="limit._data.permission == 'cash.review'">钱包</p> -->
+	    		<!-- <p class="powerChi">发图文帖</p>
 	    		<p class="powerChi">付费阅读帖</p>
 	    		<p class="powerChi">附件查看</p>
-	    		<p class="powerChi">回帖</p>
+	    		<p class="powerChi">回帖</p> -->
 	    	</div>
 	    </div>
 
     </div>
-	</van-pull-refresh> 
+	</van-pull-refresh>
     </div>
 </template>
 

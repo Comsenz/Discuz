@@ -19,8 +19,8 @@ class OrderSubscriber
 {
     public function subscribe(Dispatcher $events)
     {
-        // 打赏通知
-        $events->listen(Updated::class, [$this, 'whenReward']);
+        // 订单支付成功
+        $events->listen(Updated::class, [$this, 'whenOrderPaid']);
     }
 
     /**
@@ -29,17 +29,19 @@ class OrderSubscriber
      * @param Updated $event
      * @throws BindingResolutionException
      */
-    public function whenReward(Updated $event)
+    public function whenOrderPaid(Updated $event)
     {
         $order = $event->order;
 
-        // 付费加入的订单，修改用户过期时间
-        if ($order->type == Order::ORDER_TYPE_REGISTER) {
+        // 付费加入站点的订单，支付成功后修改用户过期时间
+        if ($order->type == Order::ORDER_TYPE_REGISTER && $order->status == Order::ORDER_STATUS_PAID) {
             $day = app()->make(SettingsRepository::class)->get('site_expire');
 
             $order->user->expired_at = Carbon::now()->addDays($day);
+            $order->user->save();
         }
 
+        // 打赏主题的订单，支付成功后通知主题作者
         if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
             $order->payee->notify(new Rewarded($order));
         }
