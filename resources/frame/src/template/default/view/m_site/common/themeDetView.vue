@@ -25,7 +25,7 @@
               <div class="postContent" v-if="item.firstPost">
                 <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
               </div>
-              <div class="themeImgBox" v-if="item.firstPost.imageList.length>0">
+              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
                 <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
