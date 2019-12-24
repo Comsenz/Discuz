@@ -10,7 +10,7 @@
     :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <main class="reply-my-main">
+    <main class="reply-my-main content">
       <div class="reply-my-cont cell-crossing" v-for='(item,index) in replyList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"

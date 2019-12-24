@@ -4,13 +4,26 @@
     <div>
 		<div class="foueHeadBox">
 			<div class="fourHeader">
-		        <span class="icon iconfont icon-back headBack" ></span>
+		        <span class="icon iconfont icon-back headBack" @click="headerBack"></span>
 		        <h1 class="headTit">{{$route.meta.title}}</h1>
 		    </div>
-		    <div class="serBox">
-		    	<input type="text" name="" placeholder="搜索" class="serInp" v-model="searchName" @input="handleSearch">
-		    	<i v-show="searchName === ''" class="icon iconfont icon-search"></i>
+		    <div class="serBox" v-show="serHide">
+		    	<input type="text" name="" placeholder="搜索" class="serInp"   @click="serToggle">
+		    	<!-- <i v-show="searchName === ''" class="icon iconfont icon-search"></i> -->
 		    </div>
+		<form action="/">
+          <van-search
+            v-model="searchName"
+            v-show="serShow"
+            ref="serInp"
+            placeholder="搜索用户和主题"
+            background="#f8f8f8"
+            show-action
+            @input="handleSearch"
+            @cancel="onCancel"
+            class="searchCon"
+          />
+        </form>
 		</div>
 		<van-list
 		v-model="loading"

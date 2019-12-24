@@ -11,7 +11,7 @@
     :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-	    <Header :searchIconShow="true" :menuIconShow="true" navShow="true" headFixed="true"></Header>
+	    <Header :searchIconShow="true" :menuIconShow="true" navShow="true" headFixed="true" @click="headerBack"></Header>
         <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>

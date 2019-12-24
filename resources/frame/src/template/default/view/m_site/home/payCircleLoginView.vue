@@ -22,7 +22,7 @@
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">加入方式</span>
-        	<span class="infoItemRight">付费{{siteInfo._data.price}}元，有效期自加入起{{siteInfo.day}}天</span>
+        	<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">站长</span>
@@ -45,7 +45,7 @@
       	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
       </div>
     </div>
- </van-pull-refresh> 
+ </van-pull-refresh>
   </div>
 
 </template>

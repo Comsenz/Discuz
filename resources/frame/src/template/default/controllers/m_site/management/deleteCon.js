@@ -202,14 +202,21 @@ export default {
 			  this.$toast('刷新失败');
 			  this.isLoading = false;
 			})
+		  },
+
+		  headerBack(){
+			console.log("回退");
+			this.$router.go(-1)
 		  }
 
+
 	},
 
-	mounted: function () {
-		// this.getVote();
-		// window.addEventListener('scroll', this.handleTabFix, true);
-	},
+	// mounted: function () {
+
+	// 	// this.getVote();
+	// 	// window.addEventListener('scroll', this.handleTabFix, true);
+	// },
 	beforeRouteLeave(to, from, next) {
 		// window.removeEventListener('scroll', this.handleTabFix, true)
 		next()

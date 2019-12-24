@@ -25,7 +25,9 @@ export default {
 			pageSize:'',//每页的条数
 			pageIndex: 1,//页码
 			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-			searchTimeout:null
+			searchTimeout:null,
+			serHide:true,
+			serShow:false,
 		}
 	},
 	//用于数据初始化
@@ -34,6 +36,14 @@ export default {
 		this.handleSearch();
 	},
 	methods: {
+		    //搜索框切换
+			serToggle(){
+				this.serHide = false;
+				this.serShow = true;
+				this.$refs.serInp.focus();
+			  },
+			  onCancel() {
+			},
 		//选中复选框
 		toggle(id) {
 			var listLen = this.userList.length;
@@ -62,10 +72,11 @@ export default {
 		},
 
 		// 通过搜索获取用户列表
-		handleSearch(e) {
-			if (e) {
-				var value = e.target.value;
-				this.searchName = value;
+		handleSearch(val) {
+			console.log(val,'0000000000')
+			if (val) {
+				// var value = e.target.value;
+				this.searchName = val;
 			} else {
 				this.searchName = '';
 			}
@@ -199,6 +210,10 @@ export default {
 			this.$toast('刷新成功');
 			this.isLoading = false;
 			this.finished = false;  
+		  },
+		  headerBack(){
+			console.log("回退");
+			this.$router.go(-1)
 		  }
 	},
 

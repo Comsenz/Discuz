@@ -9,87 +9,72 @@ namespace App\Commands\Invite;
 
 use App\Events\Invite\Saving;
 use App\Models\Invite;
+use App\Models\User;
 use Carbon\Carbon;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Exception;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
 class CreateInvite
 {
+    use AssertPermissionTrait;
     use EventsDispatchTrait;
 
     /**
-     * 执行操作的用户.
+     * The user performing the action.
      *
      * @var User
      */
     public $actor;
 
     /**
-     * 请求的数据.
+     * The attributes of the new invitation.
      *
      * @var array
      */
     public $data;
 
     /**
-     * 初始化命令参数
-     *
-     * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
+     * @param User $actor
+     * @param array $data
      */
-    public function __construct($actor, array $data)
+    public function __construct(User $actor, array $data)
     {
         $this->actor = $actor;
         $this->data = $data;
     }
 
     /**
-     * 执行命令
-     *
-     * @param BusDispatcher $bus
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @return Invite
-     * @throws Exception
+     * @throws PermissionDeniedException
      */
-    public function handle(BusDispatcher $bus, EventDispatcher $events)
+    public function handle(Dispatcher $events)
     {
         $this->events = $events;
 
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'createInvite');
+        $this->assertCan($this->actor, 'createInvite');
 
-        // 生成邀请码
-        $code = Str::random(32);
-        $dateline = Carbon::now()->timestamp;
-        //7天有效期
-        $endtime  = Carbon::now()->addDay(7)->timestamp;
-
-        // 初始数据
         $invite = Invite::creation(
             Arr::get($this->data, 'attributes.group_id'),
             2,
-            $code,
-            $dateline,
-            $endtime,
-            $this->actor->id ?: 0
+            Str::random(32),
+            Carbon::now()->timestamp,
+            Carbon::now()->addDays(7)->timestamp,
+            $this->actor->id
         );
 
-        // 触发钩子事件
         $this->events->dispatch(
             new Saving($invite, $this->actor, $this->data)
         );
 
-        // 保存
         $invite->save();
 
-        // 调用钩子事件
         $this->dispatchEventsFor($invite);
 
-        // 返回数据对象
         return $invite;
     }
 }
