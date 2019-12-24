@@ -6,7 +6,6 @@ export default {
 	data: function() {
 		return {
       thread:{},
-      themeId:'',
 	    sitePrice:'',   //加入价格
 	    loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
@@ -15,13 +14,18 @@ export default {
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       thread:false,
-      sitePrice:''   //加入价格
+      sitePrice:'',//加入价格
+      themeCon:[],
+      limitList:''
 		}
 	},
   computed: {
-      themeId: function(){
-          return this.$route.params.themeId;
-      }
+    themeId: function(){
+        return this.$route.params.themeId;
+    },
+    groupId: function(){
+        return this.$route.params.groupId;
+    }
   },
   created(){
     this.myThread();
@@ -47,6 +51,23 @@ export default {
         }
         this.sitePrice = res.readdata._data.sitePrice
       });
+
+      //请求权限列表数据
+      this.appFetch({
+        url: 'groups',
+        method: 'get',
+        splice:'/'+this.groupId,
+        data: {
+          include: ['permission'],
+        }
+      }).then((res) => {
+        console.log('000000');
+        console.log(res);
+        this.limitList = res.readdata;
+
+      });
+
+
     },
 
     myThread(initStatus = false){
