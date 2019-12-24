@@ -104,8 +104,9 @@ export default {
 
     var userId = browserDb.getLItem('tokenId');
     if(enentType == 1){
-      browserDb.removeLItem('tokenId');
-      browserDb.removeLItem('Authorization');
+      // browserDb.removeLItem('tokenId');
+      // browserDb.removeLItem('Authorization');
+      localStorage.clear();
       this.$router.push({ path:url});
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
