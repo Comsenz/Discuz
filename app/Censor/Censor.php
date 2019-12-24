@@ -9,6 +9,8 @@ namespace App\Censor;
 
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\Application;
+use Illuminate\Support\Arr;
 
 class Censor
 {
@@ -31,13 +33,6 @@ class Censor
      * 替换
      */
     const REPLACE = '{REPLACE}';
-
-    /**
-     * 开关
-     *
-     * @var bool
-     */
-    public $isTurnOn;
 
     /**
      * 是否合法（放入待审核）
@@ -68,22 +63,36 @@ class Censor
     public $wordBanned = [];
 
     /**
-     * @param SettingsRepository $setting
+     * @var
      */
-    public function __construct(SettingsRepository $setting)
+    public $app;
+
+    /**
+     * @var SettingsRepository
+     */
+    public $setting;
+
+    /**
+     * @param SettingsRepository $setting
+     * @param Application $app
+     */
+    public function __construct(SettingsRepository $setting, Application $app)
     {
-        $this->isTurnOn = $setting->get('censor', 'default', true) == 'true';
+        $this->app = $app;
+        $this->setting = $setting;
     }
 
     /**
+     * Check text information.
+     *
      * @param $content
      * @param string $type 'ugc' or 'username'
      * @return string
      */
-    public function check($content, $type = 'ugc')
+    public function checkText($content, $type = 'ugc')
     {
         // 设置关闭时，直接返回原内容
-        if (! $this->isTurnOn) {
+        if (!$this->setting->get('censor', 'default', true)) {
             return $content;
         }
 
@@ -91,7 +100,9 @@ class Censor
         $content = $this->localStopWordsCheck($content, $type);
 
         // 腾讯云敏感词校验
-        $content = $this->tencentCloudCheck($content);
+        if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
+            $content = $this->tencentCloudCheck($content);
+        }
 
         return $content;
     }
@@ -135,10 +146,24 @@ class Censor
 
     /**
      * @param $content
-     * @return string
+     * @return mixed
      */
     public function tencentCloudCheck($content)
     {
+        $qcloud = $this->app->make('qcloud');
+
+        /**
+         * @property \Discuz\Qcloud\QcloudManage
+         */
+        $result = $qcloud->service('cms')->TextModeration($content);
+        $keyWords = Arr::get($result, 'Data.Keywords', []);
+
+        if (!blank($keyWords)) {
+            // 记录触发的审核词
+            $this->wordMod = array_merge($this->wordMod, $keyWords);
+            $this->isMod = true;
+        }
+
         return $content;
     }
 }
