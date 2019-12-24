@@ -8,16 +8,6 @@ export default {
 			headOpeShow: false,
 			isfixNav: false,
 			current:0,
-        todos: [
-          { text: '选项一111' },
-          { text: '选项二' },
-          { text: '选项三' },
-          { text: '选项四' },
-          { text: '选项五' },
-          { text: '选项六' },
-          { text: '选项七' },
-          { text: '选项八' }
-      ],
       siteInfo: false,
       siteUsername:'',  //站长
       joinedAt:'',    //加入时间

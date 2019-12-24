@@ -97,14 +97,14 @@
       </el-collapse-transition>
 
       <Card  header="主题打赏金额分成比例：">
-        <CardRow description="主题打赏的分成比例设置">
+        <CardRow description="主题打赏的分成比例设置，两者加起来必须为10，不填时默认为作者10、平台0">
           <div class="proportion-box">
             <span>作者</span>
-            <el-input class="" size="small" v-model="siteAuthorScale"></el-input>
+            <el-input class="" size="small" v-model="siteAuthorScale" @blur.native.capture="onblurFun"></el-input>
           </div>
           <div class="proportion-box">
             <span>平台(站长)</span>
-            <el-input size="small" v-model="siteMasterScale"></el-input>
+            <el-input size="small" v-model="siteMasterScale" @blur.native.capture="onblurFun"></el-input>
           </div>
         </CardRow>
       </Card>
@@ -148,7 +148,11 @@
       </Card>
     </div>
 </template>
-
+<style>
+  .disabled .el-upload--picture-card {
+      display: none;
+  }
+</style>
 <script>
 import '../../../scss/site/globalStyle.scss';
 import siteSetCon from '../../../controllers/site/global/siteSetCon';

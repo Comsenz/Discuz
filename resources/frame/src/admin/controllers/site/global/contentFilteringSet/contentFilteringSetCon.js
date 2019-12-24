@@ -34,7 +34,7 @@ export default {
       inputFind:false,
       radio2:"1",
       total:0, //总条数
-      pageLimit: 5, //每页多少条
+      pageLimit:20, //每页多少条
       pageNum:0, //当前页
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,

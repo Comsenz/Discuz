@@ -40,7 +40,7 @@
               label="主题和回复处理方式"
             >
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.username" placeholder="请选择" @change="selectChange(scope)">
+                <el-select v-model="scope.row._data.ugc" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -55,7 +55,7 @@
               prop="address"
               label="用户名处理方式">
               <template slot-scope="scope">
-                <el-select v-model="scope.row._data.ugc" placeholder="请选择" @change="selectChange(scope)">
+                <el-select v-model="scope.row._data.username" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
