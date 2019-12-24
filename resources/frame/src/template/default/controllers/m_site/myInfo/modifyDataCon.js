@@ -55,7 +55,7 @@ export default {
         this.modifyPhone = res.readdata._data.mobile; //用户手机号
         this.headPortrait = res.readdata._data.avatarUrl; //用户头像
         this.wechatId = res.readdata._data.id;            //用户Id
-        // this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
+        this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
       })
     },
       handleFile: function (e) {
@@ -93,10 +93,10 @@ export default {
           // on cancel
         });
       },
-      wechat(id){
+      wechat(id){   //解绑微信
         if(id!= '' && id!= null){
           this.appFetch({
-            url:'wechat',
+            url:'wechatDelete',
             method:'delete',
             splice:this.wechatId+'/'+'wechat',
             data:{

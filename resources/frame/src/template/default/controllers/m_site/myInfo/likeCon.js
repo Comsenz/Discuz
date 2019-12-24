@@ -12,6 +12,7 @@ export default {
   data:function () {
     return {
       likeList:[],
+      stateTitle:'点赞了我',
       pageIndex: 1,
       pageLimit: 20,
       loading: false,

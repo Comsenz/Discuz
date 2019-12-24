@@ -14,6 +14,7 @@ export default {
   data:function () {
     return {
       rewardList:[],
+      stateTitle:'打赏了我',
       pageIndex: 1,
       pageLimit: 20,
       loading: false,

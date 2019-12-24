@@ -12,6 +12,7 @@ export default {
   data:function () {
     return {
       replyList:[],
+      stateTitle:'回复了我',
       isLoading: false, //是否处于下拉刷新状态
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
