@@ -169,17 +169,15 @@
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
+// import Header from '../../m_site/common//headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "detailsView",
     components:{
     	comHeader,
-      Header
     },
-    ...mSiteHeader,
     ...mSiteDetailsCon
 }
 
