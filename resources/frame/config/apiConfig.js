@@ -52,7 +52,7 @@ module.exports = {
   'groups':'/api/groups', //获取所有操作类型、获取所有用户角色
   'groupPermission':'/api/permission', // 修改用户组权限
   'deleteNotification':'/api/notification', //删除通知里的回复我的
-  'wechat':'/api/users/' ,//修改资料里的解绑微信
+  'wechatDelete':'/api/users/' ,//修改资料里的解绑微信
   'wechatBind':'api/oauth/wechat',//去绑定微信
 
 
