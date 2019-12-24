@@ -92,7 +92,7 @@ export default {
           oneHeader: true
         }
       },
-      'pay-circle-con/:themeId':{
+      'pay-circle-con/:themeId/:groupId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleConView'],resolve)
         },
@@ -440,11 +440,10 @@ export default {
     'bind-phone',
     'retrieve-pwd',
     'pay-the-fee',
-    'pay-circle-con',
+    'pay-circle-con/:themeId/:groupId',
     'pay-circle-login',
     'pay-circle'
   ];
-
   /*
   * 获取用户第一次访问页面，登录后跳转回来
   * */
@@ -836,6 +835,7 @@ export default {
                 path:'/sign-up'
               });
             } else {
+
               console.log('首页');
               next({
                 path:'/pay-circle'
