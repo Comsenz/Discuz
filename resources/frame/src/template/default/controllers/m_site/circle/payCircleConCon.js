@@ -5,16 +5,16 @@
 export default {
 	data: function() {
 		return {
-      thread:{},
-      themeId:'',
+      thread:false,
       sitePrice:''   //加入价格
 		}
 	},
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
+  },
   created(){
-    // themeId: function(){
-    //     return this.$route.params.themeId;
-    // },
-    this.themeId = "140";
     this.myThread();
     this.getInfo();
   },
@@ -40,7 +40,7 @@ export default {
       });
     },
     myThread(){
-     return this.appFetch({
+     this.appFetch({
         url:'threads',
         method:'get',
         splice:'/'+this.themeId,
@@ -51,7 +51,8 @@ export default {
         console.log('123');
         console.log(res)
         this.thread = res.readdata;
-
+        console.log(this.thread._data.createdAt);
+        console.log('567');
       })
     },
 		//跳转到登录页

@@ -1,9 +1,9 @@
 <template>
   <footer class="login-user-footer">
     <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
-      <span @click="retrieveClick">忘记密码？找回</span>
-      <i></i>
-      <span @click="signUpClick">注册</span>
+      <span v-if="qcloudSms" @click="retrieveClick">忘记密码？找回</span>
+      <i v-if="registerClose && qcloudSms"></i>
+      <span v-if="registerClose" @click="signUpClick">注册</span>
     </template>
 
     <template v-else-if="pageName === 'wx-login-bd'||pageName === 'wx-sign-up-bd'">
@@ -15,7 +15,7 @@
     </template>
 
     <template v-else-if="pageName === 'bind-phone'">
-      <span @click="homeClick">跳过，进入首页</span>
+      <span @click="homeClick">{{siteMode === 'pay'?'跳过，进入支付费用':'跳过，进入首页'}}</span>
     </template>
 
     <template v-else-if="pageName === 'retrieve-pwd'">

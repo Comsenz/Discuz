@@ -1,12 +1,10 @@
 <!--移动端付费站点模板-->
 
 <template>
-    <div class="circleCon">
-	    <!-- <Header :logoShow="true" :perDetShow="true" :userInfoName="false" :invitationShow="false" @categoriesChoice=""></Header> -->
-      <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false"></Header>
+    <div class="circleCon" v-if="thread">
+      <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false" :personInfo="false"></Header>
 	    <div class="gap"></div>
 	    <div class="cirPostCon">
-
         <!-- <main class="reward-main">
           <div class="reward-con cell-crossing" v-model="thread">
             <ContHeader
@@ -29,7 +27,7 @@
 	    			<div class="perDet">
 	    				<div class="perName" v-if="thread.user">{{thread.user._data.username}}</div>
 	    			  <div class="perName" v-else="">该用户已被删除</div>
-	    				<div class="postTime">{{thread._data.createdAt}}</div>
+	    				<div class="postTime" v-if="thread._data.createdAt">{{thread._data.createdAt}}</div>
 	    			</div>
 	    		</div>
 	    	</div>

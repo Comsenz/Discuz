@@ -1,7 +1,16 @@
+/*
+* 页脚控制器
+* */
+
+import webDb from '../../../../../../helpers/webDbHelper';
+
 export default {
   data:function () {
     return {
-      pageName:'login'  //页面分为login:登录界面、wx：绑定微信、signup：注册、bd：绑定手机号、pd：忘记密码
+      pageName:'login',   //页面分为login:登录界面、wx：绑定微信、signup：注册、bd：绑定手机号、pd：忘记密码
+      siteMode:'',        //站点模式
+      registerClose:true, //注册是否打开
+      qcloudSms:true,    //短信配置是否打开
     }
   },
 
@@ -25,15 +34,38 @@ export default {
     },
     //进入首页
     homeClick(){
-      this.$router.push('/')
+      switch (this.siteMode){
+        case 'pay':
+          this.$router.push({path:'pay-the-fee'});
+          // this.$router.push({path:'pay-circle-login'});
+          break;
+        case 'public':
+          this.$router.push({path:'/'});
+          break;
+        default:
+          console.log("参数错误，请重新刷新页面");
+      }
     },
 
-
+    getForum(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        this.siteMode = res.readdata._data.setsite.site_mode;
+        this.registerClose = res.readdata._data.setreg.register_close;
+        this.qcloudSms = res.readdata._data.qcloud.qcloud_sms;
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
 
   },
   created(){
     this.pageName = this.$router.history.current.name;
-    console.log(this.$router.history.current.name);
+    this.getForum();
   }
 
 }
