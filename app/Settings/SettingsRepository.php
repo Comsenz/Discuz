@@ -36,8 +36,8 @@ class SettingsRepository implements ContractsSettingRepository
                 $tag = $setting['tag'] ?? 'default';
                 $settings[$tag][$setting['key']] = $setting['value'];
             });
-
             $settings = collect($settings);
+
             $this->cache->put($this->key, $settings);
             $this->settings = $settings;
         }

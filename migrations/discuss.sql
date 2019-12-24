@@ -300,3 +300,11 @@ CREATE TABLE `user_login_fail_log` (
 
 -- 2019-12-19 验证码过期时间字段
 ALTER TABLE `mobile_codes` CHANGE `exception_at` `expired_at` DATETIME NOT NULL COMMENT '过期时间';
+
+-- 2019-12-24 14:08:48 敏感词表
+CREATE TABLE `post_mod` (
+  `post_id` int(10) unsigned NOT NULL COMMENT '帖子 id',
+  `stop_word` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '触发的敏感词，半角逗号隔开',
+  PRIMARY KEY (`post_id`),
+  CONSTRAINT `post_mod_post_id_foreign` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
