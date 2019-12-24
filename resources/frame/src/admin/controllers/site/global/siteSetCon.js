@@ -26,7 +26,7 @@ export default {
       siteCloseMsg:'',
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList:[]
+      fileList:[],
     }
   },
 
@@ -34,6 +34,24 @@ export default {
     //初始化请求设置
     this.loadStatus();
   },
+  computed: {
+      // uploadDisabled:function() {
+      //     return this.fileList.length >0
+      // },
+
+  },
+  // watch: {
+    //监听图片数组变化
+  //   'this.fileList.length': {
+  //     handler(newValue, oldValue) {
+  //       if (newValue !== oldValue) {
+  //         // 操作
+  //          this.fileList = newValue;
+  //         }
+  //     }
+  //   },
+  // },
+
   methods:{
     loadStatus(){
       //初始化设置
