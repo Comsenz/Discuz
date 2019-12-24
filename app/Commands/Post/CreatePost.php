@@ -108,7 +108,7 @@ class CreatePost
             $this->assertCan($this->actor, 'reply', $thread);
 
             // 敏感词校验
-            $content = $censor->check(Arr::get($this->data, 'attributes.content'));
+            $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
             Arr::set($this->data, 'attributes.content', $content);
 
             // 存在审核敏感词时，将回复内容放入待审核

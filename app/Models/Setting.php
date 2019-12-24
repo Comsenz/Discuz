@@ -66,7 +66,7 @@ class Setting extends Model
     public function getValueAttribute($value)
     {
         if (in_array($this->key, self::$encrypt)) {
-            $value = app()->make('encrypter')->decrypt($value);
+            $value = empty($value) ? $value : app()->make('encrypter')->decrypt($value);
         }
 
         return $value;
