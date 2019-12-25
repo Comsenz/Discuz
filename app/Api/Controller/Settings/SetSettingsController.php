@@ -11,6 +11,11 @@ use App\Settings\SettingsRepository;
 use App\Settings\SiteRevManifest;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Foundation\Application;
+use Discuz\Qcloud\QcloudManage;
+use Discuz\Qcloud\QcloudTrait;
+use Discuz\Qcloud\Services\BillingService;
+use Discuz\Qcloud\Services\CmsService;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,7 +26,17 @@ use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
-    use AssertPermissionTrait;
+    use AssertPermissionTrait, QcloudTrait;
+
+    /**
+     * 需要验证的值
+     *
+     * @var array
+     */
+    protected $validationQCloud = [
+        'qcloud_secret_id',
+        'qcloud_secret_key',
+    ];
 
     protected $cache;
 
@@ -29,9 +44,10 @@ class SetSettingsController implements RequestHandlerInterface
 
     protected $siteRevManifest;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest)
+    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app)
     {
         $this->cache = $cache;
+        $this->app = $app;
         $this->settings = $settings;
         $this->siteRevManifest = $siteRevManifest;
     }
@@ -62,6 +78,14 @@ class SetSettingsController implements RequestHandlerInterface
             if ($sum != 10) {
                 throw new Exception('scale_sum_not_10');
             }
+        }
+
+        // 判断是否存QCloud验证值是否正确
+        $pluck = $settings->pluck('value', 'key');
+        if ($pluck->has($this->validationQCloud)) {
+            $only = $pluck->only($this->validationQCloud);
+            $billing = new BillingService($only);
+            $billing->DescribeAccountBalance();
         }
 
         $settings->each(function ($setting) {
