@@ -50,6 +50,11 @@ class Group extends Model
      */
     const MEMBER_ID = 10;
 
+    /*
+     * 未付费用户组
+     */
+    const UNPAID = 6;
+
     const BAN_ID = 5;
 
     const DEFAULT = 1;

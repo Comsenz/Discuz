@@ -2,6 +2,8 @@
  * 模板配置
  */
 import tplConfig from "../../template/default/viewConfig/tplConfig";         //获取配置信息
+import webDb from '../../helpers/webDbHelper';
+import appFetch from '../../helpers/axiosHelper';
 
 export default {
   /**
@@ -59,7 +61,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningSetView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -69,7 +71,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigH5WxView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -79,7 +81,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigAppletsView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -89,7 +91,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigPcWxView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -425,7 +427,61 @@ export default {
    * @return {[type]}        [description]
    */
   beforeEnter: function(to, form, next) {
-    next()
-    //console.log(to, form, next, 'admin');
+    let token = webDb.getLItem('Authorization');
+    let tokenId = webDb.getLItem('tokenId');
+    let groupId = '';
+
+
+    if(!token && !tokenId){
+      if (to.path == '/admin/login'){
+        next();
+        return
+      }
+      next({path:"/admin/login"});
+      console.log('未登录');
+    } else {
+      this.getUserInfo(tokenId).then(res=>{
+        groupId = res.readdata.groups[0]._data.id;
+
+        if (groupId === '1'){
+          if (to.path == '/admin/login'){
+            next('/admin');
+            return
+          }
+          next();
+        } else {
+          alert("权限不足！");
+          if (to.path == '/admin/login'){
+            next();
+            return
+          }
+          next({path:"/admin/login"});
+        }
+      }).catch(()=>{
+        if (to.path == '/admin/login'){
+          next();
+          return
+        }
+        next({path:"/admin/login"});
+      });
+      console.log('已经登录');
+    }
+  },
+
+  getUserInfo(id){
+    return appFetch({
+      url:'users',
+      method:'get',
+      splice:'/' + id,
+      data:{
+        include:['groups']
+      }
+    }).then(res=>{
+      console.log(res);
+      return res
+    }).catch(err=>{
+      console.log(err);
+    })
   }
+
 };

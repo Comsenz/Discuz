@@ -21,6 +21,11 @@ class GroupTableSeeder extends Seeder
                 'default' => 0
             ],
             [
+                'id' => 6,
+                'name' => '待付费',
+                'default' => 0
+            ],
+            [
                 'id' => 7,
                 'name' => '游客',
                 'default' => 0
