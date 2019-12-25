@@ -31,6 +31,7 @@ export default {
     submi(){ //提交附件信息
       var reg = /^(?:[a-zA-Z]{3},)*[a-zA-Z]{3}$/;
       var regs = /^\d+$|^\d+[.]?\d+$/;
+      var regSize= /^[0-9]*$/;
       var picture = this.picture;
       var fileExtension = this.fileExtension;
       var maximumSize = this.maximumSize;
@@ -46,12 +47,16 @@ export default {
       this.$toast('请您输入支持的最大尺寸')
       return
     }
-    if(!reg.test(picture)){
-      this.$toast('请输入正确的扩展名格式')
-      return
-    }
+    // if(!reg.test(picture)){
+    //   this.$toast('请输入正确的扩展名格式')
+    //   return
+    // }
     if(!regs.test(maximumSize)){
       this.$toast('请输入正确的支持最大尺寸格式')
+      return
+    }
+    if(!regSize.test(maximumSize)){
+      this.this.$toast('请输入正确的支持最大尺寸格式')
       return
     }
       this.appFetch({

@@ -18,7 +18,8 @@ export default {
       bind: 'bind',
       time: 1, //发送验证码间隔时间
       insterVal: '',
-      isGray: false
+      isGray: false,
+      btnContent:'发送验证码'
     }
   },
 
@@ -39,15 +40,15 @@ export default {
     },
     sendSmsCodePhone() { //发送验证码
       console.log('11111111111111')
-      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
-      var newphone = this.newphone;
-      if (!newphone) { //未输入手机号
-        this.$toast("请输入手机号码");
-        return;
-      }
-      if (!reg.test(newphone)) { //手机号不合法
-        this.$toast("您输入的手机号码不合法，请重新输入");
-      }
+      // var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
+      // var newphone = this.newphone;
+      // if (!newphone) { //未输入手机号
+      //   this.$toast("请输入手机号码");
+      //   return;
+      // }
+      // if (!reg.test(newphone)) { //手机号不合法
+      //   this.$toast("您输入的手机号码不合法，请重新输入");
+      // }
       var modifyState = this.modifyState
       if (modifyState) {
         this.appFetch({

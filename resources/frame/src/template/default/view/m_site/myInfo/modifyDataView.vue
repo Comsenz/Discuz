@@ -14,7 +14,8 @@
             </i>
           </div>
         </div>
-        <van-cell title="手机号" @click="myModify('modify-phone')" is-link :value="modifyPhone" />
+        <van-cell title="手机号" @click="myModify('modify-phone')" is-link :value="modifyPhone" v-if="modifyPhone"/>
+        <van-cell title="手机号" @click="$router.push({path:'/bind-new-phone'})" is-link value="去绑定" v-else />
         <van-cell title="密码" @click="myModify('change-pwd')" is-link value="********" />
         <van-cell title="微信" is-link :value="wechatNickname" v-if="wechatNickname"  @click="myModifyWechat" />
         <van-cell title="微信" is-link value="去绑定" v-else  @click="wechatBind" />

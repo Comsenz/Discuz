@@ -56,6 +56,7 @@ export default {
             "filter[username]": username,
             "filter[id]": userUID,
             "filter[group_id]": userRole,
+            "filter[userPhone]": userPhone,  //目前后端还没这个字段
             "filter[bind]": radio1 === '1' ? 'wechat':'',
             "page[limit]": this.pageLimit,
             "page[number]": this.pageNum

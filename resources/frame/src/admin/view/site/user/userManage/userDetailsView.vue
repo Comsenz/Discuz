@@ -91,12 +91,12 @@
       <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
-    <Card header="微信昵称：">
-      <p>小虫</p>
+    <Card header="微信昵称：" v-if="wechatNickName">
+      <p>{{wechatNickName}}</p>
     </Card>
 
-    <Card header="性别：">
-      <p>男</p>
+    <Card header="性别："  v-if="sex">
+      <p>{{sex === 0 ? "未知" : sex === 1 ? "男" : "女"}}</p>
     </Card>
 <!-- 
     <Card header="实名认证姓名：">

@@ -13,6 +13,8 @@ export default {
       imageUrl: '',
       userInfo: {},
       newPassword:'',
+      wechatNickName:'',
+      sex:'',
       options: [
         {
           value: 0,
@@ -47,6 +49,11 @@ export default {
         console.log(response,'response');
         this.userInfo = response.readdata._data;
         this.imageUrl = this.userInfo.avatarUrl;
+        if(response.readdata.wechat){
+          this.wechatNickName = response.readdata.wechat._data.nickname
+          this.sex = response.readdata.wechat._data.sex
+        }
+        console.log()
       } catch(err){
         console.error(err, 'getUserDetail')
       }
@@ -110,6 +117,7 @@ export default {
     },
     
     submission(){
+      const userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'users',
         method:'patch',
