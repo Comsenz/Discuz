@@ -7,6 +7,7 @@
 
 namespace App\Api\Controller\Users;
 
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
@@ -19,6 +20,9 @@ use App\Models\User;
 
 class ExportUserController implements RequestHandlerInterface
 {
+
+    use AssertPermissionTrait;
+
     /**
      * 命令集调用工具类.
      *
@@ -34,10 +38,14 @@ class ExportUserController implements RequestHandlerInterface
         $this->app = $app;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // 获取当前用户
-        $actor = $request->getAttribute('actor');
+        $this->assertAdmin($request->getAttribute('actor'));
 
         $params = $request->getQueryParams();
 
@@ -56,8 +64,7 @@ class ExportUserController implements RequestHandlerInterface
 
     private function data($params = null)
     {
-        return User::select('users.id as id', 'users.username', 'user_profiles.sex', 'users.mobile', 'user_wechats.nickname', 'user_wechats.unionid', 'users.last_login_ip', 'users.created_at', 'users.status')
-            ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+        return User::select('users.id as id', 'users.username', 'users.mobile', 'user_wechats.nickname', 'user_wechats.unionid', 'users.last_login_ip', 'users.created_at', 'users.status')
             ->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')
             ->orderBy('id', 'asc')
             ->get()

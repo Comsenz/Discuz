@@ -56,10 +56,12 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      groupId:''
 		}
 	},
   created(){
     this.getInfo();
+    this.getUser();
     this.detailsLoad();
     if(!this.themeCon){
       this.themeShow = false;
@@ -110,18 +112,19 @@ export default {
           include: 'groups',
         }
       }).then((res) => {
-        // console.log(res.readdata._data.username);
-        this.username = res.readdata._data.username;
-        this.isPaid = res.readdata._data.paid;
-        this.roleList = res.readdata.groups;
-        if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-          this.joinedAt = res.readdata._data.createdAt;
-        } else {
-          this.joinedAt = res.readdata._data.joinedAt;
-        }
-        if(this.isPaid != null && this.isPaid != ''){
-          this.detailIf(this.isPayVal,false);
-        }
+        this.groupId = res.readdata.groups[0]._data.id;
+        console.log(this.groupId);
+        // this.username = res.readdata._data.username;
+        // this.isPaid = res.readdata._data.paid;
+        // this.roleList = res.readdata.groups;
+        // if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
+        //   this.joinedAt = res.readdata._data.createdAt;
+        // } else {
+        //   this.joinedAt = res.readdata._data.joinedAt;
+        // }
+        // if(this.isPaid != null && this.isPaid != ''){
+        //   this.detailIf(this.isPayVal,false);
+        // }
         // this.detailIf(false,this.isPaid);
       })
 
@@ -217,7 +220,9 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme(){
-        var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.themeId;
+        // var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.groupId;
+        var Url= 'http://10.0.10.210:8883/pay-circle-con/'+this.themeId+'/'+this.groupId;
+        console.log(Url);
         var oInput = document.createElement('input');
         oInput.value = Url;
         document.body.appendChild(oInput);
