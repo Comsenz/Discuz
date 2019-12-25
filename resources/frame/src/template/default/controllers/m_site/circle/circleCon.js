@@ -313,7 +313,7 @@ export default {
 	    },
 	    postTopic:function(){
 	    	// alert('跳转到发布主题页');
-	    	this.$router.push({ path:'post-topic'});
+	    	this.$router.push({ path:'/post-topic'});
 	    },
 		/**
 		 * 给导航添加点击状态

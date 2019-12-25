@@ -9,13 +9,12 @@ export default {
     return {
       username:'',
       password:'',
-      mobile:'13434900053',
-      btnLoading:false, //注册按钮状态
-      error:false,    //错误状态
-      errorMessage:"", //错误信息
+      btnLoading:false,     //注册按钮状态
+      error:false,          //错误状态
+      errorMessage:"",      //错误信息
 
-      phoneStatus:'',    //绑定手机号状态
-      siteMode:'',       //站点是否付费
+      phoneStatus:'',       //绑定手机号状态
+      siteMode:'',          //站点是否付费
     }
   },
 

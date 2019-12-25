@@ -11,8 +11,8 @@ import moment from "moment/moment";
 export default {
   data:function () {
     return {
-      searchUserName:'',  //用户名
-      keyWords:'',        //关键词
+      searchUserName:'',          //用户名
+      keyWords:'',                //关键词
       showSensitiveWords:false,   //显示敏感词
       pageOptions: [
         {
@@ -59,9 +59,9 @@ export default {
         }
       ],
       searchTimeSelect:1,         //搜索时间选中
-      relativeTime:['',''],                  //搜索相对时间转换
+      relativeTime:['',''],       //搜索相对时间转换
 
-      submitForm:[],    //操作理由表单
+      submitForm:[],              //操作理由表单
       reasonForOperation:[
         {
           value:'无',
@@ -104,13 +104,13 @@ export default {
           label:'其他'
         }
       ],
-      reasonForOperationSelect:1,   //操作理由选中
+      reasonForOperationSelect:1, //操作理由选中
       appleAll:false,             //应用其他页面
       themeList:[],               //主题列表
       currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
-      ignoreStatus:true,         //全部忽略是否显示
+      ignoreStatus:true,          //全部忽略是否显示
 
       //未审核0，已审核\通过1，已忽略2
     }

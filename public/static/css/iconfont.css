@@ -121,3 +121,42 @@
 .icon-wepay:before {
   content: "\e622";
 }
+.icon-doubt:before {
+  content: "\e623";
+}
+
+.icon-jpg:before {
+  content: "\e624";
+}
+
+.icon-mp:before {
+  content: "\e625";
+}
+
+.icon-mp1:before {
+  content: "\e626";
+}
+
+.icon-PNG:before {
+  content: "\e628";
+}
+
+.icon-ppt:before {
+  content: "\e629";
+}
+
+.icon-swf:before {
+  content: "\e62a";
+}
+
+.icon-TIFF:before {
+  content: "\e62b";
+}
+
+.icon-txt:before {
+  content: "\e62c";
+}
+
+.icon-xls:before {
+  content: "\e62d";
+}
