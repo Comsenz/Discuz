@@ -12,31 +12,56 @@ use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Support\Arr;
 
 class ListUsersController extends AbstractListController
 {
     use AssertPermissionTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = UserSerializer::class;
 
-    //默认排序
-    public $sort = [];
-
-    //能排序的字段
-    public $sortFields = ['createdAt'];
-
+    /**
+     * {@inheritdoc}
+     */
     public $include = ['groups'];
 
+    /**
+     * {@inheritdoc}
+     */
     public $optionalInclude = ['wechat'];
 
+    /**
+     * {@inheritdoc}
+     */
+    public $sortFields = ['createdAt'];
+
+    /**
+     * @var UserRepository
+     */
     protected $users;
 
+    /**
+     * @var UrlGenerator
+     */
     protected $url;
 
+    /**
+     * @var int|null
+     */
+    protected $userCount;
+
+    /**
+     * @param UserRepository $users
+     * @param UrlGenerator $url
+     */
     public function __construct(UserRepository $users, UrlGenerator $url)
     {
         $this->users = $users;
@@ -44,11 +69,7 @@ class ListUsersController extends AbstractListController
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return mixed
-     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -56,70 +77,101 @@ class ListUsersController extends AbstractListController
 
         $this->assertCan($actor, 'viewUserList');
 
-        $query = $this->users->query();
+        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'bind']);
+        $sort = $this->extractSort($request);
 
-        $sorts = $this->extractSort($request);
-        $offset = $this->extractOffset($request);
         $limit = $this->extractLimit($request);
-
+        $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
 
-        $filter = Arr::only($this->extractFilter($request), ['username', 'id', 'group_id', 'bind']);
+        $users = $this->search($actor, $filter, $sort, $limit, $offset);
 
-        $this->applyFilters($query, $filter);
+        $users->load($include);
 
-        //统计总数
-        $count = $query->count();
-
-        //分页
-        $query->skip($offset)->take($limit);
-
-        //排序
-        foreach ($sorts as $sort => $direction) {
-            $query->orderBy(Str::snake($sort), $direction);
-        }
-
-        $data = $query->get();
-
-        //关联数据
-        $data->load($include);
-
-        //添加分页
         $document->addPaginationLinks(
             $this->url->route('users.list'),
             $request->getQueryParams(),
             $offset,
             $limit,
-            $count
+            $this->userCount
         );
 
-        //设置meta
         $document->setMeta([
-            'total' => $count,
-            'size' => (int)$limit
+            'total' => $this->userCount,
+            'size' => (int) $limit,
         ]);
 
-        return $data;
+        return $users;
     }
 
-    private function applyFilters($query, $filter)
+    /**
+     * @param $actor
+     * @param $filter
+     * @param $sort
+     * @param int|null $limit
+     * @param int $offset
+     *
+     * @return Collection
+     */
+    public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
-        //条件搜索
-        if ($username = Arr::get($filter, 'username')) {
-            $query->where('username', 'like', '%'.$username.'%');
+        $query = $this->users->query()->whereVisibleTo($actor);
+
+        $this->applyFilters($query, $filter);
+
+        $this->userCount = $limit > 0 ? $query->count() : null;
+
+        $query->skip($offset)->take($limit);
+
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
         }
 
-        //uid 查找
+        return $query->get();
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $filter
+     */
+    private function applyFilters(Builder $query, array $filter)
+    {
+        // 用户 id
         if ($id = Arr::get($filter, 'id')) {
             $query->where('id', $id);
         }
 
-        //用户组搜索
-        if ($group_id = Arr::get($filter, 'group_id')) {
-            $query->join('group_user', 'users.id', '=', 'group_user.user_id')->whereIn('group_id', $group_id);
+        // 用户名
+        if ($username = Arr::get($filter, 'username')) {
+            // 多个用户名用逗号隔开
+            $username = explode(',', $username);
+
+            $query->where(function ($query) use ($username) {
+                foreach ($username as $name) {
+                    // 用户名前后存在星号（*）则使用模糊查询
+                    if (Str::startsWith($name, '*') || Str::endsWith($name, '*')) {
+                        $name = Str::replaceLast('*', '%', Str::replaceFirst('*', '%', $name));
+
+                        $query->orWhere('username', 'like', $name);
+                    } else {
+                        $query->orWhere('username', $name);
+                    }
+                }
+            });
         }
 
-        //是否绑定微信
+        // 手机号
+        if ($mobile = Arr::get($filter, 'mobile')) {
+            $query->where('mobile', $mobile);
+        }
+
+        // 用户组
+        if ($group_id = Arr::get($filter, 'group_id')) {
+            $query->join('group_user', 'users.id', '=', 'group_user.user_id')
+                ->whereIn('group_id', $group_id);
+        }
+
+        // 是否绑定微信
         if ($bind = Arr::get($filter, 'bind')) {
             in_array($bind, $this->optionalInclude) && $query->has($bind);
         }

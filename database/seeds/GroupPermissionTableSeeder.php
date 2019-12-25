@@ -27,6 +27,7 @@ class GroupPermissionTableSeeder extends Seeder
         'category.edit' => [],                  // 修改分类
 
         // 主题
+        'viewThreadList' => [7, 10],            // 查看主题列表
         'viewThreads' => [7, 10],               // 查看主题
         'createThread' => [10],                 // 发布主题
         'thread.reply' => [10],                 // 回复主题
