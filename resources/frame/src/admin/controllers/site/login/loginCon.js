@@ -3,6 +3,7 @@
  */
 
 import { mapMutations } from 'vuex';
+import browserDb from "../../../../helpers/webDbHelper";
 
 export default {
   data:function () {
@@ -15,9 +16,13 @@ export default {
       rules:{
         user:[
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+        ],
+        password:[
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
-      }
+      },
+      tokenId:''
     }
   },
   methods:{
@@ -26,27 +31,84 @@ export default {
     }),
 
     adminLogin(formName){
-
-      // console.log(this.$refs[formName].validate);
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          this.postLogin().then(res=>{
+            // this.tokenId = res.data.id;
+            let token = res.data.attributes.access_token;
+            let tokenId = res.data.id;
+
+            if (token && tokenId){
+              this.getUserInfo(tokenId).then(res=>{
+                let groupId = res.readdata.groups[0]._data.id;
+                browserDb.setLItem('username',res.data.attributes.username);
+                if(groupId === "1"){
+                  browserDb.setLItem('Authorization', token);
+                  browserDb.setLItem('tokenId', tokenId);
+                  this.$message({
+                    message: '登录成功！',
+                    type: 'success'
+                  });
+                  this.$router.push({path:'/admin'})
+                } else {
+                  this.$message.error('权限不足！');
+                }
+              })
+            } else {
+              this.$message.error('登录失败');
+            }
+
+          }).catch(()=>{
+            this.$message.error('登录失败');
+          })
         } else {
           console.log('error submit!!');
           return false;
         }
       });
-
-      // this.$router.push({path:'/admin/home'})
     },
 
-    black(){
-      this.setLoginState();
-      this.$router.go(-1)
-    },
-    user(){
+   /* user(){
       this.$router.push('/user/userview')
+    },*/
+
+
+    /*
+    * 接口请求
+    * */
+    postLogin(){
+      return this.appFetch({
+        url:'login',
+        method:'post',
+        data:{
+          "data": {
+            "attributes": {
+              "username": this.form.user,
+              "password": this.form.password
+            }
+          }
+        }
+      }).then(res=>{
+        console.log(res);
+        return res
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getUserInfo(id){
+      return this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + id,
+        data:{
+          include:['groups']
+        }
+      }).then(res=>{
+        console.log(res);
+        return res
+      }).catch(err=>{
+        console.log(err);
+      })
     }
   }
 }
