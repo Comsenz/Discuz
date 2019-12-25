@@ -17,7 +17,7 @@
                 <span slot="prefix" class="iconfont iconuser"></span>
               </el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="password">
               <el-input
                 placeholder="请输入密码"
                 type="password"

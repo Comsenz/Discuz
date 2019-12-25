@@ -1,13 +1,13 @@
 /**
  * 后台Index
  */
-
+import webDb from '../../../helpers/webDbHelper'
 
 export default {
   data:function () {
     return {
-      indexTitle:"管理中心首页",  //页面内容标题  /顶部导航下面
-      sideTitle:"首页", //左侧菜单标题
+      indexTitle:"管理中心首页",    //页面内容标题  /顶部导航下面
+      sideTitle:"首页",           //左侧菜单标题
 
       /*菜单列表里的name必须和路由里面的name一致，*/
       navList:[
@@ -214,14 +214,16 @@ export default {
             }
           ]
         }
-      ],  //导航菜单列表
-      navSelect:'',  //导航选中
+      ],             //导航菜单列表
+      navSelect:'',              //导航选中
 
-      sideList:[],    //侧边菜单
-      sideSelect:'',    //侧边选中
+      sideList:[],               //侧边菜单
+      sideSelect:'',             //侧边选中
 
-      sideSubmenu:[],   //侧边栏子菜单
-      sideSubmenuSelect:''    //侧边栏子菜单选中
+      sideSubmenu:[],            //侧边栏子菜单
+      sideSubmenuSelect:'',      //侧边栏子菜单选中
+
+      userName:'',               //用户名
 
     }
   },
@@ -507,12 +509,17 @@ export default {
         }
       }
 
-    }
+    },
 
+    quitClick(){
+      localStorage.clear();
+      this.$router.push({path:'/admin/login'});
+    }
 
   },
   created(){
    this.setDataStatus();
+   this.userName = webDb.getLItem('username');
   },
   watch: {
     $route () {
