@@ -81,6 +81,16 @@ class Formatter
     }
 
     /**
+     * Generate thr formatter components cache.
+     */
+    public function cacheFormatter()
+    {
+        $formatter = $this->getConfigurator()->finalize();
+
+        $this->cache->forever('formatter', $formatter);
+    }
+
+    /**
      * @return Configurator
      */
     protected function getConfigurator()
@@ -123,9 +133,7 @@ class Formatter
         $formatter = $this->cache->get('formatter');
 
         if (! $formatter) {
-            $formatter = $this->getConfigurator()->finalize();
-
-            $this->cache->forever('formatter', $formatter);
+            $this->cacheFormatter();
         }
 
         return $formatter[$name];
@@ -156,6 +164,10 @@ class Formatter
         spl_autoload_register(function ($class) {
             if (file_exists($file = $this->cacheDir.'/'.$class.'.php')) {
                 include $file;
+            } else {
+                $this->flush();
+
+                $this->cacheFormatter();
             }
         });
 
