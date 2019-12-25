@@ -280,7 +280,6 @@ export default {
          this.themeList.forEach((item,index)=>{
            this.themeListAll.push(item._data.id);
          });
-         console.log('完车给');
        }).catch(err=>{
          console.log(err);
        })

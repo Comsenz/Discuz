@@ -9,6 +9,7 @@
 
           <!--:author="items.user?'该用户被删除':items.user._data.username"-->
           <!--:last="items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"-->
+          <!--:theme="items.category._data.name"-->
 
           <ContArrange
             v-for="(items,index) in  themeList"
