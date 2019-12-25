@@ -6,7 +6,7 @@
           style="width: 100%">
           <el-table-column
             prop="date"
-            label="第三方登录类型"
+            label="微信设置类型"
           >
             <template slot-scope="scope">
               <i class="iconfont table-icon" :class="scope.row.icon"></i>

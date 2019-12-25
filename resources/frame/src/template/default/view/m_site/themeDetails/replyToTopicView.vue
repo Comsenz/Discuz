@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <footer class="post-topic-footer" :class="{'footMove':footMove}">
+      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left reply-topic-footer-left">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
            <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">

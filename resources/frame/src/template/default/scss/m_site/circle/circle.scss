@@ -872,6 +872,7 @@ $postTopicColor:#336699;
   height: 100%;
   color: #000;
   .post-topic-header{
+    position: relative;
     width: 100%;
     @include px2rem(height,88);
     background-color: rgba(249, 249, 249, 0.9);
