@@ -12,12 +12,12 @@ use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Exceptions\NoUserException;
-use App\Models\User;
 use App\Models\UserWechat;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Discuz\Contracts\Socialite\Factory;
@@ -47,7 +47,10 @@ class WechatLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $request = $request->withAttribute('cache', $this->cache);
+
+        $sessionId = Arr::get($request->getQueryParams(), 'sessionId', Str::random());
+
+        $request = $request->withAttribute('cache', $this->cache)->withAttribute('sessionId', $sessionId);
 
         $this->socialite->setRequest($request);
 
@@ -61,19 +64,14 @@ class WechatLoginController extends AbstractResourceController
 
         $user = $driver->user();
 
-        $state = Arr::get($request->getQueryParams(), 'state');
-
-        $actor = null;
-        if($state) {
-            $actor = User::find($state);
-        }
+        $actor = $request->getAttribute('actor');
 
         $wechatUser = UserWechat::where('openid', $user->id)->first();
 
         $this->wechatSaved($user);
 
         if (!$wechatUser) {
-            if (!is_null($actor)) {
+            if ($actor->id) {
                 $user->user['user_id'] = $actor->id;
             }
             UserWechat::create($user->user);
@@ -90,7 +88,7 @@ class WechatLoginController extends AbstractResourceController
             return $this->bus->dispatch(new GenJwtToken($params));
         }
 
-        if (!is_null($actor)) {
+        if ($actor->id) {
             $wechatUser->user_id = $actor->id;
             $wechatUser->save();
             return $actor;
