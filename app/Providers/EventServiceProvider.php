@@ -7,10 +7,12 @@
 
 namespace App\Providers;
 
+use App\Events\Group\Saving;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
+use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
@@ -39,6 +41,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         Logind::class => [
             ChckoutSite::class
         ],
+        Saving::class => [
+            ChangeDefaultGroup::class
+        ]
     ];
 
     protected $subscribe = [
