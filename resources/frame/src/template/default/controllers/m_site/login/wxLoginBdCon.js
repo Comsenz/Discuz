@@ -65,23 +65,6 @@ export default {
 
           })
 
-          /*if(this.siteMode === 'pay'){
-            this.$router.push({path:'pay-circle-login'})
-          } else if (this.siteMode === 'public'){
-            this.$router.push({path:'/'})
-          } else {
-            console.log("缺少参数，请刷新页面");
-          }*/
-
-          /*if (this.phoneStatus){
-            this.$router.push({path:'bind-phone'});
-          } else if (this.siteMode === 'pay'){
-            this.$router.push({path:'pay-the-fee'});
-          } else if (this.siteMode === 'public'){
-            this.$router.push({path:'/'});
-          } else {
-            console.log("缺少参数，请刷新页面");
-          }*/
         }
       }).catch(err => {
         console.log(err);

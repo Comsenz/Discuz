@@ -20,9 +20,9 @@
       </div>
 
       <div class="index-header__info-menu">
-        <span>您好，admin</span>
-        <span @click="$router.push({path:'/admin/login'})">&nbsp;[退出]</span>
-        <span class="site-home">站点首页</span>
+        <span>您好，{{userName}}</span>
+        <span @click="quitClick">&nbsp;[退出]</span>
+        <span class="site-home" @click="$router.push({path:'/admin'})">站点首页</span>
       </div>
 
     </el-header>

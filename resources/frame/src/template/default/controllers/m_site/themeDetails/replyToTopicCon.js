@@ -51,11 +51,19 @@ export default {
           }
         });
       })
+      //设置在pc的宽度
+      this.limitWidth();
   },
   beforeDestroy () {
       Bus.$off('message');
   },
   methods: {
+    //设置底部在pc里的宽度
+    limitWidth(){
+      document.getElementById('post-topic-footer').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     //上传图片,点击加号时
     handleFile(e){
       // 实例化

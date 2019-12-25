@@ -120,11 +120,21 @@
     @include font-dpr(28);
     }
 }
-.reference .reference-cont {
-  span {
-    display: block;
-    @include px2rem(line-height,40);
-  }
+// .reference .reference-cont {
+//   span {
+//     display: block;
+//     @include px2rem(line-height,40);
+//   }
+// }
+.postContent {
+	@include font-dpr(30);
+	@include px2rem(line-height, 40);
+	@include px2rem(margin-bottom, 20);
+	a {
+		display: block;
+		@include px2rem(line-height, 40);
+		color: $font000;
+	}
 }
 
 /**

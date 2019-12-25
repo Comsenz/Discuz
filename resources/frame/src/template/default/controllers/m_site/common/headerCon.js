@@ -83,7 +83,18 @@ export default {
     // this.getUserInfo();
     this.loadCategories();
   },
+  watch: {
+    'isfixNav': function(newVal,oldVal){
+        this.isfixNav = newVal;
+    }
+  },
   methods:{
+    //设置底部在pc里的宽度
+    limitWidth(){
+      document.getElementById('testNavBar').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('testNavBar').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     //初始化请站点信息和分类接口
     loadCategories(){
       //请求站点信息
@@ -134,6 +145,7 @@ export default {
             // this.isfixHead = true;
             // console.log(this.isfixHead+'1');
             this.isfixNav = true;
+            this.limitWidth();
             // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
             // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
           } else {
@@ -141,6 +153,8 @@ export default {
             // this.isfixHead = false;
             // console.log(this.isfixHead+'2');
             this.isfixNav = false;
+            let viewportWidth = window.innerWidth;
+            document.getElementById('testNavBar').style.marginLeft ='0px';
             // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
             // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
           };
@@ -177,7 +191,6 @@ export default {
   },
 
   mounted: function() {
-    // this.getVote();
     window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeRouteLeave (to, from, next) {

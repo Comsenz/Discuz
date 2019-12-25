@@ -7,8 +7,10 @@
 
 namespace App\Models;
 
+use App\Events\Group\Saved;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\Foundation\EventsDispatchTrait;
 use DomainException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -31,8 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Group extends Model
 {
-    use EventGeneratorTrait;
-    use ScopeVisibilityTrait;
+    use EventGeneratorTrait, ScopeVisibilityTrait;
 
     /**
      * The ID of the administrator group.
@@ -48,6 +49,11 @@ class Group extends Model
      * The ID of the member group.
      */
     const MEMBER_ID = 10;
+
+    /*
+     * 未付费用户组
+     */
+    const UNPAID = 6;
 
     const BAN_ID = 5;
 

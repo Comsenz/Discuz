@@ -13,8 +13,8 @@ $headBg: #EEEFF0;
 
 body,html {
 	min-height: 100%;
-	// height: auto;
-	height: 100%;
+	height: auto;
+	// height: 100%;
 	color: $font000;
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
@@ -371,4 +371,24 @@ a { color: $fontColor;}
 //绑定手机号
 .grayBg {
   color: #999;
+}
+//
+.likePostContent {
+	@include font-dpr(30);
+	@include px2rem(line-height, 40);
+	@include px2rem(margin-bottom, 20);
+	@include px2rem(padding, 0 30 28 30);
+	a {
+		display: block;
+		@include px2rem(line-height, 40);
+		color: $font000;
+	}
+	.quoteCon {
+		display: block;
+			  @include px2rem(padding, 16);
+		@include px2rem(margin-bottom, 16);
+			  background: $corF7;
+			  @include font-dpr(26);
+			  color: $cor888;
+		  }
 }

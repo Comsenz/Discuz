@@ -16,8 +16,10 @@ class CreateGroupUser extends Migration
             $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
             $table->integer('group_id')->unsigned()->nullable()->comment('用户组 id');
 
-//            $table->foreign('user_id')->references('id')->on('users');
-//            $table->foreign('group_id')->references('id')->on('groups');
+            $table->primary(['post_id', 'user_id']);
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 

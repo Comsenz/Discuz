@@ -14,8 +14,9 @@ export default {
    */
   template: {
     m_site:{
-      js: ['/js/rem.js'],
-      css: [],
+      css: ['/css/reset.css'],
+      // js: ['/js/rem.js'],
+
       'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
@@ -730,7 +731,21 @@ export default {
     //手机浏览器登录时
     console.log('手机浏览器登录');
     console.log(to);
-
+    // 基准大小
+    const baseSize = 37.5;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 750 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 375;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
     if (noLoginPage.includes(to.name)){
       console.log(form.fullPath);
       next();
@@ -976,7 +991,28 @@ export default {
   });
     next();*/
   } else {
+    console.log('pc');
+    // 基准大小
+    const baseSize = 24;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 640 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 240;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
 
+    document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
+    document.getElementsByTagName("html")[0].style.width  = "640px";
+    let viewportWidth = window.innerWidth;
+    document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
+    console.log('3456543');
     if (noLoginPage.includes(to.name)){
       console.log(form.fullPath);
       next();

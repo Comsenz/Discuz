@@ -57,7 +57,8 @@ class ThreadListener
     {
         $categoryId = Arr::get($event->data, 'relationships.category.data.id');
 
-        if ($categoryId && $event->thread->category_id != $categoryId) {
+        // 如果主题尚未分类 或 接收到的分类与当前分类不一致，就修改分类
+        if (! $event->thread->category_id || $categoryId && $event->thread->category_id != $categoryId) {
             // 如果接收到可用的分类，则设置分类
             if ($categoryId = Category::where('id', $categoryId)->value('id')) {
                 $event->thread->category_id = $categoryId;

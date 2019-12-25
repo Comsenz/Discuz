@@ -10,7 +10,6 @@ namespace App\Api\Controller\Threads;
 use App\Api\Serializer\ThreadSerializer;
 use App\Models\Order;
 use App\Models\Post;
-use App\Models\PostUser;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;

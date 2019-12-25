@@ -7,7 +7,7 @@
         <el-input v-model="appId"></el-input>
 
         <template #tail>
-          <span  style="color: #336699;margin-left: 15PX;cursor: pointer;" >未申请？点此申请</span>
+          <a href="https://mp.weixin.qq.com/" target="_blank" style="margin-left:15px;">未申请？点此申请</a>
         </template>
       </CardRow>
     </Card>

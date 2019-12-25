@@ -7,9 +7,12 @@
 
 namespace App\Commands\Group;
 
+use App\Events\Group\Saving;
+use App\Models\Group;
 use App\Repositories\GroupRepository;
 use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class UpdateGroup
@@ -26,6 +29,8 @@ class UpdateGroup
 
     protected $validator;
 
+    protected $event;
+
     public function __construct($id, $actor, $data)
     {
         $this->id = $id;
@@ -33,10 +38,11 @@ class UpdateGroup
         $this->data = $data;
     }
 
-    public function handle(GroupRepository $groups, GroupValidator $validator)
+    public function handle(GroupRepository $groups, GroupValidator $validator, Dispatcher $event)
     {
         $this->groups = $groups;
         $this->validator = $validator;
+        $this->event = $event;
         return call_user_func([$this, '__invoke']);
     }
 
@@ -53,10 +59,15 @@ class UpdateGroup
         $group->type = Arr::get($this->data, 'attributes.type', '');
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
-        $group->default = Arr::get($this->data, 'attributes.default', 0);
 
         // 修改时调用脏数据Dirty
         $this->validator->valid($group->getDirty());
+
+        //先把表的其它默认组清空， 再设置当前组为默认组
+        if($value = Arr::get($this->data, 'attributes.default', 0)) {
+            $this->event->dispatch(new Saving($group, $this->actor, []));
+            $group->default = $value ? Group::DEFAULT : 0;
+        }
 
         $group->save();
 
