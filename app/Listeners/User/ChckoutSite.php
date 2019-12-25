@@ -8,8 +8,10 @@
 namespace App\Listeners\User;
 
 use App\Events\Users\Logind;
+use App\Models\Group;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Illuminate\Support\Carbon;
 
 class ChckoutSite
 {
@@ -22,12 +24,12 @@ class ChckoutSite
         $this->settings = $settings;
     }
 
+    /**
+     * @param Logind $event
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     */
     public function handle(Logind $event)
     {
-        $str = $this->settings->get('site_close');
-
-        if ($str) {
-            $this->assertAdmin($event->user);
-        }
+        (bool)$this->settings->get('site_close') && $this->assertAdmin($event->user);
     }
 }
