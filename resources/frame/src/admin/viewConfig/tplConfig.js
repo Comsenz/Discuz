@@ -59,7 +59,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningSetView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -69,7 +69,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigH5WxView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -79,7 +79,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigAppletsView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
@@ -89,7 +89,7 @@ export default {
               require(['../view/site/global/worthMentioningSet/worthMentioningConfigPcWxView'], resolve)
             },
             metaInfo: {
-              title: '第三方登录设置',
+              title: '微信设置',
               name:'worthMentioningSet',
               attribution:'全局'
             }
