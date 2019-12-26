@@ -1,8 +1,6 @@
 <template>
     <div class="login-user-box">
       <LoginHeader></LoginHeader>
-      <!--<span>{{this.$store.state}}</span>-->
-      <!--<Header></Header>-->
       <main class="login-user-box-main">
         <div class="login-user-title-box login-module-title-box">
           <p class="login-user-title-p login-module-title">用户名登录</p>

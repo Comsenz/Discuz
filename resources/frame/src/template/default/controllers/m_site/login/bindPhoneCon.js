@@ -6,7 +6,7 @@ import webDb from '../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
-      phoneNum:"17633330168",    //手机号
+      phoneNum:"",    //手机号
       verifyNum:"",              //验证码
       btnContent:"获取验证码",     //获取验证码按钮内文字
       time:1,                    //发送验证码间隔时间

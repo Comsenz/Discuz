@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserWalletLog extends Migration
+class CreateUserWalletLogs extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,9 @@ class CreateUserWalletLog extends Migration
      */
     public function up()
     {
-        $this->schema()->create('user_wallet_log', function (Blueprint $table) {
+        $this->schema()->create('user_wallet_logs', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('钱包明细ID');
             $table->unsignedBigInteger('user_id')->comment('明细所属用户ID');
-            $table->unsignedBigInteger('user_wallet_id')->comment('明细所属钱包ID');
             $table->decimal('change_available_amount', 10, 2)->comment('变动可用金额');
             $table->decimal('change_freeze_amount', 10, 2)->comment('变动冻结金额');
             $table->unsignedSmallInteger('change_type')->default(0)->comment('10：提现冻结，11：提现成功，12：撤销提现解冻； 31：打赏收入，32：人工收入； 50：人工支出');
@@ -32,6 +31,6 @@ class CreateUserWalletLog extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('user_wallet_log');
+        $this->schema()->dropIfExists('user_wallet_logs');
     }
 }

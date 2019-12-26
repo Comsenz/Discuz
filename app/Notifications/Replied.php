@@ -44,7 +44,7 @@ class Replied extends Notification
             'thread_id' => $this->post->thread->id,
             'thread_title' => $this->post->thread->title,
             'post_id' => $this->post->id,
-            'post_content' => $this->post->content,
+            'post_content' => $this->post->formatContent(),
             'user_id' => $this->post->user->id,
             'user_name' => $this->post->user->username,
             'user_avatar' => $this->post->user->avatar,

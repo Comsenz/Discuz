@@ -1,36 +1,44 @@
 <template>
     <div class="home-box">
       <Card class="home-card-box" header="待处理事项" intercept="true">
-        <p>
+        <p class="pending-p">
           等待审核的主题数
-          <span style="color: #336699;">(&nbsp;1&nbsp;)</span>
+          <router-link to="/admin/cont-review" style="color: #336699;">(&nbsp;{{siteInfo.unapprovedThreads}}&nbsp;)</router-link>
+        </p>
+        <p class="pending-p">
+          等待审核的回复数
+          <router-link to="/admin/reply-review" style="color: #336699;">(&nbsp;{{siteInfo.unapprovedPosts}}&nbsp;)</router-link>
+        </p>
+        <p class="pending-p">
+          等待审核的提现数
+          <router-link to="/admin/withdrawal-application" style="color: #336699;">(&nbsp;{{siteInfo.unapprovedMoneys}}&nbsp;)</router-link>
         </p>
       </Card>
 
       <Card class="home-card-box" header="系统信息" intercept="true">
-        <p>
+        <p class="section">
           <span>Discuz!程序版本</span>
-          <span>{{this.siteInfo.version}}</span>
+          <span>{{siteInfo.version}}</span>
         </p>
-        <p>
+        <p class="section">
           <span>服务器系统及PHP</span>
-          <span>{{this.siteInfo.php_version}}</span>
+          <span>{{siteInfo.php_version}}</span>
         </p>
-        <p>
+        <p class="section">
           <span>服务器软件</span>
-          <span>{{this.siteInfo.server_software}}</span>
+          <span>{{siteInfo.server_software}}</span>
         </p>
-        <p>
+        <p class="section">
           <span>服务器MySQL版本</span>
-          <span></span>
+          <span>{{siteInfo.db}}</span>
         </p>
-        <p>
+        <p class="section">
           <span>上传许可</span>
-          <span>{{this.siteInfo.upload_size}}</span>
+          <span>{{siteInfo.upload_size}}</span>
         </p>
-        <p>
+        <p class="section">
           <span>当前数据库尺寸</span>
-          <span>{{this.siteInfo.db_size}}</span>
+          <span>{{siteInfo.db_size}}</span>
         </p>
       </Card>
 
