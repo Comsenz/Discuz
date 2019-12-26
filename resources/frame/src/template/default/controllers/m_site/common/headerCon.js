@@ -4,6 +4,7 @@
 import {Bus} from '../../../store/bus.js';
 import Forum from '../../../../../common/models/Forum';
 import browserDb from '../../../../../helpers/webDbHelper';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
 	data: function() {
     return {
@@ -40,13 +41,19 @@ export default {
         categories:[],
         siteInfo: false,
         username:'',
-        isPayVal:''
+        isPayVal:'',
+        isWeixin: false,
+        isPhone: false,
+        firstCategoriesId:'',
 	  }
   },
 	props: {
     personInfo: { // 组件用户信息
       type: false
     },
+    // firstCategoryId:{
+    //   type: String
+    // },
     userInfoAvatarUrl: { // 组件用户信息
       type: String
     },
@@ -80,8 +87,13 @@ export default {
     }
   },
   created(){
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
+    // console.log(this.isWeixin+'0'+this.isPhone);
     // this.getUserInfo();
     this.loadCategories();
+    //把第一个分类的id值传过去，便于请求初始化主题列表
+    
   },
   watch: {
     'isfixNav': function(newVal,oldVal){
@@ -117,7 +129,13 @@ export default {
           include: [],
         }
       }).then((res) => {
+        console.log('2222');
+        console.log(res);
         this.categories = res.readdata;
+        this.firstCategoriesId = res.readdata[0]._data.id;
+        console.log(this.firstCategoriesId);
+        this.$emit("update", this.firstCategoriesId);
+        console.log('3456');
       })
     },
     backUrl () {
@@ -132,6 +150,11 @@ export default {
     categoriesCho(cateId){
       this.$emit('categoriesChoice',cateId);
     },
+
+    searchJump() {
+      this.$router.push({ path:'/search'});
+    },
+
     // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
@@ -145,7 +168,10 @@ export default {
             // this.isfixHead = true;
             // console.log(this.isfixHead+'1');
             this.isfixNav = true;
-            this.limitWidth();
+            if(this.isWeixin != true && this.isPhone != true){
+              this.limitWidth();
+            }
+            //
             // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
             // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
           } else {
@@ -159,9 +185,6 @@ export default {
             // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
           };
       }
-    },
-    searchJump(){
-
     },
     backUrl(){
     // 返回上一级
@@ -194,7 +217,7 @@ export default {
     window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeRouteLeave (to, from, next) {
-     window.removeEventListener('scroll', this.handleTabFix, true)
-     next()
+     window.removeEventListener('scroll', this.handleTabFix, true);
+     next();
   }
 }

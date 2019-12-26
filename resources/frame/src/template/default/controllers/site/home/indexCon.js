@@ -5,7 +5,7 @@
 export default {
 	data: function() {
 		return {
-			title: "纯净版框架",
+			title: "Discuz! Q",
 			description: "vue + webpack + vue-router + vuex + sass + prerender + axios ",
 			num: 0,
 			voteInfo: {}

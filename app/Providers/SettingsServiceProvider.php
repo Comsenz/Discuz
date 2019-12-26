@@ -7,8 +7,10 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Settings\SettingsRepository;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Support\ServiceProvider;
 
 class SettingsServiceProvider extends ServiceProvider
@@ -18,5 +20,10 @@ class SettingsServiceProvider extends ServiceProvider
         $this->app->singleton(ContractsSettingsRepository::class, function ($app) {
             return new SettingsRepository($app['cache']);
         });
+    }
+
+    public function boot()
+    {
+        Setting::setEncrypt($this->app->make(Encrypter::class));
     }
 }

@@ -40,7 +40,7 @@ class UploadExceptionHandler implements ExceptionHandlerInterface
         $status = 404;
         $error = [
             'status' => (string) $status,
-            'code' => 'upload_error'
+            'code' => $e->getMessage() ?: 'upload_error'
         ];
         return new ResponseBag($status, [$error]);
     }

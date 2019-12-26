@@ -18,11 +18,9 @@ class UserWalletLog extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 该模型是否被自动维护时间戳.
-     *
-     * @var bool
+     * {@inheritdoc}
      */
-    public $timestamps = true;
+    protected $table = 'user_wallet_log';
 
     /**
      * 钱包明细类型

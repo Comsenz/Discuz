@@ -4,7 +4,7 @@
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Store from '../../../../../common/Store.js';
 import Post from '../../../../../common/models/Post.js';
-
+import appCommonH from '../../../../../helpers/commonHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
@@ -45,7 +45,9 @@ export default {
       headerImage: null,
       picValue: null,
       upImgUrl:'',
-      enclosureShow: false
+      enclosureShow: false,
+      isWeixin: false,
+      isPhone: false
     }
   },
 
@@ -64,9 +66,14 @@ export default {
         });
       })
       //设置在pc的宽度
-      this.limitWidth();
+      if(this.isWeixin != true && this.isPhone != true){
+        this.limitWidth();
+      }
   },
   created(){
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
+
     if(this.$route.params.themeId){
       var themeId = this.$route.params.themeId;
       var postsId = this.$route.params.postsId;
@@ -351,6 +358,7 @@ export default {
     //发布主题
     publish(){
       if(this.postsId && this.content){
+        console.log('回复');
         let posts = 'posts/'+this.postsId;
         this.appFetch({
           url:posts,
@@ -370,6 +378,7 @@ export default {
           this.$router.push({ path:'details'+'/'+this.themeId});
         })
       } else {
+        console.log('发帖');
         this.appFetch({
           url:"threads",
           method:"post",
