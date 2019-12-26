@@ -180,7 +180,7 @@ export default {
 
   },
   created() {
-    // localStorage.clear();
+    localStorage.clear();
 
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;

@@ -76,9 +76,9 @@ class UpdateUser
             $user->changeMobile($mobile);
         }
 
-        if ($status = Arr::get($attributes, 'status')) {
+        if (Arr::has($attributes, 'status')) {
             $this->assertCan($this->actor, 'edit.status', $user);
-            $user->changeStatus($status);
+            $user->changeStatus(Arr::get($attributes, 'status'));
         }
 
         if ($groupId = Arr::get($attributes, 'groupId')) {

@@ -111,11 +111,6 @@ class CreatePost
             $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
             Arr::set($this->data, 'attributes.content', $content);
 
-            // 存在审核敏感词时，将回复内容放入待审核
-            if ($censor->isMod) {
-                $post->is_approved = 0;
-            }
-
             // 回复另一条回复时，检查是否在同一主题下的
             if (! empty($this->replyPostId)) {
                 $this->replyUserId = $post->where('id', $this->replyPostId)
@@ -137,6 +132,11 @@ class CreatePost
             $this->replyUserId,
             $isFirst
         );
+
+        // 存在审核敏感词时，将回复内容放入待审核
+        if ($censor->isMod) {
+            $post->is_approved = 0;
+        }
 
         $post->raise(new Created($post, $this->actor, $this->data));
 

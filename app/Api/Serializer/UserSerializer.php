@@ -21,7 +21,7 @@ class UserSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
+        $attributes = [
             'id'                => $model->id,
             'username'          => $model->username,
             'mobile'            => $model->mobile,
@@ -36,6 +36,12 @@ class UserSerializer extends AbstractSerializer
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
         ];
+
+        if($this->actor->isAdmin()) {
+            $attributes['originalMobile'] = $model->getOriginal('mobile');
+        }
+
+        return $attributes;
     }
 
     public function wechat($user)

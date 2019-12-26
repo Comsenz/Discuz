@@ -75,13 +75,14 @@ export default {
     /*
     * 接口请求
     * */
-    getWatchHref(code,state){
+    getWatchHref(code,state,sessionId){
       this.appFetch({
         url:'wechat',
         method:'get',
         data:{
           code:code,
-          state:state
+          state:state,
+          sessionId:sessionId
         }
       }).then(res=>{
         console.log(res);
@@ -154,6 +155,7 @@ export default {
   created(){
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
+    let sessionId = this.$router.history.current.query.sessionId;
 
     console.log(code);
     console.log(state);
@@ -164,7 +166,7 @@ export default {
     if (!code && !state){
       this.getWatchHref()
     } else {
-      this.getWatchHref(code,state);
+      this.getWatchHref(code,state,sessionId);
     }
 
     this.getForum();
