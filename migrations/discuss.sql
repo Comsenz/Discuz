@@ -314,3 +314,6 @@ alter table attachments add column is_approved tinyint(1) not null default '0' c
 
 -- 2019-12-25 01:07:15 上一次头像上传时间 防刷敏感图
 alter table `users` add column avatar_at datetime null comment '头像修改时间' after avatar;
+
+-- 2019-12-26 15:48:33 用户表添加status 用户状态 0 为正常， 1 为禁用
+alter table users add column status tinyint(1) not null default '0' comment '用户状态：0为正常1为禁用' after last_login_ip;
