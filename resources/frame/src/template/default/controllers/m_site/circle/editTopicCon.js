@@ -9,8 +9,8 @@ let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
     return {
-      headerTitle:"发布主题",
-      selectSort:'选择分类',
+      headerTitle:"编辑主题",
+      selectSort:'',
       showPopup:false,
       categories: [],
       categoriesId: [],
@@ -36,7 +36,6 @@ export default {
         // },
       ],
       avatar: "",
-      themeId:'',
       postsId:'',
       files: {
         name: "",
@@ -48,7 +47,7 @@ export default {
       enclosureShow: false,
       isWeixin: false,
       isPhone: false,
-      themeCon:false,
+      themeCon:false
     }
   },
 
@@ -71,19 +70,14 @@ export default {
         this.limitWidth();
       }
   },
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
+  },
   created(){
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-
-    if(this.$route.params.themeId){
-      var themeId = this.$route.params.themeId;
-      var postsId = this.$route.params.postsId;
-      var themeContent = this.$route.params.themeContent;
-      // console.log(themeId)
-      this.themeId = themeId;
-      this.postsId = postsId;
-      this.content = themeContent;
-    }
     //初始化请求分类接口
     this.loadCategories();
     //初始化请求主题数据
@@ -95,94 +89,77 @@ export default {
   methods: {
       //初始化请求编辑主题数据
       detailsLoad(){
-        if(this.postsId && this.content){
-          let threads = 'threads/'+this.themeId;
           this.appFetch({
-            url: threads,
+            url: 'threads',
             method: 'get',
+            splice:'/'+this.themeId,
             data: {
               include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
             }
           }).then((res) => {
             console.log(res);
             console.log('1234');
-            // this.enclosureList = res.readdata.attachments;
-            // this.fileList = res.readdata.images;
+            const enclosureListCon = res.readdata.firstPost.attachments;
+            const fileListCon = res.readdata.images;
+            this.cateId = res.readdata.category._data.id;
             console.log(this.cateId);
-            const initializeCateId = res.readdata.category._data.id;
             this.selectSort = res.readdata.category._data.description;
-            console.log(this.selectSort);
-            if(this.cateId != initializeCateId){
-              this.cateId = initializeCateId;
-            } else {
-
+            this.content = res.readdata.firstPost._data.content;
+            this.postsId = res.readdata.firstPost._data.id;
+            for (let i = 0; i < enclosureListCon.length; i++) {
+              this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,uuid:enclosureListCon[i]._data.uuid});
             }
+            // console.log(this.enclosureList);
+            if(this.enclosureList.length>0){
+              this.enclosureShow = true;
+            }
+            // for (let i = 0; i < fileListCon.length; i++) {
+            //   this.fileList.push({type:fileListCon[i]._data.extension,name:fileListCon[i]._data.fileName,uuid:fileListCon[i]._data.uuid});
+            // }
+
+            // if(this.cateId != initializeCateId){
+            //   this.cateId = initializeCateId;
+            // } else {
+
+            // }
           })
-        }
     },
     //发布主题
     publish(){
-      if(this.postsId && this.content){
-        console.log('回复');
-        let posts = 'posts/'+this.postsId;
-        this.appFetch({
-          url:posts,
-          method:"patch",
-          data: {
-            "data": {
-              "type": "posts",
-              "attributes": {
-                  "content": this.content
-              }
+      this.appFetch({
+        url:'posts',
+        method:"patch",
+        splice:'/'+this.postsId,
+        // data: {
+        //   "data": {
+        //     "type": "posts",
+        //     "attributes": {
+        //         "content": this.content
+        //     }
+        //   },
+        // }
+        
+        data:{
+          "data": {
+            "type": "threads",
+            "attributes": {
+                "content": this.content,
+            },
+            "relationships": {
+              "category": {
+                  "data": {
+                      "type": "categories",
+                      "id": this.cateId
+                  }
+              },
             }
           }
-        }).then((res)=>{
-          // console.log('2222');
-          let a = this.apiStore.pushPayload(res);
-          this.$router.push({ path:'details'+'/'+this.themeId});
-        })
-      } else {
-        console.log('发帖');
-        this.appFetch({
-          url:"threads",
-          method:"post",
-          data:{
-            "data": {
-              "type": "threads",
-              "attributes": {
-                  "content": this.content,
-              },
-              "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  // "attachments": {
-                  //     "data": [
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 1
-                  //         },
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 2
-                  //         }
-                  //     ]
-                  // }
-              }
-
-            }
-          },
-        }).then((res)=>{
-          // console.log(res);
-          // console.log('456');
-          var postThemeId = res.readdata._data.id;
-          this.$router.push({ path:'details'+'/'+postThemeId});
-        })
-
-      }
+        },
+      }).then((res)=>{
+        // console.log('2222');
+        // let a = this.apiStore.pushPayload(res);
+        this.$router.push({ path:'/details'+'/'+this.themeId});
+      })
     },
 
     //设置底部在pc里的宽度
@@ -441,7 +418,7 @@ export default {
              }
               if(enclosure){
                 console.log('fujian');
-                this.enclosureShow = true
+                this.enclosureShow = true;
                 this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
 
               }

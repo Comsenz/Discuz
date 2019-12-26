@@ -302,11 +302,7 @@ export default {
          // content = content
          // console.log(content);
          //跳转到发帖页
-        this.$router.push({
-          path:'/post-topic',
-          name:'post-topic',
-          params: { themeId:this.themeId,postsId:postsId,themeContent:content}
-        })
+        this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
        }
     },
     //主题操作接口请求

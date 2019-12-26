@@ -219,12 +219,13 @@ export default {
 
       } else {
           console.log('执行初始化');
-          console.log(this.firstCategoriesId)
+          // console.log(this.firstCategoriesId)
           return  this.appFetch({
             url: 'threads',
             method: 'get',
             data: {
               'filter[categoryId]':this.firstCategoriesId,
+              'filter[isApproved]':1,
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit

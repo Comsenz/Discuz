@@ -19,6 +19,7 @@ body,html {
 	@include font-dpr(28);
 	font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
+.van-pull-refresh { min-height: 360px;}
 //附件颜色定义
 .icon-pdf {
   color: #FF5562 !important;
