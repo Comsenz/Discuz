@@ -99,12 +99,12 @@
           <div class="recycle-bin-reply-table__footer" slot="footer">
             <div class="recycle-bin-reply-table__footer-operator">
               <span>操作者：</span>
-              <span>{{!items.deletedUser?'操作者被禁止或删除':items.deletedUser._data.name}}</span>
+              <span>{{!items.deletedUser?'操作者被禁止或删除':items.deletedUser._data.username}}</span>
             </div>
 
-            <div class="recycle-bin-reply-table__footer-reason">
+            <div class="recycle-bin-reply-table__footer-reason" v-if="items.lastDeletedLog._data.message.length > 0">
               <span>原因：</span>
-              <span>{{!items.deletedUser?'操作者被禁止或删除':items.deletedUser._data.message}}</span>
+              <span>{{!items.deletedUser?'操作者被禁止或删除':items.lastDeletedLog._data.message}}</span>
             </div>
 
           </div>
