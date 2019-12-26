@@ -24,6 +24,10 @@ class UserWalletCashSerializer extends AbstractSerializer
             'cash_apply_amount' => $model->cash_apply_amount,
             'cash_status' => $model->cash_status,
             'remark' => $model->remark,
+            'trade_no' => $model->trade_no,
+            'error_code' => $model->error_code,
+            'error_message' => $model->error_message,
+            'refunds_status' => $model->refunds_status,
             'updated_at' => $this->formatDate($model->updated_at),
             'created_at' => $this->formatDate($model->created_at),
         ];

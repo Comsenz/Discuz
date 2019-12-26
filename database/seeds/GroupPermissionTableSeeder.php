@@ -31,12 +31,15 @@ class GroupPermissionTableSeeder extends Seeder
         'viewThreads' => [7, 10],               // 查看主题
         'createThread' => [10],                 // 发布主题
         'thread.reply' => [10],                 // 回复主题
+        'thread.favorite' => [10],              // 收藏主题
 
         // 回复
-        'deletePosts' => [10],                  // 删除回复
+        'thread.deletePosts' => [10],           // 删除回复
+        'thread.likePosts' => [10],             // 点赞回复
 
         // 附件
-        'attachment.createAttachment' => [10],  // 上传附件
+        'attachment.create.0' => [10],          // 上传附件
+        'attachment.create.1' => [10],          // 上传图片
         'attachment.delete' => [10],            // 删除附件
 
         // 敏感词

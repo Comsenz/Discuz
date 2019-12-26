@@ -12,6 +12,11 @@ use App\Settings\SettingsRepository;
 use App\Settings\SiteRevManifest;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Foundation\Application;
+use Discuz\Qcloud\QcloudManage;
+use Discuz\Qcloud\QcloudTrait;
+use Discuz\Qcloud\Services\BillingService;
+use Discuz\Qcloud\Services\CmsService;
 use Exception;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ResponseInterface;
@@ -23,7 +28,17 @@ use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
-    use AssertPermissionTrait;
+    use AssertPermissionTrait, QcloudTrait;
+
+    /**
+     * 需要验证的值
+     *
+     * @var array
+     */
+    protected $validationQCloud = [
+        'qcloud_secret_id',
+        'qcloud_secret_key',
+    ];
 
     protected $cache;
 
@@ -31,9 +46,10 @@ class SetSettingsController implements RequestHandlerInterface
 
     protected $siteRevManifest;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest)
+    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app)
     {
         $this->cache = $cache;
+        $this->app = $app;
         $this->settings = $settings;
         $this->siteRevManifest = $siteRevManifest;
     }
@@ -46,7 +62,8 @@ class SetSettingsController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-//        $this->assertAdmin($request->getAttribute('actor'));
+        $this->assertAdmin($request->getAttribute('actor'));
+
         $settings = collect($request->getParsedBody()->get('data', []))->pluck('attributes');
 
         // 分成比例检查
@@ -66,13 +83,21 @@ class SetSettingsController implements RequestHandlerInterface
             }
         }
 
+        // 判断是否存QCloud验证值是否正确
+        $pluck = $settings->pluck('value', 'key');
+        if ($pluck->has($this->validationQCloud)) {
+            $only = $pluck->only($this->validationQCloud);
+            $billing = new BillingService($only);
+            $billing->DescribeAccountBalance();
+        }
+
         $siteMode = $settings->where('tag', 'default')
             ->where('key', 'site_mode')->first();
 
         if(Arr::get($siteMode, 'value') === 'pay')
         {
             $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
-        } elseif(Arr::get($siteMode, 'value') === 'public')
+        } elseif (Arr::get($siteMode, 'value') === 'public')
         {
             $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
         }

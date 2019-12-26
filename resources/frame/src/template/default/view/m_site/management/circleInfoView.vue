@@ -26,14 +26,14 @@
             	<span class="infoItemLeft">创建时间</span>
             	<span class="infoItemRight">{{siteInfo._data.siteInstall}}</span>
             </div>
-            <div class="infoItem">
+            <div class="infoItem" v-if="siteInfo._data.sitePrice || siteInfo._data.siteExpir">
             	<span class="infoItemLeft">加入方式</span>
             	<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
             </div>
             <div class="infoItem">
             	<span class="infoItemLeft">站长</span>
             	<span class="infoItemRight" v-if="siteInfo._data.siteAuthor">{{username}}</span>
-              <span class="infoItemRight" v-else="">当前用户已删除</span>
+              <span class="infoItemRight" v-else="">无</span>
             </div>
             <div class="infoItem">
             	<div class="overHide">
@@ -54,21 +54,43 @@
             </div>
             <div class="infoItem">
             	<span class="infoItemLeft">加入时间</span>
-            	<span class="infoItemRight">{{joinedAt}}</span>
+            	<span class="infoItemRight">{{$moment(joinedAt).format('YYYY-MM-DD')}}</span>
             </div>
-            <div class="infoItem">
+            <div class="infoItem" v-if="expiredAt">
             	<span class="infoItemLeft">有效期至</span>
-            	<span class="infoItemRight">2020-01-01</span>
+            	<span class="infoItemRight">{{$moment(expiredAt).format('YYYY-MM-DD')}}</span>
             </div>
           </div>
-          <div class="infoPower">
+          <div class="powerListBox" v-if="limitList">
+          	<div class="powerTit">作为{{limitList._data.name}}，您将获得以下权限</div>
           	<div class="powerList">
-          		<div class="powerClassify">我的权限</div>
-          		<p class="powerChi">查看主题</p>
-          		<p class="powerChi">发图文帖</p>
-          		<p class="powerChi">付费阅读帖</p>
-          		<p class="powerChi">附件查看</p>
-          		<p class="powerChi">回帖</p>
+          		<div class="powerClassify">权限列表</div>
+              <div class="" v-for="(limit,index) in limitList.permission">
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreadList'">查看主题列表</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createThread'">发表主题</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.reply'">回复主题</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.create.0'">上传附件</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.create.1'">上传图片</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.view.0'">查看附件</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.view.1'">查看图片</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewUserList'">站点会员列表</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.delete'">删除附件</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'cash.create'">cash.create</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'order.create'">order.create</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.deletePosts'">删除回复</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.favorite'">帖子收藏</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.likePosts'">帖子点赞</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.view'">user.view</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewSiteInfo'">站点信息</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.edit'">编辑用户状态（例如：禁用）</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'group.edit'">编辑用户组</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createInvite'">管理-邀请加入</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.hide'">批量删除帖子</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.editPosts'">编辑</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.essence'">加精</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.sticky'">置顶</p>
+              </div>
           	</div>
           </div>
         </div>
