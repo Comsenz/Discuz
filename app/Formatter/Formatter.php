@@ -81,6 +81,16 @@ class Formatter
     }
 
     /**
+     * Generate thr formatter components cache.
+     */
+    public function cacheFormatter()
+    {
+        $formatter = $this->getConfigurator()->finalize();
+
+        $this->cache->forever('formatter', $formatter);
+    }
+
+    /**
      * @return Configurator
      */
     protected function getConfigurator()
@@ -97,10 +107,17 @@ class Formatter
         $configurator->Autolink;
         $configurator->tags->onDuplicate('replace');
 
+        // emoji
         foreach (Emoji::cursor() as $emoji) {
             $emojiImg = '<img src="' . $emoji->url . '" alt="' . $emoji->code . '">';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
+
+        // html
+        $configurator->HTMLElements->allowElement('blockquote');
+        $configurator->HTMLElements->allowAttribute('blockquote', 'class');
+        $configurator->HTMLElements->allowElement('span');
+        $configurator->HTMLElements->allowAttribute('span', 'class');
 
         return $configurator;
     }
@@ -116,9 +133,7 @@ class Formatter
         $formatter = $this->cache->get('formatter');
 
         if (! $formatter) {
-            $formatter = $this->getConfigurator()->finalize();
-
-            $this->cache->forever('formatter', $formatter);
+            $this->cacheFormatter();
         }
 
         return $formatter[$name];
@@ -149,6 +164,10 @@ class Formatter
         spl_autoload_register(function ($class) {
             if (file_exists($file = $this->cacheDir.'/'.$class.'.php')) {
                 include $file;
+            } else {
+                $this->flush();
+
+                $this->cacheFormatter();
             }
         });
 

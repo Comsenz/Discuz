@@ -27,12 +27,14 @@ class Setting extends Model
 
     public $timestamps = false;
 
+    public static $encrypt;
+
     /**
      * 需要加密的数据字段
      *
      * @var array
      */
-    public static $encrypt = [
+    public static $checkEncrypt = [
         'offiaccount_app_id',
         'offiaccount_app_secret',
         'miniprogram_app_id',
@@ -47,11 +49,21 @@ class Setting extends Model
     ];
 
     /**
+     * Set the encrypt.
+     *
+     * @param $encrypt
+     */
+    public static function setEncrypt($encrypt)
+    {
+        self::$encrypt = $encrypt;
+    }
+
+    /**
      * each data decrypt
      */
     public function existDecrypt()
     {
-        if (in_array($this->key, self::$encrypt)) {
+        if (in_array($this->key, self::$checkEncrypt)) {
             return;
         }
     }
@@ -65,8 +77,8 @@ class Setting extends Model
      */
     public function getValueAttribute($value)
     {
-        if (in_array($this->key, self::$encrypt)) {
-            $value = empty($value) ? $value : app()->make('encrypter')->decrypt($value);
+        if (in_array($this->key, self::$checkEncrypt)) {
+            $value = empty($value) ? $value : static::$encrypt->decrypt($value);
         }
 
         return $value;
@@ -82,8 +94,8 @@ class Setting extends Model
      */
     public static function setValue($key, &$value)
     {
-        if (in_array($key, self::$encrypt)) {
-            $value = app()->make('encrypter')->encrypt($value);
+        if (in_array($key, self::$checkEncrypt)) {
+            $value = static::$encrypt->encrypt($value);
         }
     }
 }

@@ -39,16 +39,25 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      canEdit:false
+      canEdit:false,
+      firstCategoriesId:''
 		}
 	},
   created:function(){
-    this.loadThemeList();
-    this.getInfo();
-    this.load();
+    // this.firstCategoriesId();
+    // if(this.firstCategoriesId){
+      this.loadThemeList();
+      this.getInfo();
+      this.load();
+    // }
+
+
+
   },
 	methods: {
-
+    receive: function (val_1) {
+      this.firstCategoriesId = val_1;
+    },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
@@ -149,12 +158,13 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus = false){
+      console.log(filterCondition);
       if(filterCondition == 'isEssence'){
       return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
-            'filter[isEssence]':filterVal,
+            'filter[isEssence]':'isEssence',
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
@@ -163,6 +173,7 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
+          this.themeListCon = res.readdata;
           this.themeListCon =this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
@@ -185,7 +196,8 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
+          this.themeListCon = res.readdata;
+          this.themeListCon = this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
         }).catch((err)=>{
@@ -194,13 +206,13 @@ export default {
           }
           this.loading = false;
         })
-        
+
       } else {
         return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
-            filterValue:filterVal,
+            'filter[categoryId]':this.firstCategoriesId,
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
@@ -211,6 +223,7 @@ export default {
             // },
           }
         }).then((res) => {
+          console.log('56754');
           if(initStatus){
             this.themeListCon = []
           }
@@ -223,7 +236,7 @@ export default {
           }
           this.loading = false;
         })
-      
+
       }
 
 
@@ -273,9 +286,10 @@ export default {
 	    },
       //筛选
 	    choTheme(themeType) {
-        this.loadThemeList('isEssence',themeType);
+        this.loadThemeList(themeType);
 	    	// console.log('筛选');
 	    },
+
       //点击分类
       categoriesChoice(cateId) {
         // console.log(cateId);
@@ -310,7 +324,7 @@ export default {
 	    },
 	    postTopic:function(){
 	    	// alert('跳转到发布主题页');
-	    	this.$router.push({ path:'post-topic'});
+	    	this.$router.push({ path:'/post-topic'});
 	    },
 		/**
 		 * 给导航添加点击状态

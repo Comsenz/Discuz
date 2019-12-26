@@ -23,6 +23,7 @@ class CreateUsers extends Migration
             $table->unsignedInteger('thread_count')->default(0)->comment('主题数');
             $table->tinyInteger('status')->default(0)->comment('用户状态');
             $table->string('avatar', 100)->default('')->comment('头像地址');
+            $table->dateTime('avatar_at')->nullable()->comment('头像修改时间');
             $table->dateTime('joined_at')->nullable()->comment('付费加入时间');
             $table->dateTime('expired_at')->nullable()->comment('付费到期时间');
             $table->dateTime('created_at')->comment('创建时间');

@@ -148,7 +148,11 @@
       </Card>
     </div>
 </template>
-
+<style>
+  .disabled .el-upload--picture-card {
+      display: none;
+  }
+</style>
 <script>
 import '../../../scss/site/globalStyle.scss';
 import siteSetCon from '../../../controllers/site/global/siteSetCon';

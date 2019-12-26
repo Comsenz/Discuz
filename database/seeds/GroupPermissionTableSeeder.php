@@ -24,23 +24,27 @@ class GroupPermissionTableSeeder extends Seeder
         // 分类
         'createCategory' => [],                 // 创建分类
         'category.delete' => [],                // 删除分类
-        'category.edit' => [],                // 修改分类
+        'category.edit' => [],                  // 修改分类
 
         // 主题
+        'viewThreadList' => [7, 10],            // 查看主题列表
         'viewThreads' => [7, 10],               // 查看主题
         'createThread' => [10],                 // 发布主题
         'thread.reply' => [10],                 // 回复主题
+        'thread.favorite' => [10],              // 收藏主题
 
         // 回复
-        'deletePosts' => [10],                  // 删除回复
+        'thread.deletePosts' => [10],           // 删除回复
+        'thread.likePosts' => [10],             // 点赞回复
 
         // 附件
-        'attachment.createAttachment' => [10],  // 上传附件
+        'attachment.create.0' => [10],          // 上传附件
+        'attachment.create.1' => [10],          // 上传图片
         'attachment.delete' => [10],            // 删除附件
 
         // 敏感词
-        'stopWord.create' => [],        // 创建敏感词
-        'stopWord.delete' => [],        // 删除敏感词
+        'stopWord.create' => [],                // 创建敏感词
+        'stopWord.delete' => [],                // 删除敏感词
 
         // 站点
         'viewSiteInfo' => [],                   // 查看站点信息权限
@@ -59,6 +63,9 @@ class GroupPermissionTableSeeder extends Seeder
         'cash.create' => [7, 10],               // 申请提现
         'cash.review' => [],                    // 提现审核
         'cash.viewList' => [],                  // 提现总列表
+
+        // 邀请
+        'createInvite' => [],                   // 发起邀请
     ];
 
     /**

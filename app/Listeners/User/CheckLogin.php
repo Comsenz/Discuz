@@ -39,10 +39,6 @@ class CheckLogin
      */
     public function handle(Logining $event)
     {
-        if ($this->cache->get(self::CACHE_NAME.$_SERVER['REMOTE_ADDR'])) {
-            throw new LoginFailuresTimesToplimitException;
-        }
-
         $userLoginFailCount = $this->userLoginFailLog->getDataByIp($_SERVER['REMOTE_ADDR']);
         $maxTime = $this->userLoginFailLog->getLastFailTime($_SERVER['REMOTE_ADDR']);
 
@@ -52,7 +48,6 @@ class CheckLogin
                 //check fail count & login time limit
                 $expire = Carbon::parse($maxTime)->addMinutes(self::LIMIT_TIME);
                 if ($userLoginFailCount > 4 && ($expire > Carbon::now())) {
-                    $this->cache->put(self::CACHE_NAME.$_SERVER['REMOTE_ADDR'], 1, $expire);
                     throw new LoginFailuresTimesToplimitException;
                 } elseif ($userLoginFailCount > 4 && ($expire < Carbon::now())) {
                     //reset fail count

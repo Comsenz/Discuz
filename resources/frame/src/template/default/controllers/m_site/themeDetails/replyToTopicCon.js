@@ -1,6 +1,7 @@
 import {Bus} from '../../../store/bus.js';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data:function () {
     return {
@@ -19,16 +20,20 @@ export default {
       ],
       uploadShow:false,
       replyId:'',
-      themeId:''
+      themeId:'',
+      isWeixin: false,
+      isPhone: false
     }
   },
   created(){
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     var replyQuote = this.$route.params.replyQuote;
     var replyId = this.$route.params.replyId;
     var themeId = this.$route.params.themeId;
-    console.log(replyQuote);
-    console.log(replyId);
-    console.log(themeId+'2222');
+    // console.log(replyQuote);
+    // console.log(replyId);
+    // console.log(themeId+'2222');
     if(replyId && replyQuote){
       this.replyText = '<blockquote class="quoteCon">'+replyQuote+'</blockquote>';
     } else {
@@ -51,11 +56,22 @@ export default {
           }
         });
       })
+      //设置在pc的宽度
+      //设置在pc的宽度
+      if(this.isWeixin != true && this.isPhone != true){
+        this.limitWidth();
+      }
   },
   beforeDestroy () {
       Bus.$off('message');
   },
   methods: {
+    //设置底部在pc里的宽度
+    limitWidth(){
+      document.getElementById('post-topic-footer').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     //上传图片,点击加号时
     handleFile(e){
       // 实例化

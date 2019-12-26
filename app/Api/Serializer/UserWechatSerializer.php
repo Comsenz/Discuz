@@ -24,6 +24,7 @@ class UserWechatSerializer extends AbstractSerializer
         return [
             'openid'            => $model->openid,
             'nickname'          => $model->nickname,
+            'sex'               => $model->sex, // 用户的性别，值为 1 时是男性，值为 2 时是女性，值为 0 时是未知
         ];
     }
 

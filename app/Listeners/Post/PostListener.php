@@ -80,6 +80,17 @@ class PostListener
 
         // 绑定附件
         if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
+            $ids = array_column($attachments, 'id');
+            // 判断附件是否合法
+            $bool = Attachment::approvedInExists($ids);
+            if ($bool) {
+                // 如果是首贴，将主题设为待审核
+                if ($post->is_first) {
+                    $post->thread->is_approved = 0;
+                }
+                $post->is_approved = 0;
+            }
+
             Attachment::where('user_id', $actor->id)
                 ->where('post_id', 0)
                 ->whereIn('id', array_column($attachments, 'id'))

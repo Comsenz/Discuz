@@ -26,7 +26,7 @@ export default {
       siteCloseMsg:'',
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList:[]
+      fileList:[],
     }
   },
 
@@ -34,6 +34,24 @@ export default {
     //初始化请求设置
     this.loadStatus();
   },
+  computed: {
+      // uploadDisabled:function() {
+      //     return this.fileList.length >0
+      // },
+
+  },
+  // watch: {
+    //监听图片数组变化
+  //   'this.fileList.length': {
+  //     handler(newValue, oldValue) {
+  //       if (newValue !== oldValue) {
+  //         // 操作
+  //          this.fileList = newValue;
+  //         }
+  //     }
+  //   },
+  // },
+
   methods:{
     loadStatus(){
       //初始化设置
@@ -43,7 +61,8 @@ export default {
         data:{
         }
       }).then(data=>{
-        // console.log(data.readdata._data);
+        console.log(data);
+        console.log('123');
         this.siteName = data.readdata._data.siteName;
         this.siteIntroduction = data.readdata._data.siteIntroduction;
         this.siteMode = data.readdata._data.siteMode;
@@ -60,6 +79,9 @@ export default {
         this.siteRecord = data.readdata._data.siteRecord;
         this.siteStat = data.readdata._data.siteStat;
         this.siteClose = data.readdata._data.siteClose;
+        if(data.readdata._data.logo){
+          this.fileList.push({url:data.readdata._data.logo});
+        }
         if(this.siteClose == true){
            this.radio2 = '1';
         } else {

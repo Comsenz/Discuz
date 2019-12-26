@@ -9,13 +9,12 @@ export default {
     return {
       username:'',
       password:'',
-      mobile:'13434900053',
-      btnLoading:false, //注册按钮状态
-      error:false,    //错误状态
-      errorMessage:"", //错误信息
+      btnLoading:false,     //注册按钮状态
+      error:false,          //错误状态
+      errorMessage:"",      //错误信息
 
-      phoneStatus:'',    //绑定手机号状态
-      siteMode:'',       //站点是否付费
+      phoneStatus:'',       //绑定手机号状态
+      siteMode:'',          //站点是否付费
     }
   },
 
@@ -46,6 +45,11 @@ export default {
           } else {
             this.$toast.success('注册成功');
             let token = res.data.attributes.access_token;
+            let tokenId = res.data.id;
+
+            browserDb.setLItem('Authorization', token);
+            browserDb.setLItem('tokenId', tokenId);
+            console.log(this.phoneStatus);
 
             if (this.phoneStatus){
               this.$router.push({path:'bind-phone'});

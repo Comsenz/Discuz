@@ -14,6 +14,7 @@ export default {
   data:function () {
     return {
       rewardList:[],
+      stateTitle:'打赏了我',
       pageIndex: 1,
       pageLimit: 20,
       loading: false,
@@ -39,9 +40,9 @@ export default {
         url:'notice',
         method:'get',
         data:{
-          type:'3',
           'page[number]': this.pageIndex,
-          'page[limit]': this.pageLimit
+          'page[limit]': this.pageLimit,
+          'filter[type]': 3
         }
       }).then(res=>{
         console.log(res)
