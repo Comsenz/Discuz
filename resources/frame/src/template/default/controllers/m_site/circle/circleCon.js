@@ -40,13 +40,17 @@ export default {
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       canEdit:false,
-      firstCategoriesId:''
+      firstCategoriesId:'',
+      Initialization:false,     //当请求到默认分类id时，允许初始化开关
+      searchStatus: false,  //默认不显示搜索按钮
+      menuStatus: false     //默认不显示菜单按钮
+
 		}
 	},
   created:function(){
     // this.firstCategoriesId();
     // if(this.firstCategoriesId){
-      this.loadThemeList();
+      // this.loadThemeList();
       this.getInfo();
       this.load();
     // }
@@ -56,7 +60,11 @@ export default {
   },
 	methods: {
     receive: function (val_1) {
+      console.log(val_1);
       this.firstCategoriesId = val_1;
+      // this.Initialization = true;
+      // console.log(this.Initialization);
+      this.loadThemeList();
     },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
@@ -123,6 +131,8 @@ export default {
           this.loginBtnFix = false;
           this.loginHide = true;
           this.canEdit = true;
+          this.searchStatus = true;
+          this.menuStatus = true;
         }  else {
           console.log('公开，未登录');
           // this.loadThemeList();
@@ -158,7 +168,7 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus = false){
-      console.log(filterCondition);
+      // console.log(filterCondition);
       if(filterCondition == 'isEssence'){
       return  this.appFetch({
           url: 'threads',
@@ -208,34 +218,37 @@ export default {
         })
 
       } else {
-        return  this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            'filter[categoryId]':this.firstCategoriesId,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
+          console.log('执行初始化');
+          console.log(this.firstCategoriesId)
+          return  this.appFetch({
+            url: 'threads',
+            method: 'get',
+            data: {
+              'filter[categoryId]':this.firstCategoriesId,
+              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+              'page[number]': this.pageIndex,
+              'page[limit]': this.pageLimit
 
-            // page: {
-            //   offset: 20,
-            //   num: 3
-            // },
-          }
-        }).then((res) => {
-          console.log('56754');
-          if(initStatus){
-            this.themeListCon = []
-          }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
+              // page: {
+              //   offset: 20,
+              //   num: 3
+              // },
+            }
+          }).then((res) => {
+            console.log('56754');
+            if(initStatus){
+              this.themeListCon = []
+            }
+            this.themeListCon =this.themeListCon.concat(res.readdata);
+            this.loading = false;
+            this.finished = res.data.length < this.pageLimit;
+          }).catch((err)=>{
+            if(this.loading && this.pageIndex !== 1){
+              this.pageIndex--;
+            }
+            this.loading = false;
+          })
+
 
       }
 

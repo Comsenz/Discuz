@@ -67,9 +67,12 @@ a { color: $fontColor;}
 .padB0 { padding-bottom: 0 !important;}
 .overHide { overflow: hidden;}
 .hide { display: none;}
+.headeGap {
+    @include px2rem(height, 28);
+}
 .headOpe {
 	text-align: right;
-	@include px2rem(padding, 28 30 14 30);
+	@include px2rem(padding, 0 30 14 30);
 	@include px2rem(height, 40);
 	box-sizing: content-box;
 	span {

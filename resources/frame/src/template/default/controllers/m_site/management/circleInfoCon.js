@@ -10,8 +10,11 @@ export default {
 		  siteInfo: false,
 		  username:'',
 		  joinedAt:'',
+      expiredAt:'',
       isLoading: false, //是否处于下拉刷新状态
-		  roleList:[]
+		  roleList:[],
+      groupId:'',
+      limitList:''
 
 		}
 	},
@@ -38,14 +41,50 @@ export default {
           include: 'groups',
         }
       }).then((res) => {
+        console.log(res);
         this.roleList = res.readdata.groups;
-        if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
+        this.groupId = res.readdata.groups[0]._data.id;
+        if(res.readdata._data.joinedAt =='' || res.readdata._data.joinedAt == null){
           this.joinedAt = res.readdata._data.createdAt;
         } else {
           this.joinedAt = res.readdata._data.joinedAt;
         }
-      })
-    return  this.appFetch({
+        if(res.readdata._data.expiredAt =='' || res.readdata._data.expiredAt == null){
+          this.expiredAt = res.readdata._data.expiredAt;
+        } else {
+          this.expiredAt = res.readdata._data.expiredAt;
+        }
+
+        //请求权限列表数据
+        this.appFetch({
+          url: 'groups',
+          method: 'get',
+          splice:'/'+this.groupId,
+          data: {
+            include: ['permission'],
+          }
+        }).then((res) => {
+          console.log(res);
+          this.limitList = res.readdata;
+          console.log(res.readdata.permission[0]._data.permission);
+          console.log(res.readdata.permission[1]._data.permission);
+          console.log(res.readdata.permission[2]._data.permission);
+          console.log(res.readdata.permission[3]._data.permission);
+          console.log(res.readdata.permission[4]._data.permission);
+          console.log(res.readdata.permission[5]._data.permission);
+          console.log(res.readdata.permission[6]._data.permission);
+          console.log(res.readdata.permission[7]._data.permission);
+          console.log(res.readdata.permission[8]._data.permission);
+          console.log(res.readdata.permission[9]._data.permission);
+          console.log(res.readdata.permission[10]._data.permission);
+          console.log(res.readdata.permission[11]._data.permission);
+          console.log(res.readdata.permission[12]._data.permission);
+          console.log(res.readdata.permission[13]._data.permission);
+        });
+
+      });
+
+      this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
@@ -58,11 +97,9 @@ export default {
         if(res.readdata._data.siteAuthor){
           this.username = res.readdata._data.siteAuthor.username;
         }
-
-
-
       });
     },
+
     //查看更多站点成员
     moreCilrcleMembers(){
       this.$router.push({path:'circle-members'});
