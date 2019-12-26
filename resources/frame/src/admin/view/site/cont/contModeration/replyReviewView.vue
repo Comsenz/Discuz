@@ -67,6 +67,7 @@
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :ip="items._data.ip"
+          :userId="items.user._data.id"
           :key="items._data.id"
         >
           <div class="cont-review-table__side" slot="side">
@@ -78,7 +79,7 @@
           </div>
 
           <div class="cont-review-table__main" slot="main">
-            {{items._data.content}}
+            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.content"></a>
           </div>
 
           <div class="cont-review-table__footer" slot="footer">
