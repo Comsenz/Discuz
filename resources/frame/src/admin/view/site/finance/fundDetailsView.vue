@@ -46,7 +46,7 @@
 
           <el-table-column
             label="变动时间"
-            width="170">
+            width="190">
             <template slot-scope="scope">{{ formatDate(scope.row._data.created_at) }}</template>
           </el-table-column>
 

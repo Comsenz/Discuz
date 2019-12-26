@@ -5,8 +5,8 @@
   "author": "李刚",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --mode development --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
-    "build": "node build/build.js"
+    "dev": "webpack-dev-server --max-old-space-size=4096 --mode development --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
+    "build": "node --max_old_space_size=4096 build/build.js"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",

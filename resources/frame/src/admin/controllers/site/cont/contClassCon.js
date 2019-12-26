@@ -32,7 +32,16 @@ export default {
     },
 
     tableContAdd(){
-      if (this.categoriesList.length <= this.categoriesListLength){
+
+      this.createCategoriesStatus = true;
+      this.categoriesList.push({
+        name:"",
+        id:"",
+        description:"",
+        sort:""
+      })
+
+      /*if (this.categoriesList.length <= this.categoriesListLength){
         this.createCategoriesStatus = true;
         this.categoriesList.push({
           name:"",
@@ -40,7 +49,7 @@ export default {
           description:"",
           sort:""
         })
-      }
+      }*/
     },
 
     submitClick(){
@@ -52,7 +61,8 @@ export default {
           type: 'warning'
         });
       } else if (this.createCategoriesStatus){
-        this.createCategories(this.categoriesList[this.categoriesList.length-1]).then(()=>{
+        console.log(this.categoriesList.slice(this.categoriesListLength, this.categoriesList.length));
+        this.createCategories(this.categoriesList.slice(this.categoriesListLength,this.categoriesList.length)).then(()=>{
           this.getCategories();
           this.createCategoriesStatus = false;
         })
@@ -82,9 +92,13 @@ export default {
 
     },
 
-    deleteClick(id){
-      if (this.createCategoriesStatus){
-        this.categoriesList.pop();
+    deleteClick(id,index){
+      console.log(index);
+      console.log(this.categoriesListLength);
+
+      if (this.createCategoriesStatus && index > this.categoriesListLength -1){
+        this.categoriesList.splice(index,1);
+        console.log(this.categoriesList);
       } else {
         this.deleteCategories(id).then(()=>{
           this.getCategories();
@@ -167,18 +181,23 @@ export default {
       })
     },
     createCategories(data){
+      let datas = [];
+      data.forEach((item)=>{
+        datas.push({
+          "type": "categories",
+          "attributes": {
+            "name": item.name,
+            "description": item.description,
+            "sort": item.sort
+          }
+        },)
+      });
+
       return  this.appFetch({
-                url:'createCategories',
+                url:'createBatchCategories',
                 method:'post',
                 data:{
-                  "data": {
-                    "type": "categories",
-                    "attributes": {
-                      "name": data.name,
-                      "description": data.description,
-                      "sort": data.sort,
-                    }
-                  }
+                  "data": datas
                 }
               }).then(res=>{
                 if (!res.meta){

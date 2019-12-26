@@ -17,7 +17,7 @@
             label="分类名称"
             min-width="200">
             <template slot-scope="scope">
-              <el-input  v-model="scope.row.name" />
+              <el-input clearable v-model="scope.row.name" />
             </template>
           </el-table-column>
 
@@ -26,7 +26,7 @@
             width="120"
           >
             <template slot-scope="scope">
-              <el-input  v-model="scope.row.sort" />
+              <el-input clearable v-model="scope.row.sort" />
             </template>
           </el-table-column>
 
@@ -35,7 +35,7 @@
             min-width="250"
           >
             <template slot-scope="scope">
-              <el-input  v-model="scope.row.description" />
+              <el-input clearable  v-model="scope.row.description" />
             </template>
           </el-table-column>
 
@@ -53,7 +53,7 @@
                   <el-button type="text" size="mini" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">
                     取消
                   </el-button>
-                  <el-button type="danger" size="mini" @click="deleteClick(scope.row.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >确定</el-button>
+                  <el-button type="danger" size="mini" @click="deleteClick(scope.row.id,scope.$index);scope._self.$refs[`popover-${scope.$index}`].doClose()" >确定</el-button>
                 </div>
                 <el-button type="text" slot="reference">删除</el-button>
               </el-popover>
