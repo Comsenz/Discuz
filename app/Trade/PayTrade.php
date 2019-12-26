@@ -11,6 +11,8 @@ namespace App\Trade;
 use App\Trade\Config\GatewayConfig;
 use Endroid\QrCode\QrCode;
 use Omnipay\Omnipay;
+use Illuminate\Support\Arr;
+use App\Exceptions\TradeErrorException;
 
 class PayTrade
 {
@@ -48,10 +50,11 @@ class PayTrade
     private static function wechatPay($order_info, $payment_type, $config, $extra)
     {
         $gateway = Omnipay::create($payment_type);
-        $gateway->setAppId($config['app_id']);
-        $gateway->setMchId($config['mch_id']);
-        $gateway->setApiKey($config['api_key']);
-        $gateway->setNotifyUrl($config['notify_url']);
+
+        $gateway->setAppId(Arr::get($config, 'app_id'));
+        $gateway->setMchId(Arr::get($config, 'mch_id'));
+        $gateway->setApiKey(Arr::get($config, 'api_key'));
+        $gateway->setNotifyUrl(Arr::get($config, 'notify_url'));
 
         //订单信息
         $order = [
@@ -96,10 +99,9 @@ class PayTrade
                     break;
             }
         } else {
-            return $response->getData();
+            $message = $response->getData();
+            throw new TradeErrorException($message['return_msg'], 500);
         }
-
-
         return $result;
     }
 

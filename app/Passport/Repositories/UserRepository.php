@@ -10,6 +10,7 @@ namespace App\Passport\Repositories;
 use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
+use Discuz\Auth\Exception\LoginFailedException;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -38,14 +39,14 @@ class UserRepository implements UserRepositoryInterface
      * @param string $grantType
      * @param ClientEntityInterface $clientEntity
      * @return UserEntity|UserEntityInterface|null
-     * @throws PermissionDeniedException
+     * @throws LoginFailedException
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
         $user = $this->users->findByIdentification(compact('username'));
 
         if (! $user) {
-            throw new PermissionDeniedException;
+            throw new LoginFailedException;
         }
         $this->events->dispatch(new Logining($user, $username, $password));
 

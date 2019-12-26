@@ -7,6 +7,7 @@
 
 namespace App\SmsMessages;
 
+use Discuz\Contracts\Setting\SettingsRepository;
 use Overtrue\EasySms\Contracts\GatewayInterface;
 use Overtrue\EasySms\Message;
 use Overtrue\EasySms\Strategies\OrderStrategy;
@@ -33,7 +34,7 @@ class SendCodeMessage extends Message
     // 定义使用模板发送方式平台所需要的模板 ID
     public function getTemplate(GatewayInterface $gateway = null)
     {
-        return 451143;
+        return app()->make(SettingsRepository::class)->get('qcloud_sms_template_id', 'qcloud');
     }
 
     // 模板参数

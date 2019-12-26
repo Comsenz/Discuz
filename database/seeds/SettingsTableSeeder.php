@@ -28,7 +28,10 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'qcloud_sms',          // 腾讯云短信开关：0 关闭，1 开启
                 'value' => '0',                 // 默认关闭
                 'tag' => 'qcloud'
-            ],
+            ],[
+                'key' => 'site_author',         // 站长用户ID 1 管理员
+                'value' => '1'                  // 默认用户1
+            ]
         ]);
     }
 }
