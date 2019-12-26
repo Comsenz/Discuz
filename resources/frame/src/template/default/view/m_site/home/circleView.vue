@@ -11,7 +11,7 @@
     :immediate-check="false"
     >
 	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice"></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice" v-on:update="receive"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>
 

@@ -12,6 +12,7 @@ use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -45,7 +46,7 @@ class ExportUserController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->assertAdmin($request->getAttribute('actor'));
+//        $this->assertAdmin($request->getAttribute('actor'));
 
         $params = $request->getQueryParams();
 
@@ -64,18 +65,12 @@ class ExportUserController implements RequestHandlerInterface
 
     private function data($params = null)
     {
-        return User::select('users.id as id', 'users.username', 'users.mobile', 'user_wechats.nickname', 'user_wechats.unionid', 'users.last_login_ip', 'users.created_at', 'users.status')
-            ->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')
-            ->orderBy('id', 'asc')
-            ->get()
-            ->each(function ($item, $key) {
-                $item->sex = ($item->sex == 1) ? '男' : '女';
-                $item->status = ($item->status == 1) ? '正常' : '禁用';
-            })
-            ->toArray();
-    }
 
-    private function createFilename($params)
-    {
+        return User::whereIn('id', explode(',', Arr::get($params, 'ids', '')))->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')->get(['id', 'username', 'mobile', 'nickname', 'openid', 'unionid', 'last_login_ip', 'users.created_at', 'sex', 'status'])->map(function($user) {
+            $user->sex = ($user->sex == 1) ? '男' : '女';
+            $user->status = ($user->status == 0) ? '正常' : '禁用';
+            return $user;
+        })->toArray();
+
     }
 }

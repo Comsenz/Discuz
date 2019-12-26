@@ -7,6 +7,8 @@ return [
     'update_failure'         => '钱包更新失败',
     'status_cash_freeze'     => '钱包已冻结提现',
     'cash_freeze_desc'       => '提现冻结',
+    'cash_sum_limit'       => '超出每日提现金额限制',
+    'cash_interval_time'       => '提现处于限制间隔天数内',
     'cash_success'           => '提现成功，扣除',
     'cash_failure'           => '提现失败，退回',
     'cash_review_failure'           => '审核不通过，退回',
