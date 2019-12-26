@@ -15,7 +15,6 @@ class CreateUserWalletCash extends Migration
         $this->schema()->create('user_wallet_cash', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('提现ID');
             $table->unsignedBigInteger('user_id')->comment('提现用户ID');
-            $table->unsignedBigInteger('user_wallet_id')->comment('提现钱包ID');
             $table->unsignedBigInteger('cash_sn')->comment('提现交易编号');
             $table->unsignedDecimal('cash_charge', 10, 2)->comment('提现手续费');
             $table->unsignedDecimal('cash_actual_amount', 10, 2)->comment('实际提现金额');
@@ -26,6 +25,7 @@ class CreateUserWalletCash extends Migration
             $table->string('trade_no', 64)->comment('交易号');
             $table->string('error_code', 64)->comment('错误代码');
             $table->string('error_message', 64)->comment('交易失败描叙');
+            $table->unsignedTinyInteger('refunds_status')->default(0)->comment('返款状态，0未返款，1已返款');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });

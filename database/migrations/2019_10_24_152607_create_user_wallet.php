@@ -30,6 +30,6 @@ class CreateUserWallets extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('user_wallet');
+        $this->schema()->dropIfExists('user_wallets');
     }
 }
