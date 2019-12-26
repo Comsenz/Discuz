@@ -135,6 +135,7 @@ class CreatePost
             $this->ip,
             $this->replyPostId,
             $this->replyUserId,
+            $post->is_approved,
             $isFirst
         );
 

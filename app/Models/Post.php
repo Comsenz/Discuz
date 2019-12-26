@@ -145,9 +145,10 @@ class Post extends Model
      * @param int $replyPostId
      * @param int $replyUserId
      * @param int $isFirst
+     * @param int $isApproved
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst = 0)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isApproved, $isFirst = 0)
     {
         $post = new static;
 
@@ -156,7 +157,9 @@ class Post extends Model
         $post->user_id = $userId;
         $post->ip = $ip;
         $post->reply_post_id = $replyPostId;
+        $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
+        $post->is_approved = $isApproved;
         $post->is_first = $isFirst;
 
         // Set content last, as the parsing may rely on other post attributes.
