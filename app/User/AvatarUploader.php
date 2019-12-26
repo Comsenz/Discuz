@@ -7,7 +7,10 @@
 
 namespace App\User;
 
+use App\Censor\Censor;
+use App\Exceptions\UploadException;
 use App\Models\User;
+use Discuz\Foundation\Application;
 use Illuminate\Support\Str;
 use Intervention\Image\Image;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -16,11 +19,29 @@ class AvatarUploader
 {
     protected $file;
 
-    public function __construct(Filesystem $file)
+    protected $censor;
+
+    protected $app;
+
+    /**
+     * 图片名称
+     *
+     * @var
+     */
+    public $avatarPath;
+
+    public function __construct(Filesystem $file, Censor $censor, Application $app)
     {
         $this->file = $file;
+        $this->censor = $censor;
+        $this->app = $app;
     }
 
+    /**
+     * @param User $user
+     * @param Image $image
+     * @throws UploadException
+     */
     public function upload(User $user, Image $image)
     {
         if (extension_loaded('exif')) {
@@ -29,12 +50,19 @@ class AvatarUploader
 
         $encodedImage = $image->fit(200, 200)->encode('png');
 
-        $avatarPath = Str::random() . '.png';
+        $this->avatarPath = Str::random() . '.png';
 
         $this->remove($user);
-        $user->changeAvatar($avatarPath);
+        $user->changeAvatar($this->avatarPath);
 
-        $this->file->put($avatarPath, $encodedImage);
+        $this->file->put($this->avatarPath, $encodedImage);
+
+        // 检测敏感图
+        $this->censor->checkImage($this->getPathname());
+        if ($this->censor->isMod) {
+            $this->deleteFile($this->avatarPath);
+            throw new UploadException();
+        }
     }
 
     public function remove(User $user)
@@ -42,11 +70,31 @@ class AvatarUploader
         $avatarPath = $user->getOriginal('avatar');
 
         $user->saved(function () use ($avatarPath) {
-            if ($this->file->has($avatarPath)) {
-                $this->file->delete($avatarPath);
-            }
+            $this->deleteFile($avatarPath);
         });
 
         $user->changeAvatar('');
+    }
+
+    /**
+     * 上传失败则删除本地图片资源
+     *
+     * @param $avatarPath
+     */
+    public function deleteFile($avatarPath)
+    {
+        if ($this->file->has($avatarPath)) {
+            $this->file->delete($avatarPath);
+        }
+    }
+
+    /**
+     * get file path name
+     *
+     * @return string
+     */
+    public function getPathname()
+    {
+        return $this->app->config('filesystems.disks.avatar.root') . '/' . $this->avatarPath;
     }
 }
