@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use App\Models\Group;
 
 class ListUsersController extends AbstractListController
 {
@@ -77,7 +78,7 @@ class ListUsersController extends AbstractListController
 
         $this->assertCan($actor, 'viewUserList');
 
-        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'bind']);
+        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'bind', 'status']);
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
@@ -163,6 +164,11 @@ class ListUsersController extends AbstractListController
         // 手机号
         if ($mobile = Arr::get($filter, 'mobile')) {
             $query->where('mobile', $mobile);
+        }
+
+        // 状态
+        if ($status = Arr::get($filter, 'status')) {
+            $query->where('status', $status);
         }
 
         // 用户组
