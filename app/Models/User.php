@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property string $union_id
  * @property string $last_login_ip
  * @property int $thread_count
+ * @property Carbon $avatar_at
  * @property Carbon $joined_at
  * @property Carbon $expired_at
  * @property Carbon $created_at
@@ -62,6 +63,7 @@ class User extends Model
      * {@inheritdoc}
      */
     protected $dates = [
+        'avatar_at',
         'joined_at',
         'expired_at',
         'created_at',

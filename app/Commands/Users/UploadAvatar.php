@@ -7,11 +7,15 @@
 
 namespace App\Commands\Users;
 
+use App\Censor\Censor;
+use App\Exceptions\UploadException;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\User\AvatarUploader;
 use App\Validators\AvatarValidator;
+use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
@@ -48,9 +52,21 @@ class UploadAvatar
         return $this();
     }
 
+    /**
+     * @return mixed
+     * @throws UploadException
+     * @throws PermissionDeniedException
+     */
     public function __invoke()
     {
         $user = $this->users->findOrFail($this->id);
+
+        // 检测上传头像时间限制
+        if (!empty($user->avatar_at)) {
+            if (Carbon::now() < Carbon::parse($user->avatar_at)->addDay()) {
+                throw new UploadException('upload_time_not_up');
+            }
+        }
 
         if ($this->actor->id !== $user->id) {
             $this->assertCan($this->actor, 'edit', $user);
@@ -71,10 +87,11 @@ class UploadAvatar
             );
 
             $this->validator->valid(['avatar' => $file]);
-
             $image = (new ImageManager())->make($tmpFile);
 
             $this->avatarUploader->upload($user, $image);
+
+            $user->avatar_at = Carbon::now()->toDateString();
 
             $user->save();
         } finally {

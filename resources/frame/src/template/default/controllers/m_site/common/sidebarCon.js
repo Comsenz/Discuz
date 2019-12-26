@@ -58,8 +58,8 @@ export default {
 	        },
 	        {
             text:'退出登录',
-	          name: 'login-user',
-	          path: '/login-user', // 跳转路径
+	          name: 'circle',
+	          path: '/circle', // 跳转路径
 	          enentType: 1 // 事件类型
 	        }
 	      ],
@@ -107,6 +107,7 @@ export default {
       // browserDb.removeLItem('tokenId');
       // browserDb.removeLItem('Authorization');
       localStorage.clear();
+      
       this.$router.push({ path:url});
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
