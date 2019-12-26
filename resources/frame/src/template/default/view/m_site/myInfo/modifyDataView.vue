@@ -8,7 +8,8 @@
           </div>
           <div class="modify-data-avatar-img">
             <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
-             <img :src="headPortrait" alt="我的头像">
+             <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
+              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
             <i>
               <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
             </i>

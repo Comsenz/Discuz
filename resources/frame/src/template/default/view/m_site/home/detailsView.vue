@@ -3,7 +3,7 @@
 <template>
     <!-- 付费站点 已登录且当前用户已付费 -->
     <div class="circleCon">
-    	<comHeader title="详情" :menuIconShow="true"></comHeader>
+    	<comHeader title="详情" :menuIconShow="menuStatus"></comHeader>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">

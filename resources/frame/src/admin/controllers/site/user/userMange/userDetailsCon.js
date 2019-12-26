@@ -117,18 +117,27 @@ export default {
     },
     
     submission(){
-      const userId = browserDb.getLItem('tokenId');
+      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
+      var mobile = this.userInfo.originalMobile;
+      if (!reg.test(mobile)) { //手机号不合法
+      return  this.$toast("您输入的手机号码不合法，请重新输入");
+      }
       this.appFetch({
         url:'users',
         method:'patch',
-        splice:'/'+userId,
+        splice:`/${this.query.id}`,
         data:{
-          'newPassword':this.newPassword,
-          'mobile':this.userInfo.mobile,
-          'status':this.userInfo.status
+          "data":{
+            "attributes":{
+              'newPassword':this.newPassword,
+              'mobile':mobile,
+              'status':this.userInfo.status
+            }
+          }
         }
       }).then(res=>{
         console.log(res)
+        this.$message({ message: '提交成功', type: 'success' });
       })
     },
 

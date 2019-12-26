@@ -8,7 +8,7 @@ export default {
 			searchVal: '',
 			userParams: {
 				'filter[name]': '',
-				'filter[id]': browserDb.getLItem('tokenId'),
+				// 'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
 				'page[limit]': 5,
@@ -60,7 +60,7 @@ export default {
 		},
 		onCancel() {
 			console.log('99999999999999')
-			this.$router.push({ path:'/bind-new-phone'});
+			this.$router.push({ path:'/'});
 		},
 
 		async handleSearchUser(initStatus = false){
@@ -148,6 +148,6 @@ export default {
 
 	},
 	beforeRouteLeave(to, from, next) {
-
+		next()
   }
 }

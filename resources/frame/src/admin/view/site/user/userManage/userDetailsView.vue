@@ -49,7 +49,7 @@
 
     <Card header="手机号：">
       <CardRow>
-        <el-input v-model="userInfo.mobile"></el-input>
+        <el-input v-model="userInfo.originalMobile"></el-input>
       </CardRow>
     </Card>
 
