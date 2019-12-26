@@ -60,7 +60,6 @@ $selectFontColor:#303133;
 .el-button{
   font-weight: 400;
 }
-
 .el-button--default{
   border: 1PX solid $--color-primary;
   color: $--color-primary;
@@ -73,13 +72,11 @@ $selectFontColor:#303133;
     //background-color: $selectColor;
   }
 }
-
 .el-button--mini{
   span{
     font-size: 12PX;
   }
 }
-
 .el-button.is-disabled{
   // background-color: #EDF5FF;
   // border: 1PX solid #D9ECFF;
@@ -101,6 +98,13 @@ $selectFontColor:#303133;
 /*输入框*/
 .el-input__inner{
   border: 1PX solid #D8DCE6;
+}
+
+
+/*提示框*/
+.el-tooltip__popper .is-dark{
+  max-width: 50%;
+  background-color: red;
 }
 
 

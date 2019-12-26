@@ -442,7 +442,7 @@ export default {
     } else {
       this.getUserInfo(tokenId).then(res=>{
         groupId = res.readdata.groups[0]._data.id;
-
+        webDb.setLItem('username',res.data.attributes.username);
         if (groupId === '1'){
           if (to.path == '/admin/login'){
             next('/admin');

@@ -17,6 +17,7 @@ module.exports = {
   'categoriesDelete':'/api/categories',    //分类单个删除
   'categoriesBatchDelete':'/api/categories/batch',    //分类批量删除
   'createCategories':'/api/categories',   //创建分类
+  'createBatchCategories':'/api/categories/batch',   //批量创建分类
   'categoriesBatchUpdate':'/api/categories/batch',   //批量修改分类
 
   'emojis':'/api/emoji',      //表情接口

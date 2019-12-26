@@ -15,6 +15,7 @@ class CreateInvites extends Migration
         $this->schema()->create('invites', function (Blueprint $table) {
             $table->increments('id')->comment('自增ID');
             $table->unsignedInteger('user_group_id')->comment('默认用户组ID');
+            $table->unsignedTinyInteger('type')->default(1)->comment('类型， 1普通用户， 2管理员');
             $table->char('code', 32)->default('')->comment('邀请码');
             $table->unsignedInteger('dateline')->default('0')->comment('邀请码生效时间');
             $table->unsignedInteger('endtime')->default('0')->comment('邀请码结束时间');

@@ -111,10 +111,11 @@ class CreateAttachment
             new Uploading($this->actor, $this->file)
         );
 
-        $type = $settings->get('allowFileType', 'default', '');
+        $type = $settings->get($this->isGallery ? 'support_img_ext' : 'support_file_ext');
         $type = $type ? explode(',', $type) : [];
 
-        $size = $settings->get('allowFileSize', 'default', 0);
+        // 将数据库存的 Mb 转换为 bytes
+        $size = $settings->get('support_max_size', 'default', 0) * 1024 * 1024;
 
         $uploadFile = $uploadTool->save($type, $size);
 

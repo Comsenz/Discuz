@@ -57,22 +57,22 @@
 .home-box{
 
   .home-card-box{
-    p{
-      //font-size:$contFontSize;
-      //font-weight:400;
+    .section{
       color:$titleColor;
       line-height:20PX;
-
       &:not(:last-child){
         margin-bottom: 20PX;
       }
-
       span{
         margin-right: 20PX;
       }
-
+    }
+    .pending-p{
+      display: inline-block;
+      margin-right: 20PX;
     }
   }
+
   .home-card__footer{
     a{
       margin-right: 20PX;
