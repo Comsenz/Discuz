@@ -25,18 +25,18 @@
         </CardRow>
       </Card>
 
-      <!-- <Card header="用户状态：">
+      <Card header="用户状态：">
       <CardRow >
-        <el-select v-model="userInfo.status" placeholder="请选择">
+        <el-select v-model="userStatus" placeholder="请选择">
           <el-option
-            v-for="item in options"
+            v-for="item in optionsStatus"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
       </CardRow>
-    </Card> -->
+    </Card>
 
       <el-collapse-transition>
         <div v-show="checked">

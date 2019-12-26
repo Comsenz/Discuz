@@ -47,6 +47,7 @@ export default {
           userUID,
           userRole,
           userPhone,
+          userStatus,
           radio1,
         } = this.query;
         const response = await this.appFetch({
@@ -56,10 +57,12 @@ export default {
             "filter[username]": username,
             "filter[id]": userUID,
             "filter[group_id]": userRole,
-            "filter[userPhone]": userPhone,  //目前后端还没这个字段
+            "filter[mobile]": userPhone, 
+            "filter[status]":userStatus,
             "filter[bind]": radio1 === '1' ? 'wechat':'',
             "page[limit]": this.pageLimit,
-            "page[number]": this.pageNum
+            "page[number]": this.pageNum,
+            
           }
         })
         console.log(response)
@@ -80,9 +83,14 @@ export default {
 
     async exporUserInfo(){
       try{
+        let usersIdList = [];
+        this.multipleSelection.forEach((v)=>{
+          usersIdList.push(v._data.id)
+        })
         const response = await this.appFetch({
           method: 'get',
           url: 'exportUser',
+          splice:'ids'+'='+usersIdList,
           responseType: 'arraybuffer'
         })
 

@@ -17,7 +17,8 @@ export default {
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
-      btnContent:'发送验证码'
+      btnContent:'发送验证码',
+      mobileConfirmed:'',//验证验证码是否正确
     }
   },
 
@@ -104,7 +105,12 @@ export default {
             }
           }
         }).then(res => {
-          this.$toast("手机号绑定成功");
+          this.mobileConfirmed =res.readdata._data.mobileConfirmed;
+          if(this.mobileConfirmed == true){
+            this.$toast("手机号绑定成功");
+            this.$router.push({path:'/modify-data'});
+          }
+          
         }).catch((err)=>{
           this.$toast("手机号绑定失败，请重试");
         });

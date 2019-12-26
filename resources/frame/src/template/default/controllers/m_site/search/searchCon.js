@@ -59,7 +59,8 @@ export default {
 			},200)
 		},
 		onCancel() {
-
+			console.log('99999999999999')
+			this.$router.push({ path:'/bind-new-phone'});
 		},
 
 		async handleSearchUser(initStatus = false){
@@ -139,7 +140,7 @@ export default {
 			// this.themeParamd['page[limit]'] = 10;
 			this.themeLoadMorePageChange = true;
 			this.handleSearchTheme();
-		}
+		},
 
 	},
 

@@ -31,7 +31,7 @@
               <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">{{ btnContent }}</van-button>
               
             </van-field>
-
+            
           </van-cell-group>
         </div>
 

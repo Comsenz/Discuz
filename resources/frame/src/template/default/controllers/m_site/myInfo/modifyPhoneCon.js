@@ -19,7 +19,8 @@ export default {
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
-      btnContent:'发送验证码'
+      btnContent:'发送验证码',
+      mobileConfirmed:''
     }
   },
 
@@ -33,9 +34,15 @@ export default {
   methods: {
     userInformation() {
       var userId = browserDb.getLItem('tokenId');
-      this.apiStore.find('users', userId).then(res => {
+      this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/'+userId,
+        data:{
+
+        }
+      }).then(res=>{
         this.phoneNum = res.data.attributes.mobile
-        // console.log(res.data.attributes.mobile)
       })
     },
     sendSmsCodePhone() { //发送验证码
@@ -57,8 +64,8 @@ export default {
           data: {
             "data": {
               "attributes": {
-                'mobile': this.phoneNum,
-                'type': this.bind
+                // 'mobile': this.phoneNum,
+                'type': 'verify'
               }
             }
           }
@@ -85,7 +92,7 @@ export default {
           console.log(res);
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
-          this.timer();
+          this.timerNext();
         })
       }
 
@@ -109,13 +116,18 @@ export default {
             "attributes": {
               "mobile": this.phoneNum,
               "code": this.sms,
-              "type": this.bind
+              "type": 'verify'
             }
           }
         }
       }).then(res => {
         this.sms = '';
         this.modifyState = !this.modifyState;
+        this.mobileConfirmed = res.readdata._data.mobileConfirmed
+        if(this.mobileConfirmed ==true){
+          this.$toast("手机号验证成功");
+          this.$router.push({path:'/bind-new-phone'});
+        }
       }).catch((err) => {
         this.$toast("手机号验证失败，请重试");
       })
@@ -137,6 +149,22 @@ export default {
         this.isGray = false;
       }
     },
+
+    //   // alert('执行');
+    //   if (this.time > 1) {
+    //     // alert('2222');
+    //     this.time--;
+    //     this.btnContent = this.time + "s后重新获取";
+    //     this.disabled = true;
+    //     var timer = setTimeout(this.timer, 1000);
+    //     this.isGray = true;
+    //   } else if (this.time == 1) {
+    //     this.btnContent = "获取验证码";
+    //     clearTimeout(timer);
+    //     this.disabled = false;
+    //     this.isGray = false;
+    //   }
+    // },
 
     bindNewPhone() { //修改新的手机号后提交验证码
 
