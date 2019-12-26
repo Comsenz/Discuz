@@ -66,20 +66,6 @@ export default {
         }).then((res) => {
           console.log(res);
           this.limitList = res.readdata;
-          console.log(res.readdata.permission[0]._data.permission);
-          console.log(res.readdata.permission[1]._data.permission);
-          console.log(res.readdata.permission[2]._data.permission);
-          console.log(res.readdata.permission[3]._data.permission);
-          console.log(res.readdata.permission[4]._data.permission);
-          console.log(res.readdata.permission[5]._data.permission);
-          console.log(res.readdata.permission[6]._data.permission);
-          console.log(res.readdata.permission[7]._data.permission);
-          console.log(res.readdata.permission[8]._data.permission);
-          console.log(res.readdata.permission[9]._data.permission);
-          console.log(res.readdata.permission[10]._data.permission);
-          console.log(res.readdata.permission[11]._data.permission);
-          console.log(res.readdata.permission[12]._data.permission);
-          console.log(res.readdata.permission[13]._data.permission);
         });
 
       });

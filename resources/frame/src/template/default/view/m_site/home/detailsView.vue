@@ -22,7 +22,7 @@
 		    		</div>
 		    	</div>
 		    	<div class="postContent">
-		    		<a href="javascript:;" v-if="themeCon.firstPost._data.content" v-html="themeCon.firstPost._data.content"></a>
+		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
 		    	</div>
 		    	<div class="postImgBox">
             <div class="postImgList">
@@ -43,7 +43,7 @@
               <span v-else-if="attachment._data.extension === 'jpg'" class="icon iconfont icon-jpg"></span>
               <span v-else-if="attachment._data.extension === 'mp'" class="icon iconfont icon-mp3"></span>
               <span v-else-if="attachment._data.extension === 'mp1'" class="icon iconfont icon-mp4"></span>
-              <span v-else-if="attachment._data.extension === 'PNG'" class="icon iconfont icon-PNG"></span>
+              <span v-else-if="attachment._data.extension === 'png'" class="icon iconfont icon-PNG"></span>
               <span v-else-if="attachment._data.extension === 'ppt'" class="icon iconfont icon-ppt"></span>
               <span v-else-if="attachment._data.extension === 'swf'" class="icon iconfont icon-swf"></span>
               <span v-else-if="attachment._data.extension === 'TIFF'" class="icon iconfont icon-TIFF"></span>
@@ -107,7 +107,7 @@
               </div>
               <div class="postContent">
                 <!-- <a href="javascript:;"><blockquote class="quoteCon">dsfhjkdshfkjdhfkjdhk</blockquote>{{item.content()}}</a> -->
-                <a href="javascript:;" v-html="item._data.content"></a>
+                <a href="javascript:;" v-html="item._data.contentHtml"></a>
               </div>
             </div>
             <div class="commentOpera padT22">
@@ -118,7 +118,7 @@
             </div>
              </van-list>
           </div>
-           
+
         </div>
         <div class="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
@@ -175,7 +175,7 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
-    </van-pull-refresh>    
+    </van-pull-refresh>
 
     </div>
 </template>
