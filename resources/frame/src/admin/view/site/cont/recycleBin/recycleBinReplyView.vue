@@ -80,6 +80,7 @@
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :ip="items._data.ip"
+          :userId="items.user._data.id"
           :key="items._data.id"
         >
           <div class="recycle-bin-reply-table__side" slot="side">
@@ -90,7 +91,9 @@
           </div>
 
           <div class="recycle-bin-reply-table__main" slot="main">
-            {{items._data.content}}
+            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank">
+              {{items._data.content}}
+            </a>
           </div>
 
           <div class="recycle-bin-reply-table__footer" slot="footer">

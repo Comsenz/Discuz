@@ -76,6 +76,7 @@
           :theme="items.category._data.name"
           :finalPost="formatDate(items._data.createdAt)"
           :deleTime="formatDate(items._data.deletedAt)"
+          :userId="items.user._data.id"
           :key="items._data.id"
         >
           <div class="recycle-bin-table__side" slot="side">
@@ -86,7 +87,9 @@
           </div>
 
           <div class="recycle-bin-table__main" slot="main">
-            {{items.firstPost._data.content}}
+            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" >
+              {{items.firstPost._data.content}}
+            </a>
           </div>
 
           <div class="recycle-bin-table__footer" slot="footer">

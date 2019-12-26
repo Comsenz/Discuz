@@ -113,7 +113,6 @@
         </div>
 
       </ContArrange>
-
       <Page
         v-if="pageCount > 1"
         @current-change="handleCurrentChange"
@@ -121,8 +120,6 @@
         :page-size="10"
         :total="total">
       </Page>
-
-
     </div>
 
     <div class="cont-review-footer footer-btn">
