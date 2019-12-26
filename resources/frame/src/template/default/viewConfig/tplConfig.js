@@ -209,10 +209,18 @@ export default {
 	  },
     'post-topic':{
       comLoad:function (resolve) {
-        require(['../view/m_site/home/postTopicView'],resolve)
+      require(['../view/m_site/home/postTopicView'],resolve)
       },
       metaInfo:{
-        title:"发布主题"
+      title:"发布主题"
+      }
+    },
+    'edit-topic/:themeId':{
+      comLoad:function (resolve) {
+        require(['../view/m_site/home/editTopicView'],resolve)
+      },
+      metaInfo:{
+        title:"编辑主题"
       }
     },
 
