@@ -7,12 +7,12 @@
 
 namespace App\Api\Exceptions;
 
-use App\Exceptions\UploadException;
+use App\Exceptions\TradeErrorException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 
-class UploadExceptionHandler implements ExceptionHandlerInterface
+class TradeErrorExceptionHandler implements ExceptionHandlerInterface
 {
     /**
      * If the exception handler is able to format a response for the provided exception,
@@ -25,7 +25,7 @@ class UploadExceptionHandler implements ExceptionHandlerInterface
     public function manages(Exception $e)
     {
         // TODO: Implement manages() method.
-        return $e instanceof UploadException;
+        return $e instanceof TradeErrorException;
     }
 
     /**
@@ -37,10 +37,11 @@ class UploadExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(Exception $e)
     {
-        $status = 404;
+        $status = 500;
         $error = [
             'status' => (string) $status,
-            'code' => $e->getMessage() ?: 'upload_error'
+            'code' => 'trade_error',
+            'message' => $e->getMessage(),
         ];
         return new ResponseBag($status, [$error]);
     }

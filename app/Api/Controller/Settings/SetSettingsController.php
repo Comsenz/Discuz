@@ -62,7 +62,8 @@ class SetSettingsController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-//        $this->assertAdmin($request->getAttribute('actor'));
+        $this->assertAdmin($request->getAttribute('actor'));
+
         $settings = collect($request->getParsedBody()->get('data', []))->pluck('attributes');
 
         // 分成比例检查

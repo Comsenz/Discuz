@@ -87,6 +87,7 @@ class CreateAttachment
      * @param Dispatcher $events
      * @param AttachmentUploadTool $uploadTool
      * @param SettingsRepository $settings
+     * @param Censor $censor
      * @return Attachment
      * @throws PermissionDeniedException
      * @throws UploadException

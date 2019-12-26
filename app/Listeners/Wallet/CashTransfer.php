@@ -28,6 +28,31 @@ class CashTransfer
     protected $settings;
 
     /**
+     * 微信可自动退款错误代码
+     * @var [type]
+     */
+    protected $wechat_transfer_back_error_code = [
+        'NO_AUTH',//没有该接口权限
+        'AMOUNT_LIMIT',//金额超限
+        'PARAM_ERROR',//参数错误
+        'OPENID_ERROR',//Openid错误
+        'SEND_FAILED',//付款错误
+        'NOTENOUGH',//余额不足  
+        'NAME_MISMATCH',//姓名校验出错
+        'SIGN_ERROR',//签名错误
+        'XML_ERROR',//Post内容出错
+        'FATAL_ERROR',//两次请求参数不一致
+        'FREQ_LIMIT',//超过频率限制，请稍后再试。
+        'MONEY_LIMIT',//已经达到今日付款总额上限/已达到付款给此用户额度上限
+        'CA_ERROR',//商户API证书校验出错
+        'V2_ACCOUNT_SIMPLE_BAN',//无法给未实名用户付款
+        'PARAM_IS_NOT_UTF8',//请求参数中包含非utf8编码字符  
+        'SENDNUM_LIMIT',//该用户今日付款次数超过限制
+        'RECV_ACCOUNT_NOT_ALLOWED',//收款账户不在收款账户列表
+        'PAY_CHANNEL_NOT_ALLOWED',//本商户号未配置API发起能力 
+    ];
+
+    /**
      * 数据库连接
      * @var ConnectionInterface
      */
@@ -59,8 +84,11 @@ class CashTransfer
         //获取用户openid
         $user_id = $event->cash_record->user_id;
         $user_wecaht = UserWechat::find($user_id);
-        $openid = $user_wecaht->openid;
-
+        if (isset($user_wecaht->openid)) {
+            $openid = $user_wecaht->openid;
+        } else {
+            $openid = '';
+        }
         //获取微信配置
         $config = $this->settings->tag('wxpay');
         //微信证书
@@ -94,12 +122,11 @@ class CashTransfer
                 'error_code' => $response['err_code'],//错误代码
                 'error_message' => $response['err_code_des'],
             ];
-            //失败时统一由后台手动回退
-            $is_thaw = false;
-            // if ($response['err_code'] == 'SYSTEMERROR') {
-            //     //未明确的错误码,不做其他操作，后续人工检查
-            //     $is_thaw = false;
-            // }
+            $is_thaw = true;
+            if (!in_array($response['err_code'], $this->wechat_transfer_back_error_code)) {
+                //未明确的错误码,体现状态返回待审核，允许重新审核
+                $is_thaw = false;
+            }
             $this->transferFailure($event->cash_record->id, $data_result, $is_thaw);
         }
     }
@@ -153,17 +180,25 @@ class CashTransfer
      */
     public function transferFailure($cash_id, $data, bool $is_thaw = false)
     {
+
         $user_wallet_cash = UserWalletCash::find($cash_id);
         $cash_apply_amount = $user_wallet_cash->cash_apply_amount;//提现申请金额
         $user_id = $user_wallet_cash->user_id;//提现用户
 
         $user_wallet_cash->trade_time = Carbon::now();//交易时间
-        $user_wallet_cash->cash_status = UserWalletCash::STATUS_PAYMENT_FAILURE;//打款失败
         $user_wallet_cash->error_code = $data['error_code'];//错误代码
         $user_wallet_cash->error_message = $data['error_message'];//错误描述
+        if (!$is_thaw) {
+            //不自动返款，状态修改为待审核
+            $user_wallet_cash->cash_status = UserWalletCash::STATUS_REVIEW;//待审核
+        } else {
+            //自动返时，状态改为打款失败
+            $user_wallet_cash->cash_status = UserWalletCash::STATUS_PAYMENT_FAILURE;//打款失败
+        }
         $user_wallet_cash->save();
 
         if ($is_thaw) {
+            //自动退款
             //开始事务
             $this->connection->beginTransaction();
             try {
