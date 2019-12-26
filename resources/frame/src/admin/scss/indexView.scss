@@ -107,9 +107,6 @@ html,body{
       right: 14PX;
 
       span{
-        //font-size:14PX;
-        //font-family:PingFangSC-Regular,PingFang SC;
-        //font-weight:400;
         color:$headerFontColor;
         line-height:20PX;
         cursor: pointer;
@@ -117,6 +114,9 @@ html,body{
 
       .site-home{
         margin-left: 20PX;
+        a{
+          color:$headerFontColor;
+        }
       }
 
     }

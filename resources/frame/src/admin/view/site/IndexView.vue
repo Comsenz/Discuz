@@ -2,7 +2,7 @@
   <el-container class="index-container-box">
     <el-header height="80px" class="index-header">
       <h1 class="index-header__icon">
-        <a href="/admin/index">
+        <a href="/admin/home">
           <img src="../../../../static/images/admin-logo.png"  alt="Logo">
         </a>
       </h1>
@@ -22,7 +22,7 @@
       <div class="index-header__info-menu">
         <span>您好，{{userName}}</span>
         <span @click="quitClick">&nbsp;[退出]</span>
-        <span class="site-home" @click="$router.push({path:'/admin'})">站点首页</span>
+        <span class="site-home" ><a href="https://2020.comsenz-service.com/" target="view_window">站点首页</a></span>
       </div>
 
     </el-header>
