@@ -103,8 +103,8 @@ export default {
             const enclosureListCon = res.readdata.firstPost.attachments;
             const fileListCon = res.readdata.images;
             this.cateId = res.readdata.category._data.id;
-            console.log(this.cateId);
-            this.selectSort = res.readdata.category._data.description;
+            // console.log(this.cateId);
+            this.selectSort = res.readdata.category._data.name;
             this.content = res.readdata.firstPost._data.content;
             this.postsId = res.readdata.firstPost._data.id;
             for (let i = 0; i < enclosureListCon.length; i++) {

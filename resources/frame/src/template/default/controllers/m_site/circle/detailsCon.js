@@ -58,6 +58,7 @@ export default {
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId:'',
       menuStatus:false,//默认不显示菜单按钮
+      collectStatus:false,
       collectFlag:''
 		}
 	},
@@ -69,6 +70,11 @@ export default {
       this.themeShow = false;
     } else {
       this.themeShow = true
+    }
+    if(this.collectStatus){
+      this.collectFlag = '已收藏';
+    } else {
+      this.collectFlag = '收藏';
     }
     // this.detailsLoad();
   },
@@ -187,16 +193,13 @@ export default {
           }
           console.log(res);
           console.log('1234');
+          this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
           this.themeCon =this.themeCon.concat(res.readdata.posts);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
-          if(res.readdata._data.isFavorite){
-            this.collectFlag = '已收藏';
-          } else {
-            this.collectFlag = '收藏';
-          }
+
           this.themeCon = res.readdata;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
@@ -282,11 +285,11 @@ export default {
     themeOpera(postsId,clickType,cateId,content) {
       let attri = new Object();
        if(clickType == 1){
-         this.collectFlag = !this.collectFlag
-         if(this.collectFlag==true){
-             this.btnText = "已收藏"
-         }else if(this.collectFlag==false){
-             this.btnText = "收藏"
+         this.collectStatus = !this.collectStatus
+         if(this.collectStatus==true){
+             this.collectFlag = "已收藏"
+         }else if(this.collectStatus==false){
+             this.collectFlag = "收藏"
          }
 
         attri.isFavorite = true;
