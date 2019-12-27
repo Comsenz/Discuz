@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import Page from '../../../../view/site/common/page/page';
+import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 
@@ -272,7 +273,8 @@ export default {
   components:{
     Card,
     ContArrange,
-    Page
+    Page,
+    tableNoList
   }
 
 }
