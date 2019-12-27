@@ -1,7 +1,5 @@
 <template>
     <div class="fund-details-box">
-      <Card header="搜索"></Card>
-
       <div class="fund-details__search-box">
         <div class="fund-details__search-condition">
           <span class="fund-details__search-condition__title">用户名：</span>

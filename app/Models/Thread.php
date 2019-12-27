@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $price
  * @property int $post_count
  * @property int $view_count
- * @property int $like_count
  * @property int $favorite_count
  * @property Carbon $created_at
  * @property Carbon $updated_at

@@ -12,11 +12,11 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="content">
-        <Header :userInfoAvataUrl="userAvatar" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
+        <Header :personInfo="true" :userInfoAvatarUrl="userAvatar" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header>
         <div class="gap"></div>
         <ThemeDet :themeList="OthersThemeList"></ThemeDet>
       </div>
-    </van-pull-refresh>    
+    </van-pull-refresh>
   </van-list>
       <footer class="home-page-footer">
         <!-- <p>上划加载更多</p> -->

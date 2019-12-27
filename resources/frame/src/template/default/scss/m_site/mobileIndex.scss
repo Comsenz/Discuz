@@ -69,7 +69,7 @@ a { color: $fontColor;}
 .overHide { overflow: hidden;}
 .hide { display: none;}
 .headeGap {
-    @include px2rem(height, 28);
+    @include px2rem(height, 82);
 }
 .headOpe {
 	text-align: right;

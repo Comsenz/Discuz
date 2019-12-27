@@ -1,7 +1,5 @@
 <template>
   <div class="order-record-box">
-    <Card header="搜索"></Card>
-
     <div class="order-record__search-box">
       <div class="order-record__search-condition">
         <span class="order-record__search-condition__title">订单号：</span>
