@@ -21,7 +21,6 @@ class CreateThreads extends Migration
             $table->decimal('price')->unsigned()->default(0)->comment('价格');
             $table->integer('post_count')->unsigned()->default(0)->comment('回复数');
             $table->integer('view_count')->unsigned()->default(0)->comment('查看数');
-            $table->integer('like_count')->unsigned()->default(0)->comment('喜欢数');
             $table->dateTime('created_at')->comment('创建时间');
             $table->dateTime('updated_at')->comment('修改时间');
             $table->dateTime('deleted_at')->nullable()->comment('删除时间');
