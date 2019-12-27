@@ -19,6 +19,7 @@
             :browse="items._data.viewCount"
             :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
             :finalPost="formatDate(items._data.createdAt)"
+            :userId="items.user._data.id"
             :key="items._data.id"
           >
             <div class="cont-manage-theme__table-side" slot="side">
@@ -27,7 +28,9 @@
             </div>
 
             <div style="line-height: 20PX;" slot="main">
-              {{items.firstPost._data.content}}
+              <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank">
+                {{items.firstPost._data.content}}
+              </a>
             </div>
 
           </ContArrange>

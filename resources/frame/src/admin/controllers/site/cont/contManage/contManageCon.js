@@ -55,6 +55,10 @@ export default {
 
   methods:{
 
+    chakan(){
+      console.log(this.$router);
+    },
+
     handleCheckAllChange(val) {
       /*if (val){
         this.checkedTheme.forEach((item,index)=>{

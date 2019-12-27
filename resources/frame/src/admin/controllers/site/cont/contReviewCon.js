@@ -282,7 +282,8 @@ export default {
           'filter[isApproved]':this.searchReviewSelect,
           'filter[createdAtBegin]':this.relativeTime[1],
           'filter[createdAtEnd]':this.relativeTime[0],
-          'filter[categoryId]':this.categoriesListSelect
+          'filter[categoryId]':this.categoriesListSelect,
+          'filter[highlight]':this.showSensitiveWords?'yes':'no'
         }
       }).then(res=>{
         console.log(res);
