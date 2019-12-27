@@ -7,6 +7,7 @@
 
 namespace App\Commands\Users;
 
+use App\Censor\Censor;
 use App\Events\Users\Registered;
 use App\Events\Users\Saving;
 use App\Models\User;
@@ -48,17 +49,21 @@ class RegisterUser
 
     /**
      * @param Dispatcher $events
+     * @param Censor $censor
      * @param SettingsRepository $settings
      * @param UserValidator $validator
      * @return User
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, SettingsRepository $settings, UserValidator $validator)
+    public function handle(Dispatcher $events, Censor $censor, SettingsRepository $settings, UserValidator $validator)
     {
         $this->events = $events;
 
         $password = Arr::get($this->data, 'password');
         $password_confirmation = Arr::get($this->data, 'password_confirmation');
+
+        // 敏感词校验
+        $censor->checkText(Arr::get($this->data, 'username'), 'username');
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip']));
 

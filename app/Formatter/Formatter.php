@@ -109,7 +109,7 @@ class Formatter
 
         // emoji
         foreach (Emoji::cursor() as $emoji) {
-            $emojiImg = '<img src="' . $emoji->url . '" alt="' . $emoji->code . '">';
+            $emojiImg = '<img src="' . $emoji->url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
 
