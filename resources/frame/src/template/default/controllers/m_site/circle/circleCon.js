@@ -12,7 +12,6 @@ export default {
 			// footShow: true,
 			fourHeader: true,
       isWx:'1',
-      isLoading: false,
       // replyTag: false,
 			themeChoList: [
 				{

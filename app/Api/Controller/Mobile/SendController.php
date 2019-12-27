@@ -60,8 +60,9 @@ class SendController extends AbstractCreateController
             $data['mobile'] = $actor->getOriginal('mobile');
         }
 
+        // 如果已经绑定，不能再发送绑定短息
         $this->validation->make($data, [
-            'mobile' => 'required',
+            'mobile' => in_array($type, ['bind', 'rebind']) ? 'required|unique:users,mobile' : 'required',
             'type' => 'required'
         ])->validate();
 
