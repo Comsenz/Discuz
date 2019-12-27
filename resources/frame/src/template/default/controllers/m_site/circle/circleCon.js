@@ -43,7 +43,8 @@ export default {
       firstCategoriesId:'',
       Initialization:false,     //当请求到默认分类id时，允许初始化开关
       searchStatus: false,  //默认不显示搜索按钮
-      menuStatus: false     //默认不显示菜单按钮
+      menuStatus: false,     //默认不显示菜单按钮
+      categoryId:false
 
 		}
 	},
@@ -168,38 +169,47 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus = false){
+      console.log('请求');
       // console.log(filterCondition);
       if(filterCondition == 'isEssence'){
-      return  this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            'filter[isEssence]':'isEssence',
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
-          }
-        }).then((res) => {
-          if(initStatus){
-            this.themeListCon = []
-          }
-          this.themeListCon = res.readdata;
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
-
+        console.log('筛选请求');
+        if(this.categoryId){
+          console.log('添加分类筛选');
+          this.appFetch({
+            url: 'threads',
+            method: 'get',
+            data: {
+              'filter[isEssence]':'yes',
+              'filter[categoryId]':this.categoryId,
+              'filter[isApproved]':1,
+              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+              'page[number]': this.pageIndex,
+              'page[limit]': this.pageLimit
+            }
+          }).then((res) => {
+            if(initStatus){
+              this.themeListCon = []
+            }
+            this.themeListCon = res.readdata;
+            this.themeListCon =this.themeListCon.concat(res.readdata);
+            this.loading = false;
+            this.finished = res.data.length < this.pageLimit;
+          }).catch((err)=>{
+            if(this.loading && this.pageIndex !== 1){
+              this.pageIndex--;
+            }
+            this.loading = false;
+          })
+        }
       } else if(filterCondition == 'categoryId') {
+        console.log('初始化请求页面');
+        this.categoryId = filterVal;
         return  this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
             'filter[categoryId]':filterVal,
+            'filter[isApproved]':1,
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
@@ -300,8 +310,9 @@ export default {
 	    },
       //筛选
 	    choTheme(themeType) {
+        console.log(themeType);
+        console.log('筛选');
         this.loadThemeList(themeType);
-	    	// console.log('筛选');
 	    },
 
       //点击分类
