@@ -4,6 +4,7 @@
 
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
+import tableNoList from '../../../../view/site/common/table/tableNoList'
 import moment from 'moment';
 import webDb from 'webDbHelper';
 import { mapState } from 'vuex';
@@ -326,7 +327,8 @@ export default {
 
   components:{
     Card,
-    ContArrange
+    ContArrange,
+    tableNoList
   }
 
 }

@@ -32,7 +32,7 @@
 
         <div class="login-user-method">
           <div class="login-user-method-box">
-            <van-divider>其他登录方式</van-divider>
+            <van-divider v-show="phoneStatus ||  wxLoginShow">其他登录方式</van-divider>
           </div>
 
           <div class="login-user-method-icon">

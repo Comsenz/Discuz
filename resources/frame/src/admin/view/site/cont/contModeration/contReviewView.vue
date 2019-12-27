@@ -67,7 +67,7 @@
         :prply="items._data.postCount"
         :browse="items._data.viewCount"
         :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
-        :finalPost="formatDate(items._data.createdAt)"
+        :finalPost="formatDate(items._data.updatedAt)"
         :userId="items.user._data.id"
         :key="items._data.id"
       >
@@ -113,6 +113,9 @@
         </div>
 
       </ContArrange>
+
+      <tableNoList v-show="themeList.length < 1"></tableNoList>
+
       <Page
         v-if="pageCount > 1"
         @current-change="handleCurrentChange"

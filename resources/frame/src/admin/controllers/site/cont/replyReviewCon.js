@@ -5,6 +5,7 @@
 import Card from '../../../view/site/common/card/card';
 import ContArrange from '../../../view/site/common/cont/contArrange';
 import Page from '../../../view/site/common/page/page';
+import tableNoList from '../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 
@@ -290,7 +291,8 @@ export default {
           'filter[createdAtBegin]':this.relativeTime[1],
           'filter[createdAtEnd]':this.relativeTime[0],
           'filter[categoryId]':this.categoriesListSelect,
-          'filter[highlight]':this.showSensitiveWords?'yes':'no'
+          'filter[highlight]':this.showSensitiveWords?'yes':'no',
+          'sort':'-updatedAt'
         }
       }).then(res=>{
         console.log(res);
@@ -392,7 +394,8 @@ export default {
   components:{
     Card,
     ContArrange,
-    Page
+    Page,
+    tableNoList
   }
 
 }
