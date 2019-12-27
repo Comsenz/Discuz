@@ -160,18 +160,9 @@ export default {
                           "id": this.cateId
                       }
                   },
-                  // "attachments": {
-                  //     "data": [
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 1
-                  //         },
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 2
-                  //         }
-                  //     ]
-                  // }
+                  "attachments": {
+                    "data":this.attriAttachment
+                  },
               }
 
             }
@@ -198,7 +189,7 @@ export default {
       // console.log(e);
       let formdata = new FormData()
       formdata.append('file', e.file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata);
 
     },
@@ -207,7 +198,7 @@ export default {
       let file = e.target.files[0];
       let formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
@@ -236,11 +227,18 @@ export default {
         } else {
           var newArr = this.enclosureList.filter(item => item.uuid !== uuid);
           this.enclosureList = newArr;
-        }
 
+          var attriAttachment = new Array();
+          for(var k=0;k<this.enclosureList.length;k++){
+            var data = {};
+            data.type = 'attachments';
+            data.id = this.enclosureList[k].id;
+            attriAttachment.push(data);
+          }
+          this.attriAttachment = attriAttachment;
+          // console.log(this.attriAttachment);
+        }
         this.$message('删除成功');
-      }).catch(error=>{
-        this.$message('失败');
       })
     },
 
@@ -250,7 +248,7 @@ export default {
       let file = e.target.files[0];
       let formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('isGallery', false);
+      formdata.append('isGallery', 0);
       this.uploaderEnclosure(formdata,false,true);
     },
     // 组件方法 获取 流

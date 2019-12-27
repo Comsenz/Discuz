@@ -35,8 +35,8 @@
               />
             </div>
 		    	</div>
-		    	<div class="uploadFileList" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
-		    		<a href="javascript:;" class="fileChi">
+		    	<div class="uploadFileList">
+		    		<a href="javascript:;" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
 		    		  <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
 		    		  <span v-else-if="attachment._data.extension === 'word'" class="icon iconfont icon-word"></span>
               <span v-else-if="attachment._data.extension === 'pdf'" class="icon iconfont icon-pdf"></span>
