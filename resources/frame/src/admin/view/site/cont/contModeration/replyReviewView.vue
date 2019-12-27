@@ -79,7 +79,7 @@
           </div>
 
           <div class="cont-review-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.content"></a>
+            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>
           </div>
 
           <div class="cont-review-table__footer" slot="footer">
