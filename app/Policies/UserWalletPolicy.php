@@ -26,7 +26,7 @@ class UserWalletPolicy extends AbstractPolicy
     public function find(User $actor, Builder $query)
     {
         if ($actor->cannot('wallet.viewList')) {
-            $query->where('user_id', $actor->id);
+            $query->whereRaw('FALSE');
             return;
         }
     }

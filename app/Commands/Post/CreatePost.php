@@ -12,6 +12,7 @@ use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
+use App\Models\PostMod;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use App\Validators\PostValidator;
@@ -147,6 +148,14 @@ class CreatePost
         $validator->valid($post->getAttributes());
 
         $post->save();
+
+        // 记录触发的审核词
+        if ($post->is_approved == 0 && $censor->wordMod) {
+            $stopWords = new PostMod;
+            $stopWords->stop_word = implode(',', $censor->wordMod);
+
+            $post->stopWords()->save($stopWords);
+        }
 
         $post->raise(new Saved($post, $this->actor, $this->data));
 

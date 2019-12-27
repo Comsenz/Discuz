@@ -58,7 +58,7 @@
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
               <i></i>
-              <a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a>&nbsp;等<span>{{item._data.likeCount}}</span>个人觉得很赞
+              <a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a><i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 
             <div class="reward" v-if="item.rewardedUsers.length>0">
@@ -66,7 +66,7 @@
               <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
             </div>
 
-            <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 || item.rewardedUsers.length>0">
+            <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 && item.rewardedUsers.length>0">
             </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">

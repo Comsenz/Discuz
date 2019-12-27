@@ -189,7 +189,7 @@ class ListThreadsController extends AbstractListController
                 if ($thread->firstPost->stopWords) {
                     $stopWords = explode(',', $thread->firstPost->stopWords->stop_word);
                     $replaceWords = array_map(function ($word) {
-                        return '<span style="background-color: yellow">' . $word . '</span>';
+                        return '<span class="highlight">' . $word . '</span>';
                     }, $stopWords);
 
                     $content = str_replace($stopWords, $replaceWords, $thread->firstPost->content);

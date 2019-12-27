@@ -9,7 +9,6 @@
            <div class="userName" v-if="username != undefined">{{username}}</div>
            <div class="userPhone" v-if="mobile != undefined">{{mobile}}</div>
          </div>
-         <span class="icon iconfont icon-right-arrow jumpJtr"></span>
        </div>
      </div>
      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">
