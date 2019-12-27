@@ -73,7 +73,7 @@ body {
       display: block;
       border-width: 10px;
       position: absolute;
-      top: -17px;
+      top: -19px;
       right: 10px;
       border-style: solid dashed dashed;
       border-color: transparent transparent $corF7;
@@ -85,7 +85,7 @@ body {
       display: block;
       border-width: 10px;
       position: absolute;
-      top: -18px;
+      top: -20px;
       right: 10px;
       border-style: solid dashed dashed;
       border-color: transparent transparent $corE5;
@@ -94,10 +94,10 @@ body {
     }
     a {
       display: block;
-      @include px2rem(padding, 22 30);
-      @include px2rem(line-height, 42);
+      @include px2rem(padding, 15 24);
+      @include px2rem(line-height, 34);
       color: $cor888;
-      @include font-dpr(30);
+      @include font-dpr(28);
       border-bottom: 1px solid $corE5;
       &:last-child {
         border: none;
@@ -109,8 +109,16 @@ body {
 	@include px2rem(padding, 30 30 20 30);
 }
 .postTop {
-	overflow: hidden;
+	overflow: visible;
 	@include px2rem(margin-bottom, 12);
+  &:after {
+    display: block;
+    content: '';
+    width: 0;
+    height: 0;
+    zoom: 1;
+    clear: both;
+  }
 }
 .postPer {
 	float: left;
