@@ -15,7 +15,7 @@ export default {
   template: {
     m_site:{
       css: ['/css/reset.css'],
-      js: ['/js/rem.js'],
+      // js: ['/js/rem.js'],
 
       'circle':{
         comLoad:function (resolve) {
@@ -199,20 +199,28 @@ export default {
         }
       },
 
-      'theme-det':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/common/themeDetView'],resolve)
-        },
-        metaInfo:{
-          title:"主题详情"
-        }
-      },
+	  'theme-det':{
+	    comLoad:function (resolve) {
+	      require(['../view/m_site/common/themeDetView'],resolve)
+	    },
+	    metaInfo:{
+	      title:"主题详情"
+	    }
+	  },
       'post-topic':{
         comLoad:function (resolve) {
-          require(['../view/m_site/home/postTopicView'],resolve)
+        require(['../view/m_site/home/postTopicView'],resolve)
         },
         metaInfo:{
-          title:"发布主题"
+        title:"发布主题"
+        }
+      },
+      'edit-topic/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editTopicView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑主题"
         }
       },
 
@@ -307,7 +315,15 @@ export default {
         },
         metaInfo:{
           title:"修改手机号"
-        }
+        },
+      },
+        'bind-new-phone':{
+          comLoad:function (resolve) {
+            require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"绑定新手机号"
+        },
       },
       'change-pwd':{
         comLoad:function (resolve) {

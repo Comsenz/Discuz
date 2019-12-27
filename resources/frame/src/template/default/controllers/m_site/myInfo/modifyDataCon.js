@@ -36,6 +36,9 @@ export default {
         case 'change-pwd':
           this.$router.push('/change-pwd'); //修改密码
           break;
+        case 'bind-new-phone':
+          this.$router.push('/bind-new-phone'); //绑定新手机号
+          break;
         default:
           this.$router.push('/');
       }

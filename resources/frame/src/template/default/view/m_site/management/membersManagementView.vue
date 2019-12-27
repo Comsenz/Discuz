@@ -43,7 +43,8 @@
 			      :key="item._data.username"
 			      @click="toggle(item._data.id)"
 			    >
-			    <img :src="item._data.avatarUrl" alt="" class="resUserHead">
+			    <img :src="item._data.avatarUrl" alt="" class="resUserHead" v-if="item._data.avatarUrl">
+				<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
 			    <div class="resUserDet">
 		            <span class="resUserName">{{item._data.username}}</span>
 		            <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span>

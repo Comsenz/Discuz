@@ -47,7 +47,8 @@ export default {
       upImgUrl:'',
       enclosureShow: false,
       isWeixin: false,
-      isPhone: false
+      isPhone: false,
+      themeCon:false,
     }
   },
 
@@ -85,11 +86,105 @@ export default {
     }
     //初始化请求分类接口
     this.loadCategories();
+    //初始化请求主题数据
+    this.detailsLoad();
   },
   watch: {
 
   },
   methods: {
+      //初始化请求编辑主题数据
+      detailsLoad(){
+        if(this.postsId && this.content){
+          let threads = 'threads/'+this.themeId;
+          this.appFetch({
+            url: threads,
+            method: 'get',
+            data: {
+              include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+            }
+          }).then((res) => {
+            console.log(res);
+            console.log('1234');
+            // this.enclosureList = res.readdata.attachments;
+            // this.fileList = res.readdata.images;
+            console.log(this.cateId);
+            const initializeCateId = res.readdata.category._data.id;
+            this.selectSort = res.readdata.category._data.description;
+            console.log(this.selectSort);
+            if(this.cateId != initializeCateId){
+              this.cateId = initializeCateId;
+            } else {
+
+            }
+          })
+        }
+    },
+    //发布主题
+    publish(){
+      if(this.postsId && this.content){
+        console.log('回复');
+        let posts = 'posts/'+this.postsId;
+        this.appFetch({
+          url:posts,
+          method:"patch",
+          data: {
+            "data": {
+              "type": "posts",
+              "attributes": {
+                  "content": this.content
+              }
+            }
+          }
+        }).then((res)=>{
+          // console.log('2222');
+          let a = this.apiStore.pushPayload(res);
+          this.$router.push({ path:'details'+'/'+this.themeId});
+        })
+      } else {
+        console.log('发帖');
+        this.appFetch({
+          url:"threads",
+          method:"post",
+          data:{
+            "data": {
+              "type": "threads",
+              "attributes": {
+                  "content": this.content,
+              },
+              "relationships": {
+                  "category": {
+                      "data": {
+                          "type": "categories",
+                          "id": this.cateId
+                      }
+                  },
+                  // "attachments": {
+                  //     "data": [
+                  //         {
+                  //             "type": "attachments",
+                  //             "id": 1
+                  //         },
+                  //         {
+                  //             "type": "attachments",
+                  //             "id": 2
+                  //         }
+                  //     ]
+                  // }
+              }
+
+            }
+          },
+        }).then((res)=>{
+          // console.log(res);
+          // console.log('456');
+          var postThemeId = res.readdata._data.id;
+          this.$router.push({ path:'details'+'/'+postThemeId});
+        })
+
+      }
+    },
+
     //设置底部在pc里的宽度
     limitWidth(){
       document.getElementById('post-topic-footer').style.width = "640px";
@@ -329,6 +424,7 @@ export default {
         },
         //这里写接口，上传
         uploaderEnclosure(file,isFoot,enclosure){
+          console.log(file,isFoot,enclosure)
            this.appFetch({
              url:'attachment',
              method:'post',
@@ -344,82 +440,15 @@ export default {
               console.log('333');
              }
               if(enclosure){
+                console.log('fujian');
                 this.enclosureShow = true
                 this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
 
               }
              this.$message('提交成功');
-           }).catch(error=>{
-             this.$message('失败');
            })
        },
 
-
-    //发布主题
-    publish(){
-      if(this.postsId && this.content){
-        console.log('回复');
-        let posts = 'posts/'+this.postsId;
-        this.appFetch({
-          url:posts,
-          method:"post",
-          data: {
-            "data": {
-              "type": "posts",
-              "attributes": {
-                  "content": this.content,
-                   'id':this.themeId
-              }
-            }
-          }
-        }).then((res)=>{
-          // console.log('2222');
-          let a = this.apiStore.pushPayload(res);
-          this.$router.push({ path:'details'+'/'+this.themeId});
-        })
-      } else {
-        console.log('发帖');
-        this.appFetch({
-          url:"threads",
-          method:"post",
-          data:{
-            "data": {
-              "type": "threads",
-              "attributes": {
-                  "content": this.content,
-              },
-              "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  // "attachments": {
-                  //     "data": [
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 1
-                  //         },
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 2
-                  //         }
-                  //     ]
-                  // }
-              }
-
-            }
-          },
-        }).then((res)=>{
-          // console.log(res);
-          // console.log('456');
-          var postThemeId = res.readdata._data.id;
-          this.$router.push({ path:'details'+'/'+postThemeId});
-        })
-
-      }
-    },
     //输入框自适应高度
     clearKeywords () {
       this.keywords = '';

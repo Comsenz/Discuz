@@ -70,7 +70,7 @@ export default {
           ]
         }
       }).then(res=>{
-        this.$message('提交成功');
+        this.$message({ message: '提交成功', type: 'success' });
       })
     }
 

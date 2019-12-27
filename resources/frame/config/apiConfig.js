@@ -71,6 +71,6 @@ module.exports = {
   'deleteWords':'/api/stop-words/',//删除敏感词
   'tags':'/api/settings',    //指定Tag配置接口
   'deleteAvatar':'/api/users',//删除用户头像
-  'exportUser':'/api/user/export',//用户信息导出
+  'exportUser':'/api/export/users?',//用户信息导出
 
 }

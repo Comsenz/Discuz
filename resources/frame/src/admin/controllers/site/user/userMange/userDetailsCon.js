@@ -13,6 +13,8 @@ export default {
       imageUrl: '',
       userInfo: {},
       newPassword:'',
+      wechatNickName:'',
+      sex:'',
       options: [
         {
           value: 0,
@@ -47,6 +49,11 @@ export default {
         console.log(response,'response');
         this.userInfo = response.readdata._data;
         this.imageUrl = this.userInfo.avatarUrl;
+        if(response.readdata.wechat){
+          this.wechatNickName = response.readdata.wechat._data.nickname
+          this.sex = response.readdata.wechat._data.sex
+        }
+        console.log()
       } catch(err){
         console.error(err, 'getUserDetail')
       }
@@ -110,17 +117,27 @@ export default {
     },
     
     submission(){
+      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
+      var mobile = this.userInfo.originalMobile;
+      if (!reg.test(mobile)) { //手机号不合法
+      return  this.$toast("您输入的手机号码不合法，请重新输入");
+      }
       this.appFetch({
         url:'users',
         method:'patch',
-        splice:'/'+userId,
+        splice:`/${this.query.id}`,
         data:{
-          'newPassword':this.newPassword,
-          'mobile':this.userInfo.mobile,
-          'status':this.userInfo.status
+          "data":{
+            "attributes":{
+              'newPassword':this.newPassword,
+              'mobile':mobile,
+              'status':this.userInfo.status
+            }
+          }
         }
       }).then(res=>{
         console.log(res)
+        this.$message({ message: '提交成功', type: 'success' });
       })
     },
 

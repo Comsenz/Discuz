@@ -156,6 +156,7 @@ class Post extends Model
         $post->user_id = $userId;
         $post->ip = $ip;
         $post->reply_post_id = $replyPostId;
+        $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
 

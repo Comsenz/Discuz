@@ -21,6 +21,7 @@ export default {
       siteClose:'1',  //关闭站点选择
       siteLogoFile: {},
       siteLogoFile: [],
+      siteMasterId:'',
       siteRecord:'',
       siteStat:'',
       siteCloseMsg:'',
@@ -79,6 +80,7 @@ export default {
         this.siteRecord = data.readdata._data.siteRecord;
         this.siteStat = data.readdata._data.siteStat;
         this.siteClose = data.readdata._data.siteClose;
+        this.siteMasterId = data.readdata._data.siteAuthor.id;
         if(data.readdata._data.logo){
           this.fileList.push({url:data.readdata._data.logo});
         }
@@ -178,6 +180,13 @@ export default {
              "attributes":{
               "key":"site_introduction",
               "value":this.siteIntroduction,
+              "tag": "default"
+             }
+            },
+            {
+             "attributes":{
+              "key":"site_author",
+              "value":this.siteMasterId,
               "tag": "default"
              }
             },
