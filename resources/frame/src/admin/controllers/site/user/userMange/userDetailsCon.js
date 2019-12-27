@@ -10,12 +10,14 @@ export default {
   data:function () {
     return {
       fileList:[],
+      options: [],
       imageUrl: '',
+      userRole: [],
       userInfo: {},
       newPassword:'',
       wechatNickName:'',
       sex:'',
-      options: [
+      optionsStatus: [
         {
           value: 0,
           label: '正常'
@@ -33,6 +35,7 @@ export default {
   created(){
     this.query = this.$route.query;
     this.getUserDetail();
+    this.getUserList() 
   },
 
   methods:{
@@ -119,9 +122,14 @@ export default {
     submission(){
       var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
       var mobile = this.userInfo.originalMobile;
-      if (!reg.test(mobile)) { //手机号不合法
-      return  this.$toast("您输入的手机号码不合法，请重新输入");
+      if(mobile ==''){
+        
+      }else if(!reg.test(mobile)){
+        return  this.$toast("您输入的手机号码不合法，请重新输入");
       }
+      // if (!reg.test(mobile)) { //手机号不合法
+      // return  this.$toast("您输入的手机号码不合法，请重新输入");
+      // }
       this.appFetch({
         url:'users',
         method:'patch',
@@ -131,6 +139,7 @@ export default {
             "attributes":{
               'newPassword':this.newPassword,
               'mobile':mobile,
+              'userRole':this.userRole,
               'status':this.userInfo.status
             }
           }
@@ -139,6 +148,25 @@ export default {
         console.log(res)
         this.$message({ message: '提交成功', type: 'success' });
       })
+    },
+
+    async getUserList(){  //获取用户角色
+      try{
+        const response = await this.appFetch({
+          method: 'get',
+          url: 'groups'
+        })
+        const data = response.data;
+        console.log(data,'8888')
+        this.options = data.map((v)=>{
+          return {
+              value: v.id,
+              label: v.attributes.name
+          }
+        })
+      } catch(err){
+        console.error(err, 'getUserList')
+      }
     },
 
   },

@@ -45,7 +45,7 @@ export default {
             include: 'groups',
           }
         }).then((res) => {
-          console.log(res);
+          console.log(res,'是我啊啊啊');
           this.username = res.readdata._data.username;
           this.userAvatar = res.readdata._data.avatarUrl;
         });
