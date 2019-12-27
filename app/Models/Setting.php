@@ -35,6 +35,9 @@ class Setting extends Model
      * @var array
      */
     public static $checkEncrypt = [
+        'app_id',
+        'app_secret',
+        'api_key',
         'offiaccount_app_id',
         'offiaccount_app_secret',
         'miniprogram_app_id',
@@ -46,6 +49,8 @@ class Setting extends Model
         'qcloud_secret_key',
         'qcloud_sms_app_id',
         'qcloud_sms_app_key',
+        'qcloud_sms_template_id',
+        'qcloud_sms_sign',
     ];
 
     /**
