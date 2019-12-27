@@ -54,7 +54,13 @@ class ListPostsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $sortFields = ['createdAt'];
+    public $sortFields = [
+        'id',
+        'createdAt',
+        'updatedAt',
+        'replyCount',
+        'likeCount',
+    ];
 
     /**
      * @var PostRepository
