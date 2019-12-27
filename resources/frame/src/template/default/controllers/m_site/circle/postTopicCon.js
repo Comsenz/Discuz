@@ -49,6 +49,7 @@ export default {
       isWeixin: false,
       isPhone: false,
       themeCon:false,
+      attriAttachment:false
     }
   },
 
@@ -435,16 +436,27 @@ export default {
              // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
+              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
               console.log(this.fileList);
               console.log('333');
              }
               if(enclosure){
                 console.log('fujian');
                 this.enclosureShow = true
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
-
+                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
+                var attriAttachment = new Array();
+                console.log(this.enclosureList);
+                for(var k=0;k<this.enclosureList.length;k++){
+                  var data = {};
+                  data.type = 'attachments';
+                  data.id = this.enclosureList[k].id;
+                  console.log(data);
+                  console.log('1111');
+                  attriAttachment.push(data);
+                }
+                this.attriAttachment = attriAttachment;
               }
+
              this.$message('提交成功');
            })
        },
