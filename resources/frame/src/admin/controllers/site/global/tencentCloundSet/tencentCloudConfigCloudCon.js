@@ -35,8 +35,9 @@ export default {
         this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
       })
     },
-    Submission(){
-      this.appFetch({
+    async  Submission(){
+      try{
+        await this.appFetch({
         url:'settings',
         method:'post',
         data:{
@@ -66,15 +67,21 @@ export default {
           ]
         }
       }).then(res=>{
-        if(errors.status == 500){
-          this.$message({ message: '提交失败',type: 'errors'});
+        if(res.errors){
+          throw new Error(res.errors[0].code);
         }
-        this.$message({ message: '提交成功', type: 'success' });
-      }).catch(err=>{
-        console.log('500啦')
-        this.$message({ message: '提交失败',type: 'errors'});
+          this.$message({ message: '提交成功', type: 'success' });        
       })
     }
+      catch(err){
+        console.log(err)
+        this.$message({
+          showClose: true,
+          message: '提交失败！'
+        });
+        // this.$message.error('操作失败！');
+      }
+  }
   },
   components:{
     Card,

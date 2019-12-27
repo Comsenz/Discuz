@@ -7,15 +7,15 @@ export default {
   data:function () {
     return {
       payee:"",
-      canWithdraw:'',
+      canWithdraw:'', //可提现余额
       withdrawalAmount:'',
       handlingFee:'',
       // actualCashWithdrawal:this.actual,
-      phone:"",
-      bind:'bind',
+      phone:"", //绑定手机号
+      bind:'verify',
       sms:'',
-
-      show: false //数字键盘显示状态
+      show: false ,//数字键盘显示状态
+      sendStatus:true, //发送验证码按钮
     }
   },
 
@@ -82,12 +82,18 @@ export default {
        
       var withdrawalAmount = this.withdrawalAmount;
       var sms = this.sms;
+      var canWithdraw = this.canWithdraw
       if(!withdrawalAmount){
         this.$toast('请输入提现金额')
         return
       }
       if(!sms){
         this.$toast('请输入验证码')
+        return
+      }
+      if(canWithdraw == 0.00){
+        this.$toast('可提现金额不足')
+        return
       }
       this.appFetch({  //提交后验证验证码
         url:'smsVerify',
@@ -108,13 +114,21 @@ export default {
     },
 
     sendVerificationCode(){
+      if(this.canWithdraw == 0.00 || this.phone ==''){
+        this.sendStatus = false
+      }
+      var phone = this.phone
+      if(!phone){
+        this.$toast('请先绑定手机号')
+        return
+      }
       this.appFetch({
         url:'sendSms',
         method:'post',
         data:{
           "data": {
             "attributes": {
-              'mobile':this.phone,
+              // 'mobile':this.phone,
               'type':this.bind
             }
           }
