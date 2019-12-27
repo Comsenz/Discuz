@@ -497,8 +497,9 @@ export default {
   * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
   * */
   if (to.name === 'sign-up'){
-  this.getForum().then(()=>{
-    console.log(registerClose);
+  this.getForum().then((res)=>{
+    registerClose = res._data.setreg.register_close;
+    siteMode = res._data.setsite.site_mode;
     if (!Authorization && !tokenId && !registerClose) {
       if (siteMode === 'pay'){
         next({path:'/pay-circle'});
@@ -525,6 +526,10 @@ export default {
     }else {
       next();
     }
+  } else {
+    console.log('前台未登录，跳转');
+    next();
+    return;
   }
 
 
@@ -1095,9 +1100,8 @@ export default {
       data:{}
     }).then(res=>{
       console.log(res);
-      registerClose = res._data.setreg.register_close;
-      siteMode = res._data.setsite.site_mode;
       browserDb.setLItem('siteInfo',res.readdata);
+      return res.readdata;
     }).catch(err=>{
       console.log(err);
     })
