@@ -11,7 +11,7 @@
               clearable
               label="验证旧手机"
               placeholder="请输入旧手机号"
-              
+              readonly
             />
 
             <van-field
