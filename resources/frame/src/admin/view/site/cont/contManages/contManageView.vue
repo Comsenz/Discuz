@@ -35,9 +35,7 @@
 
           </ContArrange>
 
-          <div v-if="themeList.length < 1" class="cont-manage-theme__table-no-data">
-            <p>暂无数据</p>
-          </div>
+          <tableNoList v-show="themeList.length < 1"></tableNoList>
 
           <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
             <el-pagination

@@ -447,13 +447,14 @@ export default {
   let isPhone = appCommonH.isWeixin().isPhone;
 
   /*
-  * 登录后不能访问的页面列表
+  * 登录且付费不能访问的页面列表
   * */
   const noLoginPage = [
     'login-user',
     'login-phone',
     'sign-up',
     'wx-login-bd',
+    'retrieve-pwd',
     'bind-phone',
     'retrieve-pwd',
     'pay-the-fee',
@@ -462,6 +463,17 @@ export default {
     'pay-circle',
     'pay-circle-con/:themeId'
   ];
+
+  /*
+  * 登录成功状态，不能访问的页面列表
+  * */
+  const noLoginAccessPage = [
+    'login-user',
+    'login-phone',
+    'sign-up',
+    'retrieve-pwd'
+  ];
+
   /*
   * 获取用户第一次访问页面，登录后跳转回来
   * */
@@ -485,8 +497,9 @@ export default {
   * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
   * */
   if (to.name === 'sign-up'){
-  this.getForum().then(()=>{
-    console.log(registerClose);
+  this.getForum().then((res)=>{
+    registerClose = res._data.setreg.register_close;
+    siteMode = res._data.setsite.site_mode;
     if (!Authorization && !tokenId && !registerClose) {
       if (siteMode === 'pay'){
         next({path:'/pay-circle'});
@@ -502,6 +515,22 @@ export default {
     next();
   }
 
+
+  /*
+  * 前台登录状态后，不能访问未登录状态的页面
+  * */
+  if (tokenId && Authorization){
+    if (noLoginAccessPage.includes(to.name)){
+      next({path:'/'});
+      return;
+    }else {
+      next();
+    }
+  } else {
+    console.log('前台未登录，跳转');
+    next();
+    return;
+  }
 
 
 
@@ -530,8 +559,8 @@ export default {
         return;
       }
 
-      next({path:'/wx-login-bd'});
-      console.log('未登录');*/
+      next({path:'/wx-login-bd'});*/
+      console.log('未登录');
     } else {
 
       if (tokenId)  {
@@ -601,14 +630,11 @@ export default {
         next();
         return
       }
-
       /*if(to.path === '/'){
         next();
       } else {
         next();
       }*/
-
-
       /*if(to.path !== browserDb.getSItem('beforeVisiting')){
         next();
       } else {
@@ -623,132 +649,7 @@ export default {
         next({path:browserDb.getSItem('beforeVisiting')});
       }*/
 
-
       console.log('已经登录');
-
-
-      /*let authVal = browserDb.getLItem('Authorization');
-      let siteMode = '';
-      let isPaid = '';
-      var pro1 = new Promise(function(resolve, reject){
-        //请求站点信息接口，判断站点是否付费
-        appFetch({
-          url: 'forum',
-          method: 'get',
-          data: {
-            include: ['users'],
-          }
-        }).then((res) => {
-          console.log(res);
-          siteMode = res.readdata._data.siteMode;
-          console.log(siteMode);
-          resolve();
-        });
-      });
-
-      Promise.all([pro1]).then(function (results) {
-        // Promise.all([pro1, pro2]).then(function (results) {
-        if(authVal){ //判断本地是否存在access_token
-          // console.log('已登录，token已存在');
-          var pro2 = new Promise(function(resolve, reject){
-            //请求站点信息接口，判断站点是否付费
-            var userId = browserDb.getLItem('tokenId');
-            console.log(browserDb.getLItem('tokenId'));
-            appFetch({
-              url: 'users',
-              method: 'get',
-              splice:'/'+userId,
-              data: {
-                include: 'groups',
-              }
-            }).then((res) => {
-              isPaid = res.readdata._data.paid;
-              resolve();
-              // console.log(isPaid+'000000');
-            })
-          });
-          //promise先请求接口，再根据接口数据去判断
-          Promise.all([pro2]).then(function (results) {
-            //请求站点信息，用于判断站点是否是付费站点
-            console.log(siteMode+'23232323');
-            if(siteMode == 'pay'){
-              //站点为付费站点时
-              if(isPaid == true){
-                //当用户已付费时
-                console.log(to);
-                console.log('已付费');
-                // console.log('当前用户已登录已付费时');
-                next({
-                  path:to.fullPath
-                });
-                // next({path:'/'})
-              } else {
-                // console.log('已登录，未付费ssssss')
-                next({
-                  path:'/pay-circle-login'
-                });
-              }
-            } else if(siteMode == 'public'){
-              //站点为公开站点时
-              // console.log('公开站点，已登录');
-              //当用户已登录，且站点为公开站点时，进入到路由页面
-              next({
-                path:to.fullPath
-              });
-            } else {
-
-            }
-            next();
-          });
-
-        } else {
-          console.log('未登录，token不存在');
-
-          if(to.name === 'wx-login-bd') {
-            next();
-            return
-          }
-          next({path:'/wx-login-bd'});
-          console.log('未登录');
-
-          // console.log(siteMode+'123456')
-          //请求站点信息，用于判断站点是否是付费站点
-          /!*if(siteMode == 'pay'){
-            console.log(7777);
-            // console.log(to);
-            // console.log(8888);
-            //站点为付费站点时，跳转到付费页，如果是登录注册页，跳转到登录注册
-            var ifLogin = to.fullPath.indexOf("login");
-            var ifSign = to.fullPath.indexOf("sign");
-            if(ifLogin != -1){
-              // console.log('d登录页');
-              next({
-                path:'/login-user'
-              });
-            } else if(ifSign != -1){
-              // console.log('注册页');
-              next({
-                path:'/sign-up'
-              });
-            } else {
-              console.log('首页');
-              next({
-                path:'/pay-circle'
-              });
-            }
-          } else if(siteMode == 'public'){
-            //站点为公开站点时
-            //当用户未登录，且站点为公开站点时，进入到路由页面
-            // console.log('当用户未登录，且站点为公开站点时，进入到路由页面');
-            // console.log(to.fullPath)
-            next({
-              path:to.fullPath
-            });
-          } else {
-            //当siteMode为其他值（undefined,null）
-          }*!/
-        };
-      });*/
     }
 
   } else if(isPhone == true) {
@@ -1199,9 +1100,8 @@ export default {
       data:{}
     }).then(res=>{
       console.log(res);
-      registerClose = res._data.setreg.register_close;
-      siteMode = res._data.setsite.site_mode;
       browserDb.setLItem('siteInfo',res.readdata);
+      return res.readdata;
     }).catch(err=>{
       console.log(err);
     })

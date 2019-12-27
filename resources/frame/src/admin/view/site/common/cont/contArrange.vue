@@ -40,7 +40,7 @@
             </div>
 
             <div v-if="$attrs.finalPost" class="cont-arrange__rt-main-header__release-time rt-box">
-              <span>发布时间：</span>
+              <span>更新时间：</span>
               <span>{{$attrs.finalPost}}</span>
             </div>
 

@@ -171,6 +171,10 @@ body {
 		@include px2rem(line-height, 40);
 		color: $font000;
 	}
+  .qq-emotion {
+    display: inline-block;
+    @include px2rem(height, 40);
+  }
 }
 .operaBox {
 	background: $corF7;
@@ -237,6 +241,10 @@ body {
 		.font9 {
 			color: $cor999;
 		}
+    .qq-emotion {
+      display: inline-block;
+      @include px2rem(height, 40);
+    }
 	}
 	.allReply {
 		display: block;
@@ -522,7 +530,7 @@ openCircleConView.vue
 			float: left;
 			@include font-dpr(36);
 		}
-    
+
 		.fileName {
 			display: block;
 			box-sizing: border-box;
