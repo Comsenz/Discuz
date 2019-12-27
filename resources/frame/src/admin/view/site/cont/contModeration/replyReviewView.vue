@@ -65,7 +65,7 @@
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread.firstPost._data.content"
-          :finalPost="formatDate(items._data.createdAt)"
+          :finalPost="formatDate(items._data.updatedAt)"
           :ip="items._data.ip"
           :userId="items.user._data.id"
           :key="items._data.id"
@@ -112,6 +112,9 @@
           </div>
 
         </ContArrange>
+
+        <tableNoList v-show="themeList.length < 1"></tableNoList>
+
         <Page
           v-if="pageCount > 1"
           @current-change="handleCurrentChange"

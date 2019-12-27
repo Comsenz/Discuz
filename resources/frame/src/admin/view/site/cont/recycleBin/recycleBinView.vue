@@ -107,6 +107,8 @@
 
         </ContArrange>
 
+        <tableNoList v-show="themeList.length < 1"></tableNoList>
+
         <Page
           v-if="pageCount > 1"
           @current-change="handleCurrentChange"
@@ -114,7 +116,6 @@
           :page-size="10"
           :total="total">
         </Page>
-
       </div>
 
       <div class="recycle-bin-footer footer-btn">
