@@ -20,7 +20,7 @@ class UserWalletLog extends Model
     /**
      * {@inheritdoc}
      */
-    protected $table = 'user_wallet_log';
+    protected $table = 'user_wallet_logs';
 
     /**
      * 钱包明细类型
