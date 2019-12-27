@@ -23,7 +23,7 @@
                 </div>
               </div>
               <div class="postContent" v-if="item.firstPost">
-                <a @click="jumpThemeDet(item._data.id)">{{item.firstPost._data.content}}</a>
+                <a @click="jumpThemeDet(item._data.id)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
                 <!-- <div class="themeImgList">
@@ -77,7 +77,7 @@
                   <!-- <span class="font9" v-else=""></span> -->
                   <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser">{{reply.replyUser._data.username}}</a>
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
-                  <span v-html="reply._data.content"></span>
+                  <span v-html="reply._data.contentHtml"></span>
                 </div>
                 <a @click="jumpThemeDet(item._data.id)" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
               </div>

@@ -27,7 +27,7 @@
             <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
             <span v-else-if="enc.type === 'mp'" class="icon iconfont icon-mp3"></span>
             <span v-else-if="enc.type === 'mp1'" class="icon iconfont icon-mp4"></span>
-            <span v-else-if="enc.type === 'PNG'" class="icon iconfont icon-PNG"></span>
+            <span v-else-if="enc.type === 'png'" class="icon iconfont icon-PNG"></span>
             <span v-else-if="enc.type === 'ppt'" class="icon iconfont icon-ppt"></span>
             <span v-else-if="enc.type === 'swf'" class="icon iconfont icon-swf"></span>
             <span v-else-if="enc.type === 'TIFF'" class="icon iconfont icon-TIFF"></span>
@@ -43,7 +43,7 @@
 
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left">
-          <div class="">
+          <!-- <div class=""> -->
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
               <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
@@ -51,8 +51,8 @@
             <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon">
               <input type="file" accept="image/*" @change="handleEnclosure" class="hiddenInput"/>
             </span>
-          </div>
-          
+          <!-- </div> -->
+
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
           <span class="post-topic-footer-right-sort">{{selectSort}}</span>

@@ -66,7 +66,13 @@ export default {
           ]
         }
       }).then(res=>{
-        this.$message('提交成功');
+        if(errors.status == 500){
+          this.$message({ message: '提交失败',type: 'errors'});
+        }
+        this.$message({ message: '提交成功', type: 'success' });
+      }).catch(err=>{
+        console.log('500啦')
+        this.$message({ message: '提交失败',type: 'errors'});
       })
     }
   },

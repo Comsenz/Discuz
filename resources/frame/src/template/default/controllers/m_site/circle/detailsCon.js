@@ -56,7 +56,8 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      groupId:''
+      groupId:'',
+      menuStatus:false,//默认不显示菜单按钮
 		}
 	},
   created(){
@@ -87,17 +88,18 @@ export default {
         }
       }).then((res) => {
         console.log(res);
+        console.log('是我啊')
         this.siteInfo = res.readdata;
         // console.log(res.readdata._data.siteMode+'请求');
         // this.siteUsername = res.readdata._data.siteAuthor.username;
         // this.sitePrice = res.readdata._data.sitePrice
         //把站点是否收费的值存储起来，以便于传到父页面
-        // this.isPayVal = res.readdata._data.siteMode;
-        // if(this.isPayVal != null && this.isPayVal != ''){
-        //   this.isPayVal = res.readdata._data.siteMode;
+        this.isPayVal = res.readdata._data.siteMode;
+         if(this.isPayVal != null && this.isPayVal != ''){
+          this.isPayVal = res.readdata._data.siteMode;
         //   //判断站点信息是否付费，用户是否登录，用户是否已支付
-        //   this.detailIf(this.isPayVal,false);
-        // }
+          this.detailIf(this.isPayVal,false);
+         }
       });
     },
     //请求用户信息
@@ -135,17 +137,19 @@ export default {
         console.log('公开');
         var token = browserDb.getLItem('Authorization',token);
         if(token){
-          console.log('公开，已登录');
+          console.log('公开，已登录2222s');
           //当用户已登录时
-          this.loadThemeList();
+          // this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
+          this.menuStatus = true;
         }  else {
           console.log('公开，未登录');
           // this.loadThemeList();
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
+          // this.menuStatus = false;
         }
       }
     },
@@ -302,11 +306,7 @@ export default {
          // content = content
          // console.log(content);
          //跳转到发帖页
-        this.$router.push({
-          path:'/post-topic',
-          name:'post-topic',
-          params: { themeId:this.themeId,postsId:postsId,themeContent:content}
-        })
+        this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
        }
     },
     //主题操作接口请求

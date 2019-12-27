@@ -207,14 +207,22 @@ export default {
 	      title:"主题详情"
 	    }
 	  },
-    'post-topic':{
-      comLoad:function (resolve) {
+      'post-topic':{
+        comLoad:function (resolve) {
         require(['../view/m_site/home/postTopicView'],resolve)
-      },
-      metaInfo:{
+        },
+        metaInfo:{
         title:"发布主题"
-      }
-    },
+        }
+      },
+      'edit-topic/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editTopicView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑主题"
+        }
+      },
 
       //登录、注册、微信绑定模块路由
       'login-user':{
@@ -307,7 +315,15 @@ export default {
         },
         metaInfo:{
           title:"修改手机号"
-        }
+        },
+      },
+        'bind-new-phone':{
+          comLoad:function (resolve) {
+            require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
+        },
+        metaInfo:{
+          title:"绑定新手机号"
+        },
       },
       'change-pwd':{
         comLoad:function (resolve) {
@@ -457,6 +473,36 @@ export default {
   * 获取tokenId
   * */
   const tokenId = browserDb.getLItem('tokenId');
+  const Authorization = browserDb.getLItem('Authorization');
+
+  /*
+  * 前台路由全局处理
+  * */
+  var registerClose = ''; //站点是否关闭
+  var siteMode = '';      //站点模式
+
+  /*
+  * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
+  * */
+  if (to.name === 'sign-up'){
+  this.getForum().then(()=>{
+    console.log(registerClose);
+    if (!Authorization && !tokenId && !registerClose) {
+      if (siteMode === 'pay'){
+        next({path:'/pay-circle'});
+        return
+      } else {
+        next({path:'/'});
+        return
+      }
+    }
+  })
+
+  } else {
+    next();
+  }
+
+
 
 
 
@@ -464,19 +510,8 @@ export default {
     //微信登录时
     console.log(to);
     console.log('微信登录');
-    // !browserDb.getLItem('Authorization') && !browserDb.getLItem('tokenId')
-    // !browserDb.getLItem('openid')
+
     if (!browserDb.getLItem('Authorization') && !browserDb.getLItem('tokenId')){
-      /*
-      * 死循环先看这里  如果获取到code和state不跳
-      * */
-      console.log("死循环，死循环");
-      console.log(localStorage.getItem('officeDb_code'));
-
-      // next();
-
-      // console.log('next后');
-
       if(to.name === 'wx-login-bd') {
         next();
         return
@@ -484,17 +519,6 @@ export default {
         next();
       }
       next({path:'/wx-login-bd'});
-
-      // console.log(to);
-
-     /* if (localStorage.getItem('officeDb_code')){
-        console.log('有');
-        next(false);
-      } else {
-        console.log('无');
-        next(false);
-      }*/
-
 
       /*if(localStorage.getItem('officeDb_code')) {
         console.log('跳转微信绑定');
@@ -1167,6 +1191,20 @@ export default {
     }).catch(err=>{
       console.log(err);
     })
-  }
+  },
+  getForum(){
+    return appFetch({
+      url:'forum',
+      method:'get',
+      data:{}
+    }).then(res=>{
+      console.log(res);
+      registerClose = res._data.setreg.register_close;
+      siteMode = res._data.setsite.site_mode;
+      browserDb.setLItem('siteInfo',res.readdata);
+    }).catch(err=>{
+      console.log(err);
+    })
+  },
 
 };

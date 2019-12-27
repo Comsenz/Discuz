@@ -61,7 +61,11 @@
           </el-dialog>
         </CardRow>
       </Card>
-
+       <Card header="站长：">
+         <CardRow description="填写站长的用户id">
+             <el-input placeholder="站长" v-model="siteMasterId"></el-input>
+         </CardRow>
+       </Card>
       <Card header="站点模式：">
         <CardRow description="你的Discuz!Q 站点的运行模式">
           <el-radio @change="radioChange('public')" v-model="radio" label="1">公开模式</el-radio>

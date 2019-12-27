@@ -11,7 +11,7 @@
               clearable
               label="验证旧手机"
               placeholder="请输入旧手机号"
-              readonly
+              
             />
 
             <van-field
@@ -28,10 +28,10 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">{{ btnContent }}</van-button>
               
             </van-field>
-
+            
           </van-cell-group>
         </div>
 

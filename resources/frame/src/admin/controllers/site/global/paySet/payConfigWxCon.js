@@ -30,7 +30,7 @@ export default {
         data:{
         }
       }).then(data=>{
-          // console.log(data);
+          console.log(data);
           this.appId = data.readdata[0]._data.app_id;
           this.mchId = data.readdata[0]._data.mch_id;
           this.apiKey = data.readdata[0]._data.api_key;
@@ -40,6 +40,7 @@ export default {
       })
     },
     submitConfiguration(){
+
       this.appFetch({
         url:'settings',
         method:'post',
@@ -77,9 +78,9 @@ export default {
         }
       }).then(data=>{
         // console.log(data)
-        this.$router.push({
-          path:'/admin/pay-set'
-        });
+        // this.$router.push({
+        //   path:'/admin/pay-set'
+        // });
         this.$message({
           message: '提交成功',
           type: 'success'

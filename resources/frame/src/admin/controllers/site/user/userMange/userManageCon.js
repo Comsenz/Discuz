@@ -15,6 +15,18 @@ export default {
       checked:false,
       userPhone: '',
       radio1:'0',
+      userStatus:[],
+      optionsStatus: [
+        {
+          value: 0,
+          label: '正常'
+        }, 
+        {
+          value: 1,
+          label: '禁用'
+        }
+      ],
+      value:''
     }
   },
 
@@ -36,6 +48,7 @@ export default {
         username: this.username.trim(),
         userUID: this.userUID.trim(),
         userRole: this.userRole,
+        userStatus:this.userStatus,
         userPhone: this.userPhone.trim(),
         radio1: this.radio1,
       };
@@ -43,7 +56,7 @@ export default {
         this.userPhone = '';
         this.radio1 = '0';
 
-        if(query.username + query.userUID + query.userRole === ''){
+        if(query.username + query.userUID + query.userRole +query.userStatus === ''){
           query = {};
         } else {
           delete query.userPhone;
@@ -60,6 +73,7 @@ export default {
           url: 'groups'
         })
         const data = response.data;
+        console.log(data,'8888')
         this.options = data.map((v)=>{
           return {
               value: v.id,
