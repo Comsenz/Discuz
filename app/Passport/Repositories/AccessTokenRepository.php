@@ -16,7 +16,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
     const TOKEN_EXP = 'P1D';
 
-    const REFER_TOKEN_EXP = 'P2D';
+    const REFER_TOKEN_EXP = 'P1Y';
 
     /**
      * {@inheritdoc}
