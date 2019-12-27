@@ -47,6 +47,8 @@ class ResourceUserWalletController extends AbstractResourceController
 
     /**
      * @param Dispatcher $bus
+     * @param SettingsRepository $setting
+     * @param UserWalletRepository $wallet
      */
     public function __construct(Dispatcher $bus, SettingsRepository $setting, UserWalletRepository $wallet)
     {
@@ -60,14 +62,10 @@ class ResourceUserWalletController extends AbstractResourceController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        // TODO: User $actor 用户模型
-        $actor = $request->getAttribute('actor');
+        $data = $this->wallet->findOrFail(Arr::get($request->getQueryParams(), 'user_id'), $request->getAttribute('actor'));
 
-        //用户ID
-        $user_id = Arr::get($request->getQueryParams(), 'user_id');
-        $return_data = $this->wallet->findWalletOrFail($user_id, $actor);
-        //$cash_tax_ratio = $this->setting->tag('cash_tax_ratio');
-        $return_data->cash_tax_ratio = 0.01;//税率
-        return $return_data;
+        $data->cash_tax_ratio = $this->setting->get('cash_rate', 'cash', 0);
+
+        return $data;
     }
 }
