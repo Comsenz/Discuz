@@ -1,7 +1,5 @@
 <template>
   <div class="cont-review-box">
-    <Card header="搜索"></Card>
-
     <div class="cont-review-header">
       <div class="cont-review-header__lf">
         <div >
@@ -80,7 +78,7 @@
         </div>
 
         <div class="cont-review-table__main" slot="main">
-          <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items.firstPost._data.content"></a>
+          <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
         </div>
 
         <div class="cont-review-table__footer" slot="footer">

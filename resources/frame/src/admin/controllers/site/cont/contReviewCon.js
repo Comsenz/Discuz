@@ -131,6 +131,7 @@ export default {
 
     themeSearch(){
       this.ignoreStatus = this.searchReviewSelect === 2?false:true;
+      this.currentPaga = 1;
       this.getThemeList();
     },
 
@@ -383,13 +384,34 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+
+    getCreated(state){
+      if(state){
+        console.log(state);
+        this.getThemeList(1);
+      } else {
+        console.log(state);
+        this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+      }
     }
 
   },
 
   created(){
     this.getCategories();
-    this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+  },
+
+  beforeRouteEnter(to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        console.log('执行');
+        vm.getCreated(true)
+      }else {
+        console.log('不执行');
+        vm.getCreated(false)
+      }
+    })
   },
 
   components:{

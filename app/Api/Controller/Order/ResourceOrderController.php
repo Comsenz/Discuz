@@ -50,6 +50,7 @@ class ResourceOrderController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
         $order_sn = Arr::get($request->getQueryParams(), 'order_sn');
         return $this->order->findOrderOrFail($order_sn, $actor);
     }

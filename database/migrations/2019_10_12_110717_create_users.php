@@ -21,7 +21,7 @@ class CreateUsers extends Migration
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
             $table->ipAddress('register_ip')->default('')->comment('注册ip');
             $table->unsignedInteger('thread_count')->default(0)->comment('主题数');
-            $table->tinyInteger('status')->default(0)->comment('用户状态');
+            $table->tinyInteger('status')->default(0)->comment('用户状态 0 正常 1 禁用');
             $table->string('avatar', 100)->default('')->comment('头像地址');
             $table->dateTime('avatar_at')->nullable()->comment('头像修改时间');
             $table->dateTime('joined_at')->nullable()->comment('付费加入时间');

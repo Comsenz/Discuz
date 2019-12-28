@@ -139,7 +139,7 @@
 
       <el-collapse-transition>
         <div v-show="radio2 === '1'">
-          <Card  header="关闭提示信息：">
+          <Card  header="">
             <CardRow description="站点关闭时出现的提示信息">
               <el-input v-model="siteCloseMsg"></el-input>
             </CardRow>

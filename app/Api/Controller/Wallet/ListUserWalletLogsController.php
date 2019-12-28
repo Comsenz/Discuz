@@ -18,9 +18,11 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\UserWalletLog;
 use App\Repositories\UserWalletLogsRepository;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ListUserWalletLogsController extends AbstractListController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -85,6 +87,8 @@ class ListUserWalletLogsController extends AbstractListController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $actor  = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
+
         $filter = $this->extractFilter($request);
         $sort   = $this->extractSort($request);
         $limit  = $this->extractLimit($request);
@@ -143,7 +147,7 @@ class ListUserWalletLogsController extends AbstractListController
             $query->where('created_at', '<=', $log_end_time);
         });
         $query->when($log_username, function ($query) use ($log_username) {
-            $query->whereIn('user_wallet_log.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
+            $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);

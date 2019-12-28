@@ -58,6 +58,8 @@ export default {
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId:'',
       menuStatus:false,//默认不显示菜单按钮
+      collectStatus:false,
+      collectFlag:''
 		}
 	},
   created(){
@@ -68,6 +70,11 @@ export default {
       this.themeShow = false;
     } else {
       this.themeShow = true
+    }
+    if(this.collectStatus){
+      this.collectFlag = '已收藏';
+    } else {
+      this.collectFlag = '收藏';
     }
     // this.detailsLoad();
   },
@@ -88,7 +95,6 @@ export default {
         }
       }).then((res) => {
         console.log(res);
-        console.log('是我啊')
         this.siteInfo = res.readdata;
         // console.log(res.readdata._data.siteMode+'请求');
         // this.siteUsername = res.readdata._data.siteAuthor.username;
@@ -187,16 +193,13 @@ export default {
           }
           console.log(res);
           console.log('1234');
+          this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
           this.themeCon =this.themeCon.concat(res.readdata.posts);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
-          // console.log(res.readdata.firstPost.attachments[0]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[1]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[2]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[3]._data.extension);
-          // console.log(res.readdata.firstPost.attachments[4]._data.extension);
+
           this.themeCon = res.readdata;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
@@ -282,6 +285,13 @@ export default {
     themeOpera(postsId,clickType,cateId,content) {
       let attri = new Object();
        if(clickType == 1){
+         this.collectStatus = !this.collectStatus
+         if(this.collectStatus==true){
+             this.collectFlag = "已收藏"
+         }else if(this.collectStatus==false){
+             this.collectFlag = "收藏"
+         }
+
         attri.isFavorite = true;
         content ='';
         this.themeOpeRequest(attri,cateId);
@@ -333,7 +343,6 @@ export default {
         }).then((res)=>{
 
         })
-
 
     },
     //点赞/删除

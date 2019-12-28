@@ -158,7 +158,8 @@ const appFetch = function(params, options) {
     'wx-sign-up-bd',
     'sign-up',
     'bind-phone',
-    'retrieve-pwd'
+    'retrieve-pwd',
+    'admin/login'
   ];
 
 // && !requireAuth.includes(window.location.pathname)

@@ -3,7 +3,7 @@
       <div class="withdrawal-application__search-box">
         <div class="withdrawal-application__search-condition">
           <span class="withdrawal-application__search-condition__title">流水号：</span>
-          <el-input v-model="cashSn" clearable ></el-input>
+          <el-input v-model="cashSn" clearable placeholder="搜索流水号"></el-input>
         </div>
 
         <div class="withdrawal-application__search-condition">
@@ -22,7 +22,7 @@
 
         <div class="withdrawal-application__search-condition">
           <span class="withdrawal-application__search-condition__title">操作用户：</span>
-          <el-input v-model="operationUser" clearable></el-input>
+          <el-input v-model="operationUser" clearable placeholder="搜索操作用户"></el-input>
         </div>
 
         <div class="withdrawal-application__search-condition">

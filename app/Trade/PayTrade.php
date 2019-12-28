@@ -85,7 +85,7 @@ class PayTrade
                 case GatewayConfig::WECAHT_PAY_NATIVE:
                     $qr_link                 = $response->getCodeUrl();
                     $qrCode                  = new QrCode($qr_link);
-                    $result['wechat_qrcode'] = base64_encode($qrCode->writeString());
+                    $result['wechat_qrcode'] = 'data:image/png;base64,' . base64_encode($qrCode->writeString());
                     break;
                 case GatewayConfig::WECAHT_PAY_WAP:
                     $h5_link                  = $response->getMwebUrl();

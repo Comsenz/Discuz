@@ -49,6 +49,7 @@ export default {
       isWeixin: false,
       isPhone: false,
       themeCon:false,
+      attriAttachment:false
     }
   },
 
@@ -159,18 +160,9 @@ export default {
                           "id": this.cateId
                       }
                   },
-                  // "attachments": {
-                  //     "data": [
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 1
-                  //         },
-                  //         {
-                  //             "type": "attachments",
-                  //             "id": 2
-                  //         }
-                  //     ]
-                  // }
+                  "attachments": {
+                    "data":this.attriAttachment
+                  },
               }
 
             }
@@ -197,7 +189,7 @@ export default {
       // console.log(e);
       let formdata = new FormData()
       formdata.append('file', e.file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata);
 
     },
@@ -206,7 +198,7 @@ export default {
       let file = e.target.files[0];
       let formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
@@ -235,11 +227,18 @@ export default {
         } else {
           var newArr = this.enclosureList.filter(item => item.uuid !== uuid);
           this.enclosureList = newArr;
-        }
 
+          var attriAttachment = new Array();
+          for(var k=0;k<this.enclosureList.length;k++){
+            var data = {};
+            data.type = 'attachments';
+            data.id = this.enclosureList[k].id;
+            attriAttachment.push(data);
+          }
+          this.attriAttachment = attriAttachment;
+          // console.log(this.attriAttachment);
+        }
         this.$message('删除成功');
-      }).catch(error=>{
-        this.$message('失败');
       })
     },
 
@@ -249,7 +248,7 @@ export default {
       let file = e.target.files[0];
       let formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('isGallery', false);
+      formdata.append('isGallery', 0);
       this.uploaderEnclosure(formdata,false,true);
     },
     // 组件方法 获取 流
@@ -435,16 +434,27 @@ export default {
              // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
+              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
               console.log(this.fileList);
               console.log('333');
              }
               if(enclosure){
                 console.log('fujian');
                 this.enclosureShow = true
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
-
+                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
+                var attriAttachment = new Array();
+                console.log(this.enclosureList);
+                for(var k=0;k<this.enclosureList.length;k++){
+                  var data = {};
+                  data.type = 'attachments';
+                  data.id = this.enclosureList[k].id;
+                  console.log(data);
+                  console.log('1111');
+                  attriAttachment.push(data);
+                }
+                this.attriAttachment = attriAttachment;
               }
+
              this.$message('提交成功');
            })
        },
