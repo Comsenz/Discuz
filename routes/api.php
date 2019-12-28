@@ -144,37 +144,6 @@ $route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\U
 $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
 
 /*
- |--------------------------------------------------------------------------
- | Payments settings
- |--------------------------------------------------------------------------
- */
-
-$route->get('/payments', 'payment.list', ApiController\Payment\ListPaymentsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Circles
-|--------------------------------------------------------------------------
-*/
-
-$route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
-$route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
-$route->patch('/circles/{id}', 'circles.update', ApiController\Circle\UpdateCircleController::class);
-$route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Invites
-|--------------------------------------------------------------------------
-*/
-
-$route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
-$route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
-$route->post('/invites', 'invites.create', ApiController\Invite\CreateAdminInviteController::class);
-$route->patch('/invites/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
-$route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
-
-/*
 |--------------------------------------------------------------------------
 | Attachment
 |--------------------------------------------------------------------------
@@ -246,6 +215,7 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
 $route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);
+$route->patch('/invite/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
