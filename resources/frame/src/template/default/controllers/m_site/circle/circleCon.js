@@ -12,7 +12,6 @@ export default {
 			// footShow: true,
 			fourHeader: true,
       isWx:'1',
-      isLoading: false,
       // replyTag: false,
 			themeChoList: [
 				{
@@ -59,6 +58,7 @@ export default {
 
 
   },
+
 	methods: {
     receive: function (val_1) {
       console.log(val_1);
@@ -182,6 +182,7 @@ export default {
               'filter[isEssence]':'yes',
               'filter[categoryId]':this.categoryId,
               'filter[isApproved]':1,
+              'filter[isDeleted]':'no',
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
@@ -210,6 +211,7 @@ export default {
           data: {
             'filter[categoryId]':filterVal,
             'filter[isApproved]':1,
+            'filter[isDeleted]':'no',
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
@@ -236,6 +238,7 @@ export default {
             data: {
               'filter[categoryId]':this.firstCategoriesId,
               'filter[isApproved]':1,
+              'filter[isDeleted]':'no',
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
@@ -247,10 +250,14 @@ export default {
             }
           }).then((res) => {
             console.log('56754');
-            if(initStatus){
-              this.themeListCon = []
-            }
-            this.themeListCon =this.themeListCon.concat(res.readdata);
+            console.log(res);
+            // if(initStatus){
+            //   this.themeListCon = []
+            // }
+            this.themeListCon = res.readdata;
+            // this.themeListCon =this.themeListCon.concat(res.readdata);
+            console.log(this.themeListCon);
+            console.log('77777');
             this.loading = false;
             this.finished = res.data.length < this.pageLimit;
           }).catch((err)=>{
@@ -391,7 +398,7 @@ export default {
 		window.addEventListener('scroll', this.footFix, true);
 	},
 	beforeRouteLeave (to, from, next) {
-	   window.removeEventListener('scroll', this.footFix, true)
+	   window.removeEventListener('scroll', this.footFix, true);
 	   next()
 	}
 }
