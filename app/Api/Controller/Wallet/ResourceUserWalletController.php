@@ -15,9 +15,11 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use App\Repositories\UserWalletRepository;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ResourceUserWalletController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -62,6 +64,9 @@ class ResourceUserWalletController extends AbstractResourceController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
+        // 获取当前用户
+        $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
         $data = $this->wallet->findOrFail(Arr::get($request->getQueryParams(), 'user_id'), $request->getAttribute('actor'));
 
         $data->cash_tax_ratio = $this->setting->get('cash_rate', 'cash', 0);

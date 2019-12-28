@@ -12,9 +12,11 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use App\Repositories\UserWalletCashRepository;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ResourceUserWalletCashController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -40,6 +42,7 @@ class ResourceUserWalletCashController extends AbstractResourceController
     {
         // 获取当前用户
         $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
         $id = Arr::get($request->getQueryParams(), 'id');
         return $this->cash->findCashOrFail($id);
     }

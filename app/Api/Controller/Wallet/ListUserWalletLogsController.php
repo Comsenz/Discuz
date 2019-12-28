@@ -18,9 +18,11 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\UserWalletLog;
 use App\Repositories\UserWalletLogsRepository;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ListUserWalletLogsController extends AbstractListController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -85,6 +87,8 @@ class ListUserWalletLogsController extends AbstractListController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $actor  = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
+
         $filter = $this->extractFilter($request);
         $sort   = $this->extractSort($request);
         $limit  = $this->extractLimit($request);
