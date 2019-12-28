@@ -29,7 +29,7 @@
               <van-image
                 fit="none"
                 lazy-load
-                v-for="(image,index)  in firstpostImageList"
+                v-for="(image,index)  in firstpost.ImageList"
                 :src="image"
                 @click="imageSwiper"
               />
