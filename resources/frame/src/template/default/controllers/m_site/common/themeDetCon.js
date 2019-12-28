@@ -19,7 +19,9 @@ export default {
          // ],
          themeListResult:[],
          firstpostImageListResult:[],
-         priview:[]
+         priview:[],
+         showScreen:[],
+         length:0
 
     }
 	},
@@ -48,6 +50,7 @@ export default {
   },
 	created(){
     this.loadPriviewImgList();
+    this.forList();
     // this.getCircle();
   },
 	beforeDestroy () {
@@ -56,11 +59,123 @@ export default {
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      this.themeListResult = newData;
+      console.log(prevData);
+      console.log(newData);
+      this.themeList = newData;
       this.loadPriviewImgList();
-    }
+    },
+    deep:true
   },
+
 	methods: {
+    //循环数据新建数组，用于操作管理显示隐藏下拉菜单
+    forList(){
+      for(let k=0;k<this.themeList.length;k++){
+        this.showScreen.push(false);
+        this.length = this.themeList.length;
+      }
+    },
+
+    //主题管理，点击更多显示下拉菜单
+    bindScreen(index){
+      var that = this;
+      this.showScreen.forEach((item) => {  //循环已经把所有的状态值清空了
+          item = false;
+      })
+       this.showScreen.splice(index,1,!this.showScreen[index]);
+    },
+
+
+    //管理操作
+    themeOpera(postsId,clickType,clickStatus) {
+      let attri = new Object();
+       if(clickType == 2){
+         console.log(clickStatus);
+         //加精
+         this.themeOpeRequest(postsId,attri,clickStatus);
+        attri.isEssence = clickStatus;
+       } else if(clickType == 3){
+         //置顶
+         // request = true;
+        attri.isSticky = clickStatus;
+        this.themeOpeRequest(postsId,attri,clickStatus);
+       } else if(clickType == 4){
+         //删除
+        attri.isDeleted = true;
+        this.themeOpeRequest(postsId,attri);
+        // this.$router.push({
+        //   path:'/circle',
+        //   name:'circle'
+        // })
+       } else {
+         // content = content
+         // console.log(content);
+         //跳转到发帖页
+        this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
+       }
+    },
+
+    //跳转到回复页
+    replyToJump:function(themeId,replyId,quoteCon) {
+    	this.$router.push({
+        path:'/reply-to-topic',
+        name:'reply-to-topic',
+        params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
+       })
+    },
+
+    //主题操作接口请求
+    themeOpeRequest(themeId,attri,clickStatus){
+        // console.log(attri);
+        this.appFetch({
+          url:'threads',
+          method:'patch',
+          splice:'/'+themeId,
+          data:{
+            "data": {
+              "type": "threads",
+              "attributes": attri
+            },
+            // "relationships": {
+            //     "category": {
+            //         "data": {
+            //             "type": "categories",
+            //             "id": cateId
+            //         }
+            //     }
+            // }
+          }
+        }).then((res)=>{
+          console.log(res);
+          console.log('888');
+          this.$emit('changeStatus', true);
+        })
+        // this.$emit('changeStatus', true);
+    },
+
+    //点赞
+    replyOpera(postId,type,isLike,status){
+      // console.log(isLike);
+      let attri = new Object();
+      attri.isLiked = status;
+      let posts = 'posts/'+postId;
+      this.appFetch({
+        url:posts,
+        method:'patch',
+        data:{
+          "data": {
+            "type": "posts",
+            "attributes": attri,
+          }
+        }
+      }).then((res)=>{
+        this.$message('修改成功');
+        // this.detailsLoad();
+        this.$emit('changeStatus', true);
+      })
+    },
+
+
     loadPriviewImgList(){
       var themeListLen = this.themeListResult.length;
 
@@ -76,7 +191,7 @@ export default {
               imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
           }
-          
+
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }

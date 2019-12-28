@@ -14,7 +14,7 @@
         <!-- <div class="invitePerDet" v-show="invitePerDet"> -->
         <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
         <div class="" v-if="personInfo">
-          <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="" class="inviteHead" v-model="userInfoAvataUrl">
+          <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="" class="inviteHead">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt="ssss" class="inviteHead">
           <div class="inviteName" v-if="invitePerDet && userInfoName" v-model="userInfoName">{{userInfoName}}</div>
           <div class="inviteName" v-else="">该用户已被删除</div>
