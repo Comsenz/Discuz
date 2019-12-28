@@ -133,7 +133,8 @@ return [
         App\Providers\UserServiceProvider::class,
         App\Providers\ThreadServiceProvider::class,
         App\Providers\PostServiceProvider::class,
-        App\Providers\OrderServiceProvider::class
+        App\Providers\OrderServiceProvider::class,
+        App\Passport\Oauth2ServiceProvider::class
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）

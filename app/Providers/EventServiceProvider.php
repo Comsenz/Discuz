@@ -10,6 +10,7 @@ namespace App\Providers;
 use App\Events\Group\Saving;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
+use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
 use App\Listeners\Group\ChangeDefaultGroup;
@@ -47,6 +48,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         Logind::class => [
             ChckoutSite::class,
+            ChangeLastActived::class
+        ],
+        RefreshTokend::class => [
             ChangeLastActived::class
         ],
         Saving::class => [
