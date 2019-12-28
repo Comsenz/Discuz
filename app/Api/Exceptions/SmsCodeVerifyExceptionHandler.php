@@ -44,6 +44,6 @@ class SmsCodeVerifyExceptionHandler implements ExceptionHandlerInterface
             'code' => 'sms_verify_error',
         ];
 
-        return new ResponseBag($status, $data);
+        return new ResponseBag($status, [$data]);
     }
 }
