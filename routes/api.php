@@ -8,6 +8,8 @@ use App\Api\Controller as ApiController;
 |--------------------------------------------------------------------------
 */
 
+$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
+
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
 $route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);

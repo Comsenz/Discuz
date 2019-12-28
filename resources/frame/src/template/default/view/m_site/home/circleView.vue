@@ -26,7 +26,7 @@
 	    	</div>
 	    </div>
       <div v-if="themeListCon">
-        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
+        <ThemeDet :themeList.sync="themeListCon" :isTopShow="true" :isMoreShow="true" @changeStatus="loadThemeList"></ThemeDet>
       </div>
 	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
       <div class="fixedEdit" v-if="canEdit" @click="postTopic">
