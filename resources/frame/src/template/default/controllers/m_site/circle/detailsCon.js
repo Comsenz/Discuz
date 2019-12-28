@@ -39,7 +39,7 @@ export default {
         // 'https://img.yzcdn.cn/2.jpg',
         // 'https://img.yzcdn.cn/2.jpg'
       ],
-      isPayVal:'',
+      siteMode:'',
       isPaid:'',
       situation1:false,
       loginBtnFix: false,
@@ -64,7 +64,7 @@ export default {
 	},
   created(){
     this.getInfo();
-    this.getUser();
+    // this.getUser();
     this.detailsLoad();
     if(!this.themeCon){
       this.themeShow = false;
@@ -91,54 +91,23 @@ export default {
         url: 'forum',
         method: 'get',
         data: {
-          include: ['users'],
         }
       }).then((res) => {
         console.log(res);
         this.siteInfo = res.readdata;
         // console.log(res.readdata._data.siteMode+'请求');
-        // this.siteUsername = res.readdata._data.siteAuthor.username;
-        // this.sitePrice = res.readdata._data.sitePrice
         //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.siteMode;
-         if(this.isPayVal != null && this.isPayVal != ''){
-          this.isPayVal = res.readdata._data.siteMode;
+        this.siteMode = res.readdata._data.siteMode;
+         if(this.siteMode != null && this.siteMode != ''){
+          this.siteMode = res.readdata._data.siteMode;
         //   //判断站点信息是否付费，用户是否登录，用户是否已支付
-          this.detailIf(this.isPayVal,false);
+          this.detailIf(this.siteMode,false);
          }
       });
     },
-    //请求用户信息
-    getUser(){
-    //初始化请求User信息，用于判断当前用户是否已付费
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice:'/'+userId,
-        data: {
-          include: 'groups',
-        }
-      }).then((res) => {
-        this.groupId = res.readdata.groups[0]._data.id;
-        console.log(this.groupId);
-        // this.username = res.readdata._data.username;
-        // this.isPaid = res.readdata._data.paid;
-        // this.roleList = res.readdata.groups;
-        // if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-        //   this.joinedAt = res.readdata._data.createdAt;
-        // } else {
-        //   this.joinedAt = res.readdata._data.joinedAt;
-        // }
-        // if(this.isPaid != null && this.isPaid != ''){
-        //   this.detailIf(this.isPayVal,false);
-        // }
-        // this.detailIf(false,this.isPaid);
-      })
-
-    },
-    detailIf(isPayVal){
-      if(isPayVal == 'public'){
+    
+    detailIf(siteMode){
+      if(siteMode == 'public'){
         //当站点为公开站点时
         console.log('公开');
         var token = browserDb.getLItem('Authorization',token);

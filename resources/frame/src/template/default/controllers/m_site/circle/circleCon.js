@@ -255,7 +255,7 @@ export default {
             //   this.themeListCon = []
             // }
             this.themeListCon = res.readdata;
-            // this.themeListCon =this.themeListCon.concat(res.readdata);
+            this.themeListCon =this.themeListCon.concat(res.readdata);
             console.log(this.themeListCon);
             console.log('77777');
             this.loading = false;

@@ -22,7 +22,7 @@
                   	<div class="themeList" v-show="showScreen[index]">
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,false)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,true)" v-if="item.firstPost._data.canLike && !item.firstPost._data.isLiked">点赞</a>
-                      <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a>
+                      <!-- <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a> -->
 
                   		<a href="javascript:;"  @click="themeOpera(item._data.id,2,false)" v-if="item._data.canEssence && item._data.isEssence">取消加精</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,2,true)" v-if="item._data.canEssence && !item._data.isEssence">加精</a>

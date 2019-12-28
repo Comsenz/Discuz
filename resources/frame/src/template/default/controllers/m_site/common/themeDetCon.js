@@ -83,6 +83,7 @@ export default {
           item = false;
       })
        this.showScreen.splice(index,1,!this.showScreen[index]);
+       console.log(this.showScreen[index]);
     },
 
 
@@ -116,13 +117,13 @@ export default {
     },
 
     //跳转到回复页
-    replyToJump:function(themeId,replyId,quoteCon) {
-    	this.$router.push({
-        path:'/reply-to-topic',
-        name:'reply-to-topic',
-        params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
-       })
-    },
+    // replyToJump:function(themeId,replyId,quoteCon) {
+    // 	this.$router.push({
+    //     path:'/reply-to-topic',
+    //     name:'reply-to-topic',
+    //     params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
+    //    })
+    // },
 
     //主题操作接口请求
     themeOpeRequest(themeId,attri,clickStatus){
