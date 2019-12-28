@@ -146,9 +146,11 @@ export default {
             // }
           }
         }).then((res)=>{
+          console.log(res);
+          console.log('888');
           this.$emit('changeStatus', true);
         })
-
+        // this.$emit('changeStatus', true);
     },
 
     //点赞

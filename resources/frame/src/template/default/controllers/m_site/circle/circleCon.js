@@ -247,11 +247,14 @@ export default {
             }
           }).then((res) => {
             console.log('56754');
-            if(initStatus){
-              this.themeListCon = []
-            }
-            this.themeListCon =this.themeListCon.concat(res.readdata);
+            console.log(res);
+            // if(initStatus){
+            //   this.themeListCon = []
+            // }
+            this.themeListCon = res.readdata;
+            // this.themeListCon =this.themeListCon.concat(res.readdata);
             console.log(this.themeListCon);
+            console.log('77777');
             this.loading = false;
             this.finished = res.data.length < this.pageLimit;
           }).catch((err)=>{
@@ -392,7 +395,7 @@ export default {
 		window.addEventListener('scroll', this.footFix, true);
 	},
 	beforeRouteLeave (to, from, next) {
-	   window.removeEventListener('scroll', this.footFix, true)
+	   window.removeEventListener('scroll', this.footFix, true);
 	   next()
 	}
 }
