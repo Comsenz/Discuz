@@ -182,6 +182,7 @@ export default {
               'filter[isEssence]':'yes',
               'filter[categoryId]':this.categoryId,
               'filter[isApproved]':1,
+              'filter[isDeleted]':'no',
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
@@ -210,6 +211,7 @@ export default {
           data: {
             'filter[categoryId]':filterVal,
             'filter[isApproved]':1,
+            'filter[isDeleted]':'no',
             include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           }
         }).then((res) => {
@@ -236,6 +238,7 @@ export default {
             data: {
               'filter[categoryId]':this.firstCategoriesId,
               'filter[isApproved]':1,
+              'filter[isDeleted]':'no',
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
