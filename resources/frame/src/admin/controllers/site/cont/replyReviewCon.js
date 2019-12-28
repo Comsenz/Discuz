@@ -143,6 +143,7 @@ export default {
 
     postSearch(){
       this.ignoreStatus = this.searchReviewSelect === 2?false:true;
+      this.currentPaga = 1;
       this.getPostsList();
     },
 
