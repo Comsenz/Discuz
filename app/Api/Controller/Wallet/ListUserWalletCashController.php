@@ -17,9 +17,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Repositories\UserWalletCashRepository;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ListUserWalletCashController extends AbstractListController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -84,6 +86,7 @@ class ListUserWalletCashController extends AbstractListController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $actor  = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
         $filter = $this->extractFilter($request);
         $sort   = $this->extractSort($request);
         $limit  = $this->extractLimit($request);

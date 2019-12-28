@@ -1,6 +1,5 @@
 <template>
     <div class="recycle-bin-reply-box">
-      <Card header="搜索"></Card>
       <div class="recycle-bin-reply-header">
 
         <div class="recycle-bin-reply-header__section">

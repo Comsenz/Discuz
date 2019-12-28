@@ -15,13 +15,13 @@ class CreateInvites extends Migration
         $this->schema()->create('invites', function (Blueprint $table) {
             $table->increments('id')->comment('自增ID');
             $table->unsignedInteger('group_id')->comment('默认用户组ID');
-            $table->unsignedTinyInteger('type')->default(1)->comment('类型， 1普通用户， 2管理员');
+            $table->unsignedTinyInteger('type')->default(1)->comment('类型:1普通用户2管理员');
             $table->char('code', 32)->default('')->comment('邀请码');
             $table->unsignedInteger('dateline')->default('0')->comment('邀请码生效时间');
             $table->unsignedInteger('endtime')->default('0')->comment('邀请码结束时间');
             $table->unsignedInteger('user_id')->comment('邀请用户ID');
             $table->unsignedInteger('to_user_id')->default(0)->comment('被邀请用户ID');
-            $table->unsignedTinyInteger('status')->default(0)->comment('邀请码状态');
+            $table->unsignedTinyInteger('status')->default(1)->comment('邀请码状态:0失效1生效2已使用3未使用4已过期');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });

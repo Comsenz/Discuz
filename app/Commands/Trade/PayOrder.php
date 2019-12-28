@@ -17,9 +17,11 @@ use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Order;
+use Discuz\Auth\AssertPermissionTrait;
 
 class PayOrder
 {
+    use AssertPermissionTrait;
     /**
      * 订单编号
      *
@@ -82,11 +84,10 @@ class PayOrder
      */
     public function handle(Validator $validator, SettingsRepository $setting, UrlGenerator $url)
     {
+        // 判断有没有权限执行此操作
+        $this->assertCan($this->actor, 'trade.pay.order');
         $this->setting = $setting;
         $this->url     = $url;
-
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'payOrder');
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
             'payment_type' => 'required',
@@ -95,10 +96,9 @@ class PayOrder
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
         }
-        //订单信息
-        $order_info = $this->actor->orders()->where('order_sn', $this->order_sn)->where('status', Order::ORDER_STATUS_PENDING)->firstOrFail();
 
-        $payment_params     = '';
+        $order_info = Order::where('user_id', $this->actor->id)->where('order_sn', $this->order_sn)->where('status', Order::ORDER_STATUS_PENDING)->firstOrFail();
+
         $this->payment_type = (int) $this->data->get('payment_type');
         switch ($order_info->type) {
             case Order::ORDER_TYPE_REGISTER:
@@ -111,7 +111,7 @@ class PayOrder
                 $order_info->body = '';
                 break;
         }
-        
+
         // 支付参数
         $order_info->payment_params = $this->paymentParams($order_info->toArray());
         if (!empty($order_info->payment_params)) {

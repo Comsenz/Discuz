@@ -83,8 +83,6 @@ class Invite extends Model
         $invite->dateline = $dateline;
         $invite->endtime = $endtime;
         $invite->user_id = $user_id;
-        $invite->to_user_id = 0;
-        $invite->status = 0;
 
         // 暂存需要执行的事件
         $invite->raise(new Created($invite));
