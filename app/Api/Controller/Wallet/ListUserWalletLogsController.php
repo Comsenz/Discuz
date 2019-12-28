@@ -147,7 +147,7 @@ class ListUserWalletLogsController extends AbstractListController
             $query->where('created_at', '<=', $log_end_time);
         });
         $query->when($log_username, function ($query) use ($log_username) {
-            $query->whereIn('user_wallet_log.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
+            $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
         foreach ((array) $sort as $field => $order) {
             $query->orderBy(Str::snake($field), $order);
