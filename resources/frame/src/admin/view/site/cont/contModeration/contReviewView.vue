@@ -1,7 +1,5 @@
 <template>
   <div class="cont-review-box">
-    <Card header="搜索"></Card>
-
     <div class="cont-review-header">
       <div class="cont-review-header__lf">
         <div >
