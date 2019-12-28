@@ -59,6 +59,7 @@ export default {
 
 
   },
+
 	methods: {
     receive: function (val_1) {
       console.log(val_1);
@@ -251,6 +252,7 @@ export default {
               this.themeListCon = []
             }
             this.themeListCon =this.themeListCon.concat(res.readdata);
+            console.log(this.themeListCon);
             this.loading = false;
             this.finished = res.data.length < this.pageLimit;
           }).catch((err)=>{
