@@ -26,13 +26,6 @@
 		    	</div>
 		    	<div class="postImgBox">
             <div class="postImgList">
-              <van-image
-                fit="none"
-                lazy-load
-                v-for="(image,index)  in firstpostImageList"
-                :src="image"
-                @click="imageSwiper"
-              />
             </div>
 		    	</div>
 		    	<div class="uploadFileList">
@@ -84,17 +77,17 @@
             <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
           </div>
-
           <div v-for="item in themeCon.posts">
-                <van-list
-    v-model="loading"
-    :finished="finished"
-    :offset="offset"
-    finished-text="没有更多了"
-    @load="onLoad"
-    :immediate-check="false"
-    >
-            <div class="commentPostDet">
+            
+<van-list
+        v-model="loading"
+        :finished="finished"
+        :offset="offset"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check="false"
+        >          
+            <div class="commentPostDet">    
               <div class="postTop">
                 <div class="postPer">
                   <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
@@ -117,7 +110,7 @@
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
-             </van-list>
+   </van-list>
           </div>
 
         </div>
@@ -177,6 +170,8 @@
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
     </van-pull-refresh>
+
+
 
     </div>
 </template>
