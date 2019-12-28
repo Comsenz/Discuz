@@ -16,6 +16,11 @@ export default {
       sms:'',
       show: false ,//数字键盘显示状态
       sendStatus:true, //发送验证码按钮
+      time: 1, //发送验证码间隔时间
+      insterVal: '',
+      isGray: false,
+      btnContent:'发送验证码',
+      wechatNickname:''
     }
   },
 
@@ -47,11 +52,18 @@ export default {
       this.appFetch({
         url:'users',
         method:'get',
-        splice:'/'+userId
+        splice:'/'+userId,
+        data:{
+          include:'wechat'
+        }
       }).then(res=>{
         console.log(res)
         this.payee= res.data.attributes.username;
         this.phone = res.data.attributes.mobile;
+        if(res.readdata.wechat){
+          console.log(res.readdata.wechat,'999999')
+          this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
+        }
       })
      
       this.appFetch({
@@ -67,7 +79,62 @@ export default {
        
       })
     },
+  
+
+    sendVerificationCode(){
+      if(this.canWithdraw == 0.00 || this.phone ==''){
+        this.sendStatus = false
+      }
+      var phone = this.phone
+      if(!phone){
+        this.$toast('请先绑定手机号')
+        return
+      }
+      this.appFetch({
+        url:'sendSms',
+        method:'post',
+        data:{
+          "data": {
+            "attributes": {
+              // 'mobile':this.phone,
+              'type':this.bind
+            }
+          }
+        }
+      }).then(res=>{
+        console.log(res)
+        this.insterVal = res.data.attributes.interval;
+          this.time = this.insterVal;
+          this.timer();
+      })
+    }, //发送验证码
+    timer() {
+      // alert('执行');
+      if (this.time > 1) {
+        // alert('2222');
+        this.time--;
+        this.btnContent = this.time + "s后重新获取";
+        this.disabled = true;
+        var timer = setTimeout(this.timer, 1000);
+        this.isGray = true;
+      } else if (this.time == 1) {
+        this.btnContent = "获取验证码";
+        clearTimeout(timer);
+        this.disabled = false;
+        this.isGray = false;
+      }
+    },
+
     withdraw(){
+      var phone = this.phone
+      if(!phone){
+        this.$toast('请先绑定手机号')
+        return
+      }
+      if(!this.wechatNickname){
+        this.$toast('请绑定微信')
+        return
+      }
       this.appFetch({
         url:'cash',
         method:"post",
@@ -112,30 +179,6 @@ export default {
 
       })
     },
-
-    sendVerificationCode(){
-      if(this.canWithdraw == 0.00 || this.phone ==''){
-        this.sendStatus = false
-      }
-      var phone = this.phone
-      if(!phone){
-        this.$toast('请先绑定手机号')
-        return
-      }
-      this.appFetch({
-        url:'sendSms',
-        method:'post',
-        data:{
-          "data": {
-            "attributes": {
-              // 'mobile':this.phone,
-              'type':this.bind
-            }
-          }
-        }
-      }).then(res=>{
-        console.log(res)
-      })
-    } //发送验证码
+    
   }
 }
