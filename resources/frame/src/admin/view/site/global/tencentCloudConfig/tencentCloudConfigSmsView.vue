@@ -1,5 +1,6 @@
 <template>
     <div>
+      <Card header="短信配置"></Card>
       <Card header="SDK AppID:">
         <CardRow description="SDK AppID是短信应用的唯一标识，调用短信API接口时，需要提供该参数">
           <el-input v-model="sdkAppId" clearable></el-input>

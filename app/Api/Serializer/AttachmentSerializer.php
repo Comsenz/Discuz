@@ -37,10 +37,12 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        return [
+        $url = $this->url->to('/storage/attachment/' . $model->attachment);
+
+        $attributes = [
             'isGallery'         => $model->is_gallery,
             'isRemote'          => $model->is_remote,
-            'url'               => $this->url->to('/storage/attachment/' . $model->attachment),
+            'url'               => $url,
             'attachment'        => $model->attachment,
             'extension'         => Str::afterLast($model->attachment, '.'),
             'fileName'          => $model->file_name,
@@ -48,6 +50,12 @@ class AttachmentSerializer extends AbstractSerializer
             'fileSize'          => (int) $model->file_size,
             'fileType'          => $model->file_type,
         ];
+
+        if ($model->is_gallery) {
+            $attributes['thumbUrl'] = Str::replaceLast('.', '_thumb.', $url);
+        }
+
+        return $attributes;
     }
 
     /**
