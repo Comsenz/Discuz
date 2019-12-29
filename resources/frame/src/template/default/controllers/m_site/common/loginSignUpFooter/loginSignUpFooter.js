@@ -28,6 +28,11 @@ export default {
       this.$router.push('/wx-sign-up-bd');
     },
 
+    //登录微信账号
+    wxLoginBdClick(){
+      this.$router.push('/wx-login-bd')
+    },
+
     //已有账号立即登录
     loginClick(){
       this.$router.push('/login-user')

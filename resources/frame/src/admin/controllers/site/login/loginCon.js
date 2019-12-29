@@ -110,5 +110,8 @@ export default {
         console.log(err);
       })
     }
+  },
+  created(){
+    localStorage.clear();
   }
 }
