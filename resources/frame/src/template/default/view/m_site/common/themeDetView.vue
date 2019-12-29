@@ -40,7 +40,7 @@
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
-              <div class="themeImgBox">
+              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
                 <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
@@ -83,7 +83,7 @@
               <a href="javascript:;" v-for="reward in item.rewardedUsers" @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
             </div>
 
-            <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 && item.rewardedUsers.length>0">
+            <div class="isrelationLine" v-if="(item.lastThreePosts.length>0 && item.firstPost.likedUsers.length>0) || (item.lastThreePosts.length>0 && item.rewardedUsers.length>0)">
             </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
