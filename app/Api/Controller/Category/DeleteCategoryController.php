@@ -33,11 +33,8 @@ class DeleteCategoryController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        $id = Arr::get($request->getQueryParams(), 'id');
-        $actor = $request->getAttribute('actor');
-
         $this->bus->dispatch(
-            new DeleteCategory($id, $actor)
+            new DeleteCategory(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'))
         );
     }
 }

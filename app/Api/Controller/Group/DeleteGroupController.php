@@ -7,7 +7,6 @@
 
 namespace App\Api\Controller\Group;
 
-use App\Api\Serializer\InfoSerializer;
 use App\Commands\Group\DeleteGroup;
 use Discuz\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -16,20 +15,26 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteGroupController extends AbstractDeleteController
 {
-    public $serializer = InfoSerializer::class;
-
+    /**
+     * @var Dispatcher
+     */
     protected $bus;
 
+    /**
+     * @param Dispatcher $bus
+     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function delete(ServerRequestInterface $request)
     {
-        return $this->bus->dispatch(new DeleteGroup(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor')));
+        $this->bus->dispatch(
+            new DeleteGroup(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'))
+        );
     }
 }
