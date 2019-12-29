@@ -26,7 +26,7 @@
 	    </div>
 
 	    <div class="memberCheckList">
-        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick"></ThemeDet>
+        <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick" ></ThemeDet>
 		<div class="gap"></div>
 	    </div>
 	    <!-- <div class="manageFootFixed choFixed">

@@ -7,7 +7,7 @@ export default {
 		return {
 			searchVal: '',
 			userParams: {
-				'filter[name]': '',
+				'filter[username]': this.searchVal,
 				// 'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
@@ -17,7 +17,8 @@ export default {
 				'include': 'groups'
 			},
 			themeParamd: {
-				'filter[q]': '',
+				'filter[q]': this.searchVal,
+				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
 				'page[number]': 1,
 
@@ -49,7 +50,7 @@ export default {
 
 				this.firstComeIn = false;
 
-				this.userParams['filter[name]'] = this.searchVal
+				this.userParams['filter[username]'] = this.searchVal
 
 				this.handleSearchUser(true);
 
@@ -116,8 +117,9 @@ export default {
 					url:'searchThreads',
 					method:'get',
 					data:{
-						include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-						'filter[q]': '',
+						include: ['user', 'firstPost'],
+						'filter[q]': this.searchVal,
+						'filter[isDeleted]': 'no',
 						'page[limit]': 5,
 						'page[number]': 1,
 					}

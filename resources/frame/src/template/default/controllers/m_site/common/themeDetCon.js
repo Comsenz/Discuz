@@ -103,13 +103,14 @@ export default {
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      // console.log(prevData);
-      // console.log(newData);
+      console.log(prevData);
+      console.log(newData);
       this.themeList = newData;
       this.themeListResult = newData;
       this.loadPriviewImgList();
+      this.$forceUpdate()
     },
-    // deep:true
+    deep:true
   },
 
 	methods: {

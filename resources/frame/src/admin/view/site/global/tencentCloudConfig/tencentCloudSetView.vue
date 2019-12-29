@@ -34,7 +34,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.status">
               <el-button
-                v-if="scope.row.type !== 'img' && scope.row.type !=='text'"
+                v-if="scope.row.setFlag && scope.row.type !== 'img' && scope.row.type !=='text'"
                 size="mini"
                 @click="configClick(scope.row.type)">
                 配置
