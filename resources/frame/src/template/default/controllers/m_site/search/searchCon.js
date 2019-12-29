@@ -115,10 +115,13 @@ export default {
 				await this.appFetch({
 					url:'searchThreads',
 					method:'get',
-					// data:{
-					// 	currentPageNum :this.themeParamd
-					// }
-					data: this.themeParamd
+					data:{
+						include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+						'filter[q]': '',
+						'page[limit]': 5,
+						'page[number]': 1,
+					}
+					// data: this.themeParamd
 				}).then(data=>{
 					console.log(data,'datadatadata')
 					this.searchThemeList = this.searchThemeList.concat(data.readdata);

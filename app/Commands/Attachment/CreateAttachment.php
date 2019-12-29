@@ -19,6 +19,8 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
@@ -105,7 +107,7 @@ class CreateAttachment
             throw new UploadException();
         }
 
-        $uploadTool->upload($this->file, 'attachment');
+        $uploadTool->upload($this->file, 'public/attachment');
 
         $this->events->dispatch(
             new Uploading($this->actor, $this->file)
@@ -121,6 +123,19 @@ class CreateAttachment
 
         if (! $uploadFile) {
             throw new UploadException();
+        }
+
+        // 生成缩略图
+        if ($this->isGallery) {
+            $imgPath = storage_path('app/public/attachment/' . $uploadTool->getUploadName());
+            $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
+
+            $img = (new ImageManager())->make($imgPath);
+
+            $img->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();     // 保持纵横比
+                $constraint->upsize();          // 避免文件变大
+            })->save($thumbPath);
         }
 
         // 检测敏感图

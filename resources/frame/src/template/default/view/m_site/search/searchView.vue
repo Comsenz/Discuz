@@ -35,7 +35,7 @@
             <div class="postPer">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
               <div class="perDet">
-                <div class="perName">{{item._data.title}}</div>
+                <div class="perName">{{item.user._data.username}}</div>
                 <div class="postTime">{{$moment(item._data.createdAt).startOf('hour').fromNow()}}</div>
               </div>
             </div>

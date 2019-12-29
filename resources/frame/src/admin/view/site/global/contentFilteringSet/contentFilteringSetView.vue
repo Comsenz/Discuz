@@ -57,7 +57,7 @@
               <template slot-scope="scope">
                 <el-select v-model="scope.row._data.username" placeholder="请选择" @change="selectChange(scope)">
                   <el-option
-                    v-for="item in options"
+                    v-for="item in optionsUser"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">

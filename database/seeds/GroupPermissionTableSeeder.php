@@ -37,6 +37,9 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.deletePosts' => [10],           // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
 
+        // 回收站
+        'viewTrashed' => [],                    // 查看回收站
+
         // 附件
         'attachment.create.0' => [10],          // 上传附件
         'attachment.create.1' => [10],          // 上传图片
@@ -51,16 +54,17 @@ class GroupPermissionTableSeeder extends Seeder
         'checkVersion' => [],                   // 检查是否有新版权限
 
         // 订单
-        'order.create' => [7, 10],              // 创建订单
+        'order.create' => [10],              // 创建订单
         'order.viewList' => [],                 // 订单总列表
 
         // 钱包
         'wallet.update' => [],                  // 更新钱包
         'wallet.viewList' => [],                // 总钱包信息列表
         'wallet.logs.viewList' => [],           // 钱包动账记录总列表
+        'trade.pay.order' => [10],                //支付订单
 
         // 提现
-        'cash.create' => [7, 10],               // 申请提现
+        'cash.create' => [10],               // 申请提现
         'cash.review' => [],                    // 提现审核
         'cash.viewList' => [],                  // 提现总列表
 

@@ -53,11 +53,25 @@
       </CardRow>
     </Card>
 
+    <Card header="用户角色：">
+      <CardRow description="设置允许参与搜索的用户组，可多选">
+        <el-select v-model="userRole" multiple  placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :disabled="item.value === '7' "
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </CardRow>
+    </Card>
+
     <Card header="状态：">
       <CardRow >
         <el-select v-model="userInfo.status" placeholder="请选择">
           <el-option
-            v-for="item in options"
+            v-for="item in optionsStatus"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -85,10 +99,6 @@
 
     <Card header="最后登录IP：">
       <p>{{userInfo.lastLoginIp}}</p>
-    </Card>
-
-    <Card header="注册时间：">
-      <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="微信昵称：" v-if="wechatNickName">

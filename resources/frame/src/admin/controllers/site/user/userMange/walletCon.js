@@ -75,12 +75,16 @@ export default {
             operate_reason: this.textarea,
             wallet_status: this.walletInfo._data.wallet_status
           }
+        }).then(res=>{
+          this.$message({ message: '提交成功', type: 'success' });
+          this.getWalletDet();
         })
 
       } catch(err){
         console.error(err,'handleSubmit ')
       }
-    }
+    },
+    
   },
 
   components:{

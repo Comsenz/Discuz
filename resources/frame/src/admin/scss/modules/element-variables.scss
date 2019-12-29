@@ -86,14 +86,14 @@ $selectFontColor:#303133;
   // color: #8CC5FF;
 
   &:hover{
-    background-color: #EDF5FF;
-    border: 1PX solid #D9ECFF;
-    color: #8CC5FF;
+    background-color: none;
+    border: none;
+    color: none;
   }
   &:focus{
-    background-color: #EDF5FF;
-    border: 1PX solid #D9ECFF;
-    color: #8CC5FF;
+    background-color: none;
+    border: none;
+    color:none;
   }
 
 }

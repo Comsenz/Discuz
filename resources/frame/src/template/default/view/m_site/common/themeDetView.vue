@@ -18,11 +18,11 @@
                 <div class="postOpera">
                   <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
                   <div class="screen" @click="bindScreen(index)" v-if="item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit">
-                  	<span class="icon iconfont icon-more"></span>
+                  	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
                   	<div class="themeList" v-show="showScreen[index]">
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,false)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,true)" v-if="item.firstPost._data.canLike && !item.firstPost._data.isLiked">点赞</a>
-                      <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a>
+                      <!-- <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a> -->
 
                   		<a href="javascript:;"  @click="themeOpera(item._data.id,2,false)" v-if="item._data.canEssence && item._data.isEssence">取消加精</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,2,true)" v-if="item._data.canEssence && !item._data.isEssence">加精</a>
@@ -38,7 +38,9 @@
               <div class="postContent" v-if="item.firstPost">
                 <a @click="jumpThemeDet(item._data.id)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
-              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
+
+              <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
+              <div class="themeImgBox">
                 <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
@@ -51,7 +53,9 @@
                     class=""
                   />
                 </div> -->
-                <div class="themeImgList moreImg">
+                <!-- <img src="aaaa.png" v-bind:is="auth-img" alt=""/> -->
+
+                <div class="themeImgList moreImg" v-for="(image,index)  in item.firstPost.imageList">
                   <van-image
                     fit="cover"
                     width="113px"
@@ -70,7 +74,7 @@
             </div>
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
-              <a v-for="like in item.firstPost.likedUsers" @click="jumpPerDet(like._data.id)">{{like._data.username + ','}}</a>
+              <a  @click="jumpPerDet(like._data.id)">{{likes(item.firstPost.likedUsers)}}</a>
               <i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 

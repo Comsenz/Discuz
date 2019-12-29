@@ -8,7 +8,7 @@
 namespace App\Api\Controller\Category;
 
 use App\Api\Serializer\CategorySerializer;
-use App\Commands\Category\BatchDeleteCategories;
+use App\Commands\Category\DeleteCategory;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -43,9 +43,17 @@ class BatchDeleteCategoriesController extends AbstractListController
         $ids = explode(',', Arr::get($request->getQueryParams(), 'ids'));
         $actor = $request->getAttribute('actor');
 
-        $result = $this->bus->dispatch(
-            new BatchDeleteCategories($ids, $actor)
-        );
+        $result = ['data' => [], 'meta' => []];
+
+        foreach ($ids as $id) {
+            try {
+                $result['data'][] = $this->bus->dispatch(
+                    new DeleteCategory($id, $actor)
+                );
+            } catch (\Exception $e) {
+                $result['meta'][] = $e->getMessage();
+            }
+        }
 
         $document->setMeta($result['meta']);
 

@@ -67,7 +67,7 @@
               label="验证码 "
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="sendVerificationCode" :sendStatus="sendStatus">发送验证码</van-button>
+              <van-button slot="button" size="small" type="default" @click="sendVerificationCode" :sendStatus="sendStatus">{{btnContent}}</van-button>
             </van-field>
 
           </van-cell-group>

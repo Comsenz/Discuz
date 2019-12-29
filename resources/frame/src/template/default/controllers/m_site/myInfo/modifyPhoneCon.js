@@ -192,6 +192,7 @@ export default {
         }
       }).then(res => {
         this.$toast("手机号修改成功");
+        this.$router.push({path:'../view/m_site/home/circleView'});
       }).catch((err)=>{
         this.$toast("手机号修改失败，请重试");
       });

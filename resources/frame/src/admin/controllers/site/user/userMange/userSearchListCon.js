@@ -16,20 +16,40 @@ export default {
       multipleSelection:[],
 
       deleteStatus:true,
-      pageLimit: 15,
+      pageLimit: 20,
       pageNum: 1,
       query: {},
       total: 0,
+      disabled:true,//禁用表单上的游客
     }
   },
 
   created(){
     this.query = this.$route.query;
     this.handleGetUserList();
-    this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
-    this.handleGetUserList(Number(webDb.getLItem('currentPag'))||1);
+  },
+  beforeRouteEnter(to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        console.log('执行');
+        vm.getCreated(true)
+      }else {
+        console.log('不执行');
+        vm.getCreated(false)
+      }
+    })
   },
   methods:{
+    getCreated(state){
+      if(state){
+        console.log(state);
+        this.pageNum  = 1;
+      } else {
+        console.log(state);
+        this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+      };
+      this.handleGetUserList();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
       if (this.multipleSelection.length >= 1){
