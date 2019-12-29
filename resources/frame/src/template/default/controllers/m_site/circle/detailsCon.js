@@ -100,12 +100,17 @@ export default {
       this.collectFlag = '收藏';
     }
     // this.detailsLoad();
-    this.limitWidth();
   },
 
   computed: {
     themeId: function () {
       return this.$route.params.themeId;
+    }
+  },
+  mounted () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
     }
   },
   methods: {

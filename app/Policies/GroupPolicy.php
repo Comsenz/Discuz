@@ -26,4 +26,23 @@ class GroupPolicy extends AbstractPolicy
             return true;
         }
     }
+
+    /**
+     * @param User $actor
+     * @param Group $group
+     * @return bool
+     */
+    public function delete(User $actor, Group $group)
+    {
+        // 禁止删除系统用户组
+        $groups = [
+            Group::ADMINISTRATOR_ID,
+            Group::BAN_ID,
+            Group::UNPAID,
+            Group::GUEST_ID,
+            Group::MEMBER_ID,
+        ];
+
+        return ! in_array($group->id, $groups);
+    }
 }
