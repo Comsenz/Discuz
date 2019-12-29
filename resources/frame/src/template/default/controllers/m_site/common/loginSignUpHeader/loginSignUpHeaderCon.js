@@ -22,6 +22,12 @@ export default {
     }
   },
   methods:{
+    //设置Header在pc里的宽度
+    limitWidth(){
+      document.getElementById('comHeader').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('comHeader').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     showPopup() {
       //侧边栏显示
       this.popupShow = true;
@@ -32,11 +38,11 @@ export default {
     }
   },
 
-  mounted (){
-    /*this.pageName = this.$router.history.current.name;
-    if (this.pageName === 'modify-data'){
-      this.headerTitle="修改资料"
-    }*/
+  mounted () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
+    }
   },
   beforeRouteLeave (to, from, next) {
     next()
