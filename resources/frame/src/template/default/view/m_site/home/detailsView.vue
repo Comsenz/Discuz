@@ -76,13 +76,13 @@
         <div class="commentBox">
           <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
             <span class="icon iconfont icon-praise-after"></span>
-            <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a>
+            <a  @click="jumpPerDet(like._data.id)" v-for="like in themeCon.firstPost.likedUsers">{{userArr(themeCon.firstPost.likedUsers)}}</a>
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
           <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
-            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
+            <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
           </div>
           <van-list
           v-model="loading"
@@ -93,7 +93,7 @@
           :immediate-check="false"
           >
           <div v-for="item in themeCon.posts">
-                
+
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
@@ -117,7 +117,7 @@
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
-             
+
           </div>
           </van-list>
         </div>

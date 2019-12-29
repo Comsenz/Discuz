@@ -114,6 +114,14 @@ export default {
     }
   },
   methods: {
+    //点赞和打赏数组处理（用户名之间用逗号分隔）
+    userArr(data){
+      let datas = [];
+      data.forEach((item)=>{
+        datas.push(item._data.username)
+      });
+      return datas.join(',')
+    },
     //设置底部在pc里的宽度
     limitWidth(){
       document.getElementById('detailsFooter').style.width = "640px";
@@ -226,7 +234,7 @@ export default {
         if (res.error) {
           throw new Error(res.error);
         }
-        
+
         console.log(res.readdata);
         console.log('1234');
         if (!this.loading) {
@@ -305,7 +313,10 @@ export default {
       });
       browserDb.setLItem('themeId', this.themeId);
     },
-
+    //点击用户名称，跳转到用户主页
+    jumpPerDet:function(id){
+      this.$router.push({ path:'/home-page'+'/'+id});
+    },
     //付费，获得成员权限
     sitePayClick(amount) {
       this.appFetch({

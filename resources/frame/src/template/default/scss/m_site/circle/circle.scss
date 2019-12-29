@@ -65,7 +65,7 @@ body {
     background: $corF7;
     right: 0;
     z-index: 13;
-    @include px2rem(min-width, 190);
+    // @include px2rem(min-width, 190);
     @include px2rem(border-radius, 10);
     border: 1px solid $corE5;
     &:after {
@@ -99,6 +99,7 @@ body {
       color: $cor888;
       @include font-dpr(28);
       border-bottom: 1px solid $corE5;
+      white-space: nowrap;
       &:last-child {
         border: none;
       }
