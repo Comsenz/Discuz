@@ -63,7 +63,6 @@
                     lazy-load
                     v-for="(image,index)  in item.firstPost.imageList"
                     :src="image"
-                    @click="imageSwiper"
                     class="themeImgChild"
                   />
                 </div>

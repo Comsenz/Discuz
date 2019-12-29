@@ -709,10 +709,15 @@ openCircleConView.vue
   width: 50%;
   min-height: 100px;
 }
+.themeImgList {
+  overflow: hidden;
+}
 .moreImg {
+   overflow: hidden;
   .themeImgChild {
     @include px2rem(margin-right, 6);
     @include px2rem(margin-bottom, 4);
+    float: left;
     &:nth-child(3n) {
       margin-right:0;
     }

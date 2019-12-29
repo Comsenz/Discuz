@@ -253,7 +253,7 @@ export default {
           let imageList = [];
           if(this.themeListResult[h].firstPost.images){
             for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
-              imageList.push(this.themeListResult[h].firstPost.images[i]._data.url);
+              imageList.push(this.themeListResult[h].firstPost.images[i]._data.thumbUrl);
               // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
               // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
