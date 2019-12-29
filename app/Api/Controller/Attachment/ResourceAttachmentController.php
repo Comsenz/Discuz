@@ -48,6 +48,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
      * {@inheritdoc}
      *
      * @throws OrderException
+     * @throws PermissionDeniedException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
