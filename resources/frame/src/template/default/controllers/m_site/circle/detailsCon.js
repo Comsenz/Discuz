@@ -70,7 +70,6 @@ export default {
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-<<<<<<< HEAD
       pageIndex: 1, //页码
       pageLimit: 5,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
@@ -82,19 +81,6 @@ export default {
     }
   },
   created() {
-=======
-      pageIndex: 1,//页码
-      pageLimit: 5,
-      offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      groupId:'',
-      menuStatus:false,//默认不显示菜单按钮
-      collectStatus:false,
-      collectFlag:'',
-      postCount:0          //回复总条数
-		}
-	},
-  created(){
->>>>>>> gao
     this.getInfo();
     this.getUser();
     this.detailsLoad();
@@ -208,7 +194,6 @@ export default {
     },
 
     //初始化请求主题详情数据
-<<<<<<< HEAD
     detailsLoad() {
       let threads = 'threads/' + this.themeId;
       return this.appFetch({
@@ -231,26 +216,6 @@ export default {
           this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
-=======
-    detailsLoad(){
-        let threads = 'threads/'+this.themeId;
-     return this.appFetch({
-          url: threads,
-          method: 'get',
-          data: {
-            'filter[isDeleted]':'no',
-            include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
-          }
-        }).then((res) => {
-          console.log(res.readdata);
-          console.log('1234');
-          this.collectStatus = res.readdata._data.isFavorite;
-          this.themeShow = true;
-          this.themeCon = res.readdata;
-          this.themeCon = res.readdata;
->>>>>>> gao
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) return;
           var firstpostImage = [];
@@ -259,7 +224,6 @@ export default {
             firstpostImage.push(src + this.themeCon.firstPost.images[i]._data.uuid);
           }
           this.firstpostImageList = firstpostImage;
-<<<<<<< HEAD
 
         } else {
           if(res.readdata.posts.length === 0){
@@ -277,15 +241,6 @@ export default {
         console.log('22222222222222')
         this.loading = false;
       })
-=======
-          console.log(1, this.firstpostImageList);
-        }).catch((err)=>{
-          // if(this.loading && this.pageIndex !== 1){
-          //   this.pageIndex--;
-          // }
-          // this.loading = false;
-        })
->>>>>>> gao
     },
     //主题详情图片放大轮播
     imageSwiper() {
@@ -547,7 +502,6 @@ export default {
 
       })
     },
-<<<<<<< HEAD
     onLoad() { //上拉加载
       this.loading = true;
       this.finished = false;
@@ -556,33 +510,15 @@ export default {
       this.detailsLoad();
     },
     onRefresh() { //下拉刷新
-      // this.pageIndex = 1;
-      // this.detailsLoad(true).then(()=>{
-      //   this.$toast('刷新成功');
-      //   this.finished = false;
-      //   this.isLoading = false;
-      // }).catch((err)=>{
-      //   this.$toast('刷新失败');
-      //   this.isLoading = false;
-      // })
-=======
-    onLoad(){    //上拉加载
-      // this.loading = true;
-      // this.pageIndex++;
-      // console.log(123)
-      // this.detailsLoad();
-    },
-    onRefresh(){    //下拉刷新
-        // this.pageIndex = 1;
-        // this.detailsLoad(true).then(()=>{
-        //   this.$toast('刷新成功');
-        //   this.finished = false;
-        //   this.isLoading = false;
-        // }).catch((err)=>{
-        //   this.$toast('刷新失败');
-        //   this.isLoading = false;
-        // })
->>>>>>> gao
+      this.pageIndex = 1;
+      this.detailsLoad(true).then(()=>{
+        this.$toast('刷新成功');
+        this.finished = false;
+        this.isLoading = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
     }
 
 

@@ -5,7 +5,6 @@
   <div class="circleCon">
     <comHeader title="详情" :menuIconShow="menuStatus"></comHeader>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-<<<<<<< HEAD
       <div class="content marBfixed" v-if="themeShow">
         <div class="cirPostCon">
           <div class="postTop">
@@ -25,29 +24,6 @@
             </div>
             <div class="postOpera">
               <span class="icon iconfont icon-top"></span>
-=======
-    	<div class="content marBfixed" v-if="themeShow">
-		    <div class="cirPostCon">
-		    	<div class="postTop">
-		    		<div class="postPer">
-              <img :src="themeCon.user._data.avatarUrl" alt="" class="postHead" v-if="themeCon.user && themeCon.user._data.avatarUrl == '' && themeCon.user._data.avatarUrl == null">
-              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
-		    			<div class="perDet">
-		    				<div class="perName" v-if="themeCon.user">{{themeCon.user._data.username}}</div>
-                <div class="perName" v-else="">该用户已被删除</div>
-		    				<div class="postTime">{{themeCon._data.createdAt}}</div>
-		    			</div>
-		    		</div>
-		    		<div class="postOpera">
-		    			<span class="icon iconfont icon-top"></span>
-		    		</div>
-		    	</div>
-		    	<div class="postContent">
-		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
-		    	</div>
-		    	<div class="postImgBox">
-            <div class="postImgList">
->>>>>>> gao
             </div>
           </div>
           <div class="postContent">
@@ -149,7 +125,6 @@
             />
             <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead" />
           </div>
-<<<<<<< HEAD
           <van-list
             v-model="loading"
             :finished="finished"
@@ -177,27 +152,6 @@
                       <div class="perName" v-else>该用户已被删除</div>
                       <div class="postTime">{{item._data.updatedAt}}</div>
                     </div>
-=======
-          <div v-for="item in themeCon.posts">
-            
-<van-list
-        v-model="loading"
-        :finished="finished"
-        :offset="offset"
-        finished-text="没有更多了"
-        @load="onLoad"
-        :immediate-check="false"
-        >          
-            <div class="commentPostDet">    
-              <div class="postTop">
-                <div class="postPer">
-                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
-                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
-                  <div class="perDet">
-                    <div class="perName" v-if="themeCon.posts.user">{{item.user._data.username}}</div>
-                    <div class="perName" v-else="">该用户已被删除</div>
-                    <div class="postTime">{{item._data.updatedAt}}</div>
->>>>>>> gao
                   </div>
                 </div>
                 <div class="postContent">
@@ -224,19 +178,7 @@
                 ></a>
               </div>
             </div>
-<<<<<<< HEAD
           </van-list>
-=======
-            <div class="commentOpera padT22">
-              <a @click="replyOpera(item._data.id,'1')">删除</a>
-              <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
-              <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
-              <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
-            </div>
-   </van-list>
-          </div>
-
->>>>>>> gao
         </div>
         <div class="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
@@ -310,14 +252,7 @@
         :class="{'hide':loginHide}"
       >登录 / 注册</van-button>
     </van-pull-refresh>
-<<<<<<< HEAD
   </div>
-=======
-
-
-
-    </div>
->>>>>>> gao
 </template>
 
 <script>
