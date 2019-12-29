@@ -84,16 +84,16 @@
             <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
           </div>
-
+          <van-list
+          v-model="loading"
+          :finished="finished"
+          :offset="offset"
+          finished-text="没有更多了"
+          @load="onLoad"
+          :immediate-check="false"
+          >
           <div v-for="item in themeCon.posts">
-                <van-list
-    v-model="loading"
-    :finished="finished"
-    :offset="offset"
-    finished-text="没有更多了"
-    @load="onLoad"
-    :immediate-check="false"
-    >
+                
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
@@ -117,9 +117,9 @@
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
-             </van-list>
+             
           </div>
-
+          </van-list>
         </div>
         <div class="detailsFooter" id="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
