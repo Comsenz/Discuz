@@ -537,6 +537,7 @@ export default {
 
 
   /*
+  * 前台路由前置判断
   * 判断登录状态
   * */
   if (tokenId && Authorization){
@@ -1229,8 +1230,6 @@ export default {
       console.log('pc登录');
     }
   }*/
-
-
 
 
   },
