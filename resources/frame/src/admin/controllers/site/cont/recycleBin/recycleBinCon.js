@@ -12,9 +12,9 @@ import moment from "moment/moment";
 export default {
   data:function () {
     return {
-      searchUserName:'',  //作者
-      keyWords:'',        //关键词
-      operator:'',        //操作人
+      searchUserName:'',          //作者
+      keyWords:'',                //关键词
+      operator:'',                //操作人
       categoriesList:[],
       categoriesListSelect:'',    //搜索分类选中
       pickerOptions: {
@@ -44,8 +44,8 @@ export default {
           }
         }]
       },
-      releaseTime: ['',''],            //发布时间范围
-      deleteTime: ['',''],             //删除时间范围
+      releaseTime: ['',''],       //发布时间范围
+      deleteTime: ['',''],        //删除时间范围
 
       radioList:'',               //主题左侧单选
       deleteStatusList:[],        //硬删除列表
@@ -76,6 +76,7 @@ export default {
 
     searchClick(){
       console.log(this.releaseTime);
+      this.currentPaga = 1;
       this.getThemeList(1);
     },
 
@@ -263,13 +264,34 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+
+    getCreated(state){
+      if(state){
+        console.log(state);
+        this.getThemeList(1);
+      } else {
+        console.log(state);
+        this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+      }
     }
 
   },
   created(){
     this.getCategories();
-    this.getThemeList(Number(webDb.getLItem('currentPag'))||1)
   },
+
+  beforeRouteEnter (to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        console.log('执行');
+        vm.getCreated(true)
+      }else {
+        vm.getCreated(false)
+      }
+    })
+  },
+
   components:{
     Card,
     ContArrange,

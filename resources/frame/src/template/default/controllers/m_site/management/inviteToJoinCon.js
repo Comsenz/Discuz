@@ -122,7 +122,7 @@ export default {
         })
         this.pageIndex = 1;
         this.finished = false;
-        this.getInviteList(true)
+        // this.getInviteList(true)
       } catch (err) {
         console.error(err, 'checkSubmit')
       }

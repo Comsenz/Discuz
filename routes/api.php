@@ -8,8 +8,6 @@ use App\Api\Controller as ApiController;
 |--------------------------------------------------------------------------
 */
 
-$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
-
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
 $route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
@@ -18,14 +16,6 @@ $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Cloud APIs
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +39,7 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 
 $route->post('/login', 'login', ApiController\Users\LoginController::class);
 $route->post('/register', 'register', ApiController\Users\RegisterController::class);
+$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -74,10 +65,7 @@ $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersControll
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'user.delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
-
-
 $route->get('/export/users', 'export.users', ApiController\Users\ExportUserController::class);
-
 
 /*
 |--------------------------------------------------------------------------
@@ -144,37 +132,6 @@ $route->post('/stop-words', 'stop-words.create', ApiController\StopWords\CreateS
 $route->post('/stop-words/batch', 'stop-words.batchCreate', ApiController\StopWords\BatchCreateStopWordsController::class);
 $route->patch('/stop-words/{id}', 'stop-words.update', ApiController\StopWords\UpdateStopWordController::class);
 $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\DeleteStopWordController::class);
-
-/*
- |--------------------------------------------------------------------------
- | Payments settings
- |--------------------------------------------------------------------------
- */
-
-$route->get('/payments', 'payment.list', ApiController\Payment\ListPaymentsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Circles
-|--------------------------------------------------------------------------
-*/
-
-$route->get('/circles', 'circles.list', ApiController\Circle\ListCircleController::class);
-$route->post('/circles', 'circles.create', ApiController\Circle\CreateCircleController::class);
-$route->patch('/circles/{id}', 'circles.update', ApiController\Circle\UpdateCircleController::class);
-$route->delete('/circles/{id}', 'circles.delete', ApiController\Circle\DeleteCircleController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Invites
-|--------------------------------------------------------------------------
-*/
-
-$route->get('/invites', 'invites.list', ApiController\Invite\ListInviteController::class);
-$route->get('/invites/{id}', 'invites.resource', ApiController\Invite\ResourceInviteController::class);
-$route->post('/invites', 'invites.create', ApiController\Invite\CreateAdminInviteController::class);
-$route->patch('/invites/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
-$route->delete('/invites/{id}', 'invites.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -248,6 +205,7 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{id}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
 $route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);
+$route->patch('/invite/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*

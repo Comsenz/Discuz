@@ -56,6 +56,7 @@ export default {
         this.changeTime[0] = this.changeTime[0] + '-00-00-00';
         this.changeTime[1] = this.changeTime[1] + '-24-00-00';
       }
+      this.currentPaga = 1;
       this.getFundingDetailsList();
     },
 
@@ -98,12 +99,32 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
-    }
+    },
 
+    getCreated(state){
+      if(state){
+        console.log(state);
+        this.currentPaga = 1;
+      } else {
+        console.log(state);
+        this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
+      }
+      this.getFundingDetailsList();
+    }
   },
   created(){
-    this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
-    this.getFundingDetailsList(Number(webDb.getLItem('currentPag'))||1);
+    // this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
+    // this.getFundingDetailsList(Number(webDb.getLItem('currentPag'))||1);
+  },
+  beforeRouteEnter (to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        console.log('执行');
+        vm.getCreated(true)
+      }else {
+        vm.getCreated(false)
+      }
+    })
   },
   components:{
     Card,

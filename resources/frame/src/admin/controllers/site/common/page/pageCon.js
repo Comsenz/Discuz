@@ -36,7 +36,7 @@ export default {
       * *!/
       this.$parent.$emit('created',Number(webDb.getLItem('currentPag'))||1);
     },*/
-    
+
   },
 
   beforeUpdate() {
@@ -46,7 +46,14 @@ export default {
 
   beforeDestroy() {
     webDb.setLItem('currentPag',1);
+    this.currentPags = 1;
   },
+
+  /*beforeRouteLeave(to,form,next){
+    console.log(to);
+    console.log('离开');
+    next();
+  },*/
 
   created(){
     /*
@@ -54,4 +61,12 @@ export default {
     * */
     this.currentPags = Number(webDb.getLItem('currentPag'))||1;
   },
+
+  /*watch: {
+    $route (to, from,next) {
+      console.log(to);
+      console.log('我去去就来');
+      next();
+    }
+  }*/
 }

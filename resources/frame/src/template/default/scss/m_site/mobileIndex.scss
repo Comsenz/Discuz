@@ -134,10 +134,10 @@ a { color: $fontColor;}
 }
 .loginBtnFix {
 	position: fixed !important;
-	@include px2rem(bottom, 88);
+	@include px2rem(bottom, 106);
 	left: 30%;
   right: 30%;
-	z-index: 15;
+	z-index: 16;
 	width: 40%;
   padding: 0;
   min-width: auto;

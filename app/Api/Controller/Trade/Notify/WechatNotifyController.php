@@ -29,7 +29,7 @@ class WechatNotifyController extends AbstractResourceController
     {
         $this->bus = $bus;
     }
-    
+
     /**
      * {@inheritdoc}
      */

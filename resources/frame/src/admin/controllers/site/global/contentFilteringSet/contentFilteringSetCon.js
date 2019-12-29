@@ -14,19 +14,33 @@ export default {
       tableData: [],
       multipleSelection: [],
       tableDataLength:'',
+      // disabled:true,
       createCategoriesStatus:false,   //添加分类状态
 
       options: [{
-          value: '{MOD}',
-          label: '{MOD}'
+          value: '{IGNORE}',
+          label: '不处理'
         }, {
-          value: '{BANNED}',
-          label: '{BANNED}'
+          value: '{MOD}',
+          label: '审核'
         },{
+          value: '{BANNED}',
+          label: '禁用'
+        },
+        {
           value: '{REPLACE}',
-          label: '{REPLACE}'
+          label: '替换'
         }
       ],
+      
+      optionsUser: [{
+        value: '{IGNORE}',
+        label: '不处理'
+      },{
+        value: '{BANNED}',
+        label: '禁用'
+      }
+    ],
       serachVal:'',
       checked:false,
       searchData :[],//搜索后的数据
@@ -52,10 +66,32 @@ export default {
   },
   created(){
     this.handleSearchUser(true);  //初始化页面数据
-    this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
-    this.handleSearchUser(Number(webDb.getLItem('currentPag'))||1);
+    // this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+    // this.handleSearchUser(Number(webDb.getLItem('currentPag'))||1);
+  },
+  beforeRouteEnter(to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        console.log('执行');
+        vm.getCreated(true)
+      }else {
+        console.log('不执行');
+        vm.getCreated(false)
+      }
+    })
   },
   methods:{
+    getCreated(state){
+      if(state){
+        console.log(state);
+        this.pageNum  = 1
+      } else {
+        console.log(state);
+        this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+      };
+      this.handleSearchUser(true)
+
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {

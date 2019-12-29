@@ -7,5 +7,5 @@
 .project
 .settings
 /node_modules
-
+.php_cs.cache
 

@@ -59,7 +59,7 @@ class ThreadPolicy extends AbstractPolicy
         }
 
         // 回收站
-        if (! $actor->hasPermission('threads.viewTrashed')) {
+        if (! $actor->hasPermission('viewTrashed')) {
             $query->where(function (Builder $query) use ($actor) {
                 $query->whereNull('threads.deleted_at')
                     ->orWhere('threads.user_id', $actor->id)

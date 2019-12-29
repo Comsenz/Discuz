@@ -21,7 +21,9 @@ export default {
          firstpostImageListResult:[],
          priview:[],
          showScreen:[],
-         length:0
+         length:0,
+
+         menuStatus:false
 
     }
 	},
@@ -51,7 +53,49 @@ export default {
 	created(){
     this.loadPriviewImgList();
     this.forList();
+
     // this.getCircle();
+
+    // let requestImage = function (url, element) {
+    //             let request = new XMLHttpRequest();
+    //             request.responseType = 'blob';
+    //             request.open('get', url, true);
+    //             request.setRequestHeader('Authorization', "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIwZjQzYjczM2M3MjYxYjRjNTk0MjA4ZjhmMDcxNThlM2E4N2JhOGM3ZTQ1YzA1YTJlMmQ5YWEzZGRlMDFhMzk1MjdiMDM5NDBmNThjOTk2YiIsImlhdCI6MTU3NzUxOTQ3NywibmJmIjoxNTc3NTE5NDc3LCJleHAiOjE1Nzc2MDU4NzcsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.N0xGIu4_NSB2NjPyutbUyC5bEDia5DoyN0v9HObjHu-J67RomngwlVsA0zFnhqJKzMB3ky85KVXFVrrmzkXAfzNOH1Jso4Zxf-O5SkHZVpZ_vgAzvUE2poaCKGnGgOR_xW9EAcJQkEJsVQqh-Y0w2VsssYAuAcQubRCHdF5PSGhBfPo8S-LTRNKrKR-5mgPJp80RfxlZJDZYo1BPHATudS0lflxXuVu8-RfiWfVDbz2NMk8sIkDkxnlSp5lIuKm6GEeZfjddcVrr1SeS-sdwjgS7mAaF3F49RgJ_MqY1NLgOwD89IVYKBy5hlCRABKtoHMvqs2iDj9wq8BUfoNpKxw");
+    //             request.onreadystatechange = e => {
+    //                 if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+    //                     element.src = URL.createObjectURL(request.response);
+    //                     element.onload = () => {
+    //                         URL.revokeObjectURL(element.src);
+    //                     }
+    //                 }
+    //             };
+    //             request.send(null);
+    //         }
+
+    // class AuthImg extends HTMLImageElement {
+    //   constructor() {
+    //       super();
+    //       this._lastUrl = '';
+    //   }
+
+    //   static get observedAttributes() {
+    //       return ['authSrc'];
+    //   }
+
+    //   connectedCallback() {
+    //       let url = this.getAttribute('authSrc');
+    //       if (url !== this._lastUrl) {
+    //           this._lastUrl = url;
+    //           requestImage(url, this);
+    //       }
+    //       console.log('connectedCallback() is called.');
+    //   }
+    // }
+
+
+
+
+
   },
 	beforeDestroy () {
 
@@ -59,31 +103,50 @@ export default {
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      console.log(prevData);
-      console.log(newData);
+      // console.log(prevData);
+      // console.log(newData);
       this.themeList = newData;
+      this.themeListResult = newData;
       this.loadPriviewImgList();
     },
-    deep:true
+    // deep:true
   },
 
 	methods: {
+
+    likes(data){
+      let datas = [];
+      data.forEach((item)=>{
+        datas.push(item._data.username)
+      });
+      return datas.join(',')
+    },
+
+
     //循环数据新建数组，用于操作管理显示隐藏下拉菜单
     forList(){
-      for(let k=0;k<this.themeList.length;k++){
+      var screenLen = this.themeList.length;
+      for(let k=0;k < screenLen;k++){
         this.showScreen.push(false);
-        this.length = this.themeList.length;
+        // this.length = screenLen;
       }
     },
 
     //主题管理，点击更多显示下拉菜单
     bindScreen(index){
+      console.log(index);
+      // this.menuStatus = !this.menuStatus;
+
       var that = this;
       this.showScreen.forEach((item) => {  //循环已经把所有的状态值清空了
+      console.log(this.showScreen);
           item = false;
       })
        this.showScreen.splice(index,1,!this.showScreen[index]);
-       console.log(this.showScreen[index]);
+       // console.log(this.showScreen[index]);
+
+
+
     },
 
 
@@ -178,6 +241,7 @@ export default {
 
 
     loadPriviewImgList(){
+      console.log(themeListLen);
       var themeListLen = this.themeListResult.length;
 
       if(this.themeListResult =='' || this.themeListResult == null){
@@ -192,7 +256,7 @@ export default {
               imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
           }
-
+          // console.log(imageList);
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }

@@ -30,7 +30,7 @@ defaultConfig.init = function() {
  */
 defaultConfig.beforeEnterModule = function(Router) {
 	var _this = this;
-		
+
 	/**
 	 * 获取用户信息，判断当前模块是否需要登陆，如果需要，直接跳转登陆页
 	 * @param  {[type]} to    [目标模块]
@@ -45,6 +45,17 @@ defaultConfig.beforeEnterModule = function(Router) {
 			frontTplConfig.beforeEnter(to, form, next);
 		}
 	});
+
+  Router.onError((error) => {
+    console.log('找不到模块');
+    const pattern = /Loading chunk (\d)+ failed/g;
+    const isChunkLoadFailed = error.message.match(pattern);
+    const targetPath = router.history.pending.fullPath;
+    if (isChunkLoadFailed) {
+      router.replace(targetPath);
+    }
+  });
+
 }
 
 export default defaultConfig;

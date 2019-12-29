@@ -529,6 +529,12 @@ export default {
   } else {
     console.log('前台未登录，跳转');
     next();
+    // if (!noLoginAccessPage.includes(to.name)){
+    //   next({path:'/'});
+    //   return;
+    // }
+
+    // next();
     return;
   }
 

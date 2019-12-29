@@ -19,9 +19,11 @@ use App\Repositories\OrderRepository;
 use App\Models\Thread;
 use App\Models\Post;
 use App\Models\User;
+use Discuz\Auth\AssertPermissionTrait;
 
 class ListOrdersController extends AbstractListController
 {
+    use AssertPermissionTrait;
     /**
      * {@inheritdoc}
      */
@@ -93,6 +95,7 @@ class ListOrdersController extends AbstractListController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $actor  = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
         $filter = $this->extractFilter($request);
         $sort   = $this->extractSort($request);
         $limit  = $this->extractLimit($request);
@@ -164,7 +167,7 @@ class ListOrdersController extends AbstractListController
         $this->total = $query->count();
 
         $query->skip($offset)->take($limit);
- 
+
         return $query->get();
     }
 }
