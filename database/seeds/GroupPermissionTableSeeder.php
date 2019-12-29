@@ -37,6 +37,9 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.deletePosts' => [10],           // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
 
+        // 回收站
+        'viewTrashed' => [],                    // 查看回收站
+
         // 附件
         'attachment.create.0' => [10],          // 上传附件
         'attachment.create.1' => [10],          // 上传图片
