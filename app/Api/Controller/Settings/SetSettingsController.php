@@ -13,10 +13,8 @@ use App\Settings\SiteRevManifest;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
-use Discuz\Qcloud\QcloudManage;
 use Discuz\Qcloud\QcloudTrait;
 use Discuz\Qcloud\Services\BillingService;
-use Discuz\Qcloud\Services\CmsService;
 use Exception;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ResponseInterface;
@@ -94,11 +92,9 @@ class SetSettingsController implements RequestHandlerInterface
         $siteMode = $settings->where('tag', 'default')
             ->where('key', 'site_mode')->first();
 
-        if(Arr::get($siteMode, 'value') === 'pay')
-        {
+        if (Arr::get($siteMode, 'value') === 'pay') {
             $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
-        } elseif (Arr::get($siteMode, 'value') === 'public')
-        {
+        } elseif (Arr::get($siteMode, 'value') === 'public') {
             $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
         }
 

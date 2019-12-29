@@ -54,7 +54,7 @@ class GroupPermissionTableSeeder extends Seeder
         'checkVersion' => [],                   // 检查是否有新版权限
 
         // 订单
-        'order.create' => [10],              // 创建订单
+        'order.create' => [6, 10],              // 创建订单
         'order.viewList' => [],                 // 订单总列表
 
         // 钱包
