@@ -390,6 +390,7 @@ class ListThreadsController extends AbstractListController
         $allLastThreePosts = Post::from('posts', 'a')
             ->whereRaw('( SELECT count( * ) FROM posts WHERE a.thread_id = thread_id AND a.id < id ) < ?', [3])
             ->whereIn('thread_id', $threadIds)
+            ->where('is_first', false)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->take(3);
