@@ -434,7 +434,7 @@ export default {
              // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
+              this.fileList.push({url:'https://2020.comsenz-service.com/'+data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
               console.log(this.fileList);
               console.log('333');
              }

@@ -39,6 +39,8 @@ import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 
+
+
 import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
@@ -78,4 +80,3 @@ const App = new Vue({
   	template: '<router-view></router-view>'
 }).$mount('#app');
 window.app = App;
-

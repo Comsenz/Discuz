@@ -55,8 +55,6 @@ export default {
       this.load();
     // }
 
-
-
   },
 
 	methods: {
@@ -249,13 +247,15 @@ export default {
               // },
             }
           }).then((res) => {
-            console.log('56754');
-            console.log(res);
+            // console.log('56754');
+            // console.log(res.readdata[3].firstPost.images[0]._data.fileName)
+            // console.log(res);
             // if(initStatus){
             //   this.themeListCon = []
             // }
             this.themeListCon = res.readdata;
-            // this.themeListCon =this.themeListCon.concat(res.readdata);
+
+            this.themeListCon =this.themeListCon.concat(res.readdata);
             console.log(this.themeListCon);
             console.log('77777');
             this.loading = false;
