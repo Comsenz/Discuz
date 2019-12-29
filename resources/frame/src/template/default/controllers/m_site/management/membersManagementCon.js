@@ -14,7 +14,7 @@ export default {
 			userParams: {
 				'filter[name]': '',
 				'page[limit]': 15,
-				'page[number]': 1,
+				'page[number]': 0,
 			},
 			userLoadMoreStatus: false,
 			userLoadMorePageChange: false,
@@ -33,17 +33,16 @@ export default {
 	//用于数据初始化
 	created: async function () {
 		await this.getOperaType();
-		this.handleSearch();
 	},
 	methods: {
-		    //搜索框切换
-			serToggle(){
-				this.serHide = false;
-				this.serShow = true;
-				this.$refs.serInp.focus();
-			  },
-			  onCancel() {
+		//搜索框切换
+		serToggle(){
+			this.serHide = false;
+			this.serShow = true;
+			this.$refs.serInp.focus();
 			},
+			onCancel() {
+		},
 		//选中复选框
 		toggle(id) {
 			var listLen = this.userList.length;
@@ -73,7 +72,6 @@ export default {
 
 		// 通过搜索获取用户列表
 		handleSearch(val) {
-			console.log(val,'0000000000')
 			if (val) {
 				// var value = e.target.value;
 				this.searchName = val;
@@ -140,7 +138,7 @@ export default {
 		},
 
 		// 提交按钮的点击事件
-		async handleSubmit() {
+		async handleSubmit() {
 
 			try {
 				if (!this.checkOperaStatus) {
@@ -176,6 +174,7 @@ export default {
 					}
 				})
 				this.result = [];
+				this.userParams['page[number]'] = 1;
 				this.getSearchValUserList(true);
 			} catch (err) {
 				console.error(err, 'handleSubmit error');
@@ -191,7 +190,7 @@ export default {
 		// },
 		async onLoad(){    //上拉加载
 			try{
-				console.log(this.finished,'finished')
+				console.log('onLoad')
 				this.userLoadMorePageChange = true;
 				this.loading = true;
 				this.userParams['page[number]']++;
@@ -204,7 +203,7 @@ export default {
 			}
 		  },
 		onRefresh(){
-			this.pageIndex = 1;
+			this.userParams['page[number]'] = 1;
 			this.result = [];
 			this.getSearchValUserList(true);
 			this.$toast('刷新成功');
@@ -212,7 +211,6 @@ export default {
 			this.finished = false;  
 		  },
 		  headerBack(){
-			console.log("回退");
 			this.$router.go(-1)
 		  }
 	},
