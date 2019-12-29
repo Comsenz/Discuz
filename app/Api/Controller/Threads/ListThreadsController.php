@@ -392,11 +392,10 @@ class ListThreadsController extends AbstractListController
             ->whereIn('thread_id', $threadIds)
             ->where('is_first', false)
             ->orderBy('updated_at', 'desc')
-            ->get()
-            ->take(3);
+            ->get();
 
         $threads->map(function ($thread) use ($allLastThreePosts) {
-            $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id));
+            $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id)->take(3));
         });
 
         return $threads;
@@ -418,12 +417,11 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$limit])
             ->whereIn('post_id', $firstPostIds)
             ->orderBy('a.created_at', 'desc')
-            ->get()
-            ->take($limit);
+            ->get();
 
-        $threads->map(function ($thread) use ($allLikes) {
+        $threads->map(function ($thread) use ($allLikes, $limit) {
             if ($thread->firstPost) {
-                $thread->firstPost->setRelation('likedUsers', $allLikes->where('post_id', $thread->firstPost->id));
+                $thread->firstPost->setRelation('likedUsers', $allLikes->where('post_id', $thread->firstPost->id)->take($limit));
             }
         });
 
@@ -449,11 +447,10 @@ class ListThreadsController extends AbstractListController
             ->where('a.status', Order::ORDER_STATUS_PAID)
             ->where('type', Order::ORDER_TYPE_REWARD)
             ->orderBy('a.created_at', 'desc')
-            ->get()
-            ->take($limit);
+            ->get();
 
-        $threads->map(function ($thread) use ($allRewardedUser) {
-            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id));
+        $threads->map(function ($thread) use ($allRewardedUser, $limit) {
+            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id)->take($limit));
         });
 
         return $threads;

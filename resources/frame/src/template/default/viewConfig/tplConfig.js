@@ -455,7 +455,6 @@ export default {
     'sign-up',
     'wx-login-bd',
     'retrieve-pwd',
-    'bind-phone',
     'retrieve-pwd',
     'pay-the-fee',
     'pay-circle-con/:themeId/:groupId',
@@ -483,6 +482,8 @@ export default {
     'login-user',
     'login-phone',
     'sign-up',
+    'bind-phone',
+    'pay-the-fee',
     'retrieve-pwd',
     'pay-circle-con/:themeId/:groupId',
     'open-circle-con',
@@ -490,7 +491,7 @@ export default {
     'open-circle',
     'details/:themeId',
     'home-page/:userId',
-    '/'
+    'circle'
   ];
 
 
@@ -510,7 +511,7 @@ export default {
   /*
   * 前台路由全局处理
   * */
-  var registerClose = ''; //站点是否关闭
+  var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
 
   /*
@@ -535,25 +536,8 @@ export default {
   }
 
 
-
   /*
-  * 前台登录状态后，不能访问未登录状态的页面
-  * */
-  /*if (tokenId && Authorization){
-    if (noLoginAccessPage.includes(to.name)){
-      next({path:'/'});
-      // return;
-    }else {
-      next();
-    }
-  } else {
-    console.log('前台未登录，跳转');
-    next();
-    // return;
-  }*/
-
-
-  /*
+  * 前台路由前置判断
   * 判断登录状态
   * */
   if (tokenId && Authorization){
@@ -588,13 +572,21 @@ export default {
 
       } else {
 
-        this.getUsers(tokenId).then(res=>{
+        if (signInAndPayForAccess.includes(to.name)){
+          console.log(form);
+          // next(form.path)
+          next('/')
+        }else {
+          next();
+        }
+
+        /*this.getUsers(tokenId).then(res=>{
           console.log(res);
           if (res){
             if (signInAndPayForAccess.includes(to.name)){
               console.log(form);
-              next(form.path)
-              // next('/')
+              // next(form.path)
+              next('/')
             }else {
               next();
             }
@@ -609,7 +601,7 @@ export default {
               next({path:'/'});
             }
           }
-        })
+        })*/
 
       }
 
@@ -648,6 +640,9 @@ export default {
             if (to.name === '/'){
               next();
               return
+            }else {
+              next();
+              return
             }
             next('/')
           }
@@ -658,6 +653,48 @@ export default {
   }
 
 
+
+
+  if(isWeixin){
+
+  }else if (isPhone){
+      // 基准大小
+    const baseSize = 37.5;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 750 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 375;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
+  }else {
+    // 基准大小
+    const baseSize = 24;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 640 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 240;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
+
+    document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
+    document.getElementsByTagName("html")[0].style.width  = "640px";
+    let viewportWidth = window.innerWidth;
+    document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
+  }
 
 
  /* if (isWeixin == true) {
@@ -1193,8 +1230,6 @@ export default {
       console.log('pc登录');
     }
   }*/
-
-
 
 
   },
