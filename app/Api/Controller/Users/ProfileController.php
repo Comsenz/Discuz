@@ -56,7 +56,7 @@ class ProfileController extends AbstractResourceController
         }
 
         // 付费模式是否过期
-        $user->paid = ! in_array(Group::UNPAID, $user->groups->pluck('id')->toArray());
+        $user->paid = ! in_array(Group::UNPAID, $actor->groups->pluck('id')->toArray());
 
         $include = $this->extractInclude($request);
 
