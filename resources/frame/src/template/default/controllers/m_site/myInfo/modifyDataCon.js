@@ -108,6 +108,8 @@ export default {
             splice:this.wechatId+'/'+'wechat',
             data:{
             }
+          }).then(res=>{
+            this.modifyData()
           })
         }    
       },

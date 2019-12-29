@@ -106,8 +106,11 @@ export default {
 				data:{
 					'data':data
 				}
+			}).then(res=>{
+				this.pageIndex = 1;
+				this.deleteList(true)
 			})
-			this.deleteList()
+
 
 		},
 
@@ -124,7 +127,7 @@ export default {
 				}
 			}).then(res=>{
 				if(initStatus){
-				this.themeListCon
+				this.themeListCon = []
 				}
 				console.log(res.readdata)
 				this.themeListCon =this.themeListCon.concat(res.readdata);
