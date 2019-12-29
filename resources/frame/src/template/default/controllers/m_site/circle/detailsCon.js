@@ -490,16 +490,15 @@ export default {
       this.pageIndex++;
       this.detailsLoad();
     },
-    onRefresh(){    //下拉刷新
-        this.pageIndex = 1;
-        this.detailsLoad(true).then(()=>{
-          this.$toast('刷新成功');
-          this.finished = false;
-          this.isLoading = false;
-        }).catch((err)=>{
-          this.$toast('刷新失败');
-          this.isLoading = false;
-        })
+    onRefresh() { //下拉刷新
+      this.pageIndex = 1;
+      this.finished = false;
+      this.themeCon.posts = [];
+      this.detailsLoad().then(()=>{
+        this.$toast('刷新成功');
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+      })
     }
 
 

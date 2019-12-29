@@ -66,6 +66,7 @@ export default {
         }
       }).then((res)=>{
         this.$toast("密码修改成功");
+        this.$router.push({path:'/'});
       }).catch((err)=>{
         this.$toast("密码修改失败，请重试");
       })
