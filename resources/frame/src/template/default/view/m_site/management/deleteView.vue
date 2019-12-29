@@ -11,7 +11,7 @@
     :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-	    <Header :searchIconShow="true" :menuIconShow="true" navShow="true" headFixed="true" @click="headerBack"></Header>
+	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" navShow="true" headFixed="true" @click="headerBack"></Header>
         <div class="gap"></div>
 	    <div class="themeTitBox">
 	    	<span class="themeTit">全部主题</span>
@@ -34,7 +34,7 @@
 			<a href="javascript:;" @click="signOutDele">取消全选</a>
 			<button class="checkSubmit">删除选中</button>
 		</div> -->
-      </van-pull-refresh>    
+      </van-pull-refresh>
   </van-list>
     </div>
 </template>

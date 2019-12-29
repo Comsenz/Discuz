@@ -139,6 +139,9 @@ export default {
           this.loginBtnFix = true;
           this.loginHide = false;
         }
+      } else {
+        this.searchStatus = true;
+        this.menuStatus = true;
       }
     },
 

@@ -567,6 +567,9 @@ openCircleConView.vue
   .screen {
     @include px2rem(margin-left, 40);
     @include px2rem(line-height, 40);
+    span {
+      display: inline-block;
+    }
   }
 	.postDetR {
 		float: right;
