@@ -104,7 +104,6 @@ class UpdateUserWallet
                     $change_available_amount = -$change_available_amount;
                     break;
                 default:
-                    //throw new Exception('operate_type_error');
                     break;
             }
             //修改钱包金额
