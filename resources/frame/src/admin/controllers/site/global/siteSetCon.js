@@ -67,6 +67,7 @@ export default {
         this.siteName = data.readdata._data.siteName;
         this.siteIntroduction = data.readdata._data.siteIntroduction;
         this.siteMode = data.readdata._data.siteMode;
+        this.imageUrl = data.readdata._data.logo;
         if(this.siteMode == 'pay'){
           this.radio = '2';
         } else {

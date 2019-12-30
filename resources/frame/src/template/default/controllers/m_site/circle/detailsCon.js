@@ -86,7 +86,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
     this.getUser();
-    this.detailsLoad();
+    this.detailsLoad(true);
     if (!this.themeCon) {
       this.themeShow = false;
     } else {
@@ -97,7 +97,6 @@ export default {
     } else {
       this.collectFlag = '收藏';
     }
-    // this.detailsLoad();
   },
 
   computed: {
@@ -225,7 +224,7 @@ export default {
     },
 
     //初始化请求主题详情数据
-    detailsLoad() {
+    detailsLoad(initFlag = false) {
       let threads = 'threads/' + this.themeId;
       return this.appFetch({
         url: threads,
@@ -243,7 +242,8 @@ export default {
 
         console.log(res.readdata);
         console.log('1234');
-        if (!this.loading) {
+        this.finished = res.readdata.posts.length < this.pageLimit;
+        if (initFlag) {
           this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
@@ -258,9 +258,6 @@ export default {
           this.firstpostImageList = firstpostImage;
           // console.log(134, this.firstpostImageList);
         } else {
-          if(res.readdata.posts.length === 0){
-            this.finished = true;
-          }
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
         // this.themeCon = res.readdata;
@@ -442,7 +439,8 @@ export default {
         }
       }).then((res) => {
         this.$message('修改成功');
-        this.detailsLoad();
+        this.pageIndex = 1;
+        this.detailsLoad(true);
       })
     },
     //打赏
@@ -549,16 +547,13 @@ export default {
     },
     onLoad() { //上拉加载
       this.loading = true;
-      this.finished = false;
       this.pageIndex++;
       // console.log(123)
       this.detailsLoad();
     },
     onRefresh() { //下拉刷新
       this.pageIndex = 1;
-      this.finished = false;
-      this.themeCon.posts = [];
-      this.detailsLoad().then(()=>{
+      this.detailsLoad(true).then(()=>{
         this.$toast('刷新成功');
       }).catch((err)=>{
         this.$toast('刷新失败');

@@ -109,7 +109,7 @@ export default {
             data:{
             }
           }).then(res=>{
-            this.modifyData()
+            this.modifyData(true)
           })
         }    
       },

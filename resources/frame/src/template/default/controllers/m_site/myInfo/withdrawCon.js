@@ -20,7 +20,8 @@ export default {
       insterVal: '',
       isGray: false,
       btnContent:'发送验证码',
-      wechatNickname:''
+      wechatNickname:'',
+      mobileConfirmed:'',//验证验证码是否正确
     }
   },
 
@@ -176,7 +177,11 @@ export default {
           }
         }
       }).then(res=>{
-
+        this.mobileConfirmed =res.readdata._data.mobileConfirmed;
+        if(this.mobileConfirmed == true){
+          this.$toast("提现申请已提交，请等待审核");
+          // this.$router.push({path:'/modify-data'});
+        }
       })
     },
     
