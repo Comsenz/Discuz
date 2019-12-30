@@ -9,7 +9,8 @@ export default {
       userName:"",
       password:"",
       phoneStatus:"",
-      siteMode:''
+      siteMode:'',
+      openid:''
     }
   },
 
@@ -28,7 +29,8 @@ export default {
           "type": "users",
           "attributes": {
               username:this.userName,
-              password:this.password
+              password:this.password,
+              openid:this.openid
           },
           }
         }
@@ -85,6 +87,7 @@ export default {
   },
   created(){
     this.getForum();
+    this.openid = webDb.getLItem('openid');
   }
 
 }
