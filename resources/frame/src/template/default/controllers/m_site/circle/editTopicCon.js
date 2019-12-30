@@ -212,9 +212,12 @@ export default {
     // },
     //删除附件
     deleteEnclosure(id,type){
+      console.log(id);
+      return false;
       if(this.fileList.length<=1){
         this.uploadShow = false;
       }
+
       this.appFetch({
         url:'attachment',
         method:'delete',
