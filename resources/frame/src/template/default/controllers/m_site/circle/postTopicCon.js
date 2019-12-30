@@ -26,7 +26,7 @@ export default {
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        // { url: 'https://cloud-image', isImage: true }
+        // { url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=88704046,262850083&fm=11&gp=0.jpg', isImage: true }
       ],
       uploadShow:false,
       enclosureList:[
@@ -143,7 +143,17 @@ export default {
           this.$router.push({ path:'details'+'/'+this.themeId});
         })
       } else {
+        this.attriAttachment = this.fileList.concat(this.enclosureList);
+         var aa = new Array();
+        for(let m=0;m<this.attriAttachment.length;m++){
+          this.attriAttachment[m] = {
+            "type": "attachments",
+            "id": this.attriAttachment[m].id
+          }
+        }
+        console.log(this.attriAttachment);
         console.log('发帖');
+        // return false;
         this.appFetch({
           url:"threads",
           method:"post",
@@ -211,31 +221,43 @@ export default {
     //    //调接口
     // },
     //删除附件
-    deleteEnclosure(uuid,type){
+    deleteEnclosure(id,type){
+      console.log(id);
+
+      // return false;
       if(this.fileList.length<=1){
         this.uploadShow = false;
       }
       this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+uuid
-
+        splice:'/'+id
       }).then(data=>{
+        var attriAttachment = new Array();
         if(type == "img"){
-          var newArr = this.fileList.filter(item => item.uuid !== uuid);
+          var newArr = this.fileList.filter(item => item.id !== id);
           this.fileList = newArr;
+          console.log(this.fileList);
+          console.log('104');
+          // for(var h=0;k<this.fileList.length;h++){
+          //   var data = {};
+          //   data.type = 'attachments';
+          //   data.id = this.fileList[h].id;
+          //   attriAttachment.push(data);
+          // }
+          // this.attriAttachment = attriAttachment;
         } else {
-          var newArr = this.enclosureList.filter(item => item.uuid !== uuid);
+          var newArr = this.enclosureList.filter(item => item.id !== id);
           this.enclosureList = newArr;
-
-          var attriAttachment = new Array();
-          for(var k=0;k<this.enclosureList.length;k++){
-            var data = {};
-            data.type = 'attachments';
-            data.id = this.enclosureList[k].id;
-            attriAttachment.push(data);
-          }
-          this.attriAttachment = attriAttachment;
+          console.log(this.enclosureList);
+          console.log('2567');
+          // for(var k=0;k<this.enclosureList.length;k++){
+          //   var data = {};
+          //   data.type = 'attachments';
+          //   data.id = this.enclosureList[k].id;
+          //   attriAttachment.push(data);
+          // }
+          // this.attriAttachment = attriAttachment;
           // console.log(this.attriAttachment);
         }
         this.$message('删除成功');
@@ -432,29 +454,37 @@ export default {
            }).then(data=>{
              console.log(data);
              // console.log('909090');
+             // var attriAttachment = new Array();
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:'https://2020.comsenz-service.com/'+data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
-              console.log(this.fileList);
-              console.log('333');
+              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+              // console.log(this.fileList);
+              // for(var h=0;h<this.fileList.length;h++){
+              //   var data = {};
+              //   data.type = 'attachments';
+              //   data.id = this.fileList[h].id;
+              //   console.log('1111');
+              //   attriAttachment.push(data);
+              // }
              }
               if(enclosure){
                 console.log('fujian');
                 this.enclosureShow = true
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
-                var attriAttachment = new Array();
-                console.log(this.enclosureList);
-                for(var k=0;k<this.enclosureList.length;k++){
-                  var data = {};
-                  data.type = 'attachments';
-                  data.id = this.enclosureList[k].id;
-                  console.log(data);
-                  console.log('1111');
-                  attriAttachment.push(data);
-                }
-                this.attriAttachment = attriAttachment;
-              }
+                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
 
+                console.log(this.enclosureList);
+                // for(var k=0;k<this.enclosureList.length;k++){
+                //   var data = {};
+                //   data.type = 'attachments';
+                //   data.id = this.enclosureList[k].id;
+                //   console.log('1111');
+                //   attriAttachment.push(data);
+                //   console.log(attriAttachment);
+                //   console.log('678');
+                // }
+              }
+             // this.attriAttachment = attriAttachment;
+             // console.log(this.attriAttachment);
              this.$message('提交成功');
            })
        },

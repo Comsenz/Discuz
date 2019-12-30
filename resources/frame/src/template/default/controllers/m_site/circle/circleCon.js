@@ -196,10 +196,11 @@ export default {
             if(initStatus){
               this.themeListCon = []
             }
-            this.themeListCon = res.readdata;
+            // this.themeListCon = res.readdata;
             this.themeListCon =this.themeListCon.concat(res.readdata);
             this.loading = false;
-            this.finished = res.data.length < this.pageLimit;
+            this.finished = res.readdata.length < this.pageLimit;
+            
           }).catch((err)=>{
             if(this.loading && this.pageIndex !== 1){
               this.pageIndex--;
@@ -256,10 +257,11 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
-          this.themeListCon = res.readdata;
+          console.log(res)
+          // this.themeListCon = res.readdata;
           this.themeListCon = this.themeListCon.concat(res.readdata);
           this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
+          this.finished = res.readdata.length < this.pageLimit;
         }).catch((err)=>{
           if(this.loading && this.pageIndex !== 1){
             this.pageIndex--;
@@ -294,7 +296,10 @@ export default {
             // if(initStatus){
             //   this.themeListCon = []
             // }
-            this.themeListCon = res.readdata;
+            // this.themeListCon = res.readdata;
+            if(initStatus){
+              this.themeListCon = []
+            }
 
             this.themeListCon =this.themeListCon.concat(res.readdata);
             console.log(this.themeListCon);
@@ -418,6 +423,7 @@ export default {
 	        this.showScreen = false;
       },
       onLoad(){    //上拉加载
+        // console.log('onLoadonLoadonLoad')
         this.loading = true;
         this.pageIndex++;
         this.loadThemeList();

@@ -12,7 +12,7 @@
                   <div class="perDet">
                     <div class="perName" v-if="item.user">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
-                    <div class="postTime">{{item._data.createdAt|timeAgo}}</div>
+                    <div class="postTime">{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
                 <div class="postOpera">

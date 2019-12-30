@@ -97,7 +97,7 @@ export default {
       })
     },
     //删除已上传logo
-    handleRemove(file, fileList) {
+    deleteImage(file, fileList) {
       // console.log(file);
       let logoFormData = new FormData()
       logoFormData.append('logo', file.raw);
@@ -128,10 +128,16 @@ export default {
         this.siteClose = false;
       }
     },
+    handleAvatarSuccess(res, file) {
+      // this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    handleFile(){
+
+    },
 
     //上传时，判断文件的类型及大小是否符合规则
 　　beforeAvatarUpload(file) {
-　　　　const isJPG =file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
+　　　　const isJPG =file.type == 'image/jpeg' || file.type == 'image/png' ||            file.type == 'image/gif'
 　　　　const isLt2M = file.size / 1024 / 1024 < 2
 　　　　if (!isJPG) {
 　　　　　　this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
@@ -155,6 +161,8 @@ export default {
         method:'post',
         data:logoFormData,
       }).then(data=>{
+        this.imageUrl = data.readdata._data.default.logo;
+        console.log(data.readdata._data.default.logo)
         // this.$message('上传成功');
       }).catch(error=>{
         console.log('上传失败');
