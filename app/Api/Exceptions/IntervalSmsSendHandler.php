@@ -39,8 +39,8 @@ class IntervalSmsSendHandler implements ExceptionHandlerInterface
         $errors = [
             [
                 'status' => 500,
-                'code' => 100002,
-                'message' => 'sms_interval'
+//                'code' => 100002,
+                'code' => 'sms_interval',
             ]
         ];
 
