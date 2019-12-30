@@ -43,6 +43,14 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 
 /*
 |--------------------------------------------------------------------------
+| GroupPermission
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Auth
 |--------------------------------------------------------------------------
 */
@@ -187,14 +195,6 @@ $route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateUs
 $route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListUserWalletCashController::class);
 $route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\UserWalletCashReviewController::class);
 $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalletLogsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| GroupPermission
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------
