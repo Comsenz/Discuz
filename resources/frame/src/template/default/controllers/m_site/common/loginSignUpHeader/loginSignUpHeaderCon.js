@@ -1,4 +1,5 @@
 // import {Bus} from '../../../../store/site/bus.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
 export default {
   data:function () {
     return {
@@ -9,6 +10,8 @@ export default {
       // avatarUrl:'',
       // username:'',
       // mobile:''
+      isWeixin: false,
+      isPhone: false
 
     }
   },
@@ -19,6 +22,16 @@ export default {
     },
     menuIconShow: { // 组件是否显示菜单按钮
       menuIconShow: false
+    }
+  },
+  created() {
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
+  },
+  mounted () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
     }
   },
   methods:{
