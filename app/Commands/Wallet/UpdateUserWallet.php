@@ -77,9 +77,10 @@ class UpdateUserWallet
         $operate_amount = Arr::get($this->data, 'operate_amount');
         $operate_reason = Arr::get($this->data, 'operate_reason');
         $wallet_status  = Arr::get($this->data, 'wallet_status');
-
-        if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
-            throw new WalletException('operate_type_error');
+        if (!is_null($operate_type)) {
+            if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
+                throw new WalletException('operate_type_error');
+            }
         }
 
         if (!is_null($wallet_status) && !in_array($wallet_status, [UserWallet::WALLET_STATUS_NORMAL, UserWallet::WALLET_STATUS_FROZEN])) {
@@ -103,7 +104,7 @@ class UpdateUserWallet
                     $change_available_amount = -$change_available_amount;
                     break;
                 default:
-                    throw new Exception('operate_type_error');
+                    //throw new Exception('operate_type_error');
                     break;
             }
             //修改钱包金额
