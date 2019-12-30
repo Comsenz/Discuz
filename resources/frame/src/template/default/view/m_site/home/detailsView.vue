@@ -121,7 +121,10 @@
           </div>
           </van-list>
         </div>
-        <div class="detailsFooter" id="detailsFooter">
+        
+     </div>
+     </van-pull-refresh>
+     <div class="detailsFooter" id="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
             <span class="icon iconfont icon-review"></span>
             回复
@@ -168,7 +171,6 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
-     </div>
      <van-image-preview
        v-model="imageShow"
        :images="firstpostImageList"
@@ -177,7 +179,7 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
-    </van-pull-refresh>
+    
 
     </div>
 </template>

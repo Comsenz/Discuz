@@ -45,20 +45,21 @@
           <!-- <el-button type="text">删除</el-button> -->
 
           <el-upload
+           class="avatar-uploader"
             action=""
             :http-request="uploaderLogo"
-            list-type="picture-card"
-            :limit="1"
-            :on-error="errorFile"
-            :file-list="fileList"
-            :on-preview="handlePictureCardPreview"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            @change="handleFile" 
             :before-upload="beforeAvatarUpload"
-            :on-remove="handleRemove">
-            <i class="el-icon-plus"></i>
+            >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogVisible" size="tiny">
+           <el-button type="text" @click="deleteImage">删除</el-button>
+          <!-- <el-dialog :visible.sync="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
+          </el-dialog> -->
         </CardRow>
       </Card>
        <Card header="站长：">
