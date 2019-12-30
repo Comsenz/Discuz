@@ -201,21 +201,21 @@ export default {
     //    //调接口
     // },
     //删除附件
-    deleteEnclosure(uuid,type){
+    deleteEnclosure(id,type){
       if(this.fileList.length<=1){
         this.uploadShow = false;
       }
       this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+uuid
+        splice:'/'+id
 
       }).then(data=>{
         if(type == "img"){
-          var newArr = this.fileList.filter(item => item.uuid !== uuid);
+          var newArr = this.fileList.filter(item => item.id !== id);
           this.fileList = newArr;
         } else {
-          var newArr = this.enclosureList.filter(item => item.uuid !== uuid);
+          var newArr = this.enclosureList.filter(item => item.id !== id);
           this.enclosureList = newArr;
 
           var attriAttachment = new Array();
@@ -423,25 +423,25 @@ export default {
              // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName,uuid:data.readdata._data.uuid});
-              console.log(this.fileList);
-              console.log('333');
+              this.fileList.push({url:data.readdata._data.fileName,id:data.readdata._data.id});
+              // console.log(this.fileList);
+              // console.log('333');
              }
               if(enclosure){
                 console.log('fujian');
                 this.enclosureShow = true;
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,uuid:data.readdata._data.uuid,id:data.readdata._data.id});
-                 var attriAttachment = new Array();
-                 console.log(this.enclosureList);
-                 for(var k=0;k<this.enclosureList.length;k++){
-                   var data = {};
-                   data.type = 'attachments';
-                   data.id = this.enclosureList[k].id;
-                   console.log(data);
-                   console.log('1111');
-                   attriAttachment.push(data);
-                 }
-                 this.attriAttachment = attriAttachment;
+                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
+                 // var attriAttachment = new Array();
+                 // console.log(this.enclosureList);
+                 // for(var k=0;k<this.enclosureList.length;k++){
+                 //   var data = {};
+                 //   data.type = 'attachments';
+                 //   data.id = this.enclosureList[k].id;
+                 //   console.log(data);
+                 //   console.log('1111');
+                 //   attriAttachment.push(data);
+                 // }
+                 // this.attriAttachment = attriAttachment;
               }
              this.$message('提交成功');
            })
