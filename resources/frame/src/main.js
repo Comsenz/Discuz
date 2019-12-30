@@ -39,6 +39,8 @@ import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 
+// import wx from 'weixin-js-sdk';
+// Vue.prototype.$wx = wx;
 
 
 import filters from "./common/filters";   //过滤器
