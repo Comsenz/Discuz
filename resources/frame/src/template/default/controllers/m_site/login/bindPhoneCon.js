@@ -2,6 +2,7 @@
 import BindPhoneHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import BindPhoneFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDb from '../../../../../helpers/webDbHelper';
+import appFetch from "../../../../../helpers/axiosHelper";
 
 export default {
   data:function () {
@@ -114,13 +115,34 @@ export default {
        }).catch(err=>{
         console.log(err);
       })
-    }
-
+    },
+    getUsers(id){
+      return appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + id,
+        headers:{'Authorization': 'Bearer ' + webDb.getLItem('Authorization')},
+        data:{
+          include:['groups']
+        }
+      }).then(res=>{
+        console.log(res);
+        return res.readdata._data.mobile;
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
   },
 
   created(){
     // console.log(this.time);
     this.siteMode = webDb.getLItem('siteInfo')._data.setsite.site_mode;
+    let tokenId = webDb.getLItem('tokenId');
+    this.getUsers(tokenId).then((res)=>{
+      if (res !== ''){
+        this.$router.push('bind-new-phone');
+      }
+    })
   },
 
   components:{

@@ -33,6 +33,14 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 
 /*
 |--------------------------------------------------------------------------
+| GroupPermission
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+
+/*
+|--------------------------------------------------------------------------
 | Auth
 |--------------------------------------------------------------------------
 */
@@ -139,9 +147,9 @@ $route->delete('/stop-words/{id}', 'stop-words.delete', ApiController\StopWords\
 |--------------------------------------------------------------------------
 */
 
-$route->get('/attachments/{uuid}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
+$route->get('/attachments/{id}', 'attachments.resource', ApiController\Attachment\ResourceAttachmentController::class);
 $route->post('/attachments', 'attachments.create', ApiController\Attachment\CreateAttachmentController::class);
-$route->delete('/attachments/{uuid}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
+$route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachment\DeleteAttachmentController::class);
 
 /*
  |--------------------------------------------------------------------------
@@ -175,14 +183,6 @@ $route->post('/wallet/cash', 'wallet.cash.create', ApiController\Wallet\CreateUs
 $route->get('/wallet/cash', 'wallet.cash.list', ApiController\Wallet\ListUserWalletCashController::class);
 $route->post('/wallet/cash/review', 'wallet.cash.review', ApiController\Wallet\UserWalletCashReviewController::class);
 $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalletLogsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| GroupPermission
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------

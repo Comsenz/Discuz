@@ -128,7 +128,7 @@
       <el-button type="text" @click="allOperationsSubmit(1)" >全部通过</el-button>
       <el-button type="text" @click="allOperationsSubmit(2)" >全部删除</el-button>
       <el-button type="text" v-show="ignoreStatus" @click="allOperationsSubmit(3)" >全部忽略</el-button>
-      <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox>
+      <!-- <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox> -->
     </div>
 
   </div>

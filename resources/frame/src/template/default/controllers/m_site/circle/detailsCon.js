@@ -81,6 +81,8 @@ export default {
     }
   },
   created() {
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;    
     this.getInfo();
     this.getUser();
     this.detailsLoad();
@@ -102,7 +104,33 @@ export default {
       return this.$route.params.themeId;
     }
   },
+  updated () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth('detailsFooter');
+    }
+  },
+
   methods: {
+    //点赞和打赏数组处理（用户名之间用逗号分隔）
+    userArr(data){
+      let datas = [];
+      data.forEach((item)=>{
+        datas.push(item._data.username)
+      });
+      return datas.join(',')
+    },
+    //设置底部在pc里的宽度
+    limitWidth(limitId){
+      console.log(limitId);
+      let viewportWidth = window.innerWidth;
+      // if(limitId){
+        document.getElementById(limitId).style.width = "640px";
+        document.getElementById(limitId).style.marginLeft = (viewportWidth - 640)/2+'px';
+      // }
+      // document.getElementById('detailsFooter').style.width = "640px";
+      // document.getElementById('detailsFooter').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     getInfo() {
       //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
@@ -155,11 +183,13 @@ export default {
       })
 
     },
-    detailIf(isPayVal) {
-      if (isPayVal == 'public') {
+    detailIf(siteMode) {
+      var token = browserDb.getLItem('Authorization', token);
+      this.token = token;
+      if (siteMode == 'public') {
         //当站点为公开站点时
         console.log('公开');
-        var token = browserDb.getLItem('Authorization', token);
+
         if (token) {
           console.log('公开，已登录2222s');
           //当用户已登录时
@@ -209,7 +239,7 @@ export default {
         if (res.error) {
           throw new Error(res.error);
         }
-        
+
         console.log(res.readdata);
         console.log('1234');
         if (!this.loading) {
@@ -288,7 +318,10 @@ export default {
       });
       browserDb.setLItem('themeId', this.themeId);
     },
-
+    //点击用户名称，跳转到用户主页
+    jumpPerDet:function(id){
+      this.$router.push({ path:'/home-page'+'/'+id});
+    },
     //付费，获得成员权限
     sitePayClick(amount) {
       this.appFetch({
@@ -412,7 +445,17 @@ export default {
     },
     //打赏
     showRewardPopup: function () {
-      this.rewardShow = true;
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.rewardShow = true;
+        if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
+          // this.limitWidth('rewardPopup');
+        }
+      }
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {

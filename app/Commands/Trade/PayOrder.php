@@ -153,9 +153,8 @@ class PayOrder
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid
-                $user_wecaht = $this->actor->userWechats;
                 $extra                = [
-                    'openid' => $user_wecaht->openid,
+                    'openid' => $this->actor->wechat->openid,
                 ];
                 break;
             default:

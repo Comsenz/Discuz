@@ -9,7 +9,8 @@ export default {
       userName:"",
       password:"",
       phoneStatus:"",
-      siteMode:''
+      siteMode:'',
+      openid:''
     }
   },
 
@@ -28,7 +29,8 @@ export default {
           "type": "users",
           "attributes": {
               username:this.userName,
-              password:this.password
+              password:this.password,
+              openid:this.openid
           },
           }
         }
@@ -39,20 +41,44 @@ export default {
           this.$toast.fail(res.errors[0].code)
         } else {
         this.$toast.success('注册成功');
-        // let token = res.data.attributes.access_token;
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
 
-        if (this.phoneStatus){
-          this.$router.push({path:'bind-phone'});
-        } else if (this.siteMode === 'pay'){
-          this.$router.push({path:'pay-the-fee'});
-        } else if (this.siteMode === 'public'){
-          this.$router.push({path:'/'});
-        } else {
-          console.log("缺少参数，请刷新页面");
+          webDb.setLItem('Authorization', token);
+          webDb.setLItem('tokenId', tokenId);
+
+        this.getForum().then(()=>{
+          if (this.phoneStatus){
+            this.$router.push({path:'bind-phone'});
+          } else if (this.siteMode === 'pay'){
+            this.$router.push({path:'pay-the-fee'});
+          } else if (this.siteMode === 'public'){
+            this.$router.push({path:'/'});
+          } else {
+            console.log("缺少参数，请刷新页面");
+          }
+        })
+
         }
 
-        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
 
+
+    /*
+    * 接口请求
+    * */
+    getForum(){
+      return this.appFetch({
+        url:'forum',
+        method:'get',
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+        this.siteMode = res.readdata._data.setsite.site_mode;
       }).catch(err=>{
         console.log(err);
       })
@@ -60,8 +86,8 @@ export default {
 
   },
   created(){
-    this.siteMode =  webDb.getLItem('siteInfo')._data.setsite.site_mode;
-    this.phoneStatus = webDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    this.getForum();
+    this.openid = webDb.getLItem('openid');
   }
 
 }

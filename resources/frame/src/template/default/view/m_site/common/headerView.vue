@@ -22,15 +22,18 @@
         </div>
 
       </div>
-      <div class="headeGap"></div>
+      <div class="headeGap" v-if="!searchIconShow && !menuIconShow"></div>
       <div class="headOpe" v-if="searchIconShow || menuIconShow">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" @click="searchJump" v-show="searchIconShow"></span>
         <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
       </div>
+      <div class="logoBox" v-show="logoShow">
+        <img v-if="logo" :src="logo" class="logo">
+        <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo">
+      </div>
 
-      <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="logo" v-show="logoShow">
-      <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" v-show="logoShow">
+
       <div class="circleDet" v-show="perDetShow" v-if="siteInfo">
         <span>主题：{{siteInfo._data.threads}}</span>
         <span>成员：{{siteInfo._data.members}}</span>

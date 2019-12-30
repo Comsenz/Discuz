@@ -42,9 +42,6 @@ class PostListener
         // 修改内容
         $events->listen(Revised::class, [$this, 'whenPostWasRevised']);
 
-        // 修改回复
-        $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
-
         // 喜欢帖子
         $events->listen(Serializing::class, AddPostLikeAttribute::class);
         $events->subscribe(SaveLikesToDatabase::class);
@@ -79,11 +76,11 @@ class PostListener
     }
 
     /**
-     * 绑定附件
+     * 绑定附件 & 刷新被回复数
      *
-     * @param Saving $event
+     * @param Saved $event
      */
-    public function whenPostWasSaving(Saving $event)
+    public function whenPostWasSaved(Saved $event)
     {
         $post = $event->post;
         $actor = $event->actor;
@@ -107,20 +104,9 @@ class PostListener
                 ->whereIn('id', $ids)
                 ->update(['post_id' => $post->id]);
         }
-    }
 
-    /**
-     * 在添加完成后触发此事件
-     *
-     * @param Saved $event
-     */
-    public function whenPostWasSaved(Saved $event)
-    {
-        // 要添加回复数的ID
-        $replyId = $event->post->reply_post_id;
-
-        // 为null是Created，不需要刷新
-        if ($replyId) {
+        // 刷新被回复数
+        if ($replyId = $post->reply_post_id) {
             // 回复以及修改、批量修改 全都刷新回复数
             $post = Post::find($replyId);
             $post->refreshReplyCount();

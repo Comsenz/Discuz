@@ -107,8 +107,11 @@ export default {
       // browserDb.removeLItem('tokenId');
       // browserDb.removeLItem('Authorization');
       localStorage.clear();
-      
       this.$router.push({ path:url});
+      if (url === '/circle'){
+        this.$router.go(0);
+      }
+
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
       if(this.isPayValue == 'pay'){

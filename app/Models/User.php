@@ -43,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @package App\Models
  * @method truncate()
  * @method static find($id)
+ * @method static where(array)
  */
 class User extends Model
 {
