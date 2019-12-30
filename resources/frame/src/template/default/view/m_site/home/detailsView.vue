@@ -121,7 +121,7 @@
           </div>
           </van-list>
         </div>
-        
+
      </div>
      </van-pull-refresh>
      <div class="detailsFooter" id="detailsFooter">
@@ -130,8 +130,8 @@
             回复
           </div>
           <div class="footChi" @click="replyOpera(themeCon.firstPost._data.id,'2',themeCon.firstPost._data.isLiked)">
-            <span v-if="themeCon.firstPost._data.isLiked" class="icon iconfont icon-praise-after"></span>
-            <span v-else="" class="icon iconfont icon-like"></span>
+            <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
+            <span v-else="" class="icon iconfont icon-praise-after"></span>
             赞
           </div>
           <div class="footChi" @click="showRewardPopup">
@@ -179,7 +179,7 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
-    
+
 
     </div>
 </template>

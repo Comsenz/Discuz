@@ -7,6 +7,7 @@ import appConfig from "../../../../../../../frame/config/appConfig";
 // import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
 // import Forum from '../../../../../common/models/Forum';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data: function () {
     return {
@@ -255,7 +256,7 @@ export default {
             firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
           }
           this.firstpostImageList = firstpostImage;
-          console.log(134, this.firstpostImageList);
+          // console.log(134, this.firstpostImageList);
         } else {
           if(res.readdata.posts.length === 0){
             this.finished = true;
@@ -263,7 +264,7 @@ export default {
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
         // this.themeCon = res.readdata;
-        console.log(1, this.firstpostImageList);
+        // console.log(1, this.firstpostImageList);
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
