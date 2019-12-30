@@ -73,6 +73,9 @@ Vue.prototype.apiStore = new Store({
 });
 Vue.prototype.$utils = utils; //注册全局方法
 
+import wx from '../static/js/jweixin-1.4.0';
+Vue.prototype.$wx = wx;
+
 //实例化根目录
 const appRouter = RConfig.init();
 const App = new Vue({
