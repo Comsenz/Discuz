@@ -64,7 +64,7 @@ export default {
         if(this.query.id === undefined){
           return;
         }
-        if(this.operate_type){
+        if(this.operateType){
           var datas = {
             user_id: Number(this.query.id),
             operate_type: this.operateType,
