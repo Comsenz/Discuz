@@ -138,6 +138,7 @@
         </div>
         <van-popup
           class="rewardPopup"
+          id="rewardPopup"
           v-model="rewardShow"
           closeable
           close-icon-position="top-right"

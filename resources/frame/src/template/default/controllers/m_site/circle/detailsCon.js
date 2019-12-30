@@ -107,12 +107,13 @@ export default {
       return this.$route.params.themeId;
     }
   },
-  mounted () {
+  updated () {
     //设置在pc的宽度
     if(this.isWeixin != true && this.isPhone != true){
-      this.limitWidth();
+      this.limitWidth('detailsFooter');
     }
   },
+
   methods: {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
@@ -123,10 +124,15 @@ export default {
       return datas.join(',')
     },
     //设置底部在pc里的宽度
-    limitWidth(){
-      document.getElementById('detailsFooter').style.width = "640px";
+    limitWidth(limitId){
+      console.log(limitId);
       let viewportWidth = window.innerWidth;
-      document.getElementById('detailsFooter').style.marginLeft = (viewportWidth - 640)/2+'px';
+      // if(limitId){
+        document.getElementById(limitId).style.width = "640px";
+        document.getElementById(limitId).style.marginLeft = (viewportWidth - 640)/2+'px';
+      // }
+      // document.getElementById('detailsFooter').style.width = "640px";
+      // document.getElementById('detailsFooter').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
     getInfo() {
       //请求站点信息，用于判断站点是否是付费站点
@@ -180,11 +186,12 @@ export default {
 
     },
     detailIf(siteMode) {
+      var token = browserDb.getLItem('Authorization', token);
+      this.token = token;
       if (siteMode == 'public') {
         //当站点为公开站点时
         console.log('公开');
-        var token = browserDb.getLItem('Authorization', token);
-        this.token = token;
+
         if (token) {
           console.log('公开，已登录2222s');
           //当用户已登录时
@@ -456,14 +463,14 @@ export default {
     //打赏
     showRewardPopup: function () {
       if(!this.token){
-          this.$router.push({
+        this.$router.push({
           path:'/login-user',
           name:'login-user'
         })
       } else {
         this.rewardShow = true;
-        if(this.isWeixin != true && this.isPhone != true){
-          this.limitWidth();
+        if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
+          // this.limitWidth('rewardPopup');
         }
       }
     },
