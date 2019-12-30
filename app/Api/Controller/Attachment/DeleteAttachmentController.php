@@ -33,11 +33,11 @@ class DeleteAttachmentController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        $uuid = Arr::get($request->getQueryParams(), 'uuid');
+        $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
 
         $this->bus->dispatch(
-            new DeleteAttachment($uuid, $actor)
+            new DeleteAttachment($id, $actor)
         );
     }
 }

@@ -121,7 +121,7 @@ export default {
         url:'users',
         method:'get',
         splice:'/' + id,
-        headers:{'Authorization': 'Bearer ' + browserDb.getLItem('Authorization')},
+        headers:{'Authorization': 'Bearer ' + webDb.getLItem('Authorization')},
         data:{
           include:['groups']
         }

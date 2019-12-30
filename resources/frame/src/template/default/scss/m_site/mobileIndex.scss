@@ -73,7 +73,7 @@ a { color: $fontColor;}
 }
 .headOpe {
 	text-align: right;
-	@include px2rem(padding, 0 30 14 30);
+	@include px2rem(padding, 28 30 14 30);
 	@include px2rem(height, 40);
 	box-sizing: content-box;
 	span {

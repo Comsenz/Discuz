@@ -12,7 +12,7 @@
                   <div class="perDet">
                     <div class="perName" v-if="item.user">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
-                    <div class="postTime">{{item._data.createdAt|timeAgo}}</div>
+                    <div class="postTime">{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
                 <div class="postOpera">
@@ -40,7 +40,7 @@
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
-              <div class="themeImgBox">
+              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
                 <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
@@ -55,7 +55,7 @@
                 </div> -->
                 <!-- <img src="aaaa.png" v-bind:is="auth-img" alt=""/> -->
 
-                <div class="themeImgList moreImg" v-for="(image,index)  in item.firstPost.imageList">
+                <div class="themeImgList moreImg">
                   <van-image
                     fit="cover"
                     width="113px"
@@ -63,7 +63,6 @@
                     lazy-load
                     v-for="(image,index)  in item.firstPost.imageList"
                     :src="image"
-                    @click="imageSwiper"
                     class="themeImgChild"
                   />
                 </div>
@@ -74,16 +73,16 @@
             </div>
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
-              <a  @click="jumpPerDet(like._data.id)">{{likes(item.firstPost.likedUsers)}}</a>
+              <a  @click="jumpPerDet(like._data.id)" v-for="like in item.firstPost.likedUsers">{{userArr(item.firstPost.likedUsers)}}</a>
               <i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 
             <div class="reward" v-if="item.rewardedUsers.length>0">
               <span class="icon iconfont icon-money"></span>
-              <a href="javascript:;" v-for="reward in item.rewardedUsers">{{reward._data.username+','}}</a>
+              <a href="javascript:;" v-for="reward in item.rewardedUsers" @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
             </div>
 
-            <div class="isrelationLine" v-if="item.firstPost.likedUsers.length>0 && item.rewardedUsers.length>0">
+            <div class="isrelationLine" v-if="(item.lastThreePosts.length>0 && item.firstPost.likedUsers.length>0) || (item.lastThreePosts.length>0 && item.rewardedUsers.length>0)">
             </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">

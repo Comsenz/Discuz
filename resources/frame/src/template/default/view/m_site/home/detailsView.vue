@@ -14,7 +14,7 @@
 		    			<div class="perDet">
 		    				<div class="perName" v-if="themeCon.user">{{themeCon.user._data.username}}</div>
                 <div class="perName" v-else="">该用户已被删除</div>
-		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD h:mm')}}</div>
+		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
 		    			</div>
 		    		</div>
 		    		<div class="postOpera">
@@ -25,15 +25,15 @@
 		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
 		    	</div>
 		    	<div class="postImgBox">
-            <!-- <div class="postImgList">
+            <div class="postImgList">
               <van-image
-                fit="none"
-                lazy-load
-                v-for="(image,index)  in firstpost.ImageList"
-                :src="image"
-                @click="imageSwiper"
-              />
-            </div> -->
+                  fit="none"
+                  lazy-load
+                  v-for="(image,index)  in firstpostImageList"
+                  :src="image"
+                  @click="imageSwiper"
+                />
+            </div>
 		    	</div>
 		    	<div class="uploadFileList">
 		    		<a href="javascript:;" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
@@ -76,13 +76,13 @@
         <div class="commentBox">
           <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
             <span class="icon iconfont icon-praise-after"></span>
-            <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a>
+            <a  @click="jumpPerDet(like._data.id)" v-for="like in themeCon.firstPost.likedUsers">{{userArr(themeCon.firstPost.likedUsers)}}</a>
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
           <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" class="payPerHead">
-            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="payPerHead">
+            <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
           </div>
           <van-list
           v-model="loading"
@@ -93,7 +93,7 @@
           :immediate-check="false"
           >
           <div v-for="item in themeCon.posts">
-                
+
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
@@ -102,7 +102,7 @@
                   <div class="perDet">
                     <div class="perName" v-if="item.user && item.user._data.username">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
-                    <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD h:mm')}}</div>
+                    <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
               </div>
@@ -117,11 +117,14 @@
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
-             
+
           </div>
           </van-list>
         </div>
-        <div class="detailsFooter" id="detailsFooter">
+        
+     </div>
+     </van-pull-refresh>
+     <div class="detailsFooter" id="detailsFooter">
           <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
             <span class="icon iconfont icon-review"></span>
             回复
@@ -138,6 +141,7 @@
         </div>
         <van-popup
           class="rewardPopup"
+          id="rewardPopup"
           v-model="rewardShow"
           closeable
           close-icon-position="top-right"
@@ -167,7 +171,6 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
-     </div>
      <van-image-preview
        v-model="imageShow"
        :images="firstpostImageList"
@@ -176,7 +179,7 @@
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
-    </van-pull-refresh>
+    
 
     </div>
 </template>

@@ -1,4 +1,5 @@
 // import {Bus} from '../../../../store/site/bus.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
 export default {
   data:function () {
     return {
@@ -9,6 +10,8 @@ export default {
       // avatarUrl:'',
       // username:'',
       // mobile:''
+      isWeixin: false,
+      isPhone: false
 
     }
   },
@@ -21,7 +24,23 @@ export default {
       menuIconShow: false
     }
   },
+  created() {
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
+  },
+  mounted () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
+    }
+  },
   methods:{
+    //设置Header在pc里的宽度
+    limitWidth(){
+      document.getElementById('comHeader').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('comHeader').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
     showPopup() {
       //侧边栏显示
       this.popupShow = true;
@@ -32,11 +51,11 @@ export default {
     }
   },
 
-  mounted (){
-    /*this.pageName = this.$router.history.current.name;
-    if (this.pageName === 'modify-data'){
-      this.headerTitle="修改资料"
-    }*/
+  mounted () {
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
+    }
   },
   beforeRouteLeave (to, from, next) {
     next()

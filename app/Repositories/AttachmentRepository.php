@@ -34,7 +34,7 @@ class AttachmentRepository extends AbstractRepository
      */
     public function findOrFail($uuid, User $actor = null)
     {
-        $query = Attachment::where('uuid', $uuid);
+        $query = Attachment::where('id', $uuid);
 
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }

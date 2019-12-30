@@ -45,6 +45,7 @@ export default {
         isWeixin: false,
         isPhone: false,
         firstCategoriesId:'',
+        logo:false
 	  }
   },
 	props: {
@@ -93,7 +94,7 @@ export default {
     // this.getUserInfo();
     this.loadCategories();
     //把第一个分类的id值传过去，便于请求初始化主题列表
-    
+
   },
   watch: {
     'isfixNav': function(newVal,oldVal){
@@ -118,6 +119,9 @@ export default {
         }
       }).then((res) => {
         this.siteInfo = res.readdata;
+        if(res.readdata._data.logo){
+          this.logo = res.readdata._data.logo;
+        }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.siteMode;
       })

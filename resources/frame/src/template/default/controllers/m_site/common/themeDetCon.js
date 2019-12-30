@@ -114,15 +114,14 @@ export default {
   },
 
 	methods: {
-
-    likes(data){
+    //点赞和打赏数组处理（用户名之间用逗号分隔）
+    userArr(data){
       let datas = [];
       data.forEach((item)=>{
         datas.push(item._data.username)
       });
       return datas.join(',')
     },
-
 
     //循环数据新建数组，用于操作管理显示隐藏下拉菜单
     forList(){
@@ -250,14 +249,16 @@ export default {
       } else {
         for (let h = 0; h < themeListLen; h++) {
           // 图片地址
-          let src = 'https://2020.comsenz-service.com/api/attachments/';
+          // let src = 'https://2020.comsenz-service.com/api/attachments/';
           let imageList = [];
           if(this.themeListResult[h].firstPost.images){
             for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
-              imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+              imageList.push(this.themeListResult[h].firstPost.images[i]._data.thumbUrl);
+              // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
+              // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
           }
-          // console.log(imageList);
+          console.log(imageList);
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }
@@ -293,7 +294,7 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      this.$router.push({ path:'home-page'+'/'+id});
+      this.$router.push({ path:'/home-page'+'/'+id});
     },
     	//选中复选框
 		// toggle(id) {

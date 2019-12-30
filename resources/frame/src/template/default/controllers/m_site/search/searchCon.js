@@ -40,7 +40,6 @@ export default {
 		onSearch(val) {
 			clearTimeout(this.timerSearch);
 			this.searchVal = val;
-			console.log(val,'valvalvalval')
 			if(this.searchVal === ''){
 				this.searchUserList = [];
 				this.searchThemeList = [];
@@ -50,17 +49,21 @@ export default {
 
 				this.firstComeIn = false;
 
-				this.userParams['filter[username]'] = this.searchVal
+				// 用户搜索
+				this.userParams['filter[username]'] = this.searchVal;
+				this.userParams['page[number]'] = 1;
 
 				this.handleSearchUser(true);
 
+				// 主题搜索
 				this.themeParamd['filter[q]'] = this.searchVal;
+				this.themeParamd['page[number]'] = 1;
+
 				this.handleSearchTheme(true);
 
 			},200)
 		},
 		onCancel() {
-			console.log('99999999999999')
 			this.$router.push({ path:'/'});
 		},
 
@@ -112,7 +115,7 @@ export default {
 			}
 			this.themeLoading = true;
 			try {
-				const currentPageNum = this.themeParamd['page[number]']; 
+				const currentPageNum = this.themeParamd['page[number]'];
 				await this.appFetch({
 					url:'searchThreads',
 					method:'get',
@@ -125,7 +128,6 @@ export default {
 					}
 					// data: this.themeParamd
 				}).then(data=>{
-					console.log(data,'datadatadata')
 					this.searchThemeList = this.searchThemeList.concat(data.readdata);
 					this.themeLoadMoreStatus = data.readdata.length < this.themeParamd['page[limit]'];
 				}).catch(err=>{
