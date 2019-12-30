@@ -14,7 +14,7 @@
 		    			<div class="perDet">
 		    				<div class="perName" v-if="themeCon.user">{{themeCon.user._data.username}}</div>
                 <div class="perName" v-else="">该用户已被删除</div>
-		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD h:mm')}}</div>
+		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
 		    			</div>
 		    		</div>
 		    		<div class="postOpera">
@@ -25,15 +25,15 @@
 		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
 		    	</div>
 		    	<div class="postImgBox">
-            <!-- <div class="postImgList">
+            <div class="postImgList">
               <van-image
-                fit="none"
-                lazy-load
-                v-for="(image,index)  in firstpost.ImageList"
-                :src="image"
-                @click="imageSwiper"
-              />
-            </div> -->
+                  fit="none"
+                  lazy-load
+                  v-for="(image,index)  in firstpostImageList"
+                  :src="image"
+                  @click="imageSwiper"
+                />
+            </div>
 		    	</div>
 		    	<div class="uploadFileList">
 		    		<a href="javascript:;" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
@@ -102,7 +102,7 @@
                   <div class="perDet">
                     <div class="perName" v-if="item.user && item.user._data.username">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
-                    <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD h:mm')}}</div>
+                    <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
               </div>

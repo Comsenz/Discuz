@@ -86,7 +86,7 @@ export default {
   },
   created() {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
-    this.isPhone = appCommonH.isWeixin().isPhone;    
+    this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
     this.getUser();
     this.detailsLoad();
@@ -253,11 +253,12 @@ export default {
           if (firstpostImageLen === 0) return;
           var firstpostImage = [];
           for (let i = 0; i < firstpostImageLen; i++) {
-            let src = 'https://2020.comsenz-service.com/api/attachments/';
-            firstpostImage.push(src + this.themeCon.firstPost.images[i]._data.uuid);
+            // let src = 'https://2020.comsenz-service.com/api/attachments/';
+            // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+            firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
           }
           this.firstpostImageList = firstpostImage;
-
+          console.log(134, this.firstpostImageList);
         } else {
           if(res.readdata.posts.length === 0){
             this.finished = true;
