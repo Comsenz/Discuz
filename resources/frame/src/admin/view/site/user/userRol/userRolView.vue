@@ -28,14 +28,14 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button v-if="scope.row._data.id !== '1'" type="text" @click="$router.push({path:'/admin/rol-permission',query:{id:scope.row._data.id}})">设置权限</el-button>
-              <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '7' && scope.row._data.id !== '10'" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
+              <el-button v-if="scope.row._data.id !== '1' && scope.row._data.id !== '6' && scope.row._data.id !== '7' && scope.row._data.id !== '10'" @click="singleDelete(scope.$index,scope.row._data.id)" type="text">删除</el-button>
             </template>
           </el-table-column>
 
           <el-table-column
             min-width="115">
             <template slot-scope="scope">
-              <el-radio v-model="radio" @change="radioChange(scope.row)" v-if="scope.row._data.id != 1 && scope.row._data.id !== '7'" :label="scope.row._data.id">设为加入站点的默认级别</el-radio>
+              <el-radio v-model="radio" @change="radioChange(scope.row)" v-if="scope.row._data.id != 1 && scope.row._data.id !== '6' && scope.row._data.id !== '7'" :label="scope.row._data.id">设为加入站点的默认级别</el-radio>
             </template>
           </el-table-column>
 
