@@ -101,22 +101,25 @@ export default {
             console.log(res);
             console.log('1234');
             const enclosureListCon = res.readdata.firstPost.attachments;
-            const fileListCon = res.readdata.images;
+            const fileListCon = res.readdata.firstPost.images;
             this.cateId = res.readdata.category._data.id;
             // console.log(this.cateId);
             this.selectSort = res.readdata.category._data.name;
             this.content = res.readdata.firstPost._data.content;
             this.postsId = res.readdata.firstPost._data.id;
             for (let i = 0; i < enclosureListCon.length; i++) {
-              this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,uuid:enclosureListCon[i]._data.uuid});
+              this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
             }
             // console.log(this.enclosureList);
             if(this.enclosureList.length>0){
               this.enclosureShow = true;
             }
-            // for (let i = 0; i < fileListCon.length; i++) {
-            //   this.fileList.push({type:fileListCon[i]._data.extension,name:fileListCon[i]._data.fileName,uuid:fileListCon[i]._data.uuid});
-            // }
+            for (let i = 0; i < fileListCon.length; i++) {
+              this.fileList.push({url:fileListCon[i]._data.url,id:fileListCon[i]._data.id});
+            }
+            if(this.fileList.length>0){
+              this.uploadShow = true;
+            }
 
             // if(this.cateId != initializeCateId){
             //   this.cateId = initializeCateId;
@@ -127,6 +130,13 @@ export default {
     },
     //发布主题
     publish(){
+      this.attriAttachment = this.fileList.concat(this.enclosureList);
+      for(let m=0;m<this.attriAttachment.length;m++){
+        this.attriAttachment[m] = {
+          "type": "attachments",
+          "id": this.attriAttachment[m].id
+        }
+      }
       this.appFetch({
         url:'posts',
         method:"patch",
@@ -423,7 +433,7 @@ export default {
              // console.log('909090');
              if(isFoot){
                console.log('图片');
-              this.fileList.push({url:data.readdata._data.fileName,id:data.readdata._data.id});
+              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
               // console.log(this.fileList);
               // console.log('333');
              }
