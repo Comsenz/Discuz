@@ -52,7 +52,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $attachmentUuid = Arr::get($request->getQueryParams(), 'uuid');
+        $attachmentUuid = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
 
         $attachment = $this->getAttachment($attachmentUuid, $actor);
