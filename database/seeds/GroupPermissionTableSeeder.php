@@ -37,6 +37,9 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.deletePosts' => [10],           // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
 
+        // 回收站
+        'viewTrashed' => [],                    // 查看回收站
+
         // 附件
         'attachment.create.0' => [10],          // 上传附件
         'attachment.create.1' => [10],          // 上传图片
@@ -51,7 +54,7 @@ class GroupPermissionTableSeeder extends Seeder
         'checkVersion' => [],                   // 检查是否有新版权限
 
         // 订单
-        'order.create' => [10],              // 创建订单
+        'order.create' => [6, 10],              // 创建订单
         'order.viewList' => [],                 // 订单总列表
 
         // 钱包

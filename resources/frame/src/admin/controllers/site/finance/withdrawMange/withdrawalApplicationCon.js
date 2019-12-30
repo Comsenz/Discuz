@@ -77,16 +77,20 @@ export default {
   },
   methods:{
 
-    cashStatus(status,remark){
+    cashStatus(status,data){
       switch (status){
         case 1:
-          return "待审核";
+          if (!data.error_message){
+            return '待审核'
+          } else {
+            return "待审核，原因：" + data.error_message;
+          }
           break;
         case 2:
           return "审核通过";
           break;
         case 3:
-          return "审核不通过，原因：" + remark;
+          return "审核不通过，原因：" + data.remark;
           break;
         case 4:
           return "待打款";
@@ -95,7 +99,7 @@ export default {
           return "已打款";
           break;
         case 6:
-          return "打款失败";
+          return "打款失败，原因：" + data.error_message;
           break;
         default:
           console.log("获取状态失败，请刷新页面！");
@@ -105,7 +109,7 @@ export default {
 
     noReviewClick(id){
       let data = {id:[]};
-      this.$MessageBox.prompt('请输入不通过理由', '提示', {
+      this.$MessageBox.prompt('', '提示', {
         confirmButtonText: '提交',
         cancelButtonText: '取消',
         inputPlaceholder:'请输入不通过理由'
@@ -193,7 +197,7 @@ export default {
         if (res.data.result[data.id] === 'success'){
           this.getReflectList();
           this.$message({
-            message: '提交通过！',
+            message: '提交成功！',
             type: 'success'
           });
         }else if (res.data.result[data.id] === 'failure'){

@@ -6,8 +6,12 @@
       <span v-if="registerClose" @click="signUpClick">注册</span>
     </template>
 
-    <template v-else-if="pageName === 'wx-login-bd'||pageName === 'wx-sign-up-bd'">
+    <template v-else-if="pageName === 'wx-login-bd'">
       <span @click="wxSignUpBdClick">没有账号？注册，绑定微信新账号</span>
+    </template>
+
+    <template v-else-if="pageName === 'wx-sign-up-bd'">
+      <span @click="wxLoginBdClick">已有账号？登录，微信绑定账号</span>
     </template>
 
     <template v-else-if="pageName === 'sign-up'">

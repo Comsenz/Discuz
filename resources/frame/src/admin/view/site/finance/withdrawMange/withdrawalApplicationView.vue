@@ -75,7 +75,7 @@
           <el-table-column
             label="状态"
             show-overflow-tooltip>
-            <template slot-scope="scope">{{cashStatus(scope.row._data.cash_status,scope.row._data.remark)}}</template>
+            <template slot-scope="scope">{{cashStatus(scope.row._data.cash_status,scope.row._data)}}</template>
           </el-table-column>
 
           <el-table-column

@@ -7,7 +7,7 @@ export default {
 		return {
 			searchVal: '',
 			userParams: {
-				'filter[name]': '',
+				'filter[username]': this.searchVal,
 				// 'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
@@ -17,7 +17,8 @@ export default {
 				'include': 'groups'
 			},
 			themeParamd: {
-				'filter[q]': '',
+				'filter[q]': this.searchVal,
+				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
 				'page[number]': 1,
 
@@ -49,7 +50,7 @@ export default {
 
 				this.firstComeIn = false;
 
-				this.userParams['filter[name]'] = this.searchVal
+				this.userParams['filter[username]'] = this.searchVal
 
 				this.handleSearchUser(true);
 
@@ -115,10 +116,14 @@ export default {
 				await this.appFetch({
 					url:'searchThreads',
 					method:'get',
-					// data:{
-					// 	currentPageNum :this.themeParamd
-					// }
-					data: this.themeParamd
+					data:{
+						include: ['user', 'firstPost'],
+						'filter[q]': this.searchVal,
+						'filter[isDeleted]': 'no',
+						'page[limit]': 5,
+						'page[number]': 1,
+					}
+					// data: this.themeParamd
 				}).then(data=>{
 					console.log(data,'datadatadata')
 					this.searchThemeList = this.searchThemeList.concat(data.readdata);

@@ -449,13 +449,12 @@ export default {
   /*
   * 登录且付费不能访问的页面列表
   * */
-  const noLoginPage = [
+  const signInAndPayForAccess = [
     'login-user',
     'login-phone',
     'sign-up',
     'wx-login-bd',
     'retrieve-pwd',
-    'bind-phone',
     'retrieve-pwd',
     'pay-the-fee',
     'pay-circle-con/:themeId/:groupId',
@@ -464,15 +463,37 @@ export default {
     'pay-circle-con/:themeId'
   ];
 
+
   /*
   * 登录成功状态，不能访问的页面列表
   * */
-  const noLoginAccessPage = [
+  const successfulLoginForbiddenPage = [
     'login-user',
     'login-phone',
     'sign-up',
     'retrieve-pwd'
   ];
+
+
+  /*
+  * 未登录可访问页面
+  * */
+  const notLoggedInToAccessPage = [
+    'login-user',
+    'login-phone',
+    'sign-up',
+    'bind-phone',
+    'pay-the-fee',
+    'retrieve-pwd',
+    'pay-circle-con/:themeId/:groupId',
+    'open-circle-con',
+    'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
+    'open-circle',
+    'details/:themeId',
+    'home-page/:userId',
+    'circle'
+  ];
+
 
   /*
   * 获取用户第一次访问页面，登录后跳转回来
@@ -490,7 +511,7 @@ export default {
   /*
   * 前台路由全局处理
   * */
-  var registerClose = ''; //站点是否关闭
+  var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
 
   /*
@@ -510,32 +531,173 @@ export default {
       }
     }
   })
-
   } else {
     next();
   }
 
 
   /*
-  * 前台登录状态后，不能访问未登录状态的页面
+  * 前台路由前置判断
+  * 判断登录状态
   * */
   if (tokenId && Authorization){
-    if (noLoginAccessPage.includes(to.name)){
-      next({path:'/'});
-      return;
-    }else {
-      next();
-    }
+    /*已登录状态*/
+
+    this.getForum().then(ress=>{
+      if (ress._data.setsite.site_mode === 'pay'){
+
+        this.getUsers(tokenId).then(res=>{
+          /*获取用户付费状态并判断*/
+          if (res){
+            /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
+            if (signInAndPayForAccess.includes(to.name)){
+              next(vm=>{
+                vm.$router.go(-1);
+              })
+            }else {
+              next();
+            }
+          }else {
+            if (notLoggedInToAccessPage.includes(to.name)){
+              next();
+            }else {
+              if(to.name === 'pay-circle'){
+                next();
+                return
+              }
+              next({path:'pay-circle'});
+            }
+          }
+        })
+
+      } else {
+
+        if (signInAndPayForAccess.includes(to.name)){
+          console.log(form);
+          // next(form.path)
+          next('/')
+        }else {
+          next();
+        }
+
+        /*this.getUsers(tokenId).then(res=>{
+          console.log(res);
+          if (res){
+            if (signInAndPayForAccess.includes(to.name)){
+              console.log(form);
+              // next(form.path)
+              next('/')
+            }else {
+              next();
+            }
+          }else {
+            if (notLoggedInToAccessPage.includes(to.name)){
+              next();
+            }else {
+              if(to.name === '/'){
+                next();
+                return
+              }
+              next({path:'/'});
+            }
+          }
+        })*/
+
+      }
+
+    })
+
+
   } else {
-    console.log('前台未登录，跳转');
-    next();
-    return;
+    /*未登录状态*/
+
+    /*判断登录设备*/
+    if (isWeixin){
+      /*微信设备，跳转到微信绑定页*/
+      if(to.name === 'wx-login-bd') {
+        next();
+        return
+      } else {
+        next();
+      }
+      next({path:'/wx-login-bd'});
+    } else {
+      if (notLoggedInToAccessPage.includes(to.name)){
+        /*符合，未登录可以访问站点*/
+        next();
+      }else {
+        /*不符合，跳转到未登录，可访问站点*/
+        this.getForum().then((res)=>{
+
+          /*判断站点模式*/
+          if (res._data.setsite.site_mode === 'pay'){
+            if(to.name === 'pay-circle'){
+              next();
+              return
+            }
+            next({path:'pay-circle'});
+          }else {
+            if (to.name === '/'){
+              next();
+              return
+            }else {
+              next();
+              return
+            }
+            next('/')
+          }
+        })
+      }
+    }
+
   }
 
 
 
 
-  if (isWeixin == true) {
+  if(isWeixin){
+
+  }else if (isPhone){
+      // 基准大小
+    const baseSize = 37.5;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 750 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 375;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
+  }else {
+    // 基准大小
+    const baseSize = 24;  //需要跟.postcssrc.js’rootValue‘属性统一大小
+    // 设置 rem 函数
+    function setRem () {
+      // 当前页面宽度相对于 640 宽的缩放比例，可根据自己需要修改。
+      const scale = document.documentElement.clientWidth / 240;
+      // 设置页面根节点字体大小
+      document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+    }
+    // 初始化
+    setRem();
+    // 改变窗口大小时重新设置 rem
+    window.onresize = function () {
+      setRem()
+    };
+
+    document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
+    document.getElementsByTagName("html")[0].style.width  = "640px";
+    let viewportWidth = window.innerWidth;
+    document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
+  }
+
+
+ /* if (isWeixin == true) {
     //微信登录时
     console.log(to);
     console.log('微信登录');
@@ -549,7 +711,7 @@ export default {
       }
       next({path:'/wx-login-bd'});
 
-      /*if(localStorage.getItem('officeDb_code')) {
+      /!*if(localStorage.getItem('officeDb_code')) {
         console.log('跳转微信绑定');
         next();
         return
@@ -559,7 +721,7 @@ export default {
         return;
       }
 
-      next({path:'/wx-login-bd'});*/
+      next({path:'/wx-login-bd'});*!/
       console.log('未登录');
     } else {
 
@@ -567,16 +729,16 @@ export default {
         this.getUsers(tokenId).then(res => {
 
           if (res) {
-            /*
+            /!*
             * 登录成功，且付费后，判断路由不能进未登录和付费页面
             * bug：路由跳转前需要在显示页面前直接跳转，不然会触发页面的方法
-            * */
+            * *!/
             if (noLoginPage.includes(to.name)){
               console.log(form.fullPath);
               next(form.fullPath);
-              /*next(vm => {
+              /!*next(vm => {
                 // vm.$router.go(-1);
-              })*/
+              })*!/
               console.log('符合');
             } else {
               console.log('不符合');
@@ -617,25 +779,25 @@ export default {
 
         });
       } else {
-        /*
+        /!*
         * 获取站点模式，需要forum接口
-        * */
-        /*if (this.siteMode === 'pay') {
+        * *!/
+        /!*if (this.siteMode === 'pay') {
           this.$router.push({path: 'pay-circle-login'});
         } else if (this.siteMode === 'public') {
           this.$router.push({path: '/'});
         } else {
           console.log("缺少参数，请刷新页面");
-        }*/
+        }*!/
         next();
         return
       }
-      /*if(to.path === '/'){
+      /!*if(to.path === '/'){
         next();
       } else {
         next();
-      }*/
-      /*if(to.path !== browserDb.getSItem('beforeVisiting')){
+      }*!/
+      /!*if(to.path !== browserDb.getSItem('beforeVisiting')){
         next();
       } else {
         /!*
@@ -647,7 +809,7 @@ export default {
           next();
         }
         next({path:browserDb.getSItem('beforeVisiting')});
-      }*/
+      }*!/
 
       console.log('已经登录');
     }
@@ -674,9 +836,9 @@ export default {
     if (noLoginPage.includes(to.name)){
       console.log(form.fullPath);
       next();
-      /*next(vm => {
+      /!*next(vm => {
         // vm.$router.go(-1);
-      })*/
+      })*!/
       console.log('符合');
     } else {
       console.log('不符合');
@@ -800,7 +962,7 @@ export default {
       return
     }
 
-    /*let authVal = browserDb.getLItem('Authorization');
+    /!*let authVal = browserDb.getLItem('Authorization');
     let siteMode = '';
     let isPaid = '';
     var pro1 = new Promise(function(resolve, reject){
@@ -914,7 +1076,7 @@ export default {
         }
     };
   });
-    next();*/
+    next();*!/
   } else {
     console.log('pc');
     // 基准大小
@@ -941,9 +1103,9 @@ export default {
     if (noLoginPage.includes(to.name)){
       console.log(form.fullPath);
       next();
-      /*next(vm => {
+      /!*next(vm => {
         // vm.$router.go(-1);
-      })*/
+      })*!/
       console.log('pc符合');
     } else {
       console.log('pc不符合');
@@ -1067,9 +1229,7 @@ export default {
 
       console.log('pc登录');
     }
-  }
-
-
+  }*/
 
 
   },

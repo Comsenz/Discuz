@@ -8,8 +8,6 @@ use App\Api\Controller as ApiController;
 |--------------------------------------------------------------------------
 */
 
-$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
-
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
 $route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
@@ -18,14 +16,6 @@ $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
-
-/*
-|--------------------------------------------------------------------------
-| Cloud APIs
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/qcloud/version', 'qcloud.version', ApiController\Qcloud\VersionController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +47,7 @@ $route->post('/permission', 'permission.update', ApiController\GroupPermission\U
 
 $route->post('/login', 'login', ApiController\Users\LoginController::class);
 $route->post('/register', 'register', ApiController\Users\RegisterController::class);
+$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -82,10 +73,7 @@ $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersControll
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
 $route->delete('/users/{id}/avatar', 'user.delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
-
-
 $route->get('/export/users', 'export.users', ApiController\Users\ExportUserController::class);
-
 
 /*
 |--------------------------------------------------------------------------

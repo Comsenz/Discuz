@@ -45,6 +45,7 @@ export default {
         if(initStatus){
           this.walletDetailsList = [];
         }
+        console.log(res,'2222222222222222')
         this.walletDetailsList = this.walletDetailsList.concat(res.data);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;

@@ -16,6 +16,7 @@ export default {
       userPhone: '',
       radio1:'0',
       userStatus:[],
+      disabled:true,//禁用表单上的游客
       optionsStatus: [
         {
           value: 0,
