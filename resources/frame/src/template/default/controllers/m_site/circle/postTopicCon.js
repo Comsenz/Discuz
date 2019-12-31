@@ -153,7 +153,7 @@ export default {
         }
         console.log(this.attriAttachment);
         // return false;
-        console.log('发帖');
+        // console.log('发帖');
         // return false;
         this.appFetch({
           url:"threads",
