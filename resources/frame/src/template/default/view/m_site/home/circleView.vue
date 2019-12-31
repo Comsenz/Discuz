@@ -6,7 +6,7 @@
     v-model="loading"
     :finished="finished"
     :offset="offset"
-    finished-text="没有更多了"
+    :finished-text="pageIndex === 1 && themeListCon.length === 0 ? '暂无数据':'没有更多了'"
     @load="onLoad"
     :immediate-check="false"
     >
@@ -16,7 +16,7 @@
       <div class="gap"></div>
 
 	    <div class="themeTitBox">
-	    	<span class="themeTit">全部主题</span>
+	    	<span class="themeTit">{{filterInfo.typeWo}}</span>
 	    	<div class="screen" @click="bindScreen">
 	    		<span>筛选</span>
 	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>

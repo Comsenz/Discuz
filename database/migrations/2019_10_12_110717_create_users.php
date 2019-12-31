@@ -27,7 +27,7 @@ class CreateUsers extends Migration
             $table->dateTime('joined_at')->nullable()->comment('付费加入时间');
             $table->dateTime('expired_at')->nullable()->comment('付费到期时间');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('修改时间/最后登录时间');
         });
     }
 

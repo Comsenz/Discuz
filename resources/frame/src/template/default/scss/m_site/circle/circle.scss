@@ -722,6 +722,8 @@ openCircleConView.vue
   .themeImgChild {
     @include px2rem(margin-right, 6);
     @include px2rem(margin-bottom, 4);
+    height: 113px;
+    width: 113px;
     float: left;
     &:nth-child(3n) {
       margin-right:0;

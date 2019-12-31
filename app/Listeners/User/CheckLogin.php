@@ -45,29 +45,33 @@ class CheckLogin
         $userLoginFailCount = $this->userLoginFailLog->getDataByIp($ip);
         $maxTime = $this->userLoginFailLog->getLastFailTime($ip);
 
+        //set current count
+        ++$userLoginFailCount;
+
+        $expire = Carbon::parse($maxTime)->addMinutes(self::LIMIT_TIME);
+        if ($userLoginFailCount > self::FAIL_NUM && ($expire > Carbon::now())) {
+            throw new LoginFailuresTimesToplimitException;
+        }elseif ($userLoginFailCount > self::FAIL_NUM && ($expire < Carbon::now())) {
+            //reset fail count
+            UserLoginFailLog::reSetFailCountByIp($ip);
+        }
+
         //password not match
         if ($event->password && ! $event->user->checkPassword($event->password)) {
-            //set current count,reduce one database update
-            ++$userLoginFailCount;
-
             if($userLoginFailCount == 1){
                 //first time set fail log
                 UserLoginFailLog::writeLog($ip, $event->user->id, $event->user->username);
             }else{
-                //check fail count & login time limit
-                $expire = Carbon::parse($maxTime)->addMinutes(self::LIMIT_TIME);
-                if ($userLoginFailCount >= self::FAIL_NUM && ($expire > Carbon::now())) {
+                //fail count +1
+                UserLoginFailLog::setFailCountByIp($ip,$event->user->id,$event->user->username);
+
+                if ($userLoginFailCount == self::FAIL_NUM) {
                     throw new LoginFailuresTimesToplimitException;
-                } elseif ($userLoginFailCount > self::FAIL_NUM && ($expire < Carbon::now())) {
-                    //reset fail count
-                    UserLoginFailLog::reSetFailCountByIp($ip);
-                } else {
-                    //add fail count
-                    UserLoginFailLog::setFailCountByIp($ip);
                 }
             }
 
             throw new LoginFailedException(self::FAIL_NUM-$userLoginFailCount,403);
         }
     }
+
 }

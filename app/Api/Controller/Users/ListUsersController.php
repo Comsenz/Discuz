@@ -9,6 +9,7 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
+use App\Traits\UserTrait;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
@@ -18,11 +19,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use App\Models\Group;
 
 class ListUsersController extends AbstractListController
 {
     use AssertPermissionTrait;
+    use UserTrait;
 
     /**
      * {@inheritdoc}
@@ -129,57 +130,5 @@ class ListUsersController extends AbstractListController
         }
 
         return $query->get();
-    }
-
-    /**
-     * @param Builder $query
-     * @param array $filter
-     */
-    private function applyFilters(Builder $query, array $filter)
-    {
-        // 用户 id
-        if ($id = Arr::get($filter, 'id')) {
-            $query->where('id', $id);
-        }
-
-        // 用户名
-        if ($username = Arr::get($filter, 'username')) {
-            // 多个用户名用逗号隔开
-            $username = explode(',', $username);
-
-            $query->where(function ($query) use ($username) {
-                foreach ($username as $name) {
-                    // 用户名前后存在星号（*）则使用模糊查询
-                    if (Str::startsWith($name, '*') || Str::endsWith($name, '*')) {
-                        $name = Str::replaceLast('*', '%', Str::replaceFirst('*', '%', $name));
-
-                        $query->orWhere('username', 'like', $name);
-                    } else {
-                        $query->orWhere('username', $name);
-                    }
-                }
-            });
-        }
-
-        // 手机号
-        if ($mobile = Arr::get($filter, 'mobile')) {
-            $query->where('mobile', $mobile);
-        }
-
-        // 状态
-        if ($status = Arr::get($filter, 'status')) {
-            $query->where('status', $status);
-        }
-
-        // 用户组
-        if ($group_id = Arr::get($filter, 'group_id')) {
-            $query->join('group_user', 'users.id', '=', 'group_user.user_id')
-                ->whereIn('group_id', $group_id);
-        }
-
-        // 是否绑定微信
-        if ($bind = Arr::get($filter, 'bind')) {
-            in_array($bind, $this->optionalInclude) && $query->has($bind);
-        }
     }
 }
