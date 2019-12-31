@@ -16,7 +16,14 @@ export default {
     m_site:{
       css: ['/css/reset.css'],
       // js: ['/js/rem.js'],
-
+      'pay-status':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/pay/payView'],resolve)
+        },
+        metaInfo:{
+          title:"支付订单查询"
+        }
+      },
       'circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleView'],resolve)
@@ -491,7 +498,8 @@ export default {
     'open-circle',
     'details/:themeId',
     'home-page/:userId',
-    'circle'
+    'circle',
+    'pay-status'
   ];
 
 
