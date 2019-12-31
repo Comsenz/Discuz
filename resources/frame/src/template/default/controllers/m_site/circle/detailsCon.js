@@ -57,7 +57,7 @@ export default {
         // 'https://img.yzcdn.cn/2.jpg',
         // 'https://img.yzcdn.cn/2.jpg'
       ],
-      isPayVal: '',
+      siteMode:'',
       isPaid: '',
       situation1: false,
       loginBtnFix: false,
@@ -72,15 +72,16 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1, //页码
-      pageLimit: 5,
+      pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId: '',
       menuStatus: false, //默认不显示菜单按钮
       collectStatus: false,
       collectFlag: '',
-      postCount: 0 ,//回复总条数
-      isAndroid:false,
-      isiOS:false,
+      postCount: 0, //回复总条数
+      token:false,
+      isWeixin: false,
+      isPhone: false
     }
   },
   created() {
@@ -150,21 +151,18 @@ export default {
       this.appFetch({
         url: 'forum',
         method: 'get',
-        data: {
-          include: ['users'],
-        }
+        data: {}
       }).then((res) => {
-        console.log(res);
         this.siteInfo = res.readdata;
         // console.log(res.readdata._data.siteMode+'请求');
         // this.siteUsername = res.readdata._data.siteAuthor.username;
         // this.sitePrice = res.readdata._data.sitePrice
         //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.siteMode;
-        if (this.isPayVal != null && this.isPayVal != '') {
-          this.isPayVal = res.readdata._data.siteMode;
+        this.siteMode = res.readdata._data.siteMode;
+        if (this.siteMode != null && this.siteMode != '') {
+          this.siteMode = res.readdata._data.siteMode;
           //   //判断站点信息是否付费，用户是否登录，用户是否已支付
-          this.detailIf(this.isPayVal, false);
+          this.detailIf(this.siteMode, false);
         }
       });
     },
@@ -191,7 +189,7 @@ export default {
         //   this.joinedAt = res.readdata._data.joinedAt;
         // }
         // if(this.isPaid != null && this.isPaid != ''){
-        //   this.detailIf(this.isPayVal,false);
+        //   this.detailIf(this.siteMode,false);
         // }
         // this.detailIf(false,this.isPaid);
       })
@@ -269,7 +267,7 @@ export default {
             firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
           }
           this.firstpostImageList = firstpostImage;
-          // console.log(134, this.firstpostImageList);
+
         } else {
           if(res.readdata.posts.length === 0){
             this.finished = true;
@@ -362,42 +360,49 @@ export default {
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
-      let attri = new Object();
-      if (clickType == 1) {
-        this.collectStatus = !this.collectStatus
-        if (this.collectStatus == true) {
-          this.collectFlag = "已收藏"
-        } else if (this.collectStatus == false) {
-          this.collectFlag = "收藏"
-        }
-
-        attri.isFavorite = true;
-        content = '';
-        this.themeOpeRequest(attri, cateId);
-      } else if (clickType == 2) {
-        content = '';
-        this.themeOpeRequest(attri, cateId);
-        attri.isEssence = true;
-      } else if (clickType == 3) {
-        content = '';
-        // request = true;
-        attri.isSticky = true;
-        this.themeOpeRequest(attri, cateId);
-      } else if (clickType == 4) {
-        attri.isDeleted = true;
-        content = '';
-        this.themeOpeRequest(attri, cateId);
+      if(!this.token){
         this.$router.push({
-          path: '/circle',
-          name: 'circle'
+          path:'/login-user',
+          name:'login-user'
         })
       } else {
-        // content = content
-        // console.log(content);
-        //跳转到发帖页
-        this.$router.push({
-          path: '/edit-topic' + '/' + this.themeId
-        });
+        let attri = new Object();
+        if (clickType == 1) {
+          this.collectStatus = !this.collectStatus
+          if (this.collectStatus == true) {
+            this.collectFlag = "已收藏"
+          } else if (this.collectStatus == false) {
+            this.collectFlag = "收藏"
+          }
+
+          attri.isFavorite = true;
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+        } else if (clickType == 2) {
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+          attri.isEssence = true;
+        } else if (clickType == 3) {
+          content = '';
+          // request = true;
+          attri.isSticky = true;
+          this.themeOpeRequest(attri, cateId);
+        } else if (clickType == 4) {
+          attri.isDeleted = true;
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+          this.$router.push({
+            path: '/circle',
+            name: 'circle'
+          })
+        } else {
+          // content = content
+          // console.log(content);
+          //跳转到发帖页
+          this.$router.push({
+            path: '/edit-topic' + '/' + this.themeId
+          });
+        }
       }
     },
     //主题操作接口请求
@@ -429,34 +434,42 @@ export default {
     },
     //点赞/删除
     replyOpera(postId, type, isLike) {
-      // console.log(isLike);
-      let attri = new Object();
-      if (type == 1) {
-        attri.isDeleted = true;
-      } else if (type == 2) {
-        if (isLike) {
-          //如果已点赞
-          attri.isLiked = false;
-        } else {
-          //如果未点赞
-          attri.isLiked = true;
-        }
-      }
-      // console.log(attri);
-      let posts = 'posts/' + postId;
-      this.appFetch({
-        url: posts,
-        method: 'patch',
-        data: {
-          "data": {
-            "type": "posts",
-            "attributes": attri,
+      // console.log(this.token);
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        // console.log(isLike);
+        let attri = new Object();
+        if (type == 1) {
+          attri.isDeleted = true;
+        } else if (type == 2) {
+          if (isLike) {
+            //如果已点赞
+            attri.isLiked = false;
+          } else {
+            //如果未点赞
+            attri.isLiked = true;
           }
         }
-      }).then((res) => {
-        this.$message('修改成功');
-        this.detailsLoad();
-      })
+        // console.log(attri);
+        let posts = 'posts/' + postId;
+        this.appFetch({
+          url: posts,
+          method: 'patch',
+          data: {
+            "data": {
+              "type": "posts",
+              "attributes": attri,
+            }
+          }
+        }).then((res) => {
+          this.$message('修改成功');
+          this.detailsLoad();
+        })
+      }
     },
     //打赏
     showRewardPopup: function () {
@@ -474,15 +487,18 @@ export default {
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
-      this.$router.push({
-        path: '/reply-to-topic',
-        name: 'reply-to-topic',
-        params: {
-          themeId: themeId,
-          replyQuote: quoteCon,
-          replyId: replyId
-        }
-      })
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.$router.push({
+          path:'/reply-to-topic',
+          name:'reply-to-topic',
+          params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
+          })
+      }
     },
     //打赏 生成订单
     rewardPay(amount) {
