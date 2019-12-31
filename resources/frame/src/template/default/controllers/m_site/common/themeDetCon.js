@@ -22,7 +22,7 @@ export default {
          priview:[],
          showScreen:[],
          length:0,
-
+         indexlist:-1,
          menuStatus:false
 
     }
@@ -103,8 +103,8 @@ export default {
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      // console.log(prevData);
-      // console.log(newData);
+      console.log(prevData);
+      console.log(newData);
       this.themeList = newData;
       this.themeListResult = newData;
       this.loadPriviewImgList();
@@ -125,30 +125,26 @@ export default {
 
     //循环数据新建数组，用于操作管理显示隐藏下拉菜单
     forList(){
-      var screenLen = this.themeList.length;
-      for(let k=0;k < screenLen;k++){
-        this.showScreen.push(false);
-        // this.length = screenLen;
-      }
+      // var screenLen = this.themeList.length;
+      // for(let k=0;k < screenLen;k++){
+      //   this.showScreen.push(false);
+      //   // this.length = screenLen;
+      // }
     },
 
     //主题管理，点击更多显示下拉菜单
     bindScreen(index){
-      console.log(index);
-      // this.menuStatus = !this.menuStatus;
-
-      var that = this;
-      this.showScreen.forEach((item) => {  //循环已经把所有的状态值清空了
-      console.log(this.showScreen);
-          item = false;
-      })
-       this.showScreen.splice(index,1,!this.showScreen[index]);
-       // console.log(this.showScreen[index]);
-
-
-
+      if(index==this.indexlist){
+        this.indexlist=-1
+      }else{
+        this.indexlist=index;
+      }
     },
-
+    disappear(){
+      // this.$nextTick(function (){
+      //   this.indexlist=-1
+      // })
+    },
 
     //管理操作
     themeOpera(postsId,clickType,clickStatus) {

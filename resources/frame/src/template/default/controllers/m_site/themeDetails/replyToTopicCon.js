@@ -91,14 +91,38 @@ export default {
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
-    //删除图片
-    deleteFile(){
-      // alert('刪除');
+    // //删除图片
+    // deleteFile(){
+    //   // alert('刪除');
+    //   if(this.fileList.length<=1){
+    //     this.uploadShow = false;
+    //   }
+    //   //调接口
+    // },
+
+    deleteEnclosure(id,type){
+      console.log(id);
+
+      // return false;
       if(this.fileList.length<=1){
         this.uploadShow = false;
       }
-      //调接口
+      this.appFetch({
+        url:'attachment',
+        method:'delete',
+        splice:'/'+id
+      }).then(data=>{
+        var attriAttachment = new Array();
+        if(type == "img"){
+          var newArr = this.fileList.filter(item => item.id !== id);
+          this.fileList = newArr;
+          console.log(this.fileList);
+        }
+        this.$message('删除成功');
+      })
     },
+
+
     //这里写接口，上传
     uploaderEnclosure(file,isFoot){
         this.appFetch({
@@ -108,7 +132,7 @@ export default {
 
         }).then(data=>{
           if(isFoot){
-           this.fileList.push({url:data.readdata._data.fileName});
+           this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
           }
           // this.$message('提交成功');
         }).catch(error=>{
@@ -192,6 +216,13 @@ export default {
 
     //回复主题
     publish(){
+      this.attriAttachment = this.fileList;
+      for(let m=0;m<this.attriAttachment.length;m++){
+        this.attriAttachment[m] = {
+          "type": "attachments",
+          "id": this.attriAttachment[m].id
+        }
+      }
       if(this.replyId && this.replyText){
         this.appFetch({
           url:"posts",
@@ -210,7 +241,10 @@ export default {
                             "id": this.themeId
                         }
                     }
-                }
+                },
+                "attachments": {
+                  "data":this.attriAttachment
+                },
             }
           },
         }).then(res =>{
@@ -234,7 +268,10 @@ export default {
                             "id": this.themeId
                         }
                     }
-                }
+                },
+                "attachments": {
+                  "data":this.attriAttachment
+                },
             }
           },
         }).then(res =>{
