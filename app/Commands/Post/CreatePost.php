@@ -137,7 +137,7 @@ class CreatePost
 
         $post = $post->reply(
             $thread->id,
-            Arr::get($this->data, 'attributes.content'),
+            trim(Arr::get($this->data, 'attributes.content')),
             $this->actor->id,
             $this->ip,
             $this->replyPostId,
