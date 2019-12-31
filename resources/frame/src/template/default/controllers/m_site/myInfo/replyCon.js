@@ -68,7 +68,8 @@ export default {
 
         }
       }).then(res=>{
-        this.myReplyList()
+        this.pageIndex = 1;
+        this.myReplyList(true)
       })
     },
     onRefresh(){           //下拉刷新

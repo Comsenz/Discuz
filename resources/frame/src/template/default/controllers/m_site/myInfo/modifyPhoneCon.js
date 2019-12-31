@@ -191,8 +191,11 @@ export default {
           }
         }
       }).then(res => {
-        this.$toast("手机号修改成功");
-        this.$router.push({path:'../view/m_site/home/circleView'});
+        this.mobileConfirmed =res.readdata._data.mobileConfirmed;
+        if(this.mobileConfirmed == true){
+          this.$toast("手机号修改成功");
+          this.$router.push({path:'../view/m_site/home/circleView'});
+        }
       }).catch((err)=>{
         this.$toast("手机号修改失败，请重试");
       });

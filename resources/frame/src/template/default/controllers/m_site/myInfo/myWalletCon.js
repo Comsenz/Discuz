@@ -20,6 +20,7 @@ export default {
       valueFrozen:'',
       user_id:'1',
       isLoading: false, //是否处于下拉刷新状态
+
     }
   },
   components:{
