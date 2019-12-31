@@ -27,10 +27,14 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res)
-        this.sdkAppId = res.readdata._data.qcloud.qcloud_sms_app_id;
-        this.appKey = res.readdata._data.qcloud.qcloud_sms_app_key;
-        this.smsId = res.readdata._data.qcloud.qcloud_sms_template_id;
-        this.smsSignature = res.readdata._data.qcloud.qcloud_sms_sign;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.sdkAppId = res.readdata._data.qcloud.qcloud_sms_app_id;
+          this.appKey = res.readdata._data.qcloud.qcloud_sms_app_key;
+          this.smsId = res.readdata._data.qcloud.qcloud_sms_template_id;
+          this.smsSignature = res.readdata._data.qcloud.qcloud_sms_sign;
+        }
       })
     },
     Submission(){
@@ -66,11 +70,15 @@ export default {
                   "tag": "qcloud",
                 }
               }
-            
+
           ]
         }
       }).then(res=>{
-        this.$message({ message: '提交成功', type: 'success' });
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({message: '提交成功', type: 'success'});
+        }
       })
     }
 

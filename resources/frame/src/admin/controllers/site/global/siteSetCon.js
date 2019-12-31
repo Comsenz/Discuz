@@ -62,36 +62,40 @@ export default {
         data:{
         }
       }).then(data=>{
-        console.log(data);
-        console.log('123');
-        this.siteName = data.readdata._data.siteName;
-        this.siteIntroduction = data.readdata._data.siteIntroduction;
-        this.siteMode = data.readdata._data.siteMode;
-        if(this.siteMode == 'pay'){
-          this.radio = '2';
-        } else {
-          this.radio = '1';
-        }
-        this.sitePrice = data.readdata._data.sitePrice;
-        this.siteExpire = data.readdata._data.siteExpire;
-        this.siteAuthorScale = data.readdata._data.siteAuthorScale;
-        this.siteMasterScale = data.readdata._data.siteMasterScale;
-        this.siteLogoFile = data.readdata._data.siteLogoFile;
-        this.siteRecord = data.readdata._data.siteRecord;
-        this.siteStat = data.readdata._data.siteStat;
-        this.siteClose = data.readdata._data.siteClose;
-        this.siteMasterId = data.readdata._data.siteAuthor.id;
-        if(data.readdata._data.logo){
-          this.fileList.push({url:data.readdata._data.logo});
-        }
-        if(this.siteClose == true){
-           this.radio2 = '1';
-        } else {
-          this.radio2 = '2';
-        }
-        this.siteCloseMsg = data.readdata._data.siteCloseMsg;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          console.log(data);
+          console.log('123');
+          this.siteName = data.readdata._data.siteName;
+          this.siteIntroduction = data.readdata._data.siteIntroduction;
+          this.siteMode = data.readdata._data.siteMode;
+          if (this.siteMode == 'pay') {
+            this.radio = '2';
+          } else {
+            this.radio = '1';
+          }
+          this.sitePrice = data.readdata._data.sitePrice;
+          this.siteExpire = data.readdata._data.siteExpire;
+          this.siteAuthorScale = data.readdata._data.siteAuthorScale;
+          this.siteMasterScale = data.readdata._data.siteMasterScale;
+          this.siteLogoFile = data.readdata._data.siteLogoFile;
+          this.siteRecord = data.readdata._data.siteRecord;
+          this.siteStat = data.readdata._data.siteStat;
+          this.siteClose = data.readdata._data.siteClose;
+          this.siteMasterId = data.readdata._data.siteAuthor.id;
+          if (data.readdata._data.logo) {
+            this.fileList.push({url: data.readdata._data.logo});
+          }
+          if (this.siteClose == true) {
+            this.radio2 = '1';
+          } else {
+            this.radio2 = '2';
+          }
+          this.siteCloseMsg = data.readdata._data.siteCloseMsg;
 
-        // this.$message({'修改成功'});
+          // this.$message({'修改成功'});
+        }
       }).catch(error=>{
         // console.log('失败');
       })
@@ -107,7 +111,11 @@ export default {
         method:'delete',
         data:logoFormData,
       }).then(data=>{
-        this.$message('删除成功');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message('删除成功');
+        }
       }).catch(error=>{
         console.log('上传失败');
       })
@@ -161,9 +169,13 @@ export default {
         method:'post',
         data:logoFormData,
       }).then(data=>{
-        this.imageUrl = data.readdata._data.default.logo;
-        console.log(data.readdata._data.default.logo)
-        // this.$message('上传成功');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.imageUrl = data.readdata._data.default.logo;
+          console.log(data.readdata._data.default.logo)
+          // this.$message('上传成功');
+        }
       }).catch(error=>{
         console.log('上传失败');
       })
@@ -266,10 +278,14 @@ export default {
         }
       }).then(data=>{
         console.log(data)
-        this.$message({
-          message: '提交成功',
-          type: 'success'
-        });
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          });
+        }
       }).catch(error=>{
         console.log('失败');
       })

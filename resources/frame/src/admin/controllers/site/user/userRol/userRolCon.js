@@ -166,14 +166,18 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.tableData = res.readdata;
-        this.alternateLength = res.readdata.length;
-        this.tableData.forEach((item)=>{
-          if (item._data.default == 1){
-            this.radio = item._data.id;
-            this.alternateRadio = item._data.id;
-          }
-        })
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.tableData = res.readdata;
+          this.alternateLength = res.readdata.length;
+          this.tableData.forEach((item) => {
+            if (item._data.default == 1) {
+              this.radio = item._data.id;
+              this.alternateRadio = item._data.id;
+            }
+          })
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -186,12 +190,16 @@ export default {
           data
         }
       }).then(res=>{
-        this.$message({
-          message: '提交成功！',
-          type: 'success'
-        });
-        this.addStatus = false;
-        this.getGroups();
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功！',
+            type: 'success'
+          });
+          this.addStatus = false;
+          this.getGroups();
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -203,11 +211,15 @@ export default {
         splice:'/' + id,
         data:{}
       }).then(res=>{
-        this.$message({
-          message: '删除成功！',
-          type: 'success'
-        });
-        this.getGroups();
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          });
+          this.getGroups();
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -220,11 +232,15 @@ export default {
           data
         }
       }).then(res=>{
-        this.$message({
-          message: '删除成功！',
-          type: 'success'
-        });
-        this.getGroups();
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          });
+          this.getGroups();
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -243,11 +259,15 @@ export default {
           }
         }
       }).then(res=>{
-        this.$message({
-          message: '提交成功！',
-          type: 'success'
-        });
-        this.getGroups();
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功！',
+            type: 'success'
+          });
+          this.getGroups();
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -261,11 +281,15 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.$message({
-          message: '提交成功！',
-          type: 'success'
-        });
-        this.getGroups();
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功！',
+            type: 'success'
+          });
+          this.getGroups();
+        }
       }).catch(err=>{
         console.log(err);
       })

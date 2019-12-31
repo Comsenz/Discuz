@@ -173,11 +173,15 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.tableData = [];
-        this.tableData = res.readdata;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.tableData = [];
+          this.tableData = res.readdata;
 
-        this.total = res.meta.total;
-        this.pageCount = res.meta.pageCount;
+          this.total = res.meta.total;
+          this.pageCount = res.meta.pageCount;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -194,16 +198,20 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        if (res.data.result[data.id] === 'success'){
-          this.getReflectList();
-          this.$message({
-            message: '提交成功！',
-            type: 'success'
-          });
-        }else if (res.data.result[data.id] === 'failure'){
-          this.$message.error('提交错误！请重新提交');
-        } else {
-          this.$message.error('未知错误，请刷新页面后重新提交');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          if (res.data.result[data.id] === 'success') {
+            this.getReflectList();
+            this.$message({
+              message: '提交成功！',
+              type: 'success'
+            });
+          } else if (res.data.result[data.id] === 'failure') {
+            this.$message.error('提交错误！请重新提交');
+          } else {
+            this.$message.error('未知错误，请刷新页面后重新提交');
+          }
         }
       }).catch(err=>{
         console.log(err);

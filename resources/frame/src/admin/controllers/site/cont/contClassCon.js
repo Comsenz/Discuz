@@ -129,16 +129,20 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        this.categoriesListLength = res.data.length;
-        this.categoriesList = [];
-        res.data.forEach((item,index)=>{
-          this.categoriesList.push({
-            name:item.attributes.name,
-            id:item.id,
-            description:item.attributes.description,
-            sort:item.attributes.sort
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.categoriesListLength = res.data.length;
+          this.categoriesList = [];
+          res.data.forEach((item, index) => {
+            this.categoriesList.push({
+              name: item.attributes.name,
+              id: item.id,
+              description: item.attributes.description,
+              sort: item.attributes.sort
+            })
           })
-        })
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -150,13 +154,17 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
-        if (!res.meta){
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('操作失败！');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          if (!res.meta) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+          } else {
+            this.$message.error('操作失败！');
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -168,13 +176,17 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
-        if (!res.meta){
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('操作失败！');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          if (!res.meta) {
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+          } else {
+            this.$message.error('操作失败！');
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -200,13 +212,17 @@ export default {
                   "data": datas
                 }
               }).then(res=>{
-                if (!res.meta){
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success'
-                  });
-                } else {
-                  this.$message.error('操作失败！');
+                if (res.errors){
+                  this.$toast.fail(res.errors[0].code);
+                }else {
+                  if (!res.meta) {
+                    this.$message({
+                      message: '操作成功',
+                      type: 'success'
+                    });
+                  } else {
+                    this.$message.error('操作失败！');
+                  }
                 }
               }).catch(err=>{
                 console.log(err);
@@ -220,13 +236,17 @@ export default {
                   data
               }
             }).then(res=>{
-              if (!res.meta){
-                this.$message({
-                  message: '操作成功',
-                  type: 'success'
-                });
-              } else {
-                this.$message.error('操作失败！');
+              if (res.errors){
+                this.$toast.fail(res.errors[0].code);
+              }else {
+                if (!res.meta) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
+                } else {
+                  this.$message.error('操作失败！');
+                }
               }
             }).catch(err=>{
               console.log(err);

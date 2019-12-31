@@ -17,7 +17,11 @@ export default {
       method:"get",
       data:{}
     }).then(res => {
-      this.siteInfo = res.data.attributes;
+      if (res.errors){
+        this.$toast.fail(res.errors[0].code);
+      }else {
+        this.siteInfo = res.data.attributes;
+      }
     });
   },
 

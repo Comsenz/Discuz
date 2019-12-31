@@ -20,7 +20,7 @@ export default {
   methods:{
     loadStatus(){
       console.log(this.type);
-      //³õÊ¼»¯ÅäÖÃ²ÎÊı
+      //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
       this.appFetch({
         url:'tags',
         method:'get',
@@ -29,10 +29,14 @@ export default {
         }
       }).then(data=>{
           // console.log(data);
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+        }else {
           this.appId = data.readdata[0]._data.app_id;
           this.appSecret = data.readdata[0]._data.app_secret;
+        }
       }).catch(error=>{
-        // console.log('Ê§°Ü');
+        // console.log('Ê§ï¿½ï¿½');
       })
     },
     submitConfiguration(){
@@ -58,13 +62,17 @@ export default {
           ]
         }
       }).then(data=>{
-        this.$router.push({
-          path:'/admin/worth-mentioning-set'
-        });
-        this.$message({
-          message: 'æäº¤æˆåŠŸ',
-          type: 'success'
-        });
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+        }else {
+          this.$router.push({
+            path: '/admin/worth-mentioning-set'
+          });
+          this.$message({
+            message: 'æäº¤æˆåŠŸ',
+            type: 'success'
+          });
+        }
       })
     }
   },

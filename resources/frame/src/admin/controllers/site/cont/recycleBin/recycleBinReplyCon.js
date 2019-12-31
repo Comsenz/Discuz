@@ -173,26 +173,30 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.themeList=[];
-        this.submitForm = [];
-        this.themeList = res.readdata;
-        this.total = res.meta.postCount;
-        this.pageCount = res.meta.pageCount;
 
-        this.themeList.forEach((item,index)=>{
-          this.submitForm.push({
-            Select:'无',
-            radio:'',
-            type:'posts',
-            id:item._data.id,
-            attributes: {
-              isApproved: 0,
-              isDeleted:true,
-              message:'',
-            }
-          })
-        });
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.themeList = [];
+          this.submitForm = [];
+          this.themeList = res.readdata;
+          this.total = res.meta.postCount;
+          this.pageCount = res.meta.pageCount;
 
+          this.themeList.forEach((item, index) => {
+            this.submitForm.push({
+              Select: '无',
+              radio: '',
+              type: 'posts',
+              id: item._data.id,
+              attributes: {
+                isApproved: 0,
+                isDeleted: true,
+                message: '',
+              }
+            })
+          });
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -204,13 +208,17 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        this.categoriesList = [];
-        res.data.forEach((item,index)=>{
-          this.categoriesList.push({
-            name:item.attributes.name,
-            id:item.id
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.categoriesList = [];
+          res.data.forEach((item, index) => {
+            this.categoriesList.push({
+              name: item.attributes.name,
+              id: item.id
+            })
           })
-        })
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -224,16 +232,20 @@ export default {
           data
         }
       }).then(res=>{
-        if (res.meta && res.data){
-          this.$message.error('操作失败！');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
         }else {
-          this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
+          if (res.meta && res.data) {
+            this.$message.error('操作失败！');
+          } else {
+            this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+          }
+          console.log(res);
         }
-        console.log(res);
       }).catch(err=>{
 
       })
@@ -247,15 +259,19 @@ export default {
           data
         }
       }).then(res=>{
-        if (res.meta && res.data){
-          this.checkedTheme = [];
-          this.$message.error('操作失败！');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
         }else {
-          this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
+          if (res.meta && res.data) {
+            this.checkedTheme = [];
+            this.$message.error('操作失败！');
+          } else {
+            this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
+          }
         }
       }).catch(err=>{
         console.log(err);
