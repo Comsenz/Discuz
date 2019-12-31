@@ -270,6 +270,34 @@ export default {
           }
           this.firstpostImageList = firstpostImage;
           // console.log(134, this.firstpostImageList);
+
+
+            // console.log(themeListLen);
+            var themeListLen = this.themeCon.length;
+
+            if(this.themeCon =='' || this.themeCon == null){
+              return false;
+            } else {
+              for (let h = 0; h < themeListLen; h++) {
+                // 图片地址
+                // let src = 'https://2020.comsenz-service.com/api/attachments/';
+                let imageList = [];
+                if(this.themeCon[h].firstPost.images){
+                  for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
+                    imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
+                    // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
+                    // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+                  }
+                }
+                // console.log(imageList);
+                this.themeCon[h].posts.imageList = imageList;
+                console.log(imageList);
+              }
+            }
+
+
+
+
         } else {
           if(res.readdata.posts.length === 0){
             this.finished = true;
@@ -289,7 +317,7 @@ export default {
     },
     //主题详情图片放大轮播
     imageSwiper() {
-      this.imageShow = true;
+      // this.imageShow = true;
     },
     //主题详情图片放大轮播index值监听
     onChange(index) {
