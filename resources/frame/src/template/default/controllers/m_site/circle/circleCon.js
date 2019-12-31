@@ -36,13 +36,13 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
-      pageLimit: 20,
+      pageLimit: 5,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      canEdit:false,
+      canEdit:true,
       firstCategoriesId:'',
       Initialization:false,     //当请求到默认分类id时，允许初始化开关
-      searchStatus: false,  //默认不显示搜索按钮
-      menuStatus: false,     //默认不显示菜单按钮
+      searchStatus: true,  //默认不显示搜索按钮
+      menuStatus: true,     //默认不显示菜单按钮
       categoryId:false
 
 		}
@@ -138,10 +138,12 @@ export default {
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
+          this.canEdit = false;
+          this.searchStatus = false;
+          this.menuStatus = false;
         }
       } else {
-        this.searchStatus = true;
-        this.menuStatus = true;
+
       }
     },
 
@@ -200,7 +202,7 @@ export default {
             this.themeListCon =this.themeListCon.concat(res.readdata);
             this.loading = false;
             this.finished = res.readdata.length < this.pageLimit;
-            
+
           }).catch((err)=>{
             if(this.loading && this.pageIndex !== 1){
               this.pageIndex--;
@@ -230,6 +232,7 @@ export default {
             if(initStatus){
               this.themeListCon = []
             }
+            this.themeListCon = [];
             this.themeListCon = res.readdata;
             this.themeListCon =this.themeListCon.concat(res.readdata);
             this.loading = false;
@@ -257,9 +260,12 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
-          console.log(res)
-          // this.themeListCon = res.readdata;
+          console.log(res);
+          console.log('890');
+          this.themeListCon = res.readdata;
           this.themeListCon = this.themeListCon.concat(res.readdata);
+          console.log(this.themeListCon);
+          console.log('666');
           this.loading = false;
           this.finished = res.readdata.length < this.pageLimit;
         }).catch((err)=>{

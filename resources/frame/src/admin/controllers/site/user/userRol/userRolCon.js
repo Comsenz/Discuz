@@ -47,6 +47,9 @@ export default {
         case '1':
           return false;
           break;
+        case '6':
+          return false;
+          break;
         case '7':
           return false;
           break;

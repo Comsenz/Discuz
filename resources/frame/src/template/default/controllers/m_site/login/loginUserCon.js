@@ -7,6 +7,7 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 import browserDb from '../../../../../helpers/webDbHelper';
 
 import {mapMutations,mapState} from 'vuex';
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data: function () {
@@ -63,9 +64,9 @@ export default {
         }
       }).then(res => {
         console.log(res);
-
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+          this.$toast.fail(errorInfo[0].errorDetail);
         } else {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
@@ -74,20 +75,23 @@ export default {
           browserDb.setLItem('tokenId', tokenId);
 
           this.getUsers(tokenId).then(res=>{
-            if (res.readdata._data.paid){
-              this.$router.push({path:'/'})
+            if (res.errors){
+              let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+              this.$toast.fail(errorInfo[0].errorDetail);
             } else {
-              if (this.siteMode === 'pay'){
-                this.$router.push({path:'pay-circle-login'});
-              } else if (this.siteMode === 'public'){
-                this.$router.push({path:'/'});
+              if (res.readdata._data.paid) {
+                this.$router.push({path: '/'})
               } else {
-                console.log("缺少参数，请刷新页面");
+                if (this.siteMode === 'pay') {
+                  this.$router.push({path: 'pay-circle-login'});
+                } else if (this.siteMode === 'public') {
+                  this.$router.push({path: '/'});
+                } else {
+                  console.log("缺少参数，请刷新页面");
+                }
               }
             }
-
           })
-
         }
 
       }).catch(err => {
@@ -103,16 +107,13 @@ export default {
           type: 'warning'
         });
       }else {
-
       }
-
       // window.location.href = this.wxHref;
     },
 
     loginPhoneClick() {
       this.$router.push({path: '/login-phone'})
     },
-
 
     /*
     * 接口请求
@@ -192,28 +193,14 @@ export default {
     //获取到code 和 state再访问getWatchHref接口，把code和state拼接到接口url里。
 
     if (isWeixin === true) {
-      // const APPID = 'wx2aa96b3508831102';
-      // const REDIRECT_URI = window.location.host;
-      // const SCOPE = 'snsapi_base';
-      // const STATE = '123';
-      //微信登录时
       console.log('微信登录');
-      // this.getWatchHref();
-
-      // this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
-      // if (this.$router.history.current.query.code && this.$router.history.current.query.state){
-      //   this.$router.push({path:'/login-user'});
-      // }
     } else if (isPhone === true) {
       console.log('手机浏览器登录');
-
       this.wxLoginShow = false;
       this.isOne = true;
     } else {
       console.log('pc登录');
-
       this.isPC = true;
-      // this.getWatchHref();
     }
 
     this.getForum();

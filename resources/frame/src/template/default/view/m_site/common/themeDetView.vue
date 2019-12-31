@@ -7,7 +7,7 @@
             <div class="">
               <div class="postTop">
                 <div class="postPer">
-                  <img :src="item.postHead" v-if="item.postHead" class="postHead">
+                  <img :src="item.user._data.avatarUrl" v-if="item.user._data.avatarUrl" class="postHead">
                   <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
                   <div class="perDet">
                     <div class="perName" v-if="item.user">{{item.user._data.username}}</div>

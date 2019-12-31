@@ -3,6 +3,7 @@ import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSig
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import  '../../../scss/m_site/mobileIndex.scss';
 import browserDb from "../../../../../helpers/webDbHelper";
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data:function () {
@@ -41,7 +42,8 @@ export default {
         console.log(res);
         this.getForum().then(()=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code)
+            let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+            this.$toast.fail(errorInfo[0].errorDetail);
           } else {
             this.$toast.success('注册成功');
             let token = res.data.attributes.access_token;
@@ -95,9 +97,14 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-        this.siteMode = res.readdata._data.setsite.site_mode;
-        browserDb.setLItem('siteInfo',res.readdata);
+        if (res.errors){
+          let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+          this.$toast.fail(errorInfo[0].errorDetail);
+        } else {
+          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+          this.siteMode = res.readdata._data.setsite.site_mode;
+          browserDb.setLItem('siteInfo',res.readdata);
+        }
       }).catch(err=>{
         console.log(err);
       })

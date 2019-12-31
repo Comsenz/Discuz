@@ -2,9 +2,8 @@
 
 return [
     'operate_type_error'     => '操作类型不存在',
-    'wallet_status_error'     => '钱包状态有误',
+    'wallet_status_error'     => '钱包状态不存在',
     'available_amount_error' => '钱包可用金额不足',
-    'update_failure'         => '钱包更新失败',
     'status_cash_freeze'     => '钱包已冻结提现',
     'cash_freeze_desc'       => '提现冻结',
     'cash_sum_limit'       => '超出每日提现金额限制',

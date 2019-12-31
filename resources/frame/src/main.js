@@ -39,8 +39,8 @@ import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 
-// import wx from 'weixin-js-sdk';
-// Vue.prototype.$wx = wx;
+import wx from 'weixin-js-sdk';
+Vue.prototype.$wx = wx;
 
 
 import filters from "./common/filters";   //过滤器
@@ -73,8 +73,6 @@ Vue.prototype.apiStore = new Store({
 });
 Vue.prototype.$utils = utils; //注册全局方法
 
-import wx from '../static/js/jweixin-1.4.0';
-Vue.prototype.$wx = wx;
 
 //实例化根目录
 const appRouter = RConfig.init();

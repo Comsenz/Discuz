@@ -65,11 +65,8 @@ class SetSettingsController implements RequestHandlerInterface
         $settings = collect($request->getParsedBody()->get('data', []))->pluck('attributes');
 
         // 分成比例检查
-        $siteAuthorScale = $settings->where('tag', 'default')
-            ->where('key', 'site_author_scale')->first();
-
-        $siteMasterScale = $settings->where('tag', 'default')
-            ->where('key', 'site_master_scale')->first();
+        $siteAuthorScale = $settings->where('tag', 'default')->where('key', 'site_author_scale')->first();
+        $siteMasterScale = $settings->where('tag', 'default')->where('key', 'site_master_scale')->first();
 
         // 只要传了其中一个，就检查分成比例相加是否为 10
         if ($siteAuthorScale || $siteMasterScale) {
@@ -89,13 +86,16 @@ class SetSettingsController implements RequestHandlerInterface
             $billing->DescribeAccountBalance();
         }
 
-        $siteMode = $settings->where('tag', 'default')
-            ->where('key', 'site_mode')->first();
+        // 站点模式切换
+        $siteMode = $settings->where('tag', 'default')->where('key', 'site_mode')->first();
+        $siteMode = Arr::get($siteMode, 'value');
 
-        if (Arr::get($siteMode, 'value') === 'pay') {
-            $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
-        } elseif (Arr::get($siteMode, 'value') === 'public') {
-            $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
+        if ($siteMode && $siteMode != $this->settings->get('site_mode')) {
+            if ($siteMode === 'pay') {
+                $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
+            } elseif ($siteMode === 'public') {
+                $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
+            }
         }
 
         $settings->each(function ($setting) {

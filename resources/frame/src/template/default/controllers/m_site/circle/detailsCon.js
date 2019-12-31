@@ -7,6 +7,7 @@ import appConfig from "../../../../../../../frame/config/appConfig";
 // import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
 // import Forum from '../../../../../common/models/Forum';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data: function () {
     return {
@@ -77,10 +78,17 @@ export default {
       menuStatus: false, //默认不显示菜单按钮
       collectStatus: false,
       collectFlag: '',
-      postCount: 0 //回复总条数
+      postCount: 0 ,//回复总条数
+      isAndroid:false,
+      isiOS:false,
     }
   },
   created() {
+    var u = navigator.userAgent;
+    this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    // alert('是否是Android：'+isAndroid);
+    // alert('是否是iOS：'+isiOS);
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
@@ -112,6 +120,12 @@ export default {
   },
 
   methods: {
+    //判断设备，下载时提示
+    downAttachment(url){
+      if(this.isiOS){
+        this.$message('因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
+      }
+    },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
       let datas = [];
@@ -255,7 +269,7 @@ export default {
             firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
           }
           this.firstpostImageList = firstpostImage;
-          console.log(134, this.firstpostImageList);
+          // console.log(134, this.firstpostImageList);
         } else {
           if(res.readdata.posts.length === 0){
             this.finished = true;
@@ -263,7 +277,7 @@ export default {
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
         // this.themeCon = res.readdata;
-        console.log(1, this.firstpostImageList);
+        // console.log(1, this.firstpostImageList);
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;

@@ -18,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Order;
 use Discuz\Auth\AssertPermissionTrait;
+use App\Exceptions\TradeErrorException;
 
 class PayOrder
 {
@@ -90,7 +91,7 @@ class PayOrder
         $this->url     = $url;
         // 验证参数
         $validator_info = $validator->make($this->data->toArray(), [
-            'payment_type' => 'required',
+            'payment_type' => 'required'
         ]);
 
         if ($validator_info->fails()) {
@@ -158,7 +159,7 @@ class PayOrder
                 ];
                 break;
             default:
-                return [];
+                throw new TradeErrorException('payment_method_invalid', 500);
                 break;
         }
         return PayTrade::pay($order_info, $pay_gateway, $config, $extra); //生成支付参数
