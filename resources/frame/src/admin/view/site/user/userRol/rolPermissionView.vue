@@ -39,7 +39,7 @@
       </CardRow>
     </Card>
 
-    <Card>
+    <!-- <Card>
       <CardRow description="查看主题的详情页中的附件的权限">
         <el-checkbox v-model="checked" label="attachment.view.0">查看附件</el-checkbox>
       </CardRow>
@@ -49,7 +49,7 @@
       <CardRow description="查看主题的详情页中的图片的权限">
         <el-checkbox v-model="checked" label="attachment.view.1">查看图片</el-checkbox>
       </CardRow>
-    </Card>
+    </Card> -->
 
     <Card>
       <CardRow description="查看站点成员列表、搜索成员的权限">
