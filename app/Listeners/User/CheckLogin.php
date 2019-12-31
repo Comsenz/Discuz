@@ -23,7 +23,7 @@ class CheckLogin
     protected $userLoginFailLog;
     protected $app;
 
-    const FAIL_NUM = 4;
+    const FAIL_NUM = 5;
     const LIMIT_TIME = 15;
 
     public function __construct(UserLoginFailLogRepository $userLoginFailLog,Application $app)
@@ -47,10 +47,16 @@ class CheckLogin
 
         //password not match
         if ($event->password && ! $event->user->checkPassword($event->password)) {
-            if ($userLoginFailCount) {
+            //set current count,reduce one database update
+            ++$userLoginFailCount;
+
+            if($userLoginFailCount == 1){
+                //first time set fail log
+                UserLoginFailLog::writeLog($ip, $event->user->id, $event->user->username);
+            }else{
                 //check fail count & login time limit
                 $expire = Carbon::parse($maxTime)->addMinutes(self::LIMIT_TIME);
-                if ($userLoginFailCount > self::FAIL_NUM && ($expire > Carbon::now())) {
+                if ($userLoginFailCount >= self::FAIL_NUM && ($expire > Carbon::now())) {
                     throw new LoginFailuresTimesToplimitException;
                 } elseif ($userLoginFailCount > self::FAIL_NUM && ($expire < Carbon::now())) {
                     //reset fail count
@@ -59,10 +65,9 @@ class CheckLogin
                     //add fail count
                     UserLoginFailLog::setFailCountByIp($ip);
                 }
-            } else {
-                UserLoginFailLog::writeLog($ip, $event->user->id, $event->user->username);
             }
-            throw new LoginFailedException(++$userLoginFailCount,403);
+
+            throw new LoginFailedException(self::FAIL_NUM-$userLoginFailCount,403);
         }
     }
 }
