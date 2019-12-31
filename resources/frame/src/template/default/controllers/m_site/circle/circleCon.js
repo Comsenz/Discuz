@@ -37,7 +37,7 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      canEdit:false,
+      canEdit:true,
       firstCategoriesId:'',
       Initialization:false,     //当请求到默认分类id时，允许初始化开关
       searchStatus: false,  //默认不显示搜索按钮
@@ -141,6 +141,7 @@ export default {
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
+          this.canEdit = false;
         }
       } else {
         this.searchStatus = true;
@@ -174,7 +175,7 @@ export default {
     //初始化请求主题列表数据
 
     loadThemeList(filterCondition,filterVal){
-      
+
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
       // }
@@ -208,7 +209,7 @@ export default {
         this.themeListCon =this.themeListCon.concat(res.readdata);
         this.loading = false;
         this.finished = res.readdata.length < this.pageLimit;
-        
+
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
           this.pageIndex--;

@@ -264,64 +264,20 @@ export default {
         this.collectStatus = res.readdata._data.isFavorite;
         this.themeShow = true;
         this.themeCon = res.readdata;
+
         var firstpostImageLen = this.themeCon.firstPost.images.length;
-        if (firstpostImageLen === 0) return;
-        var firstpostImage = [];
-        for (let i = 0; i < firstpostImageLen; i++) {
-          // let src = 'https://2020.comsenz-service.com/api/attachments/';
-          // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-          firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
-        }
-        this.firstpostImageList = firstpostImage;
-        // console.log(134, this.firstpostImageList);
-
-
-        // console.log(themeListLen);
-        var themeListLen = this.themeCon.length;
-
-        if(this.themeCon =='' || this.themeCon == null){
-          return false;
+        if (firstpostImageLen === 0) {
+          return;
         } else {
-          for (let h = 0; h < themeListLen; h++) {
-            // 图片地址
+          var firstpostImage = [];
+          for (let i = 0; i < firstpostImageLen; i++) {
             // let src = 'https://2020.comsenz-service.com/api/attachments/';
-            let imageList = [];
-            if(this.themeCon[h].firstPost.images){
-              for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
-                imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
-                // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
-                // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
-              }
-            }
-            // console.log(imageList);
-            this.themeCon[h].posts.imageList = imageList;
-            console.log(imageList);
+            // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+            firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
           }
-
-          if(this.themeCon =='' || this.themeCon == null){
-            console.log('null');
-            return false;
-          } else {
-            console.log('循环');
-            for (let h = 0; h < themeListLen; h++) {
-              // 图片地址
-              // let src = 'https://2020.comsenz-service.com/api/attachments/';
-              let imageList = [];
-              if(this.themeCon[h].firstPost.images){
-                for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
-                  imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
-                  // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
-                  // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
-                }
-              }
-              // console.log(imageList);
-              this.themeCon[h].posts.imageList = imageList;
-              console.log('898989');
-              console.log(imageList);
-            }
-          }
-        }
-
+          this.firstpostImageList = firstpostImage;
+          // console.log(134, this.firstpostImageList);
+        };
         } else {
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
@@ -561,7 +517,7 @@ export default {
       }
     },
     //打赏 生成订单
-    rewardPay(amount) {
+    getOrderSn(amount) {
       this.appFetch({
         url: "orderList",
         method: "post",
@@ -587,6 +543,44 @@ export default {
       // console.log(isPhone+'2222')
       let payment_type = '';
       if (isWeixin == true) {
+        
+        
+        
+        
+        console.log('微信');
+        this.getOrderSn().then(()=>{
+          this.orderPay(12).then((res)=>{
+            if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+              }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+              }
+            }else{
+              this.onBridgeReady(res);
+            }
+          })
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         //微信登录时
         alert('微信支付');
         // this.appFetch({
