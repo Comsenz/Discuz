@@ -84,7 +84,9 @@ export default {
       isPhone: false,
       isAndroid:false,
       isiOS:false,
-      orderSn:''
+      orderSn:'',
+      payStatus:false,   //支付状态
+      payStatusNum:0    //支付状态次数
     }
   },
   created() {
@@ -542,7 +544,7 @@ export default {
     payClick(amount){
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
-
+      this.amountNum = amount;
       if (isWeixin){
         console.log('微信');
         this.getOrderSn(amount).then(()=>{
@@ -565,6 +567,12 @@ export default {
           this.orderPay(11).then((res)=>{
             this.wxPayHref = res.readdata._data.wechat_h5_link;
             window.location.href = this.wxPayHref;
+            const payPhone = setInterval(()=>{
+              if (this.payStatus == '1' && this.payStatusNum > 10){
+                clearInterval(payPhone);
+              }
+              this.getOrderStatus()
+            },3000)
           })
         });
       } else {
@@ -574,27 +582,24 @@ export default {
             console.log(res);
             this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
-
-            if (this.payStatus && this.payStatusNum < 10){
-              clearInterval(pay);
-            }else {
-              var pay = setInterval(()=>{
-                // this.getUsersInfo()
-              },3000)
-            }
+            const pay = setInterval(()=>{
+              if (this.payStatus == '1' && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              this.getOrderStatus()
+            },3000)
 
           })
         });
       }
     },
 
-
     getOrderSn(amount){
       return this.appFetch({
         url:'orderList',
         method:'post',
         data:{
-          "type":1,
+          "type": 2,
           "thread_id": this.themeId,
           "amount": amount
         }
@@ -619,100 +624,33 @@ export default {
         console.log(err);
       })
     },
+    getOrderStatus(){
+      return this.appFetch({
+        url:'order',
+        method:'get',
+        splice:'/' + this.orderSn,
+        data:{
+        }
+      }).then(res=>{
+        console.log(res);
+        // const orderStatus = res.readdata._data.status;
 
-     // getUsersInfo(){
-     //   this.appFetch({
-     //     url:'users',
-     //     method:'get',
-     //     splice:'/' + browserDb.getLItem('tokenId'),
-     //     data:{
-     //       include:['groups']
-     //     }
-     //   }).then(res=>{
-     //     console.log(res);
-     //     console.log(res.readdata._data.paid);
-     //     this.payStatus = res.readdata._data.paid;
-     //     this.payStatusNum =+1;
-     //     if (this.payStatus){
-     //       this.qrcodeShow = false;
-     //       this.$router.push('/');
-     //       this.payStatusNum = 11;
-     //       clearInterval(pay);
-     //     }
-     //   }).catch(err=>{
-     //     console.log(err);
-     //   })
-     // },
-
-    //打赏，生成订单成功后支付
-    // orderPay(orderSn, amount) {
-    //   // console.log(amount+'101010');
-    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
-    //   let isPhone = this.appCommonH.isWeixin().isPhone;
-    //   // console.log(isWeixin+'1111')
-    //   // console.log(isPhone+'2222')
-    //   let payment_type = '';
-    //   if (isWeixin == true) {
-    //     console.log('微信');
-    //     this.rewardPay().then(()=>{
-    //       this.orderPay(12).then((res)=>{
-    //         if (typeof WeixinJSBridge == "undefined"){
-    //           if( document.addEventListener ){
-    //             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-    //           }else if (document.attachEvent){
-    //             document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-    //             document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
-    //           }
-    //         }else{
-    //           this.onBridgeReady(res);
-    //         }
-    //       })
-    //     });
+        this.payStatus = res.readdata._data.status;
+        this.payStatusNum =+1;
+        if (this.payStatus == '1'){
+          this.rewardShow = false;
+          this.qrcodeShow = false;
+          // this.$router.push('/');
+          this.payStatusNum = 11;
+          this.detailsLoad(true);
+          console.log('重新请求');
+          clearInterval(pay);
+        }
+        // return res;
+      })
+    },
 
 
-
-    //   } else if (isPhone == true) {
-    //     //手机浏览器登录时
-    //     // console.log('手机浏览器登录');
-
-
-
-
-
-
-    //   } else {
-    //     // payment_type = "10";
-    //     // console.log('pc登录');
-    //   }
-    //   let orderPay = 'trade/pay/order/' + orderSn;
-    //   this.appFetch({
-    //     url: orderPay,
-    //     method: "post",
-    //     data: {
-    //       'payment_type': payment_type
-    //     },
-    //   }).then(data => {
-    //     // console.log(data);
-    //     if (isWeixin) {
-    //       //如果是微信支付
-    //       // console.log(data.data.attributes.wechat_js);
-    //     } else if (isPhone) {
-    //       //如果是h5支付
-    //       // console.log(data.data.attributes.wechat_h5_link);
-    //       window.location.href = data.data.attributes.wechat_h5_link;
-    //     } else {
-    //       // console.log('pc');
-    //       //如果是pc支付
-    //       // console.log(data.data.attributes.wechat_qrcode);
-    //       this.qrcodeShow = true;
-    //       // console.log(this.qrcodeShow);
-    //       this.amountNum = amount;
-    //       // console.log(this.amountNum);
-    //       this.codeUrl = data.data.attributes.wechat_qrcode;
-    //     }
-
-    //   })
-    // },
     onLoad() { //上拉加载
       this.loading = true;
       this.pageIndex++;
