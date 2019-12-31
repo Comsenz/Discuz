@@ -33,7 +33,7 @@ export default {
     onBridgeReady(data){
       let that = this;
 
-      // const wxPay = new Promise((resolve,reject)=>{
+      const wxPay = new Promise((resolve,reject)=>{
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
@@ -45,33 +45,31 @@ export default {
         },
         function(res){
           alert('支付唤醒');
-          // alert(that.dialogShow);
-          // alert(this.dialogShow);
-          // that.dialogShow = true;
 
-          if (res.err_msg == "get_brand_wcpay_request:ok") {
-            alert("支付成功");
-            alert(res.err_msg);
-
-          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            alert("支付过程中用户取消");             //支付取消正常走
-            alert(res.err_msg);
-
-          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            alert("支付失败");
-            alert(res.err_msg);
-            resolve;
-          }
+          // if (res.err_msg == "get_brand_wcpay_request:ok") {
+          //   alert("支付成功");
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          //   alert("支付过程中用户取消");             //支付取消正常走
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          //   alert("支付失败");
+          //   alert(res.err_msg);
+          //   resolve;
+          // }
 
         });
-      // });
+        resolve;
+      });
 
-      // wxPay.then(()=>{
+      wxPay.then(()=>{
         alert('开始查询接口');
         const toast = that.$toast.loading({
           duration: 0, // 持续展示 toast
           forbidClick: true,
-          message: '正在查询订单...'
+          message: '支付状态查询中...'
         });
 
         let second = 5;
@@ -102,7 +100,7 @@ export default {
             }
           });
         }, 1000);
-      // });
+      });
 
     },
 
