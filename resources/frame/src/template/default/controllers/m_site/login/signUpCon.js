@@ -97,9 +97,14 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-        this.siteMode = res.readdata._data.setsite.site_mode;
-        browserDb.setLItem('siteInfo',res.readdata);
+        if (res.errors){
+          let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+          this.$toast.fail(errorInfo[0].errorDetail);
+        } else {
+          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+          this.siteMode = res.readdata._data.setsite.site_mode;
+          browserDb.setLItem('siteInfo',res.readdata);
+        }
       }).catch(err=>{
         console.log(err);
       })

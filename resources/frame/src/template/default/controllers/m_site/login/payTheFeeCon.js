@@ -38,9 +38,11 @@ export default {
           "signType":"MD5",         //微信签名方式：
           "paySign":res.data.attributes.wechat_js.paySign //微信签名
         },
-        function(res){
-          console.log(res);
-          if(res.err_msg == "get_brand_wcpay_request:ok" ){
+        function(ress){
+          console.log(ress);
+          alert('支付成功');
+          alert(ress);
+          if(ress.err_msg == "get_brand_wcpay_request:ok" ){
             this.$toast.success('支付成功');
             // this.$router.push('/')
           } else {
@@ -68,6 +70,7 @@ export default {
                 document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
               }
             }else{
+              alert('存在wx方法');
               this.onBridgeReady(res);
             }
 
