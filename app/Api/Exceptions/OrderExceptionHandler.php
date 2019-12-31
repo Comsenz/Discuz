@@ -42,7 +42,7 @@ class OrderExceptionHandler implements ExceptionHandlerInterface
         $error  = [
             'status'  => $status,
             'code'    => $e->getMessage(),
-            'message' => app('translator')->get('order.'. $e->getMessage()),
+            'detail' => app('translator')->get('order.'. $e->getMessage()),
         ];
         return new ResponseBag($status, [$error]);
     }

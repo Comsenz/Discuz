@@ -42,7 +42,7 @@ class WalletExceptionHandler implements ExceptionHandlerInterface
         $error  = [
             'status'  => $status,
             'code'    => $e->getMessage(),
-            'message' => app('translator')->get('wallet.'. $e->getMessage()),
+            'detail' => app('translator')->get('wallet.'. $e->getMessage()),
         ];
         return new ResponseBag($status, [$error]);
     }

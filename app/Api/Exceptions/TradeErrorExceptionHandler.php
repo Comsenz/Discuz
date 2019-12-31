@@ -28,7 +28,8 @@ class TradeErrorExceptionHandler implements ExceptionHandlerInterface
         return $e instanceof TradeErrorException;
     }
 
-    /**
+
+       /**
      * Handle the provided exception.
      *
      * @param  $e
@@ -37,11 +38,16 @@ class TradeErrorExceptionHandler implements ExceptionHandlerInterface
      */
     public function handle(Exception $e)
     {
-        $status = 500;
-        $error = [
-            'status' => (string) $status,
-            'code' => 'trade_error',
-            'message' => $e->getMessage(),
+        $code = $e->getMessage();
+        $language = app('translator')->get('trade.'. $code);
+        if (app('translator')->get($language) == 'trade.'. $code) {
+            $language = $e->getMessage();
+        }
+        $status = $e->getCode();
+        $error  = [
+            'status'  => $status,
+            'code'    => 'trade_error',
+            'detail' => $language,
         ];
         return new ResponseBag($status, [$error]);
     }
