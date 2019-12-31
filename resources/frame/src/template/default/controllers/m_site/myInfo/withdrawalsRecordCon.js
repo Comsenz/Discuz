@@ -44,13 +44,17 @@ export default {
             'page[limit]': this.pageLimit
           }
         })
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.withdrawalsList = [];
         }
 
         this.finished = response.data.length < this.pageLimit;
         this.withdrawalsList = this.withdrawalsList.concat(response.data);
-
+      }
       } catch(err){
 
         if(this.loading && this.pageIndex !== 1){

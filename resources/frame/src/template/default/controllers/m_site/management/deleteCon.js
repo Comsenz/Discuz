@@ -107,8 +107,13 @@ export default {
 					'data':data
 				}
 			}).then(res=>{
+				if (res.errors){
+					this.$toast.fail(res.errors[0].code);
+					// throw new Error(res.error)
+				  }else{
 				this.pageIndex = 1;
 				this.deleteList(true)
+				  }
 			})
 
 
@@ -126,6 +131,10 @@ export default {
 					'page[limit]': this.pageLimit
 				}
 			}).then(res=>{
+				if (res.errors){
+					this.$toast.fail(res.errors[0].code);
+					throw new Error(res.error)
+				  }else{
 				if(initStatus){
 				this.themeListCon = []
 				}
@@ -133,6 +142,7 @@ export default {
 				this.themeListCon =this.themeListCon.concat(res.readdata);
 				this.loading = false;
 				this.finished = res.readdata.length < this.pageLimit;
+			}
 			}).catch((err)=>{
 				if(this.loading && this.pageIndex !== 1){
 				  this.pageIndex--;

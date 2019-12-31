@@ -30,7 +30,12 @@ export default {
           include:''       
         }
       }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         this.walletFrozenList = res.data
+        }
       })
     }
   }

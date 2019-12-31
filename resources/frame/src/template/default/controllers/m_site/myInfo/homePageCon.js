@@ -45,10 +45,15 @@ export default {
             include: 'groups',
           }
         }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }else{
           console.log('234');
           console.log(res);
           this.username = res.readdata._data.username;
           this.userAvatar = res.readdata._data.avatarUrl;
+          }
         });
      return this.appFetch({
         url: 'threads',
@@ -60,6 +65,10 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.OthersThemeList = []
         }
@@ -70,6 +79,7 @@ export default {
         this.OthersThemeList =this.OthersThemeList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
+      }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
           this.pageIndex--;

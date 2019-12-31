@@ -65,11 +65,21 @@ export default {
         }
         }
       }).then((res)=>{
-        this.$toast("密码修改成功");
-        this.$router.push({path:'../view/m_site/home/circleView'});
-      }).catch((err)=>{
-        this.$toast("密码修改失败，请重试");
+        if (res.errors){
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
+        }else{
+          this.$toast("密码修改成功");
+          this.$router.push({path:'../view/m_site/home/circleView'});
+        }
+
       })
+      // .catch((err)=>{
+      //   this.$toast("密码修改失败，请重试");
+      // })
     },
   }
 

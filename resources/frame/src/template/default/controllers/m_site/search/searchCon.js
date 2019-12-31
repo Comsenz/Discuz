@@ -86,8 +86,8 @@ export default {
 					// }
 					data: this.userParams
 				}).then(data=>{
-						this.searchUserList = this.searchUserList.concat(data.readdata);
-					    this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
+					this.searchUserList = this.searchUserList.concat(data.readdata);
+					this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
 				}).catch(err=>{
 					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
 						this.userParams['page[number]'] = currentPageNum - 1;

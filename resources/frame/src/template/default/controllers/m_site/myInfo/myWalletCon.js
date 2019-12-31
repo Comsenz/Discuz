@@ -67,15 +67,13 @@ export default {
         data:{
           // user_id:this.user_id
         }
-      },(res)=>{
-        if(res == '200'){
-          console.log('成功')
-        }else{
-          console.log('400')
-        }
       }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         this.value = res.data.attributes.available_amount;
         this.valueFrozen = res.data.attributes.freeze_amount;
+        }
       })
       // let user_id = browserDb.getLItem('tokenId');
       // this.apiStore.find('wallet/user',user_id).then(res=>{

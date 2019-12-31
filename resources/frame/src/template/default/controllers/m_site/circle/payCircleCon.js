@@ -45,6 +45,10 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.siteInfo = []
         }
@@ -64,6 +68,7 @@ export default {
         //   //判断站点信息是否付费，用户是否登录，用户是否已支付
         //   this.detailIf(this.isPayVal,false);
         // }
+      }
       });
     },
 		//跳转到登录页

@@ -41,6 +41,10 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         console.log(res);
         this.siteInfo = res.readdata;
         console.log(res.readdata._data.siteMode+'请求');
@@ -50,6 +54,7 @@ export default {
           this.siteUsername = '暂无站长信息';
         }
         this.sitePrice = res.readdata._data.sitePrice
+      }
       });
 
       //请求权限列表数据
@@ -61,10 +66,19 @@ export default {
           include: ['permission'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         console.log('000000');
         console.log(res);
         this.limitList = res.readdata;
-
+        }
+      }
       });
 
 
@@ -79,14 +93,19 @@ export default {
           include: ['user', 'posts', 'posts.user', 'firstPost'],
         }
       }).then(res=>{
-		if(initStatus){
-		this.thread=[]
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
+		    if(initStatus){
+		    this.thread=[]
 		}
         console.log('123');
         console.log(res)
         this.thread = res.readdata;
         console.log(this.thread._data.createdAt);
         console.log('567');
+  }
       })
     },
 		//跳转到登录页

@@ -11,6 +11,7 @@ export default {
     return {
       fileList:[],
       options: [],
+      optionsList:[],
       imageUrl: '',
       userRole: [],
       userInfo: {},
@@ -46,7 +47,7 @@ export default {
           url: 'users',
           splice: `/${this.query.id}`,
           data:{
-            include:'wechat'
+            include:'wechat,groups'
           }
         })
         if (response.errors){

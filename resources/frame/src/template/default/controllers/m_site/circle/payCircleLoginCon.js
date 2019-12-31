@@ -37,6 +37,10 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.siteInfo= []
         }
@@ -49,6 +53,7 @@ export default {
           this.siteUsername = '暂无站长信息';
         }
         this.sitePrice = res.readdata._data.sitePrice
+      }
       });
     },
     //退出登录
@@ -108,7 +113,7 @@ export default {
               },2000)
             } else {
               if (second > 0 || !res.readdata._data.paid){
-                toast.message = `正在查询订单...`;
+                toast.message = '正在查询订单...';
               } else if (res.readdata._data.paid){
                 clearInterval(timer);
                 toast.message = '支付成功，正在跳转首页...';
