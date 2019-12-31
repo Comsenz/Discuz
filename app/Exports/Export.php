@@ -53,6 +53,7 @@ abstract class Export
 
         $datas = $this->data;
 
+        $keys = [];
         foreach ($datas as $row => $data) {
             $keys = array_keys($data);
             $values = array_values($data);
@@ -61,6 +62,7 @@ abstract class Export
                 $sheet->setCellValue($this->cells[$index].($row+2), $item);
             }
         }
+
         if ($keys) {
             foreach ($keys as $index => $key) {
                 $sheet->setCellValue($this->cells[$index].'1', Arr::get($this->columnMap, $key, $key));

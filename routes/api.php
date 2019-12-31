@@ -33,7 +33,7 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 
 /*
 |--------------------------------------------------------------------------
-| GroupPermission
+| Groups - Permission
 |--------------------------------------------------------------------------
 */
 
