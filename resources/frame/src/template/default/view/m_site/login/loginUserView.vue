@@ -25,7 +25,6 @@
           </van-cell-group>
         </form>
 
-
         <div class="login-user-btn">
           <van-button type="primary" @click="loginClick" :loading="btnLoading" loading-text="登录中..." >登录</van-button>
         </div>

@@ -78,7 +78,7 @@ export default {
       // console.log(e);
       let formdata = new FormData()
       formdata.append('file', e.file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata);
 
     },
@@ -87,7 +87,7 @@ export default {
       let file = e.target.files[0];
       let formdata = new FormData();
       formdata.append('file', file);
-      formdata.append('isGallery', true);
+      formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
     },
@@ -240,11 +240,12 @@ export default {
                             "type": "threads",
                             "id": this.themeId
                         }
-                    }
+                    },
+                    "attachments": {
+                      "data":this.attriAttachment
+                    },
                 },
-                "attachments": {
-                  "data":this.attriAttachment
-                },
+
             }
           },
         }).then(res =>{
@@ -267,11 +268,12 @@ export default {
                             "type": "threads",
                             "id": this.themeId
                         }
-                    }
+                    },
+                    "attachments": {
+                      "data":this.attriAttachment
+                    },
                 },
-                "attachments": {
-                  "data":this.attriAttachment
-                },
+
             }
           },
         }).then(res =>{

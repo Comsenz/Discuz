@@ -16,7 +16,8 @@ export default {
       payStatus:false,   //支付状态
       payStatusNum:0,    //支付状态次数
       authorityList:'',  //权限列表
-      tokenId:''          //用户ID
+      tokenId:'',          //用户ID
+      dialogShow:false    //微信支付确认弹框
     }
   },
 
@@ -30,54 +31,52 @@ export default {
     },
 
     onBridgeReady(data){
+      let that = this;
 
       const wxPay = new Promise((resolve,reject)=>{
-        WeixinJSBridge.invoke(
-          'getBrandWCPayRequest', {
-            "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
-            "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
-            "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
-            "package":data.data.attributes.wechat_js.package,
-            "signType":"MD5",         //微信签名方式：
-            "paySign":data.data.attributes.wechat_js.paySign //微信签名
-          },
-          function(res){
-            console.log(res);
-            // alert('支付唤醒');
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', {
+          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
+          "package":data.data.attributes.wechat_js.package,
+          "signType":"MD5",         //微信签名方式：
+          "paySign":data.data.attributes.wechat_js.paySign //微信签名
+        },
+        function(res){
+          alert('支付唤醒');
 
-            if (res.err_msg == "get_brand_wcpay_request:ok") {
-              alert("支付成功");
-              alert(res.err_msg);
-              resolve;
-              // this.$toast.success('支付成功');
-            } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-              alert("支付过程中用户取消");             //支付取消正常走
-              alert(res.err_msg);
-              resolve;
-              // this.$toast.fail('取消支付！');
-            } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-              alert("支付失败");
-              alert(res.err_msg);
-              resolve;
-              // this.$toast.fail('支付失败！');
-            }
+          // if (res.err_msg == "get_brand_wcpay_request:ok") {
+          //   alert("支付成功");
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          //   alert("支付过程中用户取消");             //支付取消正常走
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          //   alert("支付失败");
+          //   alert(res.err_msg);
+          //   resolve;
+          // }
 
-          });
+        });
+        resolve;
       });
 
       wxPay.then(()=>{
         alert('开始查询接口');
-        const toast = this.$toast.loading({
+        const toast = that.$toast.loading({
           duration: 0, // 持续展示 toast
           forbidClick: true,
-          message: '正在查询订单...'
+          message: '支付状态查询中...'
         });
 
         let second = 5;
 
         const timer = setInterval(() => {
           second--;
-          this.getUsers(this.tokenId).then(res=>{
+          this.getUsers(that.tokenId).then(res=>{
             console.log(second);
 
             if (res.errors){
@@ -153,6 +152,22 @@ export default {
         });
       }
     },
+
+    completePayment(){
+     this.getUsers(this.tokenId).then(res=>{
+       if (res.errors){
+         this.$toast.message = '支付失败，请重新支付！';
+       } else {
+         if (res.readdata._data.paid){
+           this.$toast.message = '支付成功，正在跳转首页...';
+           this.dialogShow = false;
+         } else {
+           this.$toast.message = '支付失败，请重新支付！';
+         }
+       }
+     })
+    },
+
 
     /*
     * 接口请求
