@@ -132,7 +132,9 @@ class Post extends Model
      */
     public function formatContent()
     {
-        return static::$formatter->render($this->attributes['content']);
+        return $this->attributes['content']
+            ? static::$formatter->render($this->attributes['content'])
+            : '';
     }
 
     /**
