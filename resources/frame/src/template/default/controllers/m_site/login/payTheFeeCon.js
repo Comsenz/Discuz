@@ -28,21 +28,21 @@ export default {
       this.$router.push({path:'pay-circle-login'})
     },
 
-    onBridgeReady(res){
+    onBridgeReady(data){
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
-          "appId":res.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
-          "timeStamp":res.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
-          "nonceStr":res.data.attributes.wechat_js.nonceStr, //随机串
-          "package":res.data.attributes.wechat_js.package,
+          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
+          "package":data.data.attributes.wechat_js.package,
           "signType":"MD5",         //微信签名方式：
-          "paySign":res.data.attributes.wechat_js.paySign //微信签名
+          "paySign":data.data.attributes.wechat_js.paySign //微信签名
         },
-        function(ress){
-          console.log(ress);
+        function(res){
+          console.log(res);
           alert('支付成功');
-          alert(ress);
-          if(ress.err_msg == "get_brand_wcpay_request:ok" ){
+          alert(res);
+          if(res.err_msg == "get_brand_wcpay_request:ok" ){
             this.$toast.success('支付成功');
             // this.$router.push('/')
           } else {
@@ -59,21 +59,21 @@ export default {
         console.log('微信');
         this.getOrderSn().then(()=>{
           this.orderPay(12).then((res)=>{
-
-            // this.onBridgeReady(res);
-
-            if (typeof WeixinJSBridge == "undefined"){
-              if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-              }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+            if (res.errors){
+              alert('调起微信失败!')
+            }else {
+              if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                  document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+                }else if (document.attachEvent){
+                  document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                  document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+                }
+              }else{
+                alert('存在wx方法');
+                this.onBridgeReady(res);
               }
-            }else{
-              alert('存在wx方法');
-              this.onBridgeReady(res);
             }
-
           })
         });
       } else if (isPhone){
