@@ -63,8 +63,11 @@ export default {
       }).then(res => {
         console.log(res);
         if (res.errors){
-          let errorInfo = this.appCommonH.errorHandling(res.errors,true);
-          this.$toast.fail(errorInfo[0].errorDetail);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
@@ -123,9 +126,13 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-        this.siteMode = res.readdata._data.setsite.site_mode;
-        browserDb.setLItem('siteInfo',res.readdata);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+          this.siteMode = res.readdata._data.setsite.site_mode;
+          browserDb.setLItem('siteInfo', res.readdata);
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -170,8 +177,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res;
-        //paid
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })

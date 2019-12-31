@@ -56,7 +56,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.$toast.success('发送成功');
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.$toast.success('发送成功');
+        }
       }).catch(err=>{
         console.log(err);
       });
@@ -144,9 +148,13 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-        this.siteMode = res.readdata._data.setsite.site_mode;
-        browserDb.setLItem('siteInfo',res.readdata);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+          this.siteMode = res.readdata._data.setsite.site_mode;
+          browserDb.setLItem('siteInfo', res.readdata);
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -162,8 +170,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res;
-        //paid
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })

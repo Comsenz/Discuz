@@ -21,10 +21,14 @@ export default {
         data:{
         }
       }).then(res=>{
-        this.picture = res.readdata._data.supportImgExt;
-        this.fileExtension = res.readdata._data.supportFileExt;
-        this.maximumSize = res.readdata._data.supportMaxSize;
-        console.log(res)
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          this.picture = res.readdata._data.supportImgExt;
+          this.fileExtension = res.readdata._data.supportFileExt;
+          this.maximumSize = res.readdata._data.supportMaxSize;
+          console.log(res)
+        }
       })
     },
 
@@ -85,13 +89,17 @@ export default {
                   "tag": "default",
                 }
               },
-            
+
           ]
         }
       }).then(data=>{
-        this.$message({ message: '提交成功', type: 'success' });
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
+        }else {
+          this.$message({message: '提交成功', type: 'success'});
+        }
       }).catch(error=>{
-        
+
       })
     }
   },

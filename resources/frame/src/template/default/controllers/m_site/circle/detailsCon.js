@@ -57,7 +57,7 @@ export default {
         // 'https://img.yzcdn.cn/2.jpg',
         // 'https://img.yzcdn.cn/2.jpg'
       ],
-      isPayVal: '',
+      siteMode:'',
       isPaid: '',
       situation1: false,
       loginBtnFix: false,
@@ -72,15 +72,21 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1, //页码
-      pageLimit: 5,
+      pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId: '',
       menuStatus: false, //默认不显示菜单按钮
       collectStatus: false,
       collectFlag: '',
-      postCount: 0 ,//回复总条数
+      postCount: 0, //回复总条数
+      token:false,
+      isWeixin: false,
+      isPhone: false,
       isAndroid:false,
       isiOS:false,
+      orderSn:'',
+      payStatus:false,   //支付状态
+      payStatusNum:0    //支付状态次数
     }
   },
   created() {
@@ -92,7 +98,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
-    this.getUser();
+    // this.getUser();
     this.detailsLoad(true);
     if (!this.themeCon) {
       this.themeShow = false;
@@ -257,11 +263,14 @@ export default {
         console.log('1234');
         this.finished = res.readdata.posts.length < this.pageLimit;
         if (initFlag) {
-          this.collectStatus = res.readdata._data.isFavorite;
-          this.themeShow = true;
-          this.themeCon = res.readdata;
-          var firstpostImageLen = this.themeCon.firstPost.images.length;
-          if (firstpostImageLen === 0) return;
+        this.collectStatus = res.readdata._data.isFavorite;
+        this.themeShow = true;
+        this.themeCon = res.readdata;
+
+        var firstpostImageLen = this.themeCon.firstPost.images.length;
+        if (firstpostImageLen === 0) {
+          return;
+        } else {
           var firstpostImage = [];
           for (let i = 0; i < firstpostImageLen; i++) {
             // let src = 'https://2020.comsenz-service.com/api/attachments/';
@@ -270,34 +279,7 @@ export default {
           }
           this.firstpostImageList = firstpostImage;
           // console.log(134, this.firstpostImageList);
-
-
-            // console.log(themeListLen);
-            var themeListLen = this.themeCon.length;
-
-            if(this.themeCon =='' || this.themeCon == null){
-              return false;
-            } else {
-              for (let h = 0; h < themeListLen; h++) {
-                // 图片地址
-                // let src = 'https://2020.comsenz-service.com/api/attachments/';
-                let imageList = [];
-                if(this.themeCon[h].firstPost.images){
-                  for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
-                    imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
-                    // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
-                    // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
-                  }
-                }
-                // console.log(imageList);
-                this.themeCon[h].posts.imageList = imageList;
-                console.log(imageList);
-              }
-            }
-
-
-
-
+        };
         } else {
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
@@ -311,6 +293,7 @@ export default {
         console.log('22222222222222')
         this.loading = false;
       })
+
     },
     //主题详情图片放大轮播
     imageSwiper() {
@@ -360,25 +343,32 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      this.$router.push({ path:'/home-page'+'/'+id});
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.$router.push({ path:'/home-page'+'/'+id});
+      }
     },
     //付费，获得成员权限
-    sitePayClick(amount) {
-      this.appFetch({
-        url: "orderList",
-        method: "post",
-        data: {
-          "type": "1",
-          "thread_id": this.themeId,
-          "amount": amount
-        },
-      }).then(data => {
-        // console.log(data.data.attributes.order_sn);
-        const orderSn = data.data.attributes.order_sn;
-        this.orderPay(orderSn, amount);
+    // sitePayClick(amount) {
+    //   this.appFetch({
+    //     url: "orderList",
+    //     method: "post",
+    //     data: {
+    //       "type": "1",
+    //       "thread_id": this.themeId,
+    //       "amount": amount
+    //     },
+    //   }).then(data => {
+    //     // console.log(data.data.attributes.order_sn);
+    //     this.orderSn = data.data.attributes.order_sn;
+    //     // this.orderPay(orderSn, amount);
 
-      })
-    },
+    //   })
+    // },
 
     //主题管理
     bindScreen: function () {
@@ -387,42 +377,49 @@ export default {
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
-      let attri = new Object();
-      if (clickType == 1) {
-        this.collectStatus = !this.collectStatus
-        if (this.collectStatus == true) {
-          this.collectFlag = "已收藏"
-        } else if (this.collectStatus == false) {
-          this.collectFlag = "收藏"
-        }
-
-        attri.isFavorite = true;
-        content = '';
-        this.themeOpeRequest(attri, cateId);
-      } else if (clickType == 2) {
-        content = '';
-        this.themeOpeRequest(attri, cateId);
-        attri.isEssence = true;
-      } else if (clickType == 3) {
-        content = '';
-        // request = true;
-        attri.isSticky = true;
-        this.themeOpeRequest(attri, cateId);
-      } else if (clickType == 4) {
-        attri.isDeleted = true;
-        content = '';
-        this.themeOpeRequest(attri, cateId);
+      if(!this.token){
         this.$router.push({
-          path: '/circle',
-          name: 'circle'
+          path:'/login-user',
+          name:'login-user'
         })
       } else {
-        // content = content
-        // console.log(content);
-        //跳转到发帖页
-        this.$router.push({
-          path: '/edit-topic' + '/' + this.themeId
-        });
+        let attri = new Object();
+        if (clickType == 1) {
+          this.collectStatus = !this.collectStatus
+          if (this.collectStatus == true) {
+            this.collectFlag = "已收藏"
+          } else if (this.collectStatus == false) {
+            this.collectFlag = "收藏"
+          }
+
+          attri.isFavorite = true;
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+        } else if (clickType == 2) {
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+          attri.isEssence = true;
+        } else if (clickType == 3) {
+          content = '';
+          // request = true;
+          attri.isSticky = true;
+          this.themeOpeRequest(attri, cateId);
+        } else if (clickType == 4) {
+          attri.isDeleted = true;
+          content = '';
+          this.themeOpeRequest(attri, cateId);
+          this.$router.push({
+            path: '/circle',
+            name: 'circle'
+          })
+        } else {
+          // content = content
+          // console.log(content);
+          //跳转到发帖页
+          this.$router.push({
+            path: '/edit-topic' + '/' + this.themeId
+          });
+        }
       }
     },
     //主题操作接口请求
@@ -454,35 +451,43 @@ export default {
     },
     //点赞/删除
     replyOpera(postId, type, isLike) {
-      // console.log(isLike);
-      let attri = new Object();
-      if (type == 1) {
-        attri.isDeleted = true;
-      } else if (type == 2) {
-        if (isLike) {
-          //如果已点赞
-          attri.isLiked = false;
-        } else {
-          //如果未点赞
-          attri.isLiked = true;
-        }
-      }
-      // console.log(attri);
-      let posts = 'posts/' + postId;
-      this.appFetch({
-        url: posts,
-        method: 'patch',
-        data: {
-          "data": {
-            "type": "posts",
-            "attributes": attri,
+      // console.log(this.token);
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        // console.log(isLike);
+        let attri = new Object();
+        if (type == 1) {
+          attri.isDeleted = true;
+        } else if (type == 2) {
+          if (isLike) {
+            //如果已点赞
+            attri.isLiked = false;
+          } else {
+            //如果未点赞
+            attri.isLiked = true;
           }
         }
-      }).then((res) => {
-        this.$message('修改成功');
-        this.pageIndex = 1;
-        this.detailsLoad(true);
-      })
+        // console.log(attri);
+        let posts = 'posts/' + postId;
+        this.appFetch({
+          url: posts,
+          method: 'patch',
+          data: {
+            "data": {
+              "type": "posts",
+              "attributes": attri,
+            }
+          }
+        }).then((res) => {
+          this.$message('修改成功');
+          this.pageIndex = 1;
+          this.detailsLoad(true);
+        })
+      }
     },
     //打赏
     showRewardPopup: function () {
@@ -500,92 +505,151 @@ export default {
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
-      this.$router.push({
-        path: '/reply-to-topic',
-        name: 'reply-to-topic',
-        params: {
-          themeId: themeId,
-          replyQuote: quoteCon,
-          replyId: replyId
-        }
-      })
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.$router.push({
+          path:'/reply-to-topic',
+          name:'reply-to-topic',
+          params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
+          })
+      }
     },
     //打赏 生成订单
-    rewardPay(amount) {
-      this.appFetch({
-        url: "orderList",
-        method: "post",
-        data: {
-          "type": "2",
-          "thread_id": this.themeId,
-          "amount": amount
-        },
-      }).then(data => {
-        // console.log(data.data.attributes.order_sn);
-        const orderSn = data.data.attributes.order_sn;
-        this.orderPay(orderSn, amount);
+    // rewardPay(amount) {
+    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
+    //   let isPhone = this.appCommonH.isWeixin().isPhone;
+    //   let payment_type = '';
+    //   this.appFetch({
+    //     url: "orderList",
+    //     method: "post",
+    //     data: {
+    //       "type": "2",
+    //       "thread_id": this.themeId,
+    //       "amount": amount
+    //     },
+    //   }).then(data => {
 
-      })
-    },
+    //     // console.log(data.data.attributes.order_sn);
+    //     this.orderSn = data.data.attributes.order_sn;
+    //     this.orderPay(this.orderSn, amount);
 
-    //打赏，生成订单成功后支付
-    orderPay(orderSn, amount) {
-      // console.log(amount+'101010');
+    //   })
+    // },
+
+    payClick(amount){
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
-      // console.log(isWeixin+'1111')
-      // console.log(isPhone+'2222')
-      let payment_type = '';
-      if (isWeixin == true) {
-        //微信登录时
-        alert('微信支付');
-        // this.appFetch({
-        //   url:"weixin",
-        //   method:"get",
-        //   data:{
-        //   }
-        // }).then(data=>{
-        //   console.log(data.data.attributes.location)
-        //   window.location.href = data.data.attributes.location;
-        // });
-        payment_type = "12";
-      } else if (isPhone == true) {
-        //手机浏览器登录时
-        // console.log('手机浏览器登录');
-        payment_type = "11";
+      this.amountNum = amount;
+      if (isWeixin){
+        console.log('微信');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(12).then((res)=>{
+            if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+              }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+              }
+            }else{
+              this.onBridgeReady(res);
+            }
+          })
+        });
+      } else if (isPhone){
+        console.log('手机浏览器');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(11).then((res)=>{
+            this.wxPayHref = res.readdata._data.wechat_h5_link;
+            window.location.href = this.wxPayHref;
+            const payPhone = setInterval(()=>{
+              if (this.payStatus == '1' && this.payStatusNum > 10){
+                clearInterval(payPhone);
+              }
+              this.getOrderStatus()
+            },3000)
+          })
+        });
       } else {
-        payment_type = "10";
-        // console.log('pc登录');
-      }
-      let orderPay = 'trade/pay/order/' + orderSn;
-      this.appFetch({
-        url: orderPay,
-        method: "post",
-        data: {
-          'payment_type': payment_type
-        },
-      }).then(data => {
-        // console.log(data);
-        if (isWeixin) {
-          //如果是微信支付
-          // console.log(data.data.attributes.wechat_js);
-        } else if (isPhone) {
-          //如果是h5支付
-          // console.log(data.data.attributes.wechat_h5_link);
-          window.location.href = data.data.attributes.wechat_h5_link;
-        } else {
-          // console.log('pc');
-          //如果是pc支付
-          // console.log(data.data.attributes.wechat_qrcode);
-          this.qrcodeShow = true;
-          // console.log(this.qrcodeShow);
-          this.amountNum = amount;
-          // console.log(this.amountNum);
-          this.codeUrl = data.data.attributes.wechat_qrcode;
-        }
+        console.log('pc');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(10).then((res)=>{
+            console.log(res);
+            this.codeUrl = res.readdata._data.wechat_qrcode;
+            this.qrcodeShow = true;
+            const pay = setInterval(()=>{
+              if (this.payStatus == '1' && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              this.getOrderStatus()
+            },3000)
 
+          })
+        });
+      }
+    },
+
+    getOrderSn(amount){
+      return this.appFetch({
+        url:'orderList',
+        method:'post',
+        data:{
+          "type": 2,
+          "thread_id": this.themeId,
+          "amount": amount
+        }
+      }).then(res=>{
+        console.log(res);
+        this.orderSn = res.readdata._data.order_sn;
       })
     },
+
+    orderPay(type){
+      return this.appFetch({
+        url:'orderPay',
+        method:'post',
+        splice:'/' + this.orderSn,
+        data:{
+          "payment_type":type
+        }
+      }).then(res=>{
+        console.log(res);
+        return res;
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getOrderStatus(){
+      return this.appFetch({
+        url:'order',
+        method:'get',
+        splice:'/' + this.orderSn,
+        data:{
+        }
+      }).then(res=>{
+        console.log(res);
+        // const orderStatus = res.readdata._data.status;
+
+        this.payStatus = res.readdata._data.status;
+        this.payStatusNum =+1;
+        if (this.payStatus == '1'){
+          this.rewardShow = false;
+          this.qrcodeShow = false;
+          // this.$router.push('/');
+          this.payStatusNum = 11;
+          this.detailsLoad(true);
+          console.log('重新请求');
+          clearInterval(pay);
+        }
+        // return res;
+      })
+    },
+
+
     onLoad() { //上拉加载
       this.loading = true;
       this.pageIndex++;

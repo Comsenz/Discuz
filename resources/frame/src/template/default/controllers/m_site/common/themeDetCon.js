@@ -112,7 +112,17 @@ export default {
     },
     deep:true
   },
+  // mounted (){
+  //       let _this = this;
+  //       document.addEventListener('click', function (e) {
+  // 　　　　// 下面这句代码是获取 点击的区域是否包含你的菜单，如果包含，说明点击的是菜单以外，不包含则为菜单以内
+  //       let flag = e.target.contains(document.getElementsByClassName('screen'))
+  //       console.log(flag)
+  //       if(!flag) return
+  //       _this.indexlist = -1;
 
+  //       })
+  // },
 	methods: {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
@@ -141,10 +151,12 @@ export default {
       }
     },
     disappear(){
-      var screen = this.refs.screenDiv;
-      if(!screen.contains(event.target)){            //这句是说如果我们点击到了calss为screen以外的区域
-        this.indexlist=-1
-      }
+      console.log('dianji');
+      // var screen = this.$refs.screenDiv;
+      // console.log(screen);
+      // if(!screen.contains(event.target)){            //这句是说如果我们点击到了calss为screen以外的区域
+      //   this.indexlist=-1
+      // }
     },
 
     //管理操作

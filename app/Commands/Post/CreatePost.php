@@ -19,6 +19,7 @@ use App\Validators\PostValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
@@ -94,6 +95,7 @@ class CreatePost
      * @param Post $post
      * @return Post
      * @throws PermissionDeniedException
+     * @throws Exception
      * @throws ValidationException
      */
     public function handle(Dispatcher $events, ThreadRepository $threads, PostValidator $validator, Censor $censor, Post $post)
@@ -108,25 +110,34 @@ class CreatePost
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 
-            // 敏感词校验
-            $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
-            Arr::set($this->data, 'attributes.content', $content);
-
-            // 回复另一条回复时，检查是否在同一主题下的
+            // 引用回复
             if (! empty($this->replyPostId)) {
+                // 不能只回复引用部分
+                $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+                $replyContent = preg_replace($pattern, '', Arr::get($this->data, 'attributes.content'));
+
+                if (! $replyContent) {
+                    throw new Exception('reply_content_cannot_null');
+                }
+
+                // 检查是否在同一主题下的
                 $this->replyUserId = $post->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
                     ->value('user_id');
 
                 if (! $this->replyUserId) {
-                    throw (new ModelNotFoundException);
+                    throw new ModelNotFoundException;
                 }
             }
+
+            // 敏感词校验
+            $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
+            Arr::set($this->data, 'attributes.content', $content);
         }
 
         $post = $post->reply(
             $thread->id,
-            Arr::get($this->data, 'attributes.content'),
+            trim(Arr::get($this->data, 'attributes.content')),
             $this->actor->id,
             $this->ip,
             $this->replyPostId,

@@ -92,10 +92,14 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.tableData = [];
-        this.tableData = res.readdata;
-        this.total = res.meta.total;
-        this.pageCount = res.meta.pageCount;
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          this.tableData = [];
+          this.tableData = res.readdata;
+          this.total = res.meta.total;
+          this.pageCount = res.meta.pageCount;
+        }
       }).catch(err=>{
         console.log(err);
       })

@@ -16,8 +16,32 @@
         </div>
         <div class="pay-the-fee-per-list">
           <div class="pay-the-fee-per-name">帖子操作</div>
-          <p>查看主题</p>
-          <p>发图文贴</p>
+          <div class="" v-for="(limit,index) in limitList.permission">
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreadList'">查看主题列表</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createThread'">发表主题</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.reply'">回复主题</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.create.0'">上传附件</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.create.1'">上传图片</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.view.0'">查看附件</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.view.1'">查看图片</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewUserList'">站点会员列表</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.delete'">删除附件</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'cash.create'">cash.create</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'order.create'">order.create</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.deletePosts'">删除回复</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.favorite'">帖子收藏</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.likePosts'">帖子点赞</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.view'">user.view</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewSiteInfo'">站点信息</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.edit'">编辑用户状态（例如：禁用）</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'group.edit'">编辑用户组</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createInvite'">管理-邀请加入</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.hide'">批量删除帖子</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.editPosts'">编辑</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.essence'">加精</p>
+            <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.sticky'">置顶</p>
+          </div>
         </div>
         <div class="pay-the-fee-per-list-footer">
           <p @click="leapFrogClick">跳过，进入首页</p>
@@ -40,16 +64,6 @@
         <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
       </van-popup>
-
-      <van-dialog
-        v-model="dialogShow"
-        title="请确认微信支付是否完成"
-        :show-confirm-button="false"
-        :show-cancel-button="false"
-      >
-        <van-button type="primary" block @click="completePayment">已完成支付</van-button>
-        <van-button type="primary" block>支付遇到问题，重新支付</van-button>
-      </van-dialog>
     </div>
 </template>
 

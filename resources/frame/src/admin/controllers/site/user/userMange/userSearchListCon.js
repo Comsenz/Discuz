@@ -85,12 +85,17 @@ export default {
             
           }
         })
-        console.log(response)
-        // console.log(response.meta.total)
-        this.total = response.meta.total;
-        this.pageNum = response.meta.pageCount;
-        this.total = response.meta ? response.meta.total : 0;
-        this.tableData = response.readdata;
+        if(response.errors){
+          throw new Error(response.errors[0].code);
+        }else{
+          console.log(response)
+          // console.log(response.meta.total)
+          this.total = response.meta.total;
+          this.pageNum = response.meta.pageCount;
+          this.total = response.meta ? response.meta.total : 0;
+          this.tableData = response.readdata;
+        }
+        
       } catch(err){
 
       }

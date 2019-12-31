@@ -34,12 +34,16 @@ export default {
           include:['permission']
         }
       }).then(res=>{
-        console.log(res);
-        let data = res.readdata.permission;
-        this.checked = [];
-        data.forEach((item)=>{
-          this.checked.push(item._data.permission)
-        })
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          console.log(res);
+          let data = res.readdata.permission;
+          this.checked = [];
+          data.forEach((item) => {
+            this.checked.push(item._data.permission)
+          })
+        }
 
       }).catch(err=>{
         console.log(err);

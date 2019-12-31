@@ -46,10 +46,14 @@ export default {
         }
       }).then(res => {
           // console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
           this.insterVal = res.data.attributes.interval;
           // console.log(this.insterVal+'555555');
           this.time = this.insterVal;
           this.timer();
+        }
        });
     },
     timer(){
@@ -104,11 +108,15 @@ export default {
             path:'/circle',
           });
 
-        if(!res.errors){
-          if(this.siteMode === 'pay'){
-            this.$router.push({path:'pay-the-fee'});
-          }else if(this.siteMode === 'public'){
-            this.$router.push({path:'/'});
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          if (!res.errors) {
+            if (this.siteMode === 'pay') {
+              this.$router.push({path: 'pay-the-fee'});
+            } else if (this.siteMode === 'public') {
+              this.$router.push({path: '/'});
+            }
           }
         }
 
@@ -126,8 +134,12 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
-        return res.readdata._data.mobile;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          console.log(res);
+          return res.readdata._data.mobile;
+        }
       }).catch(err=>{
         console.log(err);
       })

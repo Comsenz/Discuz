@@ -73,7 +73,10 @@ export default {
           method: 'get',
           url: 'groups'
         })
-        const data = response.data;
+        if (response.errors){
+          this.$message.error(response.errors[0].code);
+        }else{
+          const data = response.data;
         console.log(data,'8888')
         this.options = data.map((v)=>{
           return {
@@ -81,6 +84,8 @@ export default {
               label: v.attributes.name
           }
         })
+        }
+        
       } catch(err){
         console.error(err, 'getUserList')
       }

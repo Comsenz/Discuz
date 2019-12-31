@@ -214,22 +214,26 @@ export default {
           method:'patch',
           data:{data:themeData}
         }).then(res=>{
-          if (res.meta && res.data){
-            this.checkedTheme = [];
-            this.$message.error('操作失败！');
+          if (res.errors){
+            this.$message.error(res.errors[0].code);
           }else {
-            if (this.pageCount < 3){
-              this.currentPag = 1;
-              webDb.setLItem('currentPag',1);
+            if (res.meta && res.data) {
+              this.checkedTheme = [];
+              this.$message.error('操作失败！');
+            } else {
+              if (this.pageCount < 3) {
+                this.currentPag = 1;
+                webDb.setLItem('currentPag', 1);
+              }
+              this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
+              this.isIndeterminate = false;
+              this.checkAll = false;
+              this.checkedTheme = [];
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              });
             }
-            this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
-            this.isIndeterminate = false;
-            this.checkAll = false;
-            this.checkedTheme = [];
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
           }
         }).catch(err=>{
           console.log(err);
@@ -277,14 +281,19 @@ export default {
          }
        }).then(res=>{
          console.log(res);
-         this.themeList = res.readdata;
-         this.total = res.meta.threadCount;
-         this.pageCount = res.meta.pageCount;
 
-         this.themeListAll = [];
-         this.themeList.forEach((item,index)=>{
-           this.themeListAll.push(item._data.id);
-         });
+         if (res.errors){
+           this.$message.error(res.errors[0].code);
+         }else {
+           this.themeList = res.readdata;
+           this.total = res.meta.threadCount;
+           this.pageCount = res.meta.pageCount;
+
+           this.themeListAll = [];
+           this.themeList.forEach((item, index) => {
+             this.themeListAll.push(item._data.id);
+           });
+         }
        }).catch(err=>{
          console.log(err);
        })
@@ -297,12 +306,16 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        res.data.forEach((item,index)=>{
-          this.categoriesList.push({
-            name:item.attributes.name,
-            id:item.id
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          res.data.forEach((item, index) => {
+            this.categoriesList.push({
+              name: item.attributes.name,
+              id: item.id
+            })
           })
-        })
+        }
       }).catch(err=>{
         console.log(err);
       })

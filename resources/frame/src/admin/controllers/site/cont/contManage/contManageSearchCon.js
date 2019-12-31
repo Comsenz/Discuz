@@ -147,12 +147,16 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        res.data.forEach((item,index)=>{
-          this.categoriesList.push({
-            name:item.attributes.name,
-            id:item.id
-          })
-        });
+        if (res.error){
+          this.$message.error(res.errors[0].code);
+        }else {
+          res.data.forEach((item, index) => {
+            this.categoriesList.push({
+              name: item.attributes.name,
+              id: item.id
+            })
+          });
+        }
       }).catch(err=>{
         console.log(err);
       })

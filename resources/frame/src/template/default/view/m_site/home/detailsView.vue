@@ -32,7 +32,7 @@
                   v-for="(image,index)  in firstpostImageList"
                   :src="image"
                   @click="imageSwiper"
-                  :key='index'
+                  :key="index"
                 />
             </div>
 		    	</div>
@@ -125,35 +125,24 @@
                     <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
-                  <!-- <div class="postImgBox">
-                    <div class="postImgList">
-                      <van-image
-                          fit="none"
-                          lazy-load
-                          v-for="(image,index)  in item.imageList"
-                          :src="image"
-                          @click="imageSwiper"
-                        />
-                    </div>
-                  </div> -->
-
-
-                  <div class="postImgBox">
-                    <!-- <div class="postImgList">
-                      <van-image
-                          fit="none"
-                          lazy-load
-                          v-for="(image,index)  in firstpostImageList"
-                          :src="image"
-                          @click="imageSwiper"
-                        />
-                    </div> -->
-                  </div>
                 </div>
               </div>
               <div class="postContent">
                 <!-- <a href="javascript:;"><blockquote class="quoteCon">dsfhjkdshfkjdhfkjdhk</blockquote>{{item.content()}}</a> -->
                 <a href="javascript:;" v-html="item._data.contentHtml"></a>
+              </div>
+              <div class="postImgBox">
+                <div class="themeImgList moreImg">
+                  <van-image
+                      fit="none"
+                      lazy-load
+                      v-for="(image,index)  in item.images"
+                      :src="image._data.thumbUrl"
+                      class="themeImgChild"
+                      @click="imageSwiper"
+                      :key="index"
+                    />
+                </div>
               </div>
             </div>
             <div class="commentOpera padT22">
@@ -195,7 +184,7 @@
         >
           <span class="support">支持作者继续创作</span>
           <div class="rewardMonBox">
-            <div class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="rewardPay(rewardChi.rewardNum)">
+            <div class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
               <span>{{rewardChi.rewardNum}}</span>元
             </div>
           </div>
