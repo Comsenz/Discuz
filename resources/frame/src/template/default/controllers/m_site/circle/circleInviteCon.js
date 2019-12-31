@@ -7,7 +7,8 @@ export default {
 		return {
 			isfixNav: false,
       siteInfo: false,
-      username:''
+      username:'',
+      limitList:false
 		}
 	},
 	//用于数据初始化
@@ -47,6 +48,23 @@ export default {
         this.siteInfo = res.readdata;
         console.log(res.readdata._data.siteIntroduction);
       });
+
+      //请求权限列表数据
+      this.appFetch({
+        url: 'groups',
+        method: 'get',
+        data: {
+          include: ['permission'],
+          'filter[isDefault]':1
+        }
+      }).then((res) => {
+        // console.log(res);
+        this.limitList = res.readdata[0];
+
+      });
+
+
+
     },
     //查看更多站点成员
     moreCilrcleMembers(){

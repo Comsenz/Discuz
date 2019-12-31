@@ -23,8 +23,20 @@ class ListGroupsController extends AbstractListController
     /**
      * {@inheritdoc}
      */
+    public $optionalInclude = ['permission'];
+
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return Group::all();
+        // 默认用户组
+        $isDefault = (bool) $this->extractFilter($request);
+
+        $include = $this->extractInclude($request);
+
+        return Group::when($isDefault, function ($query, $isDefault) {
+            return $query->where('default', $isDefault);
+        })->get()->load($include);
     }
 }
