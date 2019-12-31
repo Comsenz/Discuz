@@ -93,7 +93,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
-    this.getUser();
+    // this.getUser();
     this.detailsLoad();
     if (!this.themeCon) {
       this.themeShow = false;
@@ -364,7 +364,14 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      this.$router.push({ path:'/home-page'+'/'+id});
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.$router.push({ path:'/home-page'+'/'+id});
+      }
     },
     //付费，获得成员权限
     sitePayClick(amount) {
