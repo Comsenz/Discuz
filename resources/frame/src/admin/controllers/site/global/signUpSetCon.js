@@ -23,7 +23,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           // this.pwdLength = res.readdata._data.setreg.password_length
           this.checked = res.readdata._data.setreg.register_close
@@ -77,7 +77,7 @@ export default {
       }).then(data=>{
         console.log(data)
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({message: '提交成功', type: 'success'});
         }

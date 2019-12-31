@@ -134,7 +134,7 @@ export default {
           }
         })
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (initStatus) {
             this.tableData = [];

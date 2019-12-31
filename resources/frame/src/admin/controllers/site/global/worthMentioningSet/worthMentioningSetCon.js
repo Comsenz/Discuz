@@ -46,7 +46,7 @@ export default {
         console.log(data.readdata._data.passport);
 
         if (data.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
 
           if (data.readdata._data.passport.offiaccount_close == '0') {
@@ -106,7 +106,7 @@ export default {
         }
       }).then(data=>{
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({
             message: '修改成功',

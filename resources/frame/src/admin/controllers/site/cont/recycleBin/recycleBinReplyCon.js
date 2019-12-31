@@ -175,7 +175,7 @@ export default {
         console.log(res);
 
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.themeList = [];
           this.submitForm = [];
@@ -209,7 +209,7 @@ export default {
         data:{}
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.categoriesList = [];
           res.data.forEach((item, index) => {
@@ -233,7 +233,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (res.meta && res.data) {
             this.$message.error('操作失败！');
@@ -260,7 +260,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (res.meta && res.data) {
             this.checkedTheme = [];

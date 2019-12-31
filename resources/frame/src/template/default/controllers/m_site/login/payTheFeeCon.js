@@ -178,20 +178,22 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.sitePrice = res.readdata._data.setsite.site_price;
-
-        let day = res.readdata._data.setsite.site_expire;
-
-        switch (day){
-          case '':
-            this.siteExpire = '永久有效';
-            break;
-          case '0':
-            this.siteExpire = '永久有效';
-            break;
-          default:
-            this.siteExpire = '有效期自加入起' + day + '天';
-            break;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.sitePrice = res.readdata._data.setsite.site_price;
+          let day = res.readdata._data.setsite.site_expire;
+          switch (day) {
+            case '':
+              this.siteExpire = '永久有效';
+              break;
+            case '0':
+              this.siteExpire = '永久有效';
+              break;
+            default:
+              this.siteExpire = '有效期自加入起' + day + '天';
+              break;
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -206,7 +208,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.orderSn = res.readdata._data.order_sn;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.orderSn = res.readdata._data.order_sn;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -221,7 +227,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -237,13 +247,17 @@ export default {
       }).then(res=>{
         console.log(res);
         console.log(res.readdata._data.paid);
-        this.payStatus = res.readdata._data.paid;
-        this.payStatusNum =+1;
-        if (this.payStatus){
-          this.qrcodeShow = false;
-          this.$router.push('/');
-          this.payStatusNum = 11;
-          clearInterval(pay);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.payStatus = res.readdata._data.paid;
+          this.payStatusNum = +1;
+          if (this.payStatus) {
+            this.qrcodeShow = false;
+            this.$router.push('/');
+            this.payStatusNum = 11;
+            clearInterval(pay);
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -259,8 +273,12 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
-        return res;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          console.log(res);
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -275,7 +293,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res
+        }
       }).catch(err=>{
         console.log(err);
       })

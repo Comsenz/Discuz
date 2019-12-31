@@ -35,7 +35,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           console.log(res);
           let data = res.readdata.permission;

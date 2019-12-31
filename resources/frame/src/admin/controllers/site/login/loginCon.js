@@ -34,44 +34,36 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.postLogin().then(res=>{
-            if (res.errors){
-              if (res.errors[0].detail){
-                this.$toast.fail(res.errors[0].code + res.errors[0].detail[0])
-              } else {
-                this.$toast.fail(res.errors[0].code);
-              }
-            }else {
-              // this.tokenId = res.data.id;
-              let token = res.data.attributes.access_token;
-              let tokenId = res.data.id;
+            // this.tokenId = res.data.id;
+            let token = res.data.attributes.access_token;
+            let tokenId = res.data.id;
 
-              if (token && tokenId) {
-                this.getUserInfo(tokenId).then(res => {
-                  if (res.errors){
-                    if (res.errors[0].detail){
-                      this.$toast.fail(res.errors[0].code + res.errors[0].detail[0])
-                    } else {
-                      this.$toast.fail(res.errors[0].code);
-                    }
+            if (token && tokenId) {
+              this.getUserInfo(tokenId).then(res => {
+                if (res.errors){
+                  if (res.errors[0].detail){
+                    this.$message.error(res.errors[0].code + res.errors[0].detail[0])
                   } else {
-                    let groupId = res.readdata.groups[0]._data.id;
-                    browserDb.setLItem('username', res.data.attributes.username);
-                    if (groupId === "1") {
-                      browserDb.setLItem('Authorization', token);
-                      browserDb.setLItem('tokenId', tokenId);
-                      this.$message({
-                        message: '登录成功！',
-                        type: 'success'
-                      });
-                      this.$router.push({path: '/admin'})
-                    } else {
-                      this.$message.error('权限不足！');
-                    }
+                    this.$message.error(res.errors[0].code);
                   }
-                })
-              } else {
-                this.$message.error('登录失败');
-              }
+                } else {
+                  let groupId = res.readdata.groups[0]._data.id;
+                  browserDb.setLItem('username', res.data.attributes.username);
+                if (groupId === "1") {
+                    browserDb.setLItem('Authorization', token);
+                    browserDb.setLItem('tokenId', tokenId);
+                    this.$message({
+                      message: '登录成功！',
+                      type: 'success'
+                    });
+                    this.$router.push({path: '/admin'})
+                  } else {
+                    this.$message.error('权限不足！');
+                  }
+                }
+              })
+            } else {
+              this.$message.error('登录失败');
             }
           }).catch(()=>{
             this.$message.error('登录失败');
@@ -105,12 +97,7 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        }else {
           return res
-        }
       }).catch(err=>{
         console.log(err);
       })
@@ -124,12 +111,7 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        }else {
-          return res
-        }
+        return res
       }).catch(err=>{
         console.log(err);
       })

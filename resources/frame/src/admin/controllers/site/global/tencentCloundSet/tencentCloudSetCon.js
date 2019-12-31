@@ -66,7 +66,7 @@ export default {
       }).then(res=>{
         console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (res.readdata._data.qcloud.qcloud_close) {
             this.tableData[0].status = true
@@ -131,7 +131,7 @@ export default {
       }).then(data=>{
         console.log(data);
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({
             message: '修改成功',

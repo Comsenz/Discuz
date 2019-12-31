@@ -28,7 +28,7 @@ export default {
       }).then(res=>{
         console.log(res)
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.sdkAppId = res.readdata._data.qcloud.qcloud_sms_app_id;
           this.appKey = res.readdata._data.qcloud.qcloud_sms_app_key;
@@ -75,7 +75,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.$message({message: '提交成功', type: 'success'});
         }

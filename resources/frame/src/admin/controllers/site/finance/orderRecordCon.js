@@ -110,7 +110,7 @@ export default {
       }).then(res=>{
         console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.tableData = [];
           this.tableData = res.readdata;

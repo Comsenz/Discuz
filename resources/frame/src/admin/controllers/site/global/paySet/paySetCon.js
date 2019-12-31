@@ -27,7 +27,7 @@ export default {
         }
       }).then(data=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           // console.log(data);
           if (data.readdata._data.wxpay_close == '0') {
@@ -63,7 +63,7 @@ export default {
         }
       }).then(data=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.$message({
             message: '修改成功',

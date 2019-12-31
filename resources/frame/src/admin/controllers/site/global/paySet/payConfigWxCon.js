@@ -31,7 +31,7 @@ export default {
         }
       }).then(data=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           console.log(data);
           this.appId = data.readdata[0]._data.app_id;
@@ -86,7 +86,7 @@ export default {
         //   path:'/admin/pay-set'
         // });
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.$message({
             message: '提交成功',

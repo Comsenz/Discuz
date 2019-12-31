@@ -31,7 +31,7 @@ export default {
       }).then(res=>{
         console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.appId = res.readdata._data.qcloud.qcloud_app_id
           this.secretId = res.readdata._data.qcloud.qcloud_secret_id

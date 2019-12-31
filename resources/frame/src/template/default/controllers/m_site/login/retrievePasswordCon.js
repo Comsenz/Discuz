@@ -49,9 +49,13 @@ export default {
         }
       }).then(res => {
           // console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timer();
+        }
        });
     },
     timer(){
@@ -85,10 +89,13 @@ export default {
         }
       }).then(res => {
           // console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
           this.$router.push({
-            path:'login-user',
+            path: 'login-user',
           });
-
+        }
        });
     }
   }

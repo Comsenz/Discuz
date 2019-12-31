@@ -63,7 +63,7 @@ export default {
         }
       }).then(data=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           console.log(data);
           console.log('123');
@@ -111,8 +111,8 @@ export default {
         method:'delete',
         data:logoFormData,
       }).then(data=>{
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message('删除成功');
         }
@@ -169,8 +169,8 @@ export default {
         method:'post',
         data:logoFormData,
       }).then(data=>{
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           this.imageUrl = data.readdata._data.default.logo;
           console.log(data.readdata._data.default.logo)
@@ -278,8 +278,8 @@ export default {
         }
       }).then(data=>{
         console.log(data)
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({
             message: '提交成功',

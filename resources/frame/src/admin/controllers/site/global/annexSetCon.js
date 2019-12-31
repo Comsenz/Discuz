@@ -22,7 +22,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.picture = res.readdata._data.supportImgExt;
           this.fileExtension = res.readdata._data.supportFileExt;
@@ -94,7 +94,7 @@ export default {
         }
       }).then(data=>{
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({message: '提交成功', type: 'success'});
         }

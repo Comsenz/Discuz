@@ -30,7 +30,7 @@ export default {
       }).then(data=>{
           // console.log(data);
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           this.appId = data.readdata[0]._data.app_id;
           this.appSecret = data.readdata[0]._data.app_secret;

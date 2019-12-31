@@ -130,7 +130,7 @@ export default {
         data:{}
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           this.categoriesListLength = res.data.length;
           this.categoriesList = [];
@@ -155,7 +155,7 @@ export default {
         splice:'/'+id
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (!res.meta) {
             this.$message({
@@ -177,7 +177,7 @@ export default {
         splice:'/'+id
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$message.error(res.errors[0].code);
         }else {
           if (!res.meta) {
             this.$message({
@@ -213,7 +213,7 @@ export default {
                 }
               }).then(res=>{
                 if (res.errors){
-                  this.$toast.fail(res.errors[0].code);
+                  this.$message.error(res.errors[0].code);
                 }else {
                   if (!res.meta) {
                     this.$message({
@@ -237,7 +237,7 @@ export default {
               }
             }).then(res=>{
               if (res.errors){
-                this.$toast.fail(res.errors[0].code);
+                this.$message.error(res.errors[0].code);
               }else {
                 if (!res.meta) {
                   this.$message({
