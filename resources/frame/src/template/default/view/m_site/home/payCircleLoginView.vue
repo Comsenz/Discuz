@@ -41,7 +41,7 @@
       <div class="gap"></div>
       <div class="loginOpera">
       	<p class="welcomeUser">欢迎您，{{username}}<a href="javascript:;" class="signOut" @click="signOut">退出</a></p>
-      	<a href="javascript:;" class="regiJoin" @click="sitePayClick(sitePrice)">付费，获得成员权限</a>
+      	<a href="javascript:;" class="regiJoin" @click="payClick(sitePrice)">付费，获得成员权限</a>
       	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
       </div>
     </div>
