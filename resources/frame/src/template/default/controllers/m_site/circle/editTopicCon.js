@@ -48,7 +48,8 @@ export default {
       isWeixin: false,
       isPhone: false,
       themeCon:false,
-      attriAttachment:false
+      attriAttachment:false,
+      fileLength:0
     }
   },
 
@@ -195,12 +196,18 @@ export default {
     },
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      let file = e.target.files[0];
-      let formdata = new FormData();
-      formdata.append('file', file);
-      formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,true);
-      this.uploadShow = true;
+      console.log(this.fileLength);
+      if(this.fileLength>12){
+        this.$message('已达上限');
+      } else {
+        let file = e.target.files[0];
+        let formdata = new FormData();
+        formdata.append('file', file);
+        formdata.append('isGallery', 1);
+        this.uploaderEnclosure(formdata,true);
+        this.uploadShow = true;
+      }
+
     },
     //删除图片
     // deleteFile(uuid){
@@ -437,9 +444,13 @@ export default {
              if(isFoot){
                console.log('图片');
               this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+              this.fileLength = this.fileList.length;
+
               // console.log(this.fileList);
               // console.log('333');
              }
+             console.log(this.fileList.length);
+             console.log('9999');
               if(enclosure){
                 console.log('fujian');
                 this.enclosureShow = true;
