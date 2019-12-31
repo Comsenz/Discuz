@@ -16,6 +16,7 @@ export default {
       payStatus:false,   //支付状态
       payStatusNum:0,    //支付状态次数
       authorityList:'',  //权限列表
+      tokenId:''          //用户ID
     }
   },
 
@@ -40,6 +41,7 @@ export default {
         },
         function(res){
           console.log(res);
+          alert('支付唤醒');
 
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             alert("支付成功");
@@ -48,12 +50,42 @@ export default {
           } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
             alert("支付过程中用户取消");             //支付取消正常走
             alert(res.err_msg)
+            this.$toast.fail('取消支付！');
           } else if (res.err_msg == "get_brand_wcpay_request:fail") {
             alert("支付失败");
-            alert(res.err_msg)
+            alert(res.err_msg);
+            this.$toast.fail('支付失败！');
           }
 
         });
+
+      const wxPay = new Promise((resolve,reject)=>{
+
+      });
+
+      alert('开始查询接口');
+
+      const toast = Toast.loading({
+        duration: 0, // 持续展示 toast
+        forbidClick: true,
+        message: '正在查询订单...'
+      });
+
+      let second = 10;
+
+      const timer = setInterval(() => {
+        second--;
+        this.getUsers(this.tokenId).then(res=>{
+          if (res.readdata._data.paid || second){
+            toast.message = `正在查询订单...`;
+          } else {
+            clearInterval(timer);
+            toast.message = '支付成功，正在跳转首页...';
+            // 手动清除 Toast
+            Toast.clear();
+          }
+        });
+      }, 1000);
     },
 
     payClick(){
@@ -72,7 +104,6 @@ export default {
                 document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
               }
             }else{
-              alert('存在wx方法');
               this.onBridgeReady(res);
             }
           })
@@ -100,8 +131,6 @@ export default {
                 this.getUsersInfo()
               },3000)
             }
-
-
 
           })
         });
@@ -200,8 +229,7 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res.readdata.groups[0]._data.id;
-        //paid
+        return res;
       }).catch(err=>{
         console.log(err);
       })
@@ -226,8 +254,9 @@ export default {
   created(){
     this.getForum();
     this.getUsers(webDb.getLItem('tokenId')).then(res=>{
-      this.getAuthority(res)
+      this.getAuthority(res.readdata.groups[0]._data.id)
     });
+    this.tokenId = webDb.getLItem('tokenId');
     this.amountNum = webDb.getLItem('siteInfo')._data.setsite.site_price;
   }
 }
