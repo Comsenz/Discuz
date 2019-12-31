@@ -40,6 +40,16 @@
         <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
       </van-popup>
+
+      <van-dialog
+        v-model="dialogShow"
+        title="请确认微信支付是否完成"
+        :show-confirm-button="false"
+        :show-cancel-button="false"
+      >
+        <van-button type="primary" block @click="completePayment">已完成支付</van-button>
+        <van-button type="primary" block>支付遇到问题，重新支付</van-button>
+      </van-dialog>
     </div>
 </template>
 

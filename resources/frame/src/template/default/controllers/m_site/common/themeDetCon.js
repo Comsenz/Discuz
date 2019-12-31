@@ -141,9 +141,10 @@ export default {
       }
     },
     disappear(){
-      // this.$nextTick(function (){
-      //   this.indexlist=-1
-      // })
+      var screen = this.refs.screenDiv;
+      if(!screen.contains(event.target)){            //这句是说如果我们点击到了calss为screen以外的区域
+        this.indexlist=-1
+      }
     },
 
     //管理操作

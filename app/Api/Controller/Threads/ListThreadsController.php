@@ -392,7 +392,15 @@ class ListThreadsController extends AbstractListController
             ->whereIn('thread_id', $threadIds)
             ->where('is_first', false)
             ->orderBy('updated_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function (Post $post) {
+                if ($post->reply_post_id) {
+                    $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+                    $post->content = preg_replace($pattern, '', $post->content);
+                }
+
+                return $post;
+            });
 
         $threads->map(function ($thread) use ($allLastThreePosts) {
             $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id)->take(3));
