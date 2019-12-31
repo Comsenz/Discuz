@@ -64,6 +64,7 @@
                     v-for="(image,index)  in item.firstPost.imageList"
                     :src="image"
                     class="themeImgChild"
+                    :key='index'
                   />
                 </div>
               </div>
