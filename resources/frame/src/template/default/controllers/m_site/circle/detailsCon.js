@@ -126,7 +126,7 @@ export default {
         this.$message('因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
       } else {
         alert('and');
-        this.$refs.href = url; 
+        this.$refs.link.href = url;
         // window.location.href = url;
         // window.open(url);
 
