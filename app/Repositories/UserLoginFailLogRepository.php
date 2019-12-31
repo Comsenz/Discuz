@@ -32,7 +32,7 @@ class UserLoginFailLogRepository extends AbstractRepository
     {
         return $this->query()
             ->where(['ip'=>$ip])
-            ->value('count');
+            ->sum('count');
     }
 
     /**
