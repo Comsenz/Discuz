@@ -9,7 +9,7 @@
       <div class="circlePL">
       	<div class="circleLoBox">
         	<span class="circleIcon">站点图标</span>
-          <img v-if="siteInfo.logo" :src="siteInfo._data.logo" class="circleLogo">
+          <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
         </div>
       </div>

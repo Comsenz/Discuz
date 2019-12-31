@@ -9,20 +9,20 @@
       <div class="circlePL">
       	<div class="circleLoBox">
         	<span class="circleIcon">站点图标</span>
-          <img v-if="siteInfo.logo" :src="siteInfo._data.logo" class="circleLogo">
+          <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
         </div>
       </div>
       <div class="circleInfo padB0 lastBorNone">
       	<h1 class="cirInfoTit">站点简介</h1>
-      	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}{{}}</p>
+      	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}</p>
       	<div class="infoItem">
         	<span class="infoItemLeft">创建时间</span>
         	<span class="infoItemRight">{{siteInfo._data.siteInstall}}</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">加入方式</span>
-        	<span class="infoItemRight">付费{{siteInfo._data.price}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
+        	<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">站长</span>
