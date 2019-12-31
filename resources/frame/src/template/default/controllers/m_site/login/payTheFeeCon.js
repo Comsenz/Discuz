@@ -124,6 +124,14 @@ export default {
           this.orderPay(11).then((res)=>{
             this.wxPayHref = res.readdata._data.wechat_h5_link;
             window.location.href = this.wxPayHref;
+
+            const payPhone = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(payPhone);
+              }
+              this.getUsersInfo()
+            },3000)
+
           })
         });
       } else {
@@ -131,17 +139,14 @@ export default {
         this.getOrderSn().then(()=>{
           this.orderPay(10).then((res)=>{
             console.log(res);
-            this.codeUrl = 'data:image/jpg;base64,' + res.readdata._data.wechat_qrcode;
+            this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
-
-            if (this.payStatus && this.payStatusNum < 10){
-              clearInterval(pay);
-            }else {
-              var pay = setInterval(()=>{
-                this.getUsersInfo()
-              },3000)
-            }
-
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              this.getUsersInfo()
+            },3000)
           })
         });
       }
