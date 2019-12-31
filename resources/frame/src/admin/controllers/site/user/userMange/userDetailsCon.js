@@ -11,6 +11,7 @@ export default {
     return {
       fileList:[],
       options: [],
+      optionsList:[],
       imageUrl: '',
       userRole: [],
       userInfo: {},
@@ -46,12 +47,14 @@ export default {
           url: 'users',
           splice: `/${this.query.id}`,
           data:{
-            include:'wechat'
+            include:'wechat,groups'
           }
         })
         console.log(response,'response');
         this.userInfo = response.readdata._data;
         this.imageUrl = this.userInfo.avatarUrl;
+        this.optionsList = response.readdata.groups[0]._data.id;
+        console.log(response.readdata.groups[0]._data.id)
         if(response.readdata.wechat){
           this.wechatNickName = response.readdata.wechat._data.nickname
           this.sex = response.readdata.wechat._data.sex

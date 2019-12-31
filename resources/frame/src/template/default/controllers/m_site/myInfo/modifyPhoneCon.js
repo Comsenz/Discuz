@@ -42,7 +42,11 @@ export default {
 
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         this.phoneNum = res.data.attributes.mobile
+        }
       })
     },
     sendSmsCodePhone() { //发送验证码
@@ -70,10 +74,14 @@ export default {
             }
           }
         }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          }else{
           console.log(res);
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timer();
+          }
         })
       } else {
         this.appFetch({
@@ -89,10 +97,14 @@ export default {
             }
           }
         }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          }else{
           console.log(res);
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timerNext();
+          }
         })
       }
 
@@ -121,6 +133,9 @@ export default {
           }
         }
       }).then(res => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         this.sms = '';
         this.modifyState = !this.modifyState;
         this.mobileConfirmed = res.readdata._data.mobileConfirmed
@@ -128,9 +143,11 @@ export default {
           this.$toast("手机号验证成功");
           this.$router.push({path:'/bind-new-phone'});
         }
-      }).catch((err) => {
-        this.$toast("手机号验证失败，请重试");
+      }
       })
+      // .catch((err) => {
+      //   this.$toast("手机号验证失败，请重试");
+      // })
     },
 
     timer() {
@@ -191,14 +208,19 @@ export default {
           }
         }
       }).then(res => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         this.mobileConfirmed =res.readdata._data.mobileConfirmed;
         if(this.mobileConfirmed == true){
           this.$toast("手机号修改成功");
           this.$router.push({path:'../view/m_site/home/circleView'});
         }
-      }).catch((err)=>{
-        this.$toast("手机号修改失败，请重试");
-      });
+      }
+      })
+      // .catch((err)=>{
+      //   this.$toast("手机号修改失败，请重试");
+      // });
     }
   },
 

@@ -45,13 +45,18 @@ export default {
           'filter[type]': 3
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         console.log(res)
         if(initStatus){
           this.rewardList = []
         }
         this.rewardList =this.rewardList.concat(res.readdata);
         this.loading = false;
-        this.finished = res.data.length < this.pageLimit;s
+        this.finished = res.data.length < this.pageLimit;
+      }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
           this.pageIndex--;

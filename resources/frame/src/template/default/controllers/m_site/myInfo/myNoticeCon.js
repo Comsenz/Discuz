@@ -58,6 +58,10 @@ export default {
           // include:[]
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res)
         const DATA = res.data;
         this.num = this.num.map((val)=>{
@@ -65,6 +69,7 @@ export default {
           console.log(val.number)
           return val;
         })
+      }
       })
     },
   

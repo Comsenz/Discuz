@@ -56,10 +56,15 @@ export default {
           url: 'groups',
           method: 'get'
         })
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         this.choList = response.data;
         for (let val of this.choList) {
           this.getGroupNameById[val.id] = val.attributes.name;
         }
+      }
       } catch (err) {
         console.error(err, 'membersManagementCon.js getOperaType');
         // 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
@@ -84,12 +89,17 @@ export default {
             'page[limit]': this.pageLimit
           }
         }).then(res => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }else{
           if (initStatus) {
             this.inviteList = [];
           }
           this.loading = false;
           this.inviteList = this.inviteList.concat(res.readdata);
           this.finished = res.readdata.length < this.pageLimit; //数据全部加载完成
+        }
         })
       } catch (err) {
         console.error(err, '邀请码列表获取失败');
@@ -120,9 +130,14 @@ export default {
             }
           }
         })
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         this.pageIndex = 1;
         this.finished = false;
         // this.getInviteList(true)
+        }
       } catch (err) {
         console.error(err, 'checkSubmit')
       }
@@ -160,7 +175,12 @@ export default {
           method: 'delete',
           splice: `/${id}`
         })
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         this.checkSubmit();
+        }
       } catch (err) {
         this.$toast("邀请码操作失败！");
       }

@@ -43,6 +43,10 @@ export default {
           'filter[type]': 1
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.replyList = []
         }
@@ -50,6 +54,7 @@ export default {
         this.replyList = this.replyList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
+      }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
             this.pageIndex--
@@ -68,8 +73,13 @@ export default {
 
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         this.pageIndex = 1;
         this.myReplyList(true)
+        }
       })
     },
     onRefresh(){           //下拉刷新

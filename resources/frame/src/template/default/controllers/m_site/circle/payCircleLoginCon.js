@@ -37,6 +37,10 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.siteInfo= []
         }
@@ -49,6 +53,7 @@ export default {
           this.siteUsername = '暂无站长信息';
         }
         this.sitePrice = res.readdata._data.sitePrice
+      }
       });
     },
     //退出登录
@@ -68,10 +73,14 @@ export default {
               "amount":amount
         },
       }).then(data =>{
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        }else{
         // console.log(data.data.attributes.order_sn);
         const orderSn = data.data.attributes.order_sn;
         this.orderPay(orderSn,amount);
-
+        }
       })
     },
     //生成订单成功后支付
@@ -111,6 +120,10 @@ export default {
               'payment_type':payment_type
         },
       }).then(data =>{
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         // console.log(data);
         if(isWeixin){
           //如果是微信支付
@@ -129,6 +142,7 @@ export default {
           // console.log(this.amountNum);
           this.codeUrl= data.data.attributes.wechat_qrcode;
         }
+      }
 
       })
     },

@@ -56,11 +56,16 @@ export default {
             }
           }
         }).then(res => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }else{
             console.log(res);
             this.insterVal = res.data.attributes.interval;
             // console.log(this.insterVal+'555555');
             this.time = this.insterVal;
             this.timer();
+          }
          });
       },
       timer(){
@@ -105,11 +110,16 @@ export default {
             }
           }
         }).then(res => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }else{
           this.mobileConfirmed =res.readdata._data.mobileConfirmed;
           if(this.mobileConfirmed == true){
             this.$toast("手机号绑定成功");
             this.$router.push({path:'/modify-data'});
           }
+        }
           
         }).catch((err)=>{
           this.$toast("手机号绑定失败，请重试");

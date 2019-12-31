@@ -58,6 +58,10 @@ export default {
           include:'wechat'
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res)
         this.payee= res.data.attributes.username;
         this.phone = res.data.attributes.mobile;
@@ -65,6 +69,7 @@ export default {
           console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
         }
+      }
       })
      
       this.appFetch({
@@ -75,9 +80,13 @@ export default {
           include:'',
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         this.canWithdraw = res.data.attributes.available_amount;
          this.handlingFee = res.data.attributes.cash_tax_ratio;
-       
+        }
       })
     },
   
@@ -103,10 +112,15 @@ export default {
           }
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res)
         this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timer();
+        }
       })
     }, //发送验证码
     timer() {
@@ -143,9 +157,14 @@ export default {
           cash_apply_amount:this.withdrawalAmount
         }
       }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
         this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
         this.handlingFee = res.data.attributes.cash_charge;//提现手续费
+        }
       })
        
       var withdrawalAmount = this.withdrawalAmount;
@@ -177,11 +196,16 @@ export default {
           }
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         this.mobileConfirmed =res.readdata._data.mobileConfirmed;
         if(this.mobileConfirmed == true){
           this.$toast("提现申请已提交，请等待审核");
           // this.$router.push({path:'/modify-data'});
         }
+      }
       })
     },
     
