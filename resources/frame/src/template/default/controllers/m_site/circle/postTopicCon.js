@@ -105,19 +105,23 @@ export default {
               include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
             }
           }).then((res) => {
-            console.log(res);
-            console.log('1234');
-            // this.enclosureList = res.readdata.attachments;
-            // this.fileList = res.readdata.images;
-            console.log(this.cateId);
-            const initializeCateId = res.readdata.category._data.id;
-            this.selectSort = res.readdata.category._data.description;
-            console.log(this.selectSort);
-            if(this.cateId != initializeCateId){
-              this.cateId = initializeCateId;
-            } else {
-
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+              throw new Error(res.error)
+            } else {
+              console.log(res);
+              console.log('1234');
+              // this.enclosureList = res.readdata.attachments;
+              // this.fileList = res.readdata.images;
+              console.log(this.cateId);
+              const initializeCateId = res.readdata.category._data.id;
+              this.selectSort = res.readdata.category._data.description;
+              console.log(this.selectSort);
+              if(this.cateId != initializeCateId){
+                this.cateId = initializeCateId;
+              }
             }
+
           })
         }
     },
@@ -138,9 +142,13 @@ export default {
             }
           }
         }).then((res)=>{
-          // console.log('2222');
-          let a = this.apiStore.pushPayload(res);
-          this.$router.push({ path:'details'+'/'+this.themeId});
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            let a = this.apiStore.pushPayload(res);
+            this.$router.push({ path:'details'+'/'+this.themeId});
+          }
         })
       } else {
         this.attriAttachment = this.fileList.concat(this.enclosureList);
@@ -179,10 +187,13 @@ export default {
             }
           },
         }).then((res)=>{
-          // console.log(res);
-          // console.log('456');
-          var postThemeId = res.readdata._data.id;
-          this.$router.push({ path:'details'+'/'+postThemeId});
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }else{
+            var postThemeId = res.readdata._data.id;
+            this.$router.push({ path:'details'+'/'+postThemeId});
+          }
         })
 
       }
@@ -236,34 +247,40 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(data=>{
-        var attriAttachment = new Array();
-        if(type == "img"){
-          var newArr = this.fileList.filter(item => item.id !== id);
-          this.fileList = newArr;
-          console.log(this.fileList);
-          console.log('104');
-          // for(var h=0;k<this.fileList.length;h++){
-          //   var data = {};
-          //   data.type = 'attachments';
-          //   data.id = this.fileList[h].id;
-          //   attriAttachment.push(data);
-          // }
-          // this.attriAttachment = attriAttachment;
-        } else {
-          var newArr = this.enclosureList.filter(item => item.id !== id);
-          this.enclosureList = newArr;
-          console.log(this.enclosureList);
-          console.log('2567');
-          // for(var k=0;k<this.enclosureList.length;k++){
-          //   var data = {};
-          //   data.type = 'attachments';
-          //   data.id = this.enclosureList[k].id;
-          //   attriAttachment.push(data);
-          // }
-          // this.attriAttachment = attriAttachment;
-          // console.log(this.attriAttachment);
+
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        } else {
+          var attriAttachment = new Array();
+          if(type == "img"){
+            var newArr = this.fileList.filter(item => item.id !== id);
+            this.fileList = newArr;
+            console.log(this.fileList);
+            console.log('104');
+            // for(var h=0;k<this.fileList.length;h++){
+            //   var data = {};
+            //   data.type = 'attachments';
+            //   data.id = this.fileList[h].id;
+            //   attriAttachment.push(data);
+            // }
+            // this.attriAttachment = attriAttachment;
+          } else {
+            var newArr = this.enclosureList.filter(item => item.id !== id);
+            this.enclosureList = newArr;
+            console.log(this.enclosureList);
+            console.log('2567');
+            // for(var k=0;k<this.enclosureList.length;k++){
+            //   var data = {};
+            //   data.type = 'attachments';
+            //   data.id = this.enclosureList[k].id;
+            //   attriAttachment.push(data);
+            // }
+            // this.attriAttachment = attriAttachment;
+            // console.log(this.attriAttachment);
+          }
+          this.$toast.success('删除成功');
         }
-        this.$message('删除成功');
       })
     },
 
@@ -456,41 +473,46 @@ export default {
              data:file,
 
            }).then(data=>{
-             console.log(data);
-             // console.log('909090');
-             // var attriAttachment = new Array();
-             if(isFoot){
-               console.log('图片');
-              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-              // console.log(this.fileList);
-              // for(var h=0;h<this.fileList.length;h++){
-              //   var data = {};
-              //   data.type = 'attachments';
-              //   data.id = this.fileList[h].id;
-              //   console.log('1111');
-              //   attriAttachment.push(data);
-              // }
-             }
-              if(enclosure){
-                console.log('fujian');
-                this.enclosureShow = true
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
-
-                console.log(this.enclosureList);
-                // for(var k=0;k<this.enclosureList.length;k++){
-                //   var data = {};
-                //   data.type = 'attachments';
-                //   data.id = this.enclosureList[k].id;
-                //   console.log('1111');
-                //   attriAttachment.push(data);
-                //   console.log(attriAttachment);
-                //   console.log('678');
-                // }
+            if (data.errors){
+              this.$toast.fail(data.errors[0].code);
+              throw new Error(data.error)
+            } else {
+              console.log(data);
+              // console.log('909090');
+              // var attriAttachment = new Array();
+              if(isFoot){
+                console.log('图片');
+               this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+               // console.log(this.fileList);
+               // for(var h=0;h<this.fileList.length;h++){
+               //   var data = {};
+               //   data.type = 'attachments';
+               //   data.id = this.fileList[h].id;
+               //   console.log('1111');
+               //   attriAttachment.push(data);
+               // }
               }
-             // this.attriAttachment = attriAttachment;
-             // console.log(this.attriAttachment);
-             this.loading = false;
-             this.$message('提交成功');
+               if(enclosure){
+                 console.log('fujian');
+                 this.enclosureShow = true
+                 this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
+
+                 console.log(this.enclosureList);
+                 // for(var k=0;k<this.enclosureList.length;k++){
+                 //   var data = {};
+                 //   data.type = 'attachments';
+                 //   data.id = this.enclosureList[k].id;
+                 //   console.log('1111');
+                 //   attriAttachment.push(data);
+                 //   console.log(attriAttachment);
+                 //   console.log('678');
+                 // }
+               }
+              // this.attriAttachment = attriAttachment;
+              // console.log(this.attriAttachment);
+              this.loading = false;
+              this.$toast.fail('提交成功');
+            }
            })
        },
 
@@ -574,20 +596,25 @@ export default {
           include: '',
         }
       }).then((res) => {
-        console.log(res, 'res1111');
-        var newCategories = [];
-        newCategories = res.readdata;
-        console.log(res.readdata);
-        for(let j = 0,len=newCategories.length; j < len; j++) {
-          // console.log(newCategories[j]._data);
-          this.categories.push(
-            {
-              'text': newCategories[j]._data.name,
-              'id':newCategories[j]._data.id
-            }
-          );
-          // console.log(this.categories)
-          this.categoriesId.push(newCategories[j]._data.id);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          console.log(res, 'res1111');
+          var newCategories = [];
+          newCategories = res.readdata;
+          console.log(res.readdata);
+          for(let j = 0,len=newCategories.length; j < len; j++) {
+            // console.log(newCategories[j]._data);
+            this.categories.push(
+              {
+                'text': newCategories[j]._data.name,
+                'id':newCategories[j]._data.id
+              }
+            );
+            // console.log(this.categories)
+            this.categoriesId.push(newCategories[j]._data.id);
+          }
         }
       })
     },

@@ -99,34 +99,33 @@ export default {
               include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
             }
           }).then((res) => {
-            console.log(res);
-            console.log('1234');
-            const enclosureListCon = res.readdata.firstPost.attachments;
-            const fileListCon = res.readdata.firstPost.images;
-            this.cateId = res.readdata.category._data.id;
-            // console.log(this.cateId);
-            this.selectSort = res.readdata.category._data.name;
-            this.content = res.readdata.firstPost._data.content;
-            this.postsId = res.readdata.firstPost._data.id;
-            for (let i = 0; i < enclosureListCon.length; i++) {
-              this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+              throw new Error(res.error)
+            } else {
+              console.log(res);
+              console.log('1234');
+              const enclosureListCon = res.readdata.firstPost.attachments;
+              const fileListCon = res.readdata.firstPost.images;
+              this.cateId = res.readdata.category._data.id;
+              // console.log(this.cateId);
+              this.selectSort = res.readdata.category._data.name;
+              this.content = res.readdata.firstPost._data.content;
+              this.postsId = res.readdata.firstPost._data.id;
+              for (let i = 0; i < enclosureListCon.length; i++) {
+                this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
+              }
+              // console.log(this.enclosureList);
+              if(this.enclosureList.length>0){
+                this.enclosureShow = true;
+              }
+              for (let i = 0; i < fileListCon.length; i++) {
+                this.fileList.push({url:fileListCon[i]._data.url,id:fileListCon[i]._data.id});
+              }
+              if(this.fileList.length>0){
+                this.uploadShow = true;
+              }
             }
-            // console.log(this.enclosureList);
-            if(this.enclosureList.length>0){
-              this.enclosureShow = true;
-            }
-            for (let i = 0; i < fileListCon.length; i++) {
-              this.fileList.push({url:fileListCon[i]._data.url,id:fileListCon[i]._data.id});
-            }
-            if(this.fileList.length>0){
-              this.uploadShow = true;
-            }
-
-            // if(this.cateId != initializeCateId){
-            //   this.cateId = initializeCateId;
-            // } else {
-
-            // }
           })
     },
     //发布主题
@@ -172,9 +171,12 @@ export default {
           }
         },
       }).then((res)=>{
-        // console.log('2222');
-        // let a = this.apiStore.pushPayload(res);
-        this.$router.push({ path:'/details'+'/'+this.themeId});
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.$router.push({ path:'/details'+'/'+this.themeId});
+        }
       })
     },
 
@@ -231,23 +233,28 @@ export default {
         splice:'/'+id
 
       }).then(data=>{
-        if(type == "img"){
-          var newArr = this.fileList.filter(item => item.id !== id);
-          this.fileList = newArr;
-        } else {
-          var newArr = this.enclosureList.filter(item => item.id !== id);
-          this.enclosureList = newArr;
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        } else {
+          if(type == "img"){
+            var newArr = this.fileList.filter(item => item.id !== id);
+            this.fileList = newArr;
+          } else {
+            var newArr = this.enclosureList.filter(item => item.id !== id);
+            this.enclosureList = newArr;
 
-          var attriAttachment = new Array();
-          for(var k=0;k<this.enclosureList.length;k++){
-            var data = {};
-            data.type = 'attachments';
-            data.id = this.enclosureList[k].id;
-            attriAttachment.push(data);
+            var attriAttachment = new Array();
+            for(var k=0;k<this.enclosureList.length;k++){
+              var data = {};
+              data.type = 'attachments';
+              data.id = this.enclosureList[k].id;
+              attriAttachment.push(data);
+            }
+            this.attriAttachment = attriAttachment;
           }
-          this.attriAttachment = attriAttachment;
+          this.$toast.success('删除成功');
         }
-        this.$message('删除成功');
       })
     },
 
@@ -439,35 +446,40 @@ export default {
              data:file,
 
            }).then(data=>{
-             console.log(data);
-             // console.log('909090');
-             if(isFoot){
-               console.log('图片');
-              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-              this.fileLength = this.fileList.length;
+             if (data.errors){
+               this.$toast.fail(data.errors[0].code);
+               throw new Error(data.error)
+             }else{
+                console.log(data);
+                // console.log('909090');
+                if(isFoot){
+                  console.log('图片');
+                 this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+                 this.fileLength = this.fileList.length;
 
-              // console.log(this.fileList);
-              // console.log('333');
+                 // console.log(this.fileList);
+                 // console.log('333');
+                }
+                console.log(this.fileList.length);
+                console.log('9999');
+                 if(enclosure){
+                   console.log('fujian');
+                   this.enclosureShow = true;
+                   this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
+                    // var attriAttachment = new Array();
+                    // console.log(this.enclosureList);
+                    // for(var k=0;k<this.enclosureList.length;k++){
+                    //   var data = {};
+                    //   data.type = 'attachments';
+                    //   data.id = this.enclosureList[k].id;
+                    //   console.log(data);
+                    //   console.log('1111');
+                    //   attriAttachment.push(data);
+                    // }
+                    // this.attriAttachment = attriAttachment;
+                 }
+                this.$toast.success('提交成功');
              }
-             console.log(this.fileList.length);
-             console.log('9999');
-              if(enclosure){
-                console.log('fujian');
-                this.enclosureShow = true;
-                this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
-                 // var attriAttachment = new Array();
-                 // console.log(this.enclosureList);
-                 // for(var k=0;k<this.enclosureList.length;k++){
-                 //   var data = {};
-                 //   data.type = 'attachments';
-                 //   data.id = this.enclosureList[k].id;
-                 //   console.log(data);
-                 //   console.log('1111');
-                 //   attriAttachment.push(data);
-                 // }
-                 // this.attriAttachment = attriAttachment;
-              }
-             this.$message('提交成功');
            })
        },
 
@@ -551,20 +563,26 @@ export default {
           include: '',
         }
       }).then((res) => {
-        console.log(res, 'res1111');
-        var newCategories = [];
-        newCategories = res.readdata;
-        console.log(res.readdata);
-        for(let j = 0,len=newCategories.length; j < len; j++) {
-          // console.log(newCategories[j]._data);
-          this.categories.push(
-            {
-              'text': newCategories[j]._data.name,
-              'id':newCategories[j]._data.id
-            }
-          );
-          // console.log(this.categories)
-          this.categoriesId.push(newCategories[j]._data.id);
+
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          console.log(res, 'res1111');
+          var newCategories = [];
+          newCategories = res.readdata;
+          console.log(res.readdata);
+          for(let j = 0,len=newCategories.length; j < len; j++) {
+            // console.log(newCategories[j]._data);
+            this.categories.push(
+              {
+                'text': newCategories[j]._data.name,
+                'id':newCategories[j]._data.id
+              }
+            );
+            // console.log(this.categories)
+            this.categoriesId.push(newCategories[j]._data.id);
+          }
         }
       })
     },

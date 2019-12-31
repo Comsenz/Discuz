@@ -29,11 +29,16 @@ export default {
           include: 'groups',
         }
       }).then((res) => {
-        this.roleList = res.readdata.groups;
-        if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-          this.joinedAt = res.readdata._data.createdAt;
-        } else {
-          this.joinedAt = res.readdata._data.joinedAt;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
+          this.roleList = res.readdata.groups;
+          if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
+            this.joinedAt = res.readdata._data.createdAt;
+          } else {
+            this.joinedAt = res.readdata._data.joinedAt;
+          }
         }
       })
       //请求初始化站点信息数据
@@ -44,9 +49,15 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res);
-        this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteIntroduction);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else{
+          console.log(res);
+          this.siteInfo = res.readdata;
+          console.log(res.readdata._data.siteIntroduction);
+        }
+
       });
 
       //请求权限列表数据
@@ -59,11 +70,13 @@ export default {
         }
       }).then((res) => {
         // console.log(res);
-        this.limitList = res.readdata[0];
-
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.limitList = res.readdata[0];
+        }
       });
-
-
 
     },
     //查看更多站点成员

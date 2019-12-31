@@ -219,11 +219,14 @@ export default {
             // }
           }
         }).then((res)=>{
-          console.log(res);
-          console.log('888');
-          this.$emit('changeStatus', true);
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            // console.log(res);
+            this.$emit('changeStatus', true);
+          }
         })
-        // this.$emit('changeStatus', true);
     },
 
     //点赞
@@ -242,9 +245,14 @@ export default {
           }
         }
       }).then((res)=>{
-        this.$message('修改成功');
-        // this.detailsLoad();
-        this.$emit('changeStatus', true);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          // console.log(res);
+          this.$toast.success('修改成功');
+          this.$emit('changeStatus', true);
+        }
       })
     },
 
