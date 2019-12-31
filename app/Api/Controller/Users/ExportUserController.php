@@ -118,10 +118,14 @@ class ExportUserController implements RequestHandlerInterface
         $userArr = $users->map(function (User $user) use ($columnMap) {
             $user->sex = ($user->sex == 1) ? '男' : '女';
             $user->status = ($user->status == 0) ? '正常' : '禁用';
-            $user->groups = $user->groups->pluck('name')->implode(',');
-            $user->nickname = $user->wechat->nickname;
-            $user->openid = $user->wechat->openid;
-            $user->unionid = $user->wechat->unionid;
+            if (!is_null($user->groups)) {
+                $user->groups = $user->groups->pluck('name')->implode(',');
+            }
+            if (!is_null($user->wechat)) {
+                $user->nickname = $user->wechat->nickname;
+                $user->openid = $user->wechat->openid;
+                $user->unionid = $user->wechat->unionid;
+            }
             $user->unsetRelation('wechat');
             $user->unsetRelation('groups');
             return $user->only($columnMap);
