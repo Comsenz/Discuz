@@ -11,7 +11,7 @@
 
     <Card>
       <CardRow description="查看主题的详情页的权限">
-        <el-checkbox v-model="checked" label="viewThread">查看主题详情</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThreads">查看主题详情</el-checkbox>
       </CardRow>
     </Card>
 
