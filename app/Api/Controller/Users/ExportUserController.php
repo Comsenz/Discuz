@@ -7,22 +7,24 @@
 
 namespace App\Api\Controller\Users;
 
+use App\Exports\UsersExport;
+use App\Models\User;
+use App\Traits\UserTrait;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
 use Discuz\Http\FileResponse;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Psr\Http\Message\ResponseInterface;
-use App\Exports\UsersExport;
-use App\Models\User;
+use Tobscure\JsonApi\Parameters;
 
 class ExportUserController implements RequestHandlerInterface
 {
-
     use AssertPermissionTrait;
+    use UserTrait;
 
     /**
      * 命令集调用工具类.
@@ -48,14 +50,17 @@ class ExportUserController implements RequestHandlerInterface
     {
 //        $this->assertAdmin($request->getAttribute('actor'));
 
-        $params = $request->getQueryParams();
+        $filter = new Parameters($request->getQueryParams());
+        $filters = $filter->getFilter() ?: [];
 
-        $data = $this->data($params);
+        $ids = Arr::get($request->getQueryParams(), 'ids', '');
+        $filters['id'] = $ids;
+
+        $data = $this->data($filters);
 
         $filename = $this->app->config('excel.root') . DIRECTORY_SEPARATOR . 'user_excel.xlsx';
 
         //TODO 判断满足条件的excel是否存在,if exist 直接返回;
-
         $this->bus->dispatch(
             new UsersExport($filename, $data)
         );
@@ -63,14 +68,65 @@ class ExportUserController implements RequestHandlerInterface
         return new FileResponse($filename);
     }
 
-    private function data($params = null)
+    private function data($filters)
     {
+        $userField = [
+            'id',
+            'username',
+            'mobile',
+            'last_login_ip',
+            'register_ip',
+            'users.status',
+            'users.created_at',
+            'users.updated_at',
+        ];
+        $wechatField = [
+            'user_id',
+            'nickname',
+            'sex',
+            'openid',
+            'unionid',
+        ];
 
-        return User::whereIn('id', explode(',', Arr::get($params, 'ids', '')))->leftJoin('user_wechats', 'users.id', '=', 'user_wechats.user_id')->get(['id', 'username', 'mobile', 'nickname', 'openid', 'unionid', 'last_login_ip', 'users.created_at', 'sex', 'status'])->map(function($user) {
+        $columnMap = [
+            'id',
+            'username',
+            'mobile',
+            'status',
+            'sex',
+            'groups',
+            'openid',
+            'unionid',
+            'nickname',
+            'created_at',
+            'register_ip',
+            'updated_at',
+            'last_login_ip',
+        ];
+
+        $query = User::query();
+
+        // 拼接条件
+        $this->applyFilters($query, $filters);
+
+        $users = $query->with(['wechat' => function ($query) use ($wechatField) {
+            $query->select($wechatField);
+        }, 'groups' => function ($query) {
+            $query->select(['id', 'user_id', 'name']);
+        }])->get($userField);
+
+        $userArr = $users->map(function (User $user) use ($columnMap) {
             $user->sex = ($user->sex == 1) ? '男' : '女';
             $user->status = ($user->status == 0) ? '正常' : '禁用';
-            return $user;
+            $user->groups = $user->groups->pluck('name')->implode(',');
+            $user->nickname = $user->wechat->nickname;
+            $user->openid = $user->wechat->openid;
+            $user->unionid = $user->wechat->unionid;
+            $user->unsetRelation('wechat');
+            $user->unsetRelation('groups');
+            return $user->only($columnMap);
         })->toArray();
 
+        return $userArr;
     }
 }
