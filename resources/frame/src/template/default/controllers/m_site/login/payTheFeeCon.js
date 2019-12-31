@@ -16,8 +16,10 @@ export default {
       payStatus:false,   //支付状态
       payStatusNum:0,    //支付状态次数
       authorityList:'',  //权限列表
-      tokenId:'',          //用户ID
-      dialogShow:false    //微信支付确认弹框
+      tokenId:'',        //用户ID
+      dialogShow:false,  //微信支付确认弹框
+      groupId:'',        //用户组ID
+      limitList:[]       //用户组权限
     }
   },
 
@@ -167,6 +169,19 @@ export default {
      })
     },
 
+    /*groupListDealWith(key){
+
+      const config = {
+        default: '默认权限',
+        viewThreadList:'查看主题列表',
+        viewThreads:'查看主题',
+        createThread:'发表主题',
+        thread.reply:'回复主题'
+      };
+
+      return config[key] ? config[key] : config['default'];
+    },*/
+
 
     /*
     * 接口请求
@@ -301,11 +316,52 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+    getGroups(){
+      this.appFetch({
+        url:'groups',
+        method:'get',
+        data:{
+          include:['permission'],
+          'filter[isDefault]':1
+        }
+      }).then(res=>{
+        if(res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.groupId = res.readdata[0]._data.id;
+          this.getGroupsList();
+        }
+      })
+    },
+    getGroupsList(){
+      this.appFetch({
+        url: 'groups',
+        method: 'get',
+        splice:'/'+this.groupId,
+        data: {
+          include: ['permission'],
+        }
+      }).then((res) => {
+        if(res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.limitList = res.readdata;
+
+          // res.readdata.forEach((item)=>{
+          //   this.limitList.push(
+          //     this.groupListDealWith(item._data.permission)
+          //   )
+          // })
+
+        }
+      });
     }
 
   },
   created(){
     this.getForum();
+    this.getGroups();
     this.getUsers(webDb.getLItem('tokenId')).then(res=>{
       this.getAuthority(res.readdata.groups[0]._data.id)
     });
