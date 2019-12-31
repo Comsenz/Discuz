@@ -113,5 +113,6 @@ export default {
   },
   created(){
     localStorage.clear();
+    console.log("版本号：圣诞测试版1.6-测试微信支付0.6")
   }
 }
