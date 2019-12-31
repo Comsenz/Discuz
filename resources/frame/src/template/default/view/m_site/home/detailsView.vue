@@ -140,6 +140,7 @@
                       :src="image._data.thumbUrl"
                       class="themeImgChild"
                       @click="imageSwiper"
+                      :key="index"
                     />
                 </div>
               </div>
