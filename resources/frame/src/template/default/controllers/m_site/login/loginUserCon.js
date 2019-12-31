@@ -7,6 +7,7 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 import browserDb from '../../../../../helpers/webDbHelper';
 
 import {mapMutations,mapState} from 'vuex';
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data: function () {

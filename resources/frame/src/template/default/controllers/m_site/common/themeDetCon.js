@@ -103,8 +103,8 @@ export default {
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      console.log(prevData);
-      console.log(newData);
+      // console.log(prevData);
+      // console.log(newData);
       this.themeList = newData;
       this.themeListResult = newData;
       this.loadPriviewImgList();
@@ -241,7 +241,7 @@ export default {
 
 
     loadPriviewImgList(){
-      console.log(themeListLen);
+      // console.log(themeListLen);
       var themeListLen = this.themeListResult.length;
 
       if(this.themeListResult =='' || this.themeListResult == null){
@@ -258,7 +258,7 @@ export default {
               // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
           }
-          console.log(imageList);
+          // console.log(imageList);
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }

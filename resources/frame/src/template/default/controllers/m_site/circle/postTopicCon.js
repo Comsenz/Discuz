@@ -144,7 +144,7 @@ export default {
         })
       } else {
         this.attriAttachment = this.fileList.concat(this.enclosureList);
-         var aa = new Array();
+         // var aa = new Array();
         for(let m=0;m<this.attriAttachment.length;m++){
           this.attriAttachment[m] = {
             "type": "attachments",

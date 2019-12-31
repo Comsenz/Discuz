@@ -9,12 +9,13 @@
       <div class="post-topic-form">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox" v-if="uploadShow" v-for="(file,fileIndex) in fileList" :key="fileIndex">
+        <div class="uploadBox" v-if="uploadShow">
           <!-- <div class="posting-uploader-item" v-for="(file,fileIndex) in fileList" :key="fileIndex">
             <img :src="file.url" alt="图片" class="imgPreview">
             <van-icon name="close" @click="deleteEnclosure(file.uuid,'img')" class="delte"/>
           </div> -->
-          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileList">
+
+          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileList" @delete="deleteEnclosure($event.id,'img')" multiple>
           </van-uploader>
           <!-- <van-uploader :max-count="12" :after-read="handleFile" :delete="deleteEnclosure(file.uuid,'img')" accept="image/*" v-model="fileList">
           </van-uploader> -->

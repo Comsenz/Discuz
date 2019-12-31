@@ -10,6 +10,37 @@ import moment from "moment/moment";
 const appCommonH = {};
 
 /**
+ * 接口错误处理
+ * @param  {[type]} data  [接口错误信息]
+ * @param  {[type]} state [是否返回detail]
+ * @return {[type]}       [description]
+ */
+appCommonH.errorHandling = function (data,state) {
+  var errorList = [];
+
+  data.forEach((item)=>{
+    var errorDetail = '';
+    if (state){
+      item.detail.forEach((datail)=>{
+        errorDetail = errorDetail + datail
+      });
+      errorList.push({
+        code:item.code,
+        status:item.status,
+        errorDetail:errorDetail
+      })
+    } else {
+      errorList.push({
+        code:item.code,
+        status:item.status,
+      })
+    }
+  });
+
+  return errorList;
+}
+
+/**
  * [根据模块名称调用模块方法]
  * @param  {[type]} _this [description]
  * @param  {[type]} data  [description]
