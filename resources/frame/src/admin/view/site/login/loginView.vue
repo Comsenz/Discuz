@@ -23,7 +23,7 @@
                 type="password"
                 show-password
                 clearable
-                @change="adminLogin('form')"
+                @keyup.enter.native="adminLogin('form')"
                 v-model="form.password">
                 <span slot="prefix" class="iconfont iconpassword"></span>
               </el-input>

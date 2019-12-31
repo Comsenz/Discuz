@@ -25,10 +25,12 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
+ * @property int $sex
  * @property string $username
  * @property string $mobile
  * @property string $password
  * @property string $avatar
+ * @property $groups
  * @property int $status
  * @property int $mobile_confirmed
  * @property string $union_id

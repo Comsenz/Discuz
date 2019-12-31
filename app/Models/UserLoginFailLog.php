@@ -41,52 +41,63 @@ class UserLoginFailLog extends Model
      * @param $ip
      * @param $user_id
      * @param $username
+     * @return mixed
      */
     public static function writeLog($ip, $user_id, $username)
     {
-        $log = new static;
+        if(self::getDataByIp($ip,$username)){
+            return self::setFailCountByIp($ip,$user_id,$username);
+        }
 
+        $log = new static;
         $log->ip = $ip;
         $log->user_id = $user_id;
         $log->username = $username;
         $log->count = 1;
-        $log->created_at = Carbon::now();
-
-        $log->save();
+        return $log->save();
     }
 
     /**
      * add fail count
      *
-     * @param $log
      * @param $ip
+     * @param $user_id
+     * @param $username
+     * @return mixed
      */
-    public static function setFailCountByIp($ip)
+    public static function setFailCountByIp($ip,$user_id,$username)
     {
-        $log = self::getDataByIp($ip);
-        $log->increment('count');
+        if(!self::getDataByIp($ip,$username)){
+            return self::writeLog($ip, $user_id, $username);
+        }
+
+        return self::query()
+            ->where(['ip'=>$ip,'username'=>$username])
+            ->increment('count');
     }
 
     /**
      * refresh fail count
      * @param $ip
+     * @return int
      */
     public static function reSetFailCountByIp($ip)
     {
-        $log = self::getDataByIp($ip);
-        $log->count = 1;
-        $log->update();
+        return self::query()
+            ->where(['ip'=>$ip])
+            ->update(['count'=>0]);
     }
 
     /**
      * get fail data by ip
      * @param $ip
+     * @param $username
      * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
      */
-    public static function getDataByIp($ip)
+    public static function getDataByIp($ip,$username)
     {
         return self::query()
-            ->where(['ip'=>$ip])
+            ->where(['ip'=>$ip,'username'=>$username])
             ->first();
     }
 }

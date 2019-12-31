@@ -49,8 +49,6 @@ export default {
     loginClick() {
       this.setStatus('啊啦啦啦');
 
-      console.log(this.status);
-
       this.appFetch({
         url: "login",
         method: "post",

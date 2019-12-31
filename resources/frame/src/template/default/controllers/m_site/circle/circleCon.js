@@ -24,7 +24,6 @@ export default {
 					type:'2',
           themeType:'isEssence'
 				}
-
 			],
       // themeListCon:false,
       themeListCon:[],
@@ -36,14 +35,18 @@ export default {
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
-      pageLimit: 5,
+      pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       canEdit:false,
       firstCategoriesId:'',
       Initialization:false,     //当请求到默认分类id时，允许初始化开关
       searchStatus: false,  //默认不显示搜索按钮
       menuStatus: false,     //默认不显示菜单按钮
-      categoryId:false
+      categoryId:false,
+      filterInfo: {
+        filterCondition: 'allThemes',
+        typeWo: '全部主题'
+      }
 
 		}
 	},
@@ -169,159 +172,51 @@ export default {
     //   // }
     // },
     //初始化请求主题列表数据
-    loadThemeList(filterCondition,filterVal,initStatus = false){
-      console.log('请求333');
-      console.log(filterCondition);
-      if(filterCondition == 'isEssence'){
-        console.log('筛选请求');
-        // if(this.categoryId){
-          if(! this.categoryId){
-            this.categoryId = this.firstCategoriesId;
-          }
-          console.log(this.categoryId)
-          console.log('添加分类筛选');
-          this.appFetch({
-            url: 'threads',
-            method: 'get',
-            data: {
-              'filter[isEssence]':'yes',
-              'filter[categoryId]':this.categoryId,
-              'filter[isApproved]':1,
-              'filter[isDeleted]':'no',
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-              'page[number]': this.pageIndex,
-              'page[limit]': this.pageLimit
-            }
-          }).then((res) => {
-            if(initStatus){
-              this.themeListCon = []
-            }
-            // this.themeListCon = res.readdata;
-            this.themeListCon =this.themeListCon.concat(res.readdata);
-            this.loading = false;
-            this.finished = res.readdata.length < this.pageLimit;
 
-          }).catch((err)=>{
-            if(this.loading && this.pageIndex !== 1){
-              this.pageIndex--;
-            }
-            this.loading = false;
-          })
-        // }
-      } else if(filterCondition == 'allThemes'){
-        console.log('筛选请求');
-        // if(this.categoryId){
-          if(! this.categoryId){
-            this.categoryId = this.firstCategoriesId;
-          }
-          console.log(this.categoryId)
-          this.appFetch({
-            url: 'threads',
-            method: 'get',
-            data: {
-              'filter[categoryId]':this.categoryId,
-              'filter[isApproved]':1,
-              'filter[isDeleted]':'no',
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-              'page[number]': this.pageIndex,
-              'page[limit]': this.pageLimit
-            }
-          }).then((res) => {
-            if(initStatus){
-              this.themeListCon = []
-            }
-            this.themeListCon = [];
-            this.themeListCon = res.readdata;
-            this.themeListCon =this.themeListCon.concat(res.readdata);
-            this.loading = false;
-            this.finished = res.data.length < this.pageLimit;
-          }).catch((err)=>{
-            if(this.loading && this.pageIndex !== 1){
-              this.pageIndex--;
-            }
-            this.loading = false;
-          })
-        // }
-      } else if(filterCondition == 'categoryId') {
-        console.log('初始化请求页面');
+    loadThemeList(filterCondition,filterVal){
+      
+      // if(!this.categoryId){
+      //   this.categoryId = this.firstCategoriesId;
+      // }
+
+      if(filterVal){
         this.categoryId = filterVal;
-        return  this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            'filter[categoryId]':filterVal,
-            'filter[isApproved]':1,
-            'filter[isDeleted]':'no',
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-          }
-        }).then((res) => {
-          if(initStatus){
-            this.themeListCon = []
-          }
-          console.log(res);
-          console.log('890');
-          this.themeListCon = res.readdata;
-          this.themeListCon = this.themeListCon.concat(res.readdata);
-          console.log(this.themeListCon);
-          console.log('666');
-          this.loading = false;
-          this.finished = res.readdata.length < this.pageLimit;
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
-
       } else {
-          console.log('执行初始化');
-          // console.log(this.categoryId);
-          // console.log(this.firstCategoriesId)
-          return  this.appFetch({
-            url: 'threads',
-            method: 'get',
-            data: {
-              'filter[categoryId]':this.firstCategoriesId,
-              'filter[isApproved]':1,
-              'filter[isDeleted]':'no',
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-              'page[number]': this.pageIndex,
-              'page[limit]': this.pageLimit
-
-              // page: {
-              //   offset: 20,
-              //   num: 3
-              // },
-            }
-          }).then((res) => {
-            // console.log('56754');
-            // console.log(res.readdata[3].firstPost.images[0]._data.fileName)
-            // console.log(res);
-            // if(initStatus){
-            //   this.themeListCon = []
-            // }
-            // this.themeListCon = res.readdata;
-            if(initStatus){
-              this.themeListCon = []
-            }
-
-            this.themeListCon =this.themeListCon.concat(res.readdata);
-            console.log(this.themeListCon);
-            console.log('77777');
-            this.loading = false;
-            this.finished = res.data.length < this.pageLimit;
-          }).catch((err)=>{
-            if(this.loading && this.pageIndex !== 1){
-              this.pageIndex--;
-            }
-            this.loading = false;
-          })
-
-
+        this.categoryId = this.firstCategoriesId;
       }
 
+      let data = {
+        'filter[isEssence]':'yes',
+        'filter[categoryId]':this.categoryId,
+        'filter[isApproved]':1,
+        'filter[isDeleted]':'no',
+        include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+        'page[number]': this.pageIndex,
+        'page[limit]': this.pageLimit
+      }
 
+      if(filterCondition !== 'isEssence'){
+        delete data['filter[isEssence]'];
+      }
+
+      return this.appFetch({
+        url: 'threads',
+        method: 'get',
+        data
+      }).then((res) => {
+        // this.themeListCon = res.readdata;
+        this.themeListCon =this.themeListCon.concat(res.readdata);
+        this.loading = false;
+        this.finished = res.readdata.length < this.pageLimit;
+        
+      }).catch((err)=>{
+        if(this.loading && this.pageIndex !== 1){
+          this.pageIndex--;
+        }
+        this.loading = false;
+      })
     },
+
     //把图片url取出，组成一个新的数组（用户主题图片预览）
     pushImgArray(){
       //   var themeListLen = this.themeListCon.length;
@@ -369,13 +264,18 @@ export default {
 	    choTheme(themeType) {
         console.log(themeType);
         console.log('筛选');
-        this.loadThemeList(themeType);
+        this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
+        this.filterInfo.filterCondition = themeType;
+        this.pageIndex = 1;
+        this.themeListCon = [];
+        this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
 	    },
 
       //点击分类
       categoriesChoice(cateId) {
-        // console.log(cateId);
-        this.loadThemeList('categoryId',cateId);
+        this.pageIndex = 1;
+        this.themeListCon = [];
+        this.loadThemeList(this.filterInfo.filterCondition,cateId);
       },
 	    //跳转到登录页
 	    loginJump:function(isWx){
@@ -430,11 +330,12 @@ export default {
         // console.log('onLoadonLoadonLoad')
         this.loading = true;
         this.pageIndex++;
-        this.loadThemeList();
+        this.loadThemeList(this.filterCondition,this.categoryId);
       },
       onRefresh(){    //下拉刷新
           this.pageIndex = 1;
-          this.loadThemeList(true).then(()=>{
+          this.themeListCon = [];
+          this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
             this.$toast('刷新成功');
             this.finished = false;
             this.isLoading = false;
