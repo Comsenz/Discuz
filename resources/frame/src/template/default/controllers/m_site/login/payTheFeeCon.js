@@ -30,62 +30,79 @@ export default {
     },
 
     onBridgeReady(data){
-      WeixinJSBridge.invoke(
-        'getBrandWCPayRequest', {
-          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
-          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
-          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
-          "package":data.data.attributes.wechat_js.package,
-          "signType":"MD5",         //微信签名方式：
-          "paySign":data.data.attributes.wechat_js.paySign //微信签名
-        },
-        function(res){
-          console.log(res);
-          alert('支付唤醒');
-
-          if (res.err_msg == "get_brand_wcpay_request:ok") {
-            alert("支付成功");
-            alert(res.err_msg)
-            this.$toast.success('支付成功');
-          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            alert("支付过程中用户取消");             //支付取消正常走
-            alert(res.err_msg)
-            this.$toast.fail('取消支付！');
-          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            alert("支付失败");
-            alert(res.err_msg);
-            this.$toast.fail('支付失败！');
-          }
-
-        });
 
       const wxPay = new Promise((resolve,reject)=>{
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+            "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+            "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
+            "package":data.data.attributes.wechat_js.package,
+            "signType":"MD5",         //微信签名方式：
+            "paySign":data.data.attributes.wechat_js.paySign //微信签名
+          },
+          function(res){
+            console.log(res);
+            // alert('支付唤醒');
 
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+              alert("支付成功");
+              alert(res.err_msg);
+              resolve;
+              // this.$toast.success('支付成功');
+            } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+              alert("支付过程中用户取消");             //支付取消正常走
+              alert(res.err_msg);
+              resolve;
+              // this.$toast.fail('取消支付！');
+            } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+              alert("支付失败");
+              alert(res.err_msg);
+              resolve;
+              // this.$toast.fail('支付失败！');
+            }
+
+          });
       });
 
-      alert('开始查询接口');
-
-      const toast = Toast.loading({
-        duration: 0, // 持续展示 toast
-        forbidClick: true,
-        message: '正在查询订单...'
-      });
-
-      let second = 10;
-
-      const timer = setInterval(() => {
-        second--;
-        this.getUsers(this.tokenId).then(res=>{
-          if (res.readdata._data.paid || second){
-            toast.message = `正在查询订单...`;
-          } else {
-            clearInterval(timer);
-            toast.message = '支付成功，正在跳转首页...';
-            // 手动清除 Toast
-            Toast.clear();
-          }
+      wxPay.then(()=>{
+        alert('开始查询接口');
+        const toast = this.$toast.loading({
+          duration: 0, // 持续展示 toast
+          forbidClick: true,
+          message: '正在查询订单...'
         });
-      }, 1000);
+
+        let second = 5;
+
+        const timer = setInterval(() => {
+          second--;
+          this.getUsers(this.tokenId).then(res=>{
+            console.log(second);
+
+            if (res.errors){
+              clearInterval(timer);
+              toast.message = '支付失败，请重新支付！';
+              setTimeout(()=>{
+                toast.clear();
+              },2000)
+            } else {
+              if (second > 0 || !res.readdata._data.paid){
+                toast.message = `正在查询订单...`;
+              } else if (res.readdata._data.paid){
+                clearInterval(timer);
+                toast.message = '支付成功，正在跳转首页...';
+                toast.clear();
+              } else {
+                clearInterval(timer);
+                toast.message = '支付失败，请重新支付！';
+                toast.clear();
+              }
+            }
+          });
+        }, 1000);
+      });
+
     },
 
     payClick(){
