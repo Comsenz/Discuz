@@ -498,7 +498,6 @@ export default {
     'open-circle',
     'details/:themeId',
     'home-page/:userId',
-    'circle',
     'pay-status'
   ];
 
@@ -632,6 +631,7 @@ export default {
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){
         /*符合，未登录可以访问站点*/
+        console.log('符合');
         next();
       }else {
         /*不符合，跳转到未登录，可访问站点*/

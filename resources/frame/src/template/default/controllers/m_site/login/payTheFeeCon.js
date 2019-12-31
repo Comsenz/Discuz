@@ -33,7 +33,6 @@ export default {
     onBridgeReady(data){
       let that = this;
 
-      const wxPay = new Promise((resolve,reject)=>{
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
@@ -44,8 +43,7 @@ export default {
           "paySign":data.data.attributes.wechat_js.paySign //微信签名
         },
         function(res){
-          alert('支付唤醒');
-
+          // alert('支付唤醒');
           // if (res.err_msg == "get_brand_wcpay_request:ok") {
           //   alert("支付成功");
           //   alert(res.err_msg);
@@ -61,19 +59,14 @@ export default {
           // }
 
         });
-        resolve;
-      });
 
-      wxPay.then(()=>{
-        alert('开始查询接口');
+      setTimeout(()=>{
         const toast = that.$toast.loading({
           duration: 0, // 持续展示 toast
           forbidClick: true,
           message: '支付状态查询中...'
         });
-
         let second = 5;
-
         const timer = setInterval(() => {
           second--;
           this.getUsers(that.tokenId).then(res=>{
@@ -92,6 +85,7 @@ export default {
                 clearInterval(timer);
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
+                that.$router.push({path:'/'});
               } else {
                 clearInterval(timer);
                 toast.message = '支付失败，请重新支付！';
@@ -100,7 +94,7 @@ export default {
             }
           });
         }, 1000);
-      });
+      },3000);
 
     },
 

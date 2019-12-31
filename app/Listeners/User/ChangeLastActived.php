@@ -7,7 +7,10 @@ namespace App\Listeners\User;
 use App\Events\Users\Logind;
 use App\Models\Group;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\Application;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ChangeLastActived
 {
@@ -16,12 +19,16 @@ class ChangeLastActived
      */
     public $settings;
 
+    public $app;
+
     /**
      * @param SettingsRepository $settings
+     * @param Application $app
      */
-    public function __construct(SettingsRepository $settings)
+    public function __construct(SettingsRepository $settings, Application $app)
     {
         $this->settings = $settings;
+        $this->app = $app;
     }
 
     /**
@@ -30,6 +37,8 @@ class ChangeLastActived
     public function handle(Logind $event)
     {
         $user = $event->user;
+        $request = $this->app->make(ServerRequestInterface::class);
+        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
 
         // 检查用户是否加入站点
         if ($this->settings->get('site_mode') == 'pay') {
@@ -51,6 +60,8 @@ class ChangeLastActived
 
         // 更新用户最后活跃时间
         $user->updated_at = Carbon::now();
+        $user->last_login_ip = $ip;
+
         $user->save();
     }
 
