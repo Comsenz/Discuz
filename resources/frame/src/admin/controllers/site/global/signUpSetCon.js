@@ -22,13 +22,16 @@ export default {
 
         }
       }).then(res=>{
-      
-        // this.pwdLength = res.readdata._data.setreg.password_length
-        this.checked = res.readdata._data.setreg.register_close
-        this.pwdLength = res.readdata._data.setreg.password_length
-        this.checkList = res.readdata._data.setreg.password_strength.split(',')
-        console.log(this.checkList)
-        console.log( res)
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          // this.pwdLength = res.readdata._data.setreg.password_length
+          this.checked = res.readdata._data.setreg.register_close
+          this.pwdLength = res.readdata._data.setreg.password_length
+          this.checkList = res.readdata._data.setreg.password_strength.split(',')
+          console.log(this.checkList)
+          console.log(res)
+        }
       })
     },
     submission(){ //提交注册信息接口
@@ -69,13 +72,17 @@ export default {
            ]
           // "register_close": this.checked,
           // "password_length":this.pwdLength,
-          
+
         }
       }).then(data=>{
         console.log(data)
-        this.$message({ message: '提交成功', type: 'success' });
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+        }else {
+          this.$message({message: '提交成功', type: 'success'});
+        }
       })
-      
+
     }
   },
   components:{

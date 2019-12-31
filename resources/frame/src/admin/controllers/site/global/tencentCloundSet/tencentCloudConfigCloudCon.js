@@ -29,10 +29,14 @@ export default {
 
         }
       }).then(res=>{
-        console.log(res)
-        this.appId = res.readdata._data.qcloud.qcloud_app_id
-        this.secretId = res.readdata._data.qcloud.qcloud_secret_id
-        this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
+        console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.appId = res.readdata._data.qcloud.qcloud_app_id
+          this.secretId = res.readdata._data.qcloud.qcloud_secret_id
+          this.secretKey = res.readdata._data.qcloud.qcloud_secret_key
+        }
       })
     },
     async  Submission(){
@@ -63,14 +67,14 @@ export default {
                   "tag": "qcloud",
                 }
               }
-            
+
           ]
         }
       }).then(res=>{
         if(res.errors){
           throw new Error(res.errors[0].code);
         }
-          this.$message({ message: '提交成功', type: 'success' });        
+          this.$message({ message: '提交成功', type: 'success' });
       })
     }
       catch(err){

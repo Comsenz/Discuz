@@ -42,7 +42,7 @@ export default {
     }
   },
   created(){
-    this.tencentCloudStatus() 
+    this.tencentCloudStatus()
   },
   methods:{
     configClick(type){
@@ -65,30 +65,32 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        // console.log(res.readdata._data.qcloud);
-        // console.log(res.readdata._data.qcloud.qcloud_close)
-        if(res.readdata._data.qcloud.qcloud_close){ 
-          this.tableData[0].status = true
-        }else{
-          this.tableData[0].status = false
-        }
-        if(res.readdata._data.qcloud.qcloud_cms_image){
-          this.tableData[1].status = true
-        }else{
-          this.tableData[1].status = false
-        }
-        if(res.readdata._data.qcloud.qcloud_cms_text){
-          this.tableData[2].status = true
-        }else{
-          this.tableData[2].status = false
-        }
-        if(res.readdata._data.qcloud.qcloud_sms){
-          this.tableData[3].status = true
-        }else{
-          this.tableData[3].status = false
-        }
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          if (res.readdata._data.qcloud.qcloud_close) {
+            this.tableData[0].status = true
+          } else {
+            this.tableData[0].status = false
+          }
+          if (res.readdata._data.qcloud.qcloud_cms_image) {
+            this.tableData[1].status = true
+          } else {
+            this.tableData[1].status = false
+          }
+          if (res.readdata._data.qcloud.qcloud_cms_text) {
+            this.tableData[2].status = true
+          } else {
+            this.tableData[2].status = false
+          }
+          if (res.readdata._data.qcloud.qcloud_sms) {
+            this.tableData[3].status = true
+          } else {
+            this.tableData[3].status = false
+          }
 
-        console.log(this.tableData)
+          console.log(this.tableData)
+        }
       })
     },
     loginSetting(index,type,status){
@@ -96,7 +98,7 @@ export default {
       if(type == 'qcloud_close') {
         console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
-      } 
+      }
       else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
@@ -127,17 +129,21 @@ export default {
 
         }
       }).then(data=>{
-        console.log(data)
-        this.$message({
-          message: '修改成功',
-          type: 'success'
-        });
-        this.tencentCloudStatus();
+        console.log(data);
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+        }else {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.tencentCloudStatus();
+        }
       }).catch(error=>{
         // cthis.$message.error('修改失败');
       })
     },
- 
+
   },
   components:{
     Card,

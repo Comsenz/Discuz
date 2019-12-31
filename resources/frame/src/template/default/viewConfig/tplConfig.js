@@ -568,11 +568,11 @@ export default {
             if (notLoggedInToAccessPage.includes(to.name)){
               next();
             }else {
-              if(to.name === 'pay-circle'){
+              if(to.name === 'pay-circle-login'){
                 next();
                 return
               }
-              next({path:'pay-circle'});
+              next({path:'pay-circle-login'});
             }
           }
         })

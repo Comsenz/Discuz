@@ -91,7 +91,9 @@ export default {
               }
               }
             }).then(res=>{
-      
+               if (res.errors){
+                 this.$toast.fail(res.errors[0].code);
+               }
             })
           },
   },

@@ -30,11 +30,15 @@ export default {
         data:{
         }
       }).then(data=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
           console.log(data);
           this.appId = data.readdata[0]._data.app_id;
           this.mchId = data.readdata[0]._data.mch_id;
           this.apiKey = data.readdata[0]._data.api_key;
           this.appSecret = data.readdata[0]._data.app_secret;
+        }
       }).catch(error=>{
         // console.log('ʧ��');
       })
@@ -81,10 +85,14 @@ export default {
         // this.$router.push({
         //   path:'/admin/pay-set'
         // });
-        this.$message({
-          message: '提交成功',
-          type: 'success'
-        });
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          });
+        }
       })
     }
 

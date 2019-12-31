@@ -32,7 +32,7 @@ export default {
           label: '替换'
         }
       ],
-      
+
       optionsUser: [{
         value: '{IGNORE}',
         label: '不处理'
@@ -58,7 +58,7 @@ export default {
       //   'filter[p]': '',
       //   'page[number]': 1,
       // }
-      
+
       deleteList:[],
       tableAdd:false,
 
@@ -133,21 +133,25 @@ export default {
             "page[number]": this.pageNum
           }
         })
-        if(initStatus){
-          this.tableData = [];
-        }
-        
-        this.tableData = this.tableData.concat(response.readdata).map((v)=>{
-          if(v._data.inputVal === undefined){
-            v._data.inputVal = '';
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else {
+          if (initStatus) {
+            this.tableData = [];
           }
-          console.log(response)
-          this.total = response.meta.total;
-          this.pageNum = response.meta.pageCount;
-          // this.total = response.meta ? response.meta.total : 0;
-          return v;
-        });
-        console.log(this.tableData)
+
+          this.tableData = this.tableData.concat(response.readdata).map((v) => {
+            if (v._data.inputVal === undefined) {
+              v._data.inputVal = '';
+            }
+            console.log(response)
+            this.total = response.meta.total;
+            this.pageNum = response.meta.pageCount;
+            // this.total = response.meta ? response.meta.total : 0;
+            return v;
+          });
+          console.log(this.tableData)
+        }
       } catch(err){
 
       } finally {
@@ -168,7 +172,7 @@ export default {
         }
       }
     },
-    
+
     async loginStatus(){  //批量提交接口
 
       let result = this.tableData.filter((v)=>{
@@ -224,7 +228,7 @@ export default {
       } catch(err){
         console.error(err,'function loginStatus error')
       }
-      
+
     },
     tableContAdd(){
         this.tableData.push({
@@ -249,19 +253,19 @@ export default {
         method:'delete',
         splice:this.deleteList.join(","),
         data:{
-          
+
         }
       }).then(res=>{
         this.handleSearchUser(true);
         console.log(res)
       })
-      
+
     },
     handleCurrentChange(val){
       this.pageNum = val
       this.handleSearchUser(true)
     }
-  
+
   },
   components:{
     Card,
