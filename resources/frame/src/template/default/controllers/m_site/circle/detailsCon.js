@@ -81,7 +81,9 @@ export default {
       postCount: 0, //回复总条数
       token:false,
       isWeixin: false,
-      isPhone: false
+      isPhone: false,
+      isAndroid:false,
+      isiOS:false,
     }
   },
   created() {
@@ -93,8 +95,8 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
-    this.getUser();
-    this.detailsLoad();
+    // this.getUser();
+    this.detailsLoad(true);
     if (!this.themeCon) {
       this.themeShow = false;
     } else {
@@ -239,7 +241,7 @@ export default {
     },
 
     //初始化请求主题详情数据
-    detailsLoad() {
+    detailsLoad(initFlag = false) {
       let threads = 'threads/' + this.themeId;
       return this.appFetch({
         url: threads,
@@ -257,52 +259,70 @@ export default {
 
         console.log(res.readdata);
         console.log('1234');
-        if (!this.loading) {
-          this.collectStatus = res.readdata._data.isFavorite;
-          this.themeShow = true;
-          this.themeCon = res.readdata;
-          var firstpostImageLen = this.themeCon.firstPost.images.length;
-          if (firstpostImageLen === 0) return;
-          var firstpostImage = [];
-          for (let i = 0; i < firstpostImageLen; i++) {
+        this.finished = res.readdata.posts.length < this.pageLimit;
+        if (initFlag) {
+        this.collectStatus = res.readdata._data.isFavorite;
+        this.themeShow = true;
+        this.themeCon = res.readdata;
+        var firstpostImageLen = this.themeCon.firstPost.images.length;
+        if (firstpostImageLen === 0) return;
+        var firstpostImage = [];
+        for (let i = 0; i < firstpostImageLen; i++) {
+          // let src = 'https://2020.comsenz-service.com/api/attachments/';
+          // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+          firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+        }
+        this.firstpostImageList = firstpostImage;
+        // console.log(134, this.firstpostImageList);
+
+
+        // console.log(themeListLen);
+        var themeListLen = this.themeCon.length;
+
+        if(this.themeCon =='' || this.themeCon == null){
+          return false;
+        } else {
+          for (let h = 0; h < themeListLen; h++) {
+            // 图片地址
             // let src = 'https://2020.comsenz-service.com/api/attachments/';
-            // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-            firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
-          }
-          this.firstpostImageList = firstpostImage;
-          // console.log(134, this.firstpostImageList);
-
-
-            // console.log(themeListLen);
-            var themeListLen = this.themeCon.length;
-
-            if(this.themeCon =='' || this.themeCon == null){
-              return false;
-            } else {
-              for (let h = 0; h < themeListLen; h++) {
-                // 图片地址
-                // let src = 'https://2020.comsenz-service.com/api/attachments/';
-                let imageList = [];
-                if(this.themeCon[h].firstPost.images){
-                  for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
-                    imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
-                    // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
-                    // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
-                  }
-                }
-                // console.log(imageList);
-                this.themeCon[h].posts.imageList = imageList;
-                console.log(imageList);
+            let imageList = [];
+            if(this.themeCon[h].firstPost.images){
+              for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
+                imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
+                // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
+                // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
               }
             }
+            // console.log(imageList);
+            this.themeCon[h].posts.imageList = imageList;
+            console.log(imageList);
+          }
 
-
-
+          if(this.themeCon =='' || this.themeCon == null){
+            console.log('null');
+            return false;
+          } else {
+            console.log('循环');
+            for (let h = 0; h < themeListLen; h++) {
+              // 图片地址
+              // let src = 'https://2020.comsenz-service.com/api/attachments/';
+              let imageList = [];
+              if(this.themeCon[h].firstPost.images){
+                for (let i = 0; i < this.themeCon[h].posts.images.length; i++) {
+                  imageList.push(this.themeCon[h].posts.images[i]._data.thumbUrl);
+                  // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
+                  // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
+                }
+              }
+              // console.log(imageList);
+              this.themeCon[h].posts.imageList = imageList;
+              console.log('898989');
+              console.log(imageList);
+            }
+          }
+        }
 
         } else {
-          if(res.readdata.posts.length === 0){
-            this.finished = true;
-          }
           this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
         // this.themeCon = res.readdata;
@@ -315,6 +335,7 @@ export default {
         console.log('22222222222222')
         this.loading = false;
       })
+
     },
     //主题详情图片放大轮播
     imageSwiper() {
@@ -364,7 +385,14 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      this.$router.push({ path:'/home-page'+'/'+id});
+      if(!this.token){
+        this.$router.push({
+          path:'/login-user',
+          name:'login-user'
+        })
+      } else {
+        this.$router.push({ path:'/home-page'+'/'+id});
+      }
     },
     //付费，获得成员权限
     sitePayClick(amount) {
@@ -498,7 +526,8 @@ export default {
           }
         }).then((res) => {
           this.$message('修改成功');
-          this.detailsLoad();
+          this.pageIndex = 1;
+          this.detailsLoad(true);
         })
       }
     },
@@ -609,16 +638,13 @@ export default {
     },
     onLoad() { //上拉加载
       this.loading = true;
-      this.finished = false;
       this.pageIndex++;
       // console.log(123)
       this.detailsLoad();
     },
     onRefresh() { //下拉刷新
       this.pageIndex = 1;
-      this.finished = false;
-      this.themeCon.posts = [];
-      this.detailsLoad().then(()=>{
+      this.detailsLoad(true).then(()=>{
         this.$toast('刷新成功');
       }).catch((err)=>{
         this.$toast('刷新失败');

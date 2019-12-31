@@ -125,7 +125,7 @@
                     <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
-                  <!-- <div class="postImgBox">
+                  <div class="postImgBox">
                     <div class="postImgList">
                       <van-image
                           fit="none"
@@ -135,7 +135,7 @@
                           @click="imageSwiper"
                         />
                     </div>
-                  </div> -->
+                  </div>
 
 
                   <div class="postImgBox">
