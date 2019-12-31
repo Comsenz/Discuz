@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Illuminate\Database\Seeder;
 use App\Models\GroupPermission;
 
@@ -61,10 +66,10 @@ class GroupPermissionTableSeeder extends Seeder
         'wallet.update' => [],                  // 更新钱包
         'wallet.viewList' => [],                // 总钱包信息列表
         'wallet.logs.viewList' => [],           // 钱包动账记录总列表
-        'trade.pay.order' => [10],                //支付订单
+        'trade.pay.order' => [10],              //支付订单
 
         // 提现
-        'cash.create' => [10],               // 申请提现
+        'cash.create' => [10],                  // 申请提现
         'cash.review' => [],                    // 提现审核
         'cash.viewList' => [],                  // 提现总列表
 
@@ -80,7 +85,7 @@ class GroupPermissionTableSeeder extends Seeder
     public function run()
     {
         $data = collect($this->permissions)->map(function ($value, $key) {
-            return collect($value)->map(function($value) use ($key) {
+            return collect($value)->map(function ($value) use ($key) {
                 return [
                     'group_id' => $value,
                     'permission' => $key
