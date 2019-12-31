@@ -518,38 +518,93 @@ export default {
       }
     },
     //打赏 生成订单
-    rewardPay(amount) {
+    // rewardPay(amount) {
+    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
+    //   let isPhone = this.appCommonH.isWeixin().isPhone;
+    //   let payment_type = '';
+    //   this.appFetch({
+    //     url: "orderList",
+    //     method: "post",
+    //     data: {
+    //       "type": "2",
+    //       "thread_id": this.themeId,
+    //       "amount": amount
+    //     },
+    //   }).then(data => {
+
+    //     // console.log(data.data.attributes.order_sn);
+    //     this.orderSn = data.data.attributes.order_sn;
+    //     this.orderPay(this.orderSn, amount);
+
+    //   })
+    // },
+
+    payClick(amount){
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
-      let payment_type = '';
-      this.appFetch({
-        url: "orderList",
-        method: "post",
-        data: {
-          "type": "2",
-          "thread_id": this.themeId,
-          "amount": amount
-        },
-      }).then(data => {
-        if(isWeixin == true){
-          
-        } else if(isPhone == true){
 
-        } else {
+      if (isWeixin){
+        console.log('微信');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(12).then((res)=>{
+            if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+              }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+              }
+            }else{
+              this.onBridgeReady(res);
+            }
+          })
+        });
+      } else if (isPhone){
+        console.log('手机浏览器');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(11).then((res)=>{
+            this.wxPayHref = res.readdata._data.wechat_h5_link;
+            window.location.href = this.wxPayHref;
+          })
+        });
+      } else {
+        console.log('pc');
+        this.getOrderSn(amount).then(()=>{
+          this.orderPay(10).then((res)=>{
+            console.log(res);
+            this.codeUrl = res.readdata._data.wechat_qrcode;
+            this.qrcodeShow = true;
 
-        }
-        // console.log(data.data.attributes.order_sn);
-        this.orderSn = data.data.attributes.order_sn;
-        this.orderPay(this.orderSn, amount);
+            if (this.payStatus && this.payStatusNum < 10){
+              clearInterval(pay);
+            }else {
+              var pay = setInterval(()=>{
+                // this.getUsersInfo()
+              },3000)
+            }
 
-      })
+          })
+        });
+      }
     },
 
 
+    getOrderSn(amount){
+      return this.appFetch({
+        url:'orderList',
+        method:'post',
+        data:{
+          "type":1,
+          "thread_id": this.themeId,
+          "amount": amount
+        }
+      }).then(res=>{
+        console.log(res);
+        this.orderSn = res.readdata._data.order_sn;
+      })
+    },
 
-
-
-    orderPay(type,amount){
+    orderPay(type){
       return this.appFetch({
         url:'orderPay',
         method:'post',
@@ -565,8 +620,29 @@ export default {
       })
     },
 
-
-
+     // getUsersInfo(){
+     //   this.appFetch({
+     //     url:'users',
+     //     method:'get',
+     //     splice:'/' + browserDb.getLItem('tokenId'),
+     //     data:{
+     //       include:['groups']
+     //     }
+     //   }).then(res=>{
+     //     console.log(res);
+     //     console.log(res.readdata._data.paid);
+     //     this.payStatus = res.readdata._data.paid;
+     //     this.payStatusNum =+1;
+     //     if (this.payStatus){
+     //       this.qrcodeShow = false;
+     //       this.$router.push('/');
+     //       this.payStatusNum = 11;
+     //       clearInterval(pay);
+     //     }
+     //   }).catch(err=>{
+     //     console.log(err);
+     //   })
+     // },
 
     //打赏，生成订单成功后支付
     // orderPay(orderSn, amount) {
