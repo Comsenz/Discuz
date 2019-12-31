@@ -120,19 +120,18 @@ export default {
   },
 
   methods: {
-    downAttachment(url){
-      console.log(url);
-      if(this.isiOS){
-        this.$message('因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
-      } else {
-        alert('and');
-        this.$refs.link.href = url;
-        // window.location.href = url;
-        // window.open(url);
-
-
-      }
-    },
+    //判断设备，下载时提示
+    // downAttachment(url){
+    //   console.log(url);
+    //   if(this.isiOS){
+    //     this.$message('因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
+    //   } else {
+    //     alert('and');
+    //     this.$refs.link.href = url;
+    //     // window.location.href = url;
+    //     // window.open(url);
+    //   }
+    // },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
       let datas = [];

@@ -152,6 +152,7 @@ export default {
           }
         }
         console.log(this.attriAttachment);
+        // return false;
         console.log('发帖');
         // return false;
         this.appFetch({
@@ -201,6 +202,7 @@ export default {
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata);
+      this.loading = false;
 
     },
     //上传图片，点击底部Icon时
@@ -211,6 +213,7 @@ export default {
       formdata.append('isGallery', 1);
       this.uploaderEnclosure(formdata,true);
       this.uploadShow = true;
+      this.loading = false;
     },
     //删除图片
     // deleteFile(uuid){
@@ -271,6 +274,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 0);
+      this.loading = true,
       this.uploaderEnclosure(formdata,false,true);
     },
     // 组件方法 获取 流
@@ -485,6 +489,7 @@ export default {
               }
              // this.attriAttachment = attriAttachment;
              // console.log(this.attriAttachment);
+             this.loading = false;
              this.$message('提交成功');
            })
        },
