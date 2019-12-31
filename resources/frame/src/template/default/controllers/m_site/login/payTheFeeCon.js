@@ -40,16 +40,17 @@ export default {
         },
         function(res){
           console.log(res);
-          alert('支付成功');
-          alert(res);
 
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             alert("支付成功");
+            alert(res.err_msg)
             this.$toast.success('支付成功');
           } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
             alert("支付过程中用户取消");             //支付取消正常走
+            alert(res.err_msg)
           } else if (res.err_msg == "get_brand_wcpay_request:fail") {
             alert("支付失败");
+            alert(res.err_msg)
           }
 
         });
