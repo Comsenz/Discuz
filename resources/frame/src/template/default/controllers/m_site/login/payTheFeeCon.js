@@ -42,12 +42,16 @@ export default {
           console.log(res);
           alert('支付成功');
           alert(res);
-          if(res.err_msg == "get_brand_wcpay_request:ok" ){
+
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            alert("支付成功");
             this.$toast.success('支付成功');
-            // this.$router.push('/')
-          } else {
-            this.$toast.fail('支付失败！')
+          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            alert("支付过程中用户取消");             //支付取消正常走
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            alert("支付失败");
           }
+
         });
     },
 
@@ -59,20 +63,16 @@ export default {
         console.log('微信');
         this.getOrderSn().then(()=>{
           this.orderPay(12).then((res)=>{
-            if (res.errors){
-              alert('调起微信失败!')
-            }else {
-              if (typeof WeixinJSBridge == "undefined"){
-                if( document.addEventListener ){
-                  document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-                }else if (document.attachEvent){
-                  document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-                  document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
-                }
-              }else{
-                alert('存在wx方法');
-                this.onBridgeReady(res);
+            if (typeof WeixinJSBridge == "undefined"){
+              if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+              }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
               }
+            }else{
+              alert('存在wx方法');
+              this.onBridgeReady(res);
             }
           })
         });

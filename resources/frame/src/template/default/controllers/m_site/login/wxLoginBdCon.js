@@ -40,7 +40,8 @@ export default {
         console.log(res);
 
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+          this.$toast.fail(errorInfo[0].errorDetail);
         } else {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
