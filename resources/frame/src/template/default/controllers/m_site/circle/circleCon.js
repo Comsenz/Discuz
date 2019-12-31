@@ -38,11 +38,11 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 5,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      canEdit:false,
+      canEdit:true,
       firstCategoriesId:'',
       Initialization:false,     //当请求到默认分类id时，允许初始化开关
-      searchStatus: false,  //默认不显示搜索按钮
-      menuStatus: false,     //默认不显示菜单按钮
+      searchStatus: true,  //默认不显示搜索按钮
+      menuStatus: true,     //默认不显示菜单按钮
       categoryId:false
 
 		}
@@ -138,10 +138,12 @@ export default {
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
+          this.canEdit = false;
+          this.searchStatus = false;
+          this.menuStatus = false;
         }
       } else {
-        this.searchStatus = true;
-        this.menuStatus = true;
+
       }
     },
 
