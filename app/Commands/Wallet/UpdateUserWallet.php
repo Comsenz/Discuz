@@ -92,16 +92,19 @@ class UpdateUserWallet
         // $this->assertCan($this->actor, 'UpdateUserWallet');
         //开始事务
         $db->beginTransaction();
+        $change_type = '';
         try {
             $user_wallet = UserWallet::lockForUpdate()->findOrFail($this->user_id);
             switch ($operate_type) {
                 case UserWallet::OPERATE_ADD: //增加
+                    $change_type = UserWalletLog::TYPE_INCOME_ARTIFICIAL;
                     break;
                 case UserWallet::OPERATE_REDUCE: //减少
                     if ($user_wallet->available_amount - $operate_amount < 0) {
                         throw new Exception('available_amount_error');
                     }
                     $change_available_amount = -$change_available_amount;
+                    $change_type = UserWalletLog::TYPE_EXPEND_ARTIFICIAL;
                     break;
                 default:
                     break;
@@ -118,7 +121,7 @@ class UpdateUserWallet
                 $this->user_id,
                 $change_available_amount,
                 0,
-                UserWalletLog::TYPE_EXPEND_ARTIFICIAL,
+                $change_type,
                 $operate_reason
             );
 

@@ -31,8 +31,8 @@ export default {
     },
 
     onBridgeReady(data){
+      let that = this;
 
-      // const wxPay = new Promise((resolve,reject)=>{
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
@@ -44,38 +44,32 @@ export default {
         },
         function(res){
           // alert('支付唤醒');
-          this.dialogShow = true;
-
-          /*if (res.err_msg == "get_brand_wcpay_request:ok") {
-            alert("支付成功");
-            alert(res.err_msg);
-
-          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            alert("支付过程中用户取消");             //支付取消正常走
-            alert(res.err_msg);
-
-          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            alert("支付失败");
-            alert(res.err_msg);
-            resolve;
-          }*/
+          // if (res.err_msg == "get_brand_wcpay_request:ok") {
+          //   alert("支付成功");
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          //   alert("支付过程中用户取消");             //支付取消正常走
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          //   alert("支付失败");
+          //   alert(res.err_msg);
+          //   resolve;
+          // }
 
         });
-      // });
 
-      /*wxPay.then(()=>{
-        alert('开始查询接口');
-        const toast = this.$toast.loading({
+      setTimeout(()=>{
+        const toast = that.$toast.loading({
           duration: 0, // 持续展示 toast
           forbidClick: true,
-          message: '正在查询订单...'
+          message: '支付状态查询中...'
         });
-
         let second = 5;
-
         const timer = setInterval(() => {
           second--;
-          this.getUsers(this.tokenId).then(res=>{
+          this.getUsers(that.tokenId).then(res=>{
             console.log(second);
 
             if (res.errors){
@@ -91,6 +85,7 @@ export default {
                 clearInterval(timer);
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
+                that.$router.push({path:'/'});
               } else {
                 clearInterval(timer);
                 toast.message = '支付失败，请重新支付！';
@@ -99,7 +94,7 @@ export default {
             }
           });
         }, 1000);
-      });*/
+      },3000);
 
     },
 
@@ -129,6 +124,14 @@ export default {
           this.orderPay(11).then((res)=>{
             this.wxPayHref = res.readdata._data.wechat_h5_link;
             window.location.href = this.wxPayHref;
+
+            const payPhone = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(payPhone);
+              }
+              this.getUsersInfo()
+            },3000)
+
           })
         });
       } else {
@@ -136,17 +139,14 @@ export default {
         this.getOrderSn().then(()=>{
           this.orderPay(10).then((res)=>{
             console.log(res);
-            this.codeUrl = 'data:image/jpg;base64,' + res.readdata._data.wechat_qrcode;
+            this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
-
-            if (this.payStatus && this.payStatusNum < 10){
-              clearInterval(pay);
-            }else {
-              var pay = setInterval(()=>{
-                this.getUsersInfo()
-              },3000)
-            }
-
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              this.getUsersInfo()
+            },3000)
           })
         });
       }
@@ -178,20 +178,22 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.sitePrice = res.readdata._data.setsite.site_price;
-
-        let day = res.readdata._data.setsite.site_expire;
-
-        switch (day){
-          case '':
-            this.siteExpire = '永久有效';
-            break;
-          case '0':
-            this.siteExpire = '永久有效';
-            break;
-          default:
-            this.siteExpire = '有效期自加入起' + day + '天';
-            break;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.sitePrice = res.readdata._data.setsite.site_price;
+          let day = res.readdata._data.setsite.site_expire;
+          switch (day) {
+            case '':
+              this.siteExpire = '永久有效';
+              break;
+            case '0':
+              this.siteExpire = '永久有效';
+              break;
+            default:
+              this.siteExpire = '有效期自加入起' + day + '天';
+              break;
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -206,7 +208,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.orderSn = res.readdata._data.order_sn;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.orderSn = res.readdata._data.order_sn;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -221,7 +227,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -237,13 +247,17 @@ export default {
       }).then(res=>{
         console.log(res);
         console.log(res.readdata._data.paid);
-        this.payStatus = res.readdata._data.paid;
-        this.payStatusNum =+1;
-        if (this.payStatus){
-          this.qrcodeShow = false;
-          this.$router.push('/');
-          this.payStatusNum = 11;
-          clearInterval(pay);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.payStatus = res.readdata._data.paid;
+          this.payStatusNum = +1;
+          if (this.payStatus) {
+            this.qrcodeShow = false;
+            this.$router.push('/');
+            this.payStatusNum = 11;
+            clearInterval(pay);
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -259,8 +273,12 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
-        return res;
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          console.log(res);
+          return res;
+        }
       }).catch(err=>{
         console.log(err);
       })
@@ -275,7 +293,11 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        return res
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res
+        }
       }).catch(err=>{
         console.log(err);
       })

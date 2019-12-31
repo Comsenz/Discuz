@@ -84,9 +84,13 @@ export default {
           url: 'wallet',
           splice: this.query.id,
           data: datas
-        }).then(res=>{
+        }).then(data=>{
+          if (data.errors){
+            this.$message.error(data.errors[0].code);
+          }else{
           this.$message({ message: '提交成功', type: 'success' });
           this.getWalletDet();
+          }
         })
 
       } catch(err){

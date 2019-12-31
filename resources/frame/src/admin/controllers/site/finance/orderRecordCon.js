@@ -109,11 +109,15 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-        this.tableData = [];
-        this.tableData = res.readdata;
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          this.tableData = [];
+          this.tableData = res.readdata;
 
-        this.pageCount = res.meta.pageCount;
-        this.total = res.meta.total;
+          this.pageCount = res.meta.pageCount;
+          this.total = res.meta.total;
+        }
       }).catch(err=>{
         console.log(err);
       })

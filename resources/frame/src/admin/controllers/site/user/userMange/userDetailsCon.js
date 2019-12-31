@@ -49,14 +49,19 @@ export default {
             include:'wechat'
           }
         })
-        console.log(response,'response');
-        this.userInfo = response.readdata._data;
-        this.imageUrl = this.userInfo.avatarUrl;
-        if(response.readdata.wechat){
-          this.wechatNickName = response.readdata.wechat._data.nickname
-          this.sex = response.readdata.wechat._data.sex
+        if (response.errors){
+          this.$message.error(response.errors[0].code);
+        }else{
+          console.log(response,'response');
+          this.userInfo = response.readdata._data;
+          this.imageUrl = this.userInfo.avatarUrl;
+          if(response.readdata.wechat){
+            this.wechatNickName = response.readdata.wechat._data.nickname
+            this.sex = response.readdata.wechat._data.sex
+          }
+          console.log()
         }
-        console.log()
+       
       } catch(err){
         console.error(err, 'getUserDetail')
       }
@@ -115,7 +120,12 @@ export default {
             splice: `${this.query.id}`+'/avatar',
             data:formData
           }).then(res=>{
-            this.imageUrl = res.readdata._data.avatarUrl;
+            if (data.errors){
+              this.$message.error(data.errors[0].code);
+            }else{
+              this.imageUrl = res.readdata._data.avatarUrl;
+            }
+           
           })
     },
     
@@ -145,8 +155,13 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res)
-        this.$message({ message: '提交成功', type: 'success' });
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
+        }else{
+          console.log(res)
+          this.$message({ message: '提交成功', type: 'success' });
+        }
+        
       })
     },
 

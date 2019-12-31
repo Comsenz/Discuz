@@ -9,7 +9,7 @@
       <div class="circlePL">
       	<div class="circleLoBox">
         	<span class="circleIcon">站点图标</span>
-          <img v-if="siteInfo.logo" :src="siteInfo._data.logo" class="circleLogo">
+          <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
         </div>
       </div>
@@ -41,7 +41,7 @@
       <div class="gap"></div>
       <div class="loginOpera">
       	<p class="welcomeUser">欢迎您，{{username}}<a href="javascript:;" class="signOut" @click="signOut">退出</a></p>
-      	<a href="javascript:;" class="regiJoin" @click="sitePayClick(sitePrice)">付费，获得成员权限</a>
+      	<a href="javascript:;" class="regiJoin" @click="payClick(sitePrice)">付费，获得成员权限</a>
       	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
       </div>
     </div>

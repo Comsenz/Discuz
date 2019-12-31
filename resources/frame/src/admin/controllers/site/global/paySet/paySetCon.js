@@ -26,11 +26,15 @@ export default {
         data:{
         }
       }).then(data=>{
-        // console.log(data);
-        if(data.readdata._data.wxpay_close == '0'){
-          this.settingStatus[0].status = false;
-        } else {
-          this.settingStatus[0].status = true;
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          // console.log(data);
+          if (data.readdata._data.wxpay_close == '0') {
+            this.settingStatus[0].status = false;
+          } else {
+            this.settingStatus[0].status = true;
+          }
         }
       })
     },
@@ -58,11 +62,15 @@ export default {
 
         }
       }).then(data=>{
-        this.$message({
-          message: '修改成功',
-          type: 'success'
-        });
-        this.loadStatus();
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.loadStatus();
+        }
       }).catch(error=>{
         cthis.$message.error('修改失败');
       })

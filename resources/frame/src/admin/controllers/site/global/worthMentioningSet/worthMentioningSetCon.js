@@ -44,20 +44,26 @@ export default {
         }
       }).then(data=>{
         console.log(data.readdata._data.passport);
-        if(data.readdata._data.passport.offiaccount_close == '0'){
-          this.settingStatus[0].status = false;
-        } else {
-          this.settingStatus[0].status = true;
-        }
-        if(data.readdata._data.passport.miniprogram_close == '0'){
-          this.settingStatus[1].status = false;
-        } else {
-          this.settingStatus[1].status = true;
-        }
-        if(data.readdata._data.passport.oplatform_close == '0'){
-          this.settingStatus[2].status = false;
-        } else {
-          this.settingStatus[2].status = true;
+
+        if (data.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+
+          if (data.readdata._data.passport.offiaccount_close == '0') {
+            this.settingStatus[0].status = false;
+          } else {
+            this.settingStatus[0].status = true;
+          }
+          if (data.readdata._data.passport.miniprogram_close == '0') {
+            this.settingStatus[1].status = false;
+          } else {
+            this.settingStatus[1].status = true;
+          }
+          if (data.readdata._data.passport.oplatform_close == '0') {
+            this.settingStatus[2].status = false;
+          } else {
+            this.settingStatus[2].status = true;
+          }
         }
         // this.$message({'修改成功'});
       }).catch(error=>{
@@ -99,11 +105,15 @@ export default {
            ]
         }
       }).then(data=>{
-        this.$message({
-          message: '修改成功',
-          type: 'success'
-        });
-        this.loadStatus();
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
+        }else {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          });
+          this.loadStatus();
+        }
       }).catch(error=>{
         cthis.$message.error('修改失败');
       })
