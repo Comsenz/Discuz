@@ -26,8 +26,8 @@ export default {
         data:{
         }
       }).then(data=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           // console.log(data);
           if (data.readdata._data.wxpay_close == '0') {
@@ -62,8 +62,8 @@ export default {
 
         }
       }).then(data=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({
             message: '修改成功',

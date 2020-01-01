@@ -281,10 +281,10 @@ export default {
     getCreated(state){
       if(state){
         console.log(state);
-        this.getThemeList(1);
+        this.getPostsList(1);
       } else {
         console.log(state);
-        this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
+        this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
       }
     }
 
