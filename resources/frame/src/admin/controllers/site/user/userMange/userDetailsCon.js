@@ -56,7 +56,11 @@ export default {
           console.log(response,'response');
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
-          // this.userRole = response.readdata.groups[0]._data.name
+          this.userRole = response.readdata.groups.map((v)=>{
+            return  v._data.id
+           });
+           console.log(this.userRole,'是我啊啊啊啊啊')
+           console.log(this.options,'option')
           if(response.readdata.wechat){
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
