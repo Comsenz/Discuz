@@ -562,12 +562,18 @@ export default {
    /*
    * 站点关闭，跳转到站点关闭页面
    * */
-  /*this.getForum().then((res)=>{
-    if (res.errors[0].code === 'site_closed'){
-      next({path:'/site-close'});
-      return
+  this.getForum().then((res)=>{
+
+    if (res.rawData[0].code === 'site_closed'){
+
+      if (to.name === 'login-user'){
+        next();
+      } else {
+        next({path:'/site-close'});
+        return
+      }
     }
-  });*/
+  });
 
 
   /*
@@ -578,10 +584,10 @@ export default {
     /*已登录状态*/
 
     this.getForum().then(ress=>{
-      if (ress.errors[0].code === 'site_closed'){
-        next({path:'/site-close'})
-        return
-      }
+      // if (ress.errors[0].code === 'site_closed'){
+      //   next({path:'/site-close'})
+      //   return
+      // }
 
       if (ress.readdata._data.setsite.site_mode === 'pay'){
 
@@ -668,10 +674,10 @@ export default {
       }else {
         /*不符合，跳转到未登录，可访问站点*/
         this.getForum().then(res=>{
-          if (res.errors[0].code === 'site_closed'){
-            next({path:'/site-close'})
-            return
-          }
+          // if (res.errors[0].code === 'site_closed'){
+          //   next({path:'/site-close'})
+          //   return
+          // }
           /*判断站点模式*/
           if (res.readdata._data.setsite.site_mode === 'pay'){
             if(to.name === 'pay-circle'){
