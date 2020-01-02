@@ -49,9 +49,9 @@ export default {
 	  }
   },
 	props: {
-    personInfo: { // 组件用户信息
-      type: false
-    },
+    // personInfo: { // 组件用户信息
+    //   type: false
+    // },
     // firstCategoryId:{
     //   type: String
     // },
@@ -219,6 +219,12 @@ export default {
 
   mounted: function() {
     window.addEventListener('scroll', this.handleTabFix, true);
+  },
+  beforeDestroy() {
+      window.removeEventListener('scroll', this.handleTabFix, true);
+  },
+  destroyed() {
+      window.removeEventListener('scroll', this.handleTabFix, true);
   },
   beforeRouteLeave (to, from, next) {
      window.removeEventListener('scroll', this.handleTabFix, true);
