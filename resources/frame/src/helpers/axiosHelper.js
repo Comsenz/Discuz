@@ -236,7 +236,16 @@ const appFetch = function(params, options) {
     } else {
       console.log(data.data.errors[0].code);
 
-      if (data.data.errors[0].code){
+      if (data.data.errors[0].code === 'access_denied'){
+        //拒绝访问需要跳转到登录页面
+        let isWeixin = appCommonH.isWeixin().isWeixin;
+        if (isWeixin){
+          getNewToken();
+        }else {
+          this.$router.push({path:'/login-user'})
+        }
+
+        // getNewToken();
 
       }
 
@@ -258,15 +267,25 @@ const appFetch = function(params, options) {
  * @return {[type]}      [description]
  */
 const getNewToken = function () {
-/*  appFetch({
-    url:'',
+  appFetch({
+    url:'access',
     method:'get',
-    data:{}
+    data:{
+      'grant_type':'refresh_token',
+      'client_id':browserDb.getLItem('tokenId'),
+      'refresh_token':browserDb.getLItem('refreshToken')
+    }
   }).then(res=>{
     console.log(res);
+    let token = res.data.attributes.access_token;
+    let tokenId = res.data.id;
+    let refreshToken = res.data.attributes.refresh_token;
+    browserDb.setLItem('Authorization', token);
+    browserDb.setLItem('tokenId', tokenId);
+    browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
     console.log(err);
-  })*/
+  })
 }
 
 Vue.prototype.appFetch = appFetch;
