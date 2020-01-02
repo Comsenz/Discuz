@@ -23,11 +23,11 @@ class SiteInfoSerializer extends AbstractSerializer
     {
         // 待审核主题数
         $unapprovedThreads = Thread::where('is_approved', Thread::UNAPPROVED)
-            ->whereNotNull('deleted_at')->count();
+            ->whereNull('deleted_at')->count();
 
         // 待审核回复数
         $unapprovedPosts = Post::where('is_approved', Post::UNAPPROVED)
-            ->whereNotNull('deleted_at')->where('is_first', false)->count();
+            ->whereNull('deleted_at')->where('is_first', false)->count();
 
         return [
             'version' => $model['version'],
