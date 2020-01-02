@@ -12,6 +12,7 @@ use App\Passport\Repositories\AccessTokenRepository;
 use App\Passport\Repositories\RefreshTokenRepository;
 use DateInterval;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\Guest;
 use Discuz\Foundation\Application;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -48,7 +49,7 @@ class RefreshTokenController extends AbstractResourceController
         $refreshTokenRepository = new RefreshTokenRepository();
 
         // Setup the authorization server
-        $server = $server = $this->app->make(AuthorizationServer::class);
+        $server = $this->app->make(AuthorizationServer::class);
 
         $grant = new RefreshTokenGrant($refreshTokenRepository);
         $grant->setRefreshTokenTTL(new DateInterval(AccessTokenRepository::REFER_TOKEN_EXP)); // new refresh tokens will expire after 1 month
@@ -73,6 +74,10 @@ class RefreshTokenController extends AbstractResourceController
         }
         try {
             $response = $server->respondToAccessTokenRequest($request, new Response());
+
+            // TODO: 刷新 token 无法获取用户 id 暂时返回 0
+            TokenSerializer::setUser(new Guest());
+
             return json_decode((string)$response->getBody());
         } catch (Exception $e) {
             throw $e;
