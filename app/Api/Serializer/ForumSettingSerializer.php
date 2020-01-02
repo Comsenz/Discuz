@@ -63,6 +63,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportFileExt' => $this->settings->get('support_file_ext'),
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
 
+            // 主题
+            'canViewThreadList' => $this->actor->can('viewThreadList'),
+            'canCreateThread' => $this->actor->can('createThread'),
+
             // 支付设置
             'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
 
