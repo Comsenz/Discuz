@@ -64,7 +64,7 @@ export default {
         console.log(res);
         if (res.errors){
           if (res.errors[0].detail){
-            this.$toast.fail(res.errors[0].code + res.errors[0].detail[0])
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);
           }
