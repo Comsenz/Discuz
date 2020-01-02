@@ -56,6 +56,7 @@ export default {
           console.log(response,'response');
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
+          // this.userRole = response.readdata.groups[0]._data.name
           if(response.readdata.wechat){
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
@@ -156,8 +157,8 @@ export default {
           }
         }
       }).then(res=>{
-        if (data.errors){
-          this.$message.error(data.errors[0].code);
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
         }else{
           console.log(res)
           this.$message({ message: '提交成功', type: 'success' });

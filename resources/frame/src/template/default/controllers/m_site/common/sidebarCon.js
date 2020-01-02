@@ -132,8 +132,8 @@ export default {
         //如果是公开的站点
         // console.log('公开');
         //复制邀请链接
-        var shareUrl= 'http://10.0.10.210:8883/open-circle';
-        // var shareUrl= appConfig.devApiUrl+'/open-circle';
+        // var shareUrl= 'http://10.0.10.210:8883/open-circle';
+        var shareUrl= appConfig.devApiUrl+'/open-circle';
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

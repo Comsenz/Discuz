@@ -437,6 +437,14 @@ export default {
           title:"支付订单查询"
         }
       },
+      'site-close':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/siteClose'],resolve)
+        },
+        metaInfo:{
+          title:"站点关闭提示"
+        }
+      },
 
 
     }

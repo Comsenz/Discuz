@@ -95,6 +95,10 @@ export default {
       if(this.canWithdraw == 0.00 || this.phone ==''){
         this.sendStatus = false
       }
+      if(!this.wechatNickname){
+        this.$toast('请绑定微信')
+        return
+      }
       var phone = this.phone
       if(!phone){
         this.$toast('请先绑定手机号')
