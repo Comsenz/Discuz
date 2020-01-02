@@ -220,7 +220,8 @@ export default {
           data:{
             "data": {
               "type": "stop-words",
-              "words": words
+              "words": words,
+              "overwrite":true
           }
           }
         })
