@@ -19,8 +19,8 @@ axios.interceptors.response.use(
   error => {
     return error.response;
   }
-
 )
+
 /**
  * 根据api key 获取api 地址
  * @param  {[type]} key [description]
@@ -104,6 +104,7 @@ const analyzingData = function(data, included) {
 
   return getData(data, included);
 }
+
 
 /**
  * ajax 调用方法
@@ -233,13 +234,38 @@ const appFetch = function(params, options) {
       return data.data;
     }
     else {
+      console.log(data.data.errors[0].code);
+
+      if (data.data.errors[0].code){
+
+      }
+
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
-      })
+      });
+      data.data.rawData = data.data.errors;
 
       return data.data;
     }
   });
+}
+
+
+/**
+ * 拉取新token
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+const getNewToken = function () {
+/*  appFetch({
+    url:'',
+    method:'get',
+    data:{}
+  }).then(res=>{
+    console.log(res);
+  }).catch(err=>{
+    console.log(err);
+  })*/
 }
 
 Vue.prototype.appFetch = appFetch;

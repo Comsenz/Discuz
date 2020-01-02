@@ -42,7 +42,7 @@ export default {
               this.getUserInfo(tokenId).then(res => {
                 if (res.errors){
                   if (res.errors[0].detail){
-                    this.$message.error(res.errors[0].code + res.errors[0].detail[0])
+                    this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
                   } else {
                     this.$message.error(res.errors[0].code);
                   }

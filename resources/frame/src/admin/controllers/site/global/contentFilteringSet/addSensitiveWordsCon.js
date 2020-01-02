@@ -46,7 +46,7 @@ export default {
       }],
 
       checked:false,
-      radio2:false,
+      radio:false,
       // loginStatus:'default',  //default  batchSet
       deleteStatus:true,
       textarea:''
@@ -74,28 +74,29 @@ export default {
 
     },
     loginStatus(){
-       if(this.textarea.trim() === ''){
-           return;
-       }
+      if(this.textarea.trim() === ''){
+        return;
+      }
       let wordsArr = this.textarea.split('\n')
-         this.appFetch({
-         url:'batchSubmit',
-         method:'post',
-         standard:false,
-          data:{
-           "data": 
-                {
-                  "type": "stop-words",
-                  "words": wordsArr,
-                  "overwrite":this.radio2 === 'true'?true:false
-              }
-              }
-            }).then(res=>{
-               if (res.errors){
-                 this.$message.error(res.errors[0].code);
-               }
-            })
-          },
+        this.appFetch({
+        url:'batchSubmit',
+        method:'post',
+        standard:false,
+        data:{
+            "data": {
+              "type": "stop-words",
+              "words": wordsArr,
+              "overwrite":this.radio?true:false
+            }
+          }
+        }).then(res=>{
+          if (res.errors){
+            this.$message.error(res.errors[0].code);
+          }else{
+          this.$message({message: '提交成功', type: 'success'});
+          }
+        })
+      },
   },
   components:{
     Card,

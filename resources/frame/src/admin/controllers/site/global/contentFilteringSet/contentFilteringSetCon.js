@@ -133,8 +133,8 @@ export default {
             "page[number]": this.pageNum
           }
         })
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (response.errors){
+          this.$message.error(response.errors[0].code);
         }else {
           if (initStatus) {
             this.tableData = [];
@@ -220,15 +220,17 @@ export default {
           data:{
             "data": {
               "type": "stop-words",
-              "words": words
+              "words": words,
+              "overwrite":true
           }
           }
         })
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
-        }else{
+        // if (res.errors){
+        //   this.$message.error(res.errors[0].code);
+        // }else{
           this.handleSearchUser(true);
-        }
+          this.$message({message: '提交成功', type: 'success'});
+        // }
         
       } catch(err){
         console.error(err,'function loginStatus error')

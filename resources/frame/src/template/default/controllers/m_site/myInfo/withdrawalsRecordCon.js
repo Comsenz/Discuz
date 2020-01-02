@@ -44,9 +44,9 @@ export default {
             'page[limit]': this.pageLimit
           }
         })
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+        if (response.errors){
+          this.$toast.fail(response.errors[0].code);
+          throw new Error(response.error)
         }else{
         if(initStatus){
           this.withdrawalsList = [];
