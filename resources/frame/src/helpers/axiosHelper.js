@@ -4,6 +4,7 @@ import Vue from "vue";
 import axios from "axios";
 import appConfig from "../../config/appConfig";
 import browserDb from 'webDbHelper';
+import appCommonH from "./commonHelper";
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -232,15 +233,15 @@ const appFetch = function(params, options) {
       }
 
       return data.data;
-    }
-    else {
+    } else {
       console.log(data.data.errors[0].code);
 
       if (data.data.errors[0].code){
 
       }
 
-      data.data.rawData = data.data.errors;
+      data.data.rawData = this.appCommonH.copyObj(data.data.errors);
+
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       });
