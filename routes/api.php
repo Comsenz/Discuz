@@ -47,7 +47,7 @@ $route->post('/permission', 'permission.update', ApiController\GroupPermission\U
 
 $route->post('/login', 'login', ApiController\Users\LoginController::class);
 $route->post('/register', 'register', ApiController\Users\RegisterController::class);
-$route->post('/refresh_token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
+$route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\RefreshTokenController::class);
 
 /*
 |--------------------------------------------------------------------------

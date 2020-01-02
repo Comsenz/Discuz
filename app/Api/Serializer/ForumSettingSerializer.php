@@ -51,7 +51,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'siteAuthorScale' => $this->settings->get('site_author_scale'),
             'siteMasterScale' => $this->settings->get('site_master_scale'),
             'siteInstall' => $this->settings->get('site_install'),
-            'threads' => Thread::count(),
+            'threads' => Thread::where('is_approved', Thread::APPROVED)->whereNotNull('deleted_at')->count(),
             'members' => User::count(),
             'siteAuthor' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
             'passwordLength' => (int)$this->settings->get('password_length'),
