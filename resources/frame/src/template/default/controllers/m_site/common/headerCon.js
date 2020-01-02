@@ -49,9 +49,9 @@ export default {
 	  }
   },
 	props: {
-    personInfo: { // 组件用户信息
-      type: false
-    },
+    // personInfo: { // 组件用户信息
+    //   type: false
+    // },
     // firstCategoryId:{
     //   type: String
     // },

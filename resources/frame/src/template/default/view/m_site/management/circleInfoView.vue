@@ -38,7 +38,7 @@
             <div class="infoItem">
             	<div class="overHide">
             		<span class="infoItemLeft">站点成员</span>
-            		<a href="javascript:;" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
+            		<a v-if="moreMemberShow" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
             	</div>
             	<div class="circleMemberList">
                 <img v-for="(item,index) in siteInfo.users" :key="index" :src="item._data.avatarUrl" alt="" class="circleMember" v-if="item._data.avatarUrl == '' && item._data.avatarUrl == null" @click="membersJump(item._data.id)">
