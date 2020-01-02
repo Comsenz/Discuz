@@ -554,12 +554,12 @@ export default {
    /*
    * 站点关闭，跳转到站点关闭页面
    * */
-  this.getForum().then((res)=>{
+  /*this.getForum().then((res)=>{
     if (res.errors[0].code === 'site_closed'){
       next({path:'/site-close'});
       return
     }
-  });
+  });*/
 
 
   /*
