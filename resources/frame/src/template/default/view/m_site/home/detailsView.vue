@@ -33,7 +33,7 @@
                   :src="image"
                   @click="imageSwiper"
                   :key="index"
-                />
+              />
             </div>
 		    	</div>
 		    	<div class="uploadFileList" v-if="isiOS">
@@ -97,12 +97,12 @@
         <div class="commentBox">
           <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
             <span class="icon iconfont icon-praise-after"></span>
-            <a  @click="jumpPerDet(like._data.id)" v-for="like in themeCon.firstPost.likedUsers">{{userArr(themeCon.firstPost.likedUsers)}}</a>
+            <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a>
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
           <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <img v-for="reward in themeCon.rewardedUsers" v-if="reward.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <img v-for="reward in themeCon.rewardedUsers" v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
           </div>
           <van-list
@@ -138,8 +138,6 @@
                       lazy-load
                       v-for="(image,index)  in item.images"
                       :src="image._data.thumbUrl"
-                      class="themeImgChild"
-                      @click="imageSwiper"
                       :key="index"
                     />
                 </div>
@@ -205,11 +203,11 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
-     <van-image-preview
-       v-model="imageShow"
-       :images="firstpostImageList"
-       @change="onChange"
-     >
+       <van-image-preview
+         v-model="imageShow"
+         :images="firstpostImageList"
+         @change="onChange"
+       >
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>

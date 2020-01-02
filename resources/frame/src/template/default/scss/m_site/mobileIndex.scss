@@ -61,6 +61,14 @@ body,html {
   color: #4CCC7D !important;;
 }
 .bgEd { min-height: 100%; background: #EDEDED; }
+.nullTip {
+  text-align: center;
+  padding: 60px 30px;
+  @include font-dpr(32);
+  color: $corB2;
+  .nullIcon {}
+  .nullWord { line-height: 50px;}
+}
 * {	margin: 0; padding: 0;}
 a { color: $fontColor;}
 .lineE5 { border-bottom: 1px solid #e5e5e5;}

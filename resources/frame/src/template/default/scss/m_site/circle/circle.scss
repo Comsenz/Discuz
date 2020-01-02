@@ -1059,16 +1059,12 @@ $postTopicColor:#336699;
       white-space: nowrap;
     }
     .encDelete {
+      color:$corB2;
       display: inline-block;
-      @include px2rem(width, 32);
-      @include px2rem(height, 32);
       @include px2rem(line-height, 32);
       @include px2rem(margin-left, 28);
-      background: #FC6A6A;
-      border-radius: 50%;
-      text-align: center;
-      color: #fff;
-      @include font-dpr(16);
+      @include font-dpr(36);
+      vertical-align: bottom;
       .icon {
         @include font-dpr(16);
         color: $corFff;

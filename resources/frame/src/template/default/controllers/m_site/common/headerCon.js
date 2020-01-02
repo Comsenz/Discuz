@@ -220,6 +220,12 @@ export default {
   mounted: function() {
     window.addEventListener('scroll', this.handleTabFix, true);
   },
+  beforeDestroy() {
+      window.removeEventListener('scroll', this.handleTabFix, true);
+  },
+  destroyed() {
+      window.removeEventListener('scroll', this.handleTabFix, true);
+  },
   beforeRouteLeave (to, from, next) {
      window.removeEventListener('scroll', this.handleTabFix, true);
      next();

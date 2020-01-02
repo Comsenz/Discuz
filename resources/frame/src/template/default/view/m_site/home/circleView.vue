@@ -34,6 +34,10 @@
       </div>
       </van-pull-refresh>
 	    </van-list>
+      <div class="nullTip" v-if="nullTip">
+        <van-icon name="warning-o" size="1.8rem" class="nullIcon"/>
+        <p class="nullWord">{{nullWord}}</p>
+      </div>
     </div>
 
 </template>
