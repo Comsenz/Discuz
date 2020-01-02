@@ -110,7 +110,6 @@ export default {
     } else {
       this.collectFlag = '收藏';
     }
-    // this.detailsLoad();
   },
 
   computed: {
@@ -160,18 +159,23 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res);
-        this.siteInfo = res.readdata;
-        // console.log(res.readdata._data.siteMode+'请求');
-        // this.siteUsername = res.readdata._data.siteAuthor.username;
-        // this.sitePrice = res.readdata._data.sitePrice
-        //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.siteMode;
-        if (this.isPayVal != null && this.isPayVal != '') {
-          this.isPayVal = res.readdata._data.siteMode;
-          //   //判断站点信息是否付费，用户是否登录，用户是否已支付
-          this.detailIf(this.isPayVal, false);
-        }
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+           console.log(res);
+           this.siteInfo = res.readdata;
+           // console.log(res.readdata._data.siteMode+'请求');
+           // this.siteUsername = res.readdata._data.siteAuthor.username;
+           // this.sitePrice = res.readdata._data.sitePrice
+           //把站点是否收费的值存储起来，以便于传到父页面
+           this.isPayVal = res.readdata._data.siteMode;
+           if (this.isPayVal != null && this.isPayVal != '') {
+             this.isPayVal = res.readdata._data.siteMode;
+             //   //判断站点信息是否付费，用户是否登录，用户是否已支付
+             this.detailIf(this.isPayVal, false);
+           }
+         }
       });
     },
     //请求用户信息
@@ -186,20 +190,14 @@ export default {
           include: 'groups',
         }
       }).then((res) => {
-        this.groupId = res.readdata.groups[0]._data.id;
-        console.log(this.groupId);
-        // this.username = res.readdata._data.username;
-        // this.isPaid = res.readdata._data.paid;
-        // this.roleList = res.readdata.groups;
-        // if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-        //   this.joinedAt = res.readdata._data.createdAt;
-        // } else {
-        //   this.joinedAt = res.readdata._data.joinedAt;
-        // }
-        // if(this.isPaid != null && this.isPaid != ''){
-        //   this.detailIf(this.isPayVal,false);
-        // }
-        // this.detailIf(false,this.isPaid);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
+          this.groupId = res.readdata.groups[0]._data.id;
+          console.log(this.groupId);
+         }
+
       })
 
     },
@@ -256,34 +254,36 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
-        if (res.error) {
-          throw new Error(res.error);
-        }
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
+          console.log(res.readdata);
+          console.log('1234');
+          this.finished = res.readdata.posts.length < this.pageLimit;
+          if (initFlag) {
+          this.collectStatus = res.readdata._data.isFavorite;
+          this.themeShow = true;
+          this.themeCon = res.readdata;
 
-        console.log(res.readdata);
-        console.log('1234');
-        this.finished = res.readdata.posts.length < this.pageLimit;
-        if (initFlag) {
-        this.collectStatus = res.readdata._data.isFavorite;
-        this.themeShow = true;
-        this.themeCon = res.readdata;
-
-        var firstpostImageLen = this.themeCon.firstPost.images.length;
-        if (firstpostImageLen === 0) {
-          return;
-        } else {
-          var firstpostImage = [];
-          for (let i = 0; i < firstpostImageLen; i++) {
-            // let src = 'https://2020.comsenz-service.com/api/attachments/';
-            // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-            firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+          var firstpostImageLen = this.themeCon.firstPost.images.length;
+          if (firstpostImageLen === 0) {
+            return;
+          } else {
+            var firstpostImage = [];
+            for (let i = 0; i < firstpostImageLen; i++) {
+              // let src = 'https://2020.comsenz-service.com/api/attachments/';
+              // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+              firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+            }
+            this.firstpostImageList = firstpostImage;
+            // console.log(134, this.firstpostImageList);
+          };
+          } else {
+            this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
           }
-          this.firstpostImageList = firstpostImage;
-          // console.log(134, this.firstpostImageList);
-        };
-        } else {
-          this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
         }
+
         // this.themeCon = res.readdata;
         // console.log(1, this.firstpostImageList);
       }).catch((err) => {
@@ -445,7 +445,12 @@ export default {
           }
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
 
+        }
       })
 
 
@@ -484,9 +489,14 @@ export default {
             }
           }
         }).then((res) => {
-          this.$message('修改成功');
-          this.pageIndex = 1;
-          this.detailsLoad(true);
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.$toast.success('修改成功');
+            this.pageIndex = 1;
+            this.detailsLoad(true);
+          }
         })
       }
     },
@@ -635,17 +645,23 @@ export default {
         console.log(res);
         // const orderStatus = res.readdata._data.status;
 
-        this.payStatus = res.readdata._data.status;
-        this.payStatusNum =+1;
-        if (this.payStatus == '1'){
-          this.rewardShow = false;
-          this.qrcodeShow = false;
-          // this.$router.push('/');
-          this.payStatusNum = 11;
-          this.detailsLoad(true);
-          console.log('重新请求');
-          clearInterval(pay);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.payStatus = res.readdata._data.status;
+          this.payStatusNum =+1;
+          if (this.payStatus == '1'){
+            this.rewardShow = false;
+            this.qrcodeShow = false;
+            // this.$router.push('/');
+            this.payStatusNum = 11;
+            this.detailsLoad(true);
+            console.log('重新请求');
+            clearInterval(pay);
+          }
         }
+
         // return res;
       })
     },

@@ -41,6 +41,10 @@ export default {
           include: 'groups',
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res);
         this.roleList = res.readdata.groups;
         this.groupId = res.readdata.groups[0]._data.id;
@@ -54,6 +58,7 @@ export default {
         } else {
           this.expiredAt = res.readdata._data.expiredAt;
         }
+      }
 
         //请求权限列表数据
         this.appFetch({
@@ -64,8 +69,13 @@ export default {
             include: ['permission'],
           }
         }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            // throw new Error(res.error)
+          }else{
           console.log(res);
           this.limitList = res.readdata;
+          }
         });
 
       });
@@ -77,12 +87,17 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res);
         this.siteInfo = res.readdata;
         console.log(this.siteInfo._data.logo);
         if(res.readdata._data.siteAuthor){
           this.username = res.readdata._data.siteAuthor.username;
         }
+      }
       });
     },
 

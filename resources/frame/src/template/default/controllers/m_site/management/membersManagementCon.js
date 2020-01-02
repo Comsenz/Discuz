@@ -98,7 +98,10 @@ export default {
 					url: 'users',
 					data: this.userParams
 				})
-
+				if (response.errors){
+					this.$toast.fail(response.errors[0].code);
+					throw new Error(response.error)
+				  }else{
 				if (initStatus) {
 					this.userList = [];
 				}
@@ -110,6 +113,7 @@ export default {
 				});
 
 				this.finished = response.readdata.length < this.userParams['page[limit]'];
+			}
 			} catch (err) {
 				console.error(err, 'membersManagementCon.js getSearchValUserList');
 				const currentPageNum = this.userParams['page[number]'];
@@ -128,7 +132,12 @@ export default {
 					url: 'groups',
 					method: 'get'
 				})
+				if (response.errors){
+					this.$toast.fail(response.errors[0].code);
+					throw new Error(response.error)
+				  }else{
 				this.choList = response.data;
+				  }
 			} catch (err) {
 				console.error(err, 'membersManagementCon.js getOperaType');
 				// 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
@@ -173,9 +182,14 @@ export default {
 						data
 					}
 				})
+				if (res.errors){
+					this.$toast.fail(res.errors[0].code);
+					throw new Error(res.error)
+				  }else{
 				this.result = [];
 				this.userParams['page[number]'] = 1;
 				this.getSearchValUserList(true);
+				  }
 			} catch (err) {
 				console.error(err, 'handleSubmit error');
 				this.$toast("修改成员状态失败");

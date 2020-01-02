@@ -54,6 +54,9 @@ export default {
           include:'wechat'
         }
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         console.log(res)
         this.modifyPhone = res.readdata._data.mobile; //用户手机号
         this.headPortrait = res.readdata._data.avatarUrl; //用户头像
@@ -62,7 +65,7 @@ export default {
           console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
         }
-        
+      }
       })
     },
       handleFile: function (e) {
@@ -84,7 +87,11 @@ export default {
         splice:userId+'/avatar',
         data:formdata
       }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
         this.headPortrait = res.data.attributes.avatarUrl;
+        }
       })
       },
 
@@ -93,12 +100,16 @@ export default {
           title: '确认解绑微信',
           // message: '弹窗内容'
         }).then(() => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          }else{
           console.log('000000')
           this.wechat(this.wechatId)
-
-        }).catch(() => {
-          // on cancel
-        });
+          }
+        })
+        // .catch(() => {
+        //   // on cancel
+        // });
       },
       wechat(id){   //解绑微信
         if(id!= '' && id!= null){
@@ -109,7 +120,11 @@ export default {
             data:{
             }
           }).then(res=>{
-            this.modifyData()
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+            }else{
+            this.modifyData(true)
+            }
           })
         }    
       },
@@ -119,8 +134,12 @@ export default {
           method:'get',
           data:{}
         }).then(res=>{
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          }else{
           console.log(res.readdata._data.location)
           window.location.href = res.readdata._data.location
+          }
         })
       }
      

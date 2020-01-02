@@ -85,11 +85,17 @@ export default {
             
           }
         })
-        console.log(response)
-        this.total = response.meta.total;
-        this.pageNum = response.meta.pageCount;
-        this.total = response.meta ? response.meta.total : 0;
-        this.tableData = response.readdata;
+        if(response.errors){
+          throw new Error(response.errors[0].code);
+        }else{
+          console.log(response)
+          // console.log(response.meta.total)
+          this.total = response.meta.total;
+          this.pageNum = response.meta.pageCount;
+          this.total = response.meta ? response.meta.total : 0;
+          this.tableData = response.readdata;
+        }
+        
       } catch(err){
 
       }
@@ -107,10 +113,26 @@ export default {
         this.multipleSelection.forEach((v)=>{
           usersIdList.push(v._data.id)
         })
+        const {
+          username,
+          userUID,
+          userRole,
+          userPhone,
+          userStatus,
+          radio1,
+        } = this.query;
         const response = await this.appFetch({
           method: 'get',
           url: 'exportUser',
           splice:'ids'+'='+usersIdList,
+          data:{
+            "filter[username]": username,
+            "filter[id]": userUID,
+            "filter[group_id]": userRole,
+            "filter[mobile]": userPhone, 
+            "filter[status]":userStatus,
+            "filter[bind]": radio1 === '1' ? 'wechat':'',
+          },
           responseType: 'arraybuffer'
         })
 

@@ -62,8 +62,8 @@ export default {
         data:{
         }
       }).then(data=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           console.log(data);
           console.log('123');

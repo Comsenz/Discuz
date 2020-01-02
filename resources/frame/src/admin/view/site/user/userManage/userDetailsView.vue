@@ -58,7 +58,7 @@
         <el-select v-model="userRole" multiple  placeholder="请选择">
           <el-option
             v-for="item in options"
-            :disabled="item.value === '7' "
+            :disabled="item.value === '6' || item.value === '7'"
             :key="item.value"
             :label="item.label"
             :value="item.value">

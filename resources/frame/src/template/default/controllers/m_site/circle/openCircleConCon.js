@@ -89,6 +89,10 @@ export default {
             include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'firstPost','firstPost.likedUsers', 'rewardedUsers', 'category'],
           }
         }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            // throw new Error(res.error)
+          }else{
           if(initStatus){
             this.themeCon = []
           }
@@ -97,6 +101,7 @@ export default {
           this.themeShow = true;
           this.themeCon =this.themeCon.concat(res.readdata);
           // console.log(this.themeCon.firstPost._data.content);
+        }
         })
     },
     //分享
@@ -110,6 +115,10 @@ export default {
           include: '',
         }
       }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
         console.log(res.readdata._data.paid);
         if(res.readdata._data.paid){
           console.log('付费站点，内容页的分享');
@@ -124,6 +133,7 @@ export default {
             name:'open-circle-con'
           })
         }
+      }
       })
 
     },
@@ -199,7 +209,10 @@ export default {
             }
           }
         }).then((res)=>{
-
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            // throw new Error(res.error)
+          }
         })
 
 

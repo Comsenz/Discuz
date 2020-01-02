@@ -112,13 +112,18 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(data=>{
-        var attriAttachment = new Array();
-        if(type == "img"){
-          var newArr = this.fileList.filter(item => item.id !== id);
-          this.fileList = newArr;
-          console.log(this.fileList);
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        } else {
+          var attriAttachment = new Array();
+          if(type == "img"){
+            var newArr = this.fileList.filter(item => item.id !== id);
+            this.fileList = newArr;
+            console.log(this.fileList);
+          }
+          this.$toast.success('删除成功');
         }
-        this.$message('删除成功');
       })
     },
 
@@ -131,12 +136,18 @@ export default {
           data:file,
 
         }).then(data=>{
-          if(isFoot){
-           this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-          }
+          if (data.errors){
+            this.$toast.fail(data.errors[0].code);
+            throw new Error(data.error)
+          }else{
+            if(isFoot){
+             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            }
+           }
           // this.$message('提交成功');
+          this.$toast.success('提交成功');
         }).catch(error=>{
-          this.$message('失败');
+          this.$toast.fail('失败');
         })
     },
 
@@ -192,7 +203,12 @@ export default {
           include: '',
         }
       }).then((data) => {
-        this.faceData = data.readdata;
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        } else {
+          this.faceData = data.readdata;
+        }
       })
       this.showFacePanel = !this.showFacePanel;
       this.footMove = !this.footMove;
@@ -249,7 +265,12 @@ export default {
             }
           },
         }).then(res =>{
-          this.$router.push({path:'details'+'/'+this.themeId})
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.$router.push({path:'details'+'/'+this.themeId})
+          }
         })
       } else {
         // alert('2222');
@@ -277,7 +298,12 @@ export default {
             }
           },
         }).then(res =>{
-          this.$router.push({path:'details'+'/'+this.themeId})
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.$router.push({path:'details'+'/'+this.themeId});
+          }
         })
       }
 

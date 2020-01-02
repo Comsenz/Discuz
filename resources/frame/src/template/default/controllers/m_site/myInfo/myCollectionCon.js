@@ -54,13 +54,17 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then(data=>{
+        if (data.errors){
+          this.$toast.fail(data.errors[0].code);
+          throw new Error(data.error)
+        }else{
         if(initStatus){
           this.collectionList = []
         }
         this.collectionList =this.collectionList.concat(data.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
-
+      }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
           this.pageIndex--;

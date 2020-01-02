@@ -42,6 +42,10 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        }else{
         if(initStatus){
           this.walletDetailsList = [];
         }
@@ -49,7 +53,7 @@ export default {
         this.walletDetailsList = this.walletDetailsList.concat(res.data);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
-
+      }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
           this.pageIndex--;

@@ -12,7 +12,7 @@ export default {
 				'filter[group_id]': [],
 				'filter[bind]': 1,
 				'page[limit]': 5,
-				'page[number]': 1,
+				'page[number]': this.pageNumber,
 				'sort': '-createdAt',
 				'include': 'groups'
 			},
@@ -20,7 +20,7 @@ export default {
 				'filter[q]': this.searchVal,
 				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
-				'page[number]': 1,
+				'page[number]': this.pageNumber,
 
 			},
 			firstComeIn: true, // 是否首次进入页面
@@ -33,6 +33,7 @@ export default {
 			userLoading: false,
 			themeLoading: false,
 			timerSearch: null, // 延迟器
+			pageNumber:1,
 		}
   	},
 
@@ -85,8 +86,8 @@ export default {
 					// }
 					data: this.userParams
 				}).then(data=>{
-						this.searchUserList = this.searchUserList.concat(data.readdata);
-					    this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
+					this.searchUserList = this.searchUserList.concat(data.readdata);
+					this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
 				}).catch(err=>{
 					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
 						this.userParams['page[number]'] = currentPageNum - 1;
@@ -100,7 +101,9 @@ export default {
 		},
 
 		handleLoadMoreUser(){
-			this.userParams['page[number]']++;
+			this.pageNumber++
+			// this.userParams['page[number]']++;
+			console.log(this.userParams['page[number]']++)
 			// this.userParams['page[limit]'] = 10;
 			this.userLoadMorePageChange = true;
 			this.handleSearchUser();
@@ -124,7 +127,7 @@ export default {
 						'filter[q]': this.searchVal,
 						'filter[isDeleted]': 'no',
 						'page[limit]': 5,
-						'page[number]': 1,
+						'page[number]': this.pageNumber,
 					}
 					// data: this.themeParamd
 				}).then(data=>{
@@ -143,7 +146,8 @@ export default {
 		},
 
 		handleLoadMoreTheme(){
-			this.themeParamd['page[number]']++;
+			this.pageNumber++
+			// this.themeParamd['page[number]']++;
 			// this.themeParamd['page[limit]'] = 10;
 			this.themeLoadMorePageChange = true;
 			this.handleSearchTheme();

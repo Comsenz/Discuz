@@ -224,7 +224,12 @@ export default {
           }
           }
         })
-        this.handleSearchUser(true);
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else{
+          this.handleSearchUser(true);
+        }
+        
       } catch(err){
         console.error(err,'function loginStatus error')
       }
@@ -256,7 +261,12 @@ export default {
 
         }
       }).then(res=>{
-        this.handleSearchUser(true);
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else{
+          this.handleSearchUser(true);
+        }
+        
         console.log(res)
       })
 
