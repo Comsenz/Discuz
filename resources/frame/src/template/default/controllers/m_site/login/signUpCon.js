@@ -51,11 +51,11 @@ export default {
             this.$toast.success('注册成功');
             let token = res.data.attributes.access_token;
             let tokenId = res.data.id;
-
+            let refreshToken = res.data.attributes.refresh_token;
             browserDb.setLItem('Authorization', token);
             browserDb.setLItem('tokenId', tokenId);
-            console.log(this.phoneStatus);
-
+            browserDb.setLItem('refreshToken',refreshToken);
+            
             if (this.phoneStatus){
               this.$router.push({path:'bind-phone'});
             } else if (this.siteMode === 'pay'){

@@ -453,6 +453,9 @@ export default {
   let isWeixin = appCommonH.isWeixin().isWeixin;
   let isPhone = appCommonH.isWeixin().isPhone;
 
+  /*站点是否关闭*/
+  var siteClose = false;
+
   /*
   * 登录且付费不能访问的页面列表
   * */
@@ -551,6 +554,7 @@ export default {
     /*已登录状态*/
 
     this.getForum().then(ress=>{
+      siteClose = ress._data.setsite.site_close;
       if (ress._data.setsite.site_mode === 'pay'){
 
         this.getUsers(tokenId).then(res=>{
@@ -636,6 +640,7 @@ export default {
       }else {
         /*不符合，跳转到未登录，可访问站点*/
         this.getForum().then((res)=>{
+          siteClose = ress._data.setsite.site_close;
 
           /*判断站点模式*/
           if (res._data.setsite.site_mode === 'pay'){
@@ -661,8 +666,9 @@ export default {
   }
 
 
-
-
+  /*
+  * 判断设备显示不同的尺寸
+  * */
   if(isWeixin){
 
   }else if (isPhone){
@@ -702,6 +708,17 @@ export default {
     document.getElementsByTagName("html")[0].style.width  = "640px";
     let viewportWidth = window.innerWidth;
     document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
+  }
+
+
+
+  /*
+  * 站点关闭，跳转到站点关闭页面
+  * */
+  if (siteClose){
+    console.log('进入');
+    next({path:'/site-close'});
+    return
   }
 
 
