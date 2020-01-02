@@ -72,8 +72,10 @@ export default {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
+          let refreshToken = res.data.attributes.refresh_token;
           browserDb.setLItem('Authorization', token);
           browserDb.setLItem('tokenId', tokenId);
+          browserDb.setLItem('refreshToken',refreshToken);
 
           this.getUsers(tokenId).then(res=>{
             if (res.errors){

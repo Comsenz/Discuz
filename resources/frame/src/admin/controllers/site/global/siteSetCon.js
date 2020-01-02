@@ -301,7 +301,7 @@ export default {
       var countRes = parseFloat(this.siteAuthorScale) + parseFloat(this.siteMasterScale);
       if(countRes != 10){
         this.$message({
-          message: '比例相加必须为10',
+          message: '分成比例相加必须为10',
           type: 'error'
         });
       }
