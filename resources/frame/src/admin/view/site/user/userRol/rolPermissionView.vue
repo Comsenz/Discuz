@@ -91,7 +91,7 @@
 
     <Card>
       <CardRow description="前台按用户组邀请成员的权限">
-        <el-checkbox v-model="checked">管理-邀请加入</el-checkbox>
+        <el-checkbox v-model="checked" label="createInvite">管理-邀请加入</el-checkbox>
       </CardRow>
     </Card>
 

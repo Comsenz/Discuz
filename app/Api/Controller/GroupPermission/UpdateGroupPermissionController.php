@@ -49,6 +49,7 @@ class UpdateGroupPermissionController extends AbstractListController
         $data = $request->getParsedBody()->get('data', []);
 
         $permissions = Arr::get($data, 'attributes.permissions');
+        $permissions = array_filter($permissions);
         $groupId = Arr::get($data, 'attributes.groupId');
 
         Permission::where('group_id', $groupId)->delete();
