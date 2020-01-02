@@ -228,6 +228,7 @@ export default {
         //   this.$message.error(res.errors[0].code);
         // }else{
           this.handleSearchUser(true);
+          this.$message({message: '提交成功', type: 'success'});
         // }
         
       } catch(err){

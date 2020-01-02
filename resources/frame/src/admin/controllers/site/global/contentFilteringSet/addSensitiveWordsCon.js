@@ -93,6 +93,8 @@ export default {
             }).then(res=>{
                if (res.errors){
                  this.$message.error(res.errors[0].code);
+               }else{
+                this.$message({message: '提交成功', type: 'success'});
                }
             })
           },
