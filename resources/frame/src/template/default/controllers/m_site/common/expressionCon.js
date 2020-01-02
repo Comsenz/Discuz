@@ -15,9 +15,6 @@ export default {
 
     }
   },
-  created(){
-
-  },
   computed: {
     faces: function () {
       const { faceData, faceIndex } = this
