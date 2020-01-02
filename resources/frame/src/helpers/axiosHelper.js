@@ -240,10 +240,10 @@ const appFetch = function(params, options) {
 
       }
 
+      data.data.rawData = data.data.errors;
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);
       });
-      data.data.rawData = data.data.errors;
 
       return data.data;
     }
