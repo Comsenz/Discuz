@@ -285,6 +285,9 @@
       .highlight{
         background-color: yellow;
       }
+      a{
+        word-break:break-all;
+      }
     }
     &__footer{
       width: 100%;
@@ -473,6 +476,9 @@
       line-height: 20PX;
       .highlight{
         background-color: yellow;
+      }
+      a{
+        word-break:break-all;
       }
     }
     &__footer{
@@ -701,6 +707,9 @@
 
     &__main{
       line-height: 20PX;
+      a{
+        word-break:break-all;
+      }
     }
 
     &__footer{
@@ -840,6 +849,9 @@
 
     &__main{
       line-height: 20PX;
+      a{
+        word-break:break-all;
+      }
     }
 
     &__footer{

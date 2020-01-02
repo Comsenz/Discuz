@@ -95,19 +95,11 @@ export default {
       this.submitForm.forEach((item,index)=>{
         if (item.hardDelete){
           this.deleteStatusList.push(item.id);
-        };
+        }
         if (!item.attributes.isDeleted){
           isDeleted.push(item.id)
-        };
-      });
-
-      /*this.deleteStatusList.forEach((item,index)=>{
-        if (index < this.deleteStatusList.length-1){
-          deleteStr = deleteStr + item + ','
-        }else {
-          deleteStr = deleteStr + item
         }
-      });*/
+      });
 
       if (this.deleteStatusList.length > 0){
         this.deleteThreadsBatch(deleteStr.join(','));
