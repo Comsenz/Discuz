@@ -9,14 +9,15 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserRepository extends AbstractRepository
 {
     /**
-     * Get a new query builder for the posts table.
+     * Get a new query builder for the users table.
      *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function query()
     {
@@ -29,9 +30,9 @@ class UserRepository extends AbstractRepository
      *
      * @param int $id
      * @param User $actor
-     * @param string $ability
-     * @return \Illuminate\Database\Eloquent\Builder|Model
+     * @return User
      *
+     * @throws ModelNotFoundException
      */
     public function findOrFail($id, User $actor = null)
     {
@@ -43,7 +44,7 @@ class UserRepository extends AbstractRepository
     /**
      * Find a user by an identification (username or phone number).
      *
-     * @param string $identification
+     * @param array $param
      * @return User|null
      */
     public function findByIdentification($param)
