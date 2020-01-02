@@ -5,6 +5,7 @@ import axios from "axios";
 import appConfig from "../../config/appConfig";
 import browserDb from 'webDbHelper';
 import appCommonH from "./commonHelper";
+import router from 'vue-router';
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -240,12 +241,15 @@ const appFetch = function(params, options) {
         //拒绝访问需要跳转到登录页面
         let isWeixin = this.appCommonH.isWeixin().isWeixin;
         if (isWeixin){
-          getNewToken();
+          browserDb.setLItem('Authorization','');
+          getNewToken().then(res=>{
+            console.log('输出');
+            console.log(this.$router);
+            this.$router.replace({path:'/supplier-all-back',query:{url:this.$router.history.current.path}});
+          })
         }else {
           this.$router.push({path:'/login-user'})
         }
-
-        // getNewToken();
 
       }
 
@@ -266,14 +270,20 @@ const appFetch = function(params, options) {
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
-const getNewToken = function () {
-  appFetch({
+const getNewToken = function (router) {
+  let that = this;
+
+
+  return appFetch({
     url:'access',
-    method:'get',
+    method:'post',
     data:{
-      'grant_type':'refresh_token',
-      'client_id':browserDb.getLItem('tokenId'),
-      'refresh_token':browserDb.getLItem('refreshToken')
+      "data": {
+        "attributes": {
+          'grant_type':'refresh_token',
+          'refresh_token':browserDb.getLItem('refreshToken')
+        }
+      }
     }
   }).then(res=>{
     console.log(res);

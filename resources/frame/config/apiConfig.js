@@ -58,7 +58,7 @@ module.exports = {
   'wechatDelete':'/api/users/' ,//修改资料里的解绑微信
   'wechatBind':'api/oauth/wechat',//去绑定微信
 
-  'access':'/api/access', //刷新token
+  'access':'/api/refresh-token', //刷新token
 
   /*后台*/
   'siteinfo':'/api/siteinfo',    //首页-系统信息

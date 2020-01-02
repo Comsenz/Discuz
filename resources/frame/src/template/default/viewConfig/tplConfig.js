@@ -445,6 +445,14 @@ export default {
           title:"站点关闭提示"
         }
       },
+      'supplier-all-back':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/supplierAllBack'],resolve)
+        },
+        metaInfo:{
+          title:"空白页"
+        }
+      }
 
 
     }
