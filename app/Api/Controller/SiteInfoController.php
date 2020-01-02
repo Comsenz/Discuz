@@ -8,8 +8,8 @@
 namespace App\Api\Controller;
 
 use App\Api\Serializer\SiteInfoSerializer;
-use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
 use Discuz\Foundation\Support\Decomposer;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,20 +19,26 @@ class SiteInfoController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = SiteInfoSerializer::class;
 
+    /**
+     * @var Application
+     */
     protected $app;
 
+    /**
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return array|mixed
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * {@inheritdoc}
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {

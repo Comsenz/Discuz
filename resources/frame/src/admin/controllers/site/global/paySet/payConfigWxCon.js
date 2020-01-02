@@ -30,8 +30,8 @@ export default {
         data:{
         }
       }).then(data=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           console.log(data);
           this.appId = data.readdata[0]._data.app_id;
@@ -85,8 +85,8 @@ export default {
         // this.$router.push({
         //   path:'/admin/pay-set'
         // });
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (data.errors){
+          this.$message.error(data.errors[0].code);
         }else {
           this.$message({
             message: '提交成功',

@@ -6,7 +6,7 @@ import Vue from 'vue';
 const config = {
 	default: '系统错误，请联系管理员',
   access_denied:'拒绝访问',
-  category_not_found:'分类未找到',
+  category_not_found:'请选择分类',
   censor_not_passed:'检查未通过',
   model_not_found:'模型未找到',
   route_not_found:'路由未找到',
@@ -18,7 +18,7 @@ const config = {
   scale_sum_not_10:'分成比例相加必须为 10',
   cannot_delete_category_with_threads:'无法删除存在主题的分类',
   permission_denied:'没有权限，请联系站点管理员',
-  validation_error:'权限名称不符合规则',
+  validation_error:'验证错误',
   upload_time_not_up:'上传头像频繁',
   order_post_not_found:'订单主题不存在',
   order_type_not_found:'订单类型有误',

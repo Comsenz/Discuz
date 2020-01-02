@@ -76,7 +76,7 @@ class UserValidator extends AbstractValidator
         $reg = $this->settings->get('password_strength');
 
         if (filled($reg)) {
-            $regColl = collect(explode(',', $reg));
+            $regColl = collect(explode(',', trim($reg, ',')));
             // Splicing
             $regColl->each(function ($item) use (&$res) {
                 $res['regex'] .= '|regex:' . $this->setReg[$item];
