@@ -1,7 +1,8 @@
 /**
  * 移动端站点管理页控制器
  */
-import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
+import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import appConfig from "../../../../../../../frame/config/appConfig";
 export default {
   data: function () {
     return {
@@ -56,9 +57,9 @@ export default {
           url: 'groups',
           method: 'get'
         })
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+        if (response.errors){
+          this.$toast.fail(response.errors[0].code);
+          throw new Error(response.error)
         }else{
         this.choList = response.data;
         for (let val of this.choList) {
@@ -66,7 +67,7 @@ export default {
         }
       }
       } catch (err) {
-        console.error(err, 'membersManagementCon.js getOperaType');
+        // console.error(err, 'membersManagementCon.js getOperaType');
         // 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
         this.$toast("邀请码类型获取失败，请刷新重试");
       }
@@ -130,14 +131,14 @@ export default {
             }
           }
         })
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        }else{
+        // if (res.errors){
+        //   this.$toast.fail(res.errors[0].code);
+        //   throw new Error(res.error)
+        // }else{
         this.pageIndex = 1;
         this.finished = false;
-        // this.getInviteList(true)
-        }
+        this.getInviteList(true)
+        // }
       } catch (err) {
         console.error(err, 'checkSubmit')
       }
@@ -151,9 +152,8 @@ export default {
       textarea.style.position = 'absolute';
       textarea.style.opacity = '0';
       textarea.style.height = '0';
-	    textarea.textContent = `${window.location.href}?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
-	  
-
+      textarea.textContent = `${appConfig.devApiUrl}?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
+      this.$toast.success('邀请链接已复制成功');
       document.body.appendChild(textarea);
       textarea.select(textarea, '链接链接');
       try {

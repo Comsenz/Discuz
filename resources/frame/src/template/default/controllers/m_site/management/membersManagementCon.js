@@ -175,7 +175,7 @@ export default {
 					}
 				}
 
-				await this.appFetch({
+				const res = await this.appFetch({
 					url: 'users',
 					method: 'PATCH',
 					data: {
