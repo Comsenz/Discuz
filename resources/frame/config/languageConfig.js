@@ -7,7 +7,7 @@ const config = {
 	default: '系统错误，请联系管理员',
   access_denied:'拒绝访问',
   category_not_found:'请选择分类',
-  censor_not_passed:'检查未通过',
+  censor_not_passed:'抱歉，您填写的内容包含不良信息',
   model_not_found:'模型未找到',
   route_not_found:'路由未找到',
   no_bind_user:'未绑定用户',
