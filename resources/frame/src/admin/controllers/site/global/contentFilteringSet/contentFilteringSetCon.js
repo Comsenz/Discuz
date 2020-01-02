@@ -133,8 +133,8 @@ export default {
             "page[number]": this.pageNum
           }
         })
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (response.errors){
+          this.$message.error(response.errors[0].code);
         }else {
           if (initStatus) {
             this.tableData = [];
@@ -224,11 +224,11 @@ export default {
           }
           }
         })
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
-        }else{
+        // if (res.errors){
+        //   this.$message.error(res.errors[0].code);
+        // }else{
           this.handleSearchUser(true);
-        }
+        // }
         
       } catch(err){
         console.error(err,'function loginStatus error')
