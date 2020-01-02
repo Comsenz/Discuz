@@ -151,6 +151,13 @@ $splitLine:#DCDFE6;     //竖分割线颜色
 /*
   公共样式
 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
 
 
 /*使用Card组件时，去掉底部边框*/

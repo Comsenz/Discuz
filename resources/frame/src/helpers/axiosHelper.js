@@ -238,7 +238,7 @@ const appFetch = function(params, options) {
 
       if (data.data.errors[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
-        let isWeixin = appCommonH.isWeixin().isWeixin;
+        let isWeixin = this.appCommonH.isWeixin().isWeixin;
         if (isWeixin){
           getNewToken();
         }else {
@@ -249,7 +249,7 @@ const appFetch = function(params, options) {
 
       }
 
-      data.data.rawData = this.appCommonH.copyObj(data.data.errors);
+      data.data.rawData = appCommonH.copyObj(data.data.errors);
 
       data.data.errors.forEach(function(error) {
         error.code = Vue.prototype.getLang(error.code);

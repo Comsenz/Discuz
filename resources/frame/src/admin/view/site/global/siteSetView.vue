@@ -50,7 +50,7 @@
             :http-request="uploaderLogo"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
-            @change="handleFile" 
+            @change="handleFile"
             :before-upload="beforeAvatarUpload"
             >
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -64,7 +64,7 @@
       </Card>
        <Card header="站长：">
          <CardRow description="填写站长的用户id">
-             <el-input placeholder="站长" v-model="siteMasterId"></el-input>
+             <el-input placeholder="站长" type="number" v-model="siteMasterId"></el-input>
          </CardRow>
        </Card>
       <Card header="站点模式：">
@@ -78,7 +78,7 @@
         <div v-show="radio === '2'">
           <Card  header="加入价格（元）：">
             <CardRow description="付费模式下，付费成为站点默认角色，需支付的金额">
-              <el-input placeholder="加入价格" v-model="sitePrice"></el-input>
+              <el-input placeholder="加入价格" type="number" v-model="sitePrice"></el-input>
             </CardRow>
           </Card>
 
@@ -89,6 +89,7 @@
                     style="height: 36PX;width: 80PX"
                     clearable
                     placeholder="天数"
+                    type="number"
                     v-model="siteExpire"
                     >
                   </el-input>
@@ -105,7 +106,7 @@
         <CardRow description="主题打赏的分成比例设置，两者加起来必须为10，不填时默认为作者10、平台0">
           <div class="proportion-box">
             <span>作者</span>
-            <el-input class="" size="small" v-model="siteAuthorScale" @blur.native.capture="onblurFun"></el-input>
+            <el-input class="" size="small" type="number" v-model="siteAuthorScale" @blur.native.capture="onblurFun"></el-input>
           </div>
           <div class="proportion-box">
             <span>平台(站长)</span>
