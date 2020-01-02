@@ -17,13 +17,18 @@ class SiteInfoSerializer extends AbstractSerializer
     protected $type = 'siteinfo';
 
     /**
-     * Get the default set of serialized attributes for a model.
-     *
-     * @param object|array $model
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultAttributes($model)
     {
+        // 待审核主题数
+        $unapprovedThreads = Thread::where('is_approved', Thread::UNAPPROVED)
+            ->whereNull('deleted_at')->count();
+
+        // 待审核回复数
+        $unapprovedPosts = Post::where('is_approved', Post::UNAPPROVED)
+            ->whereNull('deleted_at')->where('is_first', false)->count();
+
         return [
             'version' => $model['version'],
             'php_version' => $model['php_version'],
@@ -41,12 +46,15 @@ class SiteInfoSerializer extends AbstractSerializer
             'cache_dir_writable' => $model['cache_dir_writable'],
             'app_size' => $model['app_size'],
             'packages' => $model['packages'],
-            'unapprovedThreads' => Thread::where('is_approved', Thread::UNAPPROVED)->count(),
-            'unapprovedPosts' => Post::where('is_approved', Post::UNAPPROVED)->count(),
+            'unapprovedThreads' => $unapprovedThreads,
+            'unapprovedPosts' => $unapprovedPosts,
             'unapprovedMoneys' => UserWalletCash::where('cash_status', UserWalletCash::STATUS_REVIEW)->count(),
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getId($model)
     {
         return 1;

@@ -116,8 +116,8 @@ export default {
       let circlePath = this.sidebarList3[0].path;
       if(this.isPayValue == 'pay'){
         //复制邀请链接
-        var shareUrl= 'http://10.0.10.210:8883/circle-invite';
-        // var shareUrl= appConfig.devApiUrl+'/circle-invite';
+        // var shareUrl= 'http://10.0.10.210:8883/circle-invite';
+        var shareUrl= appConfig.devApiUrl+'/circle-invite';
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);
