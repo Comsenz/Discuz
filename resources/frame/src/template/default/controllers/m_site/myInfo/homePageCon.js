@@ -120,5 +120,8 @@ export default {
         this.isLoading = false;
       })
   }
-  }
+  },
+  beforeRouteLeave(to, from, next) {
+		next()
+	}
 }
