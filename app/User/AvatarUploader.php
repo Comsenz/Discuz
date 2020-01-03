@@ -11,7 +11,6 @@ use App\Censor\Censor;
 use App\Exceptions\UploadException;
 use App\Models\User;
 use Discuz\Foundation\Application;
-use Illuminate\Support\Str;
 use Intervention\Image\Image;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
@@ -47,54 +46,18 @@ class AvatarUploader
         if (extension_loaded('exif')) {
             $image->orientate();
         }
+        // 检测敏感图
+        $this->censor->checkImage($image->dirname.$image->basename);
+        if ($this->censor->isMod) {
+            throw new UploadException();
+        }
 
         $encodedImage = $image->fit(200, 200)->encode('png');
 
-        $this->avatarPath = Str::random() . '.png';
+        $this->avatarPath = $user->id . '.png';
 
-        $this->remove($user);
         $user->changeAvatar($this->avatarPath);
 
         $this->file->put($this->avatarPath, $encodedImage);
-
-        // 检测敏感图
-        $this->censor->checkImage($this->getPathname());
-        if ($this->censor->isMod) {
-            $this->deleteFile($this->avatarPath);
-            throw new UploadException();
-        }
-    }
-
-    public function remove(User $user)
-    {
-        $avatarPath = $user->getOriginal('avatar');
-
-        $user->saved(function () use ($avatarPath) {
-            $this->deleteFile($avatarPath);
-        });
-
-        $user->changeAvatar('');
-    }
-
-    /**
-     * 上传失败则删除本地图片资源
-     *
-     * @param $avatarPath
-     */
-    public function deleteFile($avatarPath)
-    {
-        if ($this->file->has($avatarPath)) {
-            $this->file->delete($avatarPath);
-        }
-    }
-
-    /**
-     * get file path name
-     *
-     * @return string
-     */
-    public function getPathname()
-    {
-        return $this->app->config('filesystems.disks.avatar.root') . '/' . $this->avatarPath;
     }
 }

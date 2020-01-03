@@ -14,6 +14,8 @@ use App\Models\Thread;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -21,6 +23,8 @@ use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ResourceThreadController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
+
     /**
      * @var ThreadRepository
      */
@@ -73,6 +77,7 @@ class ResourceThreadController extends AbstractResourceController
     /**
      * {@inheritdoc}
      * @throws InvalidParameterException
+     * @throws PermissionDeniedException
      * @throws OrderException
      */
     protected function data(ServerRequestInterface $request, Document $document)
@@ -83,6 +88,8 @@ class ResourceThreadController extends AbstractResourceController
 
         // 主题
         $thread = $this->thread->findOrFail($threadId, $actor);
+
+        $this->assertCan($actor, 'viewPosts', $thread);
 
         // 付费帖子
         if ($thread->price > 0 && ! $actor->isAdmin()) {

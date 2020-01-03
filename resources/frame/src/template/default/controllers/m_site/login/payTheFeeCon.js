@@ -173,8 +173,8 @@ export default {
 
       const config = {
         default: '默认权限',
-        viewThreadList:'查看主题列表',
-        viewThreads:'查看主题',
+        viewThreads:'查看主题列表',
+        thread.viewPosts:'查看主题',
         createThread:'发表主题',
         thread.reply:'回复主题'
       };
