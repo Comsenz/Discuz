@@ -3,7 +3,6 @@ export default {
     data: function() {
         return {
             closeReason:'',
-            imgLogo:''
       }
     },
     created(){
@@ -15,12 +14,15 @@ export default {
               url:'forum',
               method:'get',
               data:{
-      
+
               }
             }).then(res=>{
-                console.log(res,'wuwuwuuwuw')
-                this.closeReason = res.readdata._data.siteCloseMsg
-                this.imgLogo = res.readdata._data.logo
+              console.log(res);
+              if (res.errors){
+                this.closeReason = res.errors[0].code;
+              }
+              // this.closeReason = res.readdata._data.siteCloseMsg
+              // this.imgLogo = res.readdata._data.logo
             })
         },
         loginClick(){
@@ -28,4 +30,4 @@ export default {
         }
     }
 }
-    
+
