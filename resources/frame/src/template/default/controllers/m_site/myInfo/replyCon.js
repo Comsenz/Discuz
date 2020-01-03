@@ -50,7 +50,7 @@ export default {
         if(initStatus){
           this.replyList = []
         }
-        console.log(res)
+        console.log(res,'000000')
         this.replyList = this.replyList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;

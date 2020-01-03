@@ -7,6 +7,7 @@
 
 namespace App\Commands\Users;
 
+use App\Exceptions\TranslatorException;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -44,6 +45,7 @@ class UpdateUser
     /**
      * @return mixed
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws TranslatorException
      */
     public function __invoke()
     {
@@ -62,7 +64,9 @@ class UpdateUser
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
             if ($isSelf) {
                 $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                $this->assertPermission($verifyPwd);
+                if (!$verifyPwd) {
+                    throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                }
 
                 $this->validator->setUser($user);
                 $validator['password_confirmation'] = Arr::get($attributes, 'password_confirmation');

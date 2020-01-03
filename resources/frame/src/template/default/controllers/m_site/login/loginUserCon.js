@@ -7,7 +7,6 @@ import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSign
 import browserDb from '../../../../../helpers/webDbHelper';
 
 import {mapMutations,mapState} from 'vuex';
-import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data: function () {
@@ -72,8 +71,10 @@ export default {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
+          let refreshToken = res.data.attributes.refresh_token;
           browserDb.setLItem('Authorization', token);
           browserDb.setLItem('tokenId', tokenId);
+          browserDb.setLItem('refreshToken',refreshToken);
 
           this.getUsers(tokenId).then(res=>{
             if (res.errors){
@@ -126,13 +127,13 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        } else {
+        // if (res.errors){
+        //   this.$toast.fail(res.errors[0].code);
+        // } else {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.setsite.site_mode;
           browserDb.setLItem('siteInfo', res.readdata);
-        }
+        // }
       }).catch(err=>{
         console.log(err);
       })

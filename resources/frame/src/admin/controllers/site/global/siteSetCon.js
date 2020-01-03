@@ -70,6 +70,7 @@ export default {
           this.siteName = data.readdata._data.siteName;
           this.siteIntroduction = data.readdata._data.siteIntroduction;
           this.siteMode = data.readdata._data.siteMode;
+          this.imageUrl = data.readdata._data.logo
           if (this.siteMode == 'pay') {
             this.radio = '2';
           } else {
@@ -84,9 +85,9 @@ export default {
           this.siteStat = data.readdata._data.siteStat;
           this.siteClose = data.readdata._data.siteClose;
           this.siteMasterId = data.readdata._data.siteAuthor.id;
-          if (data.readdata._data.logo) {
-            this.fileList.push({url: data.readdata._data.logo});
-          }
+          // if (data.readdata._data.logo) {
+          //   this.fileList.push({url: data.readdata._data.logo});
+          // }
           if (this.siteClose == true) {
             this.radio2 = '1';
           } else {
@@ -300,7 +301,7 @@ export default {
       var countRes = parseFloat(this.siteAuthorScale) + parseFloat(this.siteMasterScale);
       if(countRes != 10){
         this.$message({
-          message: '比例相加必须为10',
+          message: '分成比例相加必须为10',
           type: 'error'
         });
       }

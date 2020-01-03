@@ -14,7 +14,7 @@
 
     <Card header="支持的最大尺寸：">
       <CardRow description="单位：MB">
-        <el-input v-model="maximumSize"></el-input>
+        <el-input v-model="maximumSize" type="number"></el-input>
       </CardRow>
     </Card>
 
