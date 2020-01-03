@@ -182,7 +182,6 @@
         >
           <span class="support">支持作者继续创作</span>
           <div class="rewardMonBox">
-            <button @click="payClick" style="display: block; width: 100px; height: 30px; background: #f00;">sdasdsadsads</button>
             <a class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
               <span>{{rewardChi.rewardNum}}</span>元
             </a>
