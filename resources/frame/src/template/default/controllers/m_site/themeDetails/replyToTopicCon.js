@@ -299,7 +299,7 @@ export default {
           },
         }).then(res =>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           } else {
             this.$router.push({path:'details'+'/'+this.themeId});

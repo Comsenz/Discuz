@@ -8,12 +8,12 @@
 namespace App\Commands\Invite;
 
 use App\Events\Invite\Saving;
+use App\Models\Invite;
 use App\Models\User;
 use App\Repositories\InviteRepository;
 use App\Validators\InviteValidator;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class UpdateInvite
 {
@@ -66,18 +66,13 @@ class UpdateInvite
     /**
      * 执行命令
      *
-     * @param BusDispatcher $bus
-     * @param EventDispatcher $events
+     * @param Dispatcher $events
      * @param InviteRepository $repository
      * @param InviteValidator $validator
-     * @return \Flarum\Group\Group
+     * @return Invite
      */
-    public function handle(
-        BusDispatcher $bus,
-        EventDispatcher $events,
-        InviteRepository $repository,
-        InviteValidator $validator
-    ) {
+    public function handle(Dispatcher $events, InviteRepository $repository, InviteValidator $validator)
+    {
         $this->events = $events;
 
         $invite = $repository->findOrFail($this->inviteId, $this->actor, 'findEdit');

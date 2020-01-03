@@ -179,8 +179,5 @@ return [
         'ugc'                   => '用户内容',
         'find'                  => '敏感词',
         'replacement'           => '替换词',
-
-        // settings
-        'password_length'       => '密码长度',
     ],
 ];
