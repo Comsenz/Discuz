@@ -1,6 +1,6 @@
 <template>
     <div class="siteCom">
-        <img class="logo" :src="imgLogo"  alt="Logo">
+        <van-icon class="logo" name="warning" />
         <div class="siteClose">站点已关闭</div>
         <div class="siteReason">{{closeReason}}</div>
         <div class="login">
@@ -24,6 +24,7 @@
     display:block;
     margin: 40% auto 0;
     height:30px;
+    text-align: center;
 
 }
 .siteClose{
