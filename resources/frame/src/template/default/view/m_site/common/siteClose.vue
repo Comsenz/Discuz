@@ -1,6 +1,6 @@
 <template>
     <div class="siteCom">
-        <img class="logo" :src="imgLogo"  alt="Logo">
+        <img class="logo" src="https://2020.comsenz-service.com/storage/logo.png"  alt="Logo">
         <div class="siteClose">站点已关闭</div>
         <div class="siteReason">{{closeReason}}</div>
         <div class="login">
@@ -31,7 +31,7 @@
     text-align: center;
     padding-top:40px;
     font-size:19px;
-    color:black; 
+    color:black;
     // margin-top:10px;
 }
 .siteReason{
