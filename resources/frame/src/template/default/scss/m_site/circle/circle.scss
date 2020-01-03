@@ -200,13 +200,14 @@ body {
 .likeBox {
 	@include font-dpr(28);
 	background: $corF7;
-	@include px2rem(padding, 0 18 8 18);
+	@include px2rem(padding, 0 18 8 46);
 	vertical-align: middle;
 	word-break: break-all;
 	color: #444;
 	.icon {
 		@include font-dpr(28);
 		color: $fontColor;
+		@include px2rem(margin-left, -28);
 	}
 	a {
 		color: $fontColor;
@@ -216,7 +217,7 @@ body {
 }
 .reward {
 	background: $corF7;
-	@include px2rem(padding, 0 18 0 18);
+	@include px2rem(padding, 0 18 0 46);
 	vertical-align: middle;
 	@include px2rem(padding-bottom, 16);
 	@include font-dpr(28);
@@ -225,6 +226,7 @@ body {
 	.icon {
 		@include font-dpr(28);
 		color: #FF5453;
+		@include px2rem(margin-left, -28);
 	}
 	a {
 		color: $fontColor;
@@ -596,14 +598,15 @@ openCircleConView.vue
 .commentBox {
 	@include px2rem(padding, 28 0 0 0);
 	.likeBox {
-		@include px2rem(padding, 0 30);
+		@include px2rem(padding, 0 30 0 58);
 		color: #353535;
-    background: transparent;
+    	background: transparent;
 		@include font-dpr(28);
 		word-break: break-all;
 		.icon {
 			@include font-dpr(28);
 			@include px2rem(line-height, 36);
+			@include px2rem(margin-left, -28);
 		}
 		a {
 			@include font-dpr(28);
@@ -611,22 +614,23 @@ openCircleConView.vue
 		}
 	}
 	.payPer {
-		@include px2rem(padding, 16 30 28 30);
+		@include px2rem(padding, 16 30 20 58);
 		overflow: hidden;
 		border-bottom: 1px solid $corE5;
 		.icon-money {
 			float: left;
 			@include font-dpr(28);
-			@include px2rem(margin, 12 4 12 0);
+			@include px2rem(margin, 12 0);
 			color: #FF5453;
 			@include px2rem(line-height, 28);
+			@include px2rem(margin-left, -28);
 		}
 		.payPerHead {
 			float: left;
 			@include px2rem(border-radius, 4);
 			@include px2rem(height, 52);
 			@include px2rem(width, 52);
-			@include px2rem(margin-left, 7);
+			@include px2rem(margin, 0 0 7 7);
 		}
 	}
 	.commentPostDet {
