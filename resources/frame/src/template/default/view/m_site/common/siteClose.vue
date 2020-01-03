@@ -1,6 +1,6 @@
 <template>
     <div class="siteCom">
-        <van-icon class="logo" name="warning" />
+        <van-icon class="logo" name="warning" color="#c33" size="40"/>
         <div class="siteClose">站点已关闭</div>
         <div class="siteReason">{{closeReason}}</div>
         <div class="login">
