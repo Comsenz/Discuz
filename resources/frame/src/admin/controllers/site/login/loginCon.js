@@ -37,6 +37,10 @@ export default {
             // this.tokenId = res.data.id;
             let token = res.data.attributes.access_token;
             let tokenId = res.data.id;
+            let refreshToken = res.data.attributes.refresh_token;
+            browserDb.setLItem('Authorization', token);
+            browserDb.setLItem('tokenId', tokenId);
+            browserDb.setLItem('refreshToken',refreshToken);
 
             if (token && tokenId) {
               this.getUserInfo(tokenId).then(res => {
@@ -50,8 +54,6 @@ export default {
                   let groupId = res.readdata.groups[0]._data.id;
                   browserDb.setLItem('username', res.data.attributes.username);
                 if (groupId === "1") {
-                    browserDb.setLItem('Authorization', token);
-                    browserDb.setLItem('tokenId', tokenId);
                     this.$message({
                       message: '登录成功！',
                       type: 'success'
@@ -119,6 +121,5 @@ export default {
   },
   created(){
     localStorage.clear();
-    console.log("版本号：圣诞测试版1.6-测试微信支付0.10")
   }
 }

@@ -306,8 +306,13 @@ export default {
 
 
     //点击标题跳转到主题详情页
-    jumpThemeDet:function(id){
-      this.$router.push({ path:'details'+'/'+id});
+    jumpThemeDet:function(id,canReply){
+      if(canReply){
+        this.$router.push({ path:'details'+'/'+id});
+      } else {
+        this.$toast.fail('没有权限，请联系站点管理员');
+      }
+
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){

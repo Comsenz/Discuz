@@ -7,7 +7,7 @@
 	    <!-- <Header :logoShow="true" :perDetShow="true" :userInfoName="false" :invitationShow="false" @categoriesChoice=""></Header> -->
       <!-- <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false"></Header> -->
     <div class="circleCon" v-if="thread">
-      <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false" :personInfo="false"></Header>
+      <Header :logoShow="true" :perDetShow="true" :invitePerDet="false" :invitationShow="false"></Header>
 	    <div class="gap"></div>
 	    <div class="cirPostCon">
         <!-- <main class="reward-main">

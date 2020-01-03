@@ -82,11 +82,13 @@ export default {
       token:false,
       isWeixin: false,
       isPhone: false,
-      isAndroid:false,
-      isiOS:false,
+      isAndroid: false,
+      isiOS: false,
       orderSn:'',
-      payStatus:false,   //支付状态
-      payStatusNum:0    //支付状态次数
+      payStatus: false,   //支付状态
+      payStatusNum: 0,//支付状态次数
+      canReply:'',
+      canLike:''
     }
   },
   created() {
@@ -265,7 +267,8 @@ export default {
           this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
-
+          this.canLike = res.readdata._data.canLike;
+          this.canReply = res.readdata._data.canReply;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -298,7 +301,7 @@ export default {
     },
     //主题详情图片放大轮播
     imageSwiper() {
-      // this.imageShow = true;
+      this.imageShow = true;
     },
     //主题详情图片放大轮播index值监听
     onChange(index) {
@@ -469,12 +472,17 @@ export default {
         if (type == 1) {
           attri.isDeleted = true;
         } else if (type == 2) {
-          if (isLike) {
-            //如果已点赞
-            attri.isLiked = false;
+          if(!this.canLike){
+            this.$toast.fail('没有权限，请联系站点管理员');
+            return false;
           } else {
-            //如果未点赞
-            attri.isLiked = true;
+            if (isLike) {
+              //如果已点赞
+              attri.isLiked = false;
+            } else {
+              //如果未点赞
+              attri.isLiked = true;
+            }
           }
         }
         // console.log(attri);
@@ -521,12 +529,14 @@ export default {
           path:'/login-user',
           name:'login-user'
         })
+      } else if(!this.canReply){
+        this.$toast.fail('没有权限，请联系站点管理员');
       } else {
         this.$router.push({
           path:'/reply-to-topic',
           name:'reply-to-topic',
           params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
-          })
+        })
       }
     },
     //打赏 生成订单

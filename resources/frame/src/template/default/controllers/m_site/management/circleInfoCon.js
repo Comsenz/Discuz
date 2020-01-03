@@ -14,7 +14,8 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
 		  roleList:[],
       groupId:'',
-      limitList:''
+      limitList:'',
+      moreMemberShow:''
 
 		}
 	},
@@ -30,7 +31,7 @@ export default {
 
   },
 	methods: {
-    //请求初始化站点信息数据
+    //请求初始化数据
     loadSite(){
       var userId = browserDb.getLItem('tokenId');
       this.appFetch({
@@ -93,6 +94,7 @@ export default {
         }else{
         console.log(res);
         this.siteInfo = res.readdata;
+        this.moreMemberShow = res.readdata._data.canViewUserList;
         console.log(this.siteInfo._data.logo);
         if(res.readdata._data.siteAuthor){
           this.username = res.readdata._data.siteAuthor.username;

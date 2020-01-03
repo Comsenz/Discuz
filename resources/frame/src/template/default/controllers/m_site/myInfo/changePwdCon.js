@@ -60,7 +60,7 @@ export default {
               "newPassword":this.newpwd,
               "password_confirmation":this.confirmpwd,
               // "mobile": "186xxxx0384",
-              "status": 1
+              // "status": 1
             }
         }
         }

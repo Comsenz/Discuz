@@ -437,6 +437,22 @@ export default {
           title:"支付订单查询"
         }
       },
+      'site-close':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/siteClose'],resolve)
+        },
+        metaInfo:{
+          title:"站点关闭提示"
+        }
+      },
+      'supplier-all-back':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/supplierAllBack'],resolve)
+        },
+        metaInfo:{
+          title:"空白页"
+        }
+      }
 
 
     }
@@ -526,8 +542,8 @@ export default {
   * */
   if (to.name === 'sign-up'){
   this.getForum().then((res)=>{
-    registerClose = res._data.setreg.register_close;
-    siteMode = res._data.setsite.site_mode;
+    registerClose = res.readdata._data.setreg.register_close;
+    siteMode = res.readdata._data.setsite.site_mode;
     if (!Authorization && !tokenId && !registerClose) {
       if (siteMode === 'pay'){
         next({path:'/pay-circle'});
@@ -543,6 +559,23 @@ export default {
   }
 
 
+   /*
+   * 站点关闭，跳转到站点关闭页面
+   * */
+  this.getForum().then((res)=>{
+
+    if (res.rawData[0].code === 'site_closed'){
+
+      if (to.name === 'login-user'){
+        next();
+      } else {
+        next({path:'/site-close'});
+        return
+      }
+    }
+  });
+
+
   /*
   * 前台路由前置判断
   * 判断登录状态
@@ -551,7 +584,12 @@ export default {
     /*已登录状态*/
 
     this.getForum().then(ress=>{
-      if (ress._data.setsite.site_mode === 'pay'){
+      // if (ress.errors[0].code === 'site_closed'){
+      //   next({path:'/site-close'})
+      //   return
+      // }
+
+      if (ress.readdata._data.setsite.site_mode === 'pay'){
 
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
@@ -635,10 +673,13 @@ export default {
         next();
       }else {
         /*不符合，跳转到未登录，可访问站点*/
-        this.getForum().then((res)=>{
-
+        this.getForum().then(res=>{
+          // if (res.errors[0].code === 'site_closed'){
+          //   next({path:'/site-close'})
+          //   return
+          // }
           /*判断站点模式*/
-          if (res._data.setsite.site_mode === 'pay'){
+          if (res.readdata._data.setsite.site_mode === 'pay'){
             if(to.name === 'pay-circle'){
               next();
               return
@@ -661,8 +702,9 @@ export default {
   }
 
 
-
-
+  /*
+  * 判断设备显示不同的尺寸
+  * */
   if(isWeixin){
 
   }else if (isPhone){
@@ -703,6 +745,8 @@ export default {
     let viewportWidth = window.innerWidth;
     document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
   }
+
+
 
 
  /* if (isWeixin == true) {
@@ -1269,7 +1313,7 @@ export default {
     }).then(res=>{
       console.log(res);
       browserDb.setLItem('siteInfo',res.readdata);
-      return res.readdata;
+      return res;
     }).catch(err=>{
       console.log(err);
     })

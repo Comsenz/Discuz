@@ -26,7 +26,7 @@ export default {
         url:"walletFrozen",
         method:"get",
         data:{
-          type:'10',
+          'filter[change_type]':10,
           include:''       
         }
       }).then((res)=>{

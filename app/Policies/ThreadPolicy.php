@@ -52,12 +52,6 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
-        if ($actor->cannot('viewThreads')) {
-            $query->whereRaw('FALSE');
-
-            return;
-        }
-
         // 回收站
         if (! $actor->hasPermission('viewTrashed')) {
             $query->where(function (Builder $query) use ($actor) {

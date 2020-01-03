@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="postContent" v-if="item.firstPost">
-                <a @click="jumpThemeDet(item._data.id)" v-html="item.firstPost._data.contentHtml"></a>
+                <a @click="jumpThemeDet(item._data.id,item._data.canReply)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
@@ -58,13 +58,12 @@
                 <div class="themeImgList moreImg">
                   <van-image
                     fit="cover"
-                    width="113px"
-                    height="113px"
                     lazy-load
                     v-for="(image,index)  in item.firstPost.imageList"
                     :src="image"
                     class="themeImgChild"
                     :key="index"
+                    @click="jumpThemeDet(item._data.id,item._data.canReply)"
                   />
                 </div>
               </div>
@@ -96,7 +95,7 @@
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
                   <span v-html="reply._data.contentHtml"></span>
                 </div>
-                <a @click="jumpThemeDet(item._data.id)" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
+                <a @click="jumpThemeDet(item._data.id,item._data.canReply)" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
               </div>
             </div>
             <van-checkbox

@@ -46,7 +46,10 @@ export default {
       filterInfo: {
         filterCondition: 'allThemes',
         typeWo: '全部主题'
-      }
+      },
+      canCreateThread:'',
+      nullTip:false,
+      nullWord:''
 
 		}
 	},
@@ -83,6 +86,7 @@ export default {
         } else {
           console.log(res);
           this.siteInfo = res.readdata;
+          this.canCreateThread = res.readdata._data.canCreateThread;
           console.log(res.readdata._data.siteMode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
           this.sitePrice = res.readdata._data.sitePrice
@@ -210,9 +214,18 @@ export default {
         method: 'get',
         data
       }).then((res) => {
+        console.log(res);
+        console.log('344343');
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          // console.log(res);
+          if(res.rawData[0].code == 'permission_denied'){
+            this.nullTip = true;
+            this.nullWord = res.errors[0].code;
+          } else {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }
+          
         } else {
           // this.themeListCon = res.readdata;
           this.themeListCon =this.themeListCon.concat(res.readdata);
@@ -314,14 +327,19 @@ export default {
               // window.location.href = res.data.attributes.location;
               this.$router.push({ path:'wechat'});
             }
-            
+
           });
 
         }
 	    },
 	    postTopic:function(){
-	    	// alert('跳转到发布主题页');
-	    	this.$router.push({ path:'/post-topic'});
+        if(this.canCreateThread){
+          // alert('跳转到发布主题页');
+          this.$router.push({ path:'/post-topic'});
+        } else {
+          this.$toast.fail('没有权限，请联系站点管理员');
+        }
+
 	    },
 		/**
 		 * 给导航添加点击状态
