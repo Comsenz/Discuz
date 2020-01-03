@@ -14,7 +14,7 @@
           :imgUrl="item._data.user_avatar"
           :stateTitle="stateTitle"
           :amount="item._data.amount"
-          :time="$moment(item._data.created_at).startOf('hour').fromNow()"
+          :time="$moment(item._data.created_at).fromNow()"
           :userName="item._data.user_name">
         </ContHeader>
           <div class="reference">

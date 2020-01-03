@@ -14,7 +14,7 @@
         <ContHeader
           :imgUrl="item._data.user_avatar"
           :stateTitle="stateTitle"
-          :time="$moment(item._data.created_at).startOf('hour').fromNow()"
+          :time="$moment(item._data.created_at).fromNow()"
           :userName="item._data.user_name">
         </ContHeader>
         <div class="likePostContent" v-if="item._data.post_content">
