@@ -9,8 +9,8 @@
 
 .login-user-footer{
   width: 100%;
-  position: fixed;
-  @include px2px(bottom,98);
+  // position: fixed;
+  // @include px2px(bottom,98);
   text-align: center;
   @include font-dpr(26);
   color: $fontColor;
