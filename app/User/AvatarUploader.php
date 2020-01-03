@@ -50,7 +50,7 @@ class AvatarUploader
 
         $encodedImage = $image->fit(200, 200)->encode('png');
 
-        $this->avatarPath = Str::random() . '.png';
+        $this->avatarPath = $user->id . '.png';
 
         $this->remove($user);
         $user->changeAvatar($this->avatarPath);
