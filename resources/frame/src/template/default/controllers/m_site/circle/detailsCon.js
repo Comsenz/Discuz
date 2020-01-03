@@ -687,6 +687,7 @@ export default {
 
           this.payStatus = res.readdata._data.status;
           alert(res.readdata._data.status);
+          
           this.payStatusNum =+1;
           if (this.payStatus == '1'){
             alert(this.payStatus);
