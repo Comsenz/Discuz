@@ -36,10 +36,6 @@ class ThreadRepository extends AbstractRepository
     {
         $query = Thread::where('id', $id);
 
-        if ($actor && $actor->cannot('viewThreads')) {
-            $query->whereRaw('FALSE');
-        }
-
         return $this->scopeVisibleTo($query, $actor)->firstOrFail();
     }
 }

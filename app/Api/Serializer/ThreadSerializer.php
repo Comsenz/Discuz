@@ -51,7 +51,7 @@ class ThreadSerializer extends AbstractSerializer
             'isApproved'        => (int) $model->is_approved,
             'isSticky'          => (bool) $model->is_sticky,
             'isEssence'         => (bool) $model->is_essence,
-            'canView'           => $gate->allows('viewThreads', $model),
+            'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canApprove'        => $gate->allows('approve', $model),
             'canSticky'         => $gate->allows('sticky', $model),
             'canEssence'        => $gate->allows('essence', $model),
