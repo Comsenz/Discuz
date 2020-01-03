@@ -571,8 +571,13 @@ export default {
            "package":data.data.attributes.wechat_js.package,
            "signType":"MD5",         //微信签名方式：
            "paySign":data.data.attributes.wechat_js.paySign //微信签名
-         }),
-        this.getOrderStatus();
+         })
+        const pay = setInterval(()=>{
+          if (this.payStatus == '1' && this.payStatusNum > 10){
+            clearInterval(pay);
+          }
+          this.getOrderStatus()
+        },3000)
 
      },
 
