@@ -37,20 +37,20 @@ class UploadAvatar
 
     protected $settings;
 
-    public function __construct(User $actor, $id, UploadedFile $upload_file, SettingsRepository $settings)
+    public function __construct(User $actor, $id, UploadedFile $upload_file)
     {
         $this->actor = $actor;
         $this->id = $id;
         $this->upload_file = $upload_file;
-        $this->settings = $settings;
     }
 
-    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader)
+    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader, SettingsRepository $settings)
     {
         $this->app = $app;
         $this->users = $users;
         $this->validator = $validator;
         $this->avatarUploader = $avatarUploader;
+        $this->settings = $settings;
 
         return $this();
     }
