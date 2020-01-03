@@ -833,6 +833,7 @@ details.vue
 			&:nth-child(3n) {
 				@include px2rem(margin-right, 0);
 			}
+      cursor: pointer;
 		}
 	}
 }
