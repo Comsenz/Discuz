@@ -87,7 +87,7 @@ export default {
       orderSn:'',
       payStatus: false,   //支付状态
       payStatusNum: 0,//支付状态次数
-      canReply:'',
+      canViewPosts:'',
       canLike:''
     }
   },
@@ -268,7 +268,7 @@ export default {
           this.themeShow = true;
           this.themeCon = res.readdata;
           this.canLike = res.readdata._data.canLike;
-          this.canReply = res.readdata._data.canReply;
+          this.canViewPosts = res.readdata._data.canViewPosts;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -529,7 +529,7 @@ export default {
           path:'/login-user',
           name:'login-user'
         })
-      } else if(!this.canReply){
+      } else if(!this.canViewPosts){
         this.$toast.fail('没有权限，请联系站点管理员');
       } else {
         this.$router.push({
