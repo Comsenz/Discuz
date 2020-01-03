@@ -52,7 +52,6 @@ class AvatarUploader
 
         $this->avatarPath = $user->id . '.png';
 
-        $this->remove($user);
         $user->changeAvatar($this->avatarPath);
 
         $this->file->put($this->avatarPath, $encodedImage);
@@ -63,17 +62,6 @@ class AvatarUploader
             $this->deleteFile($this->avatarPath);
             throw new UploadException();
         }
-    }
-
-    public function remove(User $user)
-    {
-        $avatarPath = $user->getOriginal('avatar');
-
-        $user->saved(function () use ($avatarPath) {
-            $this->deleteFile($avatarPath);
-        });
-
-        $user->changeAvatar('');
     }
 
     /**
