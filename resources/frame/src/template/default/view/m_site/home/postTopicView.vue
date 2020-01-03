@@ -14,7 +14,7 @@
             <img :src="file.url" alt="图片" class="imgPreview">
             <van-icon name="close" @click="deleteEnclosure(file.uuid,'img')" class="delte"/>
           </div> -->
-          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*"  v-model="fileList" @delete="deleteEnclosure($event,'img')" multiple>
+          <van-uploader :max-count="12" :after-read="handleFile" accept="image/*"  v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
           <!-- <van-uploader :max-count="12" :after-read="handleFile" :delete="deleteEnclosure(file.uuid,'img')" accept="image/*" v-model="fileList">
           </van-uploader> -->
