@@ -73,13 +73,13 @@
             </div>
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
-              <a  @click="jumpPerDet(like._data.id)" v-for="like in item.firstPost.likedUsers">{{userArr(item.firstPost.likedUsers)}}</a>
+              <a  @click="jumpPerDet(like._data.id)">{{userArr(item.firstPost.likedUsers)}}</a>
               <i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 
             <div class="reward" v-if="item.rewardedUsers.length>0">
               <span class="icon iconfont icon-money"></span>
-              <a href="javascript:;" v-for="reward in item.rewardedUsers" @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
+              <a @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
             </div>
 
             <div class="isrelationLine" v-if="(item.lastThreePosts.length>0 && item.firstPost.likedUsers.length>0) || (item.lastThreePosts.length>0 && item.rewardedUsers.length>0)">

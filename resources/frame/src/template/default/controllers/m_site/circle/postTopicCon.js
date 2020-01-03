@@ -213,6 +213,25 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
+      console.log(this.fileList);
+      // this.fileList.splice(this.fileList.length,1);
+
+      // console.log(document.getElementsByClassName('van-uploader__preview'));
+      // // let img = document.getElementsByClassName('van-uploader__preview').pop();
+
+      //  let imgDomFather = document.getElementsByClassName('van-uploader__wrapper')[0];
+
+      //  let imgDomSon = document.getElementsByClassName('van-uploader__preview')[1]
+
+      //  console.log(imgDomFather)
+      //  console.log(imgDomSon)
+
+      //  // imgDomFather.removeChild(imgDomSon);
+
+      // console.log(document.getElementsByClassName('van-uploader__preview'));
+
+
+
       this.uploaderEnclosure(formdata,false,true);
       this.loading = false;
 
@@ -239,11 +258,12 @@ export default {
     deleteEnclosure(id,type){
       console.log(id,type);
 
+
       // return false;
       if(this.fileList.length<1){
         this.uploadShow = false;
       }
-      this.appFetch({
+      /* this.appFetch({
         url:'attachment',
         method:'delete',
         splice:'/'+id
@@ -282,7 +302,7 @@ export default {
           }
           this.$toast.success('删除成功');
         }
-      })
+      }) */
     },
 
 
@@ -469,6 +489,7 @@ export default {
     uploaderEnclosure(file,isFoot,img,enclosure){
       console.log(file,isFoot,enclosure)
        this.appFetch({
+
          url:'attachment',
          method:'post',
          data:file,
@@ -483,6 +504,9 @@ export default {
           // var attriAttachment = new Array();
           if(img){
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            // if(!isFoot){
+            //   this.fileList.splice(this.fileList.length-2,1);
+            // }
           }
           if(isFoot){
             console.log('图片');
@@ -518,6 +542,7 @@ export default {
           // this.$toast.success('提交成功');
         }
        })
+       console.log(this.fileList);
     },
 
     //输入框自适应高度

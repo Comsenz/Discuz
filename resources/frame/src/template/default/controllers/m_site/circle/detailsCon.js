@@ -578,7 +578,7 @@ export default {
           },3000);
         const payWechat = setInterval(()=>{
           alert('循环'+this.payStatus);
-          if (this.payStatus == '1' && this.payStatusNum > 10){
+          if (this.payStatus == '1' || this.payStatusNum > 10){
             clearInterval(payWechat);
           }
           this.getOrderStatus();
@@ -616,7 +616,7 @@ export default {
             this.wxPayHref = res.readdata._data.wechat_h5_link;
             window.location.href = this.wxPayHref;
             const payPhone = setInterval(()=>{
-              if (this.payStatus == '1' && this.payStatusNum > 10){
+              if (this.payStatus == '1' || this.payStatusNum > 10){
                 clearInterval(payPhone);
               }
               this.getOrderStatus();
@@ -631,7 +631,7 @@ export default {
             this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
             const pay = setInterval(()=>{
-              if (this.payStatus == '1' && this.payStatusNum > 10){
+              if (this.payStatus == '1' || this.payStatusNum > 10){
                 clearInterval(pay);
               }
               this.getOrderStatus()
