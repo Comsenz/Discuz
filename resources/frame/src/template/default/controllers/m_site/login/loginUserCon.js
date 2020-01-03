@@ -127,13 +127,13 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        } else {
+        // if (res.errors){
+        //   this.$toast.fail(res.errors[0].code);
+        // } else {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.setsite.site_mode;
           browserDb.setLItem('siteInfo', res.readdata);
-        }
+        // }
       }).catch(err=>{
         console.log(err);
       })

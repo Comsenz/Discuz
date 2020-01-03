@@ -45,6 +45,7 @@
           <!-- <div class=""> -->
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
+              <!-- <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/> -->
               <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
             </span>
             <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon">

@@ -66,7 +66,7 @@ class GroupPermissionTableSeeder extends Seeder
         'wallet.update' => [],                  // 更新钱包
         'wallet.viewList' => [],                // 总钱包信息列表
         'wallet.logs.viewList' => [],           // 钱包动账记录总列表
-        'trade.pay.order' => [10],              //支付订单
+        'trade.pay.order' => [6, 10],           // 支付订单
 
         // 提现
         'cash.create' => [10],                  // 申请提现
