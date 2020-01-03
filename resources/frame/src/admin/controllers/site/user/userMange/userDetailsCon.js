@@ -59,8 +59,8 @@ export default {
           this.userRole = response.readdata.groups.map((v)=>{
             return  v._data.id
            });
-           console.log(this.userRole,'是我啊啊啊啊啊')
-           console.log(this.options,'option')
+          //  console.log(this.userRole,'是我啊啊啊啊啊')
+          //  console.log(this.options,'option')
           if(response.readdata.wechat){
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
@@ -155,7 +155,7 @@ export default {
             "attributes":{
               'newPassword':this.newPassword,
               'mobile':mobile,
-              'userRole':this.userRole,
+              'groupId':this.userRole,
               'status':this.userInfo.status
             }
           }
