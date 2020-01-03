@@ -110,7 +110,7 @@
           </div>
           <div class="proportion-box">
             <span>平台(站长)</span>
-            <el-input size="small" v-model="siteMasterScale" @blur.native.capture="onblurFun"></el-input>
+            <el-input size="small" type="number" v-model="siteMasterScale" @blur.native.capture="onblurFun"></el-input>
           </div>
         </CardRow>
       </Card>
