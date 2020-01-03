@@ -1,6 +1,6 @@
 <template>
   <div class="rol-permission-box">
-    <Card header="设置权限——角色名称（成员）"></Card>
+    <Card :header="'设置权限——' + $router.history.current.query.name"></Card>
 
     <Card header="前台操作权限："></Card>
     <Card>
