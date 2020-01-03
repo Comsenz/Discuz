@@ -1,6 +1,6 @@
 <template>
     <div class="siteCom">
-        <van-icon class="logo" name="warning" color="#c33" size="40"/>
+        <van-icon class="logo" name="warning" color="#c33" size="64"/>
         <div class="siteClose">站点已关闭</div>
         <div class="siteReason">{{closeReason}}</div>
         <div class="login">
@@ -25,12 +25,13 @@
     margin: 40% auto 0;
     height:30px;
     text-align: center;
-
+    width: 64px;
+    height:64px;
 }
 .siteClose{
     width:100%;
     text-align: center;
-    padding-top:40px;
+    margin-top:43px;
     font-size:19px;
     color:black;
     // margin-top:10px;
@@ -38,7 +39,8 @@
 .siteReason{
     width:100%;
     text-align: center;
-    line-height: 40px;
+    // line-height: 40px;
+    margin-top:10px;
     font-size: 15px;
     color:#ccc
 }
@@ -46,5 +48,6 @@
      width:100%;
      margin-top:10px;
      text-align: center;
+     margin-top:24px;
 }
 </style>

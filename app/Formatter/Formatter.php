@@ -9,11 +9,17 @@ namespace App\Formatter;
 
 use App\Models\Emoji;
 use Discuz\Cache\CacheManager;
+use Discuz\Http\UrlGenerator;
 use s9e\TextFormatter\Configurator;
 use s9e\TextFormatter\Unparser;
 
 class Formatter
 {
+    /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
     /**
      * @var CacheManager
      */
@@ -25,11 +31,13 @@ class Formatter
     protected $cacheDir;
 
     /**
+     * @param UrlGenerator $url
      * @param CacheManager $cache
      * @param string $cacheDir
      */
-    public function __construct(CacheManager $cache, $cacheDir)
+    public function __construct(UrlGenerator $url, CacheManager $cache, $cacheDir)
     {
+        $this->url = $url;
         $this->cache = $cache;
         $this->cacheDir = $cacheDir;
     }
@@ -109,7 +117,8 @@ class Formatter
 
         // emoji
         foreach (Emoji::cursor() as $emoji) {
-            $emojiImg = '<img src="' . $emoji->url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
+            $url = $this->url->to('/' . $emoji->url);
+            $emojiImg = '<img src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
 

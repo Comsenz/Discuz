@@ -12,8 +12,8 @@ export default {
 			choList: [],
 			searchName: '',
 			userParams: {
-				'filter[name]': '',
-				'page[limit]': 15,
+				'filter[username]': '',
+				'page[limit]': 20,
 				'page[number]': 0,
 			},
 			userLoadMoreStatus: false,
@@ -80,7 +80,7 @@ export default {
 			}
 
 			this.userParams = {
-				'filter[name]': this.searchName,
+				'filter[username]': this.searchName,
 				'page[limit]': 15,
 				'page[number]': 1,
 			}
@@ -186,9 +186,10 @@ export default {
 					this.$toast.fail(res.errors[0].code);
 					throw new Error(res.error)
 				  }else{
-				this.result = [];
-				this.userParams['page[number]'] = 1;
-				this.getSearchValUserList(true);
+					this.result = [];
+					this.userParams['page[number]'] = 1;
+					console.log('我变啦啦啦')
+					this.getSearchValUserList(true);
 				  }
 			} catch (err) {
 				console.error(err, 'handleSubmit error');

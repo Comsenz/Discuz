@@ -15,7 +15,7 @@
             <ContHeader
               :imgUrl="thread"
               :stateTitle=""
-              :time="$moment(thread.firstPost._data.createdAt).startOf('hour').fromNow()"
+              :time="$moment(thread.firstPost._data.createdAt).fromNow()"
               :userName="thread.firstPost._data.user_name">
             </ContHeader>
               <div class="reference">

@@ -18,7 +18,8 @@ class NotificationSerializer extends AbstractSerializer
         return array_merge([
             'id'            => $model->id,
             'user_id'       => $model->notifiable_id,
-            'read_at'       => $model->read_at,
+            'read_at'       => $this->formatDate($model->read_at),
+            'created_at'       => $this->formatDate($model->created_at),
         ], $model->data);
     }
 }
