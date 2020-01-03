@@ -563,7 +563,6 @@ export default {
 
      onBridgeReady(data){
        let that = this;
-
        WeixinJSBridge.invoke(
          'getBrandWCPayRequest', {
            "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
@@ -574,52 +573,20 @@ export default {
            "paySign":data.data.attributes.wechat_js.paySign //微信签名
          }),
         this.getOrderStatus().then(res=>{
-          alert('支付成功');
+          // alert('支付成功');
         })
-
-       //   let second = 5;
-       //   const timer = setInterval(() => {
-       //     second--;
-       //     this.getOrderStatus().then(res=>{
-       //       console.log(second);
-
-       //       if (res.errors){
-       //         clearInterval(timer);
-       //         toast.message = '支付失败，请重新支付！';
-       //         setTimeout(()=>{
-       //           toast.clear();
-       //         },2000)
-       //       } else {
-       //         if (second > 0 || !res.readdata._data.paid){
-       //           toast.message = `正在查询订单...`;
-       //         } else if (res.readdata._data.paid){
-       //           clearInterval(timer);
-       //           toast.message = '支付成功，正在跳转首页...';
-       //           toast.clear();
-       //           that.$router.push({path:'/'});
-       //         } else {
-       //           clearInterval(timer);
-       //           toast.message = '支付失败，请重新支付！';
-       //           toast.clear();
-       //         }
-       //       }
-       //     });
-       //   }, 1000);
-       // },3000);
-
 
      },
 
 
 
     payClick(amount){
-      alert(amount);
+      // alert(amount);
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
       this.amountNum = amount;
       if (isWeixin){
 
-        console.log('微信');
         this.getOrderSn(amount).then(()=>{
           this.orderPay(12).then((res)=>{
             if (typeof WeixinJSBridge == "undefined"){
@@ -644,7 +611,6 @@ export default {
               if (this.payStatus == '1' && this.payStatusNum > 10){
                 clearInterval(payPhone);
               }
-              alert('6666');
               this.getOrderStatus();
             },3000)
           })
@@ -699,8 +665,7 @@ export default {
       })
     },
     getOrderStatus(){
-      alert('345');
-      alert(this.orderSn);
+      // alert(this.orderSn);
       return this.appFetch({
         url:'order',
         method:'get',
