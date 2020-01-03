@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="postContent" v-if="item.firstPost">
-                <a @click="jumpThemeDet(item._data.id,item._data.canReply)" v-html="item.firstPost._data.contentHtml"></a>
+                <a @click="jumpThemeDet(item._data.id,item._data.canView)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
@@ -63,7 +63,7 @@
                     :src="image"
                     class="themeImgChild"
                     :key="index"
-                    @click="jumpThemeDet(item._data.id,item._data.canReply)"
+                    @click="jumpThemeDet(item._data.id,item._data.canView)"
                   />
                 </div>
               </div>
