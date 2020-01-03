@@ -64,8 +64,10 @@ class ForumSettingSerializer extends AbstractSerializer
             'supportMaxSize' => (int)$this->settings->get('support_max_size', 'default', ini_get('upload_max_filesize')),
 
             // 权限
-            'canViewThreadList' => $this->actor->can('viewThreadList'),
+            'canUploadAttachments' => $this->actor->can('attachment.create.0'),
+            'canUploadImages' => $this->actor->can('attachment.create.1'),
             'canCreateThread' => $this->actor->can('createThread'),
+            'canViewThreadList' => $this->actor->can('viewThreadList'),
             'canViewUserList' => $this->actor->can('viewUserList'),
 
             // 支付设置

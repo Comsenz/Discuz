@@ -572,12 +572,16 @@ export default {
            "signType":"MD5",         //微信签名方式：
            "paySign":data.data.attributes.wechat_js.paySign //微信签名
          })
+         alert('执行');
+         const pay222 = setInterval(()=>{
+           alert('循环请求');
+          },3000);
         const payWechat = setInterval(()=>{
-          alert('循环');
+          alert('循环'+this.payStatus);
           if (this.payStatus == '1' && this.payStatusNum > 10){
             clearInterval(payWechat);
           }
-          this.getOrderStatus()
+          this.getOrderStatus();
         },3000)
 
      },
@@ -687,7 +691,6 @@ export default {
 
           this.payStatus = res.readdata._data.status;
           alert(res.readdata._data.status);
-          
           this.payStatusNum =+1;
           if (this.payStatus == '1'){
             alert(this.payStatus);

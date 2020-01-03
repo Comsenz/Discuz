@@ -28,6 +28,7 @@ export default {
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
         // { url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=88704046,262850083&fm=11&gp=0.jpg', isImage: true }
       ],
+      fileListOne:[],
       uploadShow:false,
       enclosureList:[
         // {
@@ -188,7 +189,7 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           }else{
             var postThemeId = res.readdata._data.id;
@@ -212,7 +213,7 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,false);
+      this.uploaderEnclosure(formdata,false,true);
       this.loading = false;
 
     },
@@ -222,7 +223,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,true);
+      this.uploaderEnclosure(formdata,true,true);
       this.uploadShow = true;
       this.loading = false;
     },
@@ -292,7 +293,7 @@ export default {
       formdata.append('file', file);
       formdata.append('isGallery', 0);
       this.loading = true,
-      this.uploaderEnclosure(formdata,false,true);
+      this.uploaderEnclosure(formdata,false,false,true);
     },
     // 组件方法 获取 流
     // async onRead(file) {
@@ -465,7 +466,7 @@ export default {
     //   });
     // },
     //这里写接口，上传
-    uploaderEnclosure(file,isFoot,enclosure){
+    uploaderEnclosure(file,isFoot,img,enclosure){
       console.log(file,isFoot,enclosure)
        this.appFetch({
          url:'attachment',
@@ -480,10 +481,12 @@ export default {
           console.log(data);
           // console.log('909090');
           // var attriAttachment = new Array();
-
+          if(img){
+            this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+          }
           if(isFoot){
             console.log('图片');
-            this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
            // console.log(this.fileList);
            // for(var h=0;h<this.fileList.length;h++){
            //   var data = {};
