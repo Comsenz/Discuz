@@ -242,7 +242,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,true,true);
+      this.uploaderEnclosure(formdata,true,false);
       this.uploadShow = true;
       this.loading = false;
     },
@@ -502,11 +502,19 @@ export default {
           console.log(data);
           // console.log('909090');
           // var attriAttachment = new Array();
+
+
+
+
+
           if(img){
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
             // if(!isFoot){
             //   this.fileList.splice(this.fileList.length-2,1);
             // }
+            // console.log(this.fileListOne[this.fileListOne.length-1]);
+            this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+            console.log(this.fileListOne);
           }
           if(isFoot){
             console.log('图片');
