@@ -243,8 +243,6 @@ const appFetch = function(params, options) {
         if (isWeixin){
           browserDb.setLItem('Authorization','');
           getNewToken().then(res=>{
-            console.log('输出');
-            console.log(this.$router);
             this.$router.replace({path:'/supplier-all-back',query:{url:this.$router.history.current.path}});
           })
         }else {
