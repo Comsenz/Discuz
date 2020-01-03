@@ -120,7 +120,7 @@ class ListThreadsController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertCan($actor, 'viewThreadList');
+        $this->assertCan($actor, 'viewThreads');
 
         $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);

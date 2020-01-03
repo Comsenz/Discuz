@@ -36,7 +36,7 @@
                 </div>
               </div>
               <div class="postContent" v-if="item.firstPost">
-                <a @click="jumpThemeDet(item._data.id,item._data.canView)" v-html="item.firstPost._data.contentHtml"></a>
+                <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
@@ -63,7 +63,7 @@
                     :src="image"
                     class="themeImgChild"
                     :key="index"
-                    @click="jumpThemeDet(item._data.id,item._data.canView)"
+                    @click="jumpThemeDet(item._data.id,item._data.canViewPosts)"
                   />
                 </div>
               </div>
@@ -73,13 +73,13 @@
             </div>
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
-              <a  @click="jumpPerDet(like._data.id)" v-for="like in item.firstPost.likedUsers">{{userArr(item.firstPost.likedUsers)}}</a>
+              <a  @click="jumpPerDet(like._data.id)">{{userArr(item.firstPost.likedUsers)}}</a>
               <i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 
             <div class="reward" v-if="item.rewardedUsers.length>0">
               <span class="icon iconfont icon-money"></span>
-              <a href="javascript:;" v-for="reward in item.rewardedUsers" @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
+              <a @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
             </div>
 
             <div class="isrelationLine" v-if="(item.lastThreePosts.length>0 && item.firstPost.likedUsers.length>0) || (item.lastThreePosts.length>0 && item.rewardedUsers.length>0)">
@@ -95,7 +95,7 @@
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
                   <span v-html="reply._data.contentHtml"></span>
                 </div>
-                <a @click="jumpThemeDet(item._data.id,item._data.canReply)" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
+                <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" class="allReply" v-if="item._data.postCount>4">全部{{item._data.postCount-1}}条回复<span class="icon iconfont icon-right-arrow"></span></a>
               </div>
             </div>
             <van-checkbox
