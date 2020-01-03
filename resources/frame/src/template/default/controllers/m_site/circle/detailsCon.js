@@ -682,6 +682,8 @@ export default {
         } else {
 
           this.payStatus = res.readdata._data.status;
+          alert(res.readdata._data.status);
+          alert('3333');
           this.payStatusNum =+1;
           if (this.payStatus == '1'){
             alert(this.payStatus);
