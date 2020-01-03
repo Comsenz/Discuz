@@ -32,7 +32,7 @@
     text-align: center;
     padding-top:40px;
     font-size:19px;
-    color:black; 
+    color:black;
     // margin-top:10px;
 }
 .siteReason{

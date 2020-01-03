@@ -97,11 +97,12 @@ body{
   width: $w100;
   //height: calc(100% - 44px);
   height: $heightCalc;
+  min-height: 800px;
 
   .login-user-box-main{
     width: $w100;
     //height: calc(100% - 40px);
-    height: $heightCalc40;
+    // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -160,11 +161,12 @@ body{
   width: $w100;
   //height: calc(100% - 44px);
   height: $heightCalc;
+  min-height: 800px;
 
   .login-phone-box-main{
     width: $w100;
     //height: calc(100% - 40px);
-    height: $heightCalc40;
+    // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -226,6 +228,7 @@ body{
 .wx-login-bd-box{
   width: 100%;
   height: calc(100% - #{50px});
+  min-height: 800px;
 
   .wx-login-bd-main{
     width: 100%;
@@ -284,6 +287,7 @@ body{
 .wx-sign-up-bd-box{
   width: 100%;
   height: calc(100% - #{50px});
+  min-height: 800px;
 
   .wx-sign-up-bd-main{
     width: 100%;
@@ -344,6 +348,7 @@ body{
   width: 100%;
   //height: calc(100% - #{44px});
   height: $heightCalc;
+  min-height: 800px;
 
   .bind-phone-main{
     width: $w100;
@@ -376,6 +381,7 @@ body{
   width: 100%;
   //height: calc(100% - #{44px});
   height: $heightCalc;
+  min-height: 800px;
 
   .retrieve-password-main{
     width: $w100;
@@ -407,11 +413,12 @@ body{
   width: 100%;
   //height: calc(100% - 44px);
   height: $heightCalc;
+  min-height: 800px;
 
   .sign-up-main{
     width: 100%;
     //height: calc(100% - 40px);
-    height: $heightCalc40;
+    // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -436,6 +443,7 @@ body{
   background-color: rgba(237, 237, 237, 1);
   overflow: hidden;
   color: $payColor;
+  min-height: 800px;
 
   .pay-the-fee-main{
     width: 100%;
