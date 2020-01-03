@@ -144,6 +144,8 @@ export default {
           }
         }).then((res)=>{
           if (res.errors){
+
+            alert('333');
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
@@ -189,7 +191,8 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+  //           this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+              this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }else{
             var postThemeId = res.readdata._data.id;
@@ -242,7 +245,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,true,false);
+      this.uploaderEnclosure(formdata,true,true);
       this.uploadShow = true;
       this.loading = false;
     },
@@ -499,26 +502,23 @@ export default {
           this.$toast.fail(data.errors[0].code);
           throw new Error(data.error)
         } else {
-          console.log(data);
+          console.log(data.readdata._data.id);
           // console.log('909090');
           // var attriAttachment = new Array();
-
-
-
-
-
           if(img){
+            console.log('45789');
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
             // if(!isFoot){
             //   this.fileList.splice(this.fileList.length-2,1);
             // }
             // console.log(this.fileListOne[this.fileListOne.length-1]);
-            this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
-            console.log(this.fileListOne);
+            // this.fileListOne[this.fileListOne.length-1].id = data.readdata._data.id;
+            // console.log(this.fileListOne);
           }
           if(isFoot){
             console.log('图片');
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            console.log(this.fileListOne);
            // console.log(this.fileList);
            // for(var h=0;h<this.fileList.length;h++){
            //   var data = {};

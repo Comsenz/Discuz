@@ -193,7 +193,8 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata);
+      // this.uploaderEnclosure(formdata);
+      this.uploaderEnclosure(formdata,false,true);
 
     },
     //上传图片，点击底部Icon时
@@ -206,7 +207,8 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 1);
-        this.uploaderEnclosure(formdata,true);
+        // this.uploaderEnclosure(formdata,true);
+        this.uploaderEnclosure(formdata,true,false);
         this.uploadShow = true;
       }
 
@@ -265,7 +267,8 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 0);
-      this.uploaderEnclosure(formdata,false,true);
+      // this.uploaderEnclosure(formdata,false,true);
+      this.uploaderEnclosure(formdata,false,false,true);
     },
     // 组件方法 获取 流
       async onRead(file) {
@@ -438,7 +441,8 @@ export default {
           });
         },
         //这里写接口，上传
-        uploaderEnclosure(file,isFoot,enclosure){
+        // uploaderEnclosure(file,isFoot,enclosure){
+        uploaderEnclosure(file,isFoot,img,enclosure){
           console.log(file,isFoot,enclosure)
            this.appFetch({
              url:'attachment',
@@ -452,31 +456,30 @@ export default {
              }else{
                 console.log(data);
                 // console.log('909090');
+                // if(isFoot){
+                //   console.log('图片');
+                //  this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+                //  this.fileLength = this.fileList.length;
+
+                //  // console.log(this.fileList);
+                //  // console.log('333');
+                // }
+
+                if(img){
+                  this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+                  this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+                  console.log(this.fileListOne);
+                  console.log(this.fileList);
+                }
                 if(isFoot){
                   console.log('图片');
-                 this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-                 this.fileLength = this.fileList.length;
-
-                 // console.log(this.fileList);
-                 // console.log('333');
+                  this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
                 }
-                console.log(this.fileList.length);
-                console.log('9999');
+                
                  if(enclosure){
                    console.log('fujian');
                    this.enclosureShow = true;
                    this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
-                    // var attriAttachment = new Array();
-                    // console.log(this.enclosureList);
-                    // for(var k=0;k<this.enclosureList.length;k++){
-                    //   var data = {};
-                    //   data.type = 'attachments';
-                    //   data.id = this.enclosureList[k].id;
-                    //   console.log(data);
-                    //   console.log('1111');
-                    //   attriAttachment.push(data);
-                    // }
-                    // this.attriAttachment = attriAttachment;
                  }
                 this.$toast.success('提交成功');
              }
