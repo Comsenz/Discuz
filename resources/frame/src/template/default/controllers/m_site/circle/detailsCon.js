@@ -561,12 +561,32 @@ export default {
     //   })
     // },
 
+     onBridgeReady(data){
+       let that = this;
+       WeixinJSBridge.invoke(
+         'getBrandWCPayRequest', {
+           "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+           "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+           "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
+           "package":data.data.attributes.wechat_js.package,
+           "signType":"MD5",         //微信签名方式：
+           "paySign":data.data.attributes.wechat_js.paySign //微信签名
+         }),
+        this.getOrderStatus().then(res=>{
+          // alert('支付成功');
+        })
+
+     },
+
+
+
     payClick(amount){
+      // alert(amount);
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
       this.amountNum = amount;
       if (isWeixin){
-        console.log('微信');
+
         this.getOrderSn(amount).then(()=>{
           this.orderPay(12).then((res)=>{
             if (typeof WeixinJSBridge == "undefined"){
@@ -591,7 +611,7 @@ export default {
               if (this.payStatus == '1' && this.payStatusNum > 10){
                 clearInterval(payPhone);
               }
-              this.getOrderStatus()
+              this.getOrderStatus();
             },3000)
           })
         });
@@ -645,6 +665,7 @@ export default {
       })
     },
     getOrderStatus(){
+      // alert(this.orderSn);
       return this.appFetch({
         url:'order',
         method:'get',
@@ -659,6 +680,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+
           this.payStatus = res.readdata._data.status;
           this.payStatusNum =+1;
           if (this.payStatus == '1'){

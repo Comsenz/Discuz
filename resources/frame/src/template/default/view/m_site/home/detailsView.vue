@@ -182,9 +182,9 @@
         >
           <span class="support">支持作者继续创作</span>
           <div class="rewardMonBox">
-            <div class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
+            <a class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
               <span>{{rewardChi.rewardNum}}</span>元
-            </div>
+            </a>
           </div>
        </van-popup>
        <van-popup
