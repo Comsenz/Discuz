@@ -95,13 +95,13 @@ body{
  */
 .login-user-box{
   width: $w100;
-  //height: calc(100% - 44px);
-  height: $heightCalc;
-  min-height: 800px;
+  height: calc(100% - 44px);
+  //height: $heightCalc;
+  min-height: 600px;
 
   .login-user-box-main{
     width: $w100;
-    //height: calc(100% - 40px);
+    height: 100%;
     // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -159,13 +159,12 @@ body{
  */
 .login-phone-box{
   width: $w100;
-  //height: calc(100% - 44px);
-  height: $heightCalc;
-  min-height: 800px;
-
+  height: calc(100% - 44px);
+  //height: $heightCalc;
+  min-height: 600px;
   .login-phone-box-main{
     width: $w100;
-    //height: calc(100% - 40px);
+    height: 100%;
     // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -226,14 +225,14 @@ body{
  *  微信登录绑定
  */
 .wx-login-bd-box{
-  width: 100%;
-  height: calc(100% - #{50px});
-  min-height: 800px;
+  width: $w100;
+  height: calc(100% - 44px);
+  min-height: 600px;
 
   .wx-login-bd-main{
     width: 100%;
-    //height: calc(100% - #{44px});
-    height: $heightCalc;
+    height: 100%;
+    //height: $heightCalc;
     font-size: 15px;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -287,12 +286,12 @@ body{
 .wx-sign-up-bd-box{
   width: 100%;
   height: calc(100% - #{50px});
-  min-height: 800px;
+  min-height: 600px;
 
   .wx-sign-up-bd-main{
     width: 100%;
-    //height: calc(100% - #{44px});
-    height: $heightCalc;
+    height: 100%;
+    //height: $heightCalc;
     font-size: 15px;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -346,14 +345,14 @@ body{
  */
 .bind-phone-box{
   width: 100%;
-  //height: calc(100% - #{44px});
-  height: $heightCalc;
-  min-height: 800px;
+  height: calc(100% - #{44px});
+  //height: $heightCalc;
+  min-height: 600px;
 
   .bind-phone-main{
     width: $w100;
-    //height: calc(100% - #{40px});
-    height: $heightCalc40;
+    height: 100%;
+    //height: $heightCalc40;
 
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -379,14 +378,14 @@ body{
  */
 .retrieve-password-box{
   width: 100%;
-  //height: calc(100% - #{44px});
-  height: $heightCalc;
-  min-height: 800px;
+  height: calc(100% - #{44px});
+  //height: $heightCalc;
+  min-height: 600px;
 
   .retrieve-password-main{
     width: $w100;
-    //height: calc(100% - #{40px});
-    height: $heightCalc40;
+    height: 100%;
+    //height: $heightCalc40;
 
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
@@ -411,13 +410,13 @@ body{
  */
 .sign-up-box{
   width: 100%;
-  //height: calc(100% - 44px);
-  height: $heightCalc;
-  min-height: 800px;
+  height: calc(100% - 44px);
+  //height: $heightCalc;
+  min-height: 600px;
 
   .sign-up-main{
-    width: 100%;
-    //height: calc(100% - 40px);
+    width: $w100;
+    height: 100%;
     // height: $heightCalc40;
     padding: 44px 30px 0 30px;
     -webkit-box-sizing: border-box;
