@@ -19,6 +19,7 @@ class NotificationSerializer extends AbstractSerializer
             'id'            => $model->id,
             'user_id'       => $model->notifiable_id,
             'read_at'       => $model->read_at,
+            'created_at'       => $model->created_at,
         ], $model->data);
     }
 }
