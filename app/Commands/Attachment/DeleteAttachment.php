@@ -70,7 +70,7 @@ class DeleteAttachment
         $attachment->delete();
 
         // 删除源文件
-        $filePath = storage_path('app/attachment/' . $attachment->attachment);
+        $filePath = storage_path('app/public/attachment/' . $attachment->attachment);
         unlink($filePath);
 
         // 如果是帖子图片，删除有可能生成的缩略图
