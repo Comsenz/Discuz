@@ -90,9 +90,7 @@
           </div>
 
           <div class="recycle-bin-reply-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank">
-              {{items._data.content}}
-            </a>
+            <a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items._data.contentHtml"></a>
           </div>
 
           <div class="recycle-bin-reply-table__footer" slot="footer">
