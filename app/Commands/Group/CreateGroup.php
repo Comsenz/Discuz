@@ -7,6 +7,7 @@
 
 namespace App\Commands\Group;
 
+use App\Events\Group\Created;
 use App\Events\Group\Saving;
 use App\Models\Group;
 use App\Models\User;
@@ -73,6 +74,8 @@ class CreateGroup
         $group->color = Arr::get($attributes, 'color', '');
         $group->icon = Arr::get($attributes, 'icon', '');
         $group->default = Arr::get($attributes, 'default', 0);
+
+        $group->raise(new Created($group));
 
         $this->events->dispatch(
             new Saving($group, $this->actor, $this->data)
