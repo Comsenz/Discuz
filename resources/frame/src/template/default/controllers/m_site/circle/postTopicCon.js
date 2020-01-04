@@ -190,7 +190,7 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+            this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }else{
             var postThemeId = res.readdata._data.id;
