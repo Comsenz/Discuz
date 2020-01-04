@@ -35,7 +35,7 @@
             <span v-else-if="enc.type === 'xls'" class="icon iconfont icon-xls"></span>
             <span v-else="" class="icon iconfont icon-doubt"></span>
             <span class="encName">{{enc.name}}</span>
-            <van-icon @click="deleteEnclosure(enc.id,'enclosure')" name="clear" class="encDelete"/>
+            <van-icon @click="deleteEnc(enc,'enclosure')" name="clear" class="encDelete"/>
           </div>
         </div>
       </div>
