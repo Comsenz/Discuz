@@ -564,15 +564,17 @@ export default {
    * */
   this.getForum().then((res)=>{
 
-    if (res.rawData[0].code === 'site_closed'){
-
-      if (to.name === 'login-user'){
-        next();
-      } else {
-        next({path:'/site-close'});
-        return
+    if (res.errors){
+      if (res.rawData[0].code === 'site_closed'){
+        if (to.name === 'login-user'){
+          next();
+        } else {
+          next({path:'/site-close'});
+          return
+        }
       }
     }
+
   });
 
 
