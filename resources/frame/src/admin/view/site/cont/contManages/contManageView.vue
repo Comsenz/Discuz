@@ -18,7 +18,7 @@
             :prply="items._data.postCount"
             :browse="items._data.viewCount"
             :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
-            :finalPost="formatDate(items._data.createdAt)"
+            :releaseTime="formatDate(items._data.createdAt)"
             :userId="items.user._data.id"
             :key="items._data.id"
           >
@@ -27,10 +27,8 @@
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
-            <div style="line-height: 20PX;" slot="main">
-              <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank">
-                {{items.firstPost._data.content}}
-              </a>
+            <div style="line-height: 20px;" slot="main">
+              <a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
             </div>
 
           </ContArrange>

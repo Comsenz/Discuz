@@ -152,7 +152,8 @@ export default {
           }
         })
       } else {
-        this.attriAttachment = this.fileList.concat(this.enclosureList);
+        // this.attriAttachment = this.fileList.concat(this.enclosureList);
+        this.attriAttachment = this.fileListOne.concat(this.enclosureList);
          // var aa = new Array();
         for(let m=0;m<this.attriAttachment.length;m++){
           this.attriAttachment[m] = {
@@ -189,7 +190,7 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+            this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }else{
             var postThemeId = res.readdata._data.id;
@@ -213,25 +214,7 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
-      console.log(this.fileList);
-      // this.fileList.splice(this.fileList.length,1);
-
-      // console.log(document.getElementsByClassName('van-uploader__preview'));
-      // // let img = document.getElementsByClassName('van-uploader__preview').pop();
-
-      //  let imgDomFather = document.getElementsByClassName('van-uploader__wrapper')[0];
-
-      //  let imgDomSon = document.getElementsByClassName('van-uploader__preview')[1]
-
-      //  console.log(imgDomFather)
-      //  console.log(imgDomSon)
-
-      //  // imgDomFather.removeChild(imgDomSon);
-
-      // console.log(document.getElementsByClassName('van-uploader__preview'));
-
-
-
+      // console.log(this.fileList);
       this.uploaderEnclosure(formdata,false,true);
       this.loading = false;
 
@@ -258,39 +241,39 @@ export default {
     deleteEnclosure(id,type){
       console.log(id,type);
 
-
+      console.log(this.fileListOne,'fileListOne  delete')
       // return false;
-      if(this.fileList.length<1){
+      if(this.fileListOne.length<1){
         this.uploadShow = false;
       }
-      /* this.appFetch({
+      this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+id
-      }).then(data=>{
-
-        if (data.errors){
-          this.$toast.fail(data.errors[0].code);
-          throw new Error(data.error)
-        } else {
-          var attriAttachment = new Array();
-          if(type == "img"){
-            var newArr = this.fileList.filter(item => item.id !== id);
-            this.fileList = newArr;
-            console.log(this.fileList);
-            console.log('104');
-            // for(var h=0;k<this.fileList.length;h++){
-            //   var data = {};
-            //   data.type = 'attachments';
-            //   data.id = this.fileList[h].id;
-            //   attriAttachment.push(data);
-            // }
-            // this.attriAttachment = attriAttachment;
-          } else {
-            var newArr = this.enclosureList.filter(item => item.id !== id);
-            this.enclosureList = newArr;
-            console.log(this.enclosureList);
-            console.log('2567');
+        splice:'/'+id.id,
+      })
+      // .then(data=>{
+//         if (data.errors){
+//           this.$toast.fail(data.errors[0].code);
+//           throw new Error(data.error)
+//         } else {
+//           var attriAttachment = new Array();
+//           if(type == "img"){
+//             var newArr = this.fileList.filter(item => item.id !== id);
+//             this.fileList = newArr;
+//             console.log(this.fileList);
+//             console.log('104');
+//             // for(var h=0;k<this.fileList.length;h++){
+//             //   var data = {};
+//             //   data.type = 'attachments';
+//             //   data.id = this.fileList[h].id;
+//             //   attriAttachment.push(data);
+//             // }
+//             // this.attriAttachment = attriAttachment;
+//           } else {
+            // var newArr = this.enclosureList.filter(item => item.id !== id);
+            // this.enclosureList = newArr;
+            // console.log(this.enclosureList);
+            // console.log('2567');
             // for(var k=0;k<this.enclosureList.length;k++){
             //   var data = {};
             //   data.type = 'attachments';
@@ -299,11 +282,33 @@ export default {
             // }
             // this.attriAttachment = attriAttachment;
             // console.log(this.attriAttachment);
-          }
-          this.$toast.success('删除成功');
-        }
-      }) */
+//           }
+//           this.$toast.success('删除成功');
+//         }
+      // })
     },
+
+    //删除附件
+        deleteEnc(id,type){
+          if(this.fileListOne.length<1){
+            this.uploadShow = false;
+          }
+          this.appFetch({
+            url:'attachment',
+            method:'delete',
+            splice:'/'+id.id
+          }).then(data=>{
+            var newArr = this.enclosureList.filter(item => item.id !== id.id);
+            this.enclosureList = newArr;
+            console.log(this.enclosureList);
+            console.log('2567');
+
+          })
+        },
+
+
+
+
 
 
     //上传附件
@@ -550,7 +555,7 @@ export default {
           // this.$toast.success('提交成功');
         }
        })
-       console.log(this.fileList);
+       console.log(this.fileList, this.fileListOne,'this.fileList,this.fileListOne');
     },
 
     //输入框自适应高度

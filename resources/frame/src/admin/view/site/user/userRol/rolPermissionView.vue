@@ -1,41 +1,41 @@
 <template>
   <div class="rol-permission-box">
-    <Card header="设置权限——角色名称（成员）"></Card>
+    <Card :header="'设置权限——' + $router.history.current.query.name"></Card>
 
     <Card header="前台操作权限："></Card>
     <Card>
       <CardRow description="查看主题列表页的权限">
-        <el-checkbox v-model="checked" label="viewThreads">查看主题列表</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThreadList" :disabled="$router.history.current.query.id === '1'">查看主题列表</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="查看主题的详情页的权限">
-        <el-checkbox v-model="checked" label="thread.viewPosts">查看主题详情</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThreads" :disabled="$router.history.current.query.id === '1'">查看主题详情</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="发布主题的权限">
-        <el-checkbox v-model="checked" label="createThread">发表帖子</el-checkbox>
+        <el-checkbox v-model="checked" label="createThread" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发表帖子</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="回复主题的权限">
-        <el-checkbox v-model="checked" label="thread.reply">回复主题</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.reply" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">回复主题</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="发布主题时上传附件的权限">
-        <el-checkbox v-model="checked" label="attachment.create.0">上传附件</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.create.0" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">上传附件</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="发布主题时上传图片的权限">
-        <el-checkbox v-model="checked" label="attachment.create.1">上传图片</el-checkbox>
+        <el-checkbox v-model="checked" label="attachment.create.1" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">上传图片</el-checkbox>
       </CardRow>
     </Card>
 
@@ -53,7 +53,7 @@
 
     <Card>
       <CardRow description="查看站点成员列表、搜索成员的权限">
-        <el-checkbox v-model="checked" label="viewUserList">站点会员列表</el-checkbox>
+        <el-checkbox v-model="checked" label="viewUserList" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">站点会员列表</el-checkbox>
       </CardRow>
     </Card>
 
@@ -61,49 +61,49 @@
     <Card header="前台管理权限："></Card>
     <Card>
       <CardRow description="前台删除单个主题的权限">
-        <el-checkbox v-model="checked" label="thread.deletePosts">删帖</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.deletePosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删帖</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台置顶、取消置顶主题的权限">
-        <el-checkbox v-model="checked" label="thread.sticky">置顶</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.sticky" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">置顶</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台精华、取消精华主题的权限">
-        <el-checkbox v-model="checked" label="thread.essence">加精</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.essence" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">加精</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台单个主题的编辑权限">
-        <el-checkbox v-model="checked" label="thread.editPosts">编辑</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.editPosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">编辑</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台批量删除主题的权限">
-        <el-checkbox v-model="checked" label="thread.hide">批量删除主题</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.hide" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">批量删除主题</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台按用户组邀请成员的权限">
-        <el-checkbox v-model="checked" label="createInvite">管理-邀请加入</el-checkbox>
+        <el-checkbox v-model="checked" label="createInvite" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">管理-邀请加入</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台更改成员所属用户组的权限">
-        <el-checkbox v-model="checked" label="group.edit">编辑用户组</el-checkbox>
+        <el-checkbox v-model="checked" label="group.edit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">编辑用户组</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台更改成员禁用状态的权限">
-        <el-checkbox v-model="checked" label="user.edit">编辑用户状态</el-checkbox>
+        <el-checkbox v-model="checked" label="user.edit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">编辑用户状态</el-checkbox>
       </CardRow>
     </Card>
 

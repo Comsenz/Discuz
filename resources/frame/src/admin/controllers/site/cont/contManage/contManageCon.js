@@ -277,7 +277,8 @@ export default {
            'filter[postCountGt]':searchData.numberOfRepliesMin,
            'filter[postCountLt]':searchData.numberOfRepliesMax,
            'filter[isEssence]':searchData.essentialTheme,
-           'filter[isSticky]':searchData.topType
+           'filter[isSticky]':searchData.topType,
+           'sort':'-createdAt'
          }
        }).then(res=>{
          console.log(res);

@@ -574,7 +574,6 @@ export default {
          })
 
         const payWechat = setInterval(()=>{
-          alert('循环'+this.payStatus);
           if (this.payStatus == '1' || this.payStatusNum > 10){
             clearInterval(payWechat);
           }
@@ -687,14 +686,10 @@ export default {
         } else {
 
           this.payStatus = res.readdata._data.status;
-          alert(res.readdata._data.status);
           this.payStatusNum =+1;
           if (this.payStatus == '1'){
-            alert(this.payStatus);
             this.rewardShow = false;
             this.qrcodeShow = false;
-            alert(this.rewardShow);
-            alert(this.qrcodeShow);
             // this.$router.push('/');
             this.payStatusNum = 11;
             this.detailsLoad(true);

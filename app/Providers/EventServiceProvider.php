@@ -7,13 +7,15 @@
 
 namespace App\Providers;
 
-use App\Events\Group\Saving;
+use App\Events\Group\Created as GroupCreated;
+use App\Events\Group\Saving as GroupSaving;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
 use App\Listeners\Group\ChangeDefaultGroup;
+use App\Listeners\Group\SetDefaultPermission;
 use App\Listeners\User\ChangeLastActived;
 use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
@@ -53,7 +55,10 @@ class EventServiceProvider extends BaseEventServiceProvider
         RefreshTokend::class => [
             ChangeLastActived::class
         ],
-        Saving::class => [
+        GroupCreated::class => [
+            SetDefaultPermission::class
+        ],
+        GroupSaving::class => [
             ChangeDefaultGroup::class
         ]
     ];

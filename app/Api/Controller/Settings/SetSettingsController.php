@@ -10,6 +10,7 @@ namespace App\Api\Controller\Settings;
 use App\Models\Group;
 use App\Settings\SettingsRepository;
 use App\Settings\SiteRevManifest;
+use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
@@ -44,12 +45,15 @@ class SetSettingsController implements RequestHandlerInterface
 
     protected $siteRevManifest;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app)
+    protected $validator;
+
+    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app, SetSettingValidator $validator)
     {
         $this->cache = $cache;
         $this->app = $app;
         $this->settings = $settings;
         $this->siteRevManifest = $siteRevManifest;
+        $this->validator = $validator;
     }
 
     /**
@@ -78,11 +82,10 @@ class SetSettingsController implements RequestHandlerInterface
             }
         }
 
-        // 判断是否存QCloud验证值是否正确
-        $pluck = $settings->pluck('value', 'key');
-        if ($pluck->has($this->validationQCloud)) {
-            $only = $pluck->only($this->validationQCloud);
-            $billing = new BillingService($only);
+        // 验证QCloud值是否正确
+        $Qcloud = $settings->pluck('value', 'key')->only($this->validationQCloud);
+        if (!$Qcloud->isEmpty()) {
+            $billing = new BillingService($Qcloud);
             $billing->DescribeAccountBalance();
         }
 
@@ -97,6 +100,12 @@ class SetSettingsController implements RequestHandlerInterface
                 $this->changeSiteMode(Group::MEMBER_ID, '', $settings);
             }
         }
+
+        /**
+         * @property \App\Validators\SetSettingValidator
+         */
+        $validator = $settings->pluck('value', 'key')->all();
+        $this->validator->valid($validator);
 
         $settings->each(function ($setting) {
             $this->settings->set(
