@@ -7,10 +7,10 @@
             <div class="">
               <div class="postTop">
                 <div class="postPer">
-                  <img :src="item.user._data.avatarUrl" v-if="item.user._data.avatarUrl" class="postHead">
+                  <img :src="item.user._data.avatarUrl" v-if="item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead">
                   <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
                   <div class="perDet">
-                    <div class="perName" v-if="item.user">{{item.user._data.username}}</div>
+                    <div class="perName" v-if="item.user"  @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
@@ -73,13 +73,16 @@
             </div>
             <div class="likeBox" v-if="item.firstPost.likedUsers.length>0">
               <span class="icon iconfont icon-praise-after"></span>
-              <a  @click="jumpPerDet(like._data.id)">{{userArr(item.firstPost.likedUsers)}}</a>
+              <span v-html="userArr(item.firstPost.likedUsers)"></span>
+              <!-- <a  @click="jumpPerDet(like._data.id)">
+                {{userArr(item.firstPost.likedUsers)}}</a> -->
               <i v-if="item.firstPost._data.likeCount>10">&nbsp;等<span>{{item.firstPost._data.likeCount}}</span>个人觉得很赞</i>
             </div>
 
             <div class="reward" v-if="item.rewardedUsers.length>0">
               <span class="icon iconfont icon-money"></span>
-              <a @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a>
+              <span v-html="userArr(item.rewardedUsers)"></span>
+              <!-- <a @click="jumpPerDet(reward._data.id)">{{userArr(item.rewardedUsers)}}</a> -->
             </div>
 
             <div class="isrelationLine" v-if="(item.lastThreePosts.length>0 && item.firstPost.likedUsers.length>0) || (item.lastThreePosts.length>0 && item.rewardedUsers.length>0)">

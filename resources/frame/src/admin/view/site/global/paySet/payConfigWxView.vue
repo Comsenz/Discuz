@@ -20,11 +20,11 @@
       </CardRow>
     </Card>
 
-    <Card header="App Secret：">
+    <!-- <Card header="App Secret：">
       <CardRow description="App Secret是APPID对应的接口密码，用于获取接口调用凭证access_token时使用">
         <el-input v-model="appSecret"></el-input>
       </CardRow>
-    </Card>
+    </Card> -->
 
     <Card class="footer-btn" >
       <el-button type="primary" size="medium" @click="submitConfiguration">提交</el-button>

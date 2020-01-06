@@ -77,7 +77,12 @@ export default {
       }).then(data=>{
         console.log(data)
         if (data.errors){
-          this.$message.error(data.errors[0].code);
+          if (data.errors[0].detail){
+            this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])
+          } else {
+            this.$message.error(data.errors[0].code);
+          }
+          // this.$message.error(data.errors[0].code);
         }else {
           this.$message({message: '提交成功', type: 'success'});
         }

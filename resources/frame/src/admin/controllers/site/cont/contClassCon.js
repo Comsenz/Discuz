@@ -176,17 +176,18 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (res.meta){
+          console.log(res.meta);
+          res.meta.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.code)
+            },(index+1) * 500);
+          });
         }else {
-          if (!res.meta) {
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-          } else {
-            this.$message.error('操作失败！');
-          }
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
         }
       }).catch(err=>{
         console.log(err);
@@ -214,20 +215,16 @@ export default {
               }).then(res=>{
                 if (res.meta){
                   console.log(res.meta);
-                  // if (res.errors[0].detail){
-                  //   this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
-                  // } else {
-                  //   this.$message.error(res.errors[0].code);
-                  // }
+                  res.meta.forEach((item,index)=>{
+                    setTimeout(()=>{
+                      this.$message.error(item.message.name[0])
+                    },(index+1) * 500);
+                  });
                 }else {
-                  if (!res.meta) {
-                    this.$message({
-                      message: '操作成功',
-                      type: 'success'
-                    });
-                  } else {
-                    this.$message.error('操作失败！');
-                  }
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
                 }
               }).catch(err=>{
                 console.log(err);

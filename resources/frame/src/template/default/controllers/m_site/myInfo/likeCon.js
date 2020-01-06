@@ -50,6 +50,7 @@ export default {
           this.likeList=[]
         }
         console.log(res)
+        console.log(res._data.user_id,'99999')
         this.likeList = this.likeList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
@@ -77,7 +78,10 @@ export default {
           this.$toast('刷新失败');
           this.isLoading = false;
         })
-    }
+    },
+    // jumpPerDet:function(id){
+    //   this.$router.push({ path:'/home-page'+'/'+id});
+    // },
   },
 
 }

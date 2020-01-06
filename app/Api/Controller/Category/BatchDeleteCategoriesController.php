@@ -51,7 +51,7 @@ class BatchDeleteCategoriesController extends AbstractListController
                     new DeleteCategory($id, $actor)
                 );
             } catch (\Exception $e) {
-                $result['meta'][] = $e->getMessage();
+                $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];
             }
         }
 
