@@ -203,7 +203,7 @@ export default {
           } else if(username === '{REPLACE}' && ugc !== '{REPLACE}'){
             item = `${find}=${inputVal}|${ugc}`
           } else if(username !== '{REPLACE}' && ugc !== '{REPLACE}'){
-            item = `${find}=${username}|${ugc}`
+            item = `${find}=${ugc}|${username}`
           }
 
           words.push(item);

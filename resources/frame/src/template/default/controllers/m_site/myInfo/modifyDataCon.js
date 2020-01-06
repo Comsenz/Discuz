@@ -64,6 +64,8 @@ export default {
         if(res.readdata.wechat){
           console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
+        }else{
+          this.wechatNickname = false
         }
         // this.modifyData()
       }
@@ -126,7 +128,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }else{
               console.log('我更新啦啦啦啦')
-            this.modifyData()
+             this.modifyData()
             }
           })
         }    

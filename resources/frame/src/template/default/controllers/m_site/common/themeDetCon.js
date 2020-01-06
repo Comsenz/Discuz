@@ -128,7 +128,8 @@ export default {
     userArr(data){
       let datas = [];
       data.forEach((item)=>{
-        datas.push(item._data.username)
+        
+        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
     },
@@ -336,6 +337,6 @@ export default {
 		// },
 	},
 	beforeRouteLeave (to, from, next) {
-
+    next()
 	}
 }
