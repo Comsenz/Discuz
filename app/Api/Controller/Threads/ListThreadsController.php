@@ -72,11 +72,12 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $sortFields = [
+        'id',
+        'isSticky',
         'postCount',
         'createdAt',
         'updatedAt',
-        'isSticky',
-        'id',
+        'deletedAt',
     ];
 
     /**

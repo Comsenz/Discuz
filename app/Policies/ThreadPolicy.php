@@ -64,6 +64,10 @@ class ThreadPolicy extends AbstractPolicy
                     });
             });
         }
+        // 管理员才可以查看审核中的帖子详情
+        if (! $actor->isAdmin()){
+            $query->where('is_approved',1);
+        }
     }
 
     /**
