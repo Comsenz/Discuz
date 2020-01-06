@@ -212,8 +212,13 @@ export default {
                   "data": datas
                 }
               }).then(res=>{
-                if (res.errors){
-                  this.$message.error(res.errors[0].code);
+                if (res.meta){
+                  console.log(res.meta);
+                  // if (res.errors[0].detail){
+                  //   this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+                  // } else {
+                  //   this.$message.error(res.errors[0].code);
+                  // }
                 }else {
                   if (!res.meta) {
                     this.$message({
