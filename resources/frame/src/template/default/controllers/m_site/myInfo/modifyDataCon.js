@@ -65,6 +65,7 @@ export default {
           console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
         }
+        // this.modifyData()
       }
       })
     },
@@ -91,6 +92,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
         }else{
         this.headPortrait = res.data.attributes.avatarUrl;
+         this.modifyData()
         }
       })
       },
@@ -99,7 +101,7 @@ export default {
         this.$dialog.confirm({
           title: '确认解绑微信',
           // message: '弹窗内容'
-        }).then(() => {
+        }).then((res) => {
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
           }else{
@@ -123,7 +125,8 @@ export default {
             if (res.errors){
               this.$toast.fail(res.errors[0].code);
             }else{
-            this.modifyData(true)
+              console.log('我更新啦啦啦啦')
+            this.modifyData()
             }
           })
         }    

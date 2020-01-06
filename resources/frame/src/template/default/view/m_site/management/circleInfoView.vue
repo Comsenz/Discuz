@@ -66,8 +66,8 @@
           	<div class="powerList">
           		<div class="powerClassify">权限列表</div>
               <div class="" v-for="(limit,index) in limitList.permission">
-                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreadList'">查看主题列表</p>
-                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题列表</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.viewPosts'">查看主题</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createThread'">发表主题</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.reply'">回复主题</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.create.0'">上传附件</p>

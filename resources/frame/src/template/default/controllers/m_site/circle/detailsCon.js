@@ -87,7 +87,7 @@ export default {
       orderSn:'',
       payStatus: false,   //支付状态
       payStatusNum: 0,//支付状态次数
-      canReply:'',
+      canViewPosts:'',
       canLike:''
     }
   },
@@ -268,7 +268,7 @@ export default {
           this.themeShow = true;
           this.themeCon = res.readdata;
           this.canLike = res.readdata._data.canLike;
-          this.canReply = res.readdata._data.canReply;
+          this.canViewPosts = res.readdata._data.canViewPosts;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -529,7 +529,7 @@ export default {
           path:'/login-user',
           name:'login-user'
         })
-      } else if(!this.canReply){
+      } else if(!this.canViewPosts){
         this.$toast.fail('没有权限，请联系站点管理员');
       } else {
         this.$router.push({
@@ -571,8 +571,14 @@ export default {
            "package":data.data.attributes.wechat_js.package,
            "signType":"MD5",         //微信签名方式：
            "paySign":data.data.attributes.wechat_js.paySign //微信签名
-         }),
-        this.getOrderStatus();
+         })
+
+        const payWechat = setInterval(()=>{
+          if (this.payStatus == '1' || this.payStatusNum > 10){
+            clearInterval(payWechat);
+          }
+          this.getOrderStatus();
+        },3000)
 
      },
 
@@ -606,7 +612,7 @@ export default {
             this.wxPayHref = res.readdata._data.wechat_h5_link;
             window.location.href = this.wxPayHref;
             const payPhone = setInterval(()=>{
-              if (this.payStatus == '1' && this.payStatusNum > 10){
+              if (this.payStatus == '1' || this.payStatusNum > 10){
                 clearInterval(payPhone);
               }
               this.getOrderStatus();
@@ -621,7 +627,7 @@ export default {
             this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
             const pay = setInterval(()=>{
-              if (this.payStatus == '1' && this.payStatusNum > 10){
+              if (this.payStatus == '1' || this.payStatusNum > 10){
                 clearInterval(pay);
               }
               this.getOrderStatus()
@@ -680,14 +686,10 @@ export default {
         } else {
 
           this.payStatus = res.readdata._data.status;
-          alert(res.readdata._data.status);
           this.payStatusNum =+1;
           if (this.payStatus == '1'){
-            alert(this.payStatus);
             this.rewardShow = false;
             this.qrcodeShow = false;
-            alert(this.rewardShow);
-            alert(this.qrcodeShow);
             // this.$router.push('/');
             this.payStatusNum = 11;
             this.detailsLoad(true);

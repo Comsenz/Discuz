@@ -37,6 +37,6 @@ class ListGroupsController extends AbstractListController
 
         return Group::when($isDefault, function ($query, $isDefault) {
             return $query->where('default', $isDefault);
-        })->get()->load($include);
+        })->where('id', '<>', Group::UNPAID)->get()->load($include);
     }
 }

@@ -28,6 +28,7 @@ export default {
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
         // { url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=88704046,262850083&fm=11&gp=0.jpg', isImage: true }
       ],
+      fileListOne:[],
       uploadShow:false,
       enclosureList:[
         // {
@@ -151,7 +152,8 @@ export default {
           }
         })
       } else {
-        this.attriAttachment = this.fileList.concat(this.enclosureList);
+        // this.attriAttachment = this.fileList.concat(this.enclosureList);
+        this.attriAttachment = this.fileListOne.concat(this.enclosureList);
          // var aa = new Array();
         for(let m=0;m<this.attriAttachment.length;m++){
           this.attriAttachment[m] = {
@@ -212,7 +214,8 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,false);
+      // console.log(this.fileList);
+      this.uploaderEnclosure(formdata,false,true);
       this.loading = false;
 
     },
@@ -222,7 +225,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata,true);
+      this.uploaderEnclosure(formdata,true,false);
       this.uploadShow = true;
       this.loading = false;
     },
@@ -238,38 +241,39 @@ export default {
     deleteEnclosure(id,type){
       console.log(id,type);
 
+      console.log(this.fileListOne,'fileListOne  delete')
       // return false;
-      if(this.fileList.length<1){
+      if(this.fileListOne.length<1){
         this.uploadShow = false;
       }
       this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+id
-      }).then(data=>{
-
-        if (data.errors){
-          this.$toast.fail(data.errors[0].code);
-          throw new Error(data.error)
-        } else {
-          var attriAttachment = new Array();
-          if(type == "img"){
-            var newArr = this.fileList.filter(item => item.id !== id);
-            this.fileList = newArr;
-            console.log(this.fileList);
-            console.log('104');
-            // for(var h=0;k<this.fileList.length;h++){
-            //   var data = {};
-            //   data.type = 'attachments';
-            //   data.id = this.fileList[h].id;
-            //   attriAttachment.push(data);
-            // }
-            // this.attriAttachment = attriAttachment;
-          } else {
-            var newArr = this.enclosureList.filter(item => item.id !== id);
-            this.enclosureList = newArr;
-            console.log(this.enclosureList);
-            console.log('2567');
+        splice:'/'+id.id,
+      })
+      // .then(data=>{
+//         if (data.errors){
+//           this.$toast.fail(data.errors[0].code);
+//           throw new Error(data.error)
+//         } else {
+//           var attriAttachment = new Array();
+//           if(type == "img"){
+//             var newArr = this.fileList.filter(item => item.id !== id);
+//             this.fileList = newArr;
+//             console.log(this.fileList);
+//             console.log('104');
+//             // for(var h=0;k<this.fileList.length;h++){
+//             //   var data = {};
+//             //   data.type = 'attachments';
+//             //   data.id = this.fileList[h].id;
+//             //   attriAttachment.push(data);
+//             // }
+//             // this.attriAttachment = attriAttachment;
+//           } else {
+            // var newArr = this.enclosureList.filter(item => item.id !== id);
+            // this.enclosureList = newArr;
+            // console.log(this.enclosureList);
+            // console.log('2567');
             // for(var k=0;k<this.enclosureList.length;k++){
             //   var data = {};
             //   data.type = 'attachments';
@@ -278,11 +282,33 @@ export default {
             // }
             // this.attriAttachment = attriAttachment;
             // console.log(this.attriAttachment);
-          }
-          this.$toast.success('删除成功');
-        }
-      })
+//           }
+//           this.$toast.success('删除成功');
+//         }
+      // })
     },
+
+    //删除附件
+        deleteEnc(id,type){
+          if(this.fileListOne.length<1){
+            this.uploadShow = false;
+          }
+          this.appFetch({
+            url:'attachment',
+            method:'delete',
+            splice:'/'+id.id
+          }).then(data=>{
+            var newArr = this.enclosureList.filter(item => item.id !== id.id);
+            this.enclosureList = newArr;
+            console.log(this.enclosureList);
+            console.log('2567');
+
+          })
+        },
+
+
+
+
 
 
     //上传附件
@@ -292,7 +318,7 @@ export default {
       formdata.append('file', file);
       formdata.append('isGallery', 0);
       this.loading = true,
-      this.uploaderEnclosure(formdata,false,true);
+      this.uploaderEnclosure(formdata,false,false,true);
     },
     // 组件方法 获取 流
     // async onRead(file) {
@@ -465,9 +491,10 @@ export default {
     //   });
     // },
     //这里写接口，上传
-    uploaderEnclosure(file,isFoot,enclosure){
+    uploaderEnclosure(file,isFoot,img,enclosure){
       console.log(file,isFoot,enclosure)
        this.appFetch({
+
          url:'attachment',
          method:'post',
          data:file,
@@ -481,9 +508,22 @@ export default {
           // console.log('909090');
           // var attriAttachment = new Array();
 
+
+
+
+
+          if(img){
+            this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            // if(!isFoot){
+            //   this.fileList.splice(this.fileList.length-2,1);
+            // }
+            // console.log(this.fileListOne[this.fileListOne.length-1]);
+            this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+            console.log(this.fileListOne);
+          }
           if(isFoot){
             console.log('图片');
-            this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
            // console.log(this.fileList);
            // for(var h=0;h<this.fileList.length;h++){
            //   var data = {};
@@ -515,6 +555,7 @@ export default {
           // this.$toast.success('提交成功');
         }
        })
+       console.log(this.fileList, this.fileListOne,'this.fileList,this.fileListOne');
     },
 
     //输入框自适应高度

@@ -107,6 +107,7 @@ export default {
               console.log('1234');
               const enclosureListCon = res.readdata.firstPost.attachments;
               const fileListCon = res.readdata.firstPost.images;
+              console.log(fileListCon);
               this.cateId = res.readdata.category._data.id;
               // console.log(this.cateId);
               this.selectSort = res.readdata.category._data.name;
@@ -120,11 +121,14 @@ export default {
                 this.enclosureShow = true;
               }
               for (let i = 0; i < fileListCon.length; i++) {
-                this.fileList.push({url:fileListCon[i]._data.url,id:fileListCon[i]._data.id});
+                this.fileListOne.push({thumbUrl:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
               }
-              if(this.fileList.length>0){
+
+              if(this.fileListOne.length>0){
                 this.uploadShow = true;
               }
+              // console.log(this.fileListOne);
+              // console.log('999');
             }
           })
     },
@@ -193,23 +197,20 @@ export default {
       let formdata = new FormData()
       formdata.append('file', e.file);
       formdata.append('isGallery', 1);
-      this.uploaderEnclosure(formdata);
+      // console.log(this.fileList);
+      this.uploaderEnclosure(formdata,false,true);
+      this.loading = false;
 
     },
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      console.log(this.fileLength);
-      if(this.fileLength>12){
-        this.$message('已达上限');
-      } else {
-        let file = e.target.files[0];
-        let formdata = new FormData();
-        formdata.append('file', file);
-        formdata.append('isGallery', 1);
-        this.uploaderEnclosure(formdata,true);
-        this.uploadShow = true;
-      }
-
+      let file = e.target.files[0];
+      let formdata = new FormData();
+      formdata.append('file', file);
+      formdata.append('isGallery', 1);
+      this.uploaderEnclosure(formdata,true,false);
+      this.uploadShow = true;
+      this.loading = false;
     },
     //删除图片
     // deleteFile(uuid){
@@ -265,7 +266,8 @@ export default {
       let formdata = new FormData();
       formdata.append('file', file);
       formdata.append('isGallery', 0);
-      this.uploaderEnclosure(formdata,false,true);
+      // this.uploaderEnclosure(formdata,false,true);
+      this.uploaderEnclosure(formdata,false,false,true);
     },
     // 组件方法 获取 流
       async onRead(file) {
@@ -438,7 +440,8 @@ export default {
           });
         },
         //这里写接口，上传
-        uploaderEnclosure(file,isFoot,enclosure){
+        // uploaderEnclosure(file,isFoot,enclosure){
+        uploaderEnclosure(file,isFoot,img,enclosure){
           console.log(file,isFoot,enclosure)
            this.appFetch({
              url:'attachment',
@@ -451,32 +454,20 @@ export default {
                throw new Error(data.error)
              }else{
                 console.log(data);
-                // console.log('909090');
+                if(img){
+                  this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+                  this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+                  console.log(this.fileListOne);
+                }
                 if(isFoot){
                   console.log('图片');
-                 this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-                 this.fileLength = this.fileList.length;
-
-                 // console.log(this.fileList);
-                 // console.log('333');
+                  this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
                 }
-                console.log(this.fileList.length);
-                console.log('9999');
+
                  if(enclosure){
                    console.log('fujian');
                    this.enclosureShow = true;
                    this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
-                    // var attriAttachment = new Array();
-                    // console.log(this.enclosureList);
-                    // for(var k=0;k<this.enclosureList.length;k++){
-                    //   var data = {};
-                    //   data.type = 'attachments';
-                    //   data.id = this.enclosureList[k].id;
-                    //   console.log(data);
-                    //   console.log('1111');
-                    //   attriAttachment.push(data);
-                    // }
-                    // this.attriAttachment = attriAttachment;
                  }
                 this.$toast.success('提交成功');
              }

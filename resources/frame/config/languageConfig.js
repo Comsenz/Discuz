@@ -19,7 +19,7 @@ const config = {
   cannot_delete_category_with_threads:'无法删除存在主题的分类',
   permission_denied:'没有权限，请联系站点管理员',
   validation_error:'验证错误',
-  upload_time_not_up:'上传头像频繁',
+  upload_time_not_up:'上传头像频繁，一天仅允许上传一次头像',
   order_post_not_found:'订单主题不存在',
   order_type_not_found:'订单类型有误',
   order_create_failure:'订单创建失败',

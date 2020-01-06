@@ -306,8 +306,8 @@ export default {
 
 
     //点击标题跳转到主题详情页
-    jumpThemeDet:function(id,canReply){
-      if(canReply){
+    jumpThemeDet:function(id,canViewPosts){
+      if(canViewPosts){
         this.$router.push({ path:'details'+'/'+id});
       } else {
         this.$toast.fail('没有权限，请联系站点管理员');

@@ -26,7 +26,7 @@ class UserSerializer extends AbstractSerializer
             'username'          => $model->username,
             'mobile'            => $model->mobile,
             'mobileConfirmed'   => $model->mobile_confirmed,
-            'avatarUrl'         => $model->avatar,
+            'avatarUrl'         => $model->avatar.'?'.time(),
             'threadCount'       => $model->thread_count,
             'registerIp'        => $model->register_ip,
             'lastLoginIp'       => $model->last_login_ip,
