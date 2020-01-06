@@ -88,7 +88,8 @@ export default {
       payStatus: false,   //支付状态
       payStatusNum: 0,//支付状态次数
       canViewPosts:'',
-      canLike:''
+      canLike:'',
+      canReply:''
     }
   },
   created() {
@@ -267,8 +268,9 @@ export default {
           this.collectStatus = res.readdata._data.isFavorite;
           this.themeShow = true;
           this.themeCon = res.readdata;
-          this.canLike = res.readdata._data.canLike;
+          this.canLike = res.readdata.firstPost._data.canLike;
           this.canViewPosts = res.readdata._data.canViewPosts;
+          this.canReply = res.readdata._data.canReply;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -459,7 +461,8 @@ export default {
 
     },
     //点赞/删除
-    replyOpera(postId, type, isLike) {
+    replyOpera(postId, type, isLike,postsCanLike) {
+      console.log(postId, type, isLike,postsCanLike);
       // console.log(this.token);
       if(!this.token){
         this.$router.push({
@@ -472,6 +475,20 @@ export default {
         if (type == 1) {
           attri.isDeleted = true;
         } else if (type == 2) {
+          console.log(postsCanLike);
+          if(!postsCanLike){
+            this.$toast.fail('没有权限，请联系站点管理员');
+            return false;
+          } else {
+            if (isLike) {
+              //如果已点赞
+              attri.isLiked = false;
+            } else {
+              //如果未点赞
+              attri.isLiked = true;
+            }
+          }
+        } else if (type == 3) {
           if(!this.canLike){
             this.$toast.fail('没有权限，请联系站点管理员');
             return false;
@@ -529,7 +546,7 @@ export default {
           path:'/login-user',
           name:'login-user'
         })
-      } else if(!this.canViewPosts){
+      } else if(!this.canReply){
         this.$toast.fail('没有权限，请联系站点管理员');
       } else {
         this.$router.push({
