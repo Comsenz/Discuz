@@ -86,7 +86,9 @@
           </div>
 
           <div class="recycle-bin-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items.firstPost._data.contentHtml">
+              <!--{{items.firstPost._data.content}}-->
+            </a>
           </div>
 
           <div class="recycle-bin-table__footer" slot="footer">
