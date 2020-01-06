@@ -39,6 +39,11 @@
               <span>{{$attrs.ip}}</span>
             </div>
 
+            <div v-if="$attrs.releaseTime" class="cont-arrange__rt-main-header__release-time rt-box">
+              <span>发布时间：</span>
+              <span>{{$attrs.releaseTime}}</span>
+            </div>
+
             <div v-if="$attrs.finalPost" class="cont-arrange__rt-main-header__release-time rt-box">
               <span>更新时间：</span>
               <span>{{$attrs.finalPost}}</span>

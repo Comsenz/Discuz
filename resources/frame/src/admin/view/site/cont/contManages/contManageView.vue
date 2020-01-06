@@ -18,7 +18,7 @@
             :prply="items._data.postCount"
             :browse="items._data.viewCount"
             :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
-            :finalPost="formatDate(items._data.createdAt)"
+            :releaseTime="formatDate(items._data.createdAt)"
             :userId="items.user._data.id"
             :key="items._data.id"
           >
