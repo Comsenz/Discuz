@@ -56,10 +56,11 @@ class ListPostsController extends AbstractListController
      */
     public $sortFields = [
         'id',
-        'createdAt',
-        'updatedAt',
         'replyCount',
         'likeCount',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
     ];
 
     /**
