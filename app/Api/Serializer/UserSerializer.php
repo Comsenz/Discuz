@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 
 class UserSerializer extends AbstractSerializer
@@ -26,7 +27,7 @@ class UserSerializer extends AbstractSerializer
             'username'          => $model->username,
             'mobile'            => $model->mobile,
             'mobileConfirmed'   => $model->mobile_confirmed,
-            'avatarUrl'         => $model->avatar.'?'.time(),
+            'avatarUrl'         => $model->avatar.'?'.Carbon::now()->timestamp,
             'threadCount'       => $model->thread_count,
             'registerIp'        => $model->register_ip,
             'lastLoginIp'       => $model->last_login_ip,
