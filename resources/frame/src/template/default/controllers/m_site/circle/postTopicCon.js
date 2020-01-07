@@ -52,7 +52,9 @@ export default {
       themeCon:false,
       attriAttachment:false,
       canUploadImages:'',
-      canUploadAttachments:''
+      canUploadAttachments:'',
+      allowFileUpload: '',
+      allowEncUpload: ''
     }
   },
 
@@ -253,32 +255,37 @@ export default {
 
       })
     },
-    
+
+    //上传之前先判断是否有权限上传图片
+    beforeHandleFile(){
+      if(!this.canUploadImages){
+        this.$toast.fail('没有上传图片的权限');
+      }
+    },
+
+    beforeHandleEnclosure(){
+      if(!this.canUploadAttachments){
+        this.$toast.fail('没有上传附件的权限');
+      }
+    },
+
     //上传图片,点击加号时
     handleFile(e){
       this.compressFile(e.file, false);
     },
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      if(!this.canUploadImages){
-        this.$toast.fail('没有上传图片的权限');
-      } else {
         this.compressFile(e.target.files[0], true);
-      }
     },
 
     //上传附件
     handleEnclosure(e){
-      if(!this.canUploadAttachments){
-        this.$toast.fail('没有上传附件的权限');
-      } else {
-        let file = e.target.files[0];
-        let formdata = new FormData();
-        formdata.append('file', file);
-        formdata.append('isGallery', 0);
-        this.loading = true,
-        this.uploaderEnclosure(formdata,false,false,true);
-      }
+      let file = e.target.files[0];
+      let formdata = new FormData();
+      formdata.append('file', file);
+      formdata.append('isGallery', 0);
+      this.loading = true,
+      this.uploaderEnclosure(formdata,false,false,true);
 
     },
 
