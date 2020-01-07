@@ -91,7 +91,6 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    console.log(this.isiOS+'ios');
     if(this.isiOS) {
       this.encuploadShow = true;
       console.log(this.encuploadShow);
@@ -166,36 +165,36 @@ export default {
         }
       });
     },
-      //初始化请求编辑主题数据
-      detailsLoad(){
-        if(this.postsId && this.content){
-          let threads = 'threads/'+this.themeId;
-          this.appFetch({
-            url: threads,
-            method: 'get',
-            data: {
-              include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+    //初始化请求编辑主题数据
+    detailsLoad(){
+      if(this.postsId && this.content){
+        let threads = 'threads/'+this.themeId;
+        this.appFetch({
+          url: threads,
+          method: 'get',
+          data: {
+            include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+          }
+        }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            console.log(res);
+            console.log('1234');
+            // this.enclosureList = res.readdata.attachments;
+            // this.fileList = res.readdata.images;
+            console.log(this.cateId);
+            const initializeCateId = res.readdata.category._data.id;
+            this.selectSort = res.readdata.category._data.description;
+            console.log(this.selectSort);
+            if(this.cateId != initializeCateId){
+              this.cateId = initializeCateId;
             }
-          }).then((res) => {
-            if (res.errors){
-              this.$toast.fail(res.errors[0].code);
-              throw new Error(res.error)
-            } else {
-              console.log(res);
-              console.log('1234');
-              // this.enclosureList = res.readdata.attachments;
-              // this.fileList = res.readdata.images;
-              console.log(this.cateId);
-              const initializeCateId = res.readdata.category._data.id;
-              this.selectSort = res.readdata.category._data.description;
-              console.log(this.selectSort);
-              if(this.cateId != initializeCateId){
-                this.cateId = initializeCateId;
-              }
-            }
+          }
 
-          })
-        }
+        })
+      }
     },
     //发布主题
     publish(){
@@ -382,7 +381,8 @@ export default {
         }
       })
     },
-
+    
+    //压缩图片
     compressFile(file, uploadShow, wantedSize = 150000, event){
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)

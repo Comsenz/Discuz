@@ -76,6 +76,11 @@ a { color: $fontColor;}
 .padB0 { padding-bottom: 0 !important;}
 .overHide { overflow: hidden;}
 .hide { display: none;}
+.qq-emotion {
+    display: inline-block;
+    @include px2rem(height, 40);
+    vertical-align: text-bottom;
+  }
 .headeGap {
     @include px2rem(height, 82);
 }
