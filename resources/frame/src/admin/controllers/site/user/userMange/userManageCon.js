@@ -19,11 +19,11 @@ export default {
       disabled:true,//禁用表单上的游客
       optionsStatus: [
         {
-          value: 0,
+          value: 'no',
           label: '正常'
-        }, 
+        },
         {
-          value: 1,
+          value: 'yes',
           label: '禁用'
         }
       ],
@@ -85,7 +85,7 @@ export default {
           }
         })
         }
-        
+
       } catch(err){
         console.error(err, 'getUserList')
       }
