@@ -216,3 +216,10 @@ $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInvit
 
 $route->get('/emojiLoad', 'emoji.load', ApiController\Emoji\AutoloadEmojiController::class);
 $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Statistic
+|--------------------------------------------------------------------------
+*/
+$route->get('/statistic/money', 'statistic.money', ApiController\Statistic\MoneyStatisticController::class);
