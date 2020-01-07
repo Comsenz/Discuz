@@ -143,22 +143,55 @@ export default {
     handleFile(){
 
     },
+    getScaleImgSize(url, obj) {    //处理等比例上传图片，
+      return new Promise((resolve, reject) => {
+        getImageSize(url).then((res) => {
+          const scale = res.height / res.width;
+          if (scale > obj.height / obj.width) {
+            resolve({
+              width: obj.height / scale,
+              height: obj.height
+            })
+          } else {
+            resolve({
+              width: obj.width,
+              height: obj.width * scale
+            })
+          }
+
+        }).catch((err) => {
+          reject(err);
+        })
+      })
+    },
+    getImageSize(url){
+      const img = document.createElement('img');
+    
+      return new Promise((resolve, reject) => {
+        img.onload = ev => {
+          resolve({ width: img.naturalWidth, height: img.naturalHeight });
+        };
+        img.src = url;
+        img.onerror = reject;
+    
+      });
+    },
 
     //上传时，判断文件的类型及大小是否符合规则
-　　beforeAvatarUpload(file) {
-　　　　const isJPG =file.type == 'image/jpeg' || file.type == 'image/png' ||            file.type == 'image/gif'
-　　　　const isLt2M = file.size / 1024 / 1024 < 2
-　　　　if (!isJPG) {
-　　　　　　this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
-　　　　　　return isJPG
-　　　　}
-　　　　if (!isLt2M) {
-　　　　　　this.$message.warning('上传头像图片大小不能超过 2MB!')
-　　　　　　return isLt2M
-　　　　}
-　　　　this.multfileImg = file
-　　　　return isJPG && isLt2M
-　　　},
+    beforeAvatarUpload(file) {
+      const isJPG = file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/gif'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.warning('上传头像图片只能是 JPG/PNG/GIF 格式!')
+        return isJPG
+      }
+      if (!isLt2M) {
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
+        return isLt2M
+      }
+      this.multfileImg = file
+      return isJPG && isLt2M
+    },
     uploaderLogo(e) {
       console.log(e);
       let logoFormData = new FormData()
@@ -174,8 +207,8 @@ export default {
           this.$message.error(data.errors[0].code);
         }else {
           this.imageUrl = data.readdata._data.default.logo;
-          console.log(data.readdata._data.default.logo)
-          // this.$message('上传成功');
+          console.log(this.imageUrl)
+          this.$message({message: '上传成功', type: 'success'});
         }
       }).catch(error=>{
         console.log('上传失败');

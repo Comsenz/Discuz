@@ -50,8 +50,9 @@ export default {
           this.likeList=[]
         }
         console.log(res)
-        console.log(res._data.user_id,'99999')
+        // console.log(res.readdata)
         this.likeList = this.likeList.concat(res.readdata);
+        // console.log(this.likeList,'点赞我的')
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
       }

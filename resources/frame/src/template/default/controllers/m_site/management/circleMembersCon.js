@@ -14,7 +14,7 @@ export default {
 		themeParamd: {
 		// 'filter[q]': '',
 		// 'page[limit]': 2,
-		'page[number]': 1,
+		'page[number]': this.pageIndex,
 		},
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
@@ -22,7 +22,7 @@ export default {
 	  	loading: false,  //是否处于加载状态
       	finished: false, //是否已加载完所有数据
       	isLoading: false, //是否处于下拉刷新状态
-      	pageIndex: 1,//页码
+      	pageIndex: 0,//页码
       	offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       	immediateCheck:false ,//是否在初始化时立即执行滚动位置检查
       	pageLimit:20,
@@ -107,7 +107,10 @@ export default {
           this.$toast('刷新失败');
           this.isLoading = false;
         })
-      }
+	  },
+	  headerBack(){
+		this.$router.go(-1)
+	  }
 	},
 
 	mounted () {
