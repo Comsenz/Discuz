@@ -23,6 +23,11 @@ class SetSettingValidator extends AbstractValidator
     {
         $rules = [
             'password_length' => 'gte:0',
+            'cash_interval_time' => 'gte:0',
+            'cash_rate' => 'gte:0',
+            'cash_min_sum' => 'gte:0',
+            'cash_max_sum' => 'gte:0',
+            'cash_sum_limit' => 'gte:0',
         ];
 
         return $rules;
