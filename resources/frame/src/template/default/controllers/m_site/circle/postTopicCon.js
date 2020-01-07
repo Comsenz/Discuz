@@ -55,7 +55,12 @@ export default {
       canUploadAttachments:'',
       supportImgExt: '',
       supportFileExt:'',
-      supportFileArr:''
+      supportFileArr:'',
+      limitMaxLength:true,
+      limitMaxEncLength:true,
+      fileListOneLen:'',
+      enclosureListLen:''
+
     }
   },
 
@@ -100,7 +105,24 @@ export default {
 
   },
   watch: {
-
+    'fileListOne.length': function(newVal,oldVal){
+      this.fileListOneLen = newVal;
+      if(this.fileListOneLen >= 12){
+        this.limitMaxLength = false;
+      } else {
+        this.limitMaxLength = true;
+      }
+      console.log(this.fileListOneLen+'dddd');
+    },
+    'enclosureList.length': function(newVal,oldVal){
+      this.enclosureListLen = newVal;
+      if(this.enclosureListLen >= 3){
+        this.limitMaxEncLength = false;
+      } else {
+        this.limitMaxEncLength = true;
+      }
+      console.log(this.enclosureListLen+'sssss');
+    },
   },
   methods: {
     getInfo(){
@@ -276,12 +298,20 @@ export default {
     beforeHandleFile(){
       if(!this.canUploadImages){
         this.$toast.fail('没有上传图片的权限');
+      } else {
+        if(!this.limitMaxLength){
+          this.$toast.fail('已达上传图片上限');
+        }
       }
     },
 
     beforeHandleEnclosure(){
       if(!this.canUploadAttachments){
         this.$toast.fail('没有上传附件的权限');
+      } else {
+        if(!this.limitMaxEncLength){
+          this.$toast.fail('已达上传附件上限');
+        }
       }
     },
 
@@ -328,14 +358,16 @@ export default {
             if (this.fileListOne.length>0){
               this.uploadShow = true;
             }
+
           }
           if (enclosure) {
             this.enclosureShow = true
             this.enclosureList.push({
-             type:data.readdata._data.extension,
-             name:data.readdata._data.fileName,
-             id:data.readdata._data.id
-           });
+               type:data.readdata._data.extension,
+               name:data.readdata._data.fileName,
+               id:data.readdata._data.id
+            });
+
           }
           this.loading = false;
         }
