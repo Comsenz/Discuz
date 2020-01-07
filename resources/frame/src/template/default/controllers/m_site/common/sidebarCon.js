@@ -81,7 +81,7 @@ export default {
     // console.log(appConfig.devApiUrl);
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
-    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.onLoad()
     // console.log(this.isPayValue);
   },
   methods:{

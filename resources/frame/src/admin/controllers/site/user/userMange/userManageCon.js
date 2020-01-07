@@ -19,6 +19,10 @@ export default {
       disabled:true,//禁用表单上的游客
       optionsStatus: [
         {
+          value: '',
+          label: '全部'
+        },
+        {
           value: 'no',
           label: '正常'
         },
