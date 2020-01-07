@@ -563,7 +563,7 @@ export default {
    * 站点关闭，跳转到站点关闭页面
    * */
   this.getForum().then((res)=>{
-
+    siteMode = res.readdata._data.setsite.site_mode;
     if (res.errors){
       if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
@@ -576,6 +576,28 @@ export default {
     }
 
   });
+
+
+  /*
+  * 路由过渡设置
+  * */
+  if (siteMode === 'public'){
+    if (!notLoggedInToAccessPage.includes(to.name)){
+      if (to.name == 'supplier-all-back'){
+        next();
+        return
+      }
+      next({path:'/supplier-all-back'});
+    }
+  } else {
+    if (!notLoggedInToAccessPage.includes(to.name) && to.name !== 'circle'){
+      if (to.name == 'supplier-all-back'){
+        next();
+        return
+      }
+      next({path:'/supplier-all-back'});
+    }
+  }
 
 
   /*
@@ -746,6 +768,11 @@ export default {
   }
 
 
+  },
+
+  loadingState(){
+    console.log(baseTpl.progressStart());
+    return baseTpl.progressStart
   },
 
   /*
