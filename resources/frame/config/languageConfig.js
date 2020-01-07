@@ -29,6 +29,7 @@ const config = {
   operate_type_error:'操作类型不存在',
   wallet_status_error:'钱包状态有误',
   file_type_not_allow:'文件类型不允许',
+  file_size_not_allow:'文件大小不允许',
   sms_verify_error:'验证码错误',
   operate_forbidden:'非法操作',
   login_failed:'帐号或密码错误',

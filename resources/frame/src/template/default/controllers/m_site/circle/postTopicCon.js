@@ -53,8 +53,9 @@ export default {
       attriAttachment:false,
       canUploadImages:'',
       canUploadAttachments:'',
-      allowFileUpload: '',
-      allowEncUpload: ''
+      supportImgExt: '',
+      supportFileExt:'',
+      supportFileArr:''
     }
   },
 
@@ -95,6 +96,8 @@ export default {
     //初始化请求主题数据
     this.detailsLoad();
     this.getInfo();
+
+
   },
   watch: {
 
@@ -113,7 +116,20 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res);
+          console.log(res);
+          console.log('888887');
+           var ImgExt = res.readdata._data.supportImgExt.split(',');
+           var ImgStr='';
+          for(var k=0;k<ImgExt.length;k++){
+            ImgStr = '.'+ImgExt[k]+',';
+            this.supportImgExt += ImgStr;
+          }
+          var fileExt = res.readdata._data.supportFileExt.split(',');
+          var fileStr='';
+          for(var k=0;k<fileExt.length;k++){
+            fileStr = '.'+fileExt[k]+',';
+            this.supportFileExt += fileStr;
+          }
           this.canUploadImages = res.readdata._data.canUploadImages;
           this.canUploadAttachments = res.readdata._data.canUploadAttachments;
         }
@@ -308,6 +324,10 @@ export default {
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            // 当上传一个文件成功 时，显示组件，否则不处理
+            if (this.fileListOne.length>0){
+              this.uploadShow = true;
+            }
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -335,10 +355,7 @@ export default {
           that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
           that.loading = false;
 
-          // 传 true 时，显示组件，否则不处理
-          if (uploadShow) {
-            that.uploadShow = uploadShow;
-          }
+
       }).catch(function (err) {
           /* 处理失败后执行 */
       }).always(function () {
