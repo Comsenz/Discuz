@@ -59,7 +59,9 @@ export default {
       limitMaxLength:true,
       limitMaxEncLength:true,
       fileListOneLen:'',
-      enclosureListLen:''
+      enclosureListLen:'',
+      isiOS: false,
+      encuploadShow: false
 
     }
   },
@@ -86,7 +88,14 @@ export default {
   created(){
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-
+    var u = navigator.userAgent;
+    this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    console.log(this.isiOS+'ios');
+    if(this.isiOS) {
+      this.encuploadShow = true;
+      console.log(this.encuploadShow);
+    }
     if(this.$route.params.themeId){
       var themeId = this.$route.params.themeId;
       var postsId = this.$route.params.postsId;
