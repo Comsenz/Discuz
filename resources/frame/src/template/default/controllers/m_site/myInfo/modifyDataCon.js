@@ -127,9 +127,16 @@ export default {
             if (res.errors){
               this.$toast.fail(res.errors[0].code);
             }else{
+              var userId = browserDb.getLItem('tokenId');
+                localStorage.clear();
+                this.$router.push({ path:url});
+                if (url === '/circle'){
+                  this.$router.go(0);
+                }
               console.log('我更新啦啦啦啦')
-             this.modifyData()
-            }
+            //  this.modifyData()
+            
+          }
           })
         }    
       },

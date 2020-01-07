@@ -21,7 +21,7 @@
      </div>
      <div class="itemGap"></div>
      <div class="sideConList">
-       <div class="sideCon" v-for="(item, j) in sidebarList2" :key="'list2'+j">
+       <div class="sideCon" v-for="(item, j) in sidebarList2" :key="'list2'+j" >
          <div class="sideItem" @click="sidebarUrl(item.path,item.enentType)">
             <span class="itemTit">{{item.text}}</span>
             <span class="icon iconfont icon-right-arrow jumpJtr"></span>

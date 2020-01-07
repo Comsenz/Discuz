@@ -4,6 +4,7 @@
 import {Bus} from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appConfig from "../../../../../../../frame/config/appConfig";
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   //接收站点是否收费的值
   props: {
@@ -17,6 +18,7 @@ export default {
         mobile:'',
         // userId:'',
         userInfo:{},
+        isWeixin:false,
 		    sidebarList1: [
 	        {
             text:'我的资料',
@@ -79,6 +81,7 @@ export default {
     // console.log(appConfig.devApiUrl);
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
     // console.log(this.isPayValue);
   },
   methods:{
@@ -99,6 +102,12 @@ export default {
         this.mobile = res.readdata._data.mobile;
       })
 
+  },
+  onLoad(){
+    let isWeixin =this.appCommonH.isWeixin().isWeixin;
+    if(isWeixin){
+      this.sidebarList2.splice(2,1);
+    }
   },
   sidebarUrl(url,enentType){
 
@@ -151,7 +160,7 @@ export default {
     } else {
       this.$router.push({ path:url});
     }
-  }
+  },
 
   },
 

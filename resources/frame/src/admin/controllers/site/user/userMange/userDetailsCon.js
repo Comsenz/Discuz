@@ -126,10 +126,12 @@ export default {
             splice: `${this.query.id}`+'/avatar',
             data:formData
           }).then(res=>{
-            if (data.errors){
-              this.$message.error(data.errors[0].code);
+            if (res.errors){
+              this.$message.error(res.errors[0].code);
             }else{
+              console.log(res,'是我我我我哦我我')
               this.imageUrl = res.readdata._data.avatarUrl;
+              
             }
            
           })
