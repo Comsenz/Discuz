@@ -172,6 +172,7 @@ export default {
           'filter[createdAtEnd]':this.releaseTime[1],
           'filter[deletedAtBegin]':this.deleteTime[0],
           'filter[deletedAtEnd]':this.deleteTime[1],
+          'sort':'-deletedAt'
         }
       }).then(res=>{
         console.log(res);

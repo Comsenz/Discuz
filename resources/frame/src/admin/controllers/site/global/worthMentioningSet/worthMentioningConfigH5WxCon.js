@@ -65,9 +65,9 @@ export default {
         if (data.errors){
           this.$toast.fail(data.errors[0].code);
         }else {
-          this.$router.push({
-            path: '/admin/worth-mentioning-set'
-          });
+          // this.$router.push({
+          //   path: '/admin/worth-mentioning-set'
+          // });
           this.$message({
             message: '提交成功',
             type: 'success'
