@@ -50,7 +50,11 @@ trait UserTrait
 
         // 状态
         if ($status = Arr::get($filter, 'status')) {
-            $query->where('status', $status);
+            if ($status == 'yes') {
+                $query->where('status', true);
+            } elseif ($status == 'no') {
+                $query->where('status', false);
+            }
         }
 
         // 用户组
