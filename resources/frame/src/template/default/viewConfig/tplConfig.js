@@ -581,23 +581,23 @@ export default {
   /*
   * 路由过渡设置
   * */
-  if (siteMode === 'public'){
-    if (!notLoggedInToAccessPage.includes(to.name)){
-      if (to.name == 'supplier-all-back'){
-        next();
-        return
-      }
-      next({path:'/supplier-all-back'});
-    }
-  } else {
-    if (!notLoggedInToAccessPage.includes(to.name) && to.name !== 'circle'){
-      if (to.name == 'supplier-all-back'){
-        next();
-        return
-      }
-      next({path:'/supplier-all-back'});
-    }
-  }
+  // if (siteMode === 'public'){
+  //   if (!notLoggedInToAccessPage.includes(to.name)){
+  //     if (to.name == 'supplier-all-back'){
+  //       next();
+  //       return
+  //     }
+  //     next({path:'/supplier-all-back',query:{url:to.name}});
+  //   }
+  // } else {
+  //   if (!notLoggedInToAccessPage.includes(to.name) && to.name !== 'circle'){
+  //     if (to.name == 'supplier-all-back'){
+  //       next();
+  //       return
+  //     }
+  //     next({path:'/supplier-all-back',query:{url:to.name}});
+  //   }
+  // }
 
 
   /*
@@ -768,11 +768,6 @@ export default {
   }
 
 
-  },
-
-  loadingState(){
-    console.log(baseTpl.progressStart());
-    return baseTpl.progressStart
   },
 
   /*
