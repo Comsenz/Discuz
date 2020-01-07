@@ -150,7 +150,7 @@ export default {
         url:'posts',
         method:'get',
         data:{
-          include: ['user','replyUser','thread','thread.category','thread.firstPost','deletedUser','lastDeletedLog'],
+          include: ['user','replyUser','thread','thread.category','thread.firstPost','deletedUser','lastDeletedLog','images'],
           'filter[isDeleted]':'yes',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,

@@ -27,8 +27,19 @@
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
-            <div style="line-height: 20px;" slot="main">
-              <a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+            <div class="cont-manage-theme__table-main" slot="main">
+              <a class="cont-manage-theme__table-main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+              <div class="cont-manage-theme__table-main__cont-imgs">
+                <p class="cont-manage-theme__table-main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="index">
+                  <img  :src="item._data.url" alt="">
+                </p>
+              </div>
+              <div class="cont-manage-theme__table-main__cont-annex" v-show="items.firstPost.attachments.length > 0">
+                <span>附件：</span>
+                <p v-for="(item,index) in items.firstPost.attachments" :key="index">
+                  <a :href="item._data.url" target="_blank">{{item._data.fileName}}</a>
+                </p>
+              </div>
             </div>
 
           </ContArrange>
