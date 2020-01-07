@@ -15,6 +15,7 @@
         <ContHeader
           :imgUrl="item._data.user_avatar"
           :stateTitle="stateTitle"
+          :userId="item._data.user_id"
           :time="$moment(item._data.created_at).fromNow()"
           :userName="item._data.user_name">
           <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>

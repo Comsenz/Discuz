@@ -27,7 +27,7 @@ class UserSerializer extends AbstractSerializer
             'username'          => $model->username,
             'mobile'            => $model->mobile,
             'mobileConfirmed'   => $model->mobile_confirmed,
-            'avatarUrl'         => $model->avatar.'?'.Carbon::now()->timestamp,
+            'avatarUrl'         => $model->avatar ? $model->avatar . '?' . Carbon::now()->timestamp : '',
             'threadCount'       => $model->thread_count,
             'registerIp'        => $model->register_ip,
             'lastLoginIp'       => $model->last_login_ip,
@@ -38,7 +38,7 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
         ];
 
-        if($this->actor->isAdmin()) {
+        if ($this->actor->isAdmin()) {
             $attributes['originalMobile'] = $model->getOriginal('mobile');
         }
 

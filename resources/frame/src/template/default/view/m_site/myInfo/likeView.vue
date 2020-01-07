@@ -13,6 +13,7 @@
       <div class="like-cont cell-crossing" v-for='(item,index) in likeList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"
+          :userId="item._data.user_id"
           :stateTitle="stateTitle"
           :time="$moment(item._data.created_at).fromNow()"
           :userName="item._data.user_name">

@@ -13,6 +13,7 @@
         <ContHeader
           :imgUrl="item._data.user_avatar"
           :stateTitle="stateTitle"
+          :userId="item._data.user_id"
           :amount="item._data.amount"
           :time="$moment(item._data.created_at).fromNow()"
           :userName="item._data.user_name">
