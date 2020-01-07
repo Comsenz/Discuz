@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Settings;
 
 use App\Api\Serializer\SettingSerializer;
+use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -106,7 +107,7 @@ class UploadLogoController extends AbstractResourceController
 
         return [
             'key' => 'logo',
-            'value' => $this->url->to('/storage/'.$fileName),
+            'value' => $this->url->to('/storage/'.$fileName) . '?' . Carbon::now()->timestamp,
             'tag' => 'default'
         ];
     }
