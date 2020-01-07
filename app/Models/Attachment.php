@@ -106,7 +106,7 @@ class Attachment extends Model
     {
         $self = new static;
 
-        return $self->whereIn('id', $ids)->pluck('is_approved')->contains(1);
+        return $self->whereIn('id', $ids)->pluck('is_approved')->contains(0);
     }
 
     /**

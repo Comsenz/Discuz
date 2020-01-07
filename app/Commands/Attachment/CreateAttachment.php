@@ -57,7 +57,7 @@ class CreateAttachment
     public $isGallery;
 
     /**
-     * 是否合法 0合法 1不合法
+     * 是否合法 0 不合法 1 合法
      *
      * @var int
      */
@@ -127,21 +127,23 @@ class CreateAttachment
 
         // 生成缩略图
         if ($this->isGallery) {
-            $imgPath = storage_path('app/public/attachment/' . $uploadTool->getUploadName());
+            $imgPath = $uploadFile->getPathname();
             $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
 
             $img = (new ImageManager())->make($imgPath);
 
-            $img->resize(300, null, function ($constraint) {
+            $img->resize(600, null, function ($constraint) {
                 $constraint->aspectRatio();     // 保持纵横比
                 $constraint->upsize();          // 避免文件变大
             })->save($thumbPath);
         }
 
         // 检测敏感图
-        $censor->checkImage($uploadFile->getPathname());
-        if ($censor->isMod) {
-            $this->isApproved = 1;
+        if (Str::before($uploadFile->getClientMimeType(), '/') == 'image') {
+            $censor->checkImage($uploadFile->getPathname());
+            if ($censor->isMod) {
+                $this->isApproved = 0;
+            }
         }
 
         $uploadPath = $uploadTool->getUploadPath();
