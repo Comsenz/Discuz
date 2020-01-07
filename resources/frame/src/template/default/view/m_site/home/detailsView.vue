@@ -138,7 +138,7 @@
                       fit="none"
                       lazy-load
                       v-for="(image,index)  in item.images"
-                      :src="image._data.thumbUrl"
+                      :src="image._data.url"
                       :key="index"
                     />
                 </div>
