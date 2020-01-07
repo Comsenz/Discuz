@@ -98,7 +98,7 @@ class UploadAvatar
 
             $this->avatarUploader->upload($user, $image);
 
-            $user->avatar_at = Carbon::now()->toDateString();
+            $user->avatar_at = Carbon::now()->toDateTimeString();
 
             $user->save();
         } finally {
