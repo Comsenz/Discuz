@@ -17,7 +17,7 @@ class CreatePayNotify extends Migration
             $table->unsignedBigInteger('payment_sn')->default(0)->comment('支付编号');
             $table->unsignedBigInteger('user_id')->comment('付款人ID');
             $table->string('trade_no', 64)->comment('商户平台交易号');
-            $table->unsignedTinyInteger('status')->default(0)->comment('0未接受到通知1，收到通知');
+            $table->unsignedTinyInteger('status')->default(0)->comment('0未接受到通知，1收到通知');
             $table->dateTime('created_at')->comment('创建时间');
             $table->dateTime('updated_at')->comment('修改时间');
         });
