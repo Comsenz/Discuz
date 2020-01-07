@@ -138,7 +138,7 @@
                       fit="none"
                       lazy-load
                       v-for="(image,index)  in item.images"
-                      :src="image._data.thumbUrl"
+                      :src="image._data.url"
                       :key="index"
                     />
                 </div>
@@ -146,8 +146,8 @@
             </div>
             <div class="commentOpera padT22">
               <a @click="replyOpera(item._data.id,'1')">删除</a>
-              <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
-              <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
+              <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
+              <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
 
@@ -162,7 +162,7 @@
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
-          <div class="footChi" @click="replyOpera(themeCon.firstPost._data.id,'2',themeCon.firstPost._data.isLiked)">
+          <div class="footChi" @click="replyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
             <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
             赞

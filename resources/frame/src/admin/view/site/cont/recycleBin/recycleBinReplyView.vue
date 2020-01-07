@@ -78,6 +78,7 @@
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
+          :deleTime="formatDate(items._data.deletedAt)"
           :ip="items._data.ip"
           :userId="items.user._data.id"
           :key="items._data.id"

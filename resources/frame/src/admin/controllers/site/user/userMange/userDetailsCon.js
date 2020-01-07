@@ -20,11 +20,11 @@ export default {
       sex:'',
       optionsStatus: [
         {
-          value: 0,
+          value: false,
           label: '正常'
-        }, 
+        },
         {
-          value: 1,
+          value: true,
           label: '禁用'
         }
       ],
@@ -36,7 +36,7 @@ export default {
   created(){
     this.query = this.$route.query;
     this.getUserDetail();
-    this.getUserList() 
+    this.getUserList()
   },
 
   methods:{
@@ -67,7 +67,7 @@ export default {
           }
           console.log()
         }
-       
+
       } catch(err){
         console.error(err, 'getUserDetail')
       }
@@ -133,15 +133,15 @@ export default {
               this.imageUrl = res.readdata._data.avatarUrl;
               
             }
-           
+
           })
     },
-    
+
     submission(){
       var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
       var mobile = this.userInfo.originalMobile;
       if(mobile ==''){
-        
+
       }else if(!reg.test(mobile)){
         return  this.$toast("您输入的手机号码不合法，请重新输入");
       }
@@ -169,7 +169,7 @@ export default {
           console.log(res)
           this.$message({ message: '提交成功', type: 'success' });
         }
-        
+
       })
     },
 

@@ -48,6 +48,7 @@ export default {
         typeWo: '全部主题'
       },
       canCreateThread:'',
+      canViewThreads:'',
       nullTip:false,
       nullWord:''
 
@@ -84,9 +85,11 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          console.log('44443');
           console.log(res);
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.canCreateThread;
+          this.canViewThreads = res.readdata._data.canViewThreads;
           console.log(res.readdata._data.siteMode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
           this.sitePrice = res.readdata._data.sitePrice
@@ -227,10 +230,16 @@ export default {
           }
           
         } else {
-          // this.themeListCon = res.readdata;
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.readdata.length < this.pageLimit;
+          if(!this.canViewThreads){
+            this.nullTip = true;
+            this.nullWord = res.errors[0].code;
+          } else {
+            // this.themeListCon = res.readdata;
+            this.themeListCon =this.themeListCon.concat(res.readdata);
+            this.loading = false;
+            this.finished = res.readdata.length < this.pageLimit;
+          }
+
         }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){

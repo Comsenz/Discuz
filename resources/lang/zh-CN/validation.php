@@ -182,5 +182,10 @@ return [
 
         // settings
         'password_length'       => '密码长度',
+        'cash_interval_time'    => '提现间隔时间',
+        'cash_rate'             => '提现手续费率',
+        'cash_min_sum'          => '单次提现最小金额',
+        'cash_max_sum'          => '单次提现最大金额',
+        'cash_sum_limit'        => '每日提现总金额上限',
     ],
 ];

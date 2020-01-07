@@ -76,12 +76,12 @@
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.view.1'">查看图片</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewUserList'">站点会员列表</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.delete'">删除附件</p>
-                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'cash.create'">cash.create</p>
-                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'order.create'">order.create</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'cash.create'">申请提现</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'order.create'">创建订单</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.deletePosts'">删除回复</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.favorite'">帖子收藏</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.likePosts'">帖子点赞</p>
-                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.view'">user.view</p>
+                <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.view'">查看某个用户信息权限</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewSiteInfo'">站点信息</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.edit'">编辑用户状态（例如：禁用）</p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'group.edit'">编辑用户组</p>

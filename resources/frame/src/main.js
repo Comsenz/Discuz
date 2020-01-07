@@ -38,6 +38,7 @@ import Category from './common/models/Category';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
+import lrz from 'lrz';     //图片压缩
 
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
