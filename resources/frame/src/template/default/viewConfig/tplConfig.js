@@ -316,14 +316,14 @@ export default {
           title:"修改手机号"
         },
       },
-        'bind-new-phone':{
-          comLoad:function (resolve) {
-            require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
-        },
-        metaInfo:{
-          title:"绑定新手机号"
-        },
+      'bind-new-phone':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
       },
+      metaInfo:{
+        title:"绑定新手机号"
+      },
+    },
       'change-pwd':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/changePasswordView'],resolve)
@@ -689,9 +689,6 @@ export default {
             next({path:'pay-circle'});
           }else {
             if (to.name === '/'){
-              next();
-              return
-            }else {
               next();
               return
             }
