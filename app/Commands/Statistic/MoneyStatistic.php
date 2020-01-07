@@ -25,7 +25,6 @@ class MoneyStatistic
 
     protected $userWalletCash;
 
-
     public function __construct(User $actor)
     {
         $this->actor    = $actor;
@@ -49,14 +48,23 @@ class MoneyStatistic
 
         $moneyStatistic = [];
 
-        $moneyStatistic['totalIncome'] = $this->order::where('status', $this->order::ORDER_STATUS_PAID)
-            ->sum('amount');
+        data_set(
+            $moneyStatistic,
+            'totalIncome',
+            $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('amount')
+        );
 
-        $moneyStatistic['freezingAmount'] = $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_REVIEW)
-            ->sum('cash_apply_amount');
+        data_set(
+            $moneyStatistic,
+            'freezingAmount',
+            $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_REVIEW)->sum('cash_apply_amount')
+        );
 
-        $moneyStatistic['totalExpenditures'] = $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)
-            ->sum('cash_apply_amount');
+        data_set(
+            $moneyStatistic,
+            'totalExpenditures',
+            $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_apply_amount')
+        );
 
         return $moneyStatistic;
     }

@@ -16,6 +16,7 @@ use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\SetDefaultPermission;
+use App\Listeners\User\BanLogin;
 use App\Listeners\User\ChangeLastActived;
 use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
@@ -49,6 +50,7 @@ class EventServiceProvider extends BaseEventServiceProvider
             CheckLogin::class
         ],
         Logind::class => [
+            BanLogin::class,
             ChckoutSite::class,
             ChangeLastActived::class
         ],
