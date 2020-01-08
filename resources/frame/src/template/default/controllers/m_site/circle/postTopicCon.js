@@ -61,7 +61,8 @@ export default {
       fileListOneLen:'',
       enclosureListLen:'',
       isiOS: false,
-      encuploadShow: false
+      encuploadShow: false,
+      testingRes:false
 
     }
   },
@@ -82,6 +83,7 @@ export default {
       })
       //设置在pc的宽度
       if(this.isWeixin != true && this.isPhone != true){
+        console.log(this.isWeixin);
         this.limitWidth();
       }
   },
@@ -91,6 +93,7 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    console.log(this.isiOS);
     if(this.isiOS) {
       this.encuploadShow = true;
       console.log(this.encuploadShow);
@@ -329,19 +332,39 @@ export default {
     },
     //上传图片，点击底部Icon时
     handleFileUp(e){
+      this.testingType(e.target.files[0],this.supportImgExt);
+      if(this.testingRes){
         this.compressFile(e.target.files[0], true);
+      }
     },
 
     //上传附件
     handleEnclosure(e){
-      let file = e.target.files[0];
-      let formdata = new FormData();
-      formdata.append('file', file);
-      formdata.append('isGallery', 0);
-      this.loading = true,
-      this.uploaderEnclosure(formdata,false,false,true);
+      this.testingType(e.target.files[0],this.supportFileExt);
+      if(this.testingRes){
+        let file = e.target.files[0];
+        let formdata = new FormData();
+        formdata.append('file', file);
+        formdata.append('isGallery', 0);
+        this.uploaderEnclosure(formdata,false,false,true);
+      }
 
     },
+
+    testingType(eFile,allUpext){
+      let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
+      let AllUpExt = allUpext;
+      if(AllUpExt.indexOf(extName + ",") == "-1"){
+        this.$toast.fail("文件格式不正确!");
+        return false;
+      } else {
+        this.testingRes = true;
+      }
+
+
+    },
+
+
 
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure){
@@ -381,7 +404,7 @@ export default {
         }
       })
     },
-    
+
     //压缩图片
     compressFile(file, uploadShow, wantedSize = 150000, event){
       const curSize = file.size || file.length * 0.8

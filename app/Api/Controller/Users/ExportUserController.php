@@ -115,9 +115,15 @@ class ExportUserController implements RequestHandlerInterface
             $query->select(['id', 'user_id', 'name']);
         }])->get($userField);
 
-        $userArr = $users->map(function (User $user) use ($columnMap) {
+        return $users->map(function (User $user) use ($columnMap) {
             $user->sex = ($user->sex == 1) ? '男' : '女';
-            $user->status = ($user->status == 0) ? '正常' : '禁用';
+            if ($user->status == 0) {
+                $user->status = '正常';
+            } elseif ($user->status == 1) {
+                $user->status = '禁用';
+            } else {
+                $user->status = '审核';
+            }
             if (!is_null($user->groups)) {
                 $user->groups = $user->groups->pluck('name')->implode(',');
             }
@@ -130,7 +136,5 @@ class ExportUserController implements RequestHandlerInterface
             $user->unsetRelation('groups');
             return $user->only($columnMap);
         })->toArray();
-
-        return $userArr;
     }
 }
