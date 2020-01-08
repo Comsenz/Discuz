@@ -221,7 +221,17 @@ export default {
     webDB.setLItem('code',code);
     webDB.setLItem('state',state);
 
-    if (!code && !state){
+    if (isWeixin){
+      if (!code && !state){
+        this.getWatchHref()
+      } else {
+        this.getWatchHref(code,state,sessionId);
+      }
+    }else {
+      this.getWatchHrefPC(code,state,sessionId);
+    }
+
+    /*if (!code && !state){
       this.getWatchHref()
     } else {
 
@@ -231,7 +241,7 @@ export default {
         this.getWatchHrefPC(code,state,sessionId);
       }
 
-    }
+    }*/
 
     this.getForum();
   }
