@@ -181,13 +181,14 @@ export default {
             console.log('微信跳转');
             this.openid = openid;
             webDB.setLItem('openid',openid);
-            this.$router.push({path: '/wx-login-bd'});
+            // this.$router.push({path: '/wx-login-bd'});
           }
         } else if (res.data.attributes.location) {
           console.log(res.data.attributes.loscation);
           console.log('获取地址');
           this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location
+          window.location.href = res.data.attributes.location;
+          window.onunload = function() { debugger; }
         } else if (res.data.attributes.access_token){
 
           this.$toast.success('登录成功');
@@ -199,6 +200,7 @@ export default {
 
         } else {
           console.log('任何情况都不符合');
+          console.log(res);
           console.log(res.data.attributes.location);
         }
       }).catch(err=>{
