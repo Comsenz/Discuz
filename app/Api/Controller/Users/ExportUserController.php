@@ -74,6 +74,7 @@ class ExportUserController implements RequestHandlerInterface
             'id',
             'username',
             'mobile',
+            'login_at',
             'last_login_ip',
             'register_ip',
             'users.status',
