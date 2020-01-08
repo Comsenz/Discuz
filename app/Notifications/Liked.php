@@ -44,6 +44,7 @@ class Liked extends Notification
 
     public function toDatabase()
     {
+        dd($this->actor);
         return [
             'thread_id' => $this->post->thread->id,
             'thread_title' => $this->post->thread->title,
@@ -51,7 +52,7 @@ class Liked extends Notification
             'post_content' => $this->post->formatContent(),
             'user_id' => $this->actor->id,
             'user_name' => $this->actor->username,
-            'user_avatar' => $this->post->user->avatar,
+            'user_avatar' => $this->actor->avatar,
         ];
     }
 }
