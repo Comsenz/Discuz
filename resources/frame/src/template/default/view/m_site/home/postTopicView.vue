@@ -39,7 +39,6 @@
           </div>
         </div>
       </div>
-      <div>调试安卓{{isAndroid}},调试微信{{isWeixin}}</div>
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
@@ -50,8 +49,7 @@
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
             </span>
             <span class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-if="canUploadAttachments && limitMaxEncLength">
-              <input type="file" v-if="isAndroid && isWeixin" @change="handleEnclosure" class="hiddenInput"/>
-              <input type="file" v-else="" :accept="supportFileExt" @change="handleEnclosure" class="hiddenInput"/>
+              <input type="file" @change="handleEnclosure" class="hiddenInput"/>
             </span>
             <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon":class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
             </span>
