@@ -60,11 +60,16 @@ class InviteRepository extends AbstractRepository
     /**
      * get admin invite codes
      * @param User $actor
+     * @param $data
      * @return mixed
      */
-    public function getAdminCodeList(User $actor)
+    public function getAdminCodeList(User $actor, $data)
     {
-        $query = self::query()->where([
+        $query = self::query();
+
+        $query->skip($data['offset'])->take($data['limit']);
+
+        $query = $query->where([
             ['user_id', '=', $actor->id],
             ['type', '=', 2]
         ])->orderBy('id', 'desc')->get();
