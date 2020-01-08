@@ -54,6 +54,7 @@ export default {
       canUploadImages:'',
       canUploadAttachments:'',
       supportImgExt: '',
+      supportImgExtRes:'',
       supportFileExt:'',
       supportFileArr:'',
       limitMaxLength:true,
@@ -153,9 +154,12 @@ export default {
           console.log('888887');
            var ImgExt = res.readdata._data.supportImgExt.split(',');
            var ImgStr='';
+           var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
             ImgStr = '.'+ImgExt[k]+',';
+            imgStrRes = 'image/'+ImgExt[k]+',';
             this.supportImgExt += ImgStr;
+            this.supportImgExtRes += imgStrRes;
           }
           var fileExt = res.readdata._data.supportFileExt.split(',');
           var fileStr='';
@@ -217,8 +221,13 @@ export default {
           }
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
+            if (res.errors[0].detail){
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+  //           this.$toast.fail(res.errors[0].code+ '\n' + res.errors[0].detail);
+  //           throw new Error(res.error)
           } else {
             this.$router.push({ path:'details'+'/'+this.themeId});
           }
@@ -328,43 +337,64 @@ export default {
 
     //上传图片,点击加号时
     handleFile(e){
-      this.compressFile(e.file, false);
+
+      if(this.isAndroid && this.isWeixin){
+        alert('安卓微信内');
+        this.testingType(e.file,this.supportImgExt);
+        console.log(this.testingRes+'445');
+        if(this.testingRes){
+          this.compressFile(e.file, false);
+        }
+      } else {
+        alert('其他设备');
+        this.compressFile(e.file, false);
+      }
     },
+
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      this.testingType(e.target.files[0],this.supportImgExt);
-      if(this.testingRes){
+      if(this.isAndroid && this.isWeixin){
+        alert('安卓微信内');
+        this.testingType(e.target.files[0],this.supportImgExt);
+        if(this.testingRes){
+          this.compressFile(e.target.files[0], true);
+        }
+      } else {
+        alert('其他设备');
         this.compressFile(e.target.files[0], true);
       }
     },
 
     //上传附件
     handleEnclosure(e){
-      this.testingType(e.target.files[0],this.supportFileExt);
-      if(this.testingRes){
-        let file = e.target.files[0];
-        let formdata = new FormData();
-        formdata.append('file', file);
-        formdata.append('isGallery', 0);
+      if(this.isAndroid && this.isWeixin){
+        alert('安卓微信内');
+        this.testingType(e.target.files[0],this.supportFileExt);
+        if(this.testingRes){
+          let file = e.target.files[0];
+          let formdata = new FormData();
+          formdata.append('file', file);
+          formdata.append('isGallery', 0);
+          this.uploaderEnclosure(formdata,false,false,true);
+        }
+      } else {
+        alert('其他设备');
         this.uploaderEnclosure(formdata,false,false,true);
       }
-
     },
 
+    //验证上传格式是否符合设置
     testingType(eFile,allUpext){
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
       if(AllUpExt.indexOf(extName + ",") == "-1"){
         this.$toast.fail("文件格式不正确!");
-        return false;
+        this.testingRes = false;
+        // return false;
       } else {
         this.testingRes = true;
       }
-
-
     },
-
-
 
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure){
@@ -398,7 +428,6 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
           }
           this.loading = false;
         }

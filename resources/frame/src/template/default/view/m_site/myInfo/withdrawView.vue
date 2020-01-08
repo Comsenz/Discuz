@@ -42,7 +42,7 @@
             />
 
             <van-field
-              v-model="handlingFee"
+              v-model="lingFee"
               label="手续费"
               placeholder="手续费"
               readonly

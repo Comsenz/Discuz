@@ -34,20 +34,70 @@ export default {
     this.withdrawUser()
   },
   computed:{
+    lingFee(){
+      return `${this.handlingFee1*this.withdrawalAmount}元 （${this.handlingFee}）`;
+    },
     actualCashWithdrawal(){  //实际提现金额
-      return this.withdrawalAmount === '' ? '' : this.withdrawalAmount - this.handlingFee
+      return this.withdrawalAmount === '' ? '' : this.withdrawalAmount - this.handlingFee1*this.withdrawalAmount
     }
-   
+    
   },
 
   methods:{
+    withdrawInput(val){
+      this.handleReg();
+    },
     onInput(value) {
-      this.withdrawalAmount = value;
-      // this.actualCashWithdrawal = this.canWithdraw *this.handlingFee //实际提现金额
-      console.log(value);
+      this.withdrawalAmount = this.withdrawalAmount + '' + value;
+      this.handleReg();
+    },
+    handleReg(){
+      // if(this.withdrawalAmount === '.'){                // 如果只输入一个点  变成 0.
+      //   this.withdrawalAmount = '0.';
+      //   return;
+      // }
+      const numF = parseFloat(this.withdrawalAmount);
+      // if(isNaN(numF)){                                  // 如果输入的小数点后面有不是数字的部分
+      //   this.withdrawalAmount = '';
+      //   return;
+      // }
+      const num = Number(this.withdrawalAmount);
+      // if(num > Number.MAX_SAFE_INTEGER){                // 输入的值超出了js的最大安全数
+      //   this.withdrawalAmount = '';
+      //   return;
+      // }
+      const whthDiawArr = this.withdrawalAmount.split('.');
+
+      // if(whthDiawArr.length > 2){                        // 输入了超过两个小数点 只保留前面的一个小数点
+      //   this.withdrawalAmount = whthDiawArr[0].replace(/[^0-9\.]/g, '') + '.' + whthDiawArr[1].replace(/[^0-9\.]/g, '');
+      //   return;
+      // }
+      // this.withdrawalAmount = this.withdrawalAmount.replace(/[^0-9\.]/g, ''); // 去掉不是数字的部分
+      // if(this.withdrawalAmount[0] === '.'){              // 如果字符串第一个位置是小数点 就加0(和第一个判断不一样)
+      //   this.withdrawalAmount = '0' + this.withdrawalAmount;
+      // }
+
+      switch(true){
+        case this.withdrawalAmount === '.' : 
+          this.withdrawalAmount = '0.';
+          break;
+        case isNaN(numF) :
+        case num > Number.MAX_SAFE_INTEGER : 
+          this.withdrawalAmount = '';
+          break;
+        case whthDiawArr.length > 2 : 
+          this.withdrawalAmount = whthDiawArr[0].replace(/[^0-9\.]/g, '') + '.' + whthDiawArr[1].replace(/[^0-9\.]/g, '');
+          break;
+        default :
+          this.withdrawalAmount = this.withdrawalAmount.replace(/[^0-9\.]/g, ''); // 去掉不是数字的部分
+        break;
+      }
+      if(this.withdrawalAmount[0] === '.'){              // 如果字符串第一个位置是小数点 就加0(和第一个判断不一样)
+        this.withdrawalAmount = '0' + this.withdrawalAmount;
+      };
     },
     onDelete() {
-      console.log('删除');
+      this.withdrawalAmount = this.withdrawalAmount.slice(0,-1);
     },
     withdrawUser(){
       var userId = browserDb.getLItem('tokenId');
@@ -86,7 +136,8 @@ export default {
           // throw new Error(res.error)
         }else{
         this.canWithdraw = res.data.attributes.available_amount;
-         this.handlingFee = (res.data.attributes.cash_tax_ratio);
+         this.handlingFee = res.data.attributes.cash_tax_ratio+'%';
+         this.handlingFee1 = (res.data.attributes.cash_tax_ratio/100)
         }
       })
     },

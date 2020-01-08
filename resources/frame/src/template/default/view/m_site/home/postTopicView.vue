@@ -8,15 +8,21 @@
 
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox" v-if="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" :accept="supportImgExt"  v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+        <div class="uploadBox" v-if="uploadShow && isAndroid && isWeixin">
+          <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
-          
+        </div>
+
+        <div class="uploadBox" v-if="uploadShow && !isAndroid && !isWeixin">
+          <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+          </van-uploader>
         </div>
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-for="(enc,index) in enclosureList" :key="index">
             <span v-if="enc.type === 'rar'" class="icon iconfont icon-rar"></span>
-            <span v-else-if="enc.type === 'word'" class="icon iconfont icon-word"></span>
+            <span v-if="enc.type === 'zip'" class="icon iconfont icon-rar"></span>
+            <span v-else-if="enc.type === 'docx'" class="icon iconfont icon-word"></span>
+            <span v-else-if="enc.type === 'doc'" class="icon iconfont icon-word"></span>
             <span v-else-if="enc.type === 'pdf'" class="icon iconfont icon-pdf"></span>
             <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
             <span v-else-if="enc.type === 'mp'" class="icon iconfont icon-mp3"></span>
@@ -33,19 +39,19 @@
           </div>
         </div>
       </div>
-
+      <div>调试安卓{{isAndroid}},调试微信{{isWeixin}}</div>
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
-              <input type="file" @change="handleFileUp" class="hiddenInput"/>
-              <!-- <input type="file" :accept="supportImgExt" @change="handleFileUp" class="hiddenInput"/> -->
+              <input type="file" @change="handleFileUp" class="hiddenInput" v-if="isAndroid && isWeixin"/>
+              <input type="file" :accept="supportImgExtRes" @change="handleFileUp" class="hiddenInput" v-else="" mutiple="mutiple"/>
             </span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
             </span>
             <span class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-if="canUploadAttachments && limitMaxEncLength">
-              <input type="file" @change="handleEnclosure" class="hiddenInput"/>
-              <!-- <input type="file" :accept="supportFileExt" @change="handleEnclosure" class="hiddenInput"/> -->
+              <input type="file" v-if="isAndroid && isWeixin" @change="handleEnclosure" class="hiddenInput"/>
+              <input type="file" v-else="" :accept="supportFileExt" @change="handleEnclosure" class="hiddenInput"/>
             </span>
             <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon":class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
             </span>

@@ -20,12 +20,16 @@ export default {
       sex:'',
       optionsStatus: [
         {
-          value: false,
+          value: 0,
           label: '正常'
         },
         {
-          value: true,
+          value: 1,
           label: '禁用'
+        },
+        {
+          value: 2,
+          label: '审核'
         }
       ],
       value: '',
@@ -126,12 +130,10 @@ export default {
             splice: `${this.query.id}`+'/avatar',
             data:formData
           }).then(res=>{
-            if (res.errors){
+            if (res.errors) {
               this.$message.error(res.errors[0].code);
-            }else{
-              console.log(res,'是我我我我哦我我')
+            } else {
               this.imageUrl = res.readdata._data.avatarUrl;
-              
             }
 
           })
