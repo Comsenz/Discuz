@@ -188,7 +188,6 @@ export default {
           console.log('获取地址');
           this.wxurl = res.data.attributes.location;
           window.location.href = res.data.attributes.location;
-          window.onunload = function() { debugger; }
         } else if (res.data.attributes.access_token){
 
           this.$toast.success('登录成功');
