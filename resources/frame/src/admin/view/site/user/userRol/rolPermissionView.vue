@@ -5,13 +5,13 @@
     <Card header="前台操作权限："></Card>
     <Card>
       <CardRow description="查看主题列表页的权限">
-        <el-checkbox v-model="checked" label="viewThreadList" :disabled="$router.history.current.query.id === '1'">查看主题列表</el-checkbox>
+        <el-checkbox v-model="checked" label="viewThreads" :disabled="$router.history.current.query.id === '1'">查看主题列表</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="查看主题的详情页的权限">
-        <el-checkbox v-model="checked" label="viewThreads" :disabled="$router.history.current.query.id === '1'">查看主题详情</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.viewPosts" :disabled="$router.history.current.query.id === '1'">查看主题详情</el-checkbox>
       </CardRow>
     </Card>
 

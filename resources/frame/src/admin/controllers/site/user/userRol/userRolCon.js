@@ -77,19 +77,21 @@ export default {
     },
 
     submitClick(){
-      if (this.addStatus && this.multipleSelection.length > 0){
+      /*if (this.addStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
           message: '新增用户角色未提交！请先提交，再操作其他角色',
           type: 'warning'
         });
-      } else if (this.addStatus){
+      } else*/
+      if (this.addStatus){
         let singleData = {
           "type": "groups",
           "attributes": {
             "name": ""
           }
         };    //单个
+
         let batchData = [];   //批量
 
         for (let i = this.alternateLength;i < this.tableData.length;i++){
@@ -110,13 +112,16 @@ export default {
           * 单个添加用户组写法
           * */
           singleData.attributes.name = this.tableData[i]._data.name;
-        };
+        }
 
         this.postGroups(singleData);
 
-      } else if (this.multipleSelection.length > 0){
+      }else if(this.radio !== this.alternateRadio) {
+        console.log('修改默认级别');
+        this.singlePatchGroup(this.radio,this.radioName);
+      } else {
         let data = [];
-        this.multipleSelection.forEach((item)=>{
+        this.tableData.forEach((item)=>{
           data.push({
             "attributes": {
               "name": item._data.name,
@@ -125,17 +130,7 @@ export default {
           })
         });
         this.batchPatchGroup(data);
-      } else if(this.radio !== this.alternateRadio) {
-        console.log('修改默认级别');
-        this.singlePatchGroup(this.radio,this.radioName);
-      } else {
-        this.$message({
-          showClose: true,
-          message: '操作选项错误，请重新选择 或 刷新页面(F5)',
-          type: 'warning'
-        });
       }
-
     },
 
     singleDelete(index,id){

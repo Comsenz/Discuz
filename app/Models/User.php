@@ -30,18 +30,19 @@ use Illuminate\Support\Carbon;
  * @property string $mobile
  * @property string $password
  * @property string $avatar
- * @property $groups
  * @property int $status
  * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
+ * @property string $register_ip
  * @property int $thread_count
+ * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
  * @property Carbon $expired_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property mixed register_ip
+ * @property Group $groups
  * @package App\Models
  * @method truncate()
  * @method static find($id)
@@ -56,10 +57,16 @@ class User extends Model
     const MOBILE_ACTIVE = true;
 
     /**
+     * @var bool
+     */
+    public $timestamps = true;
+
+    /**
      * {@inheritdoc}
      */
     protected $casts = [
         'mobile_confirmed' => 'boolean',
+        'status' => 'boolean',
     ];
 
     /**
@@ -67,6 +74,7 @@ class User extends Model
      */
     protected $dates = [
         'avatar_at',
+        'login_at',
         'joined_at',
         'expired_at',
         'created_at',

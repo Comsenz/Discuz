@@ -47,7 +47,7 @@ class AvatarUploader
             $image->orientate();
         }
         // 检测敏感图
-        $this->censor->checkImage($image->dirname.$image->basename);
+        $this->censor->checkImage($image->dirname .'/'. $image->basename);
         if ($this->censor->isMod) {
             throw new UploadException();
         }

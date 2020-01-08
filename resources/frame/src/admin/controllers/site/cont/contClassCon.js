@@ -32,7 +32,6 @@ export default {
     },
 
     tableContAdd(){
-
       this.createCategoriesStatus = true;
       this.categoriesList.push({
         name:"",
@@ -40,35 +39,27 @@ export default {
         description:"",
         sort:""
       })
-
-      /*if (this.categoriesList.length <= this.categoriesListLength){
-        this.createCategoriesStatus = true;
-        this.categoriesList.push({
-          name:"",
-          id:"",
-          description:"",
-          sort:""
-        })
-      }*/
     },
 
     submitClick(){
 
-      if (this.createCategoriesStatus && this.multipleSelection.length > 0){
+      /*if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
           message: '新增内容分类未提交！请先提交，再勾选其他分类',
           type: 'warning'
         });
-      } else if (this.createCategoriesStatus){
+      } else */
+
+      if (this.createCategoriesStatus){
         console.log(this.categoriesList.slice(this.categoriesListLength, this.categoriesList.length));
         this.createCategories(this.categoriesList.slice(this.categoriesListLength,this.categoriesList.length)).then(()=>{
           this.getCategories();
           this.createCategoriesStatus = false;
         })
-      } else if (this.multipleSelection.length > 0){
+      } else {
         let data = [];
-        this.multipleSelection.forEach((item)=>{
+        this.categoriesList.forEach((item)=>{
           data.push({
             'type':"categories",
             'id':item.id,
@@ -82,14 +73,7 @@ export default {
         this.batchUpdateCategories(data).then(()=>{
           this.getCategories();
         });
-      } else {
-        this.$message({
-          showClose: true,
-          message: '操作选项错误，请重新选择 或 刷新页面(F5)',
-          type: 'warning'
-        });
       }
-
     },
 
     deleteClick(id,index){
@@ -238,17 +222,18 @@ export default {
                   data
               }
             }).then(res=>{
-              if (res.errors){
-                this.$message.error(res.errors[0].code);
-              }else {
-                if (!res.meta) {
-                  this.$message({
-                    message: '操作成功',
-                    type: 'success'
-                  });
-                } else {
-                  this.$message.error('操作失败！');
-                }
+              if (res.meta){
+                console.log(res.meta);
+                res.meta.forEach((item,index)=>{
+                  setTimeout(()=>{
+                    this.$message.error(item.message.name[0])
+                  },(index+1) * 500);
+                });
+              } else {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                });
               }
             }).catch(err=>{
               console.log(err);

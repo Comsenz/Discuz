@@ -9,6 +9,7 @@ namespace App\Api\Serializer;
 
 use App\Models\Thread;
 use App\Models\User;
+use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Encryption\Encrypter;
@@ -39,9 +40,11 @@ class ForumSettingSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        $logo = $this->logo($this->settings->get('logo'));
+
         $attributes = [
-            'siteMode' => $this->settings->get('site_mode'), //pay public
-            'logo' => $this->logo($this->settings->get('logo')),
+            'siteMode' => $this->settings->get('site_mode'), // pay: 付费模式 public: 公开模式
+            'logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '',
             'siteName' => $this->settings->get('site_name'),
             'siteIntroduction' => $this->settings->get('site_introduction'),
             'siteStat' => $this->settings->get('site_stat'),

@@ -23,7 +23,7 @@ class CreateAttachments extends Migration
             $table->string('file_path')->default('')->comment('文件路径');
             $table->string('file_name')->default('')->comment('文件原名称');
             $table->unsignedInteger('file_size')->default(0)->comment('文件大小');
-            $table->char('file_type', 15)->default('')->comment('文件类型');
+            $table->string('file_type')->default('')->comment('文件类型');
             $table->unsignedTinyInteger('is_remote')->default(0)->comment('是否远程附件');
             $table->ipAddress('ip')->default('')->comment('ip 地址');
             $table->dateTime('created_at');

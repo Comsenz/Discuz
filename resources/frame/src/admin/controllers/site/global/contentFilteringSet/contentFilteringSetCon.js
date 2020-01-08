@@ -182,14 +182,14 @@ export default {
       result = result.concat(this.multipleSelection);
 
       try{
-        if(result.length === 0){
+        if(this.tableData.length === 0){
           return;
         }
 
         let words = [];
 
-        for(let i = 0,len = result.length; i < len; i++){
-          const _data = result[i]._data;
+        for(let i = 0,len = this.tableData.length; i < len; i++){
+          const _data = this.tableData[i]._data;
           const { ugc, username, find, inputVal} = _data;
           if(inputVal === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
             continue;

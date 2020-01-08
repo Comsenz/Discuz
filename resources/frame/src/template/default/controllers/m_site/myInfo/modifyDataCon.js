@@ -101,7 +101,7 @@ export default {
 
       myModifyWechat(){
         this.$dialog.confirm({
-          title: '确认解绑微信',
+          title: '确认解绑微信及退出登录',
           // message: '弹窗内容'
         }).then((res) => {
           if (res.errors){
@@ -127,8 +127,14 @@ export default {
             if (res.errors){
               this.$toast.fail(res.errors[0].code);
             }else{
-              console.log('我更新啦啦啦啦')
-             this.modifyData()
+              let isWeixin =this.appCommonH.isWeixin().isWeixin;
+              if(isWeixin){
+                var userId = browserDb.getLItem('tokenId');
+                localStorage.clear();
+                this.$router.push({ path:url});
+              }else{
+                this.modifyData()
+              }
             }
           })
         }    

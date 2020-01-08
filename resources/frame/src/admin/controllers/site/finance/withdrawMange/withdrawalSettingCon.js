@@ -68,7 +68,11 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$message.error(res.errors[0].code);
+          res.errors.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.detail[0])
+            },(index+1) * 500);
+          });
         }else {
           this.$message({
             message: '提交成功',

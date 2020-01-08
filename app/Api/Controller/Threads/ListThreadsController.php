@@ -48,6 +48,7 @@ class ListThreadsController extends AbstractListController
     public $optionalInclude = [
         'deletedUser',
         'firstPost.images',
+        'firstPost.attachments',
         'firstPost.likedUsers',
         'lastThreePosts',
         'lastThreePosts.user',

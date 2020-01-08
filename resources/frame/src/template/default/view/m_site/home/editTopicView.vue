@@ -9,16 +9,13 @@
       <div class="post-topic-form">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox" v-if="uploadShow">
-          <!-- <div class="posting-uploader-item" v-for="(file,fileIndex) in fileList" :key="fileIndex">
-            <img :src="file.url" alt="图片" class="imgPreview">
-            <van-icon name="close" @click="deleteEnclosure(file.uuid,'img')" class="delte"/>
-          </div> -->
-
+        <!-- <div class="uploadBox" v-if="uploadShow">
           <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileListOne" @delete="deleteEnclosure($event.id,'img')" multiple>
           </van-uploader>
-          <!-- <van-uploader :max-count="12" :after-read="handleFile" :delete="deleteEnclosure(file.uuid,'img')" accept="image/*" v-model="fileList">
-          </van-uploader> -->
+        </div> -->
+        <div class="uploadBox" v-if="uploadShow">
+          <van-uploader :max-count="12" :after-read="handleFile" :accept="supportImgExt"  v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+          </van-uploader>
         </div>
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-model="enclosureList" v-for="(enc,index) in enclosureList" :key="index">
@@ -36,14 +33,13 @@
             <span v-else-if="enc.type === 'xls'" class="icon iconfont icon-xls"></span>
             <span v-else="" class="icon iconfont icon-doubt"></span>
             <span class="encName">{{enc.name}}</span>
-            <van-icon @click="deleteEnclosure(enc.id,'enclosure')" name="clear" class="encDelete"/>
+            <van-icon @click="deleteEnc(enc,'enclosure')" name="clear" class="encDelete"/>
           </div>
         </div>
       </div>
 
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
-        <div class="post-topic-footer-left">
-          <!-- <div class=""> -->
+        <!-- <div class="post-topic-footer-left">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
               <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
@@ -51,9 +47,25 @@
             <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon">
               <input type="file" accept="image/*" @change="handleEnclosure" class="hiddenInput"/>
             </span>
-          <!-- </div> -->
-
+        </div> -->
+        
+        <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
+            <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
+            <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
+              <input type="file" :accept="supportImgExt" @change="handleFileUp" class="hiddenInput"/>
+            </span>
+            <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
+            </span>
+            <span class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-if="canUploadAttachments && limitMaxEncLength">
+              <input type="file" :accept="supportFileExt" @change="handleEnclosure" class="hiddenInput"/>
+            </span>
+            <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon":class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
+            </span>
         </div>
+        
+        
+        
+        
         <div @click="dClick"  class="post-topic-footer-right">
           <span class="post-topic-footer-right-sort">{{selectSort}}</span>
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
