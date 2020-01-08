@@ -516,7 +516,8 @@ export default {
     'open-circle',
     'details/:themeId',
     'home-page/:userId',
-    'pay-status'
+    'pay-status',
+    'wx-login-bd'
   ];
 
 

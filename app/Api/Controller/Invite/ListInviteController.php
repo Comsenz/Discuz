@@ -12,6 +12,7 @@ use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListInviteController extends AbstractListController
 {
@@ -28,6 +29,10 @@ class ListInviteController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        return $this->InviteRepository->getAdminCodeList($actor);
+        $data = [];
+        $data['limit'] = $this->extractLimit($request);
+        $data['offset'] = $this->extractOffset($request);
+
+        return $this->InviteRepository->getAdminCodeList($actor, $data);
     }
 }

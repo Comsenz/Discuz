@@ -13,7 +13,7 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Zend\Diactoros\Response\XmlResponse;
+use Laminas\Diactoros\Response\XmlResponse;
 
 class WechatNotifyController extends AbstractResourceController
 {

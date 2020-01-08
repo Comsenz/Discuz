@@ -64,7 +64,7 @@ class SaveLikesToDatabase
                     // $post->raise(new PostWasLiked($post, $actor));
                     // 如果被点赞的用户不是当前用户，则通知被点赞的人
                     if ($post->user->id != $actor->id) {
-                        $post->user->notify(new Liked($post));
+                        $post->user->notify(new Liked($post, $actor));
                     }
                 }
             }
