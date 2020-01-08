@@ -7,7 +7,7 @@ import ContArrange from '../../../../view/site/common/cont/contArrange';
 import tableNoList from '../../../../view/site/common/table/tableNoList'
 import moment from 'moment';
 import webDb from 'webDbHelper';
-import { mapState } from 'vuex';
+import { mapState,mapMutations } from 'vuex';
 
 export default {
   data:function () {
@@ -55,6 +55,9 @@ export default {
   }),
 
   methods:{
+    ...mapMutations({
+      setSearch:'admin/SET_SEARCH_CONDITION'
+    }),
 
     handleCheckAllChange(val) {
       /*if (val){
@@ -328,9 +331,22 @@ export default {
 
   beforeDestroy() {
     webDb.setLItem('currentPag',1);
+
+    let data = new Object();
+
+    for (let key in this.searchData){
+      if (key === 'pageSelect'){
+        data[key] = '10'
+      } else {
+        data[key] = ''
+      }
+    }
+
+    this.setSearch(data);
   },
 
   created(){
+    console.log(this.searchData);
     this.currentPag = Number(webDb.getLItem('currentPag'))||1;
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
     this.getCategories();
