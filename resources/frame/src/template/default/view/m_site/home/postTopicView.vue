@@ -8,9 +8,11 @@
 
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
-        <div class="uploadBox" v-if="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile"v-if="isAndroid && isWeixin" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+        <div class="uploadBox" v-if="uploadShow && isAndroid && isWeixin">
+          <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
+        </div>
+        <div class="uploadBox" v-if="uploadShow && !isAndroid && !isWeixin">
           <van-uploader :max-count="12" :accept="supportImgExt" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
         </div>
@@ -41,8 +43,8 @@
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
-              <input type="file" v-if="isAndroid && isWeixin" @change="handleFileUp" class="hiddenInput"/>
-              <input type="file" v-else="" :accept="supportImgExt" @change="handleFileUp" class="hiddenInput"/>
+              <input type="file" @change="handleFileUp" class="hiddenInput" v-if="isAndroid && isWeixin"/>
+              <input type="file" :accept="supportImgExt" @change="handleFileUp" class="hiddenInput" v-else=""/>
             </span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
             </span>
