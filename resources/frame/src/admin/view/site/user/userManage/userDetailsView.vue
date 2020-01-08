@@ -93,8 +93,8 @@
       <p>{{userInfo.registerIp}}</p>
     </Card>
 
-    <Card header="最后登录时间：">
-      <p>{{$moment(userInfo.updatedAt).format('YYYY-MM-DD HH:mm')}}</p>
+    <Card header="最后登录时间：" v-if="userInfo.loginAt">
+      <p>{{$moment(userInfo.loginAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="最后登录IP：">

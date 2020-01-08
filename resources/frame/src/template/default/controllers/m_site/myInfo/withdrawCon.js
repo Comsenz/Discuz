@@ -34,8 +34,8 @@ export default {
     this.withdrawUser()
   },
   computed:{
-    actualCashWithdrawal(){
-      return this.withdrawalAmount - this.handlingFee
+    actualCashWithdrawal(){  //实际提现金额
+      return this.withdrawalAmount === '' ? '' : this.withdrawalAmount - this.handlingFee
     }
    
   },
@@ -86,7 +86,7 @@ export default {
           // throw new Error(res.error)
         }else{
         this.canWithdraw = res.data.attributes.available_amount;
-         this.handlingFee = (res.data.attributes.cash_tax_ratio/100);
+         this.handlingFee = (res.data.attributes.cash_tax_ratio);
         }
       })
     },

@@ -32,12 +32,13 @@
       <div class="fixedEdit" v-if="canEdit" @click="postTopic">
         <span class="icon iconfont icon-publish"></span>
       </div>
-      </van-pull-refresh>
-	    </van-list>
-      <div class="nullTip" v-if="nullTip">
+       <div class="nullTip" v-if="nullTip">
         <van-icon name="warning-o" size="1.8rem" class="nullIcon"/>
         <p class="nullWord">{{nullWord}}</p>
       </div>
+      </van-pull-refresh>
+	    </van-list>
+     
     </div>
 
 </template>

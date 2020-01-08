@@ -9,6 +9,8 @@ export default {
       radio2:'2',
       // fileList:[],
       imageUrl: '',
+      imgWidht: 0,
+      imgHeight: 0,
       loading: true,
       fullscreenLoading: false,
       siteName:'',
@@ -70,7 +72,11 @@ export default {
           this.siteName = data.readdata._data.siteName;
           this.siteIntroduction = data.readdata._data.siteIntroduction;
           this.siteMode = data.readdata._data.siteMode;
-          this.imageUrl = data.readdata._data.logo
+          this.imageUrl = data.readdata._data.logo;
+          this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
+            this.imgWidht = res.width;
+            this.imgHeight = res.height;
+          })
           if (this.siteMode == 'pay') {
             this.radio = '2';
           } else {
@@ -145,7 +151,7 @@ export default {
     },
     getScaleImgSize(url, obj) {    //处理等比例上传图片，
       return new Promise((resolve, reject) => {
-        getImageSize(url).then((res) => {
+        this.getImageSize(url).then((res) => {
           const scale = res.height / res.width;
           if (scale > obj.height / obj.width) {
             resolve({
@@ -207,6 +213,10 @@ export default {
           this.$message.error(data.errors[0].code);
         }else {
           this.imageUrl = data.readdata._data.default.logo;
+          this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
+            this.imgWidht = res.width;
+            this.imgHeight = res.height;
+          })
           console.log(this.imageUrl)
           this.$message({message: '上传成功', type: 'success'});
         }

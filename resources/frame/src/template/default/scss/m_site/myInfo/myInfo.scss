@@ -133,8 +133,10 @@
 	a {
 		display: block;
 		@include px2rem(line-height, 40);
-		color: $font000;
-	}
+    color: $font000;
+
+  }
+ 
 }
 
 /**

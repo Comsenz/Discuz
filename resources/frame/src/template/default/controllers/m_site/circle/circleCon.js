@@ -234,6 +234,9 @@ export default {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
           } else {
+            if(this.themeListCon = []){
+              this.nullTip = true
+            }
             // this.themeListCon = res.readdata;
             this.themeListCon =this.themeListCon.concat(res.readdata);
             this.loading = false;

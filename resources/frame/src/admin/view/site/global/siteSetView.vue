@@ -53,7 +53,9 @@
             @change="handleFile"
             :before-upload="beforeAvatarUpload"
             >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <div v-if="imageUrl" class="avatar">
+              <img :src="imageUrl" class="avatar-LogoImage" :style="{'width': imgWidht + 'px', height: imgHeight+'px'}">
+            </div>
            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
            <el-button type="text" @click="deleteImage">删除</el-button>
