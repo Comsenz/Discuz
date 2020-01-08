@@ -228,7 +228,8 @@ export default {
         this.getWatchHref(code,state,sessionId);
       }
     }else {
-      if (!this.openid){
+      if (this.openid !== ''){
+        alert('PC端：没有openid');
         this.getWatchHrefPC(code,state,sessionId);
       }
     }
