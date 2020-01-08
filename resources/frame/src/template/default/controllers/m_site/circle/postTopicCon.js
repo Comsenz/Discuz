@@ -328,7 +328,12 @@ export default {
 
     //上传图片,点击加号时
     handleFile(e){
-      this.compressFile(e.file, false);
+      this.testingType(e.file,this.supportImgExt);
+      console.log(this.testingRes+'445');
+      if(this.testingRes){
+        this.compressFile(e.file, false);
+      }
+
     },
     //上传图片，点击底部Icon时
     handleFileUp(e){
@@ -355,16 +360,15 @@ export default {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
       if(AllUpExt.indexOf(extName + ",") == "-1"){
+        alert('阻止');
         this.$toast.fail("文件格式不正确!");
-        return false;
+        this.testingRes = false;
+        // return false;
       } else {
+        alert('继续');
         this.testingRes = true;
       }
-
-
     },
-
-
 
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure){

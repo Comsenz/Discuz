@@ -9,9 +9,9 @@
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <div class="uploadBox" v-if="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" :accept="supportImgExt"  v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+          <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
-          
+
         </div>
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-for="(enc,index) in enclosureList" :key="index">
