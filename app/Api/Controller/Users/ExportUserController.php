@@ -84,7 +84,7 @@ class ExportUserController implements RequestHandlerInterface
             'user_id',
             'nickname',
             'sex',
-            'openid',
+            'mp_openid',
             'unionid',
         ];
 
@@ -95,7 +95,7 @@ class ExportUserController implements RequestHandlerInterface
             'status',
             'sex',
             'groups',
-            'openid',
+            'mp_openid',
             'unionid',
             'nickname',
             'created_at',

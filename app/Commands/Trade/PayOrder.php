@@ -155,7 +155,7 @@ class PayOrder
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid
                 $extra                = [
-                    'openid' => $this->actor->wechat->openid,
+                    'openid' => $this->actor->wechat->mp_openid,
                 ];
                 break;
             default:
