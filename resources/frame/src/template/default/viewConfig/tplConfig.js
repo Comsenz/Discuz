@@ -563,8 +563,7 @@ export default {
    * 站点关闭，跳转到站点关闭页面
    * */
   this.getForum().then((res)=>{
-    siteMode = res.readdata._data.setsite.site_mode;
-    if (res.errors){
+    if (res.errors){   
       if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
           next();
@@ -573,6 +572,8 @@ export default {
           return
         }
       }
+    }else{
+       siteMode = res.readdata._data.setsite.site_mode;
     }
 
   });
