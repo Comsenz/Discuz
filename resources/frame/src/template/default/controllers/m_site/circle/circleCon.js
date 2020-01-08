@@ -136,10 +136,10 @@ export default {
     detailIf(isPayVal){
       if(isPayVal == 'public'){
         //当站点为公开站点时
-        console.log('公开');
+        // console.log('公开');
         var token = browserDb.getLItem('Authorization',token);
         if(token){
-          console.log('公开，已登录');
+          // console.log('公开，已登录');
           //当用户已登录时
           this.loadThemeList();
           this.loginBtnFix = false;
@@ -148,7 +148,7 @@ export default {
           this.searchStatus = true;
           this.menuStatus = true;
         }  else {
-          console.log('公开，未登录');
+          // console.log('公开，未登录');
           // this.loadThemeList();
           // //当用户未登录时
           this.loginBtnFix = true;
@@ -234,11 +234,10 @@ export default {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
           } else {
-            if(this.themeListCon = []){
+            if(!this.themeListCon.length){
               this.nullTip = true
             }
-            // this.themeListCon = res.readdata;
-            this.themeListCon =this.themeListCon.concat(res.readdata);
+            this.themeListCon = this.themeListCon.concat(res.readdata);
             this.loading = false;
             this.finished = res.readdata.length < this.pageLimit;
           }

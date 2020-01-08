@@ -38,7 +38,7 @@
       </div>
       </van-pull-refresh>
 	    </van-list>
-     
+
     </div>
 
 </template>
