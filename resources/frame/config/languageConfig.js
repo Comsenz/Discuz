@@ -14,6 +14,7 @@ const config = {
   thread_count_fail:'主题数操作错误',
   thread_behavior_fail:'主题状态异常',
   thread_action_fail:'主题操作异常',
+  reply_content_cannot_null:'内容不能为空',
   upload_error:'上传图片失败',
   scale_sum_not_10:'分成比例相加必须为 10',
   cannot_delete_category_with_threads:'无法删除存在主题的分类',
