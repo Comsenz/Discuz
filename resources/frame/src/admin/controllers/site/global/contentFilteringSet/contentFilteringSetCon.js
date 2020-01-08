@@ -39,6 +39,10 @@ export default {
       },{
         value: '{BANNED}',
         label: '禁用'
+      },
+      {
+        value: '{MOD}',
+        label: '审核'
       }
     ],
       serachVal:'',
@@ -118,6 +122,7 @@ export default {
       // this.contentParams = {
       //   'filter[q]': this.searchVal,
       // }
+      this.pageNum = 1
       console.log(this.serachVal,'5555555555555555')
       this.handleSearchUser(true);
 
@@ -146,7 +151,7 @@ export default {
             }
             console.log(response)
             this.total = response.meta.total;
-            this.pageNum = response.meta.pageCount;
+            // this.pageNum = response.meta.pageCount;
             // this.total = response.meta ? response.meta.total : 0;
             return v;
           });
@@ -228,6 +233,8 @@ export default {
         // if (res.errors){
         //   this.$message.error(res.errors[0].code);
         // }else{
+          // this.pageNum  = 1
+          console.log(this.pageNum,'页码页码页码')
           this.handleSearchUser(true);
           this.$message({message: '提交成功', type: 'success'});
         // }
