@@ -12,9 +12,9 @@
           <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
         </div>
-        
+
         <div class="uploadBox" v-if="uploadShow && !isAndroid && !isWeixin">
-          <van-uploader :max-count="12" :accept="supportImgExt" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+          <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
         </div>
         <div class="enclosure" v-if="enclosureShow">
@@ -45,7 +45,7 @@
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
               <input type="file" @change="handleFileUp" class="hiddenInput" v-if="isAndroid && isWeixin"/>
-              <input type="file" :accept="supportImgExt" @change="handleFileUp" class="hiddenInput" v-else="" mutiple="mutiple" capture="camera"/>
+              <input type="file" :accept="supportImgExtRes" @change="handleFileUp" class="hiddenInput" v-else="" mutiple="mutiple" capture="camera"/>
             </span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
             </span>

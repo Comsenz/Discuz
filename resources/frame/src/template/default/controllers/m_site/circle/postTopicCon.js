@@ -54,6 +54,7 @@ export default {
       canUploadImages:'',
       canUploadAttachments:'',
       supportImgExt: '',
+      supportImgExtRes:'',
       supportFileExt:'',
       supportFileArr:'',
       limitMaxLength:true,
@@ -153,9 +154,12 @@ export default {
           console.log('888887');
            var ImgExt = res.readdata._data.supportImgExt.split(',');
            var ImgStr='';
+           var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
             ImgStr = '.'+ImgExt[k]+',';
+            imgStrRes = 'image/'+ImgExt[k]+',';
             this.supportImgExt += ImgStr;
+            this.supportImgExtRes += imgStrRes;
           }
           var fileExt = res.readdata._data.supportFileExt.split(',');
           var fileStr='';
