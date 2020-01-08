@@ -40,10 +40,10 @@ export default {
         value: '{BANNED}',
         label: '禁用'
       },
-      {
-        value: '{MOD}',
-        label: '审核'
-      }
+      // {
+      //   value: '{MOD}',
+      //   label: '审核'
+      // }
     ],
       serachVal:'',
       checked:false,

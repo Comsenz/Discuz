@@ -10,6 +10,7 @@
 		:offset="offset"
 		finished-text="没有更多了"
 		@load="onLoad"
+	
 		>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <div class="inviteBox">

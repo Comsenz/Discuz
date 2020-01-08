@@ -86,6 +86,7 @@ export default {
 					// }
 					data: this.userParams
 				}).then(data=>{
+					// console.log(data.readdata[0]._data.id,'搜索搜索')
 					this.searchUserList = this.searchUserList.concat(data.readdata);
 					this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
 				}).catch(err=>{
@@ -152,6 +153,11 @@ export default {
 			this.themeLoadMorePageChange = true;
 			this.handleSearchTheme();
 		},
+
+		//点击用户名称，跳转到用户主页
+		jumpPerDet:function(id){
+			  this.$router.push({ path:'/home-page'+'/'+id});	
+		  },
 
 	},
 

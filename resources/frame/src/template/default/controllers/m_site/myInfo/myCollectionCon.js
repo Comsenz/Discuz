@@ -63,7 +63,7 @@ export default {
         }
         this.collectionList =this.collectionList.concat(data.readdata);
         this.loading = false;
-        this.finished = res.data.length < this.pageLimit;
+        this.finished = data.data.length < this.pageLimit;
       }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){

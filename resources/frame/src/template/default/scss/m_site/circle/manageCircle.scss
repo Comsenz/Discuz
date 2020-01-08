@@ -66,6 +66,7 @@
 	background: #fff;
 	border-top: 1px solid $corE5;
 	box-sizing: border-box;
+	// overflow: hidden;
 	.operaCho {
 		position: relative;
 		@include px2rem(width, 432);
@@ -171,7 +172,7 @@
 			@include px2rem(padding-right, 30);
 		}
 		.copyA {
-			@include px2rem(margin-right, 40);
+			@include px2rem(margin-right, 20);
 		}
 		.font9 {
 			color: $cor999;

@@ -15,8 +15,9 @@
           :imgUrl="item._data.user_avatar"
           :userId="item._data.user_id"
           :stateTitle="stateTitle"
-          :time="$moment(item._data.created_at).fromNow()"
+          :time="$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')"
           :userName="item._data.user_name">
+           <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
         <div class="likePostContent" v-if="item._data.post_content">
         <a href="javascript:;" v-html="item._data.post_content" ></a>
