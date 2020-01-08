@@ -94,7 +94,7 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    console.log(this.isiOS);
+    // console.log(this.isiOS);
     if(this.isiOS) {
       this.encuploadShow = true;
       console.log(this.encuploadShow);

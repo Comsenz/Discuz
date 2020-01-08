@@ -290,12 +290,14 @@ export default {
       },
 
       //主题详情页模块
-      'reply-to-topic':{
+      'reply-to-topic/:themeId/:replyId':{
         comLoad:function (resolve) {
           require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"回复主题",
+          name:'reply-to-topic',
+          component: reply-to-topic
         }
       },
 
@@ -563,7 +565,7 @@ export default {
    * 站点关闭，跳转到站点关闭页面
    * */
   this.getForum().then((res)=>{
-    if (res.errors){   
+    if (res.errors){
       if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
           next();
