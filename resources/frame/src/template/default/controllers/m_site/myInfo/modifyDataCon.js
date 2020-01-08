@@ -15,7 +15,9 @@ export default {
       changePwd:'',//修改密码
       bindType:'',//绑定类型
       wechatId:'',//id
-      wechatNickname:''
+      wechatNickname:'',
+      tipWx:'',
+      isWeixin:'',
       
     }
   },
@@ -26,6 +28,12 @@ export default {
   created(){
     this.modifyData() //修改资料
     this.wechat()
+    this.isWeixin =this.appCommonH.isWeixin().isWeixin
+    if(this.isWeixin){
+      this.tipWx = '确认解绑微信及退出登录'
+    }else{
+      this.tipWx = '确认解绑微信'
+    }
   },
   methods:{
     myModify(str){
@@ -101,7 +109,7 @@ export default {
 
       myModifyWechat(){
         this.$dialog.confirm({
-          title: '确认解绑微信及退出登录',
+          title: this.tipWx,
           // message: '弹窗内容'
         }).then((res) => {
           if (res.errors){
@@ -129,7 +137,7 @@ export default {
             }else{
               let isWeixin =this.appCommonH.isWeixin().isWeixin;
               if(isWeixin){
-                var userId = browserDb.getLItem('tokenId');
+                // var userId = browserDb.getLItem('tokenId');
                 localStorage.clear();
                 this.$router.push({path:'/wx-login-bd'})
               }else{

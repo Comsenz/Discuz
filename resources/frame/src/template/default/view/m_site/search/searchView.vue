@@ -13,12 +13,13 @@
       </form>
       <div class="searchRes" v-show="searchUserList.length > 0">
         <h2 class="resultTit">用户</h2>
-        <div class="resUser" v-for="(item, index) in searchUserList" :key="index">
-          <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead">
+        <div class="resUser" v-for="(item, index) in searchUserList" :key="index"  @click="jumpPerDet(item._data.id)">
+          <img v-if="item._data.avatarUrl" :src="item._data.avatarUrl" class="resUserHead"  @click="jumpPerDet(item._data.id)">
+          <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead"  @click="jumpPerDet(item._data.id)">
           <div class="resUserDet">
             <!-- <span class="resUserName">多少分接<i>你</i>口的是否健康的首付款觉得第三方第三方是的是的是的所舒服的</span> -->
             <!-- <span class="resUserName">{{item.username().slice(0,item.username().indexOf(searchVal))}}<i>{{searchVal}}</i>{{item.username().substr(item.username().indexOf(searchVal) + 1)}}</span> -->
-             <span class="resUserName" v-html="item._data.username.replace(searchVal,'<i>'+searchVal+'</i>')"></span>
+             <span class="resUserName" v-html="item._data.username.replace(searchVal,'<i>'+searchVal+'</i>')" ></span>
             <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span>
           </div>
         </div>

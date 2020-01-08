@@ -80,12 +80,12 @@ export default {
           url: 'invite',
           method: 'get',
           data: {
-            data: {
-              type: "invite",
-              attributes: {
-                group_id: parseInt(this.choiceRes.id)
-              }
-            },
+            // data: {
+            //   type: "invite",
+            //   attributes: {
+            //     group_id: parseInt(this.choiceRes.id)
+            //   }
+            // },
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
           }
@@ -97,6 +97,7 @@ export default {
           if (initStatus) {
             this.inviteList = [];
           }
+          console.log(this.pageIndex,'少时诵诗书')
           this.loading = false;
           this.inviteList = this.inviteList.concat(res.readdata);
           this.finished = res.readdata.length < this.pageLimit; //数据全部加载完成
@@ -136,7 +137,7 @@ export default {
         //   throw new Error(res.error)
         // }else{
         this.pageIndex = 1;
-        this.finished = false;
+        // this.finished = false;
         this.getInviteList(true)
         // }
       } catch (err) {
@@ -192,14 +193,17 @@ export default {
 	  this.getInviteList();
     },
     onRefresh() { //下拉刷新
-      setTimeout(() => {
-        this.pageIndex = 1;
-        this.getInviteList(true);
-        this.$toast('刷新成功');
-        this.isLoading = false;
-        this.finished = false;
 
-      }, 200)
+        this.pageIndex = 1;
+        this.getInviteList(true).then(res=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
+        });
+       
     }
   },
 

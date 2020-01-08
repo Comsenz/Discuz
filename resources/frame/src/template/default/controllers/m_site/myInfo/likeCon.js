@@ -63,6 +63,26 @@ export default {
         this.loading = false;
       })
     },
+    deleteReply(replyId){    //删除回复
+      console.log(replyId,'00000')
+      // let deleteNotification = 'deleteNotification/'+replyId;
+      this.appFetch({
+        url:'deleteNotification',
+        method:'delete',
+        splice:'/'+replyId,
+        data:{
+
+        }
+      }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
+        this.pageIndex = 1;
+        this.myLikeList(true)
+        }
+      })
+    },
     onLoad(){    //上拉加载
       this.loading = true;
       this.pageIndex++;

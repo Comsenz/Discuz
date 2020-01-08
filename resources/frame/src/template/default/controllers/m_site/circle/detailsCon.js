@@ -311,9 +311,9 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme() {
-      // var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.groupId;
-      var Url = 'http://10.0.10.210:8883/pay-circle-con/' + this.themeId + '/' + this.groupId;
-      console.log(Url);
+      var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.groupId;
+      // var Url = 'http://10.0.10.210:8883/pay-circle-con/' + this.themeId + '/' + this.groupId;
+      // console.log(appConfig.devApiUrl);
       var oInput = document.createElement('input');
       oInput.value = Url;
       document.body.appendChild(oInput);
