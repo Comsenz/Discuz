@@ -18,7 +18,7 @@ class CreateCategories extends Migration
             $table->text('description')->comment('分类描述');
             $table->string('icon')->default('')->comment('分类图标');
             $table->unsignedSmallInteger('sort')->default(0)->comment('显示顺序');
-            $table->unsignedTinyInteger('property')->default(0)->comment('属性：0:正常 1:首页展示');
+            $table->unsignedTinyInteger('property')->default(0)->comment('属性：0 正常 1 首页展示');
             $table->unsignedInteger('thread_count')->default(0)->comment('主题数');
             $table->ipAddress('ip')->default('')->comment('ip 地址');
             $table->dateTime('created_at');
