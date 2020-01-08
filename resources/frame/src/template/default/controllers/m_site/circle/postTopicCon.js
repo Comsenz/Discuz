@@ -367,20 +367,15 @@ export default {
 
     //上传附件
     handleEnclosure(e){
-      if(this.isAndroid && this.isWeixin){
-        alert('安卓微信内');
-        this.testingType(e.target.files[0],this.supportFileExt);
-        if(this.testingRes){
-          let file = e.target.files[0];
-          let formdata = new FormData();
-          formdata.append('file', file);
-          formdata.append('isGallery', 0);
-          this.uploaderEnclosure(formdata,false,false,true);
-        }
-      } else {
-        alert('其他设备');
+      this.testingType(e.target.files[0],this.supportFileExt);
+      if(this.testingRes){
+        let file = e.target.files[0];
+        let formdata = new FormData();
+        formdata.append('file', file);
+        formdata.append('isGallery', 0);
         this.uploaderEnclosure(formdata,false,false,true);
       }
+      
     },
 
     //验证上传格式是否符合设置
