@@ -16,7 +16,9 @@
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-for="(enc,index) in enclosureList" :key="index">
             <span v-if="enc.type === 'rar'" class="icon iconfont icon-rar"></span>
-            <span v-else-if="enc.type === 'word'" class="icon iconfont icon-word"></span>
+            <span v-if="enc.type === 'zip'" class="icon iconfont icon-rar"></span>
+            <span v-else-if="enc.type === 'docx'" class="icon iconfont icon-word"></span>
+            <span v-else-if="enc.type === 'doc'" class="icon iconfont icon-word"></span>
             <span v-else-if="enc.type === 'pdf'" class="icon iconfont icon-pdf"></span>
             <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
             <span v-else-if="enc.type === 'mp'" class="icon iconfont icon-mp3"></span>

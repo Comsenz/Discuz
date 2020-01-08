@@ -400,7 +400,6 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
           }
           this.loading = false;
         }
