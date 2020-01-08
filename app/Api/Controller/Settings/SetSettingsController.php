@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Zend\Diactoros\Response\EmptyResponse;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
