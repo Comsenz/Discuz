@@ -1,5 +1,5 @@
 /*
-* 内容分类控制器
+* 内容管理-控制器
 * */
 
 import Card from '../../../../view/site/common/card/card';
@@ -55,10 +55,6 @@ export default {
   }),
 
   methods:{
-
-    chakan(){
-      console.log(this.$router);
-    },
 
     handleCheckAllChange(val) {
       /*if (val){
@@ -214,26 +210,26 @@ export default {
           method:'patch',
           data:{data:themeData}
         }).then(res=>{
-          if (res.errors){
-            this.$message.error(res.errors[0].code);
+          if (res.meta){
+            this.checkedTheme = [];
+            res.meta.forEach((item,index)=>{
+              setTimeout(()=>{
+                this.$message.error(item.code)
+              },(index+1) * 500);
+            });
           }else {
-            if (res.meta && res.data) {
-              this.checkedTheme = [];
-              this.$message.error('操作失败！');
-            } else {
-              if (this.pageCount < 3) {
-                this.currentPag = 1;
-                webDb.setLItem('currentPag', 1);
-              }
-              this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
-              this.isIndeterminate = false;
-              this.checkAll = false;
-              this.checkedTheme = [];
-              this.$message({
-                message: '操作成功',
-                type: 'success'
-              });
+            if (this.pageCount < 3) {
+              this.currentPag = 1;
+              webDb.setLItem('currentPag', 1);
             }
+            this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
+            this.isIndeterminate = false;
+            this.checkAll = false;
+            this.checkedTheme = [];
+            this.$message({
+              message: '操作成功',
+              type: 'success'
+            });
           }
         }).catch(err=>{
           console.log(err);

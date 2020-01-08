@@ -356,18 +356,18 @@ export default {
           data
         }
       }).then(res=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (res.meta){
+          res.meta.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.code)
+            },(index+1) * 500);
+          });
         }else {
-          if (res.meta && res.data) {
-            this.$message.error('操作失败！');
-          } else {
-            this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-          }
+          this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
         }
         console.log(res);
       }).catch(err=>{
@@ -383,8 +383,12 @@ export default {
           data
         }
       }).then(res=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (res.meta){
+          res.meta.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.code)
+            },(index+1) * 500);
+          });
         }else {
           this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
           this.$message({
