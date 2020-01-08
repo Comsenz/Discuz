@@ -97,6 +97,7 @@ class ForumSettingSerializer extends AbstractSerializer
             // 注册设置
             'setreg' => [
                 'register_close' => (bool)$this->settings->get('register_close'),
+                'register_validate' => (bool)$this->settings->get('register_validate'),
                 'password_length' => (int)$this->settings->get('password_length'),
                 'password_strength' => $this->settings->get('password_strength'),
             ],

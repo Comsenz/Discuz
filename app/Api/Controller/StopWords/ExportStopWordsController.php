@@ -8,6 +8,7 @@
 namespace App\Api\Controller\StopWords;
 
 use App\Models\StopWord;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\FileResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,11 +16,17 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ExportStopWordsController implements RequestHandlerInterface
 {
+    use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $actor = $request->getAttribute('actor');
+
+        $this->assertAdmin($actor);
+
         // 使用 LazyCollection
         $stopWords = StopWord::cursor()->map(function ($stopWord) {
             if ($stopWord->ugc == '{REPLACE}' && $stopWord->username == 'REPLACE') {

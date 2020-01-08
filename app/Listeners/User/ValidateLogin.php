@@ -10,13 +10,13 @@ namespace App\Listeners\User;
 use App\Events\Users\Logind;
 use Discuz\Auth\Exception\PermissionDeniedException;
 
-class BanLogin
+class ValidateLogin
 {
     public function handle(Logind $event)
     {
         $user = $event->user;
-        if ($user->status == 1) {
-            throw new PermissionDeniedException('ban_user');
+        if ($user->status == 2) {
+            throw new PermissionDeniedException('register_validate');
         }
     }
 }

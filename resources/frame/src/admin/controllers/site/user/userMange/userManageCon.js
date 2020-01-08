@@ -23,12 +23,16 @@ export default {
           label: '全部'
         },
         {
-          value: 'no',
+          value: 'normal',
           label: '正常'
         },
         {
-          value: 'yes',
+          value: 'ban',
           label: '禁用'
+        },
+        {
+          value: 'mod',
+          label: '审核'
         }
       ],
       value:''

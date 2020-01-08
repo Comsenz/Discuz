@@ -9,14 +9,16 @@
       <div class="post-topic-form">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <div class="uploadBox" v-if="uploadShow">
-          <van-uploader :max-count="12" :after-read="handleFile" :accept="supportImgExt"  v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+          <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
-          
+
         </div>
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-for="(enc,index) in enclosureList" :key="index">
             <span v-if="enc.type === 'rar'" class="icon iconfont icon-rar"></span>
-            <span v-else-if="enc.type === 'word'" class="icon iconfont icon-word"></span>
+            <span v-if="enc.type === 'zip'" class="icon iconfont icon-rar"></span>
+            <span v-else-if="enc.type === 'docx'" class="icon iconfont icon-word"></span>
+            <span v-else-if="enc.type === 'doc'" class="icon iconfont icon-word"></span>
             <span v-else-if="enc.type === 'pdf'" class="icon iconfont icon-pdf"></span>
             <span v-else-if="enc.type === 'jpg'" class="icon iconfont icon-jpg"></span>
             <span v-else-if="enc.type === 'mp'" class="icon iconfont icon-mp3"></span>
