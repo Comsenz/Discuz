@@ -121,7 +121,6 @@ class CreateOrder
         $order->type       = $order_type;
         $order->thread_id  = $thread_id ? $thread_id : null;
         $order->payee_id   = $payee_id;
-        $order->remark     = '';
         $order->status     = 0; //待支付
         //开始事务
         $db->beginTransaction();

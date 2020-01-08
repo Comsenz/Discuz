@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property string $last_login_ip
  * @property string $register_ip
  * @property int $thread_count
+ * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
  * @property Carbon $expired_at
@@ -56,6 +57,11 @@ class User extends Model
     const MOBILE_ACTIVE = true;
 
     /**
+     * @var bool
+     */
+    public $timestamps = true;
+
+    /**
      * {@inheritdoc}
      */
     protected $casts = [
@@ -68,6 +74,7 @@ class User extends Model
      */
     protected $dates = [
         'avatar_at',
+        'login_at',
         'joined_at',
         'expired_at',
         'created_at',

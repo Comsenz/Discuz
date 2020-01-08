@@ -4,7 +4,7 @@
     <div>
       <div class="foueHeadBox">
         <div class="fourHeader" headFixed="true">
-            <span class="icon iconfont icon-back headBack" ></span>
+            <span class="icon iconfont icon-back headBack" @click="headerBack" ></span>
             <h1 class="headTit">{{$route.meta.title}}</h1>
         </div>
         <div class="serBox" @click="serToggle" v-show="serHide">

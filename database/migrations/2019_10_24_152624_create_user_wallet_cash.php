@@ -20,7 +20,7 @@ class CreateUserWalletCash extends Migration
             $table->unsignedDecimal('cash_actual_amount', 10, 2)->comment('实际提现金额');
             $table->unsignedDecimal('cash_apply_amount', 10, 2)->comment('提现申请金额');
             $table->unsignedTinyInteger('cash_status')->default(0)->comment('提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败');
-            $table->string('remark', 255)->nullable()->comment('备注或原因');
+            $table->string('remark', 255)->default('')->comment('备注或原因');
             $table->dateTime('trade_time')->nullable()->comment('交易时间');
             $table->string('trade_no', 64)->nullable()->comment('交易号');
             $table->string('error_code', 64)->nullable()->comment('错误代码');

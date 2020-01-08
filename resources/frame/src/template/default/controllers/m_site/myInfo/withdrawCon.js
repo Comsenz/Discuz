@@ -22,6 +22,7 @@ export default {
       btnContent:'发送验证码',
       wechatNickname:'',
       mobileConfirmed:'',//验证验证码是否正确
+      handlingFee1:'',
     }
   },
 
@@ -34,7 +35,7 @@ export default {
   },
   computed:{
     actualCashWithdrawal(){
-      return this.withdrawalAmount *this.handlingFee
+      return this.withdrawalAmount - this.handlingFee
     }
    
   },
@@ -85,7 +86,7 @@ export default {
           // throw new Error(res.error)
         }else{
         this.canWithdraw = res.data.attributes.available_amount;
-         this.handlingFee = res.data.attributes.cash_tax_ratio;
+         this.handlingFee = (res.data.attributes.cash_tax_ratio/100);
         }
       })
     },
@@ -144,32 +145,7 @@ export default {
       }
     },
 
-    withdraw(){
-      var phone = this.phone
-      if(!phone){
-        this.$toast('请先绑定手机号')
-        return
-      }
-      if(!this.wechatNickname){
-        this.$toast('请绑定微信')
-        return
-      }
-      this.appFetch({
-        url:'cash',
-        method:"post",
-        data:{
-          cash_apply_amount:this.withdrawalAmount
-        }
-      }).then((res)=>{
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          // throw new Error(res.error)
-        }else{
-        // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
-        this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
-        this.handlingFee = res.data.attributes.cash_charge;//提现手续费
-        }
-      })
+    withdraw(){   //提交
        
       var withdrawalAmount = this.withdrawalAmount;
       var sms = this.sms;
@@ -211,6 +187,35 @@ export default {
         }
       }
       })
+      
+      var phone = this.phone
+      if(!phone){
+        this.$toast('请先绑定手机号')
+        return
+      }
+      if(!this.wechatNickname){
+        this.$toast('请绑定微信')
+        return
+      }
+      this.appFetch({
+        url:'cash',
+        method:"post",
+        data:{
+          cash_apply_amount:this.withdrawalAmount
+        }
+      }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error)
+        }else{
+        // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
+        this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
+        this.handlingFee = res.data.attributes.cash_charge;//提现手续费
+        console.log(res.data.attributes.cash_charge,'手续费')
+        // this.handlingFee1 = (this.handlingFee/100)
+        }
+      })
+
     },
     
   }
