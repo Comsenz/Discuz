@@ -228,7 +228,9 @@ export default {
         this.getWatchHref(code,state,sessionId);
       }
     }else {
-      this.getWatchHrefPC(code,state,sessionId);
+      if (!this.openid){
+        this.getWatchHrefPC(code,state,sessionId);
+      }
     }
 
     /*if (!code && !state){
