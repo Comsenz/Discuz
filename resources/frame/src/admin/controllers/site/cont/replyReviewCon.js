@@ -282,7 +282,7 @@ export default {
         url:'posts',
         method:'get',
         data:{
-          include: ['user','thread','thread.category','thread.firstPost'],
+          include: ['user','thread','thread.category','thread.firstPost','images'],
           'filter[isDeleted]':'no',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,

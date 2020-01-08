@@ -86,9 +86,18 @@
           </div>
 
           <div class="recycle-bin-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items.firstPost._data.contentHtml">
-              <!--{{items.firstPost._data.content}}-->
-            </a>
+            <a class="recycle-bin-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+            <div class="recycle-bin-table__main__cont-imgs">
+              <p class="recycle-bin-table__main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="index">
+                <img  :src="item._data.url" alt="">
+              </p>
+            </div>
+            <div class="recycle-bin-table__main__cont-annex" v-show="items.firstPost.attachments.length > 0">
+              <span>附件：</span>
+              <p v-for="(item,index) in items.firstPost.attachments" :key="index">
+                <a :href="item._data.url" target="_blank">{{item._data.fileName}}</a>
+              </p>
+            </div>
           </div>
 
           <div class="recycle-bin-table__footer" slot="footer">

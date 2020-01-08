@@ -263,6 +263,7 @@ export default {
          url:'threads',
          method:'get',
          data:{
+           include:['user', 'firstPost', 'lastPostedUser', 'category','firstPost.images','firstPost.attachments'],
            'filter[isDeleted]':'no',
            'filter[isApproved]':'1',
            'filter[username]':searchData.themeAuthor,

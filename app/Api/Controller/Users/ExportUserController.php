@@ -100,7 +100,7 @@ class ExportUserController implements RequestHandlerInterface
             'nickname',
             'created_at',
             'register_ip',
-            'updated_at',
+            'login_at',
             'last_login_ip',
         ];
 

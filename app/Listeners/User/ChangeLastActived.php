@@ -58,8 +58,8 @@ class ChangeLastActived
             $user->groups()->attach(Group::MEMBER_ID);
         }
 
-        // 更新用户最后活跃时间
-        $user->updated_at = Carbon::now();
+        // 更新用户最后登录时间
+        $user->login_at = Carbon::now();
         $user->last_login_ip = $ip;
 
         $user->save();

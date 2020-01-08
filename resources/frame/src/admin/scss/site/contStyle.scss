@@ -86,6 +86,36 @@
           display: none;
         }
       }
+
+      &-main{
+        line-height: 20PX;
+
+        &__cont-text{
+          width: 100%;
+          color: $titleColor;
+          word-break:break-all;
+          display: block;
+          .qq-emotion{
+            width: 20PX;
+            vertical-align: text-bottom;
+            display:inline-block;
+          }
+        }
+
+        &__cont-imgs{
+          &-p{
+            text-align: center;
+            margin-top: 14PX;
+            img{
+              max-width: 60%;
+            }
+          }
+        }
+
+        &__cont-annex{
+          margin-top: 10PX;
+        }
+      }
     }
 
   }
@@ -285,12 +315,33 @@
       .highlight{
         background-color: yellow;
       }
-      a{
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
         word-break:break-all;
+        display: block;
         .qq-emotion{
           width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
         }
       }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+          }
+        }
+      }
+
+      &__cont-annex{
+        margin-top: 10PX;
+      }
+
     }
     &__footer{
       width: 100%;
@@ -480,12 +531,29 @@
       .highlight{
         background-color: yellow;
       }
-      a{
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
         word-break:break-all;
+        display: block;
         .qq-emotion{
           width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
         }
       }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+          }
+        }
+      }
+
     }
     &__footer{
       width: 100%;
@@ -713,12 +781,33 @@
 
     &__main{
       line-height: 20PX;
-      a{
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
         word-break:break-all;
+        display: block;
         .qq-emotion{
           width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
         }
       }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+          }
+        }
+      }
+
+      &__cont-annex{
+        margin-top: 10PX;
+      }
+
     }
 
     &__footer{
@@ -858,6 +947,29 @@
 
     &__main{
       line-height: 20PX;
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
+        word-break:break-all;
+        display: block;
+        .qq-emotion{
+          width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
+        }
+      }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+          }
+        }
+      }
+
       a{
         word-break:break-all;
         .qq-emotion{

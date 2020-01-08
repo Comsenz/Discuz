@@ -91,9 +91,13 @@
           </div>
 
           <div class="recycle-bin-reply-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml">
-              <!--{{items._data.content}}-->
-            </a>
+            <!--<a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
+            <a class="recycle-bin-reply-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+            <div class="recycle-bin-reply-table__main__cont-imgs">
+              <p class="recycle-bin-reply-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
+                <img  :src="item._data.url" alt="">
+              </p>
+            </div>
           </div>
 
           <div class="recycle-bin-reply-table__footer" slot="footer">
