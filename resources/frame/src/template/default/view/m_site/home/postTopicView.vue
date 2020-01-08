@@ -12,6 +12,7 @@
           <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
         </div>
+        
         <div class="uploadBox" v-if="uploadShow && !isAndroid && !isWeixin">
           <van-uploader :max-count="12" :accept="supportImgExt" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
           </van-uploader>
