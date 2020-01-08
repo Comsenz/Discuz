@@ -18,7 +18,7 @@ class StopWordValidator extends AbstractValidator
     {
         return [
             'ugc' => 'required|in:{IGNORE},{MOD},{BANNED},{REPLACE}',
-            'username' => 'required|in:{IGNORE},{BANNED}',
+            'username' => 'required|in:{IGNORE},{MOD},{BANNED}',
             'find' => 'required|string|unique:stop_words,find|between:1,200',
             'replacement' => 'string|between:1,200',
         ];

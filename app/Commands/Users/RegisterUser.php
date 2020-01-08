@@ -72,7 +72,7 @@ class RegisterUser
             $user->expired_at = Carbon::now();
         }
         //审核模式，设置注册为审核状态
-        if ($settings->get('register_validate')) {
+        if ($settings->get('register_validate') || $censor->isMod) {
             $user->status = 2;
         }
 
