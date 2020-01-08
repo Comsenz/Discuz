@@ -5,6 +5,7 @@
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDB from '../../../../../helpers/webDbHelper';
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data:function () {
@@ -157,12 +158,61 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+    getWatchHrefPC(code,state,sessionId){
+      this.appFetch({
+        url:'wxLogin',
+        method:'get',
+        data:{
+          code:code,
+          state:state,
+          sessionId:sessionId
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          console.log(res.errors[0].status);
+          console.log(res.errors[0].user.openid);
+
+          let wxStatus = res.errors[0].status;
+          let openid = res.errors[0].user.openid;
+
+          if (wxStatus == 400){
+            console.log('微信跳转');
+            this.openid = openid;
+            webDB.setLItem('openid',openid);
+            this.$router.push({path: '/wx-login-bd'});
+          }
+        } else if (res.data.attributes.location) {
+          console.log(res.data.attributes.loscation);
+          console.log('获取地址');
+          this.wxurl = res.data.attributes.location;
+          window.location.href = res.data.attributes.location;
+        } else if (res.data.attributes.access_token){
+
+          this.$toast.success('登录成功');
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
+          webDB.setLItem('Authorization', token);
+          webDB.setLItem('tokenId', tokenId);
+          this.$router.push({path:'/'});
+
+        } else {
+          console.log('任何情况都不符合');
+          console.log(res);
+          console.log(res.data.attributes.location);
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
     }
+
   },
   created(){
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
+    let isWeixin = appCommonH.isWeixin().isWeixin;
 
     console.log(code);
     console.log(state);
@@ -170,11 +220,30 @@ export default {
     webDB.setLItem('code',code);
     webDB.setLItem('state',state);
 
-    if (!code && !state){
+    if (isWeixin){
+      if (!code && !state){
+        this.getWatchHref()
+      } else {
+        this.getWatchHref(code,state,sessionId);
+      }
+    }else {
+      if (this.openid === ''){
+        console.log('PC端：没有openid');
+        this.getWatchHrefPC(code,state,sessionId);
+      }
+    }
+
+    /*if (!code && !state){
       this.getWatchHref()
     } else {
-      this.getWatchHref(code,state,sessionId);
-    }
+
+      if(isWeixin){
+        this.getWatchHref(code,state,sessionId);
+      } else {
+        this.getWatchHrefPC(code,state,sessionId);
+      }
+
+    }*/
 
     this.getForum();
   }

@@ -15,7 +15,7 @@ class WeixinBind
     public function handle(UserVerify $events)
     {
         if (isset($events->data['openid'])) {
-            UserWechat::where('openid', $events->data['openid'])->update(['user_id' => $events->user->id]);
+            UserWechat::where('mp_openid', $events->data['openid'])->update(['user_id' => $events->user->id]);
         }
     }
 }

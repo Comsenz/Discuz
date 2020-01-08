@@ -514,7 +514,8 @@ export default {
     'open-circle',
     'details/:themeId',
     'home-page/:userId',
-    'pay-status'
+    'pay-status',
+    'wx-login-bd'
   ];
 
 
@@ -563,7 +564,7 @@ export default {
    * 站点关闭，跳转到站点关闭页面
    * */
   this.getForum().then((res)=>{
-    if (res.errors){   
+    if (res.errors){
       if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
           next();

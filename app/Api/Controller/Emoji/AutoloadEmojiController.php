@@ -14,7 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Zend\Diactoros\Response\XmlResponse;
+use Laminas\Diactoros\Response\XmlResponse;
 
 class AutoloadEmojiController implements RequestHandlerInterface
 {

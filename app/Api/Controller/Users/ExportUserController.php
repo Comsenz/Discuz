@@ -74,6 +74,7 @@ class ExportUserController implements RequestHandlerInterface
             'id',
             'username',
             'mobile',
+            'login_at',
             'last_login_ip',
             'register_ip',
             'users.status',
@@ -129,7 +130,7 @@ class ExportUserController implements RequestHandlerInterface
             }
             if (!is_null($user->wechat)) {
                 $user->nickname = $user->wechat->nickname;
-                $user->openid = $user->wechat->openid;
+                $user->mp_openid = $user->wechat->mp_openid;
                 $user->unionid = $user->wechat->unionid;
             }
             $user->unsetRelation('wechat');
