@@ -8,6 +8,7 @@
 namespace App\Notifications;
 
 use App\Models\Post;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -51,7 +52,7 @@ class Liked extends Notification
             'post_content' => $this->post->formatContent(),
             'user_id' => $this->actor->id,
             'user_name' => $this->actor->username,
-            'user_avatar' => $this->actor->avatar,
+            'user_avatar' => $this->actor->avatar ? $this->actor->avatar . '?' . Carbon::parse($this->actor->avatar_at)->timestamp : '',
         ];
     }
 }
