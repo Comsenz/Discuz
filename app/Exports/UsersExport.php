@@ -16,7 +16,7 @@ class UsersExport extends Export
         'status' => '账号状态',
         'sex' => '性别',
         'groups' => '用户组名',
-        'openid' => '微信openid',
+        'mp_openid' => '微信openid',
         'unionid' => '微信unionID',
         'nickname' => '微信昵称',
         'created_at' => '注册时间',

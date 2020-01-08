@@ -75,9 +75,9 @@ class UpdateUser
             $validator['password'] = $newPassword;
         }
 
-        if ($mobile = Arr::get($attributes, 'mobile')) {
+        if (Arr::has($attributes, 'mobile')) {
             $this->assertCan($this->actor, 'edit.mobile', $user);
-            $user->changeMobile($mobile);
+            $user->changeMobile(Arr::get($attributes, 'mobile'));
         }
 
         if (Arr::has($attributes, 'status')) {

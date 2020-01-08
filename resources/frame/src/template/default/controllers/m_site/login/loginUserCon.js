@@ -103,14 +103,13 @@ export default {
     },
 
     loginWxClick() {
-      if (this.isPC){
-        this.$message({
-          message: 'PC端暂不支持微信登录，请在微信客户端打开',
-          type: 'warning'
-        });
-      }else {
-      }
-      // window.location.href = this.wxHref;
+     this.getWxLogin().then(res=>{
+       if (res.errors){
+         this.$toast.fail(res.errors[0].code);
+       }else {
+         window.location.href = res.readdata._data.location
+       }
+     })
     },
 
     loginPhoneClick() {
@@ -186,8 +185,19 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+    getWxLogin(){
+      return this.appFetch({
+        url:'wxLogin',
+        method:"get",
+        data:{}
+      }).then(res=>{
+        console.log(res);
+        return res
+      }).catch(err=>{
+        console.log(err);
+      })
     }
-
   },
   created() {
     localStorage.clear();
