@@ -360,12 +360,10 @@ export default {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
       if(AllUpExt.indexOf(extName + ",") == "-1"){
-        alert('阻止');
         this.$toast.fail("文件格式不正确!");
         this.testingRes = false;
         // return false;
       } else {
-        alert('继续');
         this.testingRes = true;
       }
     },
