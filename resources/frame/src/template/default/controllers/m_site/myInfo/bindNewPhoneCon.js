@@ -57,7 +57,7 @@ export default {
           }
         }).then(res => {
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail);
             throw new Error(res.error)
           }else{
             console.log(res);

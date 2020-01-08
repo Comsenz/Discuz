@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserWechat extends Model
 {
+    /**
+     * @var string
+     */
+    public $primaryKey = 'user_id';
 
     protected $fillable = ['user_id', 'mp_openid','dev_openid','min_openid','nickname','sex', 'city', 'headimgurl', 'unionid'];
 
