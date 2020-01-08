@@ -17,14 +17,18 @@ class Liked extends Notification
 
     public $post;
 
+    public $actor;
+
     /**
      * Create a new notification instance.
      *
      * @param Post $post
+     * @param $actor
      */
-    public function __construct(Post $post)
+    public function __construct(Post $post, $actor)
     {
         $this->post = $post;
+        $this->actor = $actor;
     }
 
     /**
@@ -45,8 +49,8 @@ class Liked extends Notification
             'thread_title' => $this->post->thread->title,
             'post_id' => $this->post->id,
             'post_content' => $this->post->formatContent(),
-            'user_id' => $this->post->user->id,
-            'user_name' => $this->post->user->username,
+            'user_id' => $this->actor->id,
+            'user_name' => $this->actor->username,
             'user_avatar' => $this->post->user->avatar,
         ];
     }
