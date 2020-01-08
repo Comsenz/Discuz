@@ -50,10 +50,12 @@ trait UserTrait
 
         // 状态
         if ($status = Arr::get($filter, 'status')) {
-            if ($status == 'yes') {
-                $query->where('status', true);
-            } elseif ($status == 'no') {
-                $query->where('status', false);
+            if ($status == 'normal') {
+                $query->where('status', 0);
+            } elseif ($status == 'ban') {
+                $query->where('status', 1);
+            } elseif ($status == 'mod') {
+                $query->where('status', 2);
             }
         }
 

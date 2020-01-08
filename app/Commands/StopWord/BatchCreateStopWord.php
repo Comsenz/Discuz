@@ -160,7 +160,8 @@ class BatchCreateStopWord
                     $ugc = self::REPLACE;
                 }
 
-                if ($username !== self::BANNED) {
+                $method = [self::IGNORE, self::MOD, self::BANNED];
+                if (! in_array($username, $method)) {
                     $username = self::IGNORE;
                 }
 

@@ -66,7 +66,6 @@ class User extends Model
      */
     protected $casts = [
         'mobile_confirmed' => 'boolean',
-        'status' => 'boolean',
     ];
 
     /**
