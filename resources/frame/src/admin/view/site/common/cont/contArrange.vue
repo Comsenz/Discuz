@@ -60,7 +60,6 @@
           ><!--三元运算方法意思：高度不超过78PX也就是三行，不设置高度，高度自适应。如果超过78PX，则设置高度为78PX，显示'显示内容'组件。-->
             <slot  name="main"></slot>
           </div>
-          <p>{{mainHeight}}</p>
           <div ref="contControl" v-show="mainHeight > 78" class="cont-block-control" :class="showBottomStatus?'is-bottom-out':''" @click="showCont" >
             <p>
               <span class="iconfont icondown-menu" :class="showContStatus?'show-down':''"></span>
