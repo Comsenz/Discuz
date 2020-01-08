@@ -13,7 +13,9 @@ class GroupTableSeeder extends Seeder
     public function run()
     {
         $groups = new Group();
+        $groups->getConnection()->statement('SET FOREIGN_KEY_CHECKS=0;');
         $groups->truncate();
+        $groups->getConnection()->statement('SET FOREIGN_KEY_CHECKS=1;');
         $groups->insert([
             [
                 'id' => 1,

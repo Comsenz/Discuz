@@ -13,7 +13,7 @@ class CreateUserWallets extends Migration
     public function up()
     {
         $this->schema()->create('user_wallets', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->comment('钱包所属人ID');
+            $table->unsignedBigInteger('user_id')->comment('钱包所属人 id');
             $table->unsignedDecimal('available_amount', 10, 2)->comment('可用金额');
             $table->unsignedDecimal('freeze_amount', 10, 2)->comment('冻结金额');
             $table->unsignedTinyInteger('wallet_status')->default(0)->comment('钱包状态:0正常，1冻结提现');

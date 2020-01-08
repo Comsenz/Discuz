@@ -13,13 +13,13 @@ class CreateGroupUser extends Migration
     public function up()
     {
         $this->schema()->create('group_user', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
             $table->integer('group_id')->unsigned()->nullable()->comment('用户组 id');
+            $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
 
-            $table->primary(['post_id', 'user_id']);
+            $table->primary(['group_id', 'user_id']);
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
