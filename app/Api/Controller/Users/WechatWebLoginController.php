@@ -7,15 +7,16 @@
 
 namespace App\Api\Controller\Users;
 
-class WechatLoginController extends AbstractWechatLoginController {
+
+class WechatWebLoginController extends AbstractWechatLoginController {
 
     protected function getDriver()
     {
-        return 'wechat';
+        return 'wechatweb';
     }
 
     protected function getType()
     {
-        return 'mp_openid';
+        return 'dev_openid';
     }
 }

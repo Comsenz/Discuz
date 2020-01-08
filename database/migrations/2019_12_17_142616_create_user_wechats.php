@@ -14,7 +14,9 @@ class CreateUserWechats extends Migration
     {
         $this->schema()->create('user_wechats', function (Blueprint $table) {
             $table->unsignedInteger('user_id')->index('user_id')->default(0)->comment('用户ID');
-            $table->string('openid', 30)->primary()->default('')->comment('微信openid');
+            $table->string('mp_openid', 30)->unique()->default('')->comment('公众号openid');
+            $table->string('dev_openid', 30)->unique()->default('')->comment('开放平台openid');
+            $table->string('min_openid', 30)->unique()->default('')->comment('小程序openid');
             $table->string('nickname', 20)->default('')->comment('微信昵称');
             $table->tinyInteger('sex')->default(0)->comment('性别');
             $table->string('province', 10)->default('')->comment('省份');

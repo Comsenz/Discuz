@@ -54,8 +54,8 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 | Oauth client
 |--------------------------------------------------------------------------
 */
-
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
+$route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
 
 /*
 |--------------------------------------------------------------------------
