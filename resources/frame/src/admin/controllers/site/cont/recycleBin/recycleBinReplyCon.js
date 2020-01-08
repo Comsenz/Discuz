@@ -89,7 +89,6 @@ export default {
       console.log(this.submitForm);
 
       this.deleteStatusList = [];
-      let deleteStr = '';
       let isDeleted = [];
 
       this.submitForm.forEach((item,index)=>{
@@ -102,7 +101,7 @@ export default {
       });
 
       if (this.deleteStatusList.length > 0){
-        this.deleteThreadsBatch(deleteStr.join(','));
+        this.deletePostsBatch(this.deleteStatusList.join(','));
       }
       if (isDeleted.length > 0){
         this.patchPostsBatch(this.submitForm);
@@ -127,7 +126,7 @@ export default {
               deleteStr = deleteStr + item.id
             }
           });
-          this.deleteThreadsBatch(deleteStr);
+          this.deletePostsBatch(deleteStr);
           break;
         default:
           console.log("全部还原或全部删除操作错误,请刷新页面!")
@@ -265,6 +264,31 @@ export default {
               type: 'success'
             });
           }
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+
+    deletePostsBatch(data){
+      this.appFetch({
+        url:'postBatch',
+        method:'delete',
+        splice:'/'+ data
+      }).then(res=>{
+        console.log(res);
+        if (res.meta){
+          res.meta.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.code)
+            },(index+1) * 500);
+          });
+        }else {
+          this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
         }
       }).catch(err=>{
         console.log(err);
