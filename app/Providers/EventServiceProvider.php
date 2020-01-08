@@ -22,6 +22,7 @@ use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
+use App\Listeners\User\ValidateLogin;
 use App\Listeners\User\WeixinBind;
 use App\Listeners\Wallet\CashReviewSubscriber;
 use App\Listeners\Wallet\CreateUserWalletListener;
@@ -51,6 +52,7 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         Logind::class => [
             BanLogin::class,
+            ValidateLogin::class,
             ChckoutSite::class,
             ChangeLastActived::class
         ],

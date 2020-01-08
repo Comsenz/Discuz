@@ -25,6 +25,9 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'register_close',      // 注册开关：0 禁止，1 允许
                 'value' => '1'                  // 默认允许
             ],[
+                'key' => 'register_validate',      //注册审核：0关闭，1开启
+                'value' => '0'                  // 默认关闭
+            ],[
                 'key' => 'qcloud_sms',          // 腾讯云短信开关：0 关闭，1 开启
                 'value' => '0',                 // 默认关闭
                 'tag' => 'qcloud'

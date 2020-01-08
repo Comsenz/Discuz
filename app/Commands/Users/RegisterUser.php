@@ -71,6 +71,10 @@ class RegisterUser
         if ($settings->get('site_mode') == 'pay') {
             $user->expired_at = Carbon::now();
         }
+        //审核模式，设置注册为审核状态
+        if ($settings->get('register_validate')) {
+            $user->status = 2;
+        }
 
         $user->raise(new Registered($user, $this->actor, $this->data));
 
