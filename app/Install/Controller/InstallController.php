@@ -11,6 +11,7 @@ use App\Console\Commands\KeyGenerate;
 use App\Console\Commands\RsaCertGenerate;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\UserWallet;
 use App\Passport\Entities\AccessTokenEntity;
 use App\Passport\Entities\ClientEntity;
 use App\Passport\Repositories\AccessTokenRepository;
@@ -32,8 +33,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
@@ -217,6 +218,9 @@ class InstallController implements RequestHandlerInterface
         $user->register_ip = Arr::get($input, 'ip');
         $user->save();
         $input['user_id'] = $user->id;
+
+        //生成钱包
+        UserWallet::createUserWallet($user->id);
 
         $user->groups()->sync(Group::ADMINISTRATOR_ID);
     }

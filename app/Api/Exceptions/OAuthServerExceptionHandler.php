@@ -11,7 +11,7 @@ use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
-use Zend\Diactoros\Response;
+use Laminas\Diactoros\Response;
 
 class OAuthServerExceptionHandler implements ExceptionHandlerInterface
 {
