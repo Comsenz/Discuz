@@ -84,6 +84,7 @@ a { color: $fontColor;}
 .headeGap {
     @include px2rem(height, 82);
 }
+
 .headOpe {
 	text-align: right;
 	@include px2rem(padding, 28 30 14 30);

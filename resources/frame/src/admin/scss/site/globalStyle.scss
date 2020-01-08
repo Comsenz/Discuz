@@ -122,8 +122,16 @@
     width: 120PX;
     height: 120PX;
     display: block;
+    position: relative;
   }
-
+  .avatar-LogoImage{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin: auto;
+  }
   .el-button--text{
     padding-bottom: 0;
   }

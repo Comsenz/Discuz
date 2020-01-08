@@ -276,6 +276,7 @@ export default {
         url:'threads',
         method:'get',
         data:{
+          include:['user', 'firstPost', 'lastPostedUser', 'category','firstPost.images','firstPost.attachments'],
           'filter[isDeleted]':'no',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,

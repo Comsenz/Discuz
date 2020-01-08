@@ -77,7 +77,13 @@
           </div>
 
           <div class="cont-review-table__main" slot="main">
-            <a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items._data.contentHtml"></a>
+            <!--<a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items._data.contentHtml"></a>-->
+            <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+            <div class="cont-review-table__main__cont-imgs">
+              <p class="cont-review-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
+                <img  :src="item._data.url" alt="">
+              </p>
+            </div>
           </div>
 
           <div class="cont-review-table__footer" slot="footer">

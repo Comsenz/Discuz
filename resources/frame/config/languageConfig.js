@@ -8,7 +8,7 @@ const config = {
   access_denied:'拒绝访问',
   category_not_found:'请选择分类',
   censor_not_passed:'抱歉，您填写的内容包含不良信息',
-  model_not_found:'模型未找到',
+  model_not_found:'系统错误',
   route_not_found:'路由未找到',
   no_bind_user:'未绑定用户',
   thread_count_fail:'主题数操作错误',
@@ -34,7 +34,8 @@ const config = {
   operate_forbidden:'非法操作',
   login_failed:'帐号或密码错误',
   login_failures_times_toplimit:'密码错误次数达到5次，请15分钟后再次尝试',
-  site_closed:"站点已关闭！"
+  site_closed:"站点已关闭！",
+  ban_user:"您的账号被禁用，无法访问本站点",
 
 };
 
