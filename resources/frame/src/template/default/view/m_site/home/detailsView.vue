@@ -162,7 +162,7 @@
      </div>
      </van-pull-refresh>
      <div class="detailsFooter" id="detailsFooter">
-          <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
+          <div class="footChi" @click="replyToJump(themeCon._data.id,0,false)">
             <span class="icon iconfont icon-review"></span>
             回复
           </div>

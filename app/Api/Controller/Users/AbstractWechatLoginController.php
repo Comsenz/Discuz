@@ -77,7 +77,9 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
             ];
 
             $wechatUser->setKeyName($this->getType());
-            $wechatUser->setRawAttributes($this->fixData($user->getRaw(), $actor));
+            $data = $this->fixData($user->getRaw(), $actor);
+            unset($data['user_id'], $data[$this->getType()], $data['unionid']);
+            $wechatUser->setRawAttributes($data);
             $wechatUser->save();
 
             return $this->bus->dispatch(new GenJwtToken($params));

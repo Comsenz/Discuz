@@ -295,8 +295,7 @@ export default {
           require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
         },
         metaInfo:{
-          title:"回复主题",
-          name:'reply-to-topic'
+          title:"回复主题"
         }
       },
 
@@ -484,7 +483,7 @@ export default {
     'pay-circle-con/:themeId/:groupId',
     'pay-circle-login',
     'pay-circle',
-    'pay-circle-con/:themeId'
+    'pay-circle-con/:themeId',
   ];
 
 
@@ -516,7 +515,9 @@ export default {
     'details/:themeId',
     'home-page/:userId',
     'pay-status',
-    'wx-login-bd'
+    'wx-login-bd',
+    'supplier-all-back',
+    'circle-invite'
   ];
 
 
@@ -607,14 +608,18 @@ export default {
   * 前台路由前置判断
   * 判断登录状态
   * */
+
+  // if (to.name == 'supplier-all-back' || to.name == 'circle' || to.name == 'wx-login-bd'){
+  //   next();
+  //   return
+  // }
+  // console.log('跳转前');
+  // next({path:'/supplier-all-back',query:{state:true}});
+
   if (tokenId && Authorization){
     /*已登录状态*/
 
     this.getForum().then(ress=>{
-      // if (ress.errors[0].code === 'site_closed'){
-      //   next({path:'/site-close'})
-      //   return
-      // }
 
       if (ress.readdata._data.setsite.site_mode === 'pay'){
 
@@ -652,29 +657,6 @@ export default {
           next();
         }
 
-        /*this.getUsers(tokenId).then(res=>{
-          console.log(res);
-          if (res){
-            if (signInAndPayForAccess.includes(to.name)){
-              console.log(form);
-              // next(form.path)
-              next('/')
-            }else {
-              next();
-            }
-          }else {
-            if (notLoggedInToAccessPage.includes(to.name)){
-              next();
-            }else {
-              if(to.name === '/'){
-                next();
-                return
-              }
-              next({path:'/'});
-            }
-          }
-        })*/
-
       }
 
     })
@@ -693,6 +675,7 @@ export default {
         next();
       }
       next({path:'/wx-login-bd'});
+      console.log('微信');
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){
         /*符合，未登录可以访问站点*/
@@ -701,10 +684,6 @@ export default {
       }else {
         /*不符合，跳转到未登录，可访问站点*/
         this.getForum().then(res=>{
-          // if (res.errors[0].code === 'site_closed'){
-          //   next({path:'/site-close'})
-          //   return
-          // }
           /*判断站点模式*/
           if (res.readdata._data.setsite.site_mode === 'pay'){
             if(to.name === 'pay-circle'){
