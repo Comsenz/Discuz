@@ -89,7 +89,9 @@ export default {
       payStatusNum: 0,//支付状态次数
       canViewPosts:'',
       canLike:'',
-      canReply:''
+      canReply:'',
+      themeUserId:'',
+      userId:''
     }
   },
   created() {
@@ -101,6 +103,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
+    this.userId = browserDb.getLItem('tokenId');
     // this.getUser();
     this.detailsLoad(true);
     if (!this.themeCon) {
@@ -185,6 +188,7 @@ export default {
     getUser() {
       //初始化请求User信息，用于判断当前用户是否已付费
       var userId = browserDb.getLItem('tokenId');
+      this.userId = userId;
       this.appFetch({
         url: 'users',
         method: 'get',
@@ -271,6 +275,7 @@ export default {
           this.canLike = res.readdata.firstPost._data.canLike;
           this.canViewPosts = res.readdata._data.canViewPosts;
           this.canReply = res.readdata._data.canReply;
+          this.themeUserId = res.readdata.user._data.id;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -533,10 +538,17 @@ export default {
           name:'login-user'
         })
       } else {
-        this.rewardShow = true;
-        if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
-          // this.limitWidth('rewardPopup');
+        console.log(this.userId);
+        console.log(this.themeUserId);
+        if(this.userId == this.themeUserId) {
+          this.$toast.fail('不能打赏自己');
+        } else {
+          this.rewardShow = true;
+          if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
+            // this.limitWidth('rewardPopup');
+          }
         }
+
       }
     },
     //跳转到回复页
