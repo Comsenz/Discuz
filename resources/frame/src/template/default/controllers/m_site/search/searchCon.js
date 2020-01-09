@@ -102,7 +102,7 @@ export default {
 			// // this.userParams['page[limit]'] = 10;
 			// this.userLoadMorePageChange = true;
 			// this.handleSearchUser();
-			this.$router.push({path: '/', query: {searchWord: this.searchVal}})
+			this.$router.push({path: '/circle-members', query: {searchWord: this.searchVal}})
 		},
 
 		async handleSearchTheme(initStatus = false){

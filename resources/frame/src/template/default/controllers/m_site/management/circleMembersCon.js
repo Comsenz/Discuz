@@ -22,8 +22,12 @@ export default {
 	},
 	 //用于数据初始化
   created: function(){
-    // this.loadUserList();
-    this.onSearch();
+	// this.loadUserList();
+	let searchWord = '';
+	if(this.$route.query && this.$route.query.searchWord){
+		searchWord = this.$route.query.searchWord
+	}
+    this.onSearch(searchWord);
 	},
 	methods: {
     //搜索框切换
