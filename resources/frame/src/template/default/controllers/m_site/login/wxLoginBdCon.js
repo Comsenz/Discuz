@@ -87,7 +87,8 @@ export default {
         data:{
           code:code,
           state:state,
-          sessionId:sessionId
+          sessionId:sessionId,
+          platform:'mp'
         }
       }).then(res=>{
         console.log(res);
@@ -166,7 +167,8 @@ export default {
         data:{
           code:code,
           state:state,
-          sessionId:sessionId
+          sessionId:sessionId,
+          platform:'dev'
         }
       }).then(res=>{
         console.log(res);
