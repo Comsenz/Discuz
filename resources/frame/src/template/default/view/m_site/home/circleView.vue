@@ -32,7 +32,7 @@
       <div class="fixedEdit" v-if="canEdit" @click="postTopic">
         <span class="icon iconfont icon-publish"></span>
       </div>
-    
+
       </van-pull-refresh>
 	    </van-list>
       <div class="nullTip" v-if="nullTip">
@@ -42,7 +42,9 @@
     </div>
 
 </template>
-
+<style>
+  .van-pull-refresh { min-height: 300px;}
+</style>
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 // import '../../../vantJS/m_site/tabs/Title.js';
