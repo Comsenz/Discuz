@@ -33,7 +33,7 @@ class SetSettingValidator extends AbstractValidator
             'cash_min_sum' => ['gte:0', new CashMinSum($this->filterDefault('cash_max_sum', 0), $this->filterDefault('cash_sum_limit', 0))],
             'cash_max_sum' => ['gte:0', new CashMaxSum($this->filterDefault('cash_sum_limit', 0))],
             'cash_sum_limit' => ['gte:0', new CashSumLimit()],
-            'site_mode' => 'in:pay,public',
+            'site_mode' => ['in:pay,public'],
         ];
 
         return $rules;
