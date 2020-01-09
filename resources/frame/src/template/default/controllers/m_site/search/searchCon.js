@@ -7,17 +7,17 @@ export default {
 		return {
 			searchVal: '',
 			userParams: {
-				'filter[username]': this.searchVal,
+				'filter[username]': '*' + this.searchVal + '*',
 				// 'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
-				'page[limit]': 5,
+				'page[limit]': 20,
 				'page[number]': this.pageNumber,
 				'sort': '-createdAt',
 				'include': 'groups'
 			},
 			themeParamd: {
-				'filter[q]': this.searchVal,
+				'filter[q]': '*' + this.searchVal + '*',
 				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
 				'page[number]': this.pageNumber,
@@ -51,13 +51,13 @@ export default {
 				this.firstComeIn = false;
 
 				// 用户搜索
-				this.userParams['filter[username]'] = this.searchVal;
+				this.userParams['filter[username]'] = '*' + this.searchVal + '*';
 				this.userParams['page[number]'] = 1;
 
 				this.handleSearchUser(true);
 
 				// 主题搜索
-				this.themeParamd['filter[q]'] = this.searchVal;
+				this.themeParamd['filter[q]'] = '*' + this.searchVal + '*';
 				this.themeParamd['page[number]'] = 1;
 
 				this.handleSearchTheme(true);
@@ -125,7 +125,7 @@ export default {
 					method:'get',
 					data:{
 						include: ['user', 'firstPost'],
-						'filter[q]': this.searchVal,
+						'filter[q]': '*' + this.searchVal + '*',
 						'filter[isDeleted]': 'no',
 						'page[limit]': 5,
 						'page[number]': this.pageNumber,
@@ -156,7 +156,7 @@ export default {
 
 		//点击用户名称，跳转到用户主页
 		jumpPerDet:function(id){
-			  this.$router.push({ path:'/home-page'+'/'+id});	
+			  this.$router.push({ path:'/home-page'+'/'+id});
 		  },
 
 	},

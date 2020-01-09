@@ -310,7 +310,7 @@ a { color: $fontColor;}
 		@include px2rem(height,116);
 	}
 	.userDet {
-		float: left;
+		float: right;
 		@include px2rem(margin-left,18);
 		@include px2rem(width,280);
 		.userName {
@@ -332,7 +332,7 @@ a { color: $fontColor;}
 		float: right;
 		@include font-dpr(32);
 		color: $corE5;
-		@include px2rem(margin-top, 42);
+		@include px2rem(margin-top, -40);
 	}
 }
 .sideItem {

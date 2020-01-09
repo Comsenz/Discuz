@@ -7,16 +7,19 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 import TableContAdd from '../../../../view/site/common/table/tableContAdd';
 import Page from '../../../../view/site/common/page/page';
 import webDb from '../../../../../helpers/webDbHelper'
+import appConfig from "../../../../../../config/appConfig";
 
 export default {
   data:function () {
+    let token = browserDb.getLItem('Authorization');
+
     return {
       tableData: [],
       multipleSelection: [],
       tableDataLength:'',
       // disabled:true,
       createCategoriesStatus:false,   //添加分类状态
-
+      exportUrl: appConfig.devApiUrl+'/stop-words/export?token=Bearer ' + token,
       options: [{
           value: '{IGNORE}',
           label: '不处理'
@@ -234,11 +237,10 @@ export default {
         //   this.$message.error(res.errors[0].code);
         // }else{
           // this.pageNum  = 1
-          console.log(this.pageNum,'页码页码页码')
           this.handleSearchUser(true);
           this.$message({message: '提交成功', type: 'success'});
         // }
-        
+
       } catch(err){
         console.error(err,'function loginStatus error')
       }
@@ -275,8 +277,6 @@ export default {
         }else{
           this.handleSearchUser(true);
         }
-        
-        console.log(res)
       })
 
     },

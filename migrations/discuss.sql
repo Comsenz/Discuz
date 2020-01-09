@@ -320,3 +320,14 @@ alter table users add column status tinyint(1) not null default '0' comment '用
 
 -- 2019-12-26 14:33:11 设置项 value 允许为 null
 ALTER TABLE `settings` CHANGE `value` `value` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '设置表value';
+
+-- 2020-01-09 16:59:11 关注表
+CREATE TABLE `user_follow` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '关系 ID',
+  `from_user_id` int(10) unsigned NOT NULL COMMENT '关系主体',
+  `to_user_id` int(10) unsigned NOT NULL COMMENT '关系客体',
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `from_user_id` (`from_user_id`),
+  KEY `to_user_id` (`to_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='关注表';

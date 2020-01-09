@@ -1,4 +1,4 @@
-<template>                
+<template>
     <div class="content-filter-set-box">
       <div class="content-filter-set__search">
         <Card>
@@ -10,7 +10,7 @@
       <main class="content-filter-set-main">
         <p class="list-set-box">
           <span  @click="$router.push({path:'/admin/add-sensitive-words'})" >批量添加</span>
-          <a href="https://2020.comsenz-service.com/api/stop-words/export">导出过滤词库</a>
+          <a :href="exportUrl">导出过滤词库</a>
         </p>
 
         <div>
@@ -30,7 +30,7 @@
             >
               <template slot-scope="scope">
                 {{ !scope.row._data.addInputFlag ? scope.row._data.find : ''}}
-                <el-input splaceholder="请输入过滤词" clearable v-model="scope.row._data.find" v-show="scope.row._data.addInputFlag"> 
+                <el-input splaceholder="请输入过滤词" clearable v-model="scope.row._data.find" v-show="scope.row._data.addInputFlag">
                 </el-input> 
               </template>
 
@@ -62,7 +62,7 @@
                     :label="item.label"
                     :value="item.value">
                   </el-option>
-                </el-select>          
+                </el-select>
               </template>
             </el-table-column>
 
@@ -70,14 +70,12 @@
               prop="address"
               label="过滤词替换">
               <template slot-scope="scope">
-                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>   
+                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>
               </template>
             </el-table-column>
 
           </el-table>
 
-
-          
         <TableContAdd @tableContAddClick="tableContAdd" cont="新增"></TableContAdd>
 
           <!--<div class="content-filter-set-table-add">

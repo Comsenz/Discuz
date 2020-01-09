@@ -220,7 +220,7 @@ export default {
 
     },
     detailIf(siteMode) {
-      var token = browserDb.getLItem('Authorization', token);
+      var token = browserDb.getLItem('Authorization');
       this.token = token;
       if (siteMode == 'public') {
         //当站点为公开站点时
