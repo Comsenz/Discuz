@@ -27,7 +27,6 @@
 		    	<div class="postImgBox">
             <div class="postImgList">
               <van-image
-                  fit="none"
                   lazy-load
                   v-for="(image,index)  in firstpostImageList"
                   :src="image"
