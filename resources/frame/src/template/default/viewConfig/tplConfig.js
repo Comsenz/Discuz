@@ -290,12 +290,13 @@ export default {
       },
 
       //主题详情页模块
-      'reply-to-topic':{
+      'reply-to-topic/:themeId/:replyId':{
         comLoad:function (resolve) {
           require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
         },
         metaInfo:{
-          title:"回复主题"
+          title:"回复主题",
+          name:'reply-to-topic'
         }
       },
 

@@ -137,7 +137,7 @@ export default {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
       let datas = [];
-      data.forEach((item)=>{ 
+      data.forEach((item)=>{
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
@@ -541,6 +541,7 @@ export default {
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
+      console.log(quoteCon);
       if(!this.token){
         this.$router.push({
           path:'/login-user',
@@ -550,10 +551,12 @@ export default {
         this.$toast.fail('没有权限，请联系站点管理员');
       } else {
         this.$router.push({
-          path:'/reply-to-topic',
+          path:'/reply-to-topic'+'/'+themeId+'/'+replyId,
           name:'reply-to-topic',
-          params: { themeId:themeId,replyQuote: quoteCon,replyId:replyId }
-        })
+          // path:'/reply-to-topic',
+          // query: {themeId: themeId,replyId:replyId},
+          params: { replyQuote: quoteCon }
+        });
       }
     },
     //打赏 生成订单

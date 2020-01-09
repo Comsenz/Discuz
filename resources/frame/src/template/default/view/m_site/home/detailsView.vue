@@ -40,7 +40,9 @@
 		    		<a @click="downAttachment(attachment._data.url)" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
               <!-- <a :href="attachment._data.url" class="fileChi"  v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download> -->
 		    		  <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
-		    		  <span v-else-if="attachment._data.extension === 'word'" class="icon iconfont icon-word"></span>
+              <span v-if="attachment._data.extension === 'zip'" class="icon iconfont icon-rar"></span>
+		    		  <span v-else-if="attachment._data.extension === 'doc'" class="icon iconfont icon-word"></span>
+              <span v-else-if="attachment._data.extension === 'docx'" class="icon iconfont icon-word"></span>
               <span v-else-if="attachment._data.extension === 'pdf'" class="icon iconfont icon-pdf"></span>
               <span v-else-if="attachment._data.extension === 'jpg'" class="icon iconfont icon-jpg"></span>
               <span v-else-if="attachment._data.extension === 'mp'" class="icon iconfont icon-mp3"></span>
@@ -59,7 +61,9 @@
             <a :href="attachment._data.url" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download>
 
               <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
-              <span v-else-if="attachment._data.extension === 'word'" class="icon iconfont icon-word"></span>
+              <span v-if="attachment._data.extension === 'zip'" class="icon iconfont icon-rar"></span>
+              <span v-else-if="attachment._data.extension === 'doc'" class="icon iconfont icon-word"></span>
+              <span v-else-if="attachment._data.extension === 'docx'" class="icon iconfont icon-word"></span>
               <span v-else-if="attachment._data.extension === 'pdf'" class="icon iconfont icon-pdf"></span>
               <span v-else-if="attachment._data.extension === 'jpg'" class="icon iconfont icon-jpg"></span>
               <span v-else-if="attachment._data.extension === 'mp'" class="icon iconfont icon-mp3"></span>

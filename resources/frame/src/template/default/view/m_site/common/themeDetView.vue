@@ -63,6 +63,7 @@
                     :src="image"
                     class="themeImgChild"
                     :key="index"
+                    v-if="index < 9"
                     @click="jumpThemeDet(item._data.id,item._data.canViewPosts)"
                   />
                 </div>
