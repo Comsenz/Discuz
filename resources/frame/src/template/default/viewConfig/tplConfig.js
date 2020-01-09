@@ -296,8 +296,7 @@ export default {
         },
         metaInfo:{
           title:"回复主题",
-          name:'reply-to-topic',
-          component: reply-to-topic
+          name:'reply-to-topic'
         }
       },
 
