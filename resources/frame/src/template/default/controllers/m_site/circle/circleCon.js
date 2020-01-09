@@ -143,7 +143,7 @@ export default {
       if(isPayVal == 'public'){
         //当站点为公开站点时
         // console.log('公开');
-        var token = browserDb.getLItem('Authorization',token);
+        var token = browserDb.getLItem('Authorization');
         if(token){
           // console.log('公开，已登录');
           //当用户已登录时

@@ -15,9 +15,9 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
 use Discuz\Qcloud\QcloudTrait;
-use Discuz\Qcloud\Services\BillingService;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -28,16 +28,6 @@ use Illuminate\Support\Arr;
 class SetSettingsController implements RequestHandlerInterface
 {
     use AssertPermissionTrait, QcloudTrait;
-
-    /**
-     * 需要验证的值
-     *
-     * @var array
-     */
-    protected $validationQCloud = [
-        'qcloud_secret_id',
-        'qcloud_secret_key',
-    ];
 
     protected $cache;
 
@@ -66,34 +56,35 @@ class SetSettingsController implements RequestHandlerInterface
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $settings = collect($request->getParsedBody()->get('data', []))->pluck('attributes');
+        $settings = collect($request->getParsedBody()->get('data', []))
+            ->pluck('attributes')
+            ->keyBy(function ($item) {
+                // 以 tag + key 为键既可去重又方便取用
+                return $item['tag'] . '_' . $item['key'];
+            });
 
         // 分成比例检查
-        $siteAuthorScale = (int) $settings->where('tag', 'default')->where('key', 'site_author_scale')->first();
-        $siteMasterScale = (int) $settings->where('tag', 'default')->where('key', 'site_master_scale')->first();
+        $siteAuthorScale = $settings->pull('default_site_author_scale');
+        $siteMasterScale = $settings->pull('default_site_master_scale');
 
         // 只要传了其中一个，就检查分成比例相加是否为 10
         if ($siteAuthorScale || $siteMasterScale) {
-            $sum = Arr::get($siteAuthorScale, 'value', 0)
-                + Arr::get($siteMasterScale, 'value', 0);
+            $siteAuthorScale = abs($siteAuthorScale['value']);
+            $siteMasterScale = abs($siteMasterScale['value']);
+            $sum = $siteAuthorScale + $siteMasterScale;
 
-            if ($sum != 10) {
+            if ($sum === 10) {
+                $this->setSiteScale($siteAuthorScale, $siteMasterScale, $settings);
+            } else {
                 throw new Exception('scale_sum_not_10');
             }
         }
 
-        // 验证QCloud值是否正确
-        $Qcloud = $settings->pluck('value', 'key')->only($this->validationQCloud);
-        if (!$Qcloud->isEmpty()) {
-            $billing = new BillingService($Qcloud);
-            $billing->DescribeAccountBalance();
-        }
-
         // 站点模式切换
-        $siteMode = $settings->where('tag', 'default')->where('key', 'site_mode')->first();
+        $siteMode = $settings->get('default_site_mode');
         $siteMode = Arr::get($siteMode, 'value');
 
-        if ($siteMode && $siteMode != $this->settings->get('site_mode')) {
+        if (in_array($siteMode, ['pay', 'public']) && $siteMode != $this->settings->get('site_mode')) {
             if ($siteMode === 'pay') {
                 $this->changeSiteMode(Group::UNPAID, Carbon::now(), $settings);
             } elseif ($siteMode === 'public') {
@@ -102,7 +93,7 @@ class SetSettingsController implements RequestHandlerInterface
         }
 
         /**
-         * @property \App\Validators\SetSettingValidator
+         * @property SetSettingValidator
          */
         $validator = $settings->pluck('value', 'key')->all();
         $this->validator->valid($validator);
@@ -120,12 +111,39 @@ class SetSettingsController implements RequestHandlerInterface
         return new EmptyResponse(204);
     }
 
+    /**
+     * @param int $groupId
+     * @param Carbon $time
+     * @param Collection $settings
+     */
     private function changeSiteMode($groupId, $time, &$settings)
     {
-        $settings->push([
+        $settings->put('default_site_pay_time', [
             'key' => 'site_pay_time',
             'value' => $time,
             'tag' => 'default'
+        ]);
+    }
+
+    /**
+     * 设置分成比例
+     *
+     * @param int $siteAuthorScale
+     * @param int $siteMasterScale
+     * @param Collection $settings
+     */
+    private function setSiteScale(int $siteAuthorScale, int $siteMasterScale, &$settings)
+    {
+        $settings->put('default_site_author_scale', [
+            'key' => 'site_author_scale',
+            'value' => $siteAuthorScale,
+            'tag' => 'default',
+        ]);
+
+        $settings->put('default_site_master_scale', [
+            'key' => 'site_master_scale',
+            'value' => $siteMasterScale,
+            'tag' => 'default',
         ]);
     }
 }
