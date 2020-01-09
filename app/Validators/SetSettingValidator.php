@@ -28,6 +28,7 @@ class SetSettingValidator extends AbstractValidator
             'cash_min_sum' => 'gte:0',
             'cash_max_sum' => 'gte:0',
             'cash_sum_limit' => 'gte:0',
+            'site_mode' => 'in:pay,public',
         ];
 
         return $rules;
