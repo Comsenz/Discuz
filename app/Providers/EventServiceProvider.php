@@ -23,7 +23,7 @@ use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
 use App\Listeners\User\ValidateLogin;
-use App\Listeners\User\WeixinBind;
+use App\Listeners\User\WechatBind;
 use App\Listeners\Wallet\CashReviewSubscriber;
 use App\Listeners\Wallet\CreateUserWalletListener;
 use App\Policies\AttachmentPolicy;
@@ -40,7 +40,7 @@ class EventServiceProvider extends BaseEventServiceProvider
 {
     protected $listen = [
         UserVerify::class => [
-            WeixinBind::class,
+            WechatBind::class,
             MobileBind::class
         ],
         Registered::class => [
