@@ -516,6 +516,7 @@ export default {
     'home-page/:userId',
     'pay-status',
     'wx-login-bd',
+    'wx-sign-up-bd',
     'supplier-all-back',
     'circle-invite'
   ];
