@@ -12,7 +12,7 @@
               <img v-if="themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
 		    			<div class="perDet">
-		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.username)">{{themeCon.user._data.username}}</div>
+		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.id)">{{themeCon.user._data.username}}</div>
                 <div class="perName" v-else="">该用户已被删除</div>
 		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
 		    			</div>
