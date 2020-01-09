@@ -11,7 +11,7 @@ export default {
 				// 'filter[id]': browserDb.getLItem('tokenId'),
 				'filter[group_id]': [],
 				'filter[bind]': 1,
-				'page[limit]': 5,
+				'page[limit]': 20,
 				'page[number]': this.pageNumber,
 				'sort': '-createdAt',
 				'include': 'groups'
