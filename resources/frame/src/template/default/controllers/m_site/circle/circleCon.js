@@ -234,7 +234,7 @@ export default {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
           } else {
-            if(!this.themeListCon.length){
+            if(this.themeListCon.length<0){
               this.nullTip = true
             }
             this.themeListCon = this.themeListCon.concat(res.readdata);
@@ -379,6 +379,7 @@ export default {
       onRefresh(){    //下拉刷新
           this.pageIndex = 1;
           this.themeListCon = [];
+          this.nullTip = false;
           this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
             this.$toast('刷新成功');
             this.finished = false;
