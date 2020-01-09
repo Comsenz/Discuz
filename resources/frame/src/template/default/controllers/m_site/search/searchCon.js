@@ -7,21 +7,20 @@ export default {
 		return {
 			searchVal: '',
 			userParams: {
-				'filter[username]': '*' + this.searchVal + '*',
-				// 'filter[id]': browserDb.getLItem('tokenId'),
+				'filter[username]': '',
 				'filter[group_id]': [],
 				'filter[bind]': 1,
-				'page[limit]': 20,
-				'page[number]': this.pageNumber,
+				'page[limit]': 5,
+				'page[number]': 1,
 				'sort': '-createdAt',
 				'include': 'groups'
 			},
 			themeParamd: {
-				'filter[q]': '*' + this.searchVal + '*',
+				include: ['user', 'firstPost'],
+				'filter[q]': '',
 				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
-				'page[number]': this.pageNumber,
-
+				'page[number]': 1,
 			},
 			firstComeIn: true, // 是否首次进入页面
 			searchUserList: [],
@@ -33,7 +32,7 @@ export default {
 			userLoading: false,
 			themeLoading: false,
 			timerSearch: null, // 延迟器
-			pageNumber:1,
+			searchMaxSum: 3,
 		}
   	},
 
@@ -81,14 +80,10 @@ export default {
 				await this.appFetch({
 					url:'users',
 					methods:'get',
-					// data:{
-					// 	currentPageNum:this.userParams
-					// }
 					data: this.userParams
 				}).then(data=>{
-					// console.log(data.readdata[0]._data.id,'搜索搜索')
-					this.searchUserList = this.searchUserList.concat(data.readdata);
-					this.userLoadMoreStatus = data.readdata.length < this.userParams['page[limit]'];
+					this.userLoadMoreStatus = data.readdata.length > this.searchMaxSum;
+					this.searchUserList = data.readdata.splice(0,3);
 				}).catch(err=>{
 					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
 						this.userParams['page[number]'] = currentPageNum - 1;
@@ -102,12 +97,12 @@ export default {
 		},
 
 		handleLoadMoreUser(){
-			this.pageNumber++
-			// this.userParams['page[number]']++;
-			console.log(this.userParams['page[number]']++)
-			// this.userParams['page[limit]'] = 10;
-			this.userLoadMorePageChange = true;
-			this.handleSearchUser();
+			// // this.userParams['page[number]']++;
+			// console.log(this.userParams['page[number]']++)
+			// // this.userParams['page[limit]'] = 10;
+			// this.userLoadMorePageChange = true;
+			// this.handleSearchUser();
+			this.$router.push({path: '/', query: {searchWord: this.searchVal}})
 		},
 
 		async handleSearchTheme(initStatus = false){
@@ -123,17 +118,10 @@ export default {
 				await this.appFetch({
 					url:'searchThreads',
 					method:'get',
-					data:{
-						include: ['user', 'firstPost'],
-						'filter[q]': '*' + this.searchVal + '*',
-						'filter[isDeleted]': 'no',
-						'page[limit]': 5,
-						'page[number]': this.pageNumber,
-					}
-					// data: this.themeParamd
+					data: this.themeParamd
 				}).then(data=>{
-					this.searchThemeList = this.searchThemeList.concat(data.readdata);
-					this.themeLoadMoreStatus = data.readdata.length < this.themeParamd['page[limit]'];
+					this.themeLoadMoreStatus = data.readdata.length < this.searchMaxSum;
+					this.searchThemeList = data.readdata.splice(0,3);
 				}).catch(err=>{
 					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
 						this.themeParamd['page[number]'] = currentPageNum - 1;
@@ -147,11 +135,11 @@ export default {
 		},
 
 		handleLoadMoreTheme(){
-			this.pageNumber++
-			// this.themeParamd['page[number]']++;
-			// this.themeParamd['page[limit]'] = 10;
-			this.themeLoadMorePageChange = true;
-			this.handleSearchTheme();
+			// // this.themeParamd['page[number]']++;
+			// // this.themeParamd['page[limit]'] = 10;
+			// this.themeLoadMorePageChange = true;
+			// this.handleSearchTheme();
+			this.$router.push({path: '/', query: {searchWord: this.searchVal}})
 		},
 
 		//点击用户名称，跳转到用户主页

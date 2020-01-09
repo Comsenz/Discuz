@@ -8,11 +8,6 @@ export default {
       	serHide:true,
       	serShow:false,
 		searchVal: '',
-		userParams: {
-		 'filter[username]': this.searchVal,
-		 'page[number]': this.pageNumber,
-		 'page[limit]': 20,
-		},
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
 	  	userLoadMorePageChange: false,
@@ -38,13 +33,8 @@ export default {
       this.$refs.serInp.focus();
     },
 	onSearch(val) {
-	  this.searchVal = val;
-	// console.log(val,'value')
-	//   this.userParams = {
-	// 	'filter[username]': this.searchVal,
-	//     }
-	this.userParams['filter[username]'] = this.searchVal;
-	this.userParams['page[number]'] = 1;
+	this.searchVal = val;
+	this.pageIndex = 1;
 	this.handleSearchUser(true);
 		},
 	    onCancel() {
@@ -58,12 +48,12 @@ export default {
 			  await this.appFetch({
 				  url:'users',
 				  method:'get',
-				  data:this.userParams
-				//   data:{
-				// 	'filter[username]': this.searchVal,
-				// 	'page[number]': this.pageIndex,
-            	// 	'page[limit]': this.pageLimit
-				//   }
+				//   data:this.userParams
+				  data:{
+					'filter[username]': this.searchVal,
+					'page[number]': this.pageIndex,
+            		'page[limit]': this.pageLimit
+				  }
 			  }).then(data=>{
 				if (data.errors){
 					this.$toast.fail(data.errors[0].code);
