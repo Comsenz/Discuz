@@ -2,6 +2,7 @@ import {Bus} from '../../../store/bus.js';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 import appCommonH from '../../../../../helpers/commonHelper';
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
@@ -44,7 +45,8 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    var replyQuote = this.$route.params.replyQuote;
+    // var replyQuote = this.$route.params.replyQuote;
+    var replyQuote = browserDb.getLItem('replyQuote');
     // var replyId = this.$route.params.replyId;
     // var themeId = this.$route.params.themeId;
     console.log(replyQuote);
@@ -132,25 +134,7 @@ export default {
       let viewportWidth = window.innerWidth;
       document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
-    // //上传图片,点击加号时
-    // handleFile(e){
-    //   // 实例化
-    //   // console.log(e);
-    //   let formdata = new FormData()
-    //   formdata.append('file', e.file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata);
 
-    // },
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   let file = e.target.files[0];
-    //   let formdata = new FormData();
-    //   formdata.append('file', file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,true);
-    //   this.uploadShow = true;
-    // },
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
       console.log(this.canUploadImages+'0099')
@@ -274,19 +258,8 @@ export default {
               if (this.fileListOne.length>0){
                 this.uploadShow = true;
               }
-
             }
-
           }
-
-  //         if (data.errors){
-  //           this.$toast.fail(data.errors[0].code);
-  //           throw new Error(data.error)
-  //         }else{
-  //           if(isFoot){
-  //            this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-  //           }
-  //         }
         })
     },
 
@@ -416,7 +389,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'details'+'/'+this.themeId})
+            this.$router.push({path:'/details'+'/'+this.themeId})
           }
         })
       } else {
@@ -449,7 +422,7 @@ export default {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'details'+'/'+this.themeId});
+            this.$router.push({path:'/details'+'/'+this.themeId});
           }
         })
       }
@@ -500,5 +473,9 @@ export default {
     backClick() {
       this.$router.go(-1);
     },
-  }
+  },
+
+  destroyed: function () {
+      browserDb.removeLItem('replyQuote');
+  },
 }

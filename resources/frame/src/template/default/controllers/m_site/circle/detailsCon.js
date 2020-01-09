@@ -205,7 +205,7 @@ export default {
 
     },
     detailIf(siteMode) {
-      var token = browserDb.getLItem('Authorization', token);
+      var token = browserDb.getLItem('Authorization');
       this.token = token;
       if (siteMode == 'public') {
         //当站点为公开站点时
@@ -541,7 +541,7 @@ export default {
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
-      console.log(quoteCon);
+      console.log(themeId, replyId, quoteCon);
       if(!this.token){
         this.$router.push({
           path:'/login-user',
@@ -552,34 +552,11 @@ export default {
       } else {
         this.$router.push({
           path:'/reply-to-topic'+'/'+themeId+'/'+replyId,
-          name:'reply-to-topic',
-          // path:'/reply-to-topic',
-          // query: {themeId: themeId,replyId:replyId},
-          params: { replyQuote: quoteCon }
         });
+        browserDb.setLItem('replyQuote', quoteCon);
       }
     },
-    //打赏 生成订单
-    // rewardPay(amount) {
-    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
-    //   let isPhone = this.appCommonH.isWeixin().isPhone;
-    //   let payment_type = '';
-    //   this.appFetch({
-    //     url: "orderList",
-    //     method: "post",
-    //     data: {
-    //       "type": "2",
-    //       "thread_id": this.themeId,
-    //       "amount": amount
-    //     },
-    //   }).then(data => {
 
-    //     // console.log(data.data.attributes.order_sn);
-    //     this.orderSn = data.data.attributes.order_sn;
-    //     this.orderPay(this.orderSn, amount);
-
-    //   })
-    // },
 
      onBridgeReady(data){
        let that = this;

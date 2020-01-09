@@ -15,6 +15,7 @@ export default {
     return {
         avatarUrl:'',
         username:'',
+        userId:'',
         mobile:'',
         // userId:'',
         userInfo:{},
@@ -100,6 +101,8 @@ export default {
         this.avatarUrl = res.readdata._data.avatarUrl;
         this.username = res.readdata._data.username;
         this.mobile = res.readdata._data.mobile;
+        this.userId = res.readdata._data.id;
+        console.log(res.readdata._data.id,'是id')
       })
 
   },

@@ -9,12 +9,9 @@ export default {
       	serShow:false,
 		searchVal: '',
 		userParams: {
-		 'filter[username]': '',
-		},
-		themeParamd: {
-		// 'filter[q]': '',
-		// 'page[limit]': 2,
-		'page[number]': this.pageIndex,
+		 'filter[username]': this.searchVal,
+		 'page[number]': this.pageNumber,
+		 'page[limit]': 20,
 		},
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
@@ -43,10 +40,12 @@ export default {
 	onSearch(val) {
 	  this.searchVal = val;
 	// console.log(val,'value')
-	  this.userParams = {
-	    'filter[username]': this.searchVal,
-	    }
-	  this.handleSearchUser(true);
+	//   this.userParams = {
+	// 	'filter[username]': this.searchVal,
+	//     }
+	this.userParams['filter[username]'] = this.searchVal;
+	this.userParams['page[number]'] = 1;
+	this.handleSearchUser(true);
 		},
 	    onCancel() {
 	    },
@@ -59,11 +58,12 @@ export default {
 			  await this.appFetch({
 				  url:'users',
 				  method:'get',
-				  data:{
-					'filter[username]': this.searchVal,
-					'page[number]': this.pageIndex,
-            		'page[limit]': this.pageLimit
-				  }
+				  data:this.userParams
+				//   data:{
+				// 	'filter[username]': this.searchVal,
+				// 	'page[number]': this.pageIndex,
+            	// 	'page[limit]': this.pageLimit
+				//   }
 			  }).then(data=>{
 				if (data.errors){
 					this.$toast.fail(data.errors[0].code);

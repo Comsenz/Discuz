@@ -12,7 +12,7 @@
               <img v-if="themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
 		    			<div class="perDet">
-		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.username)">{{themeCon.user._data.username}}</div>
+		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.id)">{{themeCon.user._data.username}}</div>
                 <div class="perName" v-else="">该用户已被删除</div>
 		    				<div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
 		    			</div>
@@ -123,10 +123,10 @@
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
-                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
-                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
+                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead" @click="jumpPerDet(item.user._data.id)" >
+                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" @click="jumpPerDet(item.user._data.id)">
                   <div class="perDet">
-                    <div class="perName" v-if="item.user && item.user._data.username">{{item.user._data.username}}</div>
+                    <div class="perName" v-if="item.user && item.user._data.username" @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
@@ -162,7 +162,7 @@
      </div>
      </van-pull-refresh>
      <div class="detailsFooter" id="detailsFooter">
-          <div class="footChi" @click="replyToJump(themeCon._data.id,false,false)">
+          <div class="footChi" @click="replyToJump(themeCon._data.id,0,false)">
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
