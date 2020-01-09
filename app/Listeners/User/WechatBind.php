@@ -17,7 +17,7 @@ class WechatBind
     {
         if ($openid = Arr::get($events->data, 'openid') && $platform = Arr::get($events->data, 'platform')) {
             $key = $platform.'_openid';
-            if(in_array($key, ['mp', 'dev', 'min'])) {
+            if(in_array($platform, ['mp', 'dev', 'min'])) {
                 UserWechat::where($key, $openid)->update(['user_id' => $events->user->id]);
             }
         }
