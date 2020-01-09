@@ -123,10 +123,10 @@
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
-                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
-                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
+                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead" @click="jumpPerDet(item.user._data.id)" >
+                  <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" @click="jumpPerDet(item.user._data.id)">
                   <div class="perDet">
-                    <div class="perName" v-if="item.user && item.user._data.username">{{item.user._data.username}}</div>
+                    <div class="perName" v-if="item.user && item.user._data.username" @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
                     <div class="postTime">{{$moment(item._data.updatedAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
