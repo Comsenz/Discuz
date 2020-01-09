@@ -15,7 +15,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
 use Discuz\Qcloud\QcloudTrait;
-use Discuz\Qcloud\Services\BillingService;
 use Exception;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ResponseInterface;
@@ -28,16 +27,6 @@ use Illuminate\Support\Arr;
 class SetSettingsController implements RequestHandlerInterface
 {
     use AssertPermissionTrait, QcloudTrait;
-
-    /**
-     * 需要验证的值
-     *
-     * @var array
-     */
-    protected $validationQCloud = [
-        'qcloud_secret_id',
-        'qcloud_secret_key',
-    ];
 
     protected $cache;
 
@@ -80,13 +69,6 @@ class SetSettingsController implements RequestHandlerInterface
             if ($sum != 10) {
                 throw new Exception('scale_sum_not_10');
             }
-        }
-
-        // 验证QCloud值是否正确
-        $Qcloud = $settings->pluck('value', 'key')->only($this->validationQCloud);
-        if (!$Qcloud->isEmpty()) {
-            $billing = new BillingService($Qcloud);
-            $billing->DescribeAccountBalance();
         }
 
         // 站点模式切换
