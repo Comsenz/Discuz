@@ -609,12 +609,12 @@ export default {
   * 判断登录状态
   * */
 
-  if (to.name == 'supplier-all-back' || to.name == 'circle' || to.name == 'wx-login-bd'){
-    next();
-    return
-  }
-  console.log('跳转前');
-  next({path:'/supplier-all-back',query:{state:true}});
+  // if (to.name == 'supplier-all-back' || to.name == 'circle' || to.name == 'wx-login-bd'){
+  //   next();
+  //   return
+  // }
+  // console.log('跳转前');
+  // next({path:'/supplier-all-back',query:{state:true}});
 
   if (tokenId && Authorization){
     /*已登录状态*/
