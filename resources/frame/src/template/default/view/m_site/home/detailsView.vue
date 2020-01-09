@@ -32,6 +32,7 @@
                   v-for="(image,index)  in firstpostImageList"
                   :src="image"
                   @click="imageSwiper"
+                  :fit="none"
                   :key="index"
               />
             </div>
