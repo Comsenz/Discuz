@@ -295,8 +295,7 @@ export default {
           require(['../view/m_site/themeDetails/replyToTopicView'],resolve)
         },
         metaInfo:{
-          title:"回复主题",
-          name:'reply-to-topic'
+          title:"回复主题"
         }
       },
 
