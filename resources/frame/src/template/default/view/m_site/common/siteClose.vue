@@ -2,6 +2,7 @@
     <div class="siteCom">
         <van-icon class="logo" name="warning" color="#c33" size="64"/>
         <div class="siteClose">站点已关闭</div>
+        <!-- <div class="siteReason">你是傻子吗对你是</div> -->
         <div class="siteReason">{{closeReason}}</div>
         <div class="login">
           <van-button type="primary" @click="loginClick">登录</van-button>
@@ -37,12 +38,14 @@
     // margin-top:10px;
 }
 .siteReason{
-    width:100%;
-    text-align: center;
+    width:65%;
+    margin:0 auto;
+    text-align:center;
     // line-height: 40px;
     margin-top:10px;
     font-size: 15px;
-    color:#ccc
+    color:#000;
+    opacity: 0.5;
 }
 .login{
      width:100%;

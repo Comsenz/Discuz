@@ -50,7 +50,9 @@ export default {
       canCreateThread:'',
       canViewThreads:'',
       nullTip:false,
-      nullWord:''
+      nullWord:'',
+      allowRegister:'',
+      loginWord:'登录 / 注册'
 
 		}
 	},
@@ -90,6 +92,10 @@ export default {
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.canCreateThread;
           this.canViewThreads = res.readdata._data.canViewThreads;
+          this.allowRegister = res.readdata._data.allowRegister;
+          if(!this.allowRegister){
+            this.loginWord = '登录';
+          }
           console.log(res.readdata._data.siteMode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
           this.sitePrice = res.readdata._data.sitePrice

@@ -69,8 +69,8 @@ class SetSettingsController implements RequestHandlerInterface
         $settings = collect($request->getParsedBody()->get('data', []))->pluck('attributes');
 
         // 分成比例检查
-        $siteAuthorScale = $settings->where('tag', 'default')->where('key', 'site_author_scale')->first();
-        $siteMasterScale = $settings->where('tag', 'default')->where('key', 'site_master_scale')->first();
+        $siteAuthorScale = (int) $settings->where('tag', 'default')->where('key', 'site_author_scale')->first();
+        $siteMasterScale = (int) $settings->where('tag', 'default')->where('key', 'site_master_scale')->first();
 
         // 只要传了其中一个，就检查分成比例相加是否为 10
         if ($siteAuthorScale || $siteMasterScale) {
