@@ -8,7 +8,7 @@
     @load="onLoad"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <main class="reward-main">
+    <main class="reward-main" style="padding-top:30px">
       <div class="reward-con cell-crossing" v-for='(item,index) in rewardList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"
@@ -21,7 +21,7 @@
         </ContHeader>
           <div class="reference">
           <div class="reference-cont">
-            <span>{{item._data.post_content}}</span>
+            <span>{{item._data.content}}</span>
           </div>
         </div>
         <!-- <ContMain
