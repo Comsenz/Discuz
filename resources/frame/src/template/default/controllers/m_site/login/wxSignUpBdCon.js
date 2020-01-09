@@ -2,6 +2,7 @@
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDb from '../../../../../helpers/webDbHelper';
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data:function () {
@@ -10,7 +11,8 @@ export default {
       password:"",
       phoneStatus:"",
       siteMode:'',
-      openid:''
+      openid:'',
+      platform:''
     }
   },
 
@@ -30,7 +32,8 @@ export default {
           "attributes": {
               username:this.userName,
               password:this.password,
-              openid:this.openid
+              openid:this.openid,
+              platform:this.platform
           },
           }
         }
@@ -99,6 +102,14 @@ export default {
   created(){
     this.getForum();
     this.openid = webDb.getLItem('openid');
+    let isWeixin = appCommonH.isWeixin().isWeixin;
+
+    if(isWeixin){
+      this.platform = 'mp';
+    }else {
+      this.platform = 'dev';
+    }
+
   }
 
 }
