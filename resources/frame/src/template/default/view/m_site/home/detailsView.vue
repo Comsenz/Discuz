@@ -167,7 +167,7 @@
           <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
             <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
-            赞{{themeCon.firstPost._data.isLiked}}
+            赞
           </div>
           <div class="footChi" @click="showRewardPopup">
             <span class="icon iconfont icon-reward"></span>
