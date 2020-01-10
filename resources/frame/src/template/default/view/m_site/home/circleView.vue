@@ -28,16 +28,18 @@
       <div v-if="themeListCon">
         <ThemeDet :themeList.sync="themeListCon" :isTopShow="true" :isMoreShow="true" @changeStatus="loadThemeList"></ThemeDet>
       </div>
-	    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
-      <div class="fixedEdit" v-if="canEdit" @click="postTopic">
-        <span class="icon iconfont icon-publish"></span>
-      </div>
+	    
+      
 
       </van-pull-refresh>
 	    </van-list>
       <div class="nullTip" v-if="nullTip">
         <van-icon name="warning-o" size="1.8rem" class="nullIcon"/>
         <p class="nullWord">{{nullWord}}</p>
+      </div>
+      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
+      <div class="fixedEdit" v-if="canEdit" @click="postTopic">
+        <span class="icon iconfont icon-publish"></span>
       </div>
     </div>
 
