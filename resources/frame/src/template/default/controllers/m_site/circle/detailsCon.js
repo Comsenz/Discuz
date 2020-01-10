@@ -81,6 +81,7 @@ export default {
       postCount: 0, //回复总条数
       postsList:'',
       likedUsers:[],
+      rewardedUsers:[],
       token:false,
       isWeixin: false,
       isPhone: false,
@@ -95,6 +96,7 @@ export default {
       themeUserId:'',
       userId:'',
       currentUserName:'',
+      currentUserAvatarUrl:'',
       likedData:[]
     }
   },
@@ -211,7 +213,8 @@ export default {
           throw new Error(res.error)
         } else {
           this.currentUserName = res.readdata._data.username;
-          console.log(this.currentUserName+'3334');
+          this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
+          // console.log(this.currentUserAvatarUrl+'3334');
           this.groupId = res.readdata.groups[0]._data.id;
           console.log(this.groupId);
          }
@@ -284,6 +287,7 @@ export default {
           this.canReply = res.readdata._data.canReply;
           this.postsList = res.readdata.posts;
           this.likedUsers = res.readdata.firstPost.likedUsers;
+          this.rewardedUsers = res.readdata.rewardedUsers;
           this.themeUserId = res.readdata.user._data.id;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
@@ -756,11 +760,14 @@ export default {
             this.codeUrl = res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
             const pay = setInterval(()=>{
+              console.log(this.payStatusNum);
+              this.getOrderStatus();
               if (this.payStatus == '1' || this.payStatusNum > 10){
+                console.log('已达上限');
                 clearInterval(pay);
               }
-              this.getOrderStatus()
-            },3000)
+            },3000);
+
 
           })
         });
@@ -808,20 +815,21 @@ export default {
       }).then(res=>{
         console.log(res);
         // const orderStatus = res.readdata._data.status;
-
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-
           this.payStatus = res.readdata._data.status;
-          this.payStatusNum =+1;
-          if (this.payStatus == '1'){
+          console.log(res.readdata._data.status);
+          this.payStatusNum ++;
+          // console.log(this.payStatusNum);
+          if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
-            // this.$router.push('/');
+            this.rewardedUsers.push({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
+            console.log(this.rewardedUsers);
             this.payStatusNum = 11;
-            this.detailsLoad(true);
+            // this.detailsLoad(true);
             console.log('重新请求');
             clearInterval(pay);
           }
