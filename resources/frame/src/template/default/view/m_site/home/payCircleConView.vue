@@ -86,9 +86,9 @@
 </template>
 
 <script>
-import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCOn';
+import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-import Header from '../../m_site/common//headerView';
+import Header from '../../m_site/common/headerView';
 import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",

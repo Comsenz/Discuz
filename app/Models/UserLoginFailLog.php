@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -45,8 +46,8 @@ class UserLoginFailLog extends Model
      */
     public static function writeLog($ip, $user_id, $username)
     {
-        if(self::getDataByIp($ip,$username)){
-            return self::setFailCountByIp($ip,$user_id,$username);
+        if (self::getDataByIp($ip, $username)) {
+            return self::setFailCountByIp($ip, $user_id, $username);
         }
 
         $log = new static;
@@ -65,9 +66,9 @@ class UserLoginFailLog extends Model
      * @param $username
      * @return mixed
      */
-    public static function setFailCountByIp($ip,$user_id,$username)
+    public static function setFailCountByIp($ip, $user_id, $username)
     {
-        if(!self::getDataByIp($ip,$username)){
+        if (!self::getDataByIp($ip, $username)) {
             return self::writeLog($ip, $user_id, $username);
         }
 
@@ -92,9 +93,9 @@ class UserLoginFailLog extends Model
      * get fail data by ip
      * @param $ip
      * @param $username
-     * @return \Illuminate\Database\Eloquent\Builder|Model|object|null
+     * @return Builder|Model|object|null
      */
-    public static function getDataByIp($ip,$username)
+    public static function getDataByIp($ip, $username)
     {
         return self::query()
             ->where(['ip'=>$ip,'username'=>$username])

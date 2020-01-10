@@ -127,8 +127,7 @@ export default {
          this.canHideThreads = res.readdata._data.canHideThreads;
          this.canEditUserGroup = res.readdata._data.canEditUserGroup;
          this.canCreateInvite = res.readdata._data.canCreateInvite;
-         console.log(this.canHideThreads,this.canEditUserGroup,this.canCreateInvite);
-         console.log(7890);
+         // console.log(this.canHideThreads,this.canEditUserGroup,this.canCreateInvite);
          //判断 当用户组拥有批量删除帖子、管理-邀请加入、编辑用户组、编辑用户组状态这4个权限中的任意一项时才会显示该菜单
          if(!(this.canHideThreads || this.canEditUserGroup || this.canCreateInvite)){
            this.sidebarList2.splice(1,1);

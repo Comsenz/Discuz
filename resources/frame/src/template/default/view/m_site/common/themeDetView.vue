@@ -20,23 +20,16 @@
                   <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit)">
                   	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
                   	<div class="themeList" v-show="indexlist==index" >
-                     <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,false)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
-                      <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,true)" v-if="item.firstPost._data.canLike && !item.firstPost._data.isLiked">点赞</a>
+                      <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,index)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
+                      <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,index)" v-if="item.firstPost._data.canLike && !item.firstPost._data.isLiked">点赞</a>
 
-                      <!-- <a href="javascript:;"  @click="themeOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked)" v-if="themeCon._data.canEssence">{{essenceFlag}}</a>
-                      <a href="javascript:;"  @click="themeOpera(item.firstPost._data.id,3,item.firstPost._data.isLiked)" v-if="themeCon._data.canSticky">{{stickyFlag}}</a> -->
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,3,item._data.isEssence,index)" v-if="item._data.canEssence && item._data.isEssence">取消加精</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,3,item._data.isEssence,index)" v-if="item._data.canEssence && !item._data.isEssence">加精</a>
 
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && item._data.isSticky">取消置顶</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && !item._data.isSticky">置顶</a>
 
-
-                      <!-- <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a> -->
-
-                  		<a href="javascript:;"  @click="themeOpera(item._data.id,2,false)" v-if="item._data.canEssence && item._data.isEssence">取消加精</a>
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,2,true)" v-if="item._data.canEssence && !item._data.isEssence">加精</a>
-
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,3,false)" v-if="item._data.canSticky && item._data.isSticky">取消置顶</a>
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,3,true)" v-if="item._data.canSticky && !item._data.isSticky">置顶</a>
-
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,4)" v-if="item._data.canDelete">删除</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,5)" v-if="item._data.canDelete">删除</a>
                   	</div>
                   </div>
                 </div>
