@@ -175,7 +175,6 @@ export default {
           this.compressFile(e.target.files[0], true);
         }
       } else {
-        alert('333');
         this.compressFile(e.target.files[0], true);
       }
     },
@@ -226,7 +225,6 @@ export default {
 
     //这里写接口，上传
     uploaderEnclosure(file,isFoot,img){
-      alert('上传接口');
         this.appFetch({
           url:'attachment',
           method:'post',
