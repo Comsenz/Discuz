@@ -11,7 +11,7 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="content">
-      <Panenl :title="type[item.attributes.type]" :num="item.attributes.amount" v-for="(item,index) in orderList" :key="index">
+      <Panenl :title="type[item.attributes.type]" :num='item.attributes.amount' v-for="(item,index) in orderList" :key="index">
         <span slot="label">{{status[item.attributes.status]}}</span>
         <span slot="label">流水号 : {{item.attributes.order_sn}}</span>
         <span slot="label">{{$moment(item.attributes.created_at).format('YYYY-MM-DD HH:mm')}}</span>

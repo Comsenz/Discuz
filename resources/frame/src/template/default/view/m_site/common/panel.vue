@@ -7,7 +7,8 @@
         </div>
 
         <div class="panel-header-rh">
-          <span :class="parseInt(this.nums) >= 0?'add-orange':''">{{nums}}</span>
+            <span :class="this.nums >= 0?'add-orange':''">{{nums}}</span>
+          <!-- <span :class="parseInt(this.nums) >= 0?'add-orange':''">{{parseInt(this.nums) >= 0?'+'+nums:nums}}</span> -->
         </div>
       </div>
 
