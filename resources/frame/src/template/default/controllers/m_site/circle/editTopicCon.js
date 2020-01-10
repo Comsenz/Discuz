@@ -143,12 +143,17 @@ export default {
         } else {
           console.log(res);
           console.log('888887');
-           var ImgExt = res.readdata._data.supportImgExt.split(',');
-           var ImgStr='';
+          var ImgExt = res.readdata._data.supportImgExt.split(',');
+          var ImgStr='';
+          var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
             ImgStr = '.'+ImgExt[k]+',';
+            imgStrRes = 'image/'+ImgExt[k]+',';
             this.supportImgExt += ImgStr;
+            this.supportImgExtRes += imgStrRes;
           }
+
+
           var fileExt = res.readdata._data.supportFileExt.split(',');
           var fileStr='';
           for(var k=0;k<fileExt.length;k++){
@@ -325,14 +330,65 @@ export default {
     //   this.loading = false;
     // },
 
+    // //上传图片,点击加号时
+    // handleFile(e){
+    //   this.compressFile(e.file, false);
+    // },
+    // //上传图片，点击底部Icon时
+    // handleFileUp(e){
+    //     this.compressFile(e.target.files[0], true);
+    // },
     //上传图片,点击加号时
     handleFile(e){
-      this.compressFile(e.file, false);
+      if(this.isAndroid && this.isWeixin){
+        this.testingType(e.file,this.supportImgExt);
+        console.log(this.testingRes+'445');
+        if(this.testingRes){
+          this.compressFile(e.file, false);
+        }
+      } else {
+        this.compressFile(e.file, false);
+      }
     },
+
     //上传图片，点击底部Icon时
     handleFileUp(e){
+      if(this.isAndroid && this.isWeixin){
+        this.testingType(e.target.files[0],this.supportImgExt);
+        if(this.testingRes){
+          this.compressFile(e.target.files[0], true);
+        }
+      } else {
         this.compressFile(e.target.files[0], true);
+      }
     },
+
+    //上传附件
+    handleEnclosure(e){
+      this.testingType(e.target.files[0],this.supportFileExt);
+      if(this.testingRes){
+        let file = e.target.files[0];
+        let formdata = new FormData();
+        formdata.append('file', file);
+        formdata.append('isGallery', 0);
+        this.uploaderEnclosure(formdata,false,false,true);
+      }
+
+    },
+    
+    //验证上传格式是否符合设置
+    testingType(eFile,allUpext){
+      let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
+      let AllUpExt = allUpext;
+      if(AllUpExt.indexOf(extName + ",") == "-1"){
+        this.$toast.fail("文件格式不正确!");
+        this.testingRes = false;
+        // return false;
+      } else {
+        this.testingRes = true;
+      }
+    },
+    
 
     // 删除图片
     deleteEnclosure(id,type){
@@ -404,15 +460,15 @@ export default {
 //       })
 //     },
 
-    //上传附件
-    handleEnclosure(e){
-      let file = e.target.files[0];
-      let formdata = new FormData();
-      formdata.append('file', file);
-      formdata.append('isGallery', 0);
-      // this.uploaderEnclosure(formdata,false,true);
-      this.uploaderEnclosure(formdata,false,false,true);
-    },
+    // //上传附件
+    // handleEnclosure(e){
+    //   let file = e.target.files[0];
+    //   let formdata = new FormData();
+    //   formdata.append('file', file);
+    //   formdata.append('isGallery', 0);
+    //   // this.uploaderEnclosure(formdata,false,true);
+    //   this.uploaderEnclosure(formdata,false,false,true);
+    // },
 
 
     // 这里写接口，上传

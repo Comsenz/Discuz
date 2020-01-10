@@ -15,6 +15,7 @@ export default {
     return {
         avatarUrl:'',
         username:'',
+        userId:'',
         mobile:'',
         // userId:'',
         userInfo:{},
@@ -100,6 +101,8 @@ export default {
         this.avatarUrl = res.readdata._data.avatarUrl;
         this.username = res.readdata._data.username;
         this.mobile = res.readdata._data.mobile;
+        this.userId = res.readdata._data.id;
+        console.log(res.readdata._data.id,'是id')
       })
 
   },
@@ -126,7 +129,7 @@ export default {
       if(this.isPayValue == 'pay'){
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/circle-invite';
-        var shareUrl= appConfig.devApiUrl+'/circle-invite';
+        var shareUrl= appConfig.devApiUrl+'/circle-invite/'+this.userId;
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);
@@ -142,7 +145,7 @@ export default {
         // console.log('公开');
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/open-circle';
-        var shareUrl= appConfig.devApiUrl+'/open-circle';
+        var shareUrl= appConfig.devApiUrl+'/open-circle/'+this.userId;
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

@@ -7,7 +7,6 @@
 
 namespace App\Api\Exceptions;
 
-use App\Api\ApiCode;
 use App\Exceptions\NoUserException;
 use Exception;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;

@@ -56,6 +56,7 @@
 
 }
 .manageFootFixed {
+	// overflow: hidden;
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -66,6 +67,7 @@
 	background: #fff;
 	border-top: 1px solid $corE5;
 	box-sizing: border-box;
+	
 	.operaCho {
 		position: relative;
 		@include px2rem(width, 432);
@@ -100,6 +102,7 @@
 			border: 1px solid $corE5;
 			@include px2rem(border-radius, 10);
 			box-sizing: border-box;
+			overflow: hidden;
 			.operaChoLi {
 				@include px2rem(line-height, 94);
 				@include px2rem(height, 94);
@@ -171,7 +174,7 @@
 			@include px2rem(padding-right, 30);
 		}
 		.copyA {
-			@include px2rem(margin-right, 40);
+			@include px2rem(margin-right, 20);
 		}
 		.font9 {
 			color: $cor999;

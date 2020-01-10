@@ -10,19 +10,35 @@
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="replyText" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false"></textarea> -->
          <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="replyText" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
 
-        <div class="uploadBox" v-show="uploadShow">
-          <!-- <van-uploader :max-count="12" :after-read="handleFile" :before-delete="deleteFile" accept="image/*"  v-model="fileList">
-          </van-uploader> -->
+        <!-- <div class="uploadBox" v-show="uploadShow">
           <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileList" @delete="deleteEnclosure($event.id,'img')" multiple></van-uploader>
+        </div> -->
+        <div class="uploadBox" v-if="isAndroid && isWeixin">
+          <div class="uploadBox" v-if="uploadShow">
+            <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+            </van-uploader>
+          </div>
+        </div>
+        <div class="" v-else ="">
+          <div class="uploadBox" v-if="uploadShow ">
+            <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+            </van-uploader>
+          </div>
         </div>
       </div>
 
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left reply-topic-footer-left">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
-           <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
-             <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
-           </span>
+         <!-- <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon">
+            <input type="file" accept="image/*" @change="handleFileUp" class="hiddenInput"/>
+          </span> -->
+          <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
+            <input type="file" @change="handleFileUp" class="hiddenInput" v-if="isAndroid && isWeixin"/>
+            <input type="file" :accept="supportImgExtRes" @change="handleFileUp" class="hiddenInput" v-else="" mutiple="mutiple"/>
+          </span>
+          <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
+          </span>
         </div>
       </footer>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>

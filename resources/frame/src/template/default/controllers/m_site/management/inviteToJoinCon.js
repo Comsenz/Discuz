@@ -32,7 +32,8 @@ export default {
   //用于数据初始化
   created: async function () {
     await this.getOperaType();
-    this.query = this.$route.query
+    this.query = this.$route.query;
+    this.getInviteList();
   },
   methods: {
     //选中复选框
@@ -67,8 +68,6 @@ export default {
         }
       }
       } catch (err) {
-        // console.error(err, 'membersManagementCon.js getOperaType');
-        // 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
         this.$toast("邀请码类型获取失败，请刷新重试");
       }
     },
@@ -80,12 +79,12 @@ export default {
           url: 'invite',
           method: 'get',
           data: {
-            data: {
-              type: "invite",
-              attributes: {
-                group_id: parseInt(this.choiceRes.id)
-              }
-            },
+            // data: {
+            //   type: "invite",
+            //   attributes: {
+            //     group_id: parseInt(this.choiceRes.id)
+            //   }
+            // },
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
           }
@@ -94,13 +93,15 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }else{
-          if (initStatus) {
-            this.inviteList = [];
+            this.finished = res.readdata.length < this.pageLimit; //数据全部加载完成
+            if (initStatus) {
+              this.inviteList = [];
+            }
+            console.log(this.pageIndex,'少时诵诗书')
+            this.loading = false;
+            this.inviteList = this.inviteList.concat(res.readdata);
+            
           }
-          this.loading = false;
-          this.inviteList = this.inviteList.concat(res.readdata);
-          this.finished = res.readdata.length < this.pageLimit; //数据全部加载完成
-        }
         })
       } catch (err) {
         console.error(err, '邀请码列表获取失败');
@@ -136,7 +137,7 @@ export default {
         //   throw new Error(res.error)
         // }else{
         this.pageIndex = 1;
-        this.finished = false;
+        // this.finished = false;
         this.getInviteList(true)
         // }
       } catch (err) {
@@ -192,14 +193,17 @@ export default {
 	  this.getInviteList();
     },
     onRefresh() { //下拉刷新
-      setTimeout(() => {
-        this.pageIndex = 1;
-        this.getInviteList(true);
-        this.$toast('刷新成功');
-        this.isLoading = false;
-        this.finished = false;
 
-      }, 200)
+        this.pageIndex = 1;
+        this.getInviteList(true).then(res=>{
+          this.$toast('刷新成功');
+          this.isLoading = false;
+          this.finished = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
+        });
+       
     }
   },
 

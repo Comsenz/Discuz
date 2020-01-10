@@ -50,7 +50,9 @@ export default {
       canCreateThread:'',
       canViewThreads:'',
       nullTip:false,
-      nullWord:''
+      nullWord:'',
+      allowRegister:'',
+      loginWord:'登录 / 注册'
 
 		}
 	},
@@ -90,6 +92,10 @@ export default {
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.canCreateThread;
           this.canViewThreads = res.readdata._data.canViewThreads;
+          this.allowRegister = res.readdata._data.allowRegister;
+          if(!this.allowRegister){
+            this.loginWord = '登录';
+          }
           console.log(res.readdata._data.siteMode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
           this.sitePrice = res.readdata._data.sitePrice
@@ -137,7 +143,7 @@ export default {
       if(isPayVal == 'public'){
         //当站点为公开站点时
         // console.log('公开');
-        var token = browserDb.getLItem('Authorization',token);
+        var token = browserDb.getLItem('Authorization');
         if(token){
           // console.log('公开，已登录');
           //当用户已登录时
@@ -234,7 +240,7 @@ export default {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
           } else {
-            if(!this.themeListCon.length){
+            if(this.themeListCon.length<0){
               this.nullTip = true
             }
             this.themeListCon = this.themeListCon.concat(res.readdata);
@@ -379,6 +385,7 @@ export default {
       onRefresh(){    //下拉刷新
           this.pageIndex = 1;
           this.themeListCon = [];
+          this.nullTip = false;
           this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
             this.$toast('刷新成功');
             this.finished = false;

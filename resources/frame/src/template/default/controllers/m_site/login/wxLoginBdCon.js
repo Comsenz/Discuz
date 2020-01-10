@@ -14,7 +14,8 @@ export default {
       password:'',    //密码
       siteMode:'',    //站点信息
       openid:'',       //微信openid
-      wxurl:''
+      wxurl:'',
+      platform:''
     }
   },
 
@@ -33,7 +34,8 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              openid:this.openid
+              openid:this.openid,
+              platform:this.platform
             },
           }
         }
@@ -87,7 +89,7 @@ export default {
         data:{
           code:code,
           state:state,
-          sessionId:sessionId
+          sessionId:sessionId,
         }
       }).then(res=>{
         console.log(res);
@@ -166,7 +168,7 @@ export default {
         data:{
           code:code,
           state:state,
-          sessionId:sessionId
+          sessionId:sessionId,
         }
       }).then(res=>{
         console.log(res);
@@ -188,7 +190,6 @@ export default {
           console.log('获取地址');
           this.wxurl = res.data.attributes.location;
           window.location.href = res.data.attributes.location;
-          window.onunload = function() { debugger; }
         } else if (res.data.attributes.access_token){
 
           this.$toast.success('登录成功');
@@ -222,29 +223,19 @@ export default {
     webDB.setLItem('state',state);
 
     if (isWeixin){
+      this.platform = 'mp';
       if (!code && !state){
         this.getWatchHref()
       } else {
         this.getWatchHref(code,state,sessionId);
       }
     }else {
+      this.platform = 'dev';
       if (this.openid === ''){
         console.log('PC端：没有openid');
         this.getWatchHrefPC(code,state,sessionId);
       }
     }
-
-    /*if (!code && !state){
-      this.getWatchHref()
-    } else {
-
-      if(isWeixin){
-        this.getWatchHref(code,state,sessionId);
-      } else {
-        this.getWatchHrefPC(code,state,sessionId);
-      }
-
-    }*/
 
     this.getForum();
   }

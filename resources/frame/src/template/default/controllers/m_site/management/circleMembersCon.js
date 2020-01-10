@@ -8,21 +8,13 @@ export default {
       	serHide:true,
       	serShow:false,
 		searchVal: '',
-		userParams: {
-		 'filter[username]': '',
-		},
-		themeParamd: {
-		// 'filter[q]': '',
-		// 'page[limit]': 2,
-		'page[number]': this.pageIndex,
-		},
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
 	  	userLoadMorePageChange: false,
 	  	loading: false,  //是否处于加载状态
       	finished: false, //是否已加载完所有数据
       	isLoading: false, //是否处于下拉刷新状态
-      	pageIndex: 0,//页码
+      	pageIndex: 1,//页码
       	offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       	immediateCheck:false ,//是否在初始化时立即执行滚动位置检查
       	pageLimit:20,
@@ -30,8 +22,12 @@ export default {
 	},
 	 //用于数据初始化
   created: function(){
-    // this.loadUserList();
-    this.onSearch();
+	// this.loadUserList();
+	let searchWord = '';
+	if(this.$route.query && this.$route.query.searchWord){
+		searchWord = this.$route.query.searchWord
+	}
+    this.onSearch(searchWord);
 	},
 	methods: {
     //搜索框切换
@@ -41,12 +37,9 @@ export default {
       this.$refs.serInp.focus();
     },
 	onSearch(val) {
-	  this.searchVal = val;
-	// console.log(val,'value')
-	  this.userParams = {
-	    'filter[username]': this.searchVal,
-	    }
-	  this.handleSearchUser(true);
+	this.searchVal = val;
+	this.pageIndex = 1;
+	this.handleSearchUser(true);
 		},
 	    onCancel() {
 	    },
@@ -59,6 +52,7 @@ export default {
 			  await this.appFetch({
 				  url:'users',
 				  method:'get',
+				//   data:this.userParams
 				  data:{
 					'filter[username]': this.searchVal,
 					'page[number]': this.pageIndex,
@@ -72,6 +66,7 @@ export default {
 				if(initStatus){
 					this.searchUserList = [];
 				}
+				console.log(data,'搜索')
 				this.loading = false;
 				this.searchUserList = this.searchUserList.concat(data.readdata);
 				this.finished = data.readdata.length < this.pageLimit;
@@ -110,7 +105,12 @@ export default {
 	  },
 	  headerBack(){
 		this.$router.go(-1)
-	  }
+	  },
+	  		//点击用户名称，跳转到用户主页
+		jumpPerDet:function(id){
+			console.log('跳转到个人主页')
+			  this.$router.push({ path:'/home-page'+'/'+id});
+		  },
 	},
 
 	mounted () {

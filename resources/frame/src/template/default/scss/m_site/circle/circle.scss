@@ -652,6 +652,9 @@ openCircleConView.vue
 			background: $corF7;
 			@include font-dpr(26);
 			color: $cor888;
+      .quoteCon {
+        @include px2rem(padding, 0 16);
+      }
 		}
 		.viewPoint {
 			@include px2rem(padding, 16 0 6 0);

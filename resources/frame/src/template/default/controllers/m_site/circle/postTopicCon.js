@@ -94,7 +94,7 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    console.log(this.isiOS);
+    // console.log(this.isiOS);
     if(this.isiOS) {
       this.encuploadShow = true;
       console.log(this.encuploadShow);
@@ -266,7 +266,7 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           }else{
             var postThemeId = res.readdata._data.id;
@@ -337,16 +337,13 @@ export default {
 
     //上传图片,点击加号时
     handleFile(e){
-
       if(this.isAndroid && this.isWeixin){
-        alert('安卓微信内');
         this.testingType(e.file,this.supportImgExt);
         console.log(this.testingRes+'445');
         if(this.testingRes){
           this.compressFile(e.file, false);
         }
       } else {
-        alert('其他设备');
         this.compressFile(e.file, false);
       }
     },
@@ -354,13 +351,11 @@ export default {
     //上传图片，点击底部Icon时
     handleFileUp(e){
       if(this.isAndroid && this.isWeixin){
-        alert('安卓微信内');
         this.testingType(e.target.files[0],this.supportImgExt);
         if(this.testingRes){
           this.compressFile(e.target.files[0], true);
         }
       } else {
-        alert('其他设备');
         this.compressFile(e.target.files[0], true);
       }
     },
@@ -375,7 +370,7 @@ export default {
         formdata.append('isGallery', 0);
         this.uploaderEnclosure(formdata,false,false,true);
       }
-      
+
     },
 
     //验证上传格式是否符合设置
