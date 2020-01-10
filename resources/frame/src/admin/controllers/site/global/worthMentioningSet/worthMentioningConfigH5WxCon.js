@@ -30,13 +30,11 @@ export default {
         }
 
       },
-      info:{}
     }
   },
   created(){
     var type = this.$route.query.type;
     this.type = type;
-    this.info = this.typeCopywriting[type];
     this.loadStatus();
   },
   methods:{
