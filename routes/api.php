@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use App\Api\Controller as ApiController;
 
 /*
@@ -231,3 +236,13 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 |--------------------------------------------------------------------------
 */
 $route->get('/statistic/money', 'statistic.money', ApiController\Statistic\MoneyStatisticController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Follow
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowController::class);
+$route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
+$route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
