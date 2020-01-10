@@ -20,13 +20,13 @@ export default {
           title:'小程序微信授权登录设置',
           appIdDescription:'填写申请小程序后，你获得的APPID ',
           appSecretDescription:'填写申请小程序后，你获得的App secret',
-          url:''
+          url:'https://mp.weixin.qq.com/'
         },
         wx_oplatform:{
           title:'PC端微信扫码登录',
           appIdDescription:'填写申请PC端微信扫码后，你获得的APPID ',
           appSecretDescription:'填写申请PC端微信扫码后，你获得的App secret',
-          url:''
+          url:'https://open.weixin.qq.com/'
         }
 
       },
