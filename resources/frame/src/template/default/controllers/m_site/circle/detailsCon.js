@@ -79,6 +79,8 @@ export default {
       collectStatus: false,
       collectFlag: '',
       postCount: 0, //回复总条数
+      postsList:'',
+      likedUsers:[],
       token:false,
       isWeixin: false,
       isPhone: false,
@@ -89,7 +91,11 @@ export default {
       payStatusNum: 0,//支付状态次数
       canViewPosts:'',
       canLike:'',
-      canReply:''
+      canReply:'',
+      themeUserId:'',
+      userId:'',
+      currentUserName:'',
+      likedData:[]
     }
   },
   created() {
@@ -101,7 +107,8 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
-    // this.getUser();
+    this.userId = browserDb.getLItem('tokenId');
+    this.getUser();
     this.detailsLoad(true);
     if (!this.themeCon) {
       this.themeShow = false;
@@ -136,11 +143,16 @@ export default {
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
+      console.log(data);
+      console.log('55544');
       let datas = [];
       data.forEach((item)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
+        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>');
       });
-      return datas.join(',')
+      // this.likedData = datas.join(',');
+      // console.log(this.likedData);
+      return datas.join(',');
+
     },
     //设置底部在pc里的宽度
     limitWidth(limitId){
@@ -185,6 +197,7 @@ export default {
     getUser() {
       //初始化请求User信息，用于判断当前用户是否已付费
       var userId = browserDb.getLItem('tokenId');
+      this.userId = userId;
       this.appFetch({
         url: 'users',
         method: 'get',
@@ -196,7 +209,9 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
-        }else{
+        } else {
+          this.currentUserName = res.readdata._data.username;
+          console.log(this.currentUserName+'3334');
           this.groupId = res.readdata.groups[0]._data.id;
           console.log(this.groupId);
          }
@@ -210,9 +225,8 @@ export default {
       if (siteMode == 'public') {
         //当站点为公开站点时
         console.log('公开');
-
         if (token) {
-          console.log('公开，已登录2222s');
+          // console.log('公开，已登录2222s');
           //当用户已登录时
           // this.loadThemeList();
           this.loginBtnFix = false;
@@ -228,17 +242,14 @@ export default {
         }
       }
     },
+    //登录注册按钮悬浮时隐藏以及显示效果
     footFix() {
       var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       if (this.loginBtnFix == true) {
         this.loginHide = true;
-        // console.log(scrollTop+'1111');
         if (scrollTop > 80) {
-          // console.log('大于');
           this.loginHide = true;
-          // console.log(this.loginHide);
         } else {
-          // console.log('小于');
           this.loginHide = false;
         }
       }
@@ -271,6 +282,9 @@ export default {
           this.canLike = res.readdata.firstPost._data.canLike;
           this.canViewPosts = res.readdata._data.canViewPosts;
           this.canReply = res.readdata._data.canReply;
+          this.postsList = res.readdata.posts;
+          this.likedUsers = res.readdata.firstPost.likedUsers;
+          this.themeUserId = res.readdata.user._data.id;
           var firstpostImageLen = this.themeCon.firstPost.images.length;
           if (firstpostImageLen === 0) {
             return;
@@ -358,23 +372,6 @@ export default {
         this.$router.push({ path:'/home-page'+'/'+id});
       }
     },
-    //付费，获得成员权限
-    // sitePayClick(amount) {
-    //   this.appFetch({
-    //     url: "orderList",
-    //     method: "post",
-    //     data: {
-    //       "type": "1",
-    //       "thread_id": this.themeId,
-    //       "amount": amount
-    //     },
-    //   }).then(data => {
-    //     // console.log(data.data.attributes.order_sn);
-    //     this.orderSn = data.data.attributes.order_sn;
-    //     // this.orderPay(orderSn, amount);
-
-    //   })
-    // },
 
     //主题管理
     bindScreen: function () {
@@ -460,8 +457,40 @@ export default {
 
 
     },
-    //点赞/删除
-    replyOpera(postId, type, isLike,postsCanLike) {
+
+    //删除请求接口
+    deleteOpear(postId,postIndex){
+      console.log(postIndex);
+      let attri = new Object();
+      attri.isDeleted = true;
+      this.appFetch({
+        url: 'posts',
+        splice:'/'+ postId,
+        method: 'patch',
+        data: {
+          "data": {
+            "type": "posts",
+            "attributes": attri,
+          }
+        }
+      }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.$toast.success('删除成功');
+          this.pageIndex = 1;
+          console.log(this.postsList);
+          this.postsList.splice(postIndex,1);
+          console.log(this.postsList);
+          // this.detailsLoad(true);
+        }
+      })
+    },
+
+
+    //回复点赞
+    replyOpera(postId, type, isLike,postsCanLike,postIndex) {
       console.log(postId, type, isLike,postsCanLike);
       // console.log(this.token);
       if(!this.token){
@@ -472,9 +501,7 @@ export default {
       } else {
         // console.log(isLike);
         let attri = new Object();
-        if (type == 1) {
-          attri.isDeleted = true;
-        } else if (type == 2) {
+        if (type == 2) {
           console.log(postsCanLike);
           if(!postsCanLike){
             this.$toast.fail('没有权限，请联系站点管理员');
@@ -488,20 +515,21 @@ export default {
               attri.isLiked = true;
             }
           }
-        } else if (type == 3) {
-          if(!this.canLike){
-            this.$toast.fail('没有权限，请联系站点管理员');
-            return false;
-          } else {
-            if (isLike) {
-              //如果已点赞
-              attri.isLiked = false;
-            } else {
-              //如果未点赞
-              attri.isLiked = true;
-            }
-          }
         }
+        // else if (type == 3) {
+        //   if(!this.canLike){
+        //     this.$toast.fail('没有权限，请联系站点管理员');
+        //     return false;
+        //   } else {
+        //     if (isLike) {
+        //       //如果已点赞
+        //       attri.isLiked = false;
+        //     } else {
+        //       //如果未点赞
+        //       attri.isLiked = true;
+        //     }
+        //   }
+        // }
         // console.log(attri);
         let posts = 'posts/' + postId;
         this.appFetch({
@@ -518,13 +546,110 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            this.$toast.success('修改成功');
+            // this.$toast.success('修改成功');
+            if(isLike){
+              this.postsList[postIndex]._data.likeCount = this.postsList[postIndex]._data.likeCount - 1;
+              this.postsList[postIndex]._data.isLiked = false;
+            } else {
+              this.postsList[postIndex]._data.likeCount = this.postsList[postIndex]._data.likeCount + 1;
+              this.postsList[postIndex]._data.isLiked = true;
+            }
             this.pageIndex = 1;
-            this.detailsLoad(true);
+            // this.detailsLoad(true);
           }
         })
       }
     },
+
+    //主题点赞
+      footReplyOpera(postId, type, isLike,postsCanLike,postIndex) {
+        console.log(postId, type, isLike,postsCanLike);
+        // console.log(this.token);
+        if(!this.token){
+          this.$router.push({
+            path:'/login-user',
+            name:'login-user'
+          })
+        } else {
+          // console.log(isLike);
+          let attri = new Object();
+          // if (type == 2) {
+          //   console.log(postsCanLike);
+          //   if(!postsCanLike){
+          //     this.$toast.fail('没有权限，请联系站点管理员');
+          //     return false;
+          //   } else {
+          //     if (isLike) {
+          //       //如果已点赞
+          //       attri.isLiked = false;
+          //     } else {
+          //       //如果未点赞
+          //       attri.isLiked = true;
+          //     }
+          //   }
+          // } else
+          if (type == 3) {
+            if(!this.canLike){
+              this.$toast.fail('没有权限，请联系站点管理员');
+              return false;
+            } else {
+              if (isLike) {
+                //如果已点赞
+                attri.isLiked = false;
+              } else {
+                //如果未点赞
+                attri.isLiked = true;
+              }
+            }
+          }
+          // console.log(attri);
+          let posts = 'posts/' + postId;
+          this.appFetch({
+            url: posts,
+            method: 'patch',
+            data: {
+              "data": {
+                "type": "posts",
+                "attributes": attri,
+              }
+            }
+          }).then((res) => {
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+              throw new Error(res.error)
+            } else {
+              if(isLike){
+                // console.log('已点赞时，点击取消点赞');
+                // this.likedUsers = this.likedUsers.filter(value => value._data.id !== this.userId);
+                this.likedUsers.map((value, key, likedUsers) => {
+                  value._data.id === this.userId && likedUsers.splice(key,1);
+                });
+                // for(var i = 0; i < this.likedUsers.length; i++){
+                //   console.log('循环');
+                //   if(this.likedUsers[i]._data.id === this.userId){
+                //     console.log(this.likedUsers[i]._data.id);
+                //       this.likedUsers.splice(i,1);
+                //       console.log(this.likedUsers);
+                //       console.log('123');
+                //   }
+                // }
+                this.userArr(this.likedUsers);
+                this.themeCon.firstPost._data.isLiked = false;
+              } else {
+                // console.log('未点赞时，点击点赞');
+                this.likedUsers.push({_data:{username:this.currentUserName,id:this.userId}});
+                this.themeCon.firstPost._data.isLiked = true;
+                console.log(this.themeCon.firstPost._data.isLiked);
+              }
+              this.pageIndex = 1;
+              // this.detailsLoad(true);
+            }
+          })
+        }
+      },
+
+
+
     //打赏
     showRewardPopup: function () {
       if(!this.token){
@@ -533,10 +658,17 @@ export default {
           name:'login-user'
         })
       } else {
-        this.rewardShow = true;
-        if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
-          // this.limitWidth('rewardPopup');
+        console.log(this.userId);
+        console.log(this.themeUserId);
+        if(this.userId == this.themeUserId) {
+          this.$toast.fail('不能打赏自己');
+        } else {
+          this.rewardShow = true;
+          if(this.isWeixin != true && this.isPhone != true && this.rewardShow){
+            // this.limitWidth('rewardPopup');
+          }
         }
+
       }
     },
     //跳转到回复页

@@ -100,7 +100,7 @@
         <div class="commentBox">
           <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
             <span class="icon iconfont icon-praise-after"></span>
-             <span v-html="userArr(themeCon.firstPost.likedUsers)"></span>
+             <span id="likedUserList" v-html="userArr(themeCon.firstPost.likedUsers)"></span>
             <!-- <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a> -->
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
@@ -117,7 +117,7 @@
           @load="onLoad"
           :immediate-check="false"
           >
-          <div v-for="item in themeCon.posts">
+          <div v-for="(item,postIndex) in themeCon.posts" :key="postIndex">
 
             <div class="commentPostDet">
               <div class="postTop">
@@ -138,7 +138,6 @@
               <div class="postImgBox">
                 <div class="themeImgList moreImg">
                   <van-image
-                      fit="none"
                       lazy-load
                       v-for="(image,index)  in item.images"
                       :src="image._data.url"
@@ -148,9 +147,9 @@
               </div>
             </div>
             <div class="commentOpera padT22">
-              <a @click="replyOpera(item._data.id,'1')">删除</a>
-              <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
-              <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
+              <a @click="deleteOpear(item._data.id,postIndex)">删除</a>
+              <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike,postIndex)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
+              <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike,postIndex)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
 
@@ -165,10 +164,10 @@
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
-          <div class="footChi" @click="replyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
+          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
             <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
-            赞
+            赞{{themeCon.firstPost._data.isLiked}}
           </div>
           <div class="footChi" @click="showRewardPopup">
             <span class="icon iconfont icon-reward"></span>

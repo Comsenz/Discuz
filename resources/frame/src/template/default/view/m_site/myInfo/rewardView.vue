@@ -8,7 +8,7 @@
     @load="onLoad"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <main class="reward-main" style="padding-top:30px">
+    <main class="reward-main" style="padding-top:40px">
       <div class="reward-con cell-crossing" v-for='(item,index) in rewardList' :key='index'>
         <ContHeader
           :imgUrl="item._data.user_avatar"

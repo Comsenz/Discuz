@@ -574,7 +574,11 @@ openCircleConView.vue
     @include px2rem(line-height, 40);
     span {
       display: inline-block;
-    }
+	}
+	.icon-down-menu {
+		font-size: 15px;
+		line-height: 15px;
+	}
   }
 	.postDetR {
 		float: right;
