@@ -197,26 +197,30 @@ export default {
       //初始化请求User信息，用于判断当前用户是否已付费
       var userId = browserDb.getLItem('tokenId');
       this.userId = userId;
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: 'groups',
-        }
-      }).then((res) => {
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
-          this.currentUserName = res.readdata._data.username;
-          this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
-          // console.log(this.currentUserAvatarUrl+'3334');
-          this.groupId = res.readdata.groups[0]._data.id;
-          console.log(this.groupId);
-         }
+      console.log(this.userId+'ddddd');
+      if(this.userId != '' && this.userId != null){
+        this.appFetch({
+          url: 'users',
+          method: 'get',
+          splice: '/' + userId,
+          data: {
+            include: 'groups',
+          }
+        }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.currentUserName = res.readdata._data.username;
+            this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
+            // console.log(this.currentUserAvatarUrl+'3334');
+            this.groupId = res.readdata.groups[0]._data.id;
+            console.log(this.groupId);
+           }
 
-      })
+        })
+      }
+
 
     },
     detailIf(siteMode) {

@@ -10,6 +10,9 @@ export default {
       userInfoAvatarUrl:'',
       userInfoName:'',
       invitationShow:false,
+      loginBtnFix: true,
+      loginHide:false,
+      loginWord:'登录 / 注册',
       themeChoList: [
       	{
       		typeWo: '全部主题',
@@ -167,6 +170,26 @@ export default {
         })
       }
     },
+    footFix() {
+      // console.log(this.$route.meta.oneHeader);
+      // if(this.$route.meta.oneHeader){
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+          var offsetTop = document.querySelector('#testNavBar').offsetTop;
+            if(this.loginBtnFix == true){
+              this.loginHide = true;
+              // console.log(scrollTop+'1111');
+              // console.log(offsetTop+'2222');
+              if(scrollTop > offsetTop){
+                // console.log('大于');
+                this.loginHide = true;
+                // console.log(this.loginHide);
+              } else {
+                // console.log('小于');
+                this.loginHide = false;
+              }
+          }
+      // }
+    },
 
 
 
@@ -191,7 +214,7 @@ export default {
     },
 		//跳转到登录页
 		loginJump:function(){
-			this.$router.push({ path:'login-user'})
+			this.$router.push({ path:'/login-user'})
 		},
 		//跳转到注册页
 		registerJump:function(){
