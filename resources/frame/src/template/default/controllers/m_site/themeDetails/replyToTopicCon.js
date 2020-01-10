@@ -1,8 +1,14 @@
+/*
+* 回复主题控制器
+* */
+
 import {Bus} from '../../../store/bus.js';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 import appCommonH from '../../../../../helpers/commonHelper';
 import browserDb from '../../../../../helpers/webDbHelper';
+
+
 export default {
   data:function () {
     return {
@@ -26,7 +32,8 @@ export default {
       supportImgExtRes:'',
       limitMaxLength:true,
       fileListOne:[],
-      canUploadImages:''
+      canUploadImages:'',
+      backGo:-3
     }
   },
   computed: {
@@ -195,7 +202,7 @@ export default {
       }).then(function (rst) {
           let formdata = new FormData();
           formdata.append('file', rst.file, file.name);
-          formdata.append('isGallery', 1);
+          fromdata.append('isGallery', 1);
           that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
           that.loading = false;
 
@@ -389,7 +396,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId})
+            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}})
           }
         })
       } else {
@@ -422,7 +429,7 @@ export default {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId});
+            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
       }
@@ -478,4 +485,14 @@ export default {
   destroyed: function () {
       browserDb.removeLItem('replyQuote');
   },
+  /*beforeRouteEnter (to,from,next){
+    console.log(to.name);
+    console.log(from.name);
+    next(vm=>{
+      if (from.name === 'details/:themeId'){
+        console.log('回退2');
+        vm.backGo = '/';
+      }
+    });
+  }*/
 }
