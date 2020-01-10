@@ -9,6 +9,8 @@ namespace App\Api\Serializer;
 
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Tobscure\JsonApi\Relationship;
 
 class UserSerializer extends AbstractSerializer
 {
@@ -18,39 +20,68 @@ class UserSerializer extends AbstractSerializer
     protected $type = 'users';
 
     /**
+     * @var Gate
+     */
+    protected $gate;
+
+    /**
+     * @param Gate $gate
+     */
+    public function __construct(Gate $gate)
+    {
+        $this->gate = $gate;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getDefaultAttributes($model)
     {
+        $gate = $this->gate->forUser($this->actor);
+
+        $canEdit = $gate->allows('edit', $model);
+
         $attributes = [
-            'id'                => $model->id,
+            'id'                => (int) $model->id,
             'username'          => $model->username,
             'mobile'            => $model->mobile,
-            'mobileConfirmed'   => $model->mobile_confirmed,
             'avatarUrl'         => $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
-            'threadCount'       => $model->thread_count,
-            'registerIp'        => $model->register_ip,
-            'lastLoginIp'       => $model->last_login_ip,
+            'threadCount'       => (int) $model->thread_count,
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
             'joinedAt'          => $this->formatDate($model->joined_at),
             'expiredAt'         => $this->formatDate($model->expired_at),
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
+            'canEdit'           => $canEdit,
+            'canDelete'         => $gate->allows('delete', $model),
         ];
 
-        if ($this->actor->isAdmin()) {
-            $attributes['originalMobile'] = $model->getOriginal('mobile');
+        if ($canEdit || $this->actor->id === $model->id) {
+            $attributes += [
+                'originalMobile'    => $model->getOriginal('mobile'),
+                'mobileConfirmed'   => $model->mobile_confirmed,
+                'registerIp'        => $model->register_ip,
+                'lastLoginIp'       => $model->last_login_ip,
+            ];
         }
 
         return $attributes;
     }
 
+    /**
+     * @param $user
+     * @return Relationship
+     */
     public function wechat($user)
     {
         return $this->hasOne($user, UserWechatSerializer::class);
     }
 
+    /**
+     * @param $user
+     * @return Relationship
+     */
     public function groups($user)
     {
         return $this->hasMany($user, GroupSerializer::class);
