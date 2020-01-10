@@ -109,22 +109,24 @@ class UpdateUserWallet
                 default:
                     break;
             }
-            //修改钱包金额
-            $user_wallet->available_amount = sprintf('%.2f', ($user_wallet->available_amount + $change_available_amount));
             //钱包状态修改
             if (!is_null($wallet_status)) {
                 $user_wallet->wallet_status = (int) $wallet_status;
             }
+            //金额变动
+            if ($change_type) {
+                //修改钱包金额
+                $user_wallet->available_amount = sprintf('%.2f', ($user_wallet->available_amount + $change_available_amount));
+                //添加钱包明细
+                $user_wallet_log = UserWalletLog::createWalletLog(
+                    $this->user_id,
+                    $change_available_amount,
+                    0,
+                    $change_type,
+                    $operate_reason
+                );   
+            }
             $user_wallet->save();
-            //添加钱包明细
-            $user_wallet_log = UserWalletLog::createWalletLog(
-                $this->user_id,
-                $change_available_amount,
-                0,
-                $change_type,
-                $operate_reason
-            );
-
             //提交事务
             $db->commit();
             return $user_wallet;
