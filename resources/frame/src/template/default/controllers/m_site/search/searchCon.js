@@ -12,7 +12,7 @@ export default {
 				'filter[bind]': 1,
 				'page[limit]': 5,
 				'page[number]': 1,
-				'sort': '-createdAt',
+				'sort': 'createdAt',
 				'include': 'groups'
 			},
 			themeParamd: {

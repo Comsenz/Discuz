@@ -27,7 +27,7 @@
         </main> -->
 		    <div class="postTop">
 	    		<div class="postPer">
-            <img :src="thread.user._data.avatarUrl" alt="" class="postHead" v-if="thread.user && themeCon.user._data.avatarUrl == '' && thread.user._data.avatarUrl == null">
+            <img :src="thread.user._data.avatarUrl" alt="" class="postHead" v-if="thread.user && thread.user._data.avatarUrl">
             <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
 	    			<div class="perDet">
 	    				<div class="perName" v-if="thread.user">{{thread.user._data.username}}</div>
