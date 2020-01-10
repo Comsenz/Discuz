@@ -29,6 +29,7 @@
               <van-image
                   lazy-load
                   v-for="(image,index)  in firstpostImageList"
+                  key = index
                   :src="image"
                   @click="imageSwiper(index)"
                   :key="index"
@@ -205,13 +206,13 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
-       <van-image-preview
+       <!-- <van-image-preview
          v-model="imageShow"
          :images="firstpostImageList"
          @change="onChangeImgPreview"
-       >
-       <template v-slot:index>第{{ index }}页</template>
-     </van-image-preview>
+       > -->
+       <!-- <template v-slot:index>第{{ index }}页</template> -->
+     <!-- </van-image-preview> -->
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
 
 

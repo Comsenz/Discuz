@@ -8,6 +8,7 @@ import appConfig from "../../../../../../../frame/config/appConfig";
 import browserDb from '../../../../../helpers/webDbHelper';
 // import Forum from '../../../../../common/models/Forum';
 import appCommonH from '../../../../../helpers/commonHelper';
+import {ImagePreview} from "vant";
 export default {
   data: function () {
     return {
@@ -196,26 +197,30 @@ export default {
       //初始化请求User信息，用于判断当前用户是否已付费
       var userId = browserDb.getLItem('tokenId');
       this.userId = userId;
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: 'groups',
-        }
-      }).then((res) => {
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
-          this.currentUserName = res.readdata._data.username;
-          this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
-          // console.log(this.currentUserAvatarUrl+'3334');
-          this.groupId = res.readdata.groups[0]._data.id;
-          console.log(this.groupId);
-         }
+      console.log(this.userId+'ddddd');
+      if(this.userId != '' && this.userId != null){
+        this.appFetch({
+          url: 'users',
+          method: 'get',
+          splice: '/' + userId,
+          data: {
+            include: 'groups',
+          }
+        }).then((res) => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.currentUserName = res.readdata._data.username;
+            this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
+            // console.log(this.currentUserAvatarUrl+'3334');
+            this.groupId = res.readdata.groups[0]._data.id;
+            console.log(this.groupId);
+           }
 
-      })
+        })
+      }
+
 
     },
     detailIf(siteMode) {
@@ -327,30 +332,24 @@ export default {
           this.pageIndex--;
         }
       }).finally(()=>{
-        console.log('22222222222222')
         this.loading = false;
       })
 
     },
     //主题详情图片放大轮播
-    imageSwiper(pageIndex) {
-      this.imageShow = true;
-      // this.pageIndex = pageIndex;
+    imageSwiper(imgIndex) {
+      console.log(imgIndex);
       ImagePreview({
-        images:[            //需要预览的图片URL数组
-            'https://img.yzcdn.cn/public_files/2017/09/05/4e3ea0898b1c2c416eec8c11c5360833.jpg',
-            'https://img.yzcdn.cn/public_files/2017/09/05/fd08f07665ed67d50e11b32a21ce0682.jpg'
-        ],
-        startPosition:pageIndex,    //图片预览起始位置索引 默认 0
+        images:this.firstpostImageList,
+        startPosition:imgIndex,    //图片预览起始位置索引 默认 0
         showIndex: true,    //是否显示页码         默认 true
         showIndicators: true, //是否显示轮播指示器 默认 false
-        loop:false,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-        onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
-          //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
-          var num = url.index, url_link = url.url;
-          console.log(url);
-        }
-
+        loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
+        //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
+        //   var num = url.index, url_link = url.url;
+        //   console.log(url);
+        // }
       })
     },
     onChangeImgPreview() {
