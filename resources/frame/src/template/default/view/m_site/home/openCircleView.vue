@@ -1,5 +1,4 @@
 <!--移动端首页模板-->
-
 <template>
     <div class="circleCon">
     <van-list
@@ -30,14 +29,14 @@
   </van-list>
 
 
-
+ <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
 	    <div class="gap"></div>
-	    <div class="loginOpera">
+	    <!-- <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
-	    </div>
+	    </div> -->
 
     </div>
 </template>

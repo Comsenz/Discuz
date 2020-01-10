@@ -1,7 +1,8 @@
 /**
  * 付费站点-已支付-未登录控制器
  */
-import Header from '../../../view/m_site/common/headerView'
+import Header from '../../../view/m_site/common/headerView';
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -49,6 +50,7 @@ export default {
         console.log(res.readdata._data.siteMode+'请求');
         if(res.readdata._data.siteAuthor){
           this.siteUsername = res.readdata._data.siteAuthor.username;
+          console.log(res.readdata._data.siteAuthor.username,'用户名')
         } else {
           this.siteUsername = '暂无站长信息';
         }
