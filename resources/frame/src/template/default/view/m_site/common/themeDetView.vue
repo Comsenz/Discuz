@@ -8,7 +8,7 @@
               <div class="postTop">
                 <div class="postPer">
                   <img :src="item.user._data.avatarUrl" v-if="item.user && item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead">
-                  <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
+                  <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(item.user._data.id)">
                   <div class="perDet">
                     <div class="perName" v-if="item.user"  @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
@@ -97,11 +97,11 @@
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
                 <div class="replyCon" v-for="reply in item.lastThreePosts">
-                  <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(item.user._data.id)">{{reply.user._data.username}}</a>
+                  <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(reply.user._data.id)">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
-                  <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(item.user._data.id)">回复</span>
+                  <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(reply.user._data.id)">回复</span>
                   <!-- <span class="font9" v-else=""></span> -->
-                  <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser" @click="jumpPerDet(item.user._data.id)">{{reply.replyUser._data.username}}</a>
+                  <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser" @click="jumpPerDet(reply.user._data.id)">{{reply.replyUser._data.username}}</a>
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
                   <span v-html="reply._data.contentHtml"></span>
                 </div>
