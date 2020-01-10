@@ -734,7 +734,7 @@ openCircleConView.vue
    overflow: hidden;
   .themeImgChild {
     @include px2rem(margin-right, 6);
-    @include px2rem(margin-bottom, 4);
+    @include px2rem(margin-bottom, 6);
     height: 113px;
     width: 113px;
     float: left;
@@ -911,6 +911,13 @@ details.vue
     text-align: center;
   }
 }
+.commentBox {
+  .van-list__finished-text {
+    line-height: 140px;
+  }
+}
+
+
 //发表主题
 $postTopicColor:#336699;
 

@@ -511,14 +511,15 @@ export default {
     'pay-circle-con/:themeId/:groupId',
     'open-circle-con',
     'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
-    'open-circle',
+    'open-circle/:userId',
     'details/:themeId',
     'home-page/:userId',
     'pay-status',
     'wx-login-bd',
     'wx-sign-up-bd',
     'supplier-all-back',
-    'circle-invite'
+    'circle-invite',
+    'site-close'
   ];
 
 

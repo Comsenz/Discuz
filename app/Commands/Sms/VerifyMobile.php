@@ -78,9 +78,16 @@ class VerifyMobile
 
     protected function bind()
     {
+        $mobile = $this->mobileCode->mobile;
+
+        // 判断手机号是否已经被绑定
+        if (User::where('mobile', $mobile)->exists()) {
+            throw new \Exception('mobile_is_already_bind');
+        }
+
         $this->controller->serializer = UserSerializer::class;
         if ($this->actor->exists) {
-            $this->actor->changeMobile($this->mobileCode->mobile);
+            $this->actor->changeMobile($mobile);
             $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();
             $this->mobileCode->user = $this->actor;

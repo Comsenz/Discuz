@@ -53,6 +53,8 @@ export default {
 	created(){
     this.loadPriviewImgList();
     this.forList();
+    // console.log(this.themeList[0].user._data.avatarUrl);
+
 
     // this.getCircle();
 
@@ -92,13 +94,19 @@ export default {
     //   }
     // }
 
-
-
-
-
-  },
-	beforeDestroy () {
-
+    document.addEventListener('click',e => {
+      console.log('444');
+        var screen = this.$refs.screenDiv;
+        // var a1 = document.getElementById('a1');
+        // console.log(screen);
+        // console.log(a1.contains(e.target));
+        if(document.contains(e.target)){
+          // console.log('在外');         //这句是说如果我们点击到了calss为screen以外的区域
+          this.indexlist = -1;
+        } else {
+          // console.log('在内');
+        }
+    })
   },
   watch:{
     //监听得到的数据
@@ -128,7 +136,7 @@ export default {
     userArr(data){
       let datas = [];
       data.forEach((item)=>{
-        
+
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
@@ -144,46 +152,79 @@ export default {
     },
 
     //主题管理，点击更多显示下拉菜单
-    bindScreen(index){
+    bindScreen(index,e){
       if(index==this.indexlist){
         this.indexlist=-1
       }else{
         this.indexlist=index;
       }
     },
-    disappear(){
-      console.log('dianji');
-      // var screen = this.$refs.screenDiv;
-      // console.log(screen);
-      // if(!screen.contains(event.target)){            //这句是说如果我们点击到了calss为screen以外的区域
-      //   this.indexlist=-1
-      // }
-    },
+
 
     //管理操作
-    themeOpera(postsId,clickType,clickStatus) {
+    // themeOpera(postsId,clickType,clickStatus) {
+    //   let attri = new Object();
+    //    if(clickType == 2){
+    //      console.log(clickStatus);
+    //      //加精
+    //      this.themeOpeRequest(postsId,attri,clickStatus);
+    //     attri.isEssence = clickStatus;
+    //    } else if(clickType == 3){
+    //      //置顶
+    //      // request = true;
+    //     attri.isSticky = clickStatus;
+    //     this.themeOpeRequest(postsId,attri,clickStatus);
+    //    } else if(clickType == 4){
+    //      //删除
+    //     attri.isDeleted = true;
+    //     this.themeOpeRequest(postsId,attri);
+    //     // this.$router.push({
+    //     //   path:'/circle',
+    //     //   name:'circle'
+    //     // })
+    //    } else {
+    //      // content = content
+    //      // console.log(content);
+    //      //跳转到发帖页
+    //     this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
+    //    }
+    // },
+
+
+    themeOpera(themeId,clickType,clickStatus,itemIndex) {
+      console.log(themeId,clickType,clickStatus,itemIndex);
       let attri = new Object();
-       if(clickType == 2){
-         console.log(clickStatus);
+       // if(clickType == 2){
+       //   console.log('操作点赞');
+       //   //点赞
+       //   if (clickStatus) {
+       //     attri.isLiked = false;
+       //   } else {
+       //     attri.isLiked = true;
+       //   }
+       //   this.themeOpeRequest(themeId, attri, '2', itemIndex);
+       // } else
+       if(clickType == 3){
          //加精
-         this.themeOpeRequest(postsId,attri,clickStatus);
-        attri.isEssence = clickStatus;
-       } else if(clickType == 3){
-         //置顶
-         // request = true;
-        attri.isSticky = clickStatus;
-        this.themeOpeRequest(postsId,attri,clickStatus);
+         if (clickStatus) {
+           attri.isEssence = false;
+         } else {
+           attri.isEssence = true;
+         }
+         this.themeOpeRequest(themeId, attri, '3', itemIndex);
        } else if(clickType == 4){
+         //置顶
+         if (clickStatus) {
+           attri.isSticky = false;
+         } else {
+           attri.isSticky = true;
+         }
+        this.themeOpeRequest(themeId,attri,'4', itemIndex);
+       } else if(clickType == 5){
          //删除
         attri.isDeleted = true;
-        this.themeOpeRequest(postsId,attri);
-        // this.$router.push({
-        //   path:'/circle',
-        //   name:'circle'
-        // })
+        this.themeOpeRequest(themeId,attri,'5', itemIndex);
        } else {
-         // content = content
-         // console.log(content);
          //跳转到发帖页
         this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
        }
@@ -199,7 +240,9 @@ export default {
     // },
 
     //主题操作接口请求
-    themeOpeRequest(themeId,attri,clickStatus){
+    themeOpeRequest(themeId,attri,clickType, itemIndex){
+      console.log(themeId,attri,clickType, itemIndex);
+      console.log('7890');
         // console.log(attri);
         this.appFetch({
           url:'threads',
@@ -210,35 +253,44 @@ export default {
               "type": "threads",
               "attributes": attri
             },
-            // "relationships": {
-            //     "category": {
-            //         "data": {
-            //             "type": "categories",
-            //             "id": cateId
-            //         }
-            //     }
-            // }
           }
         }).then((res)=>{
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            // console.log(res);
-            this.$emit('changeStatus', true);
+            console.log(res);
+            console.log('01234');
+            // this.$emit('changeStatus', true);
+
+            if(clickType == '3'){
+              //加精
+              this.essenceStatus = res.readdata._data.isEssence;
+              this.themeList[itemIndex]._data.isEssence = this.essenceStatus;
+            } else if(clickType == '4'){
+              //置顶
+              this.stickyStatus = res.readdata._data.isSticky;
+              this.themeList[itemIndex]._data.isSticky = this.stickyStatus;
+
+            } else if(clickType == '5'){
+              //删除
+              this.deletedStatus = res.readdata._data.isDeleted;
+              this.themeList.splice(itemIndex,1);
+            }
           }
         })
     },
 
     //点赞
-    replyOpera(postId,type,isLike,status){
+    replyOpera(firstPostId,clickStatus,itemIndex){
       // console.log(isLike);
       let attri = new Object();
       attri.isLiked = status;
-      let posts = 'posts/'+postId;
+      // let posts = 'posts/'+postId;
       this.appFetch({
-        url:posts,
+        url:'posts',
         method:'patch',
+        splice:'/'+firstPostId,
         data:{
           "data": {
             "type": "posts",
@@ -251,6 +303,8 @@ export default {
           throw new Error(res.error)
         } else {
           // console.log(res);
+          this.likedStatus = res.readdata._data.isLiked;
+          this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
           this.$toast.success('修改成功');
           this.$emit('changeStatus', true);
         }
@@ -336,6 +390,12 @@ export default {
 		// 	this.result = checkList;
 		// },
 	},
+  mounted: function() {
+  	document.addEventListener('click', this.disappear, false);
+  },
+  destroyed: function() {
+  	document.addEventListener('click', this.disappear, false);
+  },
 	beforeRouteLeave (to, from, next) {
     next()
 	}

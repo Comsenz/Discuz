@@ -257,6 +257,10 @@ const appFetch = function(params, options) {
         error.code = Vue.prototype.getLang(error.code);
       });
 
+      if (data.data.rawData[0].code === 'access_denied' && appCommonH.isWeixin().isWeixin){
+        delete data.data.errors;
+      }
+
       return data.data;
     }
   });

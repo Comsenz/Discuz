@@ -30,12 +30,7 @@ export default {
       ],
       fileListOne:[],
       uploadShow:false,
-      enclosureList:[
-        // {
-        //   type:'doc',
-        //   name:'saaaaaaaa',
-        // },
-      ],
+      enclosureList:[],
       avatar: "",
       themeId:'',
       postsId:'',
@@ -63,7 +58,8 @@ export default {
       enclosureListLen:'',
       isiOS: false,
       encuploadShow: false,
-      testingRes:false
+      testingRes:false,
+      backGo:-2
 
     }
   },
@@ -89,6 +85,8 @@ export default {
       }
   },
   created(){
+    console.log(this.backGo);
+
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -227,7 +225,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.push({ path:'details'+'/'+this.themeId});
+            this.$router.push({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
       } else {
@@ -272,7 +270,7 @@ export default {
           } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.push({ path:'details'+'/'+postThemeId});
+            _this.$router.push({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
           }
         })
       }
@@ -553,5 +551,15 @@ export default {
       this.showPopup = false;
     }
 
-  }
+  },
+  /*beforeRouteEnter(to,from,next){
+    console.log(to.name);
+    console.log(from.name);
+
+    next(vm =>{
+      if (from.name === 'circle'){
+        vm.backGo = -2
+      }
+    });
+  }*/
 }

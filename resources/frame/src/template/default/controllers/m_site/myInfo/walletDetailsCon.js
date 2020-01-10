@@ -42,7 +42,7 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res)=>{
-        if (res.errors){
+      if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
@@ -53,6 +53,7 @@ export default {
         this.walletDetailsList = this.walletDetailsList.concat(res.data);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
+        console.log(this.walletDetailsList);
       }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
@@ -76,7 +77,7 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-      
+
   }
   }
 }

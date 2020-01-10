@@ -75,13 +75,18 @@ export default {
 	        }
 
 	      ],
-        isPayValue:this.isPayVal
+        isPayValue:this.isPayVal,
+        canHideThreads:false,
+        canEditUserGroup:false,
+        canCreateInvite:false
+
 	  }
   },
   created: function() {
     // console.log(appConfig.devApiUrl);
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
+    this.getInfo();
     this.onLoad()
     // console.log(this.isPayValue);
   },
@@ -106,6 +111,30 @@ export default {
       })
 
   },
+  getInfo() {
+    //请求站点信息，用于判断站点是否是付费站点
+    this.appFetch({
+      url: 'forum',
+      method: 'get',
+      data: {
+      }
+    }).then((res) => {
+      if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+         // console.log(res);
+         this.canHideThreads = res.readdata._data.canHideThreads;
+         this.canEditUserGroup = res.readdata._data.canEditUserGroup;
+         this.canCreateInvite = res.readdata._data.canCreateInvite;
+         // console.log(this.canHideThreads,this.canEditUserGroup,this.canCreateInvite);
+         //判断 当用户组拥有批量删除帖子、管理-邀请加入、编辑用户组、编辑用户组状态这4个权限中的任意一项时才会显示该菜单
+         if(!(this.canHideThreads || this.canEditUserGroup || this.canCreateInvite)){
+           this.sidebarList2.splice(1,1);
+         }
+       }
+    });
+  },
   onLoad(){
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
     if(isWeixin){
@@ -127,9 +156,10 @@ export default {
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
       if(this.isPayValue == 'pay'){
+        console.log(this.isPayValue,'付费站点')
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/circle-invite';
-        var shareUrl= appConfig.devApiUrl+'/circle-invite/'+this.userId;
+        var shareUrl= appConfig.devApiUrl+'/circle-invite';
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);
@@ -144,8 +174,8 @@ export default {
         //如果是公开的站点
         // console.log('公开');
         //复制邀请链接
-        // var shareUrl= 'http://10.0.10.210:8883/open-circle';
-        var shareUrl= appConfig.devApiUrl+'/open-circle/'+this.userId;
+        var shareUrl= 'http://10.0.10.210:8883/open-circle/'+this.userId;
+        // var shareUrl= appConfig.devApiUrl+'/open-circle/'+this.userId;
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

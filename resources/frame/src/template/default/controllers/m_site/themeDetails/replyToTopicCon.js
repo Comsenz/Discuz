@@ -1,8 +1,14 @@
+/*
+* 回复主题控制器
+* */
+
 import {Bus} from '../../../store/bus.js';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 import appCommonH from '../../../../../helpers/commonHelper';
 import browserDb from '../../../../../helpers/webDbHelper';
+
+
 export default {
   data:function () {
     return {
@@ -26,7 +32,8 @@ export default {
       supportImgExtRes:'',
       limitMaxLength:true,
       fileListOne:[],
-      canUploadImages:''
+      canUploadImages:'',
+      backGo:-3
     }
   },
   computed: {
@@ -185,27 +192,8 @@ export default {
       }
     },
 
-    //压缩图片
-    compressFile(file, uploadShow, wantedSize = 150000, event){
-      const curSize = file.size || file.length * 0.8
-      const quality = Math.max(wantedSize / curSize, 0.8)
-      let that = this;
-      lrz(file, {
-          quality: 0.8, //设置压缩率
-      }).then(function (rst) {
-          let formdata = new FormData();
-          formdata.append('file', rst.file, file.name);
-          formdata.append('isGallery', 1);
-          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
-          that.loading = false;
 
 
-      }).catch(function (err) {
-          /* 处理失败后执行 */
-      }).always(function () {
-          /* 必然执行 */
-      })
-    },
 
     deleteEnclosure(id,type){
       console.log(id);
@@ -262,7 +250,49 @@ export default {
           }
         })
     },
+    //压缩
+    compressFile(file, uploadShow, wantedSize = 150000, event){
+      const curSize = file.size || file.length * 0.8
+      const quality = Math.max(wantedSize / curSize, 0.8)
+      let that = this;
+      lrz(file, {
+          quality: 0.8, //设置压缩率
+      }).then(function (rst) {
+          let formdata = new FormData();
+          formdata.append('file', rst.file, file.name);
+          formdata.append('isGallery', 1);
+          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+          that.loading = false;
+      }).catch(function (err) {
+          /* 处理失败后执行 */
+      }).always(function () {
+          /* 必然执行 */
+      })
+    },
 
+
+    //压缩图片
+    // compressFile(file, uploadShow, wantedSize = 150000, event){
+    //   const curSize = file.size || file.length * 0.8
+    //   const quality = Math.max(wantedSize / curSize, 0.8)
+    //   // let that = this;
+    //   lrz(file, {
+    //       quality: 0.8, //设置压缩率
+    //   }).then(function (rst) {
+    //       alert('压缩');
+    //       let formdata = new FormData();
+    //       formdata.append('file', rst.file, file.name);
+    //       fromdata.append('isGallery', 1);
+    //       this.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+    //       // that.loading = false;
+
+
+    //   }).catch(function (err) {
+    //       /* 处理失败后执行 */
+    //   }).always(function () {
+    //       /* 必然执行 */
+    //   })
+    // },
     //输入框自适应高度
     clearKeywords () {
       this.keywords = '';
@@ -389,7 +419,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId})
+            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}})
           }
         })
       } else {
@@ -422,7 +452,7 @@ export default {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             throw new Error(res.error)
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId});
+            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
       }
@@ -478,4 +508,14 @@ export default {
   destroyed: function () {
       browserDb.removeLItem('replyQuote');
   },
+  /*beforeRouteEnter (to,from,next){
+    console.log(to.name);
+    console.log(from.name);
+    next(vm=>{
+      if (from.name === 'details/:themeId'){
+        console.log('回退2');
+        vm.backGo = '/';
+      }
+    });
+  }*/
 }

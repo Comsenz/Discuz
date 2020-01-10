@@ -54,7 +54,7 @@ export default {
 				  method:'get',
 				//   data:this.userParams
 				  data:{
-					'filter[username]': this.searchVal,
+					'filter[username]':'*'+ this.searchVal+'*',
 					'page[number]': this.pageIndex,
             		'page[limit]': this.pageLimit
 				  }

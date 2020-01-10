@@ -13,6 +13,13 @@ export default {
     num:{
       default:"0.00",
       type:String
+    },
+    type:{
+      type:String
+    },
+    status:{
+      default:false,
+      type:Boolean
     }
   },
 
