@@ -16,11 +16,11 @@
         </div>
         <div class="" v-else ="">
           <div class="uploadBox" v-if="uploadShow ">
-            <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
+            <van-uploader :max-count="12" :accept="supportImgExtRes" multiple="false" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')">
             </van-uploader>
           </div>
         </div>
-        
+
         <div class="enclosure" v-if="enclosureShow">
           <div class="enclosureChi" v-for="(enc,index) in enclosureList" :key="index">
             <span v-if="enc.type === 'rar'" class="icon iconfont icon-rar"></span>
