@@ -72,6 +72,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'canCreateThread' => $this->actor->can('createThread'),
             'canViewThreads' => $this->actor->can('viewThreads'),
             'canViewUserList' => $this->actor->can('viewUserList'),
+            'canCreateInvite' => $this->actor->can('createInvite'),
 
             // 支付设置
             'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
