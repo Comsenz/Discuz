@@ -37,6 +37,7 @@
 
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../scss/m_site/mobileIndex.scss';
 import rewardCon from '../../../controllers/m_site/myInfo/rewardCon'
 export default {
   name: "reward",

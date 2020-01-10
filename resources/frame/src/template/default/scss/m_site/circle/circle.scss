@@ -911,6 +911,13 @@ details.vue
     text-align: center;
   }
 }
+.commentBox {
+  .van-list__finished-text {
+    line-height: 140px;
+  }
+}
+
+
 //发表主题
 $postTopicColor:#336699;
 

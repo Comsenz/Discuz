@@ -333,13 +333,33 @@ export default {
 
     },
     //主题详情图片放大轮播
-    imageSwiper() {
+    imageSwiper(pageIndex) {
       this.imageShow = true;
+      // this.pageIndex = pageIndex;
+      ImagePreview({
+        images:[            //需要预览的图片URL数组
+            'https://img.yzcdn.cn/public_files/2017/09/05/4e3ea0898b1c2c416eec8c11c5360833.jpg',
+            'https://img.yzcdn.cn/public_files/2017/09/05/fd08f07665ed67d50e11b32a21ce0682.jpg'
+        ],
+        startPosition:pageIndex,    //图片预览起始位置索引 默认 0
+        showIndex: true,    //是否显示页码         默认 true
+        showIndicators: true, //是否显示轮播指示器 默认 false
+        loop:false,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
+          //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
+          var num = url.index, url_link = url.url;
+          console.log(url);
+        }
+
+      })
+    },
+    onChangeImgPreview() {
+      this.index = index;
     },
     //主题详情图片放大轮播index值监听
-    onChange(index) {
-      this.index = index + 1;
-    },
+    // onChange(index) {
+    //   this.index = index + 1;
+    // },
     //分享，复制浏览器地址
     shareTheme() {
       var Url= appConfig.devApiUrl+'/pay-circle-con/'+this.groupId;

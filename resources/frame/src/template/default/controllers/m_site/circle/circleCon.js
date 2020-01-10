@@ -234,8 +234,8 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }
-          
         } else {
+          console.log('正确请求');
           if(!this.canViewThreads){
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
@@ -244,6 +244,8 @@ export default {
               this.nullTip = true
             }
             this.themeListCon = this.themeListCon.concat(res.readdata);
+            console.log(this.themeListCon);
+            console.log('66544');
             this.loading = false;
             this.finished = res.readdata.length < this.pageLimit;
           }

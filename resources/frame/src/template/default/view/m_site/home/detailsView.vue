@@ -30,7 +30,7 @@
                   lazy-load
                   v-for="(image,index)  in firstpostImageList"
                   :src="image"
-                  @click="imageSwiper"
+                  @click="imageSwiper(index)"
                   :key="index"
               />
             </div>
@@ -58,7 +58,6 @@
             </div>
             <div class="uploadFileList" v-else="">
             <a :href="attachment._data.url" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download>
-
               <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
               <span v-if="attachment._data.extension === 'zip'" class="icon iconfont icon-rar"></span>
               <span v-else-if="attachment._data.extension === 'doc'" class="icon iconfont icon-word"></span>
@@ -209,7 +208,7 @@
        <van-image-preview
          v-model="imageShow"
          :images="firstpostImageList"
-         @change="onChange"
+         @change="onChangeImgPreview"
        >
        <template v-slot:index>第{{ index }}页</template>
      </van-image-preview>
