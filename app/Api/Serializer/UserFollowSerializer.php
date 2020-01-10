@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
+use Tobscure\JsonApi\Relationship;
 
 class UserFollowSerializer extends AbstractSerializer
 {
@@ -22,4 +23,25 @@ class UserFollowSerializer extends AbstractSerializer
         ];
     }
 
+    /**
+     * Define the relationship with the from_user.
+     *
+     * @param $userFollow
+     * @return Relationship
+     */
+    public function fromUser($userFollow)
+    {
+        return $this->hasOne($userFollow, UserSerializer::class);
+    }
+
+    /**
+     * Define the relationship with the to_user.
+     *
+     * @param $userFollow
+     * @return Relationship
+     */
+    public function toUser($userFollow)
+    {
+        return $this->hasOne($userFollow, UserSerializer::class);
+    }
 }

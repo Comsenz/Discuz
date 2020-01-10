@@ -12,11 +12,12 @@ use App\Models\User;
 use App\Repositories\UserFollowRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListUserFollowController extends AbstractListController
 {
@@ -42,6 +43,12 @@ class ListUserFollowController extends AbstractListController
      */
     public $userFollowCount;
 
+    /* The relationships that are included by default.
+     *
+     * @var array
+     */
+    public $include = ['fromUser', 'toUser'];
+
     /**
      * @param UserFollowRepository $userFollow
      * @param UrlGenerator $url
@@ -53,9 +60,10 @@ class ListUserFollowController extends AbstractListController
     }
 
     /**
+     * 我的关注
      * {@inheritdoc}
-     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
-     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
+     * @throws InvalidParameterException
+     * @throws NotAuthenticatedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -90,13 +98,13 @@ class ListUserFollowController extends AbstractListController
      * @param array $filter
      * @param null $limit
      * @param int $offset
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $query = $this->userFollow->query()->whereVisibleTo($actor);
+        $query = $this->userFollow->query();
 
-        $this->applyFilters($query, $filter, $actor);
+        $query->where('from_user_id', $actor->id)->with('toUser');
 
         $this->userFollowCount = $limit > 0 ? $query->count() : null;
 

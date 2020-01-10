@@ -9,6 +9,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -40,4 +41,24 @@ class UserFollow extends Model
         'from_user_id',
         'to_user_id'
     ];
+
+    /**
+     * Define the relationship with the from_user.
+     *
+     * @return belongsTo
+     */
+    public function fromUser()
+    {
+        return $this->belongsTo(User::class, 'from_user_id');
+    }
+
+    /**
+     * Define the relationship with the to_user.
+     *
+     * @return belongsTo
+     */
+    public function toUser()
+    {
+        return $this->belongsTo(User::class, 'to_user_id');
+    }
 }
