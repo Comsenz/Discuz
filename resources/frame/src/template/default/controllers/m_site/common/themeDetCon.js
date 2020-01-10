@@ -53,6 +53,8 @@ export default {
 	created(){
     this.loadPriviewImgList();
     this.forList();
+    // console.log(this.themeList[0].user._data.avatarUrl);
+
 
     // this.getCircle();
 
@@ -128,7 +130,7 @@ export default {
     userArr(data){
       let datas = [];
       data.forEach((item)=>{
-        
+
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')

@@ -66,7 +66,7 @@
             <div class="commentPostDet">
               <div class="postTop">
                 <div class="postPer">
-                  <img v-if="item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
+                  <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead">
                   <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
                   <div class="perDet">
                     <div class="perName">{{item.user._data.username}}</div>
