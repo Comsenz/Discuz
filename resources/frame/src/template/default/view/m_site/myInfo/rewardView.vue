@@ -19,11 +19,18 @@
           :userName="item._data.user_name">
            <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
-          <div class="reference">
+         <div class="likePostContent">
+          <a href="javascript:;" v-html="item._data.content"></a>
+          <!-- <a href="javascript:;">
+            <blockquote class="quoteCon">asdasdsadasdasdasdasdaasdadasd</blockquote>
+            我们的观点不一样
+          </a> -->
+        </div>
+          <!-- <div class="reference">
           <div class="reference-cont">
             <span>{{item._data.content}}</span>
           </div>
-        </div>
+        </div> -->
         <!-- <ContMain
           :contText="contText">
         </ContMain> -->
