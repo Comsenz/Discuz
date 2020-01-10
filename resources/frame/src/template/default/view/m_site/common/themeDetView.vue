@@ -17,7 +17,7 @@
                 </div>
                 <div class="postOpera">
                   <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
-                  <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit)">
+                  <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit || item.firstPost._data.canLike)">
                   	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
                   	<div class="themeList" v-show="indexlist==index" >
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,index)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
