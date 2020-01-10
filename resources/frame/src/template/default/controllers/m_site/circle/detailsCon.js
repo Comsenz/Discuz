@@ -117,11 +117,7 @@ export default {
     } else {
       this.themeShow = true
     }
-    if (this.collectStatus) {
-      this.collectFlag = '已收藏';
-    } else {
-      this.collectFlag = '收藏';
-    }
+
   },
 
   computed: {
@@ -279,29 +275,46 @@ export default {
           console.log('1234');
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
-          this.collectStatus = res.readdata._data.isFavorite;
-          this.themeShow = true;
-          this.themeCon = res.readdata;
-          this.canLike = res.readdata.firstPost._data.canLike;
-          this.canViewPosts = res.readdata._data.canViewPosts;
-          this.canReply = res.readdata._data.canReply;
-          this.postsList = res.readdata.posts;
-          this.likedUsers = res.readdata.firstPost.likedUsers;
-          this.rewardedUsers = res.readdata.rewardedUsers;
-          this.themeUserId = res.readdata.user._data.id;
-          var firstpostImageLen = this.themeCon.firstPost.images.length;
-          if (firstpostImageLen === 0) {
-            return;
-          } else {
-            var firstpostImage = [];
-            for (let i = 0; i < firstpostImageLen; i++) {
-              // let src = 'https://2020.comsenz-service.com/api/attachments/';
-              // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-              firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+            this.collectStatus = res.readdata._data.isFavorite;
+            this.essenceStatus = res.readdata._data.isEssence;
+            this.stickyStatus = res.readdata._data.isSticky;
+            if (this.collectStatus) {
+              this.collectFlag = '已收藏';
+            } else {
+              this.collectFlag = '收藏';
             }
-            this.firstpostImageList = firstpostImage;
-            // console.log(134, this.firstpostImageList);
-          };
+            if (this.essenceStatus) {
+              this.essenceFlag = '取消收藏';
+            } else {
+              this.essenceFlag = '收藏';
+            }
+            if (this.stickyStatus) {
+              this.stickyFlag = '取消置顶';
+            } else {
+              this.stickyFlag = '置顶';
+            }
+            this.themeShow = true;
+            this.themeCon = res.readdata;
+            this.canLike = res.readdata.firstPost._data.canLike;
+            this.canViewPosts = res.readdata._data.canViewPosts;
+            this.canReply = res.readdata._data.canReply;
+            this.postsList = res.readdata.posts;
+            this.likedUsers = res.readdata.firstPost.likedUsers;
+            this.rewardedUsers = res.readdata.rewardedUsers;
+            this.themeUserId = res.readdata.user._data.id;
+            var firstpostImageLen = this.themeCon.firstPost.images.length;
+            if (firstpostImageLen === 0) {
+              return;
+            } else {
+              var firstpostImage = [];
+              for (let i = 0; i < firstpostImageLen; i++) {
+                // let src = 'https://2020.comsenz-service.com/api/attachments/';
+                // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+                firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+              }
+              this.firstpostImageList = firstpostImage;
+              // console.log(134, this.firstpostImageList);
+            };
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
           }
@@ -392,33 +405,33 @@ export default {
       } else {
         let attri = new Object();
         if (clickType == 1) {
-          this.collectStatus = !this.collectStatus
-          if (this.collectStatus == true) {
-            this.collectFlag = "已收藏"
-          } else if (this.collectStatus == false) {
-            this.collectFlag = "收藏"
+          if (this.collectStatus) {
+            attri.isFavorite = false;
+          } else {
+            attri.isFavorite = true;
           }
-
-          attri.isFavorite = true;
           content = '';
-          this.themeOpeRequest(attri, cateId);
+          this.themeOpeRequest(attri, cateId, '1');
         } else if (clickType == 2) {
           content = '';
-          this.themeOpeRequest(attri, cateId);
-          attri.isEssence = true;
+          if (this.essenceStatus) {
+            attri.isEssence = false;
+          } else {
+            attri.isEssence = true;
+          }
+          this.themeOpeRequest(attri, cateId, '2');
         } else if (clickType == 3) {
           content = '';
-          // request = true;
-          attri.isSticky = true;
-          this.themeOpeRequest(attri, cateId);
+          if (this.stickyStatus) {
+            attri.isSticky = false;
+          } else {
+            attri.isSticky = true;
+          }
+          this.themeOpeRequest(attri, cateId, '3');
         } else if (clickType == 4) {
           attri.isDeleted = true;
           content = '';
-          this.themeOpeRequest(attri, cateId);
-          this.$router.push({
-            path: '/circle',
-            name: 'circle'
-          })
+          this.themeOpeRequest(attri, cateId, '4');
         } else {
           // content = content
           // console.log(content);
@@ -430,7 +443,7 @@ export default {
       }
     },
     //主题操作接口请求
-    themeOpeRequest(attri, cateId) {
+    themeOpeRequest(attri, cateId, clickType) {
       // console.log(attri);
       let threads = 'threads/' + this.themeId;
       this.appFetch({
@@ -451,10 +464,42 @@ export default {
           }
         }
       }).then((res) => {
+        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
+          if(clickType == '1'){
+            this.collectStatus = res.readdata._data.isFavorite;
+            if (this.collectStatus) {
+              this.collectFlag = "已收藏";
+            } else {
+              this.collectFlag = "收藏";
+            }
+          } else if(clickType == '2'){
+            this.essenceStatus = res.readdata._data.isEssence;
+            if (this.essenceStatus) {
+              this.essenceFlag = "取消加精";
+            } else {
+              this.essenceFlag = "加精";
+            }
+          } else if(clickType == '3'){
+            this.stickyStatus = res.readdata._data.isSticky;
+            if (this.stickyStatus) {
+              this.stickyFlag = "取消置顶";
+            } else {
+              this.stickyFlag = "置顶";
+            }
+          } else if(clickType == '4'){
+            //删除
+            this.deletedStatus = res.readdata._data.isDeleted;
+            if (this.deletedStatus) {
+              this.$router.push({
+                path: '/circle',
+                name: 'circle'
+              })
+            }
+          }
 
         }
       })
