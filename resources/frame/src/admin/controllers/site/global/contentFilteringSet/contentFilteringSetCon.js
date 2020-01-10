@@ -11,7 +11,7 @@ import appConfig from "../../../../../../config/appConfig";
 
 export default {
   data:function () {
-    let token = browserDb.getLItem('Authorization');
+    let token = webDb.getLItem('Authorization');
 
     return {
       tableData: [],
@@ -19,7 +19,7 @@ export default {
       tableDataLength:'',
       // disabled:true,
       createCategoriesStatus:false,   //添加分类状态
-      exportUrl: appConfig.devApiUrl+'/stop-words/export?token=Bearer ' + token,
+      exportUrl: appConfig.devApiUrl+'/api/stop-words/export?token=Bearer ' + token,
       options: [{
           value: '{IGNORE}',
           label: '不处理'

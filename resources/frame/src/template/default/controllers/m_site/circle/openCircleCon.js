@@ -7,6 +7,9 @@ export default {
 		return {
       showScreen: false,
       themeListCon:[],
+      userInfoAvatarUrl:'',
+      userInfoName:'',
+      invitationShow:false,
       themeChoList: [
       	{
       		typeWo: '全部主题',
@@ -42,8 +45,31 @@ export default {
 	},
   created:function(){
     this.loadThemeList();
+    this.getUserInfo()
   },
+  computed: {
+    userId: function(){
+        return this.$route.params.userId;
+    },
+},
 	methods: {
+    getUserInfo(){
+      this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice:'/'+this.userId,
+        data:{
+
+        }
+      }).then(res=>{
+        console.log(res,'用户信息请求')
+        this.userInfoName = res.readdata._data.username;
+        this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
+        if(this.userInfoName){
+          this.invitationShow = true;
+        }
+      })
+    },
 
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus=false){
@@ -65,6 +91,7 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
+          console.log(res,'邀请人')
           this.themeListCon =this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
@@ -139,8 +166,6 @@ export default {
           this.loading = false;
         })
       }
-
-
     },
 
 

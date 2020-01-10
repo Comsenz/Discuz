@@ -226,8 +226,6 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-  //           this.$toast.fail(res.errors[0].code+ '\n' + res.errors[0].detail);
-  //           throw new Error(res.error)
           } else {
             this.$router.push({ path:'details'+'/'+this.themeId});
           }
@@ -266,9 +264,12 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-          }else{
+            if (res.errors[0].detail){
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+          } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
             _this.$router.push({ path:'details'+'/'+postThemeId});

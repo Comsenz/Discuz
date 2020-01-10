@@ -53,6 +53,8 @@ export default {
 	created(){
     this.loadPriviewImgList();
     this.forList();
+    // console.log(this.themeList[0].user._data.avatarUrl);
+
 
     // this.getCircle();
 
@@ -92,13 +94,19 @@ export default {
     //   }
     // }
 
-
-
-
-
-  },
-	beforeDestroy () {
-
+    document.addEventListener('click',e => {
+      console.log('444');
+        var screen = this.$refs.screenDiv;
+        // var a1 = document.getElementById('a1');
+        // console.log(screen);
+        // console.log(a1.contains(e.target));
+        if(document.contains(e.target)){
+          // console.log('在外');         //这句是说如果我们点击到了calss为screen以外的区域
+          this.indexlist = -1;
+        } else {
+          // console.log('在内');
+        }
+    })
   },
   watch:{
     //监听得到的数据
@@ -128,7 +136,7 @@ export default {
     userArr(data){
       let datas = [];
       data.forEach((item)=>{
-        
+
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
@@ -144,21 +152,22 @@ export default {
     },
 
     //主题管理，点击更多显示下拉菜单
-    bindScreen(index){
+    bindScreen(index,e){
       if(index==this.indexlist){
         this.indexlist=-1
       }else{
         this.indexlist=index;
       }
     },
-    disappear(){
-      console.log('dianji');
-      // var screen = this.$refs.screenDiv;
-      // console.log(screen);
-      // if(!screen.contains(event.target)){            //这句是说如果我们点击到了calss为screen以外的区域
-      //   this.indexlist=-1
-      // }
-    },
+    // disappear(e){
+    //   console.log('dianji');
+    //   var screen = this.$refs.screenDiv;
+    //   console.log(screen);
+    //   if(!this.$refs.screenDiv.contains(e.target)){            //这句是说如果我们点击到了calss为screen以外的区域
+    //     this.indexlist=-1;
+    //   }
+    // },
+
 
     //管理操作
     themeOpera(postsId,clickType,clickStatus) {
@@ -336,6 +345,12 @@ export default {
 		// 	this.result = checkList;
 		// },
 	},
+  mounted: function() {
+  	document.addEventListener('click', this.disappear, false);
+  },
+  destroyed: function() {
+  	document.addEventListener('click', this.disappear, false);
+  },
 	beforeRouteLeave (to, from, next) {
     next()
 	}

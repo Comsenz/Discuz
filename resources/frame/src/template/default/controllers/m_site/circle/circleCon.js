@@ -34,7 +34,7 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 0,//页码
+      pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       canEdit:true,
@@ -234,8 +234,8 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }
-          
         } else {
+          console.log('正确请求');
           if(!this.canViewThreads){
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
@@ -244,6 +244,8 @@ export default {
               this.nullTip = true
             }
             this.themeListCon = this.themeListCon.concat(res.readdata);
+            console.log(this.themeListCon);
+            console.log('66544');
             this.loading = false;
             this.finished = res.readdata.length < this.pageLimit;
           }
