@@ -75,7 +75,7 @@ class UpdateUserWallet
         }
         $operate_type   = Arr::get($this->data, 'operate_type');
         $operate_amount = Arr::get($this->data, 'operate_amount');
-        $operate_reason = Arr::get($this->data, 'operate_reason');
+        $operate_reason = Arr::get($this->data, 'operate_reason', '');
         $wallet_status  = Arr::get($this->data, 'wallet_status');
         if (!is_null($operate_type)) {
             if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
