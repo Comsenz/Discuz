@@ -175,6 +175,7 @@ export default {
           this.compressFile(e.target.files[0], true);
         }
       } else {
+        alert('333');
         this.compressFile(e.target.files[0], true);
       }
     },
@@ -192,27 +193,8 @@ export default {
       }
     },
 
-    //压缩图片
-    compressFile(file, uploadShow, wantedSize = 150000, event){
-      const curSize = file.size || file.length * 0.8
-      const quality = Math.max(wantedSize / curSize, 0.8)
-      let that = this;
-      lrz(file, {
-          quality: 0.8, //设置压缩率
-      }).then(function (rst) {
-          let formdata = new FormData();
-          formdata.append('file', rst.file, file.name);
-          fromdata.append('isGallery', 1);
-          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
-          that.loading = false;
 
 
-      }).catch(function (err) {
-          /* 处理失败后执行 */
-      }).always(function () {
-          /* 必然执行 */
-      })
-    },
 
     deleteEnclosure(id,type){
       console.log(id);
@@ -244,6 +226,7 @@ export default {
 
     //这里写接口，上传
     uploaderEnclosure(file,isFoot,img){
+      alert('上传接口');
         this.appFetch({
           url:'attachment',
           method:'post',
@@ -269,7 +252,49 @@ export default {
           }
         })
     },
+    //压缩
+    compressFile(file, uploadShow, wantedSize = 150000, event){
+      const curSize = file.size || file.length * 0.8
+      const quality = Math.max(wantedSize / curSize, 0.8)
+      let that = this;
+      lrz(file, {
+          quality: 0.8, //设置压缩率
+      }).then(function (rst) {
+          let formdata = new FormData();
+          formdata.append('file', rst.file, file.name);
+          formdata.append('isGallery', 1);
+          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+          that.loading = false;
+      }).catch(function (err) {
+          /* 处理失败后执行 */
+      }).always(function () {
+          /* 必然执行 */
+      })
+    },
 
+
+    //压缩图片
+    // compressFile(file, uploadShow, wantedSize = 150000, event){
+    //   const curSize = file.size || file.length * 0.8
+    //   const quality = Math.max(wantedSize / curSize, 0.8)
+    //   // let that = this;
+    //   lrz(file, {
+    //       quality: 0.8, //设置压缩率
+    //   }).then(function (rst) {
+    //       alert('压缩');
+    //       let formdata = new FormData();
+    //       formdata.append('file', rst.file, file.name);
+    //       fromdata.append('isGallery', 1);
+    //       this.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+    //       // that.loading = false;
+
+
+    //   }).catch(function (err) {
+    //       /* 处理失败后执行 */
+    //   }).always(function () {
+    //       /* 必然执行 */
+    //   })
+    // },
     //输入框自适应高度
     clearKeywords () {
       this.keywords = '';
