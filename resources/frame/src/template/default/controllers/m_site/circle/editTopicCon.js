@@ -200,7 +200,7 @@ export default {
           for (var i = 0; i < fileListCon.length; i++) {
             console.log(fileListCon[i]._data.thumbUrl);
             // this.fileListOne.push({thumbUrl:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
-            this.fileListOne.push({url:fileListCon[i]._data.url,id:fileListCon[i]._data.id});
+            this.fileListOne.push({url:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
             console.log(this.fileListOne);
             console.log('4445566');
           }
