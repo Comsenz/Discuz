@@ -46,8 +46,27 @@ export default {
       this.popupShow = true;
     },
     headerBack(){
-      console.log("回退");
-      this.$router.go(-1)
+      console.log("回退1");
+      let backGo = this.$route.query.backGo;
+      let backHomePage = ['modify-data'];
+
+      console.log(backGo);
+
+      if (backGo){
+        if (isNaN(parseInt(backGo))){
+          this.$router.push({path:backGo})
+        } else {
+          this.$router.go(this.$route.query.backGo)
+        }
+      } else {
+        // if (backHomePage.includes(this.$route.name)){
+        //
+        //   this.$router.push({path:'/'})
+        // } else {
+          this.$router.go(-1);
+        // }
+      }
+
     }
   },
 
@@ -57,8 +76,5 @@ export default {
       this.limitWidth();
     }
   },
-  beforeRouteLeave (to, from, next) {
-    next()
-  }
 
 }
