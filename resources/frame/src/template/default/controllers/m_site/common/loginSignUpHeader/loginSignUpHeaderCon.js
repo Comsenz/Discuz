@@ -48,7 +48,6 @@ export default {
     headerBack(){
       console.log("回退1");
       let backGo = this.$route.query.backGo;
-      let backHomePage = ['modify-data'];
 
       console.log(backGo);
 
@@ -59,12 +58,7 @@ export default {
           this.$router.go(this.$route.query.backGo)
         }
       } else {
-        // if (backHomePage.includes(this.$route.name)){
-        //
-        //   this.$router.push({path:'/'})
-        // } else {
-          this.$router.go(-1);
-        // }
+        this.$router.go(-1);
       }
 
     }
