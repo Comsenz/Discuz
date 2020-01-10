@@ -7,7 +7,6 @@
             <div class="">
               <div class="postTop">
                 <div class="postPer">
-                  <!-- <img :src="item.user._data.avatarUrl" v-if="item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead"> -->
                   <img :src="item.user._data.avatarUrl" v-if="item.user && item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead">
                   <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
                   <div class="perDet">
