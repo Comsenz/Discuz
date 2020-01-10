@@ -1,5 +1,4 @@
 <!--移动端首页模板-->
-
 <template>
     <div class="circleCon">
     <van-list
@@ -11,7 +10,7 @@
     :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-     <Header :searchIconShow="false" :perDetShow="true" :logoShow="true" :menuIconShow="false" :navShow="true" :invitePerDet="true" :headFixed="false" @categoriesChoice="categoriesChoice"></Header>
+     <Header :searchIconShow="false" :perDetShow="true" :logoShow="true" :menuIconShow="false" :navShow="true" :invitePerDet="true" :headFixed="false" @categoriesChoice="categoriesChoice" :userInfoAvatarUrl="userInfoAvatarUrl" :userInfoName="userInfoName" :invitationShow="invitationShow"></Header>
 	    <div class="gap"></div>
       <div class="themeTitBox">
       	<span class="themeTit">全部主题</span>
@@ -26,19 +25,19 @@
       <div v-if="themeListCon">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
       </div>
+  </van-pull-refresh>    
+  </van-list>
 
 
-
-
+ <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
 	    <div class="gap"></div>
-	    <div class="loginOpera">
+	    <!-- <div class="loginOpera">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin">接受邀请，注册</a>
-	    </div>
-  </van-pull-refresh>    
-  </van-list>
+	    </div> -->
+
     </div>
 </template>
 

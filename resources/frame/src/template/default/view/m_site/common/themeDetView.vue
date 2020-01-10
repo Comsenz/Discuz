@@ -2,13 +2,13 @@
   <section>
     <div>
        <van-checkbox-group v-model="result" ref="checkboxGroup">
-        <div class="" @click="disappear()" v-for="(item,index) in themeList" :key="index">
+        <div class=""  v-for="(item,index) in themeList" :key="index">
           <div class="cirPostCon">
             <div class="">
               <div class="postTop">
                 <div class="postPer">
-                  <img :src="item.user._data.avatarUrl" v-if="item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead">
-                  <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="">
+                  <img :src="item.user._data.avatarUrl" v-if="item.user && item.user._data.avatarUrl" @click="jumpPerDet(item.user._data.id)" class="postHead">
+                  <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(item.user._data.id)">
                   <div class="perDet">
                     <div class="perName" v-if="item.user"  @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
                     <div class="perName" v-else="">该用户已被删除</div>
@@ -17,11 +17,17 @@
                 </div>
                 <div class="postOpera">
                   <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
-                  <div class="screen" ref="screenDiv" @click="bindScreen(index)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit)">
+                  <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit)">
                   	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
                   	<div class="themeList" v-show="indexlist==index" >
-                      <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,false)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
+                     <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,false)" v-if="item.firstPost._data.canLike && item.firstPost._data.isLiked">取消点赞</a>
                       <a href="javascript:;"  @click="replyOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked,true)" v-if="item.firstPost._data.canLike && !item.firstPost._data.isLiked">点赞</a>
+
+                      <!-- <a href="javascript:;"  @click="themeOpera(item.firstPost._data.id,2,item.firstPost._data.isLiked)" v-if="themeCon._data.canEssence">{{essenceFlag}}</a>
+                      <a href="javascript:;"  @click="themeOpera(item.firstPost._data.id,3,item.firstPost._data.isLiked)" v-if="themeCon._data.canSticky">{{stickyFlag}}</a> -->
+
+
+
                       <!-- <a href="javascript:;"  @click="replyToJump(item._data.id,false,false)">回复</a> -->
 
                   		<a href="javascript:;"  @click="themeOpera(item._data.id,2,false)" v-if="item._data.canEssence && item._data.isEssence">取消加精</a>
@@ -91,11 +97,11 @@
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
                 <div class="replyCon" v-for="reply in item.lastThreePosts">
-                  <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(item.user._data.id)">{{reply.user._data.username}}</a>
+                  <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(reply.user._data.id)">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
-                  <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(item.user._data.id)">回复</span>
+                  <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(reply.user._data.id)">回复</span>
                   <!-- <span class="font9" v-else=""></span> -->
-                  <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser" @click="jumpPerDet(item.user._data.id)">{{reply.replyUser._data.username}}</a>
+                  <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser" @click="jumpPerDet(reply.user._data.id)">{{reply.replyUser._data.username}}</a>
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>
                   <span v-html="reply._data.contentHtml"></span>
                 </div>

@@ -7,6 +7,12 @@ export default {
 		return {
       showScreen: false,
       themeListCon:[],
+      userInfoAvatarUrl:'',
+      userInfoName:'',
+      invitationShow:false,
+      loginBtnFix: true,
+      loginHide:false,
+      loginWord:'登录 / 注册',
       themeChoList: [
       	{
       		typeWo: '全部主题',
@@ -42,8 +48,31 @@ export default {
 	},
   created:function(){
     this.loadThemeList();
+    this.getUserInfo()
   },
+  computed: {
+    userId: function(){
+        return this.$route.params.userId;
+    },
+},
 	methods: {
+    getUserInfo(){
+      this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice:'/'+this.userId,
+        data:{
+
+        }
+      }).then(res=>{
+        console.log(res,'用户信息请求')
+        this.userInfoName = res.readdata._data.username;
+        this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
+        if(this.userInfoName){
+          this.invitationShow = true;
+        }
+      })
+    },
 
     //初始化请求主题列表数据
     loadThemeList(filterCondition,filterVal,initStatus=false){
@@ -65,6 +94,7 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
+          console.log(res,'邀请人')
           this.themeListCon =this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
@@ -139,8 +169,26 @@ export default {
           this.loading = false;
         })
       }
-
-
+    },
+    footFix() {
+      // console.log(this.$route.meta.oneHeader);
+      // if(this.$route.meta.oneHeader){
+          var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+          var offsetTop = document.querySelector('#testNavBar').offsetTop;
+            if(this.loginBtnFix == true){
+              this.loginHide = true;
+              // console.log(scrollTop+'1111');
+              // console.log(offsetTop+'2222');
+              if(scrollTop > offsetTop){
+                // console.log('大于');
+                this.loginHide = true;
+                // console.log(this.loginHide);
+              } else {
+                // console.log('小于');
+                this.loginHide = false;
+              }
+          }
+      // }
     },
 
 
@@ -166,7 +214,7 @@ export default {
     },
 		//跳转到登录页
 		loginJump:function(){
-			this.$router.push({ path:'login-user'})
+			this.$router.push({ path:'/login-user'})
 		},
 		//跳转到注册页
 		registerJump:function(){
