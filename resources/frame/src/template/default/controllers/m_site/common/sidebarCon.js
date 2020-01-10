@@ -129,7 +129,7 @@ export default {
       if(this.isPayValue == 'pay'){
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/circle-invite';
-        var shareUrl= appConfig.devApiUrl+'/circle-invite';
+        var shareUrl= appConfig.devApiUrl+'/circle-invite/'+this.userId;
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);
@@ -145,7 +145,7 @@ export default {
         // console.log('公开');
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/open-circle';
-        var shareUrl= appConfig.devApiUrl+'/open-circle';
+        var shareUrl= appConfig.devApiUrl+'/open-circle/'+this.userId;
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

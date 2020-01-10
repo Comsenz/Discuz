@@ -101,7 +101,7 @@ export default {
           oneHeader: true
         }
       },
-      'open-circle':{
+      'open-circle/:userId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/openCircleView'],resolve)
         },

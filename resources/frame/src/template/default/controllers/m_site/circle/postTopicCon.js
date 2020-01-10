@@ -269,7 +269,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-          } else {
+          } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
             _this.$router.push({ path:'details'+'/'+postThemeId});

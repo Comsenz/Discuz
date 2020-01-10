@@ -23,7 +23,7 @@
             <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span>
           </div>
         </div>
-        <div class="searchMore" v-show='!userLoadMoreStatus' @click="handleLoadMoreUser">
+        <div class="searchMore" v-show='userLoadMoreStatus' @click="handleLoadMoreUser">
           <i class="icon iconfont icon-search"></i>
           搜索更多用户
         </div>
@@ -45,7 +45,7 @@
             <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
         </div>
-        <div class="searchMore" v-show="!themeLoadMoreStatus" @click="handleLoadMoreTheme">
+        <div class="searchMore" v-show="themeLoadMoreStatus" @click="handleLoadMoreTheme">
           <i class="icon iconfont icon-search"></i>
           搜索更多主题
         </div>

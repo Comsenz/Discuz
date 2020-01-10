@@ -43,6 +43,11 @@ export default {
   created:function(){
     this.loadThemeList();
   },
+  computed: {
+    userId: function(){
+        return this.$route.params.userId;
+    },
+},
 	methods: {
 
     //初始化请求主题列表数据
