@@ -8,19 +8,40 @@ export default {
       loginStatus:'default',   //default h5 applets pc
       appId:'',
       appSecret:'',
-      type:''
+      type:'',
+      typeCopywriting:{
+        wx_offiaccount:{
+          title:'公众号接口配置',
+          appIdDescription:'填写申请公众号后，你获得的APPID ',
+          appSecretDescription:'填写申请公众号后，你获得的App secret',
+          url:'https://mp.weixin.qq.com/'
+        },
+        wx_miniprogram:{
+          title:'小程序微信授权登录设置',
+          appIdDescription:'填写申请小程序后，你获得的APPID ',
+          appSecretDescription:'填写申请小程序后，你获得的App secret',
+          url:''
+        },
+        wx_oplatform:{
+          title:'PC端微信扫码登录',
+          appIdDescription:'填写申请PC端微信扫码后，你获得的APPID ',
+          appSecretDescription:'填写申请PC端微信扫码后，你获得的App secret',
+          url:''
+        }
+
+      },
+      info:{}
     }
   },
   created(){
     var type = this.$route.query.type;
     this.type = type;
-    console.log(this.type);
+    this.info = this.typeCopywriting[type];
     this.loadStatus();
   },
   methods:{
     loadStatus(){
       console.log(this.type);
-      //��ʼ�����ò���
       this.appFetch({
         url:'tags',
         method:'get',

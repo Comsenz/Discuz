@@ -1,20 +1,20 @@
 <template>
   <div class="worth-mentioning-config-h5-box">
-    <Card header="公众号接口配置"></Card>
+    <Card :header="typeCopywriting[type].title"></Card>
 
     <Card header="APPID：">
-      <CardRow description="填写申请公众号后，你获得的APPID">
+      <CardRow :description="typeCopywriting[type].appIdDescription">
         <el-input v-model="appId"></el-input>
 
         <template #tail>
-          <a href="https://mp.weixin.qq.com/" target="_blank" style="margin-left:15px;">未申请？点此申请</a>
+          <a :href="typeCopywriting[type].url" target="_blank" style="margin-left:15px;">未申请？点此申请</a>
         </template>
       </CardRow>
     </Card>
 
 
     <Card header="App secret：">
-      <CardRow description="填写申请公众号后，你获得的App secret">
+      <CardRow :description="typeCopywriting[type].appSecretDescription">
         <el-input v-model="appSecret"></el-input>
       </CardRow>
     </Card>
