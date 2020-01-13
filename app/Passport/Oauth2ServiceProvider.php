@@ -11,6 +11,7 @@ use App\Passport\Repositories\ScopeRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\CryptKey;
 
 class Oauth2ServiceProvider extends ServiceProvider
 {
@@ -23,8 +24,7 @@ class Oauth2ServiceProvider extends ServiceProvider
             $scopeRepository = new ScopeRepository();
 
             // Path to public and private keys
-            $privateKey = storage_path('cert/private.key');
-            //$privateKey = new CryptKey('file://path/to/private.key', 'passphrase'); // if private key has a pass phrase
+            $privateKey = new CryptKey(storage_path('cert/private.key'), '', false); // if private key has a pass phrase
             $encryptionKey = substr($app->config('key'), 7); // generate using base64_encode(random_bytes(32))
 
             // Setup the authorization server
