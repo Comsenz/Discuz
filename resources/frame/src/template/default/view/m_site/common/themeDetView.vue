@@ -39,7 +39,7 @@
               </div>
 
               <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
-              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0">
+              <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <div class="themeImgList">
                   <van-image
                     fit="cover"
@@ -63,7 +63,6 @@
                     class="themeImgChild"
                     :key="index"
                     v-if="index < 9"
-                    @click="jumpThemeDet(item._data.id,item._data.canViewPosts)"
                   />
                 </div>
               </div>
