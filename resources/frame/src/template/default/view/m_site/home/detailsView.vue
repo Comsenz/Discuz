@@ -9,7 +9,7 @@
 		    <div class="cirPostCon">
 		    	<div class="postTop">
 		    		<div class="postPer">
-              <img v-if="themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
+              <img v-if="themeCon.user && themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(themeCon.user._data.id)">
 		    			<div class="perDet">
 		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.id)">{{themeCon.user._data.username}}</div>
@@ -31,7 +31,7 @@
                   v-for="(image,index)  in firstpostImageList"
                   key = index
                   :src="image"
-                  @click="imageSwiper(index)"
+                  @click="imageSwiper(index,detailImg)"
                   :key="index"
               />
             </div>
@@ -140,8 +140,9 @@
                   <van-image
                       lazy-load
                       v-for="(image,index)  in item.images"
-                      :src="image._data.url"
+                      :src="image._data.thumbUrl"
                       :key="index"
+                      @click="imageSwiper(index, replyImg, item)"
                     />
                 </div>
               </div>

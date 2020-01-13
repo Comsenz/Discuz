@@ -320,6 +320,40 @@ export default {
               this.firstpostImageList = firstpostImage;
               // console.log(134, this.firstpostImageList);
             };
+
+            // var postsListLen = this.themeCon.posts.length;
+
+            // if(this.postsList =='' || this.postsList == null){
+            //   return false;
+            // } else {
+            //   for (let h = 0; h < themeConPostsLen; h++) {
+            //     // 图片地址
+            //     // let src = 'https://2020.comsenz-service.com/api/attachments/';
+            //     let replyImageList = [];
+            //     if(this.postsList[h].posts){
+            //       for (let i = 0; i < this.postsList[h].images.length; i++) {
+            //         replyImageList.push(this.postsList[h].images[i]._data.thumbUrl);
+            //       }
+            //     }
+            //     // console.log(replyImageList);
+            //     this.postsList[h].image = replyImageList;
+            //   }
+            // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
           }
@@ -337,20 +371,36 @@ export default {
 
     },
     //主题详情图片放大轮播
-    imageSwiper(imgIndex) {
+    imageSwiper(imgIndex, typeclick, replyItem) {
       console.log(imgIndex);
-      ImagePreview({
-        images:this.firstpostImageList,
-        startPosition:imgIndex,    //图片预览起始位置索引 默认 0
-        showIndex: true,    //是否显示页码         默认 true
-        showIndicators: true, //是否显示轮播指示器 默认 false
-        loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-        // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
-        //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
-        //   var num = url.index, url_link = url.url;
-        //   console.log(url);
-        // }
-      })
+      if(detailImg == detailImg){
+        ImagePreview({
+          images:this.firstpostImageList,
+          startPosition:imgIndex,    //图片预览起始位置索引 默认 0
+          showIndex: true,    //是否显示页码         默认 true
+          showIndicators: true, //是否显示轮播指示器 默认 false
+          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
+          //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
+          //   var num = url.index, url_link = url.url;
+          //   console.log(url);
+          // }
+        })
+      } else if(typeclick == replyImg) {
+        ImagePreview({
+          images:this.firstpostImageList,
+          startPosition:imgIndex,    //图片预览起始位置索引 默认 0
+          showIndex: true,    //是否显示页码         默认 true
+          showIndicators: true, //是否显示轮播指示器 默认 false
+          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
+          //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
+          //   var num = url.index, url_link = url.url;
+          //   console.log(url);
+          // }
+        })
+      }
+
     },
     onChangeImgPreview() {
       this.index = index;
