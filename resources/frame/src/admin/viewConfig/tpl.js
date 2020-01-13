@@ -47,15 +47,16 @@ defaultConfig.beforeEnterModule = function(Router) {
 	});
 
   Router.onError((error) => {
-    console.log('找不到模块');
+    console.log('页面跳转错误');
     const pattern = /Loading chunk (\d)+ failed/g;
     const isChunkLoadFailed = error.message.match(pattern);
-    const targetPath = router.history.pending.fullPath;
-    if (isChunkLoadFailed) {
-      router.replace(targetPath);
+    if(isChunkLoadFailed){
+      location.reload();
+      // const targetPath = $router.history.pending.fullPath;
+      // $router.replace(targetPath);
     }
-  });
 
+  });
 }
 
 export default defaultConfig;
