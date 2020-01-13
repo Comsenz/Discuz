@@ -97,8 +97,9 @@ export default {
       themeUserId:'',
       userId:'',
       currentUserName:'',
-      currentUserAvatarUrl:'',
-      likedData:[]
+      currentUserAvatarUrl: '',
+      likedData: [],
+      postsImages: []
     }
   },
   created() {
@@ -177,11 +178,8 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-           console.log(res);
+           // console.log(res);
            this.siteInfo = res.readdata;
-           // console.log(res.readdata._data.siteMode+'请求');
-           // this.siteUsername = res.readdata._data.siteAuthor.username;
-           // this.sitePrice = res.readdata._data.sitePrice
            //把站点是否收费的值存储起来，以便于传到父页面
            this.isPayVal = res.readdata._data.siteMode;
            if (this.isPayVal != null && this.isPayVal != '') {
@@ -215,7 +213,7 @@ export default {
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             // console.log(this.currentUserAvatarUrl+'3334');
             this.groupId = res.readdata.groups[0]._data.id;
-            console.log(this.groupId);
+            // console.log(this.groupId);
            }
 
         })
@@ -230,19 +228,15 @@ export default {
         //当站点为公开站点时
         console.log('公开');
         if (token) {
-          // console.log('公开，已登录2222s');
           //当用户已登录时
-          // this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
           this.menuStatus = true;
         } else {
-          console.log('公开，未登录');
-          // this.loadThemeList();
+          // console.log('公开，未登录');
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
-          // this.menuStatus = false;
         }
       }
     },
@@ -318,49 +312,19 @@ export default {
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
               }
               this.firstpostImageList = firstpostImage;
-              // console.log(134, this.firstpostImageList);
             };
 
-            // var postsListLen = this.themeCon.posts.length;
-
-            // if(this.postsList =='' || this.postsList == null){
-            //   return false;
-            // } else {
-            //   for (let h = 0; h < themeConPostsLen; h++) {
-            //     // 图片地址
-            //     // let src = 'https://2020.comsenz-service.com/api/attachments/';
-            //     let replyImageList = [];
-            //     if(this.postsList[h].posts){
-            //       for (let i = 0; i < this.postsList[h].images.length; i++) {
-            //         replyImageList.push(this.postsList[h].images[i]._data.thumbUrl);
-            //       }
-            //     }
-            //     // console.log(replyImageList);
-            //     this.postsList[h].image = replyImageList;
-            //   }
-            // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            this.postsList.map(post => {
+              let urls = [];
+              post.images.map(image => urls.push(image._data.url));
+              this.postsImages.push(urls);
+            });
+            // console.log(this.postsImages);
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
           }
         }
 
-        // this.themeCon = res.readdata;
-        // console.log(1, this.firstpostImageList);
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
@@ -372,8 +336,11 @@ export default {
     },
     //主题详情图片放大轮播
     imageSwiper(imgIndex, typeclick, replyItem) {
-      console.log(imgIndex);
-      if(detailImg == detailImg){
+      console.log(imgIndex, typeclick, replyItem);
+      // console.log(this.firstpostImageList);
+      // console.log(imgIndex);
+      if(typeclick == 'detailImg'){
+        //主题详情图片预览
         ImagePreview({
           images:this.firstpostImageList,
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
@@ -386,18 +353,16 @@ export default {
           //   console.log(url);
           // }
         })
-      } else if(typeclick == replyImg) {
+      } else if(typeclick == 'replyImg') {
+        console.log(this.postsImages[replyItem]);
+        console.log('-------------------');
+        //主题回复图片预览
         ImagePreview({
-          images:this.firstpostImageList,
+          images:this.postsImages[replyItem],
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-          // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
-          //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
-          //   var num = url.index, url_link = url.url;
-          //   console.log(url);
-          // }
         })
       }
 

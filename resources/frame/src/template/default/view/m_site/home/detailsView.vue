@@ -31,7 +31,7 @@
                   v-for="(image,index)  in firstpostImageList"
                   key = index
                   :src="image"
-                  @click="imageSwiper(index,detailImg)"
+                  @click="imageSwiper(index,'detailImg')"
                   :key="index"
               />
             </div>
@@ -142,7 +142,7 @@
                       v-for="(image,index)  in item.images"
                       :src="image._data.thumbUrl"
                       :key="index"
-                      @click="imageSwiper(index, replyImg, item)"
+                      @click="imageSwiper(index, 'replyImg', postIndex)"
                     />
                 </div>
               </div>
