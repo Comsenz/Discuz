@@ -19,7 +19,7 @@
             :browse="items._data.viewCount"
             :last="!items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"
             :releaseTime="formatDate(items._data.createdAt)"
-            :userId="items.user._data.id"
+            :userId="!items.user?'该用户被删除':items.user._data.id"
             :key="items._data.id"
           >
             <div class="cont-manage-theme__table-side" slot="side">
@@ -30,8 +30,8 @@
             <div class="cont-manage-theme__table-main" slot="main">
               <a class="cont-manage-theme__table-main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
               <div class="cont-manage-theme__table-main__cont-imgs">
-                <p class="cont-manage-theme__table-main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="index">
-                  <img  :src="item._data.url" alt="">
+                <p class="cont-manage-theme__table-main__cont-imgs-p"  v-for="(item,index) in items.firstPost.images" :key="index" >
+                  <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.firstPost.images,index)" :alt="item._data.fileName">
                 </p>
               </div>
               <div class="cont-manage-theme__table-main__cont-annex" v-show="items.firstPost.attachments.length > 0">
@@ -43,6 +43,11 @@
             </div>
 
           </ContArrange>
+
+          <el-image-viewer
+            v-if="showViewer"
+            :on-close="closeViewer"
+            :url-list="url" />
 
           <tableNoList v-show="themeList.length < 1"></tableNoList>
 

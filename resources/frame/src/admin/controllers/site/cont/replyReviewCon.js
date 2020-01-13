@@ -8,6 +8,8 @@ import Page from '../../../view/site/common/page/page';
 import tableNoList from '../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+
 
 export default {
   data:function () {
@@ -112,12 +114,44 @@ export default {
       pageCount:1,                //总页数
       ignoreStatus:true,         //全部忽略是否显示
       submitForm:[],            //操作理由表单
+      showViewer:false,      //预览图
+      url:[]
 
       //未审核0，已审核\通过1，已忽略2
     }
   },
 
   methods:{
+    imgShowClick(list,imgIndex){
+      console.log(list);
+      this.url = [];
+      let urlList = [];
+
+      list.forEach((item)=>{
+        urlList.push(item._data.url)
+      });
+
+      this.url.push(urlList[imgIndex]);
+
+      urlList.forEach((item,index)=>{
+        if (index > imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      urlList.forEach((item,index)=>{
+        if (index < imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      this.showViewer = true
+    },
+    closeViewer() {
+      this.showViewer = false
+    },
+
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
 
@@ -135,7 +169,8 @@ export default {
 
     handleCurrentChange(val) {
       console.log(val);
-      // webDb.setLItem('currentPag',val);
+      document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
+      webDb.setLItem('currentPag',val);
       // this.isIndeterminate = false;
       // this.checkAll = false;
       this.getPostsList(val);
@@ -407,7 +442,8 @@ export default {
     Card,
     ContArrange,
     Page,
-    tableNoList
+    tableNoList,
+    ElImageViewer
   }
 
 }

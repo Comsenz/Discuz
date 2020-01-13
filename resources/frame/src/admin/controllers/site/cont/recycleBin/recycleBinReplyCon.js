@@ -8,6 +8,8 @@ import Page from '../../../../view/site/common/page/page';
 import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+
 
 export default {
   data:function () {
@@ -56,11 +58,42 @@ export default {
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
       submitForm:[],              //提交操作表单
+      showViewer:false,      //预览图
+      url:[]
 
     }
   },
 
   methods:{
+    imgShowClick(list,imgIndex){
+      console.log(list);
+      this.url = [];
+      let urlList = [];
+
+      list.forEach((item)=>{
+        urlList.push(item._data.url)
+      });
+
+      this.url.push(urlList[imgIndex]);
+
+      urlList.forEach((item,index)=>{
+        if (index > imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      urlList.forEach((item,index)=>{
+        if (index < imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      this.showViewer = true
+    },
+    closeViewer() {
+      this.showViewer = false
+    },
+
     radioChange(val,index){
       switch (val){
         case '还原':
@@ -82,6 +115,8 @@ export default {
     },
 
     handleCurrentChange(val){
+      document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
+      webDb.setLItem('currentPag',val);
       this.getPostsList(val);
     },
 
@@ -325,7 +360,8 @@ export default {
     Card,
     ContArrange,
     Page,
-    tableNoList
+    tableNoList,
+    ElImageViewer
   }
 
 }
