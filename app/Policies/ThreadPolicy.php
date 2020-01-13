@@ -65,8 +65,8 @@ class ThreadPolicy extends AbstractPolicy
             });
         }
         // 管理员才可以查看审核中的帖子详情
-        if (! $actor->isAdmin()){
-            $query->where('is_approved',1);
+        if (! $actor->isAdmin()) {
+            $query->where('is_approved', 1);
         }
     }
 
@@ -77,7 +77,7 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        if ($thread->user_id == $actor->id && $actor->can('reply', $thread)) {
+        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
             return true;
         }
     }
