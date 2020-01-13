@@ -37,7 +37,7 @@ class CashTransfer
         'PARAM_ERROR',//参数错误
         'OPENID_ERROR',//Openid错误
         'SEND_FAILED',//付款错误
-        'NOTENOUGH',//余额不足  
+        'NOTENOUGH',//余额不足
         'NAME_MISMATCH',//姓名校验出错
         'SIGN_ERROR',//签名错误
         'XML_ERROR',//Post内容出错
@@ -46,10 +46,10 @@ class CashTransfer
         'MONEY_LIMIT',//已经达到今日付款总额上限/已达到付款给此用户额度上限
         'CA_ERROR',//商户API证书校验出错
         'V2_ACCOUNT_SIMPLE_BAN',//无法给未实名用户付款
-        'PARAM_IS_NOT_UTF8',//请求参数中包含非utf8编码字符  
+        'PARAM_IS_NOT_UTF8',//请求参数中包含非utf8编码字符
         'SENDNUM_LIMIT',//该用户今日付款次数超过限制
         'RECV_ACCOUNT_NOT_ALLOWED',//收款账户不在收款账户列表
-        'PAY_CHANNEL_NOT_ALLOWED',//本商户号未配置API发起能力 
+        'PAY_CHANNEL_NOT_ALLOWED',//本商户号未配置API发起能力
     ];
 
     /**
@@ -114,6 +114,8 @@ class CashTransfer
                 'trade_time' => Carbon::parse($response['payment_time'])->format('Y-m-d H:i:s'),//交易时间
                 'payment_no' => $response['payment_no'],//交易号
                 'cash_sn' => $response['partner_trade_no'],//商户交易号
+                'error_code' => '',
+                'error_message' => '',
             ];
             $this->transferSuccess($event->cash_record->id, $data_result);
         } else {
