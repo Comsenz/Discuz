@@ -30,7 +30,7 @@
             </el-form-item>
 
             <el-form-item class="login-main-form__item">
-              <el-checkbox  v-model="checked">记住密码</el-checkbox>
+              <!--<el-checkbox  v-model="checked">记住密码</el-checkbox>-->
             </el-form-item>
 
             <el-form-item class="login-main-form__item">

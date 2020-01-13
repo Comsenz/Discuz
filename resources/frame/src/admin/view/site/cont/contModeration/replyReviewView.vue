@@ -65,7 +65,7 @@
           :themeName="items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.updatedAt)"
           :ip="items._data.ip"
-          :userId="items.user._data.id"
+          :userId="!items.user?'该用户被删除':items.user._data.id"
           :key="items._data.id"
         >
           <div class="cont-review-table__side" slot="side">
@@ -81,7 +81,7 @@
             <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>
             <div class="cont-review-table__main__cont-imgs">
               <p class="cont-review-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
-                <img  :src="item._data.url" alt="">
+                <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">
               </p>
             </div>
           </div>
@@ -116,6 +116,11 @@
           </div>
 
         </ContArrange>
+
+        <el-image-viewer
+          v-if="showViewer"
+          :on-close="closeViewer"
+          :url-list="url" />
 
         <tableNoList v-show="themeList.length < 1"></tableNoList>
 

@@ -8,6 +8,7 @@ import tableNoList from '../../../../view/site/common/table/tableNoList'
 import moment from 'moment';
 import webDb from 'webDbHelper';
 import { mapState,mapMutations } from 'vuex';
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
 export default {
   data:function () {
@@ -47,7 +48,9 @@ export default {
       themeList:[],         //主题列表
       currentPag: 1,        //当前页数
       total:0,              //主题列表总条数
-      pageCount:1           //总页数
+      pageCount:1,          //总页数
+      showViewer:false,      //预览图
+      url:[]
     }
   },
   computed:mapState({
@@ -59,8 +62,33 @@ export default {
       setSearch:'admin/SET_SEARCH_CONDITION'
     }),
 
-    chakan(){
-      console.log(this.$router);
+    imgShowClick(list,imgIndex){
+      console.log(list);
+      this.url = [];
+      let urlList = [];
+
+      list.forEach((item)=>{
+        urlList.push(item._data.url)
+      });
+
+      this.url.push(urlList[imgIndex]);
+
+      urlList.forEach((item,index)=>{
+        if (index > imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      urlList.forEach((item,index)=>{
+        if (index < imgIndex){
+          this.url.push(item);
+        }
+      });
+
+      this.showViewer = true
+    },
+    closeViewer() {
+      this.showViewer = false
     },
 
     handleCheckAllChange(val) {
@@ -250,6 +278,7 @@ export default {
     },
 
     handleCurrentChange(val) {
+      document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       webDb.setLItem('currentPag',val);
       this.isIndeterminate = false;
       this.checkAll = false;
@@ -359,7 +388,8 @@ export default {
   components:{
     Card,
     ContArrange,
-    tableNoList
+    tableNoList,
+    ElImageViewer
   }
 
 }
