@@ -9,7 +9,7 @@
 		    <div class="cirPostCon">
 		    	<div class="postTop">
 		    		<div class="postPer">
-              <img v-if="themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
+              <img v-if="themeCon.user && themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(themeCon.user._data.id)">
 		    			<div class="perDet">
 		    				<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.id)">{{themeCon.user._data.username}}</div>
@@ -31,7 +31,7 @@
                   v-for="(image,index)  in firstpostImageList"
                   key = index
                   :src="image"
-                  @click="imageSwiper(index)"
+                  @click="imageSwiper(index,'detailImg')"
                   :key="index"
               />
             </div>
@@ -140,8 +140,9 @@
                   <van-image
                       lazy-load
                       v-for="(image,index)  in item.images"
-                      :src="image._data.url"
+                      :src="image._data.thumbUrl"
                       :key="index"
+                      @click="imageSwiper(index, 'replyImg', postIndex)"
                     />
                 </div>
               </div>
@@ -167,7 +168,7 @@
           <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
             <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
-            赞{{themeCon.firstPost._data.isLiked}}
+            赞
           </div>
           <div class="footChi" @click="showRewardPopup">
             <span class="icon iconfont icon-reward"></span>

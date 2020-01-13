@@ -1,7 +1,7 @@
 /**
  * pc 端首页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -48,7 +48,18 @@ export default {
 	},
   created:function(){
     this.loadThemeList();
-    this.getUserInfo()
+    this.getUserInfo();
+    // this.detailIf();
+    var token = browserDb.getLItem('Authorization');
+    if(token){
+      //当用户已登录时
+      this.loginBtnFix = false;
+      this.loginHide = true;
+    }  else {
+      // //当用户未登录时
+      this.loginBtnFix = true;
+      this.loginHide = false;
+    }
   },
   computed: {
     userId: function(){
