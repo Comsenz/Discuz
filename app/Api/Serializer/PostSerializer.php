@@ -55,6 +55,7 @@ class PostSerializer extends AbstractSerializer
             'canEdit'           => $gate->allows('edit', $model),
             'canApprove'        => $gate->allows('approve', $model),
             'canDelete'         => $gate->allows('delete', $model),
+            'canHide'           => $gate->allows('hide', $model),
         ];
 
         if ($model->deleted_at) {
