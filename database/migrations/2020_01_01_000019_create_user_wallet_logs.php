@@ -19,6 +19,8 @@ class CreateUserWalletLogs extends Migration
             $table->decimal('change_freeze_amount', 10, 2)->comment('变动冻结金额');
             $table->unsignedSmallInteger('change_type')->default(0)->comment('10：提现冻结，11：提现成功，12：撤销提现解冻； 31：打赏收入，32：人工收入； 50：人工支出');
             $table->string('change_desc', 255)->default('')->comment('变动描述');
+            $table->unsignedBigInteger('order_id')->nullable()->comment('关联订单记录ID');
+            $table->unsignedBigInteger('user_wallet_cash_id')->nullable()->comment('关联提现记录ID');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });

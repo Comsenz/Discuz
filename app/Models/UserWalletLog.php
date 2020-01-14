@@ -46,6 +46,8 @@ class UserWalletLog extends Model
      * @param  [type] $change_freeze_amount    [description]
      * @param  [type] $change_type             [description]
      * @param  [type] $change_desc             [description]
+     * @param  [type] $user_wallet_cash_id     [description]
+     * @param  [type] $order_id                [description]
      * @return [type]                          [description]
      */
     public static function createWalletLog(
@@ -53,7 +55,9 @@ class UserWalletLog extends Model
         $change_available_amount,
         $change_freeze_amount,
         $change_type,
-        $change_desc
+        $change_desc,
+        $user_wallet_cash_id = null,
+        $order_id = null
     ) {
         $wallet_log                          = new static;
         $wallet_log->user_id                 = $user_id;
@@ -61,6 +65,8 @@ class UserWalletLog extends Model
         $wallet_log->change_freeze_amount    = $change_freeze_amount;
         $wallet_log->change_type             = $change_type;
         $wallet_log->change_desc             = $change_desc;
+        $wallet_log->user_wallet_cash_id     = $user_wallet_cash_id;
+        $wallet_log->order_id     = $order_id;
 
         $wallet_log->save();
         return $wallet_log;
@@ -84,5 +90,26 @@ class UserWalletLog extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Define the relationship with the cash log.
+     *
+     * @return belongsTo
+     */
+    public function userWalletCash()
+    {
+        return $this->belongsTo(UserwalletCash::class);
+    }
+
+    /**
+     * Define the relationship with the log order.
+     *
+     * @return belongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

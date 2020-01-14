@@ -40,12 +40,12 @@ trait NotifyTrait
                 return $order_info;
             } elseif ($order_info->type == Order::ORDER_TYPE_REWARD) {
                 //打赏
-                
+
                 $order_amount = $order_info->amount;//订单金额
                 //站长作者分成配置
                 $site_author_scale = $setting->get('site_author_scale');
                 $site_master_scale = $setting->get('site_master_scale');
-                
+
                 $payee_amount = 0.00;//收款人分成金额
                 if ($site_author_scale > 0
                     && $site_master_scale > 0
@@ -72,7 +72,15 @@ trait NotifyTrait
                     $change_type_lang = 'wallet.reward_income';
                 }
                 //添加钱包明细
-                $user_wallet_log = UserWalletLog::createWalletLog($payee_id, $payee_change_available_amount, 0, $change_type, app('translator')->get($change_type_lang));
+                $user_wallet_log = UserWalletLog::createWalletLog(
+                    $payee_id,
+                    $payee_change_available_amount,
+                    0,
+                    $change_type,
+                    app('translator')->get($change_type_lang),
+                    null,
+                    $order_info->id
+                );
                 return $order_info;
             }
         }
