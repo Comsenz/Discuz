@@ -9,8 +9,7 @@
     <div class="text-box">
       <h3 class="user-name">
         <a class="user-name-text" :href="'/home-page/'+this.$attrs.userId">{{this.$attrs.userName}}</a>
-        <span class="text-status">{{this.$attrs.stateTitle}}</span>
-        <span>{{this.$attrs.amount}}</span>
+        <span class="text-status">{{this.$attrs.stateTitle}}{{this.$attrs.amount}}</span>
       </h3>
       <h4 class="time">{{this.$attrs.time}}</h4>
     </div>
