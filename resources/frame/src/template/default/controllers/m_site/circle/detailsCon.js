@@ -433,6 +433,11 @@ export default {
       //是否显示筛选内容
       this.showScreen = !this.showScreen;
     },
+    listenEvt(e){
+      if(!this.$refs.screenBox.contains(e.target)){
+        this.showScreen = false;
+      }
+    },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
       if(!this.token){
@@ -940,10 +945,16 @@ export default {
 
 
   },
-
-  mounted: function () {},
-
+  mounted: function() {
+		// this.getVote();
+    document.addEventListener('click',this.listenEvt, false);
+	},
+  destroyed: function() {
+  	// this.getVote();
+    document.addEventListener('click',this.listenEvt, false);
+  },
   beforeRouteLeave(to, from, next) {
+    document.addEventListener('click',this.listenEvt, false);
     next()
   }
 

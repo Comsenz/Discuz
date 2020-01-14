@@ -17,7 +17,7 @@
 
 	    <div class="themeTitBox">
 	    	<span class="themeTit">{{filterInfo.typeWo}}</span>
-	    	<div class="screen" @click="bindScreen">
+	    	<div class="screen" @click="bindScreen" ref="screenBox">
 	    		<span>筛选</span>
 	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>
 	    		<div class="themeList" v-if="showScreen">

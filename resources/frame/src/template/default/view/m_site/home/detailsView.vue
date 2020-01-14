@@ -80,7 +80,7 @@
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.viewCount}}&nbsp;阅读</span>
 		    		<!-- <a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a> -->
-            <div class="screen" @click="bindScreen" v-if="themeCon._data.canEssence || themeCon._data.canSticky || themeCon._data.canHide || themeCon._data.canEdit">
+            <div class="screen" ref="screenBox" @click="bindScreen" v-if="themeCon._data.canEssence || themeCon._data.canSticky || themeCon._data.canHide || themeCon._data.canEdit">
             	<span>管理</span>
             	<span class="icon iconfont icon-down-menu jtGrayB"></span>
             	<div class="themeList" v-if="showScreen">

@@ -374,6 +374,11 @@ export default {
 	        //是否显示筛选内容
 	        this.showScreen = !this.showScreen;
 	    },
+      listenEvt(e){
+        if(!this.$refs.screenBox.contains(e.target)){
+          this.showScreen = false;
+        }
+      },
 	    hideScreen(){
 	        //是否显示筛选内容
 	        this.showScreen = false;
@@ -401,9 +406,16 @@ export default {
 	mounted: function() {
 		// this.getVote();
 		window.addEventListener('scroll', this.footFix, true);
+    document.addEventListener('click',this.listenEvt, false);
 	},
+  destroyed: function() {
+  	// this.getVote();
+  	window.addEventListener('scroll', this.footFix, true);
+    document.addEventListener('click',this.listenEvt, false);
+  },
 	beforeRouteLeave (to, from, next) {
 	   window.removeEventListener('scroll', this.footFix, true);
+     document.addEventListener('click',this.listenEvt, false);
 	   next()
 	}
 }
