@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class UserFollow extends Migration
+class CreateUserFollow extends Migration
 {
     /**
      * Run the migrations.
