@@ -46,15 +46,20 @@ trait NotifyTrait
                 $site_master_scale = $setting->get('site_master_scale');
 
                 $payee_amount = 0.00;//收款人分成金额
+                $master_amount = 0.00;//站长分成金额
                 if ($site_author_scale > 0
                     && $site_master_scale > 0
                     && ($site_author_scale + $site_master_scale) == 10) {
                     $author_ratio = $site_author_scale / 10;
-                    $payee_amount = sprintf("%.2f", ($order_amount * $author_ratio));
+                    $payee_amount = sprintf('%.2f', ($order_amount * $author_ratio));
+                    $master_amount = $order_amount - $payee_amount;
                 } else {
                     //未设置或设置错误时站长分成为0,被打赏人分得全部
                     $payee_amount = $order_amount;
                 }
+                //设置分成
+                $order_info->master_amount = $master_amount;
+                $order_info->save();
 
                 if ($payee_amount > 0) {
                     //收款人钱包可用金额增加
