@@ -7,17 +7,17 @@
 
 namespace App\Api\Controller\Statistic;
 
-use App\Api\Serializer\MoneyStatisticSerializer;
-use App\Commands\Statistic\MoneyStatistic;
+use App\Api\Serializer\FinanceStatisticSerializer;
+use App\Commands\Statistic\FinanceStatistic;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class MoneyStatisticController extends AbstractResourceController
+class FinanceStatisticController extends AbstractResourceController
 {
 
-    public $serializer = MoneyStatisticSerializer::class;
+    public $serializer = FinanceStatisticSerializer::class;
     /**
      * @var Dispatcher
      */
@@ -38,6 +38,6 @@ class MoneyStatisticController extends AbstractResourceController
     {
         $actor = $request->getAttribute('actor');
 
-        return $this->bus->dispatch(new MoneyStatistic($actor));
+        return $this->bus->dispatch(new FinanceStatistic($actor));
     }
 }
