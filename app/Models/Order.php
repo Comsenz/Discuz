@@ -18,6 +18,7 @@ use Discuz\Database\ScopeVisibilityTrait;
  * @property string $order_sn
  * @property string $payment_sn
  * @property float $amount
+ * @property float $master_amount
  * @property int $user_id
  * @property int $payee_id
  * @property int $type
@@ -36,7 +37,7 @@ use Discuz\Database\ScopeVisibilityTrait;
 class Order extends Model
 {
     use ScopeVisibilityTrait;
-    
+
     /**
      * 订单类型
      */
