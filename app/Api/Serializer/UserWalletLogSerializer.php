@@ -17,6 +17,7 @@ class UserWalletLogSerializer extends AbstractSerializer
     {
         $title = '';
         if (isset($model->order_id) && !empty($model->order_id)) {
+
             $title = $model->order->thread->firstPost->formatContent();
         }
         return [
