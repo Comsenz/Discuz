@@ -213,7 +213,7 @@ export default {
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             // console.log(this.currentUserAvatarUrl+'3334');
             this.groupId = res.readdata.groups[0]._data.id;
-            // console.log(this.groupId);
+            // console.log(this.groupId,'uuuuu');
            }
 
         })

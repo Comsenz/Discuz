@@ -194,16 +194,6 @@ export default {
     themeOpera(themeId,clickType,clickStatus,itemIndex) {
       console.log(themeId,clickType,clickStatus,itemIndex);
       let attri = new Object();
-       // if(clickType == 2){
-       //   console.log('操作点赞');
-       //   //点赞
-       //   if (clickStatus) {
-       //     attri.isLiked = false;
-       //   } else {
-       //     attri.isLiked = true;
-       //   }
-       //   this.themeOpeRequest(themeId, attri, '2', itemIndex);
-       // } else
        if(clickType == 3){
          //加精
          if (clickStatus) {
@@ -224,9 +214,15 @@ export default {
          //删除
         attri.isDeleted = true;
         this.themeOpeRequest(themeId,attri,'5', itemIndex);
-       } else {
+       } else if(clickType == 6){
          //跳转到发帖页
-        this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
+        this.$router.push({ path:'/edit-topic'+'/'+themeId});
+       } else if(clickType == 7){
+         //回复
+         this.$router.push({
+           path:'/reply-to-topic'+'/'+themeId+'/0',
+         });
+         // browserDb.setLItem('replyQuote', quoteCon);
        }
     },
 

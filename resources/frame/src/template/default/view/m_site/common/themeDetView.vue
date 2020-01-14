@@ -29,6 +29,10 @@
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && item._data.isSticky">取消置顶</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && !item._data.isSticky">置顶</a>
 
+
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,6)" v-if="item.firstPost._data.canEdit">编辑</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,7)" v-if="item._data.canReply">回复</a>
+
                       <a href="javascript:;"  @click="themeOpera(item._data.id,5)" v-if="item._data.canDelete">删除</a>
                   	</div>
                   </div>
@@ -38,7 +42,6 @@
                 <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
 
-              <!-- <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0"> -->
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <div class="themeImgList">
                   <van-image
@@ -52,7 +55,6 @@
                     class=""
                   />
                 </div> -->
-                <!-- <img src="aaaa.png" v-bind:is="auth-img" alt=""/> -->
 
                 <div class="themeImgList moreImg">
                   <van-image
