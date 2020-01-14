@@ -133,6 +133,7 @@ export default {
             if (res.errors) {
               this.$message.error(res.errors[0].code);
             } else {
+              this.$message.success('修改成功');
               this.imageUrl = res.readdata._data.avatarUrl;
             }
 
