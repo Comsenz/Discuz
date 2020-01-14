@@ -59,7 +59,8 @@ export default {
       isiOS: false,
       encuploadShow: false,
       testingRes:false,
-      backGo:-2
+      backGo:-2,
+      formdataList:[]
 
     }
   },
@@ -119,10 +120,14 @@ export default {
       this.fileListOneLen = newVal;
       if(this.fileListOneLen >= 12){
         this.limitMaxLength = false;
+        console.log(this.limitMaxLength);
       } else {
         this.limitMaxLength = true;
       }
       console.log(this.fileListOneLen+'dddd');
+    },
+    'limitMaxLength': function(newVal,oldVal){
+      this.limitMaxLength = newVal;
     },
     'enclosureList.length': function(newVal,oldVal){
       this.enclosureListLen = newVal;
@@ -336,26 +341,42 @@ export default {
 
     //上传图片,点击加号时
     handleFile(e){
-      if(this.isAndroid && this.isWeixin){
-        this.testingType(e.file,this.supportImgExt);
-        console.log(this.testingRes+'445');
-        if(this.testingRes){
-          this.compressFile(e.file, false);
-        }
-      } else {
-        this.compressFile(e.file, false);
-      }
+     let files = [];
+     if(e.length === undefined) {
+       files.push(e);
+     } else {
+       files = e;
+     }
+     if(!this.limitMaxLength){
+       this.$toast.fail('已达上传图片上限');
+     } else {
+       files.map((file,index) => {
+         if(this.isAndroid && this.isWeixin){
+           this.testingType(file.file,this.supportImgExt);
+           // console.log(this.testingRes+'445');
+           if(this.testingRes){
+             this.compressFile(file.file, 150000, false,files.length - index);
+           }
+         } else {
+           this.compressFile(file.file, 150000, false, files.length - index);
+         }
+       });
+     }
     },
 
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      if(this.isAndroid && this.isWeixin){
-        this.testingType(e.target.files[0],this.supportImgExt);
-        if(this.testingRes){
-          this.compressFile(e.target.files[0], true);
+      let fileListNowLen =  e.target.files.length + this.fileListOne.length <= 12?e.target.files.length : 12 - this.fileListOne.length;
+      for(var i = 0; i < fileListNowLen; i++){
+        var file = e.target.files[i];
+        if(this.isAndroid && this.isWeixin){
+          this.testingType(file,this.supportImgExt);
+          if(this.testingRes){
+            this.compressFile(file, 150000, true);
+          }
+        } else {
+          this.compressFile(file, 150000, true);
         }
-      } else {
-        this.compressFile(e.target.files[0], true);
       }
     },
 
@@ -384,9 +405,14 @@ export default {
         this.testingRes = true;
       }
     },
-
+    getAllEvens(arr){
+      arr => {
+        let temp = evens(arr);
+        return flat(temp);
+      }
+    },
     // 这里写接口，上传
-    uploaderEnclosure(file,isFoot,img,enclosure){
+    uploaderEnclosure(file,isFoot,img,enclosure,index){
       console.log(file,isFoot,enclosure);
        this.appFetch({
          url:'attachment',
@@ -397,10 +423,35 @@ export default {
           this.$toast.fail(data.errors[0].code);
           throw new Error(data.error)
         } else {
+          console.log(data,'~~~~');
           if (img) {
-            console.log(this.fileList);
+            console.log(index);
+            console.log(this.fileListOne.length);
+
+            console.log(this.fileListOne.length - (index))
+
+
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-            this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+            this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            // this.fileListOne.id = data.data.attributes.id;
+            // this.fileListOne.id = this.getAllEvens(this.fileListOne);
+
+            // var isEven = i => i % 2 === 0;
+            // var evens = arr => arr.filter(
+            // 	(subArr, idx) => isEven(idx)
+            // );
+            // var flat = arr => arr.reduce((acc, cur) => {
+            // 	return acc.concat(cur)
+            // }, []);
+            // var getAllEvens = arr => {
+            // 	let temp = evens(arr);
+            // 	return flat(temp);
+            // };
+            // // var testArr = ['这里', '是', '0', '号', '数组', '当然是偶数'];
+            // var res = getAllEvens(this.fileListOne);
+            // console.log(res);
+
+            console.log(this.fileListOne,'---------------');
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
@@ -424,7 +475,10 @@ export default {
     },
 
     //压缩图片
-    compressFile(file, uploadShow, wantedSize = 150000, event){
+    compressFile(file, wantedSize, uploadShow, index){
+      console.log(file.size);
+      console.log(index)
+
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -434,7 +488,7 @@ export default {
           let formdata = new FormData();
           formdata.append('file', rst.file, file.name);
           formdata.append('isGallery', 1);
-          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+          that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false,index);
           that.loading = false;
 
 

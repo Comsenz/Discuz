@@ -48,7 +48,7 @@
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
               <input type="file" @change="handleFileUp" class="hiddenInput" v-if="isAndroid && isWeixin"/>
-              <input type="file" :accept="supportImgExtRes" @change="handleFileUp" class="hiddenInput" v-else="" mutiple="mutiple"/>
+              <input type="file" :accept="supportImgExtRes" @change="handleFileUp" class="hiddenInput" v-else="" multiple/>
             </span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-else="" @click="beforeHandleFile">
             </span>
