@@ -34,8 +34,8 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="searchRes">
-        <!-- <ThemeDet :themeList="searchThemeList"></ThemeDet> -->
-        <div class="themeRes" v-for="(item, index) in searchThemeList" :key="index">
+        <ThemeDet :themeList="searchThemeList"></ThemeDet>
+        <!-- <div class="themeRes" v-for="(item, index) in searchThemeList" :key="index">
           <div class="postTop">
             <div class="postPer">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
@@ -48,7 +48,7 @@
           <div class="postContent">
             <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
-        </div>
+        </div> -->
       </div>
   </van-pull-refresh>    
   </van-list>
