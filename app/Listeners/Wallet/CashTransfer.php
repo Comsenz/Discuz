@@ -162,7 +162,14 @@ class CashTransfer
                 //冻结变动金额，为负数
                 $change_freeze_amount = -$cash_apply_amount;
                 //添加钱包明细
-                $user_wallet_log = UserWalletLog::createWalletLog($user_id, 0, $change_freeze_amount, UserWalletLog::TYPE_CASH_SUCCESS, app('translator')->get('wallet.cash_success'));
+                $user_wallet_log = UserWalletLog::createWalletLog(
+                    $user_id,
+                    0,
+                    $change_freeze_amount,
+                    UserWalletLog::TYPE_CASH_SUCCESS,
+                    app('translator')->get('wallet.cash_success'),
+                    $user_wallet_cash->id
+                );
                 //提交事务
                 $this->connection->commit();
                 return true;
@@ -216,7 +223,14 @@ class CashTransfer
                 //可用金额增加
                 $change_available_amount = $cash_apply_amount;
                 //添加钱包明细
-                $user_wallet_log = UserWalletLog::createWalletLog($user_id, $change_available_amount, $change_freeze_amount, UserWalletLog::TYPE_CASH_THAW, app('translator')->get('wallet.cash_failure'));
+                $user_wallet_log = UserWalletLog::createWalletLog(
+                    $user_id,
+                    $change_available_amount,
+                    $change_freeze_amount,
+                    UserWalletLog::TYPE_CASH_THAW,
+                    app('translator')->get('wallet.cash_failure'),
+                    $user_wallet_cash->id
+                );
                 $user_wallet_cash->refresh();
                 $user_wallet_cash->refunds_status = UserWalletCash::REFUNDS_STATUS_YES;
                 $user_wallet_cash->save();

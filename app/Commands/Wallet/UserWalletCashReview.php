@@ -130,7 +130,14 @@ class UserWalletCashReview
                         //可用金额增加
                         $change_available_amount = $cash_apply_amount;
                         //添加钱包明细
-                        $user_wallet_log = UserWalletLog::createWalletLog($user_id, $change_available_amount, $change_freeze_amount, UserWalletLog::TYPE_CASH_THAW, app('translator')->get('wallet.cash_review_failure'));
+                        $user_wallet_log = UserWalletLog::createWalletLog(
+                            $user_id,
+                            $change_available_amount,
+                            $change_freeze_amount,
+                            UserWalletLog::TYPE_CASH_THAW,
+                            app('translator')->get('wallet.cash_review_failure'),
+                            $cash_record->id
+                        );
 
                         $cash_record->remark = Arr::get($this->data, 'remark');
                         $cash_record->refunds_status = UserWalletCash::REFUNDS_STATUS_YES;

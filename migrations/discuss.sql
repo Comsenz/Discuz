@@ -83,6 +83,7 @@ CREATE TABLE `orders` (
   `order_sn` char(22) CHARACTER SET utf8mb4 NOT NULL,
   `payment_sn` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+  `master_amount` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `payee_id` bigint(20) UNSIGNED NOT NULL,
   `type` tinyint(3) UNSIGNED NOT NULL,
