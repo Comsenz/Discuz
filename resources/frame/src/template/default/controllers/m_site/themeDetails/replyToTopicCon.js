@@ -18,6 +18,7 @@ export default {
       keyboard: false,
       replyText:'',
       replyQuote:'',
+      replyQuoteCont:'',
       keywordsMax: 1000,
       footMove: false,
       faceData:[],
@@ -54,7 +55,8 @@ export default {
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     // var replyQuote = this.$route.params.replyQuote;
-    this.replyQuote = '<blockquote class="quoteCon">'+ browserDb.getLItem('replyQuote') +'</blockquote>';
+    this.replyQuoteCont = browserDb.getLItem('replyQuote');
+    this.replyQuote = '<blockquote class="quoteCon">'+ this.replyQuoteCont +'</blockquote>';
     // var replyId = this.$route.params.replyId;
     // var themeId = this.$route.params.themeId;
     // console.log(replyQuote);
@@ -390,7 +392,7 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
-      if(this.replyId && this.replyText){
+      if(this.replyId && this.replyQuoteCont){
         this.appFetch({
           url:"posts",
           method:"post",
