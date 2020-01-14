@@ -20,6 +20,7 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      username: '',
 		}
 	},
 	components:{
@@ -27,6 +28,7 @@ export default {
   },
   created(){
     this.getInfo();
+    this.getUsers();
   },
 	methods: {
     getInfo(initStatus = false){
@@ -307,7 +309,26 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-  }
+    },
+    getUsers(){
+      return this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + browserDb.getLItem('tokenId'),
+        data:{
+          // include:['groups']
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.username = res.data.attributes.username
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
 
 	},
 

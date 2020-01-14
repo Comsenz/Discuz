@@ -74,6 +74,14 @@ export default {
           title:"搜索"
         }
       },
+      'theme-search':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/search/themeSearchView'],resolve)
+        },
+        metaInfo:{
+          title:"主题搜索"
+        }
+      },
       'pay-circle':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/payCircleView'],resolve)
