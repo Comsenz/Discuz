@@ -34,8 +34,8 @@
         		<span class="infoItemLeft">站点成员</span>
         	</div>
         	<div class="circleMemberList">
-            <img v-for="(item,index) in siteInfo.users" :key="index" :src="item._data.avatarUrl" alt="" class="circleMember" v-if="item._data.avatarUrl == '' && item._data.avatarUrl == null">
-            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else="">
+            <img v-for="(item,index) in siteInfo.users" :key="item._data.avatarUrl" :src="item._data.avatarUrl" :alt="item._data.username" class="circleMember" v-if="item._data.avatarUrl !== '' && item._data.avatarUrl !== null">
+            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else>
         	</div>
         </div>
       </div>

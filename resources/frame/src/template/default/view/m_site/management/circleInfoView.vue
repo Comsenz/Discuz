@@ -41,8 +41,8 @@
             		<a v-if="moreMemberShow" class="infoItemRight lookMore" @click="moreCilrcleMembers">查看更多<span class="icon iconfont icon-right-arrow"></span></a>
             	</div>
             	<div class="circleMemberList">
-                <img v-for="(item,index) in siteInfo.users" :key="index" :src="item._data.avatarUrl" alt="" class="circleMember" v-if="item._data.avatarUrl == '' && item._data.avatarUrl == null" @click="membersJump(item._data.id)">
-                <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else="" @click="membersJump(item._data.id)">
+                <img v-for="(item,index) in siteInfo.users" :key="item._data.avatarUrl" :src="item._data.avatarUrl" :alt="item._data.username" class="circleMember" v-if="item._data.avatarUrl !== '' && item._data.avatarUrl !== null">
+                <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="circleMember" v-else @click="membersJump(item._data.id)">
             	</div>
             </div>
           </div>
