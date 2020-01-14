@@ -70,19 +70,20 @@ export default {
           userStatus,
           radio1,
         } = this.query;
+        console.log(userRole);
         const response = await this.appFetch({
           method: "get",
           url: 'users',
           data: {
             "filter[username]": username,
             "filter[id]": userUID,
-            "filter[group_id]": userRole,
-            "filter[mobile]": userPhone, 
+            "filter[group_id][]": userRole,
+            "filter[mobile]": userPhone,
             "filter[status]":userStatus,
             "filter[bind]": radio1 === '1' ? 'wechat':'',
             "page[limit]": this.pageLimit,
             "page[number]": this.pageNum,
-            
+
           }
         })
         if(response.errors){
@@ -95,7 +96,7 @@ export default {
           this.total = response.meta ? response.meta.total : 0;
           this.tableData = response.readdata;
         }
-        
+
       } catch(err){
 
       }
@@ -121,6 +122,7 @@ export default {
           userStatus,
           radio1,
         } = this.query;
+        console.log(userRole);
         const response = await this.appFetch({
           method: 'get',
           url: 'exportUser',
@@ -128,8 +130,8 @@ export default {
           data:{
             "filter[username]": username,
             "filter[id]": userUID,
-            "filter[group_id]": userRole,
-            "filter[mobile]": userPhone, 
+            "filter[group_id][]": userRole,
+            "filter[mobile]": userPhone,
             "filter[status]":userStatus,
             "filter[bind]": radio1 === '1' ? 'wechat':'',
           },
@@ -221,7 +223,7 @@ export default {
               "attributes": {
                 "status": 1
               }
-            } 
+            }
           }
         })
 

@@ -26,7 +26,7 @@ use Carbon\Carbon;
 class CreateUserWalletCash
 {
     use AssertPermissionTrait;
-    
+
     /**
      * 执行操作的用户.
      *
@@ -128,9 +128,17 @@ class CreateUserWalletCash
             //冻结钱包金额
             $user_wallet->available_amount = $user_wallet->available_amount - $cash_apply_amount;
             $user_wallet->freeze_amount    = $user_wallet->freeze_amount + $cash_apply_amount;
+
             $user_wallet->save();
             //添加钱包明细,
-            $user_wallet_log = UserWalletLog::createWalletLog($this->actor->id, -$cash_apply_amount, $cash_apply_amount, UserWalletLog::TYPE_CASH_SFREEZE, app('translator')->get('wallet.cash_freeze_desc'));
+            $user_wallet_log = UserWalletLog::createWalletLog(
+                $this->actor->id,
+                -$cash_apply_amount,
+                $cash_apply_amount,
+                UserWalletLog::TYPE_CASH_SFREEZE,
+                app('translator')->get('wallet.cash_freeze_desc'),
+                $cash->id
+            );
             //提交事务
             $db->commit();
             return $cash;

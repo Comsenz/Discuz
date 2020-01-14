@@ -189,5 +189,8 @@ return [
         'cash_min_sum'          => '单次提现最小金额',
         'cash_max_sum'          => '单次提现最大金额',
         'cash_sum_limit'        => '每日提现总金额上限',
+
+        // user
+        'groupId' => '用户组',
     ],
 ];

@@ -5,6 +5,7 @@
 import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import tableNoList from '../../../../view/site/common/table/tableNoList'
+import Page from '../../../../view/site/common/page/page';
 import moment from 'moment';
 import webDb from 'webDbHelper';
 import { mapState,mapMutations } from 'vuex';
@@ -273,13 +274,8 @@ export default {
 
     },
 
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-
     handleCurrentChange(val) {
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
-      webDb.setLItem('currentPag',val);
       this.isIndeterminate = false;
       this.checkAll = false;
       this.getThemeList(val);
@@ -358,10 +354,6 @@ export default {
 
   },
 
-  beforeUpdate() {
-    webDb.setLItem('currentPag',this.currentPag);
-  },
-
   beforeDestroy() {
     webDb.setLItem('currentPag',1);
 
@@ -389,7 +381,8 @@ export default {
     Card,
     ContArrange,
     tableNoList,
-    ElImageViewer
+    ElImageViewer,
+    Page
   }
 
 }

@@ -235,7 +235,7 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 | Statistic
 |--------------------------------------------------------------------------
 */
-$route->get('/statistic/money', 'statistic.money', ApiController\Statistic\MoneyStatisticController::class);
+$route->get('/statistic/finance', 'statistic.finance', ApiController\Statistic\FinanceStatisticController::class);
 
 /*
 |--------------------------------------------------------------------------

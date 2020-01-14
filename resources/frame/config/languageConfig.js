@@ -37,6 +37,7 @@ const config = {
   login_failures_times_toplimit:'密码错误次数达到5次，请15分钟后再次尝试',
   site_closed:"站点已关闭！",
   ban_user:"您的账号被禁用，无法访问本站点",
+  mobile_is_already_bind:'手机已经绑定'
 
 };
 

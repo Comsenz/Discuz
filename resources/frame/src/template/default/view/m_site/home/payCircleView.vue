@@ -22,7 +22,8 @@
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">加入方式</span>
-        	<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>
+        	<!--<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>-->
+          <span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，{{siteInfo._data.siteExpire === '0' || siteInfo._data.siteExpire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.siteExpire +'天'}}</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">站长</span>
@@ -44,7 +45,7 @@
       	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
       </div>
     </div>
-  </van-pull-refresh> 
+  </van-pull-refresh>
   </div>
 </template>
 

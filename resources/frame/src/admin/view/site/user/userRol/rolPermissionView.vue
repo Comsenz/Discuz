@@ -61,7 +61,13 @@
     <Card header="前台管理权限："></Card>
     <Card>
       <CardRow description="前台删除单个主题的权限">
-        <el-checkbox v-model="checked" label="thread.deletePosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删帖</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.deletePosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删主题</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="前台删除单个回复的权限">
+        <el-checkbox v-model="checked" label="" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删回复</el-checkbox>
       </CardRow>
     </Card>
 

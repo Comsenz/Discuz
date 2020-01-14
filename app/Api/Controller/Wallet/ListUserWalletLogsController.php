@@ -69,6 +69,8 @@ class ListUserWalletLogsController extends AbstractListController
     public $optionalInclude = [
         'user',
         'userWallet',
+        'userWalletCash',
+        'order'
     ];
 
     /**

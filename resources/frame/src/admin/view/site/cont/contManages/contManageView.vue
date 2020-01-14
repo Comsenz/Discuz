@@ -52,14 +52,20 @@
           <tableNoList v-show="themeList.length < 1"></tableNoList>
 
           <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
-            <el-pagination
+            <!--<el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page.sync="currentPag"
               :page-size="parseInt(searchData.pageSelect)"
               layout="total, prev, pager, next,jumper"
               :total="total">
-            </el-pagination>
+            </el-pagination>-->
+            <Page
+              @current-change="handleCurrentChange"
+              :current-page="currentPag"
+              :page-size="parseInt(searchData.pageSelect)"
+              :total="total">
+            </Page>
           </div>
 
         </div>

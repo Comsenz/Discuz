@@ -133,6 +133,7 @@ export default {
             if (res.errors) {
               this.$message.error(res.errors[0].code);
             } else {
+              this.$message.success('修改成功');
               this.imageUrl = res.readdata._data.avatarUrl;
             }
 
@@ -166,7 +167,11 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$message.error(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$message.error(res.errors[0].code);
+          }
         }else{
           console.log(res)
           this.$message({ message: '提交成功', type: 'success' });
