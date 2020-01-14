@@ -20,8 +20,6 @@ class FinanceStatistic
 {
     use AssertPermissionTrait;
 
-    const WECHAT_RATE = 0.01;
-
     protected $app;
 
     protected $actor;
@@ -58,19 +56,19 @@ class FinanceStatistic
         $this->assertAdmin($this->actor);
 
         $financeStatistic = [];
-        //用户总充值：注册+打赏的总额（未扣除手续费的）
+        //用户总充值
         data_set(
             $financeStatistic,
             'totalIncome',
             $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('amount')
         );
-        //用户总提现：用户钱包已提现的总额
+        //用户总提现
         data_set(
             $financeStatistic,
             'totalWithdrawal',
             $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_apply_amount')
         );
-        //用户钱包总金额：用户钱包的汇总金额（未提现+冻结中）
+        //用户钱包总金额
         $userWallet = $this->userWallet::selectRaw('SUM(available_amount) as available_amount')
             ->selectRaw('SUM(freeze_amount) as freeze_amount')
             ->first()
@@ -80,31 +78,31 @@ class FinanceStatistic
             'totalWallet',
             $userWallet['available_amount'] + $userWallet['freeze_amount']
         );
-        //平台手续费总支出：每次不管是注册还是打赏等，微信收的手续费的汇总
-        data_set(
-            $financeStatistic,
-            'totalExpenditures',
-            Arr::get($financeStatistic, 'totalIncome') * self::WECHAT_RATE
-        );
-        //提现手续费盈利：统一收用户的金额（提现手续费汇总）
+        //提现手续费收入：(用户总提现 * 提现手续费百分比)
         data_set(
             $financeStatistic,
             'withdrawalProfit',
-            Arr::get($financeStatistic, 'totalWithdrawal') * ($this->settings->get('cash_rate')/100 - self::WECHAT_RATE)
+            $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_charge')
         );
-        //订单提成盈利：汇总平台的分成收入
+        //订单提成收入：注册加入的收入+平台的分成收入
+        $register_amount = $this->order::where('type', 1)->where('status', $this->order::ORDER_STATUS_PAID)->sum('amount');
+        $master_amount = $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('master_amount');
         data_set(
             $financeStatistic,
             'orderRoyalty',
-            $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('master_amount')
+            $register_amount + $master_amount
         );
-        //当前平台总盈利：(汇总平台的分成收入+注册收入)-(手续费) + 用户提现手续费
+        //平台总盈利：订单提成收入（打赏贴的分成 + 注册收入）+ 提现手续费收入
         data_set(
             $financeStatistic,
             'totalProfit',
-            Arr::get($financeStatistic, 'orderRoyalty') * (1 - self::WECHAT_RATE) +
-                    $this->order::where('status', $this->order::ORDER_STATUS_PAID)->where('type', $this->order::ORDER_TYPE_REGISTER)->sum('amount') * (1 - self::WECHAT_RATE)  +
-                    Arr::get($financeStatistic, 'withdrawalProfit')
+            Arr::get($financeStatistic, 'orderRoyalty') + Arr::get($financeStatistic, 'withdrawalProfit')
+        );
+        //注册收入
+        data_set(
+            $financeStatistic,
+            'totalRegisterProfit',
+            $register_amount
         );
         //当前订单总数：统计订单数量
         data_set(
@@ -112,6 +110,7 @@ class FinanceStatistic
             'orderCount',
             $this->order::count()
         );
+
         return $financeStatistic;
     }
 }
