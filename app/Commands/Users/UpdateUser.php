@@ -91,7 +91,9 @@ class UpdateUser
             $user->changeStatus(Arr::get($attributes, 'status'));
         }
 
-        if ($groupId = Arr::get($attributes, 'groupId')) {
+        $groupId = Arr::get($attributes, 'groupId');
+        $validator['groupId'] = $groupId;
+        if ($groupId) {
             $this->assertCan($this->actor, 'edit.group', $user);
             $user->groups()->sync($groupId);
         }

@@ -80,13 +80,13 @@
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.viewCount}}&nbsp;阅读</span>
 		    		<!-- <a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a> -->
-            <div class="screen" @click="bindScreen" v-if="themeCon._data.canEssence || themeCon._data.canSticky || themeCon._data.canDelete || themeCon._data.canEdit">
+            <div class="screen" @click="bindScreen" v-if="themeCon._data.canEssence || themeCon._data.canSticky || themeCon._data.canHide || themeCon._data.canEdit">
             	<span>管理</span>
             	<span class="icon iconfont icon-down-menu jtGrayB"></span>
             	<div class="themeList" v-if="showScreen">
             		<a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,2,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canEssence">{{essenceFlag}}</a>
                 <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,3,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canSticky">{{stickyFlag}}</a>
-                <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,4,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canDelete">删除</a>
+                <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,4,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon._data.canHide">删除</a>
                 <a href="javascript:;"  @click="themeOpera(themeCon.firstPost._data.id,5,themeCon.category._data.id,themeCon.firstPost._data.content)" v-if="themeCon.firstPost._data.canEdit">编辑</a>
             	</div>
             </div>
@@ -148,7 +148,7 @@
               </div>
             </div>
             <div class="commentOpera padT22">
-              <a @click="deleteOpear(item._data.id,postIndex)">删除</a>
+              <a v-if="item._data.canHide" @click="deleteOpear(item._data.id,postIndex)">删除</a>
               <a v-if="item._data.isLiked" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike,postIndex)"><span class="icon iconfont icon-praise-after" :class="{'icon-like': likedClass}"></span>{{item._data.likeCount}}</a>
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike,postIndex)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>

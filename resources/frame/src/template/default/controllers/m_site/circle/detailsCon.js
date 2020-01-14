@@ -213,7 +213,7 @@ export default {
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             // console.log(this.currentUserAvatarUrl+'3334');
             this.groupId = res.readdata.groups[0]._data.id;
-            // console.log(this.groupId);
+            // console.log(this.groupId,'uuuuu');
            }
 
         })
@@ -376,9 +376,13 @@ export default {
     // },
     //分享，复制浏览器地址
     shareTheme() {
-      var Url= appConfig.devApiUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
-      // var Url = 'http://10.0.10.210:8883/pay-circle-con/' + this.themeId + '/' + this.groupId;
-      // console.log(appConfig.devApiUrl);
+      let Url= '';
+      if(this.isPayVal === 'pay'){
+        Url = appConfig.devApiUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+      } else {
+        Url = appConfig.devApiUrl+'/details/' + this.themeId
+      }
+      // var Url= appConfig.devApiUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       oInput.value = Url;
       document.body.appendChild(oInput);
