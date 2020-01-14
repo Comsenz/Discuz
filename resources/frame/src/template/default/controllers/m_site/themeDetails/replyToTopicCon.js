@@ -17,6 +17,7 @@ export default {
       showFacePanel: false,
       keyboard: false,
       replyText:'',
+      replyQuote:'',
       keywordsMax: 1000,
       footMove: false,
       faceData:[],
@@ -53,17 +54,17 @@ export default {
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     // var replyQuote = this.$route.params.replyQuote;
-    var replyQuote = browserDb.getLItem('replyQuote');
+    this.replyQuote = '<blockquote class="quoteCon">'+ browserDb.getLItem('replyQuote') +'</blockquote>';
     // var replyId = this.$route.params.replyId;
     // var themeId = this.$route.params.themeId;
-    console.log(replyQuote);
+    // console.log(replyQuote);
     console.log(this.replyId+'1111');
     console.log(this.themeId+'2222');
-    if(this.replyId && replyQuote){
-      this.replyText = '<blockquote class="quoteCon">'+replyQuote+'</blockquote>';
+    /*if(this.replyId && replyQuote){
+      this.replyText = '';
     } else {
       this.replyText = '';
-    }
+    }*/
     // this.replyId = replyId;
     // this.themeId = themeId;
     this.getInfo(); //初始化请求接口，判断是否有权限
@@ -398,7 +399,7 @@ export default {
                 "type": "posts",
                 "attributes": {
                     "replyId": this.replyId,
-                    "content": this.replyText
+                    "content": this.replyQuote + this.replyText
                 },
                 "relationships": {
                     "thread": {
