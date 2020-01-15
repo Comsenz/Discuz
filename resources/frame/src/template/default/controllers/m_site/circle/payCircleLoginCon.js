@@ -21,6 +21,7 @@ export default {
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       username: '',
+      loginUserInfo:''
     }
   },
   components:{
@@ -325,7 +326,7 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          this.username = res.data.attributes.username
+          this.loginUserInfo = res.data.attributes.username
         }
       }).catch(err=>{
         console.log(err);
