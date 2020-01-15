@@ -88,6 +88,12 @@ export default {
         data:{
 
         }
+      }).then(res=>{
+        if (res.errors) {
+          this.$message.error(res.errors[0].code);
+        } else {
+          this.$message.success('删除成功');
+        }
       })
     },
     handlePreview(file) {
@@ -133,7 +139,7 @@ export default {
             if (res.errors) {
               this.$message.error(res.errors[0].code);
             } else {
-              this.$message.success('修改成功');
+              this.$message.success('上传成功');
               this.imageUrl = res.readdata._data.avatarUrl;
             }
 
