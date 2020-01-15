@@ -171,6 +171,7 @@ export default {
       console.log(val);
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       webDb.setLItem('currentPag',val);
+      this.currentPaga = val;
       // this.isIndeterminate = false;
       // this.checkAll = false;
       this.getPostsList(val);
