@@ -90,7 +90,7 @@
     </Card>
 
     <Card>
-      <CardRow description="前台批量删除主题的权限">
+      <CardRow description="前台批量管理主题的权限">
         <el-checkbox v-model="checked" label="thread.batchEdit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">批量管理主题</el-checkbox>
       </CardRow>
     </Card>
