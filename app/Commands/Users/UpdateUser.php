@@ -8,6 +8,7 @@
 namespace App\Commands\Users;
 
 use App\Exceptions\TranslatorException;
+use App\Models\OperationLog;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
@@ -91,7 +92,15 @@ class UpdateUser
 
         if (Arr::has($attributes, 'status')) {
             $this->assertCan($this->actor, 'edit.status', $user);
-            $user->changeStatus(Arr::get($attributes, 'status'));
+            $status = Arr::get($attributes, 'status');
+            $user->changeStatus($status);
+
+            // 记录用户状态操作日志
+            $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
+            $actionType = User::enumStatus($status);
+            OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
+            // TODO 如果是拒绝 添加系统通知
+//            if ($actionType == 'refuse') {}
         }
 
         $groupId = Arr::get($attributes, 'groupId');
