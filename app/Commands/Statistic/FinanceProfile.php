@@ -13,7 +13,6 @@ use App\Models\UserWallet;
 use App\Models\UserWalletCash;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Support\Arr;
 
 class FinanceProfile
@@ -21,8 +20,6 @@ class FinanceProfile
     use AssertPermissionTrait;
 
     protected $actor;
-
-    protected $settings;
 
     protected $order;
 
@@ -35,12 +32,11 @@ class FinanceProfile
         $this->actor    = $actor;
     }
 
-    public function handle(Order $order, UserWallet $userWallet, UserWalletCash $userWalletCash, SettingsRepository $setting)
+    public function handle(Order $order, UserWallet $userWallet, UserWalletCash $userWalletCash)
     {
         $this->order = $order;
         $this->userWallet = $userWallet;
         $this->userWalletCash = $userWalletCash;
-        $this->settings = $setting;
 
         return call_user_func([$this, '__invoke']);
     }

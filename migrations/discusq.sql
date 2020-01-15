@@ -332,3 +332,19 @@ CREATE TABLE `user_follow` (
   KEY `from_user_id` (`from_user_id`),
   KEY `to_user_id` (`to_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='关注表';
+
+-- 2020-01-15 18:42 财务统计表
+CREATE TABLE `finance` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `income` decimal(10,2) unsigned NOT NULL COMMENT '用户充值金额',
+  `withdrawal` decimal(10,2) unsigned NOT NULL COMMENT '用户提现金额',
+  `order_count` int(10) unsigned NOT NULL COMMENT '订单数量',
+  `order_profit` decimal(10,2) unsigned NOT NULL COMMENT '订单金额',
+  `total_profit` decimal(10,2) unsigned NOT NULL COMMENT '平台盈利',
+  `register_profit` decimal(10,2) unsigned NOT NULL COMMENT '注册收入',
+  `master_portion` decimal(10,2) unsigned NOT NULL COMMENT '打赏贴的分成',
+  `withdrawal_profit` decimal(10,2) unsigned NOT NULL COMMENT '提现手续费收入',
+  `created_at` date NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `create_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='财务统计表';
