@@ -16,7 +16,8 @@ export default {
       thread:false,
       sitePrice:'',//加入价格
       themeCon:[],
-      limitList:''
+      limitList:'',
+      allowRegister: '',
 		}
 	},
   computed: {
@@ -31,7 +32,7 @@ export default {
     this.myThread();
     this.getInfo();
   },
-	methods: {
+  methods: {
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
@@ -44,17 +45,18 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
-        }else{
-        console.log(res);
-        this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteMode+'请求');
-        if(res.readdata._data.siteAuthor){
-          this.siteUsername = res.readdata._data.siteAuthor.username;
         } else {
-          this.siteUsername = '暂无站长信息';
+          // console.log(res);
+          this.siteInfo = res.readdata;
+          // console.log(res.readdata._data.siteMode+'请求');
+          if(res.readdata._data.siteAuthor){
+            this.siteUsername = res.readdata._data.siteAuthor.username;
+          } else {
+            this.siteUsername = '暂无站长信息';
+          }
+          this.sitePrice = res.readdata._data.sitePrice;
+          this.allowRegister = res.readdata._data.setreg.register_close;
         }
-        this.sitePrice = res.readdata._data.sitePrice
-      }
       });
 
       //请求权限列表数据
