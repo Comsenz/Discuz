@@ -75,12 +75,15 @@ class UpdateUser
             $validator['password'] = $newPassword;
         }
 
-        if ($mobile = Arr::get($attributes, 'mobile')) {
+        if (Arr::has($attributes, 'mobile')) {
             $this->assertCan($this->actor, 'edit.mobile', $user);
-
-            // 判断手机号是否已经被绑定
-            if (User::where('mobile', $mobile)->exists()) {
-                throw new \Exception('mobile_is_already_bind');
+            $mobile = Arr::get($attributes, 'mobile');
+            // 传空的话不需要验证
+            if (!empty($mobile)) {
+                // 判断(除自己)手机号是否已经被绑定
+                if (User::where('mobile', $mobile)->whereNotIn('id', [$user->id])->exists()) {
+                    throw new \Exception('mobile_is_already_bind');
+                }
             }
 
             $user->changeMobile($mobile);
