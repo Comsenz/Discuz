@@ -13,9 +13,9 @@ class CreateUserFollow extends Migration
     public function up()
     {
         $this->schema()->create('user_follow', function (Blueprint $table) {
-            $table->increments('id')->comment('关系 ID');
-            $table->unsignedInteger('from_user_id')->index('from_user_id')->comment('关系主体');
-            $table->unsignedInteger('to_user_id')->index('to_user_id')->comment('关系客体');
+            $table->increments('id')->comment('自增ID');
+            $table->unsignedInteger('from_user_id')->index('from_user_id')->comment('关注人');
+            $table->unsignedInteger('to_user_id')->index('to_user_id')->comment('被关注人');
             $table->dateTime('created_at')->comment('创建时间');
         });
     }
