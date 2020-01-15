@@ -47,6 +47,7 @@ defaultConfig.beforeEnterModule = function(Router) {
 	});
 
   Router.onError((error) => {
+    console.log(error);
     console.log('页面跳转错误');
     const pattern = /Loading chunk (\d)+ failed/g;
     const isChunkLoadFailed = error.message.match(pattern);

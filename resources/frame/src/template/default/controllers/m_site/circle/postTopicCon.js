@@ -36,7 +36,7 @@ export default {
       postsId:'',
       files: {
         name: "",
-        type: ""
+        type: '',
       },
       headerImage: null,
       picValue: null,
@@ -60,30 +60,30 @@ export default {
       encuploadShow: false,
       testingRes:false,
       backGo:-2,
-      formdataList:[]
+      formdataList:[],
 
     }
   },
 
   mounted () {
-      this.$nextTick(() => {
-        let textarea = this.$refs.textarea;
-        textarea.focus();
-        let prevHeight = 300;
-        textarea && autoTextarea(textarea, 5, 0, (height) => {
-          height += 20;
-          if (height !== prevHeight) {
-            prevHeight = height;
-            let rem = height / rootFontSize;
-            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-          }
-        });
-      })
-      //设置在pc的宽度
-      if(this.isWeixin != true && this.isPhone != true){
-        console.log(this.isWeixin);
-        this.limitWidth();
-      }
+    this.$nextTick(() => {
+      let textarea = this.$refs.textarea;
+      textarea.focus();
+      let prevHeight = 300;
+      textarea && autoTextarea(textarea, 5, 0, (height) => {
+        height += 20;
+        if (height !== prevHeight) {
+          prevHeight = height;
+          let rem = height / rootFontSize;
+          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+        }
+      });
+    })
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      console.log(this.isWeixin);
+      this.limitWidth();
+    }
   },
   created(){
     console.log(this.backGo);
@@ -147,17 +147,17 @@ export default {
         method: 'get',
         data: {
           include: ['users'],
-        }
+        },
       }).then((res) => {
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
           console.log(res);
           console.log('888887');
-           var ImgExt = res.readdata._data.supportImgExt.split(',');
-           var ImgStr='';
-           var imgStrRes ='';
+          var ImgExt = res.readdata._data.supportImgExt.split(',');
+          var ImgStr='';
+          var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
             ImgStr = '.'+ImgExt[k]+',';
             imgStrRes = 'image/'+ImgExt[k]+',';
