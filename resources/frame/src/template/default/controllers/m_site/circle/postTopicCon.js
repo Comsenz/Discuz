@@ -124,11 +124,10 @@ export default {
       } else {
         this.limitMaxLength = true;
       }
-      console.log(this.fileListOneLen+'dddd');
     },
-    'limitMaxLength': function(newVal,oldVal){
-      this.limitMaxLength = newVal;
-    },
+    // 'limitMaxLength': function(newVal,oldVal){
+    //   this.limitMaxLength = newVal;
+    // },
     'enclosureList.length': function(newVal,oldVal){
       this.enclosureListLen = newVal;
       if(this.enclosureListLen >= 3){
@@ -423,35 +422,10 @@ export default {
           this.$toast.fail(data.errors[0].code);
           throw new Error(data.error)
         } else {
-          console.log(data,'~~~~');
           if (img) {
-            console.log(index);
-            console.log(this.fileListOne.length);
-
-            console.log(this.fileListOne.length - (index))
-
-
+            // console.log(index);
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
-            // this.fileListOne.id = data.data.attributes.id;
-            // this.fileListOne.id = this.getAllEvens(this.fileListOne);
-
-            // var isEven = i => i % 2 === 0;
-            // var evens = arr => arr.filter(
-            // 	(subArr, idx) => isEven(idx)
-            // );
-            // var flat = arr => arr.reduce((acc, cur) => {
-            // 	return acc.concat(cur)
-            // }, []);
-            // var getAllEvens = arr => {
-            // 	let temp = evens(arr);
-            // 	return flat(temp);
-            // };
-            // // var testArr = ['这里', '是', '0', '号', '数组', '当然是偶数'];
-            // var res = getAllEvens(this.fileListOne);
-            // console.log(res);
-
-            console.log(this.fileListOne,'---------------');
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
@@ -476,9 +450,6 @@ export default {
 
     //压缩图片
     compressFile(file, wantedSize, uploadShow, index){
-      console.log(file.size);
-      console.log(index)
-
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -490,8 +461,6 @@ export default {
           formdata.append('isGallery', 1);
           that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false,index);
           that.loading = false;
-
-
       }).catch(function (err) {
           /* 处理失败后执行 */
       }).always(function () {

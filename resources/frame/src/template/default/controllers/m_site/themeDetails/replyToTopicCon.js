@@ -73,24 +73,24 @@ export default {
   },
 
   mounted () {
-      this.$nextTick(() => {
-        let textarea = this.$refs.textarea;
-        textarea.focus();
-        let prevHeight = 300;
-        textarea && autoTextarea(textarea, 5, 0, (height) => {
-          height += 20;
-          if (height !== prevHeight) {
-            prevHeight = height;
-            let rem = height / rootFontSize;
-            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-          }
-        });
-      })
-      //设置在pc的宽度
-      //设置在pc的宽度
-      if(this.isWeixin != true && this.isPhone != true){
-        this.limitWidth();
-      }
+    this.$nextTick(() => {
+      let textarea = this.$refs.textarea;
+      textarea.focus();
+      let prevHeight = 300;
+      textarea && autoTextarea(textarea, 5, 0, (height) => {
+        height += 20;
+        if (height !== prevHeight) {
+          prevHeight = height;
+          let rem = height / rootFontSize;
+          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+        }
+      });
+    })
+    //设置在pc的宽度
+    //设置在pc的宽度
+    if(this.isWeixin != true && this.isPhone != true){
+      this.limitWidth();
+    }
   },
   watch: {
     'fileListOne.length': function(newVal,oldVal){
@@ -158,27 +158,68 @@ export default {
     },
 
     //上传图片,点击加号时
+    // handleFile(e){
+    //   if(this.isAndroid && this.isWeixin){
+    //     this.testingType(e.file,this.supportImgExt);
+    //     console.log(this.testingRes+'445');
+    //     if(this.testingRes){
+    //       this.compressFile(e.file, false);
+    //     }
+    //   } else {
+    //     this.compressFile(e.file, false);
+    //   }
+    // },
+
+    // //上传图片，点击底部Icon时
+    // handleFileUp(e){
+    //   if(this.isAndroid && this.isWeixin){
+    //     this.testingType(e.target.files[0],this.supportImgExt);
+    //     if(this.testingRes){
+    //       this.compressFile(e.target.files[0], true);
+    //     }
+    //   } else {
+    //     this.compressFile(e.target.files[0], true);
+    //   }
+    // },
+
+    //上传图片,点击加号时
     handleFile(e){
-      if(this.isAndroid && this.isWeixin){
-        this.testingType(e.file,this.supportImgExt);
-        console.log(this.testingRes+'445');
-        if(this.testingRes){
-          this.compressFile(e.file, false);
-        }
-      } else {
-        this.compressFile(e.file, false);
-      }
+     let files = [];
+     if(e.length === undefined) {
+       files.push(e);
+     } else {
+       files = e;
+     }
+     if(!this.limitMaxLength){
+       this.$toast.fail('已达上传图片上限');
+     } else {
+       files.map((file,index) => {
+         if(this.isAndroid && this.isWeixin){
+           this.testingType(file.file,this.supportImgExt);
+           // console.log(this.testingRes+'445');
+           if(this.testingRes){
+             this.compressFile(file.file, 150000, false,files.length - index);
+           }
+         } else {
+           this.compressFile(file.file, 150000, false, files.length - index);
+         }
+       });
+     }
     },
 
     //上传图片，点击底部Icon时
     handleFileUp(e){
-      if(this.isAndroid && this.isWeixin){
-        this.testingType(e.target.files[0],this.supportImgExt);
-        if(this.testingRes){
-          this.compressFile(e.target.files[0], true);
+      let fileListNowLen =  e.target.files.length + this.fileListOne.length <= 12?e.target.files.length : 12 - this.fileListOne.length;
+      for(var i = 0; i < fileListNowLen; i++){
+        var file = e.target.files[i];
+        if(this.isAndroid && this.isWeixin){
+          this.testingType(file,this.supportImgExt);
+          if(this.testingRes){
+            this.compressFile(file, 150000, true);
+          }
+        } else {
+          this.compressFile(file, 150000, true);
         }
-      } else {
-        this.compressFile(e.target.files[0], true);
       }
     },
 
@@ -227,7 +268,8 @@ export default {
 
 
     //这里写接口，上传
-    uploaderEnclosure(file,isFoot,img){
+    // uploaderEnclosure(file,isFoot,img){
+      uploaderEnclosure(file,isFoot,img,enclosure,index){
         this.appFetch({
           url:'attachment',
           method:'post',
@@ -241,7 +283,7 @@ export default {
             if (img) {
               console.log(this.fileList);
               this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-              this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
+              this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
             }
             if (isFoot) {
               this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
@@ -254,7 +296,8 @@ export default {
         })
     },
     //压缩
-    compressFile(file, uploadShow, wantedSize = 150000, event){
+    // compressFile(file, uploadShow, wantedSize = 150000, event){
+    compressFile(file, wantedSize, uploadShow, index){
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -264,7 +307,8 @@ export default {
           let formdata = new FormData();
           formdata.append('file', rst.file, file.name);
           formdata.append('isGallery', 1);
-          that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+          // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+          that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false,index);
           that.loading = false;
       }).catch(function (err) {
           /* 处理失败后执行 */
