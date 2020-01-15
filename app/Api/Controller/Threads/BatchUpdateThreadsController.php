@@ -11,12 +11,15 @@ use App\Api\Serializer\ThreadSerializer;
 use App\Commands\Thread\BatchEditThreads;
 use Discuz\Api\Client;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class BatchUpdateThreadsController extends AbstractListController
 {
+    use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -55,6 +58,8 @@ class BatchUpdateThreadsController extends AbstractListController
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
         $meta = $request->getParsedBody()->get('meta', []);
+
+        $this->assertCan($actor, 'thread.batchEdit');
 
         // 将操作应用到其他所有页面
         if (isset($meta['query']) && in_array($meta['type'], ['approve', 'ignore', 'delete', 'restore'])) {

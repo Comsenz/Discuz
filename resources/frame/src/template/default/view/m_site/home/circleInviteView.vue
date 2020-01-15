@@ -27,7 +27,8 @@
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'attachment.delete'">删除附件</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'cash.create'">申请提现</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'order.create'">创建订单</p>
-      	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.deletePosts'">删除回复</p>
+      	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.hide'">删除主题</p>
+      	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.hidePosts'">删除回复</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.favorite'">帖子收藏</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.likePosts'">帖子点赞</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.view'">查看某个用户信息权限</p>
@@ -35,7 +36,7 @@
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'user.edit'">编辑用户状态</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'group.edit'">编辑用户组</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createInvite'">管理-邀请加入</p>
-      	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.hide'">批量删除帖子</p>
+      	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.batchEdit'">批量管理主题</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.editPosts'">编辑</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.essence'">加精</p>
       	    <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.sticky'">置顶</p>

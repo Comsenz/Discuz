@@ -61,13 +61,13 @@
     <Card header="前台管理权限："></Card>
     <Card>
       <CardRow description="前台删除单个主题的权限">
-        <el-checkbox v-model="checked" label="thread.deletePosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删主题</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.hide" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删主题</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="前台删除单个回复的权限">
-        <el-checkbox v-model="checked" label="" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删回复</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.hidePosts" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">删回复</el-checkbox>
       </CardRow>
     </Card>
 
@@ -91,7 +91,7 @@
 
     <Card>
       <CardRow description="前台批量删除主题的权限">
-        <el-checkbox v-model="checked" label="thread.hide" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">批量删除主题</el-checkbox>
+        <el-checkbox v-model="checked" label="thread.batchEdit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">批量管理主题</el-checkbox>
       </CardRow>
     </Card>
 

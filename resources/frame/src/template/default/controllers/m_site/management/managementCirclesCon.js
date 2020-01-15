@@ -5,7 +5,7 @@
 export default {
 	data: function() {
 		return {
-			canHideThreads:false,
+			canBatchEditThreads:false,
 			canEditUserGroup:false,
 			canCreateInvite:false
 		}
@@ -49,31 +49,25 @@ export default {
         default:
         // this.$router.push('/');
       }
-	  },
+    },
     getInfo() {
-        //请求站点信息，用于判断站点是否是付费站点
-        this.appFetch({
-          url: 'forum',
-          method: 'get',
-          data: {
-          }
-        }).then((res) => {
-          if (res.errors){
-              this.$toast.fail(res.errors[0].code);
-              throw new Error(res.error)
-            } else {
-             // console.log(res);
-             this.canHideThreads = res.readdata._data.canHideThreads;
-             this.canEditUserGroup = res.readdata._data.canEditUserGroup;
-             this.canCreateInvite = res.readdata._data.canCreateInvite;
-             // console.log(this.canHideThreads,this.canEditUserGroup,this.canCreateInvite);
-             //判断 当用户组拥有批量删除帖子、管理-邀请加入、编辑用户组、编辑用户组状态这4个权限中的任意一项时才会显示该菜单
-             if(this.canHideThreads || this.canEditUserGroup || this.canCreateInvite){
-               // this.sidebarList2.splice(1,1);
-             }
-           }
-        });
-      },
+      //请求站点信息，用于判断站点是否是付费站点
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {
+        }
+      }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.canBatchEditThreads = res.readdata._data.canBatchEditThreads;
+          this.canEditUserGroup = res.readdata._data.canEditUserGroup;
+          this.canCreateInvite = res.readdata._data.canCreateInvite;
+        }
+      });
+    },
 	},
 
 
