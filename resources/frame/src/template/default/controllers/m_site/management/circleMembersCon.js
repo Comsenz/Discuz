@@ -54,9 +54,9 @@ export default {
 				  method:'get',
 				//   data:this.userParams
 				  data:{
-					'filter[username]':'*'+ this.searchVal+'*',
-					'page[number]': this.pageIndex,
-            		'page[limit]': this.pageLimit
+						'filter[username]': '*' + this.searchVal + '*',
+						'page[number]': this.pageIndex,
+						'page[limit]': this.pageLimit
 				  }
 			  }).then(data=>{
 				if (data.errors){

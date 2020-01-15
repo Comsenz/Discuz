@@ -55,7 +55,7 @@ export default {
 				this.handleSearchUser(true);
 
 				// 主题搜索
-				this.themeParamd['filter[q]'] = '*' + this.searchVal + '*';
+				this.themeParamd['filter[q]'] = this.searchVal;
 				this.themeParamd['page[number]'] = 1;
 
 				this.handleSearchTheme(true);

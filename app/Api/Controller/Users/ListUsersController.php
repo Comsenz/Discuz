@@ -79,7 +79,7 @@ class ListUsersController extends AbstractListController
 
         $this->assertCan($actor, 'viewUserList');
 
-        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'bind', 'status']);
+        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'wechat', 'status']);
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
