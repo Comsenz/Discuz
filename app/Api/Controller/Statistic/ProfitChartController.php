@@ -7,17 +7,17 @@
 
 namespace App\Api\Controller\Statistic;
 
-use App\Api\Serializer\FinanceStatisticSerializer;
-use App\Commands\Statistic\FinanceStatistic;
+use App\Api\Serializer\FinanceSerializer;
+use App\Commands\Statistic\ProfitChart;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class FinanceStatisticController extends AbstractResourceController
+class ProfitChartController extends AbstractResourceController
 {
 
-    public $serializer = FinanceStatisticSerializer::class;
+    public $serializer = FinanceSerializer::class;
     /**
      * @var Dispatcher
      */
@@ -37,7 +37,8 @@ class FinanceStatisticController extends AbstractResourceController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $filter = $this->extractFilter($request);
 
-        return $this->bus->dispatch(new FinanceStatistic($actor));
+        return $this->bus->dispatch(new ProfitChart($actor, $filter));
     }
 }

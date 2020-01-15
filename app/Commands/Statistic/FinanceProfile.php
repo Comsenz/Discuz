@@ -16,11 +16,9 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Support\Arr;
 
-class FinanceStatistic
+class FinanceProfile
 {
     use AssertPermissionTrait;
-
-    protected $app;
 
     protected $actor;
 
@@ -55,16 +53,16 @@ class FinanceStatistic
     {
         $this->assertAdmin($this->actor);
 
-        $financeStatistic = [];
+        $financeProfile = [];
         //用户总充值
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'totalIncome',
             $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('amount')
         );
         //用户总提现
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'totalWithdrawal',
             $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_apply_amount')
         );
@@ -74,43 +72,43 @@ class FinanceStatistic
             ->first()
             ->toArray();
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'totalWallet',
             $userWallet['available_amount'] + $userWallet['freeze_amount']
         );
         //提现手续费收入
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'withdrawalProfit',
             $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_charge')
         );
         //打赏提成收入
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'orderRoyalty',
             $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('master_amount')
         );
         //注册加入收入
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'totalRegisterProfit',
             $this->order::where('type', 1)->where('status', $this->order::ORDER_STATUS_PAID)->sum('amount')
         );
         //平台总盈利：注册加入收入+打赏提成收入+提现手续费收入
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'totalProfit',
-            Arr::get($financeStatistic, 'totalRegisterProfit') +
-            Arr::get($financeStatistic, 'orderRoyalty') +
-            Arr::get($financeStatistic, 'withdrawalProfit')
+            Arr::get($financeProfile, 'totalRegisterProfit') +
+            Arr::get($financeProfile, 'orderRoyalty') +
+            Arr::get($financeProfile, 'withdrawalProfit')
         );
         //用户订单总数
         data_set(
-            $financeStatistic,
+            $financeProfile,
             'orderCount',
             $this->order::count()
         );
 
-        return $financeStatistic;
+        return $financeProfile;
     }
 }
