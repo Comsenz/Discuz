@@ -143,8 +143,6 @@ export default {
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
-      console.log(data);
-      console.log('55544');
       let datas = [];
       data.forEach((item)=>{
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>');

@@ -229,7 +229,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-          } else {
+          } else {
             this.$router.push({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
@@ -603,7 +603,7 @@ export default {
     },
     onCancel() {
       this.showPopup = false;
-    }
+    },
 
   },
   /*beforeRouteEnter(to,from,next){
