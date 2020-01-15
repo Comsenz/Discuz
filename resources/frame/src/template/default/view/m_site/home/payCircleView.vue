@@ -2,7 +2,7 @@
 
 <template>
   <div class="circleCon" v-else-if="situation2">
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+    <!--<van-pull-refresh v-model="isLoading" @refresh="onRefresh">-->
     <div v-if="siteInfo">
       <Header :logoShow="true" :perDetShow="true"></Header>
       <div class="gap"></div>
@@ -45,7 +45,7 @@
       	<a href="javascript:;" @click="registerJump" class="regiJoin" v-if="allowRegister">注册，并加入</a>
       </div>
     </div>
-  </van-pull-refresh>
+  <!--</van-pull-refresh>-->
   </div>
 </template>
 

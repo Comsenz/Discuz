@@ -52,7 +52,7 @@ export default {
         console.log(res);
         this.siteInfo = res.readdata;
         console.log(res.readdata._data.allowRegister+'请求');
-        this.allowRegister = res.readdata._data.allowRegister;
+        this.allowRegister = res.readdata._data.setreg.register_close;
         if(res.readdata._data.siteAuthor){
           this.siteUsername = res.readdata._data.siteAuthor.username;
         } else {
