@@ -143,6 +143,8 @@ class Formatter
 
         if (! $formatter) {
             $this->cacheFormatter();
+
+            $formatter = $this->cache->get('formatter');
         }
 
         return $formatter[$name];
