@@ -535,6 +535,7 @@ export default {
             //删除
             this.deletedStatus = res.readdata._data.isDeleted;
             if (this.deletedStatus) {
+              this.$toast.success('删除成功，跳转到首页');
               this.$router.push({
                 path: '/circle',
                 name: 'circle'
@@ -544,8 +545,6 @@ export default {
 
         }
       })
-
-
     },
 
     //删除请求接口
@@ -897,7 +896,7 @@ export default {
         method:'get',
         splice:'/' + this.orderSn,
         data:{
-        }
+        },
       }).then(res=>{
         console.log(res);
         // const orderStatus = res.readdata._data.status;
@@ -944,15 +943,14 @@ export default {
 
   },
   mounted: function() {
-		// this.getVote();
-    document.addEventListener('click',this.listenEvt, false);
-	},
-  destroyed: function() {
-  	// this.getVote();
+    // this.getVote();
     document.addEventListener('click',this.listenEvt, false);
   },
+  destroyed: function() {
+    document.removeEventListener('click',this.listenEvt, false);
+  },
   beforeRouteLeave(to, from, next) {
-    document.addEventListener('click',this.listenEvt, false);
+    document.removeEventListener('click',this.listenEvt, false);
     next()
   }
 

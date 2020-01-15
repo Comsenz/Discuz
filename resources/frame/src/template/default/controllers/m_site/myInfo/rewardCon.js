@@ -80,7 +80,8 @@ export default {
           // throw new Error(res.error)
         }else{
         this.pageIndex = 1;
-        this.myRewardList(true)
+        this.myRewardList(true);
+        this.$toast.success('删除成功');
         }
       })
     },

@@ -410,12 +410,12 @@ export default {
 	},
   destroyed: function() {
   	// this.getVote();
-  	window.addEventListener('scroll', this.footFix, true);
-    document.addEventListener('click',this.listenEvt, false);
+  	window.removeEventListener('scroll', this.footFix, true);
+    document.removeEventListener('click',this.listenEvt, false);
   },
 	beforeRouteLeave (to, from, next) {
 	   window.removeEventListener('scroll', this.footFix, true);
-     document.addEventListener('click',this.listenEvt, false);
+     document.removeEventListener('click',this.listenEvt, false);
 	   next()
 	}
 }
