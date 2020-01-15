@@ -324,9 +324,9 @@ ALTER TABLE `settings` CHANGE `value` `value` TEXT CHARACTER SET utf8mb4 COLLATE
 
 -- 2020-01-09 16:59:11 关注表
 CREATE TABLE `user_follow` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '关系 ID',
-  `from_user_id` int(10) unsigned NOT NULL COMMENT '关系主体',
-  `to_user_id` int(10) unsigned NOT NULL COMMENT '关系客体',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `from_user_id` int(10) unsigned NOT NULL COMMENT '关注人',
+  `to_user_id` int(10) unsigned NOT NULL COMMENT '被关注人',
   `created_at` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `from_user_id` (`from_user_id`),

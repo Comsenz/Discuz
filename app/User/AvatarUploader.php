@@ -60,4 +60,32 @@ class AvatarUploader
 
         $this->file->put($this->avatarPath, $encodedImage);
     }
+
+    /**
+     * 删除头像
+     *
+     * @param User $user
+     */
+    public function remove(User $user)
+    {
+        $avatarPath = $user->getOriginal('avatar');
+
+        $user->saved(function () use ($avatarPath) {
+            $this->deleteFile($avatarPath);
+        });
+
+        $user->changeAvatar('');
+    }
+
+    /**
+     * 上传失败则删除本地图片资源
+     *
+     * @param $avatarPath
+     */
+    public function deleteFile($avatarPath)
+    {
+        if ($this->file->has($avatarPath)) {
+            $this->file->delete($avatarPath);
+        }
+    }
 }
