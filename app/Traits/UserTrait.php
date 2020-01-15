@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -50,13 +51,8 @@ trait UserTrait
 
         // 状态
         if ($status = Arr::get($filter, 'status')) {
-            if ($status == 'normal') {
-                $query->where('status', 0);
-            } elseif ($status == 'ban') {
-                $query->where('status', 1);
-            } elseif ($status == 'mod') {
-                $query->where('status', 2);
-            }
+            $statusNum = User::enumStatus($status);
+            $query->where('status', $statusNum);
         }
 
         // 用户组

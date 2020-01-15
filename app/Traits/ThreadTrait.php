@@ -80,7 +80,7 @@ trait ThreadTrait
      */
     public function actionThread($thread, $behavior)
     {
-        if (!in_array($behavior, OperationLog::actionType())) {
+        if (!in_array($behavior, OperationLog::getAction('thread'))) {
             $this->ThreadException('action_fail');
         }
 
