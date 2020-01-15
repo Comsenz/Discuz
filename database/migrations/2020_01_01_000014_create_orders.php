@@ -17,7 +17,7 @@ class CreateOrders extends Migration
             $table->char('order_sn', 22)->default('')->comment('订单编号');
             $table->unsignedBigInteger('payment_sn')->default(0)->comment('支付编号');
             $table->unsignedDecimal('amount', 10, 2)->comment('订单总金额');
-            $table->unsignedDecimal('master_amount', 10, 2)->comment('站长分成金额');
+            $table->unsignedDecimal('master_amount', 10, 2)->default(0.00)->comment('站长分成金额');
             $table->unsignedBigInteger('user_id')->comment('付款人 id');
             $table->unsignedBigInteger('payee_id')->comment('收款人 id');
             $table->unsignedTinyInteger('type')->default(0)->comment('交易类型：1注册、2打赏');
