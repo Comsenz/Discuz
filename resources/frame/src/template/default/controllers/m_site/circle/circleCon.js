@@ -57,13 +57,8 @@ export default {
     }
   },
   created:function(){
-    // this.firstCategoriesId();
-    // if(this.firstCategoriesId){
-      // this.loadThemeList();
       this.getInfo();
       this.load();
-    // }
-
   },
 
   methods: {
@@ -73,6 +68,15 @@ export default {
       // this.Initialization = true;
       // console.log(this.Initialization);
       this.loadThemeList();
+    },
+    //设置发表主题按钮在pc里的位置
+    limitWidth(limitId){
+      alert('设置');
+      console.log(limitId);
+      console.log(limitId);
+      let viewportWidth = window.innerWidth;
+      document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
+      // document.getElementById('fixedEdit').style.right = "100px";
     },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
@@ -105,6 +109,7 @@ export default {
             this.isPayVal = res.readdata._data.siteMode;
             //判断站点信息是否付费，用户是否登录，用户是否已支付
             this.detailIf(this.isPayVal,false);
+
           }
         }
       });
@@ -153,6 +158,9 @@ export default {
           this.canEdit = true;
           this.searchStatus = true;
           this.menuStatus = true;
+          if(this.canEdit){
+            this.limitWidth('fixedEdit');
+          }
         }  else {
           // console.log('公开，未登录');
           // this.loadThemeList();
@@ -162,6 +170,7 @@ export default {
           this.canEdit = false;
         }
       } else {
+        this.limitWidth('fixedEdit');
         this.searchStatus = true;
         this.menuStatus = true;
       }

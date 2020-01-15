@@ -284,7 +284,7 @@ export default {
     limitWidth(){
       document.getElementById('post-topic-footer').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
     },
 
     // 删除图片
