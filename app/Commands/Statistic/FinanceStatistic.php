@@ -78,33 +78,33 @@ class FinanceStatistic
             'totalWallet',
             $userWallet['available_amount'] + $userWallet['freeze_amount']
         );
-        //提现手续费收入：(用户总提现 * 提现手续费百分比)
+        //提现手续费收入
         data_set(
             $financeStatistic,
             'withdrawalProfit',
             $this->userWalletCash::where('cash_status', $this->userWalletCash::STATUS_PAID)->sum('cash_charge')
         );
-        //订单提成收入：注册加入的收入+平台的分成收入
-        $register_amount = $this->order::where('type', 1)->where('status', $this->order::ORDER_STATUS_PAID)->sum('amount');
-        $master_amount = $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('master_amount');
+        //打赏提成收入
         data_set(
             $financeStatistic,
             'orderRoyalty',
-            $register_amount + $master_amount
+            $this->order::where('status', $this->order::ORDER_STATUS_PAID)->sum('master_amount')
         );
-        //平台总盈利：订单提成收入（打赏贴的分成 + 注册收入）+ 提现手续费收入
-        data_set(
-            $financeStatistic,
-            'totalProfit',
-            Arr::get($financeStatistic, 'orderRoyalty') + Arr::get($financeStatistic, 'withdrawalProfit')
-        );
-        //注册收入
+        //注册加入收入
         data_set(
             $financeStatistic,
             'totalRegisterProfit',
-            $register_amount
+            $this->order::where('type', 1)->where('status', $this->order::ORDER_STATUS_PAID)->sum('amount')
         );
-        //当前订单总数：统计订单数量
+        //平台总盈利：注册加入收入+打赏提成收入+提现手续费收入
+        data_set(
+            $financeStatistic,
+            'totalProfit',
+            Arr::get($financeStatistic, 'totalRegisterProfit') +
+            Arr::get($financeStatistic, 'orderRoyalty') +
+            Arr::get($financeStatistic, 'withdrawalProfit')
+        );
+        //用户订单总数
         data_set(
             $financeStatistic,
             'orderCount',
