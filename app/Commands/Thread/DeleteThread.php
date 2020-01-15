@@ -74,7 +74,7 @@ class DeleteThread
         );
 
         $thread->raise(new Deleted($thread));
-        $thread->forceDelete();
+        $thread->delete();
 
         $this->dispatchEventsFor($thread, $this->actor);
 

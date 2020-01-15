@@ -74,7 +74,7 @@ class DeletePost
         );
 
         $post->raise(new Deleted($post));
-        $post->forceDelete();
+        $post->delete();
 
         $this->dispatchEventsFor($post, $this->actor);
 

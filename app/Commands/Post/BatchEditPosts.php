@@ -89,7 +89,7 @@ class BatchEditPosts
             }
 
             if (isset($attributes['isDeleted'])) {
-                if ($this->actor->can('delete', $post)) {
+                if ($this->actor->can('hide', $post)) {
                     $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                     if ($attributes['isDeleted']) {
