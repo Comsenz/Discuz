@@ -110,10 +110,11 @@ export default {
 				if (res.errors){
 					this.$toast.fail(res.errors[0].code);
 					// throw new Error(res.error)
-				  }else{
-				this.pageIndex = 1;
-				this.deleteList(true)
-				  }
+        }else{
+          this.$toast.success('删除成功'); 
+          this.pageIndex = 1;
+          this.deleteList(true)
+				}
 			})
 
 

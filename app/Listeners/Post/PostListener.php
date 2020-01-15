@@ -151,9 +151,9 @@ class PostListener
     public function whenPostWasDeleted(Deleted $event)
     {
         if ($event->post->is_first) {
-            Thread::where('id', $event->post->thread_id)->forceDelete();
+            Thread::where('id', $event->post->thread_id)->delete();
 
-            Post::where('thread_id', $event->post->thread_id)->forceDelete();
+            Post::where('thread_id', $event->post->thread_id)->delete();
         }
     }
 

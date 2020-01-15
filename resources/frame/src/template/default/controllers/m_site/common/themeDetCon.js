@@ -272,6 +272,7 @@ export default {
               //删除
               this.deletedStatus = res.readdata._data.isDeleted;
               this.themeList.splice(itemIndex,1);
+              this.$toast.success('删除成功');
             }
           }
         })

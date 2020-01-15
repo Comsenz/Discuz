@@ -2,14 +2,10 @@
  * pc 端首页控制器
  */
 export default {
-	data: function() {
-		return {
-			// title: "纯净版框架22222",
-			// description: "vue + webpack + vue-router + vuex + sass + prerender + axios ",
-			// num: 0,
-			// voteInfo: {}
-			isfixNav: false,
-			current:0,
+  data: function() {
+    return {
+      isfixNav: false,
+      current:0,
       todos: [
         { text: '选项一111' },
         { text: '选项二' },
@@ -30,15 +26,16 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
       pageLimit: 20,
-		}
-	},
-	created(){
-	  this.getInfo();
-	},
-	methods: {
+      allowRegister: '',
+    }
+  },
+  created(){
+    this.getInfo();
+  },
+  methods: {
     getInfo(initStatus = false){
       //请求站点信息，用于判断站点是否是付费站点
-    return this.appFetch({
+      return this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
@@ -54,7 +51,8 @@ export default {
         }
         console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteMode+'请求');
+        console.log(res.readdata._data.allowRegister+'请求');
+        this.allowRegister = res.readdata._data.allowRegister;
         if(res.readdata._data.siteAuthor){
           this.siteUsername = res.readdata._data.siteAuthor.username;
         } else {
@@ -68,16 +66,16 @@ export default {
         //   //判断站点信息是否付费，用户是否登录，用户是否已支付
         //   this.detailIf(this.isPayVal,false);
         // }
-      }
+       }
       });
     },
-		//跳转到登录页
-		loginJump:function(){
-			this.$router.push({ path:'/login-user'})
-		},
-		//跳转到注册页
-		registerJump:function(){
-			this.$router.push({ path:'/sign-up'})
+    //跳转到登录页
+    loginJump:function(){
+      this.$router.push({ path:'/login-user'})
+    },
+    //跳转到注册页
+      registerJump:function(){
+      this.$router.push({ path:'/sign-up'})
     },
     onRefresh(){    //下拉刷新
       this.pageIndex = 1;
@@ -89,15 +87,13 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-  }
+    }
+  },
 
-	},
+  mounted: function() {
 
-	mounted: function() {
-		// this.getVote();
-
-	},
-	beforeRouteLeave (to, from, next) {
+  },
+  beforeRouteLeave (to, from, next) {
     next()
-	}
+  },
 }

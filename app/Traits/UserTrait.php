@@ -66,8 +66,12 @@ trait UserTrait
         }
 
         // 是否绑定微信
-        if ($bind = Arr::get($filter, 'bind')) {
-            in_array($bind, $this->optionalInclude) && $query->has($bind);
+        if ($weChat = Arr::get($filter, 'wechat')) {
+            if ($weChat == 'yes') {
+                $query->has('wechat');
+            } elseif ($weChat == 'no') {
+                $query->doesntHave('wechat');
+            }
         }
     }
 }

@@ -131,6 +131,6 @@ class ThreadListener
      */
     public function whenThreadWasDeleted(Deleted $event)
     {
-        Post::where('thread_id', $event->thread->id)->forceDelete();
+        Post::where('thread_id', $event->thread->id)->delete();
     }
 }

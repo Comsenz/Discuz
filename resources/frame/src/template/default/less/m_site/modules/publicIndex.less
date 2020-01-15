@@ -139,6 +139,9 @@
   &__wrapper {
     display: flex;
     flex-wrap: wrap;
+    div:nth-child(6n){
+      margin: 0 0 @padding-xxs*3 0;
+    }
   }
 
   &__input {
@@ -165,9 +168,9 @@
     box-sizing: border-box;
     // width: @uploader-size;
     // height: @uploader-size;
-    width: 53px;
-    height: 53px;
-    margin: 0 @padding-xs @padding-xs 0;
+    width: 50px;
+    height: 50px;
+    margin: 0 @padding-xxs*3 @padding-xxs*3 0;
     background-color: @uploader-upload-background-color;
     border: 1px dashed @uploader-upload-border-color;
     border-radius: @uploader-upload-border-radius;
@@ -186,14 +189,16 @@
 
   &__preview {
     position: relative;
-    margin: 0 @padding-xs @padding-xs 0;
-
+    margin: 0 @padding-xxs*3 @padding-xxs*3 0;
+   // &:nth-child(6n){
+   //   margin: 0 0 @padding-xxs*3 0;
+   // }
     &-image {
       display: block;
       // width: @uploader-size;
       // height: @uploader-size;
-      width: 53px;
-      height: 53px;
+      width: 50px;
+      height: 50px;
     }
 
     &-delete {
@@ -206,7 +211,6 @@
       border-radius: 100%;
     }
   }
-
   &__file {
     display: flex;
     flex-direction: column;

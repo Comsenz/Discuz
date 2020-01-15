@@ -7,14 +7,12 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 import Page from '../../../../view/site/common/page/page';
 import webDb from 'webDbHelper';
 
-
 export default {
   data:function () {
     return {
       tableData: [],
       getRoleNameById: {},
       multipleSelection:[],
-
       deleteStatus:true,
       pageLimit: 20,
       pageNum: 1,
@@ -31,10 +29,8 @@ export default {
   beforeRouteEnter(to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
-        console.log('不执行');
         vm.getCreated(false)
       }
     })
@@ -42,22 +38,15 @@ export default {
   methods:{
     getCreated(state){
       if(state){
-        console.log(state);
         this.pageNum  = 1;
       } else {
-        console.log(state);
         this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
-      };
+      }
       this.handleGetUserList();
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      if (this.multipleSelection.length >= 1){
-        this.deleteStatus = false
-      } else {
-        this.deleteStatus = true;
-      }
-
+      this.deleteStatus = this.multipleSelection.length < 1
     },
 
     async handleGetUserList(){
@@ -68,9 +57,8 @@ export default {
           userRole,
           userPhone,
           userStatus,
-          radio1,
+          userWeChat,
         } = this.query;
-        console.log(userRole);
         const response = await this.appFetch({
           method: "get",
           url: 'users',
@@ -80,23 +68,19 @@ export default {
             "filter[group_id][]": userRole,
             "filter[mobile]": userPhone,
             "filter[status]":userStatus,
-            "filter[bind]": radio1 === '1' ? 'wechat':'',
+            "filter[wechat]": userWeChat,
             "page[limit]": this.pageLimit,
             "page[number]": this.pageNum,
-
           }
-        })
+        });
         if(response.errors){
           throw new Error(response.errors[0].code);
         }else{
-          console.log(response)
-          // console.log(response.meta.total)
           this.total = response.meta.total;
           this.pageNum = response.meta.pageCount;
           this.total = response.meta ? response.meta.total : 0;
           this.tableData = response.readdata;
         }
-
       } catch(err){
 
       }
@@ -113,16 +97,15 @@ export default {
         let usersIdList = [];
         this.multipleSelection.forEach((v)=>{
           usersIdList.push(v._data.id)
-        })
+        });
         const {
           username,
           userUID,
           userRole,
           userPhone,
           userStatus,
-          radio1,
+          userWeChat,
         } = this.query;
-        console.log(userRole);
         const response = await this.appFetch({
           method: 'get',
           url: 'exportUser',
@@ -133,21 +116,21 @@ export default {
             "filter[group_id][]": userRole,
             "filter[mobile]": userPhone,
             "filter[status]":userStatus,
-            "filter[bind]": radio1 === '1' ? 'wechat':'',
+            "filter[wechat]": userWeChat,
           },
           responseType: 'arraybuffer'
-        })
+        });
 
-        const blob = new Blob( [response], {type: 'application/x-xls'} )
-        const url = window.URL || window.webkitURL || window.moxURL
-        const downloadHref = url.createObjectURL(blob)
+        const blob = new Blob( [response], {type: 'application/x-xls'} );
+        const url = window.URL || window.webkitURL || window.moxURL;
+        const downloadHref = url.createObjectURL(blob);
         let a = document.createElement('a');
-        a.href = downloadHref,
+        a.href = downloadHref;
         a.download = 'export.xlsx';
         a.click();
         a = null;
       } catch(err){
-        console.error(err, 'exporUserInfo')
+        console.error(err, 'exportUserInfo')
       }
     },
 
@@ -159,7 +142,7 @@ export default {
         let userIdList = [];
         this.multipleSelection.forEach((v)=>{
           userIdList.push(v._data.id)
-        })
+        });
 
         await this.appFetch({
           method: 'delete',
@@ -171,7 +154,7 @@ export default {
               }
             }
           }
-        })
+        });
 
         this.handleGetUserList();
       } catch(err){
@@ -186,7 +169,6 @@ export default {
       try{
         let dataList = [];
         this.multipleSelection.forEach((v)=>{
-
           dataList.push({
             "attributes": {
               "id": v._data.id,
@@ -194,7 +176,7 @@ export default {
               "status": 1
             }
           })
-        })
+        });
 
         await this.appFetch({
           method: 'PATCH',
@@ -202,7 +184,7 @@ export default {
           data: {
             "data": dataList
           }
-        })
+        });
 
         this.handleGetUserList();
       } catch(err){
@@ -213,7 +195,7 @@ export default {
     async handleDisable(scope){
 
       try{
-        const data = scope.row._data
+        const data = scope.row._data;
         await this.appFetch({
           method: "PATCH",
           url: 'users',
@@ -225,7 +207,7 @@ export default {
               }
             }
           }
-        })
+        });
 
         this.tableData[scope.$index]._data.status = 1;
       } catch(err){
@@ -233,7 +215,7 @@ export default {
       }
     },
     handleCurrentChange(val){
-      this.pageNum = val
+      this.pageNum = val;
       this.handleGetUserList();
     }
   },

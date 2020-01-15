@@ -99,7 +99,9 @@ export default {
       currentUserName:'',
       currentUserAvatarUrl: '',
       likedData: [],
-      postsImages: []
+      postsImages: [],
+      allowRegister: '',
+      loginWord:'登录 / 注册',
     }
   },
   created() {
@@ -143,8 +145,6 @@ export default {
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
-      console.log(data);
-      console.log('55544');
       let datas = [];
       data.forEach((item)=>{
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>');
@@ -182,6 +182,10 @@ export default {
            this.siteInfo = res.readdata;
            //把站点是否收费的值存储起来，以便于传到父页面
            this.isPayVal = res.readdata._data.siteMode;
+           this.allowRegister = res.readdata._data.allowRegister;
+           if(!this.allowRegister){
+             this.loginWord = '登录';
+           }
            if (this.isPayVal != null && this.isPayVal != '') {
              this.isPayVal = res.readdata._data.siteMode;
              //   //判断站点信息是否付费，用户是否登录，用户是否已支付
@@ -283,9 +287,9 @@ export default {
               this.collectFlag = '收藏';
             }
             if (this.essenceStatus) {
-              this.essenceFlag = '取消收藏';
+              this.essenceFlag = '取消加精';
             } else {
-              this.essenceFlag = '收藏';
+              this.essenceFlag = '加精';
             }
             if (this.stickyStatus) {
               this.stickyFlag = '取消置顶';
@@ -354,8 +358,8 @@ export default {
           // }
         })
       } else if(typeclick == 'replyImg') {
-        console.log(this.postsImages[replyItem]);
-        console.log('-------------------');
+        // console.log(this.postsImages[replyItem]);
+        // console.log('-------------------');
         //主题回复图片预览
         ImagePreview({
           images:this.postsImages[replyItem],
@@ -537,6 +541,7 @@ export default {
             //删除
             this.deletedStatus = res.readdata._data.isDeleted;
             if (this.deletedStatus) {
+              this.$toast.success('删除成功，跳转到首页');
               this.$router.push({
                 path: '/circle',
                 name: 'circle'
@@ -546,8 +551,6 @@ export default {
 
         }
       })
-
-
     },
 
     //删除请求接口
@@ -899,7 +902,7 @@ export default {
         method:'get',
         splice:'/' + this.orderSn,
         data:{
-        }
+        },
       }).then(res=>{
         console.log(res);
         // const orderStatus = res.readdata._data.status;
@@ -946,15 +949,14 @@ export default {
 
   },
   mounted: function() {
-		// this.getVote();
-    document.addEventListener('click',this.listenEvt, false);
-	},
-  destroyed: function() {
-  	// this.getVote();
+    // this.getVote();
     document.addEventListener('click',this.listenEvt, false);
   },
+  destroyed: function() {
+    document.removeEventListener('click',this.listenEvt, false);
+  },
   beforeRouteLeave(to, from, next) {
-    document.addEventListener('click',this.listenEvt, false);
+    document.removeEventListener('click',this.listenEvt, false);
     next()
   }
 

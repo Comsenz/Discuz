@@ -70,7 +70,7 @@ class BatchDeleteThreads
                 continue;
             }
 
-            if ($this->actor->can('forceDelete', $thread)) {
+            if ($this->actor->can('delete', $thread)) {
                 try {
                     $this->events->dispatch(
                         new Deleting($thread, $this->actor, $this->data)
@@ -81,7 +81,7 @@ class BatchDeleteThreads
                 }
 
                 $thread->raise(new Deleted($thread));
-                $thread->forceDelete();
+                $thread->delete();
 
                 $result['data'][] = $thread;
 

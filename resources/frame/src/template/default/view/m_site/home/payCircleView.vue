@@ -42,7 +42,7 @@
       <div class="gap"></div>
       <div class="loginOpera">
       	<a href="javascript:;" @click="loginJump" class="mustLogin">立即登录</a>
-      	<a href="javascript:;" @click="registerJump" class="regiJoin">注册，并加入</a>
+      	<a href="javascript:;" @click="registerJump" class="regiJoin" v-if="allowRegister">注册，并加入</a>
       </div>
     </div>
   </van-pull-refresh>

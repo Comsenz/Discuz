@@ -70,7 +70,7 @@ class BatchDeletePosts
                 continue;
             }
 
-            if ($this->actor->can('forceDelete', $post)) {
+            if ($this->actor->can('delete', $post)) {
                 try {
                     $this->events->dispatch(
                         new Deleting($post, $this->actor, $this->data)
@@ -81,7 +81,7 @@ class BatchDeletePosts
                 }
 
                 $post->raise(new Deleted($post));
-                $post->forceDelete();
+                $post->delete();
 
                 $result['data'][] = $post;
 

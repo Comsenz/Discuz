@@ -14,7 +14,7 @@ export default {
       userRole: [],
       checked:false,
       userPhone: '',
-      radio1:'0',
+      userWeChat: 'no',
       userStatus:[],
       disabled:true,//禁用表单上的游客
       optionsStatus: [
@@ -59,17 +59,17 @@ export default {
         userRole: this.userRole,
         userStatus:this.userStatus,
         userPhone: this.userPhone.trim(),
-        radio1: this.radio1,
+        userWeChat: this.userWeChat,
       };
       if(!this.checked){
         this.userPhone = '';
-        this.radio1 = '0';
+        this.userWeChat = 'no';
 
         if(query.username + query.userUID + query.userRole +query.userStatus === ''){
           query = {};
         } else {
           delete query.userPhone;
-          delete query.radio1;
+          delete query.userWeChat;
         }
       }
       this.$router.push({path:'/admin/user-search-list', query})
@@ -80,18 +80,17 @@ export default {
         const response = await this.appFetch({
           method: 'get',
           url: 'groups'
-        })
+        });
         if (response.errors){
           this.$message.error(response.errors[0].code);
         }else{
           const data = response.data;
-        console.log(data,'8888')
-        this.options = data.map((v)=>{
-          return {
-              value: v.id,
-              label: v.attributes.name
-          }
-        })
+          this.options = data.map((v)=>{
+            return {
+                value: v.id,
+                label: v.attributes.name
+            }
+          })
         }
 
       } catch(err){

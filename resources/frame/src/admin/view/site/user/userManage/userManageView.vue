@@ -48,8 +48,8 @@
           </Card>
 
           <Card header="是否绑定微信：">
-            <el-radio v-model="radio1" label="1">是</el-radio>
-            <el-radio v-model="radio1" label="0">否</el-radio>
+            <el-radio v-model="userWeChat" label="yes">是</el-radio>
+            <el-radio v-model="userWeChat" label="no">否</el-radio>
           </Card>
 
         </div>

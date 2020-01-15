@@ -9,7 +9,6 @@ export default {
 			userParams: {
 				'filter[username]': '',
 				'filter[group_id]': [],
-				'filter[bind]': 1,
 				'page[limit]': 5,
 				'page[number]': 1,
 				'sort': 'createdAt',
@@ -56,7 +55,7 @@ export default {
 				this.handleSearchUser(true);
 
 				// 主题搜索
-				this.themeParamd['filter[q]'] = '*' + this.searchVal + '*';
+				this.themeParamd['filter[q]'] = this.searchVal;
 				this.themeParamd['page[number]'] = 1;
 
 				this.handleSearchTheme(true);
