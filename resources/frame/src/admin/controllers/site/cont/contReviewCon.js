@@ -160,6 +160,7 @@ export default {
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       this.isIndeterminate = false;
       this.checkAll = false;
+      this.currentPaga = val;
       this.getThemeList(val);
     },
 

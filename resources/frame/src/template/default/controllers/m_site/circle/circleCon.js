@@ -4,27 +4,27 @@
  */
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
-	data: function() {
-		return {
-			showScreen: false,
-			loginBtnFix: false,
+  data: function() {
+    return {
+      showScreen: false,
+      loginBtnFix: false,
       loginHide:false,
-			// footShow: true,
-			fourHeader: true,
+      // footShow: true,
+      fourHeader: true,
       isWx:'1',
       // replyTag: false,
-			themeChoList: [
-				{
-					typeWo: '全部主题',
-					type:'1',
+      themeChoList: [
+        {
+          typeWo: '全部主题',
+          type:'1',
           themeType:'allThemes'
-				},
-				{
-					typeWo: '精华主题',
-					type:'2',
+        },
+        {
+          typeWo: '精华主题',
+          type:'2',
           themeType:'isEssence'
-				}
-			],
+        }
+      ],
       // themeListCon:false,
       themeListCon:[],
       themeNavListCon:[],
@@ -54,8 +54,8 @@ export default {
       allowRegister:'',
       loginWord:'登录 / 注册'
 
-		}
-	},
+    }
+  },
   created:function(){
     // this.firstCategoriesId();
     // if(this.firstCategoriesId){
@@ -66,7 +66,7 @@ export default {
 
   },
 
-	methods: {
+  methods: {
     receive: function (val_1) {
       console.log(val_1);
       this.firstCategoriesId = val_1;
@@ -147,7 +147,7 @@ export default {
         if(token){
           // console.log('公开，已登录');
           //当用户已登录时
-          this.loadThemeList();
+          // this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
           this.canEdit = true;
@@ -279,143 +279,140 @@ export default {
       // this.firstpostImageListCon = firstpostImage;
       // console.log(this.firstpostImageListCon+'5555');
     },
-		// 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
+    // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
-		footFix() {
-	    	// console.log(this.$route.meta.oneHeader);
-	    	// if(this.$route.meta.oneHeader){
-            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-		        var offsetTop = document.querySelector('#testNavBar').offsetTop;
-              if(this.loginBtnFix == true){
-                this.loginHide = true;
-                // console.log(scrollTop+'1111');
-                // console.log(offsetTop+'2222');
-                if(scrollTop > offsetTop){
-                  // console.log('大于');
-                  this.loginHide = true;
-                  // console.log(this.loginHide);
-                } else {
-                  // console.log('小于');
-                  this.loginHide = false;
-                }
-		        }
-	    	// }
-	    },
+    footFix() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+          if(this.loginBtnFix == true){
+            this.loginHide = true;
+            // console.log(scrollTop+'1111');
+            // console.log(offsetTop+'2222');
+            if(scrollTop > offsetTop){
+              // console.log('大于');
+              this.loginHide = true;
+              // console.log(this.loginHide);
+            } else {
+              // console.log('小于');
+              this.loginHide = false;
+            }
+        }
+      },
       //筛选
-	    choTheme(themeType) {
-        console.log(themeType);
-        console.log('筛选');
-        this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
-        this.filterInfo.filterCondition = themeType;
-        this.pageIndex = 1;
-        this.themeListCon = [];
-        this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
-	    },
+      choTheme(themeType) {
+      console.log(themeType);
+      console.log('筛选');
+      this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
+      this.filterInfo.filterCondition = themeType;
+      this.pageIndex = 1;
+      this.themeListCon = [];
+      this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
+      },
 
       //点击分类
       categoriesChoice(cateId) {
-        this.pageIndex = 1;
-        this.themeListCon = [];
-        this.loadThemeList(this.filterInfo.filterCondition,cateId);
+      this.pageIndex = 1;
+      this.themeListCon = [];
+      this.loadThemeList(this.filterInfo.filterCondition,cateId);
       },
-	    //跳转到登录页
-	    loginJump:function(isWx){
-        let wxCode =this.load();
+      //跳转到登录页
+      loginJump:function(isWx){
+      let wxCode =this.load();
 
-        const that = this;
-        that.$router.push({
-          path:'wechat',
+      const that = this;
+      that.$router.push({
+        path:'wechat',
+      });
+      if(wxCode ==1){
+        this.$router.push({ path:'login-user'});
+      } else if(wxCode ==2){
+        this.appFetch({
+          url:"weixin",
+          method:"get",
+          data:{
+            // attributes:this.attributes,
+          }
+        }).then(res=>{
+          if (res.errors){
+                this.$toast.fail(res.errors[0].code);
+                throw new Error(res.error)
+              } else {
+            // alert(this.showScreen);
+            // console.log(res.data.attributes.location);
+            // window.location.href = res.data.attributes.location;
+            this.$router.push({ path:'wechat'});
+          }
+
         });
-        if(wxCode ==1){
-          this.$router.push({ path:'login-user'});
-        } else if(wxCode ==2){
-          this.appFetch({
-            url:"weixin",
-            method:"get",
-            data:{
-              // attributes:this.attributes,
-            }
-          }).then(res=>{
-            if (res.errors){
-              this.$toast.fail(res.errors[0].code);
-              throw new Error(res.error)
-            } else {
-              // alert(this.showScreen);
-              // console.log(res.data.attributes.location);
-              // window.location.href = res.data.attributes.location;
-              this.$router.push({ path:'wechat'});
-            }
 
-          });
+      }
+      },
+      postTopic:function(){
+      if(this.canCreateThread){
+        // alert('跳转到发布主题页');
+        this.$router.push({ path:'/post-topic'});
+      } else {
+        this.$toast.fail('没有权限，请联系站点管理员');
+      }
 
-        }
-	    },
-	    postTopic:function(){
-        if(this.canCreateThread){
-          // alert('跳转到发布主题页');
-          this.$router.push({ path:'/post-topic'});
-        } else {
-          this.$toast.fail('没有权限，请联系站点管理员');
-        }
-
-	    },
-		/**
-		 * 给导航添加点击状态
-		 */
+      },
+      /**
+      * 给导航添加点击状态
+      */
       addClass:function(index,event){
-        this.current=index;
-  　　　　//获取点击对象
-        var el = event.currentTarget;
-         // alert("当前对象的内容："+el.innerHTML);
+      this.current=index;
+      　　　　//获取点击对象
+      var el = event.currentTarget;
+       // alert("当前对象的内容："+el.innerHTML);
       },
-	    //筛选
-	    bindScreen:function(){
-	        //是否显示筛选内容
-	        this.showScreen = !this.showScreen;
-	    },
+      //筛选
+      bindScreen:function(){
+        //是否显示筛选内容
+        this.showScreen = !this.showScreen;
+      },
       listenEvt(e){
-        if(!this.$refs.screenBox.contains(e.target)){
-          this.showScreen = false;
-        }
+      if(!this.$refs.screenBox.contains(e.target)){
+        this.showScreen = false;
+      }
       },
-	    hideScreen(){
-	        //是否显示筛选内容
-	        this.showScreen = false;
+      hideScreen(){
+        //是否显示筛选内容
+        this.showScreen = false;
       },
       onLoad(){    //上拉加载
-        // console.log('onLoadonLoadonLoad')
-        this.loading = true;
-        this.pageIndex++;
-        this.loadThemeList(this.filterCondition,this.categoryId);
+      // console.log('onLoadonLoadonLoad')
+      this.loading = true;
+      this.pageIndex++;
+      this.loadThemeList(this.filterCondition,this.categoryId);
       },
       onRefresh(){    //下拉刷新
-          this.pageIndex = 1;
-          this.themeListCon = [];
-          this.nullTip = false;
-          this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
-            this.$toast('刷新成功');
-            this.finished = false;
-            this.isLoading = false;
-          }).catch((err)=>{
-            this.$toast('刷新失败');
-            this.isLoading = false;
-          })
+        this.pageIndex = 1;
+        this.themeListCon = [];
+        this.nullTip = false;
+        this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
+          this.$toast('刷新成功');
+          this.finished = false;
+          this.isLoading = false;
+        }).catch((err)=>{
+          this.$toast('刷新失败');
+          this.isLoading = false;
+        })
       }
-	},
-	mounted: function() {
-		// this.getVote();
-		window.addEventListener('scroll', this.footFix, true);
-    document.addEventListener('click',this.listenEvt, false);
-	},
-  destroyed: function() {
-  	// this.getVote();
-  	window.addEventListener('scroll', this.footFix, true);
+      },
+  mounted: function() {
+    // this.getVote();
+    window.addEventListener('scroll', this.footFix, true);
     document.addEventListener('click',this.listenEvt, false);
   },
-	beforeRouteLeave (to, from, next) {
-	   window.removeEventListener('scroll', this.footFix, true);
-     document.addEventListener('click',this.listenEvt, false);
-	   next()
-	}
+  destroyed: function() {
+    // this.getVote();
+    window.removeEventListener('scroll', this.footFix, true);
+    document.removeEventListener('click',this.listenEvt, false);
+  },
+  beforeRouteLeave (to, from, next) {
+     window.removeEventListener('scroll', this.footFix, true);
+     document.removeEventListener('click',this.listenEvt, false);
+     next()
+  },
 }

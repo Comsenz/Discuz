@@ -277,6 +277,7 @@ export default {
     handleCurrentChange(val) {
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       this.isIndeterminate = false;
+      this.currentPaga = val;
       this.checkAll = false;
       this.getThemeList(val);
     },

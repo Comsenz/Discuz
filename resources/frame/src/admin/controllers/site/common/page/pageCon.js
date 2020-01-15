@@ -40,7 +40,7 @@ export default {
   },
 
   beforeUpdate() {
-    this.currentPags = Number(webDb.getLItem('currentPag'))||1;
+    // this.currentPags = Number(webDb.getLItem('currentPag'))||1;
     webDb.setLItem('currentPag',this.currentPags);
   },
 
@@ -62,11 +62,14 @@ export default {
     this.currentPags = Number(webDb.getLItem('currentPag'))||1;
   },
 
-  /*watch: {
-    $route (to, from,next) {
-      console.log(to);
-      console.log('我去去就来');
-      next();
+  watch: {
+    currentPage:{
+      immediate: true,
+      handler (val) {
+        this.currentPags = val;
+        console.log(this.currentPags);
+      }
+
     }
-  }*/
+  }
 }

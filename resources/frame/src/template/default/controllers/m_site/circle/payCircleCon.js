@@ -26,6 +26,7 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
       pageLimit: 20,
+      allowRegister: '',
     }
   },
   created(){
@@ -50,7 +51,8 @@ export default {
         }
         console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteMode+'请求');
+        console.log(res.readdata._data.allowRegister+'请求');
+        this.allowRegister = res.readdata._data.setreg.register_close;
         if(res.readdata._data.siteAuthor){
           this.siteUsername = res.readdata._data.siteAuthor.username;
         } else {

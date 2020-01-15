@@ -66,11 +66,11 @@
               </template>
             </el-table-column>
 
-        <el-table-column
+            <el-table-column
               prop="address"
               label="过滤词替换">
               <template slot-scope="scope">
-                <el-input v-model="scope.row._data.inputVal" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>
+                <el-input v-model="scope.row._data.replacement" placeholder="请输入替换内容" :disabled="scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'" clearable v-show="replace"></el-input>
               </template>
             </el-table-column>
 
@@ -84,7 +84,7 @@
               新增
             </p>
           </div>-->
-      <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />
+        <Page :total="total" :pageSize="pageLimit" :current-page.sync="pageNum" @current-change="handleCurrentChange" />
         </div>
 
         <Card class="footer-btn">

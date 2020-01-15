@@ -71,7 +71,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'canUploadImages' => $this->actor->can('attachment.create.1'),
             'canCreateThread' => $this->actor->can('createThread'),
             'canViewThreads' => $this->actor->can('viewThreads'),
-            'canHideThreads' => $this->actor->can('thread.hide'),
+            'canBatchEditThreads' => $this->actor->can('thread.batchEdit'),
             'canViewUserList' => $this->actor->can('viewUserList'),
             'canEditUserGroup' => $this->actor->can('user.edit.group'),
             'canCreateInvite' => $this->actor->can('createInvite'),

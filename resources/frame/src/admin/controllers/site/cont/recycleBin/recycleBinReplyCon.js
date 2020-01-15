@@ -117,6 +117,7 @@ export default {
     handleCurrentChange(val){
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       webDb.setLItem('currentPag',val);
+      this.currentPaga = val;
       this.getPostsList(val);
     },
 

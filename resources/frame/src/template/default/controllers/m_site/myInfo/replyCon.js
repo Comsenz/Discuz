@@ -19,7 +19,7 @@ export default {
       pageIndex: 1,
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-     
+
     }
   },
   components:{
@@ -77,8 +77,9 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
-        this.pageIndex = 1;
-        this.myReplyList(true)
+          this.$toast.success('删除成功');
+          this.pageIndex = 1;
+          this.myReplyList(true)
         }
       })
     },
