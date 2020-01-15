@@ -20,7 +20,8 @@ export default {
       // disabled:true,
       createCategoriesStatus:false,   //添加分类状态
       exportUrl: appConfig.devApiUrl+'/api/stop-words/export?token=Bearer ' + token,
-      options: [{
+      options: [
+        {
           value: '{IGNORE}',
           label: '不处理'
         }, {
@@ -36,18 +37,19 @@ export default {
         }
       ],
 
-      optionsUser: [{
+      optionsUser: [
+        {
         value: '{IGNORE}',
         label: '不处理'
-      },{
-        value: '{BANNED}',
-        label: '禁用'
-      },
+        },{
+          value: '{BANNED}',
+          label: '禁用'
+        },
       // {
       //   value: '{MOD}',
       //   label: '审核'
       // }
-    ],
+      ],
       serachVal:'',
       checked:false,
       searchData :[],//搜索后的数据
@@ -125,10 +127,8 @@ export default {
       // this.contentParams = {
       //   'filter[q]': this.searchVal,
       // }
-      this.pageNum = 1
-      console.log(this.serachVal,'5555555555555555')
+      this.pageNum = 1;
       this.handleSearchUser(true);
-
     },
     async handleSearchUser(initStatus = false){
       try{
@@ -149,8 +149,8 @@ export default {
           }
 
           this.tableData = this.tableData.concat(response.readdata).map((v) => {
-            if (v._data.inputVal === undefined) {
-              v._data.inputVal = '';
+            if (v._data.replacement === undefined) {
+              v._data.replacement = '';
             }
             console.log(response)
             this.total = response.meta.total;
@@ -176,7 +176,7 @@ export default {
       console.log(scope,'scope');
       if(scope){
         if(scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'){
-          this.tableData[scope.$index]._data.inputVal = '';
+          this.tableData[scope.$index]._data.replacement = '';
         }
       }
     },
@@ -198,18 +198,18 @@ export default {
 
         for(let i = 0,len = this.tableData.length; i < len; i++){
           const _data = this.tableData[i]._data;
-          const { ugc, username, find, inputVal} = _data;
-          if(inputVal === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
+          const { ugc, username, find, replacement} = _data;
+          if(replacement === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
             continue;
           }
           let item = '';
 
           if(ugc === '{REPLACE}' && username === '{REPLACE}'){
-            item = `${find}=${inputVal}`
+            item = `${find}=${replacement}`
           } else if(ugc === '{REPLACE}' && username !== '{REPLACE}'){
-            item = `${find}=${username}|${inputVal}`
+            item = `${find}=${replacement}|${username}`
           } else if(username === '{REPLACE}' && ugc !== '{REPLACE}'){
-            item = `${find}=${inputVal}|${ugc}`
+            item = `${find}=${replacement}|${ugc}`
           } else if(username !== '{REPLACE}' && ugc !== '{REPLACE}'){
             item = `${find}=${ugc}|${username}`
           }
@@ -252,7 +252,7 @@ export default {
             find:"",
             username:"",
             ugc:"",
-            inputVal: "",
+            replacement: "",
             addInputFlag:true,
           }
         })
