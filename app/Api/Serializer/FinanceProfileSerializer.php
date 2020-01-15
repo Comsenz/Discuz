@@ -10,7 +10,7 @@ namespace App\Api\Serializer;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Support\Arr;
 
-class FinanceStatisticSerializer extends AbstractSerializer
+class FinanceProfileSerializer extends AbstractSerializer
 {
     protected $type = 'finance_statistic';
 
