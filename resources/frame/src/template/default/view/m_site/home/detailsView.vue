@@ -214,7 +214,7 @@
        > -->
        <!-- <template v-slot:index>第{{ index }}页</template> -->
      <!-- </van-image-preview> -->
-      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">登录 / 注册</van-button>
+      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
     </div>

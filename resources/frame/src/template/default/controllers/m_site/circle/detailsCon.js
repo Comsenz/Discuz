@@ -99,7 +99,9 @@ export default {
       currentUserName:'',
       currentUserAvatarUrl: '',
       likedData: [],
-      postsImages: []
+      postsImages: [],
+      allowRegister: '',
+      loginWord:'登录 / 注册',
     }
   },
   created() {
@@ -180,6 +182,10 @@ export default {
            this.siteInfo = res.readdata;
            //把站点是否收费的值存储起来，以便于传到父页面
            this.isPayVal = res.readdata._data.siteMode;
+           this.allowRegister = res.readdata._data.allowRegister;
+           if(!this.allowRegister){
+             this.loginWord = '登录';
+           }
            if (this.isPayVal != null && this.isPayVal != '') {
              this.isPayVal = res.readdata._data.siteMode;
              //   //判断站点信息是否付费，用户是否登录，用户是否已支付
@@ -352,8 +358,8 @@ export default {
           // }
         })
       } else if(typeclick == 'replyImg') {
-        console.log(this.postsImages[replyItem]);
-        console.log('-------------------');
+        // console.log(this.postsImages[replyItem]);
+        // console.log('-------------------');
         //主题回复图片预览
         ImagePreview({
           images:this.postsImages[replyItem],
