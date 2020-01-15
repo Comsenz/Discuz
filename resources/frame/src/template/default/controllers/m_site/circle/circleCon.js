@@ -147,7 +147,7 @@ export default {
         if(token){
           // console.log('公开，已登录');
           //当用户已登录时
-          this.loadThemeList();
+          // this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
           this.canEdit = true;
