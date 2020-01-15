@@ -9,7 +9,6 @@ export default {
 			userParams: {
 				'filter[username]': '',
 				'filter[group_id]': [],
-				'filter[bind]': 1,
 				'page[limit]': 5,
 				'page[number]': 1,
 				'sort': 'createdAt',
