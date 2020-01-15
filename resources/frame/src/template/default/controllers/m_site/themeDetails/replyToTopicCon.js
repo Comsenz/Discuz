@@ -35,7 +35,7 @@ export default {
       limitMaxLength:true,
       fileListOne:[],
       canUploadImages:'',
-      backGo:-3
+      backGo:-3,
     }
   },
   computed: {

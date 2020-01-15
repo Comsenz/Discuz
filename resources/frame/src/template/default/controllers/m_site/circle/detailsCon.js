@@ -281,9 +281,9 @@ export default {
               this.collectFlag = '收藏';
             }
             if (this.essenceStatus) {
-              this.essenceFlag = '取消收藏';
+              this.essenceFlag = '取消加精';
             } else {
-              this.essenceFlag = '收藏';
+              this.essenceFlag = '加精';
             }
             if (this.stickyStatus) {
               this.stickyFlag = '取消置顶';
