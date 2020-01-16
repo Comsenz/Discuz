@@ -1,5 +1,4 @@
-
-
+@import "../common/var";
 
 /**
   公共样式--strat
@@ -14,8 +13,8 @@
 
   width:100%;
   height:11px;
-  background:rgba(237,237,237,1);
-  border:1px solid rgba(229,229,229,1);
+  background:@gap;
+  border:1px solid @corE5;
 }
 
 
@@ -75,9 +74,8 @@
   .my-info-module-title{
     text-align: center;
     font-size: 19px;
-    // font-family:PingFangSC-Medium,PingFangSC;
     font-weight:500;
-    color:rgba(0,0,0,1);
+    color:@font000;
     line-height: 26px;
   }
 }
@@ -108,9 +106,8 @@
     background-color: #F7F7F7;
     padding: 8px;
     font-size:13px;
-    // font-family:PingFangSC-Regular,PingFang SC;
     font-weight:400;
-    color:rgba(136,136,136,1);
+    color:@cor888;
     line-height:20px;
   }
 }
@@ -170,6 +167,7 @@ h2,h3,h4{
  */
 .change-pwd-main{
   padding-left:15px;
+  padding-top: 44px;
 
   .change-pwd-operating{
     margin-top: 50px;
@@ -210,9 +208,8 @@ h2,h3,h4{
         .user-name{
           margin: 6px 0;
           font-size:15px;
-          // font-family:PingFangSC-Medium,PingFang SC;
           font-weight:500;
-          color:rgba(51,102,153,1);
+          color:@fontColor;
           line-height:20px;
         }
       }
@@ -241,7 +238,7 @@ h2,h3,h4{
       font-size:14px;
       // font-family:PingFangSC-Regular,PingFang SC;
       font-weight:400;
-      color:rgba(0,0,0,1);
+      color:@font000;
       line-height:20px;
     }
   }
@@ -266,28 +263,24 @@ h2,h3,h4{
 
       .custom-title{
         font-size:15px;
-        // font-family:PingFangSC-Regular,PingFang SC;
         font-weight:400;
-        color:rgba(0,0,0,1);
+        color:@font000;
         line-height:21px;
       }
 
       .custom-title-icon{
-        // width: 16px;
         padding: 0 5px;
         height: 16px;
         background-color: #FA5151;
-        color: white;
+        color: @corFff;
         border-radius: 50px;
         text-align: center;
         font-style:normal;
         line-height: 16px;
         margin-left: 8px;
-
         font-size:11px;
-        // font-family:PingFangSC-Regular,PingFang SC;
         font-weight:400;
-        color:rgba(255,255,255,1);
+        color:@corFff;
 
       }
     }
@@ -306,7 +299,6 @@ h2,h3,h4{
 /**
   回复我的
  */
-
 .reply-my-box{
 
   .reply-my-main{
@@ -316,12 +308,12 @@ h2,h3,h4{
       .reference{
         padding: 10px 15px 0 15px;
         .reference-cont{
-          background-color: #F7F7F7;
+          background-color: @corF7;
           padding: 8px;
           span {
             display: block;
             font-size:13px;
-            color:rgba(136,136,136,1);
+            color:@cor888;
             line-height:  20px;
           }
         }
@@ -337,17 +329,107 @@ h2,h3,h4{
 /**
   点赞我的
  */
-.like-box{
+.quote-reply {
+  line-height: 20px;
+  span {
+    display: block;
+    line-height: 20px;
+    color: @cor444;
+    font-size: 24px;
+  }
+}
+.postContent {
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  a {
+    display: block;
+    line-height: 20px;
+    color: @font000;
+  }
 
-  .like-main{
+}
 
-    .like-cont{
 
+/**
+  修改手机号
+ */
+.modify-phone-box{
+  width: 100%;
+  height: calc(100% - 44px);
+
+  .modify-phone-main{
+    width: 100%;
+    height: calc(100% - 40px);
+    padding: 44px 0 0 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .modify-phone-title-box{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+
+      .modify-phone-title-p{
+        text-align: center;
+        font-size:19px;
+        font-family:PingFangSC-Medium,PingFangSC;
+        font-weight:500;
+        color:@font000;
+        line-height: 26px;
+      }
+    }
+
+    .modify-phone-operating{
+      width: 100%;
+      height: auto;
+      margin-top: 50px;
+      text-align: center;
     }
   }
 }
 
-/**
-  站点成员
- */
 
+//我的资料
+.modify-data-box{
+  width: 100%;
+  height: 100%;
+  color: @font000;
+  background-color: @corEd;
+  overflow: hidden;
+
+  .modify-data-main{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding:44px 0 0 0;
+    border-bottom: 1PX solid @corE5;
+    background-color: @corFff;
+
+    .modify-data-avatar{
+      height: auto;
+      padding: 8px 0 8px 15px;
+      box-sizing: border-box;
+      .modify-data-avatar-img {
+        img {
+          width: 58px;
+          height: 58px;
+          border-radius: 4px;
+          position: relative;
+          vertical-align: top;
+        }
+      }
+      .iconfont {
+        display: inline-block;
+        margin-right: 15px;
+        position: relative;
+        top: 22px;
+      }
+    }
+  }
+
+}
