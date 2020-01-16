@@ -7,11 +7,16 @@
 
 namespace App\Console;
 
+use App\Console\Commands\FinanceCreate;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends ConsoleKernel
 {
+    public $commands = [
+        FinanceCreate::class,
+    ];
+
     /**
      * Define the application's command schedule.
      *
@@ -20,12 +25,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            file_put_contents('/tmp/aaa.txt', "asdf\r\n", FILE_APPEND);
-        })->everyMinute();
-
-        $schedule->call(function () {
-            file_put_contents('/tmp/aaa.txt', "ddddd\r\n", FILE_APPEND);
-        })->everyFiveMinutes();
+        $schedule->command('finance:create')->daily();
     }
 }
