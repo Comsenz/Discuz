@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item class="login-main-form__item">
-              <el-button type="primary" @click="adminLogin('form')">登录</el-button>
+              <el-button type="primary" :loading="loginLoading" @click="adminLogin('form')">登录</el-button>
             </el-form-item>
 
           </el-form>

@@ -22,7 +22,8 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
-      tokenId:''
+      tokenId:'',
+      loginLoading:false
     }
   },
   methods:{
@@ -31,6 +32,7 @@ export default {
     }),
 
     adminLogin(formName){
+      this.loginLoading = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.postLogin().then(res=>{
@@ -54,13 +56,15 @@ export default {
                   let groupId = res.readdata.groups[0]._data.id;
                   browserDb.setLItem('username', res.data.attributes.username);
                 if (groupId === "1") {
+                    this.$router.push({path: '/admin'});
                     this.$message({
                       message: '登录成功！',
                       type: 'success'
                     });
-                    this.$router.push({path: '/admin'})
+                    this.loginLoading = false;
                   } else {
                     this.$message.error('权限不足！');
+                    this.loginLoading = false;
                   }
                 }
               })
@@ -69,10 +73,12 @@ export default {
             }
           }).catch(()=>{
             this.$message.error('登录失败');
+            this.loginLoading = false;
           })
 
         } else {
           console.log('error submit!!');
+          this.loginLoading = false;
           return false;
         }
       });
