@@ -8,7 +8,8 @@ export default {
 			isfixNav: false,
       siteInfo: false,
       username:'',
-      limitList:false
+      limitList:false,
+      allowRegister: '',
 		}
 	},
 	//用于数据初始化
@@ -55,7 +56,8 @@ export default {
         } else{
           console.log(res);
           this.siteInfo = res.readdata;
-          console.log(res.readdata._data.siteIntroduction);
+          // console.log(res.readdata._data.siteIntroduction);
+          this.allowRegister = res.readdata._data.setreg.register_close;
         }
 
       });

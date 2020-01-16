@@ -11,76 +11,75 @@ export default {
     isPayVal: String,
     required: true
   },
-	data: function() {
+  data: function() {
     return {
-        avatarUrl:'',
-        username:'',
-        userId:'',
-        mobile:'',
-        // userId:'',
-        userInfo:{},
-        isWeixin:false,
-		    sidebarList1: [
-	        {
-            text:'我的资料',
-	          name: '我的资料',
-	          path: '/modify-data', // 跳转路径
-	          enentType: ''
-	        },
-	        {
-            text:'我的钱包',
-	          name: 'my-wallet',
-	          path: '/my-wallet', // 跳转路径
-	          enentType: ''
-	        },
-	        {
-            text:'我的收藏',
-	          name: 'my-collection',
-	          path: '/my-collection', // 跳转路径
-	          enentType: ''
-	        },
-	        {
-            text:'我的通知',
-	          name: 'my-notice',
-	          path: '/my-notice', // 跳转路径
-	          enentType: ''
-	        }
-	      ],
-	      sidebarList2: [
-	        {
-            text:'站点信息',
-	          name: 'circle-info',
-	          path: '/circle-info', // 跳转路径
-	          enentType: ''
-	        },
-	        {
-            text:'站点管理',
-	          name: 'management-circles',
-	          path: '/management-circles', // 跳转路径
-	          enentType: ''
-	        },
-	        {
-            text:'退出登录',
-	          name: 'circle',
-	          path: '/circle', // 跳转路径
-	          enentType: 1 // 事件类型
-	        }
-	      ],
-	      sidebarList3: [
-	        {
-            text:'邀请朋友',
-	          name: '',
-	          path: '', // 跳转路径
-	          enentType: '2'
-	        }
+      avatarUrl:'',
+      username:'',
+      userId:'',
+      mobile:'',
+      // userId:'',
+      userInfo:{},
+      isWeixin:false,
+      sidebarList1: [
+        {
+          text:'我的资料',
+          name: '我的资料',
+          path: '/modify-data', // 跳转路径
+          enentType: ''
+        },
+        {
+          text:'我的钱包',
+          name: 'my-wallet',
+          path: '/my-wallet', // 跳转路径
+          enentType: ''
+        },
+        {
+          text:'我的收藏',
+          name: 'my-collection',
+          path: '/my-collection', // 跳转路径
+          enentType: ''
+        },
+        {
+          text:'我的通知',
+          name: 'my-notice',
+          path: '/my-notice', // 跳转路径
+          enentType: ''
+        }
+      ],
+      sidebarList2: [
+        {
+          text:'站点信息',
+          name: 'circle-info',
+          path: '/circle-info', // 跳转路径
+          enentType: ''
+        },
+        {
+          text:'站点管理',
+          name: 'management-circles',
+          path: '/management-circles', // 跳转路径
+          enentType: ''
+        },
+        {
+          text:'退出登录',
+          name: 'circle',
+          path: '/circle', // 跳转路径
+          enentType: 1 // 事件类型
+        }
+      ],
+      sidebarList3: [
+        {
+          text:'邀请朋友',
+          name: '',
+          path: '', // 跳转路径
+          enentType: '2'
+        }
 
-	      ],
-        isPayValue:this.isPayVal,
-        canHideThreads:false,
-        canEditUserGroup:false,
-        canCreateInvite:false
-
-	  }
+      ],
+      isPayValue:this.isPayVal,
+      canBatchEditThreads: false,
+      canEditUserGroup: false,
+      canCreateInvite: false
+    }
   },
   created: function() {
     // console.log(appConfig.devApiUrl);
@@ -120,19 +119,18 @@ export default {
       }
     }).then((res) => {
       if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
-         // console.log(res);
-         this.canHideThreads = res.readdata._data.canHideThreads;
-         this.canEditUserGroup = res.readdata._data.canEditUserGroup;
-         this.canCreateInvite = res.readdata._data.canCreateInvite;
-         // console.log(this.canHideThreads,this.canEditUserGroup,this.canCreateInvite);
-         //判断 当用户组拥有批量删除帖子、管理-邀请加入、编辑用户组、编辑用户组状态这4个权限中的任意一项时才会显示该菜单
-         if(!(this.canHideThreads || this.canEditUserGroup || this.canCreateInvite)){
-           this.sidebarList2.splice(1,1);
-         }
-       }
+        this.$toast.fail(res.errors[0].code);
+        throw new Error(res.error)
+      } else {
+        this.canBatchEditThreads = res.readdata._data.canBatchEditThreads;
+        this.canEditUserGroup = res.readdata._data.canEditUserGroup;
+        this.canCreateInvite = res.readdata._data.canCreateInvite;
+
+        // 判断当用户组拥有批量管理主题、修改用户组、邀请加入权限中的任意一项时才会显示该菜单
+        if (!(this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite)) {
+          this.sidebarList2.splice(1,1);
+        }
+      }
     });
   },
   onLoad(){

@@ -754,7 +754,7 @@ export default {
     };
 
     document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
-    document.getElementsByTagName("html")[0].style.width  = "640px";
+    document.getElementsByTagName("body")[0].style.width  = "640px";
     let viewportWidth = window.innerWidth;
     document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640)/2+'px';
   }

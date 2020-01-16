@@ -61,6 +61,7 @@ export default {
       testingRes:false,
       backGo:-2,
       formdataList:[],
+      viewportWidth: '',
 
     }
   },
@@ -87,7 +88,7 @@ export default {
   },
   created(){
     console.log(this.backGo);
-
+    this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -284,7 +285,7 @@ export default {
     limitWidth(){
       document.getElementById('post-topic-footer').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
     },
 
     // 删除图片
@@ -522,6 +523,11 @@ export default {
         this.faceData = data.readdata;
       })
       this.showFacePanel = !this.showFacePanel;
+      if(this.showFacePanel){
+        console.log(document.getElementById('showFacePanel'));
+        document.getElementById('showFacePanel').style.width = "640px";
+        document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
+      }
       this.footMove = !this.footMove;
     },
     backClick() {

@@ -3,6 +3,7 @@
  * 移动端站点首页控制器
  */
 import browserDb from '../../../../../helpers/webDbHelper';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data: function() {
     return {
@@ -52,18 +53,17 @@ export default {
       nullTip:false,
       nullWord:'',
       allowRegister:'',
-      loginWord:'登录 / 注册'
+      loginWord:'登录 / 注册',
+      isWeixin: false,
+      isPhone: false,
 
     }
   },
   created:function(){
-    // this.firstCategoriesId();
-    // if(this.firstCategoriesId){
-      // this.loadThemeList();
       this.getInfo();
       this.load();
-    // }
-
+      this.isWeixin = appCommonH.isWeixin().isWeixin;
+      this.isPhone = appCommonH.isWeixin().isPhone;
   },
 
   methods: {
@@ -73,6 +73,15 @@ export default {
       // this.Initialization = true;
       // console.log(this.Initialization);
       this.loadThemeList();
+    },
+    //设置发表主题按钮在pc里的位置
+    limitWidth(limitId){
+      // alert('设置');
+      console.log(limitId);
+      console.log(limitId);
+      let viewportWidth = window.innerWidth;
+      document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
+      // document.getElementById('fixedEdit').style.right = "100px";
     },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
@@ -105,6 +114,7 @@ export default {
             this.isPayVal = res.readdata._data.siteMode;
             //判断站点信息是否付费，用户是否登录，用户是否已支付
             this.detailIf(this.isPayVal,false);
+
           }
         }
       });
@@ -147,12 +157,18 @@ export default {
         if(token){
           // console.log('公开，已登录');
           //当用户已登录时
-          this.loadThemeList();
+          // this.loadThemeList();
           this.loginBtnFix = false;
           this.loginHide = true;
           this.canEdit = true;
           this.searchStatus = true;
           this.menuStatus = true;
+          if(this.canEdit){
+            if(this.isWeixin != true && this.isPhone != true){
+              this.limitWidth('fixedEdit');
+            }
+            // this.limitWidth('fixedEdit');
+          }
         }  else {
           // console.log('公开，未登录');
           // this.loadThemeList();
@@ -162,6 +178,9 @@ export default {
           this.canEdit = false;
         }
       } else {
+        if(this.isWeixin != true && this.isPhone != true){
+          this.limitWidth('fixedEdit');
+        }
         this.searchStatus = true;
         this.menuStatus = true;
       }

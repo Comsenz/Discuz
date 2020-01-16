@@ -14,6 +14,8 @@ export default {
       isLoading: false, //是否处于下拉刷新状态
       pageIndex: 1,//页码
       pageLimit: 20,
+      allowRegister: '',
+
 		}
 	},
   //用于数据初始化
@@ -22,15 +24,6 @@ export default {
     var roleId = '10';
     this.roleId = roleId;
     console.log(roleId);
-    // if(role == '1'){
-    //   this.roleResult="管理员";
-    // } else if(role == '7'){
-    //   this.roleResult="游客";
-    // } else if(role == '10'){
-    //   this.roleResult="普通成员";
-    // } else {
-    //   this.roleResult="其他";
-    // }
     this.loadSite();
   },
 	methods: {
@@ -47,6 +40,7 @@ export default {
         this.siteInfo = []
        }
         this.siteInfo = res.readdata;
+        this.allowRegister = res.readdata._data.setreg.register_close;
         // console.log(res.readdata._data.siteIntroduction);
       });
 

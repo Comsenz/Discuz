@@ -63,7 +63,7 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
+      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox" id="showFacePanel"></Expression>
       <div class="popup">
         <van-popup v-model="showPopup" position="bottom"  round :style="{ height: '50%' }">
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
