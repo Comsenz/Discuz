@@ -94,7 +94,7 @@ export default {
       }).then((res) => {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error);
         } else {
           console.log('44443');
           console.log(res);
