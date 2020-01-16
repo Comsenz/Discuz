@@ -52,13 +52,17 @@ export default {
       nullTip:false,
       nullWord:'',
       allowRegister:'',
-      loginWord:'登录 / 注册'
+      loginWord:'登录 / 注册',
+      isWeixin: false,
+      isPhone: false,
 
     }
   },
   created:function(){
       this.getInfo();
       this.load();
+      this.isWeixin = appCommonH.isWeixin().isWeixin;
+      this.isPhone = appCommonH.isWeixin().isPhone;
   },
 
   methods: {
@@ -71,7 +75,7 @@ export default {
     },
     //设置发表主题按钮在pc里的位置
     limitWidth(limitId){
-      alert('设置');
+      // alert('设置');
       console.log(limitId);
       console.log(limitId);
       let viewportWidth = window.innerWidth;
@@ -159,7 +163,10 @@ export default {
           this.searchStatus = true;
           this.menuStatus = true;
           if(this.canEdit){
-            this.limitWidth('fixedEdit');
+            if(this.isWeixin != true && this.isPhone != true){
+              this.limitWidth('fixedEdit');
+            }
+            // this.limitWidth('fixedEdit');
           }
         }  else {
           // console.log('公开，未登录');
@@ -170,7 +177,9 @@ export default {
           this.canEdit = false;
         }
       } else {
-        this.limitWidth('fixedEdit');
+        if(this.isWeixin != true && this.isPhone != true){
+          this.limitWidth('fixedEdit');
+        }
         this.searchStatus = true;
         this.menuStatus = true;
       }
