@@ -3,6 +3,7 @@
  * 移动端站点首页控制器
  */
 import browserDb from '../../../../../helpers/webDbHelper';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data: function() {
     return {
