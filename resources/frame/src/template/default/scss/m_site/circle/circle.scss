@@ -513,7 +513,7 @@ openCircleConView.vue
 */
 
 .postImgBox {
-	@include px2rem(padding, 28 0);
+	@include px2rem(padding, 0 0 28 0);
 }
 //当只有一张图片时
 .postImgBox {
@@ -717,7 +717,7 @@ openCircleConView.vue
 	}
 }
 .themeImgBox {
-  @include px2rem(padding-top, 16);
+  @include px2rem(padding-top, 0);
   @include px2rem(padding-bottom, 20);
 }
 .themeImgList {
