@@ -24,6 +24,7 @@ use Discuz\Auth\AssertPermissionTrait;
 class ListOrdersController extends AbstractListController
 {
     use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -100,11 +101,6 @@ class ListOrdersController extends AbstractListController
         $sort   = $this->extractSort($request);
         $limit  = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-
-        //前台调取时筛选登陆用户
-        if(!Arr::get($request->getQueryParams(),'include')){
-            $filter['user'] = $actor->id;
-        }
 
         $orders = $this->getOrders($actor, $filter, $limit, $offset, $sort);
 
