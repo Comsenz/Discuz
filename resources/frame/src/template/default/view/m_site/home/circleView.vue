@@ -52,7 +52,8 @@ import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
 import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
 import ThemeDet from '../../m_site/common/themeDetView';
-import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 
 export default {
     name: "circleView",

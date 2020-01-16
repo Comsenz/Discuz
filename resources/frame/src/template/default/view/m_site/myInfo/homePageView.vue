@@ -33,7 +33,9 @@ import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUp
 import ThemeDet from '../../m_site/common/themeDetView';
 import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
 // import homePageCon from '../../../controllers/m_site/myInfo/homePageCon';
-import  '../../../scss/m_site/mobileIndex.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "home-page-view",
     components:{

@@ -1,0 +1,422 @@
+@charset "utf-8";
+
+/**
+ * index style
+ */
+@import "./var.less";
+// @import "./_app";
+@import  '../../../../../../static/css/iconfont.css';
+// @import "../m_site/circle/circle";
+// @import "../m_site/circle/search";
+// @import "../m_site/circle/manageCircle"; //管理站点
+
+
+body,html {
+  min-height: 100%;
+  height: auto;
+  // height: 100%;
+  color: @font000;
+  font-size: 14px;
+  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
+}
+body { height: inherit;}
+// .van-pull-refresh { min-height: 400px;}
+//附件颜色定义
+.icon-pdf {
+  color: #FF5562 !important;
+}
+.icon-word {
+  color: #548DFE !important;;
+}
+.icon-rar {
+  color: #FFA88E !important;;
+}
+.icon-doubt {
+  color: #BBBBBB !important;;
+}
+.icon-jpg {
+  color: #F10012 !important;;
+}
+.icon-mp {
+  color: #FF8D4A !important;;
+}
+.icon-mp1 {
+  color: #9765C7 !important;;
+}
+.icon-PNG {
+  color: #FFB100 !important;;
+}
+.icon-ppt {
+  color: #FF6B55 !important;;
+}
+.icon-swf {
+  color: #D63621 !important;;
+}
+.icon-TIFF {
+  color: #4D6FB9 !important;;
+}
+.icon-txt {
+  color: #2BD4AE !important;;
+}
+.icon-xls {
+  color: #4CCC7D !important;;
+}
+.bgEd { min-height: 100%; background: #EDEDED; }
+.nullTip {
+  text-align: center;
+  padding: 60px 30px;
+  font-size: 16px;
+  color: @corB2;
+  .nullIcon {}
+  .nullWord { line-height: 50px;}
+}
+* {	margin: 0; padding: 0;}
+a { color: @main;}
+.lineE5 { border-bottom: 1px solid #e5e5e5;}
+.borNone { border: none !important;}
+.padB0 { padding-bottom: 0 !important;}
+.overHide { overflow: hidden;}
+.hide { display: none;}
+.qq-emotion {
+    display: inline-block;
+    height: 20px;
+    vertical-align: text-bottom;
+  }
+.headeGap {
+    height: 41px;
+}
+
+.headOpe {
+  text-align: right;
+  padding: 14px 15px 7px 15px;
+  height: 20px;
+  box-sizing: content-box;
+  span {
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 11px;
+  }
+}
+.logo {
+  display: block;
+  height: 20px;
+  margin: 0 auto;
+}
+.circleDet {
+  text-align: center;
+  padding: 18px 15px 21px 15px;
+  line-height: 20px;
+  color: @cor999;
+  border-bottom: 1px solid @gray-light;
+  span {
+    padding: 0 14px;
+    border-right: 1px solid @gray-light;
+    font-size: 14px;
+    &:last-child {
+      border: none;
+    }
+  }
+}
+.gap {
+  background: @gap;
+  width: 100%;
+  height11px
+  border-top: 1px solid @gray-light;
+  border-bottom: 1px solid @gray-light;
+}
+
+.fixedHead {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 15;
+  width: 100%;
+  background: #f5f5f5;
+}
+.fixedNavBar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  z-index: 16;
+  width: 100%;
+  background: #fff;
+}
+.loginBtnFix {
+  position: fixed !important;
+  bottom: 53px;
+  left: 30%;
+  right: 30%;
+  z-index: 16;
+  width: 40%;
+  padding: 0;
+  min-width: auto;
+  opacity: 0.9;
+  box-sizing: border-box;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+.hederWrap {
+  position: relative;
+  background: @headBg;
+  padding: 0 15px;
+  height: 44px;
+  .logo {
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    margin-left: -62px;
+    height: 20px;
+  }
+  span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 11px;
+    line-height: 11px;
+    &:before {
+      font-size: 20px;
+    }
+  }
+}
+.contentHead {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  width: 100%;
+  background: #f9f9f9;
+  height: 44px;
+  box-shadow: 0px 1px rgba(#000,0.05);
+  padding: 10px 15px;
+  box-sizing: border-box;
+  .headBack {
+    position: absolute;
+    top: 14px;
+    left: 15px;
+    z-index: 12;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .headTit {
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+  }
+  .menuCli {
+    position: absolute;
+    top: 14px;
+    right: 15px;
+    z-index: 12;
+    font-size: 16px;
+    line-height: 1;
+  }
+}
+.foueHeadBox {
+  background: #f9f9f9;
+  box-shadow: 0px 1px rgba(#000,0.05);
+  .fourHeader {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    .headBack {
+      position: absolute;
+      top: 14px;
+      left: 15px;
+      z-index: 12;
+      font-size: 16px;
+      line-height: 1;
+    }
+    .headTit {
+      font-size: 18px;
+      line-height: 24px;
+      text-align: center;
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+    }
+    .menuCli {
+      position: absolute;
+      top: 14px;
+      right: 15px;
+      z-index: 12;
+      font-size: 16px;
+      line-height: 1;
+    }
+  }
+}
+.content {
+  padding-top: 44px;
+}
+.topRight {
+  float: right;
+  width: 70px;
+  padding-top: 12px;
+}
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 13;
+  background: rgba(#000000,0.6);
+  width: 100%;
+  height: 100%;
+}
+
+// 侧边栏
+.sidebarWrap {
+  width: 260px;
+  background: @gray-light;
+  z-index: 14
+}
+.sideCon {
+  background: @white;
+  padding-left: 15px;
+}
+.sideConList {
+  .sideCon:first-child {
+    .sideItem {
+      border-top: none;
+    }
+  }
+}
+.sideUserBox {
+  overflow: hidden;
+  padding: 54px 15px 14px 0;
+  .userHead {
+    float: left;
+    width: 58px;
+    height: 58px;
+  }
+  .userDet {
+    float: left;
+    margin-left: 9px;
+    width: 162px;
+    .userName {
+      height: 20px;
+      line-height: 20px;
+      color: @main;
+      font-size: 17px;
+      margin-bottom: 14px;
+      margin-top: 4px;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .userPhone {
+      height: 16px;
+      line-height: 16px;
+      color: @cor888;
+      font-size: 14px;
+    }
+  }
+  .jumpJtr {
+    float: right;
+    font-size: 16px;
+    color: @gray-light;
+    margin-top: -20px;
+  }
+}
+.sideItem {
+  overflow: hidden;
+  padding: 14px 14px 14px 0;
+  border-top: 1px solid @gray-light;
+  .itemTit {
+    float: left;
+    @include px2rem(line-height, 42);
+    line-height: 21px;
+    font-size: 15px;
+  }
+  .jumpJtr {
+    float: right;
+    font-size: 16px;
+    line-height: 21px;
+    color: @gray-light;
+  }
+}
+.itemGap {
+  background: @corEd;
+  border-top: 1px solid @gray-light;
+  border-bottom: 1px solid @gray-light;
+  height: 11px;
+}
+.bg_blue{
+  background: #00f;
+}
+.sidebar_item{
+  line-height: 2;
+  text-align: center;
+  display: block;
+}
+.padTgap {
+  padding-top: 48px;
+}
+//toast
+.toast {
+  position: fixed;
+  z-index: 200;
+  left: 50%;
+  top:45%;
+  transition:all .5s;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -o-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  border-radius: 5px; color:#FFF;
+  background: rgba(17, 17, 17, 0.7);
+  height: 45px;
+  line-height: 45px;
+  padding: 0 15px;
+  max-width: 150px;
+}
+
+//微信授权
+.weLogo {
+  display: block;
+  height: 34px;
+  margin-top: 129px;
+  margin-bottom: 83px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.weAuthorizeBtn {
+  display: block;
+  margin-bottom: 83px;
+  width: 100%;
+}
+//绑定手机号
+.grayBg {
+  color: #999;
+}
+//
+.likePostContent {
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding: 0 15px 14px 15px;
+  a {
+    display: block;
+    @include px2rem(line-height, 40);
+    line-height: 20px;
+    color: @font000;
+  }
+  .quoteCon {
+    display: block;
+    padding: 8px;
+    margin-bottom: 8px;
+    background: @corF7;
+    font-size: 13px;
+    color: @cor888;
+  }
+}

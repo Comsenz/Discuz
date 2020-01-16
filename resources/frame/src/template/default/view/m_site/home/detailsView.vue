@@ -24,7 +24,7 @@
 		    	<div class="postContent">
 		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
 		    	</div>
-		    	<div class="postImgBox">
+		    	<div class="postImgBox" v-if="firstpostImageList.length>0">
             <div class="postImgList">
               <van-image
                   lazy-load
@@ -135,7 +135,7 @@
                 <!-- <a href="javascript:;"><blockquote class="quoteCon">dsfhjkdshfkjdhfkjdhk</blockquote>{{item.content()}}</a> -->
                 <a href="javascript:;" v-html="item._data.contentHtml"></a>
               </div>
-              <div class="postImgBox">
+              <div class="postImgBox" v-if="item.images.length>0">
                 <div class="themeImgList moreImg">
                   <van-image
                       lazy-load
@@ -222,10 +222,10 @@
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-// import mSiteHeader from '../../../controllers/m_site/common/headerCon';
-// import Header from '../../m_site/common//headerView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "detailsView",
     components:{
