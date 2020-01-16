@@ -3,12 +3,12 @@
 /**
  * index style
  */
-@import "./../var";
+@import "./../var.less";
 @import "./_app";
 
 body {
 	// color: @main;
-	background: $corFff;
+	background: @white;
 }
 .icon-praise-after {
 	color: @main;
@@ -43,7 +43,7 @@ body {
 .themeTitBox {
 	@include px2rem(height, 106);
 	@include px2rem(padding, 30 30 28 30);
-	border-bottom: 1px solid $corE5;
+	border-bottom: 1px solid @gray-light;
 	box-sizing:border-box;
 	.themeTit {
 		float: left;
@@ -67,7 +67,7 @@ body {
     z-index: 13;
     // @include px2rem(min-width, 190);
     @include px2rem(border-radius, 10);
-    border: 1px solid $corE5;
+    border: 1px solid @gray-light;
     &:after {
       content: '';
       display: block;
@@ -88,7 +88,7 @@ body {
       top: -20px;
       right: 10px;
       border-style: solid dashed dashed;
-      border-color: transparent transparent $corE5;
+      border-color: transparent transparent @gray-light;
       font-size: 0;
       line-height: 0;
     }
@@ -98,7 +98,7 @@ body {
       @include px2rem(line-height, 34);
       color: $cor888;
       @include font-dpr(28);
-      border-bottom: 1px solid $corE5;
+      border-bottom: 1px solid @gray-light;
       white-space: nowrap;
       &:last-child {
         border: none;
@@ -195,7 +195,7 @@ body {
 	background: $corF7;
 }
 .isrelationLine {
-	border-bottom: 1px solid $corE5;
+	border-bottom: 1px solid @gray-light;
 }
 .likeBox {
 	@include font-dpr(28);
@@ -298,7 +298,7 @@ payCircle.view
 .circleLoBox {
 	@include px2rem(padding, 26 30);
 	overflow: hidden;
-	border-bottom: 1px solid $corE5;
+	border-bottom: 1px solid @gray-light;
 	.circleIcon {
 		float: left;
 		@include px2rem(line-height, 42);
@@ -325,7 +325,7 @@ payCircle.view
 		@include font-dpr(28);
 		@include px2rem(padding-bottom, 28);
 		@include px2rem(padding-right, 30);
-		border-bottom: 1px solid $corE5;
+		border-bottom: 1px solid @gray-light;
     word-break: break-all;
 	}
 }
@@ -334,7 +334,7 @@ payCircle.view
 	overflow: hidden;
 	@include px2rem(padding-right, 30);
 	position: relative;
-	// border-bottom: 1px solid $corE5;
+	// border-bottom: 1px solid @gray-light;
 	&:after {
 		position: absolute;
 	    box-sizing: border-box;
@@ -343,7 +343,7 @@ payCircle.view
 	    right: 0;
 	    bottom: 0;
 	    left: 0;
-	    border-bottom: 1px solid $corE5;
+	    border-bottom: 1px solid @gray-light;
 	}
 	.infoItemLeft {
 		float: left;
@@ -364,7 +364,7 @@ payCircle.view
 	 	.icon {
 			@include font-dpr(32);
 			@include px2rem(padding-left, 14);
-			color: $corE5;
+			color: @gray-light;
 		}
 	}
 	.circleMemberList {
@@ -458,7 +458,7 @@ payCircle.view
 		    right: 0;
 		    bottom: 0;
 		    left: 16px;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
 	}
 	.powerList {
@@ -472,7 +472,7 @@ payCircle.view
 		    right: 0;
 		    bottom: 0;
 		    left: 16px;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
 		&:last-child {
 			&:after {
@@ -620,7 +620,7 @@ openCircleConView.vue
 	.payPer {
 		@include px2rem(padding, 16 30 20 58);
 		overflow: hidden;
-		border-bottom: 1px solid $corE5;
+		border-bottom: 1px solid @gray-light;
 		.icon-money {
 			float: left;
 			@include font-dpr(28);
@@ -697,7 +697,7 @@ openCircleConView.vue
 		    right: 0;
 		    bottom: 0;
 		    left: 16px;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
 	}
 	.padT22 {
@@ -797,7 +797,7 @@ details.vue
 			@include px2rem(top, 36);
 			@include px2rem(height, 32);
 			width: 1px;
-			background: $corE5;
+			background: @gray-light;
 		}
 		&:last-child {
 			&:after {
@@ -869,7 +869,7 @@ details.vue
     @include font-dpr(48);
     @include px2rem(padding, 36 0);
     @include px2rem(margin, 0 30 24 30);
-    border-bottom: 1px solid $corE5;
+    border-bottom: 1px solid @gray-light;
     text-align: center;
     span {
       @include font-dpr(70);
@@ -1089,7 +1089,7 @@ $postTopicColor:#336699;
       vertical-align: bottom;
       .icon {
         @include font-dpr(16);
-        color: $corFff;
+        color: @white;
       }
     }
   }
