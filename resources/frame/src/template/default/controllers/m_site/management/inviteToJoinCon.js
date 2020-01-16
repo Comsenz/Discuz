@@ -3,6 +3,7 @@
  */
 import myInviteJoinHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import appConfig from "../../../../../../../frame/config/appConfig";
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
   data: function () {
     return {
@@ -24,6 +25,9 @@ export default {
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       query: {},
       pageLimit: 15,
+      isWeixin: false,
+      isPhone: false,
+      viewportWidth:'',
     }
   },
   components: {
@@ -31,6 +35,9 @@ export default {
   },
   //用于数据初始化
   created: async function () {
+    this.viewportWidth = window.innerWidth;
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     await this.getOperaType();
     this.query = this.$route.query;
     this.getInviteList();
@@ -100,7 +107,7 @@ export default {
             console.log(this.pageIndex,'少时诵诗书')
             this.loading = false;
             this.inviteList = this.inviteList.concat(res.readdata);
-            
+
           }
         })
       } catch (err) {
@@ -203,7 +210,7 @@ export default {
           this.$toast('刷新失败');
           this.isLoading = false;
         });
-       
+
     }
   },
 
