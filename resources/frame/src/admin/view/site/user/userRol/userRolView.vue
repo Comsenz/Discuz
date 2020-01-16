@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/userStyle.scss';
+import '../../../../scss/module/site/userStyle.scss';
 import userRolCon from '../../../../controllers/site/user/userRol/userRolCon';
 export default {
     name: "user-rol-view",

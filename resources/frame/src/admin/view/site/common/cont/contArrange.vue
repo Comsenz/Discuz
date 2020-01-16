@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import  "../../../../scss/site/common/cont/contArrage.scss";
+import "../../../../scss/module/site/common/cont/contArrage.scss";
 import contArrangeCon from '../../../../controllers/site/common/cont/contArrangeCon';
 export default {
     name: "cont-arrange-view",

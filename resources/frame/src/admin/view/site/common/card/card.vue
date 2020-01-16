@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/common/card/card.scss';
+import '../../../../scss/module/site/common/card/card.scss';
 // import cardCon from '../'
 export default {
     name: "card"

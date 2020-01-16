@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/globalStyle.scss';
+import '../../../../scss/module/site/globalStyle.scss';
 import tencentCloudConfigSmsCon from '../../../../controllers/site/global/tencentCloundSet/tencentCloudConfigSmsCon';
 export default {
     name: "tencent-cloud-config-sms-view",

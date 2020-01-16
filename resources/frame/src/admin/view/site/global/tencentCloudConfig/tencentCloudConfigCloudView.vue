@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/globalStyle.scss';
+import '../../../../scss/module/site/globalStyle.scss';
 import tencentCloudConfigCloudCon from '../../../../controllers/site/global/tencentCloundSet/tencentCloudConfigCloudCon';
 
 export default {

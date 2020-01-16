@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/globalStyle.scss';
+import '../../../../scss/module/site/globalStyle.scss';
 import worthMentioningConfigAppletsCon from '../../../../controllers/site/global/worthMentioningSet/worthMentioningConfigAppletsCon';
 export default {
       name: "worth-mentioning-config-applets-view",

@@ -4,16 +4,9 @@
   @Param：后台所有大小单位以大写PX书写，避免转成rem。
  */
 
-@import "./common/_index";
-@import "modules/element-variables";
-@import '../../../static/css/admin/iconfont.css';
+@import "../../common/index";
+@import '../../../../../static/css/admin/iconfont.css';
 
-
-html,body{
-  width: 100%;
-  height: 100%;
-  min-width: 1100PX;
-}
 
 .index-container-box{
   width: 100%;
@@ -83,9 +76,6 @@ html,body{
           border-bottom: 0 solid $headerFontColorShallow;
           transition-duration:0.5s;
           cursor: pointer;
-
-          //font-size:14PX;
-          //font-family:PingFangSC-Medium,PingFang SC;
           font-weight:500;
 
           &:hover{
@@ -125,7 +115,7 @@ html,body{
 
   .index-main-con{
     width: 100%;
-    height: calc(100% - #{80px});
+    //height: calc(100% - #{80px});
 
     .index-main-con__side{
       width: 100%;
@@ -139,7 +129,6 @@ html,body{
         border-bottom: 1PX solid $borderColor;
         span{
           font-size:18PX;
-          font-family:PingFangSC-Semibold,PingFang SC;
           font-weight:600;
           color:rgba(0,0,0,1);
           line-height:25PX;

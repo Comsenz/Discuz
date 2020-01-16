@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/contStyle.scss';
+import '../../../../scss/module/site/contStyle.scss';
 import recycleBinReplyCon from '../../../../controllers/site/cont/recycleBin/recycleBinReplyCon'
 export default {
     name: "recycle-bin-reply-view",

@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/financeStyle.scss';
+import '../../../../scss/module/site/financeStyle.scss';
 import withdrawalSettingCon from '../../../../controllers/site/finance/withdrawMange/withdrawalSettingCon';
 export default {
     name: "withdrawal-setting-view",

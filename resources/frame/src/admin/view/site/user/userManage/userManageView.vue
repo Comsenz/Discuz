@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/userStyle.scss';
+import '../../../../scss/module/site/userStyle.scss';
 import userManageCon from '../../../../controllers/site/user/userMange/userManageCon';
 export default {
     name: "user-manage-view",

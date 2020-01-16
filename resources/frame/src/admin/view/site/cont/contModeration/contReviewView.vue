@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/contStyle.scss';
+import '../../../../scss/module/site/contStyle.scss';
 import contReviewCon from '../../../../controllers/site/cont/contReviewCon'
 export default {
     name: "cont-review-view",
