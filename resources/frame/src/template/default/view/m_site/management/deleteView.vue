@@ -1,7 +1,7 @@
 <!--移动端首页模板-->
 
 <template>
-    <div class="circleCon">
+  <div class="circleCon">
     <van-list
     v-model="loading"
     :finished="finished"
@@ -12,22 +12,22 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
 	    <Header :searchIconShow="true" :perDetShow="true" :logoShow="true" :menuIconShow="true" navShow="true" headFixed="true" @click="headerBack"></Header>
-        <div class="gap"></div>
-	    <div class="themeTitBox">
-	    	<span class="themeTit">全部主题</span>
-	    	<div class="screen" @click="bindScreen">
-	    		<span>筛选</span>
-	    		<span class="icon iconfont icon-down-menu jtGrayB"></span>
-	    		<!-- <div class="themeList" v-if="showScreen">
-	    			<a href="javascript:;">全部主题</a>
-	    			<a href="javascript:;">精华主题</a>
-	    		</div> -->
-	    	</div>
-	    </div>
+      <div class="gap"></div>
+      <div class="themeTitBox">
+        <span class="themeTit">全部主题</span>
+        <div class="screen" @click="bindScreen">
+          <span>筛选</span>
+          <span class="icon iconfont icon-down-menu jtGrayB"></span>
+          <!-- <div class="themeList" v-if="showScreen">
+            <a href="javascript:;">全部主题</a>
+            <a href="javascript:;">精华主题</a>
+          </div> -->
+        </div>
+      </div>
 
 	    <div class="memberCheckList">
         <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true" :ischeckShow="true" v-on:deleteAll="deleteAllClick" ></ThemeDet>
-		<div class="gap"></div>
+        <div class="gap"></div>
 	    </div>
 	    <!-- <div class="manageFootFixed choFixed">
           <a href="javascript:;" @click="checkAll">全选</a>
@@ -35,8 +35,8 @@
 			<button class="checkSubmit">删除选中</button>
 		</div> -->
       </van-pull-refresh>
-  </van-list>
-    </div>
+    </van-list>
+  </div>
 </template>
 
 <script>

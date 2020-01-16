@@ -110,7 +110,7 @@
           </div>
           <div class="gap"></div>
         </div>
-         <div class="manageFootFixed choFixed" v-if="ischeckShow">
+         <div class="manageFootFixed choFixed" v-if="ischeckShow"  :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
           <a href="javascript:;" @click="checkAll">全选</a>
 			    <a href="javascript:;" @click="signOutDele">取消全选</a>
 			    <button class="checkSubmit" @click="deleteAllClick" >删除选中</button>
