@@ -7,11 +7,11 @@
 @import "./_app";
 
 body {
-	// color: $fontColor;
+	// color: @main;
 	background: $corFff;
 }
 .icon-praise-after {
-	color: $fontColor;
+	color: @main;
 }
 .navBarBox {
 	@include px2rem(height, 94);
@@ -37,8 +37,8 @@ body {
 	@include font-dpr(30);
 }
 .navBarCon li.navActi {
-	color: $fontColor;
-	border-bottom: 2px solid $fontColor;
+	color: @main;
+	border-bottom: 2px solid @main;
 }
 .themeTitBox {
 	@include px2rem(height, 106);
@@ -137,7 +137,7 @@ body {
 		@include px2rem(width, 460);
 		.perName {
 			@include px2rem(line-height, 40);
-			color: $fontColor;
+			color: @main;
 			@include font-dpr(30);
 			@include px2rem(margin-bottom, 4);
 			@include px2rem(height, 40);
@@ -161,7 +161,7 @@ body {
 		background: $corF7;
 		@include px2rem(border-radius, 3);
 		span {
-			color: $fontColor;
+			color: @main;
 		}
 	}
 	span {
@@ -206,11 +206,11 @@ body {
 	color: #444;
 	.icon {
 		@include font-dpr(28);
-		color: $fontColor;
+		color: @main;
 		@include px2rem(margin-left, -28);
 	}
 	a {
-		color: $fontColor;
+		color: @main;
 		@include px2rem(line-height, 36);
 		@include font-dpr(28);
 	}
@@ -229,7 +229,7 @@ body {
 		@include px2rem(margin-left, -28);
 	}
 	a {
-		color: $fontColor;
+		color: @main;
 		@include px2rem(line-height, 36);
 		@include font-dpr(28);
 	}
@@ -246,7 +246,7 @@ body {
 		@include px2rem(margin-bottom, 8);
 		@include font-dpr(28);
 		a {
-			color: $fontColor;
+			color: @main;
 		}
 		span {
 			display: inline;
@@ -263,7 +263,7 @@ body {
 	}
 	.allReply {
 		display: block;
-		color: $fontColor;
+		color: @main;
 		@include font-dpr(26);
 		font-weight: 500;
 		@include px2rem(margin-top, 12);
@@ -280,7 +280,7 @@ body {
 	z-index: 12;
 	@include px2rem(width, 100);
 	@include px2rem(height, 100);
-	background: $fontColor;
+	background: @main;
 	border-radius: 50%;
 	text-align: center;
   	box-shadow: 0 0 7px rgba(0,0,0,0.2);
@@ -399,13 +399,13 @@ payCircle.view
 		text-align: center;
 		@include px2rem(line-height, 72);
 		@include px2rem(border-radius, 10);
-		color: $fontColor;
+		color: @main;
 		@include font-dpr(32);
 	}
 	.regiJoin {
 		display: block;
 		@include horizontal-center;
-		background: $fontColor;
+		background: @main;
 		color: #fff;
 		@include px2rem(height, 72);
 		@include px2rem(width, 334);
@@ -431,7 +431,7 @@ payCircle.view
 		@include px2rem(border-radius, 8);
 	}
 	.inviteName {
-		color: $fontColor;
+		color: @main;
 		@include font-dpr(30);
 		@include singleline-ellipsis(0);
 		text-align: center;
@@ -839,7 +839,7 @@ details.vue
 			color: $cor888;
 			box-sizing: border-box;
 			span {
-				color: $fontColor;
+				color: @main;
 				@include font-dpr(48);
 				@include px2rem(padding-right, 14);
 			}
@@ -984,7 +984,7 @@ $postTopicColor:#336699;
       //-webkit-box-sizing: border-box;
       //-moz-box-sizing: border-box;
       //box-sizing: border-box;
-      //caret-color: $fontColor;  //光标颜色
+      //caret-color: @main;  //光标颜色
     }
   }
   .uploadBox {
@@ -1074,7 +1074,7 @@ $postTopicColor:#336699;
       float: left;
       @include px2rem(margin-left, 10);
       @include font-dpr(30);
-      color: $fontColor;
+      color: @main;
       @include px2rem(max-width, 400);
       overflow: hidden;
       text-overflow: ellipsis;
