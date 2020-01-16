@@ -1,0 +1,80 @@
+/**
+  内容页脚
+  包括：点赞、赞赏、回复
+ */
+@import "../../../../../../../static/css/iconfont.css";
+@import "../../modules/theme";
+
+.cont-footer-box{
+  width: 100%;
+  display: block;
+  padding: 0 15px 15px 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  .cont-footer-main{
+    width: 100%;
+    background-color: #F7F7F7;
+
+
+    .cont-footer-top{
+      padding: 8px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      border-bottom: 1PX solid @border-color;
+
+      .cont-footer-like{
+        font-size: 14px;
+        .icon{
+          font-size: 14px;
+          color: @blue;
+        }
+        a{
+          font-size:14px;
+          font-family:PingFangSC-Regular,PingFang SC;
+          font-weight:400;
+          color:@blue;
+          line-height:18px;
+        }
+      }
+
+      .cont-footer-praise{
+        .icon{
+          font-size:14px;
+          color: @icon-red;
+        }
+        a{
+          color: @blue;
+          font-size:14px;
+          font-family:PingFangSC-Regular,PingFang SC;
+          font-weight:400;
+          line-height:20px;
+        }
+      }
+
+    }
+    .cont-footer-btm{
+      padding: 8px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      font-size:14px;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:@blue;
+      line-height:20px;
+
+      a{
+        color:@blue;
+      }
+      span{
+        color: #444444;
+      }
+
+    }
+
+  }
+
+}

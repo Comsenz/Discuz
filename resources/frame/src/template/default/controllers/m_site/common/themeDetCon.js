@@ -1,9 +1,10 @@
 /**
- * 移动端主题详情控制器
+ * 移动端主题组件控制器
  */
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
-	data: function() {
-	    return {
+  data: function() {
+      return {
         // themeData:this.themeList.data,
         // themeIncluded:this.themeList.included,
         // replyTag:false
@@ -23,11 +24,14 @@ export default {
          showScreen:[],
          length:0,
          indexlist:-1,
-         menuStatus:false
+         menuStatus:false,
+         isWeixin: false,
+         isPhone: false,
+         viewportWidth:'',
 
     }
-	},
-	props: {
+  },
+  props: {
     themeList: { // 组件的list
       type: Array
       // default: () => {
@@ -50,7 +54,10 @@ export default {
       ischeckShow:false
     },
   },
-	created(){
+  created(){
+    this.viewportWidth = window.innerWidth;
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadPriviewImgList();
     this.forList();
     // console.log(this.themeList[0].user._data.avatarUrl);
@@ -131,7 +138,7 @@ export default {
 
   //       })
   // },
-	methods: {
+  methods: {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data){
       let datas = [];
@@ -370,30 +377,30 @@ export default {
     jumpPerDet:function(id){
       this.$router.push({ path:'/home-page'+'/'+id});
     },
-    	//选中复选框
-		// toggle(id) {
-		// 	var listLen = this.userList.length;
-		// 	if (listLen === 0) return;
-		// 	var checkList = [];
-		// 	for (let i = 0; i < listLen; i++) {
-		// 		let checkid = this.userList[i].id();
-		// 		if (checkid === id) {
-		// 			this.userList[i].checkStatus = !this.userList[i].checkStatus;
-		// 		}
-		// 		if (this.userList[i].checkStatus) {
-		// 			checkList.push(this.userList[i].username());
-		// 		}
-		// 	}
-		// 	this.result = checkList;
-		// },
-	},
+      //选中复选框
+    // toggle(id) {
+    // 	var listLen = this.userList.length;
+    // 	if (listLen === 0) return;
+    // 	var checkList = [];
+    // 	for (let i = 0; i < listLen; i++) {
+    // 		let checkid = this.userList[i].id();
+    // 		if (checkid === id) {
+    // 			this.userList[i].checkStatus = !this.userList[i].checkStatus;
+    // 		}
+    // 		if (this.userList[i].checkStatus) {
+    // 			checkList.push(this.userList[i].username());
+    // 		}
+    // 	}
+    // 	this.result = checkList;
+    // },
+  },
   mounted: function() {
-  	document.addEventListener('click', this.disappear, false);
+    document.addEventListener('click', this.disappear, false);
   },
   destroyed: function() {
-  	document.addEventListener('click', this.disappear, false);
+    document.addEventListener('click', this.disappear, false);
   },
-	beforeRouteLeave (to, from, next) {
+  beforeRouteLeave (to, from, next) {
     next()
-	}
+  }
 }

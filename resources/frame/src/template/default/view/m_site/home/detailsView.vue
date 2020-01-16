@@ -36,7 +36,7 @@
               />
             </div>
 		    	</div>
-		    	<div class="uploadFileList" v-if="isiOS">
+		    	<div class="uploadFileList" v-if="isiOS && themeCon.firstPost.attachments.length>0">
 		    		<a @click="downAttachment(attachment._data.url)" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
               <!-- <a :href="attachment._data.url" class="fileChi"  v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download> -->
 		    		  <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
@@ -57,7 +57,7 @@
 		    			<span class="fileName">{{attachment._data.fileName}}</span>
 		    		</a>
             </div>
-            <div class="uploadFileList" v-else="">
+            <div class="uploadFileList" v-if="themeCon.firstPost.attachments.length>0">
             <a :href="attachment._data.url" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download>
               <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
               <span v-if="attachment._data.extension === 'zip'" class="icon iconfont icon-rar"></span>
@@ -165,8 +165,8 @@
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
-          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
-            <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
+          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeIsLiked)">
+            <span v-if="!(themeIsLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
             赞
           </div>
@@ -182,7 +182,7 @@
           closeable
           close-icon-position="top-right"
           position="bottom"
-          :style="{ width: '100%' }"
+          :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0','width': (!isPhone && !isWeixin) ? '640px' : '100%'}"
         >
           <span class="support">支持作者继续创作</span>
           <div class="rewardMonBox">

@@ -21,15 +21,16 @@ $corF7: #f7f7f7;
 $corD8: #d8d8d8;
 $corF2: #f2f2f2;
 $corB2: #B2B2B2;
-html { height: 100%;}
 html,
 body{
   //color: $fontColor;
   width: 100%;
   min-height: 100%;
+  height: auto;
   display: block;
   //overflow-x: hidden;
 }
+
 
 
 /**

@@ -45,7 +45,8 @@ export default {
         isWeixin: false,
         isPhone: false,
         firstCategoriesId:'',
-        logo:false
+        logo:false,
+        viewportWidth:'',
 	  }
   },
 	props: {
@@ -88,6 +89,7 @@ export default {
     }
   },
   created(){
+    this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     // console.log(this.isWeixin+'0'+this.isPhone);

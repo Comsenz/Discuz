@@ -67,7 +67,7 @@
 	    </div>
  	</van-pull-refresh>    
   	</van-list>
-		<div class="manageFootFixed">
+		<div class="manageFootFixed" :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
 					<span>{{choiceRes.attributes.name}}</span>
