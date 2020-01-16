@@ -1,6 +1,7 @@
 
 import walletDetailsHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import Panenl from '../../../view/m_site/common/panel';
+import webDb from "../../../../../helpers/webDbHelper";
 
 export default {
   data:function () {
@@ -21,6 +22,7 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+      userId:''
     }
   },
 
@@ -29,6 +31,7 @@ export default {
     Panenl
   },
   created(){
+    this.userId = webDb.getLItem('tokenId');
     this.walletDetails()
   },
   methods:{
@@ -38,6 +41,7 @@ export default {
         method:'get',
         data:{
           include:'',
+          'filter[user]':this.userId,
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }

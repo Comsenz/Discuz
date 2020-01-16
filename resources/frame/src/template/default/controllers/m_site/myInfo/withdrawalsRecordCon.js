@@ -1,6 +1,7 @@
 
 import WithdrawHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import Panenl from '../../../view/m_site/common/panel';
+import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
@@ -21,6 +22,7 @@ export default {
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       immediateCheck:false ,//是否在初始化时立即执行滚动位置检查
       pageLimit:20,
+      userId:''
     }
   },
 
@@ -29,7 +31,8 @@ export default {
     Panenl
   },
   created(){
-    this.reflect()
+    this.userId = webDb.getLItem('tokenId');
+    this.reflect();
   },
   methods:{
     async reflect(initStatus = false){
@@ -40,6 +43,7 @@ export default {
           method:'get',
           data:{
             include:'',
+            'filter[user]':this.userId,
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit
           }
