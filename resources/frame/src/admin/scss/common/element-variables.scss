@@ -1,19 +1,21 @@
 @charset "utf-8";
 
+@import "var";
+
 /*
   elementUI-主题
 */
 /* 改变主题色变量 */
-$--color-primary:#336699;
+$--color-primary:$main;
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 
 
 //多选、单选按钮颜色、副颜色
-$selectColor:#1989FA;
+$selectColor:$selectColor;
 //多选、单选文字颜色
-$selectFontColor:#303133;
+$selectFontColor:$selectFontColor;
 
 
 /*表格表头背景颜色*/
@@ -103,7 +105,6 @@ $selectFontColor:#303133;
   border: 1PX solid #D8DCE6;
 }
 
-
 /*提示框*/
 .el-tooltip__popper{
   max-width: 50%;
@@ -113,59 +114,4 @@ $selectFontColor:#303133;
 .el-icon-circle-close{
   color: white;
   font-size: 40PX;
-}
-
-/*
-  全局变量
-*/
-
-$blue:#0054A5;
-
-$main:#336699;  //主体颜色
-
-$titleColor:#303133;    //内容正文、标题字体颜色
-
-$descColor:#909399;   //内容副文、描述字体颜色
-
-$commentColor:#606266;    //副标题、注释字体颜色
-
-$inputPlaceholder:#B2B2B2;
-
-$headerFontColor:#FFF;    //头部字体原色
-$headerFontColorShallow:rgba(255,255,255 ,0.65);   //头部字体浅色
-
-$borderColor:#E5E5E5;    //边框颜色
-
-$contBorderColor:#F8F9F9;   //card边框、内容、子边框颜色
-
-$tableBorderColor:#EBEEF5;    //表格边框线
-
-$tableHeaderColor:#FAFAFA;     //表格头部颜色
-
-$splitLine:#DCDFE6;     //竖分割线颜色
-
-/*后台界面规定元素默认属性*/
-*{
-  font:14PX/1 Lucida Grande,Lucida Sans Unicode,Helvetica Neue,Hiragino Sans GB,Microsoft Yahei,sans-serif;
-  a{
-    color: $main;
-  }
-}
-
-
-/*
-  公共样式
-*/
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-input[type="number"]{
-  -moz-appearance: textfield;
-}
-
-
-/*使用Card组件时，去掉底部边框*/
-.footer-btn{
-  border-bottom: 0;
 }

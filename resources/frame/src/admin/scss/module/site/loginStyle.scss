@@ -1,9 +1,8 @@
 @charset "utf-8";
 
 
-@import "../modules/element-variables";
-@import "../../../../static/css/admin/iconfont.css";
-@import "../modules/icon";
+@import "../../common/index";
+@import "../../../../../static/css/admin/iconfont.css";
 
 /**
   登录界面
@@ -23,8 +22,8 @@
     width: 400PX;
     height: 484PX;
     background-color: white;
-    box-shadow:0 0 12px 0 rgba(88,88,90,0.21);
-    border-radius:4px;
+    box-shadow:0 0 12PX 0 rgba(88,88,90,0.21);
+    border-radius:4PX;
 
     .login-header{
       padding: 74PX 105PX 35PX 105PX;
