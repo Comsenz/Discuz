@@ -165,8 +165,8 @@
             <span class="icon iconfont icon-review"></span>
             回复
           </div>
-          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeCon.firstPost._data.isLiked)">
-            <span v-if="!(themeCon.firstPost._data.isLiked)" class="icon iconfont icon-like"></span>
+          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeIsLiked)">
+            <span v-if="!(themeIsLiked)" class="icon iconfont icon-like"></span>
             <span v-else="" class="icon iconfont icon-praise-after"></span>
             赞
           </div>

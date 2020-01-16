@@ -37,7 +37,7 @@
       </van-pull-refresh>    	
   </van-list>
 	    </div>
-		<div class="manageFootFixed">
+		<div class="manageFootFixed" :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
 					<span>{{checkOperaStatus ? choiceRes.attributes.name + ' 邀请链接' : choiceRes.attributes.name}}</span>

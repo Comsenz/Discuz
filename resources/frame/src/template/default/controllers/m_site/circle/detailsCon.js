@@ -103,6 +103,7 @@ export default {
       allowRegister: '',
       loginWord:'登录 / 注册',
       viewportWidth: '',
+      themeIsLiked: '',
     }
   },
   created() {
@@ -307,6 +308,12 @@ export default {
             this.likedUsers = res.readdata.firstPost.likedUsers;
             this.rewardedUsers = res.readdata.rewardedUsers;
             this.themeUserId = res.readdata.user._data.id;
+            if(res.readdata.firstPost._data.isLiked){
+              this.themeIsLiked = true;
+            } else {
+              this.themeIsLiked = false;
+            }
+            // this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
             if (firstpostImageLen === 0) {
               return;
@@ -732,10 +739,12 @@ export default {
                 // }
                 this.userArr(this.likedUsers);
                 this.themeCon.firstPost._data.isLiked = false;
+                this.themeIsLiked = false;
               } else {
                 // console.log('未点赞时，点击点赞');
                 this.likedUsers.push({_data:{username:this.currentUserName,id:this.userId}});
                 this.themeCon.firstPost._data.isLiked = true;
+                this.themeIsLiked = true;
                 console.log(this.themeCon.firstPost._data.isLiked);
               }
               this.pageIndex = 1;
