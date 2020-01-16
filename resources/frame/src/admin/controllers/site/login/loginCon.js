@@ -52,6 +52,7 @@ export default {
                   } else {
                     this.$message.error(res.errors[0].code);
                   }
+                  this.loginLoading = false;
                 } else {
                   let groupId = res.readdata.groups[0]._data.id;
                   browserDb.setLItem('username', res.data.attributes.username);
@@ -70,6 +71,7 @@ export default {
               })
             } else {
               this.$message.error('登录失败');
+              this.loginLoading = false;
             }
           }).catch(()=>{
             this.$message.error('登录失败');
