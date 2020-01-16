@@ -339,7 +339,7 @@ CREATE TABLE `finance` (
   `income` decimal(10,2) unsigned NOT NULL COMMENT '用户充值金额',
   `withdrawal` decimal(10,2) unsigned NOT NULL COMMENT '用户提现金额',
   `order_count` int(10) unsigned NOT NULL COMMENT '订单数量',
-  `order_profit` decimal(10,2) unsigned NOT NULL COMMENT '订单金额',
+  `order_amount` decimal(10,2) unsigned NOT NULL COMMENT '订单金额',
   `total_profit` decimal(10,2) unsigned NOT NULL COMMENT '平台盈利',
   `register_profit` decimal(10,2) unsigned NOT NULL COMMENT '注册收入',
   `master_portion` decimal(10,2) unsigned NOT NULL COMMENT '打赏贴的分成',

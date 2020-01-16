@@ -61,9 +61,9 @@ class ProfitChart
                 $format = '%Y-%m';
             }
             $query->selectRaw(
-                "DATE_FORMAT(created_at,'{$format}') as `date`".
+                "DATE_FORMAT(created_at,'{$format}') as `date`,".
                 'SUM(order_count) as order_count,'.
-                'SUM(order_profit) as order_profit,'.
+                'SUM(order_amount) as order_amount,'.
                 'SUM(total_profit) as total_profit,'.
                 'SUM(register_profit) as register_profit,'.
                 'SUM(master_portion) as master_portion,'.

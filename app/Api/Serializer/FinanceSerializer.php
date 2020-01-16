@@ -18,7 +18,7 @@ class FinanceSerializer extends AbstractSerializer
         return [
             'date'                => $model->created_at ? $model->created_at : $model->date,
             'order_count'         => $model->order_count,
-            'order_profit'        => $model->order_profit,
+            'order_amount'        => $model->order_amount,
             'total_profit'        => $model->total_profit,
             'register_profit'     => $model->register_profit,
             'master_portion'      => $model->master_portion,

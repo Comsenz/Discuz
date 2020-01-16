@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $income
  * @property float $withdrawal
  * @property int $order_count
- * @property float $order_profit
+ * @property float $order_amount
  * @property float $total_profit
  * @property float $register_profit
  * @property float $master_portion
@@ -33,16 +33,23 @@ class Finance extends Model
 
     const TYPE_MONTH = 3;  //统计方式（月）
 
+    public $timestamps = false;
+
     /**
      * {@inheritdoc}
      */
     protected $table = 'finance';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $dates = ['created_at'];
-
-    protected $dateFormat = 'Y-m-d';
+    protected $fillable = [
+        'income',
+        'withdrawal',
+        'order_count',
+        'order_amount',
+        'total_profit',
+        'register_profit',
+        'master_portion',
+        'withdrawal_profit',
+        'created_at',
+        ];
 
 }

@@ -17,7 +17,7 @@ class CreateFinance extends Migration
             $table->unsignedDecimal('income', 10, 2)->comment('用户充值金额');
             $table->unsignedDecimal('withdrawal', 10, 2)->comment('用户提现金额');
             $table->unsignedInteger('order_count')->comment('订单数量');
-            $table->unsignedDecimal('order_profit', 10, 2)->comment('订单金额');
+            $table->unsignedDecimal('order_amount', 10, 2)->comment('订单金额');
             $table->unsignedDecimal('total_profit', 10, 2)->comment('平台盈利');
             $table->unsignedDecimal('register_profit', 10, 2)->comment('注册收入');
             $table->unsignedDecimal('master_portion', 10, 2)->comment('打赏贴的分成');
