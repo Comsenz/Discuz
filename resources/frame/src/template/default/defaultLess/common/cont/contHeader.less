@@ -1,0 +1,73 @@
+@import "../../modules/theme";
+
+/**
+  内容主体头部
+  包括头像、用户昵称、发布/回复等时间、操作
+ */
+
+//头像规格设置
+@imgWH:{
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.cont-header-box{
+  width: 100%;
+  height: 61px;
+  padding: 15px 15px 6px 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  .avatar-box{
+    width: 40px;
+    height: 100%;
+    .img-box{
+      img{
+        @imgWH();
+      }
+    }
+  }
+
+  .text-box{
+    margin-left: 9px;
+    flex: 1;
+
+    .user-name-text{
+      font-size:15px;
+      font-family:PingFangSC-Medium,PingFang SC;
+      font-weight:500;
+      color:rgba(51,102,153,1);
+      line-height:20px;
+    }
+    .text-status{
+      font-size:15px;
+      font-family:PingFangSC-Medium,PingFang SC;
+      font-weight:500;
+      color:rgba(68,68,68,1);
+      line-height:20px;
+    }
+    .time{
+      margin-top: 4px;
+      font-size:14px;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:rgba(136,136,136,1);
+      line-height:16px
+    }
+
+  }
+
+  .operating-box{
+    align-self: flex-start;
+    font-size:14px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:@blue;
+    line-height:20px;
+  }
+
+}

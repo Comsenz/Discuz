@@ -1,0 +1,109 @@
+@charset "utf-8";
+
+/**
+ * manageCircle style
+ */
+@import "./../var";
+@import "./_app";
+
+/*搜索*/
+.searchRes {
+	@include px2rem(padding, 0 0 0 30);
+	background: #fff;
+	.resultTit {
+		position: relative;
+		@include px2rem(padding-top, 20);
+		@include px2rem(line-height, 52);
+		text-align: left;
+		color: $cor888;
+		@include font-dpr(26);
+		font-weight: normal;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    right: 0;
+		    bottom: 0;
+		    left: 0;
+		    border-bottom: 1px solid $corE5;
+		}
+	}
+	.resUser {
+		@include px2rem(padding, 14 0);
+		position: relative;
+		overflow: hidden;
+		.resUserHead {
+			float: left;
+			@include px2rem(width, 72);
+			@include px2rem(height, 72);
+			@include px2rem(border-radius, 8);
+		}
+		.resUserDet {
+			overflow: hidden;
+			@include font-dpr(30);
+			@include px2rem(margin-left, 92);
+
+
+			.resUserName {
+				float: left;
+				@include px2rem(line-height, 72);
+				@include px2rem(max-width, 480);
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				i {
+					font-style: normal;
+					color: $fontColor;
+				}
+			}
+			.userRole {
+				float: left;
+				@include px2rem(line-height, 72);
+				@include px2rem(margin-left, 20);
+				color: $cor888;
+			}
+		}
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		   @include px2rem(left, 92);
+		    bottom: 0;
+		    right: 0;
+		    border-bottom: 1px solid $corE5;
+		}
+    &:last-child {
+      &:after {
+        border-bottom: none;
+      }
+    }
+	}
+	.searchMore {
+		color: $fontColor;
+		@include px2rem(line-height, 80);
+		@include font-dpr(26);
+		.icon {
+			color: $fontColor;
+			@include px2rem(margin-right, 18);
+			@include font-dpr(32);
+		}
+	}
+	.themeRes {
+		@include px2rem(padding, 26 30 26 0);
+		position: relative;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    left: 0;
+		    bottom: 0;
+		    right: 0;
+		    border-bottom: 1px solid $corE5;
+		}
+	}
+
+
+}
