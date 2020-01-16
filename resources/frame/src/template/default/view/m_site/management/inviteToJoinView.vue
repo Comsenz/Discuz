@@ -4,39 +4,39 @@
     <div>
       <myInviteJoinHeader title="邀请加入"></myInviteJoinHeader>
 	    <div class="content">
-		<van-list
-			v-model="loading"
-			:finished="finished"
-			:offset="offset"
-			finished-text="没有更多了"
-			@load="onLoad"
-			:immediate-check="false"
-		>
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <div class="inviteBox">
-          <table class="inviteTable">
-          	<tr>
-          		<th>编号</th>
-          		<th>邀请为</th>
-          		<th>链接状态</th>
-          		<th>链接操作</th>
-          	</tr>
-          	<tr v-for="(inviteLi, index) in inviteList" :key="index">
-          		<td>{{inviteLi._data.id}}</td>
-          		<td>{{getGroupNameById[inviteLi._data.group_id]}}</td>
-          		<td>{{inviteLi._data.status === 0 ? '已失效' : '使用中'}}</td>
-          		<td>
-          			<a href="javascript:;" :class="['copyA', inviteLi._data.status === 0 && 'font9']" @click="copyToClipBoard(inviteLi)">复制</a>
-          			<a href="javascript:;" :class="['invalidA', inviteLi._data.status === 0 && 'font9']" @click="resetDelete(inviteLi)">置为无效</a>
-          		</td>
-          	</tr>
-          </table>
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          :offset="offset"
+          finished-text="没有更多了"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <div class="inviteBox">
+              <table class="inviteTable">
+                <tr>
+                  <th>编号</th>
+                  <th>邀请为</th>
+                  <th>链接状态</th>
+                  <th>链接操作</th>
+                </tr>
+                <tr v-for="(inviteLi, index) in inviteList" :key="index">
+                  <td>{{inviteLi._data.id}}</td>
+                  <td>{{getGroupNameById[inviteLi._data.group_id]}}</td>
+                  <td>{{inviteLi._data.status === 0 ? '已失效' : '使用中'}}</td>
+                  <td>
+                    <a href="javascript:;" :class="['copyA', inviteLi._data.status === 0 && 'font9']" @click="copyToClipBoard(inviteLi)">复制</a>
+                    <a href="javascript:;" :class="['invalidA', inviteLi._data.status === 0 && 'font9']" @click="resetDelete(inviteLi)">置为无效</a>
+                  </td>
+                </tr>
+              </table>
 
 
-        </div>
-      </van-pull-refresh>    	
-  </van-list>
-	    </div>
+            </div>
+          </van-pull-refresh>    	
+      </van-list>
+	  </div>
 		<div class="manageFootFixed" :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
 			<div class="operaCho">
 				<div class="operaWo" @click="showChoice">
