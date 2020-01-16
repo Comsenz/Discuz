@@ -82,7 +82,6 @@ export default {
     })
     //设置在pc的宽度
     if(this.isWeixin != true && this.isPhone != true){
-      console.log(this.isWeixin);
       this.limitWidth();
     }
   },
@@ -94,7 +93,6 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    // console.log(this.isiOS);
     if(this.isiOS) {
       this.encuploadShow = true;
       console.log(this.encuploadShow);
@@ -523,11 +521,11 @@ export default {
         this.faceData = data.readdata;
       })
       this.showFacePanel = !this.showFacePanel;
-      if(this.showFacePanel){
-        console.log(document.getElementById('showFacePanel'));
-        document.getElementById('showFacePanel').style.width = "640px";
-        document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
-      }
+      // if(this.showFacePanel == true){
+      //   // console.log(document.getElementById('showFacePanel'));
+      //   // document.getElementById('showFacePanel').style.width = "640px";
+      //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
+      // }
       this.footMove = !this.footMove;
     },
     backClick() {
