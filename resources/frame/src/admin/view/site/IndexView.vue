@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import '../../scss/module/site/indexView.scss';
+import '../../scss/site/module/indexView.scss';
 import IndexCon from '../../controllers/site/IndexCon';
 export default {
 	name: "adminIndex",

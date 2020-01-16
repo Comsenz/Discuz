@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 import pyaConfigWxCon from '../../../../controllers/site/global/paySet/payConfigWxCon';
 export default {
     name: "pay-config-wx-view",

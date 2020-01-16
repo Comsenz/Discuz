@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/financeStyle.scss';
+import '../../../../scss/site/module/financeStyle.scss';
 import withdrawalApplicationCon from '../../../../controllers/site/finance/withdrawMange/withdrawalApplicationCon';
 export default {
     name: "withdrawal-application-view",

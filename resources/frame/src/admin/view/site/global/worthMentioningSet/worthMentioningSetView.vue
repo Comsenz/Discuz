@@ -130,7 +130,7 @@
 
 <script>
 import worthMentioningSetCon from '../../../../controllers/site/global/worthMentioningSet/worthMentioningSetCon';
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 export default {
     name: "worth-mentioning-set-view",
   ...worthMentioningSetCon

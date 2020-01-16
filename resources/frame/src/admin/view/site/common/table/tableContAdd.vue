@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import "../../../../scss/module/site/common/table/tableContAdd.scss";
+import "../../../../scss/site/module/common/table/tableContAdd.scss";
 import tableContAddCon from '../../../../controllers/site/common/table/tableContAddCon';
 export default {
     name: "table-cont-add-view",

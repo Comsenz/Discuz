@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/common/page/page.scss';
+import '../../../../scss/site/module/common/page/page.scss';
 import pageCon from '../../../../controllers/site/common/page/pageCon';
 export default {
     name: "page",

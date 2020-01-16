@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/userStyle.scss';
+import '../../../../scss/site/module/userStyle.scss';
 import userDetailsCon from '../../../../controllers/site/user/userMange/userDetailsCon'
 export default {
     name: "user-details-view",

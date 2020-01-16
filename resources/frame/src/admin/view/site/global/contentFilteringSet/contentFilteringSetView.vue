@@ -133,7 +133,7 @@
 
 <script>
 import contentFilteringSetCon from '../../../../controllers/site/global/contentFilteringSet/contentFilteringSetCon';
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 export default {
     name: "content-filtering-set-view",
   ...contentFilteringSetCon

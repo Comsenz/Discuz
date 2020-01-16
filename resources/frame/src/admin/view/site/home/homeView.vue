@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import '../../../scss/module/site/globalStyle.scss';
+import '../../../scss/site/module/globalStyle.scss';
 import homeCon from '../../../controllers/site/home/homeCon';
 export default {
     name: "home-view",

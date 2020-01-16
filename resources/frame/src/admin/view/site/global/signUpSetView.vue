@@ -40,7 +40,7 @@
 
 <script>
 import signUpSetCon from '../../../controllers/site/global/signUpSetCon';
-import '../../../scss/module/site/globalStyle.scss';
+import '../../../scss/site/module/globalStyle.scss';
 export default {
     name: "sign-up-set-view",
   ...signUpSetCon
