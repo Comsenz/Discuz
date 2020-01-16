@@ -10,6 +10,7 @@ namespace App\Api\Controller\Threads;
 use App\Api\Serializer\ThreadSerializer;
 use App\Models\Order;
 use App\Models\Post;
+use App\Models\PostUser;
 use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -106,6 +107,11 @@ class ListThreadsController extends AbstractListController
     protected $threadCount;
 
     /**
+     * @var string
+     */
+    protected $tablePrefix;
+
+    /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
      */
@@ -113,6 +119,7 @@ class ListThreadsController extends AbstractListController
     {
         $this->threads = $threads;
         $this->url = $url;
+        $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
     /**
@@ -389,8 +396,13 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
+        $subSql = Post::selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
+            ->whereRaw($this->tablePrefix . 'a.id < id')
+            ->toSql();
+
         $allLastThreePosts = Post::from('posts', 'a')
-            ->whereRaw('( SELECT count( * ) FROM posts WHERE a.thread_id = thread_id AND a.id < id ) < ?', [3])
+            ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('thread_id', $threadIds)
             ->whereNull('deleted_at')
             ->where('is_approved', 1)
@@ -424,9 +436,14 @@ class ListThreadsController extends AbstractListController
     {
         $firstPostIds = $threads->pluck('firstPost.id');
 
+        $subSql = PostUser::selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.post_id = post_id')
+            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+            ->toSql();
+
         $allLikes = User::from('post_user', 'a')
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
-            ->whereRaw('( SELECT count( * ) FROM post_user WHERE a.post_id = post_id AND a.created_at < created_at ) < ?', [$limit])
+            ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('post_id', $firstPostIds)
             ->orderBy('a.created_at', 'desc')
             ->get();
@@ -451,10 +468,15 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
+        $subSql = Order::selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
+            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+            ->toSql();
+
         $allRewardedUser = User::from('orders', 'a')
             ->join('users', 'a.user_id', '=', 'users.id')
             ->select('a.thread_id', 'users.*')
-            ->whereRaw('( SELECT count( * ) FROM orders WHERE a.thread_id = thread_id AND a.created_at < created_at ) < ?', [$limit])
+            ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
             ->where('type', Order::ORDER_TYPE_REWARD)
