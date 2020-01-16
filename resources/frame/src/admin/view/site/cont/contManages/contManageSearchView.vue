@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/contStyle.scss'
+import '../../../../scss/site/module/contStyle.scss'
 import contManageSearch from '../../../../controllers/site/cont/contManage/contManageSearchCon'
 export default {
     name: "cont-manage-search-view",

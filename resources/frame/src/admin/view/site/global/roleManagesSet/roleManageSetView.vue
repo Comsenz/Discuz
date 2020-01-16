@@ -96,7 +96,7 @@
 
 <script>
 import roleManageSetCon from '../../../../controllers/site/global/roleManageSet/roleManageSetCon';
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 export default {
     name: "role-manage-set-view",
   ...roleManageSetCon

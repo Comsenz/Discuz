@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/userStyle.scss';
+import '../../../../scss/site/module/userStyle.scss';
 import rolPermissionCon from '../../../../controllers/site/user/userRol/rolPermissionCon';
 export default {
     name: "user-permission-view",

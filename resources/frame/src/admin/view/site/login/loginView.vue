@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item class="login-main-form__item">
-              <el-button type="primary" @click="adminLogin('form')">登录</el-button>
+              <el-button type="primary" :loading="loginLoading" @click="adminLogin('form')">登录</el-button>
             </el-form-item>
 
           </el-form>
@@ -52,7 +52,7 @@
 
 <script>
 import loginCon from '../../../controllers/site/login/loginCon';
-import '../../../scss/module/site/loginStyle.scss';
+import '../../../scss/site/module/loginStyle.scss';
 import '../../../../../static/css/admin/iconfont.css'
 export default {
   name: "login-view",

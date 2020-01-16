@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import '../../../scss/module/site/contStyle.scss';
+import '../../../scss/site/module/contStyle.scss';
 import contClassCon from '../../../controllers/site/cont/contClassCon'
 export default {
     name: "cont-class",

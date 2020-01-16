@@ -1,6 +1,7 @@
 
 import orderDetailsHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import Panenl from '../../../view/m_site/common/panel';
+import webDb from "../../../../../helpers/webDbHelper";
 
 export default {
   data:function () {
@@ -20,6 +21,7 @@ export default {
       finished: false,
       offset: 100,
       isLoading: false,
+      userId:''
 
     }
   },
@@ -29,6 +31,7 @@ export default {
     Panenl
   },
   created(){
+    this.userId = webDb.getLItem('tokenId');
     this.order()
   },
   methods:{
@@ -38,6 +41,7 @@ export default {
         method:'get',
         data:{
           include:'',
+          'filter[user]':this.userId,
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }

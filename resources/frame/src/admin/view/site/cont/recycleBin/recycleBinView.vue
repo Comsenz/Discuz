@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/contStyle.scss';
+import '../../../../scss/site/module/contStyle.scss';
 import recycleBinCon from '../../../../controllers/site/cont/recycleBin/recycleBinCon'
 import ElRadio from "element-ui/packages/radio/src/radio";
 export default {

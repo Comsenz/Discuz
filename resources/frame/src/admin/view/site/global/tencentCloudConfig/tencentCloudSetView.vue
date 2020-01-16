@@ -63,7 +63,7 @@
 
 <script>
 import tencentCloudSetCon from '../../../../controllers/site/global/tencentCloundSet/tencentCloudSetCon';
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 export default {
    name: "tencent-cloud-set-view",
   ...tencentCloudSetCon

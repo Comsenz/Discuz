@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/contStyle.scss';
+import '../../../../scss/site/module/contStyle.scss';
 import contManageCon from '../../../../controllers/site/cont/contManage/contManageCon'
 export default {
     name: "cont-manage-view",

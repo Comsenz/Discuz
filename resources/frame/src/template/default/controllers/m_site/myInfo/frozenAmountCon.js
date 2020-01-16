@@ -1,15 +1,13 @@
 
 import FrozenAmountHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import Panenl from '../../../view/m_site/common/panel';
+import webDb from "../../../../../helpers/webDbHelper";
 
 export default {
   data:function () {
     return {
-      user_id:'1',
-      walletFrozenList:{
-        // date:'2019-08-10 20:30'
-      }
-
+      walletFrozenList:{},
+      userId:''
     }
   },
 
@@ -18,6 +16,7 @@ export default {
     Panenl
   },
   mounted(){
+    this.userId = webDb.getLItem('tokenId');
     this.walletFrozen()
   },
   methods:{
@@ -26,8 +25,9 @@ export default {
         url:"walletFrozen",
         method:"get",
         data:{
+          'filter[user]':this.userId,
           'filter[change_type]':10,
-          include:''       
+          include:''
         }
       }).then((res)=>{
         if (res.errors){

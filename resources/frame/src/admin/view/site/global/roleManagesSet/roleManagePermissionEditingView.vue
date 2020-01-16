@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 import roleManagePermissionEditingCon from '../../../../controllers/site/global/roleManageSet/roleManagePermissionEdititingCon';
 export default {
     name: "role-manage-permission-editing-view",

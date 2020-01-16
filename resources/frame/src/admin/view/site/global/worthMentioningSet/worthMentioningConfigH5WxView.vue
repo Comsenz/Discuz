@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import '../../../../scss/module/site/globalStyle.scss';
+import '../../../../scss/site/module/globalStyle.scss';
 import worthMentioningConfigH5WxCon from '../../../../controllers/site/global/worthMentioningSet/worthMentioningConfigH5WxCon';
 export default {
     name: "worth-mentioning-config-view",
