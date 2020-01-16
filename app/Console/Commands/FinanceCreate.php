@@ -12,7 +12,6 @@ use App\Models\Order;
 use App\Models\UserWalletCash;
 use Carbon\Carbon;
 use Discuz\Console\AbstractCommand;
-use Illuminate\Support\Arr;
 
 class FinanceCreate extends AbstractCommand
 {
