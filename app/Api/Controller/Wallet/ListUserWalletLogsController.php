@@ -96,11 +96,6 @@ class ListUserWalletLogsController extends AbstractListController
         $limit  = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
-        //前台调取时筛选登陆用户
-        if(!Arr::get($request->getQueryParams(),'include')){
-            $filter['user'] = $actor->id;
-        }
-
         $wallet_log = $this->getWalletLogs($actor, $filter, $limit, $offset, $sort);
 
         $document->addPaginationLinks(
