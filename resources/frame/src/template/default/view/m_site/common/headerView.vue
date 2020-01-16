@@ -4,7 +4,7 @@
       class="sidebarWrap"
       v-model="popupShow"
       position="right"
-      :style="{ height: '100%' }"
+      :style="{'height':'100%','right': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"
    >
     <sidebar :isPayVal = "isPayVal"></sidebar>
     </van-popup>
