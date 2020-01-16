@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import '../../../scss/site/financeStyle.scss';
+import '../../../scss/module/site/financeStyle.scss';
 import fundDetailsCon from '../../../controllers/site/finance/fundDetailsCon';
 export default {
     name: "fund-details-view",

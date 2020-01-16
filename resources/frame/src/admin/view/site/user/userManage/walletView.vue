@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/userStyle.scss';
+import '../../../../scss/module/site/userStyle.scss';
 import walletCon from '../../../../controllers/site/user/userMange/walletCon'
 export default {
     name: "wallet-view",

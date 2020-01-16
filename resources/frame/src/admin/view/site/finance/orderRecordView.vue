@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import '../../../scss/site/financeStyle.scss';
+import '../../../scss/module/site/financeStyle.scss';
 import orderRecordCon from '../../../controllers/site/finance/orderRecordCon';
 export default {
     name: "order-details",

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/userStyle.scss';
+import '../../../../scss/module/site/userStyle.scss';
 import userSearchListCon from '../../../../controllers/site/user/userMange/userSearchListCon'
 export default {
     name: "search-results-view",

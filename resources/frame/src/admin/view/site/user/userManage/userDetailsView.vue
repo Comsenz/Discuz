@@ -33,7 +33,7 @@
         :http-request="uploaderLogo"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
-        @change="handleFile" 
+        @change="handleFile"
         :before-upload="beforeAvatarUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -108,7 +108,7 @@
     <Card header="性别："  v-if="sex">
       <p>{{sex === 0 ? "未知" : sex === 1 ? "男" : "女"}}</p>
     </Card>
-<!-- 
+<!--
     <Card header="实名认证姓名：">
       <p>大虫</p>
     </Card>
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/userStyle.scss';
+import '../../../../scss/module/site/userStyle.scss';
 import userDetailsCon from '../../../../controllers/site/user/userMange/userDetailsCon'
 export default {
     name: "user-details-view",

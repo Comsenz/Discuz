@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import '../../../../scss/site/globalStyle.scss';
+import '../../../../scss/module/site/globalStyle.scss';
 import addSensitiveWordsCon from '../../../../controllers/site/global/contentFilteringSet/addSensitiveWordsCon';
 export default {
     name: "add-sensitive-words-view",

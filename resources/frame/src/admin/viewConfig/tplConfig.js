@@ -18,7 +18,7 @@ export default {
     //后台模块
     admin_site:{
       js: [],
-      css: [],
+      css: ['../../../static/css/reset.css'],
       admin:{
         comLoad: function (resolve) {
           require(['../view/site/IndexView'], resolve)

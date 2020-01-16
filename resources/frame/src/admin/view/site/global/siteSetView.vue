@@ -162,7 +162,7 @@
   }
 </style>
 <script>
-import '../../../scss/site/globalStyle.scss';
+import '../../../scss/module/site/globalStyle.scss';
 import siteSetCon from '../../../controllers/site/global/siteSetCon';
 export default {
     name: "site-set-view",
