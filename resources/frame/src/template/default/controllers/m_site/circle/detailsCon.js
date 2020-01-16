@@ -102,9 +102,11 @@ export default {
       postsImages: [],
       allowRegister: '',
       loginWord:'登录 / 注册',
+      viewportWidth: '',
     }
   },
   created() {
+    this.viewportWidth = window.innerWidth;
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端

@@ -182,7 +182,7 @@
           closeable
           close-icon-position="top-right"
           position="bottom"
-          :style="{ width: '100%' }"
+          :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0','width': (!isPhone && !isWeixin) ? '640px' : '100%'}"
         >
           <span class="support">支持作者继续创作</span>
           <div class="rewardMonBox">
