@@ -13,7 +13,7 @@ use App\Repositories\FinanceRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 
-class ProfitChart
+class FinanceChart
 {
     use AssertPermissionTrait;
 
