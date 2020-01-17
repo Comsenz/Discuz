@@ -50,7 +50,6 @@ class UserValidator extends AbstractValidator
                 'unique:users'
             ],
             'password' => 'required|max:50' . $str,
-            'groupId' => 'required',
         ];
 
         if ($this->user) {

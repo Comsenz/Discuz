@@ -92,7 +92,7 @@ class ListNotificationController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $type = Arr::get($filter, 'type', '');
+        $type = Arr::get($filter, 'type');
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {
