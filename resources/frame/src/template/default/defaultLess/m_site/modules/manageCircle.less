@@ -1,0 +1,265 @@
+@charset "utf-8";
+
+/**
+ * manageCircle style
+ */
+// @import "./../var";
+// @import "./_app";
+@import "./../common/var.less";
+.borNone {
+	&:after { border-bottom: none !important;}
+}
+.padT0 { padding-top: 0 !important;}
+.padB0 { padding-bottom: 0 !important;}
+.serBox {
+  padding: 9px 8px;
+  height: 32px;
+	position: relative;
+	.serInp {
+		display: block;
+    height: 32px;
+		width: 100%;
+		border: 1px solid #e6e6ea;
+    border-radius: 5px;
+		text-align: center;
+		@include placeholder {
+		    color: #b2b2b2;
+        font-size: 13px;
+		  }
+		}
+	.icon {
+		position: absolute;
+    top: 18px;
+    left: 157px;
+    font-size: 13px;
+		color: #b2b2b2;
+	}
+	span {
+	}
+}
+@include placeholder {
+  color: red;
+}
+.memberCheckList {
+  padding-bottom: 52px;
+	.resUser {
+		.resUserDet {
+			.resUserName {
+        max-width: 150px;
+			}
+			.memberCheck {
+				float: right;
+        margin-right: 15px;
+			}
+		}
+	}
+
+}
+.manageFootFixed {
+	// overflow: hidden;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 12;
+	width: 100%;
+  height: 52px;
+  padding: 9px 14px 7px 14px;
+	background: #fff;
+	border-top: 1px solid @gray-ligh;
+	box-sizing: border-box;
+	.operaCho {
+		position: relative;
+    width: 216px;
+		.operaWo {
+			float: left;
+			position: relative;
+      width: 216px;
+      height: 36px;
+      padding: 8px 11px 7px 15px;
+			background: @corF7;
+			border: 1px solid @gray-ligh;
+			box-sizing: border-box;
+      border-radius: 5px;
+			text-align: left;
+			span {
+        font-size: 15px;
+        line-height: 21px;
+			}
+			.icon {
+				position: absolute;
+        font-size: 12px;
+        bottom: 12px;
+        right: 11px;
+			}
+		}
+		.operaChoList {
+			position: absolute;
+      bottom: 5px;
+			left: 0;
+			width: 100%;
+			background: @corF7;
+			border: 1px solid @gray-ligh;
+			@include px2rem(border-radius, 10);
+      border-radius: 5px;
+			box-sizing: border-box;
+			overflow: hidden;
+			.operaChoLi {
+        height: 47px;
+        line-height: 47px;
+				border-bottom: 1px solid @gray-ligh;
+        font-size: 15px;
+				color: @cor888;
+        padding: 0 15px;
+				box-sizing: border-box;
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+
+	}
+	.checkSubmit {
+		float: right;
+		background: @main;
+    width: 120px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 5px;
+		border: none;
+		color: #fff;
+    font-size: 16px;
+		text-align: center;
+	}
+}
+
+//邀请加入
+.inviteBox {
+  margin-left: 15px;
+}
+.inviteTable {
+	border: none;
+	width: 100%;
+	margin: 0;
+	border-collapse: collapse;
+	tr th {
+		text-align: left;
+    font-size: 15px;
+    height: 47px;
+    line-height: 47px;
+		border-bottom: 1px solid @gray-ligh;
+		font-weight: normal;
+		&:nth-child(1) {
+      width: 55px;
+      padding-left: 11px;
+		}
+		&:nth-child(2) {
+      width: 75px;
+		}
+		&:nth-child(3) {
+      width: 90px;
+		}
+		&:nth-child(4) {
+      padding-right: 15px;
+		}
+	}
+	tr td {
+		text-align: left;
+    line-height: 45px;
+		@include font-dpr(30);
+    border-bottom: 1px solid @gray-ligh;
+		&:nth-child(1) {
+      padding-left: 11px;
+		}
+		&:nth-child(4) {
+      padding-right: 15px;
+		}
+		.copyA {
+      margin-right: 10px;
+		}
+		.font9 {
+			color: @cor999;
+		}
+	}
+}
+
+//批量删除
+.choFixed {
+	a {
+		display: inline-block;
+    font-size: 15px;
+    line-height: 36px;
+		&:first-child {
+      margin-right: 30px;
+		}
+	}
+}
+.deleChi {
+	.operaBox {
+    margin-bottom: 14px;
+	}
+	&:last-child {
+		.gap { display: none;}
+	}
+}
+
+//站点信息
+.circlePL {
+  padding-left: 15px;
+	.circleLoBox {
+    padding-left: 0;
+	}
+}
+.lastBorNone {
+	.infoItem {
+		&:last-child {
+			&:after {
+				border-bottom: none;
+			}
+		}
+	}
+}
+.infoPower {
+	.powerList {
+    padding: 12px 15px 18px 15px;
+		position: relative;
+		&:after {
+			position: absolute;
+      box-sizing: border-box;
+      content: ' ';
+      pointer-events: none;
+      right: 0;
+      bottom: 0;
+      left: 16px;
+      border-bottom: 1px solid @gray-ligh;
+		}
+		&:last-child {
+			&:after {
+				position: absolute;
+			    box-sizing: border-box;
+			    content: ' ';
+			    pointer-events: none;
+			    right: 0;
+			    bottom: 0;
+			    left: 16px;
+			    border-bottom: none;
+			}
+		}
+		.powerClassify {
+      font-size: 17px;
+      line-height: 24px;
+      padding-bottom: 8px;
+		}
+		.powerChi {
+      font-size: 14px;
+      line-height: 20px;
+			color: rgba(#000,0.5);
+		}
+	}
+}
+
+//站点成员
+.cirMemberList {
+  &::after {
+    border: none !important;
+  }
+}
