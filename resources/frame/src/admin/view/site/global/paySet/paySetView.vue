@@ -9,10 +9,12 @@
           label="支付类型"
         >
           <template slot-scope="scope">
-            <i class="iconfont iconweixin table-icon"></i>
-            <div class="table-con-box">
-              <p>{{scope.row.name }}</p>
-              <p>{{scope.row.description }}</p>
+            <div class="pay-set-type-box">
+              <i class="iconfont iconweixin table-icon"></i>
+              <div class="table-con-box">
+                <p>{{scope.row.name }}</p>
+                <p>{{scope.row.description }}</p>
+              </div>
             </div>
           </template>
         </el-table-column>

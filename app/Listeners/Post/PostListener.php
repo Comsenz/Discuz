@@ -14,11 +14,13 @@ use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
+use App\MessageTemplate\PostMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Notifications\Replied;
+use App\Notifications\System;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -170,5 +172,12 @@ class PostListener
             'revise',
             $event->actor->username . ' 修改了内容'
         );
+
+        if($event->post->user) {
+            $event->post->user->notify(new System(PostMessage::class, [
+                'message' => $event->post->content,
+                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
+            ]));
+        }
     }
 }

@@ -12,7 +12,6 @@ trait Notifiable
 {
     use HasDatabaseNotifications,RoutesNotifications;
 
-
     /**
      * Get the entity's notifications.
      *

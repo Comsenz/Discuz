@@ -18,8 +18,9 @@
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import mSiteManagementCirclesCon from '../../../controllers/m_site/management/managementCirclesCon';
-import  '../../../scss/m_site/mobileIndex.scss';
-
+// import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+// import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "managementCirclesView",
     components:{

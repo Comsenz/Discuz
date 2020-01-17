@@ -31,10 +31,8 @@
                   </td>
                 </tr>
               </table>
-
-
             </div>
-          </van-pull-refresh>    	
+          </van-pull-refresh>
       </van-list>
 	  </div>
 		<div class="manageFootFixed" :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
@@ -49,8 +47,6 @@
 			</div>
 			<button class="checkSubmit" @click="checkSubmit">生成</button>
 		</div>
-
-
     </div>
 </template>
 <style type="text/css" scoped>
@@ -60,8 +56,9 @@
 import Header from '../../m_site/common/headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteInviteToJoinCon from '../../../controllers/m_site/management/inviteToJoinCon';
-import  '../../../scss/m_site/mobileIndex.scss';
-
+// import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "managementCirclesView",
     components:{
