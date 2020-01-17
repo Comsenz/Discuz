@@ -23,27 +23,6 @@ class ListNotificationController extends AbstractListController
     use AssertPermissionTrait;
 
     /**
-     * 点赞通知
-     */
-    const TYPE_LIKED = 'App\\Notifications\\Liked';
-
-    /**
-     * 回复通知
-     */
-    const TYPE_REPLIED = 'App\\Notifications\\Replied';
-
-    /**
-     * 打赏通知
-     */
-    const TYPE_REWARDED = 'App\\Notifications\\Rewarded';
-
-    private $types = [
-        1 => self::TYPE_REPLIED,
-        2 => self::TYPE_LIKED,
-        3 => self::TYPE_REWARDED,
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public $serializer = NotificationSerializer::class;
@@ -113,7 +92,7 @@ class ListNotificationController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $type = Arr::get($this->types, Arr::get($filter, 'type', 0));
+        $type = Arr::get($filter, 'type', '');
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {
