@@ -286,10 +286,19 @@ export default {
     },
 
     //点赞
-    replyOpera(firstPostId,clickStatus,itemIndex){
+    replyOpera(firstPostId,clickType,clickStatus,itemIndex){
+      console.log(firstPostId,clickType,clickStatus,itemIndex);
+      // return false;
       // console.log(isLike);
       let attri = new Object();
-      attri.isLiked = status;
+      if (clickStatus) {
+        console.log('如果为true,提交false');
+        attri.isLiked = false;
+      } else {
+        console.log('如果为false,提交true');
+        attri.isLiked = true;
+      }
+      // attri.isLiked = clickStatus;
       // let posts = 'posts/'+postId;
       this.appFetch({
         url:'posts',
@@ -306,10 +315,12 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res);
-          this.likedStatus = res.readdata._data.isLiked;
-          this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
-          this.$toast.success('修改成功');
+          if(clickType == 2){
+            //点赞
+            this.likedStatus = res.readdata._data.isLiked;
+            this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
+            this.$toast.success('修改成功');
+          }
           this.$emit('changeStatus', true);
         }
       })
