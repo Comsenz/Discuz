@@ -53,8 +53,11 @@
 </template>
 
 <script>
-import '../../../../../../static/css/iconfont.css';
-import '../../../scss/m_site/login/loginSignUpModule.scss';
+// import '../../../../../../static/css/iconfont.css';
+// import '../../../scss/m_site/login/loginSignUpModule.scss';
+
+import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
+import '../../../defaultLess/m_site/common/common.less'
 import loginPhoneCon from '../../../controllers/m_site/login/loginPhoneCon';
 export default {
     name: "loging-phone-view",

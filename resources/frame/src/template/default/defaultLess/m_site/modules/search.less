@@ -3,20 +3,19 @@
 /**
  * manageCircle style
  */
-@import "./../var";
-@import "./_app";
+@import "./../common/var.less";
 
 /*搜索*/
 .searchRes {
-	@include px2rem(padding, 0 0 0 30);
+  padding: 0 0 0 15px;
 	background: #fff;
 	.resultTit {
 		position: relative;
-		@include px2rem(padding-top, 20);
-		@include px2rem(line-height, 52);
+    padding-top: 10px;
+    line-height: 26px;
 		text-align: left;
-		color: $cor888;
-		@include font-dpr(26);
+		color: @cor888;
+    font-size: 13px;
 		font-weight: normal;
 		&:after {
 			position: absolute;
@@ -26,42 +25,40 @@
 		    right: 0;
 		    bottom: 0;
 		    left: 0;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
 	}
 	.resUser {
-		@include px2rem(padding, 14 0);
+    padding: 7px 0;
 		position: relative;
 		overflow: hidden;
 		.resUserHead {
 			float: left;
-			@include px2rem(width, 72);
-			@include px2rem(height, 72);
-			@include px2rem(border-radius, 8);
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
 		}
 		.resUserDet {
 			overflow: hidden;
-			@include font-dpr(30);
-			@include px2rem(margin-left, 92);
-
-
+      font-size: 15px;
+      margin-left: 46px;
 			.resUserName {
 				float: left;
-				@include px2rem(line-height, 72);
-				@include px2rem(max-width, 480);
+        line-height: 36px;
+        max-width: 240px;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				i {
 					font-style: normal;
-					color: $fontColor;
+					color: @main;
 				}
 			}
 			.userRole {
 				float: left;
-				@include px2rem(line-height, 72);
-				@include px2rem(margin-left, 20);
-				color: $cor888;
+        line-height: 36px;
+        margin-left: 10px;
+				color: @cor888;
 			}
 		}
 		&:after {
@@ -69,10 +66,10 @@
 		    box-sizing: border-box;
 		    content: ' ';
 		    pointer-events: none;
-		   @include px2rem(left, 92);
+       left: 46px;
 		    bottom: 0;
 		    right: 0;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
     &:last-child {
       &:after {
@@ -81,17 +78,17 @@
     }
 	}
 	.searchMore {
-		color: $fontColor;
-		@include px2rem(line-height, 80);
-		@include font-dpr(26);
+		color: @main;
+    line-height: 40px;
+    font-size: 13px;
 		.icon {
-			color: $fontColor;
-			@include px2rem(margin-right, 18);
-			@include font-dpr(32);
+			color: @main;
+      margin-right: 9px;
+      font-size: 16px;
 		}
 	}
 	.themeRes {
-		@include px2rem(padding, 26 30 26 0);
+    padding: 13px 15px 13px 0;
 		position: relative;
 		&:after {
 			position: absolute;
@@ -101,9 +98,7 @@
 		    left: 0;
 		    bottom: 0;
 		    right: 0;
-		    border-bottom: 1px solid $corE5;
+		    border-bottom: 1px solid @gray-light;
 		}
 	}
-
-
 }

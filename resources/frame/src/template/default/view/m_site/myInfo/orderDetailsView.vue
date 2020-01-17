@@ -29,9 +29,12 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import  '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/common/common.less';
+import '../../../defaultLess/m_site/modules/myInfo.less';
 import orderDetailsCon from '../../../controllers/m_site/myInfo/orderDetailsCon';
-import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "order-details-view",
   ...orderDetailsCon

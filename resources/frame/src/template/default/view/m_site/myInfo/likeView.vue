@@ -29,16 +29,19 @@
 
 
     </main>
-    </van-pull-refresh>    
+    </van-pull-refresh>
   </van-list>
     <footer class="my-info-money-footer"></footer>
   </div>
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
-import '../../../scss/m_site/mobileIndex.scss';
-import  '../../../scss/m_site/mobileIndex.scss';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/modules/myInfo.less';
+import '../../../defaultLess/m_site/common/common.less';
 import likeCon from '../../../controllers/m_site/myInfo/likeCon';
 export default {
   name: "like-view",

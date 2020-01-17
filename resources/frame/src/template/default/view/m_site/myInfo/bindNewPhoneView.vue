@@ -18,7 +18,7 @@
               placeholder="请输入验证码"
             >
               <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">{{btnContent}}</van-button>
-              
+
             </van-field>
 
           </van-cell-group>
@@ -33,10 +33,13 @@
 </template>
 
 <script>
-import '../../../scss/m_site/myInfo/myInfo.scss';
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../scss/m_site/myInfo/myInfo.scss';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import  '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/modules/myInfo.less';
+import '../../../defaultLess/m_site/common/common.less';
 import modifyPhoneCon from '../../../controllers/m_site/myInfo/bindNewPhoneCon.js';
-import  '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "modify-phone-view",
   ...modifyPhoneCon

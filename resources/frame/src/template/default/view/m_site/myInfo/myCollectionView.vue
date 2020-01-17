@@ -45,7 +45,7 @@
     <!-- </main> -->
   <!-- </div> -->
    <div class="reply-my-box my-info-money-header">
-    <comHeader title="我的收藏"></comHeader>   
+    <comHeader title="我的收藏"></comHeader>
     <van-list
     v-model="loading"
     :finished="finished"
@@ -60,7 +60,7 @@
           <!-- <div class="gap"></div> -->
               <ThemeDet :themeList="collectionList" :isMoreShow="false"></ThemeDet>
           </div>
-      </van-pull-refresh>    
+      </van-pull-refresh>
   </van-list>
 
     <!-- <footer class="my-info-money-footer"></footer> -->
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
 import Header from '../../m_site/common/headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
@@ -78,6 +78,7 @@ import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
 // import '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
+import '../../../defaultLess/m_site/modules/myInfo.less';
 export default {
   name: "my-collection-view",
    components:{

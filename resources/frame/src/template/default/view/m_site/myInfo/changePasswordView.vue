@@ -34,9 +34,11 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import  '../../../scss/m_site/myInfo/myInfo.scss';
+
+import '../../../defaultLess/m_site/modules/myInfo.less';
 import changePwdCon from '../../../controllers/m_site/myInfo/changePwdCon';
-import  '../../../scss/m_site/myInfo/myInfo.scss';
 export default {
     name: "change-password-view",
   ...changePwdCon

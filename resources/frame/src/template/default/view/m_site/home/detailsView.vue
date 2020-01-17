@@ -4,7 +4,7 @@
     <!-- 付费站点 已登录且当前用户已付费 -->
     <div class="circleCon">
     	<comHeader title="详情" :menuIconShow="menuStatus"></comHeader>
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+    <van-pull-refresh v-model="isLoading" :head-height="0" @refresh="onRefresh">
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
 		    	<div class="postTop">

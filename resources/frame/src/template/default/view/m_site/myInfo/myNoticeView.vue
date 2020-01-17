@@ -4,7 +4,8 @@
       <main class="my-notice-main content">
         <van-cell cless="my-notice-cell" @click="myJump(item.routerName)" is-link v-for='(item,index) in num' :key='index'>
           <template class="my-notice-cell-template" slot="title">
-            <span class="custom-title" >{{item.title}}</span>
+            <!-- <span class="custom-title" >{{item.title}}</span> -->
+            <span class="custom-title">{{item.title}}</span>
             <i class="custom-title-icon" type="danger" v-show ='item.number === 0 ? false:true'>{{item.number}}</i>
           </template>
         </van-cell>
@@ -29,9 +30,12 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import  '../../../scss/m_site/mobileIndex.scss';
 import myNoticeCon from '../../../controllers/m_site/myInfo/myNoticeCon';
-import  '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/common/common.less';
+import '../../../defaultLess/m_site/modules/myInfo.less';
 export default {
     name: "my-notice",
   ...myNoticeCon
