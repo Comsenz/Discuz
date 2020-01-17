@@ -54,11 +54,7 @@ export default {
         } else {
           this.joinedAt = res.readdata._data.joinedAt;
         }
-        if(res.readdata._data.expiredAt =='' || res.readdata._data.expiredAt == null){
-          this.expiredAt = res.readdata._data.expiredAt;
-        } else {
-          this.expiredAt = res.readdata._data.expiredAt;
-        }
+        this.expiredAt = res.readdata._data.expiredAt;
       }
 
         //请求权限列表数据

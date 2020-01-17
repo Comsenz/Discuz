@@ -317,12 +317,10 @@ export default {
 
 
     loadPriviewImgList(){
-      // console.log(themeListLen);
-      var themeListLen = this.themeListResult.length;
-
       if(this.themeListResult =='' || this.themeListResult == null){
         return false;
       } else {
+        var themeListLen = this.themeListResult.length;
         for (let h = 0; h < themeListLen; h++) {
           // 图片地址
           // let src = 'https://2020.comsenz-service.com/api/attachments/';
