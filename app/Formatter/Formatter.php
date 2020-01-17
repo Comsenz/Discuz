@@ -110,9 +110,9 @@ class Formatter
         $configurator->rendering->engine = 'PHP';
         $configurator->rendering->engine->cacheDir = $this->cacheDir;
 
-        $configurator->Escaper;
-        $configurator->Autoemail;
-        $configurator->Autolink;
+        $configurator->plugins->load('Escaper');
+        $configurator->plugins->load('Autoemail');
+        $configurator->plugins->load('Autolink');
         $configurator->tags->onDuplicate('replace');
 
         // emoji

@@ -18,7 +18,7 @@ class AddThreadFavoriteAttribute
             $event->attributes['canFavorite'] = (bool) $event->actor->can('favorite', $event->model);
 
             if ($favoriteState = $event->model->favoriteState) {
-                $event->attributes['isFavorite'] = $favoriteState ? true : false;
+                $event->attributes['isFavorite'] = true;
                 $event->attributes['favoriteAt'] = $event->formatDate($favoriteState->created_at);
             }
         }
