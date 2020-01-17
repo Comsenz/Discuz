@@ -171,6 +171,9 @@ body {
     color: @corD8;
     cursor: pointer;
   }
+  .icon-top {
+    float: left;
+  }
 }
 .postContent {
   font-size: 15px;
@@ -749,6 +752,12 @@ openCircleConView.vue
     float: left;
     &:nth-child(3n) {
       margin-right:0;
+    }
+  }
+  @-moz-document url-prefix(){
+    .themeImgChild {
+      margin-right: 2px !important;
+      margin-bottom: 2px;
     }
   }
 }
