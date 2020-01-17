@@ -65,7 +65,7 @@
 			<!-- </van-pull-refresh>
 			</van-list> -->
 	    </div>
- 	</van-pull-refresh>    
+ 	</van-pull-refresh>
   	</van-list>
 		<div class="manageFootFixed" :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
 			<div class="operaCho">
@@ -79,8 +79,8 @@
 			</div>
 			<button class="checkSubmit" @click="handleSubmit">提交</button>
 		</div>
-	    
-	    
+
+
     </div>
 </template>
 <style type="text/css" scoped>
@@ -96,7 +96,9 @@
 // import Header from '../../m_site/common/headerView';
 // import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteMembersManagementCon from '../../../controllers/m_site/management/membersManagementCon';
-import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/search.less';
+import  '../../../defaultLess/m_site/modules/manageCircle.less';
 
 export default {
     name: "managementCirclesView",

@@ -56,13 +56,13 @@
 	.bgEd { min-height: 100%; background: #EDEDED; }
 </style>
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
 import themeSearchCon from '../../../controllers/m_site/search/themeSearchCon';
 import ThemeDet from '../common/themeDetView'
 // import  '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
-
+import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "themeSearchView",
     components:{

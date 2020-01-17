@@ -22,11 +22,27 @@
 		border: 1px solid #e6e6ea;
     border-radius: 5px;
 		text-align: center;
-		@include placeholder {
-		    color: #b2b2b2;
-        font-size: 13px;
-		  }
-		}
+		// @include placeholder {
+  //     color: #b2b2b2;
+  //     font-size: 13px;
+		// }
+    &::-webkit-input-placeholder {
+      color: #b2b2b2;
+      font-size: 13px;
+    }
+    &:-moz-placeholder {
+      color: #b2b2b2;
+      font-size: 13px;
+    }
+    &::-moz-placeholder {
+      color: #b2b2b2;
+      font-size: 13px;
+    }
+    &:-ms-input-placeholder {
+      color: #b2b2b2;
+      font-size: 13px;
+    }
+	}
 	.icon {
 		position: absolute;
     top: 18px;
@@ -37,9 +53,9 @@
 	span {
 	}
 }
-@include placeholder {
-  color: red;
-}
+// @include placeholder {
+//   color: red;
+// }
 .memberCheckList {
   padding-bottom: 52px;
 	.resUser {
@@ -65,7 +81,7 @@
   height: 52px;
   padding: 9px 14px 7px 14px;
 	background: #fff;
-	border-top: 1px solid @gray-ligh;
+	border-top: 1px solid @gray-light;
 	box-sizing: border-box;
 	.operaCho {
 		position: relative;
@@ -77,7 +93,7 @@
       height: 36px;
       padding: 8px 11px 7px 15px;
 			background: @corF7;
-			border: 1px solid @gray-ligh;
+			border: 1px solid @gray-light;
 			box-sizing: border-box;
       border-radius: 5px;
 			text-align: left;
@@ -98,7 +114,7 @@
 			left: 0;
 			width: 100%;
 			background: @corF7;
-			border: 1px solid @gray-ligh;
+			border: 1px solid @gray-light;
 			@include px2rem(border-radius, 10);
       border-radius: 5px;
 			box-sizing: border-box;
@@ -106,7 +122,7 @@
 			.operaChoLi {
         height: 47px;
         line-height: 47px;
-				border-bottom: 1px solid @gray-ligh;
+				border-bottom: 1px solid @gray-light;
         font-size: 15px;
 				color: @cor888;
         padding: 0 15px;
@@ -146,7 +162,7 @@
     font-size: 15px;
     height: 47px;
     line-height: 47px;
-		border-bottom: 1px solid @gray-ligh;
+		border-bottom: 1px solid @gray-light;
 		font-weight: normal;
 		&:nth-child(1) {
       width: 55px;
@@ -166,7 +182,7 @@
 		text-align: left;
     line-height: 45px;
 		@include font-dpr(30);
-    border-bottom: 1px solid @gray-ligh;
+    border-bottom: 1px solid @gray-light;
 		&:nth-child(1) {
       padding-left: 11px;
 		}
@@ -230,7 +246,7 @@
       right: 0;
       bottom: 0;
       left: 16px;
-      border-bottom: 1px solid @gray-ligh;
+      border-bottom: 1px solid @gray-light;
 		}
 		&:last-child {
 			&:after {
