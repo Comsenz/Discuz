@@ -172,11 +172,14 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         // pay: 付费模式 public: 公开模式
         $settings['siteMode'] = $this->settings->get('site_mode');
+        $settings['setsite']['site_mode'] = $this->settings->get('site_mode');
 
         // 付费模式时返回站点价格、到期时间
         if ($settings['siteMode'] == 'pay' || ($this->actor->exists && $this->actor->isAdmin())) {
             $settings['sitePrice'] = $this->settings->get('site_price');
+            $settings['setsite']['site_price'] = $this->settings->get('site_price');
             $settings['siteExpire'] = $this->settings->get('site_expire');
+            $settings['setsite']['site_Expire'] = $this->settings->get('site_expire');
         }
 
         return $settings;
