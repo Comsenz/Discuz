@@ -30,7 +30,9 @@
   /* .searchCon { box-shadow: 0px 1px rgba(0,0,0,0.02); margin-bottom: 1px;} */
 </style>
 <script>
-import '../../../scss/m_site/myInfo/myInfo.scss';
+// import '../../../scss/m_site/myInfo/myInfo.scss';
+
+import '../../../defaultLess/m_site/modules/myInfo.less';
 import modifyDataCon from '../../../controllers/m_site/myInfo/modifyDataCon';
 export default {
     name: "modify-data-view",

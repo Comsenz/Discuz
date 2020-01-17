@@ -37,8 +37,8 @@
  */
 .my-info-money-footer{
   flex: 1;
-  background-color: #EDEDED;
-  border:1px solid #E5E5E5;
+  background-color: @corEd;
+  border:1px solid @corE5;
 }
 
 
@@ -93,7 +93,7 @@
     right: 0;
     bottom: 0;
     left: 16px;
-    border-bottom: 1PX solid #E5E5E5;
+    border-bottom: 1PX solid @corE5;
   }
 }
 
@@ -103,7 +103,7 @@
 .reference{
   padding: 10px 15px 0 15px;
   .reference-cont{
-    background-color: #F7F7F7;
+    background-color: @corF7;
     padding: 8px;
     font-size:13px;
     font-weight:400;
@@ -193,7 +193,7 @@ h2,h3,h4{
     .home-page-main-header{
       height: 152px;
       width: 100%;
-      background-color: #FFF;
+      background-color: @corFff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -209,7 +209,7 @@ h2,h3,h4{
           margin: 6px 0;
           font-size:15px;
           font-weight:500;
-          color:@fontColor;
+          color:@main;
           line-height:20px;
         }
       }
@@ -226,8 +226,8 @@ h2,h3,h4{
   .home-page-footer{
     width: 100%;
     height:46px;
-    background:#F2F2F2;
-    border:1px solid #E5E5E5;
+    background:@corF2;
+    border:1px solid @corE5;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -236,7 +236,6 @@ h2,h3,h4{
     align-items: center;
     p{
       font-size:14px;
-      // font-family:PingFangSC-Regular,PingFang SC;
       font-weight:400;
       color:@font000;
       line-height:20px;
@@ -280,8 +279,6 @@ h2,h3,h4{
         margin-left: 8px;
         font-size:11px;
         font-weight:400;
-        color:@corFff;
-
       }
     }
   }
@@ -356,11 +353,11 @@ h2,h3,h4{
  */
 .modify-phone-box{
   width: 100%;
-  height: calc(100% - 44px);
+  height: calc(~"100% - 44px");
 
   .modify-phone-main{
     width: 100%;
-    height: calc(100% - 40px);
+    height: calc(~"100% - 40px");
     padding: 44px 0 0 15px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -377,7 +374,6 @@ h2,h3,h4{
       .modify-phone-title-p{
         text-align: center;
         font-size:19px;
-        font-family:PingFangSC-Medium,PingFangSC;
         font-weight:500;
         color:@font000;
         line-height: 26px;

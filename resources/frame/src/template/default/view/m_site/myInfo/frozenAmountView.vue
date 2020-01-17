@@ -12,8 +12,10 @@
 
 <script>
 import frozenAmountCon from '../../../controllers/m_site/myInfo/frozenAmountCon';
-import '../../../less/m_site/myInfo/myInfo.less'
-import  '../../../scss/m_site/mobileIndex.scss';
+// import '../../../less/m_site/myInfo/myInfo.less'
+// import  '../../../scss/m_site/mobileIndex.scss';
+import '../../../defaultLess/m_site/modules/myInfo.less';
+import '../../../defaultLess/m_site/common/common.less';
 export default {
     name: "frozen-amount-view",
   ...frozenAmountCon

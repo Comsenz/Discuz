@@ -69,7 +69,9 @@
 </template>
 
 <script>
-import '../../../scss/m_site/login/loginSignUpModule.scss';
+// import '../../../scss/m_site/login/loginSignUpModule.scss';
+
+import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import payTheFeeCon from '../../../controllers/m_site/login/payTheFeeCon';
 export default {
     name: "pay-the-fee-view",

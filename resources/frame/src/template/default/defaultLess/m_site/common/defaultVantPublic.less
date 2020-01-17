@@ -3,9 +3,19 @@
 */
 
 @import "../../../../../../node_modules/vant/lib/index";
-@import "./mixins/hairline";
-@import "theme";
+@import "var";
 * { margin: 0; padding: 0; }
+
+
+
+.hairline(@border-color: #E5E5E5) {
+  border-top: 1PX solid @border-color;
+  border-bottom: 1PX solid @border-color;
+}
+
+.hairline-bottom(@border-color: #E5E5E5) {
+  border-bottom: 1PX solid @border-color;
+}
 
 
 /**
@@ -101,7 +111,7 @@
 }
 .van-field {
   &__control {
-    caret-color: @fontColor;/*光标颜色*/
+    caret-color: @main;/*光标颜色*/
     // font-size: @font-size-sl;
     font-size: 15px;
     line-height: 24px;
@@ -155,7 +165,7 @@
     box-sizing: border-box;
   }
   &__action {
-      color: @fontColor;
+      color: @main;
       font-size: 16px
   }
 }
@@ -165,7 +175,7 @@
   van-divider  --start
  */
 .van-divider {
-  color: #BBBBBB;
+  color: @corBBB;
   font-size: 15px;
   &:before{
     border-width: 1PX;
