@@ -203,7 +203,7 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 |--------------------------------------------------------------------------
 */
 
-$route->get('/notificationUnread', 'notification.unread', ApiController\Notification\UnreadNotificationController::class);
+$route->get('/notification/unread', 'notification.unread', ApiController\Notification\UnreadNotificationController::class);
 $route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
 $route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
 $route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);
@@ -236,8 +236,7 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 |--------------------------------------------------------------------------
 */
 $route->get('/statistic/finance', 'statistic.finance', ApiController\Statistic\FinanceProfileController::class);
-$route->get('/statistic/profitChart', 'statistic.profitChart', ApiController\Statistic\ProfitChartController::class);
-$route->get('/statistic/orderChart', 'statistic.orderChart', ApiController\Statistic\OrderChartController::class);
+$route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\Statistic\FinanceChartController::class);
 
 /*
 |--------------------------------------------------------------------------

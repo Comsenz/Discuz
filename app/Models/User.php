@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use App\Traits\Notifiable;
 use Discuz\Auth\Guest;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -19,8 +20,7 @@ use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Notifications\Notifiable;
-use App\Notifications\DiscuzChannelManager;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Carbon;
 
 /**
@@ -280,45 +280,25 @@ class User extends Model
         return $this;
     }
 
-    /**
-     * 重载通知
-     */
-    public function notify($instance)
-    {
-        app(DiscuzChannelManager::class)->send($this, $instance);
-    }
-
-    /**
-     * TODO: 用户未读消息数
-     * Get the number of unread notifications for the user.
-     *
-     * @return int
-     */
     public function getUnreadNotificationCount()
     {
-        return $this->getUnreadNotifications()->count();
+        static $cached = null;
+        if (is_null($cached)) {
+            $cached = $this->unreadNotifications()->count();
+        }
+        return $cached;
     }
 
-    /**
-     * TODO: 用户未读消息
-     * Get all notifications that have not been read yet.
-     *
-     * @return Collection
-     */
-    protected function getUnreadNotifications()
+    public function getUnreadTypesNotificationCount()
     {
-        static $cached = null;
-
-        if (is_null($cached)) {
-            $cached = $this->notifications()
-                ->whereIn('type', $this->getAlertableNotificationTypes())
-                ->whereNull('read_at')
-                ->where('is_deleted', false)
-                ->whereSubjectVisibleTo($this)
-                ->get();
+        static $cachedAll = null;
+        if (is_null($cachedAll)) {
+            $cachedAll = $this->unreadNotifications()->selectRaw('type,count(*) as count')
+                ->groupBy('type')->pluck('type', 'count')->map(function($val) {
+                    return class_basename($val);
+                })->flip();
         }
-
-        return $cached;
+        return $cachedAll;
     }
 
     /**

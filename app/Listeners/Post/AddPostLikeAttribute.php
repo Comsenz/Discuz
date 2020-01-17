@@ -18,7 +18,7 @@ class AddPostLikeAttribute
             $event->attributes['canLike'] = (bool) $event->actor->can('like', $event->model);
 
             if ($likeState = $event->model->likeState) {
-                $event->attributes['isLiked'] = $likeState ? true : false;
+                $event->attributes['isLiked'] = true;
                 $event->attributes['likedAt'] = $event->formatDate($likeState->created_at);
             }
         }

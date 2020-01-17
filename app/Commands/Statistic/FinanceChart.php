@@ -13,7 +13,7 @@ use App\Repositories\FinanceRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 
-class ProfitChart
+class FinanceChart
 {
     use AssertPermissionTrait;
 
@@ -48,7 +48,7 @@ class ProfitChart
      */
     public function __invoke()
     {
-        $this->assertAdmin($this->actor);
+        $this->assertCan($this->actor, 'statistic.financeChart');
 
         $query = $this->finance->query();
         $query->whereBetween('created_at', [$this->createdAtBegin, $this->createdAtEnd]);

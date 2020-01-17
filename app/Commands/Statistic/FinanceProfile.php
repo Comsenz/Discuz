@@ -47,7 +47,7 @@ class FinanceProfile
      */
     public function __invoke()
     {
-        $this->assertAdmin($this->actor);
+        $this->assertCan($this->actor, 'statistic.financeProfile');
 
         $financeProfile = [];
         //用户总充值
