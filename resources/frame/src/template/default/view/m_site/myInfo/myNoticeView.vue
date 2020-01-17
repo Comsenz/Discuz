@@ -4,7 +4,8 @@
       <main class="my-notice-main content">
         <van-cell cless="my-notice-cell" @click="myJump(item.routerName)" is-link v-for='(item,index) in num' :key='index'>
           <template class="my-notice-cell-template" slot="title">
-            <span class="custom-title" >{{item.title}}</span>
+            <!-- <span class="custom-title" >{{item.title}}</span> -->
+            <span class="custom-title">{{item.title}}</span>
             <i class="custom-title-icon" type="danger" v-show ='item.number === 0 ? false:true'>{{item.number}}</i>
           </template>
         </van-cell>

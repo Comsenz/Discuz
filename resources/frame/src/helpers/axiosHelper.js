@@ -116,16 +116,17 @@ const analyzingData = function(data, included) {
  * @return {[type]}         [description]
  */
 const appFetch = function(params, options) {
+  if(params === undefined) {
+    console.error("必须传递参数");
+    return false;
+  }
   var oldUrl = params.url;
   var apiUrl = appConfig.apis[oldUrl];
 
   //是不是标准接口
   params.standard = params.standard !== undefined ? params.standard : true;
 
-  if(params === undefined) {
-    console.error("必须传递参数");
-    return false;
-  }
+  
 
   params.method = params.method ? params.method : 'get';
   if(!apiUrl) {
