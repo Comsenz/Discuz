@@ -75,7 +75,9 @@ import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUp
 import ThemeDet from '../../m_site/common/themeDetView';
 import myCollectionCon from '../../../controllers/m_site/myInfo/myCollectionCon';
 import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
   name: "my-collection-view",
    components:{

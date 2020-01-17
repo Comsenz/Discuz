@@ -129,7 +129,9 @@
 </template>
 <script>
 import themeDet from '../../../controllers/m_site/common/themeDetCon';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
   name: "themeDetView",
   ...themeDet

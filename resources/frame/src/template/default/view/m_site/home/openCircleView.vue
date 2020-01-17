@@ -39,7 +39,9 @@ import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
 import ThemeDet from '../../m_site/common/themeDetView';
 import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "openCircleView",
     components:{

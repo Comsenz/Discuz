@@ -59,7 +59,9 @@
 import '../../../less/m_site/myInfo/myInfo.less';
 import themeSearchCon from '../../../controllers/m_site/search/themeSearchCon';
 import ThemeDet from '../common/themeDetView'
-import  '../../../scss/m_site/mobileIndex.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 
 export default {
     name: "themeSearchView",
