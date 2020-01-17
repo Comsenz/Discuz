@@ -9,10 +9,12 @@
             label="微信设置类型"
           >
             <template slot-scope="scope">
-              <i class="iconfont table-icon" :class="scope.row.icon"></i>
-              <div class="table-con-box">
-                <p>{{scope.row.name }}</p>
-                <p>{{scope.row.description }}</p>
+              <div class="pay-set-type-box">
+                <i class="iconfont table-icon" :class="scope.row.icon"></i>
+                <div class="table-con-box">
+                  <p>{{scope.row.name }}</p>
+                  <p>{{scope.row.description }}</p>
+                </div>
               </div>
             </template>
           </el-table-column>
