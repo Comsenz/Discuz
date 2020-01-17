@@ -31,8 +31,6 @@
                   </td>
                 </tr>
               </table>
-
-
             </div>
           </van-pull-refresh>
       </van-list>
@@ -49,8 +47,6 @@
 			</div>
 			<button class="checkSubmit" @click="checkSubmit">生成</button>
 		</div>
-
-
     </div>
 </template>
 <style type="text/css" scoped>
