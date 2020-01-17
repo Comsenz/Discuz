@@ -42,6 +42,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $expired_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property string $identity
+ * @property string $realname
  * @property Group $groups
  * @package App\Models
  * @method truncate()
@@ -211,6 +213,20 @@ class User extends Model
         return $this;
     }
 
+    public function changeRealname($realname)
+    {
+        $this->realname = $realname;
+
+        return $this;
+    }
+
+    public function changeIdentity($identity)
+    {
+        $this->identity = $identity;
+
+        return $this;
+    }
+
     public function changeMobileActive($active)
     {
         $this->mobile_confirmed = $active;
@@ -257,6 +273,16 @@ class User extends Model
     public function getMobileAttribute($value)
     {
         return $value ? substr_replace($value, '****', 3, 4) : '';
+    }
+
+    public function getRealnameAttribute($value)
+    {
+        return $value ?  : '';
+    }
+
+    public function getIdentityAttribute($value)
+    {
+        return $value ?  substr_replace($value, '****************', 1, 16) : '';
     }
 
     /*

@@ -51,6 +51,11 @@ class UserValidator extends AbstractValidator
             ],
             'password' => 'required|max:50' . $str,
             'groupId' => 'required',
+            'identity' => [
+                'required',
+                'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/',
+             ],
+            'realname' => 'required',
         ];
 
         if ($this->user) {
@@ -64,6 +69,7 @@ class UserValidator extends AbstractValidator
     {
         return [
             'username.regex' => '不能有特殊字符',
+            'identity.regex' => '身份证为15位或18位',
         ];
     }
 
