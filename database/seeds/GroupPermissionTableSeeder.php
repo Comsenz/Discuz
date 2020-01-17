@@ -75,6 +75,11 @@ class GroupPermissionTableSeeder extends Seeder
 
         // 邀请
         'createInvite' => [],                   // 发起邀请
+
+        // 财务
+        'statistic.financeProfile' => [],       // 财务概况
+        'statistic.financeChart' => [],         // 财务图表
+
     ];
 
     /**
