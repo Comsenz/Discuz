@@ -20,18 +20,15 @@
 }
 
 .table-con-box{
-  width:calc(100% - 50px);
-
+  //width:calc(100% - 50PX);
   display: inline-block;
   vertical-align: middle;
-
   p{
     font-size:12PX;
     font-weight:500;
     color:rgba(144,147,153,1);
     line-height:14PX;
   }
-
   p:first-of-type{
     font-size:14PX;
     font-weight:600;
@@ -41,7 +38,6 @@
   p:last-of-type{
     margin-top: 7PX;
   }
-
 }
 
 .icon-add{
