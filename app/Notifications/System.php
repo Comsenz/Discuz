@@ -4,16 +4,17 @@
 namespace App\Notifications;
 
 
-use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Notifications\Notification;
 
 class System extends Notification
 {
 
     protected $data;
+    protected $type;
 
-    public function __construct($data)
+    public function __construct($type, $data)
     {
+        $this->type = $type;
         $this->data = $data;
     }
 
@@ -24,6 +25,11 @@ class System extends Notification
 
     public function toDatabase($notifiable)
     {
-        return $this->data;
+        $message = app()->make($this->type);
+
+        return $message->notifiable($notifiable)->template($this->data);
     }
+
+
+
 }

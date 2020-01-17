@@ -41,7 +41,7 @@
     </div>
 
 </template>
-<style>
+<style scoped="scoped">
   .van-pull-refresh { min-height: 300px;}
 </style>
 <script>

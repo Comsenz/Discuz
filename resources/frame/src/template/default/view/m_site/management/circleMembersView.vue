@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-  </van-pull-refresh>    
+  </van-pull-refresh>
   </van-list>
     </div>
 </template>
@@ -55,7 +55,10 @@
 <script>
 import '../../../less/m_site/myInfo/myInfo.less';
 import mSiteCircleMembersCon from '../../../controllers/m_site/management/circleMembersCon';
-import  '../../../scss/m_site/mobileIndex.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/search.less';
+import  '../../../defaultLess/m_site/modules/manageCircle.less';
 
 export default {
     name: "managementCirclesView",

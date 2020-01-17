@@ -8,8 +8,11 @@
 namespace App\Commands\Users;
 
 use App\Exceptions\TranslatorException;
+use App\MessageTemplate\GroupMessage;
+use App\Models\Group;
 use App\Models\OperationLog;
 use App\Models\User;
+use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
@@ -103,11 +106,18 @@ class UpdateUser
 //            if ($actionType == 'refuse') {}
         }
 
-        $groupId = Arr::get($attributes, 'groupId');
-        $validator['groupId'] = $groupId;
-        if ($groupId) {
+        if ($groupId = Arr::get($attributes, 'groupId')) {
             $this->assertCan($this->actor, 'edit.group', $user);
+            $oldGroup = $user->groups->first();;
             $user->groups()->sync($groupId);
+
+            if($oldGroup->id != $groupId) {
+                $notifyData = [
+                    'old' => $oldGroup,
+                    'new' => Group::find($groupId)
+                ];
+                $user->notify(new System(GroupMessage::class, $notifyData));
+            }
         }
 
         $this->validator->valid($validator);

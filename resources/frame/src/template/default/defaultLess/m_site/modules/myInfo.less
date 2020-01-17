@@ -429,3 +429,38 @@ h2,h3,h4{
   }
 
 }
+
+/**
+  系统通知
+ */
+.systemCon {
+  position: relative;
+  padding: 11px 15px;
+  .systemTitle {
+    font-size: 15px;
+    line-height: 22px;
+    color: @cor444;
+    margin-bottom: 8px;
+  }
+  .systemTime {
+    font-size: 14px;
+    line-height: 16px;
+    color: @cor888;
+    margin-bottom: 8px;
+  }
+  .systemDet {
+    font-size: 14px;
+    line-height: 18px;
+    color: @cor444;
+  }
+  &:after {
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 15px;
+    border-bottom: 1px solid @gray-light;
+  }
+}

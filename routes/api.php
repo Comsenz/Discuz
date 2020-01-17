@@ -203,7 +203,6 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 |--------------------------------------------------------------------------
 */
 
-$route->get('/notification/unread', 'notification.unread', ApiController\Notification\UnreadNotificationController::class);
 $route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
 $route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
 $route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);

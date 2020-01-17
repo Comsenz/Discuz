@@ -51,7 +51,7 @@ export default {
           this.$router.push('/like');
           break;
         default:
-          this.$router.push('/');
+          this.$router.push('/system');
       }
     },
     notice(){

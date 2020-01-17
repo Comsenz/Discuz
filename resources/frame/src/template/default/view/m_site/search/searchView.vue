@@ -60,8 +60,12 @@
   .searchCon { box-shadow: 0px 1px rgba(0,0,0,0.02); margin-bottom: 1px;}
 </style>
 <script>
-import  '../../../scss/m_site/mobileIndex.scss';
-import searchCon from '../../../controllers/m_site/search/searchCon'
+// import  '../../../scss/m_site/mobileIndex.scss';
+
+import searchCon from '../../../controllers/m_site/search/searchCon';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
+import  '../../../defaultLess/m_site/modules/search.less';
 export default {
     name: "searchView",
   ...searchCon
