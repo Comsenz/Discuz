@@ -15,7 +15,9 @@ class UserProfileSerializer extends UserSerializer
 
         return $attributes + [
             'paid' => $model->paid,
-            'payTime' => $this->formatDate($model->payTime)
+            'payTime' => $this->formatDate($model->payTime),
+            'unreadNotifications' => $model->getUnreadNotificationCount(),
+            'typeUnreadNotifications' => $model->getUnreadTypesNotificationCount()
         ];
     }
 }
