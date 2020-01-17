@@ -429,6 +429,14 @@ export default {
           title:"点赞我的"
         }
       },
+      'system':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/systemView'],resolve)
+        },
+        metaInfo:{
+          title:"系统通知"
+        }
+      },
       'my-wallet':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myWalletView'],resolve)
