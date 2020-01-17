@@ -120,7 +120,7 @@ a { color: @main;}
 .gap {
   background: @gap;
   width: 100%;
-  height11px
+  height:11px;
   border-top: 1px solid @gray-light;
   border-bottom: 1px solid @gray-light;
 }
@@ -188,9 +188,9 @@ a { color: @main;}
   left: 0;
   z-index: 11;
   width: 100%;
-  background: #f9f9f9;
+  background: @corF9;
   height: 44px;
-  box-shadow: 0px 1px rgba(#000,0.05);
+  box-shadow: 0 1px rgba(#000,0.05);
   padding: 10px 15px;
   box-sizing: border-box;
   .headBack {
@@ -219,8 +219,8 @@ a { color: @main;}
   }
 }
 .foueHeadBox {
-  background: #f9f9f9;
-  box-shadow: 0px 1px rgba(#000,0.05);
+  background: @corF9;
+  box-shadow: 0 1px rgba(#000,0.05);
   .fourHeader {
     position: relative;
     width: 100%;
@@ -332,7 +332,6 @@ a { color: @main;}
   border-top: 1px solid @gray-light;
   .itemTit {
     float: left;
-    @include px2rem(line-height, 42);
     line-height: 21px;
     font-size: 15px;
   }
@@ -373,7 +372,8 @@ a { color: @main;}
   -o-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
-  border-radius: 5px; color:#FFF;
+  border-radius: 5px;
+  color:@corFff;
   background: rgba(17, 17, 17, 0.7);
   height: 45px;
   line-height: 45px;
@@ -397,7 +397,7 @@ a { color: @main;}
 }
 //绑定手机号
 .grayBg {
-  color: #999;
+  color: @cor999;
 }
 //
 .likePostContent {
@@ -407,7 +407,6 @@ a { color: @main;}
   padding: 0 15px 14px 15px;
   a {
     display: block;
-    @include px2rem(line-height, 40);
     line-height: 20px;
     color: @font000;
   }
@@ -419,4 +418,305 @@ a { color: @main;}
     font-size: 13px;
     color: @cor888;
   }
+}
+
+
+
+/**
+ * 公共组件样式：登录/注册头部
+ */
+
+@lh:44px;   //height和line-height
+
+.header-box{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: @lh;
+  background-color: @corF9;
+  -webkit-box-shadow: 0 1px rgba(0,0,0,0.1);;
+  -moz-box-shadow: 0 1px rgba(0,0,0,0.1);;
+  box-shadow: 0 1px rgba(0,0,0,0.1);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink:0;
+
+  .header-title{
+    font-size: 18px;
+    color:@font000;
+    line-height: 24px;
+  }
+
+  .header-icon{
+    fill:@main;
+    position: absolute;
+    left: 16px;
+    cursor: pointer;
+  }
+  .comHeadMenu {
+    fill:@main;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+  }
+
+}
+
+
+/**
+ * 登录/注册页面底部
+ */
+
+.login-user-footer{
+  width: 100%;
+  position: relative;
+  text-align: center;
+  font-size: 13px;
+  color: @main;
+  padding-bottom: 15px;
+  i{
+    width: 1px;
+    height: 14px;
+    margin-left: 14px;
+    margin-right: 14px;
+    background-color: @corE5;
+    font-style: normal;
+    display: inline-block;
+    color: @corE5;
+  }
+  span{
+    cursor: pointer;
+  }
+}
+
+
+/**
+  内容主体头部
+  包括头像、用户昵称、发布/回复等时间、操作
+ */
+
+//头像规格设置
+@imgWH:{
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.cont-header-box{
+  width: 100%;
+  height: 61px;
+  padding: 15px 15px 6px 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  .avatar-box{
+    width: 40px;
+    height: 100%;
+    .img-box{
+      img{
+        @imgWH();
+      }
+    }
+  }
+
+  .text-box{
+    margin-left: 9px;
+    flex: 1;
+
+    .user-name-text{
+      font-size:15px;
+      font-weight:500;
+      color:rgba(51,102,153,1);
+      line-height:20px;
+    }
+    .text-status{
+      font-size:15px;
+      font-weight:500;
+      color:rgba(68,68,68,1);
+      line-height:20px;
+    }
+    .time{
+      margin-top: 4px;
+      color:rgba(136,136,136,1);
+      line-height:16px
+    }
+
+  }
+
+  .operating-box{
+    align-self: flex-start;
+    color:@blue;
+    line-height:20px;
+  }
+
+}
+
+
+/**
+  内容页脚
+  包括：点赞、赞赏、回复
+ */
+
+.cont-footer-box{
+  width: 100%;
+  display: block;
+  padding: 0 15px 15px 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  .cont-footer-main{
+    width: 100%;
+    background-color: @corF7;
+
+    .cont-footer-top{
+      padding: 8px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      border-bottom: 1PX solid @border-color;
+
+      .cont-footer-like{
+        font-size: 14px;
+        .icon{
+          font-size: 14px;
+          color: @blue;
+        }
+        a{
+          color:@blue;
+          line-height:18px;
+        }
+      }
+
+      .cont-footer-praise{
+        .icon{
+          font-size:14px;
+          color: @icon-red;
+        }
+        a{
+          color: @blue;
+          line-height:20px;
+        }
+      }
+
+    }
+    .cont-footer-btm{
+      padding: 8px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      color:@blue;
+      line-height:20px;
+      a{
+        color:@blue;
+      }
+      span{
+        color: @cor444;
+      }
+    }
+  }
+}
+
+
+/**
+  内容主体内容
+  包括：内容、引用内容、回复内容
+ */
+
+//内容主体图片大小
+@imgWH:{
+  width: 160px;
+  height: 160px;
+}
+
+.cont-main-box{
+  padding: 0 15px 10px 15px;
+
+  .cont-main-text{
+    font-size:15px;
+    color:@font000;
+    line-height:20px;
+  }
+
+  .cont-media-wraps{
+    padding-top: 8px;
+    img{
+      @imgWH();
+    }
+  }
+
+}
+
+
+
+/*
+  公共组件：面板
+*/
+.panel-box{
+  width: 100%;
+  padding:  15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+
+  &:not(:last-child)::after{
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 16px;
+    border-bottom: 1PX solid @border-color;
+  }
+
+  .panel-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .panel-header-lf{
+      width: 70%;
+      min-width: 224px;
+      font-size:15px;
+      color:@font000;
+      line-height:21px;
+    }
+    .panel-header-rh{
+      width: 30%;
+      text-align: right;
+      font-size:18px;
+      font-family:Helvetica-Bold,Helvetica;
+      font-weight:bold;
+      color:@font000;
+      line-height:22px;
+      word-wrap:break-word;
+      word-break:break-all;
+    }
+    .add-orange{
+      color: #EF7D1C;
+    }
+  }
+
+  .panel-bottom{
+    width: 100%;
+    margin-top: 8px;
+
+    span{
+      display: block;
+      font-size:13px;
+      color:@cor888;
+      line-height:18px;
+      margin-top: 4px;
+    }
+
+  }
+
 }

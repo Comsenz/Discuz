@@ -44,8 +44,11 @@
 </template>
 
 <script>
-import '../../../scss/m_site/login/loginSignUpModule.scss';
-import  '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/login/loginSignUpModule.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
+import '../../../defaultLess/m_site/common/common.less'
 import retrievePasswordCon from '../../../controllers/m_site/login/retrievePasswordCon';
 export default {
     name: "retrieve-password-view",

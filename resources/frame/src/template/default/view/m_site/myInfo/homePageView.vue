@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
 import homePageCon from '../../../controllers/m_site/myInfo/homePageCon';
@@ -36,6 +36,7 @@ import mSiteThemeDet from '../../../controllers/m_site/common/themeDetCon';
 // import  '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
+import '../../../defaultLess/m_site/modules/myInfo.less';
 export default {
     name: "home-page-view",
     components:{

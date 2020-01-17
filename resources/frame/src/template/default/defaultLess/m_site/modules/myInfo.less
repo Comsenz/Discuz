@@ -209,7 +209,7 @@ h2,h3,h4{
           margin: 6px 0;
           font-size:15px;
           font-weight:500;
-          color:@fontColor;
+          color:@main;
           line-height:20px;
         }
       }
@@ -279,8 +279,6 @@ h2,h3,h4{
         margin-left: 8px;
         font-size:11px;
         font-weight:400;
-        color:@corFff;
-
       }
     }
   }
@@ -355,11 +353,11 @@ h2,h3,h4{
  */
 .modify-phone-box{
   width: 100%;
-  height: calc(100% - 44px);
+  height: calc(~"100% - 44px");
 
   .modify-phone-main{
     width: 100%;
-    height: calc(100% - 40px);
+    height: calc(~"100% - 40px");
     padding: 44px 0 0 15px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

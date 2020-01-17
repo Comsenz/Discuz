@@ -29,9 +29,12 @@
 </template>
 
 <script>
-import '../../../less/m_site/myInfo/myInfo.less';
+// import '../../../less/m_site/myInfo/myInfo.less';
+// import  '../../../scss/m_site/mobileIndex.scss';
 import myNoticeCon from '../../../controllers/m_site/myInfo/myNoticeCon';
-import  '../../../scss/m_site/mobileIndex.scss';
+
+import '../../../defaultLess/m_site/common/common.less';
+import '../../../defaultLess/m_site/modules/myInfo.less';
 export default {
     name: "my-notice",
   ...myNoticeCon
