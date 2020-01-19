@@ -15,6 +15,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -43,11 +44,16 @@ class ListUserFollowController extends AbstractListController
      */
     public $userFollowCount;
 
+    /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = ['fromUser', 'toUser'];
+
     /* The relationships that are included by default.
      *
      * @var array
      */
-    public $include = ['fromUser', 'toUser'];
+    public $include = [];
 
     /**
      * @param UserFollowRepository $userFollow
@@ -104,7 +110,16 @@ class ListUserFollowController extends AbstractListController
     {
         $query = $this->userFollow->query();
 
-        $query->where('from_user_id', $actor->id)->with('toUser');
+        $follow = Arr::get($filter, 'follow', 1);
+
+        if ($follow == 1) {
+            //我的关注
+            $query->where('from_user_id', $actor->id)->with('toUser');
+        } elseif ($follow == 2) {
+
+            //我的粉丝
+            $query->where('to_user_id', $actor->id)->with('fromUser');
+        }
 
         $this->userFollowCount = $limit > 0 ? $query->count() : null;
 
