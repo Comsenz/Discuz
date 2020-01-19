@@ -116,6 +116,12 @@ class ForumSettingSerializer extends AbstractSerializer
                     'siteAuthorScale' => $this->settings->get('site_author_scale'),
                     'siteMasterScale' => $this->settings->get('site_master_scale'),
                 ];
+            } else {
+                //@todo 临时返回 非管理员 前台需要的字段
+                $attributes['qcloud']['qcloud_close'] = (bool)$this->settings->get('qcloud_close', 'qcloud');
+                $attributes['qcloud']['qcloud_cms_image'] = (bool)$this->settings->get('qcloud_cms_image', 'qcloud');
+                $attributes['qcloud']['qcloud_cms_text'] = (bool)$this->settings->get('qcloud_cms_text', 'qcloud');
+                $attributes['qcloud']['qcloud_sms'] = (bool)$this->settings->get('qcloud_sms', 'qcloud');
             }
         }
 
@@ -248,7 +254,6 @@ class ForumSettingSerializer extends AbstractSerializer
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
             'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
             'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
-            'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
             'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
             'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
             'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),
