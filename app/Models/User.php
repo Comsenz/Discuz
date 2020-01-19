@@ -36,6 +36,8 @@ use Illuminate\Support\Carbon;
  * @property string $last_login_ip
  * @property string $register_ip
  * @property int $thread_count
+ * @property int $follow_count
+ * @property int $fans_count
  * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
@@ -294,7 +296,7 @@ class User extends Model
         static $cachedAll = null;
         if (is_null($cachedAll)) {
             $cachedAll = $this->unreadNotifications()->selectRaw('type,count(*) as count')
-                ->groupBy('type')->pluck('type', 'count')->map(function($val) {
+                ->groupBy('type')->pluck('type', 'count')->map(function ($val) {
                     return class_basename($val);
                 })->flip();
         }

@@ -47,6 +47,8 @@ class UserSerializer extends AbstractSerializer
             'mobile'            => $model->mobile,
             'avatarUrl'         => $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
             'threadCount'       => (int) $model->thread_count,
+            'follow_count'      => (int) $model->follow_count,
+            'fans_count'        => (int) $model->fans_count,
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
             'joinedAt'          => $this->formatDate($model->joined_at),
