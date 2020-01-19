@@ -118,10 +118,14 @@ class ForumSettingSerializer extends AbstractSerializer
                 ];
             } else {
                 //@todo 临时返回 非管理员 前台需要的字段
+                $attributes['setsite'] = $this->getSiteSettings();
                 $attributes['qcloud']['qcloud_close'] = (bool)$this->settings->get('qcloud_close', 'qcloud');
                 $attributes['qcloud']['qcloud_cms_image'] = (bool)$this->settings->get('qcloud_cms_image', 'qcloud');
                 $attributes['qcloud']['qcloud_cms_text'] = (bool)$this->settings->get('qcloud_cms_text', 'qcloud');
                 $attributes['qcloud']['qcloud_sms'] = (bool)$this->settings->get('qcloud_sms', 'qcloud');
+                $attributes['passport']['offiaccount_close'] = $this->settings->get('offiaccount_close', 'wx_offiaccount');
+                $attributes['passport']['miniprogram_close'] = $this->settings->get('miniprogram_close', 'wx_miniprogram');
+                $attributes['passport']['oplatform_close'] = $this->settings->get('oplatform_close', 'wx_oplatform');
             }
         }
 
