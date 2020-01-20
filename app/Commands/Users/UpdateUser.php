@@ -103,19 +103,31 @@ class UpdateUser
             $actionType = User::enumStatus($status);
             OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
             // TODO 如果是拒绝 添加系统通知
-//            if ($actionType == 'refuse') {}
+            // if ($actionType == 'refuse') {}
         }
 
-        if ($groupId = Arr::get($attributes, 'groupId')) {
+        if ($groups = Arr::get($attributes, 'groupId')) {
             $this->assertCan($this->actor, 'edit.group', $user);
-            $oldGroup = $user->groups->first();;
-            $user->groups()->sync($groupId);
 
-            if($oldGroup->id != $groupId) {
+            // 获取新用户组 id
+            $newGroups = collect($groups)->filter(function ($groupId) {
+                return (int) $groupId;
+            })->unique()->sort();
+
+            // 获取旧用户组
+            $oldGroups = $user->groups->keyBy('id')->sortKeys();
+
+            // 当新旧用户组不一致时，更新用户组并发送通知
+            if ($newGroups && $newGroups != $oldGroups->keys()) {
+                // 更新用户组
+                $user->groups()->sync($newGroups);
+
+                // 发送系统通知
                 $notifyData = [
-                    'old' => $oldGroup,
-                    'new' => Group::find($groupId)
+                    'new' => Group::find($newGroups),
+                    'old' => $oldGroups,
                 ];
+
                 $user->notify(new System(GroupMessage::class, $notifyData));
             }
         }
