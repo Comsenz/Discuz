@@ -13,14 +13,12 @@ use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Carbon;
 
 /**
@@ -424,6 +422,39 @@ class User extends Model
     {
         return $this->hasOne(UserWallet::class);
     }
+
+    /**
+     * Define the relationship with the user's follow.
+     *
+     * @return HasMany
+     */
+    public function userFollow()
+    {
+        return $this->hasMany(UserFollow::class, 'from_user_id');
+    }
+
+    /**
+     * Define the relationship with the user's fans.
+     *
+     * @return HasMany
+     */
+    public function userFans()
+    {
+        return $this->hasMany(UserFollow::class, 'to_user_id');
+    }
+
+    public function refreshUserFollow()
+    {
+        $this->follow_count = $this->userFollow()->count();
+        return $this;
+    }
+
+    public function refreshUserFans()
+    {
+        $this->fans_count = $this->userFans()->count();
+        return $this;
+    }
+
 
     /*
     |--------------------------------------------------------------------------
