@@ -152,22 +152,34 @@ export default {
           throw new Error(res.error)
         } else {
           console.log(res);
-          console.log('888887');
-          var ImgExt = res.readdata._data.supportImgExt.split(',');
-          var ImgStr='';
-          var imgStrRes ='';
-          for(var k=0;k<ImgExt.length;k++){
-            ImgStr = '.'+ImgExt[k]+',';
-            imgStrRes = 'image/'+ImgExt[k]+',';
-            this.supportImgExt += ImgStr;
-            this.supportImgExtRes += imgStrRes;
+          // console.log('888887');
+          var ImgExt = '';
+          if(res.readdata._data.supportImgExt){
+            ImgExt = res.readdata._data.supportImgExt.split(',');
+            var ImgStr='';
+            var imgStrRes ='';
+            for(var k=0;k<ImgExt.length;k++){
+              ImgStr = '.'+ImgExt[k]+',';
+              imgStrRes = 'image/'+ImgExt[k]+',';
+              this.supportImgExt += ImgStr;
+              this.supportImgExtRes += imgStrRes;
+            }
+          } else{
+            ImgExt ='*';
           }
-          var fileExt = res.readdata._data.supportFileExt.split(',');
-          var fileStr='';
-          for(var k=0;k<fileExt.length;k++){
-            fileStr = '.'+fileExt[k]+',';
-            this.supportFileExt += fileStr;
+
+          var fileExt = '';
+          if(res.readdata._data.supportFileExt){
+            fileExt = res.readdata._data.supportFileExt.split(',');
+            var fileStr='';
+            for(var k=0;k<fileExt.length;k++){
+              fileStr = '.'+fileExt[k]+',';
+              this.supportFileExt += fileStr;
+            }
+          } else{
+            fileExt ='*';
           }
+
           this.canUploadImages = res.readdata._data.canUploadImages;
           this.canUploadAttachments = res.readdata._data.canUploadAttachments;
         }
