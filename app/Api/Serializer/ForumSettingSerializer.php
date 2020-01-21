@@ -125,10 +125,7 @@ class ForumSettingSerializer extends AbstractSerializer
         $attributes['qcloud']['qcloud_cms_image'] = (bool)$this->settings->get('qcloud_cms_image', 'qcloud');
         $attributes['qcloud']['qcloud_cms_text'] = (bool)$this->settings->get('qcloud_cms_text', 'qcloud');
         $attributes['qcloud']['qcloud_sms'] = (bool)$this->settings->get('qcloud_sms', 'qcloud');
-        $attributes['passport']['offiaccount_close'] = $this->settings->get('offiaccount_close', 'wx_offiaccount');
-        $attributes['passport']['miniprogram_close'] = $this->settings->get('miniprogram_close', 'wx_miniprogram');
-        $attributes['passport']['oplatform_close'] = $this->settings->get('oplatform_close', 'wx_oplatform');
-
+        $attributes['passport'] = $this->getPassportSettings();
         return $attributes;
     }
 
@@ -230,16 +227,16 @@ class ForumSettingSerializer extends AbstractSerializer
         return [
             // - 微信 h5
             'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'),
-            'offiaccount_app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'offiaccount_app_secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
+            'offiaccount_app_id' => $this->settings->get('app_id', 'wx_offiaccount'),
+            'offiaccount_app_secret' => $this->settings->get('app_secret', 'wx_offiaccount'),
             // - 微信小程序
             'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'),
-            'miniprogram_app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            'miniprogram_app_secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            'miniprogram_app_id' => $this->settings->get('app_id', 'wx_miniprogram'),
+            'miniprogram_app_secret' => $this->settings->get('app_secret', 'wx_miniprogram'),
             // - 微信 pc
             'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),
-            'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
-            'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
+            'oplatform_app_id' => $this->settings->get('app_id', 'wx_oplatform'),
+            'oplatform_app_secret' => $this->settings->get('app_secret', 'wx_oplatform'),
         ];
     }
 
