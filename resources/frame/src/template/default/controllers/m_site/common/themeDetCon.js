@@ -320,7 +320,6 @@ export default {
             this.likedStatus = res.readdata._data.isLiked;
             this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
           }
-          this.$emit('changeStatus', true);
         }
       })
     },
