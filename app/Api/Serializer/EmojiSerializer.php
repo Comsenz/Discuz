@@ -9,9 +9,18 @@ namespace App\Api\Serializer;
 
 use App\Models\Emoji;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 class EmojiSerializer extends AbstractSerializer
 {
+
+    protected $url;
+
+    public function __construct(UrlGenerator $url)
+    {
+        $this->url = $url;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -27,7 +36,7 @@ class EmojiSerializer extends AbstractSerializer
         return [
             'category'          => $model->category,
             // 'url'               => $model->url,
-            'url'               => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/' . $model->url,
+            'url'               => $this->url->to($model->url),
             'code'              => $model->code,
             'order'             => $model->order,
         ];
