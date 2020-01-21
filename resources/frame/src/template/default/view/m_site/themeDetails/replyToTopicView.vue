@@ -43,7 +43,7 @@
           </span>
         </div>
       </footer>
-      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
+      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" id="showFacePanel" class="expressionBox" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
     </div>
 </template>
 

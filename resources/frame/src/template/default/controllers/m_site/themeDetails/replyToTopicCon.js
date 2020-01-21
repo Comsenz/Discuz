@@ -36,6 +36,7 @@ export default {
       fileListOne:[],
       canUploadImages:'',
       backGo:-3,
+      viewportWidth: '',
     }
   },
   computed: {
@@ -48,27 +49,14 @@ export default {
   },
   created(){
     console.log(this.$route);
-    console.log('4444');
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.viewportWidth = window.innerWidth;
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    // var replyQuote = this.$route.params.replyQuote;
     this.replyQuoteCont = browserDb.getLItem('replyQuote');
     this.replyQuote = '<blockquote class="quoteCon">'+ this.replyQuoteCont +'</blockquote>';
-    // var replyId = this.$route.params.replyId;
-    // var themeId = this.$route.params.themeId;
-    // console.log(replyQuote);
-    console.log(this.replyId+'1111');
-    console.log(this.themeId+'2222');
-    /*if(this.replyId && replyQuote){
-      this.replyText = '';
-    } else {
-      this.replyText = '';
-    }*/
-    // this.replyId = replyId;
-    // this.themeId = themeId;
     this.getInfo(); //初始化请求接口，判断是否有权限
   },
 
@@ -86,7 +74,6 @@ export default {
         }
       });
     })
-    //设置在pc的宽度
     //设置在pc的宽度
     if(this.isWeixin != true && this.isPhone != true){
       this.limitWidth();
@@ -142,7 +129,7 @@ export default {
     limitWidth(){
       document.getElementById('post-topic-footer').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
     },
 
     //上传之前先判断是否有权限上传图片
