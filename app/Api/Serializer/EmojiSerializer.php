@@ -36,7 +36,7 @@ class EmojiSerializer extends AbstractSerializer
         return [
             'category'          => $model->category,
             // 'url'               => $model->url,
-            'url'               => $this->url->to($model->url),
+            'url'               => $this->url->to('/' . $model->url),
             'code'              => $model->code,
             'order'             => $model->order,
         ];
