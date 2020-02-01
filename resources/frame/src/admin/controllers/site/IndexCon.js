@@ -2,7 +2,7 @@
  * 后台Index
  */
 import webDb from '../../../helpers/webDbHelper'
-
+import appConfig from "../../../../../frame/config/appConfig";
 export default {
   data:function () {
     return {
@@ -364,6 +364,18 @@ export default {
       }
 
     },
+
+    /*
+    *  跳转到站点首页
+    * */
+    // jumpIndex(){
+    //   let Url= '';
+    //   Url = appConfig.devApiUrl + '/admin';
+    //   console.log(Url);
+    //   this.$router.push({
+    //     path: Url
+    //   });
+    // },
 
     /*
     *  左侧菜单的子菜单(位置对应：横向导航下面)点击事件
