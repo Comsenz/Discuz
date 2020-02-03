@@ -45,6 +45,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
+                'site_url' => $this->settings->get('site_url'),
+                'site_icp' => $this->settings->get('site_icp'),
+                'site_stat' => $this->settings->get('site_stat'),
             ],
 
             // 注册设置
@@ -59,10 +62,19 @@ class ForumSettingSerializer extends AbstractSerializer
             'passport' => [],
             // 支付设置
             'paycenter' => [],
+
             // 附件设置
-            'set_attach' => [],
+            'set_attach' => [
+                'support_img_ext' => $this->settings->get('support_img_ext', 'default'),
+                'support_file_ext' => $this->settings->get('support_file_ext', 'default'),
+                'support_max_size' => $this->settings->get('support_max_size', 'default'),
+            ],
+
             // 腾讯云设置
-            'qcloud' => [],
+            'qcloud' => [
+                'qcloud_sms' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
+            ],
+
             // 提现设置
             'set_cash' => [],
 
@@ -112,9 +124,6 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 支付设置
                 $attributes['paycenter'] += $this->forumField->getPaycenterSettings();
-
-                // 附件设置
-                $attributes['set_attach'] += $this->forumField->getAttachSettings();
 
                 // 腾讯云设置
                 $attributes['qcloud'] += $this->forumField->getQCloudSettings();
