@@ -9,30 +9,30 @@
           <div class="circlePL">
           	<div class="infoItem">
             	<span class="infoItemLeft">站点名称</span>
-            	<span class="infoItemRight">{{siteInfo._data.siteName}}</span>
+            	<span class="infoItemRight">{{siteInfo._data.set_site.site_name}}</span>
             </div>
           </div>
           <div class="circlePL">
           	<div class="circleLoBox">
             	<span class="circleIcon">站点图标</span>
-              <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
+              <img v-if="siteInfo._data.set_site.site_logo" :src="siteInfo._data.set_site.site_logo" class="circleLogo">
               <!-- <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo"> -->
             </div>
           </div>
           <div class="circleInfo padB0 lastBorNone">
           	<h1 class="cirInfoTit">站点简介</h1>
-          	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}</p>
+          	<p class="cirInfoWord">{{siteInfo._data.set_site.site_introduction}}</p>
           	<div class="infoItem">
             	<span class="infoItemLeft">创建时间</span>
-            	<span class="infoItemRight">{{siteInfo._data.siteInstall}}</span>
+            	<span class="infoItemRight">{{siteInfo._data.set_site.site_install}}</span>
             </div>
-            <div class="infoItem" v-if="siteInfo._data.sitePrice || siteInfo._data.siteExpir">
+            <div class="infoItem" v-if="siteInfo._data.set_site.site_price || siteInfo._data.set_site.site_expire">
             	<span class="infoItemLeft">加入方式</span>
-            	<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，{{siteInfo._data.siteExpire === '0' || siteInfo._data.siteExpire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.siteExpire +'天'}}</span>
+            	<span class="infoItemRight">付费{{siteInfo._data.set_site.site_price}}元，{{siteInfo._data.set_site.site_expire === '0' || siteInfo._data.set_site.site_expire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.set_site.site_expire +'天'}}</span>
             </div>
             <div class="infoItem">
             	<span class="infoItemLeft">站长</span>
-            	<span class="infoItemRight" v-if="siteInfo._data.siteAuthor">{{username}}</span>
+            	<span class="infoItemRight" v-if="siteInfo._data.set_site.site_author">{{username}}</span>
               <span class="infoItemRight" v-else="">无</span>
             </div>
             <div class="infoItem">

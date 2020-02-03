@@ -95,7 +95,7 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          let formData = res.data.attributes.setcash;
+          let formData = res.data.attributes.set_cash;
           this.withdrawalInterval = formData.cash_interval_time;
           this.withdrawalFee = formData.cash_rate;
           this.minAmount = formData.cash_min_sum;
