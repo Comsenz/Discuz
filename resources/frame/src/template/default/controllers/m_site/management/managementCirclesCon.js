@@ -63,11 +63,7 @@ export default {
           throw new Error(res.error)
         } else {
           this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
-<<<<<<< HEAD
-          this.canEditUserGroup = res.readdata._data.other.can_edit_user_group	;
-=======
-          this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
->>>>>>> 983434c121cc7da5aefa419f44073cb9331825c6
+          this.canEditUserGroup = res.readdata._data.other.can_edit_user_group;
           this.canCreateInvite = res.readdata._data.other.can_create_invite;
         }
       });
