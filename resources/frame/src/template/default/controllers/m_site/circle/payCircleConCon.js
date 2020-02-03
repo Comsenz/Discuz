@@ -49,7 +49,7 @@ export default {
           // console.log(res);
           this.siteInfo = res.readdata;
           // console.log(res.readdata._data.siteMode+'请求');
-          if(res.readdata._data.siteAuthor){
+          if(res.readdata._data.set_site.site_author){
             this.siteUsername = res.readdata._data.set_site.site_author.username;
           } else {
             this.siteUsername = '暂无站长信息';

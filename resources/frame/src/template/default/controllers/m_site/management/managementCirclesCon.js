@@ -62,9 +62,9 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.canBatchEditThreads = res.readdata._data.canBatchEditThreads;
-          this.canEditUserGroup = res.readdata._data.canEditUserGroup;
-          this.canCreateInvite = res.readdata._data.canCreateInvite;
+          this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
+          this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
+          this.canCreateInvite = res.readdata._data.other.can_create_invite;
         }
       });
     },
