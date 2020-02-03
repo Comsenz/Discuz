@@ -90,10 +90,9 @@ export default {
         }else{
         console.log(res);
         this.siteInfo = res.readdata;
-        this.moreMemberShow = res.readdata._data.canViewUserList;
-        console.log(this.siteInfo._data.logo);
-        if(res.readdata._data.siteAuthor){
-          this.username = res.readdata._data.siteAuthor.username;
+        this.moreMemberShow = res.readdata._data.other.can_viewUser_list;
+        if(res.readdata._data.set_site.site_author){
+          this.username = res.readdata._data.set_site.site_author.username;
         }
       }
       });

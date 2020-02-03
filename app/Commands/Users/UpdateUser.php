@@ -7,6 +7,7 @@
 
 namespace App\Commands\Users;
 
+use App\Events\Users\ChangeUserStatus;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
 use App\Models\Group;
@@ -16,11 +17,14 @@ use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class UpdateUser
 {
     use AssertPermissionTrait;
+    use EventsDispatchTrait;
 
     protected $id;
 
@@ -39,10 +43,11 @@ class UpdateUser
         $this->actor = $actor;
     }
 
-    public function handle(UserRepository $users, UserValidator $validator)
+    public function handle(UserRepository $users, UserValidator $validator, Dispatcher $events)
     {
         $this->users = $users;
         $this->validator = $validator;
+        $this->events = $events;
         return call_user_func([$this, '__invoke']);
     }
 
@@ -101,6 +106,9 @@ class UpdateUser
             // 记录用户状态操作日志
             $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
             $actionType = User::enumStatus($status);
+
+            $user->raise(new ChangeUserStatus($user, $logMsg));
+
             OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
             // TODO 如果是拒绝 添加系统通知
             // if ($actionType == 'refuse') {}
@@ -135,6 +143,8 @@ class UpdateUser
         $this->validator->valid($validator);
 
         $user->save();
+
+        $this->dispatchEventsFor($user, $this->actor);
 
         return $user;
     }

@@ -99,19 +99,20 @@ export default {
           console.log('44443');
           console.log(res);
           this.siteInfo = res.readdata;
-          this.canCreateThread = res.readdata._data.canCreateThread;
-          this.canViewThreads = res.readdata._data.canViewThreads;
-          this.allowRegister = res.readdata._data.allowRegister;
+          this.canCreateThread = res.readdata._data.other.can_create_thread;
+          this.canViewThreads = res.readdata._data.other.can_view_threads;
+          this.allowRegister = res.readdata._data.set_reg.register_close;
           if(!this.allowRegister){
             this.loginWord = '登录';
           }
-          console.log(res.readdata._data.siteMode+'请求');
+          console.log(res.readdata._data.set_site.site_mode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
-          this.sitePrice = res.readdata._data.sitePrice
+          this.sitePrice = res.readdata._data.set_site.site_price;
           //把站点是否收费的值存储起来，以便于传到父页面
-          this.isPayVal = res.readdata._data.siteMode;
+          this.isPayVal = res.readdata._data.set_site.site_mode;
           if(this.isPayVal != null && this.isPayVal != ''){
-            this.isPayVal = res.readdata._data.siteMode;
+            this.isPayVal = res.readdata._data.set_site.site_mode;
+            console.log('可以访问');
             //判断站点信息是否付费，用户是否登录，用户是否已支付
             this.detailIf(this.isPayVal,false);
 
@@ -152,10 +153,10 @@ export default {
     detailIf(isPayVal){
       if(isPayVal == 'public'){
         //当站点为公开站点时
-        // console.log('公开');
+        console.log('公开');
         var token = browserDb.getLItem('Authorization');
         if(token){
-          // console.log('公开，已登录');
+          console.log('公开，已登录');
           //当用户已登录时
           // this.loadThemeList();
           this.loginBtnFix = false;
@@ -243,7 +244,7 @@ export default {
         data
       }).then((res) => {
         console.log(res);
-        console.log('344343');
+        console.log('3443431111');
         if (res.errors){
           // console.log(res);
           if(res.rawData[0].code == 'permission_denied'){

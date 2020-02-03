@@ -50,14 +50,14 @@ export default {
         }
         console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.siteMode+'请求');
-        if(res.readdata._data.siteAuthor){
-          this.siteUsername = res.readdata._data.siteAuthor.username;
-          console.log(res.readdata._data.siteAuthor.username,'用户名')
+        console.log(res.readdata._data.set_site.site_mode+'请求');
+        if(res.readdata._data.set_site.site_author){
+          this.siteUsername = res.readdata._data.set_site.site_author.username;;
+          console.log(res.readdata._data.set_site.site_author.username,'用户名')
         } else {
           this.siteUsername = '暂无站长信息';
         }
-        this.sitePrice = res.readdata._data.sitePrice
+        this.sitePrice = res.readdata._data.set_site.site_price;
       }
       });
     },
