@@ -19,7 +19,8 @@ class UserFollowSerializer extends AbstractSerializer
         return [
             'id' => $model->id,
             'from_user_id' => $model->from_user_id,
-            'to_user_id' => $model->to_user_id
+            'to_user_id' => $model->to_user_id,
+            'created_at' => $this->formatDate($model->created_at)
         ];
     }
 

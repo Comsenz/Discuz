@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)
- * @method static find(int $GUEST_ID)
+ * @method static find(mixed $GUEST_ID)
  * @method static where(string $string, int $id)
  */
 class Group extends Model

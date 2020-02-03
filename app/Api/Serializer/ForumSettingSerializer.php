@@ -32,20 +32,102 @@ class ForumSettingSerializer extends AbstractSerializer
         $this->encrypter = $encrypter;
     }
 
+    public function getDefaultAttributes($model)
+    {
+        $logo = $this->logo($this->settings->get('logo'));
+
+        $attributes = [
+            // 站点设置
+            'set_site' => [
+                'site_name' => $this->settings->get('site_name'),
+                'site_introduction' => $this->settings->get('site_introduction'),
+                'site_mode' => $this->settings->get('site_mode'), //pay public
+                'site_price' => $this->settings->get('site_price'),
+                'site_expire' => $this->settings->get('site_expire'),
+                'site_author_scale' => $this->settings->get('site_author_scale'),
+                'site_master_scale' => $this->settings->get('site_master_scale'),
+                'site_icp' => $this->settings->get('site_icp'),
+                'site_stat' => $this->settings->get('site_stat'),
+                'site_close' => (bool)$this->settings->get('site_close'),
+                'site_close_msg' => $this->settings->get('site_close_msg'),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+                'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '',
+                'site_install' => $this->settings->get('site_install'),
+            ],
+
+            // 注册设置
+            'set_reg' => [
+                'register_close' => (bool)$this->settings->get('register_close'),
+                'password_length' => (int)$this->settings->get('password_length'),
+                'password_strength' => $this->settings->get('password_strength'),
+            ],
+
+            // 第三方登陆设置
+            'passport' => [
+                // - 微信 h5
+                'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'),
+                'offiaccount_app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
+                'offiaccount_app_secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
+                // - 微信小程序
+                'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'),
+                'miniprogram_app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
+                'miniprogram_app_secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+                // - 微信 pc
+                'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),
+                'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
+                'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
+            ],
+
+            // 腾讯云设置
+            'qcloud' => [
+                'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
+                'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
+                'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
+                'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
+                'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
+                'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
+                'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
+                'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
+                'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
+                'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
+                'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),
+                'qcloud_sms_sign' => $this->settings->get('qcloud_sms_sign', 'qcloud'),
+            ],
+
+            // 提现设置
+            'set_cash' => [
+                'cash_interval_time' => $this->settings->get('cash_interval_time', 'cash'),
+                'cash_rate' => $this->settings->get('cash_rate', 'cash'),
+                'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: '',
+                'cash_max_sum' => $this->settings->get('cash_max_sum', 'cash'),
+                'cash_sum_limit' => $this->settings->get('cash_sum_limit', 'cash'),
+            ],
+        ];
+
+        if ($this->actor->exists) {
+            $attributes['user'] = [
+                'groups' => $this->actor->groups,
+                'registerTime' => $this->formatDate($this->actor->created_at),
+            ];
+        }
+
+        return $attributes;
+    }
+
     /**
      * Get the default set of serialized attributes for a model.
      *
      * @param object|array $model
      * @return array
      */
-    public function getDefaultAttributes($model)
+    public function Default($model)
     {
-        $logo = $this->logo($this->settings->get('logo'));
+//        $logo = $this->logo($this->settings->get('logo'));
 
         $attributes = [
             // 基础信息
             'siteName' => $this->settings->get('site_name'),
-            'logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '',
+//            'logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '',
             'siteIntroduction' => $this->settings->get('site_introduction'),
             'siteStat' => $this->settings->get('site_stat'),
             'siteRecord' => $this->settings->get('site_record'),
@@ -73,7 +155,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'canCreateInvite' => $this->actor->can('createInvite'),
 
             // 支付设置
-            'wxpay_close' => (bool) $this->settings->get('wxpay_close', 'wxpay'),
+            'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
 
             // 注册设置
             'setreg' => [
@@ -119,6 +201,14 @@ class ForumSettingSerializer extends AbstractSerializer
             }
         }
 
+        //@todo 临时返回 非管理员 前台需要的字段
+        $attributes['setsite'] = $this->getSiteSettings();
+        $attributes['qcloud']['qcloud_close'] = (bool)$this->settings->get('qcloud_close', 'qcloud');
+        $attributes['qcloud']['qcloud_cms_image'] = (bool)$this->settings->get('qcloud_cms_image', 'qcloud');
+        $attributes['qcloud']['qcloud_cms_text'] = (bool)$this->settings->get('qcloud_cms_text', 'qcloud');
+        $attributes['qcloud']['qcloud_sms'] = (bool)$this->settings->get('qcloud_sms', 'qcloud');
+        $attributes['passport'] = $this->getPassportSettings();
+
         return $attributes;
     }
 
@@ -153,7 +243,7 @@ class ForumSettingSerializer extends AbstractSerializer
     private function getSiteCloseSettings()
     {
         // 站点开关
-        $settings['siteClose'] = (bool) $this->settings->get('site_close');
+        $settings['siteClose'] = (bool)$this->settings->get('site_close');
 
         // 站点关闭时或管理员登录返回关闭信息
         if ($settings['siteClose'] || ($this->actor->exists && $this->actor->isAdmin())) {
@@ -220,16 +310,16 @@ class ForumSettingSerializer extends AbstractSerializer
         return [
             // - 微信 h5
             'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'),
-            'offiaccount_app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'offiaccount_app_secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
+            'offiaccount_app_id' => $this->settings->get('app_id', 'wx_offiaccount'),
+            'offiaccount_app_secret' => $this->settings->get('app_secret', 'wx_offiaccount'),
             // - 微信小程序
             'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'),
-            'miniprogram_app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            'miniprogram_app_secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            'miniprogram_app_id' => $this->settings->get('app_id', 'wx_miniprogram'),
+            'miniprogram_app_secret' => $this->settings->get('app_secret', 'wx_miniprogram'),
             // - 微信 pc
             'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),
-            'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
-            'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
+            'oplatform_app_id' => $this->settings->get('app_id', 'wx_oplatform'),
+            'oplatform_app_secret' => $this->settings->get('app_secret', 'wx_oplatform'),
         ];
     }
 
@@ -248,7 +338,6 @@ class ForumSettingSerializer extends AbstractSerializer
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
             'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
             'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
-            'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
             'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
             'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
             'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),

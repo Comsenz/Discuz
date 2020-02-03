@@ -319,9 +319,7 @@ export default {
             //点赞
             this.likedStatus = res.readdata._data.isLiked;
             this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
-            this.$toast.success('修改成功');
           }
-          this.$emit('changeStatus', true);
         }
       })
     },

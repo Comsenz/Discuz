@@ -9,6 +9,7 @@ namespace App\Install\Controller;
 
 use App\Console\Commands\KeyGenerate;
 use App\Console\Commands\RsaCertGenerate;
+use App\Console\Commands\StorageLinkCommand;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\UserWallet;
@@ -183,6 +184,8 @@ class InstallController implements RequestHandlerInterface
         $this->app->make(KeyGenerate::class)->run($this->input, $this->output);
         //证书
         $this->app->make(RsaCertGenerate::class)->run($this->input, $this->output);
+        //软连
+        $this->app->make(StorageLinkCommand::class)->run($this->input, $this->output);
     }
 
     private function installInitMigrate()

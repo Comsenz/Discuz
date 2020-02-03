@@ -21,6 +21,8 @@ class CreateUsers extends Migration
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
             $table->ipAddress('register_ip')->default('')->comment('注册ip');
             $table->unsignedInteger('thread_count')->default(0)->comment('主题数');
+            $table->unsignedInteger('follow_count')->default(0)->comment('关注数');
+            $table->unsignedInteger('fans_count')->default(0)->comment('粉丝数');
             $table->tinyInteger('status')->default(0)->comment('用户状态：0正常 1禁用 2审核中 3审核通过 4审核拒绝 5审核忽略');
             $table->string('avatar', 100)->default('')->comment('头像地址');
             $table->char('identity',18)->default('')->comment('身份证号码');

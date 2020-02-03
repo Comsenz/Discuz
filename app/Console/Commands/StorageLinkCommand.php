@@ -7,10 +7,21 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Discuz\Console\AbstractCommand;
+use Discuz\Foundation\Application;
 
-class StorageLinkCommand extends Command
+class StorageLinkCommand extends AbstractCommand
 {
+
+    protected $app;
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+
+        parent::__construct();
+    }
+
     /**
      * The console command signature.
      *
@@ -36,7 +47,7 @@ class StorageLinkCommand extends Command
             return $this->error('The "public/storage" directory already exists.');
         }
 
-        $this->laravel->make('files')->link(
+        $this->app->make('files')->link(
             storage_path('app/public'),
             public_path('storage')
         );

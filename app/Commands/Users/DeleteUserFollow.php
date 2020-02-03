@@ -7,15 +7,18 @@
 
 namespace App\Commands\Users;
 
+use App\Events\Users\UserFollowCount;
 use App\Models\User;
 use App\Models\UserFollow;
 use App\Repositories\UserFollowRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteUserFollow
 {
     use AssertPermissionTrait;
+    use EventsDispatchTrait;
 
     /**
      * @var int
@@ -46,15 +49,24 @@ class DeleteUserFollow
         $this->actor = $actor;
     }
 
-    public function handle(UserFollow $userFollow, UserFollowRepository $followRepository)
+    public function handle(UserFollow $userFollow, UserFollowRepository $followRepository, User $user, Dispatcher $events)
     {
-        return call_user_func([$this, '__invoke'], $userFollow, $followRepository);
+        return call_user_func([$this, '__invoke'], $userFollow, $followRepository, $user, $events);
     }
 
-    public function __invoke(UserFollow $userFollow, UserFollowRepository $userFollowRepository)
+    public function __invoke(UserFollow $userFollow, UserFollowRepository $userFollowRepository, User $user, Dispatcher $events)
     {
+        $this->events = $events;
+
         $userFollow = $userFollowRepository->findOrFail($this->to_user_id, $this->from_user_id, $this->actor);
 
-        return $userFollow->delete();
+        $toUser = $user->findOrFail($this->to_user_id);
+        $deleteRes = $userFollow->delete();
+
+        $this->events->dispatch(
+            new UserFollowCount($this->actor, $toUser)
+        );
+
+        return $deleteRes;
     }
 }
