@@ -224,6 +224,7 @@ export default {
       sideSubmenuSelect:'',      //侧边栏子菜单选中
 
       userName:'',               //用户名
+      url:''                     //网站url
 
     }
   },
@@ -530,7 +531,8 @@ export default {
 
   },
   created(){
-   this.setDataStatus();
+    this.url = window.location.host;
+    this.setDataStatus();
    this.userName = webDb.getLItem('username');
   },
   watch: {

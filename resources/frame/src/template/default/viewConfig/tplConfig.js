@@ -543,7 +543,7 @@ export default {
   * 获取用户第一次访问页面，登录后跳转回来
   * */
   if (!browserDb.getSItem('beforeVisiting')){
-    browserDb.setSItem('beforeVisiting',to.path);
+    browserDb.setLItem('beforeVisiting',to.path);
   }
 
   /*
@@ -563,8 +563,8 @@ export default {
   * */
   if (to.name === 'sign-up'){
   this.getForum().then((res)=>{
-    registerClose = res.readdata._data.setreg.register_close;
-    siteMode = res.readdata._data.setsite.site_mode;
+    registerClose = res.readdata._data.set_reg.register_close;
+    siteMode = res.readdata._data.set_site.site_mode;
     if (!Authorization && !tokenId && !registerClose) {
       if (siteMode === 'pay'){
         next({path:'/pay-circle'});
@@ -594,7 +594,7 @@ export default {
         }
       }
     }else{
-       siteMode = res.readdata._data.setsite.site_mode;
+       siteMode = res.readdata._data.set_site.site_mode;
     }
 
   });
@@ -639,7 +639,7 @@ export default {
 
     this.getForum().then(ress=>{
 
-      if (ress.readdata._data.setsite.site_mode === 'pay'){
+      if (ress.readdata._data.set_site.site_mode === 'pay'){
 
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
@@ -703,7 +703,7 @@ export default {
         /*不符合，跳转到未登录，可访问站点*/
         this.getForum().then(res=>{
           /*判断站点模式*/
-          if (res.readdata._data.setsite.site_mode === 'pay'){
+          if (res.readdata._data.set_site.site_mode === 'pay'){
             if(to.name === 'pay-circle'){
               next();
               return

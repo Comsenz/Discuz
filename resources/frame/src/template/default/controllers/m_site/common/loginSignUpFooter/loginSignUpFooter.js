@@ -59,8 +59,8 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.siteMode = res.readdata._data.setsite.site_mode;
-        this.registerClose = res.readdata._data.setreg.register_close;
+        this.siteMode = res.readdata._data.set_site.site_mode;
+        this.registerClose = res.readdata._data.set_reg.register_close;
         this.qcloudSms = res.readdata._data.qcloud.qcloud_sms;
         webDb.setLItem('siteInfo',res.readdata);
       }).catch(err=>{
