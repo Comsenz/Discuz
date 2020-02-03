@@ -7,8 +7,12 @@
 
 namespace App\Listeners\User;
 
+use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\UserFollowCount;
 use App\Events\Users\UserRefreshCount;
+use App\MessageTemplate\GroupMessage;
+use App\MessageTemplate\StatusMessage;
+use App\Notifications\System;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class UserListener
@@ -20,6 +24,9 @@ class UserListener
 
         // 刷新用户关注数粉丝数
         $events->listen(UserFollowCount::class, [$this, 'refreshFollowCount']);
+
+        //通知
+        $events->listen(ChangeUserStatus::class, [$this, 'notifications']);
     }
 
     public function refreshCount(UserRefreshCount $event)
@@ -38,5 +45,13 @@ class UserListener
         //被关注人的 粉丝数
         $event->toUser->refreshUserFans();
         $event->toUser->save();
+    }
+
+
+    public function notifications(ChangeUserStatus $event)
+    {
+        $user = $event->user;
+
+        in_array($user->status, [1,0]) && $user->notify(new System(StatusMessage::class, ['refuse' => $event->refuse]));
     }
 }

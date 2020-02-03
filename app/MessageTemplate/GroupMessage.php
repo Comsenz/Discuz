@@ -7,13 +7,21 @@
 
 namespace App\MessageTemplate;
 
+use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
 
 class GroupMessage extends DatabaseMessage
 {
+    protected $translator;
+
+    public function __construct(Application $app)
+    {
+        $this->translator = $app->make('translator');
+    }
+
     protected function getTitle()
     {
-        return '用户组调整通知';
+        return $this->translator->get('core.group_change');
     }
 
     protected function getContent($data)
@@ -21,11 +29,11 @@ class GroupMessage extends DatabaseMessage
         $oldGroup = $data['old'];
         $newGroup = $data['new'];
 
-        return sprintf(
-            '【%s】你好，你的角色由【%s】变更为【%s】',
-            $this->notifiable->username,
-            $oldGroup->pluck('name')->join('、'),
-            $newGroup->pluck('name')->join('、')
+        return $this->translator->get('core.group_change_detail', [
+            'user' => $this->notifiable->username,
+            'oldgroup' => $oldGroup->pluck('name')->join('、'),
+            'newgroup' => $newGroup->pluck('name')->join('、')]
         );
+
     }
 }
