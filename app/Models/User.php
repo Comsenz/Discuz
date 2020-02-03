@@ -140,6 +140,7 @@ class User extends Model
         $user = new static;
         $user->attributes = $data;
         $user->joined_at = Carbon::now();
+        $user->login_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
         return $user;
     }

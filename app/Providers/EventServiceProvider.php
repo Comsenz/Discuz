@@ -22,6 +22,7 @@ use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\MobileBind;
+use App\Listeners\User\Notifications;
 use App\Listeners\User\ValidateLogin;
 use App\Listeners\User\WechatBind;
 use App\Listeners\Wallet\CashReviewSubscriber;
@@ -45,7 +46,8 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         Registered::class => [
             InviteBind::class,
-            CreateUserWalletListener::class
+            CreateUserWalletListener::class,
+            Notifications::class
         ],
         Logining::class => [
             CheckLogin::class
