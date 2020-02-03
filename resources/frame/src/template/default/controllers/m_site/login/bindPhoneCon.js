@@ -148,7 +148,7 @@ export default {
 
   created(){
     // console.log(this.time);
-    this.siteMode = webDb.getLItem('siteInfo')._data.setsite.site_mode;
+    this.siteMode = webDb.getLItem('siteInfo')._data.set_site.site_mode;
     let tokenId = webDb.getLItem('tokenId');
     this.getUsers(tokenId).then((res)=>{
       if (res !== ''){
