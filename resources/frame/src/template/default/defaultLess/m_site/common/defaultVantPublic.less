@@ -1,0 +1,316 @@
+/*
+  vant组件库样式
+*/
+
+@import "../../../../../../node_modules/vant/lib/index";
+@import "var";
+* { margin: 0; padding: 0; }
+
+
+
+.hairline(@border-color: #E5E5E5) {
+  border-top: 1PX solid @border-color;
+  border-bottom: 1PX solid @border-color;
+}
+
+.hairline-bottom(@border-color: #E5E5E5) {
+  border-bottom: 1PX solid @border-color;
+}
+
+
+/**
+ * tabs -start
+ */
+.van-tab {
+  &--active {
+    color: @tab-active-text-color;
+    font-weight: @font-weight-bold;
+  }
+}
+/** end **/
+
+/**
+  van-button --start
+ */
+.van-button{
+  border-radius: 4px;
+  font-size:16px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  line-height:21px;
+  &--default{
+    color: @blue;
+  }
+  &--small{
+    height: 30px;
+    line-height: inherit;
+    background-color: #F2F2F2;
+    border: none;
+  }
+  &--primary{
+    min-width: 167px;
+    height: 36px;
+  }
+  &__text{
+    //font-size: 16px;
+  }
+}
+/** end */
+
+
+/**
+  van-cell --start
+ */
+.van-cell{
+  padding-top: 13px;
+  padding-bottom: 13px;
+  line-height: 24px;
+  span{
+    font-size: 15px;
+    line-height: 24px;
+  }
+  &:not(:last-child)::after {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    border-bottom: 1PX solid @border-color;
+  }
+  &__right-icon {
+    margin-left: 6px;
+  }
+}
+.van-search {
+  .van-cell {
+    padding: 4px 0;
+  }
+}
+/** end */
+
+/**
+  van-cell-group --start
+ */
+.van-cell-group{}
+/** end */
+
+
+/**
+  van-field__control -start
+ */
+//输入框闪烁光标颜色
+.van-field__control::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #B2B2B2;
+}
+.van-field__control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #B2B2B2;
+}
+.van-field__control::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #B2B2B2;
+}
+.van-field__control:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #B2B2B2;
+}
+.van-field {
+  &__control {
+    caret-color: @main;/*光标颜色*/
+    // font-size: @font-size-sl;
+    font-size: 15px;
+    line-height: 24px;
+    width: 89%;
+  }
+  &::placeholder {
+      // color: @field-placeholder-text-color;
+  }
+  &__left-icon .van-icon {
+    color: @field-placeholder-text-color;
+  }
+}
+/** ent */
+
+/**
+  hairline --start
+ */
+//导航结构去掉上边框
+.navBox {
+  [class*='van-hairline'] {
+    &::after {
+      border-top: none !important;
+    }
+  }
+}
+[class*='van-hairline'] {
+  &::after {
+    // .hairline();
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border: 0 solid @border-color;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    border-top: 0 solid @border-color !important;
+    border-bottom: 1PX solid @border-color;
+    width: 100%;
+  }
+}
+/** end */
+
+/**
+ * search -start
+ */
+.van-search {
+  &__content {
+    border-radius: @border-radius-ml;
+    border: 1px solid #E6E6EA;
+    box-sizing: border-box;
+  }
+  &__action {
+      color: @main;
+      font-size: 16px
+  }
+}
+/** end **/
+
+/**
+  van-divider  --start
+ */
+.van-divider {
+  color: @corBBB;
+  font-size: 15px;
+  &:before{
+    border-width: 1PX;
+  }
+  &:after{
+    border-width: 1PX;
+  }
+}
+/** end */
+
+
+/**
+  van-uploader  --start
+ */
+.van-uploader {
+  position: relative;
+  display: inline-block;
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    div:nth-child(6n){
+      margin: 0 0 @padding-xxs*3 0;
+    }
+  }
+
+  &__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; // to clip file-upload-button
+    cursor: pointer;
+    opacity: 0;
+
+    &-wrapper {
+      position: relative;
+    }
+  }
+
+  &__upload {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    // width: @uploader-size;
+    // height: @uploader-size;
+    width: 50px;
+    height: 50px;
+    margin: 0 @padding-xxs*3 @padding-xxs*3 0;
+    background-color: @uploader-upload-background-color;
+    border: 1px dashed @uploader-upload-border-color;
+    border-radius: @uploader-upload-border-radius;
+
+    &-icon {
+      color: @uploader-icon-color;
+      font-size: @uploader-icon-size;
+    }
+
+    &-text {
+      margin-top: @padding-xs;
+      color: @uploader-text-color;
+      font-size: @uploader-text-font-size;
+    }
+  }
+
+  &__preview {
+    position: relative;
+    margin: 0 @padding-xxs*3 @padding-xxs*3 0;
+   // &:nth-child(6n){
+   //   margin: 0 0 @padding-xxs*3 0;
+   // }
+    &-image {
+      display: block;
+      // width: @uploader-size;
+      // height: @uploader-size;
+      width: 50px;
+      height: 50px;
+    }
+
+    &-delete {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      color: @uploader-delete-color;
+      font-size: @uploader-delete-icon-size;
+      background-color: @uploader-delete-background-color;
+      border-radius: 100%;
+    }
+  }
+  &__file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: @uploader-size;
+    height: @uploader-size;
+    background-color: @uploader-file-background-color;
+    border-radius: @uploader-upload-border-radius;
+
+    &-icon {
+      color: @uploader-file-icon-color;
+      font-size: @uploader-file-icon-size;
+    }
+
+    &-name {
+      box-sizing: border-box;
+      width: 100%;
+      margin-top: @uploader-file-name-margin-top;
+      padding: @uploader-file-name-padding;
+      color: @uploader-file-name-text-color;
+      font-size: @uploader-file-name-font-size;
+      text-align: center;
+    }
+  }
+}
+/** end */
+
+/**
+ * Checkbox -start
+ */
+.van-checkbox {
+  &__icon {
+    margin: 6px 0;
+    width: 24px;
+    height: 24px;
+    .van-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+      line-height: 24px
+    }
+  }
+}
+/** end **/

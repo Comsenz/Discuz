@@ -1,0 +1,425 @@
+@charset "utf-8";
+/**
+  后台页面全部样式
+  根据页面、类名一一划分
+ */
+
+@import "../common/index";
+@import "../../../../../static/css/admin/iconfont.css";
+
+
+/**
+  公共样式
+ */
+
+/*表格图标和内容*/
+.table-icon{
+  font-size: 40PX;
+  vertical-align: middle;
+  margin-right: 10PX;
+}
+.pay-set-type-box{
+  display: flex;
+  align-items: center;
+  .table-con-box{
+    //width:calc(100% - 55PX);
+    display: inline-block;
+    vertical-align: middle;
+    p{
+      font-size:12PX;
+      font-weight:500;
+      color:rgba(144,147,153,1);
+      line-height:14PX;
+    }
+    p:first-of-type{
+      font-size:14PX;
+      font-weight:600;
+      color:$titleColor;
+      line-height:20PX;
+    }
+    p:last-of-type{
+      margin-top: 7PX;
+    }
+  }
+}
+
+
+.icon-add{
+  font-size: 15.5PX !important;
+}
+
+
+
+/**
+  home页面样式
+ */
+.home-box{
+
+  .home-card-box{
+    .section{
+      color:$titleColor;
+      line-height:20PX;
+      &:not(:last-child){
+        margin-bottom: 20PX;
+      }
+      span{
+        margin-right: 20PX;
+      }
+    }
+    .pending-p{
+      display: inline-block;
+      margin-right: 20PX;
+    }
+  }
+
+  .home-card__footer{
+    a{
+      margin-right: 20PX;
+      color: $main;
+      //font-size: $contFontSize;
+    }
+  }
+}
+
+
+/**
+  站点信息
+ */
+.site-set-box{
+
+  /*.site-set__logo{
+    i{
+      height: 15PX;
+      width: 1PX;
+      background-color: $borderColor;
+      display: inline-block;
+      vertical-align: text-top;
+      margin: 0 20PX;
+    }
+  }*/
+
+  /*头像上传样式*/
+  .avatar-uploader .el-upload {
+    border: 1PX dashed #d9d9d9;
+    border-radius: 6PX;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: $main;
+  }
+  .avatar-uploader-icon {
+    font-size: 28PX;
+    color: #8c939d;
+    width: 120PX;
+    height: 120PX;
+    line-height: 120PX;
+    text-align: center;
+  }
+  .avatar {
+    width: 120PX;
+    height: 120PX;
+    display: block;
+    position: relative;
+  }
+  .avatar-LogoImage{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin: auto;
+  }
+  .el-button--text{
+    padding-bottom: 0;
+  }
+
+  .proportion-box{
+    width: 45%;
+    display: inline-block;
+    span{
+      height: 20PX;
+      display: inline-block;
+      white-space: pre-wrap;
+      margin-right: 20PX;
+    }
+
+    .el-input{
+      width: 120PX;
+      height: 36PX;
+    }
+
+    margin-right: 5PX;
+  }
+
+}
+
+
+/**
+  注册设置
+ */
+.sign-up-set-box{
+
+}
+
+
+/**
+  附件设置
+ */
+.annex-set-box{
+
+}
+
+
+/**
+  第三方登录设置
+ */
+.worth-mention-box{
+
+  .worth-mention__default{
+    padding-top: 15PX;
+  }
+
+}
+
+
+/*
+  第三方登录设置配置
+*/
+.worth-mentioning-config-h5-box{
+
+}
+
+
+/**
+  内容过滤设置
+ */
+.content-filter-set-box{
+
+  .content-filter-set__search{
+
+    .el-cascader__search-input{
+      width: 60%;
+      max-width: 440PX;
+      margin: 0 14PX 0 0;
+    }
+    &-button{
+      width: 20%;
+      max-width: 68PX;
+    }
+
+  }
+
+  .content-filter-set-main{
+
+    .list-set-box{
+      margin: 15PX 0;
+      span{
+        color: $main;
+        margin-right: 40PX;
+        cursor: pointer;
+      }
+    }
+
+    /*.content-filter-set-table-add{
+      width: 100%;
+      height: 45PX;
+      border-bottom: 1PX solid #EBEEF5;
+      line-height: 45PX;
+      display: flex;
+      align-items: center;
+      p{
+        margin-left: 65PX;
+        color: $main;
+        cursor: pointer;
+        //font-size:14PX;
+        //font-weight:400;
+      }
+    }*/
+
+  }
+
+  /*.batch-set-box{
+
+    .el-radio-group{
+      margin-top: 15PX;
+
+      div:last-of-type{
+        margin-top: 22PX;
+      }
+
+    }
+
+    h2{
+      font-size:18PX;
+      color:$titleColor;
+      line-height:25PX;
+      margin-bottom: 11PX;
+    }
+    p{
+      color:$commentColor;
+      line-height:28PX;
+    }
+
+  }*/
+
+}
+
+/*
+  批量添加本地敏感词
+*/
+.add-sensitive-words-box{
+
+  .el-radio-group{
+    margin-top: 15PX;
+
+    div:last-of-type{
+      margin-top: 22PX;
+    }
+
+  }
+
+  h2{
+    font-size:18PX;
+    color:$titleColor;
+    line-height:25PX;
+    margin-bottom: 11PX;
+  }
+  p{
+    color:$commentColor;
+    line-height:28PX;
+  }
+}
+
+
+
+/**
+  支付设置
+ */
+.pay-set-box{
+
+  .pay-set__default{
+    margin-top: 15PX;
+  }
+}
+
+
+/**
+  用户管理
+ */
+.user-manage-set-box{
+  margin-top: 15PX;
+
+  .user-manage-set-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    line-height: 45PX;
+    display: flex;
+    align-items: center;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      span{
+        cursor: pointer;
+      }
+    }
+  }
+
+}
+
+
+/**
+  角色管理
+ */
+.role-manage-set-box{
+  margin-top: 15PX;
+
+  /*.role-manage-set-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    line-height: 45PX;
+    display: flex;
+    align-items: center;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      //font-size:14PX;
+      //font-weight:400;
+      span{
+        cursor: pointer;
+      }
+    }
+  }*/
+
+  /*.role-editing-box{
+
+    .card-box{
+      border-bottom: 0;
+    }
+
+    .role-table{
+      width: 100%;
+      tr{
+        width: 100%;
+        border-bottom: 1PX solid #EBEEF5;
+
+        th{
+          background-color: #FAFAFA;
+          padding: 12PX 14PX 12PX 17PX;
+          line-height: 23PX;
+        }
+
+        td{
+          vertical-align: middle;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 12PX 17PX 12PX 17PX;
+          line-height: 23PX;
+          margin-right: 68PX;
+        }
+      }
+    }
+  }*/
+
+}
+
+
+/*
+  角色管理-权限编辑
+*/
+.role-editing-box{
+
+  .card-box{
+    border-bottom: 0;
+  }
+
+  .role-table{
+    width: 100%;
+    tr{
+      width: 100%;
+      border-bottom: 1PX solid #EBEEF5;
+
+      th{
+        background-color: #FAFAFA;
+        padding: 15PX 14PX 15PX 17PX;
+        line-height: 23PX;
+      }
+
+      td{
+        vertical-align: middle;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 15PX 17PX 15PX 17PX;
+        line-height: 23PX;
+        margin-right: 68PX;
+      }
+    }
+  }
+}
+
+

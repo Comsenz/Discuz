@@ -1,0 +1,43 @@
+/**
+ * 定义风格变量
+ *	字体
+ *	字号
+ *	颜色
+ */
+
+
+/*
+  全局变量
+*/
+
+$blue:#0054A5;
+
+$main:#336699;  //主体颜色
+
+$titleColor:#303133;    //内容正文、标题字体颜色
+
+$descColor:#909399;   //内容副文、描述字体颜色
+
+$commentColor:#606266;    //副标题、注释字体颜色
+
+$inputPlaceholder:#B2B2B2;
+
+$headerFontColor:#FFF;    //头部字体原色
+$headerFontColorShallow:rgba(255,255,255 ,0.65);   //头部字体浅色
+
+$borderColor:#E5E5E5;    //边框颜色
+
+$contBorderColor:#F8F9F9;   //card边框、内容、子边框颜色
+
+$tableBorderColor:#EBEEF5;    //表格边框线
+
+$tableHeaderColor:#FAFAFA;     //表格头部颜色
+
+$splitLine:#DCDFE6;     //竖分割线颜色
+
+//多选、单选按钮颜色、副颜色
+$selectColor:#1989FA;
+//多选、单选文字颜色
+$selectFontColor:#303133;
+
+$--color-primary:#336699;

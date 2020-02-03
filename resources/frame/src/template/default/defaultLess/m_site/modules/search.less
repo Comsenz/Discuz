@@ -1,0 +1,104 @@
+@charset "utf-8";
+
+/**
+ * manageCircle style
+ */
+@import "./../common/var.less";
+
+/*搜索*/
+.searchRes {
+  padding: 0 0 0 15px;
+	background: #fff;
+	.resultTit {
+		position: relative;
+    padding-top: 10px;
+    line-height: 26px;
+		text-align: left;
+		color: @cor888;
+    font-size: 13px;
+		font-weight: normal;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    right: 0;
+		    bottom: 0;
+		    left: 0;
+		    border-bottom: 1px solid @gray-light;
+		}
+	}
+	.resUser {
+    padding: 7px 0;
+		position: relative;
+		overflow: hidden;
+		.resUserHead {
+			float: left;
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+		}
+		.resUserDet {
+			overflow: hidden;
+      font-size: 15px;
+      margin-left: 46px;
+			.resUserName {
+				float: left;
+        line-height: 36px;
+        max-width: 240px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				i {
+					font-style: normal;
+					color: @main;
+				}
+			}
+			.userRole {
+				float: left;
+        line-height: 36px;
+        margin-left: 10px;
+				color: @cor888;
+			}
+		}
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+       left: 46px;
+		    bottom: 0;
+		    right: 0;
+		    border-bottom: 1px solid @gray-light;
+		}
+    &:last-child {
+      &:after {
+        border-bottom: none;
+      }
+    }
+	}
+	.searchMore {
+		color: @main;
+    line-height: 40px;
+    font-size: 13px;
+		.icon {
+			color: @main;
+      margin-right: 9px;
+      font-size: 16px;
+		}
+	}
+	.themeRes {
+    padding: 13px 15px 13px 0;
+		position: relative;
+		&:after {
+			position: absolute;
+		    box-sizing: border-box;
+		    content: ' ';
+		    pointer-events: none;
+		    left: 0;
+		    bottom: 0;
+		    right: 0;
+		    border-bottom: 1px solid @gray-light;
+		}
+	}
+}

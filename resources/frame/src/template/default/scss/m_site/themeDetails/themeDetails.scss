@@ -1,0 +1,83 @@
+@charset "utf-8";
+/**
+  主题详情页
+ */
+
+@import "../app";
+@import "../../var";
+
+
+/**
+    主题回复
+ */
+.reply-to-topic-box{
+  width: 100%;
+  height: 100%;
+  color: #000;
+
+  .reply-to-topic-header{
+    width: 100%;
+    @include px2rem(height,88);
+    background-color: rgba(249, 249, 249, 0.9);
+    box-shadow:0px 1px 0px 0px rgba(0,0,0,0.1);
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include px2rem(padding,0 32);
+    @include px2rem(line-height,48);
+
+    .van-button{
+      min-width: 52px;
+      height: 30px;
+      &__text{
+        font-size: 14px;
+        line-height:20px;
+        font-weight: 500;
+      }
+    }
+
+    .reply-to-topic-release-btn{
+
+    }
+  }
+
+  .reply-to-topic-main{
+    width: 100%;
+    height: 50%;
+    @include px2rem(min-height,300);
+  }
+
+  .reply-to-topic-footer{
+    width: 100%;
+    @include px2rem(height,100);
+    position: fixed;
+    top: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top:1px solid rgba(229,229,229,1);
+    display: flex;
+    justify-content: space-between;
+    @include px2rem(padding,0 32);
+
+    .reply-to-topic-footer-left{
+      @include px2rem(width,132);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .reply-to-topic-header-icon{
+        color: #4C4C4C;
+        @include font-dpr(48);
+      }
+
+    }
+
+  }
+
+}

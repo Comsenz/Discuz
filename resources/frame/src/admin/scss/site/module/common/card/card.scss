@@ -1,0 +1,66 @@
+@charset "utf-8";
+/**
+  公共组件--卡片
+  公共组件的颜色需要element-variables文件
+ */
+
+@import "../../../common/index";
+
+$fontColor:#606266;     //正常标题
+$interceptHeaderColor:#909399;    //拦截标题
+
+.card-box{
+  width: 100%;
+  height: auto;
+  padding: 15PX 0;
+  border-bottom: 1PX solid $contBorderColor;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  .card-box__header{
+    width: 100%;
+    margin-bottom: 14PX;
+
+    .card-title{
+      color:$fontColor;
+      line-height:20PX;
+    }
+
+    .card-intercept-title{
+      color:$interceptHeaderColor;
+    }
+
+    .card-box__main{
+      color:$titleColor;
+      line-height:20PX;
+    }
+  }
+
+  .not-main{
+    margin-bottom: 0;
+  }
+
+  .card-box__main{
+
+    .row-box{
+
+      .row-slot{
+        display: inline-block;
+        width: 60%;
+        margin-right: 14PX;
+      }
+
+      .row-desc{
+        width: 40%;
+        color: $descColor;
+        vertical-align: top;
+        line-height:20PX;
+      }
+
+    }
+  }
+
+
+
+}

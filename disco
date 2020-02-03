@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+define('DISCUZ_START', microtime(true));
+
+define('ARTISAN_BINARY', 'disco');
+
+require __DIR__.'/vendor/autoload.php';
+
+$app = new Discuz\Foundation\Application(__DIR__);
+
+$app->singleton(
+    Illuminate\Contracts\Console\Kernel::class,
+    App\Console\Kernel::class
+);
+
+$app->make(Illuminate\Contracts\Console\Kernel::class)->listen();

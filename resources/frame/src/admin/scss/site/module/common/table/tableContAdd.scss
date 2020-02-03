@@ -1,0 +1,27 @@
+@charset "utf-8";
+/*
+  添加表格空内容
+  公共组件的颜色需要element-variables文件
+*/
+
+@import "../../../common/index";
+
+
+.table-cont-add-box{
+  width: 100%;
+  height: 45PX;
+  border-bottom: 1PX solid $tableBorderColor;
+  display: flex;
+  align-items: center;
+
+  p{
+    margin-left: 65PX;
+    color: $main;
+    display: flex;
+    align-items: center;
+    span{
+      cursor: pointer;
+      margin-right: 4PX;
+    }
+  }
+}

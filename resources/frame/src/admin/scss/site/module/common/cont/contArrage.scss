@@ -1,0 +1,156 @@
+@charset "utf-8";
+/*
+  内容处理模板架子
+  公共组件的颜色需要element-variables文件
+*/
+
+@import "../../../common/index";
+
+.cont-arrange-box{
+  width: 100%;
+  height: 100%;
+  background-color: #FFF;
+  &:hover{
+    background-color: #F5F7FA;
+    transition: background-color .25s ease;
+  }
+
+  .cont-arrange-main{
+    width: 100%;
+    min-height: 100PX;
+    border-bottom: 1PX solid $tableBorderColor;
+
+    display: flex;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .cont-arrange__lf-side{
+      min-height: 100%;
+      min-width: 25PX;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18PX;
+      border-right: 1PX solid $tableBorderColor;
+
+    }
+
+    .cont-arrange__rt-main{
+      min-height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      &-header{
+        border-bottom: 1PX solid $tableBorderColor;
+        display: flex;
+        align-items:center;
+        padding: 18PX 20PX;
+        //font-size: 0;
+
+        .rt-box{
+          color: $descColor;
+          margin-left: 20PX;
+        }
+
+        div:nth-child(2){
+          margin-left: 10PX;
+        }
+
+        &__release{
+          flex: 1;
+          display: flex;
+          align-items: baseline;
+          white-space: nowrap;
+          min-width: 130PX;
+          position: relative;
+          p{
+            display: inline-block;
+            color: $titleColor;
+          }
+          p:last-of-type{
+            margin-left: 14PX;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          p:first-of-type{
+            margin-right: 14PX;
+          }
+          span{
+            color: $descColor;
+          }
+          .themeName{
+            position: absolute;
+            //width: calc(100% - 140PX);
+            //left: 111PX;
+          }
+        }
+
+      }
+
+      &-box{
+        padding: 15PX 20PX;
+        line-height:20PX;
+        color: $titleColor;
+        overflow: hidden;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        transition: .5s;
+        &:last-child{
+          border-bottom: 0;
+        }
+
+      }
+
+      .cont-block-control{
+        width: 100%;
+        height: 35PX;
+        text-align: center;
+        bottom: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        cursor: pointer;
+        border-top: 1PX solid $tableBorderColor;
+        &:hover{
+          background-color: aliceblue;
+          box-shadow: 0 0 8PX 0 rgba(232,237,250,.6);
+        }
+
+        p{
+          color: $main;
+          line-height: 35PX;
+        }
+
+        .icondown-menu{
+          display: inline-block;
+        }
+
+        .show-down{
+          transform: rotate(180deg);
+        }
+
+      }
+
+      .is-bottom-out{
+        position: fixed;
+        background-color: $tableHeaderColor;
+        z-index: 999;
+      }
+
+      &-footer{
+        flex: 1;
+        padding: 15PX 21PX;
+        display: flex;
+        align-items:center;
+        border-top: 1PX solid $tableBorderColor;
+      }
+
+    }
+
+  }
+
+}

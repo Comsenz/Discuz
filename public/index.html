@@ -1,0 +1,160 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=fragment content=!><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><meta name=apple-mobile-web-app-capable content=yes><meta name=renderer content=webkit|ie-stand><meta http-equiv=X-UA-Compatible content="IE=10,Edge"><title></title><style>.frame-loader {
+      position: absolute;
+      top: 50%;
+      left: 40%;
+      margin-left: 10%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+
+    .dot {
+      width: 15px;
+      height: 15px;
+      background: #3ac;
+      border-radius: 100%;
+      display: inline-block;
+      animation: slide 1s infinite;
+    }
+
+    .dot:nth-child(1) {
+      animation-delay: 0.1s;
+      background: #32aacc;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+      background: #64aacc;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.3s;
+      background: #96aacc;
+    }
+
+    .dot:nth-child(4) {
+      animation-delay: 0.4s;
+      background: #c8aacc;
+    }
+
+    .dot:nth-child(5) {
+      animation-delay: 0.5s;
+      background: #faaacc;
+    }
+
+    @-moz-keyframes slide {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @-webkit-keyframes slide {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @-o-keyframes slide {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slide {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }</style><script type=text/javascript>!function (a, b) {
+      function c() {
+        var b = f.getBoundingClientRect().width;
+        b / i > 540 && (b = 540 * i);
+        var c = b / 10;
+        f.style.fontSize = c + "px", k.rem = a.rem = c
+      }
+
+      var d, e = a.document, f = e.documentElement, g = e.querySelector('meta[name="viewport"]'),
+        h = e.querySelector('meta[name="flexible"]'), i = 0, j = 0, k = b.flexible || (b.flexible = {});
+      if (g) {
+        var l = g.getAttribute("content").match(/initial\-scale=([\d\.]+)/);
+        l && (j = parseFloat(l[1]), i = parseInt(1 / j))
+      } else {
+        if (h) {
+          var m = h.getAttribute("content");
+          if (m) {
+            var n = m.match(/initial\-dpr=([\d\.]+)/), o = m.match(/maximum\-dpr=([\d\.]+)/);
+            n && (i = parseFloat(n[1]), j = parseFloat((1 / i).toFixed(2))), o && (i = parseFloat(o[1]), j = parseFloat((1 / i).toFixed(2)))
+          }
+        }
+      }
+      if (!i && !j) {
+        var p = a.navigator.userAgent, q = (!!p.match(/android/gi), !!p.match(/iphone/gi)),
+          r = q && !!p.match(/OS 9_3/), s = a.devicePixelRatio;
+        i = q && !r ? s >= 3 && (!i || i >= 3) ? 3 : s >= 2 && (!i || i >= 2) ? 2 : 1 : 1, j = 1 / i
+      }
+      if (f.setAttribute("data-dpr", i), !g) {
+        if (g = e.createElement("meta"), g.setAttribute("name", "viewport"), g.setAttribute("content", "initial-scale=" + j + ", maximum-scale=" + j + ", minimum-scale=" + j + ", user-scalable=no"), f.firstElementChild) {
+          f.firstElementChild.appendChild(g)
+        } else {
+          var t = e.createElement("div");
+          t.appendChild(g), e.write(t.innerHTML)
+        }
+      }
+      a.addEventListener("resize", function () {
+        clearTimeout(d), d = setTimeout(c, 300)
+      }, !1), a.addEventListener("pageshow", function (a) {
+        a.persisted && (clearTimeout(d), d = setTimeout(c, 300))
+      }, !1), "complete" === e.readyState ? e.body.style.fontSize = 12 * i + "px" : e.addEventListener("DOMContentLoaded", function () {
+        e.body.style.fontSize = 12 * i + "px"
+      }, !1), c(), k.dpr = a.dpr = i, k.refreshRem = c, k.rem2px = function (a) {
+        var b = parseFloat(a) * this.rem;
+        return "string" == typeof a && a.match(/rem$/) && (b += "px"), b
+      }, k.px2rem = function (a) {
+        var b = parseFloat(a) / this.rem;
+        return "string" == typeof a && a.match(/px$/) && (b += "rem"), b
+      }
+    }(window, window.lib || (window.lib = {}));</script><link href=/static/css/app.593353507b49545136ea.css rel=stylesheet></head><body><div class=frame-loader><div class=dot></div><div class=dot></div><div class=dot></div><div class=dot></div><div class=dot></div></div><div id=app></div><iframe id=printCasLogout style="display: none;"></iframe><script type=text/javascript src="/static/js/manifest.1c5f44f2883be9d92bee.js?v=1580695563561"></script><script type=text/javascript src="/static/js/12.1e64a86a4ffa72af5811.js?v=1580695563561"></script></body><script>//vconsole 调试
+    if(window.location.href.indexOf("debug=1") !== -1) {
+        var jsScript = document.createElement("script");
+        jsScript.src = "/v2/static/js/common/vconsole.min.js";
+        jsScript.type = "text/javascript";
+        jsScript.async = false;
+        jsScript.onload = function() {
+          var vConsole = new VConsole();
+        };
+
+        document.getElementsByTagName("body")[0].appendChild(jsScript);
+    }</script></html>

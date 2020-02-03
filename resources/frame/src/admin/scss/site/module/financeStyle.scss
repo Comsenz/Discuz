@@ -1,0 +1,152 @@
+/*财务导航菜单各个页面*/
+
+@import "../common/index";
+@import "../../../../../static/css/admin/iconfont.css";
+
+
+
+/*
+  资金明细
+ */
+.fund-details-box{
+
+  .fund-details__search-box{
+    padding-top: 15PX;
+    display: flex;
+    flex-wrap: wrap;
+
+    .fund-details__search-condition{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin-right: 30PX;
+      margin-bottom: 15PX;
+
+      .el-input{
+        min-width: 150PX;
+      }
+
+      .el-date-editor.el-input__inner{
+        width: 0;
+        flex: 1;
+        min-width: 300PX;
+      }
+
+      &__title{
+        min-width: 70PX;
+        margin-right: 8PX;
+      }
+
+      &:last-of-type{
+        flex: 0;
+      }
+    }
+  }
+}
+
+
+/*
+  订单记录
+*/
+.order-record-box{
+
+  .order-record__search-box{
+    //padding: 15PX 0;
+    padding-top: 15PX;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .order-record__search-condition{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin-right: 30PX;
+      margin-bottom: 15PX;
+
+      .el-input{
+        min-width: 150PX;
+      }
+
+      .el-date-editor.el-input__inner{
+        width: 260PX;
+      }
+
+      &__title{
+        min-width: 70PX;
+        margin-right: 8PX;
+      }
+
+      //&:first-of-type{
+      //  margin-bottom: 15PX;
+      //}
+
+      &:last-of-type{
+        flex: 0;
+      }
+    }
+
+  }
+}
+
+
+/*
+  提现申请
+*/
+.withdrawal-application-box{
+
+  .withdrawal-application__search-box{
+    //padding: 15PX 0;
+    padding-top: 15PX;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .withdrawal-application__search-condition{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin-right: 30PX;
+      margin-bottom: 15PX;
+
+      .el-input{
+        min-width: 150PX;
+      }
+
+      .el-date-editor.el-input__inner{
+        width: 260PX;
+      }
+
+      &__title{
+        min-width: 70PX;
+        margin-right: 8PX;
+      }
+
+      .el-input__suffix{
+        min-width: 0;
+        margin-right: 0;
+      }
+
+      &:last-of-type{
+        flex: 0;
+      }
+
+      &:nth-child(4){
+        flex: 0;
+        min-width: 210PX;
+      }
+
+    }
+  }
+}
+
+
+/*
+  提现设置
+*/
+.withdrawal-setting-box{
+
+  //.el-button {
+  //  margin-right: 40PX;
+  //}
+}

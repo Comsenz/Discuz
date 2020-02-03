@@ -1,0 +1,233 @@
+/*用户导航各个页面*/
+
+@import "../common/index";
+@import "../../../../../static/css/admin/iconfont.css";
+
+
+/*
+  公共样式
+*/
+.details-wallet-header{
+  display: flex;
+  padding: 15PX 0;
+  border-bottom: 1PX solid $contBorderColor;
+
+  &__name{
+    color: $commentColor;
+  }
+
+  &__i{
+    width: 1PX;
+    height: 16PX;
+    display: inline-block;
+    background-color: $splitLine;
+    margin: 0 24PX;
+  }
+
+  .details-wallet-header__details{
+    color: $main;
+  }
+
+  .details-wallet-header__wallet{
+    color: $main;
+  }
+
+  span{
+    margin-right: 20PX;
+    color: $descColor;
+    cursor: pointer;
+  }
+
+}
+
+
+/*
+  用户管理
+*/
+.user-manage-box{
+
+  .el-button{
+    margin-right: 40PX;
+  }
+  .el-select{
+    width: 100%;
+  }
+}
+
+
+/*
+  用户搜索结果
+*/
+.user-search-list-box{
+
+  .user-search-list__table{
+
+    .user-search-list__table-title{
+      padding: 15PX 0;
+      display: flex;
+      align-items: center;
+      p{
+        margin-right: 40PX;
+        color: $titleColor;
+      }
+
+      .el-button{
+        padding: 0;
+      }
+
+      .el-button+.el-button{
+        margin-left: 20PX;
+      }
+    }
+  }
+
+  .user-search-list__prompt{
+    padding: 15PX 0;
+    h1{
+      margin-bottom: 11PX;
+      font-size: 18PX;
+      font-weight: 400;
+      color: $titleColor;
+    }
+    p{
+      height: 28PX;
+      color:$commentColor;
+    }
+  }
+}
+
+
+/*
+  用户详情
+*/
+.user-details-box{
+
+  /*头像上传样式*/
+  .avatar-uploader .el-upload {
+    border: 1PX dashed #d9d9d9;
+    border-radius: 6PX;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: $main;
+  }
+  .avatar-uploader-icon {
+    font-size: 28PX;
+    color: #8c939d;
+    width: 120PX;
+    height: 120PX;
+    line-height: 120PX;
+    text-align: center;
+  }
+  .avatar {
+    width: 120PX;
+    height: 120PX;
+    display: block;
+  }
+
+  /*.user-avatar{
+    //width: 120PX;
+
+  }*/
+
+  .add-site{
+
+    color: $main;
+
+    &:after{
+      content: '，';
+    }
+
+    &:last-of-type{
+      &:after{
+        content: '';
+      }
+    }
+
+    i{
+      color: $titleColor;
+    }
+
+  }
+
+  .el-select{
+    width: 100%;
+  }
+
+  .el-button--text{
+    padding-bottom: 0;
+  }
+
+}
+
+
+/*
+  钱包
+*/
+.wallet-box{
+
+  .wallet-set-box{
+    display: flex;
+    .el-select{
+      width:40%;
+      margin-right: 10PX;
+
+      .el-input{
+        width: 100%;
+      }
+
+    }
+    .el-input{
+      width: 60%;
+    }
+  }
+}
+
+
+/*
+  用户角色
+*/
+.user-rol-box{
+
+  .user-rol-table{
+    margin-top: 15PX;
+  }
+
+  /*.user-rol-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    line-height: 45PX;
+    display: flex;
+    align-items: center;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      span{
+        cursor: pointer;
+      }
+    }
+  }*/
+
+  .el-button+.el-button{
+    margin-left: 20PX;
+  }
+
+}
+
+
+/*
+  用户角色权限设置
+*/
+.rol-permission-box{
+
+  .card-row-box {
+
+    .card-row-rf {
+      padding-top: 0;
+    }
+  }
+}
+

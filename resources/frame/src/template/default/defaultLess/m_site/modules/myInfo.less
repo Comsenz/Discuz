@@ -1,0 +1,466 @@
+@import "../common/var";
+
+/**
+  公共样式--strat
+ */
+/**
+  隔栏
+ */
+.barrier{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  width:100%;
+  height:11px;
+  background:@gap;
+  border:1px solid @corE5;
+}
+
+
+/**
+ 我的-冻结金额、提现记录、钱包明细、订单明细等
+ 主体，白色部分
+ */
+.my-info-money-header{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-Y: scroll;
+}
+
+
+/**
+  我的-冻结金额、提现记录、钱包明细、订单明细等
+  页脚，灰色部分
+ */
+.my-info-money-footer{
+  flex: 1;
+  background-color: @corEd;
+  border:1px solid @corE5;
+}
+
+
+/**
+  我的-表单输入
+  去掉vant默认输入框边框左边缩进
+ */
+.my-info-form{
+  .van-cell-group{
+    padding: 0;
+  }
+
+  .van-cell{
+    padding: 13px 15px 13px 0;
+
+    &:not(:last-child)::after{
+      left:0;
+    }
+  }
+}
+
+
+/**
+  我的-修改手机、修改密码公共标题头部
+ */
+.my-info-module-title-box{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 58px 0;
+
+  .my-info-module-title{
+    text-align: center;
+    font-size: 19px;
+    font-weight:500;
+    color:@font000;
+    line-height: 26px;
+  }
+}
+
+/**
+  单元格-横道
+ */
+.cell-crossing{
+  position: relative;
+  &:not(:last-child)::after{
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 16px;
+    border-bottom: 1PX solid @corE5;
+  }
+}
+
+/**
+  引用内容---回复内容样式
+ */
+.reference{
+  padding: 10px 15px 0 15px;
+  .reference-cont{
+    background-color: @corF7;
+    padding: 8px;
+    font-size:13px;
+    font-weight:400;
+    color:@cor888;
+    line-height:20px;
+  }
+}
+.quote-reply{
+  font-size: 14px;
+  padding: 10px 15px 12px 15px;
+}
+
+/**
+  浏览器默认样式部分清除
+ */
+h2,h3,h4{
+  margin:0;
+  padding:0;
+  font-size:100%;
+  font-weight:bold;
+}
+
+/**
+  公共样式--end
+  */
+
+
+//各个页面样式
+/**
+  冻结金额
+ */
+.frozen-amount-box{}
+
+/**
+  提现
+ */
+.withdraw-box{
+  .withdraw-main{
+    padding: 44px 0 0 15px;
+
+    .withdraw-form{
+      .van-field {
+        &__label {
+          flex: none;
+          width: 110px;
+        }
+      }
+    }
+
+    .withdraw-operating{
+      margin-top: 50px;
+      text-align: center;
+    }
+
+  }
+}
+
+
+/**
+  修改密码
+ */
+.change-pwd-main{
+  padding-left:15px;
+  padding-top: 44px;
+
+  .change-pwd-operating{
+    margin-top: 50px;
+    text-align: center;
+  }
+
+}
+
+
+/**
+  我的主页
+ */
+
+//内容页面-头像
+.avatar-img{
+  border-radius:4px;
+}
+
+.home-page-box{
+
+  .home-page-main{
+
+    .home-page-main-header{
+      height: 152px;
+      width: 100%;
+      background-color: @corFff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .home-page-main-box{
+        text-align: center;
+
+        .header-avatar{
+          width: 46px;
+          height: 46px;
+        }
+        .user-name{
+          margin: 6px 0;
+          font-size:15px;
+          font-weight:500;
+          color:@main;
+          line-height:20px;
+        }
+      }
+
+    }
+
+    .home-page-main-cont{
+      width: 100%;
+
+    }
+
+  }
+
+  .home-page-footer{
+    width: 100%;
+    height:46px;
+    background:@corF2;
+    border:1px solid @corE5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p{
+      font-size:14px;
+      font-weight:400;
+      color:@font000;
+      line-height:20px;
+    }
+  }
+}
+
+
+
+/**
+  我的通知
+ */
+.my-notice-box{
+
+  .my-notice-main{
+    border-top: 0.5px solid rgba(0,0,0,0.1);
+    .van-cell{
+      padding: 15px;
+
+      .van-cell__title{
+        display: flex;
+        align-items: center;
+      }
+
+      .custom-title{
+        font-size:15px;
+        font-weight:400;
+        color:@font000;
+        line-height:21px;
+      }
+
+      .custom-title-icon{
+        padding: 0 5px;
+        height: 16px;
+        background-color: #FA5151;
+        color: @corFff;
+        border-radius: 50px;
+        text-align: center;
+        font-style:normal;
+        line-height: 16px;
+        margin-left: 8px;
+        font-size:11px;
+        font-weight:400;
+      }
+    }
+  }
+}
+
+
+/**
+  我的收藏
+ */
+.my-collection-box{
+
+}
+
+
+/**
+  回复我的
+ */
+.reply-my-box{
+
+  .reply-my-main{
+
+    .reply-my-cont{
+
+      .reference{
+        padding: 10px 15px 0 15px;
+        .reference-cont{
+          background-color: @corF7;
+          padding: 8px;
+          span {
+            display: block;
+            font-size:13px;
+            color:@cor888;
+            line-height:  20px;
+          }
+        }
+      }
+      .quote-reply{
+        padding: 10px 15px 12px 15px;
+      }
+    }
+  }
+}
+
+
+/**
+  点赞我的
+ */
+.quote-reply {
+  line-height: 20px;
+  span {
+    display: block;
+    line-height: 20px;
+    color: @cor444;
+    font-size: 24px;
+  }
+}
+.postContent {
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  a {
+    display: block;
+    line-height: 20px;
+    color: @font000;
+  }
+
+}
+
+
+/**
+  修改手机号
+ */
+.modify-phone-box{
+  width: 100%;
+  height: calc(~"100% - 44px");
+
+  .modify-phone-main{
+    width: 100%;
+    height: calc(~"100% - 40px");
+    padding: 44px 0 0 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .modify-phone-title-box{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+
+      .modify-phone-title-p{
+        text-align: center;
+        font-size:19px;
+        font-weight:500;
+        color:@font000;
+        line-height: 26px;
+      }
+    }
+
+    .modify-phone-operating{
+      width: 100%;
+      height: auto;
+      margin-top: 50px;
+      text-align: center;
+    }
+  }
+}
+
+
+//我的资料
+.modify-data-box{
+  width: 100%;
+  height: 100%;
+  color: @font000;
+  background-color: @corEd;
+  overflow: hidden;
+
+  .modify-data-main{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding:44px 0 0 0;
+    border-bottom: 1PX solid @corE5;
+    background-color: @corFff;
+
+    .modify-data-avatar{
+      height: auto;
+      padding: 8px 0 8px 15px;
+      box-sizing: border-box;
+      .modify-data-avatar-img {
+        img {
+          width: 58px;
+          height: 58px;
+          border-radius: 4px;
+          position: relative;
+          vertical-align: top;
+        }
+      }
+      .iconfont {
+        display: inline-block;
+        margin-right: 15px;
+        position: relative;
+        top: 22px;
+      }
+    }
+  }
+
+}
+
+/**
+  系统通知
+ */
+.systemCon {
+  position: relative;
+  padding: 11px 15px;
+  .systemTitle {
+    font-size: 15px;
+    line-height: 22px;
+    color: @cor444;
+    margin-bottom: 8px;
+  }
+  .systemTime {
+    font-size: 14px;
+    line-height: 16px;
+    color: @cor888;
+    margin-bottom: 8px;
+  }
+  .systemDet {
+    font-size: 14px;
+    line-height: 18px;
+    color: @cor444;
+  }
+  &:after {
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 15px;
+    border-bottom: 1px solid @gray-light;
+  }
+}

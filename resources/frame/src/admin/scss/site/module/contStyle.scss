@@ -1,0 +1,1016 @@
+/*内容导航菜单各个页面*/
+
+@import "../common/index";
+@import "../../../../../static/css/admin/iconfont.css";
+
+//过渡效果样式
+.transition-box {
+  margin-bottom: 10px;
+  width: 200px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: #409EFF;
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+
+/*
+  内容分类
+  */
+.cont-class-box{
+  color: $titleColor;
+
+  .cont-class-table{
+    margin-top: 15PX;
+  }
+
+  /*.cont-class-table-add{
+    width: 100%;
+    height: 45PX;
+    border-bottom: 1PX solid #EBEEF5;
+    p{
+      margin-left: 65PX;
+      color: $main;
+      line-height: 45PX;
+      span{
+        cursor: pointer;
+      }
+    }
+  }*/
+}
+
+
+/*
+  内容管理
+  */
+.cont-manage-box{
+  color: $titleColor;
+
+  .cont-manage-theme{
+    margin-top: 15PX;
+
+    &__table{
+      width: 100%;
+
+      &-header{
+        width: 100%;
+        height: 53PX;
+        background-color: $tableHeaderColor;
+        display: flex;
+        align-items: center;
+        padding-left: 17PX;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        border-bottom: 1PX solid $tableBorderColor;
+
+        &__title{
+          margin-left: 30PX;
+          color:$commentColor ;
+        }
+
+      }
+
+      &-footer{
+        padding: 15PX 0;
+        text-align: center;
+      }
+
+      &-side{
+        width: 100%;
+        .el-checkbox__label{
+          display: none;
+        }
+      }
+
+      &-main{
+        line-height: 20PX;
+
+        &__cont-text{
+          width: 100%;
+          color: $titleColor;
+          word-break:break-all;
+          display: block;
+          .qq-emotion{
+            width: 20PX;
+            vertical-align: text-bottom;
+            display:inline-block;
+          }
+        }
+
+        &__cont-imgs{
+          &-p{
+            text-align: center;
+            margin-top: 14PX;
+            img{
+              max-width: 60%;
+              cursor: pointer;
+            }
+          }
+        }
+
+        &__cont-annex{
+          margin-top: 10PX;
+        }
+      }
+    }
+
+  }
+
+  .cont-manage-operating{
+    p{
+      padding: 25PX 0 15PX 0;
+      color: $commentColor;
+    }
+
+    .cont-manage-operating__table-label{
+      padding-left: 31PX;
+    }
+
+    .el-radio__label{
+      padding-left: 31PX;
+    }
+
+    .cont-manage__option-select{
+      .el-radio__label{
+        padding-left: 10PX;
+      }
+    }
+
+  }
+}
+
+
+/*
+  内容管理--主题搜索
+*/
+
+/*范围box*/
+
+.range-box{
+
+  .card-box__main{
+    width: 40%;
+    display: flex;
+    align-items: center;
+
+    i{
+      width: 10PX;
+      height: 1PX;
+      margin: 0 15PX;
+      background-color: $commentColor;
+    }
+  }
+}
+
+.cont-manage-search-box{
+  margin-top: 15PX;
+
+  .el-select{
+    width: 40%;
+  }
+
+  .el-button{
+    margin-right:40PX;
+  }
+
+  .cont-manage-search-more{
+
+    .el-date-editor{
+      width: 100%;
+    }
+
+  }
+
+}
+
+
+/*
+  内容审核
+*/
+
+/*搜索栏下标题*/
+.cont-review-header__lf-title{
+  min-width: 70PX;
+  line-height: 36PX;
+}
+
+.cont-review-box{
+  width: 100%;
+  height: 100%;
+  color: $titleColor;
+
+  .cont-review-header{
+    width: 100%;
+    height: 100PX;       //根据设计图算的出来的效果不一样，写了一个大概
+    padding: 15PX 0;
+    display: flex;
+    //justify-content: space-between;
+
+    &__lf{
+      //width: 39%;
+      display: inline-block;
+      margin-right: 25PX;
+      flex-grow: 1;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+        }
+
+        .el-select{
+          width: 100%;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    &__rt{
+      //width: 59%;
+      flex-grow: 1;
+      display: inline-block;
+
+      div{
+        height: 36PX;
+        display: flex;
+
+        .content-contains-input{
+          width: 200PX;
+        }
+
+        .el-input--medium{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        .el-checkbox{
+          line-height: 36PX;
+          margin-left: 40PX;
+        }
+
+        .el-select--medium{
+          //width: 140PX;
+          width: 100%;
+          margin-right: 10PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+  }
+
+  .cont-review-table{
+    border-top: 1PX solid $tableBorderColor;
+
+    &__side{
+
+      .el-radio-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-radio{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__header{
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      div{
+        flex-grow:1;
+        p:nth-of-type(2){
+          margin-top: 12PX;
+        }
+
+        .desc{
+          color: $descColor;
+        }
+      }
+
+      div:first-of-type{
+        flex-grow: 2;
+      }
+
+    }
+
+    &__main{
+      line-height: 20PX;
+      .highlight{
+        background-color: yellow;
+      }
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
+        word-break:break-all;
+        display: block;
+        .qq-emotion{
+          width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
+        }
+      }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+            cursor: pointer;
+          }
+        }
+      }
+
+      &__cont-annex{
+        margin-top: 10PX;
+      }
+
+    }
+    &__footer{
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+      &__lf{
+        display: flex;
+        align-items: center;
+        margin-right: 66PX;
+
+        i{
+          height: 16PX;
+          width: 1PX;
+          display: inline-block;
+          background-color: #DCDFE6;
+          margin: 0 14PX;
+        }
+      }
+
+      &__rt{
+        //flex-grow: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .el-input{
+          width: 140PX;
+          margin-right: 10PX;
+        }
+
+      }
+
+      &__bottom{
+        flex: 1;
+        text-align: right;
+      }
+
+    }
+
+    &__table-footer{
+      padding: 15PX 0;
+      text-align: center;
+    }
+
+  }
+
+  .cont-review-footer{
+    margin-top: 30PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+
+/*
+  回复审核
+*/
+.reply-review-box{
+  width: 100%;
+  height: 100%;
+  color: $titleColor;
+
+  .cont-review-header{
+    width: 100%;
+    height: 100PX;
+    padding: 15PX 0;
+    display: flex;
+    //justify-content: space-between;
+
+    &__lf{
+      //width: 39%;
+      display: inline-block;
+      margin-right: 25PX;
+      flex-grow: 1;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+        }
+
+        .el-select{
+          width: 100%;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    &__rt{
+      //width: 59%;
+      display: inline-block;
+      flex-grow: 1;
+      //margin-left: 10PX;
+
+      div{
+        height: 36PX;
+        display: flex;
+
+        .content-contains-input{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        .el-input--medium{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        .el-checkbox{
+          line-height: 36PX;
+          margin-left: 40PX;
+        }
+
+        .el-select--medium{
+          //width: 140PX;
+          width: 100%;
+          margin-right: 10PX;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+  }
+
+  .cont-review-table{
+    border-top: 1PX solid $tableBorderColor;
+
+    &__side{
+
+      .el-radio-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-radio{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__header{
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      div{
+        flex-grow:1;
+        p:nth-of-type(2){
+          margin-top: 12PX;
+        }
+
+        .desc{
+          color: $descColor;
+        }
+      }
+
+      div:first-of-type{
+        flex-grow: 2;
+      }
+
+    }
+
+    &__main{
+      line-height: 20PX;
+      .highlight{
+        background-color: yellow;
+      }
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
+        word-break:break-all;
+        display: block;
+        .qq-emotion{
+          width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
+        }
+      }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+            cursor: pointer;
+          }
+        }
+      }
+
+    }
+    &__footer{
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+
+      &__lf{
+        display: flex;
+        align-items: center;
+        //flex-grow: 1;
+        margin-right: 66PX;
+
+        i{
+          height: 16PX;
+          width: 1PX;
+          display: inline-block;
+          background-color: #DCDFE6;
+          margin: 0 14PX;
+        }
+      }
+
+      &__rt{
+        //flex-grow: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .el-input{
+          width: 140PX;
+          margin-right: 10PX;
+        }
+
+      }
+
+      &__bottom{
+        flex: 1;
+        text-align: right;
+      }
+
+    }
+
+  }
+
+  .cont-review-footer{
+    margin-top: 30PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+
+/*
+  回收站--主题
+*/
+.recycle-bin-box{
+  color: $titleColor;
+
+  .recycle-bin-header{
+
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 15PX 0;
+
+    .recycle-bin-header__section{
+      flex: 1;
+      margin-right: 20PX;
+
+      &:nth-child(3){
+        flex-grow: 1.5;
+      }
+
+      .section-top{
+        margin-bottom: 15PX;
+      }
+
+      div{
+        display: flex;
+        align-items: center;
+        .el-select{
+          width: 100%;
+        }
+        .el-date-editor{
+          width: 100%;
+        }
+      }
+
+      &:last-of-type{
+        flex:0;
+        margin-right: 0;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .time-title{
+        min-width: 100PX;
+      }
+
+    }
+
+    div{
+      /*自适应*/
+      /* height: 40PX;
+       -webkit-box-flex: 1;
+       -webkit-flex: 1;
+       -ms-flex: 1;
+       flex: 1;
+       display: -ms-flexbox;
+       display: flex;
+       -webkit-box-align: center;
+       -ms-flex-align: center;
+       -webkit-flex-basis: 200PX;
+       -ms-flex-preferred-size: 200PX;
+       flex-basis: 200PX;
+       box-sizing: border-box;
+       margin-bottom: 10PX;
+       margin-right: 10PX;*/
+
+    }
+
+    /*&__lf{
+      width: 39%;
+      display: inline-block;
+      margin-right: 10PX;
+      div{
+        height: 36PX;
+        display: flex;
+
+        .el-input{
+          width: 100%;
+        }
+
+        .el-select{
+          width: 100%;
+        }
+      }
+
+      div:first-of-type{
+        margin-bottom: 15PX;
+      }
+
+    }
+
+    &__rt{
+      width: 59%;
+      display: inline-block;
+
+      &-top{
+        margin-bottom: 15PX;
+        height: 36PX;
+        display: flex;
+
+        .el-input--medium{
+          //width: 200PX;
+          width: 100%;
+        }
+
+        span:last-of-type{
+          margin-left: 10PX;
+        }
+
+      }
+
+      &-bottom{
+        height: 36PX;
+        display: flex;
+        justify-content: space-between;
+
+        &__time-title{
+          width: 160PX;
+          line-height: 36PX;
+        }
+
+        .el-date-editor{
+          width: 90%;
+          margin-right: 15PX;
+        }
+
+      }
+
+    }*/
+
+  }
+
+  .recycle-bin-table{
+    border-top: 1PX solid $tableBorderColor;
+    .cell{
+      display: flex;
+      align-items: center;
+    }
+
+    .recycle-bin-table-checkbox{
+      display: flex;
+      flex-direction: column;
+
+      .el-checkbox:last-of-type{
+        margin-top: 12PX;
+      }
+    }
+
+    &__side{
+      .el-radio-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-radio{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__main{
+      line-height: 20PX;
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
+        word-break:break-all;
+        display: block;
+        .qq-emotion{
+          width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
+        }
+      }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+            cursor: pointer;
+          }
+        }
+      }
+
+      &__cont-annex{
+        margin-top: 10PX;
+      }
+
+    }
+
+    &__footer{
+      color: $commentColor;
+      div{
+        display: inline-block;
+      }
+      div:first-of-type{
+        margin-right: 40PX;
+      }
+    }
+
+  }
+
+  .recycle-bin-footer{
+    margin-top: 20PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+
+/*
+  回收站--回帖
+*/
+.recycle-bin-reply-box{
+   color: $titleColor;
+
+  .recycle-bin-reply-header{
+    /*自适应*/
+   /* width: 100%;
+    display: -ms-flexbox;
+    display: inline-flex;
+    -ms-flex-pack: start;
+    -ms-flex-align: center;
+    -ms-flex-line-pack: center;
+    -ms-flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-top: 15PX;*/
+
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 15PX 0;
+
+    .recycle-bin-reply-header__section{
+      flex: 1;
+      margin-right: 20PX;
+
+      .section-top{
+        margin-bottom: 15PX;
+      }
+
+      div{
+        display: flex;
+        align-items: center;
+        .el-select{
+          width: 100%;
+        }
+        .el-date-editor{
+          width: 100%;
+        }
+      }
+
+      &:last-of-type{
+        flex:0;
+        margin-right: 0;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .time-title{
+       min-width: 100PX;
+      }
+
+    }
+
+    div{
+      /*自适应*/
+     /* height: 40PX;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-flex-basis: 200PX;
+      -ms-flex-preferred-size: 200PX;
+      flex-basis: 200PX;
+      box-sizing: border-box;
+      margin-bottom: 10PX;
+      margin-right: 10PX;*/
+
+    }
+
+  }
+
+  .recycle-bin-reply-table{
+    border-top: 1PX solid $tableBorderColor;
+    &__side{
+
+      .el-radio-group{
+        display: flex;
+        flex-direction: column;
+
+        .el-radio{
+          margin-right: 0;
+          margin-bottom: 12PX;
+        }
+      }
+    }
+
+    &__header{
+
+      /*&-bottom{
+        p{
+          span:first-of-type{
+            color: $commentColor;
+          }
+        }
+      }*/
+    }
+
+    &__main{
+      line-height: 20PX;
+
+      &__cont-text{
+        width: 100%;
+        color: $titleColor;
+        word-break:break-all;
+        display: block;
+        .qq-emotion{
+          width: 20PX;
+          vertical-align: text-bottom;
+          display:inline-block;
+        }
+      }
+
+      &__cont-imgs{
+        &-p{
+          text-align: center;
+          margin-top: 14PX;
+          img{
+            max-width: 60%;
+            cursor: pointer;
+          }
+        }
+      }
+
+      a{
+        word-break:break-all;
+        .qq-emotion{
+          width: 20PX;
+        }
+      }
+    }
+
+    &__footer{
+      color: $commentColor;
+      div{
+        display: inline-block;
+      }
+      div:first-of-type{
+        margin-right: 40PX;
+      }
+    }
+
+  }
+
+  .recycle-bin-reply-footer{
+
+    margin-top: 20PX;
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+
+    .el-checkbox{
+      margin-left: 20PX;
+    }
+
+  }
+
+}
+

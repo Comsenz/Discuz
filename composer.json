@@ -1,0 +1,46 @@
+{
+	"name" : "comsenz/discuss",
+	"description" : "The Discuz software open-source.",
+	"type" : "project",
+	"keywords" : [
+		"discuz",
+		"comsenz",
+		"forum",
+		"community"
+	],
+	"license" : "MIT",
+	"require" : {
+		"php": "^7.2",
+		"ext-json": "*",
+		"discuz/core": "dev-master",
+		"endroid/qr-code": "^3.6",
+		"league/omnipay": "^3.0",
+		"lokielse/omnipay-wechatpay": "^3.0",
+		"s9e/text-formatter": "^2.3",
+        "ext-pdo": "*"
+    },
+	"config" : {
+		"optimize-autoloader" : true,
+		"preferred-install" : "dist",
+		"sort-packages" : true
+	},
+	"repositories" : [{
+		"type" : "path",
+		"url" : "./framework"
+	}
+	],
+	"minimum-stability" : "dev",
+	"prefer-stable" : true,
+	"require-dev" : {
+		"symfony/var-dumper" : "^4.3",
+        "friendsofphp/php-cs-fixer": "^2.16"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"App\\" : "./app"
+		},
+        "classmap": [
+            "database/seeds"
+        ]
+	}
+}

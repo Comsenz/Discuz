@@ -1,0 +1,251 @@
+@charset "utf-8";
+/**
+  后台-index
+  @Param：后台所有大小单位以大写PX书写，避免转成rem。
+ */
+
+@import "../common/index";
+@import '../../../../../static/css/admin/iconfont.css';
+
+
+.index-container-box{
+  width: 100%;
+  height: 100%;
+
+  .index-header{
+    //min-width: 850PX;
+    background-color: $blue;
+    color: $headerFontColor;
+
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .index-header__icon{
+      height: 100%;
+      width: 216Px;
+      display: flex;
+      margin-right: 20Px;
+      align-items: center;
+      justify-content: center;
+
+      a{
+        width: 162Px;
+        height: 30Px;
+        img{
+          height: 100%;
+        }
+      }
+
+    }
+
+    .index-header__nav{
+      width: 400PX;
+      margin-left: 34PX;
+
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+
+      .menu-demo{
+        width: 100%;
+        height: 50PX;
+        list-style: none;
+        position: relative;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: flex-start;
+
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+
+        .menu-item{
+          height: 100%;
+          list-style: none;
+          position: relative;
+          margin-right: 40PX;
+          padding-left: 0;
+          line-height: 50PX;
+          text-align: center;
+          color:$headerFontColorShallow;
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          border-bottom: 0 solid $headerFontColorShallow;
+          transition-duration:0.5s;
+          cursor: pointer;
+          font-weight:500;
+
+          &:hover{
+            color: $headerFontColor;
+          }
+        }
+
+        .is-active{
+          color: $headerFontColor;
+          border-bottom: 2PX solid white;
+        }
+
+      }
+
+    }
+
+    .index-header__info-menu{
+      position: absolute;
+      right: 14PX;
+
+      span{
+        color:$headerFontColor;
+        line-height:20PX;
+        cursor: pointer;
+      }
+
+      .site-home{
+        margin-left: 20PX;
+        a{
+          color:$headerFontColor;
+        }
+      }
+
+    }
+
+  }
+
+  .index-main-con{
+    width: 100%;
+    //height: calc(100% - #{80px});
+
+    .index-main-con__side{
+      width: 100%;
+      height: 100%;
+      box-shadow:0 2PX 12PX 0 rgba(0,0,0,0.06);
+      padding: 20PX 40PX ;
+      position: relative;
+
+      .index-main-con__side-title{
+        height: 42PX;
+        border-bottom: 1PX solid $borderColor;
+        span{
+          font-size:18PX;
+          font-weight:600;
+          color:rgba(0,0,0,1);
+          line-height:25PX;
+          letter-spacing:25PX;
+        }
+
+      }
+
+      .index-main-con__side-list{
+
+        .index-side-ul{
+          padding-top: 14PX;
+
+          .index-side-li{
+            padding-bottom: 25PX;
+            //line-height:20PX;
+
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            span{
+              &:first-of-type{
+                display: inline-block;
+                width: 14PX;
+                height: 14PX;
+                margin-right: 8PX;
+                font-size: 14PX;
+                line-height: 14PX;
+              }
+            }
+
+            &:hover{
+              color:$blue;
+            }
+
+          }
+
+          .is-active{
+            color: $main;
+          }
+
+        }
+
+      }
+
+      .index-main-con__side-footer{
+        position: absolute;
+        bottom: 30PX;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        color: rgba(0,0,0,0.45);
+      }
+
+
+    }
+
+    .index-main-con__main{
+      height: 100%;
+      //width: calc(100% - #{256PX});
+      width: calc(100% - #{256px});
+      padding: 0;
+      padding-bottom: 20PX;
+      scroll-behavior: smooth;
+
+      .index-main-con__main-title{
+        width: 100%;
+        height: 65PX;
+        border-bottom: 1PX solid $borderColor;
+        padding: 20PX 49PX;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing:  border-box;
+        box-sizing: border-box;
+        line-height: 25PX;
+        display: flex;
+        align-items: center;
+        h1{
+          font-size:18PX;
+          font-weight:400;
+          color:rgba(0,0,0,1);
+          line-height: 25PX;
+          display: inline-block;
+        }
+
+        &__class{
+          display: flex;
+          align-items: center;
+
+          i{
+            height: 16PX;
+            width: 1PX;
+            display: inline-block;
+            background-color: #DCDFE6;
+            margin: 0 24PX;
+          }
+
+          span{
+            color: $descColor;
+            cursor: pointer;
+          }
+          span:first-of-type{
+            margin-right: 20PX;
+          }
+
+          .is-active{
+            color: $main;
+          }
+        }
+      }
+
+      .router-con{
+        padding: 0 49PX;
+      }
+
+    }
+
+  }
+
+}

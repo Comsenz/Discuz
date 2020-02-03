@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+/** 进度条 */
+#progress_loading {
+  width: 100%;
+  height: 0px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+#progress_loading div {
+  width: 0px;
+  height: 0px;
+  border-radius: 1px;
+  background-color: #336699;
+}

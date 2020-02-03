@@ -1,0 +1,535 @@
+@charset "utf-8";
+/**
+ *   移动端登录模块样式
+ */
+
+@import "../common/var.less";
+@w100:100%;  //宽度100%
+
+
+//输入框闪烁光标颜色
+::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #B2B2B2;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #B2B2B2;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #B2B2B2;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #B2B2B2;
+}
+
+
+/**
+登录、注册、微信等模块公共按钮样式
+ */
+//@mixin loginModelBtn {
+//  @include px2rem(width,334);
+//  @include px2rem(height,72);
+//  @include font-dpr(32);
+//  @include px2rem(line-height,44);
+//}
+
+html,
+body{
+  width: @w100;
+  height: 100%;
+  display: block;
+}
+
+/**
+  登录注册页模块，公共标题样式
+ */
+.login-module-title-box{
+  width: @w100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 58px 0;
+
+  .login-module-title{
+    text-align: center;
+    font-size: 19px;
+    font-weight:500;
+    color:@font000;
+    line-height: 26px;
+  }
+}
+
+/**
+  登录注册页模块，公共表单样式
+ */
+.login-module-form{
+  font-size: 15px;
+  color:@font000;
+  margin-bottom: 50px;
+
+  .van-cell-group{
+    padding: 0;
+  }
+
+  .van-cell{
+    padding: 14px 0;
+
+    &:not(:last-child)::after{
+      left:0;
+    }
+  }
+
+}
+
+
+/**
+ *  登录-用户名登录
+ */
+.login-user-box{
+  width: @w100;
+  height: calc(100% - 44px);
+  //height: @heightCalc;
+  min-height: 600px;
+
+  .login-user-box-main{
+    width: @w100;
+    height: 100%;
+    // height: @heightCalc40;
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .login-user-btn{
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .login-user-method{
+
+      .login-user-method-box{
+        width: 167px;
+        font-size: 15px;
+        margin: auto;
+      }
+
+      .login-user-method-icon{
+        display: flex;
+        justify-content: center;
+        margin-top: 25px;
+        .login-user-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-user-method-icon-ring{
+            width: 54px;
+            height: 54px;
+            border-radius: 50px;
+            border:1px solid @corE5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span{
+              font-size: 25px;
+            }
+          }
+        }
+
+        .justifyCenter {
+          justify-content: center;
+        }
+
+      }
+    }
+  }
+
+}
+
+
+/**
+ * 登录-手机号登录
+ */
+.login-phone-box{
+  width: @w100;
+  height: calc(100% - 44px);
+  //height: @heightCalc;
+  min-height: 600px;
+  .login-phone-box-main{
+    width: @w100;
+    height: 100%;
+    // height: @heightCalc40;
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .login-phone-btn{
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .login-phone-method{
+
+      .login-phone-method-box{
+        width: 167px;
+        font-size: 15px;
+        margin: auto;
+      }
+
+      .login-phone-method-icon{
+        display: flex;
+        justify-content: center;
+        margin-top: 25px;
+        .login-phone-method-icon-box{
+          width: 50%;
+          display: flex;
+          justify-content: space-between;
+          .login-phone-method-icon-ring{
+            width: 54px;
+            height: 54px;
+            border-radius: 50px;
+            border:1px solid @corE5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span{
+              font-size: 25px;
+            }
+          }
+        }
+
+        .justifyCenter {
+          justify-content: center;
+        }
+      }
+    }
+
+    .grayBg{
+      color: #999;
+    }
+  }
+
+
+}
+
+
+/**
+ *  微信登录绑定
+ */
+.wx-login-bd-box{
+  width: @w100;
+  height: calc(100% - 44px);
+  min-height: 600px;
+
+  .wx-login-bd-main{
+    width: 100%;
+    height: 100%;
+    //height: @heightCalc;
+    font-size: 15px;
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .wx-login-bd-title-box{
+      width: @w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 40px 0;
+
+      .wx-login-bd-title-h2{
+        margin-bottom: 20px;
+        font-size: 19px;
+      }
+      .wx-login-main-desc{
+        font-size: 15px;
+      }
+    }
+
+    .wx-login-bd-form{
+      margin-bottom: 49px;
+      .van-cell-group{
+        padding: 0;
+      }
+
+      .van-cell{
+        padding: 14px 0;
+
+        &:not(:last-child)::after{
+          left:0;
+        }
+      }
+
+    }
+
+    .wx-login-bd-btn{
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+
+/**
+ *  微信注册绑定
+ */
+.wx-sign-up-bd-box{
+  width: 100%;
+  height: calc(~"100% - 50px");
+  min-height: 600px;
+
+  .wx-sign-up-bd-main{
+    width: 100%;
+    height: 100%;
+    //height: @heightCalc;
+    font-size: 15px;
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .wx-sign-up-bd-title-box{
+      width: @w100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 40px 0;
+
+      .wx-sign-up-bd-title-box-h2{
+        margin-bottom: 20px;
+        font-size: 19px;
+      }
+      .wx-sign-up-main-desc{
+        font-size: 15px;
+      }
+    }
+
+    .wx-sign-up-bd-form{
+      margin-bottom: 49px;
+
+      .van-cell-group{
+        padding: 0;
+      }
+      .van-cell{
+        padding: 14px 0;
+
+        &:not(:last-child)::after{
+          left:0;
+        }
+      }
+    }
+
+    .wx-sign-up-bd-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  绑定手机号
+ */
+.bind-phone-box{
+  width: 100%;
+  height: calc(~"100% - 44px");
+  //height: @heightCalc;
+  min-height: 600px;
+
+  .bind-phone-main{
+    width: @w100;
+    height: 100%;
+    //height: @heightCalc40;
+
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .bind-phone-main-header{
+      margin: 45px 0;
+    }
+
+    .bind-phone-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  忘记密码
+ */
+.retrieve-password-box{
+  width: 100%;
+  height: calc(~"100% - 44px");
+  //height: @heightCalc;
+  min-height: 600px;
+
+  .retrieve-password-main{
+    width: @w100;
+    height: 100%;
+    //height: @heightCalc40;
+
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .retrieve-password-main-header{
+      margin: 45px 0;
+    }
+
+    .retrieve-password-btn{
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  注册页面
+ */
+.sign-up-box{
+  width: 100%;
+  height: calc(~"100% - 44px");
+  min-height: 600px;
+
+  .sign-up-main{
+    width: @w100;
+    height: 100%;
+    padding: 44px 30px 0 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    .sign-up-btn{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+
+/**
+ *  支付费用页面
+ */
+.pay-the-fee-box{
+  width: 100%;
+  height: 100%;
+  background-color: @corEd;
+  overflow: hidden;
+  color: @font000;
+  min-height: 800px;
+
+  .pay-the-fee-main{
+    width: 100%;
+    height: 202px;
+    //height: 35%;
+    text-align: center;
+    padding: 44px 0 0 0;
+    background-color: @corFff;
+    overflow: hidden;
+    border-bottom: 1px solid @corEd;
+
+    .pay-the-fee-titel{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      margin-bottom: 58px;
+
+      h2{
+        font-size:19px;
+        font-weight:500;
+        color:@font000;
+        line-height:26px;
+      }
+
+    }
+
+    .pay-the-fee-btn{
+      font-size: 16px;
+    }
+    .pay-the-fee-title-footer{
+      margin-top: 15px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      font-weight:500;
+      color:rgba(0,0,0,0.5);
+      line-height: 20px;
+    }
+
+  }
+
+  .pay-the-fee-permission{
+    width: 100%;
+    height: calc(~"100% - 257px");
+
+    background-color: @corFff;
+    margin-top: 22px;
+    padding: 32px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top: 1px solid @corEd;
+
+    .pay-the-fee-per-title{
+      height: 35px;
+      width: 100%;
+      border-bottom: 1px solid @corE5;
+      justify-items: center;
+      h3{
+        font-size: 15px;
+        font-weight:400;
+        color:@font000;
+        line-height: 21px;
+      }
+    }
+
+    .pay-the-fee-per-list{
+
+      .pay-the-fee-per-name{
+        padding-top: 14px;
+        padding-bottom: 8px;
+        font-size: 17px;
+        line-height: 22px;
+      }
+
+      p{
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.5);
+        line-height:20px;
+      }
+
+    }
+
+    .pay-the-fee-per-list-footer{
+      width: 100%;
+      height: 30px;
+      position: absolute;
+      left: 0;
+      bottom: 49px;
+      text-align: center;
+      p{
+        color: @main;
+        font-size: 13px;
+        line-height:36px;
+      }
+    }
+
+  }
+
+}

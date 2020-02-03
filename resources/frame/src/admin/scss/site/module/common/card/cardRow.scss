@@ -1,0 +1,28 @@
+@charset "utf-8";
+/**
+  公共组件--横条
+  公共组件的颜色需要element-variables文件
+ */
+
+@import "../../../common/index";
+
+.card-row-box{
+  //min-width: 650PX;
+  .card-row-lf{
+    display: inline-block;
+    margin-right: 14PX;
+    width: 50%;
+  }
+  .card-row-rf{
+    width: 47%;
+    flex-basis:auto;
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 8PX;
+    span{
+      color:rgba(144,147,153,1);
+      line-height:20PX;
+    }
+
+  }
+}
