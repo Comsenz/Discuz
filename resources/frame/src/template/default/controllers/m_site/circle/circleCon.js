@@ -101,7 +101,7 @@ export default {
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
-          this.allowRegister = res.readdata._data.setreg.register_close;
+          this.allowRegister = res.readdata._data.set_reg.register_close;
           if(!this.allowRegister){
             this.loginWord = '登录';
           }
