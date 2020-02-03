@@ -55,7 +55,7 @@ export default {
             this.siteUsername = '暂无站长信息';
           }
           this.sitePrice = res.readdata._data.set_site.site_price;
-          this.allowRegister = res.readdata._data.setreg.register_close;
+          this.allowRegister = res.readdata._data.set_reg.register_close;
         }
       });
 

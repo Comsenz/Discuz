@@ -57,7 +57,7 @@ export default {
           console.log(res);
           this.siteInfo = res.readdata;
           // console.log(res.readdata._data.siteIntroduction);
-          this.allowRegister = res.readdata._data.setreg.register_close;
+          this.allowRegister = res.readdata._data.set_reg.register_close;
         }
 
       });
