@@ -184,13 +184,13 @@ export default {
            // console.log(res);
            this.siteInfo = res.readdata;
            //把站点是否收费的值存储起来，以便于传到父页面
-           this.isPayVal = res.readdata._data.siteMode;
-           this.allowRegister = res.readdata._data.allowRegister;
+           this.isPayVal = res.readdata._data.set_site.site_mode;
+           this.allowRegister = res.readdata._data.setreg.register_close;
            if(!this.allowRegister){
              this.loginWord = '登录';
            }
            if (this.isPayVal != null && this.isPayVal != '') {
-             this.isPayVal = res.readdata._data.siteMode;
+             this.isPayVal = res.readdata._data.set_site.site_mode;
              //   //判断站点信息是否付费，用户是否登录，用户是否已支付
              this.detailIf(this.isPayVal, false);
            }
