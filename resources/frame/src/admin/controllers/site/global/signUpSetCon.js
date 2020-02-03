@@ -25,12 +25,13 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
+          console.log(res,'密码密码')
           // this.pwdLength = res.readdata._data.setreg.password_length
-          this.checked = res.readdata._data.setreg.register_close
-          this.pwdLength = res.readdata._data.setreg.password_length
-          this.checkList = res.readdata._data.setreg.password_strength.split(',')
+          this.checked = res.readdata._data.set_reg.register_close
+          this.pwdLength = res.readdata._data.set_reg.password_length
+          this.checkList = res.readdata._data.set_reg.password_strength.splice(',')
           console.log(this.checkList)
-          console.log(res)
+          // console.log(res)
         }
       })
     },
