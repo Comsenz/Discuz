@@ -185,7 +185,7 @@ export default {
            this.siteInfo = res.readdata;
            //把站点是否收费的值存储起来，以便于传到父页面
            this.isPayVal = res.readdata._data.set_site.site_mode;
-           this.allowRegister = res.readdata._data.setreg.register_close;
+           this.allowRegister = res.readdata._data.set_reg.register_close;
            if(!this.allowRegister){
              this.loginWord = '登录';
            }

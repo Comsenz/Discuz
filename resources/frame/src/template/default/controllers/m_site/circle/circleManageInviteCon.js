@@ -40,7 +40,7 @@ export default {
         this.siteInfo = []
        }
         this.siteInfo = res.readdata;
-        this.allowRegister = res.readdata._data.setreg.register_close;
+        this.allowRegister = res.readdata._data.set_reg.register_close;
         // console.log(res.readdata._data.siteIntroduction);
       });
 
