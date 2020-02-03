@@ -50,11 +50,11 @@ export default {
           this.siteInfo = res.readdata;
           // console.log(res.readdata._data.siteMode+'请求');
           if(res.readdata._data.siteAuthor){
-            this.siteUsername = res.readdata._data.siteAuthor.username;
+            this.siteUsername = res.readdata._data.set_site.site_author.username;
           } else {
             this.siteUsername = '暂无站长信息';
           }
-          this.sitePrice = res.readdata._data.sitePrice;
+          this.sitePrice = res.readdata._data.set_site.site_price;
           this.allowRegister = res.readdata._data.setreg.register_close;
         }
       });

@@ -146,7 +146,7 @@ export default {
         } else {
           console.log(res);
           console.log('888887');
-          var ImgExt = res.readdata._data.supportImgExt.split(',');
+          var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
           var ImgStr='';
           var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
@@ -157,14 +157,14 @@ export default {
           }
 
 
-          var fileExt = res.readdata._data.supportFileExt.split(',');
+          var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
           var fileStr='';
           for(var k=0;k<fileExt.length;k++){
             fileStr = '.'+fileExt[k]+',';
             this.supportFileExt += fileStr;
           }
-          this.canUploadImages = res.readdata._data.canUploadImages;
-          this.canUploadAttachments = res.readdata._data.canUploadAttachments;
+          this.canUploadImages = res.readdata._data.other.can_upload_images;
+          this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
       });
     },

@@ -152,10 +152,10 @@ export default {
           throw new Error(res.error)
         } else {
           console.log(res);
-          // console.log('888887');
+          console.log('888887');
           var ImgExt = '';
-          if(res.readdata._data.supportImgExt){
-            ImgExt = res.readdata._data.supportImgExt.split(',');
+          if(res.readdata._data.set_attach.support_img_ext){
+            ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
             var ImgStr='';
             var imgStrRes ='';
             for(var k=0;k<ImgExt.length;k++){
@@ -169,8 +169,8 @@ export default {
           }
 
           var fileExt = '';
-          if(res.readdata._data.supportFileExt){
-            fileExt = res.readdata._data.supportFileExt.split(',');
+          if(res.readdata._data.set_attach.support_file_ext){
+            fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
             var fileStr='';
             for(var k=0;k<fileExt.length;k++){
               fileStr = '.'+fileExt[k]+',';
@@ -180,8 +180,9 @@ export default {
             fileExt ='*';
           }
 
-          this.canUploadImages = res.readdata._data.canUploadImages;
-          this.canUploadAttachments = res.readdata._data.canUploadAttachments;
+          this.canUploadImages = res.readdata._data.other.can_upload_images;
+          this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
+          console.log(this.canUploadImages,this.canUploadAttachments,'图片，附件')
         }
       });
     },

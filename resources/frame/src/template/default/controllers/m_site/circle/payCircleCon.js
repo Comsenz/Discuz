@@ -51,14 +51,14 @@ export default {
         }
         console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.allowRegister+'请求');
+        console.log(es.readdata._data.setreg.register_close+'请求');
         this.allowRegister = res.readdata._data.setreg.register_close;
-        if(res.readdata._data.siteAuthor){
-          this.siteUsername = res.readdata._data.siteAuthor.username;
+        if(res.readdata._data.set_site.site_author){
+          this.siteUsername = res.readdata._data.set_site.site_author.username;
         } else {
           this.siteUsername = '暂无站长信息';
         }
-        this.sitePrice = res.readdata._data.sitePrice
+        this.sitePrice = res.readdata._data.set_site.site_price;
         //把站点是否收费的值存储起来，以便于传到父页面
         // this.isPayVal = res.readdata._data.siteMode;
         // if(this.isPayVal != null && this.isPayVal != ''){
