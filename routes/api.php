@@ -78,6 +78,7 @@ $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWe
 
 $route->get('/users', 'users.list', ApiController\Users\ListUsersController::class);
 $route->post('/users', 'users.create', ApiController\Users\CreateUserController::class);
+$route->patch('/users/real', 'users.real', ApiController\Users\RealUserController::class);
 $route->get('/users/{id}', 'user.resource', ApiController\Users\ProfileController::class);
 $route->patch('/users/{id}', 'user.update', ApiController\Users\UpdateUserController::class);
 $route->patch('/users', 'users.update', ApiController\Users\UpdateUsersController::class);

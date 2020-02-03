@@ -12,7 +12,7 @@ class System extends Notification
     protected $data;
     protected $type;
 
-    public function __construct($type, $data)
+    public function __construct($type, $data = [])
     {
         $this->type = $type;
         $this->data = $data;

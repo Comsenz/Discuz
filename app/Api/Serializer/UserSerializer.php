@@ -56,7 +56,7 @@ class UserSerializer extends AbstractSerializer
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
-            'canDelete'         => $gate->allows('delete', $model),
+            'canDelete'         => $gate->allows('delete', $model)
         ];
 
         if ($canEdit || $this->actor->id === $model->id) {
@@ -65,6 +65,8 @@ class UserSerializer extends AbstractSerializer
                 'mobileConfirmed'   => $model->mobile_confirmed,
                 'registerIp'        => $model->register_ip,
                 'lastLoginIp'       => $model->last_login_ip,
+                'identity'          => $model->identity,
+                'realname'         => $model->realname,
             ];
         }
 
