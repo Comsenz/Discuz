@@ -58,8 +58,6 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
-            'site_icp' => $this->settings->get('site_icp'),
-            'site_stat' => $this->settings->get('site_stat'),
             'site_close_msg' => $this->settings->get('site_close_msg'),
             'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
             'site_install' => $this->settings->get('site_install'),
@@ -106,20 +104,6 @@ class ForumSettingField
             'wxpay_app_id' => $this->settings->get('wxpay_app_id', 'wxpay'),
             'wxpay_api_key' => $this->settings->get('wxpay_api_key', 'wxpay'),
             'wxpay_app_secret' => $this->settings->get('wxpay_app_secret', 'wxpay'),
-        ];
-    }
-
-    /**
-     * 获取附件设置 - 管理员可见
-     *
-     * @return array
-     */
-    public function getAttachSettings()
-    {
-        return [
-            'support_img_ext' => $this->settings->get('support_img_ext', 'default'),
-            'support_file_ext' => $this->settings->get('support_file_ext', 'default'),
-            'support_max_size' => $this->settings->get('support_max_size', 'default'),
         ];
     }
 
