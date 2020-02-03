@@ -135,7 +135,7 @@ export default {
         data:{}
       }).then(res=>{
         console.log(res);
-        this.siteMode = res.readdata._data.setsite.site_mode;
+        this.siteMode = res.readdata._data.set_site.site_mode;
         webDB.setLItem('siteInfo',res.readdata);
       }).catch(err=>{
         console.log(err);

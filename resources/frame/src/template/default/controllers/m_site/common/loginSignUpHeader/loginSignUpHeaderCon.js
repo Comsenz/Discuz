@@ -28,12 +28,6 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
   },
-  mounted () {
-    //设置在pc的宽度
-    if(this.isWeixin != true && this.isPhone != true){
-      this.limitWidth();
-    }
-  },
   methods:{
     //设置Header在pc里的宽度
     limitWidth(){

@@ -108,7 +108,7 @@ export default {
           }
         } else {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-          this.siteMode = res.readdata._data.setsite.site_mode;
+          this.siteMode = res.readdata._data.set_site.site_mode;
           browserDb.setLItem('siteInfo',res.readdata);
         }
       }).catch(err=>{

@@ -196,8 +196,8 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          this.sitePrice = res.readdata._data.setsite.site_price;
-          let day = res.readdata._data.setsite.site_expire;
+          this.sitePrice = res.readdata._data.set_site.site_price;
+          let day = res.readdata._data.set_site.site_expire;
           switch (day) {
             case '':
               this.siteExpire = '永久有效';
@@ -366,6 +366,6 @@ export default {
       this.getAuthority(res.readdata.groups[0]._data.id)
     });
     this.tokenId = webDb.getLItem('tokenId');
-    this.amountNum = webDb.getLItem('siteInfo')._data.setsite.site_price;
+    this.amountNum = webDb.getLItem('siteInfo')._data.set_site.site_price;
   }
 }
