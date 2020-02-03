@@ -195,5 +195,17 @@ class Censor
             }
         }
     }
-
+    /**
+     * 检验身份证号码和姓名是否真实
+     *
+     * @param string $identity 身份证号码
+     * @param string $realname 姓名
+     * @return string
+     */
+    public function checkReal(string $identity ,string $realname)
+    {
+        $qcloud = $this->app->make('qcloud');
+        $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
+        return $result;
+    }
 }

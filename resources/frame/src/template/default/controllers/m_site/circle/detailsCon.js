@@ -391,11 +391,11 @@ export default {
     shareTheme() {
       let Url= '';
       if(this.isPayVal === 'pay'){
-        Url = appConfig.devApiUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+        Url = appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       } else {
-        Url = appConfig.devApiUrl+'/details/' + this.themeId
+        Url = appConfig.baseUrl+'/details/' + this.themeId
       }
-      // var Url= appConfig.devApiUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+      // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       oInput.value = Url;
       document.body.appendChild(oInput);
