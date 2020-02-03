@@ -108,8 +108,8 @@ export default {
           throw new Error(res.error)
         } else {
           console.log(res);
-          console.log('888887');
-           var ImgExt = res.readdata._data.supportImgExt.split(',');
+          // console.log('888887');
+           var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
            var ImgStr='';
            var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
@@ -118,8 +118,8 @@ export default {
             this.supportImgExt += ImgStr;
             this.supportImgExtRes += imgStrRes;
           }
-          this.canUploadImages = res.readdata._data.canUploadImages;
-          console.log(this.canUploadImages+'5555');
+          this.canUploadImages = res.readdata._data.other.can_upload_images;
+          // console.log(this.canUploadImages+'5555');
         }
       });
     },

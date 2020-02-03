@@ -121,11 +121,11 @@ export default {
         }
       }).then((res) => {
         this.siteInfo = res.readdata;
-        if(res.readdata._data.logo){
-          this.logo = res.readdata._data.logo;
+        if(res.readdata._data.set_site.site_logo){
+          this.logo = res.readdata._data.set_site.site_logo;
         }
         //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.siteMode;
+        this.isPayVal = res.readdata._data.set_site.site_mode;
       })
       //请求分类接口
       this.appFetch({

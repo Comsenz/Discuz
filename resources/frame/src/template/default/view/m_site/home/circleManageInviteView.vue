@@ -7,7 +7,7 @@
       <div class="gap"></div>
       <div class="circleInfo padB0 lastBorNone">
       	<h1 class="cirInfoTit">站点简介</h1>
-      	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}</p>
+      	<p class="cirInfoWord">{{siteInfo._data.set_site.site_introduction}}</p>
       </div>
 	    <!-- <div class="circleInfo padB0">
 	    	<h1 class="cirInfoTit">站点简介</h1>
@@ -42,9 +42,9 @@
       <div class="loginOpera">
         <a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
         <a href="javascript:;" @click="registerJump" class="regiJoin" v-if="allowRegister">接受邀请，注册</a>
-        <p class="payMoney">￥{{siteInfo._data.sitePrice}} / 永久有效</p>
+        <p class="payMoney">￥{{siteInfo._data.set_site.site_price}} / 永久有效</p>
       </div>
-	</van-pull-refresh>  
+	</van-pull-refresh>
     </div>
 </template>
 
