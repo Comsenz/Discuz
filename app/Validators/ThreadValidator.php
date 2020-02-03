@@ -17,7 +17,7 @@ class ThreadValidator extends AbstractValidator
     protected function getRules()
     {
         return [
-            'title' => 'min:3|max:80',
+            'title' => 'required|min:3|max:80',
         ];
     }
 

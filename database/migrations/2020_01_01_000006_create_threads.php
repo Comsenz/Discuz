@@ -28,6 +28,7 @@ class CreateThreads extends Migration
             $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('是否合法');
             $table->tinyInteger('is_sticky')->unsigned()->default(0)->comment('是否置顶');
             $table->tinyInteger('is_essence')->unsigned()->default(0)->comment('是否加精');
+            $table->tinyInteger('is_long_article')->unsigned()->default(0)->comment('是否长文');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('last_posted_user_id')->references('id')->on('users');

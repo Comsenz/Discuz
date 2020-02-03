@@ -11,6 +11,7 @@ use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
 use App\Formatter\Formatter;
+use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -85,6 +86,13 @@ class Post extends Model
     protected static $formatter;
 
     /**
+     * The markdown text formatter instance.
+     *
+     * @var MarkdownFormatter
+     */
+    protected static $markdownFormatter;
+
+    /**
      * Unparse the parsed content.
      *
      * @param string $value
@@ -92,7 +100,11 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        return static::$formatter->unparse($value);
+        if ($this->thread->is_long_article) {
+            return static::$markdownFormatter->unparse($value);
+        } else {
+            return static::$formatter->unparse($value);
+        }
     }
 
     /**
@@ -112,7 +124,11 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+        if ($this->thread->is_long_article) {
+            $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
+        } else {
+            $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+        }
     }
 
     /**
@@ -132,9 +148,15 @@ class Post extends Model
      */
     public function formatContent()
     {
-        return $this->attributes['content']
-            ? static::$formatter->render($this->attributes['content'])
-            : '';
+        $content = $this->attributes['content'] ?: '';
+
+        if ($this->thread->is_long_article) {
+            $content = $content ? static::$markdownFormatter->render($content) : '';
+        } else {
+            $content = $content ? static::$formatter->render($content) : '';
+        }
+
+        return $content;
     }
 
     /**
@@ -376,6 +398,16 @@ class Post extends Model
     }
 
     /**
+     * Get the markdown text formatter instance.
+     *
+     * @return MarkdownFormatter
+     */
+    public static function getMarkdownFormatter()
+    {
+        return static::$markdownFormatter;
+    }
+
+    /**
      * Set the text formatter instance.
      *
      * @param Formatter $formatter
@@ -383,5 +415,15 @@ class Post extends Model
     public static function setFormatter(Formatter $formatter)
     {
         static::$formatter = $formatter;
+    }
+
+    /**
+     * Set the markdown text formatter instance.
+     *
+     * @param MarkdownFormatter $formatter
+     */
+    public static function setMarkdownFormatter(MarkdownFormatter $formatter)
+    {
+        static::$markdownFormatter = $formatter;
     }
 }

@@ -8,6 +8,7 @@
 namespace App\Providers;
 
 use App\Formatter\Formatter;
+use App\Formatter\MarkdownFormatter;
 use App\Listeners\Post\PostListener;
 use App\Models\Post;
 use App\Policies\PostPolicy;
@@ -32,6 +33,7 @@ class PostServiceProvider extends AbstractServiceProvider
     public function boot()
     {
         Post::setFormatter($this->app->make(Formatter::class));
+        Post::setMarkdownFormatter($this->app->make(MarkdownFormatter::class));
 
         // 事件处理类
         $events = $this->app->make('events');
