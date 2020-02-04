@@ -410,6 +410,13 @@ h2,h3,h4{
       height: auto;
       padding: 8px 0 8px 15px;
       box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      
+      .modify-data-avatar-title{
+        flex:1;
+        text-align: center;
+      }
       .modify-data-avatar-img {
         img {
           width: 58px;
@@ -417,6 +424,14 @@ h2,h3,h4{
           border-radius: 4px;
           position: relative;
           vertical-align: top;
+          display: inline-block;
+        }
+        .hiddenInput{
+          // position: absolute;
+          left: -7.73333rem;
+          opacity:0;
+          // width:143rem;
+          // height:3rem;
         }
       }
       .iconfont {

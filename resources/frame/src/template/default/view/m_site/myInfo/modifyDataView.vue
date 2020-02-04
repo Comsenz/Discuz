@@ -25,9 +25,7 @@
     </div>
 </template>
 <style type="text/css" scoped>
- .modify-data-avatar-img{position: relative;display: inline-block;}
-  .hiddenInput {position: absolute;left: -7.73333rem;opacity:0;width:143rem;height:3rem;}
-  /* .searchCon { box-shadow: 0px 1px rgba(0,0,0,0.02); margin-bottom: 1px;} */
+
 </style>
 <script>
 // import '../../../scss/m_site/myInfo/myInfo.scss';
