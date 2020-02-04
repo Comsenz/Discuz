@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import '../../../scss/m_site/mobileIndex';
+// import '../../../scss/m_site/mobileIndex';
 import editTopicCon from '../../../controllers/m_site/circle/editTopicCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';

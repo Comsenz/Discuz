@@ -95,17 +95,15 @@ class User extends Model
     /**
      * 枚举 - status
      *
-     * 0 正常 1 禁用 2 审核中
-     * 3 审核通过 4 审核拒绝 5 审核忽略
+     * 0 正常 1 禁用 2 审核中 3 审核拒绝 4 审核忽略
      * @var array
      */
     protected static $status = [
         'normal' => 0,
         'ban' => 1,
         'mod' => 2,
-        'through' => 3,
-        'refuse' => 4,
-        'ignore' => 5,
+        'refuse' => 3,
+        'ignore' => 4,
     ];
 
     /**

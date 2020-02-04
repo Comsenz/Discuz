@@ -52,7 +52,7 @@
 import Header from '../../m_site/common/headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteCircleManageInviteCon from '../../../controllers/m_site/circle/circleManageInviteCon';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "circleInviteView",
     components:{

@@ -25,7 +25,7 @@
 
 <script>
 import panelCon from '../../../controllers/m_site/common/panelCon'
-import '../../../less/m_site/common/panel.less'
+// import '../../../less/m_site/common/panel.less'
 export default {
     name: "panel",
   ...panelCon

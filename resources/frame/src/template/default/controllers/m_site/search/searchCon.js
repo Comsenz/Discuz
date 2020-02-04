@@ -119,7 +119,8 @@ export default {
 					method:'get',
 					data: this.themeParamd
 				}).then(data=>{
-					this.themeLoadMoreStatus = data.readdata.length < this.searchMaxSum;
+					console.log(data,'主题搜索页面')
+					this.themeLoadMoreStatus = data.readdata.length > this.searchMaxSum;
 					this.searchThemeList = data.readdata.splice(0,3);
 				}).catch(err=>{
 					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
@@ -138,13 +139,17 @@ export default {
 			// // this.themeParamd['page[limit]'] = 10;
 			// this.themeLoadMorePageChange = true;
 			// this.handleSearchTheme();
-			this.$router.push({path: '/', query: {searchWord: this.searchVal}})
+			this.$router.push({path: '/theme-search', query: {searchWord: this.searchVal}})
 		},
 
 		//点击用户名称，跳转到用户主页
 		jumpPerDet:function(id){
 			  this.$router.push({ path:'/home-page'+'/'+id});
 		  },
+		//点击主题内容，跳转到详情页
+		jumpDetails:function(id){
+			this.$router.push({ path:'/details'+'/'+id});
+		},
 
 	},
 

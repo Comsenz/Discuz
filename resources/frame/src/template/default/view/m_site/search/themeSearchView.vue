@@ -61,7 +61,7 @@ import ThemeDet from '../common/themeDetView'
 // import  '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
-import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../defaultLess/m_site/modules/myInfo.less';
 import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "themeSearchView",

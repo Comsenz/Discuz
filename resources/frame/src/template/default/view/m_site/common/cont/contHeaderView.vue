@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import '../../../../less/m_site/common/cont/contHeader.less';
+// import '../../../../less/m_site/common/cont/contHeader.less';
 import contHeaderCon from '../../../../controllers/m_site/common/contCon/contHeaderCon'
 export default {
     name: "cont-header-view",

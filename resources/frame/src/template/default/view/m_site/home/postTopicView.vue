@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import '../../../scss/m_site/mobileIndex';
+// import '../../../scss/m_site/mobileIndex';
 import postTopicCon from '../../../controllers/m_site/circle/postTopicCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';
