@@ -4,7 +4,7 @@
       <main class="modify-data-main content">
         <div class="modify-data-avatar m-site-cell-access">
           <div class="modify-data-avatar-title m-site-cell-access-bd">
-            <p>头像</p>
+            <p class="modify-data-avatar-title-img">头像</p>
           </div>
           <div class="modify-data-avatar-img">
             <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
