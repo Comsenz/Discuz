@@ -21,7 +21,7 @@ export default {
       siteAuthorScale:'',
       siteMasterScale:'',
       siteClose:'1',  //关闭站点选择
-      siteLogoFile: {},
+      // siteLogoFile: {},
       siteLogoFile: [],
       siteMasterId:'',
       siteRecord:'',
@@ -172,14 +172,14 @@ export default {
     },
     getImageSize(url){
       const img = document.createElement('img');
-    
+
       return new Promise((resolve, reject) => {
         img.onload = ev => {
           resolve({ width: img.naturalWidth, height: img.naturalHeight });
         };
         img.src = url;
         img.onerror = reject;
-    
+
       });
     },
 
@@ -236,14 +236,14 @@ export default {
             {
              "attributes":{
               "key":"site_name",
-              "value":this.siteName,
+              "value":this.siteName?this.siteName:'',
               "tag": "default"
              }
             },
             {
              "attributes":{
               "key":"site_introduction",
-              "value":this.siteIntroduction,
+              "value":this.siteIntroduction?this.siteIntroduction:'',
               "tag": "default"
              }
             },

@@ -35,8 +35,6 @@
 </template>
 
 <script>
-// import '../../../scss/m_site/login/loginSignUpModule.scss';
-
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import wxLoginBdCon from '../../../controllers/m_site/login/wxLoginBdCon';
 export default {
