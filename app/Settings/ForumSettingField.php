@@ -17,6 +17,7 @@ class ForumSettingField
 
     /**
      * ForumSettingField constructor.
+     *
      * @param SettingsRepository $settings
      * @param UrlGenerator $url
      * @param Encrypter $encrypter
@@ -43,7 +44,13 @@ class ForumSettingField
         return '';
     }
 
-    private function decrypt($value = '')
+    /**
+     * 字符 - 解密
+     *
+     * @param string $value
+     * @return mixed|string
+     */
+    public function decrypt($value = '')
     {
         return $value ? $this->encrypter->decrypt($value) : '';
     }
