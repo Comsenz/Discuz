@@ -9,6 +9,8 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Http\UrlGenerator;
+use GuzzleHttp\Psr7\Uri;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
@@ -24,12 +26,19 @@ class AttachmentSerializer extends AbstractSerializer
      */
     protected $url;
 
+    /*
+     * @var Filesystem
+     */
+    protected $filesystem;
+
     /**
      * @param UrlGenerator $url
+     * @param Filesystem $filesystem
      */
-    public function __construct(UrlGenerator $url)
+    public function __construct(UrlGenerator $url, Filesystem $filesystem)
     {
         $this->url = $url;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -37,7 +46,9 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        $url = $this->url->to('/storage/attachment/' . $model->attachment);
+        $uri = $this->filesystem->url($model->file_path.'/'.$model->attachment);
+
+        $url = $uri instanceof Uri ? $uri->getScheme().'://'.$uri->getHost().$uri->getPath() : $this->url->to($uri);
 
         $attributes = [
             'isGallery'         => $model->is_gallery,

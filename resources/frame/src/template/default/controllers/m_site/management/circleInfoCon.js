@@ -2,7 +2,6 @@
  * 移动端站点管理页控制器
  */
 
-import Forum from '../../../../../common/models/Forum';
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {

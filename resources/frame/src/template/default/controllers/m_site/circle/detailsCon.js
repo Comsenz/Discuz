@@ -2,11 +2,7 @@
  * wap详情页控制器
  */
 import appConfig from "../../../../../../../frame/config/appConfig";
-// import {Bus} from '../../../store/bus.js';
-// import Thread from '../../../../../common/models/Thread';
-// import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
-// import Forum from '../../../../../common/models/Forum';
 import appCommonH from '../../../../../helpers/commonHelper';
 import {ImagePreview} from "vant";
 export default {
