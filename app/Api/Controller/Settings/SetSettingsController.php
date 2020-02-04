@@ -69,8 +69,8 @@ class SetSettingsController implements RequestHandlerInterface
 
         // 只要传了其中一个，就检查分成比例相加是否为 10
         if ($siteAuthorScale || $siteMasterScale) {
-            $siteAuthorScale = abs($siteAuthorScale['value']);
-            $siteMasterScale = abs($siteMasterScale['value']);
+            $siteAuthorScale = abs(Arr::get($siteAuthorScale, 'value', 0));
+            $siteMasterScale = abs(Arr::get($siteMasterScale, 'value', 0));
             $sum = $siteAuthorScale + $siteMasterScale;
 
             if ($sum === 10) {
