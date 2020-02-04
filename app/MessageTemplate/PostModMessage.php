@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\MessageTemplate;
-
 
 use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
@@ -17,7 +20,8 @@ class PostModMessage extends DatabaseMessage
         $this->translator = $app->make('translator');
     }
 
-    protected function getTitle() {
+    protected function getTitle()
+    {
         return $this->translator->get('core.post_mod');
     }
 

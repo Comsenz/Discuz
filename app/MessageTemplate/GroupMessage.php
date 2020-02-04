@@ -29,11 +29,13 @@ class GroupMessage extends DatabaseMessage
         $oldGroup = $data['old'];
         $newGroup = $data['new'];
 
-        return $this->translator->get('core.group_change_detail', [
-            'user' => $this->notifiable->username,
-            'oldgroup' => $oldGroup->pluck('name')->join('、'),
-            'newgroup' => $newGroup->pluck('name')->join('、')]
+        return $this->translator->get(
+            'core.group_change_detail',
+            [
+                'user' => $this->notifiable->username,
+                'oldgroup' => $oldGroup->pluck('name')->join('、'),
+                'newgroup' => $newGroup->pluck('name')->join('、')
+            ]
         );
-
     }
 }
