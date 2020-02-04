@@ -1,15 +1,18 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Notifications;
-
 
 use Illuminate\Notifications\Notification;
 
 class System extends Notification
 {
-
     protected $data;
+
     protected $type;
 
     public function __construct($type, $data = [])
@@ -29,7 +32,4 @@ class System extends Notification
 
         return $message->notifiable($notifiable)->template($this->data);
     }
-
-
-
 }

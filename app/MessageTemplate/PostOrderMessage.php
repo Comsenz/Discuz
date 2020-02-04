@@ -1,14 +1,17 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\MessageTemplate;
-
 
 use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Support\Str;
 
-class PostOrderMessageMessage extends DatabaseMessage
+class PostOrderMessage extends DatabaseMessage
 {
     protected $translator;
 
@@ -17,7 +20,8 @@ class PostOrderMessageMessage extends DatabaseMessage
         $this->translator = $app->make('translator');
     }
 
-    protected function getTitle() {
+    protected function getTitle()
+    {
         return $this->translator->get('core.post_order_change');
     }
 

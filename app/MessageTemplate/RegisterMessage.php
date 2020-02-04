@@ -1,17 +1,20 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\MessageTemplate;
-
 
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
-use Illuminate\Support\Str;
 
 class RegisterMessage extends DatabaseMessage
 {
     protected $translator;
+
     protected $settings;
 
     public function __construct(Application $app, SettingsRepository $settings)
@@ -20,7 +23,8 @@ class RegisterMessage extends DatabaseMessage
         $this->settings = $settings;
     }
 
-    protected function getTitle() {
+    protected function getTitle()
+    {
         return $this->translator->get('core.register', [
             'sitename' => $this->settings->get('site_name')
         ]);

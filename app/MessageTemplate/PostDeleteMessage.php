@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\MessageTemplate;
-
 
 use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
@@ -17,13 +20,13 @@ class PostDeleteMessage extends DatabaseMessage
         $this->translator = $app->make('translator');
     }
 
-    protected function getTitle() {
+    protected function getTitle()
+    {
         return $this->translator->get('core.post_delete');
     }
 
     protected function getContent($data)
     {
-
         return $this->translator->get('core.post_mod_ok_detail', [
             'user' => $this->notifiable->username,
             'message' => Str::words($data['message'], 10)

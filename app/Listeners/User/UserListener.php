@@ -47,7 +47,6 @@ class UserListener
         $event->toUser->save();
     }
 
-
     public function notifications(ChangeUserStatus $event)
     {
         $user = $event->user;
