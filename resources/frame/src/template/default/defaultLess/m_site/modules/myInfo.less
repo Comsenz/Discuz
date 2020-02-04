@@ -407,16 +407,21 @@ h2,h3,h4{
     background-color: @corFff;
 
     .modify-data-avatar{
+      position: relative;
       height: auto;
       padding: 8px 0 8px 15px;
       box-sizing: border-box;
       display: flex;
       // justify-content:space-between;
       align-items: center;
-      
+
       .modify-data-avatar-title{
         flex:1;
         text-align: center;
+        line-height: 58px;
+        p {
+          font-size: 15px;
+        }
       }
       .modify-data-avatar-img {
         img {
@@ -440,6 +445,16 @@ h2,h3,h4{
         margin-right: 15px;
         position: relative;
         top: 22px;
+      }
+      &:after {
+        position: absolute;
+        box-sizing: border-box;
+        content: ' ';
+        pointer-events: none;
+        right: 0;
+        bottom: 0;
+        left: 15px;
+        border-bottom: 1px solid #E5E5E5;
       }
     }
   }
