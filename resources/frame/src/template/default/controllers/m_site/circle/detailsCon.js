@@ -948,14 +948,17 @@ export default {
       // console.log(123)
       this.detailsLoad();
     },
-    onRefresh() { //下拉刷新
-      this.pageIndex = 1;
-      this.detailsLoad(true).then(()=>{
+    onRefresh(){
+      this.pageIndex = 1
+      this.detailsLoad(true).then((res)=>{
         this.$toast('刷新成功');
+        this.isLoading = false;
+        this.finished = false;
       }).catch((err)=>{
         this.$toast('刷新失败');
+        this.isLoading = false;
       })
-    }
+  },
 
 
   },
