@@ -23,7 +23,7 @@ export default {
     }
   },
   created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png";
+    this.imgUrl = "../../../../../../../static/images/noavatar.gif";
     this.loadTheme();
     // console.log(this.userId)
   },

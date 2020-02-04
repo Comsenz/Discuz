@@ -6,7 +6,7 @@
         {{this.$attrs.contText}}
       </div>
       <div class="cont-media-wraps">
-        <img src="../../../../../../../static/images/mytx.png" alt="上传图片">
+        <img src="../../../../../../../static/images/noavatar.gif" alt="上传图片">
       </div>
     </article>
 </template>

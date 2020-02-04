@@ -39,7 +39,7 @@ export default {
   //   this.myCollection()
   // },
   created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.imgUrl = "../../../../../../../static/images/noavatar.gif"
     this.myCollection();
     // console.log(typeof this.aaa);
   },
