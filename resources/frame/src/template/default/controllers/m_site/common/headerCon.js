@@ -2,7 +2,6 @@
  * 移动端header控制器
  */
 import {Bus} from '../../../store/bus.js';
-import Forum from '../../../../../common/models/Forum';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
 export default {
