@@ -49,7 +49,7 @@
 
 <script>
 // import '../../../../../../static/css/iconfont.css';
-import '../../../scss/m_site/mobileIndex';
+// import '../../../scss/m_site/mobileIndex';
 import Expression from '../../m_site/common/expressionView';
 // import '../../../scss/m_site/themeDetails/themeDetails.scss';
 import replyToTopicCon from '../../../controllers/m_site/themeDetails/replyToTopicCon';

@@ -56,7 +56,7 @@
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSitePayCircleLoginCon from '../../../controllers/m_site/circle/payCircleLoginCon';
 import Header from '../../m_site/common//headerView';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
 export default {
     name: "payCircleView",
     components:{

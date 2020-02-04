@@ -57,7 +57,8 @@
 <script>
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Sidebar from '../../m_site/common/sidebarView';
-import '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
 export default {
   name: "headerView",
   components:{

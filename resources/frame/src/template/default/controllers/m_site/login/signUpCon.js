@@ -1,7 +1,7 @@
 
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-import  '../../../scss/m_site/mobileIndex.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
 import browserDb from "../../../../../helpers/webDbHelper";
 import appCommonH from "../../../../../helpers/commonHelper";
 
