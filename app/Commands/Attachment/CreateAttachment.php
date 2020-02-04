@@ -18,7 +18,9 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Psr\Http\Message\UploadedFileInterface;
@@ -127,7 +129,7 @@ class CreateAttachment
 
         // 生成缩略图
         if ($this->isGallery) {
-            $imgPath = $uploadFile->getPathname();
+            $imgPath = Arr::get($uploadFile, 'path');
             $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
 
             $img = (new ImageManager())->make($imgPath);
@@ -139,8 +141,8 @@ class CreateAttachment
         }
 
         // 检测敏感图
-        if (Str::before($uploadFile->getClientMimeType(), '/') == 'image') {
-            $censor->checkImage($uploadFile->getPathname());
+        if (Str::before($this->file->getClientMediaType(), '/') == 'image') {
+            $censor->checkImage(Arr::get($uploadFile, 'path'));
             if ($censor->isMod) {
                 $this->isApproved = 0;
             }
@@ -149,6 +151,12 @@ class CreateAttachment
         $uploadPath = $uploadTool->getUploadPath();
 
         $uploadName = $uploadTool->getUploadName();
+
+        $isRemote = 0;
+
+        if(Arr::get($uploadFile, 'url') instanceof Uri) {
+            $isRemote = 1;
+        }
 
         // 初始附件数据
         $attachment = Attachment::creation(
@@ -161,7 +169,7 @@ class CreateAttachment
             $this->file->getClientFilename(),
             $this->file->getSize(),
             $this->file->getClientMediaType(),
-            0,
+            $isRemote,
             $this->ipAddress
         );
 
