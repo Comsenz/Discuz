@@ -26,15 +26,6 @@ import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一�
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
-import Store from "./common/Store";
-import Thread from './common/models/Thread';
-import User from './common/models/User';
-import Post from './common/models/Post';
-import Emoji from './common/models/Emoji';
-import Notification from './common/models/Notification';
-import Forum from './common/models/Forum';
-import Groups from './common/models/Groups';
-import Category from './common/models/Category';
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
@@ -61,16 +52,6 @@ moment.locale('zh-cn');//时间转换-需要汉化
 Vue.use(VueLazyload, {
   // loading: require('img/loading.png'),//加载中图片，一定要有，不然会一直重复加载占位图
   // error: require('img/error.png')  //加载失败图片
-});
-Vue.prototype.apiStore = new Store({
-  'threads': Thread,
-  'users': User,
-  'posts': Post,
-  'emoji': Emoji,
-  'notification': Notification,
-  'forums': Forum,
-  'groups':Groups,
-  'categories':Category
 });
 Vue.prototype.$utils = utils; //注册全局方法
 
