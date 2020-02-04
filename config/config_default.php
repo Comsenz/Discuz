@@ -91,7 +91,7 @@ return [
                 'visibility' => 'public',
             ],
             'attachment' => [
-                'driver' => 'local',
+                'driver' => 'cos',
                 'root'   => storage_path('app/public/attachment'),
                 'url'    => 'attachment'
             ],
