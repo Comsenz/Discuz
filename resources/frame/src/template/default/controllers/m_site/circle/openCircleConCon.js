@@ -2,8 +2,6 @@
  * wap详情页控制器
  */
 import {Bus} from '../../../store/bus.js';
-import Thread from '../../../../../common/models/Thread';
-// import User from '../../../../../common/models/User';
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
@@ -66,8 +64,6 @@ export default {
       // console.log('22222');
       this.themeShow = true
     }
-    // this.Thread = new Thread();
-    // this.themeCon.user = new User();
     this.detailsLoad();
     // console.log(this.themeId);
   },

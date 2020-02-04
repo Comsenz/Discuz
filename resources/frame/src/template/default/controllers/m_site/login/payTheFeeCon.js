@@ -1,6 +1,6 @@
 
 import PayHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import "../../../scss/var.scss";
+// import "../../../scss/var.scss";
 import webDb from '../../../../../helpers/webDbHelper';
 
 export default {

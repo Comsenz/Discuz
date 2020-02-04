@@ -28,7 +28,8 @@
 
 <script>
   import mSiteExpression from '../../../controllers/m_site/common/expressionCon';
-  import '../../../scss/m_site/mobileIndex.scss';
+  // import '../../../scss/m_site/mobileIndex.scss';
+  
   export default {
     name: "expressionView",
     ...mSiteExpression

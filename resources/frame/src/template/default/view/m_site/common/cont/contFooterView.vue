@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import '../../../../less/m_site/common/cont/contFooter.less';
+// import  '../../../defaultLess/m_site/common/common.less';
 import contFooterCon from '../../../../controllers/m_site/common/contCon/contFooterCon';
 export default {
     name: "cont-footer-view",

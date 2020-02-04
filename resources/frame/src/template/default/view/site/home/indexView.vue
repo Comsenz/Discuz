@@ -38,7 +38,8 @@
 </template>
 
 <script>
-import '../../../scss/site/pcIndex.scss';
+// import '../../../scss/site/pcIndex.scss';
+import '../../../defaultLess/m_site/modules/publicIndex.less'
 import siteIndexCon from '../../../controllers/site/home/indexCon';
 export default {
 	name: "siteIndex",

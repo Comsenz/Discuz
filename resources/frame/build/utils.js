@@ -58,7 +58,8 @@ exports.cssLoaders = function (options) {
     less: generateLoaders('less',{
       modifyVars: {
         // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
-        'hack': `true; @import "${path.join(__dirname,'../src/template/default/less/m_site/modules/theme.less')}";`
+        // 'hack': `true; @import "${path.join(__dirname,'../src/template/default/defaultLess/m_site/common/modules/theme.less')}";`,
+        'hack': `true; @import "${path.join(__dirname,'../src/template/default/defaultLess/m_site/common/theme.less')}";`,
       }
     }),
     sass: generateLoaders('sass', { indentedSyntax: true }),

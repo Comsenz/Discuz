@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import '../../../../less/m_site/common/cont/contMain.less';
+// import '../../../../less/m_site/common/cont/contMain.less';
 import contHeaderCon from '../../../../controllers/m_site/common/contCon/contMainCon'
 export default {
     name: "cont-main-view",
