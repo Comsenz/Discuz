@@ -58,9 +58,9 @@ export default {
           this.$router.push('/');
       }
     },
-    wallet(){
+    wallet(initStatus =false){
       const userId = browserDb.getLItem('tokenId');
-      this.appFetch({
+      return this.appFetch({
         url:'wallet',
         method:'get',
         splice:userId,
@@ -82,14 +82,15 @@ export default {
       // })
     },
     onRefresh(){
-          this.wallet().then(res=>{
-            this.$toast('刷新成功');
-            this.finished = false;
-            this.isLoading = false;
-          }).catch((err)=>{
-            this.$toast('刷新失败');
-            this.isLoading = false;
-          }) 
-    }
+      this.pageIndex = 1
+      this.wallet(true).then((res)=>{
+        this.$toast('刷新成功');
+        this.isLoading = false;
+        this.finished = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
+  },
   },
 }
