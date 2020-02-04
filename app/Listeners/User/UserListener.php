@@ -52,6 +52,6 @@ class UserListener
     {
         $user = $event->user;
 
-        in_array($user->status, [1,0]) && $user->notify(new System(StatusMessage::class, ['refuse' => $event->refuse]));
+        $user->notify(new System(StatusMessage::class, ['refuse' => $event->refuse]));
     }
 }

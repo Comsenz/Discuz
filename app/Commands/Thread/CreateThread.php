@@ -93,6 +93,12 @@ class CreateThread
         $thread->user_id = $this->actor->id;
         $thread->price = Arr::get($this->data, 'attributes.price', 0);
         $thread->created_at = Carbon::now();
+        $thread->is_long_article = (bool) Arr::get($this->data, 'attributes.is_long_article');
+
+        // 发布长文时记录标题
+        if ($thread->is_long_article) {
+            $thread->title = Arr::get($this->data, 'attributes.title');
+        }
 
         $thread->setRelation('user', $this->actor);
 

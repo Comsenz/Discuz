@@ -384,6 +384,13 @@ class ListThreadsController extends AbstractListController
                     }
                 });
         }
+
+        //关注的人的文章
+        $fromUserId = Arr::get($filter, 'fromUserId');
+        if ($fromUserId && $fromUserId == $actor->id) {
+            $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
+                    ->where('user_follow.from_user_id', $fromUserId);
+        }
     }
 
     /**

@@ -66,7 +66,7 @@ export default {
     currentPage:{
       immediate: true,
       handler (val) {
-        this.currentPags = val;
+        // this.currentPags = val;
         console.log(this.currentPags);
       }
 
