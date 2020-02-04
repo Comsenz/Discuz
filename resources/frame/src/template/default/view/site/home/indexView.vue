@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import '../../../scss/site/pcIndex.scss';
+// import '../../../scss/site/pcIndex.scss';
 import siteIndexCon from '../../../controllers/site/home/indexCon';
 export default {
 	name: "siteIndex",
