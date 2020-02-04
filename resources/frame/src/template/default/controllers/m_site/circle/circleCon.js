@@ -221,9 +221,9 @@ export default {
       if(filterVal){
         this.categoryId = filterVal;
       } else {
-        this.categoryId = this.firstCategoriesId;
+        // this.categoryId = this.firstCategoriesId;
+        this.categoryId = 0;
       }
-
       let data = {
         'filter[isEssence]':'yes',
         'filter[categoryId]':this.categoryId,
@@ -233,7 +233,9 @@ export default {
         'page[number]': this.pageIndex,
         'page[limit]': this.pageLimit
       }
-
+      if(filterVal == 0){
+        delete data['filter[categoryId]'];
+      }
       if(filterCondition !== 'isEssence'){
         delete data['filter[isEssence]'];
       }

@@ -34,14 +34,15 @@
         <div class="themeRes" v-for="(item, index) in searchThemeList" :key="index">
           <div class="postTop">
             <div class="postPer">
-              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead">
+              <img v-if="item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead" @click="jumpPerDet(item.user._data.id)">
+              <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead"  @click="jumpPerDet(item.user._data.id)">
               <div class="perDet">
                 <div class="perName">{{item.user._data.username}}</div>
                 <div class="postTime">{{$moment(item._data.createdAt).fromNow()}}</div>
               </div>
             </div>
           </div>
-          <div class="postContent">
+          <div class="postContent"  @click="jumpDetails(item._data.id)">
             <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
           </div>
         </div>

@@ -38,7 +38,12 @@
         <span v-else="">站长：无</span>
       </div>
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
-        <van-tabs v-model="navActi" >
+        <van-tabs v-model="navActi">
+          <van-tab>
+            <span slot="title" v-on:click="categoriesCho(0)">
+                全部
+            </span>
+          </van-tab>
           <van-tab v-for="(cateChi, index) in categories" :key="index">
             <span slot="title" v-on:click="categoriesCho(cateChi._data.id)">
                 {{cateChi._data.name}}
