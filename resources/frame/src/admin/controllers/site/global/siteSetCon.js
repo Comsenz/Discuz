@@ -69,10 +69,10 @@ export default {
         }else {
           console.log(data);
           console.log('123');
-          this.siteName = data.readdata._data.siteName;
-          this.siteIntroduction = data.readdata._data.siteIntroduction;
-          this.siteMode = data.readdata._data.siteMode;
-          this.imageUrl = data.readdata._data.logo;
+          this.siteName = data.readdata._data.set_site.site_name;
+          this.siteIntroduction = data.readdata._data.set_site.site_introduction;
+          this.siteMode = data.readdata._data.set_site.site_mode;
+          this.imageUrl = data.readdata._data.set_site.site_logo;
           this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
             this.imgWidht = res.width;
             this.imgHeight = res.height;
@@ -82,15 +82,15 @@ export default {
           } else {
             this.radio = '1';
           }
-          this.sitePrice = data.readdata._data.sitePrice;
-          this.siteExpire = data.readdata._data.siteExpire;
-          this.siteAuthorScale = data.readdata._data.siteAuthorScale;
-          this.siteMasterScale = data.readdata._data.siteMasterScale;
-          this.siteLogoFile = data.readdata._data.siteLogoFile;
-          this.siteRecord = data.readdata._data.siteRecord;
-          this.siteStat = data.readdata._data.siteStat;
-          this.siteClose = data.readdata._data.siteClose;
-          this.siteMasterId = data.readdata._data.siteAuthor.id;
+          this.sitePrice = data.readdata._data.set_site.site_price;
+          this.siteExpire = data.readdata._data.set_site.site_expire;
+          this.siteAuthorScale = data.readdata._data.set_site.site_author_scale;
+          this.siteMasterScale = data.readdata._data.set_site.site_master_scale;
+          // this.siteLogoFile = data.readdata._data.siteLogoFile;
+          this.siteRecord = data.readdata._data.set_site.site_icp;
+          this.siteStat = data.readdata._data.set_site.site_stat;
+          this.siteClose = data.readdata._data.set_site.site_close;
+          this.siteMasterId = data.readdata._data.set_site.site_author.id;
           // if (data.readdata._data.logo) {
           //   this.fileList.push({url: data.readdata._data.logo});
           // }
@@ -99,7 +99,7 @@ export default {
           } else {
             this.radio2 = '2';
           }
-          this.siteCloseMsg = data.readdata._data.siteCloseMsg;
+          this.siteCloseMsg = data.readdata._data.set_site.site_close_msg;
 
           // this.$message({'修改成功'});
         }
@@ -172,14 +172,14 @@ export default {
     },
     getImageSize(url){
       const img = document.createElement('img');
-    
+
       return new Promise((resolve, reject) => {
         img.onload = ev => {
           resolve({ width: img.naturalWidth, height: img.naturalHeight });
         };
         img.src = url;
         img.onerror = reject;
-    
+
       });
     },
 
