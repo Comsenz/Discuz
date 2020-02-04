@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import '../../../../../../../static/css/iconfont.css';
+// import '../../../../../../../static/css/iconfont.css';
 // import '../../../../scss/m_site/common/loginSignUpHeader/loginSignUpHeader.scss';
 import '../../../../defaultLess/m_site/common/common.less';
 import Sidebar from '../../../m_site/common/sidebarView';
