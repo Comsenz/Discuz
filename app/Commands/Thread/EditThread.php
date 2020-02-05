@@ -11,9 +11,12 @@ use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
+use App\MessageTemplate\PostOrderMessage;
 use App\Models\Thread;
 use App\Models\User;
+use App\Notifications\System;
 use App\Repositories\ThreadRepository;
+use App\Traits\ThreadNoticesTrait;
 use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -27,6 +30,7 @@ class EditThread
 {
     use AssertPermissionTrait;
     use EventsDispatchTrait;
+    use ThreadNoticesTrait;
 
     /**
      * The ID of the thread to edit.
@@ -101,6 +105,10 @@ class EditThread
 
         if (isset($attributes['isSticky'])) {
             $this->assertCan($this->actor, 'sticky', $thread);
+            // 置顶后 通知发帖人置顶消息
+            if ($attributes['isSticky']) {
+                $this->sendIsSticky($thread);
+            }
 
             $thread->is_sticky = $attributes['isSticky'];
         }

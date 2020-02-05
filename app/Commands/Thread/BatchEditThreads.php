@@ -11,6 +11,7 @@ use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
+use App\Traits\ThreadNoticesTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -18,6 +19,7 @@ use Illuminate\Support\Arr;
 class BatchEditThreads
 {
     use EventsDispatchTrait;
+    use ThreadNoticesTrait;
 
     /**
      * The user performing the action.
@@ -90,6 +92,10 @@ class BatchEditThreads
             if (isset($attributes['isSticky'])) {
                 if ($this->actor->can('sticky', $thread)) {
                     $thread->is_sticky = $attributes['isSticky'];
+                    // 批量置顶通知
+                    if ($attributes['isSticky']) {
+                        $this->sendIsSticky($thread);
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;

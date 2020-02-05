@@ -107,11 +107,10 @@ class UpdateUser
             $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
             $actionType = User::enumStatus($status);
 
+            // 审核后系统通知事件
             $user->raise(new ChangeUserStatus($user, $logMsg));
 
             OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
-            // TODO 如果是拒绝 添加系统通知
-            // if ($actionType == 'refuse') {}
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
