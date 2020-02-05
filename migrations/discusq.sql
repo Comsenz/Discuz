@@ -353,3 +353,6 @@ CREATE TABLE `finance` (
 
 -- 2020-02-03 17:48:59 是否长文
 ALTER TABLE `threads` add column `is_long_article` TINYINT(3)  UNSIGNED  NOT NULL  DEFAULT '0' COMMENT '是否长文' AFTER `is_essence`;
+
+-- 2020-02-05 18:12:55 添加字段 register_reason 注册原因
+alter table `users` add `register_reason` varchar(50)  not null  default '' comment '注册原因'  after `register_ip`;
