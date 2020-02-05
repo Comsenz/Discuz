@@ -35,7 +35,7 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 1,//页码
+      pageIndex: 0,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       canEdit:true,
@@ -64,15 +64,15 @@ export default {
       this.load();
       this.isWeixin = appCommonH.isWeixin().isWeixin;
       this.isPhone = appCommonH.isWeixin().isPhone;
+      this.onLoad();
   },
 
   methods: {
     receive: function (val_1) {
-      console.log(val_1);
       this.firstCategoriesId = val_1;
       // this.Initialization = true;
       // console.log(this.Initialization);
-      this.loadThemeList();
+      // this.loadThemeList();
     },
     //设置发表主题按钮在pc里的位置
     limitWidth(limitId){
@@ -403,7 +403,6 @@ export default {
         this.showScreen = false;
       },
       onLoad(){    //上拉加载
-      // console.log('onLoadonLoadonLoad')
       this.loading = true;
       this.pageIndex++;
       this.loadThemeList(this.filterCondition,this.categoryId);
