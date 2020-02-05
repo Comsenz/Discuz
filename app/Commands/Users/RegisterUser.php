@@ -65,7 +65,7 @@ class RegisterUser
         // 敏感词校验
         $censor->checkText(Arr::get($this->data, 'username'), 'username');
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip']));
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
 
         // 付费模式，默认注册时即到期
         if ($settings->get('site_mode') == 'pay') {

@@ -71,7 +71,6 @@ module.exports = {
   'exportWords':'/api/stop-words/export',   //导出敏感词
   'logo':'/api/settings/logo',              //上传站点logo
   'siteinfo':'api/siteinfo',                //站点基本信息
-  'users':'/api/users',                     //用户信息
   'deleteWords':'/api/stop-words/',         //删除敏感词
   'tags':'/api/settings',                   //指定Tag配置接口
   'deleteAvatar':'/api/users',              //删除用户头像

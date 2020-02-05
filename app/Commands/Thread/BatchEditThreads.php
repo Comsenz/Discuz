@@ -77,11 +77,14 @@ class BatchEditThreads
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $thread)) {
                     $thread->is_approved = $attributes['isApproved'];
+                    $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
+                    // 内容审核通知
+                    $this->sendIsApproved($thread, ['refuse' => $approvedMsg]);
 
                     $thread->raise(new ThreadWasApproved(
                         $thread,
                         $this->actor,
-                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+                        ['message' => $approvedMsg]
                     ));
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -105,6 +108,10 @@ class BatchEditThreads
             if (isset($attributes['isEssence'])) {
                 if ($this->actor->can('essence', $thread)) {
                     $thread->is_essence = $attributes['isEssence'];
+                    // 内容精华通知
+                    if ($attributes['isEssence']) {
+                        $this->sendIsEssence($thread);
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -117,6 +124,8 @@ class BatchEditThreads
 
                     if ($attributes['isDeleted']) {
                         $thread->hide($this->actor, $message);
+                        // 内容删除通知
+                        $this->sendIsDeleted($thread, ['refuse' => $message]);
                     } else {
                         $thread->restore($this->actor, $message);
                     }

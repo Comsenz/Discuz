@@ -110,12 +110,12 @@ class ListUserFollowController extends AbstractListController
     {
         $query = $this->userFollow->query();
 
-        $follow = Arr::get($filter, 'follow', 1);
+        $type = Arr::get($filter, 'type', 1);
 
-        if ($follow == 1) {
+        if ($type == 1) {
             //我的关注
             $query->where('from_user_id', $actor->id)->with('toUser');
-        } elseif ($follow == 2) {
+        } elseif ($type == 2) {
 
             //我的粉丝
             $query->where('to_user_id', $actor->id)->with('fromUser');

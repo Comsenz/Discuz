@@ -56,7 +56,8 @@ class UserSerializer extends AbstractSerializer
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
-            'canDelete'         => $gate->allows('delete', $model)
+            'canDelete'         => $gate->allows('delete', $model),
+            'registerReason'    => $model->register_reason,
         ];
 
         if ($canEdit || $this->actor->id === $model->id) {
