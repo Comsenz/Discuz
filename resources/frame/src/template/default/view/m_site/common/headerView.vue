@@ -18,6 +18,12 @@
           <div class="inviteName" v-if="invitePerDet && userInfoName" v-model="userInfoName">{{userInfoName}}</div>
           <div class="inviteName" v-else="">该用户已被删除</div>
           <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
+          <div class="followBox" v-if="followShow">
+            <span>关注：{{followDet._data.followCount}}</span>
+            <span>被关注：{{followDet._data.fansCount}}</span>
+            <a v-if="userId != personUserId" href="javascript:;" id="followCli" class="followOne" @click="followCli(intiFollowVal)">{{followFlag}}</a>
+            <!-- <a v-if="userId != personUserId" href="javascript:;" id="followCli" class="followOne">关注TA</a> -->
+          </div>
       </div>
       <div class="headeGap" v-if="!searchIconShow && !menuIconShow"></div>
       <div class="headOpe" v-if="searchIconShow || menuIconShow">

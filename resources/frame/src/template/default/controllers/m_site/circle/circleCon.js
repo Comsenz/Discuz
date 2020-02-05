@@ -24,6 +24,11 @@ export default {
           typeWo: '精华主题',
           type:'2',
           themeType:'isEssence'
+        },
+        {
+          typeWo: '关注用户的',
+          type:'3',
+          themeType:'isEssence'
         }
       ],
       // themeListCon:false,
