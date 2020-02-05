@@ -55,7 +55,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'register_close' => (bool)$this->settings->get('register_close'),
                 'register_validate' => (bool)$this->settings->get('register_validate'),
                 'password_length' => (int)$this->settings->get('password_length'),
-                'password_strength' => $this->settings->get('password_strength'),
+                'password_strength' => explode(',', $this->settings->get('password_strength')),
             ],
 
             // 第三方登陆设置
