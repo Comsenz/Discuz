@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -13,13 +12,13 @@ use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Thread;
 use App\Models\User;
+use App\Settings\SettingsRepository;
+use Discuz\Auth\AssertPermissionTrait;
 use Exception;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
-use Discuz\Auth\AssertPermissionTrait;
-use App\Settings\SettingsRepository;
 
 class CreateOrder
 {
@@ -40,9 +39,8 @@ class CreateOrder
     public $data;
 
     /**
-     * 初始化命令参数
-     * @param User   $actor        执行操作的用户.
-     * @param Collection  $data         请求的数据.
+     * @param User $actor 执行操作的用户.
+     * @param Collection $data 请求的数据.
      */
     public function __construct($actor, Collection $data)
     {
@@ -52,8 +50,13 @@ class CreateOrder
 
     /**
      * 执行命令
+     * @param Validator $validator
+     * @param ConnectionInterface $db
+     * @param SettingsRepository $setting
      * @return order
-     * @throws Exception
+     * @throws OrderException
+     * @throws ValidationException
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
@@ -78,35 +81,54 @@ class CreateOrder
         $amount = 0;
 
         switch ($order_type) {
+            // 注册订单
             case Order::ORDER_TYPE_REGISTER:
-                //注册订单
                 $payee_id = Order::REGISTER_PAYEE_ID;
-                //订单金额处理
-                //订单金额处理
-                $site_price      = $setting->get('site_price'); //配置信息
-                $site_price = sprintf("%.2f", (float) $site_price);
-                if ($site_price <= 0) {
-                   throw new OrderException('order_amount_error');
+                $amount = sprintf('%.2f', (float) $setting->get('site_price'));
+                if ($amount <= 0) {
+                    throw new OrderException('order_amount_error');
                 }
-                $amount = $site_price;
                 break;
+
+            // 主题打赏订单
             case Order::ORDER_TYPE_REWARD:
-                //主题打赏订单
                 $thread_id =  $this->data->get('thread_id');
-                //主题
                 $thread = Thread::find($thread_id);
+
                 if (empty($thread)) {
                     throw new OrderException('order_post_not_found');
                 } else {
                     $payee_id = $thread->user_id;
-                    //打赏金额
                     $amount = sprintf('%.2f', (float) $this->data->get('amount'));
+
                 }
                 break;
+
+            // 付费主题订单
+            case Order::ORDER_TYPE_THREAD:
+                $thread_id =  $this->data->get('thread_id');
+                $thread = Thread::find($thread_id);
+
+                if (empty($thread)) {
+                    throw new OrderException('order_post_not_found');
+                } else {
+                    $payee_id = $thread->user_id;
+                    $amount = sprintf('%.2f', (float) $thread->price);
+                    if ($amount <= 0) {
+                        throw new OrderException('order_amount_error');
+                    }
+                }
+                break;
+
             default:
                 throw new OrderException('order_type_error');
                 break;
         }
+
+        if ($amount <= 0) {
+            throw new OrderException('order_amount_error');
+        }
+
         //支付通知
         $payment_sn             = $this->getPaymentSn();
         $pay_notify             = new PayNotify();

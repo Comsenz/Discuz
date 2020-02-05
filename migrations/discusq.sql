@@ -352,4 +352,4 @@ CREATE TABLE `finance` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='财务统计表';
 
 -- 2020-02-03 17:48:59 是否长文
-ALTER TABLE `threads` add column `is_long_article` TINYINT(3)  UNSIGNED  NOT NULL  DEFAULT '0' AFTER `is_essence` COMMENT '是否长文';
+ALTER TABLE `threads` add column `is_long_article` TINYINT(3)  UNSIGNED  NOT NULL  DEFAULT '0' COMMENT '是否长文' AFTER `is_essence`;
