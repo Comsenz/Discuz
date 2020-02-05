@@ -25,6 +25,7 @@ class CreateUsers extends Migration
             $table->tinyInteger('mobile_confirmed')->unsigned()->default(0)->comment('手机号是否验证');
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
             $table->ipAddress('register_ip')->default('')->comment('注册ip');
+            $table->string('register_reason', 50)->default('')->comment('注册原因');
             $table->unsignedInteger('thread_count')->default(0)->comment('主题数');
             $table->unsignedInteger('follow_count')->default(0)->comment('关注数');
             $table->unsignedInteger('fans_count')->default(0)->comment('粉丝数');

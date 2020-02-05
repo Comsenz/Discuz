@@ -896,10 +896,17 @@ export default {
           "payment_type":type
         }
       }).then(res=>{
-        console.log(res);
-        return res;
-      }).catch(err=>{
-        console.log(err);
+        if (res.errors){
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
+        } else {
+          console.log(res);
+          return res;
+        }
+
       })
     },
     getOrderStatus(){
@@ -914,8 +921,12 @@ export default {
         console.log(res);
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }
         } else {
           this.payStatus = res.readdata._data.status;
           console.log(res.readdata._data.status);
@@ -932,7 +943,6 @@ export default {
             clearInterval(pay);
           }
         }
-
         // return res;
       })
     },

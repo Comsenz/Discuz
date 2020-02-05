@@ -8,10 +8,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Discuz\Database\ScopeVisibilityTrait;
 
 /**
  * @property int $id
@@ -44,6 +44,8 @@ class Order extends Model
     const ORDER_TYPE_REGISTER = 1; //注册
 
     const ORDER_TYPE_REWARD   = 2; //打赏
+
+    const ORDER_TYPE_THREAD   = 3; //付费主题
 
     /**
      * 订单状态

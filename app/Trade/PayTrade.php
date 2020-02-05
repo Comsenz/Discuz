@@ -100,7 +100,7 @@ class PayTrade
             }
         } else {
             $message = $response->getData();
-            throw new TradeErrorException($message['err_code_des'], 500);
+            throw new TradeErrorException(isset($message['err_code_des'])?:$message['return_msg'], 500);
         }
         return $result;
     }
