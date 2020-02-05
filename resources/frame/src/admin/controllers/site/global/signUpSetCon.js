@@ -29,7 +29,7 @@ export default {
           // this.pwdLength = res.readdata._data.setreg.password_length
           this.checked = res.readdata._data.set_reg.register_close
           this.pwdLength = res.readdata._data.set_reg.password_length
-          this.checkList = res.readdata._data.set_reg.password_strength.splice(',')
+          this.checkList = res.readdata._data.set_reg.password_strength
           console.log(this.checkList)
           // console.log(res)
         }
