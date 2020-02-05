@@ -6,8 +6,9 @@ export default {
   data:function () {
     return {
       checked:'',
-      pwdLength:'',   //密码长度
-      checkList:[],   //密码规则
+      register_validate:'',   //注册审核
+      pwdLength:'',           //密码长度
+      checkList:[],           //密码规则
     }
   },
   created(){
@@ -27,9 +28,10 @@ export default {
         }else {
           console.log(res,'密码密码')
           // this.pwdLength = res.readdata._data.setreg.password_length
-          this.checked = res.readdata._data.set_reg.register_close
-          this.pwdLength = res.readdata._data.set_reg.password_length
-          this.checkList = res.readdata._data.set_reg.password_strength
+          this.checked = res.readdata._data.set_reg.register_close;
+          this.register_validate = res.readdata._data.set_reg.register_validate;
+          this.pwdLength = res.readdata._data.set_reg.password_length;
+          this.checkList = res.readdata._data.set_reg.password_strength;
           console.log(this.checkList)
           // console.log(res)
         }
@@ -57,13 +59,22 @@ export default {
               "value":this.checked,
               "tag": 'default'
              }
-            },{
+            },
+            {
+              "attributes":{
+                "key":'register_validate',
+                "value":this.register_validate,
+                "tag": 'default'
+              }
+            },
+            {
               "attributes":{
                 "key":'password_length',
                 "value":this.pwdLength,
                 "tag": 'default'
                }
-            },{
+            },
+            {
               "attributes":{
                 "key":'password_strength',
                 "value":passwordStrength,

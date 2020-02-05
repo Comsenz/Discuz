@@ -7,6 +7,12 @@
       </CardRow>
     </Card>
 
+    <Card header="新用户审核：">
+      <CardRow description="设置新注册的用户是否需要审核">
+        <el-checkbox v-model="register_validate">新用户注册审核</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="注册密码最小长度：">
       <CardRow description="新用户注册时密码最小长度，0或不填为不限制">
         <el-input v-model="pwdLength" type="number"  clearable></el-input>
