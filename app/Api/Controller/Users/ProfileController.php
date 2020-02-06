@@ -10,6 +10,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Models\Group;
+use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -29,11 +30,14 @@ class ProfileController extends AbstractResourceController
 
     protected $users;
 
+    protected $userFollow;
+
     protected $settings;
 
-    public function __construct(UserRepository $users, SettingsRepository $settings)
+    public function __construct(UserRepository $users, UserFollowRepository $userFollow, SettingsRepository $settings)
     {
         $this->users = $users;
+        $this->userFollow = $userFollow;
         $this->settings = $settings;
     }
 
@@ -53,6 +57,9 @@ class ProfileController extends AbstractResourceController
 
         if ($actor->id === $user->id) {
             $this->serializer = UserProfileSerializer::class;
+        } else {
+            //获取关注情况
+            $user->follow = $this->userFollow->findFollowDetail($actor->id, $user->id);
         }
 
         // 付费模式是否过期
