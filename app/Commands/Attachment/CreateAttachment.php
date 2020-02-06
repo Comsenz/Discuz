@@ -139,13 +139,14 @@ class CreateAttachment
         // 生成缩略图
         if ($this->isGallery && !$isRemote) {
             $imgPath = Arr::get($uploadFile, 'path');
+            $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
 
             $img = (new ImageManager())->make($imgPath);
 
             $img->resize(self::FIX_WIDTH, null, function ($constraint) {
                 $constraint->aspectRatio();     // 保持纵横比
                 $constraint->upsize();          // 避免文件变大
-            })->save();
+            })->save($thumbPath);
         }
 
         // 检测敏感图
