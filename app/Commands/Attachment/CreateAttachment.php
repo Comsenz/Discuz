@@ -30,6 +30,8 @@ class CreateAttachment
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
+    const FIX_WIDTH = 600;
+
     /**
      * 执行操作的用户.
      *
@@ -96,6 +98,7 @@ class CreateAttachment
      * @throws PermissionDeniedException
      * @throws UploadException
      * @throws UploadVerifyException
+     * @throws \Illuminate\Contracts\Filesystem\FileExistsException
      */
     public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool, SettingsRepository $settings, Censor $censor)
     {
@@ -127,22 +130,29 @@ class CreateAttachment
             throw new UploadException();
         }
 
+        $isRemote = 0;
+
+        if(Arr::get($uploadFile, 'url') instanceof Uri) {
+            $isRemote = 1;
+        }
+
         // 生成缩略图
-        if ($this->isGallery) {
+        if ($this->isGallery && !$isRemote) {
             $imgPath = Arr::get($uploadFile, 'path');
-            $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
 
             $img = (new ImageManager())->make($imgPath);
 
-            $img->resize(600, null, function ($constraint) {
+            $img->resize(self::FIX_WIDTH, null, function ($constraint) {
                 $constraint->aspectRatio();     // 保持纵横比
                 $constraint->upsize();          // 避免文件变大
-            })->save($thumbPath);
+            })->save();
         }
 
         // 检测敏感图
         if (Str::before($this->file->getClientMediaType(), '/') == 'image') {
-            $censor->checkImage(Arr::get($uploadFile, 'path'));
+            $filePathName = $isRemote ? Arr::get($uploadFile, 'url') : Arr::get($uploadFile, 'path');
+
+            $censor->checkImage($filePathName);
             if ($censor->isMod) {
                 $this->isApproved = 0;
             }
@@ -151,12 +161,6 @@ class CreateAttachment
         $uploadPath = $uploadTool->getUploadPath();
 
         $uploadName = $uploadTool->getUploadName();
-
-        $isRemote = 0;
-
-        if(Arr::get($uploadFile, 'url') instanceof Uri) {
-            $isRemote = 1;
-        }
 
         // 初始附件数据
         $attachment = Attachment::creation(

@@ -10,6 +10,7 @@ namespace App\Censor;
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Arr;
 
 class Censor
@@ -170,24 +171,26 @@ class Censor
     /**
      * 检测敏感图片
      *
-     * @param string $filePathname 图片绝对路径
+     * @param mixed $filePathname 图片绝对路径
      */
-    public function checkImage(string $filePathname)
+    public function checkImage($filePathname)
     {
         if ($this->setting->get('qcloud_cms_image', 'qcloud', false)) {
             $qcloud = $this->app->make('qcloud');
 
-            $base64 = base64_encode(file_get_contents($filePathname));
+            $params = [];
+
+            if($filePathname instanceof Uri) {
+                $params['FileUrl'] = $filePathname->getScheme().'://'.$filePathname->getHost().$filePathname->getPath();
+            } else {
+                $params['FileContent'] = base64_encode(file_get_contents($filePathname));
+            }
 
             /**
              * TODO: 如果config配置图片不是放在本地这里需要修改base64为 传输 FileUrl地址路径
              * @property \Discuz\Qcloud\QcloudManage
              */
-            $result = $qcloud->service('cms')->ImageModeration([
-                'FileContent' => $base64,
-                'FileMD5' => '',
-                'FileUrl' => ''
-            ]);
+            $result = $qcloud->service('cms')->ImageModeration($params);
             $data = Arr::get($result, 'Data', []);
 
             if (!empty($data)) {
