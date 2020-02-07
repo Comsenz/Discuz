@@ -46,6 +46,10 @@ export default {
         firstCategoriesId:'',
         logo:false,
         viewportWidth:'',
+        userId:'',
+        followDet:'',
+        followFlag:'关注他',
+        intiFollowVal:'0',
 	  }
   },
 	props: {
@@ -85,15 +89,29 @@ export default {
     },
     logoShow: { //组件是否显示站点图标
       logoShow: false
+    },
+    followShow: { //组件是否显示关注信息
+      logoShow: false
+    },
+  },
+  computed: {
+    personUserId: function () {
+      return this.$route.params.userId;
     }
   },
   created(){
+    this.userId = browserDb.getLItem('tokenId');
+    console.log(this.userId,'登录用户id');
+    console.log(this.personUserId,'用户主页获取到的参数id');
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     // console.log(this.isWeixin+'0'+this.isPhone);
-    // this.getUserInfo();
     this.loadCategories();
+    if(this.followShow) {
+      this.loadUserInfo();
+    }
+    // this.loadUserInfo();
     //把第一个分类的id值传过去，便于请求初始化主题列表
 
   },
@@ -119,6 +137,8 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        console.log(res.readdata._data.other);
+        console.log('-------------------');
         this.siteInfo = res.readdata;
         if(res.readdata._data.set_site.site_logo){
           this.logo = res.readdata._data.set_site.site_logo;
@@ -143,6 +163,75 @@ export default {
         console.log('3456');
       })
     },
+
+    //初始化请求用户信息
+    loadUserInfo(){
+      this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/'+ this.personUserId,
+        data: {
+        }
+      }).then((res) => {
+        console.log('00000000000');
+        console.log(res.readdata);
+        this.followDet = res.readdata;
+      })
+    },
+     //管理操作
+     followCli(intiFollowVal) {
+       console.log('参数',intiFollowVal);
+       let attri = new Object();
+       let methodType = '';
+       if (intiFollowVal == '0') {
+         console.log('未关注');
+         attri.to_user_id = this.personUserId;
+         methodType = 'post';
+         this.intiFollowVal = '1';
+         console.log(this.intiFollowVal,'修改');
+       } else {
+         console.log('已关注');
+         // attri: {
+         //   from_user_id = this.userId,
+         //   to_user_id = this.personUserId
+         // }
+         attri.from_user_id = this.userId;
+         attri.to_user_id = this.personUserId;
+         methodType = 'delete';
+         this.intiFollowVal = '0';
+
+       }
+       console.log(attri,'33333333-----');
+       this.followRequest(methodType,attri);
+     },
+
+     //关注，取消关注
+     followRequest(methodType,attri){
+      this.appFetch({
+          url: 'follow',
+          method: methodType,
+          data: {
+            "data": {
+              "type": "user_follow",
+              "attributes": attri
+            },
+
+          }
+        }).then((res) => {
+          console.log(res,'987654');
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            if(methodType == 'delete'){
+              this.followFlag = "关注TA";
+            } else {
+              this.followFlag = "取消关注";
+            }
+          }
+        })
+     },
+
     backUrl () {
       // 返回上一级
       window.history.go(-1)

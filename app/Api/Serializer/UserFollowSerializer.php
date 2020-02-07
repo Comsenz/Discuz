@@ -20,6 +20,8 @@ class UserFollowSerializer extends AbstractSerializer
             'id' => $model->id,
             'from_user_id' => $model->from_user_id,
             'to_user_id' => $model->to_user_id,
+            'is_mutual'  => $model->is_mutual,
+            'updated_at' => $this->formatDate($model->updated_at),
             'created_at' => $this->formatDate($model->created_at)
         ];
     }

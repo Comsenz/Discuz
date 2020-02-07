@@ -388,6 +388,30 @@ export default {
           title:"我的通知"
         }
       },
+      'my-follow':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myFollowView'],resolve)
+        },
+        metaInfo:{
+          title:"我的关注"
+        }
+      },
+      'my-care':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/myCareView'],resolve)
+        },
+        metaInfo:{
+          title:"我关注的人"
+        }
+      },
+      'care-me':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/careMeView'],resolve)
+        },
+        metaInfo:{
+          title:"关注我的人"
+        }
+      },
       'my-collection':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/myCollectionView'],resolve)

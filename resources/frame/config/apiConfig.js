@@ -61,6 +61,7 @@ module.exports = {
   'postBatch':'/api/posts/batch/',          //删除回复接口[批量]
 
   'access':'/api/refresh-token',            //刷新token
+  'follow':'/api/follow',                   //关注
 
   /*后台*/
   'siteinfo':'/api/siteinfo',               //首页-系统信息

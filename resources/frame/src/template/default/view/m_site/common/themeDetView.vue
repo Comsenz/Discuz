@@ -3,6 +3,7 @@
     <div>
        <van-checkbox-group v-model="result" ref="checkboxGroup">
         <div class=""  v-for="(item,index) in themeList" :key="index">
+          <keep-alive>
           <div class="cirPostCon">
             <div class="">
               <div class="postTop">
@@ -108,6 +109,7 @@
                 ref="checkboxes"
             />
           </div>
+          </keep-alive>
           <div class="gap"></div>
         </div>
          <div class="manageFootFixed choFixed" v-if="ischeckShow"  :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">

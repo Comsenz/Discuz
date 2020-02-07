@@ -44,6 +44,12 @@ export default {
           name: 'my-notice',
           path: '/my-notice', // 跳转路径
           enentType: ''
+        },
+        {
+          text:'我的关注',
+          name: 'my-follow',
+          path: '/my-follow', // 跳转路径
+          enentType: ''
         }
       ],
       sidebarList2: [
