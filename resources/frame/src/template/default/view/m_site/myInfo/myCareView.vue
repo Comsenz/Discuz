@@ -13,22 +13,20 @@
             class="searchCon"
           />
         </form>
-        <div class="searchRes" v-show="searchUserList.length > 0">
-          <h2 class="resultTit">用户</h2>
-          <div class="resUser" v-for="(item, index) in searchUserList" :key="index"  @click="jumpPerDet(item._data.id)">
-            <img v-if="item._data.avatarUrl" :src="item._data.avatarUrl" class="resUserHead"  @click="jumpPerDet(item._data.id)">
-            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead"  @click="jumpPerDet(item._data.id)">
+        <div class="searchRes" v-if="searchResStatus">
+          <div class="resUser" v-for="(item, index) in searchUserList" :key="index">
+            <!-- <a href="javascript:;" class="alreadFollow">已关注</a> -->
+           <img v-if="item.toUser && item.toUser._data.avatarUrl" :src="item.toUser._data.avatarUrl" class="resUserHead"  @click="jumpPerDet(item.toUser._data.id)">
+            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead"  @click="jumpPerDet(item.toUser._data.id)">
             <div class="resUserDet">
-              <!-- <span class="resUserName">多少分接<i>你</i>口的是否健康的首付款觉得第三方第三方是的是的是的所舒服的</span> -->
-              <!-- <span class="resUserName">{{item.username().slice(0,item.username().indexOf(searchVal))}}<i>{{searchVal}}</i>{{item.username().substr(item.username().indexOf(searchVal) + 1)}}</span> -->
-               <span class="resUserName" v-html="item._data.username.replace(searchVal,'<i>'+searchVal+'</i>')" ></span>
-              <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span>
+               <span class="resUserName" v-html="item.toUser && item.toUser._data.username.replace(searchVal,'<i>'+searchVal+'</i>')" ></span>
+               <!-- <a href="javascript:;" class="followHe" v-if="item.toUser && item.toUser._data.follow == '' || item.toUser && item.toUser._data.follow == '0' || item.toUser && item.toUser._data.follow == null" @click="followSwitch()">关注TA</a> -->
+               <a href="javascript:;" class="alreadFollow" v-if="item._data.is_mutual == '0'" @click="followSwitch(item._data.is_mutual,item.toUser._data.id,index)">已关注</a>
+               <a href="javascript:;" class="alreadFollow" v-else-if="item._data.is_mutual == '1'" @click="followSwitch(item._data.is_mutual,item.toUser._data.id,index)">相互关注</a>
+               <a href="javascript:;" class="followHe" v-else="item._data.is_mutual == '2'" @click="followSwitch('2',item.toUser._data.id,index)">关注TA</a>
             </div>
           </div>
         </div>
-        <!-- <div v-show="searchThemeList.length === 0 && searchUserList.length === 0 && !firstComeIn">
-          暂无关注的人
-        </div> -->
       </div>
     </div>
 </template>
@@ -37,8 +35,7 @@
   .searchCon { box-shadow: 0px 1px rgba(0,0,0,0.02); margin-bottom: 1px;}
 </style>
 <script>
-// import  '../../../scss/m_site/mobileIndex.scss';
-
+import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import myCareCon from '../../../controllers/m_site/myInfo/myCareCon';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
