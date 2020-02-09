@@ -8,8 +8,12 @@
 
 namespace App\Trade;
 
+use App\Api\Controller\Trade\Notify\WalletNotifyController;
+use App\Models\User;
 use App\Trade\Config\GatewayConfig;
+use Discuz\Api\Client;
 use Endroid\QrCode\QrCode;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Omnipay\Omnipay;
 use Illuminate\Support\Arr;
 use App\Exceptions\TradeErrorException;
@@ -18,11 +22,13 @@ class PayTrade
 {
     /**
      * 支付
-     * @param  array $order_info    订单信息
-     * @param  string $payment_type 支付方式
-     * @param  array $config        支付配置信息
-     * @param  mixed $extra         其他参数
+     * @param array $order_info 订单信息
+     * @param string $payment_type 支付方式
+     * @param array $config 支付配置信息
+     * @param mixed $extra 其他参数
      * @return array                支付参数
+     * @throws TradeErrorException
+     * @throws BindingResolutionException
      */
     public static function pay($order_info, $payment_type, $config, $extra = [])
     {
@@ -33,6 +39,9 @@ class PayTrade
             case GatewayConfig::WECAHT_PAY_JS: //微信网页、公众号、小程序支付网关
                 $payment_params = self::wechatPay($order_info, $payment_type, $config, $extra);
                 break;
+            case GatewayConfig::WALLET_PAY: // 用户钱包支付
+                $payment_params = self::walletPay($order_info);
+                break;
             default:
                 break;
         }
@@ -40,12 +49,40 @@ class PayTrade
     }
 
     /**
+     * @param $order_info
+     * @return array
+     * @throws BindingResolutionException
+     */
+    private static function walletPay($order_info)
+    {
+        // 余额是否充足
+        $user = User::find($order_info['user_id']);
+        if ($user->userWallet->available_amount < $order_info['amount']) {
+            return [
+                'wallet_pay' => [
+                    'result' => 'failed',
+                    // 'message' => 'balance is not enough',
+                    'message' => '余额不足',
+                ]
+            ];
+        }
+
+        // 支付成功后的回调处理
+        $apiClient = app()->make(Client::class);
+
+        $response = $apiClient->send(WalletNotifyController::class, $user, [], $order_info);
+
+        return json_decode($response->getBody(), true);
+    }
+
+    /**
      * 微信支付
-     * @param  array $order_info    订单信息
-     * @param  string $payment_type 支付方式
-     * @param  array $config        支付配置信息
-     * @param  mixed $extra         其他参数
+     * @param array $order_info 订单信息
+     * @param string $payment_type 支付方式
+     * @param array $config 支付配置信息
+     * @param mixed $extra 其他参数
      * @return array                支付参数
+     * @throws TradeErrorException
      */
     private static function wechatPay($order_info, $payment_type, $config, $extra)
     {

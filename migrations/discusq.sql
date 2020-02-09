@@ -356,3 +356,6 @@ ALTER TABLE `threads` add column `is_long_article` TINYINT(3)  UNSIGNED  NOT NUL
 
 -- 2020-02-05 18:12:55 添加字段 register_reason 注册原因
 alter table `users` add `register_reason` varchar(50)  not null  default '' comment '注册原因'  after `register_ip`;
+
+-- 2020-02-06 13:12:29 支付密码
+ALTER TABLE `users` ADD `pay_password` VARCHAR(100)  NOT NULL  DEFAULT ''  COMMENT '支付密码'  AFTER `password`;

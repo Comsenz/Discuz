@@ -57,6 +57,7 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
+            'canWalletPay'      => $gate->allows('walletPay', $model),
             'registerReason'    => $model->register_reason,
         ];
 
