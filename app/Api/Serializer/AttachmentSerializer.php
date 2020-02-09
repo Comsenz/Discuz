@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Commands\Attachment\CreateAttachment;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Http\UrlGenerator;
 use GuzzleHttp\Psr7\Uri;
@@ -46,9 +47,13 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        $uri = $this->filesystem->url($model->file_path.'/'.$model->attachment);
+        $path = $model->file_path.'/'.$model->attachment;
 
-        $url = $uri instanceof Uri ? $uri->getScheme().'://'.$uri->getHost().$uri->getPath() : $this->url->to($uri);
+        $uri = $this->filesystem->url($path);
+
+        $url = $model->is_remote ? $uri->getScheme().'://'.$uri->getHost().$uri->getPath() : $this->url->to($uri);
+
+        $fixWidth = CreateAttachment::FIX_WIDTH;
 
         $attributes = [
             'isGallery'         => $model->is_gallery,
@@ -63,7 +68,7 @@ class AttachmentSerializer extends AbstractSerializer
         ];
 
         if ($model->is_gallery) {
-            $attributes['thumbUrl'] = Str::replaceLast('.', '_thumb.', $url);
+            $attributes['thumbUrl'] = $model->is_remote ? $this->filesystem->getDriver()->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0' : Str::replaceLast('.', '_thumb.', $url);
         }
 
         return $attributes;

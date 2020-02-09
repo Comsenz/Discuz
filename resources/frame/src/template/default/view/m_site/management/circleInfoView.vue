@@ -103,8 +103,8 @@
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import mSiteCircleInfoCon from '../../../controllers/m_site/management/circleInfoCon';
-
-// import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "circleInfoView",
     components:{

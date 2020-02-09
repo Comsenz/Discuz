@@ -36,4 +36,32 @@ class UserFollowRepository extends AbstractRepository
 
         return $query->firstOrFail();
     }
+
+    /**
+     * 获取用户关注情况
+     * @param $from_user_id
+     * @param $to_user_id
+     * @return int
+     * @return 0：未关注 1：已关注 2：互相关注
+     */
+    public function findFollowDetail($from_user_id, $to_user_id)
+    {
+        $follow = 0;
+        if (!$from_user_id || !$to_user_id) {
+            return $follow;
+        }
+
+        $followRes = $this->query()->where(['to_user_id'=>$to_user_id,'from_user_id'=>$from_user_id])->first();
+
+        $fansRes =  $this->query()->where(['to_user_id'=>$from_user_id,'from_user_id'=>$to_user_id])->first();
+
+        if ($followRes) {
+            $follow = 1;
+        }
+        if ($followRes && $fansRes) {
+            $follow = 2;
+        }
+
+        return $follow;
+    }
 }

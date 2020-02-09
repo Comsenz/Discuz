@@ -29,10 +29,10 @@ export default {
     myJump(str){
       switch (str) {
         case 'reply':
-          this.$router.push('/myCare');
+          this.$router.push('/my-care');
           break;
         default:
-          this.$router.push('/careMe');
+          this.$router.push('/care-me');
       }
     },
   },
