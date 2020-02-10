@@ -1055,6 +1055,87 @@ details.vue
     position: absolute;
   }
 }
+/**
+ *  回复输入框
+ */
+.reply-box{
+  width: 100%;
+  min-height: 80px;
+  max-height: 150px;
+  _height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  font-size: 15px;
+  box-sizing: content;
+  caret-color: @main;  //光标颜色
+  &::-webkit-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &::-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-ms-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+}
+
+/**
+  列表-公共样式
+ */
+.m-site-cell-access{
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #E5E5E5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:last-child{
+    border-bottom: 0;
+  }
+
+  .m-site-cell-access-bd{
+    flex: 1;
+    font-size: 15px;
+    font-weight:400;
+    color:#000000;
+    // @include px2rem(line-height,42);
+    line-height: 21px;
+  }
+
+  .m-site-cell-access-ft{
+    // @include font-dpr(30);
+    font-size: 15px;
+    font-weight:400;
+    color:rgba(0,0,0,0.5);
+    line-height: 16px;
+    padding-right: 22px;
+    position: relative;
+    i{
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
 .enclosure {
   padding-top: 14px;
   .enclosureChi {
