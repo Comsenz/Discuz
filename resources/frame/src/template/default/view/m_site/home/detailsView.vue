@@ -104,9 +104,9 @@
             <!-- <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a> -->
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
-          <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>0" v-for="reward in themeCon.rewardedUsers">
             <span class="icon iconfont icon-money"></span>
-            <img v-for="reward in themeCon.rewardedUsers" v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
             <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
           </div>
           <van-list
