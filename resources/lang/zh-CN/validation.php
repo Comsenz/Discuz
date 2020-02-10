@@ -158,7 +158,7 @@ return [
         'country'               => '国家',
         'address'               => '地址',
         'phone'                 => '电话',
-        'mobile'                => '手机',
+        'mobile'                => '手机号',
         'age'                   => '年龄',
         'sex'                   => '性别',
         'gender'                => '性别',
