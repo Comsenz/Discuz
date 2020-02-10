@@ -157,7 +157,6 @@ export default {
 
     //首页，逻辑判断
     detailIf(){
-      // alert('执行');
       var token = browserDb.getLItem('Authorization');
       if(token){
         console.log('已登录');
