@@ -100,7 +100,7 @@ export default {
        let methodType = '';
        if (intiFollowVal == '0' || intiFollowVal == '1') {
          // console.log('已关注');
-         attri.from_user_id = this.userId;
+         // attri.from_user_id = this.userId;
          attri.to_user_id = personUserId;
          methodType = 'delete';
          this.oldFollow = intiFollowVal;
