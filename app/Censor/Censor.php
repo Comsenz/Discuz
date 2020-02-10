@@ -203,7 +203,7 @@ class Censor
      *
      * @param string $identity 身份证号码
      * @param string $realname 姓名
-     * @return string
+     * @return array
      */
     public function checkReal(string $identity ,string $realname)
     {

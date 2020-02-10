@@ -142,7 +142,7 @@ appCommonH.isWeixin = function(){
       isAndroid = u.indexOf('android') > -1 || u.indexOf('adr') > -1,
       isiOS = !!u.match(/\(i[^;]+;( u;)? cpu.+mac os x/),
       isPhone = isAndroid || isiOS,
-      isWeixin = u.match(/microMessenger/i) == 'micromessenger' || u.match(/_sq_/i) == '_sq_',
+      isWeixin = u.match(/microMessenger/i) == 'micromessenger',
       isPc = u.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
       // if(isWeixin == true){
       //   alert('weixin');
