@@ -86,30 +86,25 @@ export default {
         // this.userParams['page[limit]'] = 2;
       }
     },
-    
+
     //管理关注操作
        followSwitch(intiFollowVal,personUserId,index) {
          console.log('参数',typeof intiFollowVal,intiFollowVal);
          let attri = new Object();
          let methodType = '';
-         if (intiFollowVal == '0' || intiFollowVal == '1') {
-           // console.log('已关注');
-           attri.from_user_id = this.userId;
-           attri.to_user_id = personUserId;
-           methodType = 'delete';
-           this.oldFollow = intiFollowVal;
-         } else {
-           // console.log('关注TA');
+         if (intiFollowVal == '0') {
+           // console.log('已关注，显示关注TA');
            attri.to_user_id = personUserId;
            methodType = 'post';
-           // this.intiFollowVal = '2';
-           // console.log(this.intiFollowVal,'修改');
-    
+           // this.oldFollow = intiFollowVal;
+         } else if(intiFollowVal == '1') {
+           attri.to_user_id = personUserId;
+           methodType = 'delete';
          }
          // console.log(attri,'33333333-----');
          this.followRequest(methodType,attri,intiFollowVal,index);
        },
-    
+
        //关注，取消关注
        followRequest(methodType,attri,intiFollowVal,index){
         this.appFetch({
@@ -120,7 +115,7 @@ export default {
                 "type": "user_follow",
                 "attributes": attri
               },
-    
+
             }
           }).then((res) => {
             // console.log(res,'987654','---------------',intiFollowVal);
@@ -129,16 +124,16 @@ export default {
               throw new Error(res.error)
             } else {
               if(methodType == 'delete'){
-                this.searchUserList[index]._data.is_mutual = '2';
+                this.searchUserList[index]._data.is_mutual = '0';
               } else {
                 console.log('post');
-                this.searchUserList[index]._data.is_mutual = this.oldFollow;
+                this.searchUserList[index]._data.is_mutual = '1';
               }
             }
           })
        },
-    
-    
+
+
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
       this.$router.push({ path:'/home-page'+'/'+id});
