@@ -82,7 +82,6 @@ export default {
     },
     //设置发表主题按钮在pc里的位置
     limitWidth(limitId){
-      // alert('设置');
       console.log(limitId);
       console.log(limitId);
       let viewportWidth = window.innerWidth;
@@ -126,35 +125,6 @@ export default {
         }
       });
     },
-    //请求用户信息
-    // getUser(){
-    // //初始化请求User信息，用于判断当前用户是否已付费
-    //   var userId = browserDb.getLItem('tokenId');
-    //   this.appFetch({
-    //     url: 'users',
-    //     method: 'get',
-    //     splice:'/'+userId,
-    //     data: {
-    //       include: 'groups',
-    //     }
-    //   }).then((res) => {
-    //     // console.log(res.readdata._data.username);
-    //     this.username = res.readdata._data.username;
-    //     this.isPaid = res.readdata._data.paid;
-    //     this.roleList = res.readdata.groups;
-    //     if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-    //       this.joinedAt = res.readdata._data.createdAt;
-    //     } else {
-    //       this.joinedAt = res.readdata._data.joinedAt;
-    //     }
-    //     if(this.isPaid != null && this.isPaid != ''){
-    //       this.detailIf(this.isPayVal,false);
-    //     }
-    //     // this.detailIf(false,this.isPaid);
-    //   })
-
-    // },
-
     //首页，逻辑判断
     detailIf(){
       var token = browserDb.getLItem('Authorization');
@@ -180,45 +150,6 @@ export default {
         this.canEdit = false;
       }
     },
-    // detailIf(isPayVal){
-    //   if(isPayVal == 'public'){
-    //     //当站点为公开站点时
-    //     console.log('公开');
-    //     var token = browserDb.getLItem('Authorization');
-    //     if(token){
-    //       console.log('公开，已登录');
-    //       //当用户已登录时
-    //       // this.loadThemeList();
-    //       this.loginBtnFix = false;
-    //       this.loginHide = true;
-    //       this.canEdit = true;
-    //       this.searchStatus = true;
-    //       this.menuStatus = true;
-    //       if(this.canEdit){
-    //         if(this.isWeixin != true && this.isPhone != true){
-    //           this.limitWidth('fixedEdit');
-    //         }
-    //         // this.limitWidth('fixedEdit');
-    //       }
-    //     }  else {
-    //       console.log('公开，未登录');
-    //       // this.loadThemeList();
-    //       // //当用户未登录时
-    //       this.loginBtnFix = true;
-    //       this.loginHide = false;
-    //       this.canEdit = false;
-    //     }
-    //   } else {
-    //     if(this.isWeixin != true && this.isPhone != true){
-    //       this.limitWidth('fixedEdit');
-    //     }
-    //     this.searchStatus = true;
-    //     this.menuStatus = true;
-    //   }
-    // },
-
-
-
 
     //初始化请求主题列表数据
     load(){
@@ -467,7 +398,7 @@ export default {
           this.isLoading = false;
         })
       }
-      },
+    },
   mounted: function() {
     // this.getVote();
     window.addEventListener('scroll', this.footFix, true);
