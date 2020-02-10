@@ -70,6 +70,6 @@ const App = new Vue({
       this.keepAliveStatus = urlData.includes(to.name);
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><keep-alive><router-view v-if="!keepAliveStatus"></router-view></keep-alive></div>'
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
 }).$mount('#app');
 window.app = App;
