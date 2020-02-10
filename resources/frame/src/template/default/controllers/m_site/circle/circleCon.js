@@ -70,6 +70,7 @@ export default {
       this.isWeixin = appCommonH.isWeixin().isWeixin;
       this.isPhone = appCommonH.isWeixin().isPhone;
       this.onLoad();
+      this.detailIf();
   },
 
   methods: {
@@ -119,7 +120,7 @@ export default {
             this.isPayVal = res.readdata._data.set_site.site_mode;
             console.log('可以访问');
             //判断站点信息是否付费，用户是否登录，用户是否已支付
-            this.detailIf(this.isPayVal,false);
+            // this.detailIf(this.isPayVal,false);
 
           }
         }
@@ -155,42 +156,69 @@ export default {
     // },
 
     //首页，逻辑判断
-    detailIf(isPayVal){
-      if(isPayVal == 'public'){
-        //当站点为公开站点时
-        console.log('公开');
-        var token = browserDb.getLItem('Authorization');
-        if(token){
-          console.log('公开，已登录');
-          //当用户已登录时
-          // this.loadThemeList();
-          this.loginBtnFix = false;
-          this.loginHide = true;
-          this.canEdit = true;
-          this.searchStatus = true;
-          this.menuStatus = true;
-          if(this.canEdit){
-            if(this.isWeixin != true && this.isPhone != true){
-              this.limitWidth('fixedEdit');
-            }
-            // this.limitWidth('fixedEdit');
-          }
-        }  else {
-          // console.log('公开，未登录');
-          // this.loadThemeList();
-          // //当用户未登录时
-          this.loginBtnFix = true;
-          this.loginHide = false;
-          this.canEdit = false;
-        }
-      } else {
-        if(this.isWeixin != true && this.isPhone != true){
-          this.limitWidth('fixedEdit');
-        }
+    detailIf(){
+      // alert('执行');
+      var token = browserDb.getLItem('Authorization');
+      if(token){
+        console.log('已登录');
+        //当用户已登录时
+        // this.loadThemeList();
+        this.loginBtnFix = false;
+        this.loginHide = true;
+        this.canEdit = true;
         this.searchStatus = true;
         this.menuStatus = true;
+        if(this.canEdit){
+          if(this.isWeixin != true && this.isPhone != true){
+            this.limitWidth('fixedEdit');
+          }
+        }
+      }  else {
+        console.log('未登录');
+        // //当用户未登录时
+        this.loginBtnFix = true;
+        this.loginHide = false;
+        this.canEdit = false;
       }
     },
+    // detailIf(isPayVal){
+    //   if(isPayVal == 'public'){
+    //     //当站点为公开站点时
+    //     console.log('公开');
+    //     var token = browserDb.getLItem('Authorization');
+    //     if(token){
+    //       console.log('公开，已登录');
+    //       //当用户已登录时
+    //       // this.loadThemeList();
+    //       this.loginBtnFix = false;
+    //       this.loginHide = true;
+    //       this.canEdit = true;
+    //       this.searchStatus = true;
+    //       this.menuStatus = true;
+    //       if(this.canEdit){
+    //         if(this.isWeixin != true && this.isPhone != true){
+    //           this.limitWidth('fixedEdit');
+    //         }
+    //         // this.limitWidth('fixedEdit');
+    //       }
+    //     }  else {
+    //       console.log('公开，未登录');
+    //       // this.loadThemeList();
+    //       // //当用户未登录时
+    //       this.loginBtnFix = true;
+    //       this.loginHide = false;
+    //       this.canEdit = false;
+    //     }
+    //   } else {
+    //     if(this.isWeixin != true && this.isPhone != true){
+    //       this.limitWidth('fixedEdit');
+    //     }
+    //     this.searchStatus = true;
+    //     this.menuStatus = true;
+    //   }
+    // },
+
+
 
 
     //初始化请求主题列表数据
