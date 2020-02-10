@@ -21,6 +21,9 @@
               <!-- <span class="resUserName">多少分接<i>你</i>口的是否健康的首付款觉得第三方第三方是的是的是的所舒服的</span> -->
               <!-- <span class="resUserName">{{item.username().slice(0,item.username().indexOf(searchVal))}}<i>{{searchVal}}</i>{{item.username().substr(item.username().indexOf(searchVal) + 1)}}</span> -->
                <span class="resUserName" v-html="item.fromUser._data.username.replace(searchVal,'<i>'+searchVal+'</i>')" ></span>
+               <a href="javascript:;" class="alreadFollow" v-if="item._data.is_mutual == '0'" @click="followSwitch(item._data.is_mutual,item.toUser._data.id,index)">关注TA</a>
+               <a href="javascript:;" class="alreadFollow" v-else="item._data.is_mutual == '1'" @click="followSwitch(item._data.is_mutual,item.toUser._data.id,index)">相互关注</a>
+               <!-- <a href="javascript:;" class="followHe" v-else="item._data.is_mutual == '2'" @click="followSwitch('2',item.toUser._data.id,index)">关注TA</a> -->
               <!-- <span class="userRole">{{item.groups[0] && item.groups[0]._data.name}}</span> -->
             </div>
           </div>
