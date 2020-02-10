@@ -98,6 +98,7 @@ class ListNotificationController extends AbstractListController
             ->when($type, function ($query, $type) {
                 return $query->where('type', $type);
             });
+        $query->orderBy('created_at', 'desc');
 
         $this->notificationCount = $limit > 0 ? $query->count() : null;
 
