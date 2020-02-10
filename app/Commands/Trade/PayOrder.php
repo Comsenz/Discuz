@@ -104,11 +104,12 @@ class PayOrder
                 'required_if:payment_type,20',
                 function ($attribute, $value, $fail) {
                     // 使用用户钱包支付时，检查密码
-                    if (
-                        $this->data->get('payment_type') == 20
-                        && ! $this->actor->checkWalletPayPassword($value)
-                    ) {
-                        $fail('支付密码错误。');
+                    if ($this->data->get('payment_type') == 20) {
+                        if (empty($this->actor->pay_password)) {
+                            $fail('未设置支付密码');
+                        } elseif (! $this->actor->checkWalletPayPassword($value)) {
+                            $fail('支付密码错误');
+                        }
                     }
                 }
             ],
