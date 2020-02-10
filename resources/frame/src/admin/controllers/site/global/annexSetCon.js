@@ -18,15 +18,14 @@ export default {
       this.appFetch({
         url:'forum',
         method:'get',
-        data:{
-        }
+        data:{}
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          this.picture = res.readdata._data.supportImgExt;
-          this.fileExtension = res.readdata._data.supportFileExt;
-          this.maximumSize = res.readdata._data.supportMaxSize;
+          this.picture = res.readdata._data.set_attach.support_img_ext;
+          this.fileExtension = res.readdata._data.set_attach.support_file_ext;
+          this.maximumSize = res.readdata._data.set_attach.support_max_size;
           console.log(res)
         }
       })
@@ -40,27 +39,23 @@ export default {
       var fileExtension = this.fileExtension;
       var maximumSize = this.maximumSize;
     if(!picture){
-      this.$toast('请您输入图片扩展名')
+      this.$message.error('请您输入图片扩展名');
       return
     }
     if(!fileExtension){
-      this.$toast('请您输入文件扩展名')
+      this.$message.error('请您输入文件扩展名');
       return
     }
     if(!maximumSize){
-      this.$toast('请您输入支持的最大尺寸')
+      this.$message.error('请您输入支持的最大尺寸');
       return
     }
-    // if(!reg.test(picture)){
-    //   this.$toast('请输入正确的扩展名格式')
-    //   return
-    // }
     if(!regs.test(maximumSize)){
-      this.$toast('请输入正确的支持最大尺寸格式')
+      this.$message.error('请输入正确的支持最大尺寸格式');
       return
     }
     if(!regSize.test(maximumSize)){
-      this.this.$toast('请输入正确的支持最大尺寸格式')
+      this.$message.error('请输入正确的支持最大尺寸格式');
       return
     }
       this.appFetch({
@@ -99,7 +94,7 @@ export default {
           this.$message({message: '提交成功', type: 'success'});
         }
       }).catch(error=>{
-
+        console.log(error);
       })
     }
   },

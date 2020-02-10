@@ -28,7 +28,7 @@
         </div>
 
         <div class="login-phone-btn">
-          <van-button type="primary" @click="phoneLoginClick">登录</van-button>
+          <van-button type="primary" :loading="btnLoading" loading-text="登录中..." @click="phoneLoginClick">登录</van-button>
         </div>
 
         <div class="login-phone-method">
