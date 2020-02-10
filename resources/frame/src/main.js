@@ -67,7 +67,14 @@ const App = new Vue({
   },
   watch: {
     '$route': function(to, from) {
-      this.keepAliveStatus = urlData.includes(to.name);
+      console.log(from.fullPath);
+      if (from.fullPath === '/login-user') {
+        this.keepAliveStatus = false;
+      } else if (urlData.includes(to.name)) {
+        this.keepAliveStatus = true;
+      } else {
+        this.keepAliveStatus = false;
+      }
     }
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
