@@ -87,7 +87,7 @@ class ListThreadsController extends AbstractListController
      */
     public $sort = [
         'isSticky' => 'desc',
-        'updatedAt' => 'desc',
+        'createdAt' => 'desc',
         'id' => 'desc',
     ];
 

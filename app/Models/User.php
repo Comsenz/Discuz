@@ -188,7 +188,16 @@ class User extends Model
     {
         $this->password = $password;
 
-//        $this->raise(new PasswordChanged($this));
+        // $this->raise(new PasswordChanged($this));
+
+        return $this;
+    }
+
+    public function changePayPassword($password)
+    {
+        $this->pay_password = $password;
+
+        // $this->raise(new PayPasswordChanged($this));
 
         return $this;
     }
@@ -271,6 +280,11 @@ class User extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value ? static::$hasher->make($value) : '';
+    }
+
+    public function setPayPasswordAttribute($value)
+    {
+        $this->attributes['pay_password'] = $value ? static::$hasher->make($value) : '';
     }
 
     public function getAvatarAttribute($value)
