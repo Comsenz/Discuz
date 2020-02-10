@@ -62,23 +62,23 @@ Vue.prototype.$utils = utils; //注册全局方法
 
 window.app = App;//实例化根目录
 const appRouter = RConfig.init();
+
 const urlData = ['circle'];
+
 const App = new Vue({
   router: appRouter,
   store: appStore,
   moment: moment,
   data:function(){
     return {
-      keepAliveStatus:false
+      keepAliveStatus:false,
     }
   },
-  // template: '<router-view></router-view>',
   watch: {
     '$route': function(to, from) {
-      console.log(to.name);
-      console.log(this.keepAliveStatus);
       this.keepAliveStatus = urlData.includes(to.name);
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><keep-alive><router-view v-if="!keepAliveStatus"></router-view></keep-alive></div>'}).$mount('#app');
-
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><keep-alive><router-view v-if="!keepAliveStatus"></router-view></keep-alive></div>'
+}).$mount('#app');
+window.app = App;

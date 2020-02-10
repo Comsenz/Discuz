@@ -27,8 +27,29 @@ class UserPolicy extends AbstractPolicy
         }
     }
 
+    /**
+     * @param User $actor
+     * @param Builder $query
+     * @return bool
+     */
     public function find(User $actor, Builder $query)
     {
         return true;
+    }
+
+    /**
+     * 是否有权使用钱包支付
+     *
+     * @param User $actor
+     * @param User $user
+     * @return bool
+     */
+    public function walletPay(User $actor, User $user)
+    {
+        if ($user->status == 0 && $user->pay_password) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -108,17 +108,27 @@ class ListUserFollowController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
+        $join_field = '';
         $query = $this->userFollow->query();
 
         $type = Arr::get($filter, 'type', 1);
+        $username = Arr::get($filter, 'username');
 
         if ($type == 1) {
             //我的关注
             $query->where('from_user_id', $actor->id)->with('toUser');
+            $join_field = 'to_user_id';
         } elseif ($type == 2) {
-
             //我的粉丝
             $query->where('to_user_id', $actor->id)->with('fromUser');
+            $join_field = 'from_user_id';
+        }
+
+        if ($username) {
+            $query->join('users', 'users.id', '=', 'user_follow.'.$join_field)
+                ->where(function ($query) use ($username) {
+                    $query->where('users.username', 'like', "%{$username}%");
+                });
         }
 
         $this->userFollowCount = $limit > 0 ? $query->count() : null;

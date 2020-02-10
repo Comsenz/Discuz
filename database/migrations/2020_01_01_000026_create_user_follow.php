@@ -16,6 +16,8 @@ class CreateUserFollow extends Migration
             $table->increments('id')->comment('自增ID');
             $table->unsignedInteger('from_user_id')->index('from_user_id')->comment('关注人');
             $table->unsignedInteger('to_user_id')->index('to_user_id')->comment('被关注人');
+            $table->tinyInteger('is_mutual')->default(0)->comment('是否互相关注：0否 1是');
+            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
         });
     }

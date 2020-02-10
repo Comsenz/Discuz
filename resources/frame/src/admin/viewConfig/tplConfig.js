@@ -293,7 +293,6 @@ export default {
             }
           },
 
-
           //财务分类
           'fund-details':{
             comLoad: function (resolve) {
@@ -398,6 +397,16 @@ export default {
             metaInfo:{
               title:'用户角色',
               name:'userRol',
+              attribution:'用户',
+            }
+          },
+          'user-review':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userReviewView'],resolve)
+            },
+            metaInfo:{
+              title:'用户审核',
+              name:'userReview',
               attribution:'用户',
             }
           }

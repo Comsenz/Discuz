@@ -39,7 +39,7 @@ export default {
         data:{
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit,
-          'filter[type]': 'liked'
+          'filter[type]': 'liked',
         }
       }).then(res=>{
         if (res.errors){

@@ -99,6 +99,12 @@ export default {
               title:'用户角色',
               name:'userRol',
               icon:'iconjiaoseguanli'
+            },
+            {
+              id:22,
+              title:'用户审核',
+              name:'userReview',
+              icon:'iconyonghushenhe'
             }
           ]
         },
@@ -224,7 +230,6 @@ export default {
       sideSubmenuSelect:'',      //侧边栏子菜单选中
 
       userName:'',               //用户名
-      url:''                     //网站url
 
     }
   },
@@ -328,6 +333,10 @@ export default {
         case 'userRol':
           this.$router.push({path:'/admin/user-rol'});
           break;
+        case 'userReview':
+          this.$router.push({path:'/admin/user-review'});
+          break;
+
 
 
         case 'contClass':
@@ -531,9 +540,8 @@ export default {
 
   },
   created(){
-    this.url = window.location.host;
     this.setDataStatus();
-   this.userName = webDb.getLItem('username');
+    this.userName = webDb.getLItem('username');
   },
   watch: {
     $route () {

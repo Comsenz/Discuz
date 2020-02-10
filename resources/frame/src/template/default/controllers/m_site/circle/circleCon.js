@@ -28,7 +28,7 @@ export default {
         {
           typeWo: '关注用户的',
           type:'3',
-          themeType:'isEssence'
+          themeType:'fromUserId'
         }
       ],
       // themeListCon:false,
@@ -218,7 +218,7 @@ export default {
     //初始化请求主题列表数据
 
     loadThemeList(filterCondition,filterVal){
-
+      var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
       // }
@@ -231,6 +231,7 @@ export default {
       }
       let data = {
         'filter[isEssence]':'yes',
+        'filter[fromUserId]':userId,
         'filter[categoryId]':this.categoryId,
         'filter[isApproved]':1,
         'filter[isDeleted]':'no',
@@ -243,12 +244,14 @@ export default {
       }
       if(filterCondition !== 'isEssence'){
         delete data['filter[isEssence]'];
+      } else if(filterCondition !== 'fromUserId'){
+        delete data['filter[fromUserId]'];
       }
 
       return this.appFetch({
         url: 'threads',
         method: 'get',
-        data
+        data:data,
       }).then((res) => {
         console.log(res);
         console.log('3443431111');
@@ -330,8 +333,17 @@ export default {
       choTheme(themeType) {
       console.log(themeType);
       console.log('筛选');
-      this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
+      // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
+      // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
+      if(themeType === 'isEssence') {
+        this.filterInfo.typeWo = '精华主题';
+      } else if(themeType === 'fromUserId') {
+        this.filterInfo.typeWo = '关注用户的';
+      } else {
+        this.filterInfo.typeWo = '全部主题';
+      }
       this.filterInfo.filterCondition = themeType;
+      console.log(this.filterInfo.filterCondition,'类型');
       this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
