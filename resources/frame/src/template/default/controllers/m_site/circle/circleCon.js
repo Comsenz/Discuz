@@ -218,6 +218,7 @@ export default {
     //初始化请求主题列表数据
 
     loadThemeList(filterCondition,filterVal){
+      console.log(filterCondition,'123~~~~');
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
@@ -244,10 +245,11 @@ export default {
       }
       if(filterCondition !== 'isEssence'){
         delete data['filter[isEssence]'];
-      } else if(filterCondition !== 'fromUserId'){
+      }
+      if(filterCondition !== 'fromUserId'){
         delete data['filter[fromUserId]'];
       }
-
+      console.log(data,'data数据');
       return this.appFetch({
         url: 'threads',
         method: 'get',
@@ -346,6 +348,7 @@ export default {
       console.log(this.filterInfo.filterCondition,'类型');
       this.pageIndex = 1;
       this.themeListCon = [];
+
       this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
       },
 
