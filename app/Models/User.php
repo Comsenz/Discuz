@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property string $username
  * @property string $mobile
  * @property string $password
+ * @property string $pay_password
  * @property string $avatar
  * @property int $status
  * @property int $mobile_confirmed
@@ -45,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property string $identity
  * @property string $realname
  * @property Group $groups
+ * @property UserWallet $userWallet
  * @package App\Models
  * @method truncate()
  * @method static find($id)
@@ -242,6 +244,17 @@ class User extends Model
     public function checkPassword($password)
     {
         return static::$hasher->check($password, $this->password);
+    }
+
+    /**
+     * Check if a given password matches the user's wallet pay password.
+     *
+     * @param string $password
+     * @return bool
+     */
+    public function checkWalletPayPassword($password)
+    {
+        return static::$hasher->check($password, $this->pay_password);
     }
 
     /*

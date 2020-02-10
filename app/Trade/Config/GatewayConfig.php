@@ -10,6 +10,8 @@ namespace App\Trade\Config;
 
 class GatewayConfig
 {
+    const WALLET_PAY = 'walletPay'; //用户钱包支付
+
     const WECAHT_PAY_WAP = 'WechatPay_Mweb'; //微信H5支付网关
 
     const WECAHT_PAY_JS = 'WechatPay_Js'; //微信网页、公众号、小程序支付网关

@@ -32,7 +32,6 @@ export default {
         avatarUrl:'',
         // username:'',
         mobile:'',
-        userId:'',
 	      isfixNav: false,
 	      popupShow: false,
         current:0,
@@ -48,7 +47,7 @@ export default {
         viewportWidth:'',
         userId:'',
         followDet:'',
-        followFlag:'关注他',
+        followFlag:'',
         intiFollowVal:'0',
 	  }
   },
@@ -176,6 +175,13 @@ export default {
         console.log('00000000000');
         console.log(res.readdata);
         this.followDet = res.readdata;
+        if(res.readdata._data.follow == '1'){
+          this.followFlag = '已关注';
+        } else if(res.readdata._data.follow == '0'){
+          this.followFlag = '关注TA';
+        } else {
+
+        }
       })
     },
      //管理操作
@@ -226,7 +232,7 @@ export default {
             if(methodType == 'delete'){
               this.followFlag = "关注TA";
             } else {
-              this.followFlag = "取消关注";
+              this.followFlag = "已关注";
             }
           }
         })
