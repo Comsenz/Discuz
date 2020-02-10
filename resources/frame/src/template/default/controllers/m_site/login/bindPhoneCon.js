@@ -16,6 +16,7 @@ export default {
       insterVal:'',
       isGray: false,
       siteMode:'',               //站点模式
+      btnLoading:false
     }
   },
 
@@ -90,6 +91,7 @@ export default {
 
     //绑定手机号
     bindPhone(){
+      this.btnLoading = true;
       this.appFetch({
         url:"smsVerify",
         method:"post",
@@ -103,13 +105,18 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
-          this.$router.push({
-            path:'/circle',
-          });
+        this.btnLoading = false;
+        // console.log(res);
+        this.$router.push({
+          path:'/circle',
+        });
 
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           if (!res.errors) {
             if (this.siteMode === 'pay') {
