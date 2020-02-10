@@ -69,6 +69,12 @@ export default {
               name:'tencentCloudSet',
               icon:'icontengxunyun'
             },
+            {
+              id:7,
+              title:'通知设置',
+              name:'noticeSet',
+              icon:'icontongzhi'
+            },
             // {
             //   id:7,
             //   title:'后台用户管理',
@@ -319,6 +325,9 @@ export default {
         case 'tencentCloudSet':
           this.$router.push({path:'/admin/tencent-cloud-set'});
           break;
+          case 'noticeSet':
+            this.$router.push({path:'/admin/notice-set'});
+            break;
         case 'adminUserManage':
           this.$router.push({path:'/admin/user-manage-set'});
           break;
