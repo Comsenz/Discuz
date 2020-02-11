@@ -14,5 +14,6 @@ return [
     'operate_forbidden' => '非法操作',
     'register_income' => '注册收入',
     'reward_income' => '打赏收入',
+    'reward_expend' => '打赏支出',
     'artificial_income' => '人工收入',
 ];

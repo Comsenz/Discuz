@@ -29,11 +29,19 @@
               @input="clearError('input')"
               @blur="clearError('blur')"
             />
+
+            <van-field
+              clearable
+              v-if="signReasonStatus"
+              label="注册原因"
+              placeholder="填写注册原因"
+              v-model="signReason"
+            />
           </van-cell-group>
         </form>
 
         <div class="sign-up-btn">
-          <van-button @click="signUpClick" :loading="btnLoading"  type="primary">注册</van-button>
+          <van-button @click="signUpClick" :loading="btnLoading" loading-text="注册中..." type="primary">注册</van-button>
         </div>
 
       </main>

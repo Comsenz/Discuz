@@ -492,6 +492,14 @@ export default {
         metaInfo:{
           title:"空白页"
         }
+      },
+      'information-page':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/informationPage'],resolve)
+        },
+        metaInfo:{
+          title:'提示信息'
+        }
       }
 
 
@@ -559,7 +567,8 @@ export default {
     'wx-sign-up-bd',
     'supplier-all-back',
     'circle-invite',
-    'site-close'
+    'site-close',
+    'information-page'
   ];
 
 

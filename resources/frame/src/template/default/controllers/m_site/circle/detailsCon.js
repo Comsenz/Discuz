@@ -100,6 +100,7 @@ export default {
       loginWord:'登录 / 注册',
       viewportWidth: '',
       themeIsLiked: '',
+      themeTitle:''
     }
   },
   created() {
@@ -280,6 +281,7 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
+            this.themeTitle = res.readdata.firstPost._data.contentHtml;
             if (this.collectStatus) {
               this.collectFlag = '已收藏';
             } else {
@@ -396,11 +398,14 @@ export default {
       if(this.isPayVal === 'pay'){
         Url = appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       } else {
-        Url = appConfig.baseUrl+'/details/' + this.themeId
+        Url = appConfig.baseUrl+'/details/' + this.themeId;
       }
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
-      oInput.value = Url;
+      var reTag = /<img(?:.|\s)*?>/g;
+      // var brTag = /<br>/g;
+      this.themeTitle = this.themeTitle.replace(reTag,'');
+      oInput.value = this.themeTitle +',' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");
