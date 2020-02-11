@@ -19,7 +19,7 @@ trait NotifyTrait
      * 支付成功，后续操作
      * @param  string $payment_sn 订单编号
      * @param  string $trade_no 支付平台交易号
-     * @param  SettingsRepository ￥setting 配置
+     * @param  SettingsRepository $setting 配置
      * @return Order
      */
     public function paymentSuccess($payment_sn, $trade_no, SettingsRepository $setting)

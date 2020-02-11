@@ -356,6 +356,13 @@ export default {
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          // asyncClose: true,
+          // onChange:function(){
+          //   console.log('qiehuan ');
+          // },
+          // onClose:function (url) {
+          //   console.log('关闭');
+          // }
           // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
           //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
           //   var num = url.index, url_link = url.url;
