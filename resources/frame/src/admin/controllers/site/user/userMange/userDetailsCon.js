@@ -18,6 +18,7 @@ export default {
       newPassword:'',
       wechatNickName:'',
       sex:'',
+      disabled:false,
       optionsStatus: [
         {
           value: 0,
@@ -46,6 +47,7 @@ export default {
   methods:{
     async getUserDetail(){
       try{
+        var userId = browserDb.getLItem('tokenId');
         const response = await this.appFetch({
           method: 'get',
           url: 'users',
@@ -69,7 +71,9 @@ export default {
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
           }
-          console.log()
+          if(userId == this.userInfo.id){
+            this.disabled = true;
+          }
         }
 
       } catch(err){

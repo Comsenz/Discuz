@@ -228,7 +228,7 @@ export default {
               id:43,
               title:'财务统计',
               name:'financialStatistics',
-              icon:'',
+              icon:'iconcaiwutongji',
             }
           ]
         }
