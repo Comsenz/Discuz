@@ -150,3 +150,38 @@
   //  margin-right: 40PX;
   //}
 }
+/*
+  财务统计
+*/
+.financial-box{
+  .financial-statistics{
+    display: flex;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    padding-top: 18PX;
+    .financial{
+      width:235PX;
+      height:131PX;
+      // background:red;
+      position: relative;
+      .financial-head{
+        width:100%;
+        height:48PX;
+        border-bottom: 1PX solid #ccc;
+        .financial-title{
+          color:#606266;
+          padding:13PX 0 0 14PX
+        }
+      }
+      .financial-con{
+        position: absolute;
+        left:14PX;
+        top:69PX;
+        font-size: 30PX;
+      }
+   
+    }
+  }
+
+}
+
