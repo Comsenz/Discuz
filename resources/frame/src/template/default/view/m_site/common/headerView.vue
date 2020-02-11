@@ -29,7 +29,7 @@
       <div class="headOpe" v-if="searchIconShow || menuIconShow">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" @click="searchJump" v-show="searchIconShow"></span>
-        <span class="icon iconfont icon-Shape" is-link @click="showPopup" v-show="menuIconShow"></span>
+        <span class="icon iconfont icon-Shape relative" is-link @click="showPopup" v-show="menuIconShow"><i class="noticeNew" v-if="noticeSum>0"></i></span>
       </div>
       <div class="logoBox" v-show="logoShow">
         <img v-if="logo" :src="logo" class="logo">

@@ -16,6 +16,7 @@
        <div class="sideItem" @click="sidebarUrl(item.path,item.enentType)">
        <!-- <router-link class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path"> -->
           <span class="itemTit">{{item.text}}</span>
+          <i class="noticeSum" type="danger" v-show ='item.number === 0 ? false:true'>{{item.noticeSum}}</i>
           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
          </div>
        <!-- </router-link> -->
