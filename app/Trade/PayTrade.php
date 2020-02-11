@@ -137,7 +137,8 @@ class PayTrade
             }
         } else {
             $message = $response->getData();
-            throw new TradeErrorException(isset($message['err_code_des'])?:$message['return_msg'], 500);
+            $message = isset($message['err_code_des']) ? $message['err_code_des'] : $message['return_msg'];
+            throw new TradeErrorException($message, 500);
         }
         return $result;
     }
