@@ -32,7 +32,7 @@
                       <a href="javascript:;"  @click="themeOpera(item._data.id,6)" v-if="item.firstPost._data.canEdit">编辑</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,7)" v-if="item._data.canReply">回复</a>
 
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,5)" v-if="item._data.canDelete">删除</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,5,'',index)" v-if="item._data.canDelete">删除</a>
                   	</div>
                   </div>
                 </div>
