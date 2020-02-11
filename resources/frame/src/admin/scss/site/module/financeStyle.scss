@@ -161,16 +161,25 @@
     padding-top: 18PX;
     .financial{
       width:235PX;
+      // width:25%;
       height:131PX;
+      // margin-left:24PX;
       // background:red;
       position: relative;
       .financial-head{
         width:100%;
         height:48PX;
         border-bottom: 1PX solid #ccc;
+        display: flex;
         .financial-title{
           color:#606266;
-          padding:13PX 0 0 14PX
+          padding:13PX 0 0 14PX;
+          flex:2;
+        }
+        .iconfont{
+          padding-top:13PX;
+          padding-right:14PX;
+          
         }
       }
       .financial-con{
