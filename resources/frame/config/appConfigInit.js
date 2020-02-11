@@ -10,7 +10,7 @@ import appConfig from "./appConfig";
 appConfig.port = location.port;
 appConfig.domainName = location.hostname;
 
-var baseUrl = location.protocol + "//" + location.hostname + (location.port == "80" ? "" : ":" + location.port);
+var baseUrl = location.protocol + "//" + location.hostname + ((location.port == "80" || location.port == '') ? "" : ":" + location.port);
 appConfig.baseUrl = baseUrl + (appConfig.siteBasePath != "/" ? appConfig.siteBasePath : "");
 
 if (location.href.indexOf('local.') !== -1) {
