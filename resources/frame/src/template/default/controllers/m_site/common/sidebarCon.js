@@ -190,13 +190,15 @@ export default {
         oInput.className = 'oInput';
         oInput.style.display='none';
         // alert('复制成功');
+        console.log(appConfig.baseUrl+'1111');
         this.$toast.success('邀请链接已复制成功');
       } else {
         //如果是公开的站点
-        // console.log('公开');
+        console.log(appConfig.baseUrl+'2222');
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/open-circle/'+this.userId;
         var shareUrl= appConfig.baseUrl+'/open-circle/'+this.userId;
+        console.log(shareUrl);
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);
