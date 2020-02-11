@@ -100,6 +100,7 @@ export default {
       loginWord:'登录 / 注册',
       viewportWidth: '',
       themeIsLiked: '',
+      themeTitle:''
     }
   },
   created() {
@@ -280,6 +281,7 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
+            this.themeTitle = res.readdata.firstPost._data.contentHtml;
             if (this.collectStatus) {
               this.collectFlag = '已收藏';
             } else {
@@ -356,6 +358,13 @@ export default {
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          // asyncClose: true,
+          // onChange:function(){
+          //   console.log('qiehuan ');
+          // },
+          // onClose:function (url) {
+          //   console.log('关闭');
+          // }
           // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
           //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
           //   var num = url.index, url_link = url.url;
@@ -389,11 +398,14 @@ export default {
       if(this.isPayVal === 'pay'){
         Url = appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       } else {
-        Url = appConfig.baseUrl+'/details/' + this.themeId
+        Url = appConfig.baseUrl+'/details/' + this.themeId;
       }
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
-      oInput.value = Url;
+      var reTag = /<img(?:.|\s)*?>/g;
+      // var brTag = /<br>/g;
+      this.themeTitle = this.themeTitle.replace(reTag,'');
+      oInput.value = this.themeTitle +',' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");

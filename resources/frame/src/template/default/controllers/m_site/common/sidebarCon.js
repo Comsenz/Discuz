@@ -43,7 +43,8 @@ export default {
           text:'我的通知',
           name: 'my-notice',
           path: '/my-notice', // 跳转路径
-          enentType: ''
+          enentType: '',
+          noticeSum: 0
         },
         {
           text:'我的关注',
@@ -84,7 +85,8 @@ export default {
       isPayValue:this.isPayVal,
       canBatchEditThreads: false,
       canEditUserGroup: false,
-      canCreateInvite: false
+      canCreateInvite: false,
+      noticeSum: 0,   //新通知总数
     }
   },
   created: function() {
@@ -107,6 +109,21 @@ export default {
           include: '',
         }
       }).then((res) => {
+        console.log(res,'侧边栏user信息');
+        if(!res.data.attributes.typeUnreadNotifications.liked) {
+          res.data.attributes.typeUnreadNotifications.liked = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.replied) {
+          res.data.attributes.typeUnreadNotifications.replied = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.rewarded) {
+          res.data.attributes.typeUnreadNotifications.rewarded = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.system) {
+          res.data.attributes.typeUnreadNotifications.system = 0;
+        }
+        this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
+        this.sidebarList1[3].noticeSum = this.noticeSum;
         this.userInfo = res.readdata;
         this.avatarUrl = res.readdata._data.avatarUrl;
         this.username = res.readdata._data.username;
@@ -173,13 +190,15 @@ export default {
         oInput.className = 'oInput';
         oInput.style.display='none';
         // alert('复制成功');
+        console.log(appConfig.baseUrl+'1111');
         this.$toast.success('邀请链接已复制成功');
       } else {
         //如果是公开的站点
-        // console.log('公开');
+        console.log(appConfig.baseUrl+'2222');
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/open-circle/'+this.userId;
         var shareUrl= appConfig.baseUrl+'/open-circle/'+this.userId;
+        console.log(shareUrl);
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

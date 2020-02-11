@@ -26,14 +26,25 @@
 		    	</div>
 		    	<div class="postImgBox" v-if="firstpostImageList.length>0">
             <div class="postImgList">
-              <van-image
-                  lazy-load
-                  v-for="(image,index)  in firstpostImageList"
-                  key = index
-                  :src="image"
-                  @click="imageSwiper(index,'detailImg')"
-                  :key="index"
-              />
+              <div v-if="isWeixin || isPhone">
+                <van-image
+                    lazy-load
+                    v-for="(image,index)  in firstpostImageList"
+                    key = index
+                    :src="image"
+                    @click="imageSwiper(index,'detailImg')"
+                    :key="index"
+                />
+              </div>
+              <div v-else="">
+                <van-image
+                    lazy-load
+                    v-for="(image,index)  in firstpostImageList"
+                    key = index
+                    :src="image"
+                    :key="index"
+                />
+              </div>
             </div>
 		    	</div>
 		    	<div class="uploadFileList" v-if="isiOS && themeCon.firstPost.attachments.length>0">
@@ -104,10 +115,13 @@
             <!-- <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a> -->
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
-          <div class="payPer" v-if="themeCon.rewardedUsers.length>0" v-for="reward in themeCon.rewardedUsers">
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
-            <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <div class="payPerHeaChi" v-for="reward in themeCon.rewardedUsers">
+              <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+              <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            </div>
+
           </div>
           <van-list
           v-model="loading"
@@ -137,13 +151,23 @@
               </div>
               <div class="postImgBox" v-if="item.images.length>0">
                 <div class="themeImgList moreImg">
-                  <van-image
-                      lazy-load
-                      v-for="(image,index)  in item.images"
-                      :src="image._data.thumbUrl"
-                      :key="index"
-                      @click="imageSwiper(index, 'replyImg', postIndex)"
-                    />
+                  <div v-if="isWeixin || isPhone">
+                    <van-image
+                        lazy-load
+                        v-for="(image,index)  in item.images"
+                        :src="image._data.thumbUrl"
+                        :key="index"
+                        @click="imageSwiper(index, 'replyImg', postIndex)"
+                      />
+                  </div>
+                  <div v-else="">
+                    <van-image
+                        lazy-load
+                        v-for="(image,index)  in item.images"
+                        :src="image._data.thumbUrl"
+                        :key="index"
+                      />
+                  </div>
                 </div>
               </div>
             </div>
@@ -153,7 +177,6 @@
               <a v-else="" @click="replyOpera(item._data.id,'2',item._data.isLiked,item._data.canLike,postIndex)"><span class="icon iconfont icon-like":class="{'icon-praise-after': likedClass}"></span>{{item._data.likeCount}}</a>
               <a class="icon iconfont icon-review" @click="replyToJump(themeCon._data.id,item._data.id,item._data.content)"></a>
             </div>
-
           </div>
           </van-list>
         </div>

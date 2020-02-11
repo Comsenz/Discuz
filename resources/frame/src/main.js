@@ -52,6 +52,15 @@ Vue.prototype.$utils = utils; //注册全局方法
 
 
 //实例化根目录
+// const appRouter = RConfig.init();
+// const App = new Vue({
+//   	router: appRouter,
+//   	store: appStore,
+//     moment: moment,
+//   	template: '<router-view></router-view>'
+// }).$mount('#app');
+
+window.app = App;//实例化根目录
 const appRouter = RConfig.init();
 
 const urlData = ['circle'];

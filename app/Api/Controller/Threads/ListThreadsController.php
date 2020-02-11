@@ -484,9 +484,9 @@ class ListThreadsController extends AbstractListController
             ->join('users', 'a.user_id', '=', 'users.id')
             ->select('a.thread_id', 'users.*')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
-            ->whereIn('thread_id', $threadIds)
+            ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('type', Order::ORDER_TYPE_REWARD)
+            ->where('a.type', Order::ORDER_TYPE_REWARD)
             ->orderBy('a.created_at', 'desc')
             ->get();
 

@@ -19,7 +19,7 @@ trait NotifyTrait
      * 支付成功，后续操作
      * @param  string $payment_sn 订单编号
      * @param  string $trade_no 支付平台交易号
-     * @param  SettingsRepository ￥setting 配置
+     * @param  SettingsRepository $setting 配置
      * @return Order
      */
     public function paymentSuccess($payment_sn, $trade_no, SettingsRepository $setting)
@@ -71,7 +71,7 @@ trait NotifyTrait
                     $payee_change_available_amount = $payee_amount;
                     $change_type                   = '';
                     $change_type_lang              = '';
-                    if ($order_info->type = Order::ORDER_TYPE_REWARD) {
+                    if ($order_info->type == Order::ORDER_TYPE_REWARD) {
                         //打赏收入
                         $change_type      = UserWalletLog::TYPE_INCOME_REWARD;
                         $change_type_lang = 'wallet.reward_income';
