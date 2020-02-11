@@ -9,6 +9,11 @@
         </div>
     </div>
 </div>
+<div class="financial-profit">
+    <div class="financial-profit-title"></div>
+    <div class="financial-profit-chart"></div>
+
+</div>
 </div>
 
 </template>
