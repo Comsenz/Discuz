@@ -43,7 +43,7 @@
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input v-model='newPassword' clearable></el-input>
+        <el-input v-model='newPassword' clearable :disabled='disabled'></el-input>
       </CardRow>
     </Card>
 

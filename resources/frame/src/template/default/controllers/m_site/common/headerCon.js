@@ -49,6 +49,7 @@ export default {
         followDet:'',
         followFlag:'',
         intiFollowVal:'0',
+        noticeSum: 0,
 	  }
   },
 	props: {
@@ -110,6 +111,7 @@ export default {
     if(this.followShow) {
       this.loadUserInfo();
     }
+    this.loadUserInfo();
     // this.loadUserInfo();
     //把第一个分类的id值传过去，便于请求初始化主题列表
 
@@ -168,12 +170,26 @@ export default {
       this.appFetch({
         url:'users',
         method:'get',
-        splice:'/'+ this.personUserId,
+        splice:'/'+ this.userId,
         data: {
         }
       }).then((res) => {
-        console.log('00000000000');
+        console.log(res,'00000000000&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&——————————————————————————————————————————');
         console.log(res.readdata);
+        if(!res.data.attributes.typeUnreadNotifications.liked) {
+          res.data.attributes.typeUnreadNotifications.liked = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.replied) {
+          res.data.attributes.typeUnreadNotifications.replied = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.rewarded) {
+          res.data.attributes.typeUnreadNotifications.rewarded = 0;
+        }
+        if(!res.data.attributes.typeUnreadNotifications.system) {
+          res.data.attributes.typeUnreadNotifications.system = 0;
+        }
+        this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
+        console.log(res.data.attributes.typeUnreadNotifications.liked,res.data.attributes.typeUnreadNotifications.replied,res.data.attributes.typeUnreadNotifications.rewarded,res.data.attributes.typeUnreadNotifications.system,'和');
         this.followDet = res.readdata;
         if(res.readdata._data.follow == '1'){
           this.followFlag = '已关注';

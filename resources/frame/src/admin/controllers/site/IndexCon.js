@@ -223,6 +223,12 @@ export default {
                   icon:'icontixianguanli',
                 }
               ]
+            },
+            {
+              id:43,
+              title:'财务统计',
+              name:'financialStatistics',
+              icon:'iconcaiwutongji',
             }
           ]
         }
@@ -378,6 +384,9 @@ export default {
           this.sideSubmenu = this.navList[4].submenu[2].submenu;
           this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[0].title;
           this.$router.push({path:'/admin/withdrawal-application'});
+          break;
+        case 'financialStatistics':
+          this.$router.push({path:'/admin/financial-statistics'})
           break;
 
       }

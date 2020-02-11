@@ -346,6 +346,16 @@ export default {
               alias:'提现设置'
             }
           },
+          'financial-statistics':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/financialStatistics'], resolve)
+            },
+            metaInfo: {
+              title: '财务统计',
+              name:'financialStatistics',
+              attribution:'财务',
+            }
+          },
 
 
           //用户
