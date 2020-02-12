@@ -4,10 +4,15 @@
     <div class="financial" v-for="(item,index) in financialList" :key="index">
         <div class="financial-head">
         <div class="financial-title">{{item.title}}</div>
-        <span class=""></span>
+        <span class="iconfont" :class="item.icon"></span>
         <span class="financial-con">¥<span class="financial-num">{{item.num}}</span></span>
         </div>
     </div>
+</div>
+<div class="financial-profit">
+    <div class="financial-profit-title"></div>
+    <div class="financial-profit-chart"></div>
+
 </div>
 </div>
 

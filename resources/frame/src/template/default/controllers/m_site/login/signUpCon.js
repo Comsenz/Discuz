@@ -10,6 +10,8 @@ export default {
     return {
       username:'',
       password:'',
+      signReason:'',        //注册原因
+      signReasonStatus:false,
       btnLoading:false,     //注册按钮状态
       error:false,          //错误状态
       errorMessage:"",      //错误信息
@@ -25,6 +27,7 @@ export default {
   },
   methods:{
     signUpClick(){
+      this.btnLoading = true;
 
       this.appFetch({
         url:'register',
@@ -34,18 +37,25 @@ export default {
           "type": "users",
           "attributes": {
               username:this.username,
-              password:this.password
+              password:this.password,
+              registerReason:this.signReason
           },
           }
         }
       }).then(res => {
         console.log(res);
+        this.btnLoading = false;
+
         this.getForum().then(()=>{
           if (res.errors){
             if (res.errors[0].detail){
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
-              this.$toast.fail(res.errors[0].code);
+              if (res.rawData[0].code === 'register_validate'){
+                this.$router.push({path:"information-page",query:{setInfo:'registrationReview'}})
+              } else {
+                this.$toast.fail(res.errors[0].code);
+              }
             }
           } else {
             this.$toast.success('注册成功');
@@ -109,6 +119,7 @@ export default {
         } else {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
+          this.signReasonStatus = res.readdata._data.set_reg.register_validate;
           browserDb.setLItem('siteInfo',res.readdata);
         }
       }).catch(err=>{

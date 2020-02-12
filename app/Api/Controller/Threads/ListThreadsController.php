@@ -404,8 +404,8 @@ class ListThreadsController extends AbstractListController
         $threadIds = $threads->pluck('id');
 
         $subSql = Post::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
-            ->whereRaw($this->tablePrefix . 'a.id < id')
+            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
 
         $allLastThreePosts = Post::from('posts', 'a')
@@ -444,8 +444,8 @@ class ListThreadsController extends AbstractListController
         $firstPostIds = $threads->pluck('firstPost.id');
 
         $subSql = PostUser::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.post_id = post_id')
-            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+            ->whereRaw($this->tablePrefix . 'a.`post_id` = `post_id`')
+            ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
         $allLikes = User::from('post_user', 'a')
@@ -476,18 +476,21 @@ class ListThreadsController extends AbstractListController
         $threadIds = $threads->pluck('id');
 
         $subSql = Order::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
-            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+            ->whereRaw($this->tablePrefix . 'a.`type` = `type`')
+            ->whereRaw($this->tablePrefix . 'a.`status` = `status`')
+            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
         $allRewardedUser = User::from('orders', 'a')
             ->join('users', 'a.user_id', '=', 'users.id')
             ->select('a.thread_id', 'users.*')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
-            ->whereIn('thread_id', $threadIds)
+            ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('type', Order::ORDER_TYPE_REWARD)
+            ->where('a.type', Order::ORDER_TYPE_REWARD)
             ->orderBy('a.created_at', 'desc')
+            ->orderBy('a.id', 'desc')
             ->get();
 
         $threads->map(function ($thread) use ($allRewardedUser, $limit) {

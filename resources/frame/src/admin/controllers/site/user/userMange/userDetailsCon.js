@@ -19,6 +19,7 @@ export default {
       wechatNickName:'',
       sex:'',
       disabled:false,
+      disabledReason:false,
       optionsStatus: [
         {
           value: 0,
@@ -73,6 +74,9 @@ export default {
           }
           if(userId == this.userInfo.id){
             this.disabled = true;
+          }
+          if(this.userInfo.status == 1){
+            this.disabledReason = true
           }
         }
 

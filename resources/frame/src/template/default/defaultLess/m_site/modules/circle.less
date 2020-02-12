@@ -179,6 +179,7 @@ body {
   font-size: 15px;
   line-height: 20px;
   margin-bottom: 10px;
+  overflow: hidden;
   a {
     display: block;
     line-height: 20px;
@@ -247,6 +248,7 @@ body {
     line-height: 20px;
     margin-bottom: 4px;
     font-size: 14px;
+    overflow: hidden;
     a {
       color: @main;
     }
@@ -647,12 +649,18 @@ openCircleConView.vue
       line-height: 14px;
       margin-left: -14px;
     }
-    .payPerHead {
+    .payPerHeaChi {
       float: left;
-      border-radius: 2px;
       height: 26px;
       width: 26px;
       margin: 0 0 3px 3px;
+      border-radius: 2px;
+    }
+    .payPerHead {
+      display: block;
+      border-radius: 2px;
+      height: 26px;
+      width: 26px;
       // @include px2rem(margin, 0 0 7 7);
     }
   }

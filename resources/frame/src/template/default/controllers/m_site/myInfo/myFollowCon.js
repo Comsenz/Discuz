@@ -8,15 +8,15 @@ export default {
   data:function () {
     return {
       num:{
-        replied: {
+        myCare: {
           title: '我关注的人',
           typeId: 1,
           number: 0,
           routerName: 'myCare'
         },
-        rewarded:{
+        careMe:{
           title: '关注我的人',
-          typeId: 3,
+          typeId: 2,
           number: 0,
           routerName: 'careMe'
         }
@@ -27,8 +27,9 @@ export default {
   },
   methods:{
     myJump(str){
+      // console.log(str,'路由');
       switch (str) {
-        case 'reply':
+        case 'myCare':
           this.$router.push('/my-care');
           break;
         default:

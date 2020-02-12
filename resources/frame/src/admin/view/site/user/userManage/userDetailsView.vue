@@ -80,6 +80,12 @@
       </CardRow>
     </Card>
 
+     <Card header="禁止原因：" v-show="disabledReason">
+      <CardRow>
+        <el-input v-model='newPassword' clearable ></el-input>
+      </CardRow>
+    </Card>
+
     <!-- <Card header="已加入的站点：">
       <span class="add-site">站长帮<i>（站长）</i></span>
       <span class="add-site">站长帮<i>（站长）</i></span>

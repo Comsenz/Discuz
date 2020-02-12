@@ -71,7 +71,7 @@ trait NotifyTrait
                     $payee_change_available_amount = $payee_amount;
                     $change_type                   = '';
                     $change_type_lang              = '';
-                    if ($order_info->type = Order::ORDER_TYPE_REWARD) {
+                    if ($order_info->type == Order::ORDER_TYPE_REWARD) {
                         //打赏收入
                         $change_type      = UserWalletLog::TYPE_INCOME_REWARD;
                         $change_type_lang = 'wallet.reward_income';
