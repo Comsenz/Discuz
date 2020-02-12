@@ -11,7 +11,8 @@
 </div>
 <div class="financial-profit">
     <div class="financial-profit-title"></div>
-    <div class="financial-profit-chart"></div>
+    <div class="financial-profit-chart" ref="financial-profit-echarts">     
+    </div>
 
 </div>
 </div>
