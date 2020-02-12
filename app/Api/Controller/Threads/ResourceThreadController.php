@@ -151,7 +151,7 @@ class ResourceThreadController extends AbstractResourceController
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
             ->when($isDeleted, function ($query, $isDeleted) use ($actor) {
-                if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+                if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                     // 只看回收站帖子
                     $query->whereNotNull('posts.deleted_at');
                 } elseif ($isDeleted == 'no') {

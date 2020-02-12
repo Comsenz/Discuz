@@ -64,9 +64,13 @@ class ThreadPolicy extends AbstractPolicy
                     });
             });
         }
-        // 管理员才可以查看审核中的帖子详情
-        if (! $actor->isAdmin()) {
-            $query->where('is_approved', 1);
+
+        // 未通过审核的主题
+        if (! $actor->hasPermission('thread.approvePosts')) {
+            $query->where(function (Builder $query) use ($actor) {
+                $query->where('is_approved', Thread::APPROVED)
+                    ->orWhere('threads.user_id', $actor->id);
+            });
         }
     }
 

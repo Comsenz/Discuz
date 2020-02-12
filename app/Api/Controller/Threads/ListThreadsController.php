@@ -354,7 +354,7 @@ class ListThreadsController extends AbstractListController
         $isApproved = Arr::get($filter, 'isApproved');
         if ($isApproved === '1') {
             $query->where('threads.is_approved', Thread::APPROVED);
-        } elseif ($actor->can('approvePosts')) {
+        } elseif ($actor->hasPermission('thread.approvePosts')) {
             if ($isApproved === '0') {
                 $query->where('threads.is_approved', Thread::UNAPPROVED);
             } elseif ($isApproved === '2') {
@@ -364,7 +364,7 @@ class ListThreadsController extends AbstractListController
 
         // 回收站
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
-            if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+            if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                 // 只看回收站帖子
                 $query->whereNotNull('threads.deleted_at');
             } elseif ($isDeleted == 'no') {
