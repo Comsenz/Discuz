@@ -51,9 +51,14 @@ export default {
           this.$router.go(this.$route.query.backGo)
         }
       } else {
-        if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
+        // console.log(document.referrer,'4578');
+        // if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
+          if(document.referrer === ''){
+            // console.log(document.referrer);
+          // alert('111');
           window.location.href = appConfig.baseUrl;
         } else {
+          // alert('222');
           this.$router.go(-1);
         }
       }
