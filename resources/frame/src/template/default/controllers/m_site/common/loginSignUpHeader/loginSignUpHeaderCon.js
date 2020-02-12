@@ -54,7 +54,6 @@ export default {
         // console.log(document.referrer,'4578');
         // if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
           if(document.referrer === ''){
-          // alert('111');
           window.location.href = appConfig.baseUrl;
         } else {
           // alert('222');
