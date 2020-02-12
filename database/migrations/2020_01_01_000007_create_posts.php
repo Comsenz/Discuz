@@ -27,6 +27,7 @@ class CreatePosts extends Migration
             $table->dateTime('deleted_at')->nullable()->comment('删除时间');
             $table->integer('deleted_user_id')->unsigned()->nullable()->comment('删除用户 id');
             $table->tinyInteger('is_first')->unsigned()->default(0)->comment('是否首个回复');
+            $table->tinyInteger('is_comment')->unsigned()->default(0)->comment('是否是回复回帖的内容');
             $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('是否合法');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
