@@ -247,3 +247,15 @@ $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\S
 $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowController::class);
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Dialog
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/dialog', 'dialog.create', ApiController\Users\CreateDialogController::class);
+$route->get('/dialog', 'dialog.list', ApiController\Users\ListDialogController::class);
+$route->delete('/dialog', 'dialog.delete', ApiController\Users\DeleteDialogController::class);
+$route->post('/dialog/message', 'dialog.message.create', ApiController\Users\CreateDialogMessageController::class);
+$route->get('/dialog/{id}', 'dialog.message.list', ApiController\Users\ListDialogMessageController::class);
