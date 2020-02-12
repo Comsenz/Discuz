@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class Dialog extends Migration
+class CreateDialogMessage extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class Dialog extends Migration
      */
     public function up()
     {
-        $this->schema()->create('dialog', function (Blueprint $table) {
+        $this->schema()->create('dialog_message', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('自增ID');
-            $table->unsignedBigInteger('dialog_message_id')->comment('消息ID');
-            $table->unsignedBigInteger('sender_user_id')->comment('发送人UID');
-            $table->unsignedBigInteger('recipient_user_id')->comment('收信人UID');
+            $table->unsignedBigInteger('dialog_id')->comment('会话ID');
+            $table->unsignedBigInteger('user_id')->comment('用户ID');
+            $table->text('message_text')->nullable()->comment('内容');
             $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
         });
@@ -29,6 +29,6 @@ class Dialog extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('dialog');
+        $this->schema()->dropIfExists('dialog_message');
     }
 }
