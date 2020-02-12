@@ -147,6 +147,7 @@ export default {
       }  else {
         console.log('未登录');
         // //当用户未登录时
+        this.themeChoList.splice(2,1);
         this.loginBtnFix = true;
         this.loginHide = false;
         this.canEdit = false;

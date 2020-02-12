@@ -109,7 +109,7 @@ export default {
     // console.log(this.isWeixin+'0'+this.isPhone);
     this.loadCategories();
     if(this.followShow) {
-      this.loadUserInfo();
+      this.loadUserFollowInfo();
     }
     this.loadUserInfo();
     // this.loadUserInfo();
@@ -165,8 +165,34 @@ export default {
       })
     },
 
-    //初始化请求用户信息
+    //初始化请求用户关注信息
+    loadUserFollowInfo(){
+      this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/'+ this.personUserId,
+        data: {
+        }
+      }).then((res) => {
+        console.log(res.readdata._data.follow,'00000000000&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&——————————————————————————————————————————');
+
+
+        this.followDet = res.readdata;
+        console.log(this.followDet,'结果数据·······');
+        if(res.readdata._data.follow == '1'){
+          console.log('已关注');
+          this.followFlag = '已关注';
+        } else if(res.readdata._data.follow == '0'){
+          console.log('关注TA');
+          this.followFlag = '关注TA';
+        } else {
+
+        }
+      })
+    },
+    //初始化请求用信息
     loadUserInfo(){
+      console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',
         method:'get',
@@ -175,7 +201,7 @@ export default {
         }
       }).then((res) => {
         console.log(res,'00000000000&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&——————————————————————————————————————————');
-        console.log(res.readdata);
+
         if(!res.data.attributes.typeUnreadNotifications.liked) {
           res.data.attributes.typeUnreadNotifications.liked = 0;
         }
@@ -190,16 +216,9 @@ export default {
         }
         this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
         console.log(res.data.attributes.typeUnreadNotifications.liked,res.data.attributes.typeUnreadNotifications.replied,res.data.attributes.typeUnreadNotifications.rewarded,res.data.attributes.typeUnreadNotifications.system,'和');
-        this.followDet = res.readdata;
-        if(res.readdata._data.follow == '1'){
-          this.followFlag = '已关注';
-        } else if(res.readdata._data.follow == '0'){
-          this.followFlag = '关注TA';
-        } else {
-
-        }
       })
     },
+
      //管理操作
      followCli(intiFollowVal) {
        console.log('参数',intiFollowVal);

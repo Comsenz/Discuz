@@ -40,10 +40,8 @@ export default {
       this.popupShow = true;
     },
     headerBack(){
-      console.log("回退1");
       let backGo = this.$route.query.backGo;
-
-      console.log(backGo);
+      // console.log(backGo);
 
       if (backGo){
         if (isNaN(parseInt(backGo))){
@@ -52,7 +50,12 @@ export default {
           this.$router.go(this.$route.query.backGo)
         }
       } else {
-        this.$router.go(-1);
+        if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
+          this.$router.push({ path:'/'})
+          // window.location.href = "www.baidu.com";
+        } else {
+          this.$router.go(-1);
+        }
       }
 
     }

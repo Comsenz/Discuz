@@ -53,7 +53,7 @@ export default {
       },200)
     },
     onCancel() {
-      this.$router.push({ path:'/'});
+      // this.$router.push({ path:'/'});
     },
 
     async handleSearchUser(initStatus = false){
