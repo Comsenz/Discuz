@@ -286,14 +286,12 @@ export default {
              if (intiFollowVal == '1' || intiFollowVal == '2') {
                attri.to_user_id = this.personUserId;
                methodType = 'delete';
-               this.intiFollowVal = '0';
                this.oldFollow = intiFollowVal;
              } else {
                attri.to_user_id = this.personUserId;
                methodType = 'post';
-               this.oldFollow =  this.oldFollow;
+               // this.oldFollow =  intiFollowVal;
              }
-             // console.log(attri,'33333333-----');
              this.followRequest(methodType,attri,intiFollowVal);
            },
 
@@ -318,8 +316,13 @@ export default {
                   if(methodType == 'delete'){
                     this.intiFollowVal = '0';
                   } else {
-                    console.log('post',this.oldFollow);
-                    this.intiFollowVal = this.oldFollow;
+                    if(this.oldFollow == '1') {
+                      this.intiFollowVal = '1';
+                    } else {
+                      this.intiFollowVal = '2';
+                    }
+                    // console.log('post',this.oldFollow);
+                    // this.intiFollowVal = intiFollowVal;
                   }
                 }
               })
