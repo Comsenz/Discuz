@@ -82,6 +82,14 @@ class PostPolicy extends AbstractPolicy
                     });
             });
         }
+
+        // 未通过审核的帖子
+        if (! $actor->hasPermission('thread.approvePosts')) {
+            $query->where(function (Builder $query) use ($actor) {
+                $query->where('is_approved', Post::APPROVED)
+                    ->orWhere('posts.user_id', $actor->id);
+            });
+        }
     }
 
     /**
