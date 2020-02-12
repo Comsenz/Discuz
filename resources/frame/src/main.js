@@ -63,7 +63,12 @@ Vue.prototype.$utils = utils; //注册全局方法
 window.app = App;//实例化根目录
 const appRouter = RConfig.init();
 
-const urlData = ['circle'];
+const keepAliveUrl = ['circle'];
+
+// const noKeepAliveUrl = ['login-user','my-notice'];
+
+const noKeepAliveUrl = ['details/:themeId'];
+
 
 const App = new Vue({
   router: appRouter,
@@ -72,18 +77,57 @@ const App = new Vue({
   data:function(){
     return {
       keepAliveStatus:false,
+      status:0
     }
   },
   watch: {
     '$route': function(to, from) {
-      console.log(from.fullPath);
-      if (from.fullPath === '/login-user') {
+      console.log(from.name);
+      console.log(to.name);
+
+
+      if (!noKeepAliveUrl.includes(from.name)) {
         this.keepAliveStatus = false;
-      } else if (urlData.includes(to.name)) {
+      } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
       } else {
         this.keepAliveStatus = false;
       }
+
+
+
+      // let name = this.$route.name;
+      /*if (this.status !== 0){
+        console.log('不等于0');
+
+        if (!keepAliveUrl.includes(to.name)){
+          this.keepAliveStatus = false;
+          console.log('进入缓存的页面');
+
+          if (name === 'circle') {
+            // alert('要去首页');
+            // this.keepAliveStatus = true;
+            // this.$destroy();
+            // this.status = 0;
+          }
+        }
+
+        if (from.name === 'details/:themeId') {
+          console.log('从详情页面回来');
+          this.keepAliveStatus = true;
+        }
+
+      }
+
+
+      //判断是不是第一次进入的是首页
+      if (to.name === 'circle' && this.status === 0){
+        this.status = 1;
+        this.keepAliveStatus = true;
+        console.log('第一次进首页缓存');
+      }*/
+
+
     }
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
