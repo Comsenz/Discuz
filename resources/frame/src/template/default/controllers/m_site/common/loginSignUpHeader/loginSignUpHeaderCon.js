@@ -1,5 +1,6 @@
 // import {Bus} from '../../../../store/site/bus.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
+import appConfig from "../../../../../../../../frame/config/appConfig";
 export default {
   data:function () {
     return {
@@ -51,8 +52,7 @@ export default {
         }
       } else {
         if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
-          this.$router.push({ path:'/'})
-          // window.location.href = "www.baidu.com";
+          window.location.href = appConfig.baseUrl;
         } else {
           this.$router.go(-1);
         }
