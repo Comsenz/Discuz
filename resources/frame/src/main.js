@@ -15,6 +15,8 @@ import './extend/viewBase/vantuiInit';   //引入vant组件
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
 
+import Echarts from 'echarts'; //引入Echarts
+
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
@@ -49,6 +51,7 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
+Vue.prototype.$echarts = Echarts; //  
 
 
 //实例化根目录

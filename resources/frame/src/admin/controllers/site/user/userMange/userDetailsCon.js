@@ -20,6 +20,7 @@ export default {
       sex:'',
       disabled:false,
       disabledReason:false,
+      reasonsForDisable:'',//禁用原用
       optionsStatus: [
         {
           value: 0,
@@ -63,6 +64,7 @@ export default {
           console.log(response,'response');
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
+          this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v)=>{
             return  v._data.id
            });

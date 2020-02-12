@@ -80,9 +80,9 @@
       </CardRow>
     </Card>
 
-     <Card header="禁止原因：" v-show="disabledReason">
+     <Card header="禁用原因：" v-show="disabledReason">
       <CardRow>
-        <el-input v-model='newPassword' clearable ></el-input>
+        <el-input v-model='reasonsForDisable' clearable ></el-input>
       </CardRow>
     </Card>
 
