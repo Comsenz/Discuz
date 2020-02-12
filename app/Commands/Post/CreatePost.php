@@ -11,6 +11,7 @@ use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
+use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\User;
@@ -106,6 +107,8 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
+        $isComment = false;
+
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
@@ -115,18 +118,27 @@ class CreatePost
                 // 不能只回复引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                 $replyContent = preg_replace($pattern, '', Arr::get($this->data, 'attributes.content'));
-
                 if (! $replyContent) {
                     throw new Exception('reply_content_cannot_null');
                 }
 
                 // 检查是否在同一主题下的
-                $this->replyUserId = $post->where('id', $this->replyPostId)
+                $replyPost = $post->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
-                    ->value('user_id');
-
+                    ->first(['user_id', 'is_comment']);
+                $this->replyUserId = $replyPost->user_id;
                 if (! $this->replyUserId) {
                     throw new ModelNotFoundException;
+                }
+
+                // 判断是否是点评内容
+                $isComment = Arr::get($this->data, 'attributes.is_comment', false);
+                if ($isComment) {
+                    // 判断点评的不能是点评的数据 (不允许叠点评)
+                    if ($replyPost->is_comment) {
+                        throw new TranslatorException('post_not_comment');
+                    }
+                    // TODO 可添加点评通知
                 }
             }
 
@@ -142,7 +154,8 @@ class CreatePost
             $this->ip,
             $this->replyPostId,
             $this->replyUserId,
-            $isFirst
+            $isFirst,
+            $isComment
         );
 
         // 存在审核敏感词时，将回复内容放入待审核
