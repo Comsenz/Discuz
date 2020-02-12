@@ -61,7 +61,7 @@ export default {
       loginWord:'登录 / 注册',
       isWeixin: false,
       isPhone: false,
-
+      viewportWidth: '',
     }
   },
   created:function(){
@@ -69,6 +69,7 @@ export default {
       this.load();
       this.isWeixin = appCommonH.isWeixin().isWeixin;
       this.isPhone = appCommonH.isWeixin().isPhone;
+      this.viewportWidth = window.innerWidth;
       this.onLoad();
       this.detailIf();
   },
@@ -81,13 +82,13 @@ export default {
       // this.loadThemeList();
     },
     //设置发表主题按钮在pc里的位置
-    limitWidth(limitId){
-      console.log(limitId);
-      console.log(limitId);
-      let viewportWidth = window.innerWidth;
-      document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
-      // document.getElementById('fixedEdit').style.right = "100px";
-    },
+    // limitWidth(limitId){
+    //   console.log(limitId);
+    //   let viewportWidth = window.innerWidth;
+    //   console.log(document.getElementById(limitId).style);
+    //   document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
+    //   // document.getElementById('fixedEdit').style.right = "100px";
+    // },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
@@ -138,13 +139,15 @@ export default {
         this.searchStatus = true;
         this.menuStatus = true;
         if(this.canEdit){
-          if(this.isWeixin != true && this.isPhone != true){
-            this.limitWidth('fixedEdit');
-          }
+          // if(this.isWeixin != true && this.isPhone != true){
+          //   console.log('是pc');
+          //   this.limitWidth('fixedEdit');
+          // }
         }
       }  else {
         console.log('未登录');
         // //当用户未登录时
+        this.themeChoList.splice(2,1);
         this.loginBtnFix = true;
         this.loginHide = false;
         this.canEdit = false;

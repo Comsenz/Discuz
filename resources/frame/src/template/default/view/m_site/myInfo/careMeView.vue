@@ -5,7 +5,7 @@
         <form action="/">
           <van-search
             v-model="searchVal"
-            placeholder="搜索用户和主题"
+            placeholder="搜索关注我的人"
             background="#f8f8f8"
             show-action
             @input="onSearch"

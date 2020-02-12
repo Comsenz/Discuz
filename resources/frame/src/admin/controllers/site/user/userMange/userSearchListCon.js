@@ -161,58 +161,151 @@ export default {
         console.error(err,'deleteBatch');
       }
     },
-
+		/**
+		 * 批量禁用
+		 * 日期 2020-02-11
+		 */
     async disabledBatch(){
-      if(this.multipleSelection.length <= 0){
+    	
+    	// 如果未选择复选框，则不允许弹出弹框
+    	if(this.multipleSelection.length <= 0){
         return;
+      }else{
+      	this.$MessageBox.prompt('', '提示', {
+	       	confirmButtonText: '提交',
+	       	cancelButtonText: '取消',
+	       	inputPlaceholder:'请输入禁用理由'
+	     	}).then((value)=>{
+	       	try{
+	       		// 点击提交后，将复选框内容对象放入数组
+		        let dataList = [];
+		        this.multipleSelection.forEach((v)=>{
+		          dataList.push({
+		            "attributes": {
+		              "id": v._data.id,
+		              "groupId": v.groups[0] ? v.groups[0]._data.id : '',
+		              "status": 1
+		            }
+		          })
+		        });
+						
+						// 进行后台请求
+		        this.appFetch({
+		          method: 'PATCH',
+		          url: 'users',
+		          data: {
+		            "data": dataList
+		          }
+		        });
+		        
+						// 数据提交完成之后 重新获取页面列表
+		        this.handleGetUserList();
+		        
+		      } catch(err){
+		        console.error(err, 'disabledBatch');
+		      }
+	     	}).catch((err) => {
+	       	console.log(err);
+	     	});
       }
-      try{
-        let dataList = [];
-        this.multipleSelection.forEach((v)=>{
-          dataList.push({
-            "attributes": {
-              "id": v._data.id,
-              "groupId": v.groups[0] ? v.groups[0]._data.id : '',
-              "status": 1
-            }
-          })
-        });
-
-        await this.appFetch({
-          method: 'PATCH',
-          url: 'users',
-          data: {
-            "data": dataList
-          }
-        });
-
-        this.handleGetUserList();
-      } catch(err){
-        console.error(err, 'disabledBatch');
-      }
+    	
+    	
+//   	this.$MessageBox.prompt('', '提示', {
+//     	confirmButtonText: '提交',
+//     	cancelButtonText: '取消',
+//     	inputPlaceholder:'请输入禁用理由'
+//   	}).then((value)=>{
+//     	data.id.push(id);
+//     	data.status = 3;
+//     	data.remark = value.value;
+//     	this.postReview(data);
+//   	}).catch((err) => {
+//     	console.log(err);
+//   	});
+//    if(this.multipleSelection.length <= 0){
+//      return;
+//    }
+//    try{
+//      let dataList = [];
+//      this.multipleSelection.forEach((v)=>{
+//        dataList.push({
+//          "attributes": {
+//            "id": v._data.id,
+//            "groupId": v.groups[0] ? v.groups[0]._data.id : '',
+//            "status": 1
+//          }
+//        })
+//      });
+//
+//      await this.appFetch({
+//        method: 'PATCH',
+//        url: 'users',
+//        data: {
+//          "data": dataList
+//        }
+//      });
+//
+//      this.handleGetUserList();
+//    } catch(err){
+//      console.error(err, 'disabledBatch');
+//    }
     },
 
+		/**
+		 * 独立禁用
+		 * 日期 2020-02-11
+		 */
     async handleDisable(scope){
-
-      try{
-        const data = scope.row._data;
-        await this.appFetch({
-          method: "PATCH",
-          url: 'users',
-          splice: `/${data.id}`,
-          data: {
-            "data": {
-              "attributes": {
-                "status": 1
-              }
-            }
-          }
-        });
-
-        this.tableData[scope.$index]._data.status = 1;
-      } catch(err){
-        console.error(err, 'handleDisable');
-      }
+    	// 弹出提示框，提示是否要禁用用户
+    	this.$MessageBox.prompt('', '提示', {
+       	confirmButtonText: '提交',
+       	cancelButtonText: '取消',
+       	inputPlaceholder:'请输入禁用理由'
+     	}).then((value)=>{
+     		try{
+     			// 获取当前行的对象值
+	        const data = scope.row._data;
+	        // 进行后台请求
+	       this.appFetch({
+	          method: "PATCH",
+	          url: 'users',
+	          splice: `/${data.id}`,
+	          data: {
+	            "data": {
+	              "attributes": {
+	                "status": 1
+	              }
+	            }
+	          }
+	        }).then(function(retData){
+	        	// 将禁用置灰
+	        	this.tableData[scope.$index]._data.status = 1;
+	        });
+	      } catch(err){
+	        console.error(err, 'handleDisable');
+	      }
+     	}).catch((err) => {
+       	console.log(err);
+     	});
+			
+//    try{
+//      const data = scope.row._data;
+//      await this.appFetch({
+//        method: "PATCH",
+//        url: 'users',
+//        splice: `/${data.id}`,
+//        data: {
+//          "data": {
+//            "attributes": {
+//              "status": 1
+//            }
+//          }
+//        }
+//      })
+//      this.tableData[scope.$index]._data.status = 1;
+//    } catch(err){
+//      console.error(err, 'handleDisable');
+//    }
     },
     handleCurrentChange(val){
       this.pageNum = val;

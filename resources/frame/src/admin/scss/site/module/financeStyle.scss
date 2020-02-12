@@ -160,8 +160,8 @@
     flex-wrap:wrap;
     padding-top: 18PX;
     .financial{
-      width:235PX;
-      // width:25%;
+      // width:235PX;
+      width:23%;
       height:131PX;
       // margin-left:24PX;
       // background:red;
@@ -189,6 +189,19 @@
         font-size: 25PX;
       }
    
+    }
+  }
+  .financial-profit{
+    height:560PX;
+    // background: green;
+    .financial-profit-title{
+      height:48PX;
+      // background:yellow;
+    }
+    .financial-profit-chart{
+      height:473PX;
+      // background: pink;
+      margin:17px 15px 21PX 14PX;
     }
   }
 

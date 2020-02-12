@@ -49,9 +49,11 @@ class EventServiceProvider extends BaseEventServiceProvider
             CreateUserWalletListener::class,
             Notifications::class
         ],
+        // 登录后事件监听
         Logining::class => [
             CheckLogin::class
         ],
+        // 登录事件监听
         Logind::class => [
             BanLogin::class,
             ValidateLogin::class,
