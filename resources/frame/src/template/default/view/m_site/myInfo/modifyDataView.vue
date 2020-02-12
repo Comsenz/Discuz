@@ -11,7 +11,7 @@
             <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
             <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
           </div>
-          <i>
+          <i class="modify-data-avatar-right">
             <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
           </i>
         </div>

@@ -10,8 +10,20 @@
     </div>
 </div>
 <div class="financial-profit">
-    <div class="financial-profit-title"></div>
-    <div class="financial-profit-chart" ref="financial-profit-echarts">     
+    <div class="financial-profit-title">
+        <span class="iconfont iconchongzhi"></span>
+        <div class="financial-profit-titles">盈利统计</div>  
+    </div>
+    <div class="financial-profit-chart" ref="financialProfitEcharts">     
+    </div>
+
+</div>
+<div class="financial-profit">
+    <div class="financial-profit-title">
+        <span class="iconfont iconchongzhi"></span>
+        <div class="financial-profit-titles">订单统计</div>  
+    </div>
+    <div class="financial-profit-chart" ref="financialOrderEcharts">     
     </div>
 
 </div>

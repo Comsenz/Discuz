@@ -197,6 +197,12 @@
     .financial-profit-title{
       height:48PX;
       background:yellow;
+      display: flex;
+      margin-left:0 8px 0 14PX;
+      align-items: center;
+      .iconfont{
+
+      }
     }
     .financial-profit-chart{
       height:473PX;
