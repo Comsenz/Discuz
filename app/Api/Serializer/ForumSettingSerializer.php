@@ -48,6 +48,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_url' => $this->settings->get('site_url'),
                 'site_icp' => $this->settings->get('site_icp'),
                 'site_stat' => $this->settings->get('site_stat'),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
             ],
 
             // 注册设置
