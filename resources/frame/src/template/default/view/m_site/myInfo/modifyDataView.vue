@@ -3,17 +3,17 @@
       <ModifyHeader title="我的资料"></ModifyHeader>
       <main class="modify-data-main content">
         <div class="modify-data-avatar m-site-cell-access">
+          <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
           <div class="modify-data-avatar-title m-site-cell-access-bd">
             <p class="modify-data-avatar-title-img">头像</p>
           </div>
           <div class="modify-data-avatar-img">
-            <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
-             <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
-              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
-            <i>
-              <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
-            </i>
+            <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
+            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
           </div>
+          <i class="modify-data-avatar-right">
+            <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
+          </i>
         </div>
         <van-cell title="手机号" @click="myModify('modify-phone')" is-link :value="modifyPhone" v-if="modifyPhone"/>
         <van-cell title="手机号" @click="$router.push({path:'/bind-new-phone'})" is-link value="去绑定" v-else />

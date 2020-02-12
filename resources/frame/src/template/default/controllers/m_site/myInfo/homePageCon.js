@@ -62,7 +62,8 @@ export default {
           'filter[userId]':this.userId,
           include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
           'page[number]': this.pageIndex,
-          'page[limit]': this.pageLimit
+          'page[limit]': this.pageLimit,
+          'filter[isDeleted]':'no'
         }
       }).then((res) => {
         if (res.errors){

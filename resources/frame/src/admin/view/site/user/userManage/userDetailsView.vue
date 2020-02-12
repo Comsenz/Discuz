@@ -43,7 +43,7 @@
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input v-model='newPassword' clearable></el-input>
+        <el-input v-model='newPassword' clearable :disabled='disabled'></el-input>
       </CardRow>
     </Card>
 
@@ -77,6 +77,12 @@
             :value="item.value">
           </el-option>
         </el-select>
+      </CardRow>
+    </Card>
+
+     <Card header="禁用原因：" v-show="disabledReason">
+      <CardRow>
+        <el-input v-model='reasonsForDisable' clearable ></el-input>
       </CardRow>
     </Card>
 

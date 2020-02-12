@@ -42,7 +42,7 @@ export default {
         data:{
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit,
-          'filter[type]': 'rewarded'
+          'filter[type]': 'rewarded',
         }
       }).then(res=>{
         if (res.errors){

@@ -3,7 +3,6 @@
     <div>
        <van-checkbox-group v-model="result" ref="checkboxGroup">
         <div class=""  v-for="(item,index) in themeList" :key="index">
-          <keep-alive>
           <div class="cirPostCon">
             <div class="">
               <div class="postTop">
@@ -33,7 +32,7 @@
                       <a href="javascript:;"  @click="themeOpera(item._data.id,6)" v-if="item.firstPost._data.canEdit">编辑</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,7)" v-if="item._data.canReply">回复</a>
 
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,5)" v-if="item._data.canDelete">删除</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,5,'',index)" v-if="item._data.canDelete">删除</a>
                   	</div>
                   </div>
                 </div>
@@ -109,7 +108,6 @@
                 ref="checkboxes"
             />
           </div>
-          </keep-alive>
           <div class="gap"></div>
         </div>
          <div class="manageFootFixed choFixed" v-if="ischeckShow"  :style="{'width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">

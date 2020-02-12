@@ -48,6 +48,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_url' => $this->settings->get('site_url'),
                 'site_icp' => $this->settings->get('site_icp'),
                 'site_stat' => $this->settings->get('site_stat'),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
             ],
 
             // 注册设置
@@ -55,7 +56,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'register_close' => (bool)$this->settings->get('register_close'),
                 'register_validate' => (bool)$this->settings->get('register_validate'),
                 'password_length' => (int)$this->settings->get('password_length'),
-                'password_strength' => explode(',', $this->settings->get('password_strength')),
+                'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
             ],
 
             // 第三方登陆设置

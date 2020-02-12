@@ -36,7 +36,7 @@
 
 
         <div class="retrieve-password-btn">
-          <van-button type="primary" @click="submissionPassword">提交</van-button>
+          <van-button type="primary" :loading="btnLoading" @click="submissionPassword">提交</van-button>
         </div>
 
       </main>

@@ -118,6 +118,16 @@ export default {
             }
           },
 
+          'notice-set': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/notice/noticeSetView'], resolve)
+            },
+            metaInfo: {
+              title: '通知设置',
+              name:'noticeSet',
+              attribution:'全局'
+            }
+          },
           'tencent-cloud-set': {
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudSetView'], resolve)
@@ -334,6 +344,16 @@ export default {
               name:'withdrawMange',
               attribution:'财务',
               alias:'提现设置'
+            }
+          },
+          'financial-statistics':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/financialStatistics'], resolve)
+            },
+            metaInfo: {
+              title: '财务统计',
+              name:'financialStatistics',
+              attribution:'财务',
             }
           },
 

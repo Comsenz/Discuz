@@ -40,7 +40,7 @@ export default {
         data:{
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit,
-          'filter[type]': 'replied'
+          'filter[type]': 'replied',
         }
       }).then(res=>{
         if (res.errors){

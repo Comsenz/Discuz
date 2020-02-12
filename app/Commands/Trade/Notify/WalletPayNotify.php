@@ -8,6 +8,9 @@
 namespace App\Commands\Trade\Notify;
 
 use App\Events\Order\Updated;
+use App\Models\Order;
+use App\Models\UserWallet;
+use App\Models\UserWalletLog;
 use App\Settings\SettingsRepository;
 use ErrorException;
 use Exception;
@@ -44,6 +47,32 @@ class WalletPayNotify
         //开始事务
         $connection->beginTransaction();
         try {
+            // 从钱包余额中扣除订单金额
+            $userWallet = UserWallet::lockForUpdate()->find($this->data['user_id']);
+            $userWallet->available_amount = $userWallet->available_amount - $this->data['amount'];
+            $userWallet->save();
+
+            // 记录钱包变更明细
+            switch ($this->data['type']) {
+                case Order::ORDER_TYPE_REWARD:
+                    $change_type      = UserWalletLog::TYPE_EXPEND_REWARD;
+                    $change_type_lang = 'wallet.reward_expend';
+                    break;
+                default:
+                    $change_type                   = '';
+                    $change_type_lang              = '';
+            }
+
+            UserWalletLog::createWalletLog(
+                $this->data['user_id'],
+                $this->data['amount'],
+                0,
+                $change_type,
+                app('translator')->get($change_type_lang),
+                null,
+                $this->data['id']
+            );
+
             //支付成功处理
             $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting);
             $connection->commit();

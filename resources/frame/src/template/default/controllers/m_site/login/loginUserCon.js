@@ -47,6 +47,7 @@ export default {
 
     loginClick() {
       this.setStatus('啊啦啦啦');
+      this.btnLoading = true;
 
       this.appFetch({
         url: "login",
@@ -61,6 +62,7 @@ export default {
         }
       }).then(res => {
         console.log(res);
+        this.btnLoading = false;
         if (res.errors){
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

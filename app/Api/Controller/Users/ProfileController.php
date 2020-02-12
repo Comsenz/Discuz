@@ -69,6 +69,13 @@ class ProfileController extends AbstractResourceController
 
         $user->load($include);
 
+        // 判断用户是否禁用
+        if ($user->status == 1) {
+            $user->load(['latelyLog' => function ($query) {
+                $query->select()->where('action', 'ban');
+            }]);
+        }
+
         return $user;
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="wallet-box">
     <div class="details-wallet-header">
-      <p class="details-wallet-header__name">{{walletInfo._data.username}}（UID：{{walletInfo._data.id}}）</p>
+      <p class="details-wallet-header__name">{{walletInfo.user._data.username}}（UID：{{walletInfo._data.id}}）</p>
       <i class="details-wallet-header__i"></i>
       <span @click="$router.push({path:'/admin/user-details', query: query})" >详情</span>
       <span class="details-wallet-header__wallet">钱包</span>

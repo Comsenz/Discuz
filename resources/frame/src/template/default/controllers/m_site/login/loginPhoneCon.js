@@ -19,7 +19,8 @@ export default {
       wxLoginShow: true,
       phoneStatus:'',
       isOne: false,
-      siteMode:''
+      siteMode:'',
+      btnLoading:false
     }
   },
 
@@ -84,6 +85,7 @@ export default {
     },
 
     phoneLoginClick(){
+      this.btnLoading = true;
       this.appFetch({
         url:'smsVerify',
         method:'post',
@@ -98,9 +100,13 @@ export default {
         }
       }).then(res=>{
         console.log(res);
-
+        this.btnLoading = false;
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;

@@ -61,7 +61,7 @@ export default {
       loginWord:'登录 / 注册',
       isWeixin: false,
       isPhone: false,
-
+      viewportWidth: '',
     }
   },
   created:function(){
@@ -69,7 +69,9 @@ export default {
       this.load();
       this.isWeixin = appCommonH.isWeixin().isWeixin;
       this.isPhone = appCommonH.isWeixin().isPhone;
+      this.viewportWidth = window.innerWidth;
       this.onLoad();
+      this.detailIf();
   },
 
   methods: {
@@ -80,14 +82,13 @@ export default {
       // this.loadThemeList();
     },
     //设置发表主题按钮在pc里的位置
-    limitWidth(limitId){
-      // alert('设置');
-      console.log(limitId);
-      console.log(limitId);
-      let viewportWidth = window.innerWidth;
-      document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
-      // document.getElementById('fixedEdit').style.right = "100px";
-    },
+    // limitWidth(limitId){
+    //   console.log(limitId);
+    //   let viewportWidth = window.innerWidth;
+    //   console.log(document.getElementById(limitId).style);
+    //   document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
+    //   // document.getElementById('fixedEdit').style.right = "100px";
+    // },
     getInfo(){
       //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
@@ -119,79 +120,39 @@ export default {
             this.isPayVal = res.readdata._data.set_site.site_mode;
             console.log('可以访问');
             //判断站点信息是否付费，用户是否登录，用户是否已支付
-            this.detailIf(this.isPayVal,false);
+            // this.detailIf(this.isPayVal,false);
 
           }
         }
       });
     },
-    //请求用户信息
-    // getUser(){
-    // //初始化请求User信息，用于判断当前用户是否已付费
-    //   var userId = browserDb.getLItem('tokenId');
-    //   this.appFetch({
-    //     url: 'users',
-    //     method: 'get',
-    //     splice:'/'+userId,
-    //     data: {
-    //       include: 'groups',
-    //     }
-    //   }).then((res) => {
-    //     // console.log(res.readdata._data.username);
-    //     this.username = res.readdata._data.username;
-    //     this.isPaid = res.readdata._data.paid;
-    //     this.roleList = res.readdata.groups;
-    //     if(res.readdata._data.joinedAt=='' || res.readdata._data.joinedAt == null){
-    //       this.joinedAt = res.readdata._data.createdAt;
-    //     } else {
-    //       this.joinedAt = res.readdata._data.joinedAt;
-    //     }
-    //     if(this.isPaid != null && this.isPaid != ''){
-    //       this.detailIf(this.isPayVal,false);
-    //     }
-    //     // this.detailIf(false,this.isPaid);
-    //   })
-
-    // },
-
     //首页，逻辑判断
-    detailIf(isPayVal){
-      if(isPayVal == 'public'){
-        //当站点为公开站点时
-        console.log('公开');
-        var token = browserDb.getLItem('Authorization');
-        if(token){
-          console.log('公开，已登录');
-          //当用户已登录时
-          // this.loadThemeList();
-          this.loginBtnFix = false;
-          this.loginHide = true;
-          this.canEdit = true;
-          this.searchStatus = true;
-          this.menuStatus = true;
-          if(this.canEdit){
-            if(this.isWeixin != true && this.isPhone != true){
-              this.limitWidth('fixedEdit');
-            }
-            // this.limitWidth('fixedEdit');
-          }
-        }  else {
-          // console.log('公开，未登录');
-          // this.loadThemeList();
-          // //当用户未登录时
-          this.loginBtnFix = true;
-          this.loginHide = false;
-          this.canEdit = false;
-        }
-      } else {
-        if(this.isWeixin != true && this.isPhone != true){
-          this.limitWidth('fixedEdit');
-        }
+    detailIf(){
+      var token = browserDb.getLItem('Authorization');
+      if(token){
+        console.log('已登录');
+        //当用户已登录时
+        // this.loadThemeList();
+        this.loginBtnFix = false;
+        this.loginHide = true;
+        this.canEdit = true;
         this.searchStatus = true;
         this.menuStatus = true;
+        if(this.canEdit){
+          // if(this.isWeixin != true && this.isPhone != true){
+          //   console.log('是pc');
+          //   this.limitWidth('fixedEdit');
+          // }
+        }
+      }  else {
+        console.log('未登录');
+        // //当用户未登录时
+        this.themeChoList.splice(2,1);
+        this.loginBtnFix = true;
+        this.loginHide = false;
+        this.canEdit = false;
       }
     },
-
 
     //初始化请求主题列表数据
     load(){
@@ -218,6 +179,7 @@ export default {
     //初始化请求主题列表数据
 
     loadThemeList(filterCondition,filterVal){
+      console.log(filterCondition,'123~~~~');
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
@@ -244,10 +206,11 @@ export default {
       }
       if(filterCondition !== 'isEssence'){
         delete data['filter[isEssence]'];
-      } else if(filterCondition !== 'fromUserId'){
+      }
+      if(filterCondition !== 'fromUserId'){
         delete data['filter[fromUserId]'];
       }
-
+      console.log(data,'data数据');
       return this.appFetch({
         url: 'threads',
         method: 'get',
@@ -346,6 +309,7 @@ export default {
       console.log(this.filterInfo.filterCondition,'类型');
       this.pageIndex = 1;
       this.themeListCon = [];
+
       this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
       },
 
@@ -437,7 +401,7 @@ export default {
           this.isLoading = false;
         })
       }
-      },
+    },
   mounted: function() {
     // this.getVote();
     window.addEventListener('scroll', this.footFix, true);

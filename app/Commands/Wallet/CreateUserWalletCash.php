@@ -115,7 +115,6 @@ class CreateUserWalletCash
             }
             $cash_sn            = $this->getCashSn();
             $cash_actual_amount = sprintf('%.2f', ($cash_apply_amount - $tax_amount));
-            $cash_apply_amount  = $cash_apply_amount;
             //创建提现记录
             $cash = UserWalletCash::createCash(
                 $this->actor->id,
@@ -135,7 +134,7 @@ class CreateUserWalletCash
                 $this->actor->id,
                 -$cash_apply_amount,
                 $cash_apply_amount,
-                UserWalletLog::TYPE_CASH_SFREEZE,
+                UserWalletLog::TYPE_CASH_FREEZE,
                 app('translator')->get('wallet.cash_freeze_desc'),
                 $cash->id
             );

@@ -59,8 +59,14 @@ class UserSerializer extends AbstractSerializer
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
             'canWalletPay'      => $gate->allows('walletPay', $model),
-            'registerReason'    => $model->register_reason,
+            'registerReason'    => $model->register_reason,     // 注册原因
+            'banReason'         => '',                          // 禁用原因
         ];
+
+        // 判断禁用原因
+        if ($model->status == 1) {
+            $attributes['banReason'] = !empty($model->latelyLog) ? $model->latelyLog->message : '' ;
+        }
 
         if ($canEdit || $this->actor->id === $model->id) {
             $attributes += [

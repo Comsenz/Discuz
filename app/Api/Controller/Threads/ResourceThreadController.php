@@ -119,8 +119,10 @@ class ResourceThreadController extends AbstractResourceController
         if (in_array('rewardedUsers', $include)) {
             $allRewardedUser = Order::with('user')
                 ->where('thread_id', $thread->id)
-                ->where('type', 2)
-                ->where('status', 1)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_REWARD)
+                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
 
             $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user')->filter());
@@ -149,7 +151,7 @@ class ResourceThreadController extends AbstractResourceController
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
             ->when($isDeleted, function ($query, $isDeleted) use ($actor) {
-                if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+                if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                     // 只看回收站帖子
                     $query->whereNotNull('posts.deleted_at');
                 } elseif ($isDeleted == 'no') {

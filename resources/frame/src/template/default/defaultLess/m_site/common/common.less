@@ -78,6 +78,7 @@ a { color: @main;}
 .padB0 { padding-bottom: 0 !important;}
 .overHide { overflow: hidden;}
 .hide { display: none;}
+.relative { position: relative;}
 .qq-emotion {
     display: inline-block;
     height: 20px;
@@ -201,6 +202,16 @@ a { color: @main;}
       font-size: 20px;
     }
   }
+}
+.noticeNew {
+  display: inline-block;
+  position: absolute;
+  right: -4px;
+  top: -6px;
+  background: #FA5151;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
 }
 .contentHead {
   position: fixed;
@@ -361,6 +372,21 @@ a { color: @main;}
     line-height: 21px;
     color: @gray-light;
   }
+}
+.noticeSum {
+  display: inline-block;
+  line-height: 16px;
+  min-width: 16px;
+  background: #FA5151;
+  font-size: 7px;
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 8px;
+  margin-left: 13px;
+  vertical-align: middle;
+  margin-top: 2px;
+  box-sizing: border-box;
+  text-align: center;
 }
 .itemGap {
   background: @corEd;
@@ -564,7 +590,9 @@ a { color: @main;}
     .time{
       margin-top: 4px;
       color:rgba(136,136,136,1);
-      line-height:16px
+      line-height:16px;
+      font-weight: 400;
+      font-size: 14px;
     }
 
   }

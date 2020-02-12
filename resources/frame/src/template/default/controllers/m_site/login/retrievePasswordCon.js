@@ -14,7 +14,8 @@ export default {
       time:1, //发送验证码间隔时间
       disabled:false, //按钮状态
       insterVal:'',
-      isGray: false
+      isGray: false,
+      btnLoading:false
     }
   },
 
@@ -74,6 +75,7 @@ export default {
     },
     //提交新密码
     submissionPassword(){
+      this.btnLoading = true;
       this.appFetch({
         url:"smsVerify",
         method:"post",
@@ -89,12 +91,14 @@ export default {
         }
       }).then(res => {
           // console.log(res);
+        this.btnLoading = false;
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           this.$router.push({
             path: 'login-user',
           });
+          this.$toast.success('提交成功');
         }
        });
     }

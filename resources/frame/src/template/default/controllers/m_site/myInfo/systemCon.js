@@ -32,7 +32,7 @@ export default {
         data:{
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit,
-          'filter[type]': 'system'
+          'filter[type]': 'system',
         }
       }).then(res=>{
         if (res.errors){

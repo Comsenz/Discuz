@@ -18,6 +18,9 @@ export default {
       newPassword:'',
       wechatNickName:'',
       sex:'',
+      disabled:false,
+      disabledReason:false,
+      reasonsForDisable:'',//禁用原用
       optionsStatus: [
         {
           value: 0,
@@ -46,6 +49,7 @@ export default {
   methods:{
     async getUserDetail(){
       try{
+        var userId = browserDb.getLItem('tokenId');
         const response = await this.appFetch({
           method: 'get',
           url: 'users',
@@ -60,6 +64,7 @@ export default {
           console.log(response,'response');
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
+          this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v)=>{
             return  v._data.id
            });
@@ -69,7 +74,12 @@ export default {
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
           }
-          console.log()
+          if(userId == this.userInfo.id){
+            this.disabled = true;
+          }
+          if(this.userInfo.status == 1){
+            this.disabledReason = true
+          }
         }
 
       } catch(err){
