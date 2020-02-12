@@ -135,6 +135,7 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 
 $route->get('/likes', 'likes', ApiController\Posts\ListLikesController::class);
 $route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::class);
+$route->get('/posts/{id}', 'posts.resource', ApiController\Posts\ResourcePostController::class);
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
 $route->patch('/posts/batch', 'posts.batchUpdate', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);
