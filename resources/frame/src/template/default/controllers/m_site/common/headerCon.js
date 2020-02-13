@@ -232,7 +232,7 @@ export default {
        } else {
          attri.to_user_id = this.personUserId;
          methodType = 'post';
-         this.oldFollow =  '0';
+         // this.oldFollow =  '0';
        }
        this.followRequest(methodType,attri,intiFollowVal);
      },
@@ -255,6 +255,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
+            console.log(this.oldFollow,'旧值');
             if(methodType == 'delete'){
               this.intiFollowVal = '0';
             } else {
