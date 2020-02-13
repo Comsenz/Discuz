@@ -50,6 +50,8 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    const SUMMARY_LENGTH = 50;
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
