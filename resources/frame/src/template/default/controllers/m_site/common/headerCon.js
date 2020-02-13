@@ -51,7 +51,8 @@ export default {
         intiFollowVal:'0',
         noticeSum: 0,
         intiFollowChangeVal: '0',
-        oldFollow: false
+        oldFollow: false,
+        equalId: false,
 	  }
   },
 	props: {
@@ -105,6 +106,11 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     console.log(this.userId,'登录用户id');
     console.log(this.personUserId,'用户主页获取到的参数id');
+    if(this.userId == this.personUserId ){
+      this.equalId = true;
+    } else {
+      this.equalId = false;
+    }
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
