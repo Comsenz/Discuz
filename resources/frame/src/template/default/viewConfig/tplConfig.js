@@ -528,7 +528,6 @@ export default {
     'retrieve-pwd',
     'retrieve-pwd',
     'pay-the-fee',
-    'pay-circle-con/:themeId/:groupId',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId',
