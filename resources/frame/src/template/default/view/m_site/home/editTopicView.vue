@@ -90,6 +90,8 @@
 import editTopicCon from '../../../controllers/m_site/circle/editTopicCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "post-topic",
     components: {
