@@ -42,6 +42,9 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.deletePosts' => [10],           // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
 
+        // 内容审核
+        'thread.approvePosts' => [],            // 审核主题或回复
+
         // 回收站
         'viewTrashed' => [],                    // 查看回收站
 

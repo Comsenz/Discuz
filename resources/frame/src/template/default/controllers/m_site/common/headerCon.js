@@ -220,113 +220,56 @@ export default {
       })
     },
 
-  //    //管理操作
-  //    followCli(intiFollowVal) {
-  //      console.log('参数',intiFollowVal);
-  //      let attri = new Object();
-  //      let methodType = '';
-  //      if (intiFollowVal == '0') {
-  //        // console.log('未关注');
-  //        attri.to_user_id = this.personUserId;
-  //        methodType = 'post';
-  //        this.intiFollowVal = '0';
-  //        this.intiFollowChangeVal = 1;
-  //        // console.log(this.intiFollowVal,'修改');
-  //      } else {
-  //        console.log('已关注');
-  //        attri.from_user_id = this.userId;
-  //        attri.to_user_id = this.personUserId;
-  //        methodType = 'delete';
-  //        // this.intiFollowVal = intiFollowVal;
-  //        this.intiFollowChangeVal = intiFollowVal;
-  //      }
-  //      console.log(attri,'33333333-----');
-  //      this.followRequest(methodType,attri,intiFollowVal,this.intiFollowChangeVal);
-  //    },
+    //管理关注操作
+    followCli (intiFollowVal) {
+       console.log('参数',intiFollowVal);
+       let attri = new Object();
+       let methodType = '';
+       if (intiFollowVal == '1' || intiFollowVal == '2') {
+         attri.to_user_id = this.personUserId;
+         methodType = 'delete';
+         this.oldFollow = intiFollowVal;
+       } else {
+         attri.to_user_id = this.personUserId;
+         methodType = 'post';
+         // this.oldFollow =  '0';
+       }
+       this.followRequest(methodType,attri,intiFollowVal);
+     },
 
-  //    //关注，取消关注
-  //    followRequest(methodType,attri,intiFollowVal,intiFollowChangeVal){
-  //      console.log(intiFollowVal,'调接口时',intiFollowChangeVal);
-  //     this.appFetch({
-  //         url: 'follow',
-  //         method: methodType,
-  //         data: {
-  //           "data": {
-  //             "type": "user_follow",
-  //             "attributes": attri
-  //           },
+     //关注，取消关注
+     followRequest(methodType,attri,intiFollowVal){
+      this.appFetch({
+          url: 'follow',
+          method: methodType,
+          data: {
+            "data": {
+              "type": "user_follow",
+              "attributes": attri
+            },
 
-  //         }
-  //       }).then((res) => {
-  //         console.log(res,'987654');
-  //         if (res.errors){
-  //           this.$toast.fail(res.errors[0].code);
-  //           throw new Error(res.error)
-  //         } else {
-  //           if(methodType == 'delete'){
-  //             this.followFlag = "关注TA";
-  //             this.intiFollowVal = "0";
-  //           } else {
-  //             if(intiFollowVal == '2') {
-  //               this.followFlag = "相互关注";
-  //               // this.intiFollowVal = "0";
-  //             } else if(intiFollowVal == '1') {
-  //               this.followFlag = "已关注";
-  //               // this.intiFollowVal = "1";
-  //             }
-  //           }
-  //         }
-  //       })
-  //    },
-        //管理关注操作
-           followCli (intiFollowVal) {
-             console.log('参数',intiFollowVal);
-             let attri = new Object();
-             let methodType = '';
-             if (intiFollowVal == '1' || intiFollowVal == '2') {
-               attri.to_user_id = this.personUserId;
-               methodType = 'delete';
-               this.oldFollow = intiFollowVal;
-             } else {
-               attri.to_user_id = this.personUserId;
-               methodType = 'post';
-               // this.oldFollow =  intiFollowVal;
-             }
-             this.followRequest(methodType,attri,intiFollowVal);
-           },
-
-           //关注，取消关注
-           followRequest(methodType,attri,intiFollowVal){
-            this.appFetch({
-                url: 'follow',
-                method: methodType,
-                data: {
-                  "data": {
-                    "type": "user_follow",
-                    "attributes": attri
-                  },
-
-                }
-              }).then((res) => {
-                // console.log(res,'987654','---------------',intiFollowVal);
-                if (res.errors){
-                  this.$toast.fail(res.errors[0].code);
-                  throw new Error(res.error)
-                } else {
-                  if(methodType == 'delete'){
-                    this.intiFollowVal = '0';
-                  } else {
-                    if(this.oldFollow == '1') {
-                      this.intiFollowVal = '1';
-                    } else {
-                      this.intiFollowVal = '2';
-                    }
-                    // console.log('post',this.oldFollow);
-                    // this.intiFollowVal = intiFollowVal;
-                  }
-                }
-              })
-           },
+          }
+        }).then((res) => {
+          // console.log(res,'987654','---------------',intiFollowVal);
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            console.log(this.oldFollow,'旧值');
+            if(methodType == 'delete'){
+              this.intiFollowVal = '0';
+            } else {
+              if(this.oldFollow == '1' || this.oldFollow == '0') {
+                this.intiFollowVal = '1';
+              } else {
+                this.intiFollowVal = '2';
+              }
+              // console.log('post',this.oldFollow);
+              // this.intiFollowVal = intiFollowVal;
+            }
+          }
+        })
+    },
     backUrl () {
       // 返回上一级
       window.history.go(-1)

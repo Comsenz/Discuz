@@ -2,7 +2,7 @@
     <div class="modify-data-box">
       <ModifyHeader title="我的资料"></ModifyHeader>
       <main class="modify-data-main content">
-        <div class="modify-data-avatar m-site-cell-access">
+        <div class="modify-data-avatar">
           <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
           <div class="modify-data-avatar-title m-site-cell-access-bd">
             <p class="modify-data-avatar-title-img">头像</p>
@@ -28,8 +28,7 @@
 
 </style>
 <script>
-// import '../../../scss/m_site/myInfo/myInfo.scss';
-
+import  '../../../defaultLess/m_site/common/common.less';
 import '../../../defaultLess/m_site/modules/myInfo.less';
 import modifyDataCon from '../../../controllers/m_site/myInfo/modifyDataCon';
 export default {
