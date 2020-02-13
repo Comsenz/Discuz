@@ -60,7 +60,7 @@ class PostSerializer extends AbstractSerializer
         ];
 
         // 判断是否有点评数据
-        if (empty($model->commentPosts)) {
+        if (!empty($model->commentPosts)) {
             $attributes['commentPosts'] = $model->commentPosts;
         }
 
