@@ -50,6 +50,7 @@ class UserValidator extends AbstractValidator
                 'unique:users'
             ],
             'password' => 'required|max:50' . $str,
+            'pay_password' => 'sometimes|required|confirmed|digits:6',
             'groupId' => 'required',
             'identity' => [
                 'required',

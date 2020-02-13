@@ -70,6 +70,7 @@ class UpdateUser
 
         $attributes = Arr::get($this->data, 'data.attributes');
 
+        // 修改登录密码
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
             if ($isSelf) {
                 $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
@@ -82,6 +83,16 @@ class UpdateUser
             }
             $user->changePassword($newPassword);
             $validator['password'] = $newPassword;
+        }
+
+        // 初始化支付密码
+        if ($payPassword = Arr::get($attributes, 'payPassword')) {
+            if ($isSelf && empty($this->actor->pay_password)) {
+                $user->changePayPassword($payPassword);
+
+                $validator['pay_password'] = $payPassword;
+                $validator['pay_password_confirmation'] = Arr::get($attributes, 'pay_password_confirmation');
+            }
         }
 
         if (Arr::has($attributes, 'mobile')) {

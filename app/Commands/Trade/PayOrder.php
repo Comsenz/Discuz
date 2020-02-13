@@ -89,27 +89,35 @@ class PayOrder
      * @throws TradeErrorException
      * @throws ValidationException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Exception
      */
     public function handle(Validator $validator, SettingsRepository $setting, UrlGenerator $url)
     {
-        // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'trade.pay.order');
+
         $this->setting = $setting;
         $this->url     = $url;
-        // 验证参数
+
+        // 使用钱包支付时，检查是否设置支付密码
+        if (
+            $this->data->get('payment_type') == GatewayConfig::WALLET_PAY
+            && empty($this->actor->pay_password)
+        ) {
+            throw new \Exception('uninitialized_pay_password');
+        }
+
         $validator_info = $validator->make($this->data->toArray(), [
             'payment_type' => 'required',
             'pay_password' => [
                 'sometimes',
                 'required_if:payment_type,20',
                 function ($attribute, $value, $fail) {
-                    // 使用用户钱包支付时，检查密码
-                    if ($this->data->get('payment_type') == GatewayConfig::WALLET_PAY) {
-                        if (empty($this->actor->pay_password)) {
-                            $fail('未设置支付密码');
-                        } elseif (! $this->actor->checkWalletPayPassword($value)) {
-                            $fail('支付密码错误');
-                        }
+                    // 使用钱包支付时验证密码
+                    if (
+                        $this->data->get('payment_type') == GatewayConfig::WALLET_PAY
+                        && ! $this->actor->checkWalletPayPassword($value)
+                    ) {
+                        $fail('支付密码错误');
                     }
                 }
             ],
