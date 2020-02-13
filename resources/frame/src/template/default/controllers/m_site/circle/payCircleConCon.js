@@ -88,11 +88,10 @@ export default {
 
     myThread(initStatus = false){
      this.appFetch({
-        url:'threads',
+        url:'shareThreads',
         method:'get',
         splice:'/'+this.themeId,
         data:{
-          include: ['user', 'posts', 'posts.user', 'firstPost'],
         }
       }).then(res=>{
         if (res.errors){

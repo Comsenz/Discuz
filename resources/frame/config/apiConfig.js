@@ -24,6 +24,7 @@ module.exports = {
   'emojis':'/api/emoji',                    //表情接口
   'attachment':'/api/attachments',          //上传附件、图片
   'threads':'/api/threads',                 //主题
+	'shareThreads':'/api/threads/share',
   'notice':'/api/notification',             //通知列表(回复,点赞,打赏)
   'wallet':'/api/wallet/user/',             //查看用户钱包
   'reflect':'/api/wallet/cash' ,            //提现记录列表
