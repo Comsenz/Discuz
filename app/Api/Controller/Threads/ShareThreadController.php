@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Models\Post;
+use App\Models\Thread;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,7 +40,7 @@ class ShareThreadController extends ResourceThreadController
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $include = $this->extractInclude($request);
 
-        $thread = $this->thread->findOrFail($threadId);
+        $thread = Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->findOrFail($threadId);
 
         $thread->loadMissing($include);
 
