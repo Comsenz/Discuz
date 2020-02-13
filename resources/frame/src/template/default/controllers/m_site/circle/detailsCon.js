@@ -4,6 +4,7 @@
 import appConfig from "../../../../../../../frame/config/appConfig";
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
+import filters from '../../../../../common/filters';
 import {ImagePreview} from "vant";
 export default {
   data: function () {
@@ -388,6 +389,29 @@ export default {
     onChangeImgPreview() {
       this.index = index;
     },
+    cutString(str, len) {
+       //length属性读出来的汉字长度为1
+       if(str.length*2 <= len) {
+         return str;
+       }
+       var strlen = 0;
+       var s = "";
+       for(var i = 0;i < str.length; i++) {
+         s = s + str.charAt(i);
+         if (str.charCodeAt(i) > 128) {
+           strlen = strlen + 2;
+           if(strlen >= len){
+             return s.substring(0,s.length-1) + "...";
+           }
+         } else {
+           strlen = strlen + 1;
+           if(strlen >= len){
+             return s.substring(0,s.length-2) + "...";
+           }
+         }
+       }
+       return s;
+     },
     //主题详情图片放大轮播index值监听
     // onChange(index) {
     //   this.index = index + 1;
@@ -403,8 +427,12 @@ export default {
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
-      // var brTag = /<br>/g;
+      var reTag2 = /(<\/?br.*?>)/gi;
       this.themeTitle = this.themeTitle.replace(reTag,'');
+      this.themeTitle = this.themeTitle.replace(reTag2,'');
+      this.themeTitle = this.themeTitle.replace(/\s+/g,"");
+      this.themeTitle = this.cutString(this.themeTitle,40);
+      // console.log(this.themeTitle,'处理后');
       oInput.value = this.themeTitle +',' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象

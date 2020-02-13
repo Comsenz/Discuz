@@ -14,7 +14,7 @@ class CreateDialog extends Migration
     {
         $this->schema()->create('dialog', function (Blueprint $table) {
             $table->bigIncrements('id')->comment('自增ID');
-            $table->unsignedBigInteger('dialog_message_id')->comment('最新消息ID');
+            $table->unsignedBigInteger('dialog_message_id')->default(0)->comment('最新消息ID');
             $table->unsignedBigInteger('sender_user_id')->comment('发送人UID');
             $table->unsignedBigInteger('recipient_user_id')->comment('收信人UID');
             $table->dateTime('updated_at')->comment('更新时间');

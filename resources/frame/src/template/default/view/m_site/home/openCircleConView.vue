@@ -149,6 +149,8 @@
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 // import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "detailsView",
     components:{
