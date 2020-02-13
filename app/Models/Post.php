@@ -335,7 +335,9 @@ class Post extends Model
      */
     public function likedUsers()
     {
-        return $this->belongsToMany(User::class)->withPivot('created_at');
+        return $this->belongsToMany(User::class)
+            ->orderBy('post_user.created_at', 'desc')
+            ->withPivot('created_at');
     }
 
     /**

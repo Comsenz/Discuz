@@ -63,7 +63,7 @@ class ListFavoritesController extends ListThreadsController
             $threads = $this->loadLastThreePosts($threads);
         }
 
-        // 特殊关联：喜欢的人
+        // 特殊关联：点赞的人
         if (in_array('firstPost.likedUsers', $specialLoad)) {
             $likedLimit = Arr::get($filter, 'likedLimit', 10);
             $threads = $this->loadLikedUsers($threads, $likedLimit);
