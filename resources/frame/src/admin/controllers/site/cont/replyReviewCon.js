@@ -294,11 +294,7 @@ export default {
     editClick(id,replyId){
       console.log(id);
       let routeData = this.$router.resolve({
-        name: 'reply-to-topic',
-        query: {
-          themeId: id,
-          replyId:replyId
-        }
+        path: `/reply-to-topic/${id}/${replyId}`
       });
       window.open(routeData.href, '_blank');
     },
