@@ -177,7 +177,7 @@ return [
         'available'             => '可用的',
         'size'                  => '大小',
 
-        // 新增
+        // stop words
         'ugc'                   => '用户内容',
         'find'                  => '敏感词',
         'replacement'           => '替换词',
@@ -191,6 +191,8 @@ return [
         'cash_sum_limit'        => '每日提现总金额上限',
 
         // user
-        'groupId' => '用户组',
+        'pay_password'          => '支付密码',
+        'pay_password_confirmation' => '支付密码',
+        'groupId'               => '用户组',
     ],
 ];

@@ -17,17 +17,35 @@ use Illuminate\Support\Arr;
 
 class UpdateUserController extends AbstractResourceController
 {
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = UserProfileSerializer::class;
 
+    /**
+     * @var Dispatcher
+     */
     protected $bus;
 
+    /**
+     * @param Dispatcher $bus
+     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->bus->dispatch(new UpdateUser(Arr::get($request->getQueryParams(), 'id'), $request->getParsedBody(), $request->getAttribute('actor')));
+        return $this->bus->dispatch(
+            new UpdateUser(
+                Arr::get($request->getQueryParams(), 'id'),
+                $request->getParsedBody(),
+                $request->getAttribute('actor')
+            )
+        );
     }
 }
