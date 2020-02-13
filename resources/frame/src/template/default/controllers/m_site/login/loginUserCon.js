@@ -84,7 +84,15 @@ export default {
               this.$toast.fail(errorInfo[0].errorDetail);
             } else {
               if (res.readdata._data.paid) {
-                this.$router.push({path: '/'})
+                let beforeVisiting = browserDb.getSItem('beforeVisiting');
+                console.log(beforeVisiting);
+
+                if (beforeVisiting) {
+                  this.$router.push({path: beforeVisiting})
+                } else {
+                  this.$router.push({path: '/'})
+                }
+
               } else {
                 if (this.siteMode === 'pay') {
                   this.$router.push({path: 'pay-circle-login'});

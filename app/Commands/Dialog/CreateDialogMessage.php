@@ -7,12 +7,14 @@
 
 namespace App\Commands\Dialog;
 
+use App\Censor\Censor;
 use App\Models\DialogMessage;
 use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Repositories\DialogRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class CreateDialogMessage
 {
@@ -41,12 +43,21 @@ class CreateDialogMessage
         $this->attributes = $attributes;
     }
 
-    public function handle(DialogMessage $dialogMessage, UserRepository $user, Dispatcher $events)
+    public function handle(DialogRepository $dialog, DialogMessage $dialogMessage, Dispatcher $events, Censor $censor)
     {
         $this->events = $events;
 
         $this->assertCan($this->actor, 'create', $dialogMessage);
 
+        $dialog_id = Arr::get($this->attributes, 'dialog_id');
+
+        $message_text = trim($censor->checkText(Arr::get($this->attributes, 'message_text')));
+
+        $dialog->findOrFail($dialog_id);
+
+        $dialogMessage->user_id      = $this->actor->id;
+        $dialogMessage->dialog_id    = $dialog_id;
+        $dialogMessage->message_text = $message_text;
 
 
 

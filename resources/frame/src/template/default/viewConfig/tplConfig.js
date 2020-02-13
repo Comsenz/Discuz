@@ -536,7 +536,6 @@ export default {
     'retrieve-pwd',
     'retrieve-pwd',
     'pay-the-fee',
-    'pay-circle-con/:themeId/:groupId',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId',
@@ -583,9 +582,13 @@ export default {
   /*
   * 获取用户第一次访问页面，登录后跳转回来
   * */
-  if (!browserDb.getSItem('beforeVisiting')){
-    browserDb.setLItem('beforeVisiting',to.path);
-  }
+  /*console.log(form.name);
+  if(form.name){
+    if (!browserDb.getSItem('beforeVisiting')){
+      browserDb.setSItem('beforeVisiting',to.path);
+    }
+  }*/
+
 
   /*
   * 获取tokenId

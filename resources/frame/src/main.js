@@ -68,9 +68,9 @@ const appRouter = RConfig.init();
 
 const keepAliveUrl = ['circle'];
 
-const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow'];
+// const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId'];
+const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId'];
 
 
 const App = new Vue({
@@ -89,16 +89,16 @@ const App = new Vue({
       console.log(from.name);
       console.log(to.name);
 
-      if (noKeepAliveUrl.includes(from.name)) {
+      /*if (noKeepAliveUrl.includes(from.name)) {
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
       } else {
         this.keepAliveStatus = false;
-      }
+      }*/
 
 
-      /*if (!noKeepAliveUrl2.includes(from.name)) {
+      if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         console.log(111111111);
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
@@ -107,7 +107,7 @@ const App = new Vue({
       } else {
         console.log(333333333333);
         this.keepAliveStatus = false;
-      }*/
+      }
 
 
 
