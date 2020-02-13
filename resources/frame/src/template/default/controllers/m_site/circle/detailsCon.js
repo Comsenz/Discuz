@@ -453,6 +453,7 @@ export default {
     },
     //跳转到登录页
     loginJump: function () {
+      browserDb.setSItem('beforeVisiting',this.$route.path);
       this.$router.push({
         path: '/login-user'
       });

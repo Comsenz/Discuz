@@ -104,8 +104,8 @@ export default {
   },
   created(){
     this.userId = browserDb.getLItem('tokenId');
-    console.log(this.userId,'登录用户id');
-    console.log(this.personUserId,'用户主页获取到的参数id');
+    // console.log(this.userId,'登录用户id');
+    // console.log(this.personUserId,'用户主页获取到的参数id');
     if(this.userId == this.personUserId ){
       this.equalId = true;
     } else {
@@ -167,7 +167,7 @@ export default {
         // console.log(res);
         this.categories = res.readdata;
         this.firstCategoriesId = res.readdata[0]._data.id;
-        console.log(this.firstCategoriesId);
+        // console.log(this.firstCategoriesId);
         this.$emit("update", this.firstCategoriesId);
         // console.log('3456');
       })
@@ -182,14 +182,12 @@ export default {
         data: {
         }
       }).then((res) => {
-        console.log(res.readdata._data.follow,'1234——————————————');
+        // console.log(res.readdata._data.follow,'1234——————————————');
         this.followDet = res.readdata;
-        console.log(this.followDet,'结果数据·······');
+        // console.log(this.followDet,'结果数据·······');
         if(res.readdata._data.follow == '1'){
-          console.log('已关注');
           this.followFlag = '已关注';
         } else if(res.readdata._data.follow == '0'){
-          console.log('关注TA');
           this.followFlag = '关注TA';
         } else {
           this.followFlag = '相互关注';
@@ -199,7 +197,7 @@ export default {
     },
     //初始化请求用信息
     loadUserInfo(){
-      console.log(this.personUserId,'访问Id');
+      // console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',
         method:'get',
@@ -207,7 +205,7 @@ export default {
         data: {
         }
       }).then((res) => {
-        console.log(res,'00000000000&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&——————————————————————————————————————————');
+        // console.log(res,'000000000—————');
 
         if(!res.data.attributes.typeUnreadNotifications.liked) {
           res.data.attributes.typeUnreadNotifications.liked = 0;
@@ -222,25 +220,32 @@ export default {
           res.data.attributes.typeUnreadNotifications.system = 0;
         }
         this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
-        console.log(res.data.attributes.typeUnreadNotifications.liked,res.data.attributes.typeUnreadNotifications.replied,res.data.attributes.typeUnreadNotifications.rewarded,res.data.attributes.typeUnreadNotifications.system,'和');
       })
     },
 
     //管理关注操作
     followCli (intiFollowVal) {
-       console.log('参数',intiFollowVal);
-       let attri = new Object();
-       let methodType = '';
-       if (intiFollowVal == '1' || intiFollowVal == '2') {
-         attri.to_user_id = this.personUserId;
-         methodType = 'delete';
-         this.oldFollow = intiFollowVal;
-       } else {
-         attri.to_user_id = this.personUserId;
-         methodType = 'post';
-         // this.oldFollow =  '0';
-       }
-       this.followRequest(methodType,attri,intiFollowVal);
+      var token = browserDb.getLItem('Authorization');
+      if(!token){
+        browserDb.setSItem('beforeVisiting',this.$route.path);
+        this.$router.push({
+          path: '/login-user'
+        });
+      } else {
+        // console.log('参数',intiFollowVal);
+        let attri = new Object();
+        let methodType = '';
+        if (intiFollowVal == '1' || intiFollowVal == '2') {
+          attri.to_user_id = this.personUserId;
+          methodType = 'delete';
+          this.oldFollow = intiFollowVal;
+        } else {
+          attri.to_user_id = this.personUserId;
+          methodType = 'post';
+          // this.oldFollow =  '0';
+        }
+        this.followRequest(methodType,attri,intiFollowVal);
+      }
      },
 
      //关注，取消关注
@@ -261,7 +266,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            console.log(this.oldFollow,'旧值');
+            // console.log(this.oldFollow,'旧值');
             if(methodType == 'delete'){
               this.intiFollowVal = '0';
             } else {
@@ -329,26 +334,13 @@ export default {
     window.history.go(-1)
     },
     LogOut(){
-      console.log('测试');
+      // console.log('测试');
     },
-    // bindSidebar () {
-   //  // 是否显示侧边栏
-    //   this.showSidebar = !this.showSidebar;
-    //   this.showMask =  !this.showMask;
-    // },
-    // hideSidebar(){
-    //   this.showSidebar = false;
-    //   this.showMask =  false;
-    // },
     bindEvent (typeName) {
       if (typeName == 1) {
         this.LogOut()
       }
     },
-    // LogOut () {
-    //   console.log('测试');
-    // }
-
   },
 
   mounted: function() {

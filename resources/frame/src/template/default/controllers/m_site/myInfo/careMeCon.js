@@ -89,6 +89,7 @@ export default {
 
     //管理关注操作
        followSwitch(intiFollowVal,personUserId,index) {
+         browserDb.setSItem('beforeVisiting',this.$route.path);
          console.log('参数',typeof intiFollowVal,intiFollowVal);
          let attri = new Object();
          let methodType = '';
