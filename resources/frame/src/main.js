@@ -70,7 +70,7 @@ const keepAliveUrl = ['circle'];
 
 // const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId'];
+const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId'];
 
 
 const App = new Vue({
