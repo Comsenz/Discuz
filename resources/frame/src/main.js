@@ -51,7 +51,7 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
-Vue.prototype.$echarts = Echarts; //  
+Vue.prototype.$echarts = Echarts; //
 
 
 //实例化根目录
@@ -145,6 +145,6 @@ const App = new Vue({
 
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats">统计代码</div></div>'
 }).$mount('#app');
 window.app = App;
