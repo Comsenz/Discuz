@@ -191,7 +191,7 @@
    
     }
   }
-  .financial-profit{
+  .financial-profit,.financial-order{
     height:560PX;
     background: green;
     .financial-profit-title{
@@ -209,6 +209,9 @@
       background: pink;
       margin:17px 15px 21PX 14PX;
     }
+  }
+  .financial-order{
+    margin-top:20PX;
   }
 
 }
