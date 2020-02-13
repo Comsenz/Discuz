@@ -63,6 +63,8 @@ module.exports = {
 
   'access':'/api/refresh-token',            //刷新token
   'follow':'/api/follow',                   //关注
+  'realName':'/api/users/real',             //实名认证
+
 
   /*后台*/
   'siteinfo':'/api/siteinfo',               //首页-系统信息
