@@ -50,6 +50,8 @@ export default {
         followFlag:'',
         intiFollowVal:'0',
         noticeSum: 0,
+        intiFollowChangeVal: '0',
+        oldFollow: false
 	  }
   },
 	props: {
@@ -138,8 +140,8 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res.readdata._data.other);
-        console.log('-------------------');
+        // console.log(res.readdata._data.other);
+        // console.log('-------------------');
         this.siteInfo = res.readdata;
         if(res.readdata._data.set_site.site_logo){
           this.logo = res.readdata._data.set_site.site_logo;
@@ -155,13 +157,13 @@ export default {
           include: [],
         }
       }).then((res) => {
-        console.log('2222');
-        console.log(res);
+        // console.log('2222');
+        // console.log(res);
         this.categories = res.readdata;
         this.firstCategoriesId = res.readdata[0]._data.id;
         console.log(this.firstCategoriesId);
         this.$emit("update", this.firstCategoriesId);
-        console.log('3456');
+        // console.log('3456');
       })
     },
 
@@ -174,9 +176,7 @@ export default {
         data: {
         }
       }).then((res) => {
-        console.log(res.readdata._data.follow,'00000000000&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&——————————————————————————————————————————');
-
-
+        console.log(res.readdata._data.follow,'1234——————————————');
         this.followDet = res.readdata;
         console.log(this.followDet,'结果数据·······');
         if(res.readdata._data.follow == '1'){
@@ -186,8 +186,9 @@ export default {
           console.log('关注TA');
           this.followFlag = '关注TA';
         } else {
-
+          this.followFlag = '相互关注';
         }
+        this.intiFollowVal = res.readdata._data.follow;
       })
     },
     //初始化请求用信息
@@ -219,35 +220,25 @@ export default {
       })
     },
 
-     //管理操作
-     followCli(intiFollowVal) {
+    //管理关注操作
+    followCli (intiFollowVal) {
        console.log('参数',intiFollowVal);
        let attri = new Object();
        let methodType = '';
-       if (intiFollowVal == '0') {
-         console.log('未关注');
-         attri.to_user_id = this.personUserId;
-         methodType = 'post';
-         this.intiFollowVal = '1';
-         console.log(this.intiFollowVal,'修改');
-       } else {
-         console.log('已关注');
-         // attri: {
-         //   from_user_id = this.userId,
-         //   to_user_id = this.personUserId
-         // }
-         attri.from_user_id = this.userId;
+       if (intiFollowVal == '1' || intiFollowVal == '2') {
          attri.to_user_id = this.personUserId;
          methodType = 'delete';
-         this.intiFollowVal = '0';
-
+         this.oldFollow = intiFollowVal;
+       } else {
+         attri.to_user_id = this.personUserId;
+         methodType = 'post';
+         // this.oldFollow =  '0';
        }
-       console.log(attri,'33333333-----');
-       this.followRequest(methodType,attri);
+       this.followRequest(methodType,attri,intiFollowVal);
      },
 
      //关注，取消关注
-     followRequest(methodType,attri){
+     followRequest(methodType,attri,intiFollowVal){
       this.appFetch({
           url: 'follow',
           method: methodType,
@@ -259,20 +250,26 @@ export default {
 
           }
         }).then((res) => {
-          console.log(res,'987654');
+          // console.log(res,'987654','---------------',intiFollowVal);
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
+            console.log(this.oldFollow,'旧值');
             if(methodType == 'delete'){
-              this.followFlag = "关注TA";
+              this.intiFollowVal = '0';
             } else {
-              this.followFlag = "已关注";
+              if(this.oldFollow == '1' || this.oldFollow == '0') {
+                this.intiFollowVal = '1';
+              } else {
+                this.intiFollowVal = '2';
+              }
+              // console.log('post',this.oldFollow);
+              // this.intiFollowVal = intiFollowVal;
             }
           }
         })
-     },
-
+    },
     backUrl () {
       // 返回上一级
       window.history.go(-1)

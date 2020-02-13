@@ -120,6 +120,7 @@ $route->delete('/categories/{id}', 'categories.delete', ApiController\Category\D
 
 $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
+$route->get('/threads/share/{id}', 'threads.share', ApiController\Threads\ShareThreadController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/batch', 'threads.batchUpdate', ApiController\Threads\BatchUpdateThreadsController::class);
@@ -135,6 +136,7 @@ $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteTh
 
 $route->get('/likes', 'likes', ApiController\Posts\ListLikesController::class);
 $route->get('/posts', 'posts.index', ApiController\Posts\ListPostsController::class);
+$route->get('/posts/{id}', 'posts.resource', ApiController\Posts\ResourcePostController::class);
 $route->post('/posts', 'posts.create', ApiController\Posts\CreatePostController::class);
 $route->patch('/posts/batch', 'posts.batchUpdate', ApiController\Posts\BatchUpdatePostsController::class);
 $route->patch('/posts/{id}', 'posts.update', ApiController\Posts\UpdatePostController::class);

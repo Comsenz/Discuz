@@ -359,3 +359,6 @@ alter table `users` add `register_reason` varchar(50)  not null  default '' comm
 
 -- 2020-02-06 13:12:29 支付密码
 ALTER TABLE `users` ADD `pay_password` VARCHAR(100)  NOT NULL  DEFAULT ''  COMMENT '支付密码'  AFTER `password`;
+
+-- 2020-02-11 16:00:29 添加字段 is_comment 是否是回复回帖的内容
+alter table `posts` add `is_comment` tinyint(3) unsigned not null  default 0 comment '是否是回复回帖的内容'  after `is_first`;

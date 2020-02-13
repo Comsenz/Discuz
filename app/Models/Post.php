@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon $deleted_at
  * @property int $deleted_user_id
  * @property bool $is_first
+ * @property bool $is_comment
  * @property bool $is_approved
  * @property Thread $thread
  * @property User $user
@@ -49,6 +50,8 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    const SUMMARY_LENGTH = 50;
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
@@ -60,6 +63,7 @@ class Post extends Model
      */
     protected $casts = [
         'is_first' => 'boolean',
+        'is_comment' => 'boolean',
     ];
 
     /**
@@ -169,9 +173,10 @@ class Post extends Model
      * @param int $replyPostId
      * @param int $replyUserId
      * @param int $isFirst
+     * @param int $isComment
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst = 0)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment)
     {
         $post = new static;
 
@@ -183,6 +188,7 @@ class Post extends Model
         $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
+        $post->is_comment = $isComment;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
@@ -331,7 +337,9 @@ class Post extends Model
      */
     public function likedUsers()
     {
-        return $this->belongsToMany(User::class)->withPivot('created_at');
+        return $this->belongsToMany(User::class)
+            ->orderBy('post_user.created_at', 'desc')
+            ->withPivot('created_at');
     }
 
     /**

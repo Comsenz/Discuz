@@ -10,6 +10,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Models\Group;
+use App\Models\User;
 use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -70,7 +71,7 @@ class ProfileController extends AbstractResourceController
         $user->load($include);
 
         // 判断用户是否禁用
-        if ($user->status == 1) {
+        if ($user->status == User::enumStatus('ban')) {
             $user->load(['latelyLog' => function ($query) {
                 $query->select()->where('action', 'ban');
             }]);

@@ -41,22 +41,34 @@ class PostSerializer extends AbstractSerializer
     {
         $gate = $this->gate->forUser($this->actor);
 
+        $canEdit = $gate->allows('edit', $model);
+
         $attributes = [
             'replyUserId'       => $model->reply_user_id,
             'content'           => $model->content,
             'contentHtml'       => $model->formatContent(),
-            'ip'                => $model->ip,
             'replyCount'        => $model->reply_count,
             'likeCount'         => $model->like_count,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isFirst'           => (bool) $model->is_first,
             'isApproved'        => (int) $model->is_approved,
-            'canEdit'           => $gate->allows('edit', $model),
+            'canEdit'           => $canEdit,
             'canApprove'        => $gate->allows('approve', $model),
             'canDelete'         => $gate->allows('delete', $model),
             'canHide'           => $gate->allows('hide', $model),
         ];
+
+        // 判断是否有点评数据
+        if (empty($model->commentPosts)) {
+            $attributes['commentPosts'] = $model->commentPosts;
+        }
+
+        if ($canEdit || $this->actor->id === $model->user_id) {
+            $attributes += [
+                'ip'            => $model->ip,
+            ];
+        }
 
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
@@ -84,6 +96,15 @@ class PostSerializer extends AbstractSerializer
     protected function replyUser($post)
     {
         return $this->hasOne($post, UserSerializer::class);
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    protected function commentPosts($post)
+    {
+        return $this->hasMany($post, PostSerializer::class);
     }
 
     /**
