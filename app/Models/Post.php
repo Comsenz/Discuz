@@ -50,6 +50,8 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    const SUMMARY_LENGTH = 50;
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
@@ -335,7 +337,9 @@ class Post extends Model
      */
     public function likedUsers()
     {
-        return $this->belongsToMany(User::class)->withPivot('created_at');
+        return $this->belongsToMany(User::class)
+            ->orderBy('post_user.created_at', 'desc')
+            ->withPivot('created_at');
     }
 
     /**
