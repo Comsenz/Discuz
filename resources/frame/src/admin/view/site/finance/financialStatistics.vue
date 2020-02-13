@@ -18,7 +18,7 @@
     </div>
 
 </div>
-<div class="financial-profit">
+<div class="financial-order">
     <div class="financial-profit-title">
         <span class="iconfont iconchongzhi"></span>
         <div class="financial-profit-titles">订单统计</div>  

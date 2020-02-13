@@ -18,6 +18,7 @@ export default {
       wechatNickname:'',
       tipWx:'',
       isWeixin:'',
+      realName:'',//实名证明
       
     }
   },
@@ -47,6 +48,9 @@ export default {
         case 'bind-new-phone':
           this.$router.push('/bind-new-phone'); //绑定新手机号
           break;
+        case 'bind-new-phone':
+          this.$router.push('/real-name'); //实名认证
+          break;
         default:
           this.$router.push('/');
       }
@@ -74,6 +78,11 @@ export default {
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
         }else{
           this.wechatNickname = false
+        }
+        if(res.readdata.realName !== ''){
+          this.realName = res.readdata._data.realName      //实名认证
+        }else{
+          this.realName = false
         }
         // this.modifyData()
       }
@@ -160,7 +169,7 @@ export default {
           window.location.href = res.readdata._data.location
           }
         })
-      }
+      },
      
   }
 }

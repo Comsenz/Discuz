@@ -340,6 +340,14 @@ export default {
           title:"修改密码"
         }
       },
+      'real-name':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/realNameView'],resolve)
+        },
+        metaInfo:{
+          title:"实名认证"
+        }
+      },
       'withdraw':{
         comLoad:function (resolve) {
           require(['../view/m_site/myInfo/withdrawView'],resolve)
