@@ -67,6 +67,7 @@ export default {
 					this.searchUserList = [];
 				}
 				console.log(data,'搜索')
+				console.log(data.readdata[0].groups[0]._data.name)
 				this.loading = false;
 				this.searchUserList = this.searchUserList.concat(data.readdata);
 				this.finished = data.readdata.length < this.pageLimit;

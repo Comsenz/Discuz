@@ -15,10 +15,11 @@ export default {
       stateTitle:'点赞了我',
       pageIndex: 1,
       pageLimit: 20,
-      loading: false,
-      finished: false,
-      offset: 100,
-      isLoading: false,
+      offset:100,
+      loading: false, //是否处于加载状态
+      finished: false, //是否已加载完所有数据
+      // offset: 100,
+      isLoading: false,//是否处于下拉刷新状态
     }
   },
   components:{
@@ -92,9 +93,10 @@ export default {
     },
     onRefresh(){
         this.pageIndex = 1
+        // this.likeList=[]
         this.myLikeList(true).then((res)=>{
           this.$toast('刷新成功');
-          this.isLoading = false;
+          this.isLoading =false;
           this.finished = false;
         }).catch((err)=>{
           this.$toast('刷新失败');

@@ -133,6 +133,10 @@ class ForumSettingField
             'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
             'qcloud_sms_template_id' => $this->settings->get('qcloud_sms_template_id', 'qcloud'),
             'qcloud_sms_sign' => $this->settings->get('qcloud_sms_sign', 'qcloud'),
+            'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
+            'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
+            'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
+            'qcloud_cos' => $this->settings->get('qcloud_cos', 'qcloud'),
         ];
     }
 

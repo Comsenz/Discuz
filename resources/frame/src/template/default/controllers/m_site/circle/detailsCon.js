@@ -779,7 +779,7 @@ export default {
                 this.themeIsLiked = false;
               } else {
                 // console.log('未点赞时，点击点赞');
-                this.likedUsers.push({_data:{username:this.currentUserName,id:this.userId}});
+                this.likedUsers.unshift({_data:{username:this.currentUserName,id:this.userId}});
                 this.themeCon.firstPost._data.isLiked = true;
                 this.themeIsLiked = true;
                 console.log(this.themeCon.firstPost._data.isLiked);

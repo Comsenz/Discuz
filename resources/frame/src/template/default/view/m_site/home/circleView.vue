@@ -10,7 +10,7 @@
     @load="onLoad"
     :immediate-check="false"
     >
-	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+	  	<van-pull-refresh v-model="isLoading" @refresh="onRefresh" style="overflow:visible">
 	    <Header :searchIconShow="searchStatus" :perDetShow="true" :logoShow="true" :menuIconShow="menuStatus" :navShow="true" :invitePerDet="false" :headFixed="true" @categoriesChoice="categoriesChoice" v-on:update="receive"></Header>
 	    <div class="padB"></div>
       <div class="gap"></div>

@@ -10,6 +10,7 @@ namespace App\Commands\Users;
 use App\Censor\Censor;
 use App\Events\Users\Registered;
 use App\Events\Users\Saving;
+use App\Exceptions\TranslatorException;
 use App\Models\User;
 use App\Validators\UserValidator;
 use Carbon\Carbon;
@@ -64,6 +65,13 @@ class RegisterUser
 
         // 敏感词校验
         $censor->checkText(Arr::get($this->data, 'username'), 'username');
+
+        // 注册原因
+        if ($settings->get('register_validate', 'default', false)) {
+            if (!Arr::has($this->data, 'register_reason')) {
+                throw new TranslatorException('setting_fill_register_reason');
+            }
+        }
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
 
