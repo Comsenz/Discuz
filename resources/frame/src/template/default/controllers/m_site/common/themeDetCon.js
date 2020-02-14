@@ -2,6 +2,7 @@
  * 移动端主题组件控制器
  */
 import appCommonH from '../../../../../helpers/commonHelper';
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   data: function() {
       return {
@@ -28,6 +29,8 @@ export default {
          isWeixin: false,
          isPhone: false,
          viewportWidth:'',
+         currentUserName: '',
+         userId: ''
 
     }
   },
@@ -55,57 +58,17 @@ export default {
     },
   },
   created(){
+    this.userId = browserDb.getLItem('tokenId');
+    this.currentUserName = browserDb.getLItem('foregroundUser');
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadPriviewImgList();
     this.forList();
-    // console.log(this.themeList[0].user._data.avatarUrl);
-
-
-    // this.getCircle();
-
-    // let requestImage = function (url, element) {
-    //             let request = new XMLHttpRequest();
-    //             request.responseType = 'blob';
-    //             request.open('get', url, true);
-    //             request.setRequestHeader('Authorization', "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIwZjQzYjczM2M3MjYxYjRjNTk0MjA4ZjhmMDcxNThlM2E4N2JhOGM3ZTQ1YzA1YTJlMmQ5YWEzZGRlMDFhMzk1MjdiMDM5NDBmNThjOTk2YiIsImlhdCI6MTU3NzUxOTQ3NywibmJmIjoxNTc3NTE5NDc3LCJleHAiOjE1Nzc2MDU4NzcsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.N0xGIu4_NSB2NjPyutbUyC5bEDia5DoyN0v9HObjHu-J67RomngwlVsA0zFnhqJKzMB3ky85KVXFVrrmzkXAfzNOH1Jso4Zxf-O5SkHZVpZ_vgAzvUE2poaCKGnGgOR_xW9EAcJQkEJsVQqh-Y0w2VsssYAuAcQubRCHdF5PSGhBfPo8S-LTRNKrKR-5mgPJp80RfxlZJDZYo1BPHATudS0lflxXuVu8-RfiWfVDbz2NMk8sIkDkxnlSp5lIuKm6GEeZfjddcVrr1SeS-sdwjgS7mAaF3F49RgJ_MqY1NLgOwD89IVYKBy5hlCRABKtoHMvqs2iDj9wq8BUfoNpKxw");
-    //             request.onreadystatechange = e => {
-    //                 if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
-    //                     element.src = URL.createObjectURL(request.response);
-    //                     element.onload = () => {
-    //                         URL.revokeObjectURL(element.src);
-    //                     }
-    //                 }
-    //             };
-    //             request.send(null);
-    //         }
-
-    // class AuthImg extends HTMLImageElement {
-    //   constructor() {
-    //       super();
-    //       this._lastUrl = '';
-    //   }
-
-    //   static get observedAttributes() {
-    //       return ['authSrc'];
-    //   }
-
-    //   connectedCallback() {
-    //       let url = this.getAttribute('authSrc');
-    //       if (url !== this._lastUrl) {
-    //           this._lastUrl = url;
-    //           requestImage(url, this);
-    //       }
-    //       console.log('connectedCallback() is called.');
-    //   }
-    // }
 
     document.addEventListener('click',e => {
       console.log('444');
         var screen = this.$refs.screenDiv;
-        // var a1 = document.getElementById('a1');
-        // console.log(screen);
         // console.log(a1.contains(e.target));
         if(document.contains(e.target)){
           // console.log('在外');         //这句是说如果我们点击到了calss为screen以外的区域
@@ -315,11 +278,19 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          if(clickType == 2){
+          if(clickStatus){
+            this.themeList[itemIndex].firstPost.likedUsers.map((value, key, likedUsers) => {
+              value._data.id === this.userId && likedUsers.splice(key,1);
+            });
+          } else {
             //点赞
             this.likedStatus = res.readdata._data.isLiked;
             this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
+            this.themeList[itemIndex].firstPost.likedUsers.unshift({_data:{username:this.currentUserName,id:this.userId}})
           }
+          // if(clickType == 2){
+
+          // }
         }
       })
     },
