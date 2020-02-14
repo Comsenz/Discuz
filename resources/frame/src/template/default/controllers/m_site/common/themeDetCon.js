@@ -279,6 +279,8 @@ export default {
           throw new Error(res.error)
         } else {
           if(clickStatus){
+            this.likedStatus = res.readdata._data.isLiked;
+            this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
             this.themeList[itemIndex].firstPost.likedUsers.map((value, key, likedUsers) => {
               value._data.id === this.userId && likedUsers.splice(key,1);
             });
