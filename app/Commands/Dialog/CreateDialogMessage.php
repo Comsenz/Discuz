@@ -51,6 +51,7 @@ class CreateDialogMessage
 
         $dialog_id = Arr::get($this->attributes, 'dialog_id');
 
+        //敏感词检查
         $message_text = trim($censor->checkText(Arr::get($this->attributes, 'message_text')));
 
         $dialog->findOrFail($dialog_id);
@@ -59,8 +60,7 @@ class CreateDialogMessage
         $dialogMessage->dialog_id    = $dialog_id;
         $dialogMessage->message_text = $message_text;
 
-
-
+        $dialogMessage->save();
         return $dialogMessage;
     }
 }
