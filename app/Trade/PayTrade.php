@@ -14,6 +14,7 @@ use App\Trade\Config\GatewayConfig;
 use Discuz\Api\Client;
 use Endroid\QrCode\QrCode;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Facades\Log;
 use Omnipay\Omnipay;
 use Illuminate\Support\Arr;
 use App\Exceptions\TradeErrorException;
@@ -137,6 +138,7 @@ class PayTrade
             }
         } else {
             $message = $response->getData();
+            Log::debug('WeiChat Pay Response: '.$message);
             $message = isset($message['err_code_des']) ? $message['err_code_des'] : $message['return_msg'];
             throw new TradeErrorException($message, 500);
         }
