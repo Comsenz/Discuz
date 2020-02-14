@@ -40,7 +40,7 @@ export default {
       },
       {
         name: '实名认证',
-        type:'qcloud_name',
+        type:'qcloud_facdid',
         description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
         status:'',
         icon:'iconduanxin',
@@ -96,7 +96,7 @@ export default {
           } else {
             this.tableData[3].status = false
           }
-          if (res.readdata._data.qcloud.qcloud_name) {
+          if (res.readdata._data.qcloud.qcloud_facdid) {
             this.tableData[4].status = true
           } else {
             this.tableData[4].status = false
@@ -118,8 +118,8 @@ export default {
         this.changeSettings('qcloud_cms_text',status);
       }else if(type == 'qcloud_sms'){
         this.changeSettings('qcloud_sms',status);
-      }else if(type == 'qcloud_name'){
-        this.changeSettings('qcloud_name',status);
+      }else if(type == 'qcloud_facdid'){
+        this.changeSettings('qcloud_facdid',status);
       }
 
 
