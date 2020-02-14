@@ -44,9 +44,31 @@ const webpackConfig = merge(baseWebpackConfig, {
         cache: true,
         parallel: true,
         sourceMap: true,
-        terserOptions: {}
+        terserOptions: {
+          ecma: undefined,
+          warnings: false,
+          parse: {},
+          compress: {
+            drop_console: true,
+            drop_debugger: false,
+            pure_funcs: ['console.log'] // 移除console
+          }
+        },
       }),
-      new OptimizeCSSPlugin()
+      new OptimizeCSSPlugin(),
+    //   new TerserPlugin({
+    //   terserOptions: {
+    //     ecma: undefined,
+    //     warnings: false,
+    //     parse: {},
+    //     compress: {
+    //       drop_console: true,
+    //       drop_debugger: false,
+    //       pure_funcs: ['console.log'] // 移除console
+    //     }
+    //   },
+    // }),
+
     ],
     splitChunks: {
       cacheGroups: {
@@ -59,11 +81,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         // app: {
         //   name: 'app',
         //   chunks: 'async',
-        //   minChunks: 3          
-        // }        
+        //   minChunks: 3
+        // }
       }
     }
-  },  
+  },
   plugins: [
     new FilterWarningsPlugin({
         exclude: /mini-css-extract-plugin[^]*Conflicting order between:/,
