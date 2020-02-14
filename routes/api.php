@@ -207,6 +207,9 @@ $route->get('/wallet/log', 'wallet.log.list', ApiController\Wallet\ListUserWalle
 */
 
 $route->get('/notification', 'notification.list', ApiController\Notification\ListNotificationController::class);
+$route->get('/notification/tpl', 'notification.tpl.list', ApiController\Notification\ListNotificationTplController::class);
+$route->get('/notification/tpl/{id}', 'notification.tpl.show', ApiController\Notification\ResourceNotificationTplController::class);
+$route->patch('/notification/tpl/{id}', 'notification.tpl.update', ApiController\Notification\UpdateNotificationTplController::class);
 $route->get('/notification/{id}', 'notification.resource', ApiController\Notification\ResourceNotificationController::class);
 $route->delete('/notification/{id}', 'notification.delete', ApiController\Notification\DeleteNotificationController::class);
 
