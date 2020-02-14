@@ -40,4 +40,18 @@ class Dialog extends Model
      */
     protected $fillable = [];
 
+    /**
+     * @param int $sender_user_id
+     * @param int $recipient_user_id
+     * @return static
+     */
+    public static function build(int $sender_user_id, int $recipient_user_id)
+    {
+        $dialog = new static;
+
+        $dialog->sender_user_id = $sender_user_id;
+        $dialog->recipient_user_id = $recipient_user_id;
+
+        return $dialog;
+    }
 }

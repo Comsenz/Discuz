@@ -87,7 +87,15 @@ export default {
                 clearInterval(timer);
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
-                that.$router.push({path:'/'});
+
+                let beforeVisiting = webDb.getSItem('beforeVisiting');
+                console.log(beforeVisiting);
+
+                if (beforeVisiting) {
+                  this.$router.push({path: beforeVisiting})
+                } else {
+                  this.$router.push({path: '/'})
+                }
               } else {
                 clearInterval(timer);
                 toast.message = '支付失败，请重新支付！';

@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class CreateDialog
 {
@@ -47,9 +48,24 @@ class CreateDialog
 
         $this->assertCan($this->actor, 'create', $dialog);
 
+        $sender = $this->actor->id;
+        $recipients = explode(',', Arr::get($this->attributes, 'recipient_username'));
 
+        $recipientUnKnowUser = [];
+        $dialogRes = [];
+        foreach ($recipients as $recipient) {
+            $recipientUser = $user->where('username', $recipient)->first();
+            //处理错误的用户名
+            if (!$recipientUser) {
+                Arr::prepend($recipientUnKnowUser, $recipient);
+                continue;
+            }
+            $dialogCreate = $dialog::build($sender, $recipientUser->id);
+            //dialog_message_id 创建时为默认值0
+            $dialogCreate->save();
+            Arr::prepend($dialogRes, $dialogCreate);
+        }
 
-
-        return $dialog;
+        return $dialogRes;
     }
 }

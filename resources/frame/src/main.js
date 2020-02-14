@@ -51,7 +51,7 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
-Vue.prototype.$echarts = Echarts; //  
+Vue.prototype.$echarts = Echarts; //
 
 
 //实例化根目录
@@ -68,9 +68,9 @@ const appRouter = RConfig.init();
 
 const keepAliveUrl = ['circle'];
 
-const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow'];
+// const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId'];
+const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId'];
 
 
 const App = new Vue({
@@ -89,16 +89,16 @@ const App = new Vue({
       console.log(from.name);
       console.log(to.name);
 
-      if (noKeepAliveUrl.includes(from.name)) {
+      /*if (noKeepAliveUrl.includes(from.name)) {
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
       } else {
         this.keepAliveStatus = false;
-      }
+      }*/
 
 
-      /*if (!noKeepAliveUrl2.includes(from.name)) {
+      if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         console.log(111111111);
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
@@ -107,7 +107,7 @@ const App = new Vue({
       } else {
         console.log(333333333333);
         this.keepAliveStatus = false;
-      }*/
+      }
 
 
 
@@ -145,6 +145,6 @@ const App = new Vue({
 
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats">统计代码</div></div>'
 }).$mount('#app');
 window.app = App;
