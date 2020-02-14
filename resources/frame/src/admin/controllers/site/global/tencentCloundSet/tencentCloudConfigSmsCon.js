@@ -17,9 +17,6 @@ export default {
     this.tencentCloudSms()
   },
   methods:{
-    configClick(type){
-
-    },
     tencentCloudSms(){
       this.appFetch({
         url:'forum',

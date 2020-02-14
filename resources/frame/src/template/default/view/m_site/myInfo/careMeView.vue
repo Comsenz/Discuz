@@ -24,6 +24,9 @@
             </div>
           </div>
         </div>
+        <div v-show="searchUserList.length === 0 && !firstComeIn" class="nullTip whiteBg">
+          暂无关注
+        </div>
       </div>
     </div>
 </template>

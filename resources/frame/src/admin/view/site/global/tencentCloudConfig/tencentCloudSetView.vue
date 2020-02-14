@@ -36,7 +36,7 @@
           <template slot-scope="scope">
             <div v-if="scope.row.status">
               <el-button
-                v-if="scope.row.setFlag && scope.row.type !== 'img' && scope.row.type !=='text' &&scope.row.type !=='name'"
+                v-if="scope.row.setFlag && scope.row.type !== 'img' && scope.row.type !=='text' && scope.row.type !=='name' && scope.row.type !=='cos'"
                 size="mini"
                 @click="configClick(scope.row.type)">
                 配置
@@ -54,7 +54,8 @@
               v-else
               size="mini"
               @click.native.prevent="loginSetting(scope.$index,scope.row.type,'1')"
-            >开启</el-button>
+            >开启
+            </el-button>
 
           </template>
         </el-table-column>

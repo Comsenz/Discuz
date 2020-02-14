@@ -5,42 +5,58 @@ export default {
                 {
                     title:"用户总充值",
                     num:"20,187",
-                    icon:'iconchongzhi'
+                    icon:'iconchongzhi',
+                    key:'totalIncome',
+
                 },
                 {
                     title:"用户总充提现",
                     num:"20,187",
-                    icon:''
+                    icon:'',
+                    key:'totalWithdrawal',
+
                 },
                 {
                     title:"用户钱包总金额",
                     num:"20,187",
-                    icon:'iconqianbaozongjine'
+                    icon:'iconqianbaozongjine',
+                    key:'totalWallet',
+
                 },
                 {
                     title:"用户订单总数",
                     num:"20,187",
-                    icon:''
+                    icon:'',
+                    key:'orderCount',
+
                 },
                 {
                     title:"平台总盈利",
                     num:"20,187",
-                    icon:''
+                    icon:'',
+                    key:'totalProfit',
+
                 },
                 {
                     title:"提现手续费收入",
                     num:"20,187",
-                    icon:''
+                    icon:'',
+                    key:'withdrawalProfit',
+
                 },
                 {
                     title:"打赏提成收入",
                     num:"20,187",
-                    icon:'icondashangtichengshouru'
+                    icon:'icondashangtichengshouru',
+                    key:'orderRoyalty',
+
                 },
                 {
                     title:"注册加入收入",
                     num:"20,187",
-                    icon:'iconzhucejiarushouru'
+                    icon:'iconzhucejiarushouru',
+                    key:'totalRegisterProfit',
+
                 },
                 
             ],
@@ -74,21 +90,101 @@ export default {
                 }]
               },
             financialTime:['',''],   //申请时间
+            financialValue1: '', //选择时间周
+            financialValue2: '', //选择时间月
+            orderValue1:'',
+            orderValue2:'',
            
         }
+    },
+    created(){
+        this.statistic() //获取资金概况
+ 
     },
     mounted(){
         this.earningsStatistics(); //盈利统计
         this.orderStatistics();//订单统计
     },
     methods:{
+        statistic(){
+            this.appFetch({
+                url:'statistic',
+                method:'get',
+                data:{
+
+                }
+            }).then(res=>{
+                console.log(res)
+                // this.financialList = res.readdata._data;
+                var oArr = Object.entries(res.readdata._data);
+                for(var i = 0;i < this.financialList.length;i ++){
+                    for(var j = 0;j < oArr.length;j ++){
+                        if(this.financialList[i].key == oArr[j][0]){
+                            this.financialList[i].num = oArr[j][1];
+                        }
+                    }
+                   }
+            })
+        },
+        change(){
+            if (this.financialTime == null){
+              this.financialTime = ['','']
+            } else if(this.financialTime[0] !== '' && this.financialTime[1] !== ''){
+              this.financialTime[0] = this.financialTime[0] + '-00-00-00';
+              this.financialTime[1] = this.financialTime[1] + '-24-00-00';
+            }
+            // this.currentPaga = 1;
+            this.earningsStatistics();
+          },
         earningsStatistics(){  //数据请求传给图标
-            this.earningsEcharts()
+            this.appFetch({
+                url:'statisticChart',
+                method:'get',
+                data:{
+                    'filter[createdAtBegin]':this.financialTime[0],
+                    'filter[createdAtEnd]':this.financialTime[1],
+                }
+            }).then(res=>{
+                console.log(res,'盈利数据图标')
+                var date = [];
+                var total_profit = [];
+                var withdrawal_profit = [];
+                var master_portion =[];
+                var register_profit = [];
+                res.readdata.map(item=>{ 
+                    date.push(item._data.date)
+                    total_profit.push(item._data.total_profit)
+                    withdrawal_profit.push(item._data.withdrawal_profit)
+                    master_portion.push(item._data.master_portion)
+                    register_profit.push(item._data.register_profit)
+                    // console.log(this.date,'000000')
+                })
+                this.earningsEcharts(date,total_profit,withdrawal_profit,master_portion,register_profit)
+                
+            })
         },
         orderStatistics(){  //订单数据请求
-            this.orderEcharts()
+            this.appFetch({
+                url:'statisticChart',
+                method:'get',
+                data:{
+
+                }
+            }).then(res=>{
+                var date = [];
+                var order_count = [];
+                var order_amount = [];
+                res.readdata.map(item=>{
+                    date.push(item._data.date);
+                    order_count.push(item._data.order_count);
+                    order_amount.push(item._data.order_amount);
+
+                })
+                this.orderEcharts(date,order_count,order_amount)
+            })
+            
         },
-        earningsEcharts(){
+        earningsEcharts(date,total_profit,withdrawal_profit,master_portion,register_profit){
             //初始化Echarts实例
             if(!this.financialEcharts){
                 this.financialEcharts = this.$echarts.init(this.$refs.financialProfitEcharts)
@@ -107,8 +203,9 @@ export default {
                         }
                     }
                 },
+
                 legend: {
-                    data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                    data: ['平台总盈利', '提现手续费收入', '打赏提成收入', '注册加入收入']
                 },
                 grid: {
                     left: '1%',
@@ -120,7 +217,7 @@ export default {
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        data: date
                     }
                 ],
                 yAxis: [
@@ -130,51 +227,38 @@ export default {
                 ],
                 series: [
                     {
-                        name: '邮件营销',
+                        name: '平台总盈利', //total_profit
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},
-                        data: [120, 132, 101, 134, 90, 230, 210]
+                        data: total_profit
                     },
                     {
-                        name: '联盟广告',
+                        name: '提现手续费收入', //withdrawal_profit
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},
-                        data: [220, 182, 191, 234, 290, 330, 310]
+                        data: withdrawal_profit
                     },
                     {
-                        name: '视频广告',
+                        name: '打赏提成收入', //master_portion
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},
-                        data: [150, 232, 201, 154, 190, 330, 410]
+                        data: master_portion
                     },
                     {
-                        name: '直接访问',
+                        name: '注册加入收入', //register_profit
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},
-                        data: [320, 332, 301, 334, 390, 330, 320]
+                        data: register_profit
                     },
-                    {
-                        name: '搜索引擎',
-                        type: 'line',
-                        stack: '总量',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'top'
-                            }
-                        },
-                        areaStyle: {},
-                        data: [820, 932, 901, 934, 1290, 1330, 1320]
-                    }
                 ]
             };
         this.financialEcharts.setOption(option);
     },
-        orderEcharts(){
+        orderEcharts(date,order_count,order_amount){
         //初始化Echarts实例
         if(!this.financiaOrderEchart){
             this.financiaOrderEchart = this.$echarts.init(this.$refs.financialOrderEcharts)
@@ -194,7 +278,7 @@ export default {
                 }
             },
             legend: {
-                data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                data: ['订单数量', '订单金额']
             },
             grid: {
                 left: '1%',
@@ -206,7 +290,7 @@ export default {
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    data: date
                 }
             ],
             yAxis: [
@@ -216,46 +300,19 @@ export default {
             ],
             series: [
                 {
-                    name: '邮件营销',
+                    name: '订单数量', //order_count	
                     type: 'line',
                     stack: '总量',
                     areaStyle: {},
-                    data: [120, 132, 101, 134, 90, 230, 210]
+                    data: order_count
                 },
                 {
-                    name: '联盟广告',
+                    name: '订单金额', //order_amount
                     type: 'line',
                     stack: '总量',
                     areaStyle: {},
-                    data: [220, 182, 191, 234, 290, 330, 310]
+                    data: order_amount
                 },
-                {
-                    name: '视频广告',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data: [150, 232, 201, 154, 190, 330, 410]
-                },
-                {
-                    name: '直接访问',
-                    type: 'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data: [320, 332, 301, 334, 390, 330, 320]
-                },
-                {
-                    name: '搜索引擎',
-                    type: 'line',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top'
-                        }
-                    },
-                    areaStyle: {},
-                    data: [820, 932, 901, 934, 1290, 1330, 1320]
-                }
             ]
         };
     this.financiaOrderEchart.setOption(option);

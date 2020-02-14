@@ -158,6 +158,16 @@ export default {
               attribution:'全局'
             }
           },
+          'tencent-cloud-config/cos':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCosView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
 
           'annex-set':{
             comLoad: function (resolve) {

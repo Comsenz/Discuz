@@ -85,6 +85,7 @@ export default {
                 toast.message = `正在查询订单...`;
               } else if (res.readdata._data.paid){
                 clearInterval(timer);
+                webDb.setLItem('foregroundUser', res.data.attributes.username);
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
 
