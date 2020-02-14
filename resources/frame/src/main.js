@@ -22,6 +22,7 @@ import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
+import browserDb from "webDbHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
 import moment from 'moment';                  //导入文件 momnet时间转换
 import utils from "./common/urlGet";         //获取url参数
@@ -80,8 +81,13 @@ const App = new Vue({
   data:function(){
     return {
       keepAliveStatus:false,
-      status:0
+      status:0,
+      siteInfoStat: ''
     }
+  },
+  created(){
+    // console.log(browserDb.getLItem('siteInfo'),'缓存里的');
+    this.siteInfoStat = browserDb.getLItem('siteInfo')._data.set_site.site_stat;
   },
   watch: {
     '$route': function(to, from) {
@@ -145,6 +151,6 @@ const App = new Vue({
 
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats">统计代码</div></div>'
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats">{{siteInfoStat}}</div></div>'
 }).$mount('#app');
 window.app = App;

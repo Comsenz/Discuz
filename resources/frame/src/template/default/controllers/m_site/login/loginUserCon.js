@@ -84,6 +84,7 @@ export default {
               this.$toast.fail(errorInfo[0].errorDetail);
             } else {
               if (res.readdata._data.paid) {
+                browserDb.setLItem('foregroundUser', res.data.attributes.username);
                 let beforeVisiting = browserDb.getSItem('beforeVisiting');
                 console.log(beforeVisiting);
 
