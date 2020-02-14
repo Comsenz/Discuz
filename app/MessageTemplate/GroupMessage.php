@@ -7,35 +7,26 @@
 
 namespace App\MessageTemplate;
 
-use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
 
 class GroupMessage extends DatabaseMessage
 {
-    protected $translator;
+    protected $tplId = 12;
 
-    public function __construct(Application $app)
+    protected function titleReplaceVars()
     {
-        $this->translator = $app->make('translator');
+        return [];
     }
 
-    protected function getTitle()
-    {
-        return $this->translator->get('core.group_change');
-    }
-
-    protected function getContent($data)
+    protected function contentReplaceVars($data)
     {
         $oldGroup = $data['old'];
         $newGroup = $data['new'];
 
-        return $this->translator->get(
-            'core.group_change_detail',
-            [
-                'user' => $this->notifiable->username,
-                'oldgroup' => $oldGroup->pluck('name')->join('、'),
-                'newgroup' => $newGroup->pluck('name')->join('、')
-            ]
-        );
+        return [
+            $this->notifiable->username,
+            $oldGroup->pluck('name')->join('、'),
+            $newGroup->pluck('name')->join('、')
+        ];
     }
 }

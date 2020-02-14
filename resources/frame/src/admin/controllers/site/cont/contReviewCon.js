@@ -285,13 +285,10 @@ export default {
       window.open(routeData.href, '_blank');
     },
 
-    editClick(id,content){
+    editClick(id){
       console.log(id);
       let routeData = this.$router.resolve({
-        name: 'reply-to-topic',
-        query: {
-          themeId: id,
-        }
+        path: `/edit-topic/${id}`
       });
       window.open(routeData.href, '_blank');
     },

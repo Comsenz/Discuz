@@ -72,6 +72,7 @@ export default {
       this.viewportWidth = window.innerWidth;
       this.onLoad();
       this.detailIf();
+      browserDb.removeSItem('beforeVisiting');
   },
 
   methods: {

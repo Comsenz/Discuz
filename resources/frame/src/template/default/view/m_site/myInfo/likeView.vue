@@ -4,8 +4,10 @@
     <van-list
     v-model="loading"
     :finished="finished"
+    :offset="offset"
     finished-text="没有更多了"
     @load="onLoad"
+    :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="like-main content" >
@@ -35,9 +37,6 @@
 </template>
 
 <script>
-// import '../../../less/m_site/myInfo/myInfo.less';
-// import '../../../scss/m_site/mobileIndex.scss';
-// import '../../../scss/m_site/mobileIndex.scss';
 
 import '../../../defaultLess/m_site/modules/myInfo.less';
 import '../../../defaultLess/m_site/common/common.less';

@@ -46,6 +46,34 @@ export default {
             ],
             financialEcharts:null,
             financiaOrderEchart:null,
+            pickerOptions: {
+                shortcuts: [{
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+              },
+            financialTime:['',''],   //申请时间
            
         }
     },
@@ -83,7 +111,7 @@ export default {
                     data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
                 },
                 grid: {
-                    left: '3%',
+                    left: '1%',
                     right: '4%',
                     bottom: '3%',
                     containLabel: true
@@ -169,7 +197,7 @@ export default {
                 data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
             },
             grid: {
-                left: '3%',
+                left: '1%',
                 right: '4%',
                 bottom: '3%',
                 containLabel: true

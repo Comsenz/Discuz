@@ -5,6 +5,7 @@
     v-model="loading"
     :finished="finished"
     finished-text="没有更多了"
+    :offset="offset"
     @load="onLoad"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">

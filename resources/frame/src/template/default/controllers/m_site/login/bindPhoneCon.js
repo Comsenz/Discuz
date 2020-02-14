@@ -48,7 +48,11 @@ export default {
       }).then(res => {
           // console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           this.insterVal = res.data.attributes.interval;
           // console.log(this.insterVal+'555555');
