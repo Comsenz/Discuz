@@ -26,7 +26,7 @@ export default {
           themeType:'isEssence'
         },
         {
-          typeWo: '关注用户的',
+          typeWo: '已关注的',
           type:'3',
           themeType:'fromUserId'
         }
@@ -304,7 +304,7 @@ export default {
       if(themeType === 'isEssence') {
         this.filterInfo.typeWo = '精华主题';
       } else if(themeType === 'fromUserId') {
-        this.filterInfo.typeWo = '关注用户的';
+        this.filterInfo.typeWo = '已关注的';
       } else {
         this.filterInfo.typeWo = '全部主题';
       }

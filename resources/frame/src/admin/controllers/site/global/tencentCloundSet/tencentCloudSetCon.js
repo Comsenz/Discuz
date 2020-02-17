@@ -37,7 +37,7 @@ export default {
         }, {
           name: '实名认证',
           type:'qcloud_facdid',
-          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          description: '使用腾讯云的实名认证服务。请先配置云API，并确保腾讯云账户的身份信息核验额度充足',
           status:'',
           icon:'iconshimingrenzheng',
           setFlag: false
