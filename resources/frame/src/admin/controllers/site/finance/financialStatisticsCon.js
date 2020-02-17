@@ -90,10 +90,21 @@ export default {
                 }]
               },
             financialTime:['',''],   //申请时间
-            financialValue1: '', //选择时间周
-            financialValue2: '', //选择时间月
-            orderValue1:'',
-            orderValue2:'',
+            orderTime:['',''],   //申请时间
+            // financialValue1: '', //选择时间周
+            // financialValue2: '', //选择时间月
+            // orderValue:'', //订单日
+            // orderValue1:'',//订单周
+            // orderValue2:'',//订单月
+            noData:false, //暂无数据
+            noDataOrder:false,//订单暂无数据
+            istrue: 0,
+            istrueOder:0,
+           items:[
+            {name:'按日统计',index:1},
+            {name:'按月统计',index:2},
+            {name:'按年统计',index:3}
+           ]
            
         }
     },
@@ -136,16 +147,33 @@ export default {
             // this.currentPaga = 1;
             this.earningsStatistics();
           },
+          daily(){},
+          month(){},
+          year(){},
+        changeOrder(){
+            if (this.orderTime == null){
+                this.orderTime = ['','']
+              } else if(this.orderTime[0] !== '' && this.orderTime[1] !== ''){
+                this.orderTime[0] = this.orderTime[0] + '-00-00-00';
+                this.orderTime[1] = this.orderTime[1] + '-24-00-00';
+              }
+              // this.currentPaga = 1;
+              this.orderStatistics();
+        },
         earningsStatistics(){  //数据请求传给图标
             this.appFetch({
                 url:'statisticChart',
                 method:'get',
                 data:{
+                    'filter[type]':this.istrue+1,
                     'filter[createdAtBegin]':this.financialTime[0],
                     'filter[createdAtEnd]':this.financialTime[1],
                 }
             }).then(res=>{
                 console.log(res,'盈利数据图标')
+                if(res.readdata == ''){
+                    this.noData = true
+                }
                 var date = [];
                 var total_profit = [];
                 var withdrawal_profit = [];
@@ -168,9 +196,14 @@ export default {
                 url:'statisticChart',
                 method:'get',
                 data:{
-
+                    'filter[type]':this.istrueOder+1,
+                    'filter[createdAtBegin]':this.financialTime[0],
+                    'filter[createdAtEnd]':this.financialTime[1],
                 }
             }).then(res=>{
+                if(res.readdata == ''){
+                    this.noDataOrder = true
+                }
                 var date = [];
                 var order_count = [];
                 var order_amount = [];
