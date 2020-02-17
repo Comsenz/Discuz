@@ -16,7 +16,7 @@ class AddDefaultGroup
     public function handle(Saving $event)
     {
         $user = $event->user;
-        $defaultGroup = Group::where('default', Group::DEFAULT)->first();
+        $defaultGroup = Group::where('default', true)->first();
 
         $user->saved(function (User $user) use ($defaultGroup) {
             $user->groups()->sync($defaultGroup->id);

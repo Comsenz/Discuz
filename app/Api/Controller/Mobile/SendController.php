@@ -13,28 +13,37 @@ use App\Repositories\MobileCodeRepository;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Qcloud\QcloudTrait;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 class SendController extends AbstractCreateController
 {
-    public $serializer = SmsSendSerializer::class;
-
     use QcloudTrait;
 
     const CODE_EXCEPTION = 5; //单位：分钟
 
     const CODE_INTERVAL = 60; //单位：秒
 
+    public $serializer = SmsSendSerializer::class;
+
     protected $validation;
 
     protected $cache;
 
     protected $mobileCodeRepository;
+
+    protected $type = [
+        'login',
+        'bind',
+        'rebind',
+        'reset_pwd',
+        'reset_pay_pwd',
+        'verify',
+    ];
 
     public function __construct(ValidationFactory $validation, CacheRepository $cache, MobileCodeRepository $mobileCodeRepository)
     {
@@ -63,7 +72,7 @@ class SendController extends AbstractCreateController
         // 如果已经绑定，不能再发送绑定短息
         $this->validation->make($data, [
             'mobile' => in_array($type, ['bind', 'rebind']) ? 'required|unique:users,mobile' : 'required',
-            'type' => 'required'
+            'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($data['mobile'], $type);

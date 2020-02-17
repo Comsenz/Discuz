@@ -9,7 +9,7 @@ export default {
       newpwd:"",
       verifyNum:"",
       phoneNum:"",
-      lostpwd:'lostpwd',
+      type:'reset_pwd',
       btnContent:"获取验证码", //获取验证码按钮内文字
       time:1, //发送验证码间隔时间
       disabled:false, //按钮状态
@@ -44,7 +44,7 @@ export default {
           "data": {
             "attributes": {
               mobile:this.phoneNum,
-              type:this.lostpwd
+              type:this.type
             }
           }
         }
@@ -84,7 +84,7 @@ export default {
             "attributes": {
               "mobile": this.phoneNum,
               "code": this.verifyNum,
-              "type": this.lostpwd,
+              "type": this.type,
               'password':this.newpwd
             }
           }

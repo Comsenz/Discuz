@@ -5,7 +5,7 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\Api\Controller\Users;
+namespace App\Api\Controller\Dialog;
 
 use App\Api\Serializer\DialogMessageSerializer;
 use App\Models\User;
