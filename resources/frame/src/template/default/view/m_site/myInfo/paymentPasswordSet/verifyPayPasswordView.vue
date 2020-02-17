@@ -8,6 +8,7 @@
       </div>
 
       <van-password-input
+        class="passwordInp"
         :value="value"
         info="密码为 6 位数字"
         :focused="showKeyboard"
@@ -15,6 +16,7 @@
       />
 
       <van-number-keyboard
+
         :show="showKeyboard"
         @input="onInput"
         @delete="onDelete"
@@ -23,7 +25,17 @@
 
     </div>
 </template>
-
+<style>
+  .passwordInp:after {
+    border-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px !important;
+  }
+  .passwordInp li.van-hairline--left:after {
+    border-left-width: 1px;
+  }
+</style>
 <script>
   import '../../../../defaultLess/m_site/modules/myInfo.less';
   import verifyPayPasswordCon from '../../../../controllers/m_site/myInfo/paymentPasswordSet/verifyPayPasswordCon'
