@@ -136,6 +136,7 @@ class ForumSettingField
             'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
             'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
+            'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
         ];
     }
 

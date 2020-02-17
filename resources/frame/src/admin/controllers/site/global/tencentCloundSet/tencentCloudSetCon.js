@@ -5,47 +5,51 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
+      tableData: [
+        {
+          name: '云api',
+          type: 'qcloud_close',
+          description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
+          status:'',
+          icon:'iconAPI',
+          setFlag: true
+        }, {
+          name: '图片内容安全',
+          type:'qcloud_cms_image',
+          description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
+          status:'',
+          icon:'icontupian',
+          setFlag: false
+        }, {
+          name: '文本内容安全',
+          type:'qcloud_cms_text',
+          description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
+          status:'',
+          icon:'iconwenben',
+          setFlag: false
+        }, {
+          name: '短信',
+          type:'qcloud_sms',
+          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          status:'',
+          icon:'iconduanxin',
+          setFlag: true
+        }, {
+          name: '实名认证',
+          type:'qcloud_facdid',
+          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          status:'',
+          icon:'iconshimingrenzheng',
+          setFlag: false
+        },{
+          name: '对象存储',
+          type:'qcloud_cos',
+          description: '使用腾讯云的对象存储服务。请先配置云API，并确保腾讯云账户的对象存储额度充足',
+          status:'',
+          icon:'iconduixiangcunchu',
+          setFlag: false
+        }
 
-      tableData: [{
-        name: '云api',
-        type: 'qcloud_close',
-        description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
-        status:'',
-        icon:'iconAPI',
-        setFlag: true
-      },
-      {
-        name: '图片内容安全',
-        type:'qcloud_cms_image',
-        description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
-        status:'',
-        icon:'icontupian',
-        setFlag: false
-      },
-      {
-        name: '文本内容安全',
-        type:'qcloud_cms_text',
-        description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
-        status:'',
-        icon:'iconwenben',
-        setFlag: false
-      },
-      {
-        name: '短信',
-        type:'qcloud_sms',
-        description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
-        status:'',
-        icon:'iconduanxin',
-        setFlag: true
-      },
-      {
-        name: '实名认证',
-        type:'qcloud_name',
-        description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
-        status:'',
-        icon:'iconduanxin',
-        setFlag: false
-      }
       ]
     }
   },
@@ -61,6 +65,9 @@ export default {
           break;
         case 'qcloud_sms':
           this.$router.push({path:'/admin/tencent-cloud-config/sms',query: {type:type}});
+          break;
+        case 'qcloud_cos':
+          this.$router.push({path:'/admin/tencent-cloud-config/cos',query: {type:type}});
           break;
         default:
           this.loginStatus = 'default';
@@ -96,12 +103,16 @@ export default {
           } else {
             this.tableData[3].status = false
           }
-          if (res.readdata._data.qcloud.qcloud_name) {
+          if (res.readdata._data.qcloud.qcloud_facdid) {
             this.tableData[4].status = true
           } else {
             this.tableData[4].status = false
           }
-
+          if (res.readdata._data.qcloud.qcloud_cos) {
+            this.tableData[5].status = true
+          } else {
+            this.tableData[5].status = false
+          }
           console.log(this.tableData)
         }
       })
@@ -111,15 +122,16 @@ export default {
       if(type == 'qcloud_close') {
         console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
-      }
-      else if( type == 'qcloud_cms_image'){
+      } else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
         this.changeSettings('qcloud_cms_text',status);
       }else if(type == 'qcloud_sms'){
         this.changeSettings('qcloud_sms',status);
-      }else if(type == 'qcloud_name'){
-        this.changeSettings('qcloud_name',status);
+      }else if(type == 'qcloud_facdid'){
+        this.changeSettings('qcloud_facdid',status);
+      }else if(type == 'qcloud_cos'){
+        this.changeSettings('qcloud_cos',status);
       }
 
 

@@ -120,6 +120,7 @@ export default {
             if (res.readdata._data.paid){
               this.$router.push({path:'/'})
             } else {
+              browserDb.setLItem('foregroundUser', res.data.attributes.username);
               if (this.siteMode === 'pay'){
                 this.$router.push({path:'pay-circle-login'});
               } else if (this.siteMode === 'public'){

@@ -21,10 +21,13 @@
           <div class="followBox" v-if="followShow">
             <span>关注：{{followDet._data.followCount}}</span>
             <span>被关注：{{followDet._data.fansCount}}</span>
-            <a href="javascript:;" class="" v-if="!equalId && intiFollowVal == '0'" @click="followCli(intiFollowVal)">关注TA</a>
-            <a href="javascript:;" class="" v-else-if="!equalId && intiFollowVal == '2'" @click="followCli(intiFollowVal)">相互关注</a>
-            <a href="javascript:;" class="" v-else-if="!equalId && intiFollowVal == '1'" @click="followCli(intiFollowVal)">已关注</a>
-            <a href="javascript:;" class="" v-else="" style="display: none;"></a>
+            <div href="javascript:;" v-if="!equalId" class="followStatus">
+              <a href="javascript:;" class="" v-if="intiFollowVal == '0'" @click="followCli(intiFollowVal)">关注TA</a>
+              <a href="javascript:;" class="" v-else-if="intiFollowVal == '2'" @click="followCli(intiFollowVal)">相互关注</a>
+              <a href="javascript:;" class="" v-else-if="intiFollowVal == '1'" @click="followCli(intiFollowVal)">已关注</a>
+              <!-- <a href="javascript:;" class="" v-else="" style="display: none;"></a> -->
+            </div>
+
           </div>
       </div>
       <div class="headeGap" v-if="!searchIconShow && !menuIconShow"></div>
