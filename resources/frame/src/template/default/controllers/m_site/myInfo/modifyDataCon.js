@@ -10,16 +10,16 @@ import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
-      headPortrait:'',//头像
-      modifyPhone:'', //修改手机号
-      changePwd:'',//修改密码
-      bindType:'',//绑定类型
-      wechatId:'',//id
+      headPortrait:'',      //头像
+      modifyPhone:'',       //修改手机号
+      changePwd:'',         //修改密码
+      bindType:'',          //绑定类型
+      wechatId:'',          //id
       wechatNickname:'',
       tipWx:'',
       isWeixin:'',
-      realName:'',//实名证明
-      
+      realName:'',          //实名证明
+      canWalletPay:'',      //钱包密码
     }
   },
 
@@ -51,6 +51,16 @@ export default {
         case 'bind-new-phone':
           this.$router.push('/real-name'); //实名认证
           break;
+        case 'change-pay-pwd':
+          console.log('设置钱包密码','跳转设置钱包密码页面');
+
+          if (this.canWalletPay){
+
+          } else {
+            this.$router.push({path:'verify-pay-pwd'});
+          }
+
+          break;
         default:
           this.$router.push('/');
       }
@@ -70,9 +80,10 @@ export default {
           this.$toast.fail(res.errors[0].code);
         }else{
         console.log(res)
-        this.modifyPhone = res.readdata._data.mobile; //用户手机号
-        this.headPortrait = res.readdata._data.avatarUrl; //用户头像
-        this.wechatId = res.readdata._data.id;            //用户Id
+        this.modifyPhone = res.readdata._data.mobile;         //用户手机号
+        this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
+        this.wechatId = res.readdata._data.id;                //用户Id
+        this.canWalletPay = res.readdata._data.canWalletPay;  //钱包密码
         if(res.readdata.wechat){
           console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
