@@ -17,13 +17,13 @@
         </div>
         <van-cell title="手机号" @click="myModify('modify-phone')" is-link :value="modifyPhone" v-if="modifyPhone"/>
         <van-cell title="手机号" @click="$router.push({path:'/bind-new-phone'})" is-link value="去绑定" v-else />
-        <van-cell title="密码" @click="myModify('change-pwd')" is-link value="********" />
+        <van-cell title="登录密码" @click="myModify('change-pwd')" is-link value="********" />
+        <van-cell title="钱包密码" @click="myModify('change-pay-pwd')" is-link value="设置密码" />
         <van-cell title="微信" is-link :value="wechatNickname" v-if="wechatNickname"  @click="myModifyWechat" />
         <van-cell title="微信" is-link value="去绑定" v-else  @click="wechatBind" />
         <van-cell title="实名认证" is-link :value="realName" v-if="realName" />
         <van-cell title="实名认证"  v-else  @click="$router.push({path:'/real-name'})" is-link value="认证" />
       </main>
-
     </div>
 </template>
 <style type="text/css" scoped>
