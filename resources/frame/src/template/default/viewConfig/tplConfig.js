@@ -222,6 +222,14 @@ export default {
         title:"发布主题"
         }
       },
+      'post-longText':{
+        comLoad:function (resolve) {
+        require(['../view/m_site/home/postLongTextView'],resolve)
+        },
+        metaInfo:{
+        title:"发布长文"
+        }
+      },
       'edit-topic/:themeId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/editTopicView'],resolve)

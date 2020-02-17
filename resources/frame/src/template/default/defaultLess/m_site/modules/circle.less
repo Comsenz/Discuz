@@ -295,7 +295,45 @@ body {
     font-size: 20px;
   }
 }
+.publishTypeBox {
+  position: fixed;
+  bottom: 128px;
+  right: 15px;
+  width: 60px;
+  padding: 7px 4px;
+  border: 2px solid #e5e5e5;
+  border-radius: 30px;
+  background: #fff;
+  box-sizing: border-box;
+  .iconBg {
+    background: #F4F4F4;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    margin: 0 auto 6px auto;
+    text-align: center;
+    line-height: 46px;
+    .icon {
+      font-size: 20px;
+      color: #000000;
+    }
+  }
+  .publishCho {
+    .publishChoWo {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      line-height: 16px;
+    }
+    &:first-child {
+      .publishChoWo {
+        margin-bottom: 5px;
+      }
+    }
+  }
 
+
+}
 /*
 付费站点-首页-未登录
 payCircle.view
@@ -1063,6 +1101,51 @@ details.vue
     position: absolute;
   }
 }
+/**
+ *  发布长文
+ */
+.post-longText-form {
+  padding-left: 15px;
+}
+.pubThemeTitle {
+  height: 52px;
+  text-align: left;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid @corE5;
+  width: 100%;
+  position: relative;
+}
+.paySetting {
+   position: fixed;
+   bottom: 50px;
+   &:after {
+     border-bottom: none !important;
+   }
+}
+.payMove {
+    bottom: 290px;
+}
+.paySetShow {
+  width: 290px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.popTitBox {
+  line-height: 21px;
+  font-size: 15px;
+  overflow: hidden;
+  .popupTit {
+    float: left;
+    color: @cor333;
+  }
+  .icon {
+    float: right;
+    cursor: pointer;
+  }
+}
+
 /**
  *  回复输入框
  */
