@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Dialog extends Model
 {
-
     /**
      * {@inheritdoc}
      */
@@ -53,5 +52,15 @@ class Dialog extends Model
         $dialog->recipient_user_id = $recipient_user_id;
 
         return $dialog;
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function dialogMessage()
+    {
+        return $this->hasOne(DialogMessage::class);
     }
 }

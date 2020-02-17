@@ -16,7 +16,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 
-class CreateDialog
+class BatchCreateDialog
 {
     use AssertPermissionTrait;
     use EventsDispatchTrait;
@@ -50,14 +50,26 @@ class CreateDialog
         $this->assertCan($this->actor, 'create', $dialog);
 
         $sender = $this->actor->id;
-        $recipient = Arr::get($this->attributes, 'recipient_username');
+        $recipients = explode(',', Arr::get($this->attributes, 'recipient_username'));
+        if (!$recipients) {
+            throw new ModelNotFoundException();
+        }
 
-        $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
+        $recipientUnKnowUser = [];
+        $dialogRes = [];
+        foreach ($recipients as $recipient) {
+            $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
 
-        $dialogCreate = $dialog::build($sender, $recipientUser->id);
-        //dialog_message_id 创建时为默认值0
-        $dialogCreate->save();
-
-        return $dialogCreate;
+            //处理错误的用户名
+            if (!$recipientUser) {
+                Arr::prepend($recipientUnKnowUser, $recipient);
+                continue;
+            }
+            $dialogCreate = $dialog::build($sender, $recipientUser->id);
+            //dialog_message_id 创建时为默认值0
+            $dialogCreate->save();
+            Arr::prepend($dialogRes, $dialogCreate);
+        }
+        return $dialogRes;
     }
 }

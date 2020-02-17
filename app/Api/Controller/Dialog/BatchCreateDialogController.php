@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Dialog;
 
 use App\Api\Serializer\DialogSerializer;
+use App\Commands\Dialog\BatchCreateDialog;
 use App\Commands\Dialog\CreateDialog;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -15,7 +16,7 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class CreateDialogController extends AbstractCreateController
+class BatchCreateDialogController extends AbstractCreateController
 {
     public $serializer = DialogSerializer::class;
     /**
@@ -40,7 +41,7 @@ class CreateDialogController extends AbstractCreateController
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         return $this->bus->dispatch(
-            new CreateDialog($actor, $attributes)
+            new BatchCreateDialog($actor, $attributes)
         );
     }
 }
