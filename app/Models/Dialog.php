@@ -54,6 +54,21 @@ class Dialog extends Model
         return $dialog;
     }
 
+    public static function buildOrFetch(int $sender_user_id, int $recipient_user_id)
+    {
+        $dialog =  self::query()
+            ->where('sender_user_id', $sender_user_id)
+            ->where('recipient_user_id', $recipient_user_id)
+            ->first();
+
+        if (!$dialog) {
+            $dialog = self::build($sender_user_id, $recipient_user_id);
+            $dialog->save();
+        }
+
+        return $dialog;
+    }
+
     public function user()
     {
         return $this->hasOne(User::class);

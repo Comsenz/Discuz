@@ -54,10 +54,6 @@ class CreateDialog
 
         $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
 
-        $dialogCreate = $dialog::build($sender, $recipientUser->id);
-        //dialog_message_id 创建时为默认值0
-        $dialogCreate->save();
-
-        return $dialogCreate;
+        return $dialog::buildOrFetch($sender, $recipientUser->id);
     }
 }

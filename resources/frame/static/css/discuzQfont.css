@@ -160,3 +160,18 @@
 .icon-xls:before {
   content: "\e62d";
 }
+.icon-longtext:before {
+  content: "\e634";
+}
+
+.icon-theme:before {
+  content: "\e630";
+}
+
+.icon-money1:before {
+  content: "\e62f";
+}
+
+.icon-closeCho:before {
+  content: "\e62e";
+}

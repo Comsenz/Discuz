@@ -13,7 +13,6 @@ use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 
 class BatchCreateDialog
@@ -47,29 +46,28 @@ class BatchCreateDialog
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'create', $dialog);
+        $result = ['data' => [], 'meta' => []];
+
+        if (! $this->actor->can('createDialog')) {
+            $result['meta'][] = ['message' => 'permission_denied'];
+            return $result;
+        }
 
         $sender = $this->actor->id;
         $recipients = explode(',', Arr::get($this->attributes, 'recipient_username'));
-        if (!$recipients) {
-            throw new ModelNotFoundException();
-        }
 
-        $recipientUnKnowUser = [];
-        $dialogRes = [];
         foreach ($recipients as $recipient) {
-            $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
+            $recipientUser = $user->query()->where('username', $recipient)->first();
 
             //处理错误的用户名
             if (!$recipientUser) {
-                Arr::prepend($recipientUnKnowUser, $recipient);
+                $result['meta'][] = ['name' => $recipient, 'message' => ' not found '];
                 continue;
             }
-            $dialogCreate = $dialog::build($sender, $recipientUser->id);
-            //dialog_message_id 创建时为默认值0
-            $dialogCreate->save();
-            Arr::prepend($dialogRes, $dialogCreate);
+
+            $result['data'][] = $dialog::buildOrFetch($sender, $recipientUser->id);
+
         }
-        return $dialogRes;
+        return $result;
     }
 }

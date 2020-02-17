@@ -46,6 +46,14 @@ export default {
                       }
                 }
             }
+        }).then(res=>{
+            if (res.errors){
+                this.$toast.fail(res.errors[0].code);
+                throw new Error(res.error)
+              }else{
+                this.$toast("实名认证成功");
+                this.$router.push({path:'/modify-data',query:{backGo:this.backGo}});
+              }
         })
         }
     }

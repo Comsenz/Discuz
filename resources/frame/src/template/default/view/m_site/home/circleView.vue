@@ -35,8 +35,23 @@
         <p class="nullWord">{{nullWord}}</p>
       </div>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
-      <div class="fixedEdit" id="fixedEdit" v-if="canEdit" @click="postTopic":style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 15) +'px' : '15px'}">
-        <span class="icon iconfont icon-publish"></span>
+      <div class="fixedEdit" id="fixedEdit" v-if="canEdit" @click="postCho":style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 15) +'px' : '15px'}">
+        <span v-if="publishType" class="icon iconfont icon-publish"></span>
+        <span v-else="" class="icon iconfont icon-closeCho"></span>
+      </div>
+      <div class="publishTypeBox" v-if="puslishCho">
+        <div class="publishCho" @click="postTopic">
+          <div class="iconBg">
+            <span class="icon iconfont icon-theme"></span>
+          </div>
+          <div class="publishChoWo">主题</div>
+        </div>
+        <div class="publishCho" @click="postLongText">
+          <div class="iconBg">
+            <span class="icon iconfont icon-longtext"></span>
+          </div>
+          <div class="publishChoWo">长文</div>
+        </div>
       </div>
     </div>
 
