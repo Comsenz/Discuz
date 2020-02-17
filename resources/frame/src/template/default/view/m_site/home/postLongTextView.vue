@@ -65,15 +65,21 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <van-popup v-model="paySetShow">
+      <van-popup 
+        v-model="paySetShow"
+        class="paySetShow"
+      >
         <div class="popTitBox">
           <span class="popupTit">设置金额</span>
-          <span class="icon iconfont icon-closeCh"></span>
+          <span class="icon iconfont icon-closeCho" @click="closePaySet"></span>
         </div>
-        
-        <input type="text" class="payMoney">
-        <div class="payEx"></div>
-        <input type="text" class="payExplain">
+        <div class="payMoneyBox">
+          <span>￥</span>
+          <input type="text" class="payMoneyInp" @keyup.enter="search" @input="search($event)" />
+        </div>
+        <div class="payEx">付费说明</div>
+        <input type="text" placeholder="这篇内容付费方可查看全部内容…." class="payExplain">
+        <a href="javascript:;" class="popSureBtn" :class="{ 'sureBtnCli': isCli, 'forbiddenCli': !isCli }" @click="isCli && paySetSure()">确定</a>
       </van-popup>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox" id="showFacePanel" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
       <div class="popup">

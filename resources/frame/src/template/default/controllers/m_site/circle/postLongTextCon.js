@@ -20,6 +20,7 @@ export default {
       keywordsMax: 1000,
       list: [],
       footMove: false,
+      payMove: false,
       faceData:[],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -62,10 +63,14 @@ export default {
       viewportWidth: '',
       payValue: '10',
       paySetShow: false,
+      isCli: false,
+      moneyVal: '',
+      timeout: null,
+      
 
     }
   },
-
+  
   mounted () {
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
@@ -217,7 +222,7 @@ export default {
         })
       }
     },
-    //发布主题
+    //发布长文
     publish(){
       if(this.postsId && this.content){
         console.log('回复');
@@ -522,10 +527,7 @@ export default {
     //   this.$refs.textarea.focus();
     //   this.footMove = false;
     // },
-    //设置付费金额
-    paySetting(){
-      this.paySetShow = true;
-    },
+    
     addExpression(){
       this.keyboard = !this.keyboard;
       this.appFetch({
@@ -594,6 +596,26 @@ export default {
     },
     onCancel() {
       this.showPopup = false;
+    },
+    //设置付费金额,，显示弹框
+    paySetting(){
+      this.paySetShow = true;
+    },
+    //关闭付费设置弹框
+    closePaySet(){
+      this.paySetShow = false;
+    },
+    //设置付费时，实时获取输入框的值，用来判断按钮状态
+    search: function (event) {
+      if(event.data != null && event.data > '0'){
+        this.isCli = true;
+      } else {
+        this.isCli = false;
+      }
+    },
+    //点击确定按钮，提交付费设置
+    paySetSure(){
+      this.paySetShow = false;
     },
 
   },

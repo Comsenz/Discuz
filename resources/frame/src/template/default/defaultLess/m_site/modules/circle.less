@@ -1143,9 +1143,70 @@ details.vue
   .icon {
     float: right;
     cursor: pointer;
+    color: #888888;
   }
 }
-
+.payMoneyBox {
+  height: 42px;
+  text-align: left;
+  padding: 18px 0;
+  border-bottom: 1px solid @corE5;
+  span {
+    float: left;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .payMoneyInp {
+    font-size: 35px;
+    height: 42px;
+    line-height: 42px;
+    color: #000000;
+    border: none;
+    width: 220px;
+    text-align: left;
+  }
+}
+.payEx {
+  padding: 16px 0 14px 0;
+  font-size: 15px;
+  color: #333333;
+}
+.payExplain {
+  line-height: 16px;
+  font-size: 15px;
+  border: none;
+  width: 100%;
+  &::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &::-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+}
+.popSureBtn {
+  display: block;
+  width: 168px;
+  margin: 51px auto 4px auto;
+  border-radius: 5px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+}
+.forbiddenCli {
+  background: @corC9;
+}
+.sureBtnCli {
+  background: @main;
+}
 /**
  *  回复输入框
  */
