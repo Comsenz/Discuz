@@ -66,7 +66,7 @@ class UpdateGroup
         //先把表的其它默认组清空， 再设置当前组为默认组
         if ($value = Arr::get($this->data, 'attributes.default', 0)) {
             $this->event->dispatch(new Saving($group, $this->actor, []));
-            $group->default = Group::DEFAULT;
+            $group->default = true;
         }
 
         $group->save();

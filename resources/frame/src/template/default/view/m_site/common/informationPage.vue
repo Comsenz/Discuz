@@ -28,6 +28,9 @@
     text-align: center;
     flex-direction: column;
     padding: 40% 20px 3000px 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     .title{
       font-size:19px;

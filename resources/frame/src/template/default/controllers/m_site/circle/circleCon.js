@@ -26,7 +26,7 @@ export default {
           themeType:'isEssence'
         },
         {
-          typeWo: '关注用户的',
+          typeWo: '已关注的',
           type:'3',
           themeType:'fromUserId'
         }
@@ -62,6 +62,8 @@ export default {
       isWeixin: false,
       isPhone: false,
       viewportWidth: '',
+      publishType: true,
+      puslishCho: false,
     }
   },
   created:function(){
@@ -302,7 +304,7 @@ export default {
       if(themeType === 'isEssence') {
         this.filterInfo.typeWo = '精华主题';
       } else if(themeType === 'fromUserId') {
-        this.filterInfo.typeWo = '关注用户的';
+        this.filterInfo.typeWo = '已关注的';
       } else {
         this.filterInfo.typeWo = '全部主题';
       }
@@ -352,14 +354,24 @@ export default {
 
       }
       },
-      postTopic:function(){
-      if(this.canCreateThread){
-        // alert('跳转到发布主题页');
-        this.$router.push({ path:'/post-topic'});
-      } else {
-        this.$toast.fail('没有权限，请联系站点管理员');
-      }
+      postCho:function(){
+        if(this.canCreateThread){
+          // alert('跳转到发布主题页');
+          this.publishType = !this.publishType;
+          this.puslishCho = !this.puslishCho;
+          // console.log(this.puslishCho);
+        } else {
+          this.$toast.fail('没有权限，请联系站点管理员');
+        }
 
+      },
+      //发布主题
+      postTopic:function(){
+        this.$router.push({ path:'/post-topic'});
+      },
+      //发布长文
+      postLongText:function(){
+        this.$router.push({ path:'/post-longText'});
       },
       /**
       * 给导航添加点击状态

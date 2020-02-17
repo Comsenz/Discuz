@@ -16,7 +16,7 @@ class CreateMobileCodes extends Migration
             $table->increments('id')->comment('验证码 id');
             $table->string('mobile', 20)->default('')->comment('手机号');
             $table->string('code', 10)->default('')->comment('验证码');
-            $table->string('type', 10)->default('')->comment('验证类型');
+            $table->string('type', 20)->default('')->comment('验证类型');
             $table->tinyInteger('state')->default(0)->comment('验证状态');
             $table->ipAddress('ip')->default('')->comment('ip');
             $table->dateTime('expired_at')->nullable()->comment('验证码过期时间');

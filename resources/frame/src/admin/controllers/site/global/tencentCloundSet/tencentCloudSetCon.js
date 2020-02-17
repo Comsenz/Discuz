@@ -37,17 +37,17 @@ export default {
         }, {
           name: '实名认证',
           type:'qcloud_facdid',
-          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          description: '使用腾讯云的实名认证服务。请先配置云API，并确保腾讯云账户的身份信息核验额度充足',
           status:'',
           icon:'iconshimingrenzheng',
           setFlag: false
         },{
           name: '对象存储',
-          type:'qcloud_name',
+          type:'qcloud_cos',
           description: '使用腾讯云的对象存储服务。请先配置云API，并确保腾讯云账户的对象存储额度充足',
           status:'',
           icon:'iconduixiangcunchu',
-          setFlag: false
+          setFlag: true
         }
 
       ]
@@ -65,6 +65,9 @@ export default {
           break;
         case 'qcloud_sms':
           this.$router.push({path:'/admin/tencent-cloud-config/sms',query: {type:type}});
+          break;
+        case 'qcloud_cos':
+          this.$router.push({path:'/admin/tencent-cloud-config/cos',query: {type:type}});
           break;
         default:
           this.loginStatus = 'default';
@@ -105,7 +108,11 @@ export default {
           } else {
             this.tableData[4].status = false
           }
-
+          if (res.readdata._data.qcloud.qcloud_cos) {
+            this.tableData[5].status = true
+          } else {
+            this.tableData[5].status = false
+          }
           console.log(this.tableData)
         }
       })
@@ -115,8 +122,7 @@ export default {
       if(type == 'qcloud_close') {
         console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
-      }
-      else if( type == 'qcloud_cms_image'){
+      } else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
         this.changeSettings('qcloud_cms_text',status);
@@ -124,6 +130,8 @@ export default {
         this.changeSettings('qcloud_sms',status);
       }else if(type == 'qcloud_facdid'){
         this.changeSettings('qcloud_facdid',status);
+      }else if(type == 'qcloud_cos'){
+        this.changeSettings('qcloud_cos',status);
       }
 
 

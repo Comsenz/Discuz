@@ -65,6 +65,13 @@ class Group extends Model
     public $timestamps = false;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'default' => 'boolean',
+    ];
+
+    /**
      * @var array
      */
     protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
