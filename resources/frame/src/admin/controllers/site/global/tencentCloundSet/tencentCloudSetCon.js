@@ -47,7 +47,7 @@ export default {
           description: '使用腾讯云的对象存储服务。请先配置云API，并确保腾讯云账户的对象存储额度充足',
           status:'',
           icon:'iconduixiangcunchu',
-          setFlag: false
+          setFlag: true
         }
 
       ]

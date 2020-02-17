@@ -206,7 +206,7 @@ export default {
         }
       },
 
-	  'theme-det':{
+	    'theme-det':{
 	    comLoad:function (resolve) {
 	      require(['../view/m_site/common/themeDetView'],resolve)
 	    },
@@ -485,6 +485,17 @@ export default {
           title:"我的钱包"
         }
       },
+      'verify-pay-pwd':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/paymentPasswordSet/verifyPayPasswordView'],resolve);
+        },
+        metaInfo:{
+          title:'验证支付密码'
+        }
+      },
+
+
+      //公共页面模块
       'pay-status':{
         comLoad:function (resolve) {
           require(['../view/m_site/common/pay/payView'],resolve)
