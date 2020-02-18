@@ -24,9 +24,13 @@ class DialogRepository extends AbstractRepository
         return Dialog::query();
     }
 
-    public function findOrFail(User $actor = null)
+    public function findOrFail($id, User $actor = null)
     {
         $query = $this->query();
+        $query->where('id', $id);
+        $query->where('sender_user_id', $actor->id);
+        $query->orWhere('recipient_user_id', $actor->id);
+
         return $query->firstOrFail();
     }
 

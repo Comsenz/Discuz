@@ -7,8 +7,25 @@
       </header>
 
       <div class="post-longText-form">
-        <input type="text" placeholder="请输入标题" class="pubThemeTitle">
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
+        <input type="text" placeholder="请输入标题" v-model="themeTitle" class="pubThemeTitle">
+        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>
+        <markdown-toolbar for="textarea_id" class="markdownBox">
+          <md-bold><span class="icon iconfont icon-bold"></span></md-bold>
+          <md-header><span class="icon iconfont icon-title"></span></md-header>
+          <md-italic><span class="icon iconfont icon-italic"></span></md-italic>
+          <md-quote><span class="icon iconfont icon-quote"></span></md-quote>
+          <md-code><span class="icon iconfont icon-code"></span></md-code>
+          <md-link><span class="icon iconfont icon-link"></span></md-link>
+          <!-- <md-image>image<span class="icon iconfont icon-italic"></span></md-image> -->
+          <md-unordered-list><span class="icon iconfont icon-unordered-list"></span></md-unordered-list>
+          <md-ordered-list><span class="icon iconfont icon-ordered-list"></span></md-ordered-list>
+          <!-- <md-task-list>task-list<span class="icon iconfont icon-italic"></span></md-task-list> -->
+          <!-- <md-mention>mention<span class="icon iconfont icon-italic"></span></md-mention> -->
+          <!-- <md-ref>ref<span class="icon iconfont icon-italic"></span></md-ref> -->
+        </markdown-toolbar>
+        
+
+        <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
         <div class="uploadBox" v-if="isAndroid && isWeixin">
           <div class="uploadBox" v-if="uploadShow">
             <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
@@ -44,7 +61,7 @@
           </div>
         </div>
       </div>
-      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue+'元'" :class="{'payMove':payMove}" class="paySetting"/>
+      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue" :class="{'payMove':payMove}" class="paySetting"/>
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
@@ -65,15 +82,22 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <van-popup v-model="paySetShow">
+      <van-popup 
+        v-model="paySetShow"
+        class="paySetShow"
+        click-overlay="closePaySet"
+      >
         <div class="popTitBox">
           <span class="popupTit">设置金额</span>
-          <span class="icon iconfont icon-closeCh"></span>
+          <span class="icon iconfont icon-closeCho" @click="closePaySet"></span>
         </div>
-        
-        <input type="text" class="payMoney">
-        <div class="payEx"></div>
-        <input type="text" class="payExplain">
+        <div class="payMoneyBox">
+          <span>￥</span>
+          <input type="text" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
+        </div>
+        <div class="payEx">付费说明</div>
+        <input type="text" placeholder="这篇内容付费方可查看全部内容…." class="payExplain">
+        <a href="javascript:;" class="popSureBtn" :class="{ 'sureBtnCli': isCli, 'forbiddenCli': !isCli }" @click="isCli && paySetSure()">确定</a>
       </van-popup>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox" id="showFacePanel" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
       <div class="popup">

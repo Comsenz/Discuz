@@ -363,5 +363,8 @@ ALTER TABLE `users` ADD `pay_password` VARCHAR(100)  NOT NULL  DEFAULT ''  COMME
 -- 2020-02-11 16:00:29 添加字段 is_comment 是否是回复回帖的内容
 alter table `posts` add `is_comment` tinyint(3) unsigned not null  default 0 comment '是否是回复回帖的内容'  after `is_first`;
 
+-- 2020-02-17 19:49:53 添加字段 is_sound 是否是音频
+alter table `attachments` add `is_sound` tinyint(1) not null default 0 comment '是否是音频：0文件1音频2视频' after is_approved;
+
 -- 2020-02-17 修改验证码类型长度
 ALTER TABLE `mobile_codes` MODIFY COLUMN `type` varchar(20) NOT NULL DEFAULT '' COMMENT '验证类型' AFTER `code`;
