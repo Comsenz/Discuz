@@ -7,7 +7,7 @@
       </header>
 
       <div class="post-longText-form">
-        <input type="text" placeholder="请输入标题" class="pubThemeTitle">
+        <input type="text" placeholder="请输入标题" v-model="themeTitle" class="pubThemeTitle">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <div class="uploadBox" v-if="isAndroid && isWeixin">
           <div class="uploadBox" v-if="uploadShow">
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue+'元'" :class="{'payMove':payMove}" class="paySetting"/>
+      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue" :class="{'payMove':payMove}" class="paySetting"/>
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
@@ -68,6 +68,7 @@
       <van-popup 
         v-model="paySetShow"
         class="paySetShow"
+        click-overlay="closePaySet"
       >
         <div class="popTitBox">
           <span class="popupTit">设置金额</span>
@@ -75,7 +76,7 @@
         </div>
         <div class="payMoneyBox">
           <span>￥</span>
-          <input type="text" class="payMoneyInp" @keyup.enter="search" @input="search($event)" />
+          <input type="text" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
         </div>
         <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…." class="payExplain">
