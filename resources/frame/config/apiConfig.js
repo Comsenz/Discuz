@@ -80,6 +80,6 @@ module.exports = {
   'deleteAvatar':'/api/users',              //删除用户头像
   'exportUser':'/api/export/users?',        //用户信息导出
   'statistic':'/api/statistic/finance',    //获取资金概况
-  'statisticChart':'/api//statistic/financeChart',//获取盈利图表数据
+  'statisticChart':'/api/statistic/financeChart',//获取盈利图表数据
 
 }

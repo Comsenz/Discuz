@@ -208,6 +208,8 @@
       align-items: center;
       .financial-profit-title-right{
         // background:greenyellow;
+        display: flex;
+        align-items: center;
         .active{
           color:#3571A5
         }
@@ -216,7 +218,8 @@
         }
         ul li {
           float: left;
-          padding: 10px;     
+          padding: 10px;  
+          // text-align: center;   
       }
       }
 
