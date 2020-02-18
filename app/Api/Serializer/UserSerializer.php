@@ -45,7 +45,7 @@ class UserSerializer extends AbstractSerializer
             'id'                => (int) $model->id,
             'username'          => $model->username,
             'mobile'            => $model->mobile,
-            'avatarUrl'         => $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
+            'avatarUrl'         => $this->getAvatarUrl($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
@@ -80,6 +80,28 @@ class UserSerializer extends AbstractSerializer
         }
 
         return $attributes;
+    }
+
+    /**
+     * 判断头像 - 是否用微信头像
+     *
+     * @param $model
+     * @return string
+     */
+    public function getAvatarUrl($model)
+    {
+        $model->load('wechat');
+
+        $avatar = '';
+        if (empty($model->avatar)) {
+            if (!empty($model->wechat)) {
+                $avatar = $model->wechat->headimgurl;
+            }
+        } else {
+            $avatar = $model->avatar;
+        }
+
+        return !empty($avatar) ? $avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
     }
 
     /**
