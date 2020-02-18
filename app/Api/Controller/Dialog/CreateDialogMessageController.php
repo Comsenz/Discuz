@@ -38,7 +38,7 @@ class CreateDialogMessageController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $attributes = (int) Arr::get($request->getParsedBody(), 'data.attributes');
+        $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         return $this->bus->dispatch(
             new CreateDialogMessage($actor, $attributes)
