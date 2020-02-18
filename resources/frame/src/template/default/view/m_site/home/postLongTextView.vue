@@ -8,7 +8,24 @@
 
       <div class="post-longText-form">
         <input type="text" placeholder="请输入标题" v-model="themeTitle" class="pubThemeTitle">
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
+        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>
+        <markdown-toolbar for="textarea_id" class="markdownBox">
+          <md-bold><span class="icon iconfont icon-bold"></span></md-bold>
+          <md-header><span class="icon iconfont icon-title"></span></md-header>
+          <md-italic><span class="icon iconfont icon-italic"></span></md-italic>
+          <md-quote><span class="icon iconfont icon-quote"></span></md-quote>
+          <md-code><span class="icon iconfont icon-code"></span></md-code>
+          <md-link><span class="icon iconfont icon-link"></span></md-link>
+          <!-- <md-image>image<span class="icon iconfont icon-italic"></span></md-image> -->
+          <md-unordered-list><span class="icon iconfont icon-unordered-list"></span></md-unordered-list>
+          <md-ordered-list><span class="icon iconfont icon-ordered-list"></span></md-ordered-list>
+          <!-- <md-task-list>task-list<span class="icon iconfont icon-italic"></span></md-task-list> -->
+          <!-- <md-mention>mention<span class="icon iconfont icon-italic"></span></md-mention> -->
+          <!-- <md-ref>ref<span class="icon iconfont icon-italic"></span></md-ref> -->
+        </markdown-toolbar>
+        
+
+        <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
         <div class="uploadBox" v-if="isAndroid && isWeixin">
           <div class="uploadBox" v-if="uploadShow">
             <van-uploader :max-count="12" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>

@@ -3,6 +3,7 @@
  */
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import appCommonH from '../../../../../helpers/commonHelper';
+import '@github/markdown-toolbar-element'
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
