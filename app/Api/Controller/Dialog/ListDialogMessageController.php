@@ -107,10 +107,15 @@ class ListDialogMessageController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $join_field = '';
         $query = $this->dialogMessage->query();
 
+        $query->where('dialog_id', $filter['dialog_id']);
 
+        $query->join('dialog', 'dialog.id', '=', 'dialog_message.dialog_id')
+            ->where(function ($query) use ($actor) {
+                $query->where('sender_user_id', $actor->id);
+                $query->orWhere('recipient_user_id', $actor->id);
+            });
 
         $this->dialogMessageCount = $limit > 0 ? $query->count() : null;
 

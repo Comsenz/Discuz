@@ -57,8 +57,10 @@ class Dialog extends Model
     public static function buildOrFetch(int $sender_user_id, int $recipient_user_id)
     {
         $dialog =  self::query()
-            ->where('sender_user_id', $sender_user_id)
-            ->where('recipient_user_id', $recipient_user_id)
+            ->where(['sender_user_id'=>$sender_user_id,'recipient_user_id'=>$recipient_user_id])
+            ->orWhere(function ($query) use ($recipient_user_id,$sender_user_id) {
+                $query->where(['sender_user_id'=>$recipient_user_id,'recipient_user_id'=>$sender_user_id]);
+            })
             ->first();
 
         if (!$dialog) {
@@ -69,9 +71,13 @@ class Dialog extends Model
         return $dialog;
     }
 
-    public function user()
+    public function sender()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'sender_user_id');
+    }
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_user_id');
     }
 
     public function dialogMessage()

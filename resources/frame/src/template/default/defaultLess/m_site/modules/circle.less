@@ -1104,6 +1104,42 @@ details.vue
 /**
  *  发布长文
  */
+ .markdownText {
+  width: 100%;
+  // min-height: 80px;
+  // max-height: 150px;
+  height: 220px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  font-size: 15px;
+  box-sizing: content;
+  caret-color: @main;  //光标颜色
+  &::-webkit-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &::-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-ms-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+ }
 .post-longText-form {
   padding-left: 15px;
 }
