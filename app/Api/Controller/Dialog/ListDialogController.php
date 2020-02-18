@@ -46,7 +46,7 @@ class ListDialogController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['user','dialogMessage'];
+    public $optionalInclude = ['sender','recipient','dialogMessage'];
 
     /* The relationships that are included by default.
      *

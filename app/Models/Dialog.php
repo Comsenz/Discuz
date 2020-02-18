@@ -71,9 +71,13 @@ class Dialog extends Model
         return $dialog;
     }
 
-    public function user()
+    public function sender()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'sender_user_id');
+    }
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_user_id');
     }
 
     public function dialogMessage()
