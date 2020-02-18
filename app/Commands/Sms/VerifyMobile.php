@@ -125,7 +125,8 @@ class VerifyMobile
         $this->controller->serializer = UserSerializer::class;
         if ($this->mobileCode->user && isset($this->params['pay_password'])) {
             $this->validator->valid([
-                'pay_password' => $this->params['pay_password']
+                'pay_password' => $this->params['pay_password'],
+                'pay_password_confirmation' => $this->params['pay_password_confirmation'],
             ]);
             $this->mobileCode->user->changePayPassword($this->params['pay_password']);
             $this->mobileCode->user->save();
