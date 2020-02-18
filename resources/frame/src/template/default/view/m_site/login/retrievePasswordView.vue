@@ -26,8 +26,24 @@
             </van-field>
 
             <van-field
+              v-if="type === 'reset_pwd'"
               label="新密码"
               v-model="newpwd"
+              placeholder="请输入新密码"
+            />
+
+
+            <van-field
+              v-if="type === 'reset_pay_pwd'"
+              label="新密码"
+              v-model="payPassword"
+              placeholder="请输入新密码"
+            />
+
+            <van-field
+              v-if="type === 'reset_pay_pwd'"
+              label="确认密码"
+              v-model="payPasswordConfirmation"
               placeholder="请输入新密码"
             />
 

@@ -1,7 +1,9 @@
+/*
+* 忘记密码控制器
+* */
 
 import retrievePWDHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import retrievePWDFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-
 
 export default {
   data:function () {
@@ -9,19 +11,30 @@ export default {
       newpwd:"",
       verifyNum:"",
       phoneNum:"",
-      type:'reset_pwd',
+      type:'',
       btnContent:"获取验证码", //获取验证码按钮内文字
       time:1, //发送验证码间隔时间
       disabled:false, //按钮状态
       insterVal:'',
       isGray: false,
-      btnLoading:false
+      btnLoading:false,
+      data:{},
+      payPassword:'',
+      payPasswordConfirmation:'',
     }
   },
 
   components:{
     retrievePWDHeader,
     retrievePWDFooter
+  },
+
+  created(){
+    if (this.$route.query.type && this.$route.query.type === 'forget') {
+      this.type = 'reset_pay_pwd';
+    }else {
+      this.type = 'reset_pwd';
+    }
   },
 
   methods:{
@@ -76,17 +89,30 @@ export default {
     //提交新密码
     submissionPassword(){
       this.btnLoading = true;
+
+      let data = {
+        "attributes": {
+          "mobile": this.phoneNum,
+          "code": this.verifyNum,
+          "type": this.type,
+        }
+      };
+
+      if (this.type === 'reset_pay_pwd') {
+        data.attributes.pay_password = this.payPassword;
+        data.attributes.pay_password_confirmation = this.payPasswordConfirmation;
+      } else if (this.type === 'reset_pwd') {
+        data.attributes.password=this.newpwd;
+      }
+
+      console.log(data);
+
       this.appFetch({
         url:"smsVerify",
         method:"post",
         data:{
-          "data": {
-            "attributes": {
-              "mobile": this.phoneNum,
-              "code": this.verifyNum,
-              "type": this.type,
-              'password':this.newpwd
-            }
+          "data":{
+            data:data
           }
         }
       }).then(res => {
