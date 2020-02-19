@@ -318,7 +318,7 @@ export default {
       //我的模块
       'modify-data':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/modifyDataView'],resolve)
+          require(['../view/m_site/myInfo/myData/modifyDataView'],resolve)
         },
         metaInfo:{
           title:"修改资料"
@@ -326,7 +326,7 @@ export default {
       },
       'modify-phone':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/modifyPhoneView'],resolve)
+          require(['../view/m_site/myInfo/myData/modifyPhoneView'],resolve)
         },
         metaInfo:{
           title:"修改手机号"
@@ -334,7 +334,7 @@ export default {
       },
       'bind-new-phone':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
+          require(['../view/m_site/myInfo/myData/bindNewPhoneView'],resolve)
       },
       metaInfo:{
         title:"绑定新手机号"
@@ -342,7 +342,7 @@ export default {
     },
       'change-pwd':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/changePasswordView'],resolve)
+          require(['../view/m_site/myInfo/myData/changePasswordView'],resolve)
         },
         metaInfo:{
           title:"修改密码"
@@ -350,7 +350,7 @@ export default {
       },
       'real-name':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/realNameView'],resolve)
+          require(['../view/m_site/myInfo/myData/realNameView'],resolve)
         },
         metaInfo:{
           title:"实名认证"
@@ -358,7 +358,7 @@ export default {
       },
       'withdraw':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/withdrawView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/withdrawView'],resolve)
         },
         metaInfo:{
           title:"提款"
@@ -366,7 +366,7 @@ export default {
       },
       'wallet-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/walletDetailsView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/walletDetailsView'],resolve)
         },
         metaInfo:{
           title:"钱包明细"
@@ -374,7 +374,7 @@ export default {
       },
       'order-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/orderDetailsView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/orderDetailsView'],resolve)
         },
         metaInfo:{
           title:"订单明细"
@@ -382,7 +382,7 @@ export default {
       },
       'frozen-amount':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/frozenAmountView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/frozenAmountView'],resolve)
         },
         metaInfo:{
           title:"冻结资金"
@@ -390,7 +390,7 @@ export default {
       },
       'withdrawals-record':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/withdrawalsRecordView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/withdrawalsRecordView'],resolve)
         },
         metaInfo:{
           title:"提现记录"
@@ -398,7 +398,7 @@ export default {
       },
       'my-notice':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/myNoticeView'],resolve)
         },
         metaInfo:{
           title:"我的通知"
@@ -406,7 +406,7 @@ export default {
       },
       'my-follow':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myFollowView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/myFollowView'],resolve)
         },
         metaInfo:{
           title:"我的关注"
@@ -414,7 +414,7 @@ export default {
       },
       'my-care':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myCareView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/myCareView'],resolve)
         },
         metaInfo:{
           title:"我关注的人"
@@ -422,7 +422,7 @@ export default {
       },
       'care-me':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/careMeView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/careMeView'],resolve)
         },
         metaInfo:{
           title:"关注我的人"
@@ -447,7 +447,7 @@ export default {
       },
       'reply':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/replyView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/replyView'],resolve)
         },
         metaInfo:{
           title:"回复我的"
@@ -455,7 +455,7 @@ export default {
       },
       'reward':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/rewardView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/rewardView'],resolve)
         },
         metaInfo:{
           title:"打赏我的"
@@ -463,7 +463,7 @@ export default {
       },
       'like':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/likeView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/likeView'],resolve)
         },
         metaInfo:{
           title:"点赞我的"
@@ -471,7 +471,7 @@ export default {
       },
       'system':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/systemView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/systemView'],resolve)
         },
         metaInfo:{
           title:"系统通知"
@@ -479,7 +479,7 @@ export default {
       },
       'my-wallet':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myWalletView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/myWalletView'],resolve)
         },
         metaInfo:{
           title:"我的钱包"
