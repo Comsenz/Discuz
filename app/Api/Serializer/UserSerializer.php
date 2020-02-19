@@ -75,7 +75,14 @@ class UserSerializer extends AbstractSerializer
                 'registerIp'        => $model->register_ip,
                 'lastLoginIp'       => $model->last_login_ip,
                 'identity'          => $model->identity,
-                'realname'         => $model->realname,
+                'realname'          => $model->realname,
+            ];
+        }
+
+        // 钱包余额
+        if ($this->actor->id === $model->id) {
+            $attributes += [
+                'walletBalance' => $model->userWallet->available_amount,
             ];
         }
 
