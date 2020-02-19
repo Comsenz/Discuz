@@ -154,6 +154,9 @@
   财务统计
 */
 .financial-box{
+  position: relative;
+  &::before{content:'';width:49PX;height:100%;position: absolute;top:0;left:-49PX;background:rgba(244,247,249,1);};
+  &::after{content:'';width:49PX;height:100%;position: absolute;top:0;right:-49PX;background:rgba(244,247,249,1);};
   // margin-left:-49PX;
   // margin-right:-49PX;
   background:rgba(244,247,249,1);
