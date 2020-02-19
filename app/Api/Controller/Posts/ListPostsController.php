@@ -212,6 +212,26 @@ class ListPostsController extends AbstractListController
                 ->where('users2.username', 'like', "%{$deletedUsername}%");
         }
 
+        // 发表于（开始时间）
+        if ($createdAtBegin = Arr::get($filter, 'createdAtBegin')) {
+            $query->where('posts.created_at', '>=', $createdAtBegin);
+        }
+
+        // 发表于（结束时间）
+        if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
+            $query->where('posts.created_at', '<=', $createdAtEnd);
+        }
+
+        // 删除于（开始时间）
+        if ($deletedAtBegin = Arr::get($filter, 'deletedAtBegin')) {
+            $query->where('posts.deleted_at', '>=', $deletedAtBegin);
+        }
+
+        // 删除于（结束时间）
+        if ($deletedAtEnd = Arr::get($filter, 'deletedAtEnd')) {
+            $query->where('posts.deleted_at', '<=', $deletedAtEnd);
+        }
+
         // 分类
         if ($categoryId = Arr::get($filter, 'categoryId')) {
             $query->leftJoin('threads', 'threads.id', '=', 'posts.thread_id')
