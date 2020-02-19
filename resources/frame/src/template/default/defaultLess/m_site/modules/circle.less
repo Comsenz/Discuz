@@ -596,7 +596,7 @@ openCircleConView.vue
     height: 20px;
     line-height: 20px;
     font-size: 15px;
-    @include px2rem(margin-bottom, 26);
+    margin-bottom: 13px;
     margin-bottom: 13px;
     .icon {
       float: left;
@@ -742,7 +742,7 @@ openCircleConView.vue
     padding: 0 15px 11px 15px;
     .icon {
       font-size: 13px;
-      @include px2rem(line-height, 36);
+      line-height: 18px;
       line-height: 18px;
     }
     a {
@@ -787,8 +787,7 @@ openCircleConView.vue
   padding-top: 0;
   padding-bottom: 10px;
 }
-.themeImgList {
-}
+
 .themeOneImgChild {
   width: 50%;
   min-height: 100px;
@@ -988,6 +987,46 @@ details.vue
     line-height: 140px;
   }
 }
+.postTitle {
+  font-size: 16px;
+  line-height: 48px;
+  text-align: left;
+  padding-bottom: 10px;
+  position: relative;
+  &:after {
+    content: '';
+    display: block;
+    border-bottom: 1px solid @corE5;
+    font-size: 0;
+    line-height: 0;
+  }
+}
+.longTextContent {
+  color: #555555;
+  line-height: 40px;
+  padding-top: 10px;
+  font-size: 15px;
+}
+.payTipBox {
+  margin-top: 30px;
+  background: #f6f6f6;
+  padding: 32px 15px 28px 15px;
+  text-align: center;
+  .tipPrice {
+    text-align: center;
+    font-size: 15px;
+    color: #333333;
+    padding-bottom: 18px;
+    span {
+      font-size: 15px;
+      color: #EF7D1C;
+    }
+  }
+}
+
+
+
+
 
 //发表主题
 .post-topic-box{
@@ -1037,8 +1076,7 @@ details.vue
     min-height: 150px;
     padding: 0 15px 50px 15px;
     box-sizing: border-box;
-    #post-topic-form-text{
-    }
+    
   }
   .uploadBox {
     padding: 0;

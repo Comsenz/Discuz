@@ -135,6 +135,24 @@ export default {
           oneHeader: true
         }
       },
+      'normal-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/details/normaldetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"普通主题详情页",
+          oneHeader: true
+        }
+      },
+      'long-text-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/details/longTextDetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"长文主题详情页",
+          oneHeader: true
+        }
+      },
       'circle-invite':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleInviteView'],resolve)
