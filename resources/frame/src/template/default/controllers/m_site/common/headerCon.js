@@ -301,34 +301,34 @@ export default {
     // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
-    handleTabFix(){
-      // console.log(this.$route.meta.oneHeader);
-      if(this.headFixed){
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-          var offsetTop = document.querySelector('#testNavBar').offsetTop;
-          if(scrollTop > offsetTop){
-            this.showHeader = true;
-            // this.isfixHead = true;
-            // console.log(this.isfixHead+'1');
-            this.isfixNav = true;
-            if(this.isWeixin != true && this.isPhone != true){
-              this.limitWidth();
-            }
-            //
-            // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
-            // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
-          } else {
-            this.showHeader = false;
-            // this.isfixHead = false;
-            // console.log(this.isfixHead+'2');
-            this.isfixNav = false;
-            let viewportWidth = window.innerWidth;
-            document.getElementById('testNavBar').style.marginLeft ='0px';
-            // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
-            // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
-          };
-      }
-    },
+    // handleTabFix(){
+    //   // console.log(this.$route.meta.oneHeader);
+    //   if(this.headFixed){
+    //     var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    //       var offsetTop = document.querySelector('#testNavBar').offsetTop;
+    //       if(scrollTop > offsetTop){
+    //         this.showHeader = true;
+    //         // this.isfixHead = true;
+    //         // console.log(this.isfixHead+'1');
+    //         this.isfixNav = true;
+    //         if(this.isWeixin != true && this.isPhone != true){
+    //           this.limitWidth();
+    //         }
+    //         //
+    //         // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
+    //         // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
+    //       } else {
+    //         this.showHeader = false;
+    //         // this.isfixHead = false;
+    //         // console.log(this.isfixHead+'2');
+    //         this.isfixNav = false;
+    //         let viewportWidth = window.innerWidth;
+    //         document.getElementById('testNavBar').style.marginLeft ='0px';
+    //         // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
+    //         // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
+    //       };
+    //   }
+    // },
     backUrl(){
     // 返回上一级
     window.history.go(-1)

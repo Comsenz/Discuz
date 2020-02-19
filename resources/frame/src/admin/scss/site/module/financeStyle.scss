@@ -154,6 +154,9 @@
   财务统计
 */
 .financial-box{
+  margin-left:-49PX;
+  margin-right:-49PX;
+  background:rgba(244,247,249,1);
   .financial-statistics{
     display: flex;
     justify-content:space-around;
@@ -163,6 +166,7 @@
       // width:235PX;
       width:23%;
       height:131PX;
+      background:rgba(255,255,255,1);
       box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
       border-radius:4px;
       margin-bottom:14PX;
@@ -195,6 +199,10 @@
     }
   }
   .financial-profit,.financial-order{
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+    border: 1PX solid #ccc;
+    // width:1014PX;
     height:560PX;
     position: relative;
     // background: green;
