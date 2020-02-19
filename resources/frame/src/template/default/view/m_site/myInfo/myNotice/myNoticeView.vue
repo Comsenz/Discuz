@@ -1,5 +1,5 @@
 <template>
-    <div class="my-notice-box my-info-money-header">
+    <div class="my-notice-box">
       <MyNoticeHeader title="我的通知"></MyNoticeHeader>
       <main class="my-notice-main content">
         <van-cell cless="my-notice-cell" @click="myJump(item.routerName)" is-link v-for='(item,index) in num' :key='index'>

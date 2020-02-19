@@ -44,7 +44,7 @@
       </div> -->
     <!-- </main> -->
   <!-- </div> -->
-   <div class="reply-my-box my-info-money-header">
+   <div class="reply-my-box">
     <comHeader title="我的收藏"></comHeader>
     <van-list
     v-model="loading"

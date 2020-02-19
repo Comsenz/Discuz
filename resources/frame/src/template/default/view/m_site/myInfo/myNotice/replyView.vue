@@ -1,5 +1,5 @@
 <template>
-  <div class="reply-my-box my-info-money-header">
+  <div class="reply-my-box">
     <ReplyHeader title="回复我的"></ReplyHeader>
     <van-list
     v-model="loading"

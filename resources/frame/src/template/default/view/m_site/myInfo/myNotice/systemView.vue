@@ -1,5 +1,5 @@
 <template>
-  <div class="reward-box my-info-money-header">
+  <div class="reward-box">
     <SystemHeader title="系统通知"></SystemHeader>
     <van-list
     v-model="loading"

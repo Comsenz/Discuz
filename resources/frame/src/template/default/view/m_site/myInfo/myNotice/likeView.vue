@@ -1,5 +1,5 @@
 <template>
-  <div class="like-box my-info-money-header">
+  <div>
     <LikeHeader title="点赞我的"></LikeHeader>
     <van-list
     v-model="loading"
@@ -27,8 +27,6 @@
         <span>{{item._data.post_content}}</span>
         </div> -->
       </div>
-
-
     </main>
     </van-pull-refresh>
   </van-list>
