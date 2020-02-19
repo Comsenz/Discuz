@@ -7,7 +7,8 @@
     <van-pull-refresh v-model="isLoading" :head-height="0" @refresh="onRefresh">
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
-		    	<div class="postTop">
+          <normalDetail v-if="themeCon._data.isLongArticle==0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
+		    	<!-- <div class="postTop">
 		    		<div class="postPer">
               <img v-if="themeCon.user && themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(themeCon.user._data.id)">
@@ -20,11 +21,11 @@
 		    		<div class="postOpera">
 		    			<span class="icon iconfont icon-top" v-if="themeCon._data.isSticky"></span>
 		    		</div>
-		    	</div>
-		    	<div class="postContent">
+		    	</div> -->
+		    	<!-- <div class="postContent">
 		    		<a v-html="themeCon.firstPost._data.contentHtml"></a>
-		    	</div>
-		    	<div class="postImgBox" v-if="firstpostImageList.length>0">
+		    	</div> -->
+		    	<!-- <div class="postImgBox" v-if="firstpostImageList.length>0">
             <div class="postImgList">
               <div v-if="isWeixin || isPhone">
                 <van-image
@@ -49,8 +50,7 @@
 		    	</div>
 		    	<div class="uploadFileList" v-if="isiOS && themeCon.firstPost.attachments.length>0">
 		    		<a @click="downAttachment(attachment._data.url)" class="fileChi" v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex">
-              <!-- <a :href="attachment._data.url" class="fileChi"  v-for="(attachment,attaindex)  in themeCon.firstPost.attachments" :key="attaindex" download> -->
-		    		  <span v-if="attachment._data.extension === 'rar'" class="icon iconfont icon-rar"></span>
+              
               <span v-if="attachment._data.extension === 'zip'" class="icon iconfont icon-rar"></span>
 		    		  <span v-else-if="attachment._data.extension === 'doc'" class="icon iconfont icon-word"></span>
               <span v-else-if="attachment._data.extension === 'docx'" class="icon iconfont icon-word"></span>
@@ -87,7 +87,11 @@
               <span v-else="" class="icon iconfont icon-doubt"></span>
             	<span class="fileName">{{attachment._data.fileName}}</span>
             </a>
-		    	</div>
+		    	</div> -->
+
+          <longTextDetail v-if="themeCon._data.isLongArticle==1" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></longTextDetail>
+
+
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.viewCount}}&nbsp;阅读</span>
 		    		<!-- <a href="javascript:;" class="postDetR">管理<span class="icon iconfont icon-down-menu"></span></a> -->
@@ -245,14 +249,17 @@
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import longTextDetail from '../home/details/longTextDetailsView';
+import normalDetail from '../home/details/normalDetailsView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
-// import '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "detailsView",
     components:{
-    	comHeader,
+      comHeader,
+      normalDetail,
+      longTextDetail
     },
     ...mSiteDetailsCon
 }

@@ -68,7 +68,8 @@ export default {
       isCli: false,
       moneyVal: '',
       timeout: null,
-      paySetValue: ''
+      paySetValue: '',
+      titleMaxLength: 80,
 
     }
   },
@@ -142,6 +143,12 @@ export default {
         this.limitMaxEncLength = true;
       }
       console.log(this.enclosureListLen+'sssss');
+    },
+    
+    themeTitle() {
+      if (this.themeTitle.length > this.titleMaxLength) {
+          this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
+      }
     },
   },
   methods: {
@@ -253,6 +260,15 @@ export default {
           }
         })
       } else {
+        if(this.themeTitle.length<4){
+          this.$toast.fail('标题不得少于三个字符');
+          return false;
+        }
+        if(this.content.length<1){
+          this.$toast.fail('内容不得为空');
+          return false;
+        }
+        
         this.attriAttachment = this.fileListOne.concat(this.enclosureList);
         for(let m=0;m<this.attriAttachment.length;m++){
           this.attriAttachment[m] = {
