@@ -107,7 +107,7 @@ class VerifyMobile
         throw new SmsCodeVerifyException();
     }
 
-    protected function lostPwd()
+    protected function resetPwd()
     {
         $this->controller->serializer = UserSerializer::class;
         if ($this->mobileCode->user && isset($this->params['password'])) {

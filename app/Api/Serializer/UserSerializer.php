@@ -45,7 +45,7 @@ class UserSerializer extends AbstractSerializer
             'id'                => (int) $model->id,
             'username'          => $model->username,
             'mobile'            => $model->mobile,
-            'avatarUrl'         => $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
+            'avatarUrl'         => $this->getAvatarUrl($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
@@ -75,11 +75,40 @@ class UserSerializer extends AbstractSerializer
                 'registerIp'        => $model->register_ip,
                 'lastLoginIp'       => $model->last_login_ip,
                 'identity'          => $model->identity,
-                'realname'         => $model->realname,
+                'realname'          => $model->realname,
+            ];
+        }
+
+        // 钱包余额
+        if ($this->actor->id === $model->id) {
+            $attributes += [
+                'walletBalance' => $model->userWallet->available_amount,
             ];
         }
 
         return $attributes;
+    }
+
+    /**
+     * 判断头像 - 是否用微信头像
+     *
+     * @param $model
+     * @return string
+     */
+    public function getAvatarUrl($model)
+    {
+        $model->load('wechat');
+
+        $avatar = '';
+        if (empty($model->avatar)) {
+            if (!empty($model->wechat)) {
+                $avatar = $model->wechat->headimgurl;
+            }
+        } else {
+            $avatar = $model->avatar;
+        }
+
+        return !empty($avatar) ? $avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
     }
 
     /**
