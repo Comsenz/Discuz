@@ -74,9 +74,8 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
                 'password' => ''
             ];
 
-            $wechatUser->setKeyName($this->getType());
             $data = $this->fixData($user->getRaw(), $actor);
-            unset($data['user_id'], $data[$this->getType()], $data['unionid']);
+            unset($data['user_id']);
             $wechatUser->setRawAttributes($data);
             $wechatUser->save();
 
@@ -100,7 +99,6 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
         if (!$wechatUser) {
             $wechatUser = new UserWechat();
         }
-        $wechatUser->setKeyName($this->getType());
         $wechatUser->setRawAttributes($this->fixData($rawUser, $actor));
         $wechatUser->save();
 
