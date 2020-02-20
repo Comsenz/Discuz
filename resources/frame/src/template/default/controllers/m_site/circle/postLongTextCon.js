@@ -22,6 +22,7 @@ export default {
       list: [],
       footMove: false,
       payMove: false,
+      markMove: false,
       faceData:[],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -70,6 +71,7 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
+      
 
     }
   },
@@ -569,6 +571,7 @@ export default {
       // }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
+      this.markMove = !this.markMove;
     },
     backClick() {
       this.$router.go(-1);

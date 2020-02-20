@@ -64,11 +64,11 @@
                   <van-image
                     fit="cover"
                     lazy-load
-                    v-for="(image,index)  in item.firstPost.imageList"
+                    v-for="(image,imgIndex)  in item.firstPost.imageList"
                     :src="image"
                     class="themeImgChild"
-                    :key="index"
-                     v-if="index < 9"
+                    :key="imgIndex"
+                     v-if="imgIndex < 9"
                   >
                   </van-image>
                 </div>
@@ -95,7 +95,7 @@
             </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
-                <div class="replyCon" v-for="reply in item.lastThreePosts" :key="reply">
+                <div class="replyCon" v-for="(reply,repIndex) in item.lastThreePosts" :key="repIndex">
                   <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(reply.user._data.id)">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
                   <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(reply.user._data.id)">回复</span>

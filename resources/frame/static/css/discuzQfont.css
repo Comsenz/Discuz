@@ -217,3 +217,6 @@
 .icon-alipay:before {
   content: "\e63d";
 }
+.icon-add:before {
+  content: "\e640";
+}
