@@ -1,7 +1,7 @@
 /**
- * pc 端首页控制器
+ * 付费站点分享页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -14,10 +14,13 @@ export default {
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       thread:false,
-      sitePrice:'',//加入价格
       themeCon:[],
       limitList:'',
       allowRegister: '',
+      token:'',
+      alreadyLogin: '',
+      loginName: ''
+      
 		}
 	},
   computed: {
@@ -29,6 +32,13 @@ export default {
     }
   },
   created(){
+    this.token = browserDb.getLItem('Authorization');
+    this.loginName = browserDb.getLItem('foregroundUser');
+    if(this.token){
+      this.alreadyLogin = true;
+    } else {
+      this.alreadyLogin = false;
+    }
     this.myThread();
     this.getInfo();
   },
@@ -46,7 +56,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res);
+          console.log(res,'123456');
           this.siteInfo = res.readdata;
           // console.log(res.readdata._data.siteMode+'请求');
           if(res.readdata._data.set_site.site_author){
@@ -63,8 +73,8 @@ export default {
       this.appFetch({
         url: 'groups',
         method: 'get',
-        splice:'/'+this.groupId,
         data: {
+          'filter[isDefault]': '1',
           include: ['permission'],
         }
       }).then((res) => {
@@ -78,7 +88,7 @@ export default {
         }else{
         console.log('000000');
         console.log(res);
-        this.limitList = res.readdata;
+        this.limitList = res.readdata[0];
         }
       }
       });
@@ -127,7 +137,18 @@ export default {
 			  this.$toast('刷新失败');
 			  this.isLoading = false;
 			})
-		}
+    },
+    //退出登录
+    signOut(){
+      browserDb.removeLItem('tokenId');
+      browserDb.removeLItem('Authorization');
+      // this.$router.push({ path:'/login-user'});
+      this.alreadyLogin = false;
+    },
+    //付费，获得成员权限
+    payClick(){
+
+    }
 
 	},
 

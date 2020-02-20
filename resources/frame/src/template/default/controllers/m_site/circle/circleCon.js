@@ -64,6 +64,7 @@ export default {
       viewportWidth: '',
       publishType: true,
       puslishCho: false,
+      rotate: false
     }
   },
   created:function(){
@@ -357,7 +358,7 @@ export default {
       postCho:function(){
         if(this.canCreateThread){
           // alert('跳转到发布主题页');
-          this.publishType = !this.publishType;
+          this.rotate = !this.rotate;
           this.puslishCho = !this.puslishCho;
           // console.log(this.puslishCho);
         } else {
