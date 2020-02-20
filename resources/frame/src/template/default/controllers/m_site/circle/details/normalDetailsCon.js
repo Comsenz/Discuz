@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     
-},
+  },
 	methods: {
     //判断设备，下载时提示
     downAttachment(url){
