@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
@@ -42,7 +43,7 @@ class BatchCreateDialog
         $this->attributes = $attributes;
     }
 
-    public function handle(Dialog $dialog, UserRepository $user, Dispatcher $events)
+    public function handle(Dialog $dialog, UserRepository $user, Dispatcher $events, DispatcherBus $bus)
     {
         $this->events = $events;
 
@@ -65,8 +66,16 @@ class BatchCreateDialog
                 continue;
             }
 
-            $result['data'][] = $dialog::buildOrFetch($sender, $recipientUser->id);
+            $result['data'][] = $dialogRes = $dialog::buildOrFetch($sender, $recipientUser->id);
 
+            //创建会话时如传入消息内容，则创建消息
+            $message_text = Arr::get($this->attributes, 'message_text', null);
+            if ($message_text) {
+                $this->attributes['dialog_id'] = $dialogRes->id;
+                $bus->dispatchNow(
+                    new CreateDialogMessage($this->actor, $this->attributes)
+                );
+            }
         }
         return $result;
     }

@@ -207,18 +207,9 @@ class ListThreadsController extends AbstractListController
             });
         }
 
-        // 付费主题，不返回内容
-        if (! $actor->isAdmin()) {
-            $allRewardedThreads = Order::where('user_id', $actor->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->pluck('thread_id');
-
-            $threads->map(function ($thread) use ($allRewardedThreads) {
-                if ($thread->price > 0 && ! $allRewardedThreads->contains($thread->id)) {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, 50);
-                }
-            });
+        // 付费主题对未付费用户只展示部分内容
+        if (in_array('firstPost', $load) && ! $actor->isAdmin()) {
+            $threads = $this->cutUnpaidThreadContent($threads, $actor);
         }
 
         return $threads;
@@ -496,6 +487,42 @@ class ListThreadsController extends AbstractListController
         $threads->map(function ($thread) use ($allRewardedUser, $limit) {
             $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id)->take($limit));
         });
+
+        return $threads;
+    }
+
+    /**
+     * 付费主题对未付费用户只展示部分内容
+     *
+     * @param Collection $threads
+     * @param User $actor
+     * @return Collection
+     */
+    protected function cutUnpaidThreadContent(Collection $threads, User $actor)
+    {
+        // 需付费主题
+        $notFreeThreads = $threads->where('price', '>', 0)->where('user_id', '<>', $actor->id)->pluck('id');
+
+        if ($notFreeThreads) {
+            // 已付费主题
+            $paidThreads = Order::whereIn('thread_id', $notFreeThreads)
+                ->where('user_id', $actor->id)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->pluck('thread_id');
+
+            // 未付费主题只展示部分内容
+            $notFreeThreads->map(function ($threadId) use ($threads, $paidThreads) {
+                $thread = $threads->firstWhere('id', $threadId);
+
+                if ($paidThreads->contains($threadId)) {
+                    $thread->setAttribute('paid', true);
+                } else {
+                    $thread->setAttribute('paid', false);
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                }
+            });
+        }
 
         return $threads;
     }
