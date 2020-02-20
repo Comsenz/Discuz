@@ -33,7 +33,7 @@ export default {
     //请求初始化数据
     loadSite(){
       const userId = browserDb.getLItem('tokenId');
-       this.appFetch({
+      var load =this.appFetch({
         url: 'users',
         method: 'get',
         splice:'/'+userId,
@@ -95,6 +95,7 @@ export default {
         }
       }
       });
+   return load
     },
 
     //查看更多站点成员
@@ -108,6 +109,7 @@ export default {
     },
     onRefresh(){
             this.loadSite().then((res)=>{
+            
             this.$toast('刷新成功');
             this.isLoading =false;
             this.finished = false;
