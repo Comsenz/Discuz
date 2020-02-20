@@ -197,6 +197,9 @@ export default {
     },
     //初始化请求用信息
     loadUserInfo(){
+      if(!this.userId){
+        return false;
+      }
       // console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',

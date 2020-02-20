@@ -206,3 +206,17 @@
 .icon-bold:before {
   content: "\e635";
 }
+.icon-wxpay:before {
+  content: "\e63f";
+}
+
+.icon-wallet:before {
+  content: "\e63e";
+}
+
+.icon-alipay:before {
+  content: "\e63d";
+}
+.icon-add:before {
+  content: "\e640";
+}

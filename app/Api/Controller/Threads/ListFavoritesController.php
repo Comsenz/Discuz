@@ -75,18 +75,9 @@ class ListFavoritesController extends ListThreadsController
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
         }
 
-        // 付费主题，不返回内容
-        if (! $actor->isAdmin()) {
-            $allRewardedThreads = Order::where('user_id', $actor->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->pluck('thread_id');
-
-            $threads->map(function ($thread) use ($allRewardedThreads) {
-                if ($thread->price > 0 && ! $allRewardedThreads->contains($thread->id)) {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, 50);
-                }
-            });
+        // 付费主题对未付费用户只展示部分内容
+        if (in_array('firstPost', $load) && ! $actor->isAdmin()) {
+            $threads = $this->cutUnpaidThreadContent($threads, $actor);
         }
 
         return $threads;

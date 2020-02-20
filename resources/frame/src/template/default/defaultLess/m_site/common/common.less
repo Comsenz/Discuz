@@ -74,16 +74,16 @@ body { height: inherit;}
 .whiteBg { background: #fff;}
 * {	margin: 0; padding: 0;}
 a { color: @main;}
-input::-webkit-input-placeholder {
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder {
 	color: #b2b2b2;
 }
-input:-moz-placeholder {
+input:-moz-placeholder,textarea:-moz-placeholder {
 	color: #b2b2b2;
 }
-input::-moz-placeholder {
+input::-moz-placeholder,textarea::-moz-placeholder {
 	color: #b2b2b2;
 }
-input:-ms-input-placeholder {
+input:-ms-input-placeholder, textarea::-moz-placeholder {
 	color: #b2b2b2;
 }
 .comBtn {
@@ -100,11 +100,12 @@ input:-ms-input-placeholder {
 }
 // 编辑器样式
 .markdownBox {
-  padding: 15px 0;
+  padding: 15px;
+  box-sizing: border-box;
   .icon {
     font-size: 16px;
     color: @main;
-    margin-right: 28px;
+    margin-right: 27px;
   }
   md-ordered-list:last-child .icon {
     margin-right: 0;

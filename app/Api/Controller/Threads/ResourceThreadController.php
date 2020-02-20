@@ -8,8 +8,8 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
-use App\Exceptions\OrderException;
 use App\Models\Order;
+use App\Models\Post;
 use App\Models\Thread;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
@@ -17,6 +17,7 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -78,7 +79,6 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      * @throws InvalidParameterException
      * @throws PermissionDeniedException
-     * @throws OrderException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -91,16 +91,26 @@ class ResourceThreadController extends AbstractResourceController
 
         $this->assertCan($actor, 'viewPosts', $thread);
 
-        // 付费帖子
-        if ($thread->price > 0 && ! $actor->isAdmin()) {
-            $order = Order::where('user_id', $actor->id)
-                ->where('thread_id', $thread->id)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->exists();
+        // 付费主题对未付费用户只展示部分内容
+        if ($thread->price > 0 && $thread->user_id != $actor->id && in_array('firstPost', $include)) {
+            // 是否付费
+            if ($actor->isAdmin()) {
+                $paid = true;
+            } else {
+                $paid = Order::where('user_id', $actor->id)
+                    ->where('thread_id', $thread->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', Order::ORDER_TYPE_THREAD)
+                    ->exists();
+            }
 
-            if (! $order) {
-                throw new OrderException('order_post_not_found');
+            $thread->setAttribute('paid', $paid);
+
+            // 截取内容、隐藏图片及附件
+            if (! $paid) {
+                $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                $thread->firstPost->setRelation('images', collect());
+                $thread->firstPost->setRelation('attachments', collect());
             }
         }
 

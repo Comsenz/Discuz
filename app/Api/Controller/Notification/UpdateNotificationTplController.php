@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Notification;
-
 
 use App\Api\Serializer\NotificationTplSerializer;
 use App\Models\NotificationTpl;
@@ -17,7 +20,6 @@ class UpdateNotificationTplController extends AbstractResourceController
     use AssertPermissionTrait;
 
     public $serializer = NotificationTplSerializer::class;
-
 
     /**
      * @param ServerRequestInterface $request
@@ -35,19 +37,18 @@ class UpdateNotificationTplController extends AbstractResourceController
 
         $notificationTpl = NotificationTpl::find($id);
 
-        if($title = Arr::get($attributes, 'title')) {
+        if ($title = Arr::get($attributes, 'title')) {
             $notificationTpl->title = $title;
         }
-        if($content = Arr::get($attributes, 'content')) {
+        if ($content = Arr::get($attributes, 'content')) {
             $notificationTpl->content = $content;
         }
-        if(isset($attributes['status'])) {
+        if (isset($attributes['status'])) {
             $notificationTpl->status = Arr::get($attributes, 'status');
         }
 
         $notificationTpl->save();
 
         return $notificationTpl;
-
     }
 }
