@@ -518,8 +518,11 @@ class ListThreadsController extends AbstractListController
                 if ($paidThreads->contains($threadId)) {
                     $thread->setAttribute('paid', true);
                 } else {
+                    // 截取内容、隐藏图片及附件
                     $thread->setAttribute('paid', false);
                     $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                    $thread->firstPost->setRelation('images', collect());
+                    $thread->firstPost->setRelation('attachments', collect());
                 }
             });
         }
