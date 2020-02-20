@@ -5,7 +5,7 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\Api\Controller\Users;
+namespace App\Api\Controller\Dialog;
 
 use App\Api\Serializer\DialogMessageSerializer;
 use App\Commands\Dialog\CreateDialogMessage;
@@ -38,7 +38,7 @@ class CreateDialogMessageController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $attributes = (int) Arr::get($request->getParsedBody(), 'data.attributes');
+        $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         return $this->bus->dispatch(
             new CreateDialogMessage($actor, $attributes)

@@ -17,7 +17,7 @@ body,html {
   height: auto;
   // height: 100%;
   color: @font000;
-  font-size: 14px;
+  font-size: 15px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
 body { height: inherit;}
@@ -74,6 +74,42 @@ body { height: inherit;}
 .whiteBg { background: #fff;}
 * {	margin: 0; padding: 0;}
 a { color: @main;}
+input::-webkit-input-placeholder {
+	color: #b2b2b2;
+}
+input:-moz-placeholder {
+	color: #b2b2b2;
+}
+input::-moz-placeholder {
+	color: #b2b2b2;
+}
+input:-ms-input-placeholder {
+	color: #b2b2b2;
+}
+.comBtn {
+  display: block;
+  width: 168px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  background: @main;
+  border-radius: 5px;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+}
+// 编辑器样式
+.markdownBox {
+  padding: 15px 0;
+  .icon {
+    font-size: 16px;
+    color: @main;
+    margin-right: 28px;
+  }
+  md-ordered-list:last-child .icon {
+    margin-right: 0;
+  }
+}
 .footer_stats { display: none;}
 .lineE5 { border-bottom: 1px solid #e5e5e5;}
 .borNone { border: none !important;}

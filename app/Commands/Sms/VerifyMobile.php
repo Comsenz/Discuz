@@ -20,6 +20,7 @@ use Discuz\Api\Client;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class VerifyMobile
 {
@@ -54,7 +55,7 @@ class VerifyMobile
         $this->validator = $validator;
         $this->mobileCodeRepository = $mobileCodeRepository;
 
-        return call_user_func([$this, $this->mobileCode->type]);
+        return call_user_func([$this, Str::camel($this->mobileCode->type)]);
     }
 
     /**
@@ -95,7 +96,18 @@ class VerifyMobile
         return $this->mobileCode->user;
     }
 
-    protected function lostpwd()
+    protected function rebind()
+    {
+        $verify = $this->mobileCodeRepository->getSmsCode($this->actor->getOriginal('mobile'), 'verify', 1);
+
+        if ($verify && $verify->expired_at < Carbon::now()) {
+            return $this->bind();
+        }
+
+        throw new SmsCodeVerifyException();
+    }
+
+    protected function resetPwd()
     {
         $this->controller->serializer = UserSerializer::class;
         if ($this->mobileCode->user && isset($this->params['password'])) {
@@ -108,20 +120,23 @@ class VerifyMobile
         return $this->mobileCode->user;
     }
 
+    protected function resetPayPwd()
+    {
+        $this->controller->serializer = UserSerializer::class;
+        if ($this->mobileCode->user && isset($this->params['pay_password'])) {
+            $this->validator->valid([
+                'pay_password' => $this->params['pay_password'],
+                'pay_password_confirmation' => $this->params['pay_password_confirmation'],
+            ]);
+            $this->mobileCode->user->changePayPassword($this->params['pay_password']);
+            $this->mobileCode->user->save();
+        }
+        return $this->mobileCode->user;
+    }
+
     protected function verify()
     {
         $this->controller->serializer = UserSerializer::class;
         return $this->mobileCode->user;
-    }
-
-    protected function rebind()
-    {
-        $verify = $this->mobileCodeRepository->getSmsCode($this->actor->getOriginal('mobile'), 'verify', 1);
-
-        if($verify && $verify->expired_at < Carbon::now()) {
-            return $this->bind();
-        }
-
-        throw new SmsCodeVerifyException();
     }
 }

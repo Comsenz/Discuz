@@ -174,6 +174,10 @@ body {
   .icon-top {
     float: left;
   }
+  .icon-money1 {
+    color: #FD6B6B;
+    margin-left: 6px;
+  }
 }
 .postContent {
   font-size: 15px;
@@ -295,7 +299,45 @@ body {
     font-size: 20px;
   }
 }
+.publishTypeBox {
+  position: fixed;
+  bottom: 128px;
+  right: 15px;
+  width: 60px;
+  padding: 7px 4px;
+  border: 2px solid #e5e5e5;
+  border-radius: 30px;
+  background: #fff;
+  box-sizing: border-box;
+  .iconBg {
+    background: #F4F4F4;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    margin: 0 auto 6px auto;
+    text-align: center;
+    line-height: 46px;
+    .icon {
+      font-size: 20px;
+      color: #000000;
+    }
+  }
+  .publishCho {
+    .publishChoWo {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      line-height: 16px;
+    }
+    &:first-child {
+      .publishChoWo {
+        margin-bottom: 5px;
+      }
+    }
+  }
 
+
+}
 /*
 付费站点-首页-未登录
 payCircle.view
@@ -558,7 +600,7 @@ openCircleConView.vue
     height: 20px;
     line-height: 20px;
     font-size: 15px;
-    @include px2rem(margin-bottom, 26);
+    margin-bottom: 13px;
     margin-bottom: 13px;
     .icon {
       float: left;
@@ -704,7 +746,7 @@ openCircleConView.vue
     padding: 0 15px 11px 15px;
     .icon {
       font-size: 13px;
-      @include px2rem(line-height, 36);
+      line-height: 18px;
       line-height: 18px;
     }
     a {
@@ -749,8 +791,7 @@ openCircleConView.vue
   padding-top: 0;
   padding-bottom: 10px;
 }
-.themeImgList {
-}
+
 .themeOneImgChild {
   width: 50%;
   min-height: 100px;
@@ -950,6 +991,57 @@ details.vue
     line-height: 140px;
   }
 }
+.postTitle {
+  font-size: 16px;
+  line-height: 48px;
+  text-align: left;
+  padding-bottom: 10px;
+  position: relative;
+  &:after {
+    content: '';
+    display: block;
+    border-bottom: 1px solid @corE5;
+    font-size: 0;
+    line-height: 0;
+  }
+}
+.longTextContent {
+  color: #555555;
+  line-height: 40px;
+  padding-top: 10px;
+  font-size: 15px;
+}
+.payTipBox {
+  margin: 30px 0;
+  background: #f6f6f6;
+  padding: 32px 15px 28px 15px;
+  text-align: center;
+  .tipPrice {
+    text-align: center;
+    font-size: 15px;
+    color: #333333;
+    padding-bottom: 18px;
+    span {
+      font-size: 15px;
+      color: #EF7D1C;
+    }
+  }
+  .buyBtn {
+    display: block;
+    width: 168px;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    background: @main;
+    border-radius: 5px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 auto;
+  }
+}
+
+
 
 //发表主题
 .post-topic-box{
@@ -999,8 +1091,7 @@ details.vue
     min-height: 150px;
     padding: 0 15px 50px 15px;
     box-sizing: border-box;
-    #post-topic-form-text{
-    }
+    
   }
   .uploadBox {
     padding: 0;
@@ -1062,6 +1153,148 @@ details.vue
   .popup{
     position: absolute;
   }
+}
+/**
+ *  发布长文
+ */
+ .markdownText {
+  width: 100%;
+  // min-height: 80px;
+  // max-height: 150px;
+  height: 220px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  font-size: 15px;
+  box-sizing: content;
+  caret-color: @main;  //光标颜色
+  &::-webkit-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &::-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-ms-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+ }
+.post-longText-form {
+  padding-left: 15px;
+}
+.pubThemeTitle {
+  height: 52px;
+  text-align: left;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid @corE5;
+  width: 100%;
+  position: relative;
+}
+.paySetting {
+   position: fixed;
+   bottom: 50px;
+   &:after {
+     border-bottom: none !important;
+   }
+}
+.payMove {
+    bottom: 290px;
+}
+.paySetShow {
+  width: 290px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.popTitBox {
+  line-height: 21px;
+  font-size: 15px;
+  overflow: hidden;
+  .popupTit {
+    float: left;
+    color: @cor333;
+  }
+  .icon {
+    float: right;
+    cursor: pointer;
+    color: #888888;
+  }
+}
+.payMoneyBox {
+  height: 42px;
+  text-align: left;
+  padding: 18px 0;
+  border-bottom: 1px solid @corE5;
+  span {
+    float: left;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .payMoneyInp {
+    font-size: 35px;
+    height: 42px;
+    line-height: 42px;
+    color: #000000;
+    border: none;
+    width: 220px;
+    text-align: left;
+  }
+}
+.payEx {
+  padding: 16px 0 14px 0;
+  font-size: 15px;
+  color: #333333;
+}
+.payExplain {
+  line-height: 16px;
+  font-size: 15px;
+  border: none;
+  width: 100%;
+  &::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &::-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+}
+.popSureBtn {
+  display: block;
+  width: 168px;
+  margin: 51px auto 4px auto;
+  border-radius: 5px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+}
+.forbiddenCli {
+  background: @corC9;
+}
+.sureBtnCli {
+  background: @main;
 }
 /**
  *  回复输入框

@@ -7,12 +7,14 @@
 
 namespace App\Commands\Dialog;
 
+use App\Censor\Censor;
 use App\Models\Dialog;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
 use Illuminate\Support\Arr;
 
 class CreateDialog
@@ -42,30 +44,27 @@ class CreateDialog
         $this->attributes = $attributes;
     }
 
-    public function handle(Dialog $dialog, UserRepository $user, Dispatcher $events)
+    public function handle(Dialog $dialog, UserRepository $user, Dispatcher $events, Censor $censor, DispatcherBus $bus)
     {
         $this->events = $events;
 
         $this->assertCan($this->actor, 'create', $dialog);
 
         $sender = $this->actor->id;
-        $recipients = explode(',', Arr::get($this->attributes, 'recipient_username'));
+        $recipient = Arr::get($this->attributes, 'recipient_username');
 
-        $recipientUnKnowUser = [];
-        $dialogRes = [];
-        foreach ($recipients as $recipient) {
-            $recipientUser = $user->where('username', $recipient)->first();
-            //处理错误的用户名
-            if (!$recipientUser) {
-                Arr::prepend($recipientUnKnowUser, $recipient);
-                continue;
-            }
-            $dialogCreate = $dialog::build($sender, $recipientUser->id);
-            //dialog_message_id 创建时为默认值0
-            $dialogCreate->save();
-            Arr::prepend($dialogRes, $dialogCreate);
+        $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
+
+        $dialogRes = $dialog::buildOrFetch($sender, $recipientUser->id);
+
+        //创建会话时如传入消息内容，则创建消息
+        $message_text = Arr::get($this->attributes, 'message_text', null);
+        if ($message_text) {
+            $this->attributes['dialog_id'] = $dialogRes->id;
+            $bus->dispatchNow(
+                new CreateDialogMessage($this->actor, $this->attributes)
+            );
         }
-
         return $dialogRes;
     }
 }

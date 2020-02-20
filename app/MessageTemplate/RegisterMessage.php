@@ -24,6 +24,7 @@ class RegisterMessage extends DatabaseMessage
     protected function titleReplaceVars()
     {
         return [
+            '',
             $this->settings->get('site_name')
         ];
     }

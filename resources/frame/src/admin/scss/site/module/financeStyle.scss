@@ -154,6 +154,12 @@
   财务统计
 */
 .financial-box{
+  position: relative;
+  &::before{content:'';width:49PX;height:100%;position: absolute;top:0;left:-49PX;background:rgba(244,247,249,1);};
+  &::after{content:'';width:49PX;height:100%;position: absolute;top:0;right:-49PX;background:rgba(244,247,249,1);};
+  // margin-left:-49PX;
+  // margin-right:-49PX;
+  background:rgba(244,247,249,1);
   .financial-statistics{
     display: flex;
     justify-content:space-around;
@@ -163,6 +169,10 @@
       // width:235PX;
       width:23%;
       height:131PX;
+      background:rgba(255,255,255,1);
+      box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+      border-radius:4px;
+      margin-bottom:14PX;
       // margin-left:24PX;
       // background:red;
       position: relative;
@@ -192,16 +202,45 @@
     }
   }
   .financial-profit,.financial-order{
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+    border: 1PX solid #ccc;
+    // width:1014PX;
     height:560PX;
+    position: relative;
     // background: green;
     .financial-profit-title{
-      height:48PX;
+      // height:48PX;
       // background:yellow;
       display: flex;
       justify-content:space-between;
+      flex-wrap: wrap;
       // margin-left:0 8px 0 14PX;
       align-items: center;
+      .financial-profit-title-right{
+        // background:greenyellow;
+        display: flex;
+        align-items: center;
+        .active{
+          color:#3571A5
+        }
+        ul{
+          display: inline-block;
+        }
+        ul li {
+          float: left;
+          padding: 10px;  
+          // text-align: center;   
+      }
+      }
 
+    }
+    .noData{
+      position: absolute;
+      height:473PX;
+      // background:red;
+      line-height: 473PX;
+      left:50%;
     }
     .financial-profit-chart{
       height:473PX;

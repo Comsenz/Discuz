@@ -17,7 +17,6 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -48,7 +47,6 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-
         $sessionId = Arr::get($request->getQueryParams(), 'sessionId', Str::random());
 
         $request = $request->withAttribute('cache', $this->cache)->withAttribute('sessionId', $sessionId);
@@ -99,7 +97,7 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
     {
         $rawUser = $user->getRaw();
 
-        if(!$wechatUser) {
+        if (!$wechatUser) {
             $wechatUser = new UserWechat();
         }
         $wechatUser->setKeyName($this->getType());
@@ -118,7 +116,8 @@ abstract class AbstractWechatLoginController extends AbstractResourceController
 
     abstract protected function getType();
 
-    protected function fixData($rawUser, $actor) {
+    protected function fixData($rawUser, $actor)
+    {
         $data = array_merge($rawUser, ['user_id' => $actor->id, $this->getType() => $rawUser['openid']]);
         unset($data['openid'], $data['language']);
         $data['privilege'] = serialize($data['privilege']);

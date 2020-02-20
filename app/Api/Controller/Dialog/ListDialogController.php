@@ -5,7 +5,7 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\Api\Controller\Users;
+namespace App\Api\Controller\Dialog;
 
 use App\Api\Serializer\DialogSerializer;
 use App\Models\User;
@@ -46,7 +46,7 @@ class ListDialogController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['user'];
+    public $optionalInclude = ['sender','recipient','dialogMessage'];
 
     /* The relationships that are included by default.
      *
@@ -107,10 +107,10 @@ class ListDialogController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
-        $join_field = '';
         $query = $this->dialog->query();
 
-
+        $query->where('sender_user_id', $actor->id);
+        $query->orWhere('recipient_user_id', $actor->id);
 
         $this->dialogCount = $limit > 0 ? $query->count() : null;
 

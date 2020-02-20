@@ -61,6 +61,11 @@ class CreateAttachment
     public $isGallery;
 
     /**
+     * @var int
+     */
+    public $isSound;
+
+    /**
      * 是否合法 0 不合法 1 合法
      *
      * @var int
@@ -74,17 +79,15 @@ class CreateAttachment
      * @param UploadedFileInterface $file
      * @param string $ipAddress 请求来源的IP地址.
      * @param bool $isGallery    是否是帖子图片
+     * @param int  $isSound      是否是音频：0文件1音频2视频
      */
-    public function __construct(
-        $actor,
-        UploadedFileInterface $file,
-        string $ipAddress,
-        bool $isGallery = false
-    ) {
+    public function __construct($actor, UploadedFileInterface $file, string $ipAddress, bool $isGallery, $isSound)
+    {
         $this->actor = $actor;
         $this->file = $file;
         $this->ipAddress = $ipAddress;
         $this->isGallery = $isGallery;
+        $this->isSound = $isSound;
     }
 
     /**
@@ -118,11 +121,19 @@ class CreateAttachment
             new Uploading($this->actor, $this->file)
         );
 
-        $type = $settings->get($this->isGallery ? 'support_img_ext' : 'support_file_ext');
+        if (!empty($this->isSound)) {
+            // 0文件 1音频 2视频
+            $enum = Attachment::enumIsSound($this->isSound, $sizeType);
+            $type = $settings->get($enum);
+        } else {
+            $type = $settings->get($this->isGallery ? 'support_img_ext' : 'support_file_ext');
+            $sizeType = 'support_max_size';
+        }
+
         $type = $type ? explode(',', $type) : [];
 
         // 将数据库存的 Mb 转换为 bytes
-        $size = $settings->get('support_max_size', 'default', 0) * 1024 * 1024;
+        $size = $settings->get($sizeType, 'default', 0) * 1024 * 1024;
 
         $uploadFile = $uploadTool->save($type, $size);
 
@@ -132,12 +143,12 @@ class CreateAttachment
 
         $isRemote = 0;
 
-        if(Arr::get($uploadFile, 'url') instanceof Uri) {
+        if (Arr::get($uploadFile, 'url') instanceof Uri) {
             $isRemote = 1;
         }
 
         // 生成缩略图
-        if ($this->isGallery && !$isRemote) {
+        if ($this->isGallery && !$isRemote && $this->isSound == 0) {
             $imgPath = Arr::get($uploadFile, 'path');
             $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
 
@@ -168,6 +179,7 @@ class CreateAttachment
             $this->actor->id,
             0,
             $this->isGallery,
+            $this->isSound,
             $this->isApproved,
             $uploadName,
             $uploadPath,

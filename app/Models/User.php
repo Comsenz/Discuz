@@ -50,7 +50,7 @@ use Illuminate\Support\Carbon;
  * @package App\Models
  * @method truncate()
  * @method static find($id)
- * @method static where(array)
+ * @method static where($column, $array)
  */
 class User extends Model
 {

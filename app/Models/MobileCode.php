@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
+ * @property string $mobile
+ * @property string $code
+ * @property string $type
+ * @property string $ip
+ * @property int $state
+ * @property \Carbon\Carbon $expired_at
  * @property mixed user
  */
 class MobileCode extends Model

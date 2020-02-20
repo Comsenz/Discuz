@@ -160,3 +160,49 @@
 .icon-xls:before {
   content: "\e62d";
 }
+.icon-longtext:before {
+  content: "\e634";
+}
+
+.icon-theme:before {
+  content: "\e630";
+}
+
+.icon-money1:before {
+  content: "\e62f";
+}
+
+.icon-closeCho:before {
+  content: "\e62e";
+}
+.icon-unordered-list:before {
+  content: "\e63c";
+}
+
+.icon-title:before {
+  content: "\e63b";
+}
+
+.icon-quote:before {
+  content: "\e63a";
+}
+
+.icon-ordered-list:before {
+  content: "\e639";
+}
+
+.icon-link:before {
+  content: "\e638";
+}
+
+.icon-italic:before {
+  content: "\e637";
+}
+
+.icon-code:before {
+  content: "\e636";
+}
+
+.icon-bold:before {
+  content: "\e635";
+}
