@@ -501,7 +501,7 @@ class ListThreadsController extends AbstractListController
     protected function cutUnpaidThreadContent(Collection $threads, User $actor)
     {
         // 需付费主题
-        $notFreeThreads = $threads->where('price', '>', 0)->pluck('id');
+        $notFreeThreads = $threads->where('price', '>', 0)->where('user_id', '<>', $actor->id)->pluck('id');
 
         if ($notFreeThreads) {
             // 已付费主题
