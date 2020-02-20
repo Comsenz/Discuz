@@ -41,9 +41,9 @@
               <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle">
                 <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item._data.title"></a>
                 <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span>
-                <span class="icon iconfont icon-money1" v-else="item._data.price>0"></span>
+                <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span>
               </div>
-              <div class="postContent" v-else="item.firstPost && !item._data.isLongArticle">
+              <div class="postContent" v-else-if="item.firstPost && !item._data.isLongArticle">
                 <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
@@ -68,8 +68,9 @@
                     :src="image"
                     class="themeImgChild"
                     :key="index"
-                    v-if="index < 9"
-                  />
+                     v-if="index < 9"
+                  >
+                  </van-image>
                 </div>
               </div>
             </div>
@@ -94,7 +95,7 @@
             </div>
 
               <div class="replyBox" v-if="item.lastThreePosts.length>0">
-                <div class="replyCon" v-for="reply in item.lastThreePosts">
+                <div class="replyCon" v-for="reply in item.lastThreePosts" :key="reply">
                   <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(reply.user._data.id)">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
                   <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(reply.user._data.id)">回复</span>
