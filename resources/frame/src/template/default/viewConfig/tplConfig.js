@@ -137,7 +137,7 @@ export default {
       },
       'normal-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/home/details/normaldetailsView'],resolve)
+          require(['../view/m_site/home/details/normalDetailsView'],resolve)
         },
         metaInfo:{
           title:"普通主题详情页",
@@ -575,7 +575,7 @@ export default {
     'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
-    'pay-circle-con/:themeId',
+    'pay-circle-con/:themeId/:groupId',
   ];
 
 
@@ -615,6 +615,13 @@ export default {
     'information-page'
   ];
 
+  //公开模式下不能访问的页面
+  const publicNotAccessPage = [
+    // 'pay-the-fee',
+    'pay-circle-con/:themeId/:groupId',
+    // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
+    // 'pay-status',
+  ];
 
   /*
   * 获取用户第一次访问页面，登录后跳转回来
@@ -727,6 +734,10 @@ export default {
           if (res){
             /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
             if (signInAndPayForAccess.includes(to.name)){
+              if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                // console.log(to.params.themeId,'当前router主题id');
+                next({path:'/details/' + to.params.themeId});
+              }
               next(vm=>{
                 vm.$router.go(-1);
               })
@@ -779,6 +790,20 @@ export default {
       if (notLoggedInToAccessPage.includes(to.name)){
         /*符合，未登录可以访问站点*/
         console.log('符合');
+        this.getForum().then(res=>{
+          /*判断站点模式*/
+          if (res.readdata._data.set_site.site_mode === 'public'){
+            if(publicNotAccessPage.includes(to.name)){
+              // console.log(to.name,'当前包含路由');
+              if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                // console.log(to.params.themeId,'当前router主题id');
+                next({path:'/details/' + to.params.themeId});
+              }
+            }
+            
+          }
+        })
+        
         next();
       }else {
         /*不符合，跳转到未登录，可访问站点*/

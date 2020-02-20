@@ -22,6 +22,7 @@ export default {
       list: [],
       footMove: false,
       payMove: false,
+      markMove: false,
       faceData:[],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -70,6 +71,7 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
+      
 
     }
   },
@@ -569,6 +571,7 @@ export default {
       // }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
+      this.markMove = !this.markMove;
     },
     backClick() {
       this.$router.go(-1);
@@ -630,9 +633,13 @@ export default {
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.data != null && event.data > '0'){
+      // console.log('执行');
+      // console.log(event.target.value);
+      if(event.target.value != null && event.target.value > '0'){
+        // console.log('符合');
         this.isCli = true;
       } else {
+        // console.log('不符合');
         this.isCli = false;
       }
     },
