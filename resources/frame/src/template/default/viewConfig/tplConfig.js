@@ -137,7 +137,7 @@ export default {
       },
       'normal-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/home/details/normaldetailsView'],resolve)
+          require(['../view/m_site/home/details/normalDetailsView'],resolve)
         },
         metaInfo:{
           title:"普通主题详情页",
