@@ -16,7 +16,7 @@
                   </div>
                 </div>
                 <div class="postOpera">
-                  <span class="icon iconfont icon-money1" v-if="item._data.isLongArticle"></span>
+                  
                   <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
                   <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit || item.firstPost._data.canLike)">
                   	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
@@ -38,10 +38,14 @@
                   </div>
                 </div>
               </div>
-              <div class="postContent" v-if="item.firstPost">
+              <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle">
+                <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item._data.title"></a>
+                <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span>
+                <span class="icon iconfont icon-money1" v-else="item._data.price>0"></span>
+              </div>
+              <div class="postContent" v-else="item.firstPost && !item._data.isLongArticle">
                 <a @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml"></a>
               </div>
-
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <div class="themeImgList">
                   <van-image
