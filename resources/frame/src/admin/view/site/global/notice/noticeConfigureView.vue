@@ -10,8 +10,8 @@
     </Card>
 
     <Card header="用户角色通知内容：">
-      <CardRow
-        description="系统发送的欢迎信息的内容，标题内容均支持变量替换，可以使用如下变量:
+      <CardRow row
+        description="系统发送的欢迎信息的内容，标题内容均支持变量替换，可以使用如下变量:<br>
                     {usename}：用户名
                     {time}：发送时间
                     {sitename}：网站名称（显示在页面底部的联系方式名称）
