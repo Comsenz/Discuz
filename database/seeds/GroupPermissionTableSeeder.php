@@ -86,8 +86,6 @@ class GroupPermissionTableSeeder extends Seeder
         //短消息
         'dialog.create' => [],                 // 创建会话
         'dialog.message.create' => [],         // 创建会话消息
-        'dialog.message.create' => [],         // 创建会话消息
-        'dialog.message.create' => [],         // 创建会话消息
 
 
     ];
