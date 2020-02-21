@@ -28,8 +28,9 @@
             >{{item.name}}</li>
           </ul>
           <el-date-picker
+            class="input-class"
             v-model="valueMouth"
-            width="100"
+            size="small"
             v-show="mouthTab"
             @change="changeMouth"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -40,7 +41,9 @@
           ></el-date-picker>
           <el-date-picker
             v-model="financialTime"
+            class="input-class"
             v-show="dayTab"
+            size="small"
             clearable
             type="daterange"
             value-format="yyyy-MM-dd"
@@ -72,7 +75,9 @@
             >{{item.name}}</li>
           </ul>
             <el-date-picker
+            class="input-class"
             v-model="valueOrder"
+            size="small"
             v-show="mouthOrderTab"
             @change="changeOrderMouth"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -82,7 +87,9 @@
             end-placeholder="结束月份"
           ></el-date-picker>
           <el-date-picker
+            class="input-class"
             v-model="orderTime"
+            size="small"
             v-show="dayOderTab"
             clearable
             type="daterange"

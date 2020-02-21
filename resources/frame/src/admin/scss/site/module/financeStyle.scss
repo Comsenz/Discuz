@@ -195,6 +195,7 @@
       }
       .financial-con{
         position: absolute;
+        color:#3E4043;
         // margin:0 auto;
         left:14PX;
         top:50%;
@@ -211,7 +212,9 @@
     height:560PX;
     position: relative;
     .financial-profit-title{
-      height:50PX;
+      font-size: 14PX;
+      color:#6B6D71;
+      height:48PX;
       display: flex;
       justify-content:space-between;
       flex-wrap: wrap;
@@ -223,6 +226,7 @@
       .financial-profit-title-right{
         display: flex;
         align-items: center;
+        padding-right:14PX;
         .active{
           color:#3571A5
         }
@@ -231,8 +235,13 @@
         }
         ul li {
           float: left;
-          padding-right: 30PX;  
+          padding-right: 30PX;
+          font-size: 14PX;
+          cursor: pointer;  
           // text-align: center;   
+      }
+      .input-class{
+        width:300PX;
       }
       }
 
