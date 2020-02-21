@@ -36,8 +36,8 @@ export default {
     }else{
       this.tipWx = '确认解绑微信'
     }
-    let qcloud_facdid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_facdid;
-    if(qcloud_facdid == false){
+    let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
+    if(qcloud_faceid == false){
       this.realNameShow = false
     }
   },

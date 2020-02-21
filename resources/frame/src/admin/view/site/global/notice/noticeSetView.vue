@@ -40,7 +40,7 @@
             <div v-if="scope.row._data.status == 1">
               <el-button
                 size="mini"
-                @click="configClick(scope.row.type)">
+                @click="configClick(scope.row._data.id)">
                 配置
               </el-button>
 

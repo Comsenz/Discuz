@@ -83,4 +83,5 @@ module.exports = {
   'statisticChart':'/api/statistic/financeChart',//获取盈利图表数据
   'noticeList':'/api/notification/tpl',               //通知设置列表
   'notification':'/api/notification/tpl/', //修改系统消息模版[通知设置]
+  'noticeConfigure':'/api/notification/tpl/', //通知配置列表
 }
