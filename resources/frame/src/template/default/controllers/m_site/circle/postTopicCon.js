@@ -17,7 +17,7 @@ export default {
       showFacePanel: false,
       keyboard: false,
       // expressionShow: false,
-      keywordsMax: 1000,
+      keywordsMax: 10000,
       list: [],
       footMove: false,
       faceData:[],
