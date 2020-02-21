@@ -12,6 +12,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Arr;
+use Exception;
 
 class Censor
 {
@@ -208,7 +209,13 @@ class Censor
     public function checkReal(string $identity ,string $realname)
     {
         $qcloud = $this->app->make('qcloud');
-        $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
+        try{
+            $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
+
+        } catch (Exception $e) {
+
+            throw new Exception('qcloud_facdid_error');
+        }
         return $result;
     }
 }

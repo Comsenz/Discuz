@@ -57,6 +57,6 @@ class RealUser
         //判断身份证信息与姓名是否符合
         Arr::get($res, 'Result', false) == self::NAME_ID_NUMBER_MATCH && $this->actor->save();
 
-        return $this->actor;
+        return ['actor'=>$this->actor,'res'=>$res];
     }
 }
