@@ -55,8 +55,8 @@ class RealUser
 
         $res = $censor->checkReal($attributes['identity'], $attributes['realname']);
         //判断身份证信息与姓名是否符合
-        Arr::get($res, 'Result', false) == self::NAME_ID_NUMBER_MATCH && $this->actor->save();
+        Arr::get($res, 'Result', true) == self::NAME_ID_NUMBER_MATCH && $this->actor->save();
 
-        return ['actor'=>$this->actor,'res'=>$res];
+        return $this->actor;
     }
 }
