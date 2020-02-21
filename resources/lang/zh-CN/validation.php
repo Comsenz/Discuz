@@ -133,6 +133,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+
+        'pay_password' => [
+            'required_if' => '使用钱包支付时，请输入支付密码。',
+        ],
     ],
 
     /*

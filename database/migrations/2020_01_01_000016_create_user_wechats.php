@@ -13,6 +13,7 @@ class CreateUserWechats extends Migration
     public function up()
     {
         $this->schema()->create('user_wechats', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->index('user_id')->default(0)->comment('用户 id');
             $table->string('mp_openid', 30)->default('')->comment('公众号openid');
             $table->string('dev_openid', 30)->default('')->comment('开放平台openid');

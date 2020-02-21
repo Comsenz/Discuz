@@ -1,0 +1,39 @@
+<template>
+    <div>
+      <Card header="云api配置"></Card>
+
+      <Card header="APPID：">
+        <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的appid。若使用子账号，权限需覆盖所使用
+的服务">
+          <el-input v-model="appId" clearable></el-input>
+        </CardRow>
+      </Card>
+
+      <Card header="Secretid：">
+        <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的SecretId">
+          <el-input v-model="secretId" clearable></el-input>
+        </CardRow>
+      </Card>
+
+      <Card header="SecretKey：">
+        <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的SecretKey">
+          <el-input v-model="secretKey" clearable></el-input>
+        </CardRow>
+      </Card>
+
+      <Card class="footer-btn">
+        <el-button type="primary" size="medium" @click='Submission'>提交</el-button>
+      </Card>
+
+    </div>
+</template>
+
+<script>
+import '../../../../scss/site/module/globalStyle.scss';
+import noticeConfigureCon from '../../../../controllers/site/global/notice/noticeConfigureCon';
+
+export default {
+    name: "notice-configure-view",
+  ...noticeConfigureCon
+}
+</script>

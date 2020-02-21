@@ -174,6 +174,10 @@ body {
   .icon-top {
     float: left;
   }
+  .icon-money1 {
+    color: #FD6B6B;
+    margin-left: 6px;
+  }
 }
 .postContent {
   font-size: 15px;
@@ -190,6 +194,14 @@ body {
     display: inline-block;
     height: 20px;
     vertical-align: text-bottom;
+  }
+}
+.listPostCon {
+  a {
+    display: inline-block;
+  }
+  .icon {
+    color: #CCCCCC;
   }
 }
 .operaBox {
@@ -290,21 +302,34 @@ body {
   border-radius: 50%;
   text-align: center;
   box-shadow: 0 0 7px rgba(0,0,0,0.2);
+  transform:rotate(0deg);
+  transition: all 200ms;
   .icon {
     color: #fff;
     font-size: 20px;
   }
+  
+}
+.rotate {
+  transform:rotate(45deg);
+  -ms-transform:rotate(45deg); 	/* IE 9 */
+  -moz-transform:rotate(45deg); 	/* Firefox */
+  -webkit-transform:rotate(7deg); /* Safari 和 Chrome */
+  -o-transform:rotate(45deg); 
+  transform: rotate(45deg);
+  transition: all 200ms;
 }
 .publishTypeBox {
   position: fixed;
-  bottom: 128px;
-  right: 15px;
+  bottom: 110px;
+  right: 10px;
   width: 60px;
   padding: 7px 4px;
-  border: 2px solid #e5e5e5;
+  border: 1px solid #e5e5e5;
   border-radius: 30px;
   background: #fff;
   box-sizing: border-box;
+  box-shadow: 0 0 7px rgba(0,0,0,0.1);
   .iconBg {
     background: #F4F4F4;
     width: 46px;
@@ -596,7 +621,7 @@ openCircleConView.vue
     height: 20px;
     line-height: 20px;
     font-size: 15px;
-    @include px2rem(margin-bottom, 26);
+    margin-bottom: 13px;
     margin-bottom: 13px;
     .icon {
       float: left;
@@ -742,7 +767,7 @@ openCircleConView.vue
     padding: 0 15px 11px 15px;
     .icon {
       font-size: 13px;
-      @include px2rem(line-height, 36);
+      line-height: 18px;
       line-height: 18px;
     }
     a {
@@ -787,8 +812,7 @@ openCircleConView.vue
   padding-top: 0;
   padding-bottom: 10px;
 }
-.themeImgList {
-}
+
 .themeOneImgChild {
   width: 50%;
   min-height: 100px;
@@ -882,6 +906,11 @@ details.vue
         background: transparent;
       }
     }
+  }
+}
+.twoChi {
+  .footChi {
+    width: 50%; 
   }
 }
 .rewardPopup {
@@ -988,6 +1017,57 @@ details.vue
     line-height: 140px;
   }
 }
+.postTitle {
+  font-size: 16px;
+  line-height: 48px;
+  text-align: left;
+  padding-bottom: 10px;
+  position: relative;
+  &:after {
+    content: '';
+    display: block;
+    border-bottom: 1px solid @corE5;
+    font-size: 0;
+    line-height: 0;
+  }
+}
+.longTextContent {
+  color: #555555;
+  line-height: 20px;
+  padding-top: 10px;
+  font-size: 15px;
+}
+.payTipBox {
+  margin: 30px 0;
+  background: #f6f6f6;
+  padding: 32px 15px 28px 15px;
+  text-align: center;
+  .tipPrice {
+    text-align: center;
+    font-size: 15px;
+    color: #333333;
+    padding-bottom: 18px;
+    span {
+      font-size: 15px;
+      color: #EF7D1C;
+    }
+  }
+  .buyBtn {
+    display: block;
+    width: 168px;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    background: @main;
+    border-radius: 5px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 auto;
+  }
+}
+
+
 
 //发表主题
 .post-topic-box{
@@ -999,8 +1079,8 @@ details.vue
     width: 100%;
     height: 44px;
     background-color: rgba(249, 249, 249, 0.9);
-    box-shadow:0px 1px 0px 0px rgba(0,0,0,0.1);
-
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    z-index: 10;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -1037,8 +1117,7 @@ details.vue
     min-height: 150px;
     padding: 0 15px 50px 15px;
     box-sizing: border-box;
-    #post-topic-form-text{
-    }
+    
   }
   .uploadBox {
     padding: 0;
@@ -1055,6 +1134,7 @@ details.vue
     display: flex;
     justify-content: space-between;
     padding: 0 16px;
+    background: #ffffff;
     .post-topic-footer-left{
       width: 30%;
       height: 100%;
@@ -1104,6 +1184,47 @@ details.vue
 /**
  *  发布长文
  */
+ .markdownFix {
+   position: fixed;
+   bottom: 100px;
+   width: 100%;
+   &:after {
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid @corE5;
+  }
+ }
+ .markMove {
+   bottom: 340px;
+ }
+ .markdownText {
+  width: 100%;
+  // min-height: 80px;
+  // max-height: 150px;
+  height: 150px;
+  max-height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  padding-right: 15px;
+  font-size: 15px;
+  box-sizing: border-box;
+  caret-color: @main;  //光标颜色
+  
+ }
 .post-longText-form {
   padding-left: 15px;
 }
@@ -1143,9 +1264,70 @@ details.vue
   .icon {
     float: right;
     cursor: pointer;
+    color: #888888;
   }
 }
-
+.payMoneyBox {
+  height: 42px;
+  text-align: left;
+  padding: 18px 0;
+  border-bottom: 1px solid @corE5;
+  span {
+    float: left;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .payMoneyInp {
+    font-size: 35px;
+    height: 42px;
+    line-height: 42px;
+    color: #000000;
+    border: none;
+    width: 220px;
+    text-align: left;
+  }
+}
+.payEx {
+  padding: 16px 0 14px 0;
+  font-size: 15px;
+  color: #333333;
+}
+.payExplain {
+  line-height: 16px;
+  font-size: 15px;
+  border: none;
+  width: 100%;
+  &::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &::-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+}
+.popSureBtn {
+  display: block;
+  width: 168px;
+  margin: 51px auto 4px auto;
+  border-radius: 5px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+}
+.forbiddenCli {
+  background: @corC9;
+}
+.sureBtnCli {
+  background: @main;
+}
 /**
  *  回复输入框
  */

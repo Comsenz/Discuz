@@ -197,6 +197,9 @@ export default {
     },
     //初始化请求用信息
     loadUserInfo(){
+      if(!this.userId){
+        return false;
+      }
       // console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',
@@ -350,7 +353,7 @@ export default {
   //     window.removeEventListener('scroll', this.handleTabFix);
   // },
   destroyed() {
-      window.destroyed('scroll', this.handleTabFix, true);
+      window.removeEventListener('scroll', this.handleTabFix);
   },
   beforeRouteLeave (to, from, next) {
      window.removeEventListener('scroll', this.handleTabFix, true);

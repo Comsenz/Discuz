@@ -26,7 +26,7 @@ export default {
           themeType:'isEssence'
         },
         {
-          typeWo: '关注用户的',
+          typeWo: '已关注的',
           type:'3',
           themeType:'fromUserId'
         }
@@ -64,6 +64,7 @@ export default {
       viewportWidth: '',
       publishType: true,
       puslishCho: false,
+      rotate: false
     }
   },
   created:function(){
@@ -304,7 +305,7 @@ export default {
       if(themeType === 'isEssence') {
         this.filterInfo.typeWo = '精华主题';
       } else if(themeType === 'fromUserId') {
-        this.filterInfo.typeWo = '关注用户的';
+        this.filterInfo.typeWo = '已关注的';
       } else {
         this.filterInfo.typeWo = '全部主题';
       }
@@ -357,7 +358,7 @@ export default {
       postCho:function(){
         if(this.canCreateThread){
           // alert('跳转到发布主题页');
-          this.publishType = !this.publishType;
+          this.rotate = !this.rotate;
           this.puslishCho = !this.puslishCho;
           // console.log(this.puslishCho);
         } else {

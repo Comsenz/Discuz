@@ -45,9 +45,9 @@ class System extends Notification
     public function via($notifiable)
     {
         $tplId = $this->message->getTplId();
-        if($this->message instanceof StatusMessage) {
+        if ($this->message instanceof StatusMessage) {
             $actionType = User::enumStatus($notifiable->status);
-            if($this->isMod()) {
+            if ($this->isMod()) {
                 $notifiable->status == 0 && $actionType = 'mod_'.$actionType;
             }
             $tplId = Arr::get($this->tplIds, $actionType);
@@ -58,7 +58,7 @@ class System extends Notification
         $this->message->setTplData($this->tplData);
 
         //开启状态发送系统消息
-        if(!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
+        if (!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
             return ['database'];
         }
         return [];

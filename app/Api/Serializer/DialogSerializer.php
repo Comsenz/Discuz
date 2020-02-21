@@ -32,7 +32,12 @@ class DialogSerializer extends AbstractSerializer
      * @param $model
      * @return Relationship
      */
-    public function user($model)
+    public function sender($model)
+    {
+        return $this->hasOne($model, UserSerializer::class);
+    }
+
+    public function recipient($model)
     {
         return $this->hasOne($model, UserSerializer::class);
     }

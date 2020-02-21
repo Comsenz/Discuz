@@ -262,6 +262,5 @@ $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowC
 $route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
 $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
-$route->delete('/dialog', 'dialog.delete', ApiController\Dialog\DeleteDialogController::class);
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
-$route->get('/dialog/{id}', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
+$route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);

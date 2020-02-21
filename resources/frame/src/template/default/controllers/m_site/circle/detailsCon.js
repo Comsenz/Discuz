@@ -101,7 +101,9 @@ export default {
       loginWord:'登录 / 注册',
       viewportWidth: '',
       themeIsLiked: '',
-      themeTitle:''
+      themeTitle:'',
+      wxpay: '',
+      twoChi: '',
     }
   },
   created() {
@@ -121,8 +123,10 @@ export default {
       this.themeShow = false;
     } else {
       this.themeShow = true
-    }
-
+    };
+    // if(!this.wxpay){
+    //   this.twoChi = true;
+    // }
   },
 
   computed: {
@@ -180,7 +184,11 @@ export default {
           throw new Error(res.error)
         } else {
            // console.log(res);
-           this.siteInfo = res.readdata;
+          this.siteInfo = res.readdata;
+          this.wxpay = res.readdata._data.paycenter.wxpay_close;
+          if(!this.wxpay){
+            this.twoChi = true;
+          }
            //把站点是否收费的值存储起来，以便于传到父页面
            this.isPayVal = res.readdata._data.set_site.site_mode;
            this.allowRegister = res.readdata._data.set_reg.register_close;

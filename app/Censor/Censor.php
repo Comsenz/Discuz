@@ -12,6 +12,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Arr;
+use Exception;
 
 class Censor
 {

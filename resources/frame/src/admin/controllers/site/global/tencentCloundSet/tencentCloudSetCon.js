@@ -16,35 +16,35 @@ export default {
         }, {
           name: '图片内容安全',
           type:'qcloud_cms_image',
-          description: '使用腾讯云的图片内容安全服务。请先配置云API，并确保腾讯云账户的图片内容安全额度充足',
+          description: '请先配置云API，开通腾讯云图片内容安全服务，并确保有对应套餐包',
           status:'',
           icon:'icontupian',
           setFlag: false
         }, {
           name: '文本内容安全',
           type:'qcloud_cms_text',
-          description: '使用腾讯云的文本内容安全服务。请先配置云API，并确保腾讯云账户的文本内容安全额度充足',
+          description: '请先配置云API，开通腾讯云文本内容安全服务，并确保有对应套餐包',
           status:'',
           icon:'iconwenben',
           setFlag: false
         }, {
           name: '短信',
           type:'qcloud_sms',
-          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          description: '请先配置云API，开通腾讯云短信服务，并确保腾讯云账户的短信额度充足',
           status:'',
           icon:'iconduanxin',
           setFlag: true
         }, {
           name: '实名认证',
           type:'qcloud_facdid',
-          description: '使用腾讯云的短信服务。请先配置云API，并确保腾讯云账户的短信额度充足',
+          description: '请先配置云API，开通腾讯云的人脸核身服务，并确保有对应资源包',
           status:'',
           icon:'iconshimingrenzheng',
           setFlag: false
         },{
           name: '对象存储',
           type:'qcloud_cos',
-          description: '使用腾讯云的对象存储服务。请先配置云API，并确保腾讯云账户的对象存储额度充足',
+          description: '请先配置云API，开通腾讯云的对象存储及数据万象服务，并确保有对应资源包',
           status:'',
           icon:'iconduixiangcunchu',
           setFlag: true

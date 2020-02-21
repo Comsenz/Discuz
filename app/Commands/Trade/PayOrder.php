@@ -100,7 +100,7 @@ class PayOrder
 
         // 使用钱包支付时，检查是否设置支付密码
         if (
-            $this->data->get('payment_type') == GatewayConfig::WALLET_PAY
+            $this->data->get('payment_type') == 20
             && empty($this->actor->pay_password)
         ) {
             throw new \Exception('uninitialized_pay_password');
@@ -114,15 +114,13 @@ class PayOrder
                 function ($attribute, $value, $fail) {
                     // 使用钱包支付时验证密码
                     if (
-                        $this->data->get('payment_type') == GatewayConfig::WALLET_PAY
+                        $this->data->get('payment_type') == 20
                         && ! $this->actor->checkWalletPayPassword($value)
                     ) {
-                        $fail('支付密码错误');
+                        $fail(trans('trade.wallet_pay_password_error'));
                     }
                 }
             ],
-        ], [
-            'pay_password.required_if' => '使用钱包支付时，请输入支付密码。',
         ]);
 
         if ($validator_info->fails()) {
@@ -137,13 +135,13 @@ class PayOrder
         $this->payment_type = (int) $this->data->get('payment_type');
         switch ($order_info->type) {
             case Order::ORDER_TYPE_REGISTER:
-                $order_info->body = '注册';
+                $order_info->body = trans('order.order_type_register');
                 break;
             case Order::ORDER_TYPE_REWARD:
-                $order_info->body = '打赏';
+                $order_info->body = trans('order.order_type_reward');
                 break;
             case Order::ORDER_TYPE_THREAD:
-                $order_info->body = '付费主题';
+                $order_info->body = trans('order.order_type_thread');
                 break;
             default:
                 $order_info->body = '';

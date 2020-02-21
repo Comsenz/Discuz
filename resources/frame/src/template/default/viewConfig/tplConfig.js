@@ -135,6 +135,24 @@ export default {
           oneHeader: true
         }
       },
+      'normal-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/details/normalDetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"普通主题详情页",
+          oneHeader: true
+        }
+      },
+      'long-text-details':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/details/longTextDetailsView'],resolve)
+        },
+        metaInfo:{
+          title:"长文主题详情页",
+          oneHeader: true
+        }
+      },
       'circle-invite':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/circleInviteView'],resolve)
@@ -318,7 +336,7 @@ export default {
       //我的模块
       'modify-data':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/modifyDataView'],resolve)
+          require(['../view/m_site/myInfo/myData/modifyDataView'],resolve)
         },
         metaInfo:{
           title:"修改资料"
@@ -326,7 +344,7 @@ export default {
       },
       'modify-phone':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/modifyPhoneView'],resolve)
+          require(['../view/m_site/myInfo/myData/modifyPhoneView'],resolve)
         },
         metaInfo:{
           title:"修改手机号"
@@ -334,7 +352,7 @@ export default {
       },
       'bind-new-phone':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/bindNewPhoneView'],resolve)
+          require(['../view/m_site/myInfo/myData/bindNewPhoneView'],resolve)
       },
       metaInfo:{
         title:"绑定新手机号"
@@ -342,7 +360,7 @@ export default {
     },
       'change-pwd':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/changePasswordView'],resolve)
+          require(['../view/m_site/myInfo/myData/changePasswordView'],resolve)
         },
         metaInfo:{
           title:"修改密码"
@@ -350,7 +368,7 @@ export default {
       },
       'real-name':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/realNameView'],resolve)
+          require(['../view/m_site/myInfo/myData/realNameView'],resolve)
         },
         metaInfo:{
           title:"实名认证"
@@ -358,7 +376,7 @@ export default {
       },
       'withdraw':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/withdrawView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/withdrawView'],resolve)
         },
         metaInfo:{
           title:"提款"
@@ -366,7 +384,7 @@ export default {
       },
       'wallet-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/walletDetailsView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/walletDetailsView'],resolve)
         },
         metaInfo:{
           title:"钱包明细"
@@ -374,7 +392,7 @@ export default {
       },
       'order-details':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/orderDetailsView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/orderDetailsView'],resolve)
         },
         metaInfo:{
           title:"订单明细"
@@ -382,7 +400,7 @@ export default {
       },
       'frozen-amount':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/frozenAmountView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/frozenAmountView'],resolve)
         },
         metaInfo:{
           title:"冻结资金"
@@ -390,7 +408,7 @@ export default {
       },
       'withdrawals-record':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/withdrawalsRecordView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/withdrawalsRecordView'],resolve)
         },
         metaInfo:{
           title:"提现记录"
@@ -398,7 +416,7 @@ export default {
       },
       'my-notice':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myNoticeView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/myNoticeView'],resolve)
         },
         metaInfo:{
           title:"我的通知"
@@ -406,7 +424,7 @@ export default {
       },
       'my-follow':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myFollowView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/myFollowView'],resolve)
         },
         metaInfo:{
           title:"我的关注"
@@ -414,7 +432,7 @@ export default {
       },
       'my-care':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myCareView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/myCareView'],resolve)
         },
         metaInfo:{
           title:"我关注的人"
@@ -422,7 +440,7 @@ export default {
       },
       'care-me':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/careMeView'],resolve)
+          require(['../view/m_site/myInfo/myFollow/careMeView'],resolve)
         },
         metaInfo:{
           title:"关注我的人"
@@ -447,7 +465,7 @@ export default {
       },
       'reply':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/replyView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/replyView'],resolve)
         },
         metaInfo:{
           title:"回复我的"
@@ -455,7 +473,7 @@ export default {
       },
       'reward':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/rewardView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/rewardView'],resolve)
         },
         metaInfo:{
           title:"打赏我的"
@@ -463,7 +481,7 @@ export default {
       },
       'like':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/likeView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/likeView'],resolve)
         },
         metaInfo:{
           title:"点赞我的"
@@ -471,7 +489,7 @@ export default {
       },
       'system':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/systemView'],resolve)
+          require(['../view/m_site/myInfo/myNotice/systemView'],resolve)
         },
         metaInfo:{
           title:"系统通知"
@@ -479,7 +497,7 @@ export default {
       },
       'my-wallet':{
         comLoad:function (resolve) {
-          require(['../view/m_site/myInfo/myWalletView'],resolve)
+          require(['../view/m_site/myInfo/myWallet/myWalletView'],resolve)
         },
         metaInfo:{
           title:"我的钱包"
@@ -571,7 +589,7 @@ export default {
     // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
-    'pay-circle-con/:themeId',
+    'pay-circle-con/:themeId/:groupId',
   ];
 
 
@@ -611,6 +629,13 @@ export default {
     'information-page'
   ];
 
+  //公开模式下不能访问的页面
+  const publicNotAccessPage = [
+    // 'pay-the-fee',
+    'pay-circle-con/:themeId/:groupId',
+    // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
+    // 'pay-status',
+  ];
 
   /*
   * 获取用户第一次访问页面，登录后跳转回来
@@ -723,6 +748,10 @@ export default {
           if (res){
             /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
             if (signInAndPayForAccess.includes(to.name)){
+              if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                // console.log(to.params.themeId,'当前router主题id');
+                next({path:'/details/' + to.params.themeId});
+              }
               next(vm=>{
                 vm.$router.go(-1);
               })
@@ -775,6 +804,20 @@ export default {
       if (notLoggedInToAccessPage.includes(to.name)){
         /*符合，未登录可以访问站点*/
         console.log('符合');
+        this.getForum().then(res=>{
+          /*判断站点模式*/
+          if (res.readdata._data.set_site.site_mode === 'public'){
+            if(publicNotAccessPage.includes(to.name)){
+              // console.log(to.name,'当前包含路由');
+              if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                // console.log(to.params.themeId,'当前router主题id');
+                next({path:'/details/' + to.params.themeId});
+              }
+            }
+            
+          }
+        })
+        
         next();
       }else {
         /*不符合，跳转到未登录，可访问站点*/

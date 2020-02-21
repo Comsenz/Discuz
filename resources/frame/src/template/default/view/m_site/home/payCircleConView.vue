@@ -41,17 +41,23 @@
 	    	</div>
     	</div>
     	<div class="gap"></div>
-	    <div class="loginOpera">
+	    <div class="loginOpera" v-if="!alreadyLogin">
 	    	<a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
 	    	<a href="javascript:;" @click="registerJump" class="regiJoin"  v-if="allowRegister">立即注册并加入</a>
 	    	<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
 	    </div>
+		
+		<div class="loginOpera" v-else="">
+			<p class="welcomeUser">欢迎您，{{loginName}}<a href="javascript:;" class="signOut" @click="signOut">退出</a></p>
+			<a href="javascript:;" class="regiJoin" @click="payClick(sitePrice)">付费，获得成员权限</a>
+			<p class="payMoney">￥{{sitePrice}} / 永久有效</p>
+		</div>
 	    <div class="gap"></div>
 	    <div class="powerListBox" v-if="limitList">
 	    	<div class="powerTit">作为{{limitList._data.name}}，您将获得以下权限</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">权限列表</div>
-	        <div class="" v-for="(limit,index) in limitList.permission">
+	        <div class="" v-for="(limit,index) in limitList.permission" :key="index">
 	          <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题列表</p>
 	          <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.viewPosts'">查看主题</p>
 	          <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createThread'">发表主题</p>

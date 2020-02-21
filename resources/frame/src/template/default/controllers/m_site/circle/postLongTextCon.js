@@ -3,6 +3,7 @@
  */
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import appCommonH from '../../../../../helpers/commonHelper';
+import '@github/markdown-toolbar-element'
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
@@ -20,6 +21,8 @@ export default {
       keywordsMax: 1000,
       list: [],
       footMove: false,
+      payMove: false,
+      markMove: false,
       faceData:[],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -60,12 +63,19 @@ export default {
       backGo:-2,
       formdataList:[],
       viewportWidth: '',
-      payValue: '10',
+      themeTitle: '',
+      payValue: '',
       paySetShow: false,
+      isCli: false,
+      moneyVal: '',
+      timeout: null,
+      paySetValue: '',
+      titleMaxLength: 80,
+      
 
     }
   },
-
+  
   mounted () {
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
@@ -135,6 +145,12 @@ export default {
         this.limitMaxEncLength = true;
       }
       console.log(this.enclosureListLen+'sssss');
+    },
+    
+    themeTitle() {
+      if (this.themeTitle.length > this.titleMaxLength) {
+          this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
+      }
     },
   },
   methods: {
@@ -217,7 +233,7 @@ export default {
         })
       }
     },
-    //发布主题
+    //发布长文
     publish(){
       if(this.postsId && this.content){
         console.log('回复');
@@ -229,7 +245,8 @@ export default {
             "data": {
               "type": "posts",
               "attributes": {
-                  "content": this.content
+                "is_long_article": true,
+                "content": this.content
               }
             }
           }
@@ -245,6 +262,15 @@ export default {
           }
         })
       } else {
+        if(this.themeTitle.length<4){
+          this.$toast.fail('标题不得少于三个字符');
+          return false;
+        }
+        if(this.content.length<1){
+          this.$toast.fail('内容不得为空');
+          return false;
+        }
+        
         this.attriAttachment = this.fileListOne.concat(this.enclosureList);
         for(let m=0;m<this.attriAttachment.length;m++){
           this.attriAttachment[m] = {
@@ -260,18 +286,21 @@ export default {
             "data": {
               "type": "threads",
               "attributes": {
-                  "content": this.content,
+                "price": this.paySetValue,
+                "title": this.themeTitle,
+                "is_long_article": true,
+                "content": this.content,
               },
               "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  "attachments": {
-                    "data":this.attriAttachment
-                  },
+                "category": {
+                    "data": {
+                        "type": "categories",
+                        "id": this.cateId
+                    }
+                },
+                "attachments": {
+                  "data":this.attriAttachment
+                },
               }
 
             }
@@ -522,10 +551,7 @@ export default {
     //   this.$refs.textarea.focus();
     //   this.footMove = false;
     // },
-    //设置付费金额
-    paySetting(){
-      this.paySetShow = true;
-    },
+    
     addExpression(){
       this.keyboard = !this.keyboard;
       this.appFetch({
@@ -545,6 +571,7 @@ export default {
       // }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
+      this.markMove = !this.markMove;
     },
     backClick() {
       this.$router.go(-1);
@@ -594,6 +621,32 @@ export default {
     },
     onCancel() {
       this.showPopup = false;
+    },
+    //设置付费金额,，显示弹框
+    paySetting(){
+      this.paySetShow = true;
+    },
+    //关闭付费设置弹框
+    closePaySet(){
+      this.paySetShow = false;
+      this.paySetValue = '';
+    },
+    //设置付费时，实时获取输入框的值，用来判断按钮状态
+    search: function (event) {
+      // console.log('执行');
+      // console.log(event.target.value);
+      if(event.target.value != null && event.target.value > '0'){
+        // console.log('符合');
+        this.isCli = true;
+      } else {
+        // console.log('不符合');
+        this.isCli = false;
+      }
+    },
+    //点击确定按钮，提交付费设置
+    paySetSure(){
+      this.paySetShow = false;
+      this.payValue = this.paySetValue +'元';
     },
 
   },

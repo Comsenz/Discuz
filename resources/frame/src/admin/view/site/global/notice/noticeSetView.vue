@@ -19,34 +19,46 @@
             label="通知类型"
             width="200">
           </el-table-column>
+          
           <el-table-column
-            label="状态"
-            show-overflow-tooltip>
-            <!-- <template slot-scope="scope">{{cashStatus(scope.row._data.cash_status,scope.row._data)}}</template> -->
-          </el-table-column>
+          prop="name"
+          label="状态"
+          width="100"
+          align="center"
+        >
+        <template slot-scope="scope">
+          <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
+          <span v-else class="iconfont iconicon_"  ></span>
+        </template>
+        </el-table-column>
 
           <el-table-column
-            label="操作"
-            show-overflow-tooltip>
-            <template slot-scope="scope">
-             <!-- <el-popover
-                width="100"
-                placement="top"
-                v-if="scope.row._data.cash_status === 1"
-                :ref="`popover-${scope.$index}`">
-                <p>确定通过该提现吗？</p>
-                <div style="text-align: right; margin: 10PX 0 0 0 ">
-                  <el-button type="danger" size="mini" @click="noReviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()">
-                    不通过
-                  </el-button>
-                  <el-button type="primary" size="mini" @click="reviewClick(scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >通过</el-button>
-                </div>
-                <el-button v-if="scope.row._data.cash_status === 1" type="text" size="small" slot="reference">审核</el-button>
-              </el-popover> -->
+          prop="address"
+          label="操作"
+          width="180">
+          <template slot-scope="scope">
+            <div v-if="scope.row._data.status == 1">
+              <el-button
+                size="mini"
+                @click="configClick(scope.row.type)">
+                配置
+              </el-button>
 
-              <!--<el-button v-if="scope.row._data.cash_status !== '1'" type="text" size="small">审核</el-button>-->
-            </template>
-          </el-table-column>
+              <el-button
+              	@click.native.prevent="noticeSetting(scope.row._data.id,'close')"
+                size="mini">
+                关闭
+              </el-button>
+            </div>
+			<div v-if="scope.row._data.status == 0">
+	            <el-button
+	              size="mini"
+	              @click.native.prevent="noticeSetting(scope.row._data.id,'open')"
+	            >开启 
+	            </el-button>
+            </div>
+          </template>
+        </el-table-column>
 
         </el-table>
         <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />

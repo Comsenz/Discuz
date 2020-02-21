@@ -52,7 +52,7 @@ export const autoTextarea = function (elem, extra, maxHeight, callback) {
         style.overflowY = 'auto';
       } else {
         height = elem.scrollHeight - padding;
-        style.overflowY = 'hidden';
+        style.overflowY = 'scroll';
       };
       style.height = height + extra + 'px';
       scrollTop += parseInt(style.height) - elem.currHeight;

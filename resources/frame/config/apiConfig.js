@@ -80,6 +80,7 @@ module.exports = {
   'deleteAvatar':'/api/users',              //删除用户头像
   'exportUser':'/api/export/users?',        //用户信息导出
   'statistic':'/api/statistic/finance',    //获取资金概况
-  'statisticChart':'/api//statistic/financeChart',//获取盈利图表数据
-
+  'statisticChart':'/api/statistic/financeChart',//获取盈利图表数据
+  'noticeList':'/api/notification/tpl',               //通知设置列表
+  'notification':'/api/notification/tpl/', //修改系统消息模版[通知设置]
 }
