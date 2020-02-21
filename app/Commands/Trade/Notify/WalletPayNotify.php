@@ -83,7 +83,7 @@ class WalletPayNotify
                 return [
                     'wallet_pay' => [
                         'result' => 'success',
-                        'message' => '支付成功',
+                        'message' => trans('trade.wallet_pay_success'),
                     ]
                 ];
             }

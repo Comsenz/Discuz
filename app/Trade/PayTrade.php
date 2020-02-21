@@ -62,8 +62,7 @@ class PayTrade
             return [
                 'wallet_pay' => [
                     'result' => 'failed',
-                    // 'message' => 'balance is not enough',
-                    'message' => '余额不足',
+                    'message' => trans('wallet.available_amount_error'),
                 ]
             ];
         }
