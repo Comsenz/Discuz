@@ -55,6 +55,7 @@ class RealUser
         $validator->valid($this->actor->getDirty());
 
         $res = $censor->checkReal($attributes['identity'], $attributes['realname']);
+
         //判断身份证信息与姓名是否符合
         if(Arr::get($res, 'Result', false) != self::NAME_ID_NUMBER_MATCH){
             throw new FaceidException($res['Description']);
