@@ -53,13 +53,11 @@ export default {
           break;
         case 'change-pay-pwd':
           console.log('设置钱包密码','跳转设置钱包密码页面');
-
           if (this.canWalletPay){
-
-          } else {
             this.$router.push({path:'verify-pay-pwd'});
+          } else {
+            this.$router.push({path:'setup-pay-pwd'});
           }
-
           break;
         default:
           this.$router.push('/');
