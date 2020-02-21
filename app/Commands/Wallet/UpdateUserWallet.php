@@ -124,7 +124,7 @@ class UpdateUserWallet
                     0,
                     $change_type,
                     $operate_reason
-                );   
+                );
             }
             $user_wallet->save();
             //提交事务

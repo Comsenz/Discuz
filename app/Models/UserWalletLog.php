@@ -51,11 +51,15 @@ class UserWalletLog extends Model
 
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
 
-    const TYPE_EXPEND_REWARD     = 51; //打赏支出
+    // ----- 分割线 -----
 
-    const TYPE_EXPEND_THREAD     = 52; //付费主题支出
+    const TYPE_EXPEND_REWARD     = 41; //打赏支出
 
-    const TYPE_EXPEND_RENEW      = 60; //站点续费支出
+    const TYPE_INCOME_THREAD     = 60; //付费主题收入
+
+    const TYPE_EXPEND_THREAD     = 61; //付费主题支出
+
+    const TYPE_EXPEND_RENEW      = 71; //站点续费支出
 
     /**
      * 创建钱包动账记录

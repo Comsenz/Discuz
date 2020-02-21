@@ -13,7 +13,13 @@ return [
     'cash_review_failure'           => '审核不通过，退回',
     'operate_forbidden' => '非法操作',
     'register_income' => '注册收入',
-    'reward_income' => '打赏收入',
-    'reward_expend' => '打赏支出',
     'artificial_income' => '人工收入',
+
+    // 分割线
+    'income_reward'             => '打赏主题收入',
+    'income_thread'             => '付费主题收入',
+
+    'expend_renew'              => '站点续费支出',
+    'expend_reward'             => '打赏主题支出',
+    'expend_thread'             => '付费主题支出',
 ];
