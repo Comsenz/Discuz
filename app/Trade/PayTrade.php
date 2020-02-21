@@ -61,7 +61,7 @@ class PayTrade
         if ($user->userWallet->available_amount < $order_info['amount']) {
             return [
                 'wallet_pay' => [
-                    'result' => 'failed',
+                    'result' => 'fail',
                     'message' => trans('wallet.available_amount_error'),
                 ]
             ];
