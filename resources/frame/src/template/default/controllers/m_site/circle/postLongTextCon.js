@@ -633,9 +633,13 @@ export default {
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.data != null && event.data > '0'){
+      // console.log('执行');
+      // console.log(event.target.value);
+      if(event.target.value != null && event.target.value > '0'){
+        // console.log('符合');
         this.isCli = true;
       } else {
+        // console.log('不符合');
         this.isCli = false;
       }
     },

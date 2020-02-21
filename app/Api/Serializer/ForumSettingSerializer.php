@@ -73,7 +73,7 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 腾讯云设置
             'qcloud' => [
-                'qcloud_sms' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
+                'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
             ],
 
             // 提现设置

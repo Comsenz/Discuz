@@ -7,7 +7,7 @@
       </header>
 
       <div class="post-longText-form">
-        <input type="text" placeholder="请输入标题" v-model="themeTitle" class="pubThemeTitle">
+        <input type="text" placeholder="请输入标题" autofocus="autofocus" v-model="themeTitle" class="pubThemeTitle">
         <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>
         
         
@@ -94,7 +94,7 @@
         </div>
         <div class="payMoneyBox">
           <span>￥</span>
-          <input type="text" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
+          <input type="number" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
         </div>
         <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…." class="payExplain">

@@ -20,6 +20,7 @@ export default {
       isWeixin:'',
       realName:'',          //实名证明
       canWalletPay:'',      //钱包密码
+      realNameShow:'true',      //实名认证是否显示
     }
   },
 
@@ -34,6 +35,10 @@ export default {
       this.tipWx = '确认解绑微信及退出登录'
     }else{
       this.tipWx = '确认解绑微信'
+    }
+    let qcloud_facdid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_facdid;
+    if(qcloud_facdid == false){
+      this.realNameShow = false
     }
   },
   methods:{
@@ -67,6 +72,23 @@ export default {
     },
 
     modifyData(){
+      // this.appFetch({
+      //   url:'forum',
+      //   method:'get',
+      //   data:{
+
+      //   }
+      // }).then(res=>{
+      //   if (res.errors){
+      //     this.$message.error(res.errors[0].code);
+      //   }else {
+      //     console.log(res,'密码密码')
+      //     if(res.readdata._data.qcloud.qcloud_facdid == false){
+      //       this.realNameShow = false
+      //     }
+      //   }
+      // })
+
       let userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url:'users',
@@ -90,6 +112,7 @@ export default {
         }else{
           this.wechatNickname = false
         }
+        // if(res.readdata)
         if(res.readdata.realName !== ''){
           this.realName = res.readdata._data.realName      //实名认证
         }else{
@@ -98,6 +121,8 @@ export default {
         // this.modifyData()
       }
       })
+
+
     },
       handleFile: function (e) {
         let file = e.target.files[0];
