@@ -787,3 +787,179 @@ input:-ms-input-placeholder {
   }
 
 }
+
+
+/*
+  公共组件：支付方式
+*/
+.payment-method-box{
+  width: 100%;
+  height: 100%;
+  //position: absolute;
+  //background-color: #e5e5e5;
+  //bottom: 0;
+
+}
+
+/*
+  支付方式标题/头部
+*/
+.manner-title{
+  text-align: center;
+  h1{
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+  p{
+    font-size: 35px;
+    font-weight: 500;
+    span{
+      height: 34px;
+      width: 25px;
+      font-size: 24px;
+      display: inline-block;
+      vertical-align: top;
+      line-height: 34px;
+    }
+  }
+  i{
+    width: 100%;
+    height: 1PX;
+    display: block;
+    background-color: @corE5;
+    margin: 18px 0 12px 0;
+  }
+}
+
+/*支付方式选择*/
+.way-to-choose-box{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 290px;
+  //min-height: 280px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .way-to-choose-main{
+    padding: 14px 15px 30px 15px;
+
+    .way-to-choose_cont{
+
+      &-title{
+        font-size: 13px;
+        margin-bottom: 25px;
+      }
+
+      &-select{
+        margin-bottom: 15px;
+        &_cell{
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 30px;
+          &-left{
+            display: flex;
+            //align-items: center;
+
+            .icon{
+              font-size: 18px;
+              color: #09BB07;
+              margin-right: 10px;
+            }
+
+            &-title{
+              span{
+                font-size: 16px;
+              }
+
+              &_description{
+                font-size: 13px;
+                color: @cor888;
+                margin-top: 4px;
+              }
+
+            }
+          }
+
+        }
+      }
+
+      .van-cell{
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .way-to-choose_footer{
+      width: 100%;
+      text-align: center;
+    }
+
+  }
+
+}
+
+/*立即支付*/
+.pay-immediately-box{
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  width: 290px;
+  height: 248px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .pay-immediately-main{
+    padding: 14px 15px 30px 15px;
+
+    .van-cell{
+      padding: 0;
+    }
+
+    .icon{
+      font-size: 15px;
+      color: #09BB07;
+      margin-right: 2px;
+    }
+
+    .custom-title{
+      color: @cor444;
+    }
+
+  }
+
+  .van-password-input{
+    margin: 30px 0 0 0;
+  }
+
+  .passwordInp{
+    height: 44px;
+  }
+
+  .passwordInp:after {
+    border-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px !important;
+  }
+
+  .passwordInp li.van-hairline--left:after {
+    border-left-width: 1px;
+  }
+
+  .van-number-keyboard {
+    border-top: 1PX solid @corE5;
+  }
+
+}
+
+.pay-immediately-box-err{
+  height: 270px;
+  .van-password-input__error-info{
+    color: @corErr;
+  }
+}

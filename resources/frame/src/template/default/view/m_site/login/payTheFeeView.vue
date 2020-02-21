@@ -65,11 +65,25 @@
         <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
       </van-popup>
+
+      <PayMethod
+        :data="payList"
+        v-model="show"
+        :money="sitePrice"
+        :balance="walletBalance"
+        @oninput="onInput"
+        @delete="onDelete"
+        @close="onClose"
+        :error="errorInfo"
+        @payImmediatelyClick="payImmediatelyClick">
+      </PayMethod>
+
     </div>
 </template>
 
 <script>
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
+import '../../../defaultLess/m_site/modules/circle.less';
 import payTheFeeCon from '../../../controllers/m_site/login/payTheFeeCon';
 export default {
     name: "pay-the-fee-view",

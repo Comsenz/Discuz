@@ -1,16 +1,20 @@
 
-import PayHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-// import "../../../scss/var.scss";
+/*
+* 支付费用控制器
+* */
+
+import PayHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
     return {
-      sitePrice:'',     //付费站点价钱
-      siteExpire:'',    //到期时间
-      orderSn:'',       //订单号
-      wxPayHref:'',     //微信支付链接
-      qrcodeShow:false,
+      sitePrice:'',      //付费站点价钱
+      siteExpire:'',     //到期时间
+      orderSn:'',        //订单号
+      wxPayHref:'',      //微信支付链接
+      qrcodeShow:false,  //pc端显示二维码
       codeUrl:"",        //支付url，base64
       amountNum:'',      //支付价钱
       payStatus:false,   //支付状态
@@ -19,15 +23,117 @@ export default {
       tokenId:'',        //用户ID
       dialogShow:false,  //微信支付确认弹框
       groupId:'',        //用户组ID
-      limitList:[]       //用户组权限
+      limitList:[],      //用户组权限
+      payList:[
+        {
+          name:'钱包',
+          icon:'icon-weixin'
+        }
+      ],     //支付方式
+      show:false,        //是否显示支付方式
+      errorInfo:'',      //密码错误提示
+      value:'',          //密码
+      walletBalance:''   //钱包余额
     }
   },
 
   components:{
-    PayHeader
+    PayHeader,
+    PayMethod
   },
 
   methods:{
+    payImmediatelyClick(data){
+      //data返回选中项
+      console.log(data);
+
+      let isWeixin = this.appCommonH.isWeixin().isWeixin;
+      let isPhone = this.appCommonH.isWeixin().isPhone;
+
+      if (data.name === '微信支付') {
+        this.show = false;
+        if (isWeixin){
+          console.log('微信');
+          this.getOrderSn().then(()=>{
+            this.orderPay(12).then((res)=>{
+              if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                  document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+                }else if (document.attachEvent){
+                  document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                  document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+                }
+              }else{
+                this.onBridgeReady(res);
+              }
+            })
+          });
+        } else if (isPhone){
+          console.log('手机浏览器');
+          this.getOrderSn().then(()=>{
+            this.orderPay(11).then((res)=>{
+              this.wxPayHref = res.readdata._data.wechat_h5_link;
+              window.location.href = this.wxPayHref;
+
+              const payPhone = setInterval(()=>{
+                if (this.payStatus && this.payStatusNum > 10){
+                  clearInterval(payPhone);
+                }
+                this.getUsersInfo()
+              },3000)
+
+            })
+          });
+        } else {
+          console.log('pc');
+          this.getOrderSn().then(()=>{
+            this.orderPay(10).then((res)=>{
+              console.log(res);
+              this.codeUrl = res.readdata._data.wechat_qrcode;
+              this.qrcodeShow = true;
+              const pay = setInterval(()=>{
+                if (this.payStatus && this.payStatusNum > 10){
+                  clearInterval(pay);
+                }
+                this.getUsersInfo()
+              },3000)
+            })
+          });
+        }
+      }
+
+    },
+
+    onInput(key){
+      console.log(key);
+      this.value = this.value + key;
+
+      if (this.value.length === 6 ) {
+        this.errorInfo = '';
+        this.getOrderSn().then(()=>{
+          this.orderPay(20,this.value).then((res)=>{
+            console.log(res);
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              this.getUsersInfo()
+            },3000)
+          })
+        })
+      }
+    },
+
+    onDelete(){
+      console.log("删除");
+    },
+
+    onClose(){
+      console.log('关闭');
+      this.value = '';
+      this.errorInfo = ''
+    },
+
     leapFrogClick(){
       this.$router.push({path:'pay-circle-login'})
     },
@@ -110,7 +216,9 @@ export default {
     },
 
     payClick(){
-      let isWeixin = this.appCommonH.isWeixin().isWeixin;
+      this.show = !this.show;
+
+      /*let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
 
       if (isWeixin){
@@ -160,7 +268,7 @@ export default {
             },3000)
           })
         });
-      }
+      }*/
     },
 
     completePayment(){
@@ -218,6 +326,12 @@ export default {
               this.siteExpire = '有效期自加入起' + day + '天';
               break;
           }
+          if (res.readdata._data.paycenter.wxpay_close === '1'){
+            this.payList.unshift( {
+              name:'微信支付',
+              icon:'icon-money'
+            })
+          }
         }
       }).catch(err=>{
         console.log(err);
@@ -241,13 +355,14 @@ export default {
         console.log(err);
       })
     },
-    orderPay(type){
+    orderPay(type,value){
       return this.appFetch({
         url:'orderPay',
         method:'post',
         splice:'/' + this.orderSn,
         data:{
-          "payment_type":type
+          "payment_type":type,
+          'pay_password':value
         }
       }).then(res=>{
         console.log(res);
@@ -372,7 +487,8 @@ export default {
     this.getForum();
     this.getGroups();
     this.getUsers(webDb.getLItem('tokenId')).then(res=>{
-      this.getAuthority(res.readdata.groups[0]._data.id)
+      this.getAuthority(res.readdata.groups[0]._data.id);
+      this.walletBalance = res.readdata._data.walletBalance;
     });
     this.tokenId = webDb.getLItem('tokenId');
     this.amountNum = webDb.getLItem('siteInfo')._data.set_site.site_price;
