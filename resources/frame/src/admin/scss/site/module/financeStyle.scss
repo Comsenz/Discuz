@@ -217,6 +217,8 @@
       display: flex;
       justify-content:space-between;
       flex-wrap: wrap;
+      margin-left:14PX;
+      border-bottom: 1PX solid #ccc;
       // margin-left:0 8px 0 14PX;
       align-items: center;
       .financial-profit-title-right{
@@ -231,7 +233,7 @@
         }
         ul li {
           float: left;
-          padding: 10px;  
+          padding-right: 30PX;  
           // text-align: center;   
       }
       }

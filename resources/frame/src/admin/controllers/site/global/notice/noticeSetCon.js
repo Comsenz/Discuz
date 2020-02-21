@@ -31,7 +31,6 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
-          console.log(res, '你是猪吗')
           this.tableData = res.readdata;
           // this.id = res.readdata._data.id;
           this.total = res.meta.total;
@@ -86,8 +85,8 @@ export default {
       this.pageNum = val;
       this.getNoticeList();
     },
-    configClick() {  //点击配置跳到对应的配置页面
-
+    configClick(id) {  //点击配置跳到对应的配置页面
+      this.$router.push({path:'/admin/notice-configure',query: {id:id}});
     }
   },
 

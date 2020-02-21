@@ -128,6 +128,17 @@ export default {
               attribution:'全局'
             }
           },
+
+          'notice-configure': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/notice/noticeConfigureView'], resolve)
+            },
+            metaInfo: {
+              title: '通知设置',
+              name:'noticeSet',
+              attribution:'全局'
+            }
+          },
           'tencent-cloud-set': {
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudSetView'], resolve)

@@ -83,6 +83,13 @@ class GroupPermissionTableSeeder extends Seeder
         'statistic.financeProfile' => [],       // 财务概况
         'statistic.financeChart' => [],         // 财务图表
 
+        //短消息
+        'dialog.create' => [],                 // 创建会话
+        'dialog.message.create' => [],         // 创建会话消息
+        'dialog.message.create' => [],         // 创建会话消息
+        'dialog.message.create' => [],         // 创建会话消息
+
+
     ];
 
     /**

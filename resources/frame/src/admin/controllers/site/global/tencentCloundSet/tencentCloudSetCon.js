@@ -36,7 +36,7 @@ export default {
           setFlag: true
         }, {
           name: '实名认证',
-          type:'qcloud_facdid',
+          type:'qcloud_faceid',
           description: '请先配置云API，开通腾讯云的人脸核身服务，并确保有对应资源包',
           status:'',
           icon:'iconshimingrenzheng',
@@ -103,7 +103,7 @@ export default {
           } else {
             this.tableData[3].status = false
           }
-          if (res.readdata._data.qcloud.qcloud_facdid) {
+          if (res.readdata._data.qcloud.qcloud_faceid) {
             this.tableData[4].status = true
           } else {
             this.tableData[4].status = false
@@ -128,8 +128,8 @@ export default {
         this.changeSettings('qcloud_cms_text',status);
       }else if(type == 'qcloud_sms'){
         this.changeSettings('qcloud_sms',status);
-      }else if(type == 'qcloud_facdid'){
-        this.changeSettings('qcloud_facdid',status);
+      }else if(type == 'qcloud_faceid'){
+        this.changeSettings('qcloud_faceid',status);
       }else if(type == 'qcloud_cos'){
         this.changeSettings('qcloud_cos',status);
       }
