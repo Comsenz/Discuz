@@ -54,13 +54,21 @@ class WalletPayNotify
 
             // 记录钱包变更明细
             switch ($this->data['type']) {
+                case Order::ORDER_TYPE_REGISTER:
+                    $change_type = UserWalletLog::TYPE_EXPEND_RENEW;
+                    $change_type_lang = 'wallet.expend_renew';
+                    break;
                 case Order::ORDER_TYPE_REWARD:
-                    $change_type      = UserWalletLog::TYPE_EXPEND_REWARD;
-                    $change_type_lang = 'wallet.reward_expend';
+                    $change_type = UserWalletLog::TYPE_EXPEND_REWARD;
+                    $change_type_lang = 'wallet.expend_reward';
+                    break;
+                case Order::ORDER_TYPE_THREAD:
+                    $change_type = UserWalletLog::TYPE_EXPEND_THREAD;
+                    $change_type_lang = 'wallet.expend_thread';
                     break;
                 default:
-                    $change_type                   = '';
-                    $change_type_lang              = '';
+                    $change_type      = $this->data['type'];
+                    $change_type_lang = '';
             }
 
             UserWalletLog::createWalletLog(
@@ -68,7 +76,7 @@ class WalletPayNotify
                 $this->data['amount'],
                 0,
                 $change_type,
-                app('translator')->get($change_type_lang),
+                trans($change_type_lang),
                 null,
                 $this->data['id']
             );

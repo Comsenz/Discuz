@@ -49,7 +49,7 @@ class BatchCreateDialog
 
         $result = ['data' => [], 'meta' => []];
 
-        if (! $this->actor->can('createDialog')) {
+        if (! $this->actor->can('dialog.create')) {
             $result['meta'][] = ['message' => 'permission_denied'];
             return $result;
         }
