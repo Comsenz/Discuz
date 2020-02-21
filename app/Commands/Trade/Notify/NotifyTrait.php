@@ -71,11 +71,11 @@ trait NotifyTrait
                     switch ($order_info->type) {
                         case Order::ORDER_TYPE_REWARD:
                             $change_type = UserWalletLog::TYPE_INCOME_REWARD;
-                            $change_type_lang = 'wallet.expend_reward';
+                            $change_type_lang = 'wallet.income_reward';
                             break;
                         case Order::ORDER_TYPE_THREAD:
                             $change_type = UserWalletLog::TYPE_INCOME_THREAD;
-                            $change_type_lang = 'wallet.expend_thread';
+                            $change_type_lang = 'wallet.income_thread';
                             break;
                         default:
                             $change_type = $order_info->type;
