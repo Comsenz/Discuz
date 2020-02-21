@@ -15,7 +15,7 @@
     <div class="financial-profit">
       <div class="financial-profit-title">
         <div class="financial-profit-title-left">
-          <span class="iconfont iconchongzhi"></span>
+          <span class="iconfont iconcaiwutongji"></span>
           <span class="financial-profit-titles">盈利统计</span>
         </div>
         <div class="financial-profit-title-right">
@@ -29,6 +29,7 @@
           </ul>
           <el-date-picker
             v-model="valueMouth"
+            width="100"
             v-show="mouthTab"
             @change="changeMouth"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -58,7 +59,7 @@
     <div class="financial-order">
       <div class="financial-profit-title">
         <div class="financial-profit-title-left">
-          <span class="iconfont iconchongzhi"></span>
+          <span class="iconfont icondingdanzongshu"></span>
           <span class="financial-profit-titles">订单统计</span>
         </div>
         <div class="financial-profit-title-right">

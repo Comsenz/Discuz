@@ -12,7 +12,7 @@ export default {
                 {
                     title: "用户总充提现",
                     num: "20,187",
-                    icon: '',
+                    icon: 'icontixian',
                     key: 'totalWithdrawal',
 
                 },
@@ -26,21 +26,21 @@ export default {
                 {
                     title: "用户订单总数",
                     num: "20,187",
-                    icon: '',
+                    icon: 'icondingdanzongshu',
                     key: 'orderCount',
 
                 },
                 {
                     title: "平台总盈利",
                     num: "20,187",
-                    icon: '',
+                    icon: 'iconcaiwutongji',
                     key: 'totalProfit',
 
                 },
                 {
                     title: "提现手续费收入",
                     num: "20,187",
-                    icon: '',
+                    icon: 'iconshouxufeishouru',
                     key: 'withdrawalProfit',
 
                 },

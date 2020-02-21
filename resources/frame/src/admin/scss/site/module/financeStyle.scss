@@ -155,11 +155,11 @@
 */
 .financial-box{
   position: relative;
-  &::before{content:'';width:49PX;height:100%;position: absolute;top:0;left:-49PX;background:rgba(244,247,249,1);};
-  &::after{content:'';width:49PX;height:100%;position: absolute;top:0;right:-49PX;background:rgba(244,247,249,1);};
+  // &::before{content:'';width:49PX;height:100%;position: absolute;top:0;left:-49PX;background:rgba(244,247,249,1);};
+  // &::after{content:'';width:49PX;height:100%;position: absolute;top:0;right:-49PX;background:rgba(244,247,249,1);};
   // margin-left:-49PX;
   // margin-right:-49PX;
-  background:rgba(244,247,249,1);
+  // background:rgba(244,247,249,1);
   .financial-statistics{
     display: flex;
     justify-content:space-between;
@@ -170,8 +170,8 @@
       width:23%;
       height:131PX;
       background:rgba(255,255,255,1);
-      box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
-      border:1px solid rgba(220,223,230,1);
+      // box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+      border:1PX solid rgba(220,223,230,1);
       border-radius:4px;
       margin-bottom:14PX;
       // margin-left:24PX;
@@ -205,18 +205,19 @@
   }
   .financial-profit,.financial-order{
     background:rgba(255,255,255,1);
-    box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
-    border: 1PX solid #ccc;
+    // box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+    border:1PX solid rgba(220,223,230,1);
+    border-radius:4px;
     height:560PX;
     position: relative;
     .financial-profit-title{
-      height:48PX;
+      height:50PX;
       display: flex;
       justify-content:space-between;
       flex-wrap: wrap;
       border-bottom: 1PX solid #ccc;
       align-items: center;
-      .iconchongzhi{
+      .iconcaiwutongji,.icondingdanzongshu{
          margin-left:14PX;
       }
       .financial-profit-title-right{

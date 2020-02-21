@@ -8,7 +8,7 @@
           <el-table-column
             prop=""
             label="编号"
-            min-width="100">
+            width="100">
             <template slot-scope="scope">
               <span v-text="getIndex(scope.$index)"> </span>
             </template>
@@ -17,7 +17,7 @@
           <el-table-column
             prop="_data.title"
             label="通知类型"
-            width="200">
+           >
           </el-table-column>
           
           <el-table-column

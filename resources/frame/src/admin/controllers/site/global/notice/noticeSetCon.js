@@ -33,7 +33,7 @@ export default {
         } else {
           this.tableData = res.readdata;
           // this.id = res.readdata._data.id;
-          this.total = res.meta.total;
+          this.total = res.readdata.length;
           // this.pageNum = res.meta.pageCount;
           // this.total = res.meta ? res.meta.total : 0;
           console.log(this.tableData, '????????????');

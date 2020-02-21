@@ -5,7 +5,7 @@
     <Card header="用户角色通知标题：">
       <CardRow description="系统发送的欢迎信息的标题，不支持HTML，不超过75字节
 ">
-        <el-input type="text" maxlength="75" v-model="noticeTitle" show-word-limit clearable></el-input>
+        <el-input type="text" maxlength="75" v-model="noticeTitle" ></el-input>
       </CardRow>
     </Card>
 
