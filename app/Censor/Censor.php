@@ -209,13 +209,7 @@ class Censor
     public function checkReal(string $identity ,string $realname)
     {
         $qcloud = $this->app->make('qcloud');
-        try{
-            $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
-
-        } catch (Exception $e) {
-
-            throw new Exception('qcloud_facdid_error');
-        }
+        $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
         return $result;
     }
 }

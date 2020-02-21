@@ -8,6 +8,7 @@
 namespace App\Commands\Users;
 
 
+use App\Exceptions\FaceidException;
 use App\Models\User;
 
 use App\Validators\UserValidator;
@@ -54,10 +55,13 @@ class RealUser
         $validator->valid($this->actor->getDirty());
 
         $res = $censor->checkReal($attributes['identity'], $attributes['realname']);
-        $log = app('log');
-        $log->info('qcloud_facdid: ', $res);
+
         //判断身份证信息与姓名是否符合
-        Arr::get($res, 'Result', false) == self::NAME_ID_NUMBER_MATCH && $this->actor->save();
+        if(Arr::get($res, 'Result', false) != self::NAME_ID_NUMBER_MATCH){
+            throw new FaceidException($res['Description']);
+        }else{
+            $this->actor->save();
+        }
 
         return $this->actor;
     }
