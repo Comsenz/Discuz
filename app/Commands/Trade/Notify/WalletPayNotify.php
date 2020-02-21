@@ -67,13 +67,13 @@ class WalletPayNotify
                     $change_type_lang = 'wallet.expend_thread';
                     break;
                 default:
-                    $change_type      = $this->data['type'];
+                    $change_type = $this->data['type'];
                     $change_type_lang = '';
             }
 
             UserWalletLog::createWalletLog(
                 $this->data['user_id'],
-                $this->data['amount'],
+                -$this->data['amount'],
                 0,
                 $change_type,
                 trans($change_type_lang),
