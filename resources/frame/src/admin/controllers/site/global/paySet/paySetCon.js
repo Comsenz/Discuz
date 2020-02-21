@@ -30,7 +30,7 @@ export default {
           this.$message.error(data.errors[0].code);
         }else {
           // console.log(data);
-          if (data.readdata._data.wxpay_close == '0') {
+          if (data.readdata._data.paycenter.wxpay_close == '0') {
             this.settingStatus[0].status = false;
           } else {
             this.settingStatus[0].status = true;

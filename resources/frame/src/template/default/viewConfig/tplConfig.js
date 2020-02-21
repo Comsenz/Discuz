@@ -511,6 +511,22 @@ export default {
           title:'验证支付密码'
         }
       },
+      'setup-pay-pwd':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/paymentPasswordSet/setUpPayPasswordView'],resolve);
+        },
+        metaInfo:{
+          title:'设置支付密码'
+        }
+      },
+      'confirm-pay-pwd':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/myInfo/paymentPasswordSet/confirmPayPasswordView'],resolve);
+        },
+        metaInfo:{
+          title:'确认支付密码'
+        }
+      },
 
 
       //公共页面模块
@@ -570,9 +586,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    'retrieve-pwd',
-    'retrieve-pwd',
-    'pay-the-fee',
+    // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',

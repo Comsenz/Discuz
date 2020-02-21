@@ -18,7 +18,9 @@ use App\MessageTemplate\PostMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Thread;
+use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use Discuz\Api\Events\Serializing;
@@ -31,6 +33,7 @@ class PostListener
     {
         // 发表回复
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+        $events->listen(Created::class, [$this, 'RelatedPost']);
 
         // 审核回复
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
@@ -73,6 +76,7 @@ class PostListener
             && $post->reply_user_id != $actor->id
             && $post->reply_user_id != $post->thread->user_id
         ) {
+
             $post->replyUser->notify(new Replied($post));
         }
     }
@@ -178,6 +182,34 @@ class PostListener
                 'message' => $event->post->content,
                 'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
             ]));
+        }
+    }
+
+    /**
+     * 判断用户是否发表内容时是否@其他人
+     *
+     * @param Created $event
+     */
+    public function RelatedPost(Created $event)
+    {
+        $post = $event->post;
+        $post_content = $post->content;
+        $actor = $event->actor;
+
+        // 过滤多空格，转化HTML代码
+        $post_content = preg_replace(['/(\s+)/', '/@/', '/</', '/>/'], [' ', ' @', '&lt;', '&gt;'], $post_content);
+
+        // 用户正则
+        $user_pattern = "/@([^\r\n]*?)[:|：|，|,|#|\s]/i";
+
+        // 提取用户
+        preg_match_all($user_pattern, $post_content, $userArr);
+
+        if(!empty($userArr[1])) {
+            $relatedids = User::whereIn('username', $userArr[1])->where('id','!=',$actor->id)->get();
+            foreach ($relatedids as $relatedid) {
+                $relatedid->notify(new Related($post));
+            }
         }
     }
 }

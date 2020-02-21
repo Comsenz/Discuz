@@ -5,7 +5,8 @@ import axios from "axios";
 import appConfig from "../../config/appConfig";
 import browserDb from 'webDbHelper';
 import appCommonH from "./commonHelper";
-import router from 'vue-router';
+import Router from '../admin/viewConfig/tpl'
+
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -240,14 +241,18 @@ const appFetch = function(params, options) {
 
       if (data.data.errors[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
-        let isWeixin = this.appCommonH.isWeixin().isWeixin;
+        let isWeixin = appCommonH.isWeixin().isWeixin;
+        console.log(isWeixin);
+
         if (isWeixin){
           browserDb.setLItem('Authorization','');
           getNewToken().then(res=>{
-            this.$router.replace({path:'/supplier-all-back',query:{url:this.$router.history.current.path}});
+            Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
-          this.$router.push({path:'/login-user'})
+          console.log('token过期，跳转登录页');
+          console.log(Router.init());
+          Router.init().push({path:'/login-user'})
         }
 
       }
