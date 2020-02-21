@@ -60,9 +60,16 @@ class ForumSettingSerializer extends AbstractSerializer
             ],
 
             // 第三方登陆设置
-            'passport' => [],
+            'passport' => [
+                'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
+                'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
+                'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),       // 微信PC 开关
+            ],
+
             // 支付设置
-            'paycenter' => [],
+            'paycenter' => [
+                'wxpay_close' => $this->settings->get('wxpay_close', 'wxpay'),
+            ],
 
             // 附件设置
             'set_attach' => [
@@ -73,11 +80,16 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 腾讯云设置
             'qcloud' => [
+                'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
+                'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
+                'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
             ],
 
             // 提现设置
-            'set_cash' => [],
+            'set_cash' => [
+                'cash_rate' => $this->settings->get('cash_rate', 'cash'), // 提现费率
+            ],
 
             // 其它信息(非setting中的信息)
             'other' => [
@@ -97,12 +109,12 @@ class ForumSettingSerializer extends AbstractSerializer
         ];
 
         // 站点开关 - 满足条件返回
-        if ($attributes['set_site']['site_close'] || ($this->actor->exists && $this->actor->isAdmin())) {
+        if ($attributes['set_site']['site_close'] == 1) {
             $attributes['set_site'] += $this->forumField->getSiteClose();
         }
 
         // 付费模式 - 满足条件返回
-        if ($attributes['set_site']['site_mode'] == 'pay' || ($this->actor->exists && $this->actor->isAdmin())) {
+        if ($attributes['set_site']['site_mode'] == 'pay') {
             $attributes['set_site'] += $this->forumField->getSitePayment();
         }
 

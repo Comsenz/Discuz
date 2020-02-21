@@ -44,7 +44,6 @@ class UserSerializer extends AbstractSerializer
         $attributes = [
             'id'                => (int) $model->id,
             'username'          => $model->username,
-            'mobile'            => $model->mobile,
             'avatarUrl'         => $this->getAvatarUrl($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
@@ -68,6 +67,7 @@ class UserSerializer extends AbstractSerializer
             $attributes['banReason'] = !empty($model->latelyLog) ? $model->latelyLog->message : '' ;
         }
 
+        // 限制字段 本人/权限 显示
         if ($canEdit || $this->actor->id === $model->id) {
             $attributes += [
                 'originalMobile'    => $model->getOriginal('mobile'),
@@ -76,6 +76,7 @@ class UserSerializer extends AbstractSerializer
                 'lastLoginIp'       => $model->last_login_ip,
                 'identity'          => $model->identity,
                 'realname'          => $model->realname,
+                'mobile'            => $model->mobile,
             ];
         }
 
