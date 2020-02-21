@@ -6,14 +6,12 @@
           <van-cell-group>
             <van-field
               label="姓名"
-              v-model="name"
-             
+              v-model="name"            
               placeholder="请输入您的真实姓名"
             />
             <van-field
               label="身份证号"
               v-model="idNumber"
-              type="password"
               placeholder="请输入您的身份证号码"
             />
           </van-cell-group>

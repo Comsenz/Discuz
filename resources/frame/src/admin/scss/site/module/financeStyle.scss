@@ -171,6 +171,7 @@
       height:131PX;
       background:rgba(255,255,255,1);
       box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+      border:1px solid rgba(220,223,230,1);
       border-radius:4px;
       margin-bottom:14PX;
       // margin-left:24PX;
@@ -179,24 +180,25 @@
       .financial-head{
         width:100%;
         height:48PX;
-        border-bottom: 1PX solid #ccc;
+        line-height:48PX;
+        border-bottom: 1PX solid rgba(235,238,245,1);
         display: flex;
         .financial-title{
           color:#606266;
-          padding:13PX 0 0 14PX;
+          padding-left:13PX;
           flex:2;
         }
         .iconfont{
-          padding-top:13PX;
           padding-right:14PX;
           
         }
       }
       .financial-con{
         position: absolute;
+        // margin:0 auto;
         left:14PX;
-        top:69PX;
-        font-size: 25PX;
+        top:50%;
+        font-size: 30PX;
       }
    
     }

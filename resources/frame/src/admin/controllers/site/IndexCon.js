@@ -73,7 +73,7 @@ export default {
               id:7,
               title:'通知设置',
               name:'noticeSet',
-              icon:'icontongzhi'
+              icon:'icontongzhi',
             },
             // {
             //   id:7,
