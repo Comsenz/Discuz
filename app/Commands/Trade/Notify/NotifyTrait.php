@@ -38,8 +38,7 @@ trait NotifyTrait
             if ($order_info->type == Order::ORDER_TYPE_REGISTER) {
                 //注册时，返回支付成功。
                 return $order_info;
-            } elseif ($order_info->type == Order::ORDER_TYPE_REWARD) {
-                //打赏
+            } elseif (in_array($order_info->type, [Order::ORDER_TYPE_REWARD, Order::ORDER_TYPE_THREAD])) {
                 $order_amount = $order_info->amount;//订单金额
                 //站长作者分成配置
                 $site_author_scale = $setting->get('site_author_scale');
@@ -67,26 +66,34 @@ trait NotifyTrait
                     $user_wallet                   = UserWallet::lockForUpdate()->find($payee_id);
                     $user_wallet->available_amount = $user_wallet->available_amount + $payee_amount;
                     $user_wallet->save();
+
                     //收款人钱包明细记录
-                    $payee_change_available_amount = $payee_amount;
-                    $change_type                   = '';
-                    $change_type_lang              = '';
-                    if ($order_info->type == Order::ORDER_TYPE_REWARD) {
-                        //打赏收入
-                        $change_type      = UserWalletLog::TYPE_INCOME_REWARD;
-                        $change_type_lang = 'wallet.reward_income';
+                    switch ($order_info->type) {
+                        case Order::ORDER_TYPE_REWARD:
+                            $change_type = UserWalletLog::TYPE_INCOME_REWARD;
+                            $change_type_lang = 'wallet.expend_reward';
+                            break;
+                        case Order::ORDER_TYPE_THREAD:
+                            $change_type = UserWalletLog::TYPE_INCOME_THREAD;
+                            $change_type_lang = 'wallet.expend_thread';
+                            break;
+                        default:
+                            $change_type = $order_info->type;
+                            $change_type_lang = '';
                     }
+
                     //添加钱包明细
                     $user_wallet_log = UserWalletLog::createWalletLog(
                         $payee_id,
-                        $payee_change_available_amount,
+                        $payee_amount,
                         0,
                         $change_type,
-                        app('translator')->get($change_type_lang),
+                        trans($change_type_lang),
                         null,
                         $order_info->id
                     );
                 }
+
                 return $order_info;
             }
         }
