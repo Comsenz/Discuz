@@ -64,7 +64,6 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
-            'site_close_msg' => $this->settings->get('site_close_msg'),
             'site_install' => $this->settings->get('site_install'),
         ];
     }
@@ -77,16 +76,13 @@ class ForumSettingField
     public function getPassportSettings()
     {
         return [
-            // - 微信 h5
-            'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'),
+            // - 微信 H5
             'offiaccount_app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'offiaccount_app_secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            // - 微信小程序
-            'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'),
+            // - 微信 小程序
             'miniprogram_app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
             'miniprogram_app_secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
-            // - 微信 pc
-            'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),
+            // - 微信 PC
             'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
             'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
         ];
@@ -100,7 +96,6 @@ class ForumSettingField
     public function getPaycenterSettings()
     {
         return [
-            'wxpay_close' => $this->settings->get('wxpay_close', 'wxpay'),
             'mch_id' => $this->settings->get('mch_id', 'wxpay'),
             'app_id' => $this->settings->get('app_id', 'wxpay'),
             'api_key' => $this->settings->get('api_key', 'wxpay'),
@@ -120,14 +115,12 @@ class ForumSettingField
     public function getQCloudSettings()
     {
         return [
-            'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
             'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
             'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
             'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
             'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
             'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
-            'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
             'qcloud_faceid_region' => (bool)$this->settings->get('qcloud_faceid_region', 'qcloud'),
             'qcloud_sms_app_id' => $this->settings->get('qcloud_sms_app_id', 'qcloud'),
             'qcloud_sms_app_key' => $this->settings->get('qcloud_sms_app_key', 'qcloud'),
@@ -136,7 +129,6 @@ class ForumSettingField
             'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
             'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
-            'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
         ];
     }
 
@@ -149,7 +141,6 @@ class ForumSettingField
     {
         return [
             'cash_interval_time' => $this->settings->get('cash_interval_time', 'cash'),
-            'cash_rate' => $this->settings->get('cash_rate', 'cash'),
             'cash_min_sum' => $this->settings->get('cash_min_sum', 'cash') ?: '',
             'cash_max_sum' => $this->settings->get('cash_max_sum', 'cash'),
             'cash_sum_limit' => $this->settings->get('cash_sum_limit', 'cash'),
