@@ -97,7 +97,7 @@
           <input type="number" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
         </div>
         <div class="payEx">付费说明</div>
-        <input type="text" placeholder="这篇内容付费方可查看全部内容…." class="payExplain">
+        <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain">
         <a href="javascript:;" class="popSureBtn" :class="{ 'sureBtnCli': isCli, 'forbiddenCli': !isCli }" @click="isCli && paySetSure()">确定</a>
       </van-popup>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox" id="showFacePanel" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
