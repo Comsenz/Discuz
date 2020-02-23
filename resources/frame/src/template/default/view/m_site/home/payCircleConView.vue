@@ -89,19 +89,52 @@
 
     </div>
 	</van-pull-refresh>
-    </div>
+
+	<van-popup
+        v-model="qrcodeShow"
+        round
+        close-icon-position="top-right"
+        closeable
+        class="qrCodeBox"
+        get-container="body">
+        <span class="popupTit">立即支付</span>
+        <div class="payNum">￥<span>{{amountNum}}</span></div>
+        <div class="payType">
+          <span class="typeLeft">支付方式</span>
+          <span class="typeRight"><i class="icon iconfont icon-wepay"></i>微信支付</span>
+        </div>
+        <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
+        <p class="payTip">微信识别二维码支付</p>
+      </van-popup>
+
+      <PayMethod
+        :data="payList"
+        v-model="show"
+        :money="sitePrice"
+        :balance="walletBalance"
+        @oninput="onInput"
+        @delete="onDelete"
+        @close="onClose"
+        :error="errorInfo"
+        @payImmediatelyClick="payImmediatelyClick">
+      </PayMethod>
+
+
+  </div>
 </template>
 
 <script>
 import mSitePayCircleConCon from '../../../controllers/m_site/circle/payCircleConCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
+import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "payCircleView",
     components:{
-    	Header
+		Header,
+		PayMethod
     },
     ...mSiteHeader,
     ...mSitePayCircleConCon

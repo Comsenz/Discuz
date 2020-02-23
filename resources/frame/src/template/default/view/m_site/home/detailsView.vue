@@ -41,7 +41,7 @@
           </div>
           <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
             <span class="icon iconfont icon-money"></span>
-            <div class="payPerHeaChi" v-for="reward in themeCon.rewardedUsers" :key="reward">
+            <div class="payPerHeaChi" v-for="(reward,rewardiInd) in themeCon.rewardedUsers" :key="rewardiInd">
               <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
               <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
             </div>
