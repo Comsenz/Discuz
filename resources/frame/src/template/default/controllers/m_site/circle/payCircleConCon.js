@@ -58,7 +58,10 @@ export default {
       this.alreadyLogin = false;
     }
     this.myThread();
+    // this.sitePrice = browserDb.getLItem('siteInfo')._data.set_site.site_price;
     this.getInfo();
+    this.getUsersInfo();
+    
   },
   methods: {
     getInfo(){
@@ -217,7 +220,7 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
+        console.log(res,'用户是否付费');
         console.log(res.readdata._data.paid);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
@@ -226,9 +229,9 @@ export default {
           this.payStatusNum = +1;
           if (this.payStatus) {
             this.qrcodeShow = false;
-            this.$router.push('/');
+            this.$router.push({path:'/details/' + this.themeId});
             this.payStatusNum = 11;
-            clearInterval(pay);
+            // clearInterval(pay);
           }
         }
       }).catch(err=>{

@@ -750,7 +750,7 @@ export default {
             if (signInAndPayForAccess.includes(to.name)){
               if(to.name === 'pay-circle-con/:themeId/:groupId'){
                 // console.log(to.params.themeId,'当前router主题id');
-                next({path:'/details/' + to.params.themeId});
+                // next({path:'/details/' + to.params.themeId});
               }
               next(vm=>{
                 vm.$router.go(-1);
