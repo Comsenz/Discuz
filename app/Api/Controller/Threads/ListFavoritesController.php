@@ -76,7 +76,7 @@ class ListFavoritesController extends ListThreadsController
         }
 
         // 付费主题对未付费用户只展示部分内容
-        if (in_array('firstPost', $load) && ! $actor->isAdmin()) {
+        if (in_array('firstPost', $load)) {
             $threads = $this->cutUnpaidThreadContent($threads, $actor);
         }
 

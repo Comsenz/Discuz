@@ -208,7 +208,7 @@ class ListThreadsController extends AbstractListController
         }
 
         // 付费主题对未付费用户只展示部分内容
-        if (in_array('firstPost', $load) && ! $actor->isAdmin()) {
+        if (in_array('firstPost', $load)) {
             $threads = $this->cutUnpaidThreadContent($threads, $actor);
         }
 
@@ -501,21 +501,25 @@ class ListThreadsController extends AbstractListController
     protected function cutUnpaidThreadContent(Collection $threads, User $actor)
     {
         // 需付费主题
-        $notFreeThreads = $threads->where('price', '>', 0)->where('user_id', '<>', $actor->id)->pluck('id');
+        $notFreeThreads = $threads->where('price', '>', 0)->pluck('id');
 
         if ($notFreeThreads) {
             // 已付费主题
-            $paidThreads = Order::whereIn('thread_id', $notFreeThreads)
-                ->where('user_id', $actor->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->pluck('thread_id');
+            if ($actor->isAdmin()) {
+                $paidThreads = $notFreeThreads;
+            } else {
+                $paidThreads = Order::whereIn('thread_id', $notFreeThreads)
+                    ->where('user_id', $actor->id)
+                    ->where('status', Order::ORDER_STATUS_PAID)
+                    ->where('type', Order::ORDER_TYPE_THREAD)
+                    ->pluck('thread_id');
+            }
 
             // 未付费主题只展示部分内容
-            $notFreeThreads->map(function ($threadId) use ($threads, $paidThreads) {
+            $notFreeThreads->map(function ($threadId) use ($threads, $actor, $paidThreads) {
                 $thread = $threads->firstWhere('id', $threadId);
 
-                if ($paidThreads->contains($threadId)) {
+                if ($thread->user_id == $actor->id || $paidThreads->contains($threadId)) {
                     $thread->setAttribute('paid', true);
                 } else {
                     // 截取内容、隐藏图片及附件

@@ -92,9 +92,9 @@ class ResourceThreadController extends AbstractResourceController
         $this->assertCan($actor, 'viewPosts', $thread);
 
         // 付费主题对未付费用户只展示部分内容
-        if ($thread->price > 0 && $thread->user_id != $actor->id && in_array('firstPost', $include)) {
+        if ($thread->price > 0 && in_array('firstPost', $include)) {
             // 是否付费
-            if ($actor->isAdmin()) {
+            if ($thread->user_id == $actor->id || $actor->isAdmin()) {
                 $paid = true;
             } else {
                 $paid = Order::where('user_id', $actor->id)
