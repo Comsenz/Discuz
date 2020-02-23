@@ -85,7 +85,7 @@ export default {
   watch:{
     value(val){
       this.paySelectShow = val;
-      this.descriptionShow = this.money > this.balance;
+      this.descriptionShow = parseFloat(this.money) > parseFloat(this.balance);
     },
     paySelectShow(val){
       if (!val){

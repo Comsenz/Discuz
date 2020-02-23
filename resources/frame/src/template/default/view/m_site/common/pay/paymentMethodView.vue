@@ -77,7 +77,7 @@
 
       <van-number-keyboard
         safe-area-inset-bottom
-        z-index="3000"
+        :z-index="3000"
         :show="showKeyboard"
         @input="onInput"
         @delete="onDelete"
