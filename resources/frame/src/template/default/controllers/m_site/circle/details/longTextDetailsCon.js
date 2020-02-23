@@ -40,9 +40,15 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.loadUserInfo();
     this.getForum();
+    this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
+      this.getAuthority(res.readdata.groups[0]._data.id);
+      this.walletBalance = res.readdata._data.walletBalance;
+    });
   },
   computed: {
-    
+    themeId: function () {
+      return this.$route.params.themeId;
+    }
   },
 	methods: {
    //判断设备，下载时提示
@@ -157,7 +163,7 @@ export default {
                 if (this.payStatus && this.payStatusNum > 10){
                   clearInterval(payPhone);
                 }
-                this.getUsersInfo()
+                this.getOrderStatus();
               },3000)
 
             })
@@ -173,7 +179,7 @@ export default {
                 if (this.payStatus && this.payStatusNum > 10){
                   clearInterval(pay);
                 }
-                this.getUsersInfo()
+                this.getOrderStatus();
               },3000)
             })
           });
@@ -193,7 +199,7 @@ export default {
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
               }
-              this.getUsersInfo()
+              // this.getUsersInfo()
             },3000)
           })
         })
@@ -209,7 +215,240 @@ export default {
       this.value = '';
       this.errorInfo = ''
     },
+    onBridgeReady(data){
+      let that = this;
 
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', {
+          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
+          "package":data.data.attributes.wechat_js.package,
+          "signType":"MD5",         //微信签名方式：
+          "paySign":data.data.attributes.wechat_js.paySign //微信签名
+        },
+        function(res){
+          // alert('支付唤醒');
+          // if (res.err_msg == "get_brand_wcpay_request:ok") {
+          //   alert("支付成功");
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          //   alert("支付过程中用户取消");             //支付取消正常走
+          //   alert(res.err_msg);
+          //   resolve;
+          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          //   alert("支付失败");
+          //   alert(res.err_msg);
+          //   resolve;
+          // }
+
+        });
+
+      setTimeout(()=>{
+        const toast = that.$toast.loading({
+          duration: 0, // 持续展示 toast
+          forbidClick: true,
+          message: '支付状态查询中...'
+        });
+        let second = 5;
+        const timer = setInterval(() => {
+          second--;
+          this.getUsers(that.tokenId).then(res=>{
+            console.log(second);
+
+            if (res.errors){
+              clearInterval(timer);
+              toast.message = '支付失败，请重新支付！';
+              setTimeout(()=>{
+                toast.clear();
+              },2000)
+            } else {
+              if (second > 0 || !res.readdata._data.paid){
+                toast.message = `正在查询订单...`;
+              } else if (res.readdata._data.paid){
+                clearInterval(timer);
+                browserDb.setLItem('foregroundUser', res.data.attributes.username);
+                toast.message = '支付成功，正在跳转首页...';
+                toast.clear();
+
+                let beforeVisiting = browserDb.getSItem('beforeVisiting');
+                console.log(beforeVisiting);
+
+                if (beforeVisiting) {
+                  this.$router.push({path: beforeVisiting})
+                } else {
+                  this.$router.push({path: '/'})
+                }
+              } else {
+                clearInterval(timer);
+                toast.message = '支付失败，请重新支付！';
+                toast.clear();
+              }
+            }
+          });
+        }, 1000);
+      },3000);
+
+      const payWechat = setInterval(()=>{
+        if (this.payStatus == '1' || this.payStatusNum > 10){
+          clearInterval(payWechat);
+        }
+        this.getOrderStatus();
+      },3000)
+
+    },
+    getOrderSn(){
+      return this.appFetch({
+        url:'orderList',
+        method:'post',
+        data:{
+          "type":3,
+          "thread_id": this.themeId
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.orderSn = res.readdata._data.order_sn;
+          console.log(this.orderSn,'订单号');
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    orderPay(type,value){
+      return this.appFetch({
+        url:'orderPay',
+        method:'post',
+        splice:'/' + this.orderSn,
+        data:{
+          "payment_type":type,
+          'pay_password':value
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          console.log('订单支付！！！！');
+          return res;
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getUsersInfo(){
+      // this.appFetch({
+      //   url:'users',
+      //   method:'get',
+      //   splice:'/' + browserDb.getLItem('tokenId'),
+      //   data:{
+      //     include:['groups']
+      //   }
+      // }).then(res=>{
+      //   console.log(res);
+      //   console.log(res.readdata._data.paid);
+      //   if (res.errors){
+      //     this.$toast.fail(res.errors[0].code);
+      //   } else {
+      //     this.payStatus = res.readdata._data.paid;
+      //     this.payStatusNum = +1;
+      //     if (this.payStatus) {
+      //       this.qrcodeShow = false;
+      //       this.$router.push('/');
+      //       this.payStatusNum = 11;
+      //       clearInterval(pay);
+      //     }
+      //   }
+      // }).catch(err=>{
+      //   console.log(err);
+      // })
+    },
+    getOrderStatus(){
+      // alert(this.orderSn);
+      return this.appFetch({
+        url:'order',
+        method:'get',
+        splice:'/' + this.orderSn,
+        data:{
+        },
+      }).then(res=>{
+        console.log(res);
+        // const orderStatus = res.readdata._data.status;
+        if (res.errors){
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }
+        } else {
+          this.payStatus = res.readdata._data.status;
+          console.log(res.readdata._data.status);
+          this.payStatusNum ++;
+          // console.log(this.payStatusNum);
+          if (this.payStatus == '1' || this.payStatusNum > 10){
+            if(this.payStatus == '1'){
+              this.sendMsgToParent();
+            }
+            this.rewardShow = false;
+            this.qrcodeShow = false;
+            // this.rewardedUsers.push({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
+            // console.log(this.rewardedUsers);
+            this.payStatusNum = 11;
+           
+            console.log('重新请求');
+            // clearInterval(pay);
+          }
+        }
+        // return res;
+      })
+    },
+    sendMsgToParent(){
+      // alert('执行');
+      this.$emit('listenToChildEvent',true);
+    },
+    getUsers(id){
+      return this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/' + id,
+        headers:{'Authorization': 'Bearer ' + browserDb.getLItem('Authorization')},
+        data:{
+          include:['groups']
+        }
+      }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          console.log(res);
+          return res;
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getAuthority(id){
+      return this.appFetch({
+        url:"authority",
+        method:'get',
+        splice:'/' + id,
+        data:{
+          include:['permission']
+        }
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
     imageSwiper(imgIndex, typeclick, replyItem) {
       ImagePreview({
         images:this.firstpostImageListProp,
