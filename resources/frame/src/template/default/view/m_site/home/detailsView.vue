@@ -154,6 +154,18 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
+       
+       <PayMethod
+        :data="payList"
+        v-model="show"
+        :money="amountNum"
+        :balance="walletBalance"
+        @oninput="onInput"
+        @delete="onDelete"
+        @close="onClose"
+        :error="errorInfo"
+        @payImmediatelyClick="payImmediatelyClick">
+      </PayMethod>
        <!-- <van-image-preview
          v-model="imageShow"
          :images="firstpostImageList"
@@ -169,6 +181,7 @@
 
 <script>
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import longTextDetail from '../home/details/longTextDetailsView';
 import normalDetail from '../home/details/normalDetailsView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
@@ -179,7 +192,8 @@ export default {
     components:{
       comHeader,
       normalDetail,
-      longTextDetail
+      longTextDetail,
+      PayMethod
     },
     ...mSiteDetailsCon
 }

@@ -104,6 +104,18 @@ export default {
       themeTitle:'',
       wxpay: '',
       twoChi: '',
+      show: false,  //是否显示支付方式
+      payList:[
+        {
+          name:'钱包',
+          icon:'icon-weixin'
+        }
+      ],
+      qrcodeShow: false,
+      walletBalance: '',  //钱包余额
+      errorInfo:'',      //密码错误提示
+      value:'',          //密码
+      codeUrl:"",        //支付url，base64
     }
   },
   created() {
@@ -200,6 +212,12 @@ export default {
              //   //判断站点信息是否付费，用户是否登录，用户是否已支付
              this.detailIf(this.isPayVal, false);
            }
+           if (res.readdata._data.paycenter.wxpay_close === '1'){
+            this.payList.unshift( {
+              name:'微信支付',
+              icon:'icon-money'
+            })
+          }
          }
       });
     },
@@ -224,6 +242,7 @@ export default {
           } else {
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
+            this.walletBalance = res.readdata._data.walletBalance;
             // console.log(this.currentUserAvatarUrl+'3334');
             this.groupId = res.readdata.groups[0]._data.id;
             // console.log(this.groupId,'uuuuu');
@@ -861,65 +880,157 @@ export default {
         },3000)
 
      },
+     payClick(amount){
+       this.amountNum = amount;
+       this.show = !this.show;
+      //  this.payImmediatelyClick();
+     },
+     payImmediatelyClick(data){
+      //data返回选中项
+      console.log(data);
 
-
-
-    payClick(amount){
-      // alert(amount);
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
-      this.amountNum = amount;
-      if (isWeixin){
 
-        this.getOrderSn(amount).then(()=>{
-          this.orderPay(12).then((res)=>{
-            if (typeof WeixinJSBridge == "undefined"){
-              if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-              }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+      if (data.name === '微信支付') {
+        this.show = false;
+        if (isWeixin){
+          console.log('微信');
+          this.getOrderSn(this.amountNum).then(()=>{
+            this.orderPay(12).then((res)=>{
+              if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                  document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+                }else if (document.attachEvent){
+                  document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                  document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+                }
+              }else{
+                this.onBridgeReady(res);
               }
-            }else{
-              this.onBridgeReady(res);
-            }
-          })
-        });
-      } else if (isPhone){
-        console.log('手机浏览器');
-        this.getOrderSn(amount).then(()=>{
-          this.orderPay(11).then((res)=>{
-            this.wxPayHref = res.readdata._data.wechat_h5_link;
-            window.location.href = this.wxPayHref;
-            const payPhone = setInterval(()=>{
-              if (this.payStatus == '1' || this.payStatusNum > 10){
-                clearInterval(payPhone);
-              }
-              this.getOrderStatus();
-            },3000)
-          })
-        });
-      } else {
-        console.log('pc');
-        this.getOrderSn(amount).then(()=>{
-          this.orderPay(10).then((res)=>{
-            console.log(res);
-            this.codeUrl = res.readdata._data.wechat_qrcode;
-            this.qrcodeShow = true;
-            const pay = setInterval(()=>{
-              console.log(this.payStatusNum);
-              this.getOrderStatus();
-              if (this.payStatus == '1' || this.payStatusNum > 10){
-                console.log('已达上限');
-                clearInterval(pay);
-              }
-            },3000);
+            })
+          });
+        } else if (isPhone){
+          console.log('手机浏览器');
+          this.getOrderSn(this.amountNum).then(()=>{
+            this.orderPay(11).then((res)=>{
+              this.wxPayHref = res.readdata._data.wechat_h5_link;
+              window.location.href = this.wxPayHref;
 
+              const payPhone = setInterval(()=>{
+                if (this.payStatus && this.payStatusNum > 10){
+                  clearInterval(payPhone);
+                }
+                this.getOrderStatus();
+              },3000)
 
-          })
-        });
+            })
+          });
+        } else {
+          console.log('pc');
+          this.getOrderSn(this.amountNum).then(()=>{
+            this.orderPay(10).then((res)=>{
+              console.log(res);
+              this.codeUrl = res.readdata._data.wechat_qrcode;
+              this.qrcodeShow = true;
+              const pay = setInterval(()=>{
+                if (this.payStatus && this.payStatusNum > 10){
+                  clearInterval(pay);
+                }
+                this.getOrderStatus();
+              },3000)
+            })
+          });
+        }
       }
     },
+    onInput(key){
+      console.log(key);
+      this.value = this.value + key;
+
+      if (this.value.length === 6 ) {
+        this.errorInfo = '';
+        this.getOrderSn(this.amountNum).then(()=>{
+          this.orderPay(20,this.value).then((res)=>{
+            console.log(res);
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
+              }
+              // this.getUsersInfo()
+            },3000)
+          })
+        })
+      }
+    },
+
+    onDelete(){
+      console.log("删除");
+    },
+
+    onClose(){
+      console.log('关闭');
+      this.value = '';
+      this.errorInfo = ''
+    },
+
+
+    // payClick(amount){
+    //   // alert(amount);
+    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
+    //   let isPhone = this.appCommonH.isWeixin().isPhone;
+    //   this.amountNum = amount;
+    //   if (isWeixin){
+
+    //     this.getOrderSn(amount).then(()=>{
+    //       this.orderPay(12).then((res)=>{
+    //         if (typeof WeixinJSBridge == "undefined"){
+    //           if( document.addEventListener ){
+    //             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+    //           }else if (document.attachEvent){
+    //             document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+    //             document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+    //           }
+    //         }else{
+    //           this.onBridgeReady(res);
+    //         }
+    //       })
+    //     });
+    //   } else if (isPhone){
+    //     console.log('手机浏览器');
+    //     this.getOrderSn(amount).then(()=>{
+    //       this.orderPay(11).then((res)=>{
+    //         this.wxPayHref = res.readdata._data.wechat_h5_link;
+    //         window.location.href = this.wxPayHref;
+    //         const payPhone = setInterval(()=>{
+    //           if (this.payStatus == '1' || this.payStatusNum > 10){
+    //             clearInterval(payPhone);
+    //           }
+    //           this.getOrderStatus();
+    //         },3000)
+    //       })
+    //     });
+    //   } else {
+    //     console.log('pc');
+    //     this.getOrderSn(amount).then(()=>{
+    //       this.orderPay(10).then((res)=>{
+    //         console.log(res);
+    //         this.codeUrl = res.readdata._data.wechat_qrcode;
+    //         this.qrcodeShow = true;
+    //         const pay = setInterval(()=>{
+    //           console.log(this.payStatusNum);
+    //           this.getOrderStatus();
+    //           if (this.payStatus == '1' || this.payStatusNum > 10){
+    //             console.log('已达上限');
+    //             clearInterval(pay);
+    //           }
+    //         },3000);
+
+
+    //       })
+    //     });
+    //   }
+    // },
 
     getOrderSn(amount){
       return this.appFetch({

@@ -245,50 +245,50 @@ export default {
 
         });
 
-      setTimeout(()=>{
-        const toast = that.$toast.loading({
-          duration: 0, // 持续展示 toast
-          forbidClick: true,
-          message: '支付状态查询中...'
-        });
-        let second = 5;
-        const timer = setInterval(() => {
-          second--;
-          this.getUsers(that.tokenId).then(res=>{
-            console.log(second);
+      // setTimeout(()=>{
+      //   const toast = that.$toast.loading({
+      //     duration: 0, // 持续展示 toast
+      //     forbidClick: true,
+      //     message: '支付状态查询中...'
+      //   });
+      //   let second = 5;
+      //   const timer = setInterval(() => {
+      //     second--;
+      //     this.getUsers(that.tokenId).then(res=>{
+      //       console.log(second);
 
-            if (res.errors){
-              clearInterval(timer);
-              toast.message = '支付失败，请重新支付！';
-              setTimeout(()=>{
-                toast.clear();
-              },2000)
-            } else {
-              if (second > 0 || !res.readdata._data.paid){
-                toast.message = `正在查询订单...`;
-              } else if (res.readdata._data.paid){
-                clearInterval(timer);
-                browserDb.setLItem('foregroundUser', res.data.attributes.username);
-                toast.message = '支付成功，正在跳转首页...';
-                toast.clear();
+      //       if (res.errors){
+      //         clearInterval(timer);
+      //         toast.message = '支付失败，请重新支付！';
+      //         setTimeout(()=>{
+      //           toast.clear();
+      //         },2000)
+      //       } else {
+      //         if (second > 0 || !res.readdata._data.paid){
+      //           toast.message = `正在查询订单...`;
+      //         } else if (res.readdata._data.paid){
+      //           clearInterval(timer);
+      //           browserDb.setLItem('foregroundUser', res.data.attributes.username);
+      //           toast.message = '支付成功，正在跳转首页...';
+      //           toast.clear();
 
-                let beforeVisiting = browserDb.getSItem('beforeVisiting');
-                console.log(beforeVisiting);
+      //           let beforeVisiting = browserDb.getSItem('beforeVisiting');
+      //           console.log(beforeVisiting);
 
-                if (beforeVisiting) {
-                  this.$router.push({path: beforeVisiting})
-                } else {
-                  this.$router.push({path: '/'})
-                }
-              } else {
-                clearInterval(timer);
-                toast.message = '支付失败，请重新支付！';
-                toast.clear();
-              }
-            }
-          });
-        }, 1000);
-      },3000);
+      //           if (beforeVisiting) {
+      //             this.$router.push({path: beforeVisiting})
+      //           } else {
+      //             this.$router.push({path: '/'})
+      //           }
+      //         } else {
+      //           clearInterval(timer);
+      //           toast.message = '支付失败，请重新支付！';
+      //           toast.clear();
+      //         }
+      //       }
+      //     });
+      //   }, 1000);
+      // },3000);
 
       const payWechat = setInterval(()=>{
         if (this.payStatus == '1' || this.payStatusNum > 10){
@@ -312,7 +312,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.orderSn = res.readdata._data.order_sn;
-          console.log(this.orderSn,'订单号');
+          // console.log(this.orderSn,'订单号');
         }
       }).catch(err=>{
         console.log(err);
@@ -332,7 +332,7 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log('订单支付！！！！');
+          // console.log('订单支付！！！！');
           return res;
         }
       }).catch(err=>{
@@ -395,8 +395,6 @@ export default {
             }
             this.rewardShow = false;
             this.qrcodeShow = false;
-            // this.rewardedUsers.push({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
-            // console.log(this.rewardedUsers);
             this.payStatusNum = 11;
            
             console.log('重新请求');
