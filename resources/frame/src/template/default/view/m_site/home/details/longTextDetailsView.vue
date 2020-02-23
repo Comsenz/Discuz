@@ -84,18 +84,47 @@
             	<span class="fileName">{{attachment._data.fileName}}</span>
             </a>
 		</div>
+        <van-popup
+            v-model="qrcodeShow"
+            round
+            close-icon-position="top-right"
+            closeable
+            class="qrCodeBox"
+            get-container="body">
+            <span class="popupTit">立即支付</span>
+            <div class="payNum">￥<span>{{themeCon._data.price}}</span></div>
+            <div class="payType">
+            <span class="typeLeft">支付方式</span>
+            <span class="typeRight"><i class="icon iconfont icon-wepay"></i>微信支付</span>
+            </div>
+            <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
+            <p class="payTip">微信识别二维码支付</p>
+        </van-popup>
+
+      <PayMethod
+        :data="payList"
+        v-model="show"
+        :money="themeCon._data.price"
+        :balance="walletBalance"
+        @oninput="onInput"
+        @delete="onDelete"
+        @close="onClose"
+        :error="errorInfo"
+        @payImmediatelyClick="payImmediatelyClick">
+      </PayMethod>
     </div>
 </template>
 
 
 <script>
 import mSiteLongTextDetailsCon from '../../../../controllers/m_site/circle/details/longTextDetailsCon';
+import PayMethod from '../../../../view/m_site/common/pay/paymentMethodView';
 import  '../../../../defaultLess/m_site/common/common.less';
 import  '../../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "longTextDetailsView",
     components:{
-    	
+    	PayMethod,
     },
     ...mSiteLongTextDetailsCon
 }

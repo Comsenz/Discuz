@@ -195,7 +195,7 @@ export default {
         this.intiFollowVal = res.readdata._data.follow;
       })
     },
-    //初始化请求用信息
+    //初始化请求用户信息
     loadUserInfo(){
       if(!this.userId){
         return false;
@@ -347,16 +347,19 @@ export default {
   },
 
   mounted: function() {
-    window.addEventListener('scroll', this.handleTabFix, true);
+    window.addEventListener('scroll', this.handleTabFix,true);
   },
-  // beforeDestroy() {
-  //     window.removeEventListener('scroll', this.handleTabFix);
-  // },
+  beforeDestroy() {
+    // alert('销毁');
+    window.removeEventListener('scroll', this.handleTabFix);
+  },
   destroyed() {
-      window.removeEventListener('scroll', this.handleTabFix);
+    // alert('销毁2');
+    window.removeEventListener('scroll', this.handleTabFix);
   },
   beforeRouteLeave (to, from, next) {
-     window.removeEventListener('scroll', this.handleTabFix, true);
-     next();
+    // alert('销毁3');
+    window.removeEventListener('scroll', this.handleTabFix);
+    next();
   }
 }

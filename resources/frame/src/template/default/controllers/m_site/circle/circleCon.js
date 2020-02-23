@@ -417,18 +417,16 @@ export default {
       }
     },
   mounted: function() {
-    // this.getVote();
-    window.addEventListener('scroll', this.footFix, true);
-    document.addEventListener('click',this.listenEvt, false);
+    window.addEventListener('scroll', this.footFix);
+    document.addEventListener('click',this.listenEvt);
   },
   destroyed: function() {
-    // this.getVote();
-    window.removeEventListener('scroll', this.footFix, true);
-    document.removeEventListener('click',this.listenEvt, false);
+    window.removeEventListener('scroll', this.footFix);
+    document.removeEventListener('click',this.listenEvt);
   },
   beforeRouteLeave (to, from, next) {
-     window.removeEventListener('scroll', this.footFix, true);
-     document.removeEventListener('click',this.listenEvt, false);
-     next()
+    window.removeEventListener('scroll', this.footFix);
+    document.removeEventListener('click',this.listenEvt);
+    next()
   },
 }
