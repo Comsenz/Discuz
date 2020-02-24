@@ -8,11 +8,13 @@
  * @param {{引入}}            例： import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
  *
  * @param {[api——参数]}       类型————   说明——————
- * @param {{data}}           Array     支付方式数组，格式：let data = [{name:'微信支付',icon:'icon-weixin'}] 。name、icon为固定字段。
+ * @param {{data}}           Array     支付方式数组，格式：let data = [{name:'微信支付',icon:'icon-weixin'}] 。name、icon为固定字段。name = '钱包'为默认内置判断条件名称
  * @param {{v-model}}        Boolean   当前组件是否显示
  * @param {{money}}          String    金额
  * @param {{balance}}        String    余额
  * @param {{error}}          String    支付密码错误信息
+ * @param {{walletStatus}}   Boolean   钱包设置支付密码状态
+ * @param {{payUrl}}         String    设置支付密码路由,点击钱包注释后可跳转对应路由
  *
  * @param {{Events——事件}}              说明——————
  * @param {{oninput}}                  密码输入时触发
@@ -60,6 +62,12 @@ export default {
     },
     error:{
       type:String
+    },
+    walletStatus:{
+      type:Boolean
+    },
+    payUrl:{
+      type:String
     }
   },
   methods:{
@@ -80,6 +88,12 @@ export default {
         this.payImmediatelyShow = !this.payImmediatelyShow
       }
       this.$emit('payImmediatelyClick',this.data[this.radio])
+    },
+    payStatusClick(){
+      if (this.payUrl){
+        this.$router.push({path:this.payUrl});
+      }
+
     }
   },
   watch:{

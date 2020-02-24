@@ -27,13 +27,14 @@ export default {
       payList:[
         {
           name:'钱包',
-          icon:'icon-weixin'
+          icon:'icon-wallet'
         }
       ],     //支付方式
       show:false,        //是否显示支付方式
       errorInfo:'',      //密码错误提示
       value:'',          //密码
-      walletBalance:''   //钱包余额
+      walletBalance:'',  //钱包余额
+      walletStatus:''    //钱包支付密码状态
     }
   },
 
@@ -329,7 +330,7 @@ export default {
           if (res.readdata._data.paycenter.wxpay_close === '1'){
             this.payList.unshift( {
               name:'微信支付',
-              icon:'icon-money'
+              icon:'icon-wxpay'
             })
           }
         }
@@ -489,6 +490,7 @@ export default {
     this.getUsers(webDb.getLItem('tokenId')).then(res=>{
       this.getAuthority(res.readdata.groups[0]._data.id);
       this.walletBalance = res.readdata._data.walletBalance;
+      this.walletStatus = res.readdata._data.canWalletPay;
     });
     this.tokenId = webDb.getLItem('tokenId');
     this.amountNum = webDb.getLItem('siteInfo')._data.set_site.site_price;
