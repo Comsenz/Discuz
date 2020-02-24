@@ -256,7 +256,14 @@ export default {
           title:"编辑主题"
         }
       },
-
+      'edit-long-text/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editLongTextView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑长文"
+        }
+      },
       //登录、注册、微信绑定模块路由
       'login-user':{
         comLoad:function (resolve) {

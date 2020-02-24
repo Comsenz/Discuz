@@ -116,6 +116,7 @@ export default {
       errorInfo:'',      //密码错误提示
       value:'',          //密码
       codeUrl:"",        //支付url，base64
+      isLongArticle: false,
     }
   },
   created() {
@@ -334,6 +335,7 @@ export default {
             this.likedUsers = res.readdata.firstPost.likedUsers;
             this.rewardedUsers = res.readdata.rewardedUsers;
             this.themeUserId = res.readdata.user._data.id;
+            this.isLongArticle = res.readdata._data.isLongArticle;
             if(res.readdata.firstPost._data.isLiked){
               this.themeIsLiked = true;
             } else {
@@ -555,10 +557,18 @@ export default {
         } else {
           // content = content
           // console.log(content);
-          //跳转到发帖页
-          this.$router.push({
-            path: '/edit-topic' + '/' + this.themeId
-          });
+          //跳转到编辑页页
+          if(this.isLongArticle){
+            this.$router.push({
+              path: '/edit-long-text' + '/' + this.themeId
+            });
+
+          } else {
+            this.$router.push({
+              path: '/edit-topic' + '/' + this.themeId
+            });
+          }
+          
         }
       }
     },
