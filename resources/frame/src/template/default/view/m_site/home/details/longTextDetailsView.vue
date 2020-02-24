@@ -17,7 +17,7 @@
         <div class="postTitle">{{themeCon._data.title}}</div>
         <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div>
         <!-- <div class="payTipBox" v-if="themeCon._data.price>0"> -->
-        <div class="payTipBox" v-if="!themeCon._data.paid">
+        <div class="payTipBox" v-if="!themeCon._data.paid && themeCon._data.price>0">
             <p class="tipPrice">本内容需向作者支付&nbsp;<span>{{themeCon._data.price}}</span>&nbsp;元&nbsp;才能浏览</p>
             <a href="javascript:;" @click="buyTheme" class="buyBtn">购买内容</a>
         </div>
