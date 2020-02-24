@@ -887,6 +887,7 @@ export default {
       //  this.payImmediatelyClick();
      },
      payImmediatelyClick(data){
+      this.rewardShow = false;
       //data返回选中项
       console.log(data);
 
