@@ -30,14 +30,8 @@ class CheckController implements RequestHandlerInterface
         //使用Qcloud查询余额看是否能请求通过，能通过刚表明配置正确，不能刚直接异常
         $this->describeAccountBalance();
 
-        //检查是否有新版本
-        $response = $this->checkVersion([
-            'data' => [
-                'attributes' => [
-                    'version' => Application::VERSION
-                ]
-            ]
-        ]);
+        //检查是否有新版本，todo 后期优化传site_id 过去验证是否在服务器已经注册 否则更新不了
+        $response = $this->checkVersion();
 
         return $response;
     }
