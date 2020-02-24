@@ -181,12 +181,13 @@ body {
 }
 .postContent {
   font-size: 15px;
-  line-height: 20px;
+  // line-height: 20px;
+  line-height: 1.5;
   margin-bottom: 10px;
   overflow: hidden;
   a {
     // display: block;
-    line-height: 20px;
+    line-height: 1.5;
     color: @font000;
     word-break: break-all;
   }
@@ -645,6 +646,7 @@ openCircleConView.vue
   }
 }
 .postDetBot {
+  padding-top: 10px;
   line-height: 20px;
   font-size: 14px;
   color: @cor888;
@@ -1017,15 +1019,20 @@ details.vue
     line-height: 140px;
   }
 }
+
 .postTitle {
+  line-height: 24px;
   font-size: 16px;
-  line-height: 48px;
   text-align: left;
   padding-bottom: 10px;
   position: relative;
   &:after {
     content: '';
     display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     border-bottom: 1px solid @corE5;
     font-size: 0;
     line-height: 0;
@@ -1313,7 +1320,7 @@ details.vue
 .popSureBtn {
   display: block;
   width: 168px;
-  margin: 51px auto 4px auto;
+  margin: 30px auto 16px auto;
   border-radius: 5px;
   text-align: center;
   height: 36px;
