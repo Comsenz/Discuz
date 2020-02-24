@@ -19,6 +19,7 @@ export default {
       tipWx:'',
       isWeixin:'',
       realName:'',          //实名证明
+      identity:'',          //身份证号码
       canWalletPay:'',      //钱包密码
       realNameShow:'true',      //实名认证是否显示
     }
@@ -99,7 +100,8 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         }else{
-        console.log(res)
+        console.log(res,'实名认证字段')
+        console.log(res.readdata._data.realName)
         this.modifyPhone = res.readdata._data.mobile;         //用户手机号
         this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
         this.wechatId = res.readdata._data.id;                //用户Id
@@ -112,7 +114,7 @@ export default {
         }
         // if(res.readdata)
         if(res.readdata.realName !== ''){
-          this.realName = res.readdata._data.realName      //实名认证
+          this.realName = `${res.readdata._data.realname}  ${res.readdata._data.identity}`
         }else{
           this.realName = false
         }

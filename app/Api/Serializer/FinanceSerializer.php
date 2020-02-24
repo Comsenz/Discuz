@@ -16,7 +16,7 @@ class FinanceSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'date'                => $model->created_at ? $model->created_at : $model->date,
+            'date'                => $model->date,
             'order_count'         => $model->order_count,
             'order_amount'        => $model->order_amount,
             'total_profit'        => $model->total_profit,
