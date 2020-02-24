@@ -49,6 +49,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_icp' => $this->settings->get('site_icp'),
                 'site_stat' => $this->settings->get('site_stat'),
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+                'site_install' => $this->settings->get('site_install'), // 安装时间
             ],
 
             // 注册设置
