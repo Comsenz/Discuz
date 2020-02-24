@@ -875,6 +875,7 @@ export default {
         const payWechat = setInterval(()=>{
           if (this.payStatus == '1' || this.payStatusNum > 10){
             clearInterval(payWechat);
+            return;
           }
           this.getOrderStatus();
         },3000)
@@ -886,6 +887,7 @@ export default {
       //  this.payImmediatelyClick();
      },
      payImmediatelyClick(data){
+      this.rewardShow = false;
       //data返回选中项
       console.log(data);
 
@@ -920,6 +922,7 @@ export default {
               const payPhone = setInterval(()=>{
                 if (this.payStatus && this.payStatusNum > 10){
                   clearInterval(payPhone);
+                  return;
                 }
                 this.getOrderStatus();
               },3000)
@@ -927,6 +930,7 @@ export default {
             })
           });
         } else {
+          // debugger;
           console.log('pc');
           this.getOrderSn(this.amountNum).then(()=>{
             this.orderPay(10).then((res)=>{
@@ -936,6 +940,7 @@ export default {
               const pay = setInterval(()=>{
                 if (this.payStatus && this.payStatusNum > 10){
                   clearInterval(pay);
+                  return;
                 }
                 this.getOrderStatus();
               },3000)
@@ -1095,12 +1100,14 @@ export default {
           if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
-            this.rewardedUsers.push({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
-            console.log(this.rewardedUsers);
+            if(this.payStatus == '1'){
+              this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
+            }
+            // 
+            // console.log(this.rewardedUsers);
             this.payStatusNum = 11;
-            // this.detailsLoad(true);
             console.log('重新请求');
-            clearInterval(pay);
+            // clearInterval(pay);
           }
         }
         // return res;

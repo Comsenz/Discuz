@@ -64,7 +64,6 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
-            'site_install' => $this->settings->get('site_install'),
         ];
     }
 
@@ -165,8 +164,8 @@ class ForumSettingField
     public function getSitePayment()
     {
         return [
-            'site_price' => $this->settings->get('site_price'),
-            'site_expire' => $this->settings->get('site_expire'),
+            'site_price' => $this->settings->get('site_price') ?: 0,
+            'site_expire' => $this->settings->get('site_expire') ?: '',
         ];
     }
 }

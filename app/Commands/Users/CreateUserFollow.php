@@ -47,7 +47,7 @@ class CreateUserFollow
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'create', $userFollow);
+        $this->assertCan($this->actor, 'userFollow.create');
         if ($this->actor->id == $this->to_user_id) {
             throw new PermissionDeniedException();
         }
