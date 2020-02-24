@@ -44,7 +44,7 @@ class FinanceChartController extends AbstractListController
         $actor = $request->getAttribute('actor');
         $filter = $this->extractFilter($request);
 
-        $type = Arr::get($filter, 'type', Finance::TYPE_DAYS);
+        $type = (int) Arr::get($filter, 'type', Finance::TYPE_DAYS);
         $createdAtBegin = Arr::get($filter, 'createdAtBegin', Carbon::parse(self::CREATE_AT_BEGIN)->toDateString());
         $createdAtEnd = Arr::get($filter, 'createdAtEnd', Carbon::now()->toDateString());
 
