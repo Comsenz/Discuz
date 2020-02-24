@@ -79,6 +79,7 @@ $(function() {
 
     $.post('', $(this).serialize())
       .done(function(data) {
+          localStorage.clear();
           localStorage.setItem('officeDb_Authorization', data.token);
           window.location.href = '/';
       })

@@ -7,6 +7,7 @@
     finished-text="没有更多了"
     :offset = "offset"
     @load="onLoad"
+    :immediate-check="false"
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="reply-my-main content">

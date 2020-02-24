@@ -16,7 +16,7 @@
           	<div class="circleLoBox">
             	<span class="circleIcon">站点图标</span>
               <img v-if="siteInfo._data.set_site.site_logo" :src="siteInfo._data.set_site.site_logo" class="circleLogo">
-              <!-- <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo"> -->
+              <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
             </div>
           </div>
           <div class="circleInfo padB0 lastBorNone">
