@@ -83,6 +83,11 @@ export default {
         }
       })
     },
+    onLoad(){
+      this.loading = true;
+      this.pageIndex++;
+      this.myReplyList();
+    },
     onRefresh(){           //下拉刷新
         this.pageIndex = 1;
         this.myReplyList(true).then(()=>{
@@ -93,12 +98,6 @@ export default {
           this.$toast('刷新失败');
           this.isLoading = false;
         })
-    },
-    onLoad(){
-      console.log('onLoadonLoadonLoad')
-      this.loading = true;
-      this.pageIndex++;
-      this.myReplyList();
     },
   },
 

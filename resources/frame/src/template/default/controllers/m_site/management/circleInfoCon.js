@@ -87,7 +87,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
-        console.log(res);
         this.siteInfo = res.readdata;
         this.moreMemberShow = res.readdata._data.other.can_viewUser_list;
         if(res.readdata._data.set_site.site_author){
