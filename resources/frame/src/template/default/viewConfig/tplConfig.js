@@ -593,7 +593,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    'pay-the-fee',
+    // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
@@ -643,16 +643,6 @@ export default {
     // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
     // 'pay-status',
   ];
-
-  /*
-  * 获取用户第一次访问页面，登录后跳转回来
-  * */
-  /*console.log(form.name);
-  if(form.name){
-    if (!browserDb.getSItem('beforeVisiting')){
-      browserDb.setSItem('beforeVisiting',to.path);
-    }
-  }*/
 
 
   /*

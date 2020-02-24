@@ -127,14 +127,15 @@ return [
     //加载ServiceProvider
     'providers' => [
         App\Formatter\FormatterServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\SettingsServiceProvider::class,
+        App\Passport\Oauth2ServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
         App\Providers\CategoryServiceProvider::class,
-        App\Providers\UserServiceProvider::class,
-        App\Providers\ThreadServiceProvider::class,
-        App\Providers\PostServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
-        App\Passport\Oauth2ServiceProvider::class
+        App\Providers\PostServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        App\Providers\ThreadServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
