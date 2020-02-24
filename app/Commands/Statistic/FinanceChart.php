@@ -72,7 +72,7 @@ class FinanceChart
             $query->groupBy('date');
             $query->orderBy('date', 'asc');
         } else {
-            $query->selectRaw('created_at as date');
+            $query->selectRaw('*, created_at as date');
         }
 
         return $query->get();
