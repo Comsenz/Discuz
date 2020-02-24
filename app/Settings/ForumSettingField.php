@@ -164,8 +164,8 @@ class ForumSettingField
     public function getSitePayment()
     {
         return [
-            'site_price' => $this->settings->get('site_price'),
-            'site_expire' => $this->settings->get('site_expire'),
+            'site_price' => $this->settings->get('site_price') ?: '',
+            'site_expire' => $this->settings->get('site_expire') ?: '',
         ];
     }
 }
