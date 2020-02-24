@@ -104,7 +104,7 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        if ($this->thread->is_long_article) {
+        if ($this->is_first && $this->thread->is_long_article) {
             return static::$markdownFormatter->unparse($value);
         } else {
             return static::$formatter->unparse($value);
@@ -128,7 +128,7 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        if ($this->thread->is_long_article) {
+        if ($this->is_first && $this->thread->is_long_article) {
             $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
             $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
@@ -154,7 +154,7 @@ class Post extends Model
     {
         $content = $this->attributes['content'] ?: '';
 
-        if ($this->thread->is_long_article) {
+        if ($this->is_first && $this->thread->is_long_article) {
             $content = $content ? static::$markdownFormatter->render($content) : '';
         } else {
             $content = $content ? static::$formatter->render($content) : '';
