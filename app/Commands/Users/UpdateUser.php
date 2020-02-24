@@ -85,15 +85,23 @@ class UpdateUser
             $validator['password'] = $newPassword;
         }
 
-        // 初始化支付密码
+        // 修改支付密码
         if ($payPassword = Arr::get($attributes, 'payPassword')) {
-            if ($isSelf && empty($user->pay_password)) {
-                $user->changePayPassword($payPassword);
+            if ($isSelf) {
+                // 当原支付密码为空时，视为初始化支付密码，不需要验证 pay_password_token
+                // 当原支付密码不为空时，则需验证 pay_password_token
+                if ($user->pay_password) {
+                    $this->validator->setUser($user);
+                    $validator['pay_password_token'] = Arr::get($attributes, 'pay_password_token');
+                }
 
                 $validator['pay_password'] = $payPassword;
                 $validator['pay_password_confirmation'] = Arr::get($attributes, 'pay_password_confirmation');
+
+                $user->changePayPassword($payPassword);
             }
         } elseif ($removePayPassword = Arr::get($attributes, 'removePayPassword')) {
+            // 清除支付密码，管理员操作，不能与设置支付密码同时进行
             if (! empty($user->pay_password) && $this->actor->isAdmin()) {
                 $user->pay_password = '';
             }

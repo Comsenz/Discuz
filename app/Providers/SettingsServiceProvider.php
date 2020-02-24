@@ -34,11 +34,11 @@ class SettingsServiceProvider extends ServiceProvider
         Setting::setEncrypt($this->app->make(Encrypter::class));
 
         //必须设置完加解密函数之后才能调用
-        if($this->app->isInstall()) {
+        if ($this->app->isInstall()) {
             $settings = $this->app->make(ContractsSettingsRepository::class);
             $qcloud = $settings->tag('qcloud');
 
-            if(Arr::get($qcloud, 'qcloud_cos', false)) {
+            if (Arr::get($qcloud, 'qcloud_cos', false)) {
                 $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
                     return $app->make(Factory::class)->disk('attachment');
                 });

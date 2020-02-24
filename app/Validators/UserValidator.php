@@ -51,6 +51,7 @@ class UserValidator extends AbstractValidator
             ],
             'password' => 'required|max:50' . $str,
             'pay_password' => 'sometimes|required|confirmed|digits:6',
+            'pay_password_token' => 'sometimes|required|session_token:reset_pay_password',
             'groupId' => 'required',
             'identity' => [
                 'required',
@@ -61,6 +62,7 @@ class UserValidator extends AbstractValidator
 
         if ($this->user) {
             $rules['password'] = '|confirmed' . $str;
+            $rules['pay_password_token'] .= ',' . ($this->user ? $this->user->id : null);
         }
 
         return $rules;
