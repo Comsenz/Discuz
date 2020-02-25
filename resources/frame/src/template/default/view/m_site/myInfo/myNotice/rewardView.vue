@@ -20,7 +20,7 @@
           :userName="item._data.user_name">
            <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
-         <div class="likePostContent">
+         <div class="likePostContent" @click="jumpDetails(item._data.thread_id)">
           <a href="javascript:;" v-html="item._data.content"></a>
           <!-- <a href="javascript:;">
             <blockquote class="quoteCon">asdasdsadasdasdasdasdaasdadasd</blockquote>

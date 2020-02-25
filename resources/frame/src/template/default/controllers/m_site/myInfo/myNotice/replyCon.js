@@ -99,6 +99,10 @@ export default {
           this.isLoading = false;
         })
     },
+    //点击主题内容，跳转到详情页
+		jumpDetails:function(id){
+			this.$router.push({ path:'/details'+'/'+id});
+		},
   },
 
 }

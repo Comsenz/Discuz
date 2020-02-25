@@ -11,16 +11,11 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="content">
-      <Panenl :title="type[item.attributes.type]" :num="'-'+item.attributes.amount" v-for="(item,index) in orderList" :key="index">
-        <span slot="label">{{status[item.attributes.status]}}</span>
-        <span slot="label">流水号 : {{item.attributes.order_sn}}</span>
-        <span slot="label">{{$moment(item.attributes.created_at).format('YYYY-MM-DD HH:mm')}}</span>
+      <Panenl :title="`${type[item._data.type]} “${item._data.title}”`" :num="'-'+item._data.amount" v-for="(item,index) in orderList" :key="index"  @click="jumpDetails(item.thread._data.id)">
+        <span slot="label"  @click="jumpDetails(item.thread._data.id)">{{status[item._data.status]}}</span>
+        <span slot="label"  @click="jumpDetails(item.thread._data.id)">流水号 : {{item._data.order_sn}}</span>
+        <span slot="label"  @click="jumpDetails(item.thread._data.id)">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</span>
       </Panenl>
-      <!-- <Panenl title="加入站点“天涯杂谈”" num="-1000.00">
-        <span slot="label">支付成功</span>
-        <span slot="label">流水号：34927384234</span>
-        <span slot="label">2019-08-10 20:30</span>
-      </Panenl> -->
     </main>
     </van-pull-refresh>
   </van-list>

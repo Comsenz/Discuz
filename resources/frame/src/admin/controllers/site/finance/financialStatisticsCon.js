@@ -168,23 +168,9 @@ export default {
             })
         },
         change() {   //盈利统计日\周
-            // if (this.financialTime == null) {
-            //     this.financialTime = ['', '']
-            // } else if (this.financialTime[0] !== '' && this.financialTime[1] !== '') {
-            //     this.financialTime[0] = this.financialTime[0] + '-00-00-00';
-            //     this.financialTime[1] = this.financialTime[1] + '-24-00-00';
-            // }
-            // this.currentPaga = 1;
             this.earningsStatistics();
         },
         changeOrder() {  //订单统计日\周
-            // if (this.orderTime == null) {
-            //     this.orderTime = ['', '']
-            // } else if (this.orderTime[0] !== '' && this.orderTime[1] !== '') {
-            //     this.orderTime[0] = this.orderTime[0] + '-00-00-00';
-            //     this.orderTime[1] = this.orderTime[1] + '-24-00-00';
-            // }
-            // this.currentPaga = 1;
             this.orderStatistics();
         },
         changeMouth(){   //盈利统计月
@@ -198,13 +184,6 @@ export default {
             this.earningsStatistics();
         },
         changeOrderMouth(){   //订单统计月
-            // if (this.valueOrder == null) {
-            //     this.valueOrder = ['', '']
-            // } else if (this.valueOrder[0] !== '' && this.valueOrder[1] !== '') {
-            //     this.valueOrder[0] = this.valueOrder[0] + '-00-00-00';
-            //     this.valueOrder[1] = this.valueOrder[1] + '-24-00-00';
-            // }
-            // this.currentPaga = 1;
             this.orderStatistics();
         },
         earningsStatistics() {  //数据请求传给图标
@@ -320,7 +299,7 @@ export default {
                 },
                 grid: {
                     left: '1%',
-                    right: '4%',
+                    right: '6%',
                     bottom: '3%',
                     containLabel: true
                 },
@@ -328,9 +307,15 @@ export default {
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: date
-                    }
+                        data: date,
+                        axisLabel: {
+                            interval: 0, 
+                             rotate:-40 
+                            },
+                    }, 
+                       
                 ],
+
                 yAxis: [
                     {
                         type: 'value'
@@ -393,7 +378,7 @@ export default {
                 },
                 grid: {
                     left: '1%',
-                    right: '4%',
+                    right: '6%',
                     bottom: '3%',
                     containLabel: true
                 },
@@ -401,7 +386,11 @@ export default {
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: date
+                        data: date,
+                        axisLabel: {
+                            interval: 0, 
+                             rotate:-40 
+                            },
                     }
                 ],
                 yAxis: [
