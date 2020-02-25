@@ -26,6 +26,7 @@
  * @param {{payImmediatelyClick}}      立即支付点击事件
  *                                     回调参数：选中项
  */
+import webDb from '../../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
@@ -64,7 +65,8 @@ export default {
       type:String
     },
     walletStatus:{
-      type:Boolean
+      type:Boolean,
+      default:false
     },
     payUrl:{
       type:String
@@ -90,8 +92,10 @@ export default {
       this.$emit('payImmediatelyClick',this.data[this.radio])
     },
     payStatusClick(){
+      console.log(this.$route);
       if (this.payUrl){
-        this.$router.push({path:this.payUrl});
+        this.$router.push({path:'/' + this.payUrl});
+        webDb.setLItem('payUrl',this.$route.fullPath);
       }
 
     }
