@@ -108,11 +108,12 @@
       </van-popup>
 
       <PayMethod
+	  	v-if="userDet"
         :data="payList"
         v-model="show"
         :money="sitePrice"
         :balance="walletBalance"
-		:walletStatus="userDet._data.canWalletPay"
+		:walletStatus="userDet._data.userDet"
         payUrl="setup-pay-pwd"
         @oninput="onInput"
         @delete="onDelete"
