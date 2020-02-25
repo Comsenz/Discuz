@@ -7,9 +7,9 @@ export default {
     return {
       tableData: [
         {
-          name: '云api',
+          name: '云API',
           type: 'qcloud_close',
-          description: '配置云api的密钥后，才可使用腾讯云的各项服务和能力',
+          description: '配置云API的密钥后，才可使用腾讯云的各项服务和能力',
           status:'',
           icon:'iconAPI',
           setFlag: true
