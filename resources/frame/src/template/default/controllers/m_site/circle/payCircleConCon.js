@@ -47,9 +47,12 @@ export default {
     
   },
   created(){
-    this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
-      this.walletBalance = res.readdata._data.walletBalance;
-    });
+    if(browserDb.getLItem('tokenId')){
+      this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
+        this.walletBalance = res.readdata._data.walletBalance;
+      });
+    }
+    
     this.tokenId = browserDb.getLItem('tokenId');
     this.amountNum = browserDb.getLItem('siteInfo')._data.set_site.site_price;
     this.token = browserDb.getLItem('Authorization');
@@ -214,6 +217,9 @@ export default {
       })
     },
     getUsersInfo(){
+      if(!browserDb.getLItem('tokenId')){
+        return false;
+      }
       this.appFetch({
         url:'users',
         method:'get',

@@ -116,10 +116,15 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     // console.log(this.isWeixin+'0'+this.isPhone);
     this.loadCategories();
-    if(this.followShow) {
+    if(this.followShow && this.userId) {
+      alert('执行00');
       this.loadUserFollowInfo();
     }
-    this.loadUserInfo();
+    if(this.userId){
+      alert('执行11');
+      this.loadUserInfo();
+    }
+    
     // this.loadUserInfo();
     //把第一个分类的id值传过去，便于请求初始化主题列表
 
@@ -155,26 +160,32 @@ export default {
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;
       })
-      //请求分类接口
-      this.appFetch({
-        url: 'categories',
-        method: 'get',
-        data: {
-          include: [],
-        }
-      }).then((res) => {
-        // console.log('2222');
-        // console.log(res);
-        this.categories = res.readdata;
-        this.firstCategoriesId = res.readdata[0]._data.id;
-        // console.log(this.firstCategoriesId);
-        this.$emit("update", this.firstCategoriesId);
-        // console.log('3456');
-      })
+      if(this.navShow){
+        //请求分类接口
+        this.appFetch({
+          url: 'categories',
+          method: 'get',
+          data: {
+            include: [],
+          }
+        }).then((res) => {
+          // console.log('2222');
+          // console.log(res);
+          this.categories = res.readdata;
+          this.firstCategoriesId = res.readdata[0]._data.id;
+          // console.log(this.firstCategoriesId);
+          this.$emit("update", this.firstCategoriesId);
+          // console.log('3456');
+        })
+      }
+      
     },
 
     //初始化请求用户关注信息
     loadUserFollowInfo(){
+      if(!this.userId){
+        return false;
+      }
       this.appFetch({
         url:'users',
         method:'get',

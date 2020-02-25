@@ -101,6 +101,7 @@ export default {
   //获取用户信息
   getUserInfo(){
     var userId = browserDb.getLItem('tokenId');
+    alert('5555');
       this.appFetch({
         url: 'users',
         method: 'get',

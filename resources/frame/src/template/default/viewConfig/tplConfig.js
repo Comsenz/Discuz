@@ -739,7 +739,7 @@ export default {
     this.getForum().then(ress=>{
 
       if (ress.readdata._data.set_site.site_mode === 'pay'){
-
+        alert('执行22');
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
           if (res){
