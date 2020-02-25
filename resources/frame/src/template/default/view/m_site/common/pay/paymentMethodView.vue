@@ -21,15 +21,15 @@
               <van-radio-group v-model="radio">
 
                 <div class="way-to-choose_cont-select_cell" v-for="(item,index) in data">
-                  <div class="way-to-choose_cont-select_cell-left" @click="descriptionShow && walletStatus?radio = index:''">
+                  <div class="way-to-choose_cont-select_cell-left" @click="descriptionShow && !walletStatus?radio = index:''">
                     <span class="icon iconfont" :class="item.icon"></span>
                     <div class="way-to-choose_cont-select_cell-left-title">
                       <span>{{item.name}}</span>
-                      <p v-if="walletStatus && item.name === '钱包'" class="way-to-choose_cont-select_cell-left-title_description" @click="payStatusClick">请设置钱包支付密码</p>
+                      <p v-if="!walletStatus && item.name === '钱包'" class="way-to-choose_cont-select_cell-left-title_description" @click="payStatusClick">请设置钱包支付密码</p>
                       <p v-else-if="descriptionShow && item.name === '钱包'" class="way-to-choose_cont-select_cell-left-title_description">钱包余额不足，剩余{{balance}}元</p>
                     </div>
                   </div>
-                  <van-radio slot="right-icon" :disabled="(descriptionShow || walletStatus)&& item.name === '钱包'" :name="index" />
+                  <van-radio slot="right-icon" :disabled="(descriptionShow || !walletStatus)&& item.name === '钱包'" :name="index" />
                 </div>
 
               </van-radio-group>

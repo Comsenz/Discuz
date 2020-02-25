@@ -65,7 +65,8 @@ export default {
       type:String
     },
     walletStatus:{
-      type:Boolean
+      type:Boolean,
+      default:false
     },
     payUrl:{
       type:String
@@ -91,9 +92,10 @@ export default {
       this.$emit('payImmediatelyClick',this.data[this.radio])
     },
     payStatusClick(){
+      console.log(this.$route);
       if (this.payUrl){
-        this.$router.push({path:this.payUrl});
-        webDb.setLItem('payUrl',this.payUrl);
+        this.$router.push({path:'/' + this.payUrl});
+        webDb.setLItem('payUrl',this.$route.fullPath);
       }
 
     }
