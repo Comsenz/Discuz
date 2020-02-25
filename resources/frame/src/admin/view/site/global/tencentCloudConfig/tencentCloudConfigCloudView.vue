@@ -1,6 +1,6 @@
 <template>
     <div>
-      <Card header="云api配置"></Card>
+      <Card header="云API配置"></Card>
 
       <Card header="APPID：">
         <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的appid。若使用子账号，权限需覆盖所使用

@@ -7,13 +7,12 @@
 
 namespace App\Models;
 
-use App\Events\Group\Saved;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
-use Discuz\Foundation\EventsDispatchTrait;
 use DomainException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -41,6 +40,16 @@ class Group extends Model
     const ADMINISTRATOR_ID = 1;
 
     /**
+     * The ID of the banned group.
+     */
+    const BAN_ID = 5;
+
+    /**
+     * The ID of the unpaid group.
+     */
+    const UNPAID = 6;
+
+    /**
      * The ID of the guest group.
      */
     const GUEST_ID = 7;
@@ -49,15 +58,6 @@ class Group extends Model
      * The ID of the member group.
      */
     const MEMBER_ID = 10;
-
-    /*
-     * 未付费用户组
-     */
-    const UNPAID = 6;
-
-    const BAN_ID = 5;
-
-    const DEFAULT = 1;
 
     /**
      * @var bool
@@ -76,6 +76,9 @@ class Group extends Model
      */
     protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected static function boot()
     {
         parent::boot();
@@ -97,6 +100,9 @@ class Group extends Model
         return $this->hasMany(GroupPermission::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function users()
     {
         return $this->belongsToMany(User::class);
