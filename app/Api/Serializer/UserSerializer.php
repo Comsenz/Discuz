@@ -57,7 +57,6 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
-            'canWalletPay'      => $gate->allows('walletPay', $model),
             'registerReason'    => $model->register_reason,     // 注册原因
             'banReason'         => '',                          // 禁用原因
         ];
@@ -83,6 +82,7 @@ class UserSerializer extends AbstractSerializer
         // 钱包余额
         if ($this->actor->id === $model->id) {
             $attributes += [
+                'canWalletPay'  => $gate->allows('walletPay', $model),
                 'walletBalance' => $model->userWallet->available_amount,
             ];
         }
