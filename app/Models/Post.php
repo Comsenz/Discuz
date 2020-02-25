@@ -50,7 +50,10 @@ class Post extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
-    const SUMMARY_LENGTH = 50;
+    /**
+     * 摘要长度
+     */
+    const SUMMARY_LENGTH = 100;
 
     const UNAPPROVED = 0;
 
