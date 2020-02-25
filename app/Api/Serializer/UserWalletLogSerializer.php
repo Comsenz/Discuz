@@ -16,8 +16,7 @@ class UserWalletLogSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         $title = '';
-        if (isset($model->order_id) && !empty($model->order_id)) {
-
+        if (!empty($model->order_id) && !empty($model->order->thread->firstPost)) {
             $title = $model->order->thread->firstPost->formatContent();
         }
         return [
