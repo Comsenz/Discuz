@@ -229,7 +229,7 @@ export default {
       var userId = browserDb.getLItem('tokenId');
       this.userId = userId;
       console.log(this.userId+'ddddd');
-      if(this.userId != '' && this.userId != null){
+      if(this.userId){
         this.appFetch({
           url: 'users',
           method: 'get',
