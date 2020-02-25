@@ -460,12 +460,14 @@ export default {
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
       var reTag2 = /(<\/?br.*?>)/gi;
+      var reTag3 = /(<\/?p.*?>)/gi;
       this.themeTitle = this.themeTitle.replace(reTag,'');
       this.themeTitle = this.themeTitle.replace(reTag2,'');
+      this.themeTitle = this.themeTitle.replace(reTag3,'');
       this.themeTitle = this.themeTitle.replace(/\s+/g,"");
       this.themeTitle = this.cutString(this.themeTitle,40);
       // console.log(this.themeTitle,'处理后');
-      oInput.value = this.themeTitle +' ' + Url;
+      oInput.value = this.themeTitle +'  ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");
