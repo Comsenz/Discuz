@@ -101,36 +101,36 @@ export default {
   //获取用户信息
   getUserInfo(){
     var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice:'/'+userId,
-        data: {
-          include: '',
-        }
-      }).then((res) => {
-        console.log(res,'侧边栏user信息');
-        if(!res.data.attributes.typeUnreadNotifications.liked) {
-          res.data.attributes.typeUnreadNotifications.liked = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.replied) {
-          res.data.attributes.typeUnreadNotifications.replied = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.rewarded) {
-          res.data.attributes.typeUnreadNotifications.rewarded = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.system) {
-          res.data.attributes.typeUnreadNotifications.system = 0;
-        }
-        this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
-        this.sidebarList1[3].noticeSum = this.noticeSum;
-        this.userInfo = res.readdata;
-        this.avatarUrl = res.readdata._data.avatarUrl;
-        this.username = res.readdata._data.username;
-        this.mobile = res.readdata._data.mobile;
-        this.userId = res.readdata._data.id;
-        console.log(res.readdata._data.id,'是id')
-      })
+    this.appFetch({
+      url: 'users',
+      method: 'get',
+      splice:'/'+userId,
+      data: {
+        include: '',
+      }
+    }).then((res) => {
+      console.log(res,'侧边栏user信息');
+      if(!res.data.attributes.typeUnreadNotifications.liked) {
+        res.data.attributes.typeUnreadNotifications.liked = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.replied) {
+        res.data.attributes.typeUnreadNotifications.replied = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.rewarded) {
+        res.data.attributes.typeUnreadNotifications.rewarded = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.system) {
+        res.data.attributes.typeUnreadNotifications.system = 0;
+      }
+      this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
+      this.sidebarList1[3].noticeSum = this.noticeSum;
+      this.userInfo = res.readdata;
+      this.avatarUrl = res.readdata._data.avatarUrl;
+      this.username = res.readdata._data.username;
+      this.mobile = res.readdata._data.mobile;
+      this.userId = res.readdata._data.id;
+      console.log(res.readdata._data.id,'是id')
+    })
 
   },
   getInfo() {
