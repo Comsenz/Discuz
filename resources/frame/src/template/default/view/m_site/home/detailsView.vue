@@ -10,7 +10,7 @@
           <!-- 普通主题内容组件 -->
           <normalDetail v-if="themeCon._data.isLongArticle==0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
           <!-- 付费长文内容组件 -->
-          <longTextDetail v-if="themeCon._data.isLongArticle==1" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
+          <longTextDetail v-if="themeCon._data.isLongArticle==1" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
 
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.postCount-1}}&nbsp;回复</span>
@@ -161,7 +161,7 @@
         v-model="show"
         :money="amountNum"
         :balance="walletBalance"
-        :walletStatus="themeCon.user._data.canWalletPay"
+        :walletStatus="userDet._data.canWalletPay"
         payUrl="setup-pay-pwd"
         @oninput="onInput"
         @delete="onDelete"

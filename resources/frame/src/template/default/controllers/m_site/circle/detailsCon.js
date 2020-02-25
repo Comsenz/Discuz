@@ -117,6 +117,7 @@ export default {
       value:'',          //密码
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
+      userDet: ''
     }
   },
   created() {
@@ -241,6 +242,8 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
+            this.userDet = res.readdata;
+            // console.log(this.userDet,'~~~~~~~~88888')
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             this.walletBalance = res.readdata._data.walletBalance;
