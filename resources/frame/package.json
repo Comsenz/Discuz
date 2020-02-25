@@ -12,7 +12,6 @@
     "@github/markdown-toolbar-element": "^1.1.1",
     "@vant/touch-emulator": "^1.2.0",
     "amfe-flexible": "^2.2.1",
-    "awesome-qr": "^1.0.10",
     "axios": "^0.19.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "echarts": "^4.6.0",
