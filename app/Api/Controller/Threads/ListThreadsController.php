@@ -415,7 +415,7 @@ class ListThreadsController extends AbstractListController
                 }
 
                 // 截取内容
-                $post->content = Str::limit($post->content, 30);
+                $post->content = Str::limit($post->content, 70);
 
                 return $post;
             });

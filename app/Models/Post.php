@@ -51,9 +51,10 @@ class Post extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 摘要长度
+     * 摘要长度（多字节字符通常是单字节字符的两倍宽度）
+     * https://www.php.net/manual/zh/function.mb-strwidth.php
      */
-    const SUMMARY_LENGTH = 100;
+    const SUMMARY_LENGTH = 200;
 
     const UNAPPROVED = 0;
 
