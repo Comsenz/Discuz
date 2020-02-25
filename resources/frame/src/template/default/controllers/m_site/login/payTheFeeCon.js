@@ -193,6 +193,7 @@ export default {
               } else if (res.readdata._data.paid){
                 clearInterval(timer);
                 webDb.setLItem('foregroundUser', res.data.attributes.username);
+                this.show = false;
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
 
