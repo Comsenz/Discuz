@@ -974,8 +974,9 @@ export default {
             const pay = setInterval(()=>{
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
+                return;
               }
-              // this.getUsersInfo()
+              this.getOrderStatus();
             },3000)
           })
         })
@@ -1088,6 +1089,7 @@ export default {
       })
     },
     getOrderStatus(){
+      // alert('查询');
       // alert(this.orderSn);
       return this.appFetch({
         url:'order',
@@ -1113,7 +1115,10 @@ export default {
           if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
+            this.show = false;
+            // alert(this.show);
             if(this.payStatus == '1'){
+              // alert('成功');
               this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
             }
             // 
