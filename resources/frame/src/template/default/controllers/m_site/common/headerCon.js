@@ -117,11 +117,11 @@ export default {
     // console.log(this.isWeixin+'0'+this.isPhone);
     this.loadCategories();
     if(this.followShow && this.userId) {
-      alert('执行00');
+      // alert('执行00');
       this.loadUserFollowInfo();
     }
     if(this.userId){
-      alert('执行11');
+      // alert('执行11');
       this.loadUserInfo();
     }
     
