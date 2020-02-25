@@ -465,7 +465,7 @@ export default {
       this.themeTitle = this.themeTitle.replace(/\s+/g,"");
       this.themeTitle = this.cutString(this.themeTitle,40);
       // console.log(this.themeTitle,'处理后');
-      oInput.value = this.themeTitle +' /n' + Url;
+      oInput.value = this.themeTitle +' ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");
