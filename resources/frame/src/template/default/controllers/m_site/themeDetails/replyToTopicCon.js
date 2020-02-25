@@ -450,8 +450,11 @@ export default {
           },
         }).then(res =>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
+            if (res.errors[0].detail){
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
           } else {
             this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}})
           }
@@ -483,8 +486,11 @@ export default {
           },
         }).then(res =>{
           if (res.errors){
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
-            throw new Error(res.error)
+            if (res.errors[0].detail){
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
           } else {
             this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }

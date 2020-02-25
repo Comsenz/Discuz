@@ -9,8 +9,6 @@
       <div class="post-longText-form">
         <input type="text" placeholder="请输入标题" autofocus="autofocus" v-model="themeTitle" class="pubThemeTitle">
         <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>
-        
-        
 
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
         <div class="uploadBox" v-if="isAndroid && isWeixin">
@@ -111,7 +109,7 @@
 </template>
 
 <script>
-import postLongTextCon from '../../../controllers/m_site/circle/postLongTextCon';
+import editLongTextCon from '../../../controllers/m_site/circle/editLongTextCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';
 import  '../../../defaultLess/m_site/common/common.less';
@@ -122,6 +120,6 @@ export default {
     components: {
       Expression,
     },
-  ...postLongTextCon
+  ...editLongTextCon
 }
 </script>

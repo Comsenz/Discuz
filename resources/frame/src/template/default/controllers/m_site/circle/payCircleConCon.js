@@ -32,7 +32,8 @@ export default {
       show:false,        //是否显示支付方式
       errorInfo:'',      //密码错误提示
       value:'',          //密码
-      walletBalance:''   //钱包余额
+      walletBalance:'',   //钱包余额
+      userDet: '',
       
 		}
 	},
@@ -42,12 +43,16 @@ export default {
     },
     groupId: function(){
         return this.$route.params.groupId;
-    }
+    },
+    
   },
   created(){
-    this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
-      this.walletBalance = res.readdata._data.walletBalance;
-    });
+    if(browserDb.getLItem('tokenId')){
+      this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
+        this.walletBalance = res.readdata._data.walletBalance;
+      });
+    }
+    
     this.tokenId = browserDb.getLItem('tokenId');
     this.amountNum = browserDb.getLItem('siteInfo')._data.set_site.site_price;
     this.token = browserDb.getLItem('Authorization');
@@ -212,6 +217,9 @@ export default {
       })
     },
     getUsersInfo(){
+      if(!browserDb.getLItem('tokenId')){
+        return false;
+      }
       this.appFetch({
         url:'users',
         method:'get',
@@ -226,6 +234,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.payStatus = res.readdata._data.paid;
+          this.userDet = res.readdata;
           this.payStatusNum = +1;
           if (this.payStatus) {
             this.qrcodeShow = false;

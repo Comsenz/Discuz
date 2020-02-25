@@ -22,6 +22,7 @@ use DateTimeImmutable;
 use Discuz\Api\Client;
 use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
+use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -39,6 +40,8 @@ use Laminas\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
+    use QcloudTrait;
+
     protected $app;
 
     protected $input;
@@ -48,6 +51,8 @@ class InstallController implements RequestHandlerInterface
     protected $console;
 
     protected $apiClient;
+
+    protected $setting;
 
     public function __construct(Application $app, Client $apiClient)
     {
@@ -64,7 +69,9 @@ class InstallController implements RequestHandlerInterface
         $input['ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
+
         try {
+            @unlink($this->app->storagePath().'/install.lock');
             //创建数据库
             $this->installDatabase($input);
             //创建配置文件
@@ -81,10 +88,14 @@ class InstallController implements RequestHandlerInterface
             $this->installAdminUser($input);
             //auto login Admin user
             $token = $this->installAutoLogin($input);
+            //上报
+            $this->cloudReport($input);
+            //安装成功
+            @touch($this->app->storagePath().'/install.lock');
         } catch (Exception $e) {
+            @unlink($this->app->basePath('config/config.php'));
             return new HtmlResponse($e->getMessage(), 500);
         }
-
 
         return new JsonResponse([
             'token' => $token
@@ -200,9 +211,11 @@ class InstallController implements RequestHandlerInterface
 
     private function installSiteSetting($input)
     {
-        $this->app->make(SettingsRepository::class)->set('site_name', Arr::get($input, 'forumTitle'));
-        $this->app->make(SettingsRepository::class)->set('site_url', Arr::get($input, 'site_url'));
-        $this->app->make(SettingsRepository::class)->set('site_install', Carbon::now());
+        $this->setting = $this->app->make(SettingsRepository::class);
+
+        $this->setting->set('site_name', Arr::get($input, 'forumTitle'));
+        $this->setting->set('site_url', Arr::get($input, 'site_url'));
+        $this->setting->set('site_install', Carbon::now());
     }
 
     private function installAdminUser(&$input)
@@ -212,8 +225,10 @@ class InstallController implements RequestHandlerInterface
         }
 
         $user = new User();
+        $userWallet = new UserWallet();
         $this->app['db']->statement('SET FOREIGN_KEY_CHECKS=0;');
         $user->truncate();
+        $userWallet->truncate();
         $this->app['db']->statement('SET FOREIGN_KEY_CHECKS=1;');
         $user->username = Arr::get($input, 'adminUsername');
         $user->password = Arr::get($input, 'adminPassword');
@@ -238,6 +253,17 @@ class InstallController implements RequestHandlerInterface
         $token->setExpiryDateTime((new DateTimeImmutable())->add(new DateInterval(AccessTokenRepository::TOKEN_EXP)));
 
         return $token->__toString();
+    }
+
+    protected function cloudReport($input)
+    {
+        try {
+            $this->report(['url' => $input['site_url']])->then(function (ResponseInterface $response) {
+                $data = json_decode($response->getBody()->getContents(), true);
+                $this->setting->set('site_id', Arr::get($data, 'site_id'));
+                $this->setting->set('site_secret', Arr::get($data, 'site_secret'));
+            })->wait();
+        } catch (Exception $e) {}
     }
 
     private function getConsole()

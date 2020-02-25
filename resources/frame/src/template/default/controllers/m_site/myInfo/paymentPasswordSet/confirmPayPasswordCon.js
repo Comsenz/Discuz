@@ -58,7 +58,13 @@ export default {
           }
         } else {
           this.$toast.success('设置成功');
-          this.$router.push({path:"modify-data"})
+          if (webDb.getLItem('payUrl')){
+            this.$router.push({path:webDb.getLItem('payUrl')})
+          } else {
+            this.$router.push({path:"modify-data"});
+          }
+          webDb.setLItem('payUrl','');
+
         }
       }).catch(err=>{
         console.log(err);

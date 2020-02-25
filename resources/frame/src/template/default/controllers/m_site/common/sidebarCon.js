@@ -60,12 +60,12 @@ export default {
           path: '/circle-info', // 跳转路径
           enentType: ''
         },
-        {
-          text:'站点管理',
-          name: 'management-circles',
-          path: '/management-circles', // 跳转路径
-          enentType: ''
-        },
+        // {
+        //   text:'站点管理',
+        //   name: 'management-circles',
+        //   path: '/management-circles', // 跳转路径
+        //   enentType: ''
+        // },
         {
           text:'退出登录',
           name: 'circle',
@@ -101,36 +101,36 @@ export default {
   //获取用户信息
   getUserInfo(){
     var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice:'/'+userId,
-        data: {
-          include: '',
-        }
-      }).then((res) => {
-        console.log(res,'侧边栏user信息');
-        if(!res.data.attributes.typeUnreadNotifications.liked) {
-          res.data.attributes.typeUnreadNotifications.liked = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.replied) {
-          res.data.attributes.typeUnreadNotifications.replied = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.rewarded) {
-          res.data.attributes.typeUnreadNotifications.rewarded = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.system) {
-          res.data.attributes.typeUnreadNotifications.system = 0;
-        }
-        this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
-        this.sidebarList1[3].noticeSum = this.noticeSum;
-        this.userInfo = res.readdata;
-        this.avatarUrl = res.readdata._data.avatarUrl;
-        this.username = res.readdata._data.username;
-        this.mobile = res.readdata._data.mobile;
-        this.userId = res.readdata._data.id;
-        console.log(res.readdata._data.id,'是id')
-      })
+    this.appFetch({
+      url: 'users',
+      method: 'get',
+      splice:'/'+userId,
+      data: {
+        include: '',
+      }
+    }).then((res) => {
+      console.log(res,'侧边栏user信息');
+      if(!res.data.attributes.typeUnreadNotifications.liked) {
+        res.data.attributes.typeUnreadNotifications.liked = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.replied) {
+        res.data.attributes.typeUnreadNotifications.replied = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.rewarded) {
+        res.data.attributes.typeUnreadNotifications.rewarded = 0;
+      }
+      if(!res.data.attributes.typeUnreadNotifications.system) {
+        res.data.attributes.typeUnreadNotifications.system = 0;
+      }
+      this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
+      this.sidebarList1[3].noticeSum = this.noticeSum;
+      this.userInfo = res.readdata;
+      this.avatarUrl = res.readdata._data.avatarUrl;
+      this.username = res.readdata._data.username;
+      this.mobile = res.readdata._data.mobile;
+      this.userId = res.readdata._data.id;
+      console.log(res.readdata._data.id,'是id')
+    })
 
   },
   getInfo() {
@@ -148,10 +148,18 @@ export default {
         this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
         this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
         this.canCreateInvite = res.readdata._data.other.can_create_invite;
-
+        console.log(this.canBatchEditThreads,this.canEditUserGroup,this.canCreateInvite);
+        var manaObj = {
+            text:'站点管理',
+            name: 'management-circles',
+            path: '/management-circles', // 跳转路径
+            enentType: ''
+        };
         // 判断当用户组拥有批量管理主题、修改用户组、邀请加入权限中的任意一项时才会显示该菜单
-        if (!(this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite)) {
-          this.sidebarList2.splice(1,1);
+        if (this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite) {
+          // alert('执行2')
+          // this.sidebarList2.splice(1,1);
+          this.sidebarList2.splice(1,0,manaObj);
         }
       }
     });

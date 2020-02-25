@@ -35,45 +35,69 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.postLogin().then(res=>{
-            // this.tokenId = res.data.id;
-            let token = res.data.attributes.access_token;
-            let tokenId = res.data.id;
-            let refreshToken = res.data.attributes.refresh_token;
-            browserDb.setLItem('Authorization', token);
-            browserDb.setLItem('tokenId', tokenId);
-            browserDb.setLItem('refreshToken',refreshToken);
 
-            if (token && tokenId) {
-              this.getUserInfo(tokenId).then(res => {
-                if (res.errors){
-                  if (res.errors[0].detail){
+            if (res.errors){
+              if (res.errors[0].detail){
+                this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+              } else {
+                this.$message.error(res.errors[0].code);
+              }
+              this.loginLoading = false;
+            } else {
+              // this.tokenId = res.data.id;
+              let token = res.data.attributes.access_token;
+              let tokenId = res.data.id;
+              let refreshToken = res.data.attributes.refresh_token;
+              browserDb.setLItem('Authorization', token);
+              browserDb.setLItem('tokenId', tokenId);
+              browserDb.setLItem('refreshToken', refreshToken);
+
+              if (token && tokenId) {
+                this.getUserInfo(tokenId).then(res => {
+                  if (res.errors) {
+                    if (res.errors[0].detail) {
+                      this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+                    } else {
+                      this.$message.error(res.errors[0].code);
+                    }
+                    this.loginLoading = false;
+                  } else {
+                    let groupId = res.readdata.groups[0]._data.id;
+                    browserDb.setLItem('username', res.data.attributes.username);
+                    if (groupId === "1") {
+                      this.$router.push({path: '/admin'});
+                      this.$message({
+                        message: '登录成功！',
+                        type: 'success'
+                      });
+                      this.loginLoading = false;
+                    } else {
+                      this.$message.error('权限不足！');
+                      this.loginLoading = false;
+                    }
+                  }
+                })
+              } else {
+                if (res.errors) {
+                  if (res.errors[0].detail) {
                     this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
                   } else {
                     this.$message.error(res.errors[0].code);
                   }
                   this.loginLoading = false;
-                } else {
-                  let groupId = res.readdata.groups[0]._data.id;
-                  browserDb.setLItem('username', res.data.attributes.username);
-                if (groupId === "1") {
-                    this.$router.push({path: '/admin'});
-                    this.$message({
-                      message: '登录成功！',
-                      type: 'success'
-                    });
-                    this.loginLoading = false;
-                  } else {
-                    this.$message.error('权限不足！');
-                    this.loginLoading = false;
-                  }
                 }
-              })
-            } else {
-              this.$message.error('登录失败');
+              }
+            }
+          }).catch((err)=>{
+            console.log(err);
+            if (err.errors){
+              if (err.errors[0].detail){
+                this.$message.error(err.errors[0].code + '\n' + err.errors[0].detail[0])
+              } else {
+                this.$message.error(err.errors[0].code);
+              }
               this.loginLoading = false;
             }
-          }).catch(()=>{
-            this.$message.error('登录失败');
             this.loginLoading = false;
           })
 

@@ -3,7 +3,7 @@
     <Card header="配置"></Card>
 
     <Card header="用户角色通知标题：">
-      <CardRow description="系统发送的欢迎信息的标题，不支持HTML，不超过75字节
+      <CardRow description="系统发送的信息标题，不支持HTML，不超过75字节
 ">
         <el-input type="text" maxlength="75" v-model="noticeTitle" ></el-input>
       </CardRow>
@@ -11,13 +11,15 @@
 
     <Card header="用户角色通知内容：">
       <CardRow row
-        description="系统发送的欢迎信息的内容，标题内容均支持变量替换，可以使用如下变量:<br>
-                    {usename}：用户名
+        description="系统发送的信息内容，标题内容均支持变量替换，可以使用如下变量:<br>
+                    {username}：用户名
+                    {groupname} ：所属用户组
                     {time}：发送时间
                     {sitename}：网站名称（显示在页面底部的联系方式名称）
                     {bbname}：站点名称（显示在浏览器窗口标题等位置的名称）
                     {adminemail}：管理员Email
-                    双击输入框可扩大/缩小    "
+                    {content}：内容
+                    {reason}：原因"
       >
         <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 5}" v-model="noticeContent" clearable></el-input>
       </CardRow>

@@ -29,6 +29,9 @@ export default {
     firstpostImageListProp: {
       type: Array
     },
+    userDet: {
+      type: Object
+    },
     
   },
   created:function(){
@@ -199,7 +202,7 @@ export default {
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
               }
-              // this.getUsersInfo()
+              this.getOrderStatus();
             },3000)
           })
         })
@@ -251,48 +254,50 @@ export default {
       //     forbidClick: true,
       //     message: '支付状态查询中...'
       //   });
-      //   let second = 5;
-      //   const timer = setInterval(() => {
-      //     second--;
-      //     this.getUsers(that.tokenId).then(res=>{
-      //       console.log(second);
+        // let second = 5;
+        // const timer = setInterval(() => {
+        //   second--;
+          // this.getUsers(that.tokenId).then(res=>{
+          //   console.log(second);
 
-      //       if (res.errors){
-      //         clearInterval(timer);
-      //         toast.message = '支付失败，请重新支付！';
-      //         setTimeout(()=>{
-      //           toast.clear();
-      //         },2000)
-      //       } else {
-      //         if (second > 0 || !res.readdata._data.paid){
-      //           toast.message = `正在查询订单...`;
-      //         } else if (res.readdata._data.paid){
-      //           clearInterval(timer);
-      //           browserDb.setLItem('foregroundUser', res.data.attributes.username);
-      //           toast.message = '支付成功，正在跳转首页...';
-      //           toast.clear();
+          //   if (res.errors){
+          //     clearInterval(timer);
+          //     toast.message = '支付失败，请重新支付！';
+          //     setTimeout(()=>{
+          //       toast.clear();
+          //     },2000)
+          //   } else {
+          //     if (second > 0 || !res.readdata._data.paid){
+          //       toast.message = `正在查询订单...`;
+          //     } else if (res.readdata._data.paid){
+          //       clearInterval(timer);
+          //       browserDb.setLItem('foregroundUser', res.data.attributes.username);
+          //       toast.message = '支付成功，正在跳转首页...';
+          //       toast.clear();
 
-      //           let beforeVisiting = browserDb.getSItem('beforeVisiting');
-      //           console.log(beforeVisiting);
+          //       let beforeVisiting = browserDb.getSItem('beforeVisiting');
+          //       console.log(beforeVisiting);
 
-      //           if (beforeVisiting) {
-      //             this.$router.push({path: beforeVisiting})
-      //           } else {
-      //             this.$router.push({path: '/'})
-      //           }
-      //         } else {
-      //           clearInterval(timer);
-      //           toast.message = '支付失败，请重新支付！';
-      //           toast.clear();
-      //         }
-      //       }
-      //     });
+          //       if (beforeVisiting) {
+          //         this.$router.push({path: beforeVisiting})
+          //       } else {
+          //         this.$router.push({path: '/'})
+          //       }
+          //     } else {
+          //       clearInterval(timer);
+          //       toast.message = '支付失败，请重新支付！';
+          //       toast.clear();
+          //     }
+          //   }
+          // });
+      //     this.getOrderStatus();
       //   }, 1000);
       // },3000);
 
       const payWechat = setInterval(()=>{
         if (this.payStatus == '1' || this.payStatusNum > 10){
           clearInterval(payWechat);
+          return;
         }
         this.getOrderStatus();
       },3000)
@@ -367,6 +372,7 @@ export default {
       // })
     },
     getOrderStatus(){
+      // alert('查询支付状态');
       // alert(this.orderSn);
       return this.appFetch({
         url:'order',
@@ -388,9 +394,9 @@ export default {
           this.payStatus = res.readdata._data.status;
           console.log(res.readdata._data.status);
           this.payStatusNum ++;
-          // console.log(this.payStatusNum);
           if (this.payStatus == '1' || this.payStatusNum > 10){
             if(this.payStatus == '1'){
+              location.reload();
               this.sendMsgToParent();
             }
             this.rewardShow = false;

@@ -75,6 +75,7 @@
         @delete="onDelete"
         @close="onClose"
         :error="errorInfo"
+        :wallet-status="walletStatus"
         @payImmediatelyClick="payImmediatelyClick">
       </PayMethod>
 

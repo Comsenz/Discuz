@@ -256,7 +256,14 @@ export default {
           title:"编辑主题"
         }
       },
-
+      'edit-long-text/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editLongTextView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑长文"
+        }
+      },
       //登录、注册、微信绑定模块路由
       'login-user':{
         comLoad:function (resolve) {
@@ -637,16 +644,6 @@ export default {
     // 'pay-status',
   ];
 
-  /*
-  * 获取用户第一次访问页面，登录后跳转回来
-  * */
-  /*console.log(form.name);
-  if(form.name){
-    if (!browserDb.getSItem('beforeVisiting')){
-      browserDb.setSItem('beforeVisiting',to.path);
-    }
-  }*/
-
 
   /*
   * 获取tokenId
@@ -742,7 +739,6 @@ export default {
     this.getForum().then(ress=>{
 
       if (ress.readdata._data.set_site.site_mode === 'pay'){
-
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
           if (res){

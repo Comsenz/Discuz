@@ -85,7 +85,7 @@
           </Card>
 
           <Card  header="到期时间：">
-            <CardRow description="付费模式下，付费成为站点默认角色，可维持的时间,不填或为0时不限制">
+            <CardRow description="付费模式下，付费成为站点默认角色，可维持的时间，不填或为0时不限制">
                加入起
                   <el-input
                     style="height: 36PX;width: 80PX"

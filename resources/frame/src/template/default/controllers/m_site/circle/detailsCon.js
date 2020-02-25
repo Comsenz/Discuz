@@ -116,6 +116,8 @@ export default {
       errorInfo:'',      //密码错误提示
       value:'',          //密码
       codeUrl:"",        //支付url，base64
+      isLongArticle: false,
+      userDet: ''
     }
   },
   created() {
@@ -240,6 +242,8 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
+            this.userDet = res.readdata;
+            // console.log(this.userDet,'~~~~~~~~88888')
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             this.walletBalance = res.readdata._data.walletBalance;
@@ -334,6 +338,7 @@ export default {
             this.likedUsers = res.readdata.firstPost.likedUsers;
             this.rewardedUsers = res.readdata.rewardedUsers;
             this.themeUserId = res.readdata.user._data.id;
+            this.isLongArticle = res.readdata._data.isLongArticle;
             if(res.readdata.firstPost._data.isLiked){
               this.themeIsLiked = true;
             } else {
@@ -460,7 +465,7 @@ export default {
       this.themeTitle = this.themeTitle.replace(/\s+/g,"");
       this.themeTitle = this.cutString(this.themeTitle,40);
       // console.log(this.themeTitle,'处理后');
-      oInput.value = this.themeTitle +',' + Url;
+      oInput.value = this.themeTitle +' ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");
@@ -555,10 +560,18 @@ export default {
         } else {
           // content = content
           // console.log(content);
-          //跳转到发帖页
-          this.$router.push({
-            path: '/edit-topic' + '/' + this.themeId
-          });
+          //跳转到编辑页页
+          if(this.isLongArticle){
+            this.$router.push({
+              path: '/edit-long-text' + '/' + this.themeId
+            });
+
+          } else {
+            this.$router.push({
+              path: '/edit-topic' + '/' + this.themeId
+            });
+          }
+          
         }
       }
     },
@@ -961,8 +974,9 @@ export default {
             const pay = setInterval(()=>{
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
+                return;
               }
-              // this.getUsersInfo()
+              this.getOrderStatus();
             },3000)
           })
         })
@@ -1075,6 +1089,7 @@ export default {
       })
     },
     getOrderStatus(){
+      // alert('查询');
       // alert(this.orderSn);
       return this.appFetch({
         url:'order',
@@ -1100,7 +1115,10 @@ export default {
           if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
+            this.show = false;
+            // alert(this.show);
             if(this.payStatus == '1'){
+              // alert('成功');
               this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
             }
             // 
