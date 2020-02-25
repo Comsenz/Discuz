@@ -107,7 +107,7 @@
         v-model="show"
         :money="themeCon._data.price"
         :balance="walletBalance"
-        :walletStatus="themeCon.user._data.canWalletPay"
+        :walletStatus="userDet._data.canWalletPay"
         payUrl="setup-pay-pwd"
         @oninput="onInput"
         @delete="onDelete"

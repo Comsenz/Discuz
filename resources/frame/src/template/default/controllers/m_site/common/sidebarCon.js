@@ -60,12 +60,12 @@ export default {
           path: '/circle-info', // 跳转路径
           enentType: ''
         },
-        {
-          text:'站点管理',
-          name: 'management-circles',
-          path: '/management-circles', // 跳转路径
-          enentType: ''
-        },
+        // {
+        //   text:'站点管理',
+        //   name: 'management-circles',
+        //   path: '/management-circles', // 跳转路径
+        //   enentType: ''
+        // },
         {
           text:'退出登录',
           name: 'circle',
@@ -148,10 +148,18 @@ export default {
         this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
         this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
         this.canCreateInvite = res.readdata._data.other.can_create_invite;
-
+        console.log(this.canBatchEditThreads,this.canEditUserGroup,this.canCreateInvite);
+        var manaObj = {
+            text:'站点管理',
+            name: 'management-circles',
+            path: '/management-circles', // 跳转路径
+            enentType: ''
+        };
         // 判断当用户组拥有批量管理主题、修改用户组、邀请加入权限中的任意一项时才会显示该菜单
-        if (!(this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite)) {
-          this.sidebarList2.splice(1,1);
+        if (this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite) {
+          // alert('执行2')
+          // this.sidebarList2.splice(1,1);
+          this.sidebarList2.splice(1,0,manaObj);
         }
       }
     });
