@@ -29,6 +29,9 @@ export default {
     firstpostImageListProp: {
       type: Array
     },
+    userDet: {
+      type: Object
+    },
     
   },
   created:function(){
