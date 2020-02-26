@@ -9,7 +9,8 @@ export default {
       orderList:[],
       type:{
         1:'注册',
-        2:'打赏'
+        2:'打赏帖子',
+        3:'付费查看帖子'
       },
       status:{
         0:'待付款',
@@ -21,7 +22,8 @@ export default {
       finished: false,
       offset: 100,
       isLoading: false,
-      userId:''
+      userId:'',
+      concent:'',
 
     }
   },
@@ -40,12 +42,14 @@ export default {
         url:'orderList',
         method:'get',
         data:{
-          include:'',
+          include:'thread.firstPost',
           'filter[user]':this.userId,
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
       }).then((res)=>{
+        console.log(res,'钱包明细')
+        console.log(res.readdata)
       if (res.errors){
         this.$toast.fail(res.errors[0].code);
         throw new Error(res.error)
@@ -53,9 +57,9 @@ export default {
         if(initStatus){
           this.orderList = [];
         }
-        this.orderList = this.orderList.concat(res.data);
+        this.orderList = this.orderList.concat(res.readdata);
         this.loading = false;
-        this.finished = res.data.length < this.pageLimit;
+        this.finished = res.readdata.length < this.pageLimit;
       }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
@@ -64,6 +68,12 @@ export default {
         this.loading = false;
       })
     },
+
+    //点击主题内容，跳转到详情页
+		jumpDetails:function(id){
+      console.log("点击了")
+			this.$router.push({ path:'/details'+'/'+id});
+		},
 
     onLoad(){
       console.log('onLoadonLoadonLoad')

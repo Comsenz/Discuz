@@ -196,6 +196,10 @@ return [
         'cash_max_sum'          => '单次提现最大金额',
         'cash_sum_limit'        => '每日提现总金额上限',
 
+        // sms
+        'sms_code'              => '验证码',
+        'sms_type'              => '验证码类型',
+
         // user
         'pay_password'          => '支付密码',
         'pay_password_confirmation' => '支付密码',

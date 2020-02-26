@@ -52,7 +52,6 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             @change="change"
-            :picker-options="pickerOptions"
           ></el-date-picker>
         </div>
       </div>
@@ -99,7 +98,6 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             @change="changeOrder"
-            :picker-options="pickerOptions"
           ></el-date-picker>
         </div>
       </div>

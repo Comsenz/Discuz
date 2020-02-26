@@ -49,11 +49,12 @@ export default {
         url:'collection',
         method:'get',
         data:{
-          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers','lastThreePosts.replyUser','firstPost.images'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
       }).then(data=>{
+        console.log(data,'我的收藏')
         if (data.errors){
           this.$toast.fail(data.errors[0].code);
           throw new Error(data.error)

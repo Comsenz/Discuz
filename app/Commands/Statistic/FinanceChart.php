@@ -56,9 +56,9 @@ class FinanceChart
         if ($this->type !== Finance::TYPE_DAYS) {
             $format = '';
             if ($this->type == Finance::TYPE_WEEKS) {
-                $format = '%Y-%u';
+                $format = '%Y/%u'.app('translator')->get('statistic.week');
             } elseif ($this->type == Finance::TYPE_MONTH) {
-                $format = '%Y-%m';
+                $format = '%Y/%m'.app('translator')->get('statistic.month');
             }
             $query->selectRaw(
                 "DATE_FORMAT(created_at,'{$format}') as `date`,".
@@ -72,7 +72,7 @@ class FinanceChart
             $query->groupBy('date');
             $query->orderBy('date', 'asc');
         } else {
-            $query->selectRaw('*, created_at as date');
+            $query->selectRaw("*, DATE_FORMAT(created_at,'%Y/%m/%d') as `date` ");
         }
 
         return $query->get();

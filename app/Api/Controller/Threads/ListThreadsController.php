@@ -403,7 +403,7 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('thread_id', $threadIds)
             ->whereNull('deleted_at')
-            ->where('is_approved', 1)
+            ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
             ->orderBy('updated_at', 'desc')
             ->get()
