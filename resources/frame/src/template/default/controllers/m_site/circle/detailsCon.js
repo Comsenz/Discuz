@@ -117,7 +117,7 @@ export default {
       value:'',          //密码
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
-      userDet: ''
+      userDet: '',
     }
   },
   created() {
@@ -141,6 +141,7 @@ export default {
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
+    console.log(this.userDet,'556688');
   },
 
   computed: {
@@ -229,7 +230,8 @@ export default {
       var userId = browserDb.getLItem('tokenId');
       this.userId = userId;
       console.log(this.userId+'ddddd');
-      if(this.userId != '' && this.userId != null){
+      if(this.userId){
+       
         this.appFetch({
           url: 'users',
           method: 'get',
@@ -243,7 +245,7 @@ export default {
             throw new Error(res.error)
           } else {
             this.userDet = res.readdata;
-            // console.log(this.userDet,'~~~~~~~~88888')
+            console.log(this.userDet,'~~~~~~~~88888')
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             this.walletBalance = res.readdata._data.walletBalance;
@@ -460,12 +462,14 @@ export default {
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
       var reTag2 = /(<\/?br.*?>)/gi;
+      var reTag3 = /(<\/?p.*?>)/gi;
       this.themeTitle = this.themeTitle.replace(reTag,'');
       this.themeTitle = this.themeTitle.replace(reTag2,'');
+      this.themeTitle = this.themeTitle.replace(reTag3,'');
       this.themeTitle = this.themeTitle.replace(/\s+/g,"");
       this.themeTitle = this.cutString(this.themeTitle,40);
       // console.log(this.themeTitle,'处理后');
-      oInput.value = this.themeTitle +' ' + Url;
+      oInput.value = this.themeTitle +'  ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       document.execCommand("Copy");

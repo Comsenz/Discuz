@@ -54,6 +54,7 @@ class CheckLogin
             throw new LoginFailuresTimesToplimitException;
         } elseif ($userLoginFailCount > self::FAIL_NUM && ($expire < Carbon::now())) {
             //reset fail count
+            $userLoginFailCount = 1;
             UserLoginFailLog::reSetFailCountByIp($ip);
         }
 

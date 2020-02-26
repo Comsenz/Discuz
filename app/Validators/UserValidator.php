@@ -153,15 +153,16 @@ class UserValidator extends AbstractValidator
         return $messages;
     }
 
+    /**
+     * @return array
+     */
     protected function getPasswordRules()
     {
         $rules = [
             'required',
             'max:50',
+            'min:' . $this->passwordLength,
         ];
-
-        // 最小长度
-        $rules[] = 'min:' . $this->passwordLength;
 
         // 密码强度
         if ($this->passwordStrength) {
