@@ -177,7 +177,7 @@ class Thread extends Model
      */
     public function replies()
     {
-        return $this->posts()->where('is_approved', true);
+        return $this->posts()->where('is_approved', Thread::APPROVED);
     }
 
     /**

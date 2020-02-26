@@ -218,7 +218,8 @@ export default {
     },
 
     payClick(){
-      this.show = !this.show;
+      // this.show = !this.show;
+      this.show = true;
 
       /*let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
@@ -272,35 +273,6 @@ export default {
         });
       }*/
     },
-
-    completePayment(){
-     this.getUsers(this.tokenId).then(res=>{
-       if (res.errors){
-         this.$toast.message = '支付失败，请重新支付！';
-       } else {
-         if (res.readdata._data.paid){
-           this.$toast.message = '支付成功，正在跳转首页...';
-           this.dialogShow = false;
-         } else {
-           this.$toast.message = '支付失败，请重新支付！';
-         }
-       }
-     })
-    },
-
-    /*groupListDealWith(key){
-
-      const config = {
-        default: '默认权限',
-        viewThreads:'查看主题列表',
-        thread.viewPosts:'查看主题',
-        createThread:'发表主题',
-        thread.reply:'回复主题'
-      };
-
-      return config[key] ? config[key] : config['default'];
-    },*/
-
 
     /*
     * 接口请求
@@ -395,9 +367,10 @@ export default {
           this.payStatusNum = +1;
           if (this.payStatus) {
             this.qrcodeShow = false;
+            this.show = false;
             this.$router.push('/');
             this.payStatusNum = 11;
-            clearInterval(pay);
+            // clearInterval(time);
           }
         }
       }).catch(err=>{

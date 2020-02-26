@@ -25,6 +25,8 @@
  *                                     回调参数：-
  * @param {{payImmediatelyClick}}      立即支付点击事件
  *                                     回调参数：选中项
+ * @param {{clickOverlay}}             点击遮罩层和右上角关闭按钮事件
+ *                                     回调参数：-
  */
 import webDb from '../../../../../../helpers/webDbHelper';
 
@@ -82,7 +84,7 @@ export default {
       this.$emit('delete');
     },
     onClose(){
-      this.$emit('close')
+      this.$emit('close');
     },
     payImmediatelyClick(){
       if (this.data[this.radio].name === '钱包'){
@@ -92,22 +94,26 @@ export default {
       this.$emit('payImmediatelyClick',this.data[this.radio])
     },
     payStatusClick(){
-      console.log(this.$route);
       if (this.payUrl){
         this.$router.push({path:'/' + this.payUrl});
         webDb.setLItem('payUrl',this.$route.fullPath);
       }
-
+    },
+    clickOverlay(){
+      this.$emit('input', false);
+      this.$emit('clickOverlay');
+      this.paySelectBox = false;
+      this.payImmediatelyShow = false;
     }
   },
   watch:{
     value(val){
       this.paySelectShow = val;
       this.descriptionShow = parseFloat(this.money) > parseFloat(this.balance);
-    },
-    paySelectShow(val){
       if (!val){
-        this.$emit('input', false);
+        this.paySelectBox = false;
+        this.payImmediatelyShow = false;
+        this.showKeyboard = false;
       }
     },
     payImmediatelyShow(val){

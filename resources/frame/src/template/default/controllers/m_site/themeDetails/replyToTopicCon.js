@@ -236,7 +236,7 @@ export default {
       this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+id
+        splice:'/'+id.id
       }).then(data=>{
         if (data.errors){
           this.$toast.fail(data.errors[0].code);

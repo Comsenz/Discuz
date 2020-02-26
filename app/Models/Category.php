@@ -73,7 +73,7 @@ class Category extends Model
     public function refreshThreadCount()
     {
         $this->thread_count = $this->threads()
-            ->where('is_approved', 1)
+            ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
             ->count();
 

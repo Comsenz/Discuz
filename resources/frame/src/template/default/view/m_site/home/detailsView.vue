@@ -107,38 +107,38 @@
 
      </div>
      </van-pull-refresh>
-     <div class="detailsFooter" id="detailsFooter" :class="{'twoChi':twoChi}">
-          <div class="footChi" @click="replyToJump(themeCon._data.id,0,false)">
-            <span class="icon iconfont icon-review"></span>
-            回复
-          </div>
-          <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeIsLiked)">
-            <span v-if="!(themeIsLiked)" class="icon iconfont icon-like"></span>
-            <span v-else="" class="icon iconfont icon-praise-after"></span>
-            赞
-          </div>
-          <div class="footChi" @click="showRewardPopup" v-if="wxpay">
-            <span class="icon iconfont icon-reward"></span>
-            打赏
-          </div>
+     <div class="detailsFooter" id="detailsFooter" :class="{'twoChi':twoChi}" v-if="themeCon">
+        <div class="footChi" @click="replyToJump(themeCon._data.id,0,false)">
+          <span class="icon iconfont icon-review"></span>
+          回复
         </div>
-        <van-popup
-          class="rewardPopup"
-          id="rewardPopup"
-          v-model="rewardShow"
-          closeable
-          close-icon-position="top-right"
-          position="bottom"
-          :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0','width': (!isPhone && !isWeixin) ? '640px' : '100%'}"
-        >
-          <span class="support">支持作者继续创作</span>
-          <div class="rewardMonBox">
-            <a class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
-              <span>{{rewardChi.rewardNum}}</span>元
-            </a>
-          </div>
-       </van-popup>
-       <van-popup
+        <div class="footChi" @click="footReplyOpera(themeCon.firstPost._data.id,'3',themeIsLiked)">
+          <span v-if="!(themeIsLiked)" class="icon iconfont icon-like"></span>
+          <span v-else="" class="icon iconfont icon-praise-after"></span>
+          赞
+        </div>
+        <div class="footChi" @click="showRewardPopup" v-if="wxpay">
+          <span class="icon iconfont icon-reward"></span>
+          打赏
+        </div>
+      </div>
+      <van-popup
+        class="rewardPopup"
+        id="rewardPopup"
+        v-model="rewardShow"
+        closeable
+        close-icon-position="top-right"
+        position="bottom"
+        :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0','width': (!isPhone && !isWeixin) ? '640px' : '100%'}"
+      >
+        <span class="support">支持作者继续创作</span>
+        <div class="rewardMonBox">
+          <a class="moneyChi" v-for="(rewardChi,i) in rewardNumList" :key="i"  @click="payClick(rewardChi.rewardNum)">
+            <span>{{rewardChi.rewardNum}}</span>元
+          </a>
+        </div>
+      </van-popup>
+      <van-popup
        v-model="qrcodeShow"
        round
        close-icon-position="top-right"
@@ -156,7 +156,7 @@
        </van-popup>
        
        <PayMethod
-        v-if="themeCon"
+        v-if="userDet"
         :data="payList"
         v-model="show"
         :money="amountNum"
