@@ -102,7 +102,7 @@
         </van-popup>
 
       <PayMethod
-        v-if="themeCon"
+        v-if="userDet"
         :data="payList"
         v-model="show"
         :money="themeCon._data.price"
