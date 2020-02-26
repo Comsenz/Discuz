@@ -118,11 +118,12 @@
     //height: calc(100% - #{80px});
 
     .index-main-con__side{
-      width: 100%;
-      height: 100%;
+      //width: 100%;
+      //height: 100%;
       box-shadow:0 2PX 12PX 0 rgba(0,0,0,0.06);
       padding: 20PX 40PX ;
       position: relative;
+      overflow: hidden;
 
       .index-main-con__side-title{
         height: 42PX;
