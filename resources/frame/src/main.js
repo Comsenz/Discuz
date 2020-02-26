@@ -23,6 +23,7 @@ import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
 import commonHelper from "commonHelper";						//公共函数封装
+
 import browserDb from "webDbHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
 import moment from 'moment';                  //导入文件 momnet时间转换
@@ -55,7 +56,6 @@ Vue.use(VueLazyload, {
 Vue.prototype.$utils = utils; //注册全局方法
 Vue.prototype.$echarts = Echarts; //
 
-
 //实例化根目录
 // const appRouter = RConfig.init();
 // const App = new Vue({
@@ -87,7 +87,7 @@ const App = new Vue({
     }
   },
   created(){
-    // console.log(browserDb.getLItem('siteInfo'),'缓存里的');
+    // console.log(browserDb.getLItem('siteInfo')._data,'缓存里的');
     this.siteInfoStat = browserDb.getLItem('siteInfo')._data.set_site.site_stat;
   },
   watch: {

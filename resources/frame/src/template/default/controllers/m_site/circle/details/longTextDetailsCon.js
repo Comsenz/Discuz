@@ -43,10 +43,13 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.loadUserInfo();
     this.getForum();
-    this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
-      this.getAuthority(res.readdata.groups[0]._data.id);
-      this.walletBalance = res.readdata._data.walletBalance;
-    });
+    if(this.userId){
+      this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
+        this.getAuthority(res.readdata.groups[0]._data.id);
+        this.walletBalance = res.readdata._data.walletBalance;
+      });
+    }
+    
   },
   computed: {
     themeId: function () {

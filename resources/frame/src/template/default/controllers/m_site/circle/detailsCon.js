@@ -117,7 +117,7 @@ export default {
       value:'',          //密码
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
-      userDet: ''
+      userDet: '',
     }
   },
   created() {
@@ -141,6 +141,7 @@ export default {
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
+    console.log(this.userDet,'556688');
   },
 
   computed: {
@@ -230,6 +231,7 @@ export default {
       this.userId = userId;
       console.log(this.userId+'ddddd');
       if(this.userId){
+       
         this.appFetch({
           url: 'users',
           method: 'get',
@@ -243,7 +245,7 @@ export default {
             throw new Error(res.error)
           } else {
             this.userDet = res.readdata;
-            // console.log(this.userDet,'~~~~~~~~88888')
+            console.log(this.userDet,'~~~~~~~~88888')
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             this.walletBalance = res.readdata._data.walletBalance;
