@@ -3,16 +3,17 @@
       <van-popup
         v-model="paySelectShow"
         round
-        close-icon-position="top-right"
-        closeable
+        safe-area-inset-bottom
         class="way-to-choose-box"
         @close="onClose"
+        @click-overlay="clickOverlay"
         get-container="body">
         <div class="way-to-choose-main">
+          <van-icon name="cross" class="icon-close" size="20" @click="clickOverlay"/>
           <div class="manner-title">
             <h1>立即支付</h1>
             <p><span>￥</span>{{money}}</p>
-            <i></i>
+            <i class="manner-title_grid"></i>
           </div>
 
           <div class="way-to-choose_cont">
@@ -45,17 +46,19 @@
       <van-popup
         v-model="payImmediatelyShow"
         round
+        safe-area-inset-bottom
         close-icon-position="top-right"
-        closeable
         @close="onClose"
+        @click-overlay="clickOverlay"
         class="pay-immediately-box"
         :class="error?'pay-immediately-box-err':''"
         get-container="body">
         <div class="pay-immediately-main">
+          <van-icon name="cross" class="icon-close" size="20" @click="clickOverlay"/>
           <div class="manner-title">
             <h1>立即支付</h1>
             <p><span>￥</span>{{money}}</p>
-            <i></i>
+            <i class="manner-title_grid"></i>
           </div>
           <div class="pay-immediately-main_cont">
             <van-cell title="支付方式" is-link @click="paySelectShow = !paySelectShow;payImmediatelyShow = !payImmediatelyShow">

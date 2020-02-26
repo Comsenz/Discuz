@@ -79,7 +79,10 @@ class CreateOrder
 
             // 主题打赏订单
             case Order::ORDER_TYPE_REWARD:
-                $thread = Thread::find($this->data->get('thread_id'));
+                $thread = Thread::where('id', $this->data->get('thread_id'))
+                    ->where('is_approved', Thread::APPROVED)
+                    ->whereNull('deleted_at')
+                    ->first();
 
                 if ($thread) {
                     $payeeId = $thread->user_id;
@@ -95,6 +98,8 @@ class CreateOrder
                 $thread = Thread::where('id', $this->data->get('thread_id'))
                     ->where('user_id', '<>', $this->actor->id)
                     ->where('price', '>', 0)
+                    ->where('is_approved', Thread::APPROVED)
+                    ->whereNull('deleted_at')
                     ->first();
 
                 // 根据主题 id 查询是否已付过费
@@ -107,7 +112,7 @@ class CreateOrder
                 // 主题存在且未付过费
                 if ($thread && ! $order) {
                     $payeeId = $thread->user_id;
-                    $amount = sprintf('%.2f', $thread->price);
+                    $amount = $thread->price;
                 } else {
                     throw new OrderException('order_post_not_found');
                 }
