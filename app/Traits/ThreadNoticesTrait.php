@@ -11,9 +11,16 @@ use App\MessageTemplate\PostDeleteMessage;
 use App\MessageTemplate\PostModMessage;
 use App\MessageTemplate\PostOrderMessage;
 use App\MessageTemplate\PostStickMessage;
+use App\MessageTemplate\PostThroughMessage;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
+/**
+ * Thread 发送通知
+ *
+ * Trait ThreadNoticesTrait
+ * @package App\Traits
+ */
 trait ThreadNoticesTrait
 {
     /**
@@ -21,7 +28,7 @@ trait ThreadNoticesTrait
      *
      * @param $thread
      */
-    public function sendIsSticky($thread)
+    private function sendIsSticky($thread)
     {
         $thread->user->notify(new System(PostOrderMessage::class, [
             'message' => $this->getThreadTitle($thread),
@@ -36,7 +43,7 @@ trait ThreadNoticesTrait
      *
      * @param $thread
      */
-    public function sendIsEssence($thread)
+    private function sendIsEssence($thread)
     {
         $thread->user->notify(new System(PostStickMessage::class, [
             'message' => $this->getThreadTitle($thread),
@@ -52,11 +59,11 @@ trait ThreadNoticesTrait
      * @param $thread
      * @param array $attach 原因
      */
-    public function sendIsDeleted($thread, $attach = [])
+    private function sendIsDeleted($thread, $attach)
     {
         $data = [
             'message' => $this->getThreadTitle($thread),
-            'refuse' => Arr::get($attach, 'refuse', ''),
+            'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $thread->id,
             ],
@@ -70,16 +77,23 @@ trait ThreadNoticesTrait
      * @param $thread
      * @param array $attach 原因
      */
-    public function sendIsApproved($thread, $attach = [])
+    private function sendIsApproved($thread, $attach)
     {
         $data = [
             'message' => $this->getThreadTitle($thread),
-            'refuse' => Arr::get($attach, 'refuse', ''),
+            'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $thread->id,
             ],
         ];
-        $thread->user->notify(new System(PostModMessage::class, $data));
+
+        if ($thread->is_approved) {
+            // 发送通过通知
+            $thread->user->notify(new System(PostThroughMessage::class, $data));
+        } else {
+            // 发送不通过通知
+            $thread->user->notify(new System(PostModMessage::class, $data));
+        }
     }
 
     /**
@@ -91,5 +105,22 @@ trait ThreadNoticesTrait
     public function getThreadTitle($thread)
     {
         return empty($thread->title) ? $thread->firstPost->content : $thread->title;
+    }
+
+    /**
+     * 过滤原因值
+     *
+     * @param $attach
+     * @return mixed|string
+     */
+    public function reasonValue($attach)
+    {
+        if (Arr::has($attach, 'refuse')) {
+            if (!empty($attach['refuse'])) {
+                return $attach['refuse'];
+            }
+        }
+
+        return '无';
     }
 }

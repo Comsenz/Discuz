@@ -9,6 +9,7 @@ namespace App\Commands\Thread;
 
 use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
 use App\MessageTemplate\PostOrderMessage;
@@ -96,7 +97,11 @@ class EditThread
             $thread->is_approved = $attributes['isApproved'];
             $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
             // 内容审核通知
-            $this->sendIsApproved($thread, ['refuse' => $approvedMsg]);
+            $thread->raise(new ThreadNotices(
+                $thread,
+                $this->actor,
+                ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
+            ));
 
             $thread->raise(new ThreadWasApproved(
                 $thread,
@@ -110,7 +115,12 @@ class EditThread
             $thread->is_sticky = $attributes['isSticky'];
             // 置顶后 通知发帖人置顶消息
             if ($attributes['isSticky']) {
-                $this->sendIsSticky($thread);
+                // 内容置顶通知
+                $thread->raise(new ThreadNotices(
+                    $thread,
+                    $this->actor,
+                    ['notice_type' => 'isSticky']
+                ));
             }
         }
 
@@ -119,7 +129,11 @@ class EditThread
             $thread->is_essence = $attributes['isEssence'];
             // 内容精华通知
             if ($attributes['isEssence']) {
-                $this->sendIsEssence($thread);
+                $thread->raise(new ThreadNotices(
+                    $thread,
+                    $this->actor,
+                    ['notice_type' => 'isEssence']
+                ));
             }
         }
 
@@ -130,7 +144,11 @@ class EditThread
             if ($attributes['isDeleted']) {
                 $thread->hide($this->actor, $message);
                 // 内容删除通知
-                $this->sendIsDeleted($thread, ['refuse' => $message]);
+                $thread->raise(new ThreadNotices(
+                    $thread,
+                    $this->actor,
+                    ['notice_type' => 'isDeleted', 'refuse' => $message]
+                ));
             } else {
                 $thread->restore($this->actor, $message);
             }
