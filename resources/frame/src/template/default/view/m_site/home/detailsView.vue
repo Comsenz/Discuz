@@ -40,13 +40,21 @@
             <!-- <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a> -->
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
-          <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>0 && themeCon.rewardedUsers.length<12">
             <span class="icon iconfont icon-money"></span>
-            <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd" v-if="rewardInd<limitLen">
-              
+            <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd">
                 <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
                 <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
               
+            </div>
+            <!-- <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
+            <i @click="rewardIsFold(themeCon.rewardedUsers.length)" class="foldTag">{{rewardTipFlag}}<span class="icon iconfont icon-down-menu" :class="{'rotate180':rewardTipShow}"></span></i> -->
+          </div>
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>12">
+            <span class="icon iconfont icon-money"></span>
+            <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd" v-if="rewardInd<limitLen">
+                <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+                <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
             </div>
             <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
             <!-- <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
