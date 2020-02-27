@@ -153,7 +153,6 @@ export default {
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
-    // console.log(this.userDet,'556688');
   },
 
   computed: {
@@ -177,26 +176,19 @@ export default {
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data,hideStatus){
-      console.log('处理',hideStatus);
       let datas = [];
-      // this.hideClass = 'none';
       if(hideStatus){
-        // alert('空');
         this.hideStyle = '';
       } else {
-        // alert('有');
         this.hideStyle = 'display:none';
       }
       
       data.forEach((item,key)=>{
         datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username + ',' +'</a>');
       });
-      // this.likedData = datas.join(',');
       // return datas;
       datas = datas.join('') ;
-      // console.log(this.likeLen,'长度');
       if(this.likeLen>10){
-        // console.log('大于');
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
         // datas+="<span onclick='likeIsFold(event)' class='foldTag'>"+ this.likeTipFlag+"<i class='icon iconfont icon-down-menu' :class='{'rotate180':likeTipShow}'></i></span>";
@@ -207,9 +199,7 @@ export default {
       this.likeTipShow = !this.likeTipShow;
       this.likeTipFlag = this.likeTipShow?'展开':'收起';
       this.hideStyle = this.likeTipShow?'':'display:none';
-      console.log(this.userArr(this.themeCon.firstPost.likedUsers,true),'得到的值',document.getElementById('likedUserList'));
       document.getElementById('likedUserList').innerHTML = this.userArr(this.themeCon.firstPost.likedUsers,true);
-      console.log(document.getElementById('likedUserList'),'修改后');
       // this.userArrStatus = true;
     },
     rewardIsFold(allLen){
@@ -220,7 +210,6 @@ export default {
     },
     //设置底部在pc里的宽度
     limitWidth(limitId){
-      console.log(limitId);
       let viewportWidth = window.innerWidth;
       // if(limitId){
         document.getElementById(limitId).style.width = "640px";
@@ -242,7 +231,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-           // console.log(res);
           this.siteInfo = res.readdata;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
           if(!this.wxpay){
@@ -273,9 +261,7 @@ export default {
       //初始化请求User信息，用于判断当前用户是否已付费
       var userId = browserDb.getLItem('tokenId');
       this.userId = userId;
-      console.log(this.userId+'ddddd');
       if(this.userId){
-       
         this.appFetch({
           url: 'users',
           method: 'get',
@@ -289,13 +275,10 @@ export default {
             throw new Error(res.error)
           } else {
             this.userDet = res.readdata;
-            console.log(this.userDet,'~~~~~~~~88888')
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
             this.walletBalance = res.readdata._data.walletBalance;
-            // console.log(this.currentUserAvatarUrl+'3334');
             this.groupId = res.readdata.groups[0]._data.id;
-            // console.log(this.groupId,'uuuuu');
            }
 
         })
@@ -308,14 +291,12 @@ export default {
       this.token = token;
       if (siteMode == 'public') {
         //当站点为公开站点时
-        console.log('公开');
         if (token) {
           //当用户已登录时
           this.loginBtnFix = false;
           this.loginHide = true;
           this.menuStatus = true;
         } else {
-          // console.log('公开，未登录');
           // //当用户未登录时
           this.loginBtnFix = true;
           this.loginHide = false;
@@ -352,11 +333,8 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
-          console.log(res.readdata);
-          console.log('1234');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
-          // console.log(this.likeLen,'长度2222')
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
             this.collectStatus = res.readdata._data.isFavorite;
@@ -414,11 +392,9 @@ export default {
               post.images.map(image => urls.push(image._data.url));
               this.postsImages.push(urls);
             });
-            // console.log(this.postsImages);
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.likeLen = themeCon.firstPost.likedUsers.length;
-            console.log(this.likeLen,'长度2222')
           }
         }
 
@@ -433,9 +409,6 @@ export default {
     },
     //主题详情图片放大轮播
     imageSwiper(imgIndex, typeclick, replyItem) {
-      console.log(imgIndex, typeclick, replyItem);
-      // console.log(this.firstpostImageList);
-      // console.log(imgIndex);
       if(typeclick == 'detailImg'){
         //主题详情图片预览
         ImagePreview({
@@ -446,20 +419,15 @@ export default {
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
           // asyncClose: true,
           // onChange:function(){
-          //   console.log('qiehuan ');
           // },
           // onClose:function (url) {
-          //   console.log('关闭');
           // }
           // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
           //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
           //   var num = url.index, url_link = url.url;
-          //   console.log(url);
           // }
         })
       } else if(typeclick == 'replyImg') {
-        // console.log(this.postsImages[replyItem]);
-        // console.log('-------------------');
         //主题回复图片预览
         ImagePreview({
           images:this.postsImages[replyItem],
@@ -519,7 +487,6 @@ export default {
       this.themeTitle = this.themeTitle.replace(reTag3,'');
       this.themeTitle = this.themeTitle.replace(/\s+/g,"");
       this.themeTitle = this.cutString(this.themeTitle,40);
-      // console.log(this.themeTitle,'处理后');
       oInput.value = this.themeTitle +'  ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
@@ -527,7 +494,6 @@ export default {
       // 执行浏览器复制命令
       oInput.className = 'oInput';
       oInput.style.display = 'none';
-      // alert('复制成功');
       this.$toast.success('分享链接已复制成功');
     },
     //退出登录
@@ -614,7 +580,6 @@ export default {
           this.themeOpeRequest(attri, cateId, '4');
         } else {
           // content = content
-          // console.log(content);
           //跳转到编辑页页
           if(this.isLongArticle){
             this.$router.push({
@@ -632,7 +597,6 @@ export default {
     },
     //主题操作接口请求
     themeOpeRequest(attri, cateId, clickType) {
-      // console.log(attri);
       let threads = 'threads/' + this.themeId;
       this.appFetch({
         url: threads,
@@ -652,7 +616,6 @@ export default {
           }
         }
       }).then((res) => {
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -696,7 +659,6 @@ export default {
 
     //删除请求接口
     deleteOpear(postId,postIndex){
-      console.log(postIndex);
       let attri = new Object();
       attri.isDeleted = true;
       this.appFetch({
@@ -716,9 +678,7 @@ export default {
         } else {
           this.$toast.success('删除成功');
           this.pageIndex = 1;
-          console.log(this.postsList);
           this.postsList.splice(postIndex,1);
-          console.log(this.postsList);
           // this.detailsLoad(true);
         }
       })
@@ -727,18 +687,14 @@ export default {
 
     //回复点赞
     replyOpera(postId, type, isLike,postsCanLike,postIndex) {
-      console.log(postId, type, isLike,postsCanLike);
-      // console.log(this.token);
       if(!this.token){
         this.$router.push({
           path:'/login-user',
           name:'login-user'
         })
       } else {
-        // console.log(isLike);
         let attri = new Object();
         if (type == 2) {
-          console.log(postsCanLike);
           if(!postsCanLike){
             this.$toast.fail('没有权限，请联系站点管理员');
             return false;
@@ -766,7 +722,6 @@ export default {
         //     }
         //   }
         // }
-        // console.log(attri);
         let posts = 'posts/' + postId;
         this.appFetch({
           url: posts,
@@ -799,18 +754,14 @@ export default {
 
     //主题点赞
       footReplyOpera(postId, type, isLike,postsCanLike,postIndex) {
-        console.log(postId, type, isLike,postsCanLike);
-        // console.log(this.token);
         if(!this.token){
           this.$router.push({
             path:'/login-user',
             name:'login-user'
           })
         } else {
-          // console.log(isLike);
           let attri = new Object();
           // if (type == 2) {
-          //   console.log(postsCanLike);
           //   if(!postsCanLike){
           //     this.$toast.fail('没有权限，请联系站点管理员');
           //     return false;
@@ -838,7 +789,6 @@ export default {
               }
             }
           }
-          // console.log(attri);
           let posts = 'posts/' + postId;
           this.appFetch({
             url: posts,
@@ -855,29 +805,23 @@ export default {
               throw new Error(res.error)
             } else {
               if(isLike){
-                // console.log('已点赞时，点击取消点赞');
                 // this.likedUsers = this.likedUsers.filter(value => value._data.id !== this.userId);
                 this.likedUsers.map((value, key, likedUsers) => {
                   value._data.id === this.userId && likedUsers.splice(key,1);
                 });
                 // for(var i = 0; i < this.likedUsers.length; i++){
-                //   console.log('循环');
                 //   if(this.likedUsers[i]._data.id === this.userId){
-                //     console.log(this.likedUsers[i]._data.id);
                 //       this.likedUsers.splice(i,1);
-                //       console.log(this.likedUsers);
-                //       console.log('123');
                 //   }
                 // }
                 this.userArr(this.likedUsers);
                 this.themeCon.firstPost._data.isLiked = false;
                 this.themeIsLiked = false;
               } else {
-                // console.log('未点赞时，点击点赞');
+                // 未点赞时，点击点赞'
                 this.likedUsers.unshift({_data:{username:this.currentUserName,id:this.userId}});
                 this.themeCon.firstPost._data.isLiked = true;
                 this.themeIsLiked = true;
-                console.log(this.themeCon.firstPost._data.isLiked);
               }
               this.pageIndex = 1;
               // this.detailsLoad(true);
@@ -896,8 +840,6 @@ export default {
           name:'login-user'
         })
       } else {
-        console.log(this.userId);
-        console.log(this.themeUserId);
         if(this.userId == this.themeUserId) {
           this.$toast.fail('不能打赏自己');
         } else {
@@ -911,7 +853,6 @@ export default {
     },
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
-      console.log(themeId, replyId, quoteCon);
       if(!this.token){
         this.$router.push({
           path:'/login-user',
@@ -957,7 +898,6 @@ export default {
      payImmediatelyClick(data){
       this.rewardShow = false;
       //data返回选中项
-      console.log(data);
 
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
@@ -965,7 +905,7 @@ export default {
       if (data.name === '微信支付') {
         this.show = false;
         if (isWeixin){
-          console.log('微信');
+          //微信
           this.getOrderSn(this.amountNum).then(()=>{
             this.orderPay(12).then((res)=>{
               if (typeof WeixinJSBridge == "undefined"){
@@ -981,7 +921,7 @@ export default {
             })
           });
         } else if (isPhone){
-          console.log('手机浏览器');
+          //手机浏览器
           this.getOrderSn(this.amountNum).then(()=>{
             this.orderPay(11).then((res)=>{
               this.wxPayHref = res.readdata._data.wechat_h5_link;
@@ -998,11 +938,9 @@ export default {
             })
           });
         } else {
-          // debugger;
-          console.log('pc');
+          // pc
           this.getOrderSn(this.amountNum).then(()=>{
             this.orderPay(10).then((res)=>{
-              console.log(res);
               this.codeUrl = res.readdata._data.wechat_qrcode;
               this.qrcodeShow = true;
               const pay = setInterval(()=>{
@@ -1018,14 +956,11 @@ export default {
       }
     },
     onInput(key){
-      console.log(key);
       this.value = this.value + key;
-
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            console.log(res);
             const pay = setInterval(()=>{
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
@@ -1037,75 +972,16 @@ export default {
         })
       }
     },
-
+    //刪除
     onDelete(){
-      console.log("删除");
     },
-
+    //关闭
     onClose(){
-      console.log('关闭');
       this.value = '';
       this.errorInfo = ''
     },
 
-
-    // payClick(amount){
-    //   // alert(amount);
-    //   let isWeixin = this.appCommonH.isWeixin().isWeixin;
-    //   let isPhone = this.appCommonH.isWeixin().isPhone;
-    //   this.amountNum = amount;
-    //   if (isWeixin){
-
-    //     this.getOrderSn(amount).then(()=>{
-    //       this.orderPay(12).then((res)=>{
-    //         if (typeof WeixinJSBridge == "undefined"){
-    //           if( document.addEventListener ){
-    //             document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-    //           }else if (document.attachEvent){
-    //             document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-    //             document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
-    //           }
-    //         }else{
-    //           this.onBridgeReady(res);
-    //         }
-    //       })
-    //     });
-    //   } else if (isPhone){
-    //     console.log('手机浏览器');
-    //     this.getOrderSn(amount).then(()=>{
-    //       this.orderPay(11).then((res)=>{
-    //         this.wxPayHref = res.readdata._data.wechat_h5_link;
-    //         window.location.href = this.wxPayHref;
-    //         const payPhone = setInterval(()=>{
-    //           if (this.payStatus == '1' || this.payStatusNum > 10){
-    //             clearInterval(payPhone);
-    //           }
-    //           this.getOrderStatus();
-    //         },3000)
-    //       })
-    //     });
-    //   } else {
-    //     console.log('pc');
-    //     this.getOrderSn(amount).then(()=>{
-    //       this.orderPay(10).then((res)=>{
-    //         console.log(res);
-    //         this.codeUrl = res.readdata._data.wechat_qrcode;
-    //         this.qrcodeShow = true;
-    //         const pay = setInterval(()=>{
-    //           console.log(this.payStatusNum);
-    //           this.getOrderStatus();
-    //           if (this.payStatus == '1' || this.payStatusNum > 10){
-    //             console.log('已达上限');
-    //             clearInterval(pay);
-    //           }
-    //         },3000);
-
-
-    //       })
-    //     });
-    //   }
-    // },
-
+    //创建订单
     getOrderSn(amount){
       return this.appFetch({
         url:'orderList',
@@ -1116,11 +992,10 @@ export default {
           "amount": amount
         }
       }).then(res=>{
-        console.log(res);
         this.orderSn = res.readdata._data.order_sn;
       })
     },
-
+    //订单支付
     orderPay(type){
       return this.appFetch({
         url:'orderPay',
@@ -1137,15 +1012,12 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          console.log(res);
           return res;
         }
 
       })
     },
     getOrderStatus(){
-      // alert('查询');
-      // alert(this.orderSn);
       return this.appFetch({
         url:'order',
         method:'get',
@@ -1153,7 +1025,6 @@ export default {
         data:{
         },
       }).then(res=>{
-        console.log(res);
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           if (res.errors[0].detail){
@@ -1164,23 +1035,15 @@ export default {
           }
         } else {
           this.payStatus = res.readdata._data.status;
-          console.log(res.readdata._data.status);
           this.payStatusNum ++;
-          // console.log(this.payStatusNum);
           if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
             this.show = false;
-            // alert(this.show);
             if(this.payStatus == '1'){
-              // alert('成功');
               this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
             }
-            // 
-            // console.log(this.rewardedUsers);
             this.payStatusNum = 11;
-            console.log('重新请求');
-            // clearInterval(pay);
           }
         }
         // return res;
@@ -1191,7 +1054,6 @@ export default {
     onLoad() { //上拉加载
       this.loading = true;
       this.pageIndex++;
-      // console.log(123)
       this.detailsLoad();
     },
     onRefresh(){
