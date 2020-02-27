@@ -50,7 +50,6 @@ export default {
         if(initStatus){
           this.replyList = []
         }
-        console.log(res,'000000')
         this.replyList = this.replyList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
@@ -63,7 +62,6 @@ export default {
       })
     },
     deleteReply(replyId){    //删除回复
-      console.log(replyId,'00000')
       // let deleteNotification = 'deleteNotification/'+replyId;
       this.appFetch({
         url:'deleteNotification',

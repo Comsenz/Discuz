@@ -50,7 +50,6 @@ export default {
       })
     },
     sendSmsCodePhone() { //发送验证码
-      console.log('11111111111111')
       // var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
       // var newphone = this.newphone;
       // if (!newphone) { //未输入手机号
@@ -77,7 +76,6 @@ export default {
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
           }else{
-          console.log(res);
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timer();
@@ -100,7 +98,6 @@ export default {
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
           }else{
-          console.log(res);
           this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timerNext();

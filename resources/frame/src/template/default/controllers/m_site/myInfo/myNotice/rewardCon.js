@@ -49,7 +49,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
-        console.log(res)
         if(initStatus){
           this.rewardList = []
         }
@@ -65,7 +64,6 @@ export default {
       })
     },
     deleteReply(replyId){    //删除回复
-      console.log(replyId,'00000')
       // let deleteNotification = 'deleteNotification/'+replyId;
       this.appFetch({
         url:'deleteNotification',

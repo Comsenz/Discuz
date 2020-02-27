@@ -50,10 +50,7 @@ export default {
         if(initStatus){
           this.likeList=[]
         }
-        console.log(res)
-        // console.log(res.readdata)
         this.likeList = this.likeList.concat(res.readdata);
-        // console.log(this.likeList,'点赞我的')
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;
       }
@@ -65,7 +62,6 @@ export default {
       })
     },
     deleteReply(replyId){    //删除回复
-      console.log(replyId,'00000')
       // let deleteNotification = 'deleteNotification/'+replyId;
       this.appFetch({
         url:'deleteNotification',

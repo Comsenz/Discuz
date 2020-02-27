@@ -74,13 +74,10 @@ export default {
           methods:'get',
           data: this.userParams
         }).then(data=>{
-          console.log(data,'dadadada');
           this.userLoadMoreStatus = data.readdata.length > this.searchMaxSum;
           // this.searchUserList = data.readdata.splice(0,3);
           this.searchUserList = data.readdata;
           this.searchResStatus = true;
-          console.log(data.readdata[0].toUser._data.avatarUrl,'88997766');
-          console.log(this.searchUserList[0].toUser._data.username,'2345432');
         }).catch(err=>{
           if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
             this.userParams['page[number]'] = currentPageNum - 1;
@@ -95,24 +92,19 @@ export default {
 
     //管理关注操作
      followSwitch(intiFollowVal,personUserId,index) {
-       console.log('参数',typeof intiFollowVal,intiFollowVal);
        let attri = new Object();
        let methodType = '';
        if (intiFollowVal == '0' || intiFollowVal == '1') {
-         // console.log('已关注');
          // attri.from_user_id = this.userId;
          attri.to_user_id = personUserId;
          methodType = 'delete';
          this.oldFollow = intiFollowVal;
        } else {
-         // console.log('关注TA');
          attri.to_user_id = personUserId;
          methodType = 'post';
          // this.intiFollowVal = '2';
-         // console.log(this.intiFollowVal,'修改');
 
        }
-       // console.log(attri,'33333333-----');
        this.followRequest(methodType,attri,intiFollowVal,index);
      },
 
@@ -129,7 +121,6 @@ export default {
 
           }
         }).then((res) => {
-          // console.log(res,'987654','---------------',intiFollowVal);
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
@@ -137,7 +128,6 @@ export default {
             if(methodType == 'delete'){
               this.searchUserList[index]._data.is_mutual = '2';
             } else {
-              console.log('post');
               this.searchUserList[index]._data.is_mutual = this.oldFollow;
             }
           }
