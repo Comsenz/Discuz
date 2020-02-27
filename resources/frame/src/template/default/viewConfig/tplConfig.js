@@ -755,7 +755,7 @@ export default {
       if (ress.readdata._data.set_site.site_mode === 'pay'){
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
-          if (res){
+          if (res.readdata._data.paid){
             /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
             if (signInAndPayForAccess.includes(to.name)){
               if(to.name === 'pay-circle-con/:themeId/:groupId'){
@@ -914,7 +914,7 @@ export default {
       }
     }).then(res=>{
       console.log(res);
-      return res.readdata._data.paid;
+      return res;
     }).catch(err=>{
       console.log(err);
     })
