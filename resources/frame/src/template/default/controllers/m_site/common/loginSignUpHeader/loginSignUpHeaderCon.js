@@ -42,7 +42,6 @@ export default {
     },
     headerBack(){
       let backGo = this.$route.query.backGo;
-      // console.log(backGo);
 
       if (backGo){
         if (isNaN(parseInt(backGo))){
@@ -51,7 +50,6 @@ export default {
           this.$router.go(this.$route.query.backGo)
         }
       } else {
-        // console.log(document.referrer,'4578');
         // if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
           if(document.referrer === ''){
           window.location.href = appConfig.baseUrl;
