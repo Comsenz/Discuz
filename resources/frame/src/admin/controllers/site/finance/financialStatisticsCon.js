@@ -4,56 +4,56 @@ export default {
             financialList: [
                 {
                     title: "用户总充值",
-                    num: "20,187",
+                    num: "0",
                     icon: 'iconchongzhi',
                     key: 'totalIncome',
 
                 },
                 {
                     title: "用户总充提现",
-                    num: "20,187",
+                    num: "0",
                     icon: 'icontixian',
                     key: 'totalWithdrawal',
 
                 },
                 {
                     title: "用户钱包总金额",
-                    num: "20,187",
+                    num: "0",
                     icon: 'iconqianbaozongjine',
                     key: 'totalWallet',
 
                 },
                 {
                     title: "用户订单总数",
-                    num: "20,187",
+                    num: "0",
                     icon: 'icondingdanzongshu',
                     key: 'orderCount',
 
                 },
                 {
                     title: "平台总盈利",
-                    num: "20,187",
+                    num: "0",
                     icon: 'iconcaiwutongji',
                     key: 'totalProfit',
 
                 },
                 {
                     title: "提现手续费收入",
-                    num: "20,187",
+                    num: "0",
                     icon: 'iconshouxufeishouru',
                     key: 'withdrawalProfit',
 
                 },
                 {
                     title: "打赏提成收入",
-                    num: "20,187",
+                    num: "0",
                     icon: 'icondashangtichengshouru',
                     key: 'orderRoyalty',
 
                 },
                 {
                     title: "注册加入收入",
-                    num: "20,187",
+                    num: "0",
                     icon: 'iconzhucejiarushouru',
                     key: 'totalRegisterProfit',
 

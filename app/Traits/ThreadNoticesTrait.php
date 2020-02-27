@@ -23,7 +23,12 @@ trait ThreadNoticesTrait
      */
     public function sendIsSticky($thread)
     {
-        $thread->user->notify(new System(PostOrderMessage::class, ['message' => $thread]));
+        $thread->user->notify(new System(PostOrderMessage::class, [
+            'message' => $this->getThreadTitle($thread),
+            'raw' => [
+                'thread_id' => $thread->id,
+            ],
+        ]));
     }
 
     /**
@@ -33,7 +38,12 @@ trait ThreadNoticesTrait
      */
     public function sendIsEssence($thread)
     {
-        $thread->user->notify(new System(PostStickMessage::class, ['message' => $thread]));
+        $thread->user->notify(new System(PostStickMessage::class, [
+            'message' => $this->getThreadTitle($thread),
+            'raw' => [
+                'thread_id' => $thread->id,
+            ],
+        ]));
     }
 
     /**
@@ -45,8 +55,11 @@ trait ThreadNoticesTrait
     public function sendIsDeleted($thread, $attach = [])
     {
         $data = [
-            'message' => $thread,
+            'message' => $this->getThreadTitle($thread),
             'refuse' => Arr::get($attach, 'refuse', ''),
+            'raw' => [
+                'thread_id' => $thread->id,
+            ],
         ];
         $thread->user->notify(new System(PostDeleteMessage::class, $data));
     }
@@ -60,9 +73,23 @@ trait ThreadNoticesTrait
     public function sendIsApproved($thread, $attach = [])
     {
         $data = [
-            'message' => $thread,
+            'message' => $this->getThreadTitle($thread),
             'refuse' => Arr::get($attach, 'refuse', ''),
+            'raw' => [
+                'thread_id' => $thread->id,
+            ],
         ];
         $thread->user->notify(new System(PostModMessage::class, $data));
+    }
+
+    /**
+     * 首贴内容代替
+     *
+     * @param $thread
+     * @return mixed
+     */
+    public function getThreadTitle($thread)
+    {
+        return empty($thread->title) ? $thread->firstPost->content : $thread->title;
     }
 }

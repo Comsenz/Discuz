@@ -32,7 +32,7 @@
 
    <!-- <Card header="微信无感注册和登录">
       <CardRow description="使用微信授权信息代替账号密码，适用于主要在微信内使用的场景。请先设置公众号接口和
-扫码登陆配置">
+扫码登录配置">
         <el-checkbox label="大写字母">开启微信授权无感注册和登录</el-checkbox>
       </CardRow>
     </Card>-->

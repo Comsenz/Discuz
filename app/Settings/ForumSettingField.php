@@ -68,7 +68,7 @@ class ForumSettingField
     }
 
     /**
-     * 第三方登陆设置 - 管理员可见
+     * 第三方登录设置 - 管理员可见
      *
      * @return array
      */

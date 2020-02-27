@@ -131,7 +131,7 @@ class UpdateUser
             $actionType = User::enumStatus($status);
 
             // 审核后系统通知事件
-            $user->raise(new ChangeUserStatus($user, $logMsg));
+            $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
             OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
         }

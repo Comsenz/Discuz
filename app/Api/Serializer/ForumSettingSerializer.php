@@ -60,7 +60,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
             ],
 
-            // 第三方登陆设置
+            // 第三方登录设置
             'passport' => [
                 'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
                 'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
@@ -133,7 +133,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 // 站点设置
                 $attributes['set_site'] += $this->forumField->getSiteSettings();
 
-                // 第三方登陆设置
+                // 第三方登录设置
                 $attributes['passport'] += $this->forumField->getPassportSettings();
 
                 // 支付设置

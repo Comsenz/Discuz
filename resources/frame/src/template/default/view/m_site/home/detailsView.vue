@@ -33,19 +33,32 @@
 
         <div class="gap"></div>
         <div class="commentBox">
-          <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0">
+          <div class="likeBox" v-if="themeCon.firstPost.likedUsers.length>0 && likeLen" v-model="userArrStatus">
             <span class="icon iconfont icon-praise-after"></span>
-             <span id="likedUserList" v-html="userArr(themeCon.firstPost.likedUsers)"></span>
+             <!-- <span id="likedUserList" class="likedUserList"></span> -->
+             <span id="likedUserList" class="likedUserList" v-html="userArr(themeCon.firstPost.likedUsers,false)"></span>
             <!-- <a  @click="jumpPerDet(like._data.id)">{{userArr(themeCon.firstPost.likedUsers)}}</a> -->
             <!-- <a href="javascript:;" v-for="like in themeCon.firstPost.likedUsers" @click="jumpPerDet(like.id)">{{like._data.username + ','}}</a><i v-if="themeCon.firstPost._data.likeCount>10">&nbsp;等<span>{{themeCon.firstPost._data.likeCount}}</span>个人觉得很赞</i> -->
           </div>
-          <div class="payPer" v-if="themeCon.rewardedUsers.length>0">
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>0 && themeCon.rewardedUsers.length<=11">
             <span class="icon iconfont icon-money"></span>
-            <div class="payPerHeaChi" v-for="(reward,rewardiInd) in themeCon.rewardedUsers" :key="rewardiInd">
-              <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
-              <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd">
+                <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+                <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+              
             </div>
-
+            <!-- <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
+            <i @click="rewardIsFold(themeCon.rewardedUsers.length)" class="foldTag">{{rewardTipFlag}}<span class="icon iconfont icon-down-menu" :class="{'rotate180':rewardTipShow}"></span></i> -->
+          </div>
+          <div class="payPer" v-if="themeCon.rewardedUsers.length>11">
+            <span class="icon iconfont icon-money"></span>
+            <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd" v-if="rewardInd<limitLen">
+                <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+                <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
+            </div>
+            <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
+            <!-- <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
+            <i @click="rewardIsFold(themeCon.rewardedUsers.length)" class="foldTag">{{rewardTipFlag}}<span class="icon iconfont icon-down-menu" :class="{'rotate180':rewardTipShow}"></span></i> -->
           </div>
           <van-list
           v-model="loading"
@@ -117,7 +130,7 @@
           <span v-else="" class="icon iconfont icon-praise-after"></span>
           赞
         </div>
-        <div class="footChi" @click="showRewardPopup" v-if="wxpay">
+        <div class="footChi" @click="showRewardPopup" v-if="wxpay=='1' || wxpay == true">
           <span class="icon iconfont icon-reward"></span>
           打赏
         </div>

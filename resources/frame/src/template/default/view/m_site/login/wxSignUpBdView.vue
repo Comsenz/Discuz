@@ -4,7 +4,7 @@
     <main class="wx-sign-up-bd-main">
       <div class="wx-sign-up-bd-title-box">
         <h2 class="wx-sign-up-bd-title-box-h2">微信绑定账号</h2>
-        <div class="wx-sign-up-main-desc">您的微信号未绑定账号，请注册并绑定您的账号</div>
+        <div class="wx-sign-up-main-desc">你的微信号未绑定账号，注册即可完成绑定</div>
       </div>
 
       <form class="wx-sign-up-bd-form" action="">

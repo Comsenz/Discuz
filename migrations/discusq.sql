@@ -288,7 +288,7 @@ ALTER TABLE `attachments` ADD `uuid` VARCHAR(100)  NOT NULL  DEFAULT ''  AFTER `
 -- 2019-12-18 15:52:08
 ALTER TABLE `users` ADD `expired_at` DATETIME  NULL  AFTER `joined_at`;
 
--- 2019-12-18 15:50:00 登陆密码错误次数记录表
+-- 2019-12-18 15:50:00 登录密码错误次数记录表
 CREATE TABLE `user_login_fail_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '日志 id',
   `ip` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'ip 地址',
@@ -299,7 +299,7 @@ CREATE TABLE `user_login_fail_log` (
   `created_at` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `user_login_fail_log_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登陆密码错误次数记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录密码错误次数记录表';
 
 -- 2019-12-19 验证码过期时间字段
 ALTER TABLE `mobile_codes` CHANGE `exception_at` `expired_at` DATETIME NOT NULL COMMENT '过期时间';

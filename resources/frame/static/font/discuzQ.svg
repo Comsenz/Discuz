@@ -20,6 +20,9 @@ Created by iconfont
   />
     <missing-glyph />
     
+    <glyph glyph-name="selected" unicode="&#58945;" d="M158.72 440a56 56 0 0 1-77.44-80.832l324.8-311.616a56 56 0 0 1 82.112 4.928l459.136 560a56 56 0 1 1-86.656 71.04L439.936 170.24 158.784 440Z"  horiz-adv-x="24064" />
+
+    
     <glyph glyph-name="add" unicode="&#58944;" d="M972.8 332.8h-409.6v-409.6H460.8v409.6H51.2V435.2h409.6V844.8h102.4v-409.6h409.6v-102.4z"  horiz-adv-x="1024" />
 
     
