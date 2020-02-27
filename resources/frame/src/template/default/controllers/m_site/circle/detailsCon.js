@@ -118,6 +118,15 @@ export default {
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
       userDet: '',
+      hideStyle: '',
+      likeTipShow: true,
+      likeTipFlag: '展开',
+      likeLen: '',
+      limitLen: 7,
+      rewardTipFlag: '展开',
+      userArrStatus: false,
+      rewardTipShow: true,
+
     }
   },
   created() {
@@ -133,15 +142,18 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.getUser();
     this.detailsLoad(true);
+    window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
+      
     } else {
-      this.themeShow = true
+      this.themeShow = true;
+      
     };
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
-    console.log(this.userDet,'556688');
+    // console.log(this.userDet,'556688');
   },
 
   computed: {
@@ -155,7 +167,7 @@ export default {
       this.limitWidth('detailsFooter');
     }
   },
-
+  
   methods: {
     //判断设备，下载时提示
     downAttachment(url){
@@ -164,15 +176,47 @@ export default {
       }
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
-    userArr(data){
+    userArr(data,hideStatus){
+      console.log('处理',hideStatus);
       let datas = [];
-      data.forEach((item)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>');
+      // this.hideClass = 'none';
+      if(hideStatus){
+        // alert('空');
+        this.hideStyle = '';
+      } else {
+        // alert('有');
+        this.hideStyle = 'display:none';
+      }
+      
+      data.forEach((item,key)=>{
+        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username + ',' +'</a>');
       });
       // this.likedData = datas.join(',');
-      // console.log(this.likedData);
-      return datas.join(',');
-
+      // return datas;
+      datas = datas.join('') ;
+      // console.log(this.likeLen,'长度');
+      if(this.likeLen>10){
+        // console.log('大于');
+        datas = datas + '等' + this.likeLen + '人觉得很赞';
+        // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
+        // datas+="<span onclick='likeIsFold(event)' class='foldTag'>"+ this.likeTipFlag+"<i class='icon iconfont icon-down-menu' :class='{'rotate180':likeTipShow}'></i></span>";
+      }
+      return datas;
+    },
+    likeIsFold(){
+      this.likeTipShow = !this.likeTipShow;
+      this.likeTipFlag = this.likeTipShow?'展开':'收起';
+      this.hideStyle = this.likeTipShow?'':'display:none';
+      console.log(this.userArr(this.themeCon.firstPost.likedUsers,true),'得到的值',document.getElementById('likedUserList'));
+      document.getElementById('likedUserList').innerHTML = this.userArr(this.themeCon.firstPost.likedUsers,true);
+      console.log(document.getElementById('likedUserList'),'修改后');
+      // this.userArrStatus = true;
+    },
+    rewardIsFold(allLen){
+      this.rewardTipShow = !this.rewardTipShow;
+      this.rewardTipFlag = this.rewardTipShow?'展开':'收起';
+      this.limitLen = this.rewardTipShow?5:allLen;
+      
     },
     //设置底部在pc里的宽度
     limitWidth(limitId){
@@ -310,12 +354,16 @@ export default {
         }else{
           console.log(res.readdata);
           console.log('1234');
+          this.likeLen = res.readdata.firstPost.likedUsers.length;
+          // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
+          // console.log(this.likeLen,'长度2222')
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
             this.themeTitle = res.readdata.firstPost._data.contentHtml;
+            
             if (this.collectStatus) {
               this.collectFlag = '已收藏';
             } else {
@@ -333,6 +381,7 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
+            
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -368,6 +417,8 @@ export default {
             // console.log(this.postsImages);
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
+            this.likeLen = themeCon.firstPost.likedUsers.length;
+            console.log(this.likeLen,'长度2222')
           }
         }
 
