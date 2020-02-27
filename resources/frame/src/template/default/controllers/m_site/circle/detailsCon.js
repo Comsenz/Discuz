@@ -140,6 +140,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
     this.userId = browserDb.getLItem('tokenId');
+    this.token = browserDb.getLItem('Authorization');
     this.getUser();
     this.detailsLoad(true);
     window.likeIsFold = this.likeIsFold;
