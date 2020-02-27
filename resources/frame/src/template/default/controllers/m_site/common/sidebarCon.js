@@ -90,12 +90,10 @@ export default {
     }
   },
   created: function() {
-    // console.log(appConfig.baseUrl);
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
     this.getInfo();
     this.onLoad()
-    // console.log(this.isPayValue);
   },
   methods:{
   //获取用户信息
@@ -109,7 +107,6 @@ export default {
         include: '',
       }
     }).then((res) => {
-      console.log(res,'侧边栏user信息');
       if(!res.data.attributes.typeUnreadNotifications.liked) {
         res.data.attributes.typeUnreadNotifications.liked = 0;
       }
@@ -129,7 +126,6 @@ export default {
       this.username = res.readdata._data.username;
       this.mobile = res.readdata._data.mobile;
       this.userId = res.readdata._data.id;
-      console.log(res.readdata._data.id,'是id')
     })
 
   },
@@ -148,7 +144,6 @@ export default {
         this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
         this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
         this.canCreateInvite = res.readdata._data.other.can_create_invite;
-        console.log(this.canBatchEditThreads,this.canEditUserGroup,this.canCreateInvite);
         var manaObj = {
             text:'站点管理',
             name: 'management-circles',
@@ -165,9 +160,12 @@ export default {
     });
   },
   onLoad(){
+    console.log('微信内登录')
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
+    console.log(isWeixin)
     if(isWeixin){
-      this.sidebarList2.splice(2,1);
+      this.sidebarList2.splice(1, 1);
+      console.log(this.sidebarList2)
     }
   },
   sidebarUrl(url,enentType){
@@ -185,7 +183,6 @@ export default {
     } else if(enentType == 2){
       let circlePath = this.sidebarList3[0].path;
       if(this.isPayValue == 'pay'){
-        console.log(this.isPayValue,'付费站点')
         //复制邀请链接
         var shareUrl= 'http://10.0.10.210:8883/circle-invite';
         // var shareUrl= appConfig.baseUrl+'/circle-invite';
@@ -198,15 +195,12 @@ export default {
         oInput.className = 'oInput';
         oInput.style.display='none';
         // alert('复制成功');
-        console.log(appConfig.baseUrl+'1111');
         this.$toast.success('邀请链接已复制成功');
       } else {
         //如果是公开的站点
-        console.log(appConfig.baseUrl+'2222');
         //复制邀请链接
         // var shareUrl= 'http://10.0.10.210:8883/open-circle/'+this.userId;
         var shareUrl= appConfig.baseUrl+'/open-circle/'+this.userId;
-        console.log(shareUrl);
         var oInput = document.createElement('input');
         oInput.value = shareUrl;
         document.body.appendChild(oInput);

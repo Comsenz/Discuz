@@ -12,7 +12,6 @@ export default {
 	},
 	 //用于数据初始化
     created: function(){
-		// console.log(this.headOneShow)
 		this.managementCircles();
     this.getInfo();
 	},
@@ -21,7 +20,6 @@ export default {
 	    // loginJump:function(){
 	    // 	// alert('跳转到成员管理');
 	    // 	this.$router.push({ path:'/open-circle'});
-	    // 	// console.log(this.$router);
 	    // },
 	    // //跳转到批量管理
 	    // registerJump:function(){

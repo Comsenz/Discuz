@@ -8,10 +8,10 @@
 namespace App\Commands\Thread;
 
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
-use App\Traits\ThreadNoticesTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -19,7 +19,6 @@ use Illuminate\Support\Arr;
 class BatchEditThreads
 {
     use EventsDispatchTrait;
-    use ThreadNoticesTrait;
 
     /**
      * The user performing the action.
@@ -79,7 +78,11 @@ class BatchEditThreads
                     $thread->is_approved = $attributes['isApproved'];
                     $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
                     // 内容审核通知
-                    $this->sendIsApproved($thread, ['refuse' => $approvedMsg]);
+                    $thread->raise(new ThreadNotices(
+                        $thread,
+                        $this->actor,
+                        ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
+                    ));
 
                     $thread->raise(new ThreadWasApproved(
                         $thread,
@@ -97,7 +100,11 @@ class BatchEditThreads
                     $thread->is_sticky = $attributes['isSticky'];
                     // 批量置顶通知
                     if ($attributes['isSticky']) {
-                        $this->sendIsSticky($thread);
+                        $thread->raise(new ThreadNotices(
+                            $thread,
+                            $this->actor,
+                            ['notice_type' => 'isSticky']
+                        ));
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -110,7 +117,11 @@ class BatchEditThreads
                     $thread->is_essence = $attributes['isEssence'];
                     // 内容精华通知
                     if ($attributes['isEssence']) {
-                        $this->sendIsEssence($thread);
+                        $thread->raise(new ThreadNotices(
+                            $thread,
+                            $this->actor,
+                            ['notice_type' => 'isEssence']
+                        ));
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -125,7 +136,11 @@ class BatchEditThreads
                     if ($attributes['isDeleted']) {
                         $thread->hide($this->actor, $message);
                         // 内容删除通知
-                        $this->sendIsDeleted($thread, ['refuse' => $message]);
+                        $thread->raise(new ThreadNotices(
+                            $thread,
+                            $this->actor,
+                            ['notice_type' => 'isDeleted', 'refuse' => $message]
+                        ));
                     } else {
                         $thread->restore($this->actor, $message);
                     }

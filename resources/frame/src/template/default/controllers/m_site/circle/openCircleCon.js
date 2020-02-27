@@ -76,7 +76,6 @@ export default {
 
         }
       }).then(res=>{
-        console.log(res,'用户信息请求')
         this.userInfoName = res.readdata._data.username;
         this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
         if(this.userInfoName){
@@ -105,7 +104,6 @@ export default {
           if(initStatus){
             this.themeListCon = []
           }
-          console.log(res,'邀请人')
           this.themeListCon =this.themeListCon.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
@@ -169,7 +167,6 @@ export default {
             this.themeListCon = []
           }
           this.themeListCon =this.themeListCon.concat(res.readdata);
-          console.log( this.themeListCon)
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
         }
@@ -182,20 +179,14 @@ export default {
       }
     },
     footFix() {
-      // console.log(this.$route.meta.oneHeader);
       // if(this.$route.meta.oneHeader){
           var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
           var offsetTop = document.querySelector('#testNavBar').offsetTop;
             if(this.loginBtnFix == true){
               this.loginHide = true;
-              // console.log(scrollTop+'1111');
-              // console.log(offsetTop+'2222');
               if(scrollTop > offsetTop){
-                // console.log('大于');
                 this.loginHide = true;
-                // console.log(this.loginHide);
               } else {
-                // console.log('小于');
                 this.loginHide = false;
               }
           }
@@ -207,11 +198,9 @@ export default {
     //筛选
     choTheme(themeType) {
       this.loadThemeList('isEssence',themeType);
-    	// console.log('筛选');
     },
     //点击分类
     categoriesChoice(cateId) {
-      // console.log(cateId);
       this.loadThemeList('categoryId',cateId);
     },
     //筛选

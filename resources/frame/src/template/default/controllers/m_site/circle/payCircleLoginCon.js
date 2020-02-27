@@ -47,12 +47,9 @@ export default {
         if(initStatus){
           this.siteInfo= []
         }
-        console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.set_site.site_mode+'请求');
         if(res.readdata._data.set_site.site_author){
           this.siteUsername = res.readdata._data.set_site.site_author.username;;
-          console.log(res.readdata._data.set_site.site_author.username,'用户名')
         } else {
           this.siteUsername = '暂无站长信息';
         }
@@ -107,7 +104,6 @@ export default {
     //     const timer = setInterval(() => {
     //       second--;
     //       this.getUsers(that.tokenId).then(res=>{
-    //         console.log(second);
 
     //         if (res.errors){
     //           clearInterval(timer);
@@ -163,7 +159,7 @@ export default {
       let isPhone = this.appCommonH.isWeixin().isPhone;
 
       if (isWeixin){
-        console.log('微信');
+        //微信
         this.getOrderSn().then(()=>{
           this.orderPay(12).then((res)=>{
             if (typeof WeixinJSBridge == "undefined"){
@@ -179,7 +175,7 @@ export default {
           })
         });
       } else if (isPhone){
-        console.log('手机浏览器');
+        //手机浏览器
         this.getOrderSn().then(()=>{
           this.orderPay(11).then((res)=>{
             this.wxPayHref = res.readdata._data.wechat_h5_link;
@@ -193,10 +189,9 @@ export default {
           })
         });
       } else {
-        console.log('pc');
+        //pc
         this.getOrderSn().then(()=>{
           this.orderPay(10).then((res)=>{
-            console.log(res);
             this.codeUrl = 'data:image/jpg;base64,' + res.readdata._data.wechat_qrcode;
             this.qrcodeShow = true;
 
@@ -237,10 +232,8 @@ export default {
           "type":1
         }
       }).then(res=>{
-        console.log(res);
         this.orderSn = res.readdata._data.order_sn;
       }).catch(err=>{
-        console.log(err);
       })
     },
     orderPay(type){
@@ -252,10 +245,8 @@ export default {
           "payment_type":type
         }
       }).then(res=>{
-        console.log(res);
         return res;
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -267,24 +258,19 @@ export default {
         data:{
         },
       }).then(res=>{
-        console.log(res);
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
           this.payStatus = res.readdata._data.status;
-          console.log(res.readdata._data.status);
           this.payStatusNum ++;
-          // console.log(this.payStatusNum);
           if (this.payStatus == '1' || this.payStatusNum > 10){
             this.rewardShow = false;
             this.qrcodeShow = false;
             this.rewardedUsers.push({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
-            console.log(this.rewardedUsers);
             this.payStatusNum = 11;
             // this.detailsLoad(true);
-            // console.log('重新请求');
             clearInterval(pay);
           }
         }
@@ -321,14 +307,12 @@ export default {
           // include:['groups']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           this.loginUserInfo = res.data.attributes.username
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

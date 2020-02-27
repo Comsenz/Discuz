@@ -27,7 +27,7 @@ class StatusMessage extends DatabaseMessage
     {
         return [
             $this->notifiable->username,
-            Arr::get($data, 'refuse', '')
+            Arr::get($data, 'refuse', '无')
         ];
     }
 

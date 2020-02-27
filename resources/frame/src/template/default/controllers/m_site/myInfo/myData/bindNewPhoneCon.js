@@ -35,7 +35,6 @@ export default {
     sendSmsCodePhone(){
         var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
         var newphone = this.newphone;
-        console.log(newphone,'999999999999')
         if(!newphone){//未输入手机号
          this.$toast("请输入手机号码");
          return;
@@ -61,9 +60,7 @@ export default {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail);
             throw new Error(res.error)
           }else{
-            console.log(res);
             this.insterVal = res.data.attributes.interval;
-            // console.log(this.insterVal+'555555');
             this.time = this.insterVal;
             this.timer();
           }
@@ -147,7 +144,6 @@ export default {
   },
 
   beforeRouteEnter(to,from,next){
-    console.log(from.name);
 
     next(vm=>{
       if(from.name === 'modify-phone'){

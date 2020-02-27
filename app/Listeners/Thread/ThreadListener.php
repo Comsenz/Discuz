@@ -12,11 +12,16 @@ use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Saving;
+use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Exceptions\CategoryNotFoundException;
+use App\MessageTemplate\PostModMessage;
+use App\MessageTemplate\PostThroughMessage;
 use App\Models\Category;
 use App\Models\OperationLog;
 use App\Models\Post;
+use App\Notifications\System;
+use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -25,6 +30,7 @@ use Illuminate\Support\Arr;
 class ThreadListener
 {
     use ThreadTrait;
+    use ThreadNoticesTrait;
 
     public function subscribe(Dispatcher $events)
     {
@@ -45,6 +51,9 @@ class ThreadListener
         // 收藏主题
         $events->listen(Serializing::class, AddThreadFavoriteAttribute::class);
         $events->listen(Saving::class, SaveFavoriteToDatabase::class);
+
+        // 通知主题
+        $events->listen(ThreadNotices::class, [$this, 'whenThreadNotices']);
     }
 
     /**
@@ -133,4 +142,33 @@ class ThreadListener
     {
         Post::where('thread_id', $event->thread->id)->delete();
     }
+
+    /**
+     * 操作主题时，发送对应通知
+     *
+     * @param ThreadNotices $event
+     */
+    public function whenThreadNotices(ThreadNotices $event)
+    {
+        // 判断是修改自己的主题 则不发送通知
+        if ($event->thread->user_id == $event->actor->id) {
+            return;
+        }
+
+        switch ($event->data['notice_type']) {
+            case 'isApproved':  // 内容审核通知
+                $this->sendIsApproved($event->thread, ['refuse' => $this->reasonValue($event->data)]);
+                break;
+            case 'isSticky':    // 内容置顶通知
+                $this->sendIsSticky($event->thread);
+                break;
+            case 'isEssence':   // 内容精华通知
+                $this->sendIsEssence($event->thread);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->sendIsDeleted($event->thread, ['refuse' => $this->reasonValue($event->data)]);
+                break;
+        }
+    }
+
 }

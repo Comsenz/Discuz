@@ -104,14 +104,12 @@ export default {
             if (initStatus) {
               this.inviteList = [];
             }
-            console.log(this.pageIndex,'少时诵诗书')
             this.loading = false;
             this.inviteList = this.inviteList.concat(res.readdata);
 
           }
         })
       } catch (err) {
-        console.error(err, '邀请码列表获取失败');
 		    this.$toast("邀请列表获取失败");
 		    if(this.loading && this.pageIndex !== 1){
 			  this.pageIndex--;

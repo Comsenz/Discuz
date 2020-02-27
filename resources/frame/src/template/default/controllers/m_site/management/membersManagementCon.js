@@ -195,7 +195,6 @@ export default {
           }else{
           this.result = [];
           this.userParams['page[number]'] = 1;
-          console.log('我变啦啦啦')
           this.getSearchValUserList(true);
           }
       } catch (err) {
@@ -212,7 +211,6 @@ export default {
     // },
     async onLoad(){    //上拉加载
       try{
-        console.log('onLoad')
         this.userLoadMorePageChange = true;
         this.loading = true;
         this.userParams['page[number]']++;

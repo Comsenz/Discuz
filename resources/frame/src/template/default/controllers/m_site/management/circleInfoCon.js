@@ -45,7 +45,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
-        console.log(res);
         this.roleList = res.readdata.groups;
         this.groupId = res.readdata.groups[0]._data.id;
         if(res.readdata._data.joinedAt =='' || res.readdata._data.joinedAt == null){
@@ -69,7 +68,6 @@ export default {
             this.$toast.fail(res.errors[0].code);
             // throw new Error(res.error)
           }else{
-          console.log(res);
           this.limitList = res.readdata;
           }
         });
@@ -103,7 +101,6 @@ export default {
     },
     //点击站点成员头像，跳转到用户主页
     membersJump(userId){
-      console.log('2222');
       this.$router.push({path:'/home-page/'+userId});
     },
     onRefresh(){

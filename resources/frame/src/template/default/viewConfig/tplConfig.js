@@ -636,6 +636,7 @@ export default {
     'information-page'
   ];
 
+
   //公开模式下不能访问的页面
   const publicNotAccessPage = [
     // 'pay-the-fee',
@@ -656,33 +657,15 @@ export default {
   * */
   var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
+  var realName = '';     //实名认证是否关闭
 
-  /*
-  * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
-  * */
-  if (to.name === 'sign-up'){
+
+
   this.getForum().then((res)=>{
-    registerClose = res.readdata._data.set_reg.register_close;
-    siteMode = res.readdata._data.set_site.site_mode;
-    if (!Authorization && !tokenId && !registerClose) {
-      if (siteMode === 'pay'){
-        next({path:'/pay-circle'});
-        return
-      } else {
-        next({path:'/'});
-        return
-      }
-    }
-  })
-  } else {
-    next();
-  }
 
-
-   /*
-   * 站点关闭，跳转到站点关闭页面
-   * */
-  this.getForum().then((res)=>{
+    /*
+    * 站点关闭，跳转到站点关闭页面
+    * */
     if (res.errors){
       if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
@@ -692,9 +675,40 @@ export default {
           return
         }
       }
-    }else{
-       siteMode = res.readdata._data.set_site.site_mode;
+    } else {
+      siteMode = res.readdata._data.set_site.site_mode;
+      registerClose = res.readdata._data.set_reg.register_close;
+      realName = res.readdata._data.qcloud.qcloud_faceid;
+
+      /*
+      * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
+      * */
+      if (to.name === 'sign-up'){
+        if (!Authorization && !tokenId && !registerClose) {
+          if (siteMode === 'pay'){
+            next({path:'/pay-circle'});
+            return
+          } else {
+            next({path:'/'});
+            return
+          }
+        }
+      } else {
+        next();
+      }
+      if(to.name === 'real-name'){
+        this.getUsers(tokenId).then(data=>{
+          console.log(data,'实名认证啊啊啊啊啊啊啊')
+          if(realName === true && data.readdata._data.realname === ''){
+            next({path:'/real-name'});
+            return
+          }else{
+            next({path:'/'})
+          }
+        })
+      }
     }
+
 
   });
 
@@ -741,7 +755,7 @@ export default {
       if (ress.readdata._data.set_site.site_mode === 'pay'){
         this.getUsers(tokenId).then(res=>{
           /*获取用户付费状态并判断*/
-          if (res){
+          if (res.readdata._data.paid){
             /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
             if (signInAndPayForAccess.includes(to.name)){
               if(to.name === 'pay-circle-con/:themeId/:groupId'){
@@ -900,7 +914,7 @@ export default {
       }
     }).then(res=>{
       console.log(res);
-      return res.readdata._data.paid;
+      return res;
     }).catch(err=>{
       console.log(err);
     })

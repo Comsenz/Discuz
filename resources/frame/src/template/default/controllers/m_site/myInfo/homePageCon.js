@@ -25,7 +25,6 @@ export default {
   created(){
     this.imgUrl = "../../../../../../../static/images/noavatar.gif";
     this.loadTheme();
-    // console.log(this.userId)
   },
 
   computed: {
@@ -49,8 +48,6 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           }else{
-          console.log('234');
-          console.log(res);
           this.username = res.readdata._data.username;
           this.userAvatar = res.readdata._data.avatarUrl;
           }
@@ -73,10 +70,8 @@ export default {
         if(initStatus){
           this.OthersThemeList = []
         }
-        console.log(res);
         // this.userInfoAvataUrlCon = res[0].user._data.avatarUrl;
         // this.userInfoNameCon = res[0].user._data.username;
-        // console.log(this.userInfoNameCon);
         this.OthersThemeList =this.OthersThemeList.concat(res.readdata);
         this.loading = false;
         this.finished = res.data.length < this.pageLimit;

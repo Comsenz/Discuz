@@ -100,7 +100,6 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if(this.isiOS) {
       this.encuploadShow = true;
-      console.log(this.encuploadShow);
     }
     //初始化请求分类接口
     this.loadCategories();
@@ -116,7 +115,6 @@ export default {
       } else {
         this.limitMaxLength = true;
       }
-      // console.log(this.fileListOneLen+'dddd');
     },
     'enclosureList.length': function(newVal,oldVal){
       this.enclosureListLen = newVal;
@@ -125,7 +123,6 @@ export default {
       } else {
         this.limitMaxEncLength = true;
       }
-      console.log(this.enclosureListLen+'sssss');
     },
   },
   methods: {
@@ -142,8 +139,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res);
-          console.log('888887');
           var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
           var ImgStr='';
           var imgStrRes ='';
@@ -180,37 +175,26 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res);
-          console.log('1234');
           var enclosureListCon = res.readdata.firstPost.attachments;
           var fileListCon = res.readdata.firstPost.images;
-          console.log('676767');
-          console.log(fileListCon.length);
           this.oldCateId = res.readdata.category._data.id;
-          // console.log(this.cateId);
           this.selectSort = res.readdata.category._data.name;
           this.content = res.readdata.firstPost._data.content;
           this.postsId = res.readdata.firstPost._data.id;
           for (let i = 0; i < enclosureListCon.length; i++) {
             this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
           }
-          // console.log(this.enclosureList);
           if(this.enclosureList.length>0){
             this.enclosureShow = true;
           }
           for (var i = 0; i < fileListCon.length; i++) {
-            console.log(fileListCon[i]._data.thumbUrl);
             // this.fileListOne.push({thumbUrl:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
             this.fileListOne.push({url:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
-            console.log(this.fileListOne);
-            console.log('4445566');
           }
 
           if(this.fileListOne.length>0){
             this.uploadShow = true;
           }
-          // console.log(this.fileListOne);
-          // console.log('999');
         }
       })
     },
@@ -311,11 +295,9 @@ export default {
     //上传图片,点击加号时
     // handleFile(e){
     //   // 实例化
-    //   // console.log(e);
     //   let formdata = new FormData()
     //   formdata.append('file', e.file);
     //   formdata.append('isGallery', 1);
-    //   // console.log(this.fileList);
     //   this.uploaderEnclosure(formdata,false,true);
     //   this.loading = false;
 
@@ -334,7 +316,6 @@ export default {
     // handleFile(e){
     //   if(this.isAndroid && this.isWeixin){
     //     this.testingType(e.file,this.supportImgExt);
-    //     console.log(this.testingRes+'445');
     //     if(this.testingRes){
     //       this.compressFile(e.file, false);
     //     }
@@ -368,7 +349,6 @@ export default {
        files.map((file,index) => {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
-           // console.log(this.testingRes+'445');
            if(this.testingRes){
              this.compressFile(file.file, 150000, false,files.length - index);
            }
@@ -445,15 +425,12 @@ export default {
       }).then(data=>{
         var newArr = this.enclosureList.filter(item => item.id !== id.id);
         this.enclosureList = newArr;
-        console.log(this.enclosureList);
-        console.log('2567');
 
       })
     },
 
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure,index){
-      console.log(file,isFoot,enclosure);
        this.appFetch({
          url:'attachment',
          method:'post',
@@ -514,7 +491,6 @@ export default {
     //这里写接口，上传
     // uploaderEnclosure(file,isFoot,enclosure){
  //    uploaderEnclosure(file,isFoot,img,enclosure){
- //      console.log(file,isFoot,enclosure)
  //       this.appFetch({
  //         url:'attachment',
  //         method:'post',
@@ -525,19 +501,15 @@ export default {
  //           this.$toast.fail(data.errors[0].code);
  //           throw new Error(data.error)
  //         }else{
- //            console.log(data);
  //            if(img){
  //              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
  //              this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
- //              console.log(this.fileListOne);
  //            }
  //            if(isFoot){
- //              console.log('图片');
  //              this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
  //            }
 
  //             if(enclosure){
- //               console.log('fujian');
  //               this.enclosureShow = true;
  //               this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
  //             }
@@ -609,10 +581,8 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
-      console.log(value);
       var id = value.id;
       this.cateId = id;
-      console.log(this.cateId);
       var text = value.text;
       this.showPopup = false;
       this.selectSort = value.text;
@@ -631,19 +601,15 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res, 'res1111');
           var newCategories = [];
           newCategories = res.readdata;
-          console.log(res.readdata);
           for(let j = 0,len=newCategories.length; j < len; j++) {
-            // console.log(newCategories[j]._data);
             this.categories.push(
               {
                 'text': newCategories[j]._data.name,
                 'id':newCategories[j]._data.id
               }
             );
-            // console.log(this.categories)
             this.categoriesId.push(newCategories[j]._data.id);
           }
         }
