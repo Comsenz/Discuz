@@ -657,6 +657,7 @@ export default {
   * */
   var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
+  var realName = '';     //实名认证是否关闭
 
 
 
@@ -677,6 +678,7 @@ export default {
     } else {
       siteMode = res.readdata._data.set_site.site_mode;
       registerClose = res.readdata._data.set_reg.register_close;
+      realName = res.readdata._data.qcloud.qcloud_faceid;
 
       /*
       * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -694,8 +696,15 @@ export default {
       } else {
         next();
       }
-
-
+      if(to.name === 'real-name'){
+        if(realName === true){
+          next({path:'/real-name'});
+          return
+        }else{
+          next({path:'/'})
+        }
+      }
+       
     }
 
   });
