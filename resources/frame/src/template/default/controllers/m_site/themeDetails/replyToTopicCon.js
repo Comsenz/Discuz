@@ -48,7 +48,6 @@ export default {
     }
   },
   created(){
-    console.log(this.$route);
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
@@ -87,7 +86,6 @@ export default {
       } else {
         this.limitMaxLength = true;
       }
-      console.log(this.fileListOneLen+'dddd');
     }
   },
   beforeDestroy () {
@@ -107,8 +105,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res);
-          // console.log('888887');
            var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
            var ImgStr='';
            var imgStrRes ='';
@@ -119,7 +115,6 @@ export default {
             this.supportImgExtRes += imgStrRes;
           }
           this.canUploadImages = res.readdata._data.other.can_upload_images;
-          // console.log(this.canUploadImages+'5555');
         }
       });
     },
@@ -148,7 +143,6 @@ export default {
     // handleFile(e){
     //   if(this.isAndroid && this.isWeixin){
     //     this.testingType(e.file,this.supportImgExt);
-    //     console.log(this.testingRes+'445');
     //     if(this.testingRes){
     //       this.compressFile(e.file, false);
     //     }
@@ -183,7 +177,6 @@ export default {
        files.map((file,index) => {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
-           // console.log(this.testingRes+'445');
            if(this.testingRes){
              this.compressFile(file.file, 150000, false,files.length - index);
            }
@@ -227,7 +220,7 @@ export default {
 
 
     deleteEnclosure(id,type){
-      console.log(id);
+      console.log(id,'删除的图片的id');
 
       // return false;
       if(this.fileList.length<=1){
@@ -268,7 +261,6 @@ export default {
             throw new Error(data.error)
           } else {
             if (img) {
-              console.log(this.fileList);
               this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
               this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
             }
@@ -351,7 +343,6 @@ export default {
       // 调api ...
     }),
     handleFaceChoose (face) {
-      console.log(face);
       const value = this.replyText;
       const el = this.$refs.textarea;
       const startPos = el.selectionStart;
@@ -396,10 +387,8 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
-      console.log(value);
       var id = value.id;
       this.cateId = id;
-      console.log(this.cateId);
       var text = value.text;
       this.showPopup = false;
       this.selectSort = value.text;
@@ -549,11 +538,8 @@ export default {
       browserDb.removeLItem('replyQuote');
   },
   /*beforeRouteEnter (to,from,next){
-    console.log(to.name);
-    console.log(from.name);
     next(vm=>{
       if (from.name === 'details/:themeId'){
-        console.log('回退2');
         vm.backGo = '/';
       }
     });
