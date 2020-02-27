@@ -341,7 +341,12 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
-            this.themeTitle = res.readdata.firstPost._data.contentHtml;
+            if(res.readdata._data.isLongArticle){
+              this.themeTitle = res.readdata._data.title;
+            } else {
+              this.themeTitle = res.readdata.firstPost._data.contentHtml;
+            }
+            
             
             if (this.collectStatus) {
               this.collectFlag = '已收藏';

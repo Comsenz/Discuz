@@ -233,7 +233,9 @@ export default {
           data:{
             "data": {
               "type": "threads",
-              "attributes": {},
+              "attributes": {
+                
+              },
               "relationships": {
                 "category": {
                   "data": {
@@ -261,7 +263,10 @@ export default {
           "data": {
             "type": "threads",
             "attributes": {
-                "content": this.content,
+              "price": this.paySetValue,
+              "title": this.themeTitle,
+              "is_long_article": true,
+              "content": this.content,
             },
 
             "relationships": {

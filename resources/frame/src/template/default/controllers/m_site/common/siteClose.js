@@ -17,10 +17,8 @@ export default {
 
               }
             }).then(res=>{
-              console.log(res);
               if (res.errors){
                 this.closeReason = res.errors[0].detail;
-                console.log(res.errors[0].detail)
               }
               // this.closeReason = res.readdata._data.siteCloseMsg
               // this.imgLogo = res.readdata._data.logo
