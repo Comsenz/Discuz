@@ -697,15 +697,18 @@ export default {
         next();
       }
       if(to.name === 'real-name'){
-        if(realName === true){
-          next({path:'/real-name'});
-          return
-        }else{
-          next({path:'/'})
-        }
+        this.getUsers(tokenId).then(data=>{
+          console.log(data,'实名认证啊啊啊啊啊啊啊')
+          if(realName === true && data.readdata._data.realName === ''){
+            next({path:'/real-name'});
+            return
+          }else{
+            next({path:'/'})
+          }
+        })
       }
-       
     }
+
 
   });
 
