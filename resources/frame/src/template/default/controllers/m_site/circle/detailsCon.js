@@ -234,7 +234,6 @@ export default {
         } else {
           this.siteInfo = res.readdata;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
-          console.log(this.wxpay,'是否开启微信支付');
           if(this.wxpay == '0' || this.wxpay == false){
             this.twoChi = true;
           }
