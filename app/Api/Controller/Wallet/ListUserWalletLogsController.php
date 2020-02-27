@@ -7,26 +7,63 @@
 
 namespace App\Api\Controller\Wallet;
 
-use Illuminate\Contracts\Bus\Dispatcher;
 use App\Api\Serializer\UserWalletLogSerializer;
-use Discuz\Api\Controller\AbstractListController;
-use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\UserWalletLog;
 use App\Repositories\UserWalletLogsRepository;
+use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
 class ListUserWalletLogsController extends AbstractListController
 {
     use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
     public $serializer = UserWalletLogSerializer::class;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $include = [
+        'user',
+        'order',
+        'order.user',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $optionalInclude = [
+        'userWallet',
+        'userWalletCash',
+        'order.thread',
+        'order.thread.firstPost',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $sortFields = [
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $sort = [
+        'created_at' => 'desc',
+    ];
 
     /**
      * @var Dispatcher
@@ -41,7 +78,7 @@ class ListUserWalletLogsController extends AbstractListController
     /**
     * @var UserWalletLogsRepository
     */
-    protected $wallet_log_repository;
+    protected $walletLogs;
 
     /**
      * @var int
@@ -49,38 +86,15 @@ class ListUserWalletLogsController extends AbstractListController
     protected $total;
 
     /**
-     * {@inheritdoc}
-     */
-    public $sort = [
-        'created_at' => 'desc',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public $sortFields = [
-        'created_at',
-        'updated_at',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public $optionalInclude = [
-        'user',
-        'userWallet',
-        'userWalletCash',
-        'order'
-    ];
-
-    /**
      * @param Dispatcher $bus
+     * @param UrlGenerator $url
+     * @param UserWalletLogsRepository $walletLogs
      */
-    public function __construct(Dispatcher $bus, UrlGenerator $url, UserWalletLogsRepository $wallet_log_repository)
+    public function __construct(Dispatcher $bus, UrlGenerator $url, UserWalletLogsRepository $walletLogs)
     {
         $this->bus = $bus;
         $this->url = $url;
-        $this->wallet_log_repository = $wallet_log_repository;
+        $this->walletLogs = $walletLogs;
     }
 
     /**
@@ -88,15 +102,17 @@ class ListUserWalletLogsController extends AbstractListController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        $actor  = $request->getAttribute('actor');
+        $actor = $request->getAttribute('actor');
+
         $this->assertRegistered($actor);
 
         $filter = $this->extractFilter($request);
-        $sort   = $this->extractSort($request);
-        $limit  = $this->extractLimit($request);
+        $sort = $this->extractSort($request);
+        $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $load = $this->extractInclude($request);
 
-        $wallet_log = $this->getWalletLogs($actor, $filter, $limit, $offset, $sort);
+        $walletLogs = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('wallet.log.list'),
@@ -105,34 +121,71 @@ class ListUserWalletLogsController extends AbstractListController
             $limit,
             $this->total
         );
+
         $document->setMeta([
             'total' => $this->total,
             'pageCount' => ceil($this->total / $limit),
         ]);
-        $load         = $this->extractInclude($request);
-        $wallet_log = $wallet_log->load($load);
 
-        return $wallet_log;
+        // 主题标题
+        if (in_array('order.thread', $load)) {
+            $walletLogs->load('order.thread.firstPost')
+                ->map(function (UserWalletLog $log) {
+                    if ($log->order->thread->is_long_article) {
+                        $title = Str::limit($log->order->thread->title, 40);
+                    } else {
+                        $title = Str::limit($log->order->thread->firstPost->content, 40);
+                        $title = str_replace("\n", '', $title);
+                    }
+
+                    $log->order->thread->title = $title;
+                });
+        }
+
+        $walletLogs = $walletLogs->loadMissing($load);
+
+        return $walletLogs;
     }
 
     /**
-     * @param  $actor
-     * @param  $filter
-     * @param  $limit
-     * @param  $offset
-     * @param  $sort
-     * @return UserWalletLog
+     * @param $actor
+     * @param $filter
+     * @param $sort
+     * @param null $limit
+     * @param int $offset
+     * @return Collection
      */
-    private function getWalletLogs($actor, $filter, $limit = 0, $offset = 0, $sort = [])
+    public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
-        $log_user    = (int) Arr::get($filter, 'user'); //用户
-        $log_change_desc     = Arr::get($filter, 'change_desc'); //变动描述
-        $log_change_type     = Arr::get($filter, 'change_type'); //变动类型
-        $log_username   = Arr::get($filter, 'username'); //变动钱包所属人
-        $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
-        $log_end_time   = Arr::get($filter, 'end_time'); //变动时间范围：结束
+        $query = $this->walletLogs->query()->whereVisibleTo($actor);
 
-        $query = $this->wallet_log_repository->query()->whereVisibleTo($actor);
+        $this->applyFilters($query, $filter, $actor);
+
+        $this->total = $limit > 0 ? $query->count() : null;
+
+        $query->skip($offset)->take($limit);
+
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $filter
+     * @param User $actor
+     */
+    private function applyFilters(Builder $query, array $filter, User $actor)
+    {
+        $log_user = (int) Arr::get($filter, 'user'); //用户
+        $log_change_desc = Arr::get($filter, 'change_desc'); //变动描述
+        $log_change_type = Arr::get($filter, 'change_type'); //变动类型
+        $log_username = Arr::get($filter, 'username'); //变动钱包所属人
+        $log_start_time = Arr::get($filter, 'start_time'); //变动时间范围：开始
+        $log_end_time = Arr::get($filter, 'end_time'); //变动时间范围：结束
+
         $query->when($log_user, function ($query) use ($log_user) {
             $query->where('user_id', $log_user);
         });
@@ -151,11 +204,5 @@ class ListUserWalletLogsController extends AbstractListController
         $query->when($log_username, function ($query) use ($log_username) {
             $query->whereIn('user_wallet_logs.user_id', User::where('users.username', $log_username)->select('id', 'username')->get());
         });
-        foreach ((array) $sort as $field => $order) {
-            $query->orderBy(Str::snake($field), $order);
-        }
-        $this->total = $query->count();
-        $query->skip($offset)->take($limit);
-        return $query->get();
     }
 }
