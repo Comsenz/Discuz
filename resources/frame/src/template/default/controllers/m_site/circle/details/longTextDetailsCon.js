@@ -11,7 +11,7 @@ export default {
       payList:[
         {
           name:'钱包',
-          icon:'icon-weixin'
+          icon:'icon-wallet'
         }
       ],
       qrcodeShow: false,
@@ -121,7 +121,7 @@ export default {
         if (res.readdata._data.paycenter.wxpay_close === '1'){
           this.payList.unshift( {
             name:'微信支付',
-            icon:'icon-money'
+            icon:'icon-wxpay'
           })
         }
       }

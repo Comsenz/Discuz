@@ -114,11 +114,9 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadCategories();
     if(this.followShow && this.userId) {
-      // alert('执行00');
       this.loadUserFollowInfo();
     }
     if(this.userId){
-      // alert('执行11');
       this.loadUserInfo();
     }
     
