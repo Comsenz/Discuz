@@ -104,8 +104,6 @@ export default {
   },
   created(){
     this.userId = browserDb.getLItem('tokenId');
-    // console.log(this.userId,'登录用户id');
-    // console.log(this.personUserId,'用户主页获取到的参数id');
     if(this.userId == this.personUserId ){
       this.equalId = true;
     } else {
@@ -114,7 +112,6 @@ export default {
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-    // console.log(this.isWeixin+'0'+this.isPhone);
     this.loadCategories();
     if(this.followShow && this.userId) {
       // alert('执行00');
@@ -151,8 +148,6 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        // console.log(res.readdata._data.other);
-        // console.log('-------------------');
         this.siteInfo = res.readdata;
         if(res.readdata._data.set_site.site_logo){
           this.logo = res.readdata._data.set_site.site_logo;
@@ -169,13 +164,9 @@ export default {
             include: [],
           }
         }).then((res) => {
-          // console.log('2222');
-          // console.log(res);
           this.categories = res.readdata;
           this.firstCategoriesId = res.readdata[0]._data.id;
-          // console.log(this.firstCategoriesId);
           this.$emit("update", this.firstCategoriesId);
-          // console.log('3456');
         })
       }
       
@@ -193,9 +184,7 @@ export default {
         data: {
         }
       }).then((res) => {
-        // console.log(res.readdata._data.follow,'1234——————————————');
         this.followDet = res.readdata;
-        // console.log(this.followDet,'结果数据·······');
         if(res.readdata._data.follow == '1'){
           this.followFlag = '已关注';
         } else if(res.readdata._data.follow == '0'){
@@ -211,7 +200,6 @@ export default {
       if(!this.userId){
         return false;
       }
-      // console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',
         method:'get',
@@ -219,7 +207,6 @@ export default {
         data: {
         }
       }).then((res) => {
-        // console.log(res,'000000000—————');
 
         if(!res.data.attributes.typeUnreadNotifications.liked) {
           res.data.attributes.typeUnreadNotifications.liked = 0;
@@ -246,7 +233,6 @@ export default {
           path: '/login-user'
         });
       } else {
-        // console.log('参数',intiFollowVal);
         let attri = new Object();
         let methodType = '';
         if (intiFollowVal == '1' || intiFollowVal == '2') {
@@ -275,12 +261,10 @@ export default {
 
           }
         }).then((res) => {
-          // console.log(res,'987654','---------------',intiFollowVal);
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            // console.log(this.oldFollow,'旧值');
             if(methodType == 'delete'){
               this.intiFollowVal = '0';
             } else {
@@ -289,7 +273,6 @@ export default {
               } else {
                 this.intiFollowVal = '2';
               }
-              // console.log('post',this.oldFollow);
               // this.intiFollowVal = intiFollowVal;
             }
           }
@@ -316,14 +299,12 @@ export default {
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
     handleTabFix(){
-      // console.log(this.$route.meta.oneHeader);
       if(this.headFixed){
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
           var offsetTop = document.querySelector('#testNavBar').offsetTop;
           if(scrollTop > offsetTop){
             this.showHeader = true;
             // this.isfixHead = true;
-            // console.log(this.isfixHead+'1');
             this.isfixNav = true;
             if(this.isWeixin != true && this.isPhone != true){
               this.limitWidth();
@@ -334,7 +315,6 @@ export default {
           } else {
             this.showHeader = false;
             // this.isfixHead = false;
-            // console.log(this.isfixHead+'2');
             this.isfixNav = false;
             let viewportWidth = window.innerWidth;
             document.getElementById('testNavBar').style.marginLeft ='0px';
@@ -348,7 +328,6 @@ export default {
     window.history.go(-1)
     },
     LogOut(){
-      // console.log('测试');
     },
     bindEvent (typeName) {
       if (typeName == 1) {
