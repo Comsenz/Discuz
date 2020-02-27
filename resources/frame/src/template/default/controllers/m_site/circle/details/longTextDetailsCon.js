@@ -79,7 +79,6 @@ export default {
       if(!this.userId){
         return false;
       }
-      // console.log(this.personUserId,'访问Id');
       this.appFetch({
         url:'users',
         method:'get',
@@ -87,7 +86,6 @@ export default {
         data: {
         }
       }).then((res) => {
-        console.log(res,'000000000—————');
         this.walletBalance = res.readdata._data.walletBalance;
         
       })
@@ -101,7 +99,6 @@ export default {
       method:'get',
       data:{}
     }).then(res=>{
-      console.log(res);
       if (res.errors){
         this.$toast.fail(res.errors[0].code);
       } else {
@@ -126,7 +123,6 @@ export default {
         }
       }
     }).catch(err=>{
-      console.log(err);
     })
   },
     //购买内容
@@ -135,7 +131,6 @@ export default {
     },
     payImmediatelyClick(data){
       //data返回选中项
-      console.log(data);
 
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
@@ -143,7 +138,7 @@ export default {
       if (data.name === '微信支付') {
         this.show = false;
         if (isWeixin){
-          console.log('微信');
+          //微信
           this.getOrderSn().then(()=>{
             this.orderPay(12).then((res)=>{
               if (typeof WeixinJSBridge == "undefined"){
@@ -159,7 +154,7 @@ export default {
             })
           });
         } else if (isPhone){
-          console.log('手机浏览器');
+          //手机浏览器
           this.getOrderSn().then(()=>{
             this.orderPay(11).then((res)=>{
               this.wxPayHref = res.readdata._data.wechat_h5_link;
@@ -175,10 +170,9 @@ export default {
             })
           });
         } else {
-          console.log('pc');
+          //pc
           this.getOrderSn().then(()=>{
             this.orderPay(10).then((res)=>{
-              console.log(res);
               this.codeUrl = res.readdata._data.wechat_qrcode;
               this.qrcodeShow = true;
               const pay = setInterval(()=>{
@@ -193,14 +187,12 @@ export default {
       }
     },
     onInput(key){
-      console.log(key);
       this.value = this.value + key;
 
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            console.log(res);
             const pay = setInterval(()=>{
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
@@ -211,13 +203,11 @@ export default {
         })
       }
     },
-
+    //删除
     onDelete(){
-      console.log("删除");
     },
-
+    //关闭
     onClose(){
-      console.log('关闭');
       this.value = '';
       this.errorInfo = ''
     },
@@ -261,7 +251,6 @@ export default {
         // const timer = setInterval(() => {
         //   second--;
           // this.getUsers(that.tokenId).then(res=>{
-          //   console.log(second);
 
           //   if (res.errors){
           //     clearInterval(timer);
@@ -279,7 +268,6 @@ export default {
           //       toast.clear();
 
           //       let beforeVisiting = browserDb.getSItem('beforeVisiting');
-          //       console.log(beforeVisiting);
 
           //       if (beforeVisiting) {
           //         this.$router.push({path: beforeVisiting})
@@ -315,15 +303,12 @@ export default {
           "thread_id": this.themeId
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           this.orderSn = res.readdata._data.order_sn;
-          // console.log(this.orderSn,'订单号');
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     orderPay(type,value){
@@ -336,43 +321,15 @@ export default {
           'pay_password':value
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          // console.log('订单支付！！！！');
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsersInfo(){
-      // this.appFetch({
-      //   url:'users',
-      //   method:'get',
-      //   splice:'/' + browserDb.getLItem('tokenId'),
-      //   data:{
-      //     include:['groups']
-      //   }
-      // }).then(res=>{
-      //   console.log(res);
-      //   console.log(res.readdata._data.paid);
-      //   if (res.errors){
-      //     this.$toast.fail(res.errors[0].code);
-      //   } else {
-      //     this.payStatus = res.readdata._data.paid;
-      //     this.payStatusNum = +1;
-      //     if (this.payStatus) {
-      //       this.qrcodeShow = false;
-      //       this.$router.push('/');
-      //       this.payStatusNum = 11;
-      //       clearInterval(pay);
-      //     }
-      //   }
-      // }).catch(err=>{
-      //   console.log(err);
-      // })
     },
     getOrderStatus(){
       // alert('查询支付状态');
@@ -384,7 +341,6 @@ export default {
         data:{
         },
       }).then(res=>{
-        console.log(res);
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           if (res.errors[0].detail){
@@ -395,7 +351,6 @@ export default {
           }
         } else {
           this.payStatus = res.readdata._data.status;
-          console.log(res.readdata._data.status);
           this.payStatusNum ++;
           if (this.payStatus == '1' || this.payStatusNum > 10){
             if(this.payStatus == '1'){
@@ -406,7 +361,6 @@ export default {
             this.qrcodeShow = false;
             this.payStatusNum = 11;
            
-            console.log('重新请求');
             // clearInterval(pay);
           }
         }
@@ -430,11 +384,9 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log(res);
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getAuthority(id){
@@ -446,14 +398,12 @@ export default {
           include:['permission']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     imageSwiper(imgIndex, typeclick, replyItem) {
