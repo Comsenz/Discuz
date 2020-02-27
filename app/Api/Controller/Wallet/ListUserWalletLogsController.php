@@ -47,6 +47,7 @@ class ListUserWalletLogsController extends AbstractListController
         'userWallet',
         'userWalletCash',
         'order.thread',
+        'order.thread.user',
         'order.thread.firstPost',
     ];
 
@@ -76,8 +77,8 @@ class ListUserWalletLogsController extends AbstractListController
     protected $url;
 
     /**
-    * @var UserWalletLogsRepository
-    */
+     * @var UserWalletLogsRepository
+     */
     protected $walletLogs;
 
     /**
@@ -128,7 +129,7 @@ class ListUserWalletLogsController extends AbstractListController
         ]);
 
         // 主题标题
-        if (in_array('order.thread', $load)) {
+        if (in_array('order.thread.firstPost', $load)) {
             $walletLogs->load('order.thread.firstPost')
                 ->map(function (UserWalletLog $log) {
                     if ($log->order->thread->is_long_article) {
