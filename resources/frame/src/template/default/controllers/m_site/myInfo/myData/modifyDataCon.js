@@ -101,7 +101,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
         }else{
         console.log(res,'实名认证字段')
-        console.log(res.readdata._data.realName)
+        console.log(res.readdata._data.realname)
         this.modifyPhone = res.readdata._data.mobile;         //用户手机号
         this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
         this.wechatId = res.readdata._data.id;                //用户Id
@@ -113,7 +113,7 @@ export default {
           this.wechatNickname = false
         }
         // if(res.readdata)
-        if(res.readdata.realName !== ''){
+        if(res.readdata._data.realname !== ''){
           this.realName = `${res.readdata._data.realname}  ${res.readdata._data.identity}`
         }else{
           this.realName = false

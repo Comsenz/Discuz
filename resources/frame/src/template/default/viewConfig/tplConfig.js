@@ -699,7 +699,7 @@ export default {
       if(to.name === 'real-name'){
         this.getUsers(tokenId).then(data=>{
           console.log(data,'实名认证啊啊啊啊啊啊啊')
-          if(realName === true && data.readdata._data.realName === ''){
+          if(realName === true && data.readdata._data.realname === ''){
             next({path:'/real-name'});
             return
           }else{
