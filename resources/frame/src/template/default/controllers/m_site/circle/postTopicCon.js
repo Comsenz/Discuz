@@ -84,7 +84,6 @@ export default {
     }
   },
   created(){
-    console.log(this.backGo);
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
@@ -93,13 +92,11 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if(this.isiOS) {
       this.encuploadShow = true;
-      console.log(this.encuploadShow);
     }
     if(this.$route.params.themeId){
       var themeId = this.$route.params.themeId;
       var postsId = this.$route.params.postsId;
       var themeContent = this.$route.params.themeContent;
-      // console.log(themeId)
       this.themeId = themeId;
       this.postsId = postsId;
       this.content = themeContent;
@@ -117,7 +114,6 @@ export default {
       this.fileListOneLen = newVal;
       if(this.fileListOneLen >= 12){
         this.limitMaxLength = false;
-        console.log(this.limitMaxLength);
       } else {
         this.limitMaxLength = true;
       }
@@ -132,7 +128,6 @@ export default {
       } else {
         this.limitMaxEncLength = true;
       }
-      console.log(this.enclosureListLen+'sssss');
     },
   },
   methods: {
@@ -149,8 +144,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res);
-          console.log('888887');
           var ImgExt = '';
           if(res.readdata._data.set_attach.support_img_ext){
             ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
@@ -180,7 +173,6 @@ export default {
 
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
-          console.log(this.canUploadImages,this.canUploadAttachments,'图片，附件')
         }
       });
     },
@@ -199,14 +191,10 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            console.log(res);
-            console.log('1234');
             // this.enclosureList = res.readdata.attachments;
             // this.fileList = res.readdata.images;
-            console.log(this.cateId);
             const initializeCateId = res.readdata.category._data.id;
             this.selectSort = res.readdata.category._data.description;
-            console.log(this.selectSort);
             if(this.cateId != initializeCateId){
               this.cateId = initializeCateId;
             }
@@ -218,7 +206,6 @@ export default {
     //发布主题
     publish(){
       if(this.postsId && this.content){
-        console.log('回复');
         let posts = 'posts/'+this.postsId;
         this.appFetch({
           url:posts,
@@ -321,8 +308,6 @@ export default {
       }).then(data=>{
         var newArr = this.enclosureList.filter(item => item.id !== id.id);
         this.enclosureList = newArr;
-        console.log(this.enclosureList);
-        console.log('2567');
 
       })
     },
@@ -362,7 +347,6 @@ export default {
        files.map((file,index) => {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
-           // console.log(this.testingRes+'445');
            if(this.testingRes){
              this.compressFile(file.file, 150000, false,files.length - index);
            }
@@ -422,7 +406,6 @@ export default {
     },
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure,index){
-      console.log(file,isFoot,enclosure);
        this.appFetch({
          url:'attachment',
          method:'post',
@@ -433,7 +416,6 @@ export default {
           throw new Error(data.error)
         } else {
           if (img) {
-            // console.log(index);
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
           }
@@ -533,7 +515,6 @@ export default {
       })
       this.showFacePanel = !this.showFacePanel;
       // if(this.showFacePanel == true){
-      //   // console.log(document.getElementById('showFacePanel'));
       //   // document.getElementById('showFacePanel').style.width = "640px";
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
@@ -546,10 +527,8 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
-      console.log(value);
       var id = value.id;
       this.cateId = id;
-      console.log(this.cateId);
       var text = value.text;
       this.showPopup = false;
       this.selectSort = value.text;
@@ -567,19 +546,15 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res, 'res1111');
           var newCategories = [];
           newCategories = res.readdata;
-          console.log(res.readdata);
           for(let j = 0,len=newCategories.length; j < len; j++) {
-            // console.log(newCategories[j]._data);
             this.categories.push(
               {
                 'text': newCategories[j]._data.name,
                 'id':newCategories[j]._data.id
               }
             );
-            // console.log(this.categories)
             this.categoriesId.push(newCategories[j]._data.id);
           }
         }
@@ -591,8 +566,6 @@ export default {
 
   },
   /*beforeRouteEnter(to,from,next){
-    console.log(to.name);
-    console.log(from.name);
 
     next(vm =>{
       if (from.name === 'circle'){

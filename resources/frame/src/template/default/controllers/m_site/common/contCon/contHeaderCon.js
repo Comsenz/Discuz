@@ -25,6 +25,5 @@ export default {
       }
     }
 
-    // console.log(this.$attrs,this.$listeners);
   }
 }

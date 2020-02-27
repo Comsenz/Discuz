@@ -26,7 +26,6 @@ export default {
         }
       }).then(res =>{
         alert(65756765);
-        // console.log(res, '111');
         // window.location.href = res.data.attributes.location;
       }, error => {
         if(error.errors[0].status == 100004){

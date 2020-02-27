@@ -108,7 +108,7 @@ export default {
       payList:[
         {
           name:'钱包',
-          icon:'icon-weixin'
+          icon:'icon-wallet'
         }
       ],
       qrcodeShow: false,
@@ -140,6 +140,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
     this.userId = browserDb.getLItem('tokenId');
+    this.token = browserDb.getLItem('Authorization');
     this.getUser();
     this.detailsLoad(true);
     window.likeIsFold = this.likeIsFold;
@@ -233,7 +234,7 @@ export default {
         } else {
           this.siteInfo = res.readdata;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
-          if(!this.wxpay){
+          if(this.wxpay == '0' || this.wxpay == false){
             this.twoChi = true;
           }
            //把站点是否收费的值存储起来，以便于传到父页面
@@ -250,7 +251,7 @@ export default {
            if (res.readdata._data.paycenter.wxpay_close === '1'){
             this.payList.unshift( {
               name:'微信支付',
-              icon:'icon-money'
+              icon:'icon-wxpay'
             })
           }
          }
@@ -340,7 +341,12 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
-            this.themeTitle = res.readdata.firstPost._data.contentHtml;
+            if(res.readdata._data.isLongArticle){
+              this.themeTitle = res.readdata._data.title;
+            } else {
+              this.themeTitle = res.readdata.firstPost._data.contentHtml;
+            }
+            
             
             if (this.collectStatus) {
               this.collectFlag = '已收藏';

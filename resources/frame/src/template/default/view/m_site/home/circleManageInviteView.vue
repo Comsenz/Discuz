@@ -18,24 +18,24 @@
 	    	<div class="powerTit">作为{{roleResult}}，您将获得以下权限</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">帖子操作</div>
-	    		<p class="powerChi">查看主题</p>
-	    		<p class="powerChi">发图文帖</p>
-	    		<p class="powerChi">付费阅读帖</p>
-	    		<p class="powerChi">附件查看</p>
-	    		<p class="powerChi">回帖</p>
+	    		<p class="powerChi">查看主题<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">发图文帖<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">付费阅读帖<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">附件查看<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">回帖<i class="iconfont icon-selected"></i></p>
 	    	</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">站点前台管理</div>
-	    		<p class="powerChi">编辑站点</p>
-	    		<p class="powerChi">邀请加入</p>
-	    		<p class="powerChi">标签管理</p>
-	    		<p class="powerChi">用户管理</p>
+	    		<p class="powerChi">编辑站点<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">邀请加入<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">标签管理<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">用户管理<i class="iconfont icon-selected"></i></p>
 	    	</div>
 	    	<div class="powerList">
 	    		<div class="powerClassify">前台内容管理</div>
-	    		<p class="powerChi">置顶</p>
-	    		<p class="powerChi">加精</p>
-	    		<p class="powerChi">删帖</p>
+	    		<p class="powerChi">置顶<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">加精<i class="iconfont icon-selected"></i></p>
+	    		<p class="powerChi">删帖<i class="iconfont icon-selected"></i></p>
 	    	</div>
 	    </div>
       <div class="gap"></div>

@@ -82,14 +82,11 @@ export default {
     receive: function (val_1) {
       this.firstCategoriesId = val_1;
       // this.Initialization = true;
-      // console.log(this.Initialization);
       // this.loadThemeList();
     },
     //设置发表主题按钮在pc里的位置
     // limitWidth(limitId){
-    //   console.log(limitId);
     //   let viewportWidth = window.innerWidth;
-    //   console.log(document.getElementById(limitId).style);
     //   document.getElementById(limitId).style.right = ((viewportWidth - 640)/2 + 30) +'px';
     //   // document.getElementById('fixedEdit').style.right = "100px";
     // },
@@ -106,8 +103,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
-          console.log('44443');
-          console.log(res);
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
@@ -115,14 +110,12 @@ export default {
           if(!this.allowRegister){
             this.loginWord = '登录';
           }
-          console.log(res.readdata._data.set_site.site_mode+'请求');
           // this.siteUsername = res.readdata._data.siteAuthor.username;
           this.sitePrice = res.readdata._data.set_site.site_price;
           //把站点是否收费的值存储起来，以便于传到父页面
           this.isPayVal = res.readdata._data.set_site.site_mode;
           if(this.isPayVal != null && this.isPayVal != ''){
             this.isPayVal = res.readdata._data.set_site.site_mode;
-            console.log('可以访问');
             //判断站点信息是否付费，用户是否登录，用户是否已支付
             // this.detailIf(this.isPayVal,false);
 
@@ -134,7 +127,6 @@ export default {
     detailIf(){
       var token = browserDb.getLItem('Authorization');
       if(token){
-        console.log('已登录');
         //当用户已登录时
         // this.loadThemeList();
         this.loginBtnFix = false;
@@ -144,12 +136,10 @@ export default {
         this.menuStatus = true;
         if(this.canEdit){
           // if(this.isWeixin != true && this.isPhone != true){
-          //   console.log('是pc');
           //   this.limitWidth('fixedEdit');
           // }
         }
       }  else {
-        console.log('未登录');
         // //当用户未登录时
         this.themeChoList.splice(2,1);
         this.loginBtnFix = true;
@@ -163,12 +153,10 @@ export default {
       let isWeixin =this.appCommonH.isWeixin().isWeixin;
       if(isWeixin == true){
         //微信登录时
-        // alert('微信登录');
         this.isWx = 2;
 
       } else {
         //手机浏览器登录时
-        // console.log('手机浏览器登录');
         this.isWx = 1;
       }
       return this.isWx;
@@ -176,14 +164,12 @@ export default {
     // //接收站点是否收费的值
     // isPayFn (data) {
     //   // if (data == 'log') {
-    //     console.log(data);
     //     // this.isPay = data;
     //   // }
     // },
     //初始化请求主题列表数据
 
     loadThemeList(filterCondition,filterVal){
-      console.log(filterCondition,'123~~~~');
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
@@ -214,16 +200,12 @@ export default {
       if(filterCondition !== 'fromUserId'){
         delete data['filter[fromUserId]'];
       }
-      console.log(data,'data数据');
       return this.appFetch({
         url: 'threads',
         method: 'get',
         data:data,
       }).then((res) => {
-        console.log(res);
-        console.log('3443431111');
         if (res.errors){
-          // console.log(res);
           if(res.rawData[0].code == 'permission_denied'){
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
@@ -232,7 +214,6 @@ export default {
             throw new Error(res.error)
           }
         } else {
-          console.log('正确请求');
           if(!this.canViewThreads){
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
@@ -241,8 +222,6 @@ export default {
               this.nullTip = true
             }
             this.themeListCon = this.themeListCon.concat(res.readdata);
-            console.log(this.themeListCon);
-            console.log('66544');
             this.loading = false;
             this.finished = res.readdata.length < this.pageLimit;
           }
@@ -263,18 +242,13 @@ export default {
       //   for (let h = 0; h < themeListLen; h++) {
       //     var firstpostImageLen = this.themeListCon[h].firstPost.images.length;
       //     firstpostImage.push(h,this.themeListCon[h]);
-      //     console.log(this.themeListCon[h].firstPost.images);
-      //     // console.log(this.themeListCon[h].firstPost.images);
       //     // if (firstpostImageLen === 0) return;
       //     // for (let i = 0; i < firstpostImageLen; i++) {
       //     //   firstpostImage.push(this.themeListCon[h].firstPost.images[i]._data.fileName);
-      //     //   console.log(firstpostImage+'3333');
       //     //   // firstpostImage.push('https://img.yzcdn.cn/2.jpg');
       //     // }
       //   }
-      // console.log(firstpostImage+'343434');
       // this.firstpostImageListCon = firstpostImage;
-      // console.log(this.firstpostImageListCon+'5555');
     },
     // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
@@ -284,22 +258,15 @@ export default {
         var offsetTop = document.querySelector('#testNavBar').offsetTop;
           if(this.loginBtnFix == true){
             this.loginHide = true;
-            // console.log(scrollTop+'1111');
-            // console.log(offsetTop+'2222');
             if(scrollTop > offsetTop){
-              // console.log('大于');
               this.loginHide = true;
-              // console.log(this.loginHide);
             } else {
-              // console.log('小于');
               this.loginHide = false;
             }
         }
       },
       //筛选
       choTheme(themeType) {
-      console.log(themeType);
-      console.log('筛选');
       // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
       // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
       if(themeType === 'isEssence') {
@@ -310,7 +277,6 @@ export default {
         this.filterInfo.typeWo = '全部主题';
       }
       this.filterInfo.filterCondition = themeType;
-      console.log(this.filterInfo.filterCondition,'类型');
       this.pageIndex = 1;
       this.themeListCon = [];
 
@@ -345,8 +311,6 @@ export default {
                 this.$toast.fail(res.errors[0].code);
                 throw new Error(res.error)
               } else {
-            // alert(this.showScreen);
-            // console.log(res.data.attributes.location);
             // window.location.href = res.data.attributes.location;
             this.$router.push({ path:'wechat'});
           }
@@ -360,7 +324,6 @@ export default {
           // alert('跳转到发布主题页');
           this.rotate = !this.rotate;
           this.puslishCho = !this.puslishCho;
-          // console.log(this.puslishCho);
         } else {
           this.$toast.fail('没有权限，请联系站点管理员');
         }

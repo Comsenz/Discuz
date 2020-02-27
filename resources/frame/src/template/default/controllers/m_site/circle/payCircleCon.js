@@ -49,9 +49,7 @@ export default {
         if(initStatus){
           this.siteInfo = []
         }
-        console.log(res);
         this.siteInfo = res.readdata;
-        console.log(res.readdata._data.set_reg.register_close+'请求');
         this.allowRegister = res.readdata._data.set_reg.register_close;
         if(res.readdata._data.set_site.site_author){
           this.siteUsername = res.readdata._data.set_site.site_author.username;
