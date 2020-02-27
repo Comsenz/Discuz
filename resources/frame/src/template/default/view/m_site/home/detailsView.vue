@@ -130,7 +130,7 @@
           <span v-else="" class="icon iconfont icon-praise-after"></span>
           赞
         </div>
-        <div class="footChi" @click="showRewardPopup" v-if="wxpay">
+        <div class="footChi" @click="showRewardPopup" v-if="wxpay=='1' || wxpay == true">
           <span class="icon iconfont icon-reward"></span>
           打赏
         </div>
