@@ -1,5 +1,5 @@
 {
-	"name" : "comsenz/discuss",
+	"name" : "qcloud/discuz",
 	"description" : "The Discuz software open-source.",
 	"type" : "project",
 	"keywords" : [
@@ -22,12 +22,18 @@
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",
-		"sort-packages" : true
+		"sort-packages" : true,
+        "secure-http": false
 	},
-	"repositories" : [{
-		"type" : "path",
-		"url" : "./framework"
-	}
+	"repositories" : [
+        {
+            "type" : "path",
+            "url" : "./framework"
+	    },
+        {
+            "type": "composer",
+            "url": "http://cloud.comsenz-service.com"
+        }
 	],
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,

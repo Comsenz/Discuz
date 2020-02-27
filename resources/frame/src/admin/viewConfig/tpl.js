@@ -32,7 +32,7 @@ defaultConfig.beforeEnterModule = function(Router) {
 	var _this = this;
 
 	/**
-	 * 获取用户信息，判断当前模块是否需要登陆，如果需要，直接跳转登陆页
+	 * 获取用户信息，判断当前模块是否需要登录，如果需要，直接跳转登录页
 	 * @param  {[type]} to    [目标模块]
 	 * @param  {[type]} from  [来源模块]
 	 * @param  {[type]} next) [执行下一步方法]

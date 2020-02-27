@@ -54,9 +54,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else{
-          console.log(res);
           this.siteInfo = res.readdata;
-          // console.log(res.readdata._data.siteIntroduction);
           this.allowRegister = res.readdata._data.set_reg.register_close;
         }
 
@@ -71,7 +69,6 @@ export default {
           'filter[isDefault]':1
         }
       }).then((res) => {
-        // console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -87,7 +84,6 @@ export default {
     },
     //点击站点成员头像，跳转到用户主页
     membersJump(userId){
-      console.log('2222');
       this.$router.push({path:'/home-page/'+userId});
     },
 

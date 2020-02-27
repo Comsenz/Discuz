@@ -315,7 +315,7 @@ body {
   transform:rotate(45deg);
   -ms-transform:rotate(45deg); 	/* IE 9 */
   -moz-transform:rotate(45deg); 	/* Firefox */
-  -webkit-transform:rotate(7deg); /* Safari 和 Chrome */
+  -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
   -o-transform:rotate(45deg); 
   transform: rotate(45deg);
   transition: all 200ms;
@@ -701,14 +701,24 @@ openCircleConView.vue
       background: transparent;
     font-size: 14px;
     word-break: break-all;
-    .icon {
+    overflow: hidden;
+    .likedUserList {
+      overflow: hidden;
+      color: #888888;
+      font-size: 13px;
+      line-height: 18px;
+    }
+    .icon-praise-after {
       font-size: 14px;
       line-height: 18px;
       margin-left: -14px;
+      // margin-right: 6px;
+      // float: left;
     }
     a {
       font-size: 14px;
       line-height: 18px;
+      // float: left;
     }
   }
   .payPer {
@@ -736,6 +746,48 @@ openCircleConView.vue
       height: 26px;
       width: 26px;
       // @include px2rem(margin, 0 0 7 7);
+    } 
+    
+  }
+  .foldTip {
+    float: left;
+    line-height: 18px;
+    font-size: 13px;
+    padding-top: 8px;
+    color: #888888;
+    padding-left: 8px;
+    
+  }
+  .foldTag {
+    float: left;
+    padding-left: 8px;
+    line-height: 18px;
+    font-size: 13px;
+    padding-top: 8px;
+    color: #888888;
+    font-style: normal;
+    .icon {
+      font-size: 16px;
+      margin-left: 4px;
+      color: #888888;
+      line-height: 18px;
+    }
+    .rotate180 {
+      transform:rotate(180deg);
+      -ms-transform:rotate(180deg); 	/* IE 9 */
+      -moz-transform:rotate(180deg); 	/* Firefox */
+      -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+      -o-transform:rotate(180deg); 
+      transform: rotate(180deg);
+      transition: all 200ms;
+    }
+  }
+  .likeBox {
+    .foldTip {
+      padding-top: 0;
+    }
+    .foldTag {
+      padding-top: 0;
     }
   }
   .commentPostDet {

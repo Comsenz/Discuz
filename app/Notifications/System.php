@@ -26,13 +26,6 @@ class System extends Notification
 
     protected $settings;
 
-    protected $tplIds = [
-        'ban' => 10,
-        'normal' => 11,
-        'mod_normal' => 2,
-        'mod' => 3
-    ];
-
     public function __construct($type, $data = [])
     {
         $this->type = $type;
@@ -46,11 +39,7 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
         if ($this->message instanceof StatusMessage) {
-            $actionType = User::enumStatus($notifiable->status);
-            if ($this->isMod()) {
-                $notifiable->status == 0 && $actionType = 'mod_'.$actionType;
-            }
-            $tplId = Arr::get($this->tplIds, $actionType);
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getOriginal('status'));
         }
 
         $this->getTplData($tplId);
@@ -61,6 +50,7 @@ class System extends Notification
         if (!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
             return ['database'];
         }
+
         return [];
     }
 
@@ -77,5 +67,33 @@ class System extends Notification
     protected function isMod()
     {
         return (bool)$this->settings->get('register_validate');
+    }
+
+    /**
+     * 区分通知
+     * (审核中变为正常 和 禁用中变为正常)
+     *
+     * @param $status
+     * @param $originStatus
+     * @return int
+     */
+    public function discTpl($status, $originStatus)
+    {
+        $id = 0;
+        if ($status == 0) {
+            if ($originStatus == 1) {
+                $id = 11; // 账号解除禁用通知
+            } else {
+                $id = 2; // 审核通过通知
+            }
+        } else {
+            if ($originStatus == 0 && $status == 1) {
+                $id = 10; // 账号禁用通知
+            } elseif ($originStatus == 2 && $status == 3) { // 2审核中 变 审核拒绝
+                $id = 3; // 审核拒绝通知
+            }
+        }
+
+        return $id;
     }
 }

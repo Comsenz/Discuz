@@ -23,7 +23,6 @@ export default {
     // var roleId = this.$route.query.groupId;
     var roleId = '10';
     this.roleId = roleId;
-    console.log(roleId);
     this.loadSite();
   },
 	methods: {
@@ -41,7 +40,6 @@ export default {
        }
         this.siteInfo = res.readdata;
         this.allowRegister = res.readdata._data.set_reg.register_close;
-        // console.log(res.readdata._data.siteIntroduction);
       });
 
       //请求初始化角色信息数据
@@ -52,7 +50,6 @@ export default {
         data: {
         }
       }).then((res) => {
-        // console.log(res);
         this.roleResult = res.readdata._data.name;
       });
     },
