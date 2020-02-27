@@ -3,7 +3,7 @@
     <Card header="小程序微信授权登录"></Card>
 
     <Card header="APPID：">
-      <CardRow description="填写申请小程序微信授权登陆后，你获得的APPID">
+      <CardRow description="填写申请小程序微信授权登录后，你获得的APPID">
         <el-input></el-input>
         <template #tail>
           <span style="color: #336699">未申请？点此申请</span>
@@ -12,7 +12,7 @@
     </Card>
 
     <Card header="App secret：">
-      <CardRow description="填写申请小程序微信授权登陆后，你获得的App secret">
+      <CardRow description="填写申请小程序微信授权登录后，你获得的App secret">
         <el-input></el-input>
       </CardRow>
     </Card>

@@ -13,7 +13,6 @@ use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
-use App\Events\Post\Saving;
 use App\MessageTemplate\PostMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
@@ -76,7 +75,6 @@ class PostListener
             && $post->reply_user_id != $actor->id
             && $post->reply_user_id != $post->thread->user_id
         ) {
-
             $post->replyUser->notify(new Replied($post));
         }
     }
@@ -177,11 +175,14 @@ class PostListener
             $event->actor->username . ' 修改了内容'
         );
 
-        if($event->post->user) {
-            $event->post->user->notify(new System(PostMessage::class, [
-                'message' => $event->post->content,
-                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
-            ]));
+        if ($event->post->user) {
+            // 判断是否是自己
+            if ($event->actor->id != $event->post->user->id) {
+                $event->post->user->notify(new System(PostMessage::class, [
+                    'message' => $event->post->content,
+                    'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
+                ]));
+            }
         }
     }
 
@@ -205,8 +206,8 @@ class PostListener
         // 提取用户
         preg_match_all($user_pattern, $post_content, $userArr);
 
-        if(!empty($userArr[1])) {
-            $relatedids = User::whereIn('username', $userArr[1])->where('id','!=',$actor->id)->get();
+        if (!empty($userArr[1])) {
+            $relatedids = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
             foreach ($relatedids as $relatedid) {
                 $relatedid->notify(new Related($post));
             }

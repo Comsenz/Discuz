@@ -30,20 +30,24 @@ class BasePostMessage extends DatabaseMessage
     protected function contentReplaceVars($data)
     {
         /**
-         * 判断是否有主题标题
-         * 使用首贴内容代替 并过滤 内容的标签
-         */
-        $thread = Arr::get($data, 'message', false);
-        $message = '';
-        if ($thread) {
-            $message = empty($thread->title) ? $message = $thread->firstPost->content : $thread->title;
-        }
+         * 格式：
+         * [
+         *     'message' => '标题名'
+         *     'refuse' => '拒绝原因'
+         *     'raw' => [
+         *          'thread_id' => 1
+         *          'is_first'  => false
+         *     ]
+         * ]
+         **/
+        $message = Arr::get($data, 'message', '');
+        $threadId = Arr::get($data, 'raw.thread_id', 0);
 
-        $threadUrl = $this->url->to('/details/'.$thread->id);
+        $threadUrl = $this->url->to('/details/' . $threadId);
 
         return [
             $this->notifiable->username,
-            '<a href="'.$threadUrl.'">'.Str::words($message, 10).'</a>',
+            '<a href="' . $threadUrl . '">' . Str::words($message, 10) . '</a>',
             Arr::get($data, 'refuse', '')
         ];
     }

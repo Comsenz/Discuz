@@ -10,6 +10,12 @@ namespace App\MessageTemplate;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Support\Arr;
 
+/**
+ * 根据用户状态变更 发送不同的通知
+ *
+ * Class StatusMessage
+ * @package App\MessageTemplate
+ */
 class StatusMessage extends DatabaseMessage
 {
     protected function titleReplaceVars()
