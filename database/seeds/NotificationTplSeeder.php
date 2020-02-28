@@ -49,7 +49,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容审核不通过通知',
                 'title' => '内容审核通知',
-                'content' => '{username}你好，你的发布的内容 "{content}" 审核不通过，原因：{reason}',
+                'content' => '{username}你好，你发布的内容 "{content}" 审核不通过，原因：{reason}',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容',
@@ -60,7 +60,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容审核通过通知',
                 'title' => '内容审核通知',
-                'content' => '{username}你好，你的发布的内容 "{content}" 审核通过',
+                'content' => '{username}你好，你发布的内容 "{content}" 审核通过',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容'
@@ -70,7 +70,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容删除通知',
                 'title' => '内容删除通知',
-                'content' => '{username}你好，你的发布的内容 "{content} " 已删除，原因：{reason}',
+                'content' => '{username}你好，你发布的内容 "{content} " 已删除，原因：{reason}',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容',
@@ -81,7 +81,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容精华通知',
                 'title' => '内容精华通知',
-                'content' => '{username}你好，你的发布的内容 "{content}" 已设为精华',
+                'content' => '{username}你好，你发布的内容 "{content}" 已设为精华',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容'
@@ -91,7 +91,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容置顶通知',
                 'title' => '内容置顶通知',
-                'content' => '{username}你好，你的发布的内容 "{content}" 已置顶',
+                'content' => '{username}你好，你发布的内容 "{content}" 已置顶',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容'
@@ -101,7 +101,7 @@ class NotificationTplSeeder extends Seeder
                 'status' => 1,
                 'type_name' => '内容修改通知',
                 'title' => '内容修改通知',
-                'content' => '{username}你好，你的发布的内容 "{content}" 已被修改',
+                'content' => '{username}你好，你发布的内容 "{content}" 已被修改',
                 'vars' => serialize([
                      '{username}' => '用户名',
                      '{content}' => '内容'
