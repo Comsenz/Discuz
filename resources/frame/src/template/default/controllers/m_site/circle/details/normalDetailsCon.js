@@ -2,11 +2,13 @@
  * pc 端首页控制器
  */
 import appCommonH from '../../../../../../helpers/commonHelper';
+import browserDb from '../../../../../../helpers/webDbHelper';
 import {ImagePreview} from "vant";
 export default {
 	data: function() {
 		return {
       firstpostImageList: [],
+      userId: ''
 		}
   },
   props: {
@@ -23,6 +25,7 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.userId = browserDb.getLItem('tokenId');
   },
   computed: {
     
@@ -36,7 +39,7 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      if(!this.token){
+      if(!this.userId){
         this.$router.push({
           path:'/login-user',
           name:'login-user'
