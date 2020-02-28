@@ -815,6 +815,7 @@ export default {
                 this.likedUsers.map((value, key, likedUsers) => {
                   value._data.id === this.userId && likedUsers.splice(key,1);
                 });
+                this.likeLen = this.likeLen - 1;
                 // for(var i = 0; i < this.likedUsers.length; i++){
                 //   if(this.likedUsers[i]._data.id === this.userId){
                 //       this.likedUsers.splice(i,1);
@@ -827,6 +828,7 @@ export default {
                 // 未点赞时，点击点赞'
                 this.likedUsers.unshift({_data:{username:this.currentUserName,id:this.userId}});
                 this.themeCon.firstPost._data.isLiked = true;
+                this.likeLen = this.likeLen + 1;
                 this.themeIsLiked = true;
               }
               this.pageIndex = 1;
@@ -1048,6 +1050,7 @@ export default {
             this.show = false;
             if(this.payStatus == '1'){
               this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
+              // this.themeCon.rewardedUsers.length = this.themeCon.rewardedUsers.length + 1;
             }
             this.payStatusNum = 11;
           }
