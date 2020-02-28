@@ -129,7 +129,6 @@ export default {
 
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
-      console.log(this.canUploadImages+'0099')
       if(!this.canUploadImages){
         this.$toast.fail('没有上传图片的权限');
       } else {
@@ -220,7 +219,6 @@ export default {
 
 
     deleteEnclosure(id,type){
-      // console.log(id.id,'删除的图片的id');
       // return false;
       if(this.fileListOne.length<1){
         this.uploadShow = false;
@@ -238,7 +236,6 @@ export default {
 //           if(type == "img"){
 //             var newArr = this.fileList.filter(item => item.id !== id);
 //             this.fileList = newArr;
-//             console.log(this.fileList);
 //           }
 //           // this.$toast.success('删除成功');
 //         }

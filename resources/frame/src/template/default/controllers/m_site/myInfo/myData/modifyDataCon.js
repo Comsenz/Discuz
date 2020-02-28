@@ -58,7 +58,7 @@ export default {
           this.$router.push('/real-name'); //实名认证
           break;
         case 'change-pay-pwd':
-          // console.log('设置钱包密码','跳转设置钱包密码页面');
+          //设置钱包密码','跳转设置钱包密码页面
           if (this.canWalletPay){
             this.$router.push({path:'verify-pay-pwd'});
           } else {
@@ -99,7 +99,6 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         }else{
-        // console.log(res.readdata._data.realname)
         this.modifyPhone = res.readdata._data.mobile;         //用户手机号
         this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
         this.wechatId = res.readdata._data.id;                //用户Id

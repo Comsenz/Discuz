@@ -97,7 +97,6 @@ export default {
 
 		handleLoadMoreUser(){
 			// // this.userParams['page[number]']++;
-			// console.log(this.userParams['page[number]']++)
 			// // this.userParams['page[limit]'] = 10;
 			// this.userLoadMorePageChange = true;
 			// this.handleSearchUser();
@@ -119,7 +118,6 @@ export default {
 					method:'get',
 					data: this.themeParamd
 				}).then(data=>{
-					console.log(data,'主题搜索页面')
 					this.themeLoadMoreStatus = data.readdata.length > this.searchMaxSum;
 					this.searchThemeList = data.readdata.splice(0,3);
 				}).catch(err=>{

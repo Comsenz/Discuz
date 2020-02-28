@@ -66,7 +66,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -80,7 +79,6 @@ export default {
           browserDb.setLItem('siteInfo',res.readdata);
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     setSignData(){
@@ -98,7 +96,6 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
         this.btnLoading = false;
 
         this.getForum().then(()=>{
@@ -128,13 +125,12 @@ export default {
             } else if (this.siteMode === 'public'){
               this.$router.push({path:'/'});
             } else {
-              console.log("缺少参数，请刷新页面");
+              //缺少参数，请刷新页面
             }
 
           }
         })
       }).catch(err=>{
-        console.log(err);
       })
     }
 
