@@ -87,14 +87,10 @@ const App = new Vue({
     }
   },
   created(){
-    // console.log(browserDb.getLItem('siteInfo')._data,'缓存里的');
     this.siteInfoStat = browserDb.getLItem('siteInfo')._data.set_site.site_stat;
   },
   watch: {
     '$route': function(to, from) {
-      console.log(from);
-      console.log(from.name);
-      console.log(to.name);
 
       /*if (noKeepAliveUrl.includes(from.name)) {
         this.keepAliveStatus = false;
@@ -106,13 +102,10 @@ const App = new Vue({
 
 
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
-        console.log(111111111);
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
-        console.log(22222222222);
         this.keepAliveStatus = true;
       } else {
-        console.log(333333333333);
         this.keepAliveStatus = false;
       }
 
@@ -120,11 +113,9 @@ const App = new Vue({
 
       // let name = this.$route.name;
       /*if (this.status !== 0){
-        console.log('不等于0');
 
         if (!keepAliveUrl.includes(to.name)){
           this.keepAliveStatus = false;
-          console.log('进入缓存的页面');
 
           if (name === 'circle') {
             // alert('要去首页');
@@ -135,7 +126,6 @@ const App = new Vue({
         }
 
         if (from.name === 'details/:themeId') {
-          console.log('从详情页面回来');
           this.keepAliveStatus = true;
         }
 
@@ -146,7 +136,7 @@ const App = new Vue({
       if (to.name === 'circle' && this.status === 0){
         this.status = 1;
         this.keepAliveStatus = true;
-        console.log('第一次进首页缓存');
+        //第一次进首页缓存
       }*/
 
 
