@@ -11,8 +11,8 @@ export default {
           name:'全部',
           id:''
         }
-      ],   //主题分类列表
-      categoryId: '',       //主题分类选中
+      ], //主题分类列表
+      categoryId: '',        //主题分类选中
 
       pageOptions: [
         {
@@ -26,12 +26,12 @@ export default {
           label: '每页显示30条'
         }
       ],
-      pageSelect:'10',      //每页显示数选择值
+      pageSelect:'10',       //每页显示数选择值
 
-      themeAuthor:'',       //主题作者
-      themeKeyWords:'',     //主题关键词
+      themeAuthor:'',        //主题作者
+      themeKeyWords:'',      //主题关键词
 
-      checkedStatus:false,  //更多选项
+      checkedStatus:false,   //更多选项
 
       pickerOptions: {
         shortcuts: [{
@@ -59,17 +59,17 @@ export default {
             picker.$emit('pick', [start, end]);
           }
         }]
-      }, //快捷选择时间
-      dataValue:['',''],         //发表时间范围
+      },  //快捷选择时间
+      dataValue:['',''],     //发表时间范围
 
-      viewedTimesMin:'',    //被浏览次数最小
-      viewedTimesMax:'',    //被浏览次数最大
+      viewedTimesMin:'',     //被浏览次数最小
+      viewedTimesMax:'',     //被浏览次数最大
 
       numberOfRepliesMin:'',    //被回复数最小
       numberOfRepliesMax:'',    //被回复数最大
 
-      essentialTheme:'',    //精华主题类型
-      topType:''            //置顶主题类型
+      essentialTheme:'',     //精华主题类型
+      topType:''             //置顶主题类型
 
     }
   },

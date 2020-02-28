@@ -22,7 +22,7 @@
       <div class="index-header__info-menu">
         <span>您好，{{userName}}</span>
         <span @click="quitClick">&nbsp;[退出]</span>
-        <span class="site-home" ><router-link to="/admin">站点首页</router-link></span>
+        <span class="site-home" @click="jumpIndex">站点首页</span>
       </div>
 
     </el-header>

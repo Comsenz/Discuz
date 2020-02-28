@@ -1,11 +1,11 @@
 /*
-* 内容审核-主题审核控制器
+* 内容审核-回复审核控制器
 * */
 
-import Card from '../../../view/site/common/card/card';
-import ContArrange from '../../../view/site/common/cont/contArrange';
-import Page from '../../../view/site/common/page/page';
-import tableNoList from '../../../view/site/common/table/tableNoList';
+import Card from '../../../../view/site/common/card/card';
+import ContArrange from '../../../../view/site/common/cont/contArrange';
+import Page from '../../../../view/site/common/page/page';
+import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
@@ -64,7 +64,6 @@ export default {
       searchTimeSelect:1,         //搜索时间选中
       relativeTime:['',''],       //搜索相对时间转换
 
-      submitForm:[],              //操作理由表单
       reasonForOperation:[
         {
           value:'无',
@@ -114,7 +113,8 @@ export default {
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
       ignoreStatus:true,          //全部忽略是否显示
-      showViewer:false,      //预览图
+      submitForm:[],              //操作理由表单
+      showViewer:false,           //预览图
       url:[]
 
       //未审核0，已审核\通过1，已忽略2
@@ -151,23 +151,36 @@ export default {
       this.showViewer = false
     },
 
+
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+
+      if (this.multipleSelection.length >= 1){
+        this.deleteStatus = false
+      } else {
+        this.deleteStatus = true
+      }
+
+    },
+
     reasonForOperationChange(event,index){
       this.submitForm[index].attributes.message = event;
-      console.log(this.submitForm[index]);
     },
 
     handleCurrentChange(val) {
+      console.log(val);
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
-      this.isIndeterminate = false;
-      this.checkAll = false;
+      webDb.setLItem('currentPag',val);
       this.currentPaga = val;
-      this.getThemeList(val);
+      // this.isIndeterminate = false;
+      // this.checkAll = false;
+      this.getPostsList(val);
     },
 
-    themeSearch(){
+    postSearch(){
       this.ignoreStatus = this.searchReviewSelect === 2?false:true;
       this.currentPaga = 1;
-      this.getThemeList();
+      this.getPostsList();
     },
 
     searchTimeChange(val){
@@ -201,7 +214,7 @@ export default {
 
     submitClick() {
       console.log(this.submitForm);
-      this.patchThreadsBatch(this.submitForm);
+      this.patchPostsBatch(this.submitForm);
     },
 
     radioChange(event,index){
@@ -222,7 +235,7 @@ export default {
       switch (val){
         case 1:
           this.submitForm.forEach((item,index)=>{
-              this.submitForm[index].attributes.isApproved = 1;
+            this.submitForm[index].attributes.isApproved = 1;
           });
           break;
         case 2:
@@ -236,42 +249,35 @@ export default {
           });
           break;
       }
-      this.patchThreadsBatch(this.submitForm);
+      this.patchPostsBatch(this.submitForm);
     },
 
     singleOperationSubmit(val,categoryId,themeId,index){
       let data = {
-        "type": "threads",
+        "type": "posts",
         "attributes": {
           "isApproved": 0,
           'isDeleted':false
-        },
-        "relationships": {
-          "category": {
-            "data": {
-              "type": "categories",
-              "id": categoryId
-            }
-          }
         }
       };
       switch (val){
         case 1:
           data.attributes.isApproved = 1;
-          this.patchThreads(data,themeId);
+          this.patchPosts(data,themeId);
           break;
         case 2:
           data.attributes.isDeleted = true;
           data.attributes.message = this.submitForm[index].attributes.message;
-          this.patchThreads(data,themeId);
+          this.patchPosts(data,themeId);
           break;
         case 3:
           data.attributes.isApproved = 2;
-          this.patchThreads(data,themeId);
+          this.patchPosts(data,themeId);
           break;
         default:
           console.log("系统错误，请刷新页面");
       }
+      console.log(data);
     },
 
     viewClick(id){
@@ -280,15 +286,15 @@ export default {
       //回帖：replyId
 
       let routeData = this.$router.resolve({
-        path: "/details/" + id,
+        path: "/details/" + id,   //id当前是回帖id
       });
       window.open(routeData.href, '_blank');
     },
 
-    editClick(id){
+    editClick(id,replyId){
       console.log(id);
       let routeData = this.$router.resolve({
-        path: `/edit-topic/${id}`
+        path: `/reply-to-topic/${id}/${replyId}`
       });
       window.open(routeData.href, '_blank');
     },
@@ -303,12 +309,12 @@ export default {
     /*
     * 请求接口
     * */
-    getThemeList(pageNumber){
+    getPostsList(pageNumber){
       this.appFetch({
-        url:'threads',
+        url:'posts',
         method:'get',
         data:{
-          include:['user', 'firstPost', 'lastPostedUser', 'category','firstPost.images','firstPost.attachments'],
+          include: ['user','thread','thread.category','thread.firstPost','images'],
           'filter[isDeleted]':'no',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,
@@ -329,27 +335,20 @@ export default {
           this.themeList = [];
           this.submitForm = [];
           this.themeList = res.readdata;
-          this.total = res.meta.threadCount;
+          this.total = res.meta.postCount;
           this.pageCount = res.meta.pageCount;
 
           this.themeList.forEach((item, index) => {
             this.submitForm.push({
+              // message:'',
               Select: '无',
               radio: '',
-              type: 'threads',
+              type: 'posts',
               id: item._data.id,
               attributes: {
                 isApproved: 0,
                 isDeleted: false,
-                message: '',
-              },
-              relationships: {
-                category: {
-                  data: {
-                    type: "categories",
-                    id: item.category._data.id
-                  }
-                }
+                message: ''
               }
             })
           });
@@ -381,9 +380,9 @@ export default {
       })
 
     },
-    patchThreadsBatch(data){
+    patchPostsBatch(data){
       this.appFetch({
-        url:'threadsBatch',
+        url:'postsBatch',
         method:'patch',
         data:{
           data
@@ -395,7 +394,7 @@ export default {
           if (res.meta && res.data) {
             this.$message.error('操作失败！');
           } else {
-            this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
+            this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
             this.$message({
               message: '操作成功',
               type: 'success'
@@ -407,9 +406,9 @@ export default {
 
       })
     },
-    patchThreads(data,id){
+    patchPosts(data,id){
       this.appFetch({
-        url:'threads',
+        url:'posts',
         method:'patch',
         splice:'/' + id,
         data:{
@@ -419,48 +418,21 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          if (res.meta && res.data) {
-            this.checkedTheme = [];
-            this.$message.error('操作失败！');
-          } else {
-            this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
-            this.$message({
-              message: '操作成功',
-              type: 'success'
-            });
-          }
+          this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          });
         }
       }).catch(err=>{
         console.log(err);
       })
-    },
-
-    getCreated(state){
-      if(state){
-        console.log(state);
-        this.getThemeList(1);
-      } else {
-        console.log(state);
-        this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
-      }
     }
 
   },
-
   created(){
     this.getCategories();
-  },
-
-  beforeRouteEnter(to,from,next){
-    next(vm => {
-      if (to.name !== from.name && from.name !== null){
-        console.log('执行');
-        vm.getCreated(true)
-      }else {
-        console.log('不执行');
-        vm.getCreated(false)
-      }
-    })
+    this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
   },
 
   components:{

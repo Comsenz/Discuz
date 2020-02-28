@@ -266,6 +266,17 @@ export default {
               alias:'最新主题'
             }
           },
+          'latest-reply':{
+            comLoad:function (resolve) {
+              require(['../view/site/cont/contManages/latestReplyView'],resolve)
+            },
+            metaInfo:{
+              title:"内容管理",
+              name:'contManage',
+              attribution:"内容",
+              alias:'最新回复'
+            }
+          },
           'cont-manage/search':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contManages/contManageSearchView'], resolve)
