@@ -158,7 +158,7 @@ class EditThread
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $thread);
-            if ($thread->is_deleted != $attributes['isDeleted']) {
+            if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
                 $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                 if ($attributes['isDeleted']) {
