@@ -34,6 +34,7 @@ class GroupPermissionTableSeeder extends Seeder
         // 主题
         'viewThreads' => [7, 10],               // 查看主题列表
         'createThread' => [10],                 // 发布主题
+        'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
 
@@ -51,7 +52,7 @@ class GroupPermissionTableSeeder extends Seeder
         // 附件
         'attachment.create.0' => [10],          // 上传附件
         'attachment.create.1' => [10],          // 上传图片
-        'attachment.delete' => [10],            // 删除附件
+        'attachment.delete' => [],              // 删除附件
 
         // 敏感词
         'stopWord.create' => [],                // 创建敏感词

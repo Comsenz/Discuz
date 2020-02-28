@@ -79,6 +79,18 @@ class ThreadPolicy extends AbstractPolicy
      * @param Thread $thread
      * @return bool|null
      */
+    public function rename(User $actor, Thread $thread)
+    {
+        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool|null
+     */
     public function hide(User $actor, Thread $thread)
     {
         if ($thread->user_id == $actor->id || $actor->isAdmin()) {
