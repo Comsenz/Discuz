@@ -3,12 +3,14 @@
 * */
 
 import verifyPayPwdHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import webDb from '../../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
     return {
       value: '',
-      showKeyboard: true
+      showKeyboard: true,
+      pwdShow:true,
     }
   },
   methods:{
@@ -18,6 +20,9 @@ export default {
     onDelete() {
       this.value = this.value.slice(0, this.value.length - 1);
     }
+  },
+  created(){
+    this.pwdShow = webDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
   },
   components: {
     verifyPayPwdHeader
