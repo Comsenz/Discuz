@@ -92,17 +92,19 @@ class Censor
      */
     public function checkText($content, $type = 'ugc')
     {
-        // 设置关闭时，直接返回原内容
-        if (!$this->setting->get('censor', 'default', true)) {
-            return $content;
-        }
+        if (!blank($content)) {
+            // 设置关闭时，直接返回原内容
+            if (!$this->setting->get('censor', 'default', true)) {
+                return $content;
+            }
 
-        // 本地敏感词校验
-        $content = $this->localStopWordsCheck($content, $type);
+            // 本地敏感词校验
+            $content = $this->localStopWordsCheck($content, $type);
 
-        // 腾讯云敏感词校验
-        if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
-            $content = $this->tencentCloudCheck($content);
+            // 腾讯云敏感词校验
+            if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
+                $content = $this->tencentCloudCheck($content);
+            }
         }
 
         return $content;

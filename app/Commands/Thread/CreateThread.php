@@ -85,7 +85,6 @@ class CreateThread
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
-
         // 存在审核敏感词时，将主题放入待审核
         if ($censor->isMod) {
             $thread->is_approved = 0;
