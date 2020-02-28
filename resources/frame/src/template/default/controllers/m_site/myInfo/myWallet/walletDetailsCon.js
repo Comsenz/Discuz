@@ -14,7 +14,11 @@ export default {
         30:'注册收入',
         31:'打赏收入',
         32:'人工收入',
-        50:'人工支出'
+        50:'人工支出',
+        41:'打赏支出',
+        60:'付费主题收入',
+        61:'付费主题支出',
+        71:'站点续费支出',
       },
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
@@ -40,7 +44,7 @@ export default {
         url:'walletDetails',
         method:'get',
         data:{
-          include:'',
+          include:'user,order.user,order.thread,order.thread.firstPost',
           'filter[user]':this.userId,
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
