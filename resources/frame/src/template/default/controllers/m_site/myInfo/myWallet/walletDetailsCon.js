@@ -50,7 +50,6 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res)=>{
-        console.log(res)
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)

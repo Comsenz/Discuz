@@ -8,18 +8,21 @@
 namespace App\Api\Controller\Order;
 
 use App\Api\Serializer\OrderSerializer;
+use App\Models\Order;
+use App\Models\Post;
+use App\Models\Thread;
+use App\Models\User;
+use App\Repositories\OrderRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use App\Repositories\OrderRepository;
-use App\Models\Thread;
-use App\Models\Post;
-use App\Models\User;
-use Discuz\Auth\AssertPermissionTrait;
+use Psr\Http\Message\ServerRequestInterface;
+use Tobscure\JsonApi\Document;
 
 class ListOrdersController extends AbstractListController
 {
@@ -31,30 +34,19 @@ class ListOrdersController extends AbstractListController
     public $serializer = OrderSerializer::class;
 
     /**
-     * @var Dispatcher
+     * {@inheritdoc}
      */
-    protected $bus;
-
-    /**
-     * @var UrlGenerator
-     */
-    protected $url;
+    public $include = [
+        'user',
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public $order;
-
-    /**
-     * @var int
-     */
-    protected $total;
-
-    /**
-     * {@inheritdoc}
-     */
-    public $sort = [
-        'orders.created_at' => 'desc',
+    public $optionalInclude = [
+        'thread',
+        'thread.user',
+        'thread.firstPost',
     ];
 
     /**
@@ -68,26 +60,40 @@ class ListOrdersController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = [
-        'thread',
-        'user',
-        'thread.firstPost',
+    public $sort = [
+        'created_at' => 'desc',
     ];
 
-    /* The relationships that are included by default.
-     *
-     * @var array
+    /**
+     * @var Dispatcher
      */
-    public $include = [];
+    protected $bus;
+
+    /**
+     * @var UrlGenerator
+     */
+    protected $url;
+
+    /**
+     * @var OrderRepository
+     */
+    protected $orders;
+
+    /**
+     * @var int
+     */
+    protected $total;
 
     /**
      * @param Dispatcher $bus
+     * @param UrlGenerator $url
+     * @param OrderRepository $orders
      */
-    public function __construct(Dispatcher $bus, UrlGenerator $url, OrderRepository $order)
+    public function __construct(Dispatcher $bus, UrlGenerator $url, OrderRepository $orders)
     {
         $this->bus = $bus;
         $this->url = $url;
-        $this->order = $order;
+        $this->orders = $orders;
     }
 
     /**
@@ -95,14 +101,17 @@ class ListOrdersController extends AbstractListController
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
-        $actor  = $request->getAttribute('actor');
-        $this->assertRegistered($actor);
-        $filter = $this->extractFilter($request);
-        $sort   = $this->extractSort($request);
-        $limit  = $this->extractLimit($request);
-        $offset = $this->extractOffset($request);
+        $actor = $request->getAttribute('actor');
 
-        $orders = $this->getOrders($actor, $filter, $limit, $offset, $sort);
+        $this->assertRegistered($actor);
+
+        $filter = $this->extractFilter($request);
+        $sort = $this->extractSort($request);
+        $limit = $this->extractLimit($request);
+        $offset = $this->extractOffset($request);
+        $load = $this->extractInclude($request);
+
+        $orders = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('order.list'),
@@ -116,31 +125,67 @@ class ListOrdersController extends AbstractListController
             'total' => $this->total,
             'pageCount' => ceil($this->total / $limit),
         ]);
-        $load = $this->extractInclude($request);
 
-        $orders = $orders->load($load);
+        // 主题标题
+        if (in_array('thread.firstPost', $load)) {
+            $orders->load('thread.firstPost')
+                ->map(function (Order $order) {
+                    if ($order->thread->is_long_article) {
+                        $title = Str::limit($order->thread->title, 40);
+                    } else {
+                        $title = Str::limit($order->thread->firstPost->content, 40);
+                        $title = str_replace("\n", '', $title);
+                    }
+
+                    $order->thread->title = $title;
+                });
+        }
+
+        $orders = $orders->loadMissing($load);
+
         return $orders;
     }
 
     /**
-     * @param  $actor
-     * @param  $filter
-     * @param  $limit
-     * @param  $offset
-     * @param  $sort
-     * @return Order
+     * @param $actor
+     * @param $filter
+     * @param $sort
+     * @param null $limit
+     * @param int $offset
+     * @return Collection
      */
-    private function getOrders($actor, $filter, $limit = 0, $offset = 0, $sort = [])
+    public function search($actor, $filter, $sort, $limit = null, $offset = 0)
     {
-        $order_user           = (int) Arr::get($filter, 'user'); //订单所属用户
-        $status           = Arr::get($filter, 'status'); //订单状态
-        $order_sn         = Arr::get($filter, 'order_sn'); //订单编号
-        $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
-        $order_end_time   = Arr::get($filter, 'end_time'); //订单创建结束时间
-        $order_username   = Arr::get($filter, 'username'); //订单创建人
-        $order_product    = Arr::get($filter, 'product'); //商品
+        $query = $this->orders->query()->whereVisibleTo($actor);
 
-        $query = $this->order->query()->whereVisibleTo($actor);
+        $this->applyFilters($query, $filter, $actor);
+
+        $this->total = $limit > 0 ? $query->count() : null;
+
+        $query->skip($offset)->take($limit);
+
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * @param Builder $query
+     * @param array $filter
+     * @param User $actor
+     */
+    private function applyFilters(Builder $query, array $filter, User $actor)
+    {
+        $order_user = (int) Arr::get($filter, 'user'); //订单所属用户
+        $status = Arr::get($filter, 'status'); //订单状态
+        $order_sn = Arr::get($filter, 'order_sn'); //订单编号
+        $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
+        $order_end_time = Arr::get($filter, 'end_time'); //订单创建结束时间
+        $order_username = Arr::get($filter, 'username'); //订单创建人
+        $order_product = Arr::get($filter, 'product'); //商品
+
         $query->when(!is_null($status), function ($query) use ($status) {
             $query->where('status', $status);
         });
@@ -162,13 +207,5 @@ class ListOrdersController extends AbstractListController
         $query->when($order_product, function ($query) use ($order_product) {
             $query->whereIn('orders.thread_id', Thread::whereIn('threads.id', Post::where('content', 'like', "%$order_product%")->select('posts.thread_id')->groupBy('posts.thread_id')->get())->select('threads.id')->get());
         });
-        foreach ((array) $sort as $field => $order) {
-            $query->orderBy(Str::snake($field), $order);
-        }
-        $this->total = $query->count();
-
-        $query->skip($offset)->take($limit);
-
-        return $query->get();
     }
 }

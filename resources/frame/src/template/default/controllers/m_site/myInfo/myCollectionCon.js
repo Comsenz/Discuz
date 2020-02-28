@@ -41,7 +41,6 @@ export default {
   created(){
     this.imgUrl = "../../../../../../../static/images/noavatar.gif"
     this.myCollection();
-    // console.log(typeof this.aaa);
   },
   methods:{
     myCollection(initStatus = false){
@@ -54,7 +53,6 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then(data=>{
-        console.log(data,'我的收藏')
         if (data.errors){
           this.$toast.fail(data.errors[0].code);
           throw new Error(data.error)

@@ -22,8 +22,7 @@
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",
-		"sort-packages" : true,
-        "secure-http": false
+		"sort-packages" : true
 	},
 	"repositories" : [
         {
@@ -32,7 +31,7 @@
 	    },
         {
             "type": "composer",
-            "url": "http://cloud.comsenz-service.com"
+            "url": "https://cloud.comsenz-service.com"
         }
 	],
 	"minimum-stability" : "dev",
