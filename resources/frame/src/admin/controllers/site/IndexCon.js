@@ -447,7 +447,6 @@ export default {
         default:
           alert("当前没有页面哦");
           // this.$router.push({path:'/admin/home'});
-          console.log("没有当前页面，跳转404页面");
       }
 
     },
@@ -499,7 +498,7 @@ export default {
           this.sideList = this.navList[4].submenu;
           break;
         default :
-          console.log("获取菜单出错");
+          //获取菜单出错
       }
 
       /*
@@ -545,7 +544,7 @@ export default {
             // alert("当前没有页面哦");
             // this.$router.push({path:'/admin/home'});
             this.sideSubmenu = [];
-            console.log("当下没有侧边栏子菜单");
+            //当下没有侧边栏子菜单
         }
       }
 
