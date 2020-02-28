@@ -94,7 +94,7 @@ export default {
       logoShow: false
     },
     followShow: { //组件是否显示关注信息
-      logoShow: false
+      followShow: false
     },
   },
   computed: {
@@ -113,7 +113,8 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadCategories();
-    if(this.followShow && this.userId) {
+    console.log(this.followShow);
+    if(this.followShow) {
       this.loadUserFollowInfo();
     }
     if(this.userId){
@@ -183,6 +184,7 @@ export default {
         }
       }).then((res) => {
         this.followDet = res.readdata;
+        console.log(this.followDet,'~~~~~~~~~~~~');
         if(res.readdata._data.follow == '1'){
           this.followFlag = '已关注';
         } else if(res.readdata._data.follow == '0'){
