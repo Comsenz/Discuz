@@ -29,9 +29,6 @@ export default {
   },
   methods:{
     configClick(type){
-
-      console.log(type);
-
       this.$router.push({path:'/admin/worth-mentioning/config',type:'h5'});
 
       /*switch (type){

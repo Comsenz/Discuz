@@ -488,7 +488,6 @@ export default {
         return
       }
       next({path:"/admin/login"});
-      console.log('未登录');
     } else {
       this.getUserInfo(tokenId).then(res=>{
         groupId = res.readdata.groups[0]._data.id;
@@ -514,7 +513,6 @@ export default {
         }
         next({path:"/admin/login"});
       });
-      console.log('已经登录');
     }
   },
 
@@ -527,10 +525,8 @@ export default {
         include:['groups']
       }
     }).then(res=>{
-      console.log(res);
       return res
     }).catch(err=>{
-      console.log(err);
     })
   }
 

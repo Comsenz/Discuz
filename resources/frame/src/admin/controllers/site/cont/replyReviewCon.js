@@ -123,7 +123,6 @@ export default {
 
   methods:{
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -168,7 +167,6 @@ export default {
     },
 
     handleCurrentChange(val) {
-      console.log(val);
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       webDb.setLItem('currentPag',val);
       this.currentPaga = val;
@@ -208,12 +206,10 @@ export default {
           this.$message.error('搜索日期选择错误，请重新选择！或 刷新页面（F5）');
       }
 
-      console.log('相对时间：'+this.relativeTime);
 
     },
 
     submitClick() {
-      console.log(this.submitForm);
       this.patchPostsBatch(this.submitForm);
     },
 
@@ -275,9 +271,8 @@ export default {
           this.patchPosts(data,themeId);
           break;
         default:
-          console.log("系统错误，请刷新页面");
+          //系统错误，请刷新页面
       }
-      console.log(data);
     },
 
     viewClick(id){
@@ -292,7 +287,6 @@ export default {
     },
 
     editClick(id,replyId){
-      console.log(id);
       let routeData = this.$router.resolve({
         path: `/reply-to-topic/${id}/${replyId}`
       });
@@ -328,7 +322,6 @@ export default {
           'sort':'-updatedAt'
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -354,7 +347,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -376,7 +368,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -401,7 +392,6 @@ export default {
             });
           }
         }
-        console.log(res);
       }).catch(err=>{
 
       })
@@ -425,7 +415,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

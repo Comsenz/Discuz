@@ -12,6 +12,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
+const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const appConfig = require("../config/appConfig")
 
 const env = require('../config/prod.env')

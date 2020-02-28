@@ -102,7 +102,7 @@ class EditThread
             // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
             $this->assertCan($this->actor, 'rename', $thread);
 
-            $thread->price = $attributes['price'];
+            $thread->price = (float) $attributes['price'];
         }
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
@@ -158,7 +158,7 @@ class EditThread
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $thread);
-            if ($thread->is_deleted != $attributes['isDeleted']) {
+            if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
                 $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                 if ($attributes['isDeleted']) {

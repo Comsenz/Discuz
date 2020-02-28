@@ -89,7 +89,6 @@ export default {
               }
             }
           }).catch((err)=>{
-            console.log(err);
             if (err.errors){
               if (err.errors[0].detail){
                 this.$message.error(err.errors[0].code + '\n' + err.errors[0].detail[0])
@@ -102,7 +101,6 @@ export default {
           })
 
         } else {
-          console.log('error submit!!');
           this.loginLoading = false;
           return false;
         }
@@ -132,7 +130,6 @@ export default {
       }).then(res=>{
           return res
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUserInfo(id){
@@ -146,7 +143,6 @@ export default {
       }).then(res=>{
         return res
       }).catch(err=>{
-        console.log(err);
       })
     }
   },

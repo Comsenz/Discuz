@@ -106,7 +106,7 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet: function (id) {
-      console.log('跳转到个人主页')
+      //跳转到个人主页
       this.$router.push({
         path: '/home-page' + '/' + id
       });

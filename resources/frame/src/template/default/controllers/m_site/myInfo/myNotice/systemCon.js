@@ -35,7 +35,6 @@ export default {
           'filter[type]': 'system',
         }
       }).then(res=>{
-        console.log(res,'系统通知阿阿阿阿')
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)

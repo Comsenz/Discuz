@@ -58,7 +58,6 @@ export default {
   },
   methods:{
     configClick(type){
-      console.log(type);
       switch (type){
         case 'qcloud_close':
           this.$router.push({path:'/admin/tencent-cloud-config/cloud',query: {type:type}});
@@ -79,7 +78,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -113,14 +111,11 @@ export default {
           } else {
             this.tableData[5].status = false
           }
-          console.log(this.tableData)
         }
       })
     },
     loginSetting(index,type,status){
-      console.log(type)
       if(type == 'qcloud_close') {
-        console.log('333333333333333333s')
         this.changeSettings('qcloud_close',status);
       } else if( type == 'qcloud_cms_image'){
         this.changeSettings('qcloud_cms_image',status);
@@ -137,8 +132,6 @@ export default {
 
     },
     changeSettings(typeVal,statusVal){
-      console.log(typeVal);
-      console.log(statusVal+'ddd2345');
       //登录设置状态修改
       this.appFetch({
         url:'settings',
@@ -156,7 +149,6 @@ export default {
 
         }
       }).then(data=>{
-        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {

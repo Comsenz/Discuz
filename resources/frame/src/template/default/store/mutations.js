@@ -10,12 +10,9 @@ export default {
   * 测试用例
   * */
   [SET_STATUS](state,payload){
-    console.log(state);
     state.status += 1;
   },
   [SET_OPENID](state,payload){
-    console.log(state);
-    console.log(payload);
     state.openid = payload;
   }
 

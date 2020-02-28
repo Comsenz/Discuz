@@ -15,7 +15,6 @@ export default {
     },
     created() {
         this.query = this.$route.query;
-        console.log(this.id, '是ID')
         this.noticeConfigure()
     },
     methods: {
@@ -26,7 +25,6 @@ export default {
                 splice: this.query.id,
                 data: {}
             }).then(res => {
-                console.log(res, '是我的通知列表啊')
                 this.noticeTitle = res.readdata._data.title  //用户角色通知标题
                 this.noticeContent = res.readdata._data.content //用户通知内容
             })

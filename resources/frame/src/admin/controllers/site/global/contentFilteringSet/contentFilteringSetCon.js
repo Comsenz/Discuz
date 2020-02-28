@@ -81,10 +81,8 @@ export default {
   beforeRouteEnter(to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
-        console.log('不执行');
         vm.getCreated(false)
       }
     })
@@ -92,12 +90,10 @@ export default {
   methods:{
     getCreated(state){
       if(state){
-        console.log(state);
         this.pageNum  = 1
       } else {
-        console.log(state);
         this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
-      };
+      }
       this.handleSearchUser(true)
 
     },
@@ -112,21 +108,11 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(this.multipleSelection,'this.multipleSelection')
-      if (this.multipleSelection.length >= 1){
-        this.deleteStatus = false
-      } else {
-        this.deleteStatus = true;
-      }
-
+      this.deleteStatus = this.multipleSelection.length < 1;
     },
 
     onSearch(val) {
       this.searchVal = val;
-      // console.log(val,'value')
-      // this.contentParams = {
-      //   'filter[q]': this.searchVal,
-      // }
       this.pageNum = 1;
       this.handleSearchUser(true);
     },
@@ -152,13 +138,11 @@ export default {
             if (v._data.replacement === undefined) {
               v._data.replacement = '';
             }
-            console.log(response)
             this.total = response.meta.total;
             // this.pageNum = response.meta.pageCount;
             // this.total = response.meta ? response.meta.total : 0;
             return v;
           });
-          console.log(this.tableData)
         }
       } catch(err){
 
@@ -173,7 +157,6 @@ export default {
     },
 
     selectChange(scope){
-      console.log(scope,'scope');
       if(scope){
         if(scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'){
           this.tableData[scope.$index]._data.replacement = '';
@@ -263,7 +246,6 @@ export default {
       for(var i =0;i<this.multipleSelection.length;i++){
         this.deleteList.push(this.multipleSelection[i]._data.id)
       }
-      console.log(this.deleteList.join(","))
       this.appFetch({
         url:'deleteWords',
         method:'delete',
