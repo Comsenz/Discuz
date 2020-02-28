@@ -80,6 +80,10 @@ class System extends Notification
     public function discTpl($status, $originStatus)
     {
         $id = 0;
+        if ($status == $originStatus) {
+            return $id;
+        }
+
         if ($status == 0) {
             if ($originStatus == 1) {
                 $id = 11; // 账号解除禁用通知

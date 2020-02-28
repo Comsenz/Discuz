@@ -13,7 +13,7 @@
         <div class="systemCon cell-crossing" v-for='(item,index) in systemResList' :key='index'>
           <div class="systemTitle">{{item._data.title}}</div>
           <div class="systemTime">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</div>
-          <div class="systemDet">{{item._data.content}}</div>
+          <div class="systemDet" v-html="item._data.content"></div>
         </div>
       </main>
       </van-pull-refresh>
