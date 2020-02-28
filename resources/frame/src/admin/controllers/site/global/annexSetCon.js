@@ -26,7 +26,6 @@ export default {
           this.picture = res.readdata._data.set_attach.support_img_ext;
           this.fileExtension = res.readdata._data.set_attach.support_file_ext;
           this.maximumSize = res.readdata._data.set_attach.support_max_size;
-          console.log(res)
         }
       })
     },
@@ -94,7 +93,6 @@ export default {
           this.$message({message: '提交成功', type: 'success'});
         }
       }).catch(error=>{
-        console.log(error);
       })
     }
   },

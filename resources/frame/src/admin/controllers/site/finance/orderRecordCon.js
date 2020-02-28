@@ -61,7 +61,7 @@ export default {
           return "已付款";
           break;
         default:
-          console.log("获取状态失败，请刷新页面！");
+          //获取状态失败，请刷新页面
           return "未知状态";
       }
     },
@@ -78,7 +78,6 @@ export default {
     },
 
     handleCurrentChange(val){
-      console.log(val);
       this.currentPaga = val;
       this.getOrderList();
     },
@@ -108,7 +107,6 @@ export default {
           'filter[end_time]':this.orderTime[1]
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -119,16 +117,13 @@ export default {
           this.total = res.meta.total;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.currentPaga = 1;
       } else {
-        console.log(state);
         this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
       };
       this.getOrderList();
@@ -141,7 +136,6 @@ export default {
   beforeRouteEnter (to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
         vm.getCreated(false)

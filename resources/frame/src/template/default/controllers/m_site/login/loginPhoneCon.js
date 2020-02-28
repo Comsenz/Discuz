@@ -42,7 +42,6 @@ export default {
     },
 
     getCode(){
-      console.log(this.btnContent);
 
       this.appFetch({
         url:'sendSms',
@@ -56,14 +55,12 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           this.$toast.success('发送成功');
         }
       }).catch(err=>{
-        console.log(err);
       });
 
       this.time = 60;
@@ -99,7 +96,6 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         this.btnLoading = false;
         if (res.errors){
           if (res.errors[0].detail){
@@ -126,7 +122,7 @@ export default {
               } else if (this.siteMode === 'public'){
                 this.$router.push({path:'/'});
               } else {
-                console.log("缺少参数，请刷新页面");
+               //缺少参数，请刷新页面"
               }
             }
 
@@ -137,12 +133,11 @@ export default {
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'});
           } else {
-            console.log("缺少参数，请刷新页面");
+            //缺少参数，请刷新页面"
           }*/
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -156,7 +151,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -165,7 +159,6 @@ export default {
           browserDb.setLItem('siteInfo', res.readdata);
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -178,21 +171,18 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 
   },
 
   mounted(){
-    console.log(this.status);
   },
 
   created(){
@@ -202,16 +192,16 @@ export default {
    this.getForum();
 
     if (isWeixin === true) {
-      console.log('微信登录');
+      //微信登录
 
       // this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
     } else if (isPhone === true) {
-      console.log('手机浏览器登录');
+      //手机浏览器登录
 
       this.wxLoginShow = false;
       this.isOne = true;
     } else {
-      console.log('pc登录');
+      //pc登录'
       this.isPC = true;
 
       // this.getWatchHref();

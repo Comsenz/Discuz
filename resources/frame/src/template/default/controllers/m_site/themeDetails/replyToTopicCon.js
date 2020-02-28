@@ -129,7 +129,6 @@ export default {
 
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
-      console.log(this.canUploadImages+'0099')
       if(!this.canUploadImages){
         this.$toast.fail('没有上传图片的权限');
       } else {
@@ -220,10 +219,8 @@ export default {
 
 
     deleteEnclosure(id,type){
-      console.log(id,'删除的图片的id');
-
       // return false;
-      if(this.fileList.length<=1){
+      if(this.fileListOne.length<1){
         this.uploadShow = false;
       }
       this.appFetch({
@@ -231,18 +228,17 @@ export default {
         method:'delete',
         splice:'/'+id.id
       }).then(data=>{
-        if (data.errors){
-          this.$toast.fail(data.errors[0].code);
-          throw new Error(data.error)
-        } else {
-          var attriAttachment = new Array();
-          if(type == "img"){
-            var newArr = this.fileList.filter(item => item.id !== id);
-            this.fileList = newArr;
-            console.log(this.fileList);
-          }
-          this.$toast.success('删除成功');
-        }
+//         if (data.errors){
+//           this.$toast.fail(data.errors[0].code);
+//           throw new Error(data.error)
+//         } else {
+//           var attriAttachment = new Array();
+//           if(type == "img"){
+//             var newArr = this.fileList.filter(item => item.id !== id);
+//             this.fileList = newArr;
+//           }
+//           // this.$toast.success('删除成功');
+//         }
       })
     },
 

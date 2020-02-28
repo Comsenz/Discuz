@@ -2,7 +2,7 @@
  * 个人主页
  */
 
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
@@ -19,18 +19,20 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,//每页20条
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-
+      token: ''
     }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/noavatar.gif";
+    this.token = browserDb.getLItem('Authorization');
     this.loadTheme();
+    
   },
 
   computed: {
-      userId: function(){
-          return this.$route.params.userId;
-      },
+    userId: function(){
+        return this.$route.params.userId;
+    },
   },
   methods:{
     loadTheme(initStatus = false){
@@ -52,36 +54,38 @@ export default {
           this.userAvatar = res.readdata._data.avatarUrl;
           }
         });
-     return this.appFetch({
-        url: 'threads',
-        method: 'get',
-        data: {
-          'filter[userId]':this.userId,
-          include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-          'page[number]': this.pageIndex,
-          'page[limit]': this.pageLimit,
-          'filter[isDeleted]':'no'
-        }
-      }).then((res) => {
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        }else{
-        if(initStatus){
-          this.OthersThemeList = []
-        }
-        // this.userInfoAvataUrlCon = res[0].user._data.avatarUrl;
-        // this.userInfoNameCon = res[0].user._data.username;
-        this.OthersThemeList =this.OthersThemeList.concat(res.readdata);
-        this.loading = false;
-        this.finished = res.data.length < this.pageLimit;
+        if(this.token != null && this.token != ''){
+          this.appFetch({
+            url: 'threads',
+            method: 'get',
+            data: {
+              'filter[userId]':this.userId,
+              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+              'page[number]': this.pageIndex,
+              'page[limit]': this.pageLimit,
+              'filter[isDeleted]':'no'
+            }
+          }).then((res) => {
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+              throw new Error(res.error)
+            }else{
+            if(initStatus){
+              this.OthersThemeList = []
+            }
+            // this.userInfoAvataUrlCon = res[0].user._data.avatarUrl;
+            // this.userInfoNameCon = res[0].user._data.username;
+            this.OthersThemeList =this.OthersThemeList.concat(res.readdata);
+            this.loading = false;
+            this.finished = res.data.length < this.pageLimit;
+            }
+          }).catch((err)=>{
+            if(this.loading && this.pageIndex !== 1){
+              this.pageIndex--;
+            }
+            this.loading = false;
+          })
       }
-      }).catch((err)=>{
-        if(this.loading && this.pageIndex !== 1){
-          this.pageIndex--;
-        }
-        this.loading = false;
-      })
     },
     onLoad(){    //上拉加载
       this.loading = true;

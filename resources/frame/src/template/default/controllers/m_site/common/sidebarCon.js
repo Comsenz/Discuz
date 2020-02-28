@@ -160,12 +160,10 @@ export default {
     });
   },
   onLoad(){
-    console.log('微信内登录')
+    //微信内登录
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
-    console.log(isWeixin)
     if(isWeixin){
       this.sidebarList2.splice(1, 1);
-      console.log(this.sidebarList2)
     }
   },
   sidebarUrl(url,enentType){

@@ -256,7 +256,6 @@ export default {
           break;
         default:
           selectStatus = true;
-          console.log('操作选项错误，请重新选择或刷新页面(F5)');
           this.$message({
             showClose: true,
             message: '操作选项错误，请重新选择或刷新页面(F5)',
@@ -329,7 +328,6 @@ export default {
             }
           }
         }).catch(err=>{
-          console.log(err);
         })
       }
 
@@ -412,10 +410,7 @@ export default {
            });
          }
        }).catch(err=>{
-         console.log(err);
        })
-
-
     },
     getCategories(){
       this.appFetch({
@@ -434,11 +429,8 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
-
   },
 
   beforeDestroy() {

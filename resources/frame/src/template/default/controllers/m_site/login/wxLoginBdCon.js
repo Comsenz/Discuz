@@ -40,7 +40,6 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
 
         if (res.errors){
           if (res.errors[0].detail){
@@ -67,7 +66,7 @@ export default {
               } else if (this.siteMode === 'public'){
                 this.$router.push({path:'/'});
               } else {
-                console.log("缺少参数，请刷新页面");
+                //缺少参数，请刷新页面
               }
             }
 
@@ -75,7 +74,6 @@ export default {
 
         }
       }).catch(err => {
-        console.log(err);
       })
 
     },
@@ -93,23 +91,19 @@ export default {
           sessionId:sessionId,
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
-          console.log(res.errors[0].status);
-          console.log(res.errors[0].user.openid);
 
           let wxStatus = res.errors[0].status;
           let openid = res.errors[0].user.openid;
 
           if (wxStatus == 400){
-            console.log('微信跳转');
+            //微信跳转
             this.openid = openid;
             webDB.setLItem('openid',openid);
             this.$router.push({path: '/wx-login-bd'});
           }
         } else if (res.data.attributes.location) {
-          console.log(res.data.attributes.loscation);
-          console.log('获取地址');
+          //获取地址
           this.wxurl = res.data.attributes.location;
           window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token){
@@ -122,11 +116,9 @@ export default {
           this.$router.push({path:'/'});
 
         } else {
-          console.log('任何情况都不符合');
-          console.log(res.data.attributes.location);
+          //任何情况都不符合
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getForum(){
@@ -135,11 +127,9 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         this.siteMode = res.readdata._data.set_site.site_mode;
         webDB.setLItem('siteInfo',res.readdata);
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -152,14 +142,12 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
         if(res.errors){
             this.$toast.fail(res.errors[0].code);
         }else {
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getWatchHrefPC(code,state,sessionId){
@@ -172,23 +160,19 @@ export default {
           sessionId:sessionId,
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
-          console.log(res.errors[0].status);
-          console.log(res.errors[0].user.openid);
 
           let wxStatus = res.errors[0].status;
           let openid = res.errors[0].user.openid;
 
           if (wxStatus == 400){
-            console.log('微信跳转');
+            //微信跳转
             this.openid = openid;
             webDB.setLItem('openid',openid);
             this.$router.push({path: '/wx-login-bd'});
           }
         } else if (res.data.attributes.location) {
-          console.log(res.data.attributes.loscation);
-          console.log('获取地址');
+          //获取地址
           this.wxurl = res.data.attributes.location;
           window.location.href = res.data.attributes.location;
         } else if (res.data.attributes.access_token){
@@ -201,12 +185,9 @@ export default {
           this.$router.push({path:'/'});
 
         } else {
-          console.log('任何情况都不符合');
-          console.log(res);
-          console.log(res.data.attributes.location);
+          //任何情况都不符合
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 
@@ -217,8 +198,6 @@ export default {
     let sessionId = this.$router.history.current.query.sessionId;
     let isWeixin = appCommonH.isWeixin().isWeixin;
 
-    console.log(code);
-    console.log(state);
 
     webDB.setLItem('code',code);
     webDB.setLItem('state',state);
@@ -233,7 +212,7 @@ export default {
     }else {
       this.platform = 'dev';
       if (this.openid === ''){
-        console.log('PC端：没有openid');
+        //PC端：没有openid
         this.getWatchHrefPC(code,state,sessionId);
       }
     }

@@ -130,7 +130,6 @@ export default {
         a.click();
         a = null;
       } catch(err){
-        console.error(err, 'exportUserInfo')
       }
     },
 
@@ -158,7 +157,6 @@ export default {
 
         this.handleGetUserList();
       } catch(err){
-        console.error(err,'deleteBatch');
       }
     },
 		/**
@@ -202,10 +200,8 @@ export default {
 		        this.handleGetUserList();
 		        
 		      // } catch(err){
-		      //   console.error(err, 'disabledBatch');
 		      // }
 	     	}).catch((err) => {
-	       	console.log(err);
 	     	});
       }
     	
@@ -220,7 +216,6 @@ export default {
 //     	data.remark = value.value;
 //     	this.postReview(data);
 //   	}).catch((err) => {
-//     	console.log(err);
 //   	});
 //    if(this.multipleSelection.length <= 0){
 //      return;
@@ -247,7 +242,6 @@ export default {
 //
 //      this.handleGetUserList();
 //    } catch(err){
-//      console.error(err, 'disabledBatch');
 //    }
     },
 
@@ -282,10 +276,8 @@ export default {
 	        	this.tableData[scope.$index]._data.status = 1;
 	        });
 	      // } catch(err){
-	      //   console.error(err, 'handleDisable');
 	      // }
      	}).catch((err) => {
-       	console.log(err);
      	});
 			
 //    try{
@@ -304,7 +296,6 @@ export default {
 //      })
 //      this.tableData[scope.$index]._data.status = 1;
 //    } catch(err){
-//      console.error(err, 'handleDisable');
 //    }
     },
     handleCurrentChange(val){

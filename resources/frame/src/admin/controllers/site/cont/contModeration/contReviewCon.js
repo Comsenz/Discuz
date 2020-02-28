@@ -123,7 +123,6 @@ export default {
 
   methods:{
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -153,7 +152,6 @@ export default {
 
     reasonForOperationChange(event,index){
       this.submitForm[index].attributes.message = event;
-      console.log(this.submitForm[index]);
     },
 
     handleCurrentChange(val) {
@@ -195,12 +193,10 @@ export default {
           this.$message.error('搜索日期选择错误，请重新选择！或 刷新页面（F5）');
       }
 
-      console.log('相对时间：'+this.relativeTime);
 
     },
 
     submitClick() {
-      console.log(this.submitForm);
       this.patchThreadsBatch(this.submitForm);
     },
 
@@ -270,7 +266,7 @@ export default {
           this.patchThreads(data,themeId);
           break;
         default:
-          console.log("系统错误，请刷新页面");
+          //系统错误，请刷新页面"
       }
     },
 
@@ -286,7 +282,6 @@ export default {
     },
 
     editClick(id){
-      console.log(id);
       let routeData = this.$router.resolve({
         path: `/edit-topic/${id}`
       });
@@ -322,7 +317,6 @@ export default {
           'sort':'-updatedAt'
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -355,7 +349,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -377,7 +370,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -402,7 +394,6 @@ export default {
             });
           }
         }
-        console.log(res);
       }).catch(err=>{
 
       })
@@ -431,16 +422,13 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.getThemeList(1);
       } else {
-        console.log(state);
         this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
       }
     }
@@ -454,10 +442,8 @@ export default {
   beforeRouteEnter(to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
-        console.log('不执行');
         vm.getCreated(false)
       }
     })

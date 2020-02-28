@@ -50,8 +50,6 @@ export default {
   },
 
   /*beforeRouteLeave(to,form,next){
-    console.log(to);
-    console.log('离开');
     next();
   },*/
 
@@ -67,7 +65,6 @@ export default {
       immediate: true,
       handler (val) {
         // this.currentPags = val;
-        console.log(this.currentPags);
       }
 
     }

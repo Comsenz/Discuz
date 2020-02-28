@@ -43,8 +43,6 @@ export default {
         data:{
         }
       }).then(data=>{
-        console.log(data.readdata._data.passport);
-
         if (data.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -67,7 +65,6 @@ export default {
         }
         // this.$message({'修改成功'});
       }).catch(error=>{
-        // console.log('失败');
       })
     },
 

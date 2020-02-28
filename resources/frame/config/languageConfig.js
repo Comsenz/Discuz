@@ -8,7 +8,7 @@ const config = {
   access_denied:'拒绝访问',
   category_not_found:'请选择分类',
   censor_not_passed:'抱歉，您填写的内容包含不良信息',
-  model_not_found:'您请求的页面未找到',
+  model_not_found:'您访问的内容不存在或已被删除',
   route_not_found:'路由未找到',
   no_bind_user:'未绑定用户',
   thread_count_fail:'主题数操作错误',
@@ -39,7 +39,9 @@ const config = {
   ban_user:"您的账号被禁用，无法访问本站点",
   register_validate:'账号审核中,请审核通过尝试',
   mobile_is_already_bind:'手机已经绑定',
-  setting_fill_register_reason:'注册时的注册原因必须必填'
+  setting_fill_register_reason:'注册时的注册原因必须必填',
+  faceid_error:'身份信息验证不通过'
+
 
 };
 

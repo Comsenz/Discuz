@@ -28,8 +28,6 @@ export default {
       this.multipleSelection = val;
     },
     singleOperation(val,id){
-      console.log(val);
-      console.log(id);
       if (val === 'pass'){
         this.editUser(id,0)
       }else if (val === 'no'){
@@ -38,10 +36,8 @@ export default {
           cancelButtonText: '取消',
           inputPlaceholder:'请输入否决原因'
         }).then((value)=>{
-          console.log(value);
           this.editUser(id,1,value.value)
         }).catch((err) => {
-          console.log(err);
         });
       }else if (val === 'del'){
         this.deleteUser(id)
@@ -77,7 +73,6 @@ export default {
           });
           this.patchEditUser(userList);
         }).catch((err) => {
-          console.log(err);
         });
       } else if (val === 'del'){
         this.multipleSelection.forEach((item)=>{
@@ -86,7 +81,6 @@ export default {
         this.patchDeleteUser(userList)
       }
 
-      console.log(userList);
 
     },
 
@@ -105,7 +99,6 @@ export default {
           'filter[status]':'mod'
         }
       }).then(res=>{
-        console.log(res);
         this.tableData = res.readdata;
       })
     },
@@ -133,7 +126,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchEditUser(dataList){
@@ -144,7 +136,6 @@ export default {
           "data": dataList
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -155,7 +146,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchDeleteUser(dataList){
@@ -180,7 +170,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     deleteUser(id){
@@ -190,7 +179,6 @@ export default {
         splice:'/' + id,
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -201,7 +189,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

@@ -38,7 +38,6 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
 
         if (res.errors){
           if (res.errors[0].detail){
@@ -64,14 +63,13 @@ export default {
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'});
           } else {
-            console.log("缺少参数，请刷新页面");
+            //缺少参数，请刷新页面
           }
         })
 
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -85,7 +83,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -94,7 +91,6 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     }
 
