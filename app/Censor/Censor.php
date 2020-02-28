@@ -12,7 +12,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Arr;
-use Exception;
 
 class Censor
 {
@@ -181,7 +180,7 @@ class Censor
 
             $params = [];
 
-            if($filePathname instanceof Uri) {
+            if ($filePathname instanceof Uri) {
                 $params['FileUrl'] = $filePathname->getScheme().'://'.$filePathname->getHost().$filePathname->getPath();
             } else {
                 $params['FileContent'] = base64_encode(file_get_contents($filePathname));
@@ -199,6 +198,7 @@ class Censor
             }
         }
     }
+
     /**
      * 检验身份证号码和姓名是否真实
      *
@@ -206,10 +206,9 @@ class Censor
      * @param string $realname 姓名
      * @return array
      */
-    public function checkReal(string $identity ,string $realname)
+    public function checkReal(string $identity, string $realname)
     {
         $qcloud = $this->app->make('qcloud');
-        $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
-        return $result;
+        return $qcloud->service('faceid')->idCardVerification($identity, $realname);
     }
 }
