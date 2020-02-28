@@ -88,7 +88,6 @@ export default {
 	},
 	methods: {
 		async deleteAllClick(value) {
-		console.log(value)
 			let data = [];
 			for (let i = 0; i < value.length; i++) {
 				data.push({
@@ -139,7 +138,6 @@ export default {
 				if(initStatus){
 				this.themeListCon = []
 				}
-				console.log(res.readdata)
 				this.themeListCon =this.themeListCon.concat(res.readdata);
 				this.loading = false;
 				this.finished = res.readdata.length < this.pageLimit;
@@ -150,19 +148,15 @@ export default {
 				}
 				this.loading = false;
 			  })
-			// console.log('1234');
 			// const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
 			// params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
 			// // params.filter['isDeleted'] = 'no';
 			// this.apiStore.find('threads', params).then(data => {
-			// 	// console.log(data[0].firstPost().id());
-			// 	// console.log(data[0].user().username());
 			// 	this.themeListCon = data;
 			// });
 		},
 
 		checkAll: function (checkAll) {
-			console.log(this.$refs);
 			this.$refs.checkboxGroup.toggleAll(true);
 			//   this.checked = !this.checked;
 
@@ -200,7 +194,6 @@ export default {
 			this.showScreen = false;
 		},
 		onLoad(){
-			console.log('onLoadonLoadonLoad')
 			this.loading = true;
 			this.pageIndex++;
 			this.deleteList();
@@ -219,7 +212,6 @@ export default {
 		  },
 
 		  headerBack(){
-			console.log("回退");
 			this.$router.go(-1)
 		  }
 

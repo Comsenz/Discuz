@@ -36,8 +36,6 @@ class PostResourceSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-//        dd($model);
-
         $attributes = [
             'id' => $model->id,
             'user_id' => $model->user_id,

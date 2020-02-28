@@ -113,11 +113,9 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
-        console.log(res)
         this.payee= res.data.attributes.username;
         this.phone = res.data.attributes.mobile;
         if(res.readdata.wechat){
-          console.log(res.readdata.wechat,'999999')
           this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
         }
       }
@@ -172,7 +170,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
-        console.log(res)
         this.insterVal = res.data.attributes.interval;
           this.time = this.insterVal;
           this.timer();
@@ -262,7 +259,6 @@ export default {
         // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
         this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
         this.handlingFee = res.data.attributes.cash_charge;//提现手续费
-        console.log(res.data.attributes.cash_charge,'手续费')
         // this.handlingFee1 = (this.handlingFee/100)
         }
       })

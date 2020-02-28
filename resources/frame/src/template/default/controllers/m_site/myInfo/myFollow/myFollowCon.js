@@ -27,7 +27,6 @@ export default {
   },
   methods:{
     myJump(str){
-      // console.log(str,'路由');
       switch (str) {
         case 'myCare':
           this.$router.push('/my-care');

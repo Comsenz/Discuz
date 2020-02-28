@@ -66,8 +66,6 @@ export default {
 				if(initStatus){
 					this.searchUserList = [];
 				}
-				console.log(data,'搜索')
-				console.log(data.readdata[0].groups[0]._data.name)
 				this.loading = false;
 				this.searchUserList = this.searchUserList.concat(data.readdata);
 				this.finished = data.readdata.length < this.pageLimit;
@@ -109,7 +107,6 @@ export default {
 	  },
 	  		//点击用户名称，跳转到用户主页
 		jumpPerDet:function(id){
-			console.log('跳转到个人主页')
 			  this.$router.push({ path:'/home-page'+'/'+id});
 		  },
 	},

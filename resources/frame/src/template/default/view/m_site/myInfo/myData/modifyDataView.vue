@@ -22,7 +22,7 @@
         <van-cell title="微信" is-link :value="wechatNickname" v-if="wechatNickname"  @click="myModifyWechat" />
         <van-cell title="微信" is-link value="去绑定" v-else  @click="wechatBind" />
         <div v-show="realNameShow">
-        <van-cell title="实名认证" :value="realName"  v-if="realName" v-show="realNameShow"/>
+        <van-cell title="实名认证" :value="realName"  v-if="realName"/>
         <van-cell title="实名认证"  v-else  @click="$router.push({path:'/real-name'})" is-link value="认证" />
         </div>
       </main>

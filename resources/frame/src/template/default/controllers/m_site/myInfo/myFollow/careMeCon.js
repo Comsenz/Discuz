@@ -40,7 +40,6 @@ export default {
       //   this.searchUserList = [];
       //   return;
       // }
-      console.log(this.searchVal);
       this.timerSearch = setTimeout(()=>{
 
         this.firstComeIn = false;
@@ -71,7 +70,6 @@ export default {
           methods:'get',
           data: this.userParams
         }).then(data=>{
-          console.log(data,'dadadada');
           this.userLoadMoreStatus = data.readdata.length > this.searchMaxSum;
           // this.searchUserList = data.readdata.splice(0,3);
           this.searchUserList = data.readdata;
@@ -90,11 +88,9 @@ export default {
     //管理关注操作
        followSwitch(intiFollowVal,personUserId,index) {
          browserDb.setSItem('beforeVisiting',this.$route.path);
-         console.log('参数',typeof intiFollowVal,intiFollowVal);
          let attri = new Object();
          let methodType = '';
          if (intiFollowVal == '0') {
-           // console.log('已关注，显示关注TA');
            attri.to_user_id = personUserId;
            methodType = 'post';
            // this.oldFollow = intiFollowVal;
@@ -102,7 +98,6 @@ export default {
            attri.to_user_id = personUserId;
            methodType = 'delete';
          }
-         // console.log(attri,'33333333-----');
          this.followRequest(methodType,attri,intiFollowVal,index);
        },
 
@@ -119,7 +114,6 @@ export default {
 
             }
           }).then((res) => {
-            // console.log(res,'987654','---------------',intiFollowVal);
             if (res.errors){
               this.$toast.fail(res.errors[0].code);
               throw new Error(res.error)
@@ -127,7 +121,6 @@ export default {
               if(methodType == 'delete'){
                 this.searchUserList[index]._data.is_mutual = '0';
               } else {
-                console.log('post');
                 this.searchUserList[index]._data.is_mutual = '1';
               }
             }
