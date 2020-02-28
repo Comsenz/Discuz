@@ -67,8 +67,6 @@ export default {
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          console.log(data);
-          console.log('123');
           this.siteName = data.readdata._data.set_site.site_name;
           this.siteIntroduction = data.readdata._data.set_site.site_introduction;
           this.siteMode = data.readdata._data.set_site.site_mode;
@@ -104,12 +102,10 @@ export default {
           // this.$message({'修改成功'});
         }
       }).catch(error=>{
-        // console.log('失败');
       })
     },
     //删除已上传logo
     deleteImage(file, fileList) {
-      // console.log(file);
       let logoFormData = new FormData()
       logoFormData.append('logo', file.raw);
       // this.uploaderLogo(logoFormData);
@@ -124,9 +120,7 @@ export default {
           this.$message('删除成功');
         }
       }).catch(error=>{
-        console.log('上传失败');
       })
-      // console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -134,7 +128,6 @@ export default {
     },
     radioChange(siteMode){
       this.siteMode = siteMode;
-      // console.log(this.radio);
     },
     radioChangeClose(closeVal){
       if(closeVal == '1'){
@@ -199,10 +192,8 @@ export default {
       return isJPG && isLt2M
     },
     uploaderLogo(e) {
-      console.log(e);
       let logoFormData = new FormData()
       logoFormData.append('logo', e.file);
-      console.log(logoFormData);
       // this.uploaderLogo(logoFormData);
       this.appFetch({
         url:'logo',
@@ -217,15 +208,12 @@ export default {
             this.imgWidht = res.width;
             this.imgHeight = res.height;
           })
-          console.log(this.imageUrl)
           this.$message({message: '上传成功', type: 'success'});
         }
       }).catch(error=>{
-        console.log('上传失败');
       })
     },
     errorFile(){
-      console.log(this.fileList);
     },
     siteSetPost(){
       this.appFetch({
@@ -321,7 +309,6 @@ export default {
 
         }
       }).then(data=>{
-        console.log(data)
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
@@ -331,7 +318,6 @@ export default {
           });
         }
       }).catch(error=>{
-        console.log('失败');
       })
     },
     onblurFun(){

@@ -64,7 +64,6 @@ export default {
     }),
 
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -109,8 +108,6 @@ export default {
       this.isIndeterminate = false;
       */
 
-      console.log(this.themeListAll);
-      console.log(val);
       this.checkedTheme = val ? this.themeListAll : [];
       this.isIndeterminate = false;
     },
@@ -195,7 +192,6 @@ export default {
           break;
         default:
           selectStatus = true;
-          console.log('操作选项错误，请重新选择或刷新页面(F5)');
           this.$message({
             showClose: true,
             message: '操作选项错误，请重新选择或刷新页面(F5)',
@@ -268,7 +264,6 @@ export default {
             }
           }
         }).catch(err=>{
-          console.log(err);
         })
       }
 
@@ -311,8 +306,6 @@ export default {
            'sort':'-createdAt'
          }
        }).then(res=>{
-         console.log(res);
-
          if (res.errors){
            this.$message.error(res.errors[0].code);
          }else {
@@ -326,10 +319,7 @@ export default {
            });
          }
        }).catch(err=>{
-         console.log(err);
        })
-
-
     },
     getCategories(){
       this.appFetch({
@@ -348,11 +338,8 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
-
   },
 
   beforeDestroy() {
@@ -372,7 +359,6 @@ export default {
   },
 
   created(){
-    console.log(this.searchData);
     this.currentPag = Number(webDb.getLItem('currentPag'))||1;
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
     this.getCategories();
