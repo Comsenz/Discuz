@@ -95,7 +95,7 @@ export default {
             valueOrder:['',''],       //订单按月统计时间
             noData: false,            //暂无数据
             noDataOrder: false,       //订单暂无数据
-            istrue: 0,                
+            istrue: 0,
             istrueOder: 0,
             mouthTab: false,         //按月统计组件
             dayTab: true,           //按日统计
@@ -155,7 +155,6 @@ export default {
 
                 }
             }).then(res => {
-                console.log(res)
                 // this.financialList = res.readdata._data;
                 var oArr = Object.entries(res.readdata._data);
                 for (var i = 0; i < this.financialList.length; i++) {
@@ -213,7 +212,7 @@ export default {
                 if (res.readdata == '') {
                     this.noData = true
                 }else{
-                    this.noData = false  
+                    this.noData = false
                 }
                 var date = [];
                 var total_profit = [];
@@ -267,10 +266,10 @@ export default {
                         date.push(item._data.date);
                         order_count.push(item._data.order_count);
                         order_amount.push(item._data.order_amount);
-    
+
                     })
                     this.orderEcharts(date, order_count, order_amount)
-   
+
             })
 
         },
@@ -309,11 +308,11 @@ export default {
                         boundaryGap: false,
                         data: date,
                         axisLabel: {
-                            interval: 0, 
-                             rotate:-40 
+                            interval: 0,
+                             rotate:-40
                             },
-                    }, 
-                       
+                    },
+
                 ],
 
                 yAxis: [
@@ -388,8 +387,8 @@ export default {
                         boundaryGap: false,
                         data: date,
                         axisLabel: {
-                            interval: 0, 
-                             rotate:-40 
+                            interval: 0,
+                             rotate:-40
                             },
                     }
                 ],
@@ -400,7 +399,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '订单数量', //order_count	
+                        name: '订单数量', //order_count
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},

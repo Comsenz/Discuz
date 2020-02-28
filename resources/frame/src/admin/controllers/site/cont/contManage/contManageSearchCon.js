@@ -103,13 +103,8 @@ export default {
 
     submitClick(){
       this.dataValue = this.dataValue == null?['','']:this.dataValue;
-
-      console.log(this.dataValue);
-
       this.dataValue[0] = this.dataValue[0] == ''?this.dataValue[0]:this.dataValue[0] + '-00-00-00';
       this.dataValue[1] = this.dataValue[1] == ''?this.dataValue[1]:this.dataValue[1] + '-23-59-59';
-
-      console.log(this.dataValue);
 
       /*
       * 调用方法可以在里面传值，对应mutations里对应方法形参payload
@@ -129,13 +124,6 @@ export default {
       });
 
       this.$router.push({path:'/admin/cont-manage'});
-
-      /*
-      * 读取映射state内的数据
-      * */
-      console.log(this.searchData);
-
-
     },
 
     /*
@@ -158,11 +146,8 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
-
   },
   created(){
     this.getCategories();
