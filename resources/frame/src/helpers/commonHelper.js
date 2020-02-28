@@ -347,7 +347,6 @@ appCommonH.timeago = function(dateTimeStamp){
  * @param {[type]} params [description]
  */
 appCommonH.setGetUrl = function(url, params) {
-  console.log(url,params);
   var paramsStr = "";
 
   for(var key in params) {

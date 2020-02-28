@@ -31,15 +31,11 @@ export default {
     },
 
     /*checkSelect(val){
-      console.log(val);
 
-      console.log(this.multipleSelection);
     },*/
 
     radioChange(val){
-      console.log(val);
       this.radioName = val._data.name;
-      console.log(this.radio);
     },
 
     checkSelectable(row){
@@ -73,7 +69,6 @@ export default {
         });
       }
       this.addStatus = true;
-      console.log(this.tableData);
     },
 
     submitClick(){
@@ -117,7 +112,6 @@ export default {
         this.postGroups(singleData);
 
       }else if(this.radio !== this.alternateRadio) {
-        console.log('修改默认级别');
         this.singlePatchGroup(this.radio,this.radioName);
       } else {
         let data = [];
@@ -160,7 +154,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -174,7 +167,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     postGroups(data){
@@ -196,7 +188,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     singleDeleteGroup(id){
@@ -216,7 +207,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchDeleteGroup(data){
@@ -237,7 +227,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     singlePatchGroup(id,name){
@@ -264,7 +253,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchPatchGroup(data){
@@ -275,7 +263,6 @@ export default {
           data
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -286,7 +273,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 
