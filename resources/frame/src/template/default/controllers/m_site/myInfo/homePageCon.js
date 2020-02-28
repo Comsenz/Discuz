@@ -25,8 +25,6 @@ export default {
   created(){
     this.imgUrl = "../../../../../../../static/images/noavatar.gif";
     this.token = browserDb.getLItem('Authorization');
-    console.log(this.token,'获取缓存的token');
-    // debugger;
     this.loadTheme();
     
   },
@@ -56,9 +54,7 @@ export default {
           this.userAvatar = res.readdata._data.avatarUrl;
           }
         });
-        console.log(this.token,'用来判断的值');
         if(this.token != null && this.token != ''){
-          console.log('为空时不应该走');
           this.appFetch({
             url: 'threads',
             method: 'get',

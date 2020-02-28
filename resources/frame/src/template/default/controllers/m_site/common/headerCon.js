@@ -113,7 +113,6 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadCategories();
-    console.log(this.followShow);
     if(this.followShow) {
       this.loadUserFollowInfo();
     }
@@ -184,7 +183,6 @@ export default {
         }
       }).then((res) => {
         this.followDet = res.readdata;
-        console.log(this.followDet,'~~~~~~~~~~~~');
         if(res.readdata._data.follow == '1'){
           this.followFlag = '已关注';
         } else if(res.readdata._data.follow == '0'){
