@@ -82,7 +82,6 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
         this.$message.error('操作失败！');
       })
     },
@@ -103,7 +102,6 @@ export default {
           this.amountCap = formData.cash_sum_limit;
         }
       }).catch(err=>{
-        console.log(err);
         this.$message.error('初始化失败！请重新刷新页面（F5）');
       })
     }

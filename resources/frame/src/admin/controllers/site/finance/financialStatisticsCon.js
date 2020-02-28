@@ -186,7 +186,6 @@ export default {
             this.orderStatistics();
         },
         earningsStatistics() {  //数据请求传给图标
-            console.log(this.financialTime,'是不是数组')
             var dataStatistics ={    //盈利统计按日、周统计
                     'filter[type]': this.istrue + 1,
                     'filter[createdAtBegin]': this.financialTime[0],
@@ -208,7 +207,6 @@ export default {
                 method: 'get',
                 data:data
             }).then(res => {
-                console.log(res, '盈利数据图标')
                 if (res.readdata == '') {
                     this.noData = true
                 }else{
@@ -225,7 +223,6 @@ export default {
                     withdrawal_profit.push(item._data.withdrawal_profit)
                     master_portion.push(item._data.master_portion)
                     register_profit.push(item._data.register_profit)
-                    // console.log(this.date,'000000')
                 })
                 this.earningsEcharts(date, total_profit, withdrawal_profit, master_portion, register_profit)
 

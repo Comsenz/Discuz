@@ -102,7 +102,7 @@ export default {
           return "打款失败，原因：" + data.error_message;
           break;
         default:
-          console.log("获取状态失败，请刷新页面！");
+          //获取状态失败，请刷新页面
           return "未知状态";
       }
     },
@@ -119,7 +119,6 @@ export default {
         data.remark = value.value;
         this.postReview(data);
       }).catch((err) => {
-        console.log(err);
       });
     },
 
@@ -142,7 +141,6 @@ export default {
     },
 
     handleCurrentChange(val){
-      console.log(val);
       this.currentPaga = val;
       this.getReflectList();
     },
@@ -172,7 +170,6 @@ export default {
           'filter[end_time]':this.applicationTime[1]
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -183,7 +180,6 @@ export default {
           this.pageCount = res.meta.pageCount;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     postReview(data){
@@ -197,7 +193,6 @@ export default {
           'remark':data.remark
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -214,16 +209,13 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.currentPaga = 1;
       } else {
-        console.log(state);
         this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
       }
       this.getReflectList();
@@ -235,7 +227,6 @@ export default {
   beforeRouteEnter (to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
         vm.getCreated(false)

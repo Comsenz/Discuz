@@ -289,7 +289,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -299,7 +298,6 @@ export default {
         method:'delete',
         splice:'/'+ data
       }).then(res=>{
-        console.log(res);
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
@@ -314,16 +312,13 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.getPostsList(1);
       } else {
-        console.log(state);
         this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
       }
     }
@@ -336,10 +331,8 @@ export default {
   beforeRouteEnter(to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
-        console.log('不执行');
         vm.getCreated(false)
       }
     })

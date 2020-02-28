@@ -132,8 +132,6 @@ export default {
 
     },
     changeSettings(typeVal,statusVal){
-      console.log(typeVal);
-      console.log(statusVal+'ddd2345');
       //登录设置状态修改
       this.appFetch({
         url:'settings',
@@ -151,7 +149,6 @@ export default {
 
         }
       }).then(data=>{
-        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {

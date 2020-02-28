@@ -52,7 +52,6 @@ export default {
       } else */
 
       if (this.createCategoriesStatus){
-        // console.log(this.categoriesList.slice(this.categoriesListLength, this.categoriesList.length));
         this.createCategories(this.categoriesList.slice(this.categoriesListLength,this.categoriesList.length)).then(()=>{
           this.getCategories();
           this.createCategoriesStatus = false;

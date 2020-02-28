@@ -29,7 +29,6 @@ export default {
 
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -78,7 +77,6 @@ export default {
       })
     }
       catch(err){
-        console.log(err)
         this.$message({
           showClose: true,
           message: '提交失败！'

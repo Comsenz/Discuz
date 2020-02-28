@@ -399,7 +399,6 @@ export default {
     // jumpIndex(){
     //   let Url= '';
     //   Url = appConfig.devApiUrl + '/admin';
-    //   console.log(Url);
     //   this.$router.push({
     //     path: Url
     //   });

@@ -39,11 +39,9 @@ module.exports = function () {
   }
 
   if (warnings.length) {
-    // console.log(chalk.yellow('To use this template, you must update following to modules:'))
 
     for (let i = 0; i < warnings.length; i++) {
       const warning = warnings[i]
-      // console.log('  ' + warning)
     }
 
     process.exit(1)
