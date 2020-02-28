@@ -136,6 +136,7 @@ const App = new Vue({
       if (to.name === 'circle' && this.status === 0){
         this.status = 1;
         this.keepAliveStatus = true;
+        //第一次进首页缓存
       }*/
 
 
