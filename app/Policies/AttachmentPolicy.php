@@ -43,4 +43,16 @@ class AttachmentPolicy extends AbstractPolicy
         //     return;
         // }
     }
+
+    /**
+     * @param User $actor
+     * @param Attachment $attachment
+     * @return bool|null
+     */
+    public function delete(User $actor, Attachment $attachment)
+    {
+        if ($attachment->user_id == $actor->id || $actor->isAdmin()) {
+            return true;
+        }
+    }
 }
