@@ -1,6 +1,6 @@
 
 import orderDetailsHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import Panenl from '../../../../view/m_site/common/panel';
+import Panel from '../../../../view/m_site/common/panel';
 import webDb from "../../../../../../helpers/webDbHelper";
 
 export default {
@@ -30,7 +30,7 @@ export default {
 
   components:{
     orderDetailsHeader,
-    Panenl
+    Panel
   },
   created(){
     this.userId = webDb.getLItem('tokenId');
@@ -69,6 +69,7 @@ export default {
 
     //点击主题内容，跳转到详情页
 		jumpDetails:function(id){
+      // console.log("点击了")
 			this.$router.push({ path:'/details'+'/'+id});
 		},
 

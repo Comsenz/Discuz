@@ -24,7 +24,12 @@ export default {
   },
 
   methods:{
-
+    boxClick(){
+      this.$emit('click')
+    },
+    labelClick(){
+      this.$emit('labelClick');
+    }
   },
   mounted(){
 

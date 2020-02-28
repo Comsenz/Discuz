@@ -7,22 +7,20 @@
 
 namespace App\Commands\Thread;
 
+use App\Censor\Censor;
 use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
-use App\MessageTemplate\PostOrderMessage;
 use App\Models\Thread;
 use App\Models\User;
-use App\Notifications\System;
 use App\Repositories\ThreadRepository;
 use App\Traits\ThreadNoticesTrait;
 use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -69,13 +67,13 @@ class EditThread
     /**
      * @param Dispatcher $events
      * @param ThreadRepository $threads
+     * @param Censor $censor
      * @param ThreadValidator $validator
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
-     * @throws Exception
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, ThreadValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator)
     {
         $this->events = $events;
 
@@ -86,10 +84,25 @@ class EditThread
         if (isset($attributes['title'])) {
             $this->assertCan($this->actor, 'rename', $thread);
 
-            $thread->title = $attributes['title'];
+            // 敏感词校验
+            $title = $censor->checkText($attributes['title']);
+
+            // 存在审核敏感词时，将主题放入待审核
+            if ($censor->isMod) {
+                $thread->is_approved = 0;
+            }
+
+            $thread->title = $title;
         } else {
             // 不修改标题时，不更新修改时间
             $thread->timestamps = false;
+        }
+
+        if (isset($attributes['price']) && $thread->is_long_article) {
+            // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
+            $this->assertCan($this->actor, 'rename', $thread);
+
+            $thread->price = $attributes['price'];
         }
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {

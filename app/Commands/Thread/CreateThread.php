@@ -82,6 +82,7 @@ class CreateThread
         $this->assertCan($this->actor, 'createThread');
 
         // 敏感词校验
+        $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
 
@@ -96,7 +97,7 @@ class CreateThread
 
         // 发布长文时记录标题及价格
         if ($thread->is_long_article) {
-            $thread->title = Arr::get($this->data, 'attributes.title');
+            $thread->title = $title;
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
         }
 
