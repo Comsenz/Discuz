@@ -77,7 +77,7 @@ class ListNotificationController extends AbstractListController
 
         $document->setMeta([
             'total' => $this->notificationCount,
-            'size' => $limit,
+            'pageCount' => ceil($this->notificationCount / $limit),
         ]);
 
         return $notifications;
