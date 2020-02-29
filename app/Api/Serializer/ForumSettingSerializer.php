@@ -106,6 +106,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
+                'initialized_pay_password' => (bool) $this->actor->pay_password,  // 是否初始化支付密码
             ],
         ];
 
