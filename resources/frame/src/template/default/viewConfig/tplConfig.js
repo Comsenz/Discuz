@@ -593,7 +593,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    'pay-the-fee',
+    // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
@@ -657,7 +657,8 @@ export default {
   * */
   var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
-  var realName = '';     //实名认证是否关闭
+  var realName = '';      //实名认证是否关闭
+  var canWalletPay = '';  //钱包密码设置
 
 
 
@@ -679,6 +680,7 @@ export default {
       siteMode = res.readdata._data.set_site.site_mode;
       registerClose = res.readdata._data.set_reg.register_close;
       realName = res.readdata._data.qcloud.qcloud_faceid;
+      canWalletPay = res.readdata._data.other.initialized_pay_password
 
       /*
       * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -702,7 +704,14 @@ export default {
             next({path:'/'})
           }
         })
-      } else {
+      } else if(to.name === 'verify-pay-pwd'){
+        if (canWalletPay) {
+          next();
+          return
+        } else {
+          next({path:'/setup-pay-pwd'})
+        }
+      }else {
         next();
       }
     }
