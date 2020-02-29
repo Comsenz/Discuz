@@ -85,6 +85,7 @@ class CreateThread
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
+
         // 存在审核敏感词时，将主题放入待审核
         if ($censor->isMod) {
             $thread->is_approved = 0;
@@ -125,7 +126,7 @@ class CreateThread
         // 记录触发的审核词
         if ($thread->is_approved == 0 && $censor->wordMod) {
             $stopWords = new PostMod;
-            $stopWords->stop_word = implode(',', $censor->wordMod);
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
             $post->stopWords()->save($stopWords);
         }
