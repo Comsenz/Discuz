@@ -8,6 +8,7 @@
 namespace App\Commands\Users;
 
 use App\Events\Users\ChangeUserStatus;
+use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
 use App\Models\Group;
@@ -99,6 +100,9 @@ class UpdateUser
                 $validator['pay_password_confirmation'] = Arr::get($attributes, 'pay_password_confirmation');
 
                 $user->changePayPassword($payPassword);
+
+                // 修改支付密码事件
+                $user->raise(new PayPasswordChanged($user));
             }
         } elseif ($removePayPassword = Arr::get($attributes, 'removePayPassword')) {
             // 清除支付密码，管理员操作，不能与设置支付密码同时进行
