@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -22,6 +21,21 @@ class PostMod extends Model
      * {@inheritdoc}
      */
     protected $table = 'post_mod';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $primaryKey = 'post_id';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $fillable = ['post_id', 'stop_word'];
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 
     /**
      * {@inheritdoc}
