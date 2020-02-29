@@ -10,7 +10,7 @@ export default {
 
                 },
                 {
-                    title: "用户总充提现",
+                    title: "用户总提现",
                     num: "0",
                     icon: 'icontixian',
                     key: 'totalWithdrawal',
