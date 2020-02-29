@@ -4,13 +4,20 @@
 
 import moment from "moment/moment";
 import Card from '../../../view/site/common/card/card';
+import Page from '../../../view/site/common/page/page';
+import tableNoList from '../../../view/site/common/table/tableNoList';
+import webDb from 'webDbHelper';
 
 
 export default {
   data:function () {
     return {
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+      visible:false,
+      currentPaga: 1,             //当前页数
+      total:0,                    //主题列表总条数
+      pageCount:1,                //总页数
     }
   },
 
@@ -27,6 +34,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+
     singleOperation(val,id){
       if (val === 'pass'){
         this.editUser(id,0)
@@ -43,6 +51,7 @@ export default {
         this.deleteUser(id)
       }
     },
+
     allOperation(val){
       let userList = [];
 
@@ -78,10 +87,19 @@ export default {
         this.multipleSelection.forEach((item)=>{
           userList.push(item._data.id)
         });
-        this.patchDeleteUser(userList)
+        this.patchDeleteUser(userList);
+        this.visible = false;
       }
 
 
+    },
+
+    handleCurrentChange(val) {
+      document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
+      // this.isIndeterminate = false;
+      // this.checkAll = false;
+      this.currentPaga = val;
+      this.getUserList(val);
     },
 
     /*
@@ -91,14 +109,19 @@ export default {
       return moment(data).format('YYYY-MM-DD HH:mm')
     },
 
-    getUserList(){
+    getUserList(pageNumber){
       this.appFetch({
         url:'users',
         method:'get',
         data:{
-          'filter[status]':'mod'
+          'filter[status]':'mod',
+          'page[number]':pageNumber,
+          'page[size]':10,
         }
       }).then(res=>{
+        console.log(res);
+        this.total = res.meta.total;
+        this.pageCount = res.meta.pageCount;
         this.tableData = res.readdata;
       })
     },
@@ -123,7 +146,7 @@ export default {
             message: '操作成功',
             type: 'success'
           });
-          this.getUserList();
+          this.getUserList(Number(webDb.getLItem('currentPag')) || 1);
         }
       }).catch(err=>{
       })
@@ -143,7 +166,7 @@ export default {
             message: '操作成功',
             type: 'success'
           });
-          this.getUserList();
+          this.getUserList(Number(webDb.getLItem('currentPag')) || 1);
         }
       }).catch(err=>{
       })
@@ -167,7 +190,7 @@ export default {
             message: '操作成功',
             type: 'success'
           });
-          this.getUserList();
+          this.getUserList(Number(webDb.getLItem('currentPag')) || 1);
         }
       }).catch(err=>{
       })
@@ -186,18 +209,36 @@ export default {
             message: '操作成功',
             type: 'success'
           });
-          this.getUserList();
+          this.getUserList(Number(webDb.getLItem('currentPag')) || 1);
         }
       }).catch(err=>{
       })
-    }
+    },
 
+    getCreated(state){
+      if(state){
+        this.getUserList(1);
+      } else {
+        this.getUserList(Number(webDb.getLItem('currentPag'))||1);
+      }
+    }
 
   },
   created(){
-    this.getUserList();
+    // this.getUserList();
+  },
+  beforeRouteEnter(to,from,next){
+    next(vm => {
+      if (to.name !== from.name && from.name !== null){
+        vm.getCreated(true)
+      }else {
+        vm.getCreated(false)
+      }
+    })
   },
   components:{
-    Card
+    Card,
+    Page,
+    tableNoList
   }
 }
