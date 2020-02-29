@@ -87,7 +87,7 @@ trait ThreadNoticesTrait
             ],
         ];
 
-        if ($thread->is_approved) {
+        if ($thread->is_approved == 0) {
             // 发送通过通知
             $thread->user->notify(new System(PostThroughMessage::class, $data));
         } else {
@@ -122,5 +122,21 @@ trait ThreadNoticesTrait
         }
 
         return '无';
+    }
+
+    /**
+     * 检查值 是否修改
+     *
+     * @param $thread
+     * @param $field
+     * @return bool
+     */
+    public function checkOriginal($thread, $field)
+    {
+        if ($thread->{$field} != $thread->getOriginal($field)) {
+            return true;
+        }
+
+        return false;
     }
 }

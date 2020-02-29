@@ -61,15 +61,12 @@ export default {
         if (response.errors){
           this.$message.error(response.errors[0].code);
         }else{
-          console.log(response,'response');
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
           this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v)=>{
             return  v._data.id
            });
-          //  console.log(this.userRole,'是我啊啊啊啊啊')
-          //  console.log(this.options,'option')
           if(response.readdata.wechat){
             this.wechatNickName = response.readdata.wechat._data.nickname
             this.sex = response.readdata.wechat._data.sex
@@ -83,11 +80,9 @@ export default {
         }
 
       } catch(err){
-        console.error(err, 'getUserDetail')
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     deleteImage(){
       this.imageUrl = '';
@@ -107,7 +102,6 @@ export default {
       })
     },
     handlePreview(file) {
-      console.log(file);
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -136,10 +130,8 @@ export default {
       return isJPG && isLt2M;
     },
     uploaderLogo(file){
-      console.log(file,'000000000000000')
       let formData = new FormData()
         formData.append('avatar', file.file)
-          console.log(formData)
           this.appFetch({
             url:'upload',
             method:'post',
@@ -190,7 +182,6 @@ export default {
             this.$message.error(res.errors[0].code);
           }
         }else{
-          console.log(res)
           this.$message({ message: '提交成功', type: 'success' });
         }
 
@@ -204,7 +195,6 @@ export default {
           url: 'groups'
         })
         const data = response.data;
-        console.log(data,'8888')
         this.options = data.map((v)=>{
           return {
               value: v.id,

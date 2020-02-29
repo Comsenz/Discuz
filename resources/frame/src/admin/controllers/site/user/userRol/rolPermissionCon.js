@@ -18,7 +18,6 @@ export default {
 
 
     submitClick(){
-      console.log(this.checked);
       this.patchGroupPermission();
     },
 
@@ -37,7 +36,6 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          console.log(res);
           let data = res.readdata.permission;
           this.checked = [];
           data.forEach((item) => {
@@ -46,7 +44,6 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchGroupPermission(){
@@ -62,7 +59,6 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         } else {
@@ -73,8 +69,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log('错误');
-        console.log(err);
       })
     }
 

@@ -102,68 +102,76 @@ class EditThread
             // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
             $this->assertCan($this->actor, 'rename', $thread);
 
-            $thread->price = $attributes['price'];
+            $thread->price = (float) $attributes['price'];
         }
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
-            $thread->is_approved = $attributes['isApproved'];
-            $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
-            // 内容审核通知
-            $thread->raise(new ThreadNotices(
-                $thread,
-                $this->actor,
-                ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
-            ));
+            if ($thread->is_approved != $attributes['isApproved']) {
+                $thread->is_approved = $attributes['isApproved'];
+                $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
+                // 内容审核通知
+                $thread->raise(new ThreadNotices(
+                    $thread,
+                    $this->actor,
+                    ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
+                ));
 
-            $thread->raise(new ThreadWasApproved(
-                $thread,
-                $this->actor,
-                ['message' => $approvedMsg]
-            ));
+                $thread->raise(new ThreadWasApproved(
+                    $thread,
+                    $this->actor,
+                    ['message' => $approvedMsg]
+                ));
+            }
         }
 
         if (isset($attributes['isSticky'])) {
             $this->assertCan($this->actor, 'sticky', $thread);
-            $thread->is_sticky = $attributes['isSticky'];
-            // 置顶后 通知发帖人置顶消息
-            if ($attributes['isSticky']) {
-                // 内容置顶通知
-                $thread->raise(new ThreadNotices(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isSticky']
-                ));
+            if ($thread->is_sticky != $attributes['isSticky']) {
+                $thread->is_sticky = $attributes['isSticky'];
+                // 置顶后 通知发帖人置顶消息
+                if ($attributes['isSticky']) {
+                    // 内容置顶通知
+                    $thread->raise(new ThreadNotices(
+                        $thread,
+                        $this->actor,
+                        ['notice_type' => 'isSticky']
+                    ));
+                }
             }
         }
 
         if (isset($attributes['isEssence'])) {
             $this->assertCan($this->actor, 'essence', $thread);
-            $thread->is_essence = $attributes['isEssence'];
-            // 内容精华通知
-            if ($attributes['isEssence']) {
-                $thread->raise(new ThreadNotices(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isEssence']
-                ));
+            if ($thread->is_essence != $attributes['isEssence']) {
+                $thread->is_essence = $attributes['isEssence'];
+                // 内容精华通知
+                if ($attributes['isEssence']) {
+                    $thread->raise(new ThreadNotices(
+                        $thread,
+                        $this->actor,
+                        ['notice_type' => 'isEssence']
+                    ));
+                }
             }
         }
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $thread);
-            $message = isset($attributes['message']) ? $attributes['message'] : '';
+            if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
+                $message = isset($attributes['message']) ? $attributes['message'] : '';
 
-            if ($attributes['isDeleted']) {
-                $thread->hide($this->actor, $message);
-                // 内容删除通知
-                $thread->raise(new ThreadNotices(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isDeleted', 'refuse' => $message]
-                ));
-            } else {
-                $thread->restore($this->actor, $message);
+                if ($attributes['isDeleted']) {
+                    $thread->hide($this->actor, $message);
+                    // 内容删除通知
+                    $thread->raise(new ThreadNotices(
+                        $thread,
+                        $this->actor,
+                        ['notice_type' => 'isDeleted', 'refuse' => $message]
+                    ));
+                } else {
+                    $thread->restore($this->actor, $message);
+                }
             }
         }
 

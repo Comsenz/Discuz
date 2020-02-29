@@ -24,7 +24,6 @@
           <el-input size="medium" class="content-contains-input" clearable placeholder="搜索关键词" v-model="keyWords" ></el-input>
           <el-checkbox v-model="showSensitiveWords">显示敏感词</el-checkbox>
         </div>
-
         <div class="cont-review-header__rt-search">
           <span  class="cont-review-header__lf-title">搜索范围：</span>
           <el-select v-model="searchReviewSelect" size="medium" placeholder="选择审核状态">
@@ -53,7 +52,6 @@
           </el-select>
           <el-button size="small" @click="themeSearch" type="primary">搜索</el-button>
         </div>
-
       </div>
     </div>
 
@@ -152,7 +150,7 @@
 
 <script>
 import '../../../../scss/site/module/contStyle.scss';
-import contReviewCon from '../../../../controllers/site/cont/contReviewCon'
+import contReviewCon from '../../../../controllers/site/cont/contModeration/contReviewCon'
 export default {
     name: "cont-review-view",
   ...contReviewCon

@@ -93,7 +93,7 @@ class ListUserFollowController extends AbstractListController
 
         $document->setMeta([
             'total' => $this->userFollowCount,
-            'size' => $limit,
+            'pageCount' => ceil($this->userFollowCount / $limit),
         ]);
 
         return $userFollow;

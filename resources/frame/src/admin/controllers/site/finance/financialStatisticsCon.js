@@ -10,7 +10,7 @@ export default {
 
                 },
                 {
-                    title: "用户总充提现",
+                    title: "用户总提现",
                     num: "0",
                     icon: 'icontixian',
                     key: 'totalWithdrawal',
@@ -95,7 +95,7 @@ export default {
             valueOrder:['',''],       //订单按月统计时间
             noData: false,            //暂无数据
             noDataOrder: false,       //订单暂无数据
-            istrue: 0,                
+            istrue: 0,
             istrueOder: 0,
             mouthTab: false,         //按月统计组件
             dayTab: true,           //按日统计
@@ -155,7 +155,6 @@ export default {
 
                 }
             }).then(res => {
-                console.log(res)
                 // this.financialList = res.readdata._data;
                 var oArr = Object.entries(res.readdata._data);
                 for (var i = 0; i < this.financialList.length; i++) {
@@ -187,7 +186,6 @@ export default {
             this.orderStatistics();
         },
         earningsStatistics() {  //数据请求传给图标
-            console.log(this.financialTime,'是不是数组')
             var dataStatistics ={    //盈利统计按日、周统计
                     'filter[type]': this.istrue + 1,
                     'filter[createdAtBegin]': this.financialTime[0],
@@ -209,11 +207,10 @@ export default {
                 method: 'get',
                 data:data
             }).then(res => {
-                console.log(res, '盈利数据图标')
                 if (res.readdata == '') {
                     this.noData = true
                 }else{
-                    this.noData = false  
+                    this.noData = false
                 }
                 var date = [];
                 var total_profit = [];
@@ -226,7 +223,6 @@ export default {
                     withdrawal_profit.push(item._data.withdrawal_profit)
                     master_portion.push(item._data.master_portion)
                     register_profit.push(item._data.register_profit)
-                    // console.log(this.date,'000000')
                 })
                 this.earningsEcharts(date, total_profit, withdrawal_profit, master_portion, register_profit)
 
@@ -267,10 +263,10 @@ export default {
                         date.push(item._data.date);
                         order_count.push(item._data.order_count);
                         order_amount.push(item._data.order_amount);
-    
+
                     })
                     this.orderEcharts(date, order_count, order_amount)
-   
+
             })
 
         },
@@ -309,11 +305,11 @@ export default {
                         boundaryGap: false,
                         data: date,
                         axisLabel: {
-                            interval: 0, 
-                             rotate:-40 
+                            interval: 0,
+                             rotate:-40
                             },
-                    }, 
-                       
+                    },
+
                 ],
 
                 yAxis: [
@@ -388,8 +384,8 @@ export default {
                         boundaryGap: false,
                         data: date,
                         axisLabel: {
-                            interval: 0, 
-                             rotate:-40 
+                            interval: 0,
+                             rotate:-40
                             },
                     }
                 ],
@@ -400,7 +396,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: '订单数量', //order_count	
+                        name: '订单数量', //order_count
                         type: 'line',
                         stack: '总量',
                         areaStyle: {},

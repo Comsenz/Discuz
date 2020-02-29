@@ -48,10 +48,8 @@ export default {
           url: 'wallet',
           splice: `${this.query.id ? this.query.id : ''}`
         })
-        console.log(response,'wallet response')
         this.walletInfo = response.readdata;
       }catch(err){
-        console.error(err, 'getWalletDet');
       }
     },
 
@@ -94,7 +92,6 @@ export default {
         })
 
       } catch(err){
-        console.error(err,'handleSubmit ')
       }
     },
     

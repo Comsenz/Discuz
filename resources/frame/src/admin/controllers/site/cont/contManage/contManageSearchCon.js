@@ -11,8 +11,8 @@ export default {
           name:'全部',
           id:''
         }
-      ],   //主题分类列表
-      categoryId: '',       //主题分类选中
+      ], //主题分类列表
+      categoryId: '',        //主题分类选中
 
       pageOptions: [
         {
@@ -26,12 +26,12 @@ export default {
           label: '每页显示30条'
         }
       ],
-      pageSelect:'10',      //每页显示数选择值
+      pageSelect:'10',       //每页显示数选择值
 
-      themeAuthor:'',       //主题作者
-      themeKeyWords:'',     //主题关键词
+      themeAuthor:'',        //主题作者
+      themeKeyWords:'',      //主题关键词
 
-      checkedStatus:false,  //更多选项
+      checkedStatus:false,   //更多选项
 
       pickerOptions: {
         shortcuts: [{
@@ -59,17 +59,17 @@ export default {
             picker.$emit('pick', [start, end]);
           }
         }]
-      }, //快捷选择时间
-      dataValue:['',''],         //发表时间范围
+      },  //快捷选择时间
+      dataValue:['',''],     //发表时间范围
 
-      viewedTimesMin:'',    //被浏览次数最小
-      viewedTimesMax:'',    //被浏览次数最大
+      viewedTimesMin:'',     //被浏览次数最小
+      viewedTimesMax:'',     //被浏览次数最大
 
       numberOfRepliesMin:'',    //被回复数最小
       numberOfRepliesMax:'',    //被回复数最大
 
-      essentialTheme:'',    //精华主题类型
-      topType:''            //置顶主题类型
+      essentialTheme:'',     //精华主题类型
+      topType:''             //置顶主题类型
 
     }
   },
@@ -103,13 +103,8 @@ export default {
 
     submitClick(){
       this.dataValue = this.dataValue == null?['','']:this.dataValue;
-
-      console.log(this.dataValue);
-
       this.dataValue[0] = this.dataValue[0] == ''?this.dataValue[0]:this.dataValue[0] + '-00-00-00';
       this.dataValue[1] = this.dataValue[1] == ''?this.dataValue[1]:this.dataValue[1] + '-23-59-59';
-
-      console.log(this.dataValue);
 
       /*
       * 调用方法可以在里面传值，对应mutations里对应方法形参payload
@@ -129,13 +124,6 @@ export default {
       });
 
       this.$router.push({path:'/admin/cont-manage'});
-
-      /*
-      * 读取映射state内的数据
-      * */
-      console.log(this.searchData);
-
-
     },
 
     /*
@@ -158,11 +146,8 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
-
   },
   created(){
     this.getCategories();

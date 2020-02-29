@@ -10,15 +10,15 @@
         @load="onLoad"
         :immediate-check="false"
     >
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div class="content">
-        <Header :userInfoAvatarUrl="userAvatar" :followShow="true" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :perDetShow="false"></Header>
-        <div class="gap"></div>
-        <ThemeDet :themeList="OthersThemeList"></ThemeDet>
-      </div>
-    </van-pull-refresh>
-  </van-list>
-      <footer class="home-page-footer">
+        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+          <div class="content">
+            <Header :userInfoAvatarUrl="userAvatar" :followShow="true" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :perDetShow="false"></Header>
+            <div class="gap"></div>
+            <ThemeDet :themeList="OthersThemeList"></ThemeDet>
+          </div>
+        </van-pull-refresh>
+      </van-list>
+      <footer class="home-page-footer" v-if="OthersThemeList != null && OthersThemeList != ''">
         <!-- <p>上划加载更多</p> -->
       </footer>
     </div>

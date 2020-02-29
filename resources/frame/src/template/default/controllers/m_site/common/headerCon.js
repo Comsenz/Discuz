@@ -94,7 +94,7 @@ export default {
       logoShow: false
     },
     followShow: { //组件是否显示关注信息
-      logoShow: false
+      followShow: false
     },
   },
   computed: {
@@ -113,7 +113,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadCategories();
-    if(this.followShow && this.userId) {
+    if(this.followShow) {
       this.loadUserFollowInfo();
     }
     if(this.userId){

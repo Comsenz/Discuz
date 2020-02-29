@@ -47,12 +47,10 @@ defaultConfig.beforeEnterModule = function(Router) {
 	});
 
   Router.onError((error) => {
-    console.log('页面跳转错误',error);
     const pattern = /Loading chunk (\d)+ failed/g;
     const isChunkLoadFailed = error.message.match(pattern);
     if(isChunkLoadFailed){
       location.reload();
-      console.log('刷新');
       // const targetPath = $router.history.pending.fullPath;
       // $router.replace(targetPath);
     }

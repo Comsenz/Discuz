@@ -9,6 +9,5 @@ export default {
    */
   [SET_LOGIN_STATE](state,payload){
     state.loginState = !state.loginState;
-    console.log(state.loginState);
   }
 }

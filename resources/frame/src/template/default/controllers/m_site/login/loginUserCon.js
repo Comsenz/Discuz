@@ -61,7 +61,6 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res);
         this.btnLoading = false;
         if (res.errors){
           if (res.errors[0].detail){
@@ -86,7 +85,6 @@ export default {
               if (res.readdata._data.paid) {
                 browserDb.setLItem('foregroundUser', res.data.attributes.username);
                 let beforeVisiting = browserDb.getSItem('beforeVisiting');
-                console.log(beforeVisiting);
 
                 if (beforeVisiting) {
                   this.$router.push({path: beforeVisiting})
@@ -100,7 +98,7 @@ export default {
                 } else if (this.siteMode === 'public') {
                   this.$router.push({path: '/'});
                 } else {
-                  console.log("缺少参数，请刷新页面");
+                  //缺少参数，请刷新页面
                 }
               }
             }
@@ -108,7 +106,6 @@ export default {
         }
 
       }).catch(err => {
-        console.log(err);
       })
 
     },
@@ -136,7 +133,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         // if (res.errors){
         //   this.$toast.fail(res.errors[0].code);
         // } else {
@@ -145,7 +141,6 @@ export default {
           browserDb.setLItem('siteInfo', res.readdata);
         // }
       }).catch(err=>{
-        console.log(err);
       })
     },
     /*getWatchHref(code,state){
@@ -157,14 +152,12 @@ export default {
           state:state
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
-          console.log(res.errors[0].status);
           this.wxStatus = res.errors[0].status;
           let openid = res.errors[0].user.openid;
 
           if (this.wxStatus == 400){
-            console.log('微信跳转');
+            //微信跳转
             this.setOpenId(openid);
             this.$router.push({path: '/wx-login-bd'})
           }
@@ -174,7 +167,6 @@ export default {
         // this.isCodeState = false;
         this.wxHref = res.data.attributes.location;
       }).catch(err=>{
-        console.log(err);
       })
     },*/
     getUsers(id){
@@ -187,14 +179,12 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getWxLogin(){
@@ -203,10 +193,8 @@ export default {
         method:"get",
         data:{}
       }).then(res=>{
-        console.log(res);
         return res
       }).catch(err=>{
-        console.log(err);
       })
     }
   },
@@ -216,20 +204,17 @@ export default {
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
-    console.log(this.$router.history);
-    console.log(this.$router.history.current.query.code);
-    console.log(this.$router.history.current.query.state);
 
     //获取到code 和 state再访问getWatchHref接口，把code和state拼接到接口url里。
 
     if (isWeixin === true) {
-      console.log('微信登录');
+      //微信登录
     } else if (isPhone === true) {
-      console.log('手机浏览器登录');
+      //手机浏览器登录
       this.wxLoginShow = false;
       this.isOne = true;
     } else {
-      console.log('pc登录');
+      //pc登录
       this.isPC = true;
     }
 

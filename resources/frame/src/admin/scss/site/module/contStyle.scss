@@ -26,28 +26,61 @@
   .cont-class-table{
     margin-top: 15PX;
   }
-
-  /*.cont-class-table-add{
-    width: 100%;
-    height: 45PX;
-    border-bottom: 1PX solid #EBEEF5;
-    p{
-      margin-left: 65PX;
-      color: $main;
-      line-height: 45PX;
-      span{
-        cursor: pointer;
-      }
-    }
-  }*/
 }
 
 
 /*
-  内容管理
+  内容管理：最新主题
   */
 .cont-manage-box{
   color: $titleColor;
+
+  .cont-manage-header{
+    margin-top: 15PX;
+
+    &_condition{
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      &-title {
+        width: 70PX;
+      }
+      .el-input{
+        flex: 1;
+      }
+      .el-select{
+        flex: 1;
+      }
+      .el-date-editor{
+        flex: 1;
+        width: 220PX;
+      }
+      .el-button{
+        margin-left: 15PX;
+      }
+    }
+
+    &_condition-lf{
+      margin-right: 30PX;
+    }
+    .cont-manage-header_condition-mid{
+      margin-right: 30PX;
+    }
+
+    .condition-box{
+      display: flex;
+      margin-bottom: 15PX;
+    }
+
+    &_bottom{
+      .spacing{
+        width: 20PX;
+        text-align: center;
+      }
+    }
+
+  }
 
   .cont-manage-theme{
     margin-top: 15PX;
@@ -143,6 +176,147 @@
 
   }
 }
+
+
+/*
+  内容管理：最新回复
+*/
+.latest-reply-box{
+
+  .latest-reply-header{
+    margin-top: 15PX;
+
+    &_condition{
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      &-title {
+        width: 70PX;
+      }
+      .el-input{
+        flex: 1;
+      }
+      .el-date-editor{
+        flex: 1;
+        width: 220PX;
+      }
+      .el-button{
+        margin-left: 15PX;
+      }
+    }
+
+    &_condition-lf{
+      margin-right: 30PX;
+    }
+
+    .condition-box{
+      display: flex;
+      margin-bottom: 15PX;
+    }
+  }
+
+  .latest-reply-theme{
+    margin-top: 15PX;
+
+    &__table{
+      width: 100%;
+
+      &-header{
+        width: 100%;
+        height: 53PX;
+        background-color: $tableHeaderColor;
+        display: flex;
+        align-items: center;
+        padding-left: 17PX;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        border-bottom: 1PX solid $tableBorderColor;
+
+        &__title{
+          margin-left: 30PX;
+          color:$commentColor ;
+        }
+
+      }
+
+      //&-footer{
+      //  padding: 15PX 0;
+      //  text-align: center;
+      //}
+
+      &-side{
+        width: 100%;
+        .el-checkbox__label{
+          display: none;
+        }
+      }
+
+      &-main{
+        line-height: 20PX;
+
+        &__cont-text{
+          width: 100%;
+          color: $titleColor;
+          word-break:break-all;
+          display: block;
+          .qq-emotion{
+            width: 20PX;
+            height: 20PX;
+            vertical-align: text-bottom;
+            display:inline-block;
+          }
+        }
+
+        &__cont-imgs{
+          &-p{
+            text-align: center;
+            margin-top: 14PX;
+            img{
+              max-width: 60%;
+              cursor: pointer;
+            }
+          }
+        }
+
+        &__cont-annex{
+          margin-top: 10PX;
+        }
+      }
+
+      &-footer{
+        width: 100%;
+        height: 100%;
+        display: flex;
+
+        &__lf{
+          display: flex;
+          align-items: center;
+          margin-right: 66PX;
+
+          i{
+            height: 16PX;
+            width: 1PX;
+            display: inline-block;
+            background-color: #DCDFE6;
+            margin: 0 14PX;
+          }
+        }
+
+      }
+
+
+    }
+  }
+
+  .latest-reply-footer{
+    margin-top: 30PX;
+  }
+
+}
+
+
 
 
 /*

@@ -34,6 +34,7 @@ export default {
       value:'',          //密码
       walletBalance:'',   //钱包余额
       userDet: '',
+      payLoading: false,
       
 		}
 	},
@@ -199,6 +200,7 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.payLoading = true;
           return res;
         }
       }).catch(err=>{
@@ -223,6 +225,7 @@ export default {
           this.userDet = res.readdata;
           this.payStatusNum = +1;
           if (this.payStatus) {
+            this.payLoading = false;
             this.qrcodeShow = false;
             this.$router.push({path:'/details/' + this.themeId});
             this.payStatusNum = 11;
@@ -407,7 +410,8 @@ export default {
     //关闭
     onClose(){
       this.value = '';
-      this.errorInfo = ''
+      this.errorInfo = '';
+      this.payLoading = true;
     },
 
 

@@ -6,25 +6,25 @@
         </CardRow>
       </Card>
 
-      <Card header="提现手续费率（百分之）：">
+      <Card header="提现手续费率（百分之）">
         <CardRow description="用户每次提现平台收取的手续费，0或不填则不收取手续费">
           <el-input clearable type="number" v-model="withdrawalFee"></el-input>
         </CardRow>
       </Card>
 
-      <Card header="单次提现最小金额（元）：">
+      <Card header="单次提现最小金额（元）">
         <CardRow description="用户每次提现的最小金额">
           <el-input clearable type="number" v-model="minAmount"></el-input>
         </CardRow>
       </Card>
 
-      <Card header="单次提现最大金额（元）：">
+      <Card header="单次提现最大金额（元）">
         <CardRow description="用户每次提现的最大金额">
           <el-input clearable type="number" v-model="maxAmount"></el-input>
         </CardRow>
       </Card>
 
-      <Card header="每日提现总金额上限（元）：">
+      <Card header="每日提现总金额上限（元）">
         <CardRow description="所有用户提现的每日上限总金额">
           <el-input clearable type="number" v-model="amountCap"></el-input>
         </CardRow>

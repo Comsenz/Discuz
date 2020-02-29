@@ -743,7 +743,6 @@ export default {
   //   next();
   //   return
   // }
-  // console.log('跳转前');
   // next({path:'/supplier-all-back',query:{state:true}});
 
   if (tokenId && Authorization){
@@ -758,7 +757,6 @@ export default {
             /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
             if (signInAndPayForAccess.includes(to.name)){
               if(to.name === 'pay-circle-con/:themeId/:groupId'){
-                // console.log(to.params.themeId,'当前router主题id');
                 // next({path:'/details/' + to.params.themeId});
               }
               next(vm=>{
@@ -783,7 +781,6 @@ export default {
       } else {
 
         if (signInAndPayForAccess.includes(to.name)){
-          console.log(form);
           // next(form.path)
           next('/')
         }else {
@@ -808,18 +805,17 @@ export default {
         next();
       }
       next({path:'/wx-login-bd'});
-      console.log('微信');
+      //微信
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){
         /*符合，未登录可以访问站点*/
-        console.log('符合');
         this.getForum().then(res=>{
           /*判断站点模式*/
           if (res.readdata._data.set_site.site_mode === 'public'){
             if(publicNotAccessPage.includes(to.name)){
-              // console.log(to.name,'当前包含路由');
+              // to.name,'当前包含路由
               if(to.name === 'pay-circle-con/:themeId/:groupId'){
-                // console.log(to.params.themeId,'当前router主题id');
+                // to.params.themeId,'当前router主题id
                 next({path:'/details/' + to.params.themeId});
               }
             }
@@ -912,10 +908,8 @@ export default {
         include:['groups']
       }
     }).then(res=>{
-      console.log(res);
       return res;
     }).catch(err=>{
-      console.log(err);
     })
   },
   getForum(){
@@ -924,11 +918,9 @@ export default {
       method:'get',
       data:{}
     }).then(res=>{
-      console.log(res);
       browserDb.setLItem('siteInfo',res.readdata);
       return res;
     }).catch(err=>{
-      console.log(err);
     })
   },
 

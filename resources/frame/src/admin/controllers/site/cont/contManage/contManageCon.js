@@ -34,7 +34,12 @@ export default {
       ],  //操作列表
       operatingSelect:'',   //操作单选选择
 
-      categoriesList: [],   //选择站点列表
+      categoriesList: [
+        {
+          name:'所有分类',
+          id:0
+        }
+      ],   //选择站点列表
       categoryId: '',       //选择站点选中
 
       toppingRadio:2,       //是否置顶
@@ -50,21 +55,79 @@ export default {
       currentPag: 1,        //当前页数
       total:0,              //主题列表总条数
       pageCount:1,          //总页数
-      showViewer:false,      //预览图
-      url:[]
+      showViewer:false,     //预览图
+      url:[],
+
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      searchData:{
+        topicTypeId:'0',         //主题类型
+        categoryId:0,            //主题分类ID
+        pageSelect:'10',         //每页显示数
+        themeAuthor:'',          //主题作者
+        themeKeyWords:'',        //主题关键词
+        dataValue:['',''],            //发表时间范围
+        viewedTimesMin:'',       //被浏览次数最小
+        viewedTimesMax:'',       //被浏览次数最大
+        numberOfRepliesMin:'',   //被回复数最小
+        numberOfRepliesMax:'',   //被回复数最大
+        essentialTheme:'',       //精华主题类型
+        topType:''               //置顶主题类型
+      },
+      topicType:[
+        {
+          name:'全部',
+          id:'0'
+        },
+        {
+          name:'置顶主题',
+          id:'1'
+        },{
+          name:'精华主题',
+          id:'2'
+        },{
+          name:'置顶并精华主题',
+          id:'3'
+        }
+      ]
+
     }
   },
   computed:mapState({
-    searchData:state => state.admin.searchData
+    // searchData:state => state.admin.searchData
   }),
 
   methods:{
-    ...mapMutations({
+    /*...mapMutations({
       setSearch:'admin/SET_SEARCH_CONDITION'
-    }),
+    }),*/
 
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -109,8 +172,6 @@ export default {
       this.isIndeterminate = false;
       */
 
-      console.log(this.themeListAll);
-      console.log(val);
       this.checkedTheme = val ? this.themeListAll : [];
       this.isIndeterminate = false;
     },
@@ -195,7 +256,6 @@ export default {
           break;
         default:
           selectStatus = true;
-          console.log('操作选项错误，请重新选择或刷新页面(F5)');
           this.$message({
             showClose: true,
             message: '操作选项错误，请重新选择或刷新页面(F5)',
@@ -268,7 +328,6 @@ export default {
             }
           }
         }).catch(err=>{
-          console.log(err);
         })
       }
 
@@ -280,6 +339,33 @@ export default {
       this.currentPaga = val;
       this.checkAll = false;
       this.getThemeList(val);
+    },
+
+    searchClick(){
+      //判断主题类型
+      switch (this.searchData.topicTypeId) {
+        case '0':
+          this.searchData.essentialTheme = '';
+          this.searchData.topType = '';
+          break;
+        case '1':
+          this.searchData.essentialTheme = '';
+          this.searchData.topType = 'yes';
+          break;
+        case '2':
+          this.searchData.essentialTheme = 'yes';
+          this.searchData.topType = '';
+          break;
+        case '3':
+          this.searchData.essentialTheme = 'yes';
+          this.searchData.topType = 'yes';
+          break;
+      }
+
+      //处理时间为空
+      this.searchData.dataValue = this.searchData.dataValue == null?['','']:this.searchData.dataValue;
+
+      this.getThemeList(1);
     },
 
     /*
@@ -311,8 +397,6 @@ export default {
            'sort':'-createdAt'
          }
        }).then(res=>{
-         console.log(res);
-
          if (res.errors){
            this.$message.error(res.errors[0].code);
          }else {
@@ -326,10 +410,7 @@ export default {
            });
          }
        }).catch(err=>{
-         console.log(err);
        })
-
-
     },
     getCategories(){
       this.appFetch({
@@ -348,11 +429,8 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
-
   },
 
   beforeDestroy() {
@@ -368,11 +446,10 @@ export default {
       }
     }
 
-    this.setSearch(data);
+    // this.setSearch(data);
   },
 
   created(){
-    console.log(this.searchData);
     this.currentPag = Number(webDb.getLItem('currentPag'))||1;
     this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
     this.getCategories();

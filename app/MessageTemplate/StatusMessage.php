@@ -25,9 +25,16 @@ class StatusMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
+        $refuse = '无';
+        if (Arr::has($data, 'refuse')) {
+            if (!empty($data['refuse'])) {
+                $refuse = $data['refuse'];
+            }
+        }
+
         return [
             $this->notifiable->username,
-            Arr::get($data, 'refuse', '无')
+            $refuse
         ];
     }
 

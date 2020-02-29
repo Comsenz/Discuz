@@ -46,7 +46,6 @@ export default {
   methods:{
     payImmediatelyClick(data){
       //data返回选中项
-      console.log(data);
 
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
@@ -54,7 +53,7 @@ export default {
       if (data.name === '微信支付') {
         this.show = false;
         if (isWeixin){
-          console.log('微信');
+          //微信
           this.getOrderSn().then(()=>{
             this.orderPay(12).then((res)=>{
               if (typeof WeixinJSBridge == "undefined"){
@@ -70,7 +69,7 @@ export default {
             })
           });
         } else if (isPhone){
-          console.log('手机浏览器');
+          //手机浏览器
           this.getOrderSn().then(()=>{
             this.orderPay(11).then((res)=>{
               this.wxPayHref = res.readdata._data.wechat_h5_link;
@@ -86,10 +85,9 @@ export default {
             })
           });
         } else {
-          console.log('pc');
+          //pc
           this.getOrderSn().then(()=>{
             this.orderPay(10).then((res)=>{
-              console.log(res);
               this.codeUrl = res.readdata._data.wechat_qrcode;
               this.qrcodeShow = true;
               const pay = setInterval(()=>{
@@ -106,14 +104,12 @@ export default {
     },
 
     onInput(key){
-      console.log(key);
       this.value = this.value + key;
 
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            console.log(res);
             const pay = setInterval(()=>{
               if (this.payStatus && this.payStatusNum > 10){
                 clearInterval(pay);
@@ -124,13 +120,11 @@ export default {
         })
       }
     },
-
+    //删除
     onDelete(){
-      console.log("删除");
     },
-
+    //关闭
     onClose(){
-      console.log('关闭');
       this.value = '';
       this.errorInfo = ''
     },
@@ -179,7 +173,6 @@ export default {
         const timer = setInterval(() => {
           second--;
           this.getUsers(that.tokenId).then(res=>{
-            console.log(second);
 
             if (res.errors){
               clearInterval(timer);
@@ -198,7 +191,6 @@ export default {
                 toast.clear();
 
                 let beforeVisiting = webDb.getSItem('beforeVisiting');
-                console.log(beforeVisiting);
 
                 if (beforeVisiting) {
                   this.$router.push({path: beforeVisiting})
@@ -220,58 +212,6 @@ export default {
     payClick(){
       // this.show = !this.show;
       this.show = true;
-
-      /*let isWeixin = this.appCommonH.isWeixin().isWeixin;
-      let isPhone = this.appCommonH.isWeixin().isPhone;
-
-      if (isWeixin){
-        console.log('微信');
-        this.getOrderSn().then(()=>{
-          this.orderPay(12).then((res)=>{
-            if (typeof WeixinJSBridge == "undefined"){
-              if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-              }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
-              }
-            }else{
-              this.onBridgeReady(res);
-            }
-          })
-        });
-      } else if (isPhone){
-        console.log('手机浏览器');
-        this.getOrderSn().then(()=>{
-          this.orderPay(11).then((res)=>{
-            this.wxPayHref = res.readdata._data.wechat_h5_link;
-            window.location.href = this.wxPayHref;
-
-            const payPhone = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
-                clearInterval(payPhone);
-              }
-              this.getUsersInfo()
-            },3000)
-
-          })
-        });
-      } else {
-        console.log('pc');
-        this.getOrderSn().then(()=>{
-          this.orderPay(10).then((res)=>{
-            console.log(res);
-            this.codeUrl = res.readdata._data.wechat_qrcode;
-            this.qrcodeShow = true;
-            const pay = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
-                clearInterval(pay);
-              }
-              this.getUsersInfo()
-            },3000)
-          })
-        });
-      }*/
     },
 
     /*
@@ -283,7 +223,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -308,7 +247,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getOrderSn(){
@@ -319,14 +257,12 @@ export default {
           "type":1
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           this.orderSn = res.readdata._data.order_sn;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     orderPay(type,value){
@@ -339,14 +275,12 @@ export default {
           'pay_password':value
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsersInfo(){
@@ -358,8 +292,6 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
-        console.log(res.readdata._data.paid);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -374,7 +306,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -390,11 +321,9 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log(res);
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getAuthority(id){
@@ -406,14 +335,12 @@ export default {
           include:['permission']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     getGroups(){

@@ -46,7 +46,6 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
         if (res.errors){
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -55,7 +54,6 @@ export default {
           }
         } else {
           this.insterVal = res.data.attributes.interval;
-          // console.log(this.insterVal+'555555');
           this.time = this.insterVal;
           this.timer();
         }
@@ -88,7 +86,6 @@ export default {
     //   },{
     //    emulateJSON:true
     //   }).then((response)=>{
-    //    console.log(response.body);
     //   });
     // },
 
@@ -110,7 +107,6 @@ export default {
         }
       }).then(res => {
         this.btnLoading = false;
-        // console.log(res);
         this.$router.push({
           path:'/circle',
         });
@@ -132,7 +128,6 @@ export default {
         }
 
        }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -148,17 +143,14 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log(res);
           return res.readdata._data.mobile;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
   },
 
   created(){
-    // console.log(this.time);
     this.siteMode = webDb.getLItem('siteInfo')._data.set_site.site_mode;
     let tokenId = webDb.getLItem('tokenId');
     this.getUsers(tokenId).then((res)=>{

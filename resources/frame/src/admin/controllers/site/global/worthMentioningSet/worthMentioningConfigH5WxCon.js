@@ -39,7 +39,6 @@ export default {
   },
   methods:{
     loadStatus(){
-      console.log(this.type);
       this.appFetch({
         url:'tags',
         method:'get',
@@ -47,7 +46,6 @@ export default {
         data:{
         }
       }).then(data=>{
-          // console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
@@ -55,7 +53,6 @@ export default {
           this.appSecret = data.readdata[0]._data.app_secret;
         }
       }).catch(error=>{
-        // console.log('ʧ��');
       })
     },
     submitConfiguration(){

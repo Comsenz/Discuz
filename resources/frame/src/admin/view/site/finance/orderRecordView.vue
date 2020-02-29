@@ -42,7 +42,8 @@
 
         <el-table-column
           prop="_data.order_sn"
-          label="订单号">
+          label="订单号"
+          min-width="110">
         </el-table-column>
 
         <el-table-column

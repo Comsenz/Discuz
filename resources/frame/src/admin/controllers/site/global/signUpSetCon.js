@@ -26,14 +26,11 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          console.log(res,'密码密码')
           // this.pwdLength = res.readdata._data.setreg.password_length
           this.checked = res.readdata._data.set_reg.register_close;
           this.register_validate = res.readdata._data.set_reg.register_validate;
           this.pwdLength = res.readdata._data.set_reg.password_length;
           this.checkList = res.readdata._data.set_reg.password_strength;
-          console.log(this.checkList)
-          // console.log(res)
         }
       })
     },
@@ -87,7 +84,6 @@ export default {
 
         }
       }).then(data=>{
-        console.log(data)
         if (data.errors){
           if (data.errors[0].detail){
             this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])

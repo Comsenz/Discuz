@@ -30,6 +30,5 @@ export default {
     }
   }),
   mounted:function () {
-    console.log("加载后台首页");
   }
 }

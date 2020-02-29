@@ -100,7 +100,10 @@
             <img :src="codeUrl" alt="微信支付二维码" class="qrCode">
             <p class="payTip">微信识别二维码支付</p>
         </van-popup>
-
+        <div class="loadFix" v-if="payLoading">
+            <div class="loadMask"></div>
+            <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
+        </div>
       <PayMethod
         v-if="userDet"
         :data="payList"

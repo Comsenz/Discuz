@@ -2,10 +2,10 @@
 * 内容审核-回复审核控制器
 * */
 
-import Card from '../../../view/site/common/card/card';
-import ContArrange from '../../../view/site/common/cont/contArrange';
-import Page from '../../../view/site/common/page/page';
-import tableNoList from '../../../view/site/common/table/tableNoList';
+import Card from '../../../../view/site/common/card/card';
+import ContArrange from '../../../../view/site/common/cont/contArrange';
+import Page from '../../../../view/site/common/page/page';
+import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
@@ -14,8 +14,8 @@ import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 export default {
   data:function () {
     return {
-      searchUserName:'',  //用户名
-      keyWords:'',        //关键词
+      searchUserName:'',          //用户名
+      keyWords:'',                //关键词
       showSensitiveWords:false,   //显示敏感词
       pageOptions: [
         {
@@ -106,15 +106,15 @@ export default {
           label:'其他'
         }
       ],
-      reasonForOperationSelect:1,   //操作理由选中
+      reasonForOperationSelect:1, //操作理由选中
       appleAll:false,             //应用其他页面
       themeList:[],               //主题列表
       currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
-      ignoreStatus:true,         //全部忽略是否显示
-      submitForm:[],            //操作理由表单
-      showViewer:false,      //预览图
+      ignoreStatus:true,          //全部忽略是否显示
+      submitForm:[],              //操作理由表单
+      showViewer:false,           //预览图
       url:[]
 
       //未审核0，已审核\通过1，已忽略2
@@ -123,7 +123,6 @@ export default {
 
   methods:{
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -168,7 +167,6 @@ export default {
     },
 
     handleCurrentChange(val) {
-      console.log(val);
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       webDb.setLItem('currentPag',val);
       this.currentPaga = val;
@@ -208,12 +206,10 @@ export default {
           this.$message.error('搜索日期选择错误，请重新选择！或 刷新页面（F5）');
       }
 
-      console.log('相对时间：'+this.relativeTime);
 
     },
 
     submitClick() {
-      console.log(this.submitForm);
       this.patchPostsBatch(this.submitForm);
     },
 
@@ -275,9 +271,8 @@ export default {
           this.patchPosts(data,themeId);
           break;
         default:
-          console.log("系统错误，请刷新页面");
+          //系统错误，请刷新页面
       }
-      console.log(data);
     },
 
     viewClick(id){
@@ -292,7 +287,6 @@ export default {
     },
 
     editClick(id,replyId){
-      console.log(id);
       let routeData = this.$router.resolve({
         path: `/reply-to-topic/${id}/${replyId}`
       });
@@ -328,7 +322,6 @@ export default {
           'sort':'-updatedAt'
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -354,7 +347,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -376,7 +368,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -401,7 +392,6 @@ export default {
             });
           }
         }
-        console.log(res);
       }).catch(err=>{
 
       })
@@ -425,7 +415,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

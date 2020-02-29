@@ -52,7 +52,6 @@ export default {
       } else */
 
       if (this.createCategoriesStatus){
-        console.log(this.categoriesList.slice(this.categoriesListLength, this.categoriesList.length));
         this.createCategories(this.categoriesList.slice(this.categoriesListLength,this.categoriesList.length)).then(()=>{
           this.getCategories();
           this.createCategoriesStatus = false;
@@ -77,12 +76,9 @@ export default {
     },
 
     deleteClick(id,index){
-      console.log(index);
-      console.log(this.categoriesListLength);
 
       if (this.createCategoriesStatus && index > this.categoriesListLength -1){
         this.categoriesList.splice(index,1);
-        console.log(this.categoriesList);
       } else {
         this.deleteCategories(id).then(()=>{
           this.getCategories();
@@ -128,7 +124,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -151,7 +146,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchDeleteCategories(id){
@@ -161,7 +155,6 @@ export default {
         splice:'/'+id
       }).then(res=>{
         if (res.meta){
-          console.log(res.meta);
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
               this.$message.error(item.code)
@@ -174,7 +167,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     createCategories(data){
@@ -198,7 +190,6 @@ export default {
                 }
               }).then(res=>{
                 if (res.meta){
-                  console.log(res.meta);
                   res.meta.forEach((item,index)=>{
                     setTimeout(()=>{
                       this.$message.error(item.message.name[0])
@@ -211,7 +202,6 @@ export default {
                   });
                 }
               }).catch(err=>{
-                console.log(err);
               })
     },
     batchUpdateCategories(data){
@@ -223,7 +213,6 @@ export default {
               }
             }).then(res=>{
               if (res.meta){
-                console.log(res.meta);
                 res.meta.forEach((item,index)=>{
                   setTimeout(()=>{
                     this.$message.error(item.message.name[0])
@@ -236,7 +225,6 @@ export default {
                 });
               }
             }).catch(err=>{
-              console.log(err);
             })
     }
   },

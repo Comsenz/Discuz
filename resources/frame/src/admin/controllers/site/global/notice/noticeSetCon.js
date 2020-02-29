@@ -27,7 +27,6 @@ export default {
         method: 'get',
         data: {}
       }).then(res => {
-        console.log(res);
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
@@ -36,13 +35,11 @@ export default {
           this.total = res.readdata.length;
           // this.pageNum = res.meta.pageCount;
           // this.total = res.meta ? res.meta.total : 0;
-          console.log(this.tableData, '????????????');
           this.tableData.forEach((item) => {
             // item.index = (currentPage-1)*pageSize+index+1
           })
         }
       }).catch(err => {
-        console.log(err);
       })
     },
     noticeSetting(id, actionName) {      //修改开启状态

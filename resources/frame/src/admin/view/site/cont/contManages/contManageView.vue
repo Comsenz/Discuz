@@ -1,15 +1,80 @@
 <template>
     <div class="cont-manage-box">
+      <div class="cont-manage-header">
+        <div class="cont-manage-header_top condition-box">
+          <div class="cont-manage-header_condition cont-manage-header_condition-lf">
+            <span class="cont-manage-header_condition-title">作者：</span>
+            <el-input size="medium" placeholder="搜索作者" v-model="searchData.themeAuthor" clearable ></el-input>
+          </div>
+          <div class="cont-manage-header_condition">
+            <span class="cont-manage-header_condition-title">内容包含：</span>
+            <el-input size="medium" placeholder="搜索内容" v-model="searchData.themeKeyWords" clearable ></el-input>
+          </div>
+        </div>
+
+        <div class="cont-manage-header_middle condition-box">
+          <div class="cont-manage-header_condition cont-manage-header_condition-lf">
+            <span class="cont-manage-header_condition-title">搜索范围：</span>
+            <el-select v-model="searchData.categoryId" placeholder="选择搜索范围">
+              <el-option
+                v-for="item in categoriesList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="cont-manage-header_condition">
+            <span class="cont-manage-header_condition-title">主题类型：</span>
+            <el-select v-model="searchData.topicTypeId" placeholder="选择主题类型">
+              <el-option
+                v-for="item in topicType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+
+        <div class="cont-manage-header_bottom condition-box">
+          <div class="cont-manage-header_condition cont-manage-header_condition-lf">
+            <span class="cont-manage-header_condition-title">发布时间:</span>
+            <el-date-picker
+              v-model="searchData.dataValue"
+              type="daterange"
+              align="right"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>
+          <div class="cont-manage-header_condition cont-manage-header_condition-mid">
+            <span class="cont-manage-header_condition-title">浏览次数：</span>
+            <el-input size="medium" placeholder="大于" v-model="searchData.viewedTimesMin" clearable ></el-input>
+            <div class="spacing"> - </div>
+            <el-input size="medium" placeholder="小于" v-model="searchData.viewedTimesMax" clearable ></el-input>
+          </div>
+          <div class="cont-manage-header_condition">
+            <span class="cont-manage-header_condition-title">被回复数：</span>
+            <el-input size="medium" placeholder="大于" v-model="searchData.numberOfRepliesMin" clearable ></el-input>
+            <div class="spacing"> - </div>
+            <el-input size="medium" placeholder="小于" v-model="searchData.numberOfRepliesMax" clearable ></el-input>
+            <el-button size="small" type="primary" @click="searchClick">搜索</el-button>
+          </div>
+        </div>
+      </div>
+
       <div class="cont-manage-theme">
         <div class="cont-manage-theme__table">
           <div class="cont-manage-theme__table-header">
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>
             <p class="cont-manage-theme__table-header__title">主题列表</p>
           </div>
-
-          <!--:author="items.user?'该用户被删除':items.user._data.username"-->
-          <!--:last="items.lastPostedUser?'该用户被删除':items.lastPostedUser._data.username"-->
-          <!--:theme="items.category._data.name"-->
 
           <ContArrange
             v-for="(items,index) in  themeList"
@@ -23,7 +88,6 @@
             :key="items._data.id"
           >
             <div class="cont-manage-theme__table-side" slot="side">
-              <!--<el-checkbox v-model="checkedTheme" :label="index" @change="handleCheckedCitiesChange(index,items.id(),checkedTheme[index].status)"></el-checkbox>-->
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
@@ -52,14 +116,6 @@
           <tableNoList v-show="themeList.length < 1"></tableNoList>
 
           <div class="cont-manage-theme__table-footer" v-if="pageCount > 1">
-            <!--<el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPag"
-              :page-size="parseInt(searchData.pageSelect)"
-              layout="total, prev, pager, next,jumper"
-              :total="total">
-            </el-pagination>-->
             <Page
               @current-change="handleCurrentChange"
               :current-page="currentPag"

@@ -266,6 +266,17 @@ export default {
               alias:'最新主题'
             }
           },
+          'latest-reply':{
+            comLoad:function (resolve) {
+              require(['../view/site/cont/contManages/latestReplyView'],resolve)
+            },
+            metaInfo:{
+              title:"内容管理",
+              name:'contManage',
+              attribution:"内容",
+              alias:'最新回复'
+            }
+          },
           'cont-manage/search':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contManages/contManageSearchView'], resolve)
@@ -488,7 +499,6 @@ export default {
         return
       }
       next({path:"/admin/login"});
-      console.log('未登录');
     } else {
       this.getUserInfo(tokenId).then(res=>{
         groupId = res.readdata.groups[0]._data.id;
@@ -514,7 +524,6 @@ export default {
         }
         next({path:"/admin/login"});
       });
-      console.log('已经登录');
     }
   },
 
@@ -527,10 +536,8 @@ export default {
         include:['groups']
       }
     }).then(res=>{
-      console.log(res);
       return res
     }).catch(err=>{
-      console.log(err);
     })
   }
 

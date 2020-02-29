@@ -126,6 +126,7 @@ export default {
       rewardTipFlag: '展开',
       userArrStatus: false,
       rewardTipShow: true,
+      payLoading: false,
 
     }
   },
@@ -982,11 +983,13 @@ export default {
     },
     //刪除
     onDelete(){
+      this.value = this.value.slice(0, this.value.length - 1);
     },
     //关闭
     onClose(){
       this.value = '';
-      this.errorInfo = ''
+      this.errorInfo = '';
+      this. payLoading= false;
     },
 
     //创建订单
@@ -1004,13 +1007,14 @@ export default {
       })
     },
     //订单支付
-    orderPay(type){
+    orderPay(type,value){
       return this.appFetch({
         url:'orderPay',
         method:'post',
         splice:'/' + this.orderSn,
         data:{
-          "payment_type":type
+          "payment_type":type,
+          'pay_password':value
         }
       }).then(res=>{
         if (res.errors){
@@ -1020,6 +1024,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          this. payLoading= true;
           return res;
         }
 
@@ -1033,6 +1038,7 @@ export default {
         data:{
         },
       }).then(res=>{
+        
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           if (res.errors[0].detail){
@@ -1050,6 +1056,8 @@ export default {
             this.show = false;
             if(this.payStatus == '1'){
               this.rewardedUsers.unshift({_data:{avatarUrl:this.currentUserAvatarUrl,id:this.userId}});
+              this.payLoading = false;
+              this.$toast.success('支付成功');
               // this.themeCon.rewardedUsers.length = this.themeCon.rewardedUsers.length + 1;
             }
             this.payStatusNum = 11;

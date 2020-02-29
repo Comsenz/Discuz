@@ -126,7 +126,7 @@ class CreateThread
         // 记录触发的审核词
         if ($thread->is_approved == 0 && $censor->wordMod) {
             $stopWords = new PostMod;
-            $stopWords->stop_word = implode(',', $censor->wordMod);
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
             $post->stopWords()->save($stopWords);
         }

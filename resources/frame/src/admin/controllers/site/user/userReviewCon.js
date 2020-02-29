@@ -28,8 +28,6 @@ export default {
       this.multipleSelection = val;
     },
     singleOperation(val,id){
-      console.log(val);
-      console.log(id);
       if (val === 'pass'){
         this.editUser(id,0)
       }else if (val === 'no'){
@@ -41,7 +39,6 @@ export default {
           console.log(value);
           this.editUser(id,3,value.value)
         }).catch((err) => {
-          console.log(err);
         });
       }else if (val === 'del'){
         this.deleteUser(id)
@@ -77,7 +74,6 @@ export default {
           });
           this.patchEditUser(userList);
         }).catch((err) => {
-          console.log(err);
         });
       } else if (val === 'del'){
         this.multipleSelection.forEach((item)=>{
@@ -86,7 +82,6 @@ export default {
         this.patchDeleteUser(userList)
       }
 
-      console.log(userList);
 
     },
 
@@ -105,7 +100,6 @@ export default {
           'filter[status]':'mod'
         }
       }).then(res=>{
-        console.log(res);
         this.tableData = res.readdata;
       })
     },
@@ -133,7 +127,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchEditUser(dataList){
@@ -144,7 +137,6 @@ export default {
           "data": dataList
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -155,7 +147,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchDeleteUser(dataList){       //批量忽略接口
@@ -182,7 +173,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     deleteUser(id){              //单个忽略接口
@@ -198,7 +188,6 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -209,7 +198,6 @@ export default {
           this.getUserList();
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

@@ -169,7 +169,6 @@ const appFetch = function(params, options) {
 
 // && !requireAuth.includes(window.location.pathname)
 
-  // console.log(window.location.pathname);
 
   let defaultHeaders;
   if(authVal != '' && authVal != null && !requireAuth.includes(window.location.pathname)){
@@ -237,12 +236,10 @@ const appFetch = function(params, options) {
 
       return data.data;
     } else {
-      console.log(data.data.errors[0].code);
 
       if (data.data.errors[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
         let isWeixin = appCommonH.isWeixin().isWeixin;
-        console.log(isWeixin);
 
         if (isWeixin){
           browserDb.setLItem('Authorization','');
@@ -250,8 +247,6 @@ const appFetch = function(params, options) {
             Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
-          console.log('token过期，跳转登录页');
-          console.log(Router.init());
           Router.init().push({path:'/login-user'})
         }
 
@@ -294,7 +289,6 @@ const getNewToken = function (router) {
       }
     }
   }).then(res=>{
-    console.log(res);
     let token = res.data.attributes.access_token;
     let tokenId = res.data.id;
     let refreshToken = res.data.attributes.refresh_token;
@@ -302,7 +296,6 @@ const getNewToken = function (router) {
     browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
-    console.log(err);
   })
 }
 

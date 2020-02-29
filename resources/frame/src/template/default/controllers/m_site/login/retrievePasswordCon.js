@@ -62,7 +62,6 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -105,7 +104,6 @@ export default {
         data.attributes.password=this.newpwd;
       }
 
-      console.log(data);
 
       this.appFetch({
         url:"smsVerify",
@@ -116,7 +114,6 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
         this.btnLoading = false;
         if (res.errors){
           this.$toast.fail(res.errors[0].code);

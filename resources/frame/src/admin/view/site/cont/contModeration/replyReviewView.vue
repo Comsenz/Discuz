@@ -146,7 +146,7 @@
 
 <script>
 import '../../../../scss/site/module/contStyle.scss';
-import replyReviewCon from '../../../../controllers/site/cont/replyReviewCon'
+import replyReviewCon from '../../../../controllers/site/cont/contModeration/replyReviewCon'
 export default {
     name: "reply-review-view",
   ...replyReviewCon
