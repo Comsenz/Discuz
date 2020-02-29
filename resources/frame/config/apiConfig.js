@@ -49,7 +49,8 @@ module.exports = {
 
   // 'getCircle': '/circle/getCircle',      //获取circle信息
 
-  'pay':'/api/trade/pay/order',             //支付订单
+  'pay':'/api/trade/pay/order',             //支付订单\
+  'verifyPayPwd':'/api/users/pay-password/reset', //验证支付密码
 
   'threadsBatch':'/api/threads/batch',      //修改主题接口(批量)
   'upload': '/api/users/',                  //上传头像(原接口是'/api/users/{id}/avatar')

@@ -41,24 +41,45 @@
                 width="100"
                 placement="top"
                 :ref="`popover-${scope.$index}`">
-                <p>确定忽略该项吗？</p>
+                <p>确定删除该项吗？</p>
                 <div style="text-align: right; margin: 10PX 0 0 0 ">
                   <el-button type="text" size="mini" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
 
                   <el-button type="danger" size="mini" @click="singleOperation('del',scope.row._data.id);scope._self.$refs[`popover-${scope.$index}`].doClose()" >确定</el-button>
                 </div>
-                <el-button type="text" slot="reference">忽略</el-button>
+                <el-button type="text" slot="reference">删除</el-button>
               </el-popover>
-              <!--<el-button type="text" @click="singleOperation('del',scope.row._data.id)" >删除</el-button>-->
             </template>
           </el-table-column>
         </el-table>
+
+        <tableNoList v-show="tableData.length < 1"></tableNoList>
+
+        <Page
+          v-if="pageCount > 1"
+          @current-change="handleCurrentChange"
+          :current-page="currentPaga"
+          :page-size="10"
+          :total="total">
+        </Page>
+
       </div>
 
       <Card class="footer-btn">
         <el-button type="primary" @click="allOperation('pass')">通过</el-button>
         <el-button type="primary" plain @click="allOperation('no')">否决</el-button>
-        <el-button size="medium"  @click="allOperation('del')">忽略</el-button>
+        <el-popover
+          placement="top"
+          width="160"
+          v-model="visible">
+          <p>确定删除选中的用户吗？</p>
+          <div style="text-align: right; margin: 10PX 0 0 0">
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="danger" size="mini" @click="allOperation('del')">确认</el-button>
+          </div>
+          <el-button size="medium" slot="reference">删除</el-button>
+        </el-popover>
+
       </Card>
     </div>
 </template>

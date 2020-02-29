@@ -13,7 +13,7 @@
         </div>
 
         <div class="latest-reply-header_bottom condition-box">
-          <div class="latest-reply-header_condition">
+          <div class="latest-reply-header_condition condition-time">
             <span class="latest-reply-header_condition-title">发布时间：</span>
             <el-date-picker
               v-model="searchData.dataValue"

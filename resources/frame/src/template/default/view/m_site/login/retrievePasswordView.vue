@@ -11,6 +11,7 @@
           <van-cell-group>
             <van-field
               label="手机号"
+              clearable
               v-model="phoneNum"
               placeholder="请输入您的手机号"
             />
@@ -28,6 +29,7 @@
             <van-field
               v-if="type === 'reset_pwd'"
               label="新密码"
+              clearable
               v-model="newpwd"
               placeholder="请输入新密码"
             />
@@ -36,6 +38,7 @@
             <van-field
               v-if="type === 'reset_pay_pwd'"
               label="新密码"
+              clearable
               v-model="payPassword"
               placeholder="请输入新密码"
             />
@@ -43,6 +46,7 @@
             <van-field
               v-if="type === 'reset_pay_pwd'"
               label="确认密码"
+              clearable
               v-model="payPasswordConfirmation"
               placeholder="请输入新密码"
             />

@@ -87,43 +87,58 @@ export default {
     },
     //提交新密码
     submissionPassword(){
-      this.btnLoading = true;
 
-      let data = {
-        "attributes": {
-          "mobile": this.phoneNum,
-          "code": this.verifyNum,
-          "type": this.type,
-        }
-      };
+      var reg=11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
 
-      if (this.type === 'reset_pay_pwd') {
-        data.attributes.pay_password = this.payPassword;
-        data.attributes.pay_password_confirmation = this.payPasswordConfirmation;
-      } else if (this.type === 'reset_pwd') {
-        data.attributes.password=this.newpwd;
-      }
+      if (this.phoneNum.length < 1){
+        this.$toast('请输入手机号');
+        return
+      } else if (!reg.test(this.phoneNum)){
+        this.$toast('请输入正确的手机号');
+        return;
+      } else if (this.verifyNum.length < 1) {
+        this.$toast('请输入验证码');
+        return
+      } else {
+        this.btnLoading = true;
 
-
-      this.appFetch({
-        url:"smsVerify",
-        method:"post",
-        data:{
-          "data":{
-            data:data
+        let data = {
+          "attributes": {
+            "mobile": this.phoneNum,
+            "code": this.verifyNum,
+            "type": this.type,
           }
+        };
+
+        if (this.type === 'reset_pay_pwd') {
+          data.attributes.pay_password = this.payPassword;
+          data.attributes.pay_password_confirmation = this.payPasswordConfirmation;
+        } else if (this.type === 'reset_pwd') {
+          data.attributes.password = this.newpwd;
         }
-      }).then(res => {
-        this.btnLoading = false;
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        } else {
-          this.$router.push({
-            path: 'login-user',
-          });
-          this.$toast.success('提交成功');
-        }
-       });
+
+        this.appFetch({
+          url: "smsVerify",
+          method: "post",
+          data: {
+            "data": data
+          }
+        }).then(res => {
+          this.btnLoading = false;
+          if (res.errors) {
+            if (res.errors[0].detail) {
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+          } else {
+            this.$router.push({
+              path: 'login-user',
+            });
+            this.$toast.success('提交成功');
+          }
+        });
+      }
     }
   }
 }
