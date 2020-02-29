@@ -20,6 +20,7 @@ export default {
       value:'',          //密码
       userId: '',         //当前用户ID
       codeUrl:"",        //支付url，base64
+      payLoading: false,
 		}
   },
   props: {
@@ -190,6 +191,7 @@ export default {
       this.value = this.value + key;
 
       if (this.value.length === 6 ) {
+        
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
@@ -205,11 +207,13 @@ export default {
     },
     //删除
     onDelete(){
+      this.value = this.value.slice(0, this.value.length - 1);
     },
     //关闭
     onClose(){
       this.value = '';
-      this.errorInfo = ''
+      this.errorInfo = '';
+      this.payLoading = true;
     },
     onBridgeReady(data){
       let that = this;
@@ -322,8 +326,13 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
+          this.payLoading = true;
           return res;
         }
       }).catch(err=>{
@@ -356,6 +365,7 @@ export default {
             if(this.payStatus == '1'){
               location.reload();
               this.sendMsgToParent();
+              this.payLoading = false;
             }
             this.rewardShow = false;
             this.qrcodeShow = false;

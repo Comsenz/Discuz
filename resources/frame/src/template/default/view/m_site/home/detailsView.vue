@@ -182,13 +182,11 @@
         :error="errorInfo"
         @payImmediatelyClick="payImmediatelyClick">
       </PayMethod>
-       <!-- <van-image-preview
-         v-model="imageShow"
-         :images="firstpostImageList"
-         @change="onChangeImgPreview"
-       > -->
-       <!-- <template v-slot:index>第{{ index }}页</template> -->
-     <!-- </van-image-preview> -->
+      <div class="loadFix" v-if="payLoading">
+        <div class="loadMask"></div>
+        <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
+      </div>
+     
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
