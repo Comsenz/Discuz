@@ -87,11 +87,11 @@ trait ThreadNoticesTrait
             ],
         ];
 
-        if ($thread->is_approved == 0) {
+        if ($thread->is_approved == 1) {
             // 发送通过通知
             $thread->user->notify(new System(PostThroughMessage::class, $data));
-        } else {
-            // 发送不通过通知
+        } elseif ($thread->is_approved == 2) {
+            // 忽略就发送不通过通知
             $thread->user->notify(new System(PostModMessage::class, $data));
         }
     }
