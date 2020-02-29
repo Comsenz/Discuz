@@ -1,5 +1,5 @@
 <template>
-    <div class="my-info-money-header">
+    <div class="">
       <walletDetailsHeader title="钱包明细"></walletDetailsHeader>
     <van-list
     v-model="loading"
@@ -11,19 +11,13 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <main class="content">
-        <Panenl :title="type[item.attributes.change_type]"
-                :status="item.attributes.change_type === 30 ||
-                item.attributes.change_type === 31 ||
-                item.attributes.change_type === 32 ? true : false"
-                :num="item.attributes.change_type === 30 ||
-                item.attributes.change_type === 31 ||
-                item.attributes.change_type === 32 ? '+' +
-                item.attributes.change_available_amount :
-                item.attributes.change_available_amount"
+        <Panenl :title="item.title"
+                :status="item.status"
+                :num="item._data.change_available_amount"
                 v-for="(item,index) in walletDetailsList"
                 :key="index">
           <!-- <span slot="label">当前可用金额：{{item.attributes.change_freeze_amount}}</span> -->
-          <span slot="label">{{$moment(item.attributes.created_at).format('YYYY-MM-DD HH:mm')}}</span>
+          <span slot="label">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</span>
         </Panenl>
       </main>
       <footer class="my-info-money-footer"></footer>

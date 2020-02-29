@@ -177,7 +177,8 @@ export default {
               'newPassword':this.newPassword,
               'mobile':mobile,
               'groupId':this.userRole,
-              'status':this.userInfo.status
+              'status':this.userInfo.status,
+              'refuse_message':this.reasonsForDisable,
             }
           }
         }
@@ -214,6 +215,12 @@ export default {
         console.error(err, 'getUserList')
       }
     },
+    userStatusChange(value){
+      this.disabledReason = value == 1;
+      if(value != 1){
+        this.reasonsForDisable = '';
+      }
+    }
 
   },
 

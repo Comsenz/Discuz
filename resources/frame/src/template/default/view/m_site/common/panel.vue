@@ -3,7 +3,7 @@
 
       <div class="panel-header">
         <div class="panel-header-lf">
-          <span>{{titles}}</span>
+          <span v-html="titles"></span>
         </div>
 
         <div class="panel-header-rh">

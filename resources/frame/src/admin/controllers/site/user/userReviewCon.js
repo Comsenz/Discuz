@@ -39,7 +39,7 @@ export default {
           inputPlaceholder:'请输入否决原因'
         }).then((value)=>{
           console.log(value);
-          this.editUser(id,1,value.value)
+          this.editUser(id,3,value.value)
         }).catch((err) => {
           console.log(err);
         });
@@ -158,14 +158,16 @@ export default {
         console.log(err);
       })
     },
-    patchDeleteUser(dataList){
+    patchDeleteUser(dataList){       //批量忽略接口
       this.appFetch({
         url:'users',
-        method:'delete',
+        method:'PATCH',
+        splice:'/'+dataList,
         data:{
           data:{
             "attributes": {
-              "id": dataList
+              "id": dataList,
+              'status':'4',
             }
           }
         }
@@ -183,12 +185,18 @@ export default {
         console.log(err);
       })
     },
-    deleteUser(id){
+    deleteUser(id){              //单个忽略接口
       this.appFetch({
         url:'users',
-        method:'delete',
-        splice:'/' + id,
-        data:{}
+        method:'PATCH',
+        splice:'/'+id,
+        data:{
+          data:{
+            "attributes": {
+              'status':'4',
+            }
+          }
+        }
       }).then(res=>{
         console.log(res);
         if (res.errors){

@@ -12,12 +12,12 @@ export default {
         11:'提现成功',
         12:'提现解冻',
         30:'注册收入',
-        31:'打赏收入',
+        31:'打赏了你的主题',
         32:'人工收入',
         50:'人工支出',
-        41:'打赏支出',
-        60:'付费主题收入',
-        61:'付费主题支出',
+        41:'打赏了主题',
+        60:'付费查看了你的主题',
+        61:'付费查看了主题',
         71:'站点续费支出',
       },
       loading: false,  //是否处于加载状态
@@ -56,10 +56,58 @@ export default {
         } else {
           if (initStatus) {
             this.walletDetailsList = [];
-          }
-          this.walletDetailsList = this.walletDetailsList.concat(res.data);
+          }      
+          res.readdata.map(item=>{
+            switch(item._data.change_type){
+              case 10: // 提现冻结
+              case 11: // 提现成功
+              case 12: // 提现解冻
+              case 50: // 人工支出
+              case 71: // 站点续费支出
+                // title 不变，显示黑色
+                item.title = this.type[item._data.change_type];
+                item.status = false;
+                break;
+              case 30: // 注册收入
+              case 32: // 人工收入
+                // title 不变，显示红色，添加 '+' 号
+                item.title = this.type[item._data.change_type];
+                item.status = true;
+                item._data.change_available_amount = "+" + item._data.change_available_amount;
+                break;
+              case 31: // 打赏收入
+              case 60: // 付费主题收入
+                // title 拼接，显示红色，添加 '+' 号
+                var orderUser = item.order ? (item.order.user ? item.order.user._data : null) : null;
+                var orderThread = item.order ? (item.order.thread ? item.order.thread._data : null) : null;
+                item.title = orderUser
+                ? `<a href='home-page/${orderUser.id}'>${orderUser.username}</a> `
+                : '该用户被删除 ';
+                item.title += this.type[item._data.change_type];
+                item.title += orderThread
+                ? `<a href='details/${orderThread.id}'>“${orderThread.title}”</a>`
+                : '“该主题被删除”';
+                item.status = true;
+                item._data.change_available_amount = "+" + item._data.change_available_amount;
+                break;
+              case 41: // 打赏支出
+              case 61: // 付费主题支出
+                // title 拼接，显示黑色
+                var orderThread = item.order ? (item.order.thread ? item.order.thread._data : null) : null;
+                item.title = this.type[item._data.change_type];
+                item.title += orderThread
+                ? `<a href='details/${orderThread.id}'>“${orderThread.title}”</a>`
+                : '“该主题被删除”';
+                item.status = false;
+                break;
+              default: // 未知变更类型    
+                item.title = 'unknown change type';
+                item.status = false;
+            }
+          });
+          this.walletDetailsList = this.walletDetailsList.concat(res.readdata);
           this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
+          this.finished = res.readdata.length < this.pageLimit;
         }
       }).catch((err)=>{
         if(this.loading && this.pageIndex !== 1){
