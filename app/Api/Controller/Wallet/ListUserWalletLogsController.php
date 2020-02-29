@@ -132,14 +132,16 @@ class ListUserWalletLogsController extends AbstractListController
         if (in_array('order.thread.firstPost', $load)) {
             $walletLogs->load('order.thread.firstPost')
                 ->map(function (UserWalletLog $log) {
-                    if ($log->order->thread->is_long_article) {
-                        $title = Str::limit($log->order->thread->title, 40);
-                    } else {
-                        $title = Str::limit($log->order->thread->firstPost->content, 40);
-                        $title = str_replace("\n", '', $title);
-                    }
+                    if ($log->order && $log->order->thread) {
+                        if ($log->order->thread->is_long_article) {
+                            $title = Str::limit($log->order->thread->title, 40);
+                        } else {
+                            $title = Str::limit($log->order->thread->firstPost->content, 40);
+                            $title = str_replace("\n", '', $title);
+                        }
 
-                    $log->order->thread->title = $title;
+                        $log->order->thread->title = $title;
+                    }
                 });
         }
 

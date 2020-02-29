@@ -38,7 +38,7 @@ class NotificationTplSeeder extends Seeder
             [
                 'status' => 1,
                 'type_name' => '注册审核不通过通知',
-                'title' => '注册审核通知',
+                'title' => '注册审核不通过通知',
                 'content' => '{username}你好，你的注册申请审核不通过，原因：{reason}',
                 'vars' => serialize([
                      '{username}' => '用户名',
@@ -48,7 +48,7 @@ class NotificationTplSeeder extends Seeder
             [
                 'status' => 1,
                 'type_name' => '内容审核不通过通知',
-                'title' => '内容审核通知',
+                'title' => '内容审核不通过通知',
                 'content' => '{username}你好，你发布的内容 "{content}" 审核不通过，原因：{reason}',
                 'vars' => serialize([
                      '{username}' => '用户名',

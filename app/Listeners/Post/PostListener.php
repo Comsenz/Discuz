@@ -17,6 +17,7 @@ use App\MessageTemplate\PostMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
+use App\Models\PostMod;
 use App\Models\User;
 use App\Models\Thread;
 use App\Notifications\Related;
@@ -125,6 +126,9 @@ class PostListener
      */
     public function whenPostWasApproved(PostWasApproved $event)
     {
+        // 审核通过时，清除记录的敏感词
+        PostMod::where('post_id', $event->post->id)->delete();
+
         if ($event->post->is_approved == 1) {
             $action = 'approve';
         } elseif ($event->post->is_approved == 2) {

@@ -42,15 +42,7 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
 
             $userId = isset($parameters[1]) ? $parameters[1] : null;
 
-            $token = SessionToken::get($value, $parameters[0], $userId);
-
-            if ($token) {
-                $token->delete();
-
-                return true;
-            } else {
-                return false;
-            }
+            return SessionToken::check($value, $parameters[0], $userId);
         });
     }
 }

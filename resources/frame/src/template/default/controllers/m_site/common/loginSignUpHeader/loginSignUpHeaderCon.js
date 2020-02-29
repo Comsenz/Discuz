@@ -51,10 +51,12 @@ export default {
         }
       } else {
         // if(window.history.go(-1) == '' || window.history.go(-1) == null || !window.history.go(-1)){
-          if(document.referrer === ''){
+          // alert(window.history.length);
+          if(document.referrer == '' && (window.history.length === 0)){
+            // alert('上一级为空时');
           window.location.href = appConfig.baseUrl;
         } else {
-          // alert('222');
+          // alert('有上一级');
           this.$router.go(-1);
         }
       }

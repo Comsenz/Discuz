@@ -1,5 +1,5 @@
 <template>
-  <div class="my-info-money-header">
+  <div class="">
     <orderDetailsHeader title="订单明细"></orderDetailsHeader>
     <van-list
     v-model="loading"
@@ -11,7 +11,7 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <main class="content">
-      <Panel :title="`${type[item._data.type]} “${item._data.title}”`" :num="'-'+item._data.amount" v-for="(item,index) in orderList" :key="index"  @click="jumpDetails(item.thread._data.id)">
+      <Panel :title="item.title" :num="'-'+item._data.amount" v-for="(item,index) in orderList" :key="index"  @click="jumpDetails(item.thread._data.id)">
         <span slot="label"  >{{status[item._data.status]}}</span>
         <span slot="label"  >流水号 : {{item._data.order_sn}}</span>
         <span slot="label"  >{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</span>

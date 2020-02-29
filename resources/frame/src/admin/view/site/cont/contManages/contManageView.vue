@@ -70,15 +70,15 @@
           </div>-->
           <div class="cont-manage-header_condition cont-manage-header_condition-mid">
             <span class="cont-manage-header_condition-title">浏览次数：</span>
-            <el-input size="medium" placeholder="浏览次数大于" v-model="searchData.viewedTimesMin" clearable ></el-input>
+            <el-input size="medium" placeholder="大于" v-model="searchData.viewedTimesMin" clearable ></el-input>
             <div class="spacing"> - </div>
-            <el-input size="medium" placeholder="浏览次数小于" v-model="searchData.viewedTimesMax" clearable ></el-input>
+            <el-input size="medium" placeholder="小于" v-model="searchData.viewedTimesMax" clearable ></el-input>
           </div>
           <div class="cont-manage-header_condition">
             <span class="cont-manage-header_condition-title">被回复数：</span>
-            <el-input size="medium" placeholder="被回复数大于" v-model="searchData.numberOfRepliesMin" clearable ></el-input>
+            <el-input size="medium" placeholder="大于" v-model="searchData.numberOfRepliesMin" clearable ></el-input>
             <div class="spacing"> - </div>
-            <el-input size="medium" placeholder="被回复数小于" v-model="searchData.numberOfRepliesMax" clearable ></el-input>
+            <el-input size="medium" placeholder="小于" v-model="searchData.numberOfRepliesMax" clearable ></el-input>
             <el-button size="small" type="primary" @click="searchClick">搜索</el-button>
           </div>
         </div>

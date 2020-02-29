@@ -44,7 +44,8 @@ export default {
           cancelButtonText: '取消',
           inputPlaceholder:'请输入否决原因'
         }).then((value)=>{
-          this.editUser(id,1,value.value)
+          console.log(value);
+          this.editUser(id,3,value.value)
         }).catch((err) => {
         });
       }else if (val === 'del'){
@@ -169,14 +170,16 @@ export default {
       }).catch(err=>{
       })
     },
-    patchDeleteUser(dataList){
+    patchDeleteUser(dataList){       //批量忽略接口
       this.appFetch({
         url:'users',
-        method:'delete',
+        method:'PATCH',
+        splice:'/'+dataList,
         data:{
           data:{
             "attributes": {
-              "id": dataList
+              "id": dataList,
+              'status':'4',
             }
           }
         }
@@ -193,12 +196,18 @@ export default {
       }).catch(err=>{
       })
     },
-    deleteUser(id){
+    deleteUser(id){              //单个忽略接口
       this.appFetch({
         url:'users',
-        method:'delete',
-        splice:'/' + id,
-        data:{}
+        method:'PATCH',
+        splice:'/'+id,
+        data:{
+          data:{
+            "attributes": {
+              'status':'4',
+            }
+          }
+        }
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);

@@ -15,12 +15,10 @@ use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Exceptions\CategoryNotFoundException;
-use App\MessageTemplate\PostModMessage;
-use App\MessageTemplate\PostThroughMessage;
 use App\Models\Category;
 use App\Models\OperationLog;
 use App\Models\Post;
-use App\Notifications\System;
+use App\Models\PostMod;
 use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
@@ -111,10 +109,12 @@ class ThreadListener
      * 审核主题时，记录操作
      *
      * @param ThreadWasApproved $event
-     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
+        // 审核通过时，清除记录的敏感词
+        PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+
         $action = $this->transLogAction($event->thread->is_approved);
 
         OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
@@ -124,7 +124,6 @@ class ThreadListener
      * 隐藏主题时，记录操作
      *
      * @param Hidden $event
-     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasHidden(Hidden $event)
     {

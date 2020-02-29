@@ -100,7 +100,7 @@ class ListUsersController extends AbstractListController
 
         $document->setMeta([
             'total' => $this->userCount,
-            'size' => (int) $limit,
+            'pageCount' => ceil($this->userCount / $limit),
         ]);
 
         return $users;

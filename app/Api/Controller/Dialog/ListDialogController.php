@@ -92,7 +92,7 @@ class ListDialogController extends AbstractListController
 
         $document->setMeta([
             'total' => $this->dialogCount,
-            'size' => $limit,
+            'pageCount' => ceil($this->dialogCount / $limit),
         ]);
 
         return $userFollow;

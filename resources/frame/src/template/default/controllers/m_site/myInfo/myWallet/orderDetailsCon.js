@@ -8,7 +8,7 @@ export default {
     return {
       orderList:[],
       type:{
-        1:'注册',
+        1:'加入圈子',
         2:'打赏帖子',
         3:'付费查看帖子'
       },
@@ -55,6 +55,23 @@ export default {
         if(initStatus){
           this.orderList = [];
         }
+        res.readdata.map(item=>{
+          switch(item._data.type){
+            case 1:
+              item.title = this.type[item._data.type];
+              break;
+            case 2:
+            case 3:
+              var orderThread = item.thread ? item.thread._data : null;
+              item.title = this.type[item._data.type];
+              item.title += orderThread
+                ? `<a href='details/${orderThread.id}'>“${orderThread.title}”</a>`
+                : '“该主题被删除”';
+              break;
+            default:
+              item.title = 'unknown order type';
+          }
+        });
         this.orderList = this.orderList.concat(res.readdata);
         this.loading = false;
         this.finished = res.readdata.length < this.pageLimit;

@@ -69,9 +69,10 @@
 
     <Card header="状态：">
       <CardRow >
-        <el-select v-model="userInfo.status" placeholder="请选择">
+        <el-select v-model="userInfo.status" placeholder="请选择" @change="userStatusChange(userInfo.status)">
           <el-option
             v-for="item in optionsStatus"
+            :disabled="item.value ===2"
             :key="item.value"
             :label="item.label"
             :value="item.value">
