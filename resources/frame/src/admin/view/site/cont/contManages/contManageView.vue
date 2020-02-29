@@ -6,7 +6,7 @@
             <span class="cont-manage-header_condition-title">作者：</span>
             <el-input size="medium" placeholder="搜索作者" v-model="searchData.themeAuthor" clearable ></el-input>
           </div>
-          <div class="cont-manage-header_condition">
+          <div class="cont-manage-header_condition cont-manage-header_condition-rh">
             <span class="cont-manage-header_condition-title">内容包含：</span>
             <el-input size="medium" placeholder="搜索内容" v-model="searchData.themeKeyWords" clearable ></el-input>
           </div>
@@ -35,10 +35,7 @@
               </el-option>
             </el-select>
           </div>
-        </div>
-
-        <div class="cont-manage-header_bottom condition-box">
-          <div class="cont-manage-header_condition cont-manage-header_condition-lf">
+          <div class="cont-manage-header_condition">
             <span class="cont-manage-header_condition-title">发布时间:</span>
             <el-date-picker
               v-model="searchData.dataValue"
@@ -53,6 +50,24 @@
               :picker-options="pickerOptions">
             </el-date-picker>
           </div>
+        </div>
+
+        <div class="cont-manage-header_bottom condition-box">
+          <!--<div class="cont-manage-header_condition cont-manage-header_condition-lf">
+            <span class="cont-manage-header_condition-title">发布时间:</span>
+            <el-date-picker
+              v-model="searchData.dataValue"
+              type="daterange"
+              align="right"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>-->
           <div class="cont-manage-header_condition cont-manage-header_condition-mid">
             <span class="cont-manage-header_condition-title">浏览次数：</span>
             <el-input size="medium" placeholder="浏览次数大于" v-model="searchData.viewedTimesMin" clearable ></el-input>
