@@ -22,6 +22,14 @@
             label="密码"
             placeholder="请填写密码"
           />
+
+          <van-field
+            clearable
+            v-if="signReasonStatus"
+            label="注册原因"
+            placeholder="请填写注册原因"
+            v-model="signReason"
+          />
         </van-cell-group>
       </form>
 

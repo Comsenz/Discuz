@@ -693,10 +693,7 @@ export default {
             return
           }
         }
-      } else {
-        next();
-      }
-      if(to.name === 'real-name'){
+      } else if(to.name === 'real-name'){
         this.getUsers(tokenId).then(data=>{
           if(realName === true && data.readdata._data.realname === ''){
             next({path:'/real-name'});
@@ -705,6 +702,8 @@ export default {
             next({path:'/'})
           }
         })
+      } else {
+        next();
       }
     }
 
@@ -748,7 +747,7 @@ export default {
   if (tokenId && Authorization){
     /*已登录状态*/
 
-    this.getForum().then(ress=>{
+    this.getForum().then((ress)=>{
 
       if (ress.readdata._data.set_site.site_mode === 'pay'){
         this.getUsers(tokenId).then(res=>{
@@ -797,14 +796,14 @@ export default {
 
     /*判断登录设备*/
     if (isWeixin){
-      /*微信设备，跳转到微信绑定页*/
-      if(to.name === 'wx-login-bd') {
+      /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
+      if(to.name === 'wx-sign-up-bd') {
         next();
         return
       } else {
         next();
       }
-      next({path:'/wx-login-bd'});
+      next({path:'/wx-sign-up-bd'});
       //微信
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){
