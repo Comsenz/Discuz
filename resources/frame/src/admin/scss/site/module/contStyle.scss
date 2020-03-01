@@ -64,6 +64,10 @@
     &_condition-lf{
       margin-right: 30PX;
     }
+    &_condition-rh{
+      flex: 2;
+    }
+
     .cont-manage-header_condition-mid{
       margin-right: 30PX;
     }
@@ -71,6 +75,12 @@
     .condition-box{
       display: flex;
       margin-bottom: 15PX;
+    }
+
+    &_middle{
+      .cont-manage-header_condition:last-of-type{
+        margin-left: 30PX;
+      }
     }
 
     &_bottom{
@@ -213,6 +223,14 @@
     .condition-box{
       display: flex;
       margin-bottom: 15PX;
+    }
+
+    &_bottom{
+      .condition-time{
+        flex: 1;
+        max-width: 42%;
+        min-width: 425.5PX;
+      }
     }
   }
 

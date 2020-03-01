@@ -239,8 +239,8 @@ export default {
       let data = {
         "type": "threads",
         "attributes": {
-          "isApproved": 0,
-          'isDeleted':false
+          // "isApproved": 0,
+          // 'isDeleted':false
         },
         "relationships": {
           "category": {
@@ -254,6 +254,7 @@ export default {
       switch (val){
         case 1:
           data.attributes.isApproved = 1;
+          data.attributes.message = this.submitForm[index].attributes.message;
           this.patchThreads(data,themeId);
           break;
         case 2:
@@ -263,6 +264,7 @@ export default {
           break;
         case 3:
           data.attributes.isApproved = 2;
+          data.attributes.message = this.submitForm[index].attributes.message;
           this.patchThreads(data,themeId);
           break;
         default:

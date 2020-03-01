@@ -593,7 +593,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    'pay-the-fee',
+    // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
@@ -657,7 +657,8 @@ export default {
   * */
   var registerClose = ''; //注册是否关闭
   var siteMode = '';      //站点模式
-  var realName = '';     //实名认证是否关闭
+  var realName = '';      //实名认证是否关闭
+  var canWalletPay = '';  //钱包密码设置
 
 
 
@@ -679,6 +680,7 @@ export default {
       siteMode = res.readdata._data.set_site.site_mode;
       registerClose = res.readdata._data.set_reg.register_close;
       realName = res.readdata._data.qcloud.qcloud_faceid;
+      canWalletPay = res.readdata._data.other.initialized_pay_password
 
       /*
       * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -693,10 +695,7 @@ export default {
             return
           }
         }
-      } else {
-        next();
-      }
-      if(to.name === 'real-name'){
+      } else if(to.name === 'real-name'){
         this.getUsers(tokenId).then(data=>{
           if(realName === true && data.readdata._data.realname === ''){
             next({path:'/real-name'});
@@ -705,6 +704,15 @@ export default {
             next({path:'/'})
           }
         })
+      } else if(to.name === 'verify-pay-pwd'){
+        if (canWalletPay) {
+          next();
+          return
+        } else {
+          next({path:'/setup-pay-pwd'})
+        }
+      }else {
+        next();
       }
     }
 
@@ -748,7 +756,7 @@ export default {
   if (tokenId && Authorization){
     /*已登录状态*/
 
-    this.getForum().then(ress=>{
+    this.getForum().then((ress)=>{
 
       if (ress.readdata._data.set_site.site_mode === 'pay'){
         this.getUsers(tokenId).then(res=>{
@@ -797,14 +805,14 @@ export default {
 
     /*判断登录设备*/
     if (isWeixin){
-      /*微信设备，跳转到微信绑定页*/
-      if(to.name === 'wx-login-bd') {
+      /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
+      if(to.name === 'wx-sign-up-bd') {
         next();
         return
       } else {
         next();
       }
-      next({path:'/wx-login-bd'});
+      next({path:'/wx-sign-up-bd'});
       //微信
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){

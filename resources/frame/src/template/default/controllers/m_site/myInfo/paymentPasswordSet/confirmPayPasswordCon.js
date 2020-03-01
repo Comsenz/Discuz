@@ -45,6 +45,7 @@ export default {
             "attributes": {
               "payPassword": this.value,
               "pay_password_confirmation": this.confirmValue,
+              'pay_password_token':webDb.getLItem('payPwdToken')?webDb.getLItem('payPwdToken'):''
             }
           }
         }
@@ -63,7 +64,7 @@ export default {
             this.$router.push({path:"modify-data"});
           }
           webDb.setLItem('payUrl','');
-
+          webDb.setLItem('payPwdToken','');
         }
       }).catch(err=>{
       })
