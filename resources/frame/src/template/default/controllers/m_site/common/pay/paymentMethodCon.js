@@ -89,14 +89,12 @@ export default {
       this.$emit('close');
     },
     payImmediatelyClick(){
-      if ((!this.descriptionShow && this.walletStatus) && this.data[this.radio].name !== '钱包'){
-        this.showKeyboard = true;
-        if (this.data[this.radio].name === '钱包'){
-          this.paySelectShow = !this.paySelectShow;
-          this.payImmediatelyShow = !this.payImmediatelyShow
-        }
-        this.$emit('payImmediatelyClick',this.data[this.radio])
+      this.showKeyboard = true;
+      if (this.data[this.radio].name === '钱包'){
+        this.paySelectShow = !this.paySelectShow;
+        this.payImmediatelyShow = !this.payImmediatelyShow
       }
+      this.$emit('payImmediatelyClick',this.data[this.radio])
     },
     payStatusClick(){
       if (this.payUrl){
