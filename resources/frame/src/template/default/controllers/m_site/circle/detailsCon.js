@@ -545,9 +545,12 @@ export default {
       this.showScreen = !this.showScreen;
     },
     listenEvt(e){
-      if(!this.$refs.screenBox.contains(e.target)){
-        this.showScreen = false;
+      if(this.$refs.screenBox){
+        if(!this.$refs.screenBox.contains(e.target)){
+            this.showScreen = false;
+          }
       }
+      
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
