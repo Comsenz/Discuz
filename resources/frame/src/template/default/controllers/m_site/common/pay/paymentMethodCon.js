@@ -88,7 +88,7 @@ export default {
     onClose(){
       this.$emit('close');
     },
-    payImmediatelyClick(name){
+    payImmediatelyClick(){
       if ((!this.descriptionShow && this.walletStatus) && this.data[this.radio].name !== '钱包'){
         this.showKeyboard = true;
         if (this.data[this.radio].name === '钱包'){
