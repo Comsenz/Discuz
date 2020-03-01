@@ -89,14 +89,14 @@ export default {
       this.$emit('close');
     },
     payImmediatelyClick(name){
-      // if (this.descriptionShow === !this.walletStatus){
+      if ((!this.descriptionShow && this.walletStatus) && this.data[this.radio].name !== '钱包'){
         this.showKeyboard = true;
         if (this.data[this.radio].name === '钱包'){
           this.paySelectShow = !this.paySelectShow;
           this.payImmediatelyShow = !this.payImmediatelyShow
         }
         this.$emit('payImmediatelyClick',this.data[this.radio])
-      // }
+      }
     },
     payStatusClick(){
       if (this.payUrl){
@@ -124,7 +124,7 @@ export default {
     },
     payImmediatelyShow(val){
       if (!val){
-        this.pwdValue = '';
+        // this.pwdValue = '';
       }
     }
   }
