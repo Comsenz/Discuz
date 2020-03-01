@@ -277,7 +277,6 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            console.log(res.readdata._data.canWalletPay,'是否足够支付---------');
             this.userDet = res.readdata;
             this.currentUserName = res.readdata._data.username;
             this.currentUserAvatarUrl = res.readdata._data.avatarUrl;
