@@ -66,14 +66,14 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      if(!this.userId){
-        this.$router.push({
-          path:'/login-user',
-          name:'login-user'
-        })
-      } else {
-        this.$router.push({ path:'/home-page'+'/'+id});
-      }
+    //   if(!this.userId){
+    //     this.$router.push({
+    //       path:'/login-user',
+    //       name:'login-user'
+    //     })
+    //   } else {
+      this.$router.push({ path:'/home-page'+'/'+id});
+      // }
     },
     //初始化请求用户信息
     loadUserInfo(){
