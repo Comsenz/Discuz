@@ -68,7 +68,9 @@ class AttachmentSerializer extends AbstractSerializer
         ];
 
         if ($model->is_gallery) {
-            $attributes['thumbUrl'] = $model->is_remote ? $this->filesystem->getDriver()->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0' : Str::replaceLast('.', '_thumb.', $url);
+            $attributes['thumbUrl'] = $model->is_remote
+                ? $this->filesystem->getDriver()->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
+                : Str::replaceLast('.', '_thumb.', $url);
         }
 
         return $attributes;
