@@ -22,7 +22,7 @@
               <van-radio-group v-model="radio">
 
                 <div class="way-to-choose_cont-select_cell" v-for="(item,index) in data">
-                  <div class="way-to-choose_cont-select_cell-left" @click="descriptionShow && !walletStatus?radio = index:''">
+                  <div class="way-to-choose_cont-select_cell-left" @click="descriptionShow === !walletStatus?radio = index:''">
                     <span class="icon iconfont" :class="item.icon"></span>
                     <div class="way-to-choose_cont-select_cell-left-title">
                       <span>{{item.name}}</span>
