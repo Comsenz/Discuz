@@ -9,10 +9,12 @@ namespace App\Api\Serializer;
 
 use App\Commands\Attachment\CreateAttachment;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Filesystem\CosAdapter;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use League\Flysystem\Adapter\Local;
 use Tobscure\JsonApi\Relationship;
 
 class AttachmentSerializer extends AbstractSerializer
@@ -32,14 +34,35 @@ class AttachmentSerializer extends AbstractSerializer
      */
     protected $filesystem;
 
+    /*
+     * @var Filesystem
+     */
+    protected $cosFilesystem;
+
     /**
      * @param UrlGenerator $url
      * @param Filesystem $filesystem
+     * @param SettingsRepository $settings
      */
-    public function __construct(UrlGenerator $url, Filesystem $filesystem)
+    public function __construct(UrlGenerator $url, Filesystem $filesystem, SettingsRepository $settings)
     {
         $this->url = $url;
         $this->filesystem = $filesystem;
+
+        $qcloud = $settings->tag('qcloud');
+        $config = app('config')->get('filesystems.disks.cos');
+
+        $config['region'] = Arr::get($qcloud, 'qcloud_cos_bucket_area');
+        $config['bucket'] = Arr::get($qcloud, 'qcloud_cos_bucket_name');
+        $config['ciurl'] = Arr::get($qcloud, 'qcloud_ci_url', '');
+
+        $config['credentials'] = [
+            'secretId'  => Arr::get($qcloud, 'qcloud_secret_id'),  //"云 API 密钥 SecretId";
+            'secretKey' => Arr::get($qcloud, 'qcloud_secret_key'), //"云 API 密钥 SecretKey";
+            'token' => ''
+        ];
+
+        $this->cosFilesystem = new \League\Flysystem\Filesystem(new CosAdapter($config));
     }
 
     /**
@@ -49,12 +72,11 @@ class AttachmentSerializer extends AbstractSerializer
     {
         $path = $model->file_path.'/'.$model->attachment;
 
-        // 当使用本地存储时，曾经上传的远程附件也只能尝试从本地获取
-        if ($this->filesystem->getDriver()->getAdapter() instanceof Local) {
-            $model->is_remote = false;
+        if ($model->is_remote) {
+            $uri = $this->cosFilesystem->getAdapter()->getUrl($path);
+        } else {
+            $uri = $this->filesystem->url($path);
         }
-
-        $uri = $this->filesystem->url($path);
 
         $url = $model->is_remote
             ? $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath()
@@ -76,7 +98,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         if ($model->is_gallery) {
             $attributes['thumbUrl'] = $model->is_remote
-                ? $this->filesystem->getDriver()->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
+                ? $this->cosFilesystem->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
                 : Str::replaceLast('.', '_thumb.', $url);
         }
 
