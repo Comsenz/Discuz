@@ -74,6 +74,8 @@ const keepAliveUrl = ['circle'];
 
 const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId'];
 
+browserDb.setSItem('homeStatus',1);
+
 
 const App = new Vue({
   router: appRouter,
@@ -103,10 +105,14 @@ const App = new Vue({
 
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
-      } else if (keepAliveUrl.includes(to.name)) {
+        // console.log(1);
+      } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
         this.keepAliveStatus = true;
+        // console.log(2);
       } else {
+        // console.log(3);
         this.keepAliveStatus = false;
+        browserDb.setSItem('homeStatus',2);
       }
 
 
