@@ -352,9 +352,12 @@ export default {
         this.showScreen = !this.showScreen;
       },
       listenEvt(e){
-      if(!this.$refs.screenBox.contains(e.target)){
-        this.showScreen = false;
-      }
+        if(this.$refs.screenBox){
+          if(!this.$refs.screenBox.contains(e.target)){
+            this.showScreen = false;
+          }
+        }
+      
       },
       hideScreen(){
         //是否显示筛选内容
