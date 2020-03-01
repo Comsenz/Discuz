@@ -174,16 +174,17 @@ class Censor
      * 检测敏感图片
      *
      * @param mixed $filePathname 图片绝对路径
+     * @param bool $isRemote 是否是远程图片
      */
-    public function checkImage($filePathname)
+    public function checkImage($filePathname, $isRemote = false)
     {
         if ($this->setting->get('qcloud_cms_image', 'qcloud', false)) {
             $qcloud = $this->app->make('qcloud');
 
             $params = [];
 
-            if ($filePathname instanceof Uri) {
-                $params['FileUrl'] = $filePathname->getScheme().'://'.$filePathname->getHost().$filePathname->getPath();
+            if ($isRemote) {
+                $params['FileUrl'] = $filePathname;
             } else {
                 $params['FileContent'] = base64_encode(file_get_contents($filePathname));
             }

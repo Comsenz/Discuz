@@ -8,17 +8,16 @@
 namespace App\Commands\Attachment;
 
 use App\Censor\Censor;
-use App\Models\User;
-use App\Settings\SettingsRepository;
-use App\Tools\AttachmentUploadTool;
 use App\Events\Attachment\Uploading;
 use App\Exceptions\UploadException;
 use App\Models\Attachment;
+use App\Models\User;
+use App\Settings\SettingsRepository;
+use App\Tools\AttachmentUploadTool;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Http\Exception\UploadVerifyException;
-use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -141,11 +140,7 @@ class CreateAttachment
             throw new UploadException();
         }
 
-        $isRemote = 0;
-
-        if (Arr::get($uploadFile, 'url') instanceof Uri) {
-            $isRemote = 1;
-        }
+        $isRemote = $uploadFile['isRemote'];
 
         // 生成缩略图
         if ($this->isGallery && !$isRemote && $this->isSound == 0) {
@@ -162,9 +157,9 @@ class CreateAttachment
 
         // 检测敏感图
         if (Str::before($this->file->getClientMediaType(), '/') == 'image') {
-            $filePathName = $isRemote ? Arr::get($uploadFile, 'url') : Arr::get($uploadFile, 'path');
+            $filePathName = Arr::get($uploadFile, $isRemote ? 'url' : 'path');
 
-            $censor->checkImage($filePathName);
+            $censor->checkImage($filePathName, $isRemote);
             if ($censor->isMod) {
                 $this->isApproved = 0;
             }
