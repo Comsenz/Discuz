@@ -69,6 +69,7 @@
       <PayMethod
         :data="payList"
         v-model="show"
+        :pwd-value="value"
         :money="sitePrice"
         :balance="walletBalance"
         @oninput="onInput"

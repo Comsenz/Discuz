@@ -104,6 +104,7 @@ export default {
     },
 
     onInput(key){
+
       this.value = this.value + key;
 
       if (this.value.length === 6 ) {
@@ -122,6 +123,7 @@ export default {
     },
     //删除
     onDelete(){
+      this.value = this.value.slice(0, this.value.length - 1);
     },
     //关闭
     onClose(){
@@ -277,6 +279,7 @@ export default {
       }).then(res=>{
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
+          this.value = '';
         } else {
           return res;
         }
@@ -294,7 +297,9 @@ export default {
       }).then(res=>{
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
+          this.value = '';
         } else {
+          console.log('走里面');
           this.payStatus = res.readdata._data.paid;
           this.payStatusNum = +1;
           if (this.payStatus) {
