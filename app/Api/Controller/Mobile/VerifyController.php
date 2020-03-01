@@ -50,7 +50,7 @@ class VerifyController extends AbstractResourceController
 
         $type = Arr::get($data, 'type');
 
-        if ($type === 'verify') {
+        if ($type === 'verify' || $type === 'reset_pay_pwd') {
             $data['mobile'] = $actor->getOriginal('mobile');
         }
 
