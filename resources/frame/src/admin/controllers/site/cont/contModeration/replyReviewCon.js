@@ -252,13 +252,14 @@ export default {
       let data = {
         "type": "posts",
         "attributes": {
-          "isApproved": 0,
-          'isDeleted':false
+          // "isApproved": 0,
+          // 'isDeleted':false
         }
       };
       switch (val){
         case 1:
           data.attributes.isApproved = 1;
+          data.attributes.message = this.submitForm[index].attributes.message;
           this.patchPosts(data,themeId);
           break;
         case 2:
@@ -268,6 +269,7 @@ export default {
           break;
         case 3:
           data.attributes.isApproved = 2;
+          data.attributes.message = this.submitForm[index].attributes.message;
           this.patchPosts(data,themeId);
           break;
         default:
