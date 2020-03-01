@@ -16,7 +16,7 @@
           <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="" class="inviteHead">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt="ssss" class="inviteHead">
           <div class="inviteName" v-if="invitePerDet && userInfoName" v-model="userInfoName">{{userInfoName}}</div>
-          <div class="inviteName" v-else="">该用户已被删除</div>
+          <!-- <div class="inviteName" v-else="">该用户已被删除</div> -->
           <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
           <div class="followBox" v-if="followShow && followDet">
             <span>关注：{{followDet._data.followCount}}</span>
