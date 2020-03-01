@@ -65,7 +65,7 @@ export default {
     searchClick(){
       //处理时间为空
       this.searchData.dataValue = this.searchData.dataValue == null?['','']:this.searchData.dataValue;
-
+      this.currentPag = 1;
       this.getPostsList(1);
     },
 
@@ -84,7 +84,7 @@ export default {
     handleCurrentChange(val){
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       this.isIndeterminate = false;
-      this.currentPaga = val;
+      this.currentPag = val;
       this.checkAll = false;
       this.getPostsList(val);
     },

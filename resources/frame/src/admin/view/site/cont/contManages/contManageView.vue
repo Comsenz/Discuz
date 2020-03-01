@@ -134,7 +134,7 @@
             <Page
               @current-change="handleCurrentChange"
               :current-page="currentPag"
-              :page-size="parseInt(searchData.pageSelect)"
+              :page-size="10"
               :total="total">
             </Page>
           </div>

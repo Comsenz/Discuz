@@ -61,12 +61,13 @@ export default {
   },
 
   watch: {
-    currentPage:{
-      immediate: true,
+    currentPage(val){
+      /*immediate: true,
       handler (val) {
-        // this.currentPags = val;
-      }
-
+        console.log(val);
+        this.currentPags = val;
+      }*/
+      this.currentPags = val;
     }
   }
 }

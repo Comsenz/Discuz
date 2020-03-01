@@ -15,7 +15,7 @@
  * @param {{error}}          String    支付密码错误信息
  * @param {{walletStatus}}   Boolean   钱包设置支付密码状态
  * @param {{payUrl}}         String    设置支付密码路由,点击钱包注释后可跳转对应路由
- * @param {{pwdValue}}       String    支付密码输入框
+ * @param {{pwdValue}}       String    支付密码输入框的值
  *
  * @param {{Events——事件}}              说明——————
  * @param {{oninput}}                  密码输入时触发
