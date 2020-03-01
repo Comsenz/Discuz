@@ -10,9 +10,9 @@ namespace App\Api\Serializer;
 use App\Commands\Attachment\CreateAttachment;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Http\UrlGenerator;
-use GuzzleHttp\Psr7\Uri;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use League\Flysystem\Adapter\Local;
 use Tobscure\JsonApi\Relationship;
 
 class AttachmentSerializer extends AbstractSerializer
@@ -49,9 +49,16 @@ class AttachmentSerializer extends AbstractSerializer
     {
         $path = $model->file_path.'/'.$model->attachment;
 
+        // 当使用本地存储时，曾经上传的远程附件也只能尝试从本地获取
+        if ($this->filesystem->getDriver()->getAdapter() instanceof Local) {
+            $model->is_remote = false;
+        }
+
         $uri = $this->filesystem->url($path);
 
-        $url = $model->is_remote ? $uri->getScheme().'://'.$uri->getHost().$uri->getPath() : $this->url->to($uri);
+        $url = $model->is_remote
+            ? $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath()
+            : $this->url->to('/storage/attachment/' . $model->attachment);
 
         $fixWidth = CreateAttachment::FIX_WIDTH;
 
