@@ -394,12 +394,24 @@ export default {
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            const pay = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
-                clearInterval(pay);
+            if (res.errors){
+              if(res.errors[0].code == 'uninitialized_pay_password'){
+                
               }
-              this.getUsersInfo()
-            },3000)
+              if (res.errors[0].detail){
+                this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+              } else {
+                this.$toast.fail(res.errors[0].code);
+              }
+            } else {
+              const pay = setInterval(()=>{
+                if (this.payStatus && this.payStatusNum > 10){
+                  clearInterval(pay);
+                }
+                this.getUsersInfo()
+              },3000)
+            }
+            
           })
         })
       }
