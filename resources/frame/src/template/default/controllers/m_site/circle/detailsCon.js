@@ -115,6 +115,7 @@ export default {
       walletBalance: '',  //钱包余额
       errorInfo:'',      //密码错误提示
       value:'',          //密码
+      // pwdVal: '',
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
       userDet: '',
@@ -267,7 +268,7 @@ export default {
         this.appFetch({
           url: 'users',
           method: 'get',
-          splice: '/' + userId,
+          splice: '/' + this.userId,
           data: {
             include: 'groups',
           }
@@ -966,28 +967,19 @@ export default {
     },
     onInput(key){
       this.value = this.value + key;
+      console.log(this.value,'输入的值');
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            if (res.errors){
-              if(res.errors[0].code == 'uninitialized_pay_password'){
-                
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
+                return;
               }
-              if (res.errors[0].detail){
-                this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-              } else {
-                this.$toast.fail(res.errors[0].code);
-              }
-            } else {
-              const pay = setInterval(()=>{
-                if (this.payStatus && this.payStatusNum > 10){
-                  clearInterval(pay);
-                  return;
-                }
-                this.getOrderStatus();
-              },3000)
-            }
+              this.getOrderStatus();
+            },3000)
+            
             
           })
         })
@@ -1030,6 +1022,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
+          this.value = '';
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {

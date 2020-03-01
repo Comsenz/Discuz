@@ -198,6 +198,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
+          this.value = '';
           this.$toast.fail(res.errors[0].code);
         } else {
           this.payLoading = true;
@@ -394,23 +395,13 @@ export default {
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            if (res.errors){
-              if(res.errors[0].code == 'uninitialized_pay_password'){
-                
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
               }
-              if (res.errors[0].detail){
-                this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-              } else {
-                this.$toast.fail(res.errors[0].code);
-              }
-            } else {
-              const pay = setInterval(()=>{
-                if (this.payStatus && this.payStatusNum > 10){
-                  clearInterval(pay);
-                }
-                this.getUsersInfo()
-              },3000)
-            }
+              this.getUsersInfo()
+            },3000)
+            
             
           })
         })
@@ -423,7 +414,7 @@ export default {
     onClose(){
       this.value = '';
       this.errorInfo = '';
-      this.payLoading = true;
+      this.payLoading = false;
     },
 
 

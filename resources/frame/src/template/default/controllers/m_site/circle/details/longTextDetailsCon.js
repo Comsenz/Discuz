@@ -195,24 +195,12 @@ export default {
         this.errorInfo = '';
         this.getOrderSn().then(()=>{
           this.orderPay(20,this.value).then((res)=>{
-            if (res.errors){
-              if(res.errors[0].code == 'uninitialized_pay_password'){
-                
+            const pay = setInterval(()=>{
+              if (this.payStatus && this.payStatusNum > 10){
+                clearInterval(pay);
               }
-              if (res.errors[0].detail){
-                this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-              } else {
-                this.$toast.fail(res.errors[0].code);
-              }
-            } else {
-              const pay = setInterval(()=>{
-                if (this.payStatus && this.payStatusNum > 10){
-                  clearInterval(pay);
-                }
-                this.getOrderStatus();
-              },3000)
-            }
-            
+              this.getOrderStatus();
+            },3000)  
           })
         })
       }
@@ -225,7 +213,7 @@ export default {
     onClose(){
       this.value = '';
       this.errorInfo = '';
-      this.payLoading = true;
+      this.payLoading = false;
     },
     onBridgeReady(data){
       let that = this;
@@ -338,6 +326,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
+          this.value = '';
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
