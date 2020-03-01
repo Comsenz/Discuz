@@ -167,21 +167,22 @@
         <img :src="codeUrl" alt="" class="qrCode">
         <p class="payTip">微信识别二维码支付</p>
        </van-popup>
+         <PayMethod
+           v-if="userDet"
+          :data="payList"
+          v-model="show"
+          :money="amountNum"
+          :balance="walletBalance"
+          :walletStatus="userDet._data.canWalletPay"
+          :pwd-value="value"
+          payUrl="setup-pay-pwd"
+          @oninput="onInput"
+          @delete="onDelete"
+          @close="onClose"
+          :error="errorInfo"
+          @payImmediatelyClick="payImmediatelyClick">
+        </PayMethod>
        
-       <PayMethod
-        v-if="userDet"
-        :data="payList"
-        v-model="show"
-        :money="amountNum"
-        :balance="walletBalance"
-        :walletStatus="userDet._data.canWalletPay"
-        payUrl="setup-pay-pwd"
-        @oninput="onInput"
-        @delete="onDelete"
-        @close="onClose"
-        :error="errorInfo"
-        @payImmediatelyClick="payImmediatelyClick">
-      </PayMethod>
       <div class="loadFix" v-if="payLoading">
         <div class="loadMask"></div>
         <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
