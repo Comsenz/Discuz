@@ -165,7 +165,10 @@ class Thread extends Model
      */
     public function refreshPostCount()
     {
-        $this->post_count = $this->replies()->count();
+        $this->post_count = $this->replies()
+            ->where('is_approved', Post::APPROVED)
+            ->whereNull('deleted_at')
+            ->count();
 
         return $this;
     }
