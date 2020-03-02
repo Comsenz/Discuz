@@ -13,7 +13,7 @@ export default {
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 1, //页码
+      pageIndex: 0, //页码
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       immediateCheck: false, //是否在初始化时立即执行滚动位置检查
       pageLimit: 20,
@@ -39,7 +39,7 @@ export default {
     onSearch(val) {
       clearTimeout(this.searchTimer);
       this.searchVal = val;
-      this.pageIndex = 1;
+      this.pageIndex = 0;
       this.searchTimer = setTimeout(()=>{
           this.handleSearchUser(true);
       }, 220)
@@ -53,7 +53,7 @@ export default {
             //   data:this.userParams
             data: {
               include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-              'filter[username]': this.searchVal.trim(),
+              'filter[q]': this.searchVal.trim(),
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
             }

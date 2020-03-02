@@ -81,12 +81,13 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        console.log(res.readdata)
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         }else{
         this.siteInfo = res.readdata;
-        this.moreMemberShow = res.readdata._data.other.can_viewUser_list;
+        this.moreMemberShow = res.readdata._data.other.can_view_user_list;
         if(res.readdata._data.set_site.site_author){
           this.username = res.readdata._data.set_site.site_author.username;
         }

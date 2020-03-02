@@ -127,7 +127,7 @@ const appFetch = function(params, options) {
   //是不是标准接口
   params.standard = params.standard !== undefined ? params.standard : true;
 
-  
+
 
   params.method = params.method ? params.method : 'get';
   if(!apiUrl) {
@@ -247,6 +247,7 @@ const appFetch = function(params, options) {
             Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
+          localStorage.clear();
           Router.init().push({path:'/login-user'})
         }
 

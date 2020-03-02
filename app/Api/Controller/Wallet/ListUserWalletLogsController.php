@@ -111,7 +111,7 @@ class ListUserWalletLogsController extends AbstractListController
         $sort = $this->extractSort($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = $this->extractInclude($request);
+        $include = $this->extractInclude($request);
 
         $walletLogs = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -129,7 +129,7 @@ class ListUserWalletLogsController extends AbstractListController
         ]);
 
         // 主题标题
-        if (in_array('order.thread.firstPost', $load)) {
+        if (in_array('order.thread.firstPost', $include)) {
             $walletLogs->load('order.thread.firstPost')
                 ->map(function (UserWalletLog $log) {
                     if ($log->order && $log->order->thread) {
@@ -145,7 +145,7 @@ class ListUserWalletLogsController extends AbstractListController
                 });
         }
 
-        $walletLogs = $walletLogs->loadMissing($load);
+        $walletLogs = $walletLogs->loadMissing($include);
 
         return $walletLogs;
     }

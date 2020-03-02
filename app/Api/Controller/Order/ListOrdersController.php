@@ -109,7 +109,7 @@ class ListOrdersController extends AbstractListController
         $sort = $this->extractSort($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = $this->extractInclude($request);
+        $include = $this->extractInclude($request);
 
         $orders = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -127,7 +127,7 @@ class ListOrdersController extends AbstractListController
         ]);
 
         // 主题标题
-        if (in_array('thread.firstPost', $load)) {
+        if (in_array('thread.firstPost', $include)) {
             $orders->load('thread.firstPost')
                 ->map(function (Order $order) {
                     if ($order->thread) {
@@ -143,9 +143,7 @@ class ListOrdersController extends AbstractListController
                 });
         }
 
-        $orders = $orders->loadMissing($load);
-
-        return $orders;
+        return $orders->loadMissing($include);
     }
 
     /**
