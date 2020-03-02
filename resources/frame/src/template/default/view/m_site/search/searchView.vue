@@ -43,7 +43,7 @@
             </div>
           </div>
           <div class="postContent"  @click="jumpDetails(item._data.id)">
-            <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
+            <a href="javascript:;" v-html="item.firstPost._data &&item.firstPost._data.contentHtml"></a>
           </div>
         </div>
         <div class="searchMore" v-show="themeLoadMoreStatus" @click="handleLoadMoreTheme">
