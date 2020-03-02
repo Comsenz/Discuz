@@ -298,7 +298,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.$router.push({ path:'/details'+'/'+this.themeId});
+          this.$router.replace({ path:'/details'+'/'+this.themeId});
         }
       })
     },

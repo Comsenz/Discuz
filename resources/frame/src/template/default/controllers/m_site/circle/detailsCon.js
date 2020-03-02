@@ -594,12 +594,12 @@ export default {
           // content = content
           //跳转到编辑页页
           if(this.isLongArticle){
-            this.$router.push({
+            this.$router.replace({
               path: '/edit-long-text' + '/' + this.themeId
             });
 
           } else {
-            this.$router.push({
+            this.$router.replace({
               path: '/edit-topic' + '/' + this.themeId
             });
           }
