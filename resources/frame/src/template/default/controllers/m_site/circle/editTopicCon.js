@@ -127,6 +127,14 @@ export default {
         this.limitMaxEncLength = true;
       }
     },
+    showFacePanel: function(newVal,oldVal){
+      this.showFacePanel = newVal;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
+    },
   },
   methods: {
      //请求站点信息，用于判断是否能上传附件
