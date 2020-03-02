@@ -16,7 +16,7 @@ export default {
     onInput(key) {
       this.value = (this.value + key).slice(0, 6);
       if (this.value.length === 6){
-        this.$router.push({name:'confirm-pay-pwd',params:{value:this.value}})
+        this.$router.replace({name:'confirm-pay-pwd',params:{value:this.value}})
       }
     },
     onDelete() {

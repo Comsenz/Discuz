@@ -45,7 +45,7 @@ export default {
           }
         } else {
           webDb.setLItem('payPwdToken',res.token);
-          this.$router.push({path:"/setup-pay-pwd"})
+          this.$router.replace({path:"/setup-pay-pwd"})
         }
       }).catch(err=>{
         console.log(err);

@@ -331,10 +331,12 @@ export default {
       },
       //发布主题
       postTopic:function(){
-        this.$router.push({ path:'/post-topic'});
+        console.log('发布');
+        this.$router.push({ path:'/post-topic',replace:true});
       },
       //发布长文
       postLongText:function(){
+        console.log('发布2');
         this.$router.push({ path:'/post-longText'});
       },
       /**

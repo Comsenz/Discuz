@@ -59,9 +59,9 @@ export default {
         } else {
           this.$toast.success('设置成功');
           if (webDb.getLItem('payUrl')){
-            this.$router.push({path:webDb.getLItem('payUrl')})
+            this.$router.replace({path:webDb.getLItem('payUrl')})
           } else {
-            this.$router.push({path:"modify-data"});
+            this.$router.replace({path:"modify-data"});
           }
           webDb.setLItem('payUrl','');
           webDb.setLItem('payPwdToken','');
