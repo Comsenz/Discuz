@@ -116,7 +116,7 @@ class EditPost
         }
 
         if (isset($attributes['isDeleted'])) {
-            $this->assertCan($this->actor, 'delete', $post);
+            $this->assertCan($this->actor, 'hide', $post);
 
             $message = isset($attributes['message']) ? $attributes['message'] : '';
 

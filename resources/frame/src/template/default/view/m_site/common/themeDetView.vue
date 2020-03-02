@@ -30,7 +30,7 @@
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && item._data.isSticky">取消置顶</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && !item._data.isSticky">置顶</a>
 
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,6)" v-if="item.firstPost._data.canEdit">编辑</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,6,item._data.isLongArticle)" v-if="item.firstPost._data.canEdit">编辑</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,7)" v-if="item._data.canReply">回复</a>
 
                       <a href="javascript:;"  @click="themeOpera(item._data.id,5,'',index)" v-if="item._data.canDelete">删除</a>

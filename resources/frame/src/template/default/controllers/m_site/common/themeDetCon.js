@@ -176,8 +176,13 @@ export default {
         attri.isDeleted = true;
         this.themeOpeRequest(themeId,attri,'5', itemIndex);
        } else if(clickType == 6){
-         //跳转到发帖页
-        this.$router.push({ path:'/edit-topic'+'/'+themeId});
+         //跳转到编辑页
+         if(!clickStatus){
+          this.$router.push({ path:'/edit-topic'+'/'+themeId});
+         } else {
+          this.$router.push({ path:'/edit-long-text'+'/'+themeId});
+         }
+        
        } else if(clickType == 7){
          //回复
          this.$router.push({
