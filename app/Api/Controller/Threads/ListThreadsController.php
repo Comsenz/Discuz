@@ -59,18 +59,6 @@ class ListThreadsController extends AbstractListController
     ];
 
     /**
-     * 特殊关联，无法通过 with 预加载
-     */
-    public $specialInclude = [
-        'firstPost.likedUsers',
-        'lastThreePosts',
-        'lastThreePosts.user',
-        'lastThreePosts.replyUser',
-        'rewardedUsers',
-        'lastDeletedLog',
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public $sortFields = [
@@ -136,7 +124,7 @@ class ListThreadsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = array_merge($this->extractInclude($request), ['favoriteState']);
+        $include = array_merge($this->extractInclude($request), ['favoriteState']);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -155,30 +143,25 @@ class ListThreadsController extends AbstractListController
 
         Thread::setStateUser($actor);
 
-        // TODO: load -> loadMissing
-        $threads = $threads->load(array_diff($load, $this->specialInclude));
-
-        $specialLoad = array_intersect($this->specialInclude, $load);
-
         // 特殊关联：最新三条回复
-        if (in_array('lastThreePosts', $specialLoad)) {
+        if (in_array('lastThreePosts', $include)) {
             $threads = $this->loadLastThreePosts($threads);
         }
 
         // 特殊关联：点赞的人
-        if (in_array('firstPost.likedUsers', $specialLoad)) {
+        if (in_array('firstPost.likedUsers', $include)) {
             $likedLimit = Arr::get($filter, 'likedLimit', 10);
             $threads = $this->loadLikedUsers($threads, $likedLimit);
         }
 
         // 特殊关联：打赏的人
-        if (in_array('rewardedUsers', $specialLoad)) {
+        if (in_array('rewardedUsers', $include)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
             $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
         }
 
         // 特殊关联：最后一次删除的日志
-        if (in_array('lastDeletedLog', $specialLoad)) {
+        if (in_array('lastDeletedLog', $include)) {
             $threads->map(function (Thread $thread) {
                 $log = $thread->logs()
                     ->with('user')
@@ -207,8 +190,11 @@ class ListThreadsController extends AbstractListController
             });
         }
 
-        // 付费主题对未付费用户只展示部分内容
-        if (in_array('firstPost', $load)) {
+        // 加载其他关联
+        $threads->loadMissing($include);
+
+        // 截取内容
+        if (in_array('firstPost', $include)) {
             $threads = $this->cutThreadContent($threads, $actor);
         }
 
