@@ -90,6 +90,11 @@
             </el-radio-group>
           </div>
 
+          <a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
+            {{items.thread._data.title}}
+            <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
+          </a>
+
           <div class="recycle-bin-reply-table__main" slot="main">
             <!--<a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
             <a class="recycle-bin-reply-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>

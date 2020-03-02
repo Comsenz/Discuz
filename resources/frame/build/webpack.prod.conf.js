@@ -14,6 +14,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
 const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const appConfig = require("../config/appConfig")
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 
@@ -57,6 +58,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
       }),
       new OptimizeCSSPlugin(),
+      new UglifyJsPlugin()
     ],
     splitChunks: {
       cacheGroups: {

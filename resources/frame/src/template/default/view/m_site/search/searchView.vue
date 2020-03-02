@@ -43,7 +43,8 @@
             </div>
           </div>
           <div class="postContent"  @click="jumpDetails(item._data.id)">
-            <a href="javascript:;">{{item.firstPost._data &&item.firstPost._data.content}}</a>
+            <a href="javascript:;" v-html="item._data.isLongArticle ? item._data.title : item.firstPost._data.contentHtml"></a>
+            <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle "></span>
           </div>
         </div>
         <div class="searchMore" v-show="themeLoadMoreStatus" @click="handleLoadMoreTheme">
@@ -67,6 +68,7 @@ import searchCon from '../../../controllers/m_site/search/searchCon';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
 import  '../../../defaultLess/m_site/modules/search.less';
+
 export default {
     name: "searchView",
   ...searchCon

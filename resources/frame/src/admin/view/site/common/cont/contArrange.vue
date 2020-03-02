@@ -56,6 +56,9 @@
 
             <slot name="header"></slot>
           </div>
+          <div class="cont-arrange__rt-main-long-text" v-if="$slots.longText">
+            <slot name="longText"></slot>
+          </div>
           <div class="cont-arrange__rt-main-box" ref="contMain" v-bind:style="{'height':showContStatus? mainHeight + 30 + 'px':mainHeight>78?'78PX':''}"
           ><!--三元运算方法意思：高度不超过78PX也就是三行，不设置高度，高度自适应。如果超过78PX，则设置高度为78PX，显示'显示内容'组件。-->
             <slot  name="main"></slot>

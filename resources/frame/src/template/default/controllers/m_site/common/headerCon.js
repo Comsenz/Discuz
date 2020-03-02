@@ -53,6 +53,7 @@ export default {
         intiFollowChangeVal: '0',
         oldFollow: false,
         equalId: false,
+        clickStatus: true,
 	  }
   },
 	props: {
@@ -228,6 +229,10 @@ export default {
           path: '/login-user'
         });
       } else {
+        if(!this.clickStatus){
+          return false;
+        }
+        this.clickStatus = false;
         let attri = new Object();
         let methodType = '';
         if (intiFollowVal == '1' || intiFollowVal == '2') {
@@ -239,6 +244,7 @@ export default {
           methodType = 'post';
           // this.oldFollow =  '0';
         }
+        
         this.followRequest(methodType,attri,intiFollowVal);
       }
      },
@@ -262,14 +268,18 @@ export default {
           } else {
             if(methodType == 'delete'){
               this.intiFollowVal = '0';
+              this.followDet._data.fansCount =this.followDet._data.fansCount - 1;
             } else {
               if(this.oldFollow == '1' || this.oldFollow == '0') {
+                this.followDet._data.fansCount=this.followDet._data.fansCount + 1;
                 this.intiFollowVal = '1';
               } else {
+                this.followDet._data.fansCount =this.followDet._data.fansCount + 1;
                 this.intiFollowVal = '2';
               }
               // this.intiFollowVal = intiFollowVal;
             }
+            this.clickStatus = true;
           }
         })
     },
