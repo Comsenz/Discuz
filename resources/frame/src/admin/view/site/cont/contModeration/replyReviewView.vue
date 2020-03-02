@@ -62,7 +62,7 @@
         <ContArrange
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
-          :themeName="items.thread.firstPost._data.content"
+          :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.updatedAt)"
           :ip="items._data.ip"
           :userId="!items.user?'该用户被删除':items.user._data.id"
@@ -83,7 +83,7 @@
 
           <div class="cont-review-table__main" slot="main">
             <!--<a :href="'/details/' + items._data.id" style="color: #333;" target="_blank" v-html="items._data.contentHtml"></a>-->
-            <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+            <a class="cont-review-table__main__cont-text" :href="'/details/' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
             <div class="cont-review-table__main__cont-imgs">
               <p class="cont-review-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
                 <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">
