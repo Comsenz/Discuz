@@ -787,7 +787,6 @@ export default {
         })
 
       } else {
-
         if (signInAndPayForAccess.includes(to.name)){
           // next(form.path)
           next('/')
@@ -827,10 +826,8 @@ export default {
                 next({path:'/details/' + to.params.themeId});
               }
             }
-            
           }
-        })
-        
+        });
         next();
       }else {
         /*不符合，跳转到未登录，可访问站点*/
