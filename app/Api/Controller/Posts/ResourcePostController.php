@@ -65,7 +65,7 @@ class ResourcePostController extends AbstractResourceController
     {
         $id = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
-        $load = array_merge($this->extractInclude($request), ['comment_posts']);
+        $include = array_merge($this->extractInclude($request), ['comment_posts']);
 
         $post = $this->posts->findOrFail($id);
         if ($post->is_first || $post->is_comment) {
@@ -73,8 +73,8 @@ class ResourcePostController extends AbstractResourceController
         }
 
         // 查询点评List 及其关联模型
-        if (in_array('comment_posts', $load)) {
-            $commentPostRelationships = $this->getPostRelationships($load);
+        if (in_array('comment_posts', $include)) {
+            $commentPostRelationships = $this->getPostRelationships($include);
 
             $reply = $this->post->query()->whereVisibleTo($actor)->where([
                 'reply_post_id' => $id,
@@ -86,8 +86,8 @@ class ResourcePostController extends AbstractResourceController
             $post->setRelation('commentPosts', $reply);
         }
 
-        $load = array_diff($load, ['comment_posts']);
-        $post->load($load);
+        $include = array_diff($include, ['comment_posts']);
+        $post->load($include);
 
         return $post;
     }

@@ -100,7 +100,7 @@ class ListPostsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = array_merge($this->extractInclude($request), ['likeState']);
+        $include = array_merge($this->extractInclude($request), ['likeState']);
 
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -120,7 +120,7 @@ class ListPostsController extends AbstractListController
         Post::setStateUser($actor);
 
         // 特殊关联：最后一次删除的日志
-        if (in_array('lastDeletedLog', $load)) {
+        if (in_array('lastDeletedLog', $include)) {
             $posts->map(function ($post) {
                 $log = $post->logs()
                     ->with('user')
@@ -149,7 +149,7 @@ class ListPostsController extends AbstractListController
             });
         }
 
-        return $posts->loadMissing($load);
+        return $posts->loadMissing($include);
     }
 
     /**
