@@ -80,6 +80,11 @@
         @payImmediatelyClick="payImmediatelyClick">
       </PayMethod>
 
+      <div class="loadFix" v-if="payLoading">
+        <div class="loadMask"></div>
+        <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
+      </div>
+
     </div>
 </template>
 

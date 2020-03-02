@@ -275,11 +275,8 @@ class Post extends Model
      */
     public function refreshReplyCount()
     {
-        $this->reply_count = $this
-            ->where([
-                'reply_post_id' => $this->id,
-                'is_approved' => 1
-            ])
+        $this->reply_count = $this->where('reply_post_id', $this->id)
+            ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
             ->count();
 

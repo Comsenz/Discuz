@@ -253,7 +253,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.push({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
+            this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
       } else {
@@ -310,7 +310,7 @@ export default {
           } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.push({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
+            _this.$router.replace({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
           }
         })
       }

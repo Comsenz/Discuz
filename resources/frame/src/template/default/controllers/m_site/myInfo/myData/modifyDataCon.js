@@ -60,9 +60,9 @@ export default {
         case 'change-pay-pwd':
           //设置钱包密码','跳转设置钱包密码页面
           if (this.canWalletPay){
-            this.$router.push({path:'verify-pay-pwd'});
+            this.$router.replace({path:'verify-pay-pwd'});
           } else {
-            this.$router.push({path:'setup-pay-pwd'});
+            this.$router.replace({path:'setup-pay-pwd'});
           }
           break;
         default:
