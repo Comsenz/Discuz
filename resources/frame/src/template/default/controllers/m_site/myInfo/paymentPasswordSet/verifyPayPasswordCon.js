@@ -38,6 +38,7 @@ export default {
       }).then(res=>{
         console.log(res);
         if (res.errors){
+          this.value = '';
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
