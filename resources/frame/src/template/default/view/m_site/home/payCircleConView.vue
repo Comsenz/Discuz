@@ -113,7 +113,7 @@
         v-model="show"
         :money="sitePrice"
         :balance="walletBalance"
-		:walletStatus="userDet._data.userDet"
+		:walletStatus="userDet._data.canWalletPay"
         payUrl="setup-pay-pwd"
         @oninput="onInput"
         @delete="onDelete"

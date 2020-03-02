@@ -15,6 +15,7 @@
  * @param {{error}}          String    支付密码错误信息
  * @param {{walletStatus}}   Boolean   钱包设置支付密码状态
  * @param {{payUrl}}         String    设置支付密码路由,点击钱包注释后可跳转对应路由
+ * @param {{pwdValue}}       String    支付密码输入框的值
  *
  * @param {{Events——事件}}              说明——————
  * @param {{oninput}}                  密码输入时触发
@@ -37,7 +38,6 @@ export default {
       payImmediatelyShow:false,      //立即支付弹框
       radio: 0,                      //选中的支付方式
       descriptionShow:false,         //钱包描述是否显示
-      pwdValue: '',                  //钱包密码
       showKeyboard: false,           //键盘是否显示
     }
   },
@@ -72,21 +72,24 @@ export default {
     },
     payUrl:{
       type:String
+    },
+    pwdValue:{
+      type:String,
+      default:''
     }
   },
   methods:{
     onInput(key) {
-      this.pwdValue = (this.pwdValue + key).slice(0, 6);
       this.$emit('oninput',key);
     },
     onDelete() {
-      this.pwdValue = this.pwdValue.slice(0, this.pwdValue.length - 1);
       this.$emit('delete');
     },
     onClose(){
       this.$emit('close');
     },
     payImmediatelyClick(){
+      this.showKeyboard = true;
       if (this.data[this.radio].name === '钱包'){
         this.paySelectShow = !this.paySelectShow;
         this.payImmediatelyShow = !this.payImmediatelyShow
@@ -102,6 +105,7 @@ export default {
     clickOverlay(){
       this.$emit('input', false);
       this.$emit('clickOverlay');
+      this.radio = 0;
       this.paySelectBox = false;
       this.payImmediatelyShow = false;
     }
@@ -118,7 +122,7 @@ export default {
     },
     payImmediatelyShow(val){
       if (!val){
-        this.pwdValue = '';
+        // this.pwdValue = '';
       }
     }
   }

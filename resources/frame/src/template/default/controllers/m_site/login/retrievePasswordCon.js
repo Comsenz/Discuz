@@ -2,25 +2,27 @@
 * 忘记密码控制器
 * */
 
-import retrievePWDHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import retrievePWDFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
+import retrievePWDHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import retrievePWDFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter';
+import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
   data:function () {
     return {
       newpwd:"",
       verifyNum:"",
-      phoneNum:"",
+      phoneNum:"",               //手机号
       type:'',
-      btnContent:"获取验证码", //获取验证码按钮内文字
-      time:1, //发送验证码间隔时间
-      disabled:false, //按钮状态
+      btnContent:"获取验证码",     //获取验证码按钮内文字
+      time:1,                    //发送验证码间隔时间
+      disabled:false,            //按钮状态
       insterVal:'',
       isGray: false,
       btnLoading:false,
       data:{},
       payPassword:'',
       payPasswordConfirmation:'',
+      tokenId:'',
     }
   },
 
@@ -30,8 +32,11 @@ export default {
   },
 
   created(){
+    this.tokenId = webDb.getLItem('tokenId');
+
     if (this.$route.query.type && this.$route.query.type === 'forget') {
       this.type = 'reset_pay_pwd';
+      this.getUserInfo();
     }else {
       this.type = 'reset_pwd';
     }
@@ -139,6 +144,31 @@ export default {
           }
         });
       }
+    },
+
+    /*
+    * 接口请求
+    * */
+    getUserInfo(){
+      this.appFetch({
+        url:"users",
+        method:"get",
+        splice:'/' + this.tokenId
+      }).then(res=>{
+        console.log(res);
+        if (res.errors){
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
+        } else {
+          this.phoneNum = res.readdata._data.mobile;
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
     }
+
   }
 }

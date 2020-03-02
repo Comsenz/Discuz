@@ -10,6 +10,7 @@ namespace App\Listeners\Post;
 use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
+use App\Events\Post\PostNotices;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
@@ -23,12 +24,15 @@ use App\Models\Thread;
 use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
+use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 
 class PostListener
 {
+    use PostNoticesTrait;
+
     public function subscribe(Dispatcher $events)
     {
         // 发表回复
@@ -53,6 +57,9 @@ class PostListener
 
         // 添加完数据后
         $events->listen(Saved::class, [$this, 'whenPostWasSaved']);
+
+        // 通知主题
+        $events->listen(PostNotices::class, [$this, 'whenPostNotices']);
     }
 
     /**
@@ -215,6 +222,28 @@ class PostListener
             foreach ($relatedids as $relatedid) {
                 $relatedid->notify(new Related($post));
             }
+        }
+    }
+
+    /**
+     * 操作回复内容时，发送对应通知
+     *
+     * @param PostNotices $event
+     */
+    public function whenPostNotices(PostNotices $event)
+    {
+        // 判断是修改自己的主题 则不发送通知
+        if ($event->post->user_id == $event->actor->id) {
+            return;
+        }
+
+        switch ($event->data['notice_type']) {
+            case 'isApproved':  // 内容审核通知
+                $this->postIsApproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->postIsDeleted($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                break;
         }
     }
 }

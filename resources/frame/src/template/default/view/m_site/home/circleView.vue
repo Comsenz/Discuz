@@ -39,7 +39,7 @@
         <span class="icon iconfont icon-add"></span>
         <!-- <span v-else="" class="icon iconfont icon-closeCho"></span> -->
       </div>
-      <div class="publishTypeBox" v-if="puslishCho">
+      <div class="publishTypeBox" v-if="puslishCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 10) +'px' : '10px'}">
         <div class="publishCho" @click="postTopic">
           <div class="iconBg">
             <span class="icon iconfont icon-theme"></span>

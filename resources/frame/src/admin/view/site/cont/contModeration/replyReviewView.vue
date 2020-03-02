@@ -88,11 +88,11 @@
 
           <div class="cont-review-table__footer" slot="footer">
             <div class="cont-review-table__footer__lf">
-              <el-button type="text" @click="singleOperationSubmit(1,items.thread.category._data.id,items._data.id)">通过</el-button>
+              <el-button type="text" @click="singleOperationSubmit(1,items.thread.category._data.id,items._data.id,index)">通过</el-button>
               <i></i>
               <el-button type="text" @click="singleOperationSubmit(2,items.thread.category._data.id,items._data.id,index)">删除</el-button>
               <i></i>
-              <el-button type="text" v-if="items._data.isApproved !== 2" @click="singleOperationSubmit(3,items.thread.category._data.id,items._data.id)">忽略</el-button>
+              <el-button type="text" v-if="items._data.isApproved !== 2" @click="singleOperationSubmit(3,items.thread.category._data.id,items._data.id,index)">忽略</el-button>
             </div>
 
             <div class="cont-review-table__footer__rt">

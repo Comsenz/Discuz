@@ -172,9 +172,6 @@ export default {
 
     //初始化请求用户关注信息
     loadUserFollowInfo(){
-      if(!this.userId){
-        return false;
-      }
       this.appFetch({
         url:'users',
         method:'get',

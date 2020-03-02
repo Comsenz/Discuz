@@ -11,8 +11,9 @@
           <van-cell-group>
             <van-field
               label="手机号"
-              clearable
+              :clearable="phoneNum.length > 0"
               v-model="phoneNum"
+              :readonly="phoneNum.length > 0"
               placeholder="请输入您的手机号"
             />
 

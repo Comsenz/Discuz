@@ -198,6 +198,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
+          this.value = '';
           this.$toast.fail(res.errors[0].code);
         } else {
           this.payLoading = true;
@@ -400,6 +401,8 @@ export default {
               }
               this.getUsersInfo()
             },3000)
+            
+            
           })
         })
       }
@@ -411,7 +414,7 @@ export default {
     onClose(){
       this.value = '';
       this.errorInfo = '';
-      this.payLoading = true;
+      this.payLoading = false;
     },
 
 

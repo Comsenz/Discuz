@@ -7,6 +7,7 @@
 
 namespace App\Commands\Post;
 
+use App\Events\Post\PostNotices;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
@@ -76,11 +77,19 @@ class BatchEditPosts
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $post)) {
                     $post->is_approved = $attributes['isApproved'];
+                    $message = isset($attributes['message']) ? $attributes['message'] : '';
+
+                    // 审核回复内容通知
+                    $post->raise(new PostNotices(
+                        $post,
+                        $this->actor,
+                        ['notice_type' => 'isApproved', 'refuse' => $message]
+                    ));
 
                     $post->raise(new PostWasApproved(
                         $post,
                         $this->actor,
-                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+                        ['message' => $message]
                     ));
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -93,6 +102,12 @@ class BatchEditPosts
                     $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                     if ($attributes['isDeleted']) {
+                        // 回复删除通知
+                        $post->raise(new PostNotices(
+                            $post,
+                            $this->actor,
+                            ['notice_type' => 'isDeleted', 'refuse' => $message]
+                        ));
                         $post->hide($this->actor, $message);
                     } else {
                         $post->restore($this->actor, $message);

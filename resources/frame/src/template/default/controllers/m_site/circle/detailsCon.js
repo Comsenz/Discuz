@@ -115,6 +115,7 @@ export default {
       walletBalance: '',  //钱包余额
       errorInfo:'',      //密码错误提示
       value:'',          //密码
+      // pwdVal: '',
       codeUrl:"",        //支付url，base64
       isLongArticle: false,
       userDet: '',
@@ -267,7 +268,7 @@ export default {
         this.appFetch({
           url: 'users',
           method: 'get',
-          splice: '/' + userId,
+          splice: '/' + this.userId,
           data: {
             include: 'groups',
           }
@@ -528,14 +529,14 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
-      if(!this.token){
-        this.$router.push({
-          path:'/login-user',
-          name:'login-user'
-        })
-      } else {
-        this.$router.push({ path:'/home-page'+'/'+id});
-      }
+    //   if(!this.token){
+    //     this.$router.push({
+    //       path:'/login-user',
+    //       name:'login-user'
+    //     })
+    //   } else {
+      this.$router.push({ path:'/home-page'+'/'+id});
+      // }
     },
 
     //主题管理
@@ -544,9 +545,12 @@ export default {
       this.showScreen = !this.showScreen;
     },
     listenEvt(e){
-      if(!this.$refs.screenBox.contains(e.target)){
-        this.showScreen = false;
+      if(this.$refs.screenBox){
+        if(!this.$refs.screenBox.contains(e.target)){
+            this.showScreen = false;
+          }
       }
+      
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
@@ -966,6 +970,7 @@ export default {
     },
     onInput(key){
       this.value = this.value + key;
+      console.log(this.value,'输入的值');
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
@@ -977,6 +982,8 @@ export default {
               }
               this.getOrderStatus();
             },3000)
+            
+            
           })
         })
       }
@@ -1018,6 +1025,7 @@ export default {
         }
       }).then(res=>{
         if (res.errors){
+          this.value = '';
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
