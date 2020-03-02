@@ -53,7 +53,7 @@
 
             <a slot="longText" class="latest-reply-theme__table-long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
               {{items.thread._data.title}}
-              <span  class="iconfont iconshouye" :class="parseInt(items.thread._data.price) > 0?'a':'b'" ></span>
+              <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
             </a>
 
             <div class="latest-reply-theme__table-main" slot="main">

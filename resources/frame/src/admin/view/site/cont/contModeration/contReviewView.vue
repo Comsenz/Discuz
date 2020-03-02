@@ -77,7 +77,7 @@
 
         <a slot="longText" class="cont-review-table__long-text" v-if="items._data.isLongArticle" :href="'/details/' + items._data.id" >
           {{items._data.title}}
-          <span  class="iconfont iconshouye" :class="parseInt(items._data.price) > 0?'a':'b'" ></span>
+          <span  class="iconfont" :class="parseInt(items._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
         </a>
 
         <div class="cont-review-table__main" slot="main">
