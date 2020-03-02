@@ -220,3 +220,6 @@
 .icon-add:before {
   content: "\e640";
 }
+.icon-selected:before {
+  content: "\e641";
+}
