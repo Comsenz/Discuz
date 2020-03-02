@@ -106,6 +106,11 @@
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
+            <a slot="longText" class="cont-manage-theme__table-long-text" v-if="items._data.isLongArticle" :href="'/details/' + items._data.id" >
+              {{items._data.title}}
+              <span  class="iconfont iconshouye" :class="parseInt(items._data.price) > 0?'a':'b'" ></span>
+            </a>
+
             <div class="cont-manage-theme__table-main" slot="main">
               <a class="cont-manage-theme__table-main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
               <div class="cont-manage-theme__table-main__cont-imgs">

@@ -129,6 +129,11 @@
         }
       }
 
+      &-long-text{
+        line-height: 20PX;
+        color: $titleColor;
+      }
+
       &-main{
         line-height: 20PX;
 
@@ -263,6 +268,11 @@
         .el-checkbox__label{
           display: none;
         }
+      }
+
+      &-long-text{
+        line-height: 20PX;
+        color: $titleColor;
       }
 
       &-main{
@@ -467,6 +477,11 @@
           margin-bottom: 12PX;
         }
       }
+    }
+
+    &__long-text{
+      line-height: 20PX;
+      color: $titleColor;
     }
 
     &__header{
@@ -679,6 +694,11 @@
           margin-bottom: 12PX;
         }
       }
+    }
+
+    &__long-text{
+      line-height: 20PX;
+      color: $titleColor;
     }
 
     &__header{
@@ -952,6 +972,11 @@
       }
     }
 
+    &__long-text{
+      line-height: 20PX;
+      color: $titleColor;
+    }
+
     &__main{
       line-height: 20PX;
 
@@ -1101,6 +1126,11 @@
           margin-bottom: 12PX;
         }
       }
+    }
+
+    &__long-text{
+      line-height: 20PX;
+      color: $titleColor;
     }
 
     &__header{

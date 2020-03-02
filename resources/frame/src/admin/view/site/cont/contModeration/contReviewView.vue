@@ -75,6 +75,11 @@
           </el-radio-group>
         </div>
 
+        <a slot="longText" class="cont-review-table__long-text" v-if="items._data.isLongArticle" :href="'/details/' + items._data.id" >
+          {{items._data.title}}
+          <span  class="iconfont iconshouye" :class="parseInt(items._data.price) > 0?'a':'b'" ></span>
+        </a>
+
         <div class="cont-review-table__main" slot="main">
           <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
           <div class="cont-review-table__main__cont-imgs">
