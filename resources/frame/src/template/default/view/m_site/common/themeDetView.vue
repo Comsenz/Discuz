@@ -39,7 +39,7 @@
                 </div>
               </div>
               <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
-                <a v-html="item._data.title"></a>
+                <a href="javascript:;">{{item._data.title}}</a>
                 <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span>
                 <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span>
               </div>
