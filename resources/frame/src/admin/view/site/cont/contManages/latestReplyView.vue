@@ -51,10 +51,10 @@
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
-            <a slot="longText" class="latest-reply-theme__table-long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
+            <!-- <a slot="longText" class="latest-reply-theme__table-long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" target="_blank">
               {{items.thread._data.title}}
               <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
-            </a>
+            </a> -->
 
             <div class="latest-reply-theme__table-main" slot="main">
               <a class="latest-reply-theme__table-main__cont-text" :href="'/details/' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
