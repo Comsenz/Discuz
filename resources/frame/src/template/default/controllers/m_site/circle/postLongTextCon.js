@@ -71,7 +71,7 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
-      
+      viewportHeight: '',
 
     }
   },
@@ -97,6 +97,7 @@ export default {
   },
   created(){
     this.viewportWidth = window.innerWidth;
+    this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -141,7 +142,14 @@ export default {
         this.limitMaxEncLength = true;
       }
     },
-    
+    showFacePanel: function(newVal,oldVal){
+      this.showFacePanel = newVal;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
+    },
     themeTitle() {
       if (this.themeTitle.length > this.titleMaxLength) {
           this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
@@ -551,13 +559,14 @@ export default {
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
       this.footMove = !this.footMove;
+      this.payMove = !this.payMove;
+      this.markMove = !this.markMove;
       if(this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
       }
-      this.payMove = !this.payMove;
-      this.markMove = !this.markMove;
+      
     },
     backClick() {
       this.$router.go(-1);

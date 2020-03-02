@@ -76,6 +76,7 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
+      viewportHeight: '',
     }
   },
 
@@ -104,6 +105,7 @@ export default {
       }
   },
   created(){
+    this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;

@@ -1260,6 +1260,7 @@ details.vue
    position: fixed;
    bottom: 100px;
    width: 100%;
+   background: #ffffff;
    &:after {
     position: absolute;
     box-sizing: border-box;
@@ -1279,7 +1280,7 @@ details.vue
   // min-height: 80px;
   // max-height: 150px;
   height: 150px;
-  max-height: 150px;
+  // max-height: 150px;
   margin-left: auto;
   margin-right: auto;
   word-wrap: break-word;
@@ -1298,7 +1299,12 @@ details.vue
   
  }
 .post-longText-form {
-  padding-left: 15px;
+  width: 100%;
+  min-height: 150px;
+  padding: 44px 0 150px 15px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: scroll;
 }
 .pubThemeTitle {
   height: 52px;

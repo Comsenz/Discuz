@@ -7,8 +7,9 @@
       </header>
 
       <div class="post-longText-form" id="postForm">
+        
         <input type="text" placeholder="请输入标题" autofocus="autofocus" v-model="themeTitle" class="pubThemeTitle">
-        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>        
+        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; payMove=false; markMove=false; keyboard = false;"></textarea>        
 
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
         <div class="uploadBox" v-if="isAndroid && isWeixin">
