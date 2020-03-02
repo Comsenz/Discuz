@@ -76,7 +76,7 @@
         <ContArrange
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
-          :themeName="items.thread.firstPost._data.content"
+          :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :deleTime="formatDate(items._data.deletedAt)"
           :ip="items._data.ip"
@@ -90,10 +90,10 @@
             </el-radio-group>
           </div>
 
-          <a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
+          <!--<a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
             {{items.thread._data.title}}
             <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
-          </a>
+          </a>-->
 
           <div class="recycle-bin-reply-table__main" slot="main">
             <!--<a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
