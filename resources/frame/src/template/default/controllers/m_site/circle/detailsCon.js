@@ -128,6 +128,7 @@ export default {
       userArrStatus: false,
       rewardTipShow: true,
       payLoading: false,
+      clickStatus: true,
 
     }
   },
@@ -704,6 +705,10 @@ export default {
           name:'login-user'
         })
       } else {
+        if(!this.clickStatus){
+          return false;
+        }
+        this.clickStatus = false;
         let attri = new Object();
         if (type == 2) {
           if(!postsCanLike){
@@ -719,20 +724,7 @@ export default {
             }
           }
         }
-        // else if (type == 3) {
-        //   if(!this.canLike){
-        //     this.$toast.fail('没有权限，请联系站点管理员');
-        //     return false;
-        //   } else {
-        //     if (isLike) {
-        //       //如果已点赞
-        //       attri.isLiked = false;
-        //     } else {
-        //       //如果未点赞
-        //       attri.isLiked = true;
-        //     }
-        //   }
-        // }
+        
         let posts = 'posts/' + postId;
         this.appFetch({
           url: posts,
@@ -748,7 +740,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            // this.$toast.success('修改成功');
+            // isLike = res.readdata._data.isLiked;
             if(isLike){
               this.postsList[postIndex]._data.likeCount = this.postsList[postIndex]._data.likeCount - 1;
               this.postsList[postIndex]._data.isLiked = false;
@@ -757,8 +749,9 @@ export default {
               this.postsList[postIndex]._data.isLiked = true;
             }
             this.pageIndex = 1;
-            // this.detailsLoad(true);
+            this.clickStatus = true;
           }
+
         })
       }
     },
@@ -815,6 +808,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
               throw new Error(res.error)
             } else {
+              
               if(isLike){
                 // this.likedUsers = this.likedUsers.filter(value => value._data.id !== this.userId);
                 this.likedUsers.map((value, key, likedUsers) => {
