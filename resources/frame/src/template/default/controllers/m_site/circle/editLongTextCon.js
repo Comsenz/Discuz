@@ -81,6 +81,29 @@ export default {
   },
 
   mounted () {
+    let postForm = document.getElementById('postForm');
+    postForm.style.height = (this.viewportHeight) + 'px';
+
+    let text = document.getElementById('textarea_id');
+
+    text.addEventListener("touchstart",(e)=>{
+      // alert('触发');
+      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+
+      let textarea = this.$refs.textarea;
+      textarea.focus();
+      let prevHeight = 300;
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
+        height += 20;
+        if (height !== prevHeight) {
+          prevHeight = height;
+          let rem = height / rootFontSize;
+          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+        }
+      });
+    });
+
+
       this.$nextTick(() => {
         let textarea = this.$refs.textarea;
         textarea.focus();
@@ -592,6 +615,8 @@ export default {
     //   this.footMove = false;
     // },
     addExpression(){
+      let text = document.getElementById('postForm');
+
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',
@@ -605,8 +630,10 @@ export default {
       this.showFacePanel = !this.showFacePanel;
       if(this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+        text.style.paddingBottom = '50px';
       } else {
         document.getElementById('postForm').style.height = '100%';
+        text.style.paddingBottom = '150px';
       }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;

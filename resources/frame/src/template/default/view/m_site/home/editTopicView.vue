@@ -8,7 +8,7 @@
 
       <div class="post-topic-form" id="postForm">
         <!-- <textarea placeholder="评论" v-model="shareText" ref="shareTextArea" @focus="showFacePanel = false"></textarea> -->
-        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea" autofocus placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
+        <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea" autofocus placeholder="请输入内容" v-model="content" :maxlength="keywordsMax"   @focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <!-- <div class="uploadBox" v-if="uploadShow">
           <van-uploader :max-count="12" :after-read="handleFile" accept="image/*" v-model="fileListOne" @delete="deleteEnclosure($event.id,'img')" multiple>
           </van-uploader>

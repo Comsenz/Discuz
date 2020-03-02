@@ -66,12 +66,41 @@ export default {
       backGo:-2,
       formdataList:[],
       viewportHeight: '',
-
+      postFormScrollTop:''
     }
   },
 
   mounted () {
-      this.$nextTick(() => {
+    let postForm = document.getElementById('postForm');
+    postForm.style.height = (this.viewportHeight) + 'px';
+
+    let text = document.getElementById('post-topic-form-text');
+
+    text.addEventListener("touchstart",(e)=>{
+      // alert('触发');
+      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+
+      let textarea = this.$refs.textarea;
+      textarea.focus();
+      let prevHeight = 300;
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
+        height += 20;
+        if (height !== prevHeight) {
+          prevHeight = height;
+          let rem = height / rootFontSize;
+          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+        }
+      });
+    });
+
+
+    /*document.getElementById('postForm').addEventListener('scroll',(e)=>{
+      console.log(document.getElementById('postForm').scrollTop);
+      this.postFormScrollTop = document.getElementById('postForm').scrollTop;
+    })*/
+
+
+    this.$nextTick(() => {
         let textarea = this.$refs.textarea;
         textarea.focus();
         let prevHeight = 300;
@@ -541,17 +570,17 @@ export default {
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
       textarea.focus();
     },
-    searchChange: debounce(function () {
-      let trim = this.keywords && this.keywords.trim();
-      if (!trim) {
-        this.list = [];
-        return;
-      }
-      const params = {
-        keywords: this.keywords
-      }
-      // 调api ...
-    }),
+    // searchChange: debounce(function () {
+    //   let trim = this.keywords && this.keywords.trim();
+    //   if (!trim) {
+    //     this.list = [];
+    //     return;
+    //   }
+    //   const params = {
+    //     keywords: this.keywords
+    //   }
+    //   // 调api ...
+    // }),
     handleFaceChoose (face) {
       const value = this.content;
       const el = this.$refs.textarea;
@@ -572,6 +601,11 @@ export default {
     //   this.footMove = false;
     // },
     addExpression(){
+
+      // console.log('点击' + this.postFormScrollTop);
+      // document.getElementById('postForm').scrollTop = this.postFormScrollTop;
+
+
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',
@@ -589,6 +623,12 @@ export default {
         document.getElementById('postForm').style.height = '100%';
       }
       this.footMove = !this.footMove;
+
+      // setTimeout(()=>{
+      //   document.getElementById('postForm').scrollTop = 700;
+      //   console.log('延迟')
+      // },1000)
+
     },
     backClick() {
       this.$router.go(-1);
