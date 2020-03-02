@@ -60,6 +60,7 @@ export default {
       backGo:-2,
       formdataList:[],
       viewportWidth: '',
+      viewportHeight: '',
 
     }
   },
@@ -69,7 +70,7 @@ export default {
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 0, (height) => {
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
         if (height !== prevHeight) {
           prevHeight = height;
@@ -85,6 +86,7 @@ export default {
   },
   created(){
     this.viewportWidth = window.innerWidth;
+    this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -520,6 +522,11 @@ export default {
       //   // document.getElementById('showFacePanel').style.width = "640px";
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
       this.footMove = !this.footMove;
     },
     backClick() {

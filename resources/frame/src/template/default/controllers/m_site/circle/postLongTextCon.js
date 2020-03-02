@@ -81,7 +81,7 @@ export default {
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 0, (height) => {
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
         if (height !== prevHeight) {
           prevHeight = height;
@@ -551,6 +551,11 @@ export default {
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
       this.footMove = !this.footMove;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
       this.payMove = !this.payMove;
       this.markMove = !this.markMove;
     },

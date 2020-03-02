@@ -6,7 +6,7 @@
         <van-button type="primary" size="mini" @click="publish">发布</van-button>
       </header>
 
-      <div class="post-longText-form">
+      <div class="post-longText-form" id="postForm">
         <input type="text" placeholder="请输入标题" autofocus="autofocus" v-model="themeTitle" class="pubThemeTitle">
         <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea>
 
