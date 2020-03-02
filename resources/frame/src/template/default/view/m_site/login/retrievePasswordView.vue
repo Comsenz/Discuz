@@ -23,6 +23,7 @@
               clearable
               label="验证码"
               placeholder="请输入验证码"
+              type="number"
             >
               <van-button slot="button" size="small" type="default" @click="forgetSendSmsCode" :class="{'grayBg':isGray}">{{ btnContent }}</van-button>
             </van-field>
@@ -41,6 +42,8 @@
               label="新密码"
               clearable
               v-model="payPassword"
+              type="number"
+              maxlength="6"
               placeholder="请输入新密码"
             />
 
@@ -49,6 +52,8 @@
               label="确认密码"
               clearable
               v-model="payPasswordConfirmation"
+              type="number"
+              maxlength="6"
               placeholder="请输入新密码"
             />
 
