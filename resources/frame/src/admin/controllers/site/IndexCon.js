@@ -403,8 +403,8 @@ export default {
     *  跳转到站点首页
     * */
     jumpIndex(){
-      // let Url= '';
-      // Url = appConfig.baseUrl + '/admin';
+      let Url= '';
+      Url = appConfig.baseUrl;
 
       this.$router.push({
         path: '/admin'
