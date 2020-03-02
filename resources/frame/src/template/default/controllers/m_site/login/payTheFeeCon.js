@@ -34,7 +34,8 @@ export default {
       errorInfo:'',      //密码错误提示
       value:'',          //密码
       walletBalance:'',  //钱包余额
-      walletStatus:''    //钱包支付密码状态
+      walletStatus:'',    //钱包支付密码状态
+      payLoading: false,
     }
   },
 
@@ -128,7 +129,8 @@ export default {
     //关闭
     onClose(){
       this.value = '';
-      this.errorInfo = ''
+      this.errorInfo = '';
+      this.payLoading= false;
     },
 
     leapFrogClick(){
@@ -189,6 +191,7 @@ export default {
                 clearInterval(timer);
                 webDb.setLItem('foregroundUser', res.data.attributes.username);
                 this.show = false;
+                this.payLoading = false;
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
 
@@ -281,6 +284,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           this.value = '';
         } else {
+          this.payLoading= true;
           return res;
         }
       }).catch(err=>{
@@ -305,6 +309,7 @@ export default {
           if (this.payStatus) {
             this.qrcodeShow = false;
             this.show = false;
+            this.payLoading = false;
             this.$router.push('/');
             this.payStatusNum = 11;
             // clearInterval(time);
