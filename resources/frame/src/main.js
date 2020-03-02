@@ -92,22 +92,22 @@ const App = new Vue({
   watch: {
     '$route': function(to, from) {
 
-      /*if (noKeepAliveUrl.includes(from.name)) {
-        this.keepAliveStatus = false;
-      } else if (keepAliveUrl.includes(to.name)) {
-        this.keepAliveStatus = true;
-      } else {
-        this.keepAliveStatus = false;
-      }*/
-
-
-      if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
+      if (noKeepAliveUrl.includes(from.name)) {
         this.keepAliveStatus = false;
       } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
       } else {
         this.keepAliveStatus = false;
       }
+
+
+      // if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
+      //   this.keepAliveStatus = false;
+      // } else if (keepAliveUrl.includes(to.name)) {
+      //   this.keepAliveStatus = true;
+      // } else {
+      //   this.keepAliveStatus = false;
+      // }
 
 
 
