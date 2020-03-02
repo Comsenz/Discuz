@@ -118,6 +118,7 @@ export default {
 					method:'get',
 					data: this.themeParamd
 				}).then(data=>{
+					console.log(data)
 					this.themeLoadMoreStatus = data.readdata.length > this.searchMaxSum;
 					this.searchThemeList = data.readdata.splice(0,3);
 				}).catch(err=>{

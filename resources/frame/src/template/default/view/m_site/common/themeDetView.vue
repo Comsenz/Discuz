@@ -98,7 +98,7 @@
                 <div class="replyCon" v-for="(reply,repIndex) in item.lastThreePosts" :key="repIndex">
                   <a href="javascript:;" v-if="reply.user" @click="jumpPerDet(reply.user._data.id)">{{reply.user._data.username}}</a>
                   <a href="javascript:;" v-else="">该用户已被删除</a>
-                  <span class="font9" v-if="reply._data.replyUserId" @click="jumpPerDet(reply.user._data.id)">回复</span>
+                  <span class="font9" v-if="reply._data.replyUserId">回复</span>
                   <!-- <span class="font9" v-else=""></span> -->
                   <a href="javascript:;" v-if="reply._data.replyUserId && reply.replyUser" @click="jumpPerDet(reply.user._data.id)">{{reply.replyUser._data.username}}</a>
                   <a href="javascript:;" v-else-if="reply._data.replyUserId && !reply.replyUser">该用户已被删除</a>

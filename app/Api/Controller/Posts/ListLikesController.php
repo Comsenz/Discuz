@@ -26,7 +26,7 @@ class ListLikesController extends ListPostsController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = $this->extractInclude($request);
+        $include = $this->extractInclude($request);
 
         $query = $actor->likedPosts();
 
@@ -47,8 +47,6 @@ class ListLikesController extends ListPostsController
             'pageCount' => ceil($this->postCount / $limit),
         ]);
 
-        $posts = $query->get()->load($load);
-
-        return $posts;
+        return $query->get()->load($include);
     }
 }

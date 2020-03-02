@@ -163,7 +163,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          this.phoneNum = res.readdata._data.mobile;
+          this.phoneNum = res.readdata._data.originalMobile;
         }
       }).catch(err=>{
         console.log(err);
