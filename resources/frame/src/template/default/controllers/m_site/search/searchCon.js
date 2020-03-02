@@ -118,7 +118,8 @@ export default {
 					method:'get',
 					data: this.themeParamd
 				}).then(data=>{
-					console.log(data)
+					console.log(data,'主题')
+					console.log(data.readdata[0]._data,'0000')
 					this.themeLoadMoreStatus = data.readdata.length > this.searchMaxSum;
 					this.searchThemeList = data.readdata.splice(0,3);
 				}).catch(err=>{
