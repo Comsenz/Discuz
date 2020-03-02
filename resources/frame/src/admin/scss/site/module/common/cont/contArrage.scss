@@ -90,6 +90,11 @@
 
       }
 
+      &-long-text{
+        border-bottom: 1PX solid $borderColor;
+        padding: 15PX 20PX;
+      }
+
       &-box{
         padding: 15PX 20PX;
         line-height:20PX;
