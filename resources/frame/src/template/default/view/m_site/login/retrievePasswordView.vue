@@ -11,10 +11,11 @@
           <van-cell-group>
             <van-field
               label="手机号"
-              :clearable="phoneNum.length > 0"
+              :clearable="type !== 'reset_pay_pwd'"
               v-model="phoneNum"
-              :readonly="phoneNum.length > 0"
+              :readonly="type === 'reset_pay_pwd'"
               placeholder="请输入您的手机号"
+              maxlength="13"
             />
 
             <van-field

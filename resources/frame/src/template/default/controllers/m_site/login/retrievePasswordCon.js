@@ -163,7 +163,11 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          this.phoneNum = res.readdata._data.originalMobile;
+          if (this.type === 'reset_pay_pwd'){
+            this.phoneNum = res.readdata._data.mobile;
+          }else {
+            this.phoneNum = res.readdata._data.originalMobile;
+          }
         }
       }).catch(err=>{
         console.log(err);
