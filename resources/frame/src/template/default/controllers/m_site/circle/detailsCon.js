@@ -594,12 +594,12 @@ export default {
           // content = content
           //跳转到编辑页页
           if(this.isLongArticle){
-            this.$router.push({
+            this.$router.replace({
               path: '/edit-long-text' + '/' + this.themeId
             });
 
           } else {
-            this.$router.push({
+            this.$router.replace({
               path: '/edit-topic' + '/' + this.themeId
             });
           }
@@ -868,8 +868,8 @@ export default {
       } else if(!this.canReply){
         this.$toast.fail('没有权限，请联系站点管理员');
       } else {
-        this.$router.push({
-          path:'/reply-to-topic'+'/'+themeId+'/'+replyId,
+        this.$router.replace({
+          path:'/reply-to-topic'+'/'+themeId+'/'+replyId,replace: true
         });
         browserDb.setLItem('replyQuote', quoteCon);
       }

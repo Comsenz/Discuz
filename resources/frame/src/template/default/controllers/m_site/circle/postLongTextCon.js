@@ -71,7 +71,7 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
-      
+      viewportHeight: '',
 
     }
   },
@@ -81,7 +81,7 @@ export default {
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 0, (height) => {
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
         if (height !== prevHeight) {
           prevHeight = height;
@@ -97,6 +97,7 @@ export default {
   },
   created(){
     this.viewportWidth = window.innerWidth;
+    this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -141,7 +142,14 @@ export default {
         this.limitMaxEncLength = true;
       }
     },
-    
+    showFacePanel: function(newVal,oldVal){
+      this.showFacePanel = newVal;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
+    },
     themeTitle() {
       if (this.themeTitle.length > this.titleMaxLength) {
           this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
@@ -245,7 +253,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.push({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
+            this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo}});
           }
         })
       } else {
@@ -302,7 +310,7 @@ export default {
           } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.push({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
+            _this.$router.replace({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
           }
         })
       }
@@ -553,6 +561,12 @@ export default {
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
       this.markMove = !this.markMove;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
+      
     },
     backClick() {
       this.$router.go(-1);

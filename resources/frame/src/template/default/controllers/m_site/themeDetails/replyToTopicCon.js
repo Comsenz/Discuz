@@ -441,7 +441,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}})
+            this.$router.replace({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo},replace: true})
           }
         })
       } else {
@@ -477,7 +477,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.push({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo}});
+            this.$router.replace({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo},replace: true});
           }
         })
       }

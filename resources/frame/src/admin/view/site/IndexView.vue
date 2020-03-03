@@ -22,7 +22,7 @@
       <div class="index-header__info-menu">
         <span>您好，{{userName}}</span>
         <span @click="quitClick">&nbsp;[退出]</span>
-        <span class="site-home" @click="jumpIndex">站点首页</span>
+        <span class="site-home" ><a :href="appConfig.baseUrl" target="_blank">站点首页</a></span>
       </div>
 
     </el-header>

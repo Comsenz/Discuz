@@ -76,15 +76,39 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
+      viewportHeight: '',
     }
   },
 
   mounted () {
+    let postForm = document.getElementById('postForm');
+    postForm.style.height = (this.viewportHeight) + 'px';
+
+    let text = document.getElementById('textarea_id');
+
+    text.addEventListener("touchstart",(e)=>{
+      // alert('触发');
+      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+
+      let textarea = this.$refs.textarea;
+      textarea.focus();
+      let prevHeight = 300;
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
+        height += 20;
+        if (height !== prevHeight) {
+          prevHeight = height;
+          let rem = height / rootFontSize;
+          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+        }
+      });
+    });
+
+
       this.$nextTick(() => {
         let textarea = this.$refs.textarea;
         textarea.focus();
         let prevHeight = 300;
-        textarea && autoTextarea(textarea, 5, 0, (height) => {
+        textarea && autoTextarea(textarea, 5, 65535, (height) => {
           height += 20;
           if (height !== prevHeight) {
             prevHeight = height;
@@ -104,6 +128,7 @@ export default {
       }
   },
   created(){
+    this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
@@ -133,6 +158,14 @@ export default {
         this.limitMaxEncLength = false;
       } else {
         this.limitMaxEncLength = true;
+      }
+    },
+    showFacePanel: function(newVal,oldVal){
+      this.showFacePanel = newVal;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
       }
     },
   },
@@ -279,7 +312,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.$router.push({ path:'/details'+'/'+this.themeId});
+          this.$router.replace({ path:'/details'+'/'+this.themeId});
         }
       })
     },
@@ -582,6 +615,8 @@ export default {
     //   this.footMove = false;
     // },
     addExpression(){
+      let text = document.getElementById('postForm');
+
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',
@@ -593,6 +628,13 @@ export default {
         this.faceData = data.readdata;
       })
       this.showFacePanel = !this.showFacePanel;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+        text.style.paddingBottom = '50px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+        text.style.paddingBottom = '150px';
+      }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
       this.markMove = !this.markMove;

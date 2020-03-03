@@ -60,14 +60,11 @@ class UpdateGroup
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
 
-        // 修改时调用脏数据Dirty
         $this->validator->valid($group->getDirty());
 
-        //先把表的其它默认组清空， 再设置当前组为默认组
-        if ($value = Arr::get($this->data, 'attributes.default', 0)) {
-            $this->event->dispatch(new Saving($group, $this->actor, []));
-            $group->default = true;
-        }
+        $this->event->dispatch(
+            new Saving($group, $this->actor, $this->data)
+        );
 
         $group->save();
 

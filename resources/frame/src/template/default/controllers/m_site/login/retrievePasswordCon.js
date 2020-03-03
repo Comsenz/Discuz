@@ -45,36 +45,61 @@ export default {
   methods:{
     //获取验证码
     forgetSendSmsCode(){
-      var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
-      var phoneNum = this.phoneNum;
-      if(!phoneNum){//未输入手机号
-       this.$toast("请输入手机号码");
-       return;
-      }
-      if(!reg.test(phoneNum)){//手机号不合法
-       this.$toast("您输入的手机号码不合法，请重新输入");
-      }
-      //获取验证码请求
-      this.appFetch({
-        url:"sendSms",
-        method:"post",
-        data:{
-          "data": {
-            "attributes": {
-              mobile:this.phoneNum,
-              type:this.type
+
+      if (this.type !== 'reset_pay_pwd'){
+        var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+        var phoneNum = this.phoneNum;
+        if(!phoneNum){//未输入手机号
+          this.$toast("请输入手机号码");
+          return;
+        }
+        if(!reg.test(phoneNum)){//手机号不合法
+          this.$toast("您输入的手机号码不合法，请重新输入");
+        }
+        //获取验证码请求
+        this.appFetch({
+          url:"sendSms",
+          method:"post",
+          data:{
+            "data": {
+              "attributes": {
+                mobile:this.phoneNum,
+                type:this.type
+              }
             }
           }
-        }
-      }).then(res => {
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-        } else {
-          this.insterVal = res.data.attributes.interval;
-          this.time = this.insterVal;
-          this.timer();
-        }
-       });
+        }).then(res => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          } else {
+            this.insterVal = res.data.attributes.interval;
+            this.time = this.insterVal;
+            this.timer();
+          }
+        });
+      } else {
+        //获取验证码请求
+        this.appFetch({
+          url:"sendSms",
+          method:"post",
+          data:{
+            "data": {
+              "attributes": {
+                type:this.type
+              }
+            }
+          }
+        }).then(res => {
+          if (res.errors){
+            this.$toast.fail(res.errors[0].code);
+          } else {
+            this.insterVal = res.data.attributes.interval;
+            this.time = this.insterVal;
+            this.timer();
+          }
+        });
+      }
+
     },
     timer(){
       if(this.time>1){
@@ -163,7 +188,11 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          this.phoneNum = res.readdata._data.originalMobile;
+          if (this.type === 'reset_pay_pwd'){
+            this.phoneNum = res.readdata._data.mobile;
+          }else {
+            this.phoneNum = res.readdata._data.originalMobile;
+          }
         }
       }).catch(err=>{
         console.log(err);

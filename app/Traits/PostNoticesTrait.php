@@ -12,6 +12,7 @@ use App\MessageTemplate\PostModMessage;
 use App\MessageTemplate\PostOrderMessage;
 use App\MessageTemplate\PostStickMessage;
 use App\MessageTemplate\PostThroughMessage;
+use App\Models\Post;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
@@ -32,7 +33,7 @@ trait PostNoticesTrait
     private function postIsDeleted($post, $attach)
     {
         $data = [
-            'message' => $post->content,
+            'message' => $this->getPostTitle($post),
             'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $post->thread->id,
@@ -50,7 +51,7 @@ trait PostNoticesTrait
     private function postIsApproved($post, $attach)
     {
         $data = [
-            'message' => $post->content,
+            'message' => $this->getPostTitle($post),
             'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $post->thread->id,
@@ -64,6 +65,17 @@ trait PostNoticesTrait
             // 忽略就发送不通过通知
             $post->user->notify(new System(PostModMessage::class, $data));
         }
+    }
+
+    /**
+     * 标题内容替换
+     *
+     * @param $post
+     * @return mixed
+     */
+    public function getPostTitle(Post $post)
+    {
+        return $post->thread->is_long_article ? $post->thread->title : $post->formatContent();
     }
 
     /**

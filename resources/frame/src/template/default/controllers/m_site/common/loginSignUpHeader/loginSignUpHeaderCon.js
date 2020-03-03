@@ -43,7 +43,14 @@ export default {
     headerBack(){
       let backGo = this.$route.query.backGo;
 
-      if (backGo){
+
+      // this.$router.go(-1);
+
+      console.log('回退');
+
+      this.$router.back(-1)
+
+      /*if (backGo){
         if (isNaN(parseInt(backGo))){
           this.$router.push({path:backGo})
         } else {
@@ -59,7 +66,7 @@ export default {
           // alert('有上一级');
           this.$router.go(-1);
         }
-      }
+      }*/
 
     }
   },

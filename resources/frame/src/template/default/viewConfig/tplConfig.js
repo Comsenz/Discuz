@@ -593,7 +593,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    'pay-the-fee',
+    // 'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
@@ -805,13 +805,13 @@ export default {
     /*判断登录设备*/
     if (isWeixin){
       /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
-      if(to.name === 'wx-sign-up-bd') {
+      if(to.name === 'wx-login-bd') {
         next();
         return
       } else {
         next();
       }
-      next({path:'/wx-sign-up-bd'});
+      next({path:'/wx-login-bd'});
       //微信
     } else {
       if (notLoggedInToAccessPage.includes(to.name)){

@@ -11,10 +11,11 @@
           <van-cell-group>
             <van-field
               label="手机号"
-              :clearable="phoneNum.length > 0"
+              :clearable="type !== 'reset_pay_pwd'"
               v-model="phoneNum"
-              :readonly="phoneNum.length > 0"
+              :readonly="type === 'reset_pay_pwd'"
               placeholder="请输入您的手机号"
+              maxlength="13"
             />
 
             <van-field
@@ -23,6 +24,7 @@
               clearable
               label="验证码"
               placeholder="请输入验证码"
+              type="number"
             >
               <van-button slot="button" size="small" type="default" @click="forgetSendSmsCode" :class="{'grayBg':isGray}">{{ btnContent }}</van-button>
             </van-field>
@@ -41,6 +43,8 @@
               label="新密码"
               clearable
               v-model="payPassword"
+              type="number"
+              maxlength="6"
               placeholder="请输入新密码"
             />
 
@@ -49,6 +53,8 @@
               label="确认密码"
               clearable
               v-model="payPasswordConfirmation"
+              type="number"
+              maxlength="6"
               placeholder="请输入新密码"
             />
 
