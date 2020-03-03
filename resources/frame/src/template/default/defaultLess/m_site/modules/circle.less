@@ -800,7 +800,12 @@ openCircleConView.vue
       color: #444444;
       line-height: 20px;
     }
-
+    .themeImgList {
+      .van-image {
+        display: block;
+        max-width: 100%;
+      }
+    }
     .quotePostTop {
       padding-top: 10px;
       margin-bottom: 11px;
@@ -1090,6 +1095,7 @@ details.vue
   text-align: left;
   padding-bottom: 10px;
   position: relative;
+  word-break: break-all;
   &:after {
     content: '';
     display: block;
@@ -1107,6 +1113,7 @@ details.vue
   line-height: 20px;
   padding-top: 10px;
   font-size: 15px;
+  word-break: break-all;
 }
 .payTipBox {
   margin: 30px 0;

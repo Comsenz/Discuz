@@ -31,7 +31,7 @@ class CreateThreads extends Migration
             $table->tinyInteger('is_long_article')->unsigned()->default(0)->comment('是否长文');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('last_posted_user_id')->references('id')->on('users');
+            $table->foreign('last_posted_user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('deleted_user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
