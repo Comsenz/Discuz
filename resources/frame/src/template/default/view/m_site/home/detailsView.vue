@@ -187,7 +187,7 @@
         <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
       </div>
      
-      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
+      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
     </div>

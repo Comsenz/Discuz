@@ -34,7 +34,7 @@
         <van-icon name="warning-o" size="1.8rem" class="nullIcon"/>
         <p class="nullWord">{{nullWord}}</p>
       </div>
-      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
+      <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix"  @click="loginJump(1)" :class="{'hide':loginHide}" :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}">{{loginWord}}</van-button>
       <div class="fixedEdit" id="fixedEdit" v-if="canEdit" @click="postCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 15) +'px' : '15px'}" :class="{'rotate':rotate}">
         <span class="icon iconfont icon-add"></span>
         <!-- <span v-else="" class="icon iconfont icon-closeCho"></span> -->
