@@ -8,7 +8,7 @@
 
       <div class="post-longText-form" id="postForm">
         
-        <input type="text" placeholder="请输入标题" autofocus="autofocus" v-model="themeTitle" class="pubThemeTitle">
+        <input type="text" placeholder="请输入标题" autofocus id="themeTitle" v-model="themeTitle" class="pubThemeTitle">
         <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; payMove=false; markMove=false; keyboard = false;"></textarea>        
 
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <markdown-toolbar for="textarea_id" class="markdownBox markdownFix" :class="{'markMove':markMove}">
+      <markdown-toolbar for="textarea_id" class="markdownBox markdownFix" :class="{'markMove':markMove}" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <md-bold><span class="icon iconfont icon-bold"></span></md-bold>
         <md-header><span class="icon iconfont icon-title"></span></md-header>
         <md-italic><span class="icon iconfont icon-italic"></span></md-italic>
@@ -61,8 +61,8 @@
         <!-- <md-mention>mention<span class="icon iconfont icon-italic"></span></md-mention> -->
         <!-- <md-ref>ref<span class="icon iconfont icon-italic"></span></md-ref> -->
       </markdown-toolbar>
-      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue" :class="{'payMove':payMove}" class="paySetting"/>
-      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
+      <van-cell title="付费设置" @click="paySetting" is-link :value="payValue" :class="{'payMove':payMove}" class="paySetting" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"/>
+      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
             <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
             <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
@@ -93,7 +93,7 @@
         </div>
         <div class="payMoneyBox">
           <span>￥</span>
-          <input type="number" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
+          <input type="number" class="payMoneyInp"" autofocus id="payMoneyInp" v-model="paySetValue" @keyup.enter="search" @input="search($event)" />
         </div>
         <!-- <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain"> -->

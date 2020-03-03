@@ -77,9 +77,10 @@ export default {
   },
   
   mounted () {
+    this.focus('themeTitle');
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
-      textarea.focus();
+      // textarea.focus();
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
@@ -92,7 +93,7 @@ export default {
     })
     //设置在pc的宽度
     if(this.isWeixin != true && this.isPhone != true){
-      this.limitWidth();
+      // this.limitWidth();
     }
   },
   created(){
@@ -103,6 +104,7 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    
     if(this.isiOS) {
       this.encuploadShow = true;
     }
@@ -157,6 +159,9 @@ export default {
     },
   },
   methods: {
+    focus(obj){
+      document.getElementById(obj).focus();
+    },
     getInfo(){
       //请求站点信息，用于判断是否能上传附件
       this.appFetch({
@@ -316,12 +321,12 @@ export default {
       }
     },
 
-    //设置底部在pc里的宽度
-    limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
-    },
+    // //设置底部在pc里的宽度
+    // limitWidth(){
+    //   document.getElementById('post-topic-footer').style.width = "640px";
+    //   let viewportWidth = window.innerWidth;
+    //   document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
+    // },
 
     // 删除图片
     deleteEnclosure(id,type){
@@ -509,7 +514,7 @@ export default {
       textarea.style.height = `${rem}rem`;
       rem = (height + 20) / rootFontSize;
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-      textarea.focus();
+      // textarea.focus();
     },
     searchChange: debounce(function () {
       let trim = this.keywords && this.keywords.trim();
@@ -614,6 +619,11 @@ export default {
     //设置付费金额,，显示弹框
     paySetting(){
       this.paySetShow = true;
+      if(this.paySetShow) {
+        setTimeout(function () {
+          document.getElementById('payMoneyInp').focus();
+        }, 200);
+      }
     },
     //关闭付费设置弹框
     closePaySet(){
