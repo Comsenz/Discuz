@@ -693,6 +693,9 @@ export default {
     //设置付费金额,，显示弹框
     paySetting(){
       this.paySetShow = true;
+      setTimeout(function () {
+        document.getElementById('payMoneyInp').focus();
+      }, 200);
     },
     //关闭付费设置弹框
     closePaySet(){

@@ -92,7 +92,7 @@
         </div>
         <div class="payMoneyBox">
           <span>￥</span>
-          <input type="number" class="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
+          <input type="number" class="payMoneyInp" id="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />
         </div>
         <!-- <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain"> -->
