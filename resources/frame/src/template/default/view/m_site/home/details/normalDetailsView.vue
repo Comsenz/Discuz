@@ -14,8 +14,7 @@
                 <span class="icon iconfont icon-top" v-if="themeCon._data.isSticky"></span>
             </div>
         </div>
-        <div class="postContent">
-            <a v-html="themeCon.firstPost._data.contentHtml"></a>
+        <div class="postContent" v-html="themeCon.firstPost._data.contentHtml">
         </div>
 
         <div class="postImgBox" v-if="firstpostImageListProp.length>0">
