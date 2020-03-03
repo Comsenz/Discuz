@@ -5,7 +5,7 @@
 
 import ModifyHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import browserDb from '../../../../../../helpers/webDbHelper';
-
+import appCommonH from '../../../../../../helpers/commonHelper';
 
 export default {
   data:function () {
@@ -18,6 +18,7 @@ export default {
       wechatNickname:'',
       tipWx:'',
       isWeixin:'',
+      isPhone: '',
       realName:'',          //实名证明
       identity:'',          //身份证号码
       canWalletPay:'',      //钱包密码
@@ -37,10 +38,13 @@ export default {
     let sessionId = this.$router.history.current.query.sessionId;
     browserDb.setLItem('code',code);
     browserDb.setLItem('state',state);
-    this.isWeixin =this.appCommonH.isWeixin().isWeixin
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     if(this.isWeixin){
-      this.tipWx = '确认解绑微信及退出登录'
+      this.tipWx = '确认解绑微信及退出登录';
+      console.log('微信~~~~~');
     }else{
+      console.log('不是微信~~~~~');
       this.tipWx = '确认解绑微信'
     }
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
