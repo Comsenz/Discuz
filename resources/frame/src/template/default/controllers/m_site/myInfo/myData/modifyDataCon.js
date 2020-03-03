@@ -32,6 +32,8 @@ export default {
     this.modifyData() //修改资料
     this.wechat()
     this.isWeixin =this.appCommonH.isWeixin().isWeixin
+    this.isPc = this.appCommonH.isWeixin().isPc
+    // console.log(this.isPc)
     if(this.isWeixin){
       this.tipWx = '确认解绑微信及退出登录'
     }else{
@@ -189,9 +191,13 @@ export default {
           method:'get',
           data:{}
         }).then(res=>{
+          console.log(res,'微信内')
           if (res.errors){
             this.$toast.fail(res.errors[0].code);
           }else{
+            // if(!isWeixin){
+
+            // }
           window.location.href = res.readdata._data.location
           }
         })
