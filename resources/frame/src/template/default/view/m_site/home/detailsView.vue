@@ -82,9 +82,8 @@
                   </div>
                 </div>
               </div>
-              <div class="postContent">
+              <div class="postContent" v-html="item._data.contentHtml">
                 <!-- <a href="javascript:;"><blockquote class="quoteCon">dsfhjkdshfkjdhfkjdhk</blockquote>{{item.content()}}</a> -->
-                <a href="javascript:;" v-html="item._data.contentHtml"></a>
               </div>
               <div class="postImgBox" v-if="item.images.length>0">
                 <div class="themeImgList moreImg">

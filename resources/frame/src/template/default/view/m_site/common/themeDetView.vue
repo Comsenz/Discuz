@@ -39,12 +39,13 @@
                 </div>
               </div>
               <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
-                <a href="javascript:;">{{item._data.title}}</a>
+                <!-- <a href="javascript:;">{{item._data.title}}</a> -->
+                <span class="postConTitle">{{item._data.title}}</span>
                 <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span>
                 <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span>
               </div>
-              <div class="postContent" v-else-if="item.firstPost && !item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
-                <a v-html="item.firstPost._data.contentHtml"></a>
+              <div class="postContent" v-else-if="item.firstPost && !item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
+                <!-- <a></a> -->
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <div class="themeImgList">
