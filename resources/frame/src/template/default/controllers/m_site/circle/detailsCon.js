@@ -154,6 +154,12 @@ export default {
       this.themeShow = true;
       
     };
+
+    if (browserDb.getSItem('beforeState') === 1){
+      this.$router.go(0);
+      browserDb.setSItem('beforeState',2);
+    }
+
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
@@ -516,9 +522,12 @@ export default {
     //跳转到登录页
     loginJump: function () {
       browserDb.setSItem('beforeVisiting',this.$route.path);
-      this.$router.push({
-        path: '/login-user'
-      });
+      // this.$router.push({
+      //   path: '/login-user'
+      // });
+
+      this.$router.replace({path:'/login-user'});
+
       browserDb.setLItem('themeId', this.themeId);
     },
     //跳转到注册页
