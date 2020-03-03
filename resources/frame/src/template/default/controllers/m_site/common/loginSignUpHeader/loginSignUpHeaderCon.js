@@ -49,8 +49,8 @@ export default {
 
       // this.$router.back(-1);
 
-
-      if(document.referrer == '' && (window.history.length === 0)){
+      // alert(window.history.length);
+      if(document.referrer == '' && (window.history.length == 0 || window.history.length < 3)){
         // alert('上一级为空时');
         window.location.href = appConfig.baseUrl;
       } else {

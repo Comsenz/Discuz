@@ -81,7 +81,6 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res.readdata)
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
