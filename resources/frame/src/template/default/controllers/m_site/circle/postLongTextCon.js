@@ -257,7 +257,7 @@ export default {
           }
         })
       } else {
-        if(this.themeTitle.length<4){
+        if(this.themeTitle.length<3){
           this.$toast.fail('标题不得少于三个字符');
           return false;
         }
