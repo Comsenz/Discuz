@@ -90,7 +90,7 @@ export default {
                 if (beforeVisiting) {
                   this.$router.push({path: beforeVisiting})
                 } else {
-                  this.$router.push({path: '/',params:{isLogin:'yes'}})
+                  this.$router.push({path: '/'})
                 }
 
               } else {
