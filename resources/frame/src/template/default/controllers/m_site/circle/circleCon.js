@@ -390,9 +390,14 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     if(this.userId){
       this.loginBtnFix = false;
+      this.loginHide = true;
       this.canEdit = true;
+      this.searchStatus = true;
+      this.menuStatus = true;
     } else {
+      this.themeChoList.splice(2,1);
       this.loginBtnFix = true;
+      this.loginHide = false;
       this.canEdit = false;
     }
     window.addEventListener('scroll', this.footFix);
