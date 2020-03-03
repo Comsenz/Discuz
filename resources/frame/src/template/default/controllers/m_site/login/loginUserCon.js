@@ -86,6 +86,7 @@ export default {
                 browserDb.setLItem('foregroundUser', res.data.attributes.username);
                 let beforeVisiting = browserDb.getSItem('beforeVisiting');
 
+
                 if (beforeVisiting) {
                   this.$router.push({path: beforeVisiting})
                 } else {

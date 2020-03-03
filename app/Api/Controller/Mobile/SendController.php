@@ -65,13 +65,24 @@ class SendController extends AbstractCreateController
 
         $type = Arr::get($data, 'type');
 
+        // 直接使用用户手机号
         if ($type === 'verify' || $type === 'reset_pay_pwd') {
             $data['mobile'] = $actor->getOriginal('mobile');
         }
 
-        // 如果已经绑定，不能再发送绑定短息
+        // 手机号验证规则
+        if (in_array($type, ['bind', 'rebind'])) {
+            // 如果已经绑定，不能再发送绑定短息
+            $mobileRule = 'required|unique:users,mobile';
+        } elseif ($type == 'reset_pwd') {
+            // 如果重设密码，必须要已绑定的手机号
+            $mobileRule = 'required|exists:users,mobile';
+        } else {
+            $mobileRule = 'required';
+        }
+
         $this->validation->make($data, [
-            'mobile' => in_array($type, ['bind', 'rebind']) ? 'required|unique:users,mobile' : 'required',
+            'mobile' => $mobileRule,
             'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();
 

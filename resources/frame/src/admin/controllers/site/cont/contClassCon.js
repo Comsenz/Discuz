@@ -41,7 +41,7 @@ export default {
       })
     },
 
-    submitClick(){
+    submitClick(){     //提交
 
       /*if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
@@ -183,7 +183,7 @@ export default {
       });
 
       return  this.appFetch({
-                url:'createBatchCategories',
+                url:'createBatchCategories',     //批量创建分类
                 method:'post',
                 data:{
                   "data": datas
@@ -206,7 +206,7 @@ export default {
     },
     batchUpdateCategories(data){
       return  this.appFetch({
-              url:'categoriesBatchUpdate',
+              url:'categoriesBatchUpdate',      //批量修改分类
               method:'patch',
               data:{
                   data

@@ -21,6 +21,7 @@ export default {
       userId: '',         //当前用户ID
       codeUrl:"",        //支付url，base64
       payLoading: false,
+      // userDet: '',
 		}
   },
   props: {
