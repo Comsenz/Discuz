@@ -98,13 +98,16 @@ class VerifyMobile
 
     protected function rebind()
     {
-        $verify = $this->mobileCodeRepository->getSmsCode($this->actor->getOriginal('mobile'), 'verify', 1);
+        $mobile = $this->mobileCode->mobile;
 
-        if ($verify && $verify->expired_at < Carbon::now()) {
-            return $this->bind();
+        $this->controller->serializer = UserSerializer::class;
+        if ($this->actor->exists) {
+            $this->actor->changeMobile($mobile);
+            $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
+            $this->actor->save();
+            $this->mobileCode->user = $this->actor;
         }
-
-        throw new SmsCodeVerifyException();
+        return $this->mobileCode->user;
     }
 
     protected function resetPwd()

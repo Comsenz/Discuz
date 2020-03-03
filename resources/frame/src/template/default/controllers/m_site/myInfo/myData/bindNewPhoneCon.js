@@ -13,7 +13,7 @@ export default {
       sms: '',
       newphone: '',
     //   modifyState: true,
-      bind: 'bind',
+      bind: 'rebind',
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
@@ -51,7 +51,7 @@ export default {
             "data": {
               "attributes": {
                 mobile:this.newphone,
-                type:'bind'
+                type:'rebind'
               }
             }
           }
