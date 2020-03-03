@@ -6,7 +6,7 @@ export default {
 	data: function() {
 		return {
       	serHide:true,
-      	serShow:false,
+      	serShow:true,
 		searchVal: '',
 		inputSearchVal:'',
 	  	searchUserList: [],
