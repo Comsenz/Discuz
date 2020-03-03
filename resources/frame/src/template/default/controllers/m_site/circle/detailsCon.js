@@ -188,10 +188,10 @@ export default {
       }
       
       data.forEach((item,key)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username + ',' +'</a>');
+        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join('') ;
+      datas = datas.join(',') ;
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
