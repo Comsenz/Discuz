@@ -201,7 +201,7 @@ export default {
             }
           })
         }else if(this.isPhone){
-          this.$toast.fail('请去微信内进行绑定');
+          this.$toast.fail('请在微信客户端中进行绑定操作');
           // this.appFetch({
           //   url:'wechatBind',
           //   method:'get',
