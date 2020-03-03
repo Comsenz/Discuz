@@ -1087,10 +1087,8 @@ export default {
       })
   },
 
-
   },
   mounted: function() {
-    // this.getVote();
     document.addEventListener('click',this.listenEvt, false);
   },
   destroyed: function() {

@@ -76,11 +76,13 @@ export default {
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
+      viewportWidth: '',
       viewportHeight: '',
     }
   },
 
   mounted () {
+    this.focus('themeTitle');
     let postForm = document.getElementById('postForm');
     postForm.style.height = (this.viewportHeight) + 'px';
 
@@ -91,7 +93,7 @@ export default {
       // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
 
       let textarea = this.$refs.textarea;
-      textarea.focus();
+      // textarea.focus();
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
@@ -106,7 +108,7 @@ export default {
 
       this.$nextTick(() => {
         let textarea = this.$refs.textarea;
-        textarea.focus();
+        // textarea.focus();
         let prevHeight = 300;
         textarea && autoTextarea(textarea, 5, 65535, (height) => {
           height += 20;
@@ -119,7 +121,7 @@ export default {
       })
       //设置在pc的宽度
       if(this.isWeixin != true && this.isPhone != true){
-        this.limitWidth();
+        // this.limitWidth();
       }
   },
   computed: {
@@ -128,12 +130,14 @@ export default {
       }
   },
   created(){
+    this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    
     if(this.isiOS) {
       this.encuploadShow = true;
     }
@@ -170,6 +174,9 @@ export default {
     },
   },
   methods: {
+    focus(obj){
+      document.getElementById(obj).focus();
+    },
      //请求站点信息，用于判断是否能上传附件
     getInfo(){
       this.appFetch({
@@ -318,11 +325,11 @@ export default {
     },
 
     //设置底部在pc里的宽度
-    limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
-    },
+    // limitWidth(){
+    //   document.getElementById('post-topic-footer').style.width = "640px";
+    //   let viewportWidth = window.innerWidth;
+    //   document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+    // },
 
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
@@ -582,7 +589,7 @@ export default {
       textarea.style.height = `${rem}rem`;
       rem = (height + 20) / rootFontSize;
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-      textarea.focus();
+      // textarea.focus();
     },
     searchChange: debounce(function () {
       let trim = this.keywords && this.keywords.trim();
