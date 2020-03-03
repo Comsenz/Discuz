@@ -12,7 +12,8 @@ export default {
       // username:'',
       // mobile:''
       isWeixin: false,
-      isPhone: false
+      isPhone: false,
+      viewportWidth: '',
 
     }
   },
@@ -28,6 +29,7 @@ export default {
   created() {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.viewportWidth = window.innerWidth;
   },
   methods:{
     //设置Header在pc里的宽度
