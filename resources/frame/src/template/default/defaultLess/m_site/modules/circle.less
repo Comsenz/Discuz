@@ -620,6 +620,11 @@ openCircleConView.vue
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 14px;
+      .van-image__img {
+        display: block;
+        max-width: 100%;
+        width: auto;
+      }
       &:last-child {
         margin-bottom: 0;
       }
@@ -800,7 +805,17 @@ openCircleConView.vue
       color: #444444;
       line-height: 20px;
     }
-
+    .themeImgList {
+      .van-image {
+        display: block;
+        max-width: 100%;
+        .van-image__img {
+          display: block;
+          max-width: 100%;
+          width: auto;
+        }
+      }
+    }
     .quotePostTop {
       padding-top: 10px;
       margin-bottom: 11px;

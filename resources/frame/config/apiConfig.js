@@ -59,7 +59,7 @@ module.exports = {
   'groupPermission':'/api/permission',      //修改用户组权限
   'deleteNotification':'/api/notification', //删除通知里的回复我的
   'wechatDelete':'/api/users/' ,            //修改资料里的解绑微信
-  'wechatBind':'api/oauth/wechat/pc',          //去绑定微信
+  'wechatBind':'api/oauth/wechat',          //去绑定微信
   'postBatch':'/api/posts/batch/',          //删除回复接口[批量]
 
   'access':'/api/refresh-token',            //刷新token

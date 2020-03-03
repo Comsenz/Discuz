@@ -8,6 +8,7 @@
               v-model="newphone"
               clearable
               label="设置新手机"
+              maxlength="13"
               placeholder="请输入新手机号"
             />
 
@@ -17,7 +18,7 @@
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">{{btnContent}}</van-button>
+              <van-button slot="button" size="small" :disabled="disabled" type="default" @click="sendSmsCodePhone">{{btnContent}}</van-button>
 
             </van-field>
 

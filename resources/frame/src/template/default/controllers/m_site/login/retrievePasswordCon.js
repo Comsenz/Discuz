@@ -55,28 +55,30 @@ export default {
         }
         if(!reg.test(phoneNum)){//手机号不合法
           this.$toast("您输入的手机号码不合法，请重新输入");
-        }
-        //获取验证码请求
-        this.appFetch({
-          url:"sendSms",
-          method:"post",
-          data:{
-            "data": {
-              "attributes": {
-                mobile:this.phoneNum,
-                type:this.type
+        } else {
+          //获取验证码请求
+          this.appFetch({
+            url:"sendSms",
+            method:"post",
+            data:{
+              "data": {
+                "attributes": {
+                  mobile:this.phoneNum,
+                  type:this.type
+                }
               }
             }
-          }
-        }).then(res => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-          } else {
-            this.insterVal = res.data.attributes.interval;
-            this.time = this.insterVal;
-            this.timer();
-          }
-        });
+          }).then(res => {
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+            } else {
+              this.insterVal = res.data.attributes.interval;
+              this.time = this.insterVal;
+              this.timer();
+            }
+          });
+        }
+
       } else {
         //获取验证码请求
         this.appFetch({
