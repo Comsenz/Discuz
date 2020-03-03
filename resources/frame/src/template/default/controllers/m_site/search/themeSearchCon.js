@@ -5,8 +5,8 @@
 export default {
   data: function () {
     return {
-      serHide: true,
-      serShow: false,
+      // serHide: true,
+      serShow: true,
       searchVal: '',
       inputSearchVal:'',
       searchThemeList: [],
@@ -28,7 +28,14 @@ export default {
     // let searchWord = '';
     if (this.$route.query && this.$route.query.searchWord) {
       this.searchVal = this.$route.query.searchWord;
-      this.inputSearchVal =  this.$route.query.searchWord;
+      if(this.searchVal){
+        // this.serShow = true;
+        // this.serShow = false;
+        this.onSearch(this.searchVal);
+      }else{
+      
+      }
+      // this.inputSearchVal =  this.$route.query.searchWord;
     }
     this.onSearch(this.searchVal); 
   },

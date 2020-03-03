@@ -32,12 +32,13 @@ export default {
   created(){
     this.modifyData() //修改资料
     this.wechat()
-    let code = this.$router.history.current.query.code;
-    let state = this.$router.history.current.query.state;
-    let sessionId = this.$router.history.current.query.sessionId;
-    browserDb.setLItem('code',code);
-    browserDb.setLItem('state',state);
-    this.isWeixin =this.appCommonH.isWeixin().isWeixin
+    // let code = this.$router.history.current.query.code;
+    // let state = this.$router.history.current.query.state;
+    // let sessionId = this.$router.history.current.query.sessionId;
+    // browserDb.setLItem('code',code);
+    // browserDb.setLItem('state',state);
+    this.isWeixin = appCommonH.isWeixin().isWeixin
+    this.isPhone = appCommonH.isWeixin().isPhone
     if(this.isWeixin){
       this.tipWx = '确认解绑微信及退出登录'
     }else{
@@ -189,8 +190,10 @@ export default {
           })
         }    
       },
-      wechatBind(){    //去绑定微信
-        if(this.isWeixin){
+      wechatBind(isWeixin){    //去绑定微信
+        console.log(isWeixin)
+        console.log('微信内')
+        if(isWeixin){
           this.appFetch({
             url:'wechatBind',
             method:'get',
@@ -203,6 +206,7 @@ export default {
             }
           })
         }else{
+          console.log('pc内')
           this.appFetch({     //pc端绑定
             url:'wxLogin',
             method:'get',
