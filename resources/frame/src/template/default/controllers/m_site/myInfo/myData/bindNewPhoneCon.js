@@ -19,7 +19,8 @@ export default {
       isGray: false,
       btnContent:'发送验证码',
       mobileConfirmed:'',//验证验证码是否正确
-      backGo:1
+      backGo:1,
+      disabled:false
     }
   },
 
@@ -33,16 +34,15 @@ export default {
   methods: {
     //获取验证码
     sendSmsCodePhone(){
-        var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
-        var newphone = this.newphone;
-        if(!newphone){//未输入手机号
-         this.$toast("请输入手机号码");
-         return;
-        }
-        if(!reg.test(newphone)){//手机号不合法
-         this.$toast("您输入的手机号码不合法，请重新输入");
-        }
-
+      var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+      var newphone = this.newphone;
+      if(!newphone){//未输入手机号
+       this.$toast("请输入手机号码");
+       return;
+      }
+      if(!reg.test(newphone)){//手机号不合法
+       this.$toast("您输入的手机号码不合法，请重新输入");
+      } else {
         // 获取验证码请求
         this.appFetch({
           url:"sendSms",
@@ -64,8 +64,11 @@ export default {
             this.time = this.insterVal;
             this.timer();
           }
-         });
-      },
+        });
+      }
+
+
+    },
     timer(){
       // alert('执行');
       if(this.time>1){

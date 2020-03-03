@@ -34,6 +34,7 @@ export default {
       supportImgExtRes:'',
       limitMaxLength:true,
       fileListOne:[],
+      fileListOneLen:'',
       canUploadImages:'',
       backGo:-3,
       viewportWidth: '',
@@ -64,7 +65,7 @@ export default {
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 0, (height) => {
+      textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
         if (height !== prevHeight) {
           prevHeight = height;
@@ -86,7 +87,15 @@ export default {
       } else {
         this.limitMaxLength = true;
       }
-    }
+    },
+    showFacePanel: function(newVal,oldVal){
+      this.showFacePanel = newVal;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
+    },
   },
   beforeDestroy () {
       Bus.$off('message');
@@ -218,30 +227,40 @@ export default {
 
 
 
+//     deleteEnclosure(id,type){
+//       // return false;
+//       if(this.fileListOne.length<1){
+//         this.uploadShow = false;
+//       }
+//       this.appFetch({
+//         url:'attachment',
+//         method:'delete',
+//         splice:'/'+id.id
+//       }).then(data=>{
+// //         if (data.errors){
+// //           this.$toast.fail(data.errors[0].code);
+// //           throw new Error(data.error)
+// //         } else {
+// //           var attriAttachment = new Array();
+// //           if(type == "img"){
+// //             var newArr = this.fileList.filter(item => item.id !== id);
+// //             this.fileList = newArr;
+// //           }
+// //           // this.$toast.success('删除成功');
+// //         }
+//       })
+//     },
+    // 删除图片
     deleteEnclosure(id,type){
-      // return false;
       if(this.fileListOne.length<1){
         this.uploadShow = false;
       }
       this.appFetch({
         url:'attachment',
         method:'delete',
-        splice:'/'+id.id
-      }).then(data=>{
-//         if (data.errors){
-//           this.$toast.fail(data.errors[0].code);
-//           throw new Error(data.error)
-//         } else {
-//           var attriAttachment = new Array();
-//           if(type == "img"){
-//             var newArr = this.fileList.filter(item => item.id !== id);
-//             this.fileList = newArr;
-//           }
-//           // this.$toast.success('删除成功');
-//         }
+        splice:'/'+id.id,
       })
     },
-
 
     //这里写接口，上传
     // uploaderEnclosure(file,isFoot,img){
@@ -374,6 +393,11 @@ export default {
         }
       })
       this.showFacePanel = !this.showFacePanel;
+      if(this.showFacePanel) {
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+      } else {
+        document.getElementById('postForm').style.height = '100%';
+      }
       this.footMove = !this.footMove;
     },
     backClick() {
@@ -393,6 +417,7 @@ export default {
 
     //回复主题
     publish(){
+      
       // this.attriAttachment = this.fileListOne;
       // for(let m=0;m<this.attriAttachment.length;m++){
       //   this.attriAttachment[m] = {
@@ -400,7 +425,10 @@ export default {
       //     "id": this.attriAttachment[m].id
       //   }
       // }
-
+      if(this.replyText == '' || this.replyText == null){
+        this.$toast.fail('内容不能为空');
+        return;
+      }
       this.attriAttachment = this.fileListOne;
       for(let m=0;m<this.attriAttachment.length;m++){
         this.attriAttachment[m] = {
@@ -408,7 +436,8 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
-      if(this.replyId && this.replyQuoteCont){
+      
+      if(this.replyId && this.replyQuoteCont && this.replyText != ''){
         this.appFetch({
           url:"posts",
           method:"post",
@@ -445,7 +474,6 @@ export default {
           }
         })
       } else {
-        // alert('2222');
         this.appFetch({
           url:"posts",
           method:"post",
