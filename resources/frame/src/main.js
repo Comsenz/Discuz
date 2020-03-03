@@ -97,7 +97,16 @@ const App = new Vue({
   },
   watch: {
     '$route': function(to, from) {
-      if (to.params.isLogin === 'yes'){
+
+      const Authorization = browserDb.getLItem('Authorization');
+      const tokenId = browserDb.getLItem('tokenId');
+
+      // console.log(Authorization);
+      // console.log(tokenId);
+      //
+      // console.log(to);
+
+      if (Authorization && tokenId){
 
         if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
           this.keepAliveStatus = false;
