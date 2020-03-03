@@ -43,12 +43,21 @@ export default {
     headerBack(){
       let backGo = this.$route.query.backGo;
 
-
       // this.$router.go(-1);
 
-      console.log('回退');
+      // console.log('回退');
 
-      this.$router.back(-1)
+      // this.$router.back(-1);
+
+
+      if(document.referrer == '' && (window.history.length === 0)){
+        // alert('上一级为空时');
+        window.location.href = appConfig.baseUrl;
+      } else {
+        // alert('有上一级');
+        this.$router.go(-1);
+      }
+
 
       /*if (backGo){
         if (isNaN(parseInt(backGo))){
