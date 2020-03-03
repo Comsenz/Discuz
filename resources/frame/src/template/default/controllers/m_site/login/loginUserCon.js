@@ -90,9 +90,10 @@ export default {
                 if (beforeVisiting) {
                   this.$router.push({path: beforeVisiting})
                 } else {
-                  this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
+                  // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
 
-                  // this.$router.push({path: '/'})
+                  this.$router.push({path: '/'});
+                  this.$router.go(0);
                 }
 
               } else {

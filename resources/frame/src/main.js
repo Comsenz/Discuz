@@ -117,7 +117,6 @@ const App = new Vue({
 
 
 
-
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
         // console.log(11);
