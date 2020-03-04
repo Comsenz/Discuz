@@ -185,7 +185,7 @@ body {
   line-height: 1.5;
   margin-bottom: 10px;
   overflow: hidden;
-  a {
+  .postConTitle {
     // display: block;
     line-height: 1.5;
     color: @font000;
@@ -624,6 +624,7 @@ openCircleConView.vue
         display: block;
         max-width: 100%;
         width: auto;
+        height: auto;
       }
       &:last-child {
         margin-bottom: 0;
@@ -804,6 +805,9 @@ openCircleConView.vue
       font-size: 14px;
       color: #444444;
       line-height: 20px;
+      a {
+        color: @main;
+      }
     }
     .themeImgList {
       .van-image {
@@ -813,6 +817,7 @@ openCircleConView.vue
           display: block;
           max-width: 100%;
           width: auto;
+          height: auto;
         }
       }
     }
@@ -1331,6 +1336,8 @@ details.vue
   border-bottom: 1px solid @corE5;
   width: 100%;
   position: relative;
+  padding-right: 15px;
+  box-sizing: border-box;
 }
 .paySetting {
    position: fixed;

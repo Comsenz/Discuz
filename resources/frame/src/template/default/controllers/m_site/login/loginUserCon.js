@@ -88,9 +88,13 @@ export default {
 
 
                 if (beforeVisiting) {
-                  this.$router.push({path: beforeVisiting})
+                  this.$router.replace({path: beforeVisiting});
+                  browserDb.setSItem('beforeState',1);
+                  // this.$router.go(0);
                 } else {
-                  this.$router.push({path: '/'})
+                  // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
+                  this.$router.push({path: '/'});
+                  this.$router.go(0);
                 }
 
               } else {

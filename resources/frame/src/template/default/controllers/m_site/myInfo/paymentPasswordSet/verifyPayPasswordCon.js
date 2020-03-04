@@ -36,7 +36,7 @@ export default {
           "pay_password": this.value
         }
       }).then(res=>{
-        console.log(res);
+        // console.log(res);
         if (res.errors){
           this.value = '';
           if (res.errors[0].detail){

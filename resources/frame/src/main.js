@@ -101,12 +101,36 @@ const App = new Vue({
       const Authorization = browserDb.getLItem('Authorization');
       const tokenId = browserDb.getLItem('tokenId');
 
-      // console.log(Authorization);
-      // console.log(tokenId);
-      //
-      // console.log(to);
 
-      if (Authorization && tokenId){
+
+      /*if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
+        this.keepAliveStatus = false;
+        console.log(1);
+      } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
+        this.keepAliveStatus = true;
+        console.log(2);
+      } else {
+        console.log(3);
+        this.keepAliveStatus = false;
+        browserDb.setSItem('homeStatus',2);
+      }*/
+
+
+
+      if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
+        this.keepAliveStatus = false;
+        // console.log(11);
+      } else if (keepAliveUrl.includes(to.name)) {
+        this.keepAliveStatus = true;
+        // console.log(22);
+      } else {
+        // console.log(33);
+        this.keepAliveStatus = false;
+        browserDb.setSItem('homeStatus',2);
+      }
+
+
+      /*if (Authorization && tokenId){
 
         if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
           this.keepAliveStatus = false;
@@ -134,7 +158,7 @@ const App = new Vue({
           browserDb.setSItem('homeStatus',2);
         }
 
-      }
+      }*/
       
     }
   },

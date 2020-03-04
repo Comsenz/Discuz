@@ -64,7 +64,9 @@ export default {
       viewportWidth: '',
       publishType: true,
       puslishCho: false,
-      rotate: false
+      rotate: false,
+      token: '',
+      userId:'',
     }
   },
   created:function(){
@@ -76,6 +78,7 @@ export default {
       this.onLoad();
       this.detailIf();
       browserDb.removeSItem('beforeVisiting');
+      this.token = browserDb.getLItem('Authorization');
   },
 
   methods: {
@@ -384,6 +387,19 @@ export default {
     }
   },
   activated(){
+    this.userId = browserDb.getLItem('tokenId');
+    if(this.userId){
+      this.loginBtnFix = false;
+      this.loginHide = true;
+      // this.canEdit = true;
+      // this.searchStatus = true;
+      // this.menuStatus = true;
+    } else {
+      // this.themeChoList.splice(2,1);
+      this.loginBtnFix = true;
+      this.loginHide = false;
+      // this.canEdit = false;
+    }
     window.addEventListener('scroll', this.footFix);
   },
   mounted: function() {

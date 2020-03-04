@@ -173,6 +173,7 @@ export default {
       // browserDb.removeLItem('tokenId');
       // browserDb.removeLItem('Authorization');
       localStorage.clear();
+
       this.$router.push({ path:url});
       if (url === '/circle'){
         this.$router.go(0);
