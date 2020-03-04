@@ -290,7 +290,7 @@ export default {
 
     editClick(id,replyId){
       let routeData = this.$router.resolve({
-        path: `/reply-to-topic/${id}/${replyId}`
+        path: `/reply-to-topic/${id}/${replyId}`,query:{edit:'reply'}
       });
       window.open(routeData.href, '_blank');
     },

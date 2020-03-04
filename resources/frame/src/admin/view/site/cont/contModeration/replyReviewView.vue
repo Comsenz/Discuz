@@ -115,7 +115,7 @@
 
             <div class="cont-review-table__footer__bottom">
               <el-button type="text" @click="viewClick(items.thread._data.id)">查看</el-button>
-              <!--<el-button type="text" @click="editClick(items.thread._data.id,items._data.id)">编辑</el-button>-->
+              <el-button type="text" @click="editClick(items.thread._data.id,items._data.id)">编辑</el-button>
             </div>
 
           </div>

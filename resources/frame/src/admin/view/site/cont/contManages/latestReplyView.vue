@@ -69,8 +69,8 @@
 
               <div class="latest-reply-theme__table-footer__lf">
                 <el-button type="text" @click="singleOperationSubmit(1,items._data.id)">删除</el-button>
-                <!--<i></i>-->
-                <!--<el-button type="text" @click="singleOperationSubmit(2,items.thread.category._data.id,items._data.id,index)">编辑</el-button>-->
+                <i></i>
+                <el-button type="text" @click="singleOperationSubmit(2,items._data.id,items.thread._data.id)">编辑</el-button>
               </div>
 
             </div>
