@@ -82,7 +82,7 @@ class VerifyMobile
         $mobile = $this->mobileCode->mobile;
 
         // 判断手机号是否已经被绑定
-        if (User::where('mobile', $mobile)->exists()) {
+        if ($this->actor->mobile) {
             throw new \Exception('mobile_is_already_bind');
         }
 
