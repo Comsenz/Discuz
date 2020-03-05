@@ -71,7 +71,7 @@ export default {
       themeTitle: '',   //标题
       payValue: '免费',     //长文价格
       paySetShow: false,
-      isCli: false,
+      isCli: true,
       moneyVal: '',
       timeout: null,
       paySetValue: '',
