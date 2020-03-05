@@ -24,8 +24,8 @@ class CreateOrders extends Migration
             $table->unsignedInteger('thread_id')->nullable()->comment('主题 id');
             $table->unsignedTinyInteger('status')->default(0)->comment('订单状态：0待付款；1已付款；2.取消订单；3支付失败；');
             $table->unsignedSmallInteger('payment_type')->default(0)->comment('付款方式：微信（10：pc扫码，11：h5支付，12：微信内支付');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

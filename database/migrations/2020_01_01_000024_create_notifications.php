@@ -19,7 +19,7 @@ class CreateNotifications extends Migration
             $table->text('data')->comment('通知内容');
             $table->dateTime('read_at')->nullable()->comment('通知阅读时间');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

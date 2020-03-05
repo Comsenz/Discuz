@@ -27,8 +27,8 @@ class CreateAttachments extends Migration
             $table->string('file_type')->default('')->comment('文件类型');
             $table->unsignedTinyInteger('is_remote')->default(0)->comment('是否远程附件');
             $table->ipAddress('ip')->default('')->comment('ip 地址');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 
