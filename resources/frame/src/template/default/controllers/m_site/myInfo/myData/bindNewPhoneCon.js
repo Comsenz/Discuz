@@ -13,14 +13,16 @@ export default {
       sms: '',
       newphone: '',
     //   modifyState: true,
-      bind: 'rebind',
+      bind: 'bind',
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
       btnContent:'发送验证码',
       mobileConfirmed:'',//验证验证码是否正确
       backGo:1,
-      disabled:false
+      disabled:false,
+      modifyPhone:'',       //用户手机号
+      titlePhone:'',     //标题
     }
   },
 
@@ -31,7 +33,38 @@ export default {
   mounted() {
 
   },
+  created(){
+    this.userPhone()
+  },
   methods: {
+    userPhone(){
+      let userId = browserDb.getLItem('tokenId');
+      this.appFetch({
+        url:'users',
+        method:'get',
+        splice:'/'+userId,
+        data:{
+          include:'wechat'
+        }
+      }).then(res=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+        }else{
+          this.modifyPhone = res.readdata._data.originalMobile;         //用户手机号
+          console.log(this.modifyPhone)
+          // if(this.modifyPhone){
+          //   this.titlePhone = true
+          //   console.log(this.modifyPhone,'判断')
+          // }else{
+          //   this.titlePhone = false
+          // }
+          // console.log(this.titlePhone,'99999')
+          // console.log(res,'手机号')
+          // console.log(res.readdata._data.originalMobile,'手机号')
+        }
+      })
+    },
+
     //获取验证码
     sendSmsCodePhone(){
       var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
@@ -44,6 +77,14 @@ export default {
        this.$toast("您输入的手机号码不合法，请重新输入");
       } else {
         // 获取验证码请求
+        var bind = 'bind';
+        var rebind = 'rebind';
+        var typeBind;
+        if(this.modifyPhone == ''){
+          typeBind = bind
+        }else{
+          typeBind = rebind
+        }
         this.appFetch({
           url:"sendSms",
           method:"post",
@@ -51,7 +92,7 @@ export default {
             "data": {
               "attributes": {
                 mobile:this.newphone,
-                type:'rebind'
+                type:typeBind
               }
             }
           }
@@ -98,6 +139,15 @@ export default {
         return;
       }
 
+      var bind = 'bind';
+      var rebind = 'rebind';
+      var typeBind;
+      if(this.modifyPhone == ''){
+        typeBind = bind
+      }else{
+        typeBind = rebind
+      }
+
       this.appFetch({
         url: "smsVerify",
         method: "post",
@@ -106,7 +156,7 @@ export default {
             "attributes": {
               "mobile": this.newphone,
               "code": this.sms,
-              'type': this.bind
+              'type': typeBind
             }
           }
         }
