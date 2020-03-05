@@ -46,7 +46,6 @@ export default {
       this.realNameShow = false
     }
     let qcloud_sms = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
-    console.log(qcloud_sms)
     if(qcloud_sms == false){
       this.myModifyPhone = false
     }else{
