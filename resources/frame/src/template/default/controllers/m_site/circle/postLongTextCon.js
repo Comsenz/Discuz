@@ -66,7 +66,7 @@ export default {
       themeTitle: '',
       payValue: '免费',
       paySetShow: false,
-      isCli: false,
+      isCli: true,
       moneyVal: '',
       timeout: null,
       paySetValue: '',
@@ -75,7 +75,11 @@ export default {
 
     }
   },
-  
+  computed: {
+    nowCateId: function () {
+      return this.$route.params.cateId;
+    }
+  },
   mounted () {
     this.focus('themeTitle');
     this.$nextTick(() => {
@@ -236,6 +240,18 @@ export default {
     },
     //发布长文
     publish(){
+      if(this.themeTitle == '' || this.themeTitle == null){
+        this.$toast.fail('标题不能为空');
+        return;
+      }
+      if(this.content == '' || this.content == null){
+        this.$toast.fail('内容不能为空');
+        return;
+      }
+      if(this.cateId == 0 || this.cateId == undefined){
+        this.$toast.fail('请选择分类');
+        return;
+      }
       if(this.postsId && this.content){
         let posts = 'posts/'+this.postsId;
         this.appFetch({
@@ -315,7 +331,7 @@ export default {
           } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.replace({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo}});
+            _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo}});
           }
         })
       }
@@ -586,7 +602,7 @@ export default {
       this.showPopup = false;
       this.selectSort = value.text;
     },
-
+    //分类接口
     loadCategories(){
       this.appFetch({
         url: 'categories',
@@ -610,6 +626,19 @@ export default {
             );
             this.categoriesId.push(newCategories[j]._data.id);
           }
+          if(this.nowCateId != 0 && this.nowCateId != undefined ){
+            var nowCate = {};
+            nowCate = newCategories.find((item) => {
+              if(item._data.id === this.nowCateId){
+                return item
+              }
+            })
+            this.nowCate = {id:nowCate._data.id,name:nowCate._data.name};
+            this.cateId = this.nowCate.id;
+            this.selectSort = this.nowCate.name;
+          } else {
+            this.selectSort = "选择分类";
+          }
         }
       })
     },
@@ -628,20 +657,25 @@ export default {
     //关闭付费设置弹框
     closePaySet(){
       this.paySetShow = false;
-      this.paySetValue = '';
+      this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.target.value != null && event.target.value > 0){
-        this.isCli = true;
-      } else {
-        this.isCli = false;
-      }
+      // if(event.target.value != null && event.target.value > 0){
+      //   this.isCli = true;
+      // } else {
+      //   this.isCli = false;
+      // }
     },
     //点击确定按钮，提交付费设置
     paySetSure(){
       this.paySetShow = false;
-      this.payValue = this.paySetValue +'元';
+      if(this.paySetValue <= 0){
+        this.payValue = '免费';
+      } else {
+        this.payValue = this.paySetValue +'元';
+      }
+      
     },
 
   },

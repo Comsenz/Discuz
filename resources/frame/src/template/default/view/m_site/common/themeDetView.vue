@@ -16,7 +16,6 @@
                   </div>
                 </div>
                 <div class="postOpera">
-                  
                   <span class="icon iconfont icon-top" v-if="item._data.isSticky" v-show="isTopShow"></span>
                   <div class="screen" ref="screenDiv" @click.stop="bindScreen(index,$event)" v-if="isMoreShow && (item._data.canEssence || item._data.canSticky || item._data.canDelete || item._data.canEdit || item.firstPost._data.canLike)">
                   	<div class="moreCli"><span class="icon iconfont icon-more"></span></div>
@@ -41,8 +40,9 @@
               <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <a href="javascript:;">{{item._data.title}}</a> -->
                 <span class="postConTitle">{{item._data.title}}</span>
-                <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span>
-                <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span>
+                <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle"></span>
+                <!-- <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span> -->
+                <!-- <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span> -->
               </div>
               <div class="postContent" v-else-if="item.firstPost && !item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
                 <!-- <a></a> -->

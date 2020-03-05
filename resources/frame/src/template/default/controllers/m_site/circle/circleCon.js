@@ -334,13 +334,11 @@ export default {
     },
     //发布主题
     postTopic:function(){
-      console.log('发布');
-      this.$router.push({ path:'/post-topic',replace:true});
+      this.$router.push({ path:'/post-topic/' + this.categoryId,replace:true});
     },
     //发布长文
     postLongText:function(){
-      console.log('发布2');
-      this.$router.push({ path:'/post-longText'});
+      this.$router.push({ path:'/post-longText/' + this.categoryId});
     },
     
     //给导航添加点击状态

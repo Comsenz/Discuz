@@ -305,9 +305,9 @@ export default {
 
     //设置底部在pc里的宽度
     limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+      // document.getElementById('post-topic-footer').style.width = "640px";
+      // let viewportWidth = window.innerWidth;
+      // document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
 
     //上传之前先判断是否有权限上传图片
@@ -643,7 +643,7 @@ export default {
       this.showPopup = false;
       this.selectSort = value.text;
     },
-
+    //分类接口
     loadCategories(){
       this.appFetch({
         url: 'categories',
