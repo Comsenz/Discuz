@@ -61,6 +61,7 @@ export default {
     // }
     if(this.queryEdit == 'reply'){
         this.replyDetailsLoad();
+        this.headerTitle = '编辑回复';
     }
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
