@@ -41,6 +41,8 @@ export default {
       backGo:-3,
       viewportWidth: '',
       queryEdit: '',
+      // userId: '',
+      canEdit: '',
     }
   },
   computed: {
@@ -53,6 +55,10 @@ export default {
   },
   created(){
     this.queryEdit = this.$route.query.edit;
+    // this.userId = browserDb.getLItem('tokenId');
+    // if(!this.userId){
+    //   this.$toast.fail('未登录状态下不能进入编辑回复页');
+    // }
     if(this.queryEdit == 'reply'){
         this.replyDetailsLoad();
     }
@@ -348,7 +354,6 @@ export default {
       this.selectSort = value.text;
     },
 
-
     //初始化请求回复数据
     replyDetailsLoad(){
       this.appFetch({
@@ -363,10 +368,15 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          // console.log(res,'~~~~~');
+          this.canEdit = res.readdata._data.canEdit;
+          if(!this.canEdit){
+            this.$toast.fail('您没有权限进行此操作');
+            this.$router.replace({path:'/'}); 
+          }
           var fileListCon = res.readdata.images;
           this.replyText = res.readdata._data.content;
           for (var i = 0; i < fileListCon.length; i++) {
-            // this.fileListOne.push({thumbUrl:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
             this.fileListOne.push({url:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
           }
 
