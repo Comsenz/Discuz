@@ -521,7 +521,11 @@ class ListThreadsController extends AbstractListController
             }
 
             // 截取内容
-            $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+            if ($thread->getAttribute('paid')) {
+                $thread->firstPost->content = '';
+            } else {
+                $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+            }
         });
 
         return $threads;
