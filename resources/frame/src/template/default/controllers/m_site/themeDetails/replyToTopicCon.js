@@ -373,7 +373,8 @@ export default {
           this.canEdit = res.readdata._data.canEdit;
           if(!this.canEdit){
             this.$toast.fail('您没有权限进行此操作');
-            this.$router.replace({path:'/'}); 
+            this.$router.replace({path:'/'});
+            return;
           }
           var fileListCon = res.readdata.images;
           this.replyText = res.readdata._data.content;
