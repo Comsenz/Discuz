@@ -8,7 +8,7 @@ export default {
   data:function () {
     return {
       headerTitle:"发布主题",
-      selectSort:'选择分类',
+      selectSort:'',
       showPopup:false,
       categories: [],
       categoriesId: [],
@@ -61,10 +61,15 @@ export default {
       formdataList:[],
       viewportWidth: '',
       viewportHeight: '',
+      nowCate: []
 
     }
   },
-
+  computed: {
+    nowCateId: function () {
+      return this.$route.params.cateId;
+    }
+  },
   mounted () {
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
@@ -85,6 +90,7 @@ export default {
     }
   },
   created(){
+    // this.cateId = this.$route.query.cateId;
     this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
@@ -106,7 +112,7 @@ export default {
     //初始化请求分类接口
     this.loadCategories();
     //初始化请求主题数据
-    this.detailsLoad();
+    // this.detailsLoad();
     this.getInfo();
 
 
@@ -219,6 +225,10 @@ export default {
         this.$toast.fail('内容不能为空');
         return;
       }
+      if(this.cateId == 0 || this.cateId == undefined){
+        this.$toast.fail('请选择分类');
+        return;
+      }
       if(this.postsId && this.content){
         let posts = 'posts/'+this.postsId;
         this.appFetch({
@@ -287,7 +297,7 @@ export default {
             var postThemeId = res.readdata._data.id;
             var _this = this;
             console.log('长文');
-            _this.$router.replace({ path:'details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
+            _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
           }
         })
       }
@@ -548,13 +558,14 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
+      console.log(value,'====================')
       var id = value.id;
       this.cateId = id;
       var text = value.text;
       this.showPopup = false;
       this.selectSort = value.text;
     },
-
+    //分类接口
     loadCategories(){
       this.appFetch({
         url: 'categories',
@@ -567,6 +578,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          
           var newCategories = [];
           newCategories = res.readdata;
           for(let j = 0,len=newCategories.length; j < len; j++) {
@@ -578,6 +590,20 @@ export default {
             );
             this.categoriesId.push(newCategories[j]._data.id);
           }
+          if(this.nowCateId != 0 && this.nowCateId != undefined ){
+            var nowCate = {};
+            nowCate = newCategories.find((item) => {
+              if(item._data.id === this.nowCateId){
+                return item
+              }
+            })
+            this.nowCate = {id:nowCate._data.id,name:nowCate._data.name};
+            this.cateId = this.nowCate.id;
+            this.selectSort = this.nowCate.name;
+          } else {
+            this.selectSort = "选择分类";
+          }
+         
         }
       })
     },

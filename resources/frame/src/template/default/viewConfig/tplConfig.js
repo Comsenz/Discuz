@@ -232,7 +232,7 @@ export default {
 	      title:"主题详情"
 	    }
 	  },
-      'post-topic':{
+      'post-topic/:cateId':{
         comLoad:function (resolve) {
         require(['../view/m_site/home/postTopicView'],resolve)
         },
@@ -240,7 +240,7 @@ export default {
         title:"发布主题"
         }
       },
-      'post-longText':{
+      'post-longText/:cateId':{
         comLoad:function (resolve) {
         require(['../view/m_site/home/postLongTextView'],resolve)
         },

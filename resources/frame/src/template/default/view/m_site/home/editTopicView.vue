@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
+      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
           <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">

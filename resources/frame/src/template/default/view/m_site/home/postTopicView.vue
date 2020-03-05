@@ -55,7 +55,7 @@
             <span class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-if="canUploadAttachments && limitMaxEncLength">
               <input type="file" @change="handleEnclosure" class="hiddenInput"/>
             </span>
-            <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon":class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
+            <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
             </span>
         </div>
         <div @click="dClick"  class="post-topic-footer-right">
