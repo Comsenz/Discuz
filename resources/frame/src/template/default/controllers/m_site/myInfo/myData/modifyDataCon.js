@@ -24,7 +24,6 @@ export default {
       canWalletPay:'',      //钱包密码
       realNameShow:'true',      //实名认证是否显示
       openid:'',       //微信openid
-      isPhone:'',
       myModifyPhone:''
     }
   },
@@ -47,8 +46,11 @@ export default {
       this.realNameShow = false
     }
     let qcloud_sms = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    console.log(qcloud_sms)
     if(qcloud_sms == false){
       this.myModifyPhone = false
+    }else{
+      this.myModifyPhone = true
     }
   },
   methods:{
