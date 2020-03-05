@@ -19,8 +19,8 @@ class CreateThreadVideo extends Migration
             $table->string('file_id')->default('')->comment('媒体文件唯一标识');
             $table->string('media_url')->default('')->comment('媒体播放地址');
             $table->string('cover_url')->default('')->comment('媒体封面地址');
-            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

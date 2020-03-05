@@ -18,8 +18,8 @@ class CreateUserLoginFailLog extends Migration
             $table->unsignedBigInteger('user_id')->default(0)->index()->comment('用户 id');
             $table->string('username', 100)->nullable()->comment('用户名');
             $table->tinyInteger('count')->default(1)->comment('错误次数');
-            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

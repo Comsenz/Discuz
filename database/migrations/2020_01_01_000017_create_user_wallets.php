@@ -17,8 +17,9 @@ class CreateUserWallets extends Migration
             $table->unsignedDecimal('available_amount', 10, 2)->comment('可用金额');
             $table->unsignedDecimal('freeze_amount', 10, 2)->comment('冻结金额');
             $table->unsignedTinyInteger('wallet_status')->default(0)->comment('钱包状态:0正常，1冻结提现');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
+
             $table->primary('user_id');
         });
     }

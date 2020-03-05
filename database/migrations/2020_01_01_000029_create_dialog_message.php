@@ -17,8 +17,8 @@ class CreateDialogMessage extends Migration
             $table->unsignedBigInteger('dialog_id')->comment('会话ID');
             $table->unsignedBigInteger('user_id')->comment('用户ID');
             $table->text('message_text')->nullable()->comment('内容');
-            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 
