@@ -36,12 +36,17 @@ class ResourcePostController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['user'];
+    public $include = [
+        'user',
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = [];
+    public $optionalInclude = [
+        'images',
+        'attachments',
+    ];
 
     /**
      * ResourcePostController constructor.

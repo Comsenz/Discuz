@@ -21,8 +21,8 @@ class CreateUserWalletLogs extends Migration
             $table->string('change_desc', 255)->default('')->comment('变动描述');
             $table->unsignedBigInteger('order_id')->nullable()->comment('关联订单记录ID');
             $table->unsignedBigInteger('user_wallet_cash_id')->nullable()->comment('关联提现记录ID');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 
