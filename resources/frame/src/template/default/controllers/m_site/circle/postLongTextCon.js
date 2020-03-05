@@ -64,7 +64,7 @@ export default {
       formdataList:[],
       viewportWidth: '',
       themeTitle: '',
-      payValue: '',
+      payValue: '免费',
       paySetShow: false,
       isCli: false,
       moneyVal: '',
@@ -632,7 +632,7 @@ export default {
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.target.value != null && event.target.value > '0'){
+      if(event.target.value != null && event.target.value > 0){
         this.isCli = true;
       } else {
         this.isCli = false;
