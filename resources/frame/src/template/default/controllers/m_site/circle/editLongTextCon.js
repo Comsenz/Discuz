@@ -69,7 +69,7 @@ export default {
       backGo:-2,
       formdataList:[],
       themeTitle: '',   //标题
-      payValue: '',     //长文价格
+      payValue: '免费',     //长文价格
       paySetShow: false,
       isCli: false,
       moneyVal: '',
@@ -700,20 +700,24 @@ export default {
     //关闭付费设置弹框
     closePaySet(){
       this.paySetShow = false;
-      this.paySetValue = '';
+      this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.target.value != null && event.target.value > '0'){
-        this.isCli = true;
-      } else {
-        this.isCli = false;
-      }
+      // if(event.target.value != null && event.target.value > '0'){
+      //   this.isCli = true;
+      // } else {
+      //   this.isCli = false;
+      // }
     },
     //点击确定按钮，提交付费设置
     paySetSure(){
       this.paySetShow = false;
-      this.payValue = this.paySetValue +'元';
+      if(this.paySetValue <= 0){
+        this.payValue = '免费';
+      } else {
+        this.payValue = this.paySetValue +'元';
+      }
     },
 
   }
