@@ -7,7 +7,6 @@ module.exports = {
   'register': '/api/register',              //用户名注册
   'login':'/api/login',                     //用户名登录
   'users':'/api/users',                     //用户信息
-  'forum':'/api/forum',                     //站点信息
   'sendSms':'/api/sms/send',                //发送验证码
   'smsVerify':'/api/sms/verify',            //短信验证
   'wechat':'/api/oauth/wechat',             //微信接口
@@ -70,7 +69,7 @@ module.exports = {
   /*后台*/
   'siteinfo':'/api/siteinfo',               //首页-系统信息
   'settings':'/api/settings',               //设置接口
-  'forum':'/api/forum',                     //获取前台配置接口
+  'forum':'api/forum',                     //获取前台配置接口
   'batchSubmit':'/api/stop-words/batch',    //创建敏感词接口[批量]
   'serachWords':'/api/stop-words',          //查询敏感词接口[列表]
   'exportWords':'/api/stop-words/export',   //导出敏感词

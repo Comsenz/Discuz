@@ -131,7 +131,7 @@ const appFetch = function(params, options) {
 
   params.method = params.method ? params.method : 'get';
   if(!apiUrl) {
-    apiUrl = "/api/" + oldUrl;
+    apiUrl = "/api" + oldUrl;
     // return false;
   }
 
@@ -148,8 +148,9 @@ const appFetch = function(params, options) {
     params.baseURL = "/api";
     params.url = apiUrl;
   } else {
-    params.baseURL = "/";
+    params.baseURL = "";
     params.url = appConfig.apiBaseUrl + apiUrl;
+    console.log(params.url);
   }
 
   params.withCredentials = true;

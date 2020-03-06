@@ -108,7 +108,8 @@ class ResourceThreadController extends AbstractResourceController
 
             // 截取内容、隐藏图片及附件
             if (! $paid) {
-                $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                // $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                $thread->firstPost->content = '';
                 $thread->firstPost->setRelation('images', collect());
                 $thread->firstPost->setRelation('attachments', collect());
             }

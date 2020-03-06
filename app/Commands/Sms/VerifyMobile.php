@@ -102,6 +102,13 @@ class VerifyMobile
 
         $this->controller->serializer = UserSerializer::class;
         if ($this->actor->exists) {
+            // 删除验证身份的验证码
+            MobileCode::where('mobile', $this->actor->getOriginal('mobile'))
+                ->where('type', 'verify')
+                ->where('state', 1)
+                ->where('updated_at', '<', Carbon::now()->addMinutes(10))
+                ->delete();
+
             $this->actor->changeMobile($mobile);
             $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();

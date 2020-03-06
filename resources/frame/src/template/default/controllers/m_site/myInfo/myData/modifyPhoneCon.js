@@ -20,7 +20,7 @@ export default {
       insterVal: '',
       isGray: false,
       btnContent:'发送验证码',
-      mobileConfirmed:''
+      mobileConfirmed:'',
     }
   },
 
@@ -200,7 +200,7 @@ export default {
             "attributes": {
               "mobile": this.newphone,
               "code": this.sms,
-              'type': this.bind
+              'type': 'rebind'
             }
           }
         }

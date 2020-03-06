@@ -115,6 +115,106 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
+    },
+    getWatchHref(code,state,sessionId){
+      this.appFetch({
+        url:'wechat',
+        method:'get',
+        data:{
+          code:code,
+          state:state,
+          sessionId:sessionId,
+        }
+      }).then(res=>{
+        console.log(res);
+
+        if (res.errors){
+
+          let wxStatus = res.errors[0].status;
+          let openid = res.errors[0].user.openid;
+
+          if (wxStatus == 400){
+            //微信跳转
+            this.openid = openid;
+            webDb.setLItem('openid',openid);
+            this.$router.push({path: '/wx-sign-up-bd'});
+          }
+        } else if (res.data.attributes.location) {
+          //获取地址
+          console.log('获取地址');
+          this.wxurl = res.data.attributes.location;
+          window.location.href = res.data.attributes.location
+        } else if (res.data.attributes.access_token){
+
+          this.$toast.success('登录成功');
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
+          webDb.setLItem('Authorization', token);
+          webDb.setLItem('tokenId', tokenId);
+          let beforeVisiting = webDb.getSItem('beforeVisiting');
+
+          if (beforeVisiting) {
+            this.$router.replace({path: beforeVisiting});
+            webDb.setSItem('beforeState',1);
+          } else {
+            this.$router.push({path: '/'});
+          }
+
+        } else {
+          //任何情况都不符合
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+    getWatchHrefPC(code,state,sessionId){
+      this.appFetch({
+        url:'wxLogin',
+        method:'get',
+        data:{
+          code:code,
+          state:state,
+          sessionId:sessionId,
+        }
+      }).then(res=>{
+        if (res.errors){
+
+          let wxStatus = res.errors[0].status;
+          let openid = res.errors[0].user.openid;
+
+          if (wxStatus == 400){
+            //微信跳转
+            this.openid = openid;
+            webDb.setLItem('openid',openid);
+            this.$router.push({path: '/wx-sign-up-bd'});
+          }
+        } else if (res.data.attributes.location) {
+          //获取地址
+          this.wxurl = res.data.attributes.location;
+          window.location.href = res.data.attributes.location;
+        } else if (res.data.attributes.access_token){
+
+          this.$toast.success('登录成功');
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
+          webDb.setLItem('Authorization', token);
+          webDb.setLItem('tokenId', tokenId);
+          let beforeVisiting = webDb.getSItem('beforeVisiting');
+
+          if (beforeVisiting) {
+            this.$router.replace({path: beforeVisiting});
+            webDb.setSItem('beforeState',1);
+          } else {
+            this.$router.push({path: '/'});
+            this.$router.go(0);
+          }
+
+        } else {
+          //任何情况都不符合
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
     }
 
   },
@@ -122,11 +222,31 @@ export default {
     this.getForum();
     this.openid = webDb.getLItem('openid');
     let isWeixin = appCommonH.isWeixin().isWeixin;
+    let code = this.$router.history.current.query.code;
+    let state = this.$router.history.current.query.state;
+    let sessionId = this.$router.history.current.query.sessionId;
+    console.log('进入注册页面');
 
-    if(isWeixin){
+    webDb.setLItem('code',code);
+    webDb.setLItem('state',state);
+
+    if (isWeixin){
       this.platform = 'mp';
+      if (!code && !state){
+        this.getWatchHref();
+        console.log('第一次请求' + code);
+        console.log('第一次请求' + state);
+      } else {
+        this.getWatchHref(code,state,sessionId);
+        console.log('第二次请求' + code);
+        console.log('第二次请求' + state);
+      }
     }else {
       this.platform = 'dev';
+      if (this.openid === ''){
+        //PC端：没有openid
+        this.getWatchHrefPC(code,state,sessionId);
+      }
     }
 
   }
