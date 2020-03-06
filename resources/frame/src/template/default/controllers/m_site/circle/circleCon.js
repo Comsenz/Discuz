@@ -67,6 +67,7 @@ export default {
       rotate: false,
       token: '',
       userId:'',
+      offiaccountClose: ''
     }
   },
   created:function(){
@@ -110,6 +111,7 @@ export default {
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
+          this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
           if(!this.allowRegister){
             this.loginWord = '登录';
           }
@@ -296,30 +298,15 @@ export default {
     loginJump:function(isWx){
       let wxCode =this.load();
 
-      const that = this;
-      that.$router.push({
-        path:'wechat',
-      });
       if(wxCode ==1){
-        this.$router.push({ path:'login-user'});
+        this.$router.push({ path:'/login-user'});
       } else if(wxCode ==2){
-        this.appFetch({
-          url:"weixin",
-          method:"get",
-          data:{
-            // attributes:this.attributes,
-          }
-        }).then(res=>{
-          if (res.errors){
-                this.$toast.fail(res.errors[0].code);
-                throw new Error(res.error)
-              } else {
-            // window.location.href = res.data.attributes.location;
-            this.$router.push({ path:'wechat'});
-          }
-
-        });
-
+        //是微信
+        if(this.offiaccountClose == '1'){
+          this.$router.push({ path:'/wx-sign-up-bd'});
+        } else {
+          this.$router.push({ path:'/login-user'});
+        }
       }
     },
     postCho:function(){
@@ -334,13 +321,11 @@ export default {
     },
     //发布主题
     postTopic:function(){
-      console.log('发布');
-      this.$router.push({ path:'/post-topic',replace:true});
+      this.$router.push({ path:'/post-topic/' + this.categoryId,replace:true});
     },
     //发布长文
     postLongText:function(){
-      console.log('发布2');
-      this.$router.push({ path:'/post-longText'});
+      this.$router.push({ path:'/post-longText/' + this.categoryId});
     },
     
     //给导航添加点击状态

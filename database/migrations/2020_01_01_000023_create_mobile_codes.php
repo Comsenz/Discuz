@@ -21,7 +21,7 @@ class CreateMobileCodes extends Migration
             $table->ipAddress('ip')->default('')->comment('ip');
             $table->dateTime('expired_at')->nullable()->comment('验证码过期时间');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

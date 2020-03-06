@@ -24,7 +24,7 @@ export default {
       canWalletPay:'',      //钱包密码
       realNameShow:'true',      //实名认证是否显示
       openid:'',       //微信openid
-      isPhone:''
+      myModifyPhone: ''
     }
   },
 
@@ -36,14 +36,20 @@ export default {
     this.wechat()
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-    if(this.isWeixin){
+    if (this.isWeixin) {
       this.tipWx = '确认解绑微信及退出登录';
-    }else{
+    } else {
       this.tipWx = '确认解绑微信'
     }
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
-    if(qcloud_faceid == false){
+    if (qcloud_faceid == false) {
       this.realNameShow = false
+    }
+    let qcloud_sms = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    if (qcloud_sms == false) {
+      this.myModifyPhone = false
+    } else {
+      this.myModifyPhone = true
     }
   },
   methods:{
@@ -185,7 +191,7 @@ export default {
               }
             }
           })
-        }    
+        }
       },
       wechatBind(){    //去绑定微信
         if(this.isWeixin){
@@ -228,6 +234,6 @@ export default {
         }
 
       },
-     
+
   }
 }

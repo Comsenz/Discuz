@@ -23,7 +23,7 @@ class CreatePosts extends Migration
             $table->integer('reply_count')->unsigned()->default(0)->comment('关联回复数');
             $table->integer('like_count')->unsigned()->default(0)->comment('喜欢数');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('deleted_at')->nullable()->comment('删除时间');
             $table->integer('deleted_user_id')->unsigned()->nullable()->comment('删除用户 id');
             $table->tinyInteger('is_first')->unsigned()->default(0)->comment('是否首个回复');

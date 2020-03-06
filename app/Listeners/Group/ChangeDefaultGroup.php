@@ -14,11 +14,11 @@ class ChangeDefaultGroup
     {
         // 设置为默认用户组
         if ((bool) Arr::get($event->data, 'attributes.default', false)) {
-            Group::query()->update(['default' => 0]);
-
             $event->group->default = true;
 
             $event->group->save();
+
+            Group::query()->where('id', '<>', $event->group->id)->update(['default' => 0]);
         }
     }
 }

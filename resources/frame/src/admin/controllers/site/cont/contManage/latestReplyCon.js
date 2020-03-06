@@ -126,12 +126,16 @@ export default {
       this.showViewer = false
     },
 
-    singleOperationSubmit(val,firstPostId){
+    singleOperationSubmit(val,firstPostId,threadId){
       switch (val){
         case 1:
           this.deletedPosts(firstPostId);
           break;
         case 2:
+          let routeData = this.$router.resolve({
+            path: `/reply-to-topic/${threadId}/${firstPostId}`,query:{edit:'reply'}
+          });
+          window.open(routeData.href, '_blank');
           break;
         default:
           console.log("系统错误，请刷新页面");
@@ -180,7 +184,7 @@ export default {
       this.appFetch({
         url:'postBatch',
         method:'delete',
-        splice:'/' + data,
+        splice:data,
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);
@@ -199,7 +203,7 @@ export default {
       this.appFetch({
         url:'postBatch',
         method:'delete',
-        splice:'/' + id
+        splice:id
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);

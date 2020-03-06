@@ -305,9 +305,9 @@ export default {
 
     //设置底部在pc里的宽度
     limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+      // document.getElementById('post-topic-footer').style.width = "640px";
+      // let viewportWidth = window.innerWidth;
+      // document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
 
     //上传之前先判断是否有权限上传图片
@@ -331,50 +331,6 @@ export default {
       }
     },
 
-
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   // 实例化
-    //   let formdata = new FormData()
-    //   formdata.append('file', e.file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,false,true);
-    //   this.loading = false;
-
-    // },
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   let file = e.target.files[0];
-    //   let formdata = new FormData();
-    //   formdata.append('file', file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,true,false);
-    //   this.uploadShow = true;
-    //   this.loading = false;
-    // },
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.file,this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.file, false);
-    //     }
-    //   } else {
-    //     this.compressFile(e.file, false);
-    //   }
-    // },
-
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.target.files[0],this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.target.files[0], true);
-    //     }
-    //   } else {
-    //     this.compressFile(e.target.files[0], true);
-    //   }
-    // },
     //上传图片,点击加号时
     handleFile(e){
      let files = [];
@@ -528,35 +484,6 @@ export default {
       })
     },
 
-    //这里写接口，上传
-    // uploaderEnclosure(file,isFoot,enclosure){
- //    uploaderEnclosure(file,isFoot,img,enclosure){
- //       this.appFetch({
- //         url:'attachment',
- //         method:'post',
- //         data:file,
-
- //       }).then(data=>{
- //         if (data.errors){
- //           this.$toast.fail(data.errors[0].code);
- //           throw new Error(data.error)
- //         }else{
- //            if(img){
- //              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
- //              this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
- //            }
- //            if(isFoot){
- //              this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
- //            }
-
- //             if(enclosure){
- //               this.enclosureShow = true;
- //               this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
- //             }
- //            this.$toast.success('提交成功');
- //         }
- //       })
- //   },
 
     //输入框自适应高度
     clearKeywords () {
@@ -643,7 +570,7 @@ export default {
       this.showPopup = false;
       this.selectSort = value.text;
     },
-
+    //分类接口
     loadCategories(){
       this.appFetch({
         url: 'categories',

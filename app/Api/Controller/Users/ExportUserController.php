@@ -48,7 +48,7 @@ class ExportUserController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-//        $this->assertAdmin($request->getAttribute('actor'));
+        $this->assertAdmin($request->getAttribute('actor'));
 
         $filter = new Parameters($request->getQueryParams());
         $filters = $filter->getFilter() ?: [];

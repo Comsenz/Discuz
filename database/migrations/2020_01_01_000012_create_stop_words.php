@@ -20,7 +20,7 @@ class CreateStopWords extends Migration
             $table->string('find')->default('')->comment('敏感词或查找方式');
             $table->string('replacement')->default('')->comment('替换词或替换规则');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

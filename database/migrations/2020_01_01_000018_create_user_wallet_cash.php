@@ -26,8 +26,8 @@ class CreateUserWalletCash extends Migration
             $table->string('error_code', 64)->nullable()->comment('错误代码');
             $table->string('error_message', 64)->nullable()->comment('交易失败描叙');
             $table->unsignedTinyInteger('refunds_status')->default(0)->comment('返款状态，0未返款，1已返款');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

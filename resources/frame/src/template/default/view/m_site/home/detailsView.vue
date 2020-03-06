@@ -89,19 +89,19 @@
                 <div class="themeImgList moreImg">
                   <div v-if="isWeixin || isPhone">
                     <van-image
-                        lazy-load
-                        v-for="(image,index)  in item.images"
-                        :src="image._data.thumbUrl"
-                        :key="index"
-                        @click="imageSwiper(index, 'replyImg', postIndex)"
-                      />
+                      lazy-load
+                      v-for="(image,index)  in item.images"
+                      :src="image._data.thumbUrl"
+                      :key="index"
+                      @click="imageSwiper(index, 'replyImg', postIndex)"
+                    />
                   </div>
                   <div v-else="">
                     <van-image
-                        lazy-load
-                        v-for="(image,index)  in item.images"
-                        :src="image._data.thumbUrl"
-                        :key="index"
+                      lazy-load
+                      v-for="(image,index)  in item.images"
+                      :src="image._data.thumbUrl"
+                      :key="index"
                       />
                   </div>
                 </div>

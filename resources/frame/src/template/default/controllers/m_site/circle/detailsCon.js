@@ -42,9 +42,7 @@ export default {
           rewardNum: '666'
         }
       ],
-      qrcodeShow: false,
       amountNum: '',
-      codeUrl: '',
       showScreen: false,
       request: false,
       isliked: '',
@@ -69,7 +67,7 @@ export default {
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 1, //页码
+      pageIndex: 0, //页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId: '',
@@ -77,28 +75,28 @@ export default {
       collectStatus: false,
       collectFlag: '',
       postCount: 0, //回复总条数
-      postsList:'',
-      likedUsers:[],
-      rewardedUsers:[],
-      token:false,
+      postsList: '',
+      likedUsers: [],
+      rewardedUsers: [],
+      token: false,
       isWeixin: false,
       isPhone: false,
       isAndroid: false,
       isiOS: false,
-      orderSn:'',
+      orderSn: '',
       payStatus: false,   //支付状态
       payStatusNum: 0,//支付状态次数
-      canViewPosts:'',
-      canLike:'',
-      canReply:'',
-      themeUserId:'',
-      userId:'',
-      currentUserName:'',
+      canViewPosts: '',
+      canLike: '',
+      canReply: '',
+      themeUserId: '',
+      userId: '',
+      currentUserName: '',
       currentUserAvatarUrl: '',
       likedData: [],
       postsImages: [],
       allowRegister: '',
-      loginWord:'登录 / 注册',
+      loginWord: '登录 / 注册',
       viewportWidth: '',
       themeIsLiked: '',
       themeTitle:'',
@@ -142,6 +140,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
+    this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
     this.getUser();
@@ -149,10 +148,8 @@ export default {
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
-      
     } else {
       this.themeShow = true;
-      
     };
 
     if (browserDb.getSItem('beforeState') === 1){
@@ -176,7 +173,7 @@ export default {
       this.limitWidth('detailsFooter');
     }
   },
-  
+
   methods: {
     //判断设备，下载时提示
     downAttachment(url){
@@ -187,17 +184,18 @@ export default {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data,hideStatus){
       let datas = [];
-      if(hideStatus){
-        this.hideStyle = '';
-      } else {
-        this.hideStyle = 'display:none';
-      }
-      
+      // if(hideStatus){
+      //   this.hideStyle = '';
+      // } else {
+      //   this.hideStyle = 'display:none';
+      // }
+      data = data.slice(0,10);
       data.forEach((item,key)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
+        // datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
+        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join(',') ;
+      datas = datas.join('，');
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
@@ -216,7 +214,6 @@ export default {
       this.rewardTipShow = !this.rewardTipShow;
       this.rewardTipFlag = this.rewardTipShow?'展开':'收起';
       this.limitLen = this.rewardTipShow?5:allLen;
-      
     },
     //设置底部在pc里的宽度
     limitWidth(limitId){
@@ -355,8 +352,8 @@ export default {
             } else {
               this.themeTitle = res.readdata.firstPost._data.contentHtml;
             }
-            
-            
+
+
             if (this.collectStatus) {
               this.collectFlag = '已收藏';
             } else {
@@ -374,7 +371,6 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
-            
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -388,8 +384,14 @@ export default {
             } else {
               this.themeIsLiked = false;
             }
-            // this.themeIsLiked = res.readdata.firstPost._data.isLiked;
+            this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
+            this.postsList.map(post => {
+              let urls = [];
+              post.images.map(image => urls.push(image._data.url));
+              this.postsImages.push(urls);
+              
+            });
             if (firstpostImageLen === 0) {
               return;
             } else {
@@ -401,14 +403,10 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
             };
-
-            this.postsList.map(post => {
-              let urls = [];
-              post.images.map(image => urls.push(image._data.url));
-              this.postsImages.push(urls);
-            });
+            
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
+            this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
@@ -426,12 +424,13 @@ export default {
     imageSwiper(imgIndex, typeclick, replyItem) {
       if(typeclick == 'detailImg'){
         //主题详情图片预览
-        ImagePreview({
-          images:this.firstpostImageList,
-          startPosition:imgIndex,    //图片预览起始位置索引 默认 0
-          showIndex: true,    //是否显示页码         默认 true
-          showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        // ImagePreview({
+        //   images:this.firstpostImageList,
+        //   startPosition:imgIndex,    //图片预览起始位置索引 默认 0
+        //   showIndex: true,    //是否显示页码         默认 true
+        //   showIndicators: true, //是否显示轮播指示器 默认 false
+        //   loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        //   closeOnPopstate: true
           // asyncClose: true,
           // onChange:function(){
           // },
@@ -441,7 +440,7 @@ export default {
           //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
           //   var num = url.index, url_link = url.url;
           // }
-        })
+        // })
       } else if(typeclick == 'replyImg') {
         //主题回复图片预览
         ImagePreview({
@@ -449,7 +448,8 @@ export default {
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          loop:true,           //是否开启循环播放  貌似循环播放是不起作用的。。。
+          closeOnPopstate: true
         })
       }
 
@@ -560,7 +560,7 @@ export default {
             this.showScreen = false;
           }
       }
-      
+
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
@@ -612,7 +612,7 @@ export default {
               path: '/edit-topic' + '/' + this.themeId
             });
           }
-          
+
         }
       }
     },
@@ -733,7 +733,7 @@ export default {
             }
           }
         }
-        
+
         let posts = 'posts/' + postId;
         this.appFetch({
           url: posts,
@@ -817,7 +817,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
               throw new Error(res.error)
             } else {
-              
+
               if(isLike){
                 // this.likedUsers = this.likedUsers.filter(value => value._data.id !== this.userId);
                 this.likedUsers.map((value, key, likedUsers) => {
@@ -973,7 +973,6 @@ export default {
     },
     onInput(key){
       this.value = this.value + key;
-      console.log(this.value,'输入的值');
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
@@ -985,8 +984,8 @@ export default {
               }
               this.getOrderStatus();
             },3000)
-            
-            
+
+
           })
         })
       }
@@ -1049,7 +1048,7 @@ export default {
         data:{
         },
       }).then(res=>{
-        
+
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           if (res.errors[0].detail){
@@ -1077,6 +1076,7 @@ export default {
         // return res;
       })
     },
+
 
 
     onLoad() { //上拉加载

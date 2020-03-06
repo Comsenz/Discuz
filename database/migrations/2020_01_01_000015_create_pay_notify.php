@@ -19,7 +19,7 @@ class CreatePayNotify extends Migration
             $table->string('trade_no', 64)->default('')->comment('商户平台交易号');
             $table->unsignedTinyInteger('status')->default(0)->comment('0未接受到通知，1收到通知');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

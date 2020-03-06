@@ -69,9 +69,16 @@ class InstallController implements RequestHandlerInterface
         $input['ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
+        if ($this->app->isInstall()) {
+            return new HtmlResponse('已安装', 500);
+        }
+
+        $tablepre = Arr::get($input, 'tablePrefix', '');
+        if(strpos($tablepre, '.') !== false || intval($tablepre[0])) {
+            return new HtmlResponse('表前缀格式错误', 500);
+        }
 
         try {
-            @unlink($this->app->storagePath().'/install.lock');
             //创建数据库
             $this->installDatabase($input);
             //创建配置文件

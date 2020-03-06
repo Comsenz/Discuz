@@ -22,7 +22,7 @@ class CreateThreads extends Migration
             $table->integer('post_count')->unsigned()->default(0)->comment('回复数');
             $table->integer('view_count')->unsigned()->default(0)->comment('查看数');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('deleted_at')->nullable()->comment('删除时间');
             $table->integer('deleted_user_id')->unsigned()->nullable()->comment('删除用户 id');
             $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('是否合法');
