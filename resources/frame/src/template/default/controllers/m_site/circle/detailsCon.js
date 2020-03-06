@@ -340,7 +340,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
-          console.log(res.readdata,'*****************');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -972,7 +971,6 @@ export default {
     },
     onInput(key){
       this.value = this.value + key;
-      console.log(this.value,'输入的值');
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
@@ -1104,10 +1102,6 @@ export default {
     document.removeEventListener('click',this.listenEvt, false);
   },
   beforeRouteLeave(to, from, next) {
-    // alert('离开');
-    // this.instance_before.close();
-    // ImagePreview.close();
-    // this.closeStatus = true;
     document.removeEventListener('click',this.listenEvt, false);
     next()
   }
