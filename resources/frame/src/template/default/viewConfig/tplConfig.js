@@ -659,6 +659,7 @@ export default {
   var siteMode = '';      //站点模式
   var realName = '';      //实名认证是否关闭
   var canWalletPay = '';  //钱包密码设置
+  var modifyPhone = '';   //短信验证是否关闭
 
 
 
@@ -680,7 +681,8 @@ export default {
       siteMode = res.readdata._data.set_site.site_mode;
       registerClose = res.readdata._data.set_reg.register_close;
       realName = res.readdata._data.qcloud.qcloud_faceid;
-      canWalletPay = res.readdata._data.other.initialized_pay_password
+      canWalletPay = res.readdata._data.other.initialized_pay_password; 
+      modifyPhone = res.readdata._data.qcloud.qcloud_sms;
 
       /*
       * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -711,12 +713,23 @@ export default {
         } else {
           next({path:'/setup-pay-pwd'})
         }
-      }else {
+      }else if(to.name === 'modify-phone'){
+        if(modifyPhone === false){
+           next({path:'/'})
+        }else{
+          next({path:'/modify-phone'});
+        }   
+      }else if(to.name === 'bind-new-phone'){
+        if(modifyPhone === false){
+          next({path:'/'})
+       }else{
+         next({path:'/bind-new-phone'});
+       }
+      }
+      else {
         next();
       }
     }
-
-
   });
 
 
