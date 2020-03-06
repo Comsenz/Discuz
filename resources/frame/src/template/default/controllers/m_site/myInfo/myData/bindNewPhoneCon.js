@@ -23,6 +23,7 @@ export default {
       disabled:false,
       modifyPhone:'',       //用户手机号
       titlePhone:'',     //标题
+      headerShow:false,
     }
   },
 
@@ -51,16 +52,12 @@ export default {
           this.$toast.fail(res.errors[0].code);
         }else{
           this.modifyPhone = res.readdata._data.originalMobile;         //用户手机号
-          console.log(this.modifyPhone)
-          // if(this.modifyPhone){
-          //   this.titlePhone = true
-          //   console.log(this.modifyPhone,'判断')
-          // }else{
-          //   this.titlePhone = false
-          // }
-          // console.log(this.titlePhone,'99999')
-          // console.log(res,'手机号')
-          // console.log(res.readdata._data.originalMobile,'手机号')
+          if(this.modifyPhone){
+            this.titlePhone = '修改手机号'
+          }else{
+            this.titlePhone = '绑定新手机号'
+          }
+          this.headerShow = true
         }
       })
     },
