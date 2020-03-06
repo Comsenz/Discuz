@@ -148,7 +148,7 @@ const appFetch = function(params, options) {
     params.baseURL = "/api";
     params.url = apiUrl;
   } else {
-    params.baseURL = "/";
+    params.baseURL = "";
     params.url = appConfig.apiBaseUrl + apiUrl;
   }
 
