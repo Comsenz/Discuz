@@ -713,19 +713,20 @@ export default {
         } else {
           next({path:'/setup-pay-pwd'})
         }
-      }else if(to.name === 'modify-phone'){
-        if(modifyPhone === false){
-           next({path:'/'})
-        }else{
-          next({path:'/modify-phone'});
-        }   
-      }else if(to.name === 'bind-new-phone'){
-        if(modifyPhone === false){
-          next({path:'/'})
-       }else{
-         next({path:'/bind-new-phone'});
-       }
       }
+      // else if(to.name === 'modify-phone'){
+      //   if(modifyPhone === false){
+      //      next({path:'/'})
+      //   }else{
+      //     next({path:'/modify-phone'});
+      //   }   
+      // }else if(to.name === 'bind-new-phone'){
+      //   if(modifyPhone === false){
+      //     next({path:'/'})
+      //  }else{
+      //    next({path:'/bind-new-phone'});
+      //  }
+      // }
       else {
         next();
       }
