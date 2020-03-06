@@ -95,8 +95,13 @@ export default {
           }
         }).then(res => {
           if (res.errors){
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail);
-            throw new Error(res.error)
+            if (res.errors[0].detail) {
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+            // this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail);
+            // throw new Error(res.error)
           }else{
             this.insterVal = res.data.attributes.interval;
             this.time = this.insterVal;

@@ -12,6 +12,7 @@ use App\Models\MobileCode;
 use App\Repositories\MobileCodeRepository;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
@@ -36,6 +37,8 @@ class SendController extends AbstractCreateController
 
     protected $mobileCodeRepository;
 
+    protected $settings;
+
     protected $type = [
         'login',
         'bind',
@@ -45,11 +48,17 @@ class SendController extends AbstractCreateController
         'verify',
     ];
 
-    public function __construct(ValidationFactory $validation, CacheRepository $cache, MobileCodeRepository $mobileCodeRepository)
+    public function __construct(
+        ValidationFactory $validation,
+        CacheRepository $cache,
+        MobileCodeRepository $mobileCodeRepository,
+        SettingsRepository $settings
+    )
     {
         $this->validation = $validation;
         $this->cache = $cache;
         $this->mobileCodeRepository = $mobileCodeRepository;
+        $this->settings = $settings;
     }
 
     /**
@@ -71,7 +80,14 @@ class SendController extends AbstractCreateController
         }
 
         // 手机号验证规则
-        if ($type == 'bind') {
+        if (!(bool)$this->settings->get('qcloud_sms', 'qcloud')) {
+            // 未开启短息服务不发送短信
+            $mobileRule = [
+                function ($attribute, $value, $fail) {
+                    $fail('短信服务未开启。');
+                },
+            ];
+        } elseif ($type == 'bind') {
             // 判断手机号是否已经被绑定
             if ($actor->mobile) {
                 throw new \Exception('mobile_is_already_bind');
