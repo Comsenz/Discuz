@@ -80,7 +80,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         $url = $model->is_remote
             ? $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath()
-            : $this->url->to('/storage/attachment/' . $model->attachment);
+            : $this->url->to(str_replace('public', '/storage', $model->file_path) . '/' . $model->attachment);
 
         $fixWidth = CreateAttachment::FIX_WIDTH;
 
