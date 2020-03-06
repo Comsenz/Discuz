@@ -20,7 +20,7 @@ export default {
       insterVal: '',
       isGray: false,
       btnContent:'发送验证码',
-      mobileConfirmed:''
+      mobileConfirmed:'',
     }
   },
 
