@@ -384,19 +384,19 @@ export default {
             } else {
               this.themeIsLiked = false;
             }
-            // this.themeIsLiked = res.readdata.firstPost._data.isLiked;
-            // var firstpostImageLen = this.themeCon.firstPost.images.length;
-            // if (firstpostImageLen === 0) {
-            //   return;
-            // } else {
-            //   var firstpostImage = [];
-            //   for (let i = 0; i < firstpostImageLen; i++) {
-            //     // let src = 'https://2020.comsenz-service.com/api/attachments/';
-            //     // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-            //     firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
-            //   }
-            //   this.firstpostImageList = firstpostImage;
-            // };
+            this.themeIsLiked = res.readdata.firstPost._data.isLiked;
+            var firstpostImageLen = this.themeCon.firstPost.images.length;
+            if (firstpostImageLen === 0) {
+              return;
+            } else {
+              var firstpostImage = [];
+              for (let i = 0; i < firstpostImageLen; i++) {
+                // let src = 'https://2020.comsenz-service.com/api/attachments/';
+                // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+                firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+              }
+              this.firstpostImageList = firstpostImage;
+            };
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
