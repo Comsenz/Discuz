@@ -597,6 +597,7 @@ export default {
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
+    'open-circle/:userId',
   ];
 
 
