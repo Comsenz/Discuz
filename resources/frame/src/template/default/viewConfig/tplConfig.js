@@ -649,26 +649,27 @@ export default {
   /*
   * 获取tokenId
   * */
-    const tokenId = browserDb.getLItem('tokenId');
-    const Authorization = browserDb.getLItem('Authorization');
+  const tokenId = browserDb.getLItem('tokenId');
+  const Authorization = browserDb.getLItem('Authorization');
+
+  /*
+  * 前台路由全局处理
+  * */
+  var registerClose = ''; //注册是否关闭
+  var siteMode = '';      //站点模式
+  var realName = '';      //实名认证是否关闭
+  var canWalletPay = '';  //钱包密码设置
+  var modifyPhone = '';   //短信验证是否关闭
+
+
+
+  this.getForum().then((res)=>{
 
     /*
-    * 前台路由全局处理
+    * 站点关闭，跳转到站点关闭页面
     * */
-    var registerClose = ''; //注册是否关闭
-    var siteMode = '';      //站点模式
-    var realName = '';      //实名认证是否关闭
-    var canWalletPay = '';  //钱包密码设置
-    var modifyPhone = '';   //短信验证是否关闭
-
-
-    this.getForum().then((res) => {
-
-      /*
-      * 站点关闭，跳转到站点关闭页面
-      * */
-      if (res.errors) {
-        if (res.rawData[0].code === 'site_closed') {
+    if (res.errors){
+      if (res.rawData[0].code === 'site_closed'){
         if (to.name === 'login-user'){
           next();
         } else {
@@ -683,59 +684,53 @@ export default {
         }
       }
     } else {
-        siteMode = res.readdata._data.set_site.site_mode;
-        registerClose = res.readdata._data.set_reg.register_close;
-        realName = res.readdata._data.qcloud.qcloud_faceid;
-        canWalletPay = res.readdata._data.other.initialized_pay_password;
-        modifyPhone = res.readdata._data.qcloud.qcloud_sms;
+      siteMode = res.readdata._data.set_site.site_mode;
+      registerClose = res.readdata._data.set_reg.register_close;
+      realName = res.readdata._data.qcloud.qcloud_faceid;
+      canWalletPay = res.readdata._data.other.initialized_pay_password;
+      modifyPhone = res.readdata._data.qcloud.qcloud_sms;
 
-        /*
-        * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
-        * */
-        if (to.name === 'sign-up') {
-          if (!Authorization && !tokenId && !registerClose) {
-            if (siteMode === 'pay') {
-              next({path: '/pay-circle'});
-              return
-            } else {
+      /*
+      * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
+      * */
+      if (to.name === 'sign-up'){
+        if (!Authorization && !tokenId && !registerClose) {
+          if (siteMode === 'pay'){
+            next({path:'/pay-circle'});
+            return
+          } else {
             next({path:'/'});
             return
           }
         }
       } else if(to.name === 'real-name'){
-        this.getUsers(tokenId).then(data=>{
-          if(realName === true && data.readdata._data.realname === ''){
-            next({path:'/real-name'});
-            return
-          }else{
-            next({path:'/'})
-          }
-        })
-      } else if (to.name === 'verify-pay-pwd') {
-          if (canWalletPay) {
-            next();
-            return
-          } else {
-            next({path: '/setup-pay-pwd'})
-          }
+        if (Authorization){
+          this.getUsers(tokenId).then(data=>{
+            if(realName === true && data.readdata._data.realname === ''){
+              next({path:'/real-name'});
+              return
+            }else{
+              next({path:'/'})
+            }
+          })
+        } else {
+          next({path:'/'});
+          return;
         }
-          // else if(to.name === 'modify-phone'){
-          //   if(modifyPhone === false){
-          //      next({path:'/'})
-          //   }else{
-          //     next({path:'/modify-phone'});
-          //   }
-          // }else if(to.name === 'bind-new-phone'){
-          //   if(modifyPhone === false){
-          //     next({path:'/'})
-          //  }else{
-          //    next({path:'/bind-new-phone'});
-          //  }
-        // }
-        else {
+
+      } else if(to.name === 'verify-pay-pwd'){
+        if (canWalletPay) {
           next();
+          return
+        } else {
+          next({path:'/setup-pay-pwd'})
         }
+      }else {
+        next();
+      }
+
     }
+
   });
 
 
