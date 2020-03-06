@@ -27,7 +27,7 @@
         </div>
       </van-pull-refresh>
     </van-list>
-    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump" :class="{'hide':loginHide}">{{loginWord}}</van-button>
+    <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump":style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}" :class="{'hide':loginHide}">{{loginWord}}</van-button>
     <div class="gap"></div>
   </div>
 </template>

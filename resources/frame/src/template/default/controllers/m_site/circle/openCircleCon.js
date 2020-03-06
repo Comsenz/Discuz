@@ -2,6 +2,7 @@
  * pc 端首页控制器
  */
 import browserDb from '../../../../../helpers/webDbHelper';
+import appCommonH from '../../../../../helpers/commonHelper';
 export default {
 	data: function() {
 		return {
@@ -32,21 +33,15 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-			// navActi: 0,
-			// current:0,
-   //    todos: [
-   //        { text: '选项一111' },
-   //        { text: '选项二' },
-   //        { text: '选项三' },
-   //        { text: '选项四' },
-   //        { text: '选项五' },
-   //        { text: '选项六' },
-   //        { text: '选项七' },
-   //        { text: '选项八' }
-   //    ]
+      viewportWidth: '',
+      isWeixin: false,
+      isPhone: false,
 		}
 	},
   created:function(){
+    this.viewportWidth = window.innerWidth;
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadThemeList();
     this.getUserInfo();
     // this.detailIf();
