@@ -593,7 +593,7 @@ export default {
     'login-phone',
     'sign-up',
     'wx-login-bd',
-    // 'pay-the-fee',
+    'pay-the-fee',
     'pay-circle-login',
     'pay-circle',
     'pay-circle-con/:themeId/:groupId',
@@ -672,8 +672,14 @@ export default {
         if (to.name === 'login-user'){
           next();
         } else {
-          next({path:'/site-close'});
-          return
+          if (to.name === 'site-close') {
+            next();
+            return;
+          } else {
+            next({path:'/site-close'});
+            return;
+          }
+
         }
       }
     } else {
@@ -714,143 +720,144 @@ export default {
       }else {
         next();
       }
-    }
 
+    }
 
   });
 
 
-  /*
-  * 路由过渡设置
-  * */
-  // if (siteMode === 'public'){
-  //   if (!notLoggedInToAccessPage.includes(to.name)){
-  //     if (to.name == 'supplier-all-back'){
-  //       next();
-  //       return
-  //     }
-  //     next({path:'/supplier-all-back',query:{url:to.name}});
-  //   }
-  // } else {
-  //   if (!notLoggedInToAccessPage.includes(to.name) && to.name !== 'circle'){
-  //     if (to.name == 'supplier-all-back'){
-  //       next();
-  //       return
-  //     }
-  //     next({path:'/supplier-all-back',query:{url:to.name}});
-  //   }
-  // }
+    if (tokenId && Authorization){
+      /*已登录状态*/
 
+      this.getForum().then((ress)=>{
 
-  /*
-  * 前台路由前置判断
-  * 判断登录状态
-  * */
-
-  // if (to.name == 'supplier-all-back' || to.name == 'circle' || to.name == 'wx-login-bd'){
-  //   next();
-  //   return
-  // }
-  // next({path:'/supplier-all-back',query:{state:true}});
-
-  if (tokenId && Authorization){
-    /*已登录状态*/
-
-    this.getForum().then((ress)=>{
-
-      if (ress.readdata._data.set_site.site_mode === 'pay'){
-        this.getUsers(tokenId).then(res=>{
-          /*获取用户付费状态并判断*/
-          if (res.readdata._data.paid){
-            /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
-            if (signInAndPayForAccess.includes(to.name)){
-              if(to.name === 'pay-circle-con/:themeId/:groupId'){
-                // next({path:'/details/' + to.params.themeId});
+        if (ress.readdata._data.set_site.site_mode === 'pay'){
+          this.getUsers(tokenId).then(res=>{
+            /*获取用户付费状态并判断*/
+            if (res.readdata._data.paid){
+              /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
+              if (signInAndPayForAccess.includes(to.name)){
+                if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                  // next({path:'/details/' + to.params.themeId});
+                }
+                next(vm=>{
+                  vm.$router.go(-1);
+                })
+              }else {
+                next();
               }
-              next(vm=>{
-                vm.$router.go(-1);
-              })
             }else {
-              next();
+              if (notLoggedInToAccessPage.includes(to.name)){
+                next();
+              }else {
+                if(to.name === 'pay-circle-login'){
+                  next();
+                  return
+                }
+                next({path:'pay-circle-login'});
+              }
             }
+          })
+
+        } else {
+          if (signInAndPayForAccess.includes(to.name)){
+            // next(form.path)
+            next('/')
           }else {
+            next();
+          }
+
+        }
+
+      })
+
+
+    } else {
+      /*未登录状态*/
+
+      this.getForum().then(res=>{
+
+        if (res.readdata._data.passport.offiaccount_close === '1'){
+          /*判断登录设备*/
+          if (isWeixin){
+            /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
+
+            if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd') {
+              next();
+            } else {
+              next({path:'/wx-sign-up-bd'});
+            }
+
+            //微信
+          } else {
             if (notLoggedInToAccessPage.includes(to.name)){
+              /*符合，未登录可以访问站点*/
+              /*判断站点模式*/
+              if (res.readdata._data.set_site.site_mode === 'public'){
+                if(publicNotAccessPage.includes(to.name)){
+                  // to.name,'当前包含路由
+                  if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                    // to.params.themeId,'当前router主题id
+                    next({path:'/details/' + to.params.themeId});
+                  }
+                }
+              }
               next();
             }else {
-              if(to.name === 'pay-circle-login'){
+              /*不符合，跳转到未登录，可访问站点*/
+              /*判断站点模式*/
+              if (res.readdata._data.set_site.site_mode === 'pay'){
+                if(to.name === 'pay-circle'){
+                  next();
+                  return
+                }
+                next({path:'pay-circle'});
+              }else {
+                if (to.name === '/'){
+                  next();
+                  return
+                }
+                next('/')
+              }
+            }
+          }
+        } else {
+          if (notLoggedInToAccessPage.includes(to.name)){
+            /*符合，未登录可以访问站点*/
+            /*判断站点模式*/
+            if (res.readdata._data.set_site.site_mode === 'public'){
+              if(publicNotAccessPage.includes(to.name)){
+                // to.name,'当前包含路由
+                if(to.name === 'pay-circle-con/:themeId/:groupId'){
+                  // to.params.themeId,'当前router主题id
+                  next({path:'/details/' + to.params.themeId});
+                }
+              }
+            }
+            next();
+          }else {
+            /*不符合，跳转到未登录，可访问站点*/
+            /*判断站点模式*/
+            if (res.readdata._data.set_site.site_mode === 'pay'){
+              if(to.name === 'pay-circle'){
                 next();
                 return
               }
-              next({path:'pay-circle-login'});
+              next({path:'pay-circle'});
+            }else {
+              if (to.name === '/'){
+                next();
+                return
+              }
+              next('/')
             }
           }
-        })
-
-      } else {
-        if (signInAndPayForAccess.includes(to.name)){
-          // next(form.path)
-          next('/')
-        }else {
-          next();
         }
 
-      }
 
-    })
+      })
 
-
-  } else {
-    /*未登录状态*/
-
-    /*判断登录设备*/
-    if (isWeixin){
-      /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
-      if(to.name === 'wx-login-bd') {
-        next();
-        return
-      } else {
-        next();
-      }
-      next({path:'/wx-login-bd'});
-      //微信
-    } else {
-      if (notLoggedInToAccessPage.includes(to.name)){
-        /*符合，未登录可以访问站点*/
-        this.getForum().then(res=>{
-          /*判断站点模式*/
-          if (res.readdata._data.set_site.site_mode === 'public'){
-            if(publicNotAccessPage.includes(to.name)){
-              // to.name,'当前包含路由
-              if(to.name === 'pay-circle-con/:themeId/:groupId'){
-                // to.params.themeId,'当前router主题id
-                next({path:'/details/' + to.params.themeId});
-              }
-            }
-          }
-        });
-        next();
-      }else {
-        /*不符合，跳转到未登录，可访问站点*/
-        this.getForum().then(res=>{
-          /*判断站点模式*/
-          if (res.readdata._data.set_site.site_mode === 'pay'){
-            if(to.name === 'pay-circle'){
-              next();
-              return
-            }
-            next({path:'pay-circle'});
-          }else {
-            if (to.name === '/'){
-              next();
-              return
-            }
-            next('/')
-          }
-        })
-      }
     }
-
-  }
 
 
   /*
