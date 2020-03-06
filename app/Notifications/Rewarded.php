@@ -45,7 +45,7 @@ class Rewarded extends Notification
             'thread_id' => $this->order->thread->id,
             'thread_title' => $this->order->thread->title,
             'content' => $this->order->thread->firstPost->formatContent(),
-            'amount' => $this->order->amount,
+            'amount' => $this->order->amount - $this->order->master_amount,
             'user_id' => $this->order->user->id,
             'user_name' => $this->order->user->username,
             'user_avatar' => $this->order->user->avatar,
