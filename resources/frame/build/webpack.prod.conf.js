@@ -58,7 +58,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         },
       }),
       new OptimizeCSSPlugin(),
-      new UglifyJsPlugin()
+      new UglifyJsPlugin()   //暂时注释掉
     ],
     splitChunks: {
       cacheGroups: {
