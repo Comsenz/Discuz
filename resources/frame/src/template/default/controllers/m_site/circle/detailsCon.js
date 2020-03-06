@@ -127,6 +127,8 @@ export default {
       rewardTipShow: true,
       payLoading: false,
       clickStatus: true,
+      instance_before: '',
+      closeStatus: false,
 
     }
   },
@@ -184,17 +186,18 @@ export default {
     //点赞和打赏数组处理（用户名之间用逗号分隔）
     userArr(data,hideStatus){
       let datas = [];
-      if(hideStatus){
-        this.hideStyle = '';
-      } else {
-        this.hideStyle = 'display:none';
-      }
-
+      // if(hideStatus){
+      //   this.hideStyle = '';
+      // } else {
+      //   this.hideStyle = 'display:none';
+      // }
+      data = data.slice(0,10);
       data.forEach((item,key)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
+        // datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
+        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join(',') ;
+      datas = datas.join('，') ;
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
@@ -423,12 +426,14 @@ export default {
     imageSwiper(imgIndex, typeclick, replyItem) {
       if(typeclick == 'detailImg'){
         //主题详情图片预览
-        ImagePreview({
+
+       ImagePreview({
           images:this.firstpostImageList,
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          closeOnPopstate: true
           // asyncClose: true,
           // onChange:function(){
           // },
@@ -441,12 +446,14 @@ export default {
         })
       } else if(typeclick == 'replyImg') {
         //主题回复图片预览
+
         ImagePreview({
           images:this.postsImages[replyItem],
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
           loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          closeOnPopstate: true
         })
       }
 
@@ -1076,6 +1083,7 @@ export default {
     },
 
 
+
     onLoad() { //上拉加载
       this.loading = true;
       this.pageIndex++;
@@ -1101,6 +1109,10 @@ export default {
     document.removeEventListener('click',this.listenEvt, false);
   },
   beforeRouteLeave(to, from, next) {
+    // alert('离开');
+    // this.instance_before.close();
+    // ImagePreview.close();
+    // this.closeStatus = true;
     document.removeEventListener('click',this.listenEvt, false);
     next()
   }
