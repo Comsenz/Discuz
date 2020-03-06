@@ -73,6 +73,11 @@ class InstallController implements RequestHandlerInterface
             return new HtmlResponse('已安装', 500);
         }
 
+        $tablepre = Arr::get($input, 'tablePrefix', '');
+        if(strpos($tablepre, '.') !== false || intval($tablepre[0])) {
+            return new HtmlResponse('表前缀格式错误', 500);
+        }
+
         try {
             //创建数据库
             $this->installDatabase($input);

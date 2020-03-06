@@ -127,8 +127,6 @@ export default {
       rewardTipShow: true,
       payLoading: false,
       clickStatus: true,
-      instance_before: '',
-      closeStatus: false,
 
     }
   },
@@ -197,7 +195,7 @@ export default {
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join('，') ;
+      datas = datas.join('，');
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
@@ -373,7 +371,6 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
-
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -387,8 +384,14 @@ export default {
             } else {
               this.themeIsLiked = false;
             }
-            // this.themeIsLiked = res.readdata.firstPost._data.isLiked;
+            this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
+            this.postsList.map(post => {
+              let urls = [];
+              post.images.map(image => urls.push(image._data.url));
+              this.postsImages.push(urls);
+              
+            });
             if (firstpostImageLen === 0) {
               return;
             } else {
@@ -400,12 +403,7 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
             };
-
-            this.postsList.map(post => {
-              let urls = [];
-              post.images.map(image => urls.push(image._data.url));
-              this.postsImages.push(urls);
-            });
+            
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
@@ -426,14 +424,13 @@ export default {
     imageSwiper(imgIndex, typeclick, replyItem) {
       if(typeclick == 'detailImg'){
         //主题详情图片预览
-
-       ImagePreview({
-          images:this.firstpostImageList,
-          startPosition:imgIndex,    //图片预览起始位置索引 默认 0
-          showIndex: true,    //是否显示页码         默认 true
-          showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-          closeOnPopstate: true
+        // ImagePreview({
+        //   images:this.firstpostImageList,
+        //   startPosition:imgIndex,    //图片预览起始位置索引 默认 0
+        //   showIndex: true,    //是否显示页码         默认 true
+        //   showIndicators: true, //是否显示轮播指示器 默认 false
+        //   loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        //   closeOnPopstate: true
           // asyncClose: true,
           // onChange:function(){
           // },
@@ -443,16 +440,15 @@ export default {
           //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
           //   var num = url.index, url_link = url.url;
           // }
-        })
+        // })
       } else if(typeclick == 'replyImg') {
         //主题回复图片预览
-
         ImagePreview({
           images:this.postsImages[replyItem],
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          loop:true,           //是否开启循环播放  貌似循环播放是不起作用的。。。
           closeOnPopstate: true
         })
       }
@@ -977,7 +973,6 @@ export default {
     },
     onInput(key){
       this.value = this.value + key;
-      console.log(this.value,'输入的值');
       if (this.value.length === 6 ) {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(()=>{
@@ -1109,10 +1104,6 @@ export default {
     document.removeEventListener('click',this.listenEvt, false);
   },
   beforeRouteLeave(to, from, next) {
-    // alert('离开');
-    // this.instance_before.close();
-    // ImagePreview.close();
-    // this.closeStatus = true;
     document.removeEventListener('click',this.listenEvt, false);
     next()
   }

@@ -87,6 +87,7 @@ export default {
       canEditUserGroup: false,
       canCreateInvite: false,
       noticeSum: 0,   //新通知总数
+      // wxOfficial:''  //微信公众号
     }
   },
   created: function() {
@@ -160,12 +161,14 @@ export default {
     });
   },
   onLoad(){
+    let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;
     //微信内登录
     let isWeixin =this.appCommonH.isWeixin().isWeixin;
-    if(isWeixin){
+    if(isWeixin && wxOfficial == '1'){
       this.sidebarList2.splice(1, 1);
     }
   },
+
   sidebarUrl(url,enentType){
 
     var userId = browserDb.getLItem('tokenId');
