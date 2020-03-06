@@ -200,7 +200,7 @@ export default {
             "attributes": {
               "mobile": this.newphone,
               "code": this.sms,
-              'type': this.bind
+              'type': 'rebind'
             }
           }
         }

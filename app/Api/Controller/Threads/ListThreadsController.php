@@ -521,7 +521,11 @@ class ListThreadsController extends AbstractListController
             }
 
             // 截取内容
-            $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+            if ($thread->price > 0) {
+                $thread->firstPost->content = '';
+            } else {
+                $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+            }
         });
 
         return $threads;
