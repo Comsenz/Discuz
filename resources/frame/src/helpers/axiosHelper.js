@@ -131,7 +131,7 @@ const appFetch = function(params, options) {
 
   params.method = params.method ? params.method : 'get';
   if(!apiUrl) {
-    apiUrl = "/api" + oldUrl;
+    apiUrl = "/api/" + oldUrl;
     // return false;
   }
 
