@@ -1,6 +1,6 @@
 <template>
     <div class="modify-phone-box">
-      <ModifyHeader title="修改手机号"></ModifyHeader>
+      <ModifyHeader title="绑定手机号"></ModifyHeader>
       <main class="modify-phone-main content">
         <div class="modify-phone-form my-info-form">
           <van-cell-group>
@@ -11,7 +11,6 @@
               maxlength="13"
               placeholder="请输入新手机号"
             />
-
             <van-field
               v-model="sms"
               clearable
