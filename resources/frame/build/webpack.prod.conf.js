@@ -12,9 +12,9 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
-const UglifyPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const appConfig = require("../config/appConfig")
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 
@@ -51,14 +51,14 @@ const webpackConfig = merge(baseWebpackConfig, {
           warnings: false,
           parse: {},
           compress: {
-            drop_console: true,
-            drop_debugger: false,
-            pure_funcs: ['console.log'] // 移除console
+            // drop_console: true,
+            // drop_debugger: false,
+            // pure_funcs: ['console.log'] // 移除console
           }
         },
       }),
       new OptimizeCSSPlugin(),
-      new UglifyJsPlugin()
+      // new UglifyJsPlugin()
     ],
     splitChunks: {
       cacheGroups: {
