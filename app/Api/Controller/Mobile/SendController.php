@@ -65,13 +65,48 @@ class SendController extends AbstractCreateController
 
         $type = Arr::get($data, 'type');
 
+        // 直接使用用户手机号
         if ($type === 'verify' || $type === 'reset_pay_pwd') {
             $data['mobile'] = $actor->getOriginal('mobile');
         }
 
-        // 如果已经绑定，不能再发送绑定短息
+        // 手机号验证规则
+        if ($type == 'bind') {
+            // 判断手机号是否已经被绑定
+            if ($actor->mobile) {
+                throw new \Exception('mobile_is_already_bind');
+            }
+
+            $mobileRule = 'required|unique:users,mobile';
+        } elseif ($type == 'rebind') {
+            // 如果是重新绑定，需要在验证旧手机后 10 分钟内
+            $unverified = MobileCode::where('mobile', $actor->getOriginal('mobile'))
+                ->where('type', 'verify')
+                ->where('state', 1)
+                ->where('updated_at', '<', Carbon::now()->addMinutes(10))
+                ->doesntExist();
+
+            $mobileRule = [
+                function ($attribute, $value, $fail) use ($actor, $unverified) {
+                    if ($unverified) {
+                        $fail('请验证旧的手机号。');
+                    } elseif ($value == $actor->getOriginal('mobile')) {
+                        $fail('请输入新的手机号。');
+                    }
+                },
+                'required',
+                'unique:users,mobile',
+            ];
+        } elseif (in_array($type, ['reset_pwd', 'reset_pay_pwd'])) {
+            // 如果已经绑定，不能再发送绑定短息
+            // 如果重设密码，必须要已绑定的手机号
+            $mobileRule = 'required|exists:users,mobile';
+        } else {
+            $mobileRule = 'required';
+        }
+
         $this->validation->make($data, [
-            'mobile' => in_array($type, ['bind', 'rebind']) ? 'required|unique:users,mobile' : 'required',
+            'mobile' => $mobileRule,
             'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();
 

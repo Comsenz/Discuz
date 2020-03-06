@@ -1,6 +1,6 @@
 <template>
     <div class="post-topic-box">
-      <header class="post-topic-header">
+      <header class="post-topic-header" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
         <h2 class="postHeadTit">{{headerTitle}}</h2>
         <van-button type="primary" size="mini" @click="publish">发布</van-button>
@@ -75,7 +75,7 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox"></Expression>
+      <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" class="expressionBox" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
       <div class="popup">
         <van-popup v-model="showPopup" position="bottom"  round :style="{ height: '50%' }">
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />

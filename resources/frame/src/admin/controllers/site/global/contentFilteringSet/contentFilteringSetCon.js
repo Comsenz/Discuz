@@ -19,7 +19,7 @@ export default {
       tableDataLength:'',
       // disabled:true,
       createCategoriesStatus:false,   //添加分类状态
-      exportUrl: appConfig.devApiUrl+'/api/stop-words/export?token=Bearer ' + token,
+      exportUrl: appConfig.baseUrl+'/api/stop-words/export?token=Bearer ' + token,
       options: [
         {
           value: '{IGNORE}',

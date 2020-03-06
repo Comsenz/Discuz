@@ -111,8 +111,8 @@ class Formatter
         $configurator->rendering->engine->cacheDir = $this->cacheDir;
 
         $configurator->plugins->load('Escaper');
-        $configurator->plugins->load('Autoemail');
-        $configurator->plugins->load('Autolink');
+        // $configurator->plugins->load('Autoemail');
+        // $configurator->plugins->load('Autolink');
         $configurator->tags->onDuplicate('replace');
 
         // emoji

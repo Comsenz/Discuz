@@ -72,9 +72,13 @@ const keepAliveUrl = ['circle'];
 
 // const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId'];
+const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId','login-user'];
 
 browserDb.setSItem('homeStatus',1);
+
+
+const Authorization = browserDb.getLItem('Authorization');
+const tokenId = browserDb.getLItem('tokenId');
 
 
 const App = new Vue({
@@ -94,58 +98,68 @@ const App = new Vue({
   watch: {
     '$route': function(to, from) {
 
-      /*if (noKeepAliveUrl.includes(from.name)) {
+      const Authorization = browserDb.getLItem('Authorization');
+      const tokenId = browserDb.getLItem('tokenId');
+
+
+
+      /*if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
-      } else if (keepAliveUrl.includes(to.name)) {
+        console.log(1);
+      } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
         this.keepAliveStatus = true;
+        console.log(2);
       } else {
+        console.log(3);
         this.keepAliveStatus = false;
+        browserDb.setSItem('homeStatus',2);
       }*/
+
 
 
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
-        // console.log(1);
-      } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
+        // console.log(11);
+      } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
-        // console.log(2);
+        // console.log(22);
       } else {
-        // console.log(3);
+        // console.log(33);
         this.keepAliveStatus = false;
         browserDb.setSItem('homeStatus',2);
       }
 
 
+      /*if (Authorization && tokenId){
 
-      // let name = this.$route.name;
-      /*if (this.status !== 0){
-
-        if (!keepAliveUrl.includes(to.name)){
+        if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
           this.keepAliveStatus = false;
-
-          if (name === 'circle') {
-            // alert('要去首页');
-            // this.keepAliveStatus = true;
-            // this.$destroy();
-            // this.status = 0;
-          }
-        }
-
-        if (from.name === 'details/:themeId') {
+          console.log(1);
+        } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
           this.keepAliveStatus = true;
+          console.log(2);
+        } else {
+          console.log(3);
+          this.keepAliveStatus = false;
+          browserDb.setSItem('homeStatus',2);
         }
 
-      }
+      } else {
 
+        if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
+          this.keepAliveStatus = false;
+          console.log(11);
+        } else if (keepAliveUrl.includes(to.name)) {
+          this.keepAliveStatus = true;
+          console.log(22);
+        } else {
+          console.log(33);
+          this.keepAliveStatus = false;
+          browserDb.setSItem('homeStatus',2);
+        }
 
-      //判断是不是第一次进入的是首页
-      if (to.name === 'circle' && this.status === 0){
-        this.status = 1;
-        this.keepAliveStatus = true;
-        //第一次进首页缓存
       }*/
-
-
+      
     }
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'

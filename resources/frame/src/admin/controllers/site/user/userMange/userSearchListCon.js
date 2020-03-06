@@ -42,7 +42,7 @@ export default {
       } else {
         this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
       }
-      this.handleGetUserList();
+      this.handleGetUserList(true);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -77,8 +77,8 @@ export default {
           throw new Error(response.errors[0].code);
         }else{
           this.total = response.meta.total;
-          this.pageNum = response.meta.pageCount;
-          this.total = response.meta ? response.meta.total : 0;
+          // this.pageNum = response.meta.pageCount;
+          // this.total = response.meta ? response.meta.total : 0;
           this.tableData = response.readdata;
         }
       } catch(err){

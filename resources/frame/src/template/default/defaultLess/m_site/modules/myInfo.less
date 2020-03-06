@@ -96,6 +96,18 @@
     border-bottom: 1PX solid @corE5;
   }
 }
+.myModifyPhone {
+  position: relative;
+  box-sizing: border-box;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid @corE5;
+  }
+}
 
 /**
   引用内容---回复内容样式
@@ -345,10 +357,6 @@ h2,h3,h4{
     line-height: 1.5;
     color: @font000;
   }
-  // .icon-longtext:before {
-  //   color: "\e634";
-  // }
-
 }
 
 

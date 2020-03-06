@@ -1,6 +1,6 @@
 <template>
     <div class="modify-phone-box">
-      <ModifyHeader title="修改手机号"></ModifyHeader>
+      <ModifyHeader v-if="headerShow" :title="titlePhone"></ModifyHeader>
       <main class="modify-phone-main content">
         <div class="modify-phone-form my-info-form">
           <van-cell-group>
@@ -8,16 +8,16 @@
               v-model="newphone"
               clearable
               label="设置新手机"
+              maxlength="13"
               placeholder="请输入新手机号"
             />
-
             <van-field
               v-model="sms"
               clearable
               label="验证码"
               placeholder="请输入验证码"
             >
-              <van-button slot="button" size="small" type="default" @click="sendSmsCodePhone">{{btnContent}}</van-button>
+              <van-button slot="button" size="small" :disabled="disabled" type="default" @click="sendSmsCodePhone">{{btnContent}}</van-button>
 
             </van-field>
 

@@ -185,7 +185,7 @@ body {
   line-height: 1.5;
   margin-bottom: 10px;
   overflow: hidden;
-  a {
+  .postConTitle {
     // display: block;
     line-height: 1.5;
     color: @font000;
@@ -620,6 +620,12 @@ openCircleConView.vue
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 14px;
+      .van-image__img {
+        display: block;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+      }
       &:last-child {
         margin-bottom: 0;
       }
@@ -799,8 +805,22 @@ openCircleConView.vue
       font-size: 14px;
       color: #444444;
       line-height: 20px;
+      a {
+        color: @main;
+      }
     }
-
+    .themeImgList {
+      .van-image {
+        display: block;
+        max-width: 100%;
+        .van-image__img {
+          display: block;
+          max-width: 100%;
+          width: auto;
+          height: auto;
+        }
+      }
+    }
     .quotePostTop {
       padding-top: 10px;
       margin-bottom: 11px;
@@ -1090,6 +1110,7 @@ details.vue
   text-align: left;
   padding-bottom: 10px;
   position: relative;
+  word-break: break-all;
   &:after {
     content: '';
     display: block;
@@ -1107,6 +1128,7 @@ details.vue
   line-height: 20px;
   padding-top: 10px;
   font-size: 15px;
+  word-break: break-all;
 }
 .payTipBox {
   margin: 30px 0;
@@ -1314,6 +1336,8 @@ details.vue
   border-bottom: 1px solid @corE5;
   width: 100%;
   position: relative;
+  padding-right: 15px;
+  box-sizing: border-box;
 }
 .paySetting {
    position: fixed;

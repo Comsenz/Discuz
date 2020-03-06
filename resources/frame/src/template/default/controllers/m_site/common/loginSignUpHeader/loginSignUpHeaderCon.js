@@ -12,7 +12,8 @@ export default {
       // username:'',
       // mobile:''
       isWeixin: false,
-      isPhone: false
+      isPhone: false,
+      viewportWidth: '',
 
     }
   },
@@ -28,6 +29,7 @@ export default {
   created() {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.viewportWidth = window.innerWidth;
   },
   methods:{
     //设置Header在pc里的宽度
@@ -43,12 +45,21 @@ export default {
     headerBack(){
       let backGo = this.$route.query.backGo;
 
-
       // this.$router.go(-1);
 
-      console.log('回退');
+      // console.log('回退');
 
-      this.$router.back(-1)
+      // this.$router.back(-1);
+
+      // alert(window.history.length);
+      if(document.referrer == '' && (window.history.length == 0 || window.history.length < 3)){
+        // alert('上一级为空时');
+        window.location.href = appConfig.baseUrl;
+      } else {
+        // alert('有上一级');
+        this.$router.go(-1);
+      }
+
 
       /*if (backGo){
         if (isNaN(parseInt(backGo))){

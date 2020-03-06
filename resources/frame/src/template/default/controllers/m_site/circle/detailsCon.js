@@ -42,9 +42,7 @@ export default {
           rewardNum: '666'
         }
       ],
-      qrcodeShow: false,
       amountNum: '',
-      codeUrl: '',
       showScreen: false,
       request: false,
       isliked: '',
@@ -69,7 +67,7 @@ export default {
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 1, //页码
+      pageIndex: 0, //页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId: '',
@@ -77,9 +75,9 @@ export default {
       collectStatus: false,
       collectFlag: '',
       postCount: 0, //回复总条数
-      postsList:'',
-      likedUsers:[],
-      rewardedUsers:[],
+      postsList: '',
+      likedUsers: [],
+      rewardedUsers: [],
       token:false,
       isWeixin: false,
       isPhone: false,
@@ -142,6 +140,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
+    this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
     this.getUser();
@@ -149,11 +148,15 @@ export default {
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
-      
     } else {
       this.themeShow = true;
-      
     };
+
+    if (browserDb.getSItem('beforeState') === 1){
+      this.$router.go(0);
+      browserDb.setSItem('beforeState',2);
+    }
+
     // if(!this.wxpay){
     //   this.twoChi = true;
     // }
@@ -170,7 +173,7 @@ export default {
       this.limitWidth('detailsFooter');
     }
   },
-  
+
   methods: {
     //判断设备，下载时提示
     downAttachment(url){
@@ -186,12 +189,12 @@ export default {
       } else {
         this.hideStyle = 'display:none';
       }
-      
+
       data.forEach((item,key)=>{
-        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username + ',' +'</a>');
+        datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join('') ;
+      datas = datas.join(',') ;
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
@@ -210,7 +213,6 @@ export default {
       this.rewardTipShow = !this.rewardTipShow;
       this.rewardTipFlag = this.rewardTipShow?'展开':'收起';
       this.limitLen = this.rewardTipShow?5:allLen;
-      
     },
     //设置底部在pc里的宽度
     limitWidth(limitId){
@@ -349,8 +351,8 @@ export default {
             } else {
               this.themeTitle = res.readdata.firstPost._data.contentHtml;
             }
-            
-            
+
+
             if (this.collectStatus) {
               this.collectFlag = '已收藏';
             } else {
@@ -368,7 +370,7 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
-            
+
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -403,6 +405,7 @@ export default {
             });
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
+            this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
@@ -516,9 +519,12 @@ export default {
     //跳转到登录页
     loginJump: function () {
       browserDb.setSItem('beforeVisiting',this.$route.path);
-      this.$router.push({
-        path: '/login-user'
-      });
+      // this.$router.push({
+      //   path: '/login-user'
+      // });
+
+      this.$router.replace({path:'/login-user'});
+
       browserDb.setLItem('themeId', this.themeId);
     },
     //跳转到注册页
@@ -551,7 +557,7 @@ export default {
             this.showScreen = false;
           }
       }
-      
+
     },
     //管理操作
     themeOpera(postsId, clickType, cateId, content) {
@@ -603,7 +609,7 @@ export default {
               path: '/edit-topic' + '/' + this.themeId
             });
           }
-          
+
         }
       }
     },
@@ -724,7 +730,7 @@ export default {
             }
           }
         }
-        
+
         let posts = 'posts/' + postId;
         this.appFetch({
           url: posts,
@@ -808,7 +814,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
               throw new Error(res.error)
             } else {
-              
+
               if(isLike){
                 // this.likedUsers = this.likedUsers.filter(value => value._data.id !== this.userId);
                 this.likedUsers.map((value, key, likedUsers) => {
@@ -976,8 +982,8 @@ export default {
               }
               this.getOrderStatus();
             },3000)
-            
-            
+
+
           })
         })
       }
@@ -1040,7 +1046,7 @@ export default {
         data:{
         },
       }).then(res=>{
-        
+
         // const orderStatus = res.readdata._data.status;
         if (res.errors){
           if (res.errors[0].detail){
@@ -1087,10 +1093,8 @@ export default {
       })
   },
 
-
   },
   mounted: function() {
-    // this.getVote();
     document.addEventListener('click',this.listenEvt, false);
   },
   destroyed: function() {

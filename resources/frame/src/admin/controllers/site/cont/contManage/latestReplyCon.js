@@ -180,7 +180,7 @@ export default {
       this.appFetch({
         url:'postBatch',
         method:'delete',
-        splice:'/' + data,
+        splice:data,
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);
@@ -199,7 +199,7 @@ export default {
       this.appFetch({
         url:'postBatch',
         method:'delete',
-        splice:'/' + id
+        splice:id
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);

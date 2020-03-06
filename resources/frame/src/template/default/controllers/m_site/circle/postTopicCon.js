@@ -215,6 +215,10 @@ export default {
     },
     //发布主题
     publish(){
+      if(this.content == '' || this.content == null){
+        this.$toast.fail('内容不能为空');
+        return;
+      }
       if(this.postsId && this.content){
         let posts = 'posts/'+this.postsId;
         this.appFetch({

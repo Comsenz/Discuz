@@ -82,7 +82,7 @@ class VerifyMobile
         $mobile = $this->mobileCode->mobile;
 
         // 判断手机号是否已经被绑定
-        if (User::where('mobile', $mobile)->exists()) {
+        if ($this->actor->mobile) {
             throw new \Exception('mobile_is_already_bind');
         }
 
@@ -98,13 +98,23 @@ class VerifyMobile
 
     protected function rebind()
     {
-        $verify = $this->mobileCodeRepository->getSmsCode($this->actor->getOriginal('mobile'), 'verify', 1);
+        $mobile = $this->mobileCode->mobile;
 
-        if ($verify && $verify->expired_at < Carbon::now()) {
-            return $this->bind();
+        $this->controller->serializer = UserSerializer::class;
+        if ($this->actor->exists) {
+            // 删除验证身份的验证码
+            MobileCode::where('mobile', $this->actor->getOriginal('mobile'))
+                ->where('type', 'verify')
+                ->where('state', 1)
+                ->where('updated_at', '<', Carbon::now()->addMinutes(10))
+                ->delete();
+
+            $this->actor->changeMobile($mobile);
+            $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
+            $this->actor->save();
+            $this->mobileCode->user = $this->actor;
         }
-
-        throw new SmsCodeVerifyException();
+        return $this->mobileCode->user;
     }
 
     protected function resetPwd()

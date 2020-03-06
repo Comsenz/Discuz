@@ -1,12 +1,12 @@
 <template>
     <div class="post-topic-box">
-      <header class="post-topic-header">
+      <header class="post-topic-header" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <span @click="backClick"  class="icon iconfont icon-back post-topic-header-icon" ></span>
         <h2 class="postHeadTit">{{headerTitle}}</h2>
         <van-button type="primary" size="mini" @click="publish">发布</van-button>
       </header>
 
-      <div class="post-topic-form">
+      <div class="post-topic-form" id="postForm">
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="replyText" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false"></textarea> -->
          <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="replyText" :maxlength="keywordsMax" @change="searchChange"@focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
 

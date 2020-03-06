@@ -5,7 +5,7 @@
 
 import ModifyHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import browserDb from '../../../../../../helpers/webDbHelper';
-
+import appCommonH from '../../../../../../helpers/commonHelper';
 
 export default {
   data:function () {
@@ -18,10 +18,13 @@ export default {
       wechatNickname:'',
       tipWx:'',
       isWeixin:'',
+      isPhone: '',
       realName:'',          //实名证明
       identity:'',          //身份证号码
       canWalletPay:'',      //钱包密码
       realNameShow:'true',      //实名认证是否显示
+      openid:'',       //微信openid
+      myModifyPhone:''
     }
   },
 
@@ -31,15 +34,22 @@ export default {
   created(){
     this.modifyData() //修改资料
     this.wechat()
-    this.isWeixin =this.appCommonH.isWeixin().isWeixin
+    this.isWeixin = appCommonH.isWeixin().isWeixin;
+    this.isPhone = appCommonH.isWeixin().isPhone;
     if(this.isWeixin){
-      this.tipWx = '确认解绑微信及退出登录'
+      this.tipWx = '确认解绑微信及退出登录';
     }else{
       this.tipWx = '确认解绑微信'
     }
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
     if(qcloud_faceid == false){
       this.realNameShow = false
+    }
+    let qcloud_sms = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    if(qcloud_sms == false){
+      this.myModifyPhone = false
+    }else{
+      this.myModifyPhone = true
     }
   },
   methods:{
@@ -184,17 +194,45 @@ export default {
         }    
       },
       wechatBind(){    //去绑定微信
-        this.appFetch({
-          url:'wechatBind',
-          method:'get',
-          data:{}
-        }).then(res=>{
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-          }else{
-          window.location.href = res.readdata._data.location
-          }
-        })
+        if(this.isWeixin){
+          this.appFetch({
+            url:'wechatBind',
+            method:'get',
+            data:{}
+          }).then(res=>{
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+            }else{
+            window.location.href = res.readdata._data.location
+            }
+          })
+        }else if(this.isPhone){
+          this.$toast.fail('请在微信客户端中进行绑定操作');
+          // this.appFetch({
+          //   url:'wechatBind',
+          //   method:'get',
+          //   data:{}
+          // }).then(res=>{
+          //   if (res.errors){
+          //     this.$toast.fail(res.errors[0].code);
+          //   }else{
+          //   window.location.href = res.readdata._data.location
+          //   }
+          // })
+        }else{
+          this.appFetch({     //pc端绑定
+            url:'wxLogin',
+            method:'get',
+            data:{}
+          }).then(res=>{
+            if (res.errors){
+              this.$toast.fail(res.errors[0].code);
+            }else{
+              window.location.href = res.readdata._data.location
+            }
+          })
+        }
+
       },
      
   }

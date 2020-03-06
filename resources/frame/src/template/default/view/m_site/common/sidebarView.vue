@@ -8,8 +8,8 @@
          <div class="userDet">
            <div class="userName" v-if="username != undefined">{{username}}</div>
            <div class="userPhone" v-if="mobile != undefined">{{mobile}}</div>
-           <span class="icon iconfont icon-right-arrow jumpJtr" style="text-align:center"></span>
          </div>
+         <span class="icon iconfont icon-right-arrow jumpJtr" style="text-align:center"></span>
        </div>
      </div>
      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">

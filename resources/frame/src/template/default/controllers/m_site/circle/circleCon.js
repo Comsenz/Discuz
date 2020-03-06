@@ -64,7 +64,9 @@ export default {
       viewportWidth: '',
       publishType: true,
       puslishCho: false,
-      rotate: false
+      rotate: false,
+      token: '',
+      userId:'',
     }
   },
   created:function(){
@@ -76,6 +78,7 @@ export default {
       this.onLoad();
       this.detailIf();
       browserDb.removeSItem('beforeVisiting');
+      this.token = browserDb.getLItem('Authorization');
   },
 
   methods: {
@@ -254,19 +257,19 @@ export default {
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
     footFix() {
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        var offsetTop = document.querySelector('#testNavBar').offsetTop;
-          if(this.loginBtnFix == true){
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      var offsetTop = document.querySelector('#testNavBar').offsetTop;
+        if(this.loginBtnFix == true){
+          this.loginHide = true;
+          if(scrollTop > offsetTop){
             this.loginHide = true;
-            if(scrollTop > offsetTop){
-              this.loginHide = true;
-            } else {
-              this.loginHide = false;
-            }
-        }
-      },
-      //筛选
-      choTheme(themeType) {
+          } else {
+            this.loginHide = false;
+          }
+      }
+    },
+    //筛选
+    choTheme(themeType) {
       // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
       // this.filterInfo.typeWo = themeType === 'isEssence' ? '精华主题' : '全部主题';
       if(themeType === 'isEssence') {
@@ -281,16 +284,16 @@ export default {
       this.themeListCon = [];
 
       this.loadThemeList(this.filterInfo.filterCondition,this.categoryId);
-      },
+    },
 
-      //点击分类
-      categoriesChoice(cateId) {
+    //点击分类
+    categoriesChoice(cateId) {
       this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition,cateId);
-      },
-      //跳转到登录页
-      loginJump:function(isWx){
+    },
+    //跳转到登录页
+    loginJump:function(isWx){
       let wxCode =this.load();
 
       const that = this;
@@ -318,72 +321,87 @@ export default {
         });
 
       }
-      },
-      postCho:function(){
-        if(this.canCreateThread){
-          // alert('跳转到发布主题页');
-          this.rotate = !this.rotate;
-          this.puslishCho = !this.puslishCho;
-        } else {
-          this.$toast.fail('没有权限，请联系站点管理员');
-        }
-
-      },
-      //发布主题
-      postTopic:function(){
-        console.log('发布');
-        this.$router.push({ path:'/post-topic',replace:true});
-      },
-      //发布长文
-      postLongText:function(){
-        console.log('发布2');
-        this.$router.push({ path:'/post-longText'});
-      },
-      /**
-      * 给导航添加点击状态
-      */
-      addClass:function(index,event){
-      this.current=index;
-      　　　　//获取点击对象
-      var el = event.currentTarget;
-       // alert("当前对象的内容："+el.innerHTML);
-      },
-      //筛选
-      bindScreen:function(){
-        //是否显示筛选内容
-        this.showScreen = !this.showScreen;
-      },
-      listenEvt(e){
-        if(this.$refs.screenBox){
-          if(!this.$refs.screenBox.contains(e.target)){
-            this.showScreen = false;
-          }
-        }
-      
-      },
-      hideScreen(){
-        //是否显示筛选内容
-        this.showScreen = false;
-      },
-      onLoad(){    //上拉加载
-      this.loading = true;
-      this.pageIndex++;
-      this.loadThemeList(this.filterCondition,this.categoryId);
-      },
-      onRefresh(){    //下拉刷新
-        this.pageIndex = 1;
-        this.themeListCon = [];
-        this.nullTip = false;
-        this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
-          this.$toast('刷新成功');
-          this.finished = false;
-          this.isLoading = false;
-        }).catch((err)=>{
-          this.$toast('刷新失败');
-          this.isLoading = false;
-        })
-      }
     },
+    postCho:function(){
+      if(this.canCreateThread){
+        // alert('跳转到发布主题页');
+        this.rotate = !this.rotate;
+        this.puslishCho = !this.puslishCho;
+      } else {
+        this.$toast.fail('没有权限，请联系站点管理员');
+      }
+
+    },
+    //发布主题
+    postTopic:function(){
+      console.log('发布');
+      this.$router.push({ path:'/post-topic',replace:true});
+    },
+    //发布长文
+    postLongText:function(){
+      console.log('发布2');
+      this.$router.push({ path:'/post-longText'});
+    },
+    
+    //给导航添加点击状态
+    addClass:function(index,event){
+    this.current=index;
+    　　　　//获取点击对象
+    var el = event.currentTarget;
+      // alert("当前对象的内容："+el.innerHTML);
+    },
+    //筛选
+    bindScreen:function(){
+      //是否显示筛选内容
+      this.showScreen = !this.showScreen;
+    },
+    listenEvt(e){
+      if(this.$refs.screenBox){
+        if(!this.$refs.screenBox.contains(e.target)){
+          this.showScreen = false;
+        }
+      }
+    
+    },
+    hideScreen(){
+      //是否显示筛选内容
+      this.showScreen = false;
+    },
+    onLoad(){    //上拉加载
+    this.loading = true;
+    this.pageIndex++;
+    this.loadThemeList(this.filterCondition,this.categoryId);
+    },
+    onRefresh(){    //下拉刷新
+      this.pageIndex = 1;
+      this.themeListCon = [];
+      this.nullTip = false;
+      this.loadThemeList(this.filterCondition,this.categoryId).then(()=>{
+        this.$toast('刷新成功');
+        this.finished = false;
+        this.isLoading = false;
+      }).catch((err)=>{
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
+    }
+  },
+  activated(){
+    this.userId = browserDb.getLItem('tokenId');
+    if(this.userId){
+      this.loginBtnFix = false;
+      this.loginHide = true;
+      // this.canEdit = true;
+      // this.searchStatus = true;
+      // this.menuStatus = true;
+    } else {
+      // this.themeChoList.splice(2,1);
+      this.loginBtnFix = true;
+      this.loginHide = false;
+      // this.canEdit = false;
+    }
+    window.addEventListener('scroll', this.footFix);
+  },
   mounted: function() {
     window.addEventListener('scroll', this.footFix);
     document.addEventListener('click',this.listenEvt);

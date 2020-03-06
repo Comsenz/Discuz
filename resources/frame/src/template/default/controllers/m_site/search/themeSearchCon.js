@@ -5,9 +5,10 @@
 export default {
   data: function () {
     return {
-      serHide: true,
-      serShow: false,
+      // serHide: true,
+      serShow: true,
       searchVal: '',
+      inputSearchVal:'',
       searchThemeList: [],
       themeLoadMorePageChange: false,
       loading: false, //是否处于加载状态
@@ -18,16 +19,25 @@ export default {
       immediateCheck: false, //是否在初始化时立即执行滚动位置检查
       pageLimit: 20,
       searchTimer: null,
+      // placeholder:'', //搜索框回填
     }
   },
   //用于数据初始化
   created: function () {
     // this.loadUserList();
-    let searchWord = '';
+    // let searchWord = '';
     if (this.$route.query && this.$route.query.searchWord) {
-      searchWord = this.$route.query.searchWord
+      this.searchVal = this.$route.query.searchWord;
+      if(this.searchVal){
+        // this.serShow = true;
+        // this.serShow = false;
+        this.onSearch(this.searchVal);
+      }else{
+      
+      }
+      // this.inputSearchVal =  this.$route.query.searchWord;
     }
-    this.onSearch(searchWord);
+    this.onSearch(this.searchVal); 
   },
   methods: {
     //搜索框切换

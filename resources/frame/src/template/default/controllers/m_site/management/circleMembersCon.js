@@ -6,8 +6,9 @@ export default {
 	data: function() {
 		return {
       	serHide:true,
-      	serShow:false,
+      	serShow:true,
 		searchVal: '',
+		inputSearchVal:'',
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
 	  	userLoadMorePageChange: false,
@@ -26,6 +27,7 @@ export default {
 	let searchWord = '';
 	if(this.$route.query && this.$route.query.searchWord){
 		searchWord = this.$route.query.searchWord
+		this.inputSearchVal =this.$route.query.searchWord
 	}
     this.onSearch(searchWord);
 	},
