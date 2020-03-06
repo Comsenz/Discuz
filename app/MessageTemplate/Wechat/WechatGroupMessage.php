@@ -5,17 +5,17 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
 use Discuz\Notifications\Messages\DatabaseMessage;
 
 /**
- * 用户角色调整通知
+ * 用户角色调整通知 - 微信
  *
  * Class GroupMessage
  * @package App\MessageTemplate
  */
-class GroupMessage extends DatabaseMessage
+class WechatGroupMessage extends DatabaseMessage
 {
     protected $tplId = 12;
 

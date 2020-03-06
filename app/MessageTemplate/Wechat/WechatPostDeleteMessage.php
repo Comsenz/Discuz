@@ -5,15 +5,15 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
 /**
- * 内容删除通知
+ * 内容删除通知 - 微信
  *
  * Class PostDeleteMessage
  * @package App\MessageTemplate
  */
-class PostDeleteMessage extends BasePostMessage
+class WechatPostDeleteMessage extends WechatMessage
 {
-    protected $tplId = 6;
+    protected $tplId = 18;
 }

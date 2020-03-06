@@ -11,6 +11,8 @@ use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
+use App\MessageTemplate\Wechat\WechatGroupMessage;
+use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\Models\Group;
 use App\Models\OperationLog;
 use App\Models\User;
@@ -162,7 +164,11 @@ class UpdateUser
                     'old' => $oldGroups,
                 ];
 
+                // 系统通知
                 $user->notify(new System(GroupMessage::class, $notifyData));
+
+                // 微信通知
+                $user->notify(new System(WechatGroupMessage::class, $notifyData));
             }
         }
 

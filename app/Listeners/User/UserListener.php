@@ -12,6 +12,7 @@ use App\Events\Users\PayPasswordChanged;
 use App\Events\Users\UserFollowCount;
 use App\Events\Users\UserRefreshCount;
 use App\MessageTemplate\StatusMessage;
+use App\MessageTemplate\Wechat\WechatStatusMessage;
 use App\Models\SessionToken;
 use App\Notifications\System;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -55,7 +56,11 @@ class UserListener
     {
         $user = $event->user;
 
+        // 系统通知
         $user->notify(new System(StatusMessage::class, ['refuse' => $event->refuse]));
+
+        // 微信通知
+        $user->notify(new System(WechatStatusMessage::class, ['refuse' => $event->refuse]));
     }
 
     public function payPasswordChanged(PayPasswordChanged $event)

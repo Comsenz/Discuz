@@ -12,13 +12,14 @@
 	"require" : {
 		"php": "^7.2",
 		"ext-json": "*",
+		"ext-pdo": "*",
 		"discuz/core": "dev-master",
 		"endroid/qr-code": "^3.6",
 		"league/omnipay": "^3.0",
 		"lokielse/omnipay-wechatpay": "^3.0",
-		"s9e/text-formatter": "^2.3",
-        "ext-pdo": "*"
-    },
+		"overtrue/wechat": "~4.0",
+		"s9e/text-formatter": "^2.3"
+	},
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",
