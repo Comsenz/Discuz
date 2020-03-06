@@ -87,6 +87,7 @@ export default {
       canEditUserGroup: false,
       canCreateInvite: false,
       noticeSum: 0,   //新通知总数
+      wxOfficial:''  //微信公众号
     }
   },
   created: function() {
@@ -144,6 +145,7 @@ export default {
         this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
         this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
         this.canCreateInvite = res.readdata._data.other.can_create_invite;
+        this.wxOfficial = res.readdata._data.passport.offiaccount_close;
         var manaObj = {
             text:'站点管理',
             name: 'management-circles',
