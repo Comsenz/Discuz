@@ -1124,7 +1124,7 @@ details.vue
   }
 }
 .longTextContent {
-  color: #555555;
+  color: #555;
   line-height: 20px;
   padding-top: 10px;
   font-size: 15px;
@@ -1138,9 +1138,9 @@ details.vue
   }
   ol {
     list-style-type: decimal;
-  }
-  ol li {
-    list-style: decimal;
+    li {
+      list-style: decimal;
+    }
   }
   h3 {
     font-size: 21px;;
@@ -1159,6 +1159,24 @@ details.vue
     padding: 3px;
     border-radius: 3px;
     font-size: 15px;
+  }
+  pre {
+    padding: 10px;
+    background: #f6f6f6;
+    border: 1px solid #ddd;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    code {
+      display: inline;
+      max-width: initial;
+      padding: 0;
+      margin: 0;
+      overflow: initial;
+      line-height: inherit;
+      word-wrap: normal;
+      background-color: transparent;
+      border: 0;
+    }
   }
 }
 .payTipBox {
