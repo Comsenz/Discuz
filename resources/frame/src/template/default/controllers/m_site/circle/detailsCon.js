@@ -386,6 +386,12 @@ export default {
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
+            this.postsList.map(post => {
+              let urls = [];
+              post.images.map(image => urls.push(image._data.url));
+              this.postsImages.push(urls);
+              
+            });
             if (firstpostImageLen === 0) {
               return;
             } else {
@@ -397,12 +403,7 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
             };
-            this.postsList.map(post => {
-              let urls = [];
-              post.images.map(image => urls.push(image._data.url));
-              this.postsImages.push(urls);
-              
-            });
+            
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
