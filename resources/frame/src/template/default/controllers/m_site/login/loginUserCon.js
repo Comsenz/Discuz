@@ -23,6 +23,7 @@ export default {
       isPC:false,            //是否PC端
       isCodeState:0,         //第一次不带参数，第二次带参数。超过两次再请求不带参数
       wxStatus:"",           //微信登录
+      siteClosed:true,      //站点关闭
     }
   },
   /*
@@ -141,9 +142,22 @@ export default {
         // if (res.errors){
         //   this.$toast.fail(res.errors[0].code);
         // } else {
-          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-          this.siteMode = res.readdata._data.set_site.site_mode;
-          browserDb.setLItem('siteInfo', res.readdata);
+
+        if (res.errors){
+          if (res.rawData[0].code === 'site_closed'){
+            this.siteClosed = false;
+            // alert('true');
+          } else {
+            this.siteClosed = true;
+          }
+
+        }
+
+        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+        this.siteMode = res.readdata._data.set_site.site_mode;
+        browserDb.setLItem('siteInfo', res.readdata);
+
+
         // }
       }).catch(err=>{
       })

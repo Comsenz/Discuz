@@ -702,14 +702,20 @@ export default {
           }
         }
       } else if(to.name === 'real-name'){
-        this.getUsers(tokenId).then(data=>{
-          if(realName === true && data.readdata._data.realname === ''){
-            next({path:'/real-name'});
-            return
-          }else{
-            next({path:'/'})
-          }
-        })
+        if (Authorization){
+          this.getUsers(tokenId).then(data=>{
+            if(realName === true && data.readdata._data.realname === ''){
+              next({path:'/real-name'});
+              return
+            }else{
+              next({path:'/'})
+            }
+          })
+        } else {
+          next({path:'/'});
+          return;
+        }
+
       } else if(to.name === 'verify-pay-pwd'){
         if (canWalletPay) {
           next();

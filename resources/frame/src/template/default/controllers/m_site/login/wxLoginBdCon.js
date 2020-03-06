@@ -212,7 +212,7 @@ export default {
     let sessionId = this.$router.history.current.query.sessionId;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     this.openid = webDb.getLItem('openid');
-    console.log('进入登录页');
+    // console.log('进入登录页');
 
 
     // webDb.setLItem('code',code);

@@ -126,7 +126,7 @@ export default {
           sessionId:sessionId,
         }
       }).then(res=>{
-        console.log(res);
+        // console.log(res);
 
         if (res.errors){
 
@@ -141,7 +141,7 @@ export default {
           }
         } else if (res.data.attributes.location) {
           //获取地址
-          console.log('获取地址');
+          // console.log('获取地址');
           this.wxurl = res.data.attributes.location;
           window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token){
@@ -225,7 +225,7 @@ export default {
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
-    console.log('进入注册页面');
+    // console.log('进入注册页面');
 
     webDb.setLItem('code',code);
     webDb.setLItem('state',state);
@@ -234,12 +234,12 @@ export default {
       this.platform = 'mp';
       if (!code && !state){
         this.getWatchHref();
-        console.log('第一次请求' + code);
-        console.log('第一次请求' + state);
+        // console.log('第一次请求' + code);
+        // console.log('第一次请求' + state);
       } else {
         this.getWatchHref(code,state,sessionId);
-        console.log('第二次请求' + code);
-        console.log('第二次请求' + state);
+        // console.log('第二次请求' + code);
+        // console.log('第二次请求' + state);
       }
     }else {
       this.platform = 'dev';
