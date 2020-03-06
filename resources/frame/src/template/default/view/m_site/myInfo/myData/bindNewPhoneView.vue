@@ -1,6 +1,6 @@
 <template>
     <div class="modify-phone-box">
-      <ModifyHeader title="绑定手机号"></ModifyHeader>
+      <ModifyHeader v-if="headerShow" :title="titlePhone"></ModifyHeader>
       <main class="modify-phone-main content">
         <div class="modify-phone-form my-info-form">
           <van-cell-group>
