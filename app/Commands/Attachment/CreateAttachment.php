@@ -114,7 +114,7 @@ class CreateAttachment
             throw new UploadException();
         }
 
-        $uploadTool->upload($this->file, 'public/attachment');
+        $uploadTool->upload($this->file, 'public/attachment' . date('/Y/m/d'));
 
         $this->events->dispatch(
             new Uploading($this->actor, $this->file)
