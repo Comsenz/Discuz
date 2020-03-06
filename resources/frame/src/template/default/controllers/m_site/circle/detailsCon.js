@@ -127,8 +127,6 @@ export default {
       rewardTipShow: true,
       payLoading: false,
       clickStatus: true,
-      instance_before: '',
-      closeStatus: false,
 
     }
   },
@@ -374,7 +372,6 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
-
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -389,27 +386,24 @@ export default {
               this.themeIsLiked = false;
             }
             // this.themeIsLiked = res.readdata.firstPost._data.isLiked;
-            var firstpostImageLen = this.themeCon.firstPost.images.length;
-            if (firstpostImageLen === 0) {
-              return;
-            } else {
-              var firstpostImage = [];
-              for (let i = 0; i < firstpostImageLen; i++) {
-                // let src = 'https://2020.comsenz-service.com/api/attachments/';
-                // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
-                firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
-              }
-              this.firstpostImageList = firstpostImage;
-            };
-            // console.log(res.readdata,'**********123');
-            // console.log(this.postsList,'&&&&&&&&&&&&&&');
+            // var firstpostImageLen = this.themeCon.firstPost.images.length;
+            // if (firstpostImageLen === 0) {
+            //   return;
+            // } else {
+            //   var firstpostImage = [];
+            //   for (let i = 0; i < firstpostImageLen; i++) {
+            //     // let src = 'https://2020.comsenz-service.com/api/attachments/';
+            //     // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
+            //     firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+            //   }
+            //   this.firstpostImageList = firstpostImage;
+            // };
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
               this.postsImages.push(urls);
               
             });
-
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
@@ -430,14 +424,12 @@ export default {
     imageSwiper(imgIndex, typeclick, replyItem) {
       if(typeclick == 'detailImg'){
         //主题详情图片预览
-        console.log('111');
         ImagePreview({
           images:this.firstpostImageList,
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-          closeOnPopstate: true
+          loop:true            //是否开启循环播放  貌似循环播放是不起作用的。。。
           // asyncClose: true,
           // onChange:function(){
           // },
@@ -450,8 +442,6 @@ export default {
         })
       } else if(typeclick == 'replyImg') {
         //主题回复图片预览
-        console.log(this.postsImages[replyItem],'~~~~~~~~~~~~~~~');
-        console.log('2222');
         ImagePreview({
           images:this.postsImages[replyItem],
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
