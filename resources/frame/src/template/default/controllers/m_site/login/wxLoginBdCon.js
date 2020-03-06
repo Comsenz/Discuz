@@ -53,12 +53,17 @@ export default {
           let tokenId = res.data.id;
           webDb.setLItem('Authorization', token);
           webDb.setLItem('tokenId', tokenId);
-
+          let beforeVisiting = webDb.getSItem('beforeVisiting');
           this.$router.push({path:webDb.getSItem('beforeVisiting')});
 
           this.getUsers(tokenId).then(res=>{
             if (res.readdata._data.paid){
-              this.$router.push({path:'/'})
+              if (beforeVisiting) {
+                this.$router.replace({path: beforeVisiting});
+                webDb.setSItem('beforeState',1);
+              } else {
+                this.$router.push({path: '/'});
+              }
             } else {
               webDb.setLItem('foregroundUser', res.data.attributes.username);
               if (this.siteMode === 'pay'){
