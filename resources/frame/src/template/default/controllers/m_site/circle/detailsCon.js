@@ -197,7 +197,7 @@ export default {
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username  +'</a>');
       });
       // return datas;
-      datas = datas.join('，') ;
+      datas = datas.join('，');
       if(this.likeLen>10){
         datas = datas + '等' + this.likeLen + '人觉得很赞';
         // datas+="<span class='foldTip'>等"+this.likeLen+"人觉得很赞</span>";
@@ -342,6 +342,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
+          console.log(res.readdata,'*****************');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -400,12 +401,15 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
             };
-
+            // console.log(res.readdata,'**********123');
+            // console.log(this.postsList,'&&&&&&&&&&&&&&');
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
               this.postsImages.push(urls);
+              
             });
+
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
@@ -426,8 +430,8 @@ export default {
     imageSwiper(imgIndex, typeclick, replyItem) {
       if(typeclick == 'detailImg'){
         //主题详情图片预览
-
-       ImagePreview({
+        console.log('111');
+        ImagePreview({
           images:this.firstpostImageList,
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
@@ -446,13 +450,14 @@ export default {
         })
       } else if(typeclick == 'replyImg') {
         //主题回复图片预览
-
+        console.log(this.postsImages[replyItem],'~~~~~~~~~~~~~~~');
+        console.log('2222');
         ImagePreview({
           images:this.postsImages[replyItem],
           startPosition:imgIndex,    //图片预览起始位置索引 默认 0
           showIndex: true,    //是否显示页码         默认 true
           showIndicators: true, //是否显示轮播指示器 默认 false
-          loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+          loop:true,           //是否开启循环播放  貌似循环播放是不起作用的。。。
           closeOnPopstate: true
         })
       }
