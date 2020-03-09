@@ -68,7 +68,7 @@ class AvatarUploader
      */
     public function remove(User $user)
     {
-        $avatarPath = $user->getOriginal('avatar');
+        $avatarPath = $user->getRawOriginal('avatar');
 
         $user->saved(function () use ($avatarPath) {
             $this->deleteFile($avatarPath);
