@@ -261,7 +261,7 @@ export default {
             "data": {
               "type": "posts",
               "attributes": {
-                "is_long_article": true,
+                "type": 1,
                 "content": this.content
               }
             }
@@ -304,7 +304,7 @@ export default {
               "attributes": {
                 "price": this.paySetValue,
                 "title": this.themeTitle,
-                "is_long_article": true,
+                "type": 1,
                 "content": this.content,
               },
               "relationships": {
