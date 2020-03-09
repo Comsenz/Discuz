@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
- * @property bool $type
+ * @property int $type
  * @property Post $firstPost
  * @property User $user
  * @property Category $category
@@ -57,6 +57,7 @@ class Thread extends Model
      * {@inheritdoc}
      */
     protected $casts = [
+        'type' => 'integer',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
     ];
