@@ -17,6 +17,7 @@ class CreateThreads extends Migration
             $table->integer('user_id')->unsigned()->nullable()->comment('创建用户 id');
             $table->integer('last_posted_user_id')->unsigned()->nullable()->comment('最后回复用户 id');
             $table->integer('category_id')->unsigned()->nullable()->comment('分类 id');
+            $table->tinyInteger('type')->unsigned()->default(0)->comment('文章类型：0普通 1长文 2视频');
             $table->string('title')->default('')->comment('标题');
             $table->decimal('price')->unsigned()->default(0)->comment('价格');
             $table->integer('post_count')->unsigned()->default(0)->comment('回复数');
@@ -28,7 +29,6 @@ class CreateThreads extends Migration
             $table->tinyInteger('is_approved')->unsigned()->default(1)->comment('是否合法');
             $table->tinyInteger('is_sticky')->unsigned()->default(0)->comment('是否置顶');
             $table->tinyInteger('is_essence')->unsigned()->default(0)->comment('是否加精');
-            $table->tinyInteger('is_long_article')->unsigned()->default(0)->comment('是否长文');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('last_posted_user_id')->references('id')->on('users')->onDelete('set null');

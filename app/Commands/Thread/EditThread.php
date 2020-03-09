@@ -98,7 +98,7 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        if (isset($attributes['price']) && $thread->is_long_article) {
+        if (isset($attributes['price']) && ($thread->type == 1)) {
             // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
             $this->assertCan($this->actor, 'rename', $thread);
 
