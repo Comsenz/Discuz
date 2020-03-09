@@ -159,7 +159,7 @@ trait ThreadNoticesTrait
      */
     public function checkOriginal($thread, $field)
     {
-        if ($thread->{$field} != $thread->getOriginal($field)) {
+        if ($thread->{$field} != $thread->getRawOriginal($field)) {
             return true;
         }
 

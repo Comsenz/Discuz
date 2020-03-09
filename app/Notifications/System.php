@@ -39,7 +39,7 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
         if ($this->message instanceof StatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getOriginal('status'));
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
         }
 
         $this->getTplData($tplId);
