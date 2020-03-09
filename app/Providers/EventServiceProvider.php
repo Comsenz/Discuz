@@ -14,6 +14,7 @@ use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
+use App\Listeners\AddApiMiddleware;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\SetDefaultPermission;
 use App\Listeners\User\BanLogin;
@@ -35,6 +36,7 @@ use App\Policies\UserPolicy;
 use App\Policies\UserWalletCashPolicy;
 use App\Policies\UserWalletLogsPolicy;
 use App\Policies\UserWalletPolicy;
+use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceProvider;
 
 class EventServiceProvider extends BaseEventServiceProvider
@@ -68,6 +70,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         GroupSaving::class => [
             ChangeDefaultGroup::class
+        ],
+        ConfigMiddleware::class => [
+            AddApiMiddleware::class
         ]
     ];
 
