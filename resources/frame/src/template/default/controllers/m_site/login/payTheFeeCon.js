@@ -151,19 +151,28 @@ export default {
         },
         function(res){
           // alert('支付唤醒');
-          // if (res.err_msg == "get_brand_wcpay_request:ok") {
-          //   alert("支付成功");
-          //   alert(res.err_msg);
-          //   resolve;
-          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-          //   alert("支付过程中用户取消");             //支付取消正常走
-          //   alert(res.err_msg);
-          //   resolve;
-          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-          //   alert("支付失败");
-          //   alert(res.err_msg);
-          //   resolve;
-          // }
+
+          if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            this.payLoading = false;
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            this.payLoading = false;
+            resolve;
+          }
+
+          /*if (res.err_msg == "get_brand_wcpay_request:ok") {
+            alert("支付成功");
+            alert(res.err_msg);
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            alert("支付过程中用户取消");             //支付取消正常走
+            alert(res.err_msg);
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            alert("支付失败");
+            alert(res.err_msg);
+            resolve;
+          }*/
 
         });
 
@@ -303,7 +312,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           this.value = '';
         } else {
-          console.log('走里面');
           this.payStatus = res.readdata._data.paid;
           this.payStatusNum = +1;
           if (this.payStatus) {
