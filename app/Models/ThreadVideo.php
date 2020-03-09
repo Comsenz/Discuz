@@ -24,18 +24,11 @@ use Illuminate\Database\Eloquent\Model;
 class ThreadVideo extends Model
 {
 
+    protected $table = 'thread_video';
+
     protected $dates = [
         'created_at',
         'updated_at',
     ];
 
-    public function thread()
-    {
-        return $this->belongsTo(Thread::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

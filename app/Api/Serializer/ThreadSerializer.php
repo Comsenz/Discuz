@@ -173,4 +173,13 @@ class ThreadSerializer extends AbstractSerializer
     {
         return $this->hasOne($thread, OperationLogSerializer::class);
     }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadVideo($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
 }
