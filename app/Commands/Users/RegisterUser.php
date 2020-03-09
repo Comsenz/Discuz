@@ -55,6 +55,7 @@ class RegisterUser
      * @param UserValidator $validator
      * @return User
      * @throws ValidationException
+     * @throws TranslatorException
      */
     public function handle(Dispatcher $events, Censor $censor, SettingsRepository $settings, UserValidator $validator)
     {
@@ -71,6 +72,15 @@ class RegisterUser
             if (!Arr::has($this->data, 'register_reason')) {
                 throw new TranslatorException('setting_fill_register_reason');
             }
+        }
+
+        // 注册验证码
+        if ((bool)$settings->get('register_captcha')) {
+            $captcha = [
+                Arr::get($this->data, 'captcha_ticket', ''),
+                Arr::get($this->data, 'captcha_rand_str', ''),
+                Arr::get($this->data, 'register_ip', ''),
+            ];
         }
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
@@ -91,7 +101,7 @@ class RegisterUser
         );
 
         //使用该验证可不传 password_confirmation参数不检测
-        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation')));
+        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha')));
 
         $user->save();
 

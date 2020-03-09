@@ -51,6 +51,8 @@ class Setting extends Model
         'qcloud_sms_app_key',
         'qcloud_sms_template_id',
         'qcloud_sms_sign',
+        'qcloud_captcha_app_id',
+        'qcloud_captcha_secret_key',
         'offiaccount_template_id', // 公众号模板推送ID
     ];
 
