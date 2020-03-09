@@ -93,7 +93,7 @@ class CreateThread
 
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
-        $thread->type = Arr::get($this->data, 'attributes.type');
+        $thread->type = Arr::get($this->data, 'attributes.type', 0);
 
         // 发布长文时记录标题及价格
         if ($thread->type == 1) {
