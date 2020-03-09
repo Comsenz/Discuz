@@ -69,7 +69,7 @@ class UserSerializer extends AbstractSerializer
         // 限制字段 本人/权限 显示
         if ($canEdit || $this->actor->id === $model->id) {
             $attributes += [
-                'originalMobile'    => $model->getOriginal('mobile'),
+                'originalMobile'    => $model->getRawOriginal('mobile'),
                 'mobileConfirmed'   => $model->mobile_confirmed,
                 'registerIp'        => $model->register_ip,
                 'lastLoginIp'       => $model->last_login_ip,

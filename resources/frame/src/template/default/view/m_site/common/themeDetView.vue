@@ -29,7 +29,7 @@
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && item._data.isSticky">取消置顶</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,4,item._data.isSticky,index)" v-if="item._data.canSticky && !item._data.isSticky">置顶</a>
 
-                      <a href="javascript:;"  @click="themeOpera(item._data.id,6,item._data.isLongArticle)" v-if="item.firstPost._data.canEdit">编辑</a>
+                      <a href="javascript:;"  @click="themeOpera(item._data.id,6,item._data.type)" v-if="item.firstPost._data.canEdit">编辑</a>
                       <a href="javascript:;"  @click="themeOpera(item._data.id,7)" v-if="item._data.canReply">回复</a>
 
                       <a href="javascript:;"  @click="themeOpera(item._data.id,5,'',index)" v-if="item._data.canDelete">删除</a>
@@ -37,14 +37,14 @@
                   </div>
                 </div>
               </div>
-              <div class="postContent listPostCon" v-if="item.firstPost && item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
+              <div class="postContent listPostCon" v-if="item.firstPost && item._data.type == 1" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <!-- <a href="javascript:;">{{item._data.title}}</a> -->
                 <span class="postConTitle">{{item._data.title}}</span>
-                <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle"></span>
-                <!-- <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle && item._data.price<=0"></span> -->
+                <span class="icon iconfont icon-longtext" v-if="item._data.type == 1"></span>
+                <!-- <span class="icon iconfont icon-longtext" v-if="item._data.type == 1 && item._data.price<=0"></span> -->
                 <!-- <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span> -->
               </div>
-              <div class="postContent" v-else-if="item.firstPost && !item._data.isLongArticle" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
+              <div class="postContent" v-else-if="item.firstPost && !item._data.type == 0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
                 <!-- <a></a> -->
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">

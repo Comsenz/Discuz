@@ -42,10 +42,16 @@
               </div>
             </div>
           </div>
-          <div class="postContent"  @click="jumpDetails(item._data.id)">
-            <a href="javascript:;" v-html="item._data.isLongArticle ? item._data.title : item.firstPost._data.contentHtml"></a>
-            <span class="icon iconfont icon-longtext" v-if="item._data.isLongArticle "></span>
+          <!-- 为普通主题时 -->
+          <div class="postContent"  @click="jumpDetails(item._data.id)" v-if="item._data.type == 0">
+            <a href="javascript:;" class="postConTitle" v-html="item.firstPost._data.contentHtml"></a>
           </div>
+          <!-- 为长文时 -->
+          <div class="postContent"  @click="jumpDetails(item._data.id)" v-if="item._data.type == 1">
+            <a href="javascript:;" class="postConTitle" v-html="item._data.title"></a>
+            <span class="icon iconfont icon-longtext" v-if="item._data.type== 1"></span>
+          </div>
+
         </div>
         <div class="searchMore" v-show="themeLoadMoreStatus" @click="handleLoadMoreTheme">
           <i class="icon iconfont icon-search"></i>

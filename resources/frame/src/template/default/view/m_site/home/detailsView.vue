@@ -8,9 +8,9 @@
     	<div class="content marBfixed" v-if="themeShow">
 		    <div class="cirPostCon">
           <!-- 普通主题内容组件 -->
-          <normalDetail v-if="themeCon._data.isLongArticle==0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
+          <normalDetail v-if="themeCon._data.type == 0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
           <!-- 付费长文内容组件 -->
-          <longTextDetail v-if="themeCon._data.isLongArticle==1" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
+          <longTextDetail v-if="themeCon._data.type == 1" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
 
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.postCount-1}}&nbsp;回复</span>
