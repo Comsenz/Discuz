@@ -74,6 +74,20 @@ export default {
               title:'通知设置',
               name:'noticeSet',
               icon:'icontongzhi',
+              submenu:[
+                {
+                  id:71,
+                  title:'系统通知',
+                  name:'noticeSet',
+                  icon:'icontongzhi',
+                },
+                {
+                  id:72,
+                  title:'微信通知',
+                  name:'noticeSet',
+                  icon:'icontongzhi',
+                },
+              ]
             },
             // {
             //   id:7,
@@ -337,9 +351,11 @@ export default {
         case 'tencentCloudSet':
           this.$router.push({path:'/admin/tencent-cloud-set'});
           break;
-          case 'noticeSet':
-            this.$router.push({path:'/admin/notice-set'});
-            break;
+        case 'noticeSet':
+          this.sideSubmenu = this.navList[1].submenu[7].submenu;
+          this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+          this.$router.push({path:'/admin/system-notice'});
+          break;
         case 'adminUserManage':
           this.$router.push({path:'/admin/user-manage-set'});
           break;
@@ -418,6 +434,15 @@ export default {
     sideSubmenuClick(title){
 
       switch (title){
+        case '系统通知':
+          this.sideSubmenuSelect = title;
+          this.$router.push({path:'/admin/system-notice'});
+          break;
+        case '微信通知':
+          this.sideSubmenuSelect = title;
+          this.$router.push({path:'/admin/wx-notice'});
+          break;
+
         case '最新主题':
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/cont-manage'});
@@ -519,6 +544,15 @@ export default {
 
       if (sideSubmenu){
         switch (sideSubmenu){
+          case '系统通知':
+            this.sideSubmenu = this.navList[1].submenu[7].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+            break;
+          case '微信通知':
+            this.sideSubmenu = this.navList[1].submenu[7].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[1].title;
+            break;
+
           case '最新主题':
             this.sideSubmenu = this.navList[3].submenu[1].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
