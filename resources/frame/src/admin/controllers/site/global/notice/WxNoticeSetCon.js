@@ -1,5 +1,5 @@
 /*
-* 用户角色控制器
+* 微信通知控制器
 * */
 
 import Card from '../../../../view/site/common/card/card';
@@ -20,8 +20,8 @@ export default {
     this.getNoticeList();
   },
   methods: {
-    getNoticeList() {   //初始化通知设置列表
-      // alert('执行');
+    getNoticeList() {
+      //初始化通知设置列表
       this.appFetch({
         url: 'noticeList',
         method: 'get',
@@ -83,7 +83,7 @@ export default {
       this.getNoticeList();
     },
     configClick(id) {  //点击配置跳到对应的配置页面
-      this.$router.push({path:'/admin/notice-configure',query: {id:id}});
+      this.$router.push({path:'/admin/notice-configure',query: {id:id,type:'wx'}});
     }
   },
 
