@@ -40,7 +40,7 @@ class ThreadVideoNotify
     {
         $this->config = $setting->tag('qcloud');
         //EditMediaComplete
-        return '';
+        return 'success';
     }
 
 }

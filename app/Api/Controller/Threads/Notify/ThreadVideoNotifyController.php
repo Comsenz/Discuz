@@ -19,7 +19,7 @@ class ThreadVideoNotifyController extends AbstractResourceController
 {
     /**
      * @var Dispatcher
-     */
+//     */
     protected $bus;
 
     /**
@@ -43,7 +43,7 @@ class ThreadVideoNotifyController extends AbstractResourceController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $log = app('log');
-        $log->info('video_notify', $request->getParsedBody());
+        $log->info('video_notify', $request->getParsedBody()->toArray());
         return $this->bus->dispatch(
             new ThreadVideoNotify($request->getParsedBody())
         );
