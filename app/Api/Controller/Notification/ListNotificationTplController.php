@@ -8,6 +8,7 @@ use App\Api\Serializer\NotificationTplSerializer;
 use App\Models\NotificationTpl;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -17,10 +18,17 @@ class ListNotificationTplController extends AbstractListController
 
     public $serializer = NotificationTplSerializer::class;
 
+    protected $tpl;
+
+    public function __construct(NotificationTpl $tpl)
+    {
+        $this->tpl = $tpl;
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return NotificationTpl[]|\Illuminate\Database\Eloquent\Collection|mixed
+     * @return mixed
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
@@ -28,6 +36,10 @@ class ListNotificationTplController extends AbstractListController
         $actor = $request->getAttribute('actor');
         $this->assertPermission($actor->isAdmin());
 
-        return NotificationTpl::all();
+        $type = Arr::get($request->getQueryParams(), 'type', 0);
+
+        $tpl = $this->tpl->where('type', $type)->get();
+
+        return $tpl;
     }
 }
