@@ -5,20 +5,19 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
 use Discuz\Notifications\Messages\DatabaseMessage;
+use Illuminate\Support\Arr;
 
 /**
- * 用户角色调整通知
+ * 根据用户状态变更 发送不同的通知 - 微信
  *
- * Class GroupMessage
+ * Class StatusMessage
  * @package App\MessageTemplate
  */
-class GroupMessage extends DatabaseMessage
+class WechatStatusMessage extends DatabaseMessage
 {
-    protected $tplId = 12;
-
     protected function titleReplaceVars()
     {
         return [];
@@ -26,13 +25,18 @@ class GroupMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        $oldGroup = $data['old'];
-        $newGroup = $data['new'];
+        $refuse = '无';
+        if (Arr::has($data, 'refuse')) {
+            if (!empty($data['refuse'])) {
+                $refuse = $data['refuse'];
+            }
+        }
 
         return [
             $this->notifiable->username,
-            $oldGroup->pluck('name')->join('、'),
-            $newGroup->pluck('name')->join('、')
+            $refuse
         ];
     }
+
+
 }

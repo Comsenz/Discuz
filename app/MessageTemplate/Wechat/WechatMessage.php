@@ -5,21 +5,21 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
-use Discuz\Foundation\Application;
+use Carbon\Carbon;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
- * 系统Post通知 - 基类
+ * 微信Post通知 - 基类
  *
- * Class BasePostMessage
- * @package App\MessageTemplate
+ * Class WechatMessage
+ * @package App\MessageTemplate\Wechat
  */
-class BasePostMessage extends DatabaseMessage
+class WechatMessage extends DatabaseMessage
 {
     protected $url;
 
@@ -35,25 +35,15 @@ class BasePostMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        /**
-         * 格式：
-         * [
-         *     'message' => '标题名'
-         *     'refuse' => '拒绝原因'
-         *     'raw' => [
-         *          'thread_id' => 1
-         *          'is_first'  => false
-         *     ]
-         * ]
-         **/
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
         $threadUrl = $this->url->to('/details/' . $threadId);
 
         return [
-            $this->notifiable->username,
-            '<a href="' . $threadUrl . '">' . Str::words($message, 10) . '</a>',
-            Arr::get($data, 'refuse', '无')
+            Str::words($message, 10),
+            Carbon::now(),
+            $threadUrl,
+            Arr::get($data, 'refuse', '无'),
         ];
     }
 }

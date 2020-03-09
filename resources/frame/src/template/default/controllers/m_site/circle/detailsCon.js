@@ -115,7 +115,7 @@ export default {
       value:'',          //密码
       // pwdVal: '',
       codeUrl:"",        //支付url，base64
-      isLongArticle: false,
+      type: false,
       userDet: '',
       hideStyle: '',
       likeTipShow: true,
@@ -347,9 +347,9 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
-            if(res.readdata._data.isLongArticle){
+            if(res.readdata._data.type == 1){
               this.themeTitle = res.readdata._data.title;
-            } else {
+            } else if(res.readdata._data.type == 0){
               this.themeTitle = res.readdata.firstPost._data.contentHtml;
             }
 
@@ -378,7 +378,7 @@ export default {
             this.likedUsers = res.readdata.firstPost.likedUsers;
             this.rewardedUsers = res.readdata.rewardedUsers;
             this.themeUserId = res.readdata.user._data.id;
-            this.isLongArticle = res.readdata._data.isLongArticle;
+            this.type = res.readdata._data.type;
             if(res.readdata.firstPost._data.isLiked){
               this.themeIsLiked = true;
             } else {
@@ -602,12 +602,12 @@ export default {
         } else {
           // content = content
           //跳转到编辑页页
-          if(this.isLongArticle){
+          if(this.type== 1){
             this.$router.replace({
               path: '/edit-long-text' + '/' + this.themeId
             });
 
-          } else {
+          } else if(this.type== 0) {
             this.$router.replace({
               path: '/edit-topic' + '/' + this.themeId
             });

@@ -83,6 +83,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'qcloud' => [
                 'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
                 'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
+                'qcloud_captcha' => (bool)$this->settings->get('qcloud_captcha', 'qcloud'),
                 'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
             ],

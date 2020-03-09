@@ -49,7 +49,7 @@ class Liked extends Notification
             'thread_id' => $this->post->thread->id,
             'thread_title' => $this->post->thread->title,
             'post_id' => $this->post->id,
-            'post_content' => $this->post->thread->is_long_article ? $this->post->thread->title : $this->post->formatContent(),
+            'post_content' => $this->post->thread->type == 1 ? $this->post->thread->title : $this->post->formatContent(),
             'user_id' => $this->actor->id,
             'user_name' => $this->actor->username,
             'user_avatar' => $this->actor->avatar ? $this->actor->avatar . '?' . Carbon::parse($this->actor->avatar_at)->timestamp : '',

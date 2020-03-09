@@ -5,22 +5,22 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Notifications\Messages\DatabaseMessage;
 
 /**
- * 新用户注册并加入后
+ * 新用户注册并加入后 - 微信
  *
  * Class RegisterMessage
- * @package App\MessageTemplate
+ * @package App\MessageTemplate\Wechat
  */
-class RegisterMessage extends DatabaseMessage
+class WechatRegisterMessage extends DatabaseMessage
 {
     protected $settings;
 
-    protected $tplId = 1;
+    protected $tplId = 13;
 
     public function __construct(SettingsRepository $settings)
     {

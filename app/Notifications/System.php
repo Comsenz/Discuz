@@ -39,22 +39,27 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
         if ($this->message instanceof StatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getOriginal('status'));
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
         }
 
         $this->getTplData($tplId);
 
         $this->message->setTplData($this->tplData);
 
-        //开启状态发送系统消息
+        // 开启状态发送系统消息
         if (!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
-            return ['database'];
+            return (array)NotificationTpl::enumType($this->tplData->type);
         }
 
         return [];
     }
 
     public function toDatabase($notifiable)
+    {
+        return $this->message->notifiable($notifiable)->template($this->data);
+    }
+
+    public function toWechat($notifiable)
     {
         return $this->message->notifiable($notifiable)->template($this->data);
     }

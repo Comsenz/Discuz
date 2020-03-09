@@ -131,7 +131,7 @@ class ListOrdersController extends AbstractListController
             $orders->load('thread.firstPost')
                 ->map(function (Order $order) {
                     if ($order->thread) {
-                        if ($order->thread->is_long_article) {
+                        if ($order->thread->type == 1) {
                             $title = Str::limit($order->thread->title, 40);
                         } else {
                             $title = Str::limit($order->thread->firstPost->content, 40);

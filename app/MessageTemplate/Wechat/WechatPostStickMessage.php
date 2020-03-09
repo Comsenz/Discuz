@@ -5,15 +5,15 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate;
+namespace App\MessageTemplate\Wechat;
 
 /**
- * 内容精华通知
+ * 内容精华通知 - 微信
  *
  * Class PostStickMessage
  * @package App\MessageTemplate
  */
-class PostStickMessage extends BasePostMessage
+class WechatPostStickMessage extends WechatMessage
 {
-    protected $tplId = 7;
+    protected $tplId = 19;
 }
