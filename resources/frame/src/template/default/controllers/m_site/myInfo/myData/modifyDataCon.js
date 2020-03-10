@@ -146,7 +146,11 @@ export default {
         data:formdata
       }).then(res=>{
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         }else{
         this.headPortrait = res.data.attributes.avatarUrl;
          this.modifyData()
