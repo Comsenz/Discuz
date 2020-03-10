@@ -49,7 +49,6 @@ export default {
     loginClick() {
       this.setStatus('啊啦啦啦');
       this.btnLoading = true;
-      console.log('点击登录');
 
       this.appFetch({
         url: "login",
