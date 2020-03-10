@@ -41,7 +41,8 @@
         </form>
 
         <div class="sign-up-btn">
-          <van-button @click="signUpClick" :loading="btnLoading" loading-text="注册中..." type="primary">注册</van-button>
+          <van-button @click="signUpClick" :loading="btnLoading" loading-text="注册中..." type="primary" v-if="signUpShow">注册</van-button>
+          <van-button loading-text="注册中..." v-else type="primary" id="TencentCaptcha" data-appid="appID" @click="initCaptcha">注册(验证码1)</van-button>
         </div>
 
       </main>
@@ -51,9 +52,11 @@
 </template>
 
 <script>
+// import TCaptcha from '../../../controllers/m_site/common/tcaptcha';
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import signUpCon from '../../../controllers/m_site/login/signUpCon';
 export default {
+  
     name: "sign-up-view",
   ...signUpCon
 }
