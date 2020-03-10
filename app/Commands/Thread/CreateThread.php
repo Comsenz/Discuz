@@ -95,7 +95,7 @@ class CreateThread
         $thread->created_at = Carbon::now();
         $thread->type = Arr::get($this->data, 'attributes.type', 0);
 
-        // 发布长文时记录标题及价格,发布视频时记录价格
+        // 发布长文时记录标题及价格，发布视频时记录价格
         if ($thread->type == 1) {
             $thread->title = $title;
         }
@@ -111,7 +111,17 @@ class CreateThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $validator->valid($thread->getAttributes());
+        // 发帖验证码
+        $captcha = [];
+        if ($this->actor->can('createThreadWithCaptcha')) {
+            $captcha = [
+                Arr::get($this->data, 'captcha_ticket', ''),
+                Arr::get($this->data, 'captcha_rand_str', ''),
+                $this->ip,
+            ];
+        }
+
+        $validator->valid($thread->getAttributes() + compact('captcha'));
 
         $thread->save();
 
@@ -125,7 +135,7 @@ class CreateThread
             throw $e;
         }
 
-        //视频主题存储相关数据
+        // 视频主题存储相关数据
         if ($thread->type == 2) {
             $threadVideo = $bus->dispatch(
                 new CreateThreadVideo($this->actor, $thread->id, $this->data)

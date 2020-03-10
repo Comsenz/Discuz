@@ -91,7 +91,7 @@ class UserValidator extends AbstractValidator
         $settingsPasswordLength = (int)$settings->get('password_length');
 
         // 获取后台设置的密码强度
-        $settingsPasswordStrength = explode(',', trim($settings->get('password_strength'), ','));
+        $settingsPasswordStrength = array_filter(explode(',', trim($settings->get('password_strength'), ',')));
 
         // 后台设置的长度大于默认长度时，使用后台设置的长度
         $this->passwordLength = $settingsPasswordLength > $this->passwordLength
@@ -144,6 +144,10 @@ class UserValidator extends AbstractValidator
             $rules['captcha'] = [
                 'sometimes',
                 function ($attribute, $value, $fail) {
+                    if (count($value) != 3) {
+                        $fail('验证码错误。');
+                    }
+
                     $result = $this->describeCaptchaResult(...$value);
 
                     if ($result['CaptchaCode'] != 1) {
