@@ -80,13 +80,14 @@ export default {
     methods: {
       noticeConfigure() {   //初始化配置列表信息
         this.appFetch({
-            url: 'noticeConfigure',
-            method: 'get',
-            splice: this.query.id,
-            data: {}
+          url: 'noticeConfigure',
+          method: 'get',
+          splice: this.query.id,
+          data: {}
         }).then(res => {
-            this.noticeTitle = res.readdata._data.title  //用户角色通知标题
-            this.noticeContent = res.readdata._data.content //用户通知内容
+          this.noticeTitle = res.readdata._data.title;  //用户角色通知标题
+          this.noticeContent = res.readdata._data.content; //用户通知内容
+          this.wxNoticeCon = res.readdata._data.template_id; //微信模板ID
         })
       },
       Submission() {     //提交按钮
@@ -102,7 +103,7 @@ export default {
         } else if (this.query.type === 'wx'){
           attributes = {
             'attributes':{
-              "title": this.wxNoticeCon
+              "template_id": this.wxNoticeCon
             }
           }
         }

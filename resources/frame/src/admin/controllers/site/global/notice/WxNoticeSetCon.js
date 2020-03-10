@@ -25,19 +25,15 @@ export default {
       this.appFetch({
         url: 'noticeList',
         method: 'get',
-        data: {}
+        data: {
+          type:1
+        }
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
           this.tableData = res.readdata;
-          // this.id = res.readdata._data.id;
           this.total = res.readdata.length;
-          // this.pageNum = res.meta.pageCount;
-          // this.total = res.meta ? res.meta.total : 0;
-          this.tableData.forEach((item) => {
-            // item.index = (currentPage-1)*pageSize+index+1
-          })
         }
       }).catch(err => {
       })

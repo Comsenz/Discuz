@@ -25,7 +25,9 @@ export default {
       this.appFetch({
         url: 'noticeList',
         method: 'get',
-        data: {}
+        data: {
+          type:0
+        }
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);

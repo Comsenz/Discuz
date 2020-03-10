@@ -7,7 +7,7 @@
 
           <el-table-column
             prop=""
-            label="编号"
+            label="序号"
             width="100">
             <template slot-scope="scope">
               <span v-text="getIndex(scope.$index)"> </span>
@@ -27,7 +27,7 @@
             align="center"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.status" class="iconfont iconicon_select" ></span>
+              <span v-if="scope.row._data.status === 1" class="iconfont iconicon_select" ></span>
               <span v-else class="iconfont iconicon_"  ></span>
             </template>
           </el-table-column>
@@ -61,12 +61,13 @@
           </el-table-column>
 
         </el-table>
-        <Page :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />
+        <Page v-if="total > 1" :total="total" :pageSize="pageLimit" :currentPage="pageNum" @current-change="handleCurrentChange" />
       </div>
     </div>
 </template>
 
 <script>
+  import '../../../../scss/site/module/globalStyle.scss';
   import systemNoticeSetCon from "../../../../controllers/site/global/notice/systemNoticeSetCon";
   export default {
     name: "systemNoticeSetView",
