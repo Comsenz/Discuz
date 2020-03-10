@@ -86,8 +86,8 @@ class CreateThread
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
 
-        // 存在审核敏感词时，将主题放入待审核
-        if ($censor->isMod) {
+        // 存在审核敏感词/发布视频主题时，将主题放入待审核
+        if ($censor->isMod || $thread->type == 2) {
             $thread->is_approved = 0;
         }
 
@@ -95,9 +95,11 @@ class CreateThread
         $thread->created_at = Carbon::now();
         $thread->type = Arr::get($this->data, 'attributes.type', 0);
 
-        // 发布长文时记录标题及价格
+        // 发布长文时记录标题及价格，发布视频时记录价格
         if ($thread->type == 1) {
             $thread->title = $title;
+        }
+        if ($thread->type != 0) {
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
         }
 
@@ -109,7 +111,17 @@ class CreateThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $validator->valid($thread->getAttributes());
+        // 发帖验证码
+        $captcha = [];
+        if ($this->actor->can('createThreadWithCaptcha')) {
+            $captcha = [
+                Arr::get($this->data, 'captcha_ticket', ''),
+                Arr::get($this->data, 'captcha_rand_str', ''),
+                $this->ip,
+            ];
+        }
+
+        $validator->valid($thread->getAttributes() + compact('captcha'));
 
         $thread->save();
 
@@ -121,6 +133,14 @@ class CreateThread
             $thread->delete();
 
             throw $e;
+        }
+
+        // 视频主题存储相关数据
+        if ($thread->type == 2) {
+            $threadVideo = $bus->dispatch(
+                new CreateThreadVideo($this->actor, $thread->id, $this->data)
+            );
+            $thread->setRelation('threadVideo', $threadVideo);
         }
 
         // 记录触发的审核词

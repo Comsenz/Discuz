@@ -74,7 +74,10 @@ class RegisterUser
             }
         }
 
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
+
         // 注册验证码
+        $captcha = [];
         if ((bool)$settings->get('register_captcha')) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
@@ -83,13 +86,11 @@ class RegisterUser
             ];
         }
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
-
         // 付费模式，默认注册时即到期
         if ($settings->get('site_mode') == 'pay') {
             $user->expired_at = Carbon::now();
         }
-        //审核模式，设置注册为审核状态
+        // 审核模式，设置注册为审核状态
         if ($settings->get('register_validate') || $censor->isMod) {
             $user->status = 2;
         }

@@ -9,7 +9,7 @@ namespace App\Api\Controller\Trade\Notify;
 
 use App\Commands\Trade\Notify\WalletPayNotify;
 use Discuz\Api\Controller\AbstractResourceController;
-use Discuz\Api\JsonApiResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,7 +38,7 @@ class WalletNotifyController extends AbstractResourceController
         $document = new Document();
         $data = $this->data($request, $document);
 
-        return new JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonApiResponse($data);
     }
 
     /**

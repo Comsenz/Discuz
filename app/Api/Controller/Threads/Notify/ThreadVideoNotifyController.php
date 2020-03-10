@@ -8,12 +8,12 @@
 namespace App\Api\Controller\Threads\Notify;
 
 use App\Commands\Thread\Notify\ThreadVideoNotify;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Discuz\Api\Controller\AbstractResourceController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Laminas\Diactoros\Response\XmlResponse;
 
 class ThreadVideoNotifyController extends AbstractResourceController
 {
@@ -37,7 +37,7 @@ class ThreadVideoNotifyController extends AbstractResourceController
     {
         $document = new Document();
         $data     = $this->data($request, $document);
-        return new XmlResponse($data);
+        return DiscuzResponseFactory::XmlResponse($data);
     }
 
     public function data(ServerRequestInterface $request, Document $document)

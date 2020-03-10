@@ -42,6 +42,7 @@ class ThreadSerializer extends AbstractSerializer
         $gate = $this->gate->forUser($this->actor);
 
         $attributes = [
+            'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
             'viewCount'         => (int) $model->view_count,
@@ -51,7 +52,6 @@ class ThreadSerializer extends AbstractSerializer
             'isApproved'        => (int) $model->is_approved,
             'isSticky'          => (bool) $model->is_sticky,
             'isEssence'         => (bool) $model->is_essence,
-            'type'              => (int) $model->type,
             'canViewPosts'      => $gate->allows('viewPosts', $model),
             'canReply'          => $gate->allows('reply', $model),
             'canApprove'        => $gate->allows('approve', $model),
@@ -172,5 +172,14 @@ class ThreadSerializer extends AbstractSerializer
     public function lastDeletedLog($thread)
     {
         return $this->hasOne($thread, OperationLogSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadVideo($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
     }
 }

@@ -22,6 +22,7 @@ use DateTimeImmutable;
 use Discuz\Api\Client;
 use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use Illuminate\Support\Arr;
@@ -35,8 +36,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Laminas\Diactoros\Response\HtmlResponse;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
@@ -70,15 +69,16 @@ class InstallController implements RequestHandlerInterface
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
         if ($this->app->isInstall()) {
-            return new HtmlResponse('已安装', 500);
+            return DiscuzResponseFactory::HtmlResponse('已安装', 500);
         }
 
-        $tablepre = Arr::get($input, 'tablePrefix', '');
-        if(strpos($tablepre, '.') !== false || intval($tablepre[0])) {
-            return new HtmlResponse('表前缀格式错误', 500);
+        $tablePrefix = Arr::get($input, 'tablePrefix', null);
+        if(preg_match("/[\.\+]+/", $tablePrefix)) {
+            return DiscuzResponseFactory::HtmlResponse('表前缀格式错误', 500);
         }
 
         try {
+            unlink($this->app->basePath('config/config.php'));
             //创建数据库
             $this->installDatabase($input);
             //创建配置文件
@@ -98,13 +98,13 @@ class InstallController implements RequestHandlerInterface
             //上报
             $this->cloudReport($input);
             //安装成功
-            @touch($this->app->storagePath().'/install.lock');
+            touch($this->app->storagePath().'/install.lock');
         } catch (Exception $e) {
-            @unlink($this->app->basePath('config/config.php'));
-            return new HtmlResponse($e->getMessage(), 500);
+            unlink($this->app->basePath('config/config.php'));
+            return DiscuzResponseFactory::HtmlResponse($e->getMessage(), 500);
         }
 
-        return new JsonResponse([
+        return DiscuzResponseFactory::JsonResponse([
             'token' => $token
         ]);
     }
@@ -128,20 +128,14 @@ class InstallController implements RequestHandlerInterface
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
         ];
-
-
         $db = $this->app->make('db');
         $this->app['config']->set(
             'database.connections',
             [
-                'mysql' => $mysqlConfig,
-                'discuz_mysql' => array_merge($mysqlConfig, [
-                    'database' => Arr::get($input, 'mysqlDatabase'),
-                    'prefix' => Arr::get($input, 'tablePrefix')
-                ])
+                'mysql' => $mysqlConfig
             ]
         );
 
@@ -160,6 +154,18 @@ class InstallController implements RequestHandlerInterface
         }
 
         $pdo->query('CREATE DATABASE IF NOT EXISTS '.Arr::get($input, 'mysqlDatabase'))->execute();
+
+        $this->app['config']->set(
+            'database.connections',
+            [
+                'mysql' => array_merge($mysqlConfig, [
+                    'database' => Arr::get($input, 'mysqlDatabase'),
+                    'prefix' => Arr::get($input, 'tablePrefix', null)
+                ])
+            ]
+        );
+
+        $db->reconnect('mysql');
     }
 
     private function installConfig($input)
@@ -167,7 +173,7 @@ class InstallController implements RequestHandlerInterface
         $host = Arr::get($input, 'mysqlHost');
         $port = 3306;
 
-        $defaultConfigFile = file_get_contents($this->app->configPath('config_default.php'));
+        $defaultConfig = file_get_contents($this->app->configPath('config_default.php'));
 
         if (Str::contains($host, ':')) {
             list($host, $port) = explode(':', $host, 2);
@@ -189,7 +195,7 @@ class InstallController implements RequestHandlerInterface
             Arr::get($input, 'mysqlPassword'),
             Arr::get($input, 'tablePrefix', ''),
             Arr::get($input, 'site_url'),
-        ], $defaultConfigFile);
+        ], $defaultConfig);
 
         file_put_contents($this->app->configPath('config.php'), $stub);
     }
@@ -208,12 +214,12 @@ class InstallController implements RequestHandlerInterface
 
     private function installInitMigrate()
     {
-        $this->getConsole()->call('migrate', ['--force' => true, '--database' => 'discuz_mysql']);
+        $this->getConsole()->call('migrate', ['--force' => true]);
     }
 
     private function installInItData()
     {
-        $this->getConsole()->call('db:seed', ['--force' => true, '--database' => 'discuz_mysql']);
+        $this->getConsole()->call('db:seed', ['--force' => true]);
     }
 
     private function installSiteSetting($input)
