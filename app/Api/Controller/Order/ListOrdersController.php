@@ -38,6 +38,7 @@ class ListOrdersController extends AbstractListController
      */
     public $include = [
         'user',
+        'payee'
     ];
 
     /**

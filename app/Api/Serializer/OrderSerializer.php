@@ -46,6 +46,15 @@ class OrderSerializer extends AbstractSerializer
      * @param $order
      * @return Relationship
      */
+    protected function payee($order)
+    {
+        return $this->hasOne($order, UserSerializer::class);
+    }
+
+    /**
+     * @param $order
+     * @return Relationship
+     */
     protected function thread($order)
     {
         return $this->hasOne($order, ThreadSerializer::class);
