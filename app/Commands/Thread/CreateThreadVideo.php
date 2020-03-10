@@ -7,9 +7,9 @@
 
 namespace App\Commands\Thread;
 
-use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
+use App\Repositories\ThreadRepository;
 use App\Settings\SettingsRepository;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -63,12 +63,12 @@ class CreateThreadVideo
     /**
      * @param EventDispatcher $events
      * @param SettingsRepository $settings
-     * @param Thread $thread
+     * @param ThreadRepository $thread
      * @param ThreadVideo $threadVideo
      * @return ThreadVideo
      * @throws PermissionDeniedException
      */
-    public function handle(EventDispatcher $events, SettingsRepository $settings, Thread $thread, ThreadVideo $threadVideo)
+    public function handle(EventDispatcher $events, SettingsRepository $settings, ThreadRepository $thread, ThreadVideo $threadVideo)
     {
         $this->events = $events;
 
