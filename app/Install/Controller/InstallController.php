@@ -22,6 +22,7 @@ use DateTimeImmutable;
 use Discuz\Api\Client;
 use Discuz\Console\Kernel;
 use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use Illuminate\Support\Arr;
@@ -35,8 +36,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use RangeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Laminas\Diactoros\Response\HtmlResponse;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class InstallController implements RequestHandlerInterface
 {
@@ -70,12 +69,12 @@ class InstallController implements RequestHandlerInterface
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
         if ($this->app->isInstall()) {
-            return new HtmlResponse('已安装', 500);
+            return DiscuzResponseFactory::HtmlResponse('已安装', 500);
         }
 
         $tablepre = Arr::get($input, 'tablePrefix', '');
         if(strpos($tablepre, '.') !== false || intval($tablepre[0])) {
-            return new HtmlResponse('表前缀格式错误', 500);
+            return DiscuzResponseFactory::HtmlResponse('表前缀格式错误', 500);
         }
 
         try {
@@ -101,10 +100,10 @@ class InstallController implements RequestHandlerInterface
             @touch($this->app->storagePath().'/install.lock');
         } catch (Exception $e) {
             @unlink($this->app->basePath('config/config.php'));
-            return new HtmlResponse($e->getMessage(), 500);
+            return DiscuzResponseFactory::HtmlResponse($e->getMessage(), 500);
         }
 
-        return new JsonResponse([
+        return DiscuzResponseFactory::JsonResponse([
             'token' => $token
         ]);
     }

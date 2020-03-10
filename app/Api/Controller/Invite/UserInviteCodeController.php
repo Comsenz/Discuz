@@ -8,7 +8,7 @@
 namespace App\Api\Controller\Invite;
 
 use App\Exceptions\NoUserException;
-use Discuz\Api\JsonApiResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -35,6 +35,6 @@ class UserInviteCodeController implements RequestHandlerInterface
             ],
         ];
 
-        return new JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonApiResponse($data);
     }
 }

@@ -12,11 +12,11 @@ use App\Models\Permission;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Laminas\Diactoros\Response\EmptyResponse;
 
 class UpdateGroupPermissionController extends AbstractListController
 {
@@ -40,7 +40,7 @@ class UpdateGroupPermissionController extends AbstractListController
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return mixed|EmptyResponse
+     * @return mixed
      * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
@@ -75,6 +75,6 @@ class UpdateGroupPermissionController extends AbstractListController
 
         Permission::insert($permissions);
 
-        return new EmptyResponse();
+        return DiscuzResponseFactory::EmptyResponse();
     }
 }
