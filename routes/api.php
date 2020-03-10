@@ -29,6 +29,7 @@ $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
+$route->get('/signature', 'signature', ApiController\Qcloud\CreateSignatureController::class);
 
 /*
 |--------------------------------------------------------------------------
