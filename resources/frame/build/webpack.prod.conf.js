@@ -47,9 +47,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         parallel: true,
         sourceMap: true,
         terserOptions: {
-          ecma: undefined,
-          warnings: false,
-          parse: {},
+          // ecma: undefined,
+          // warnings: false,
+          // parse: {},
           // compress: {
           //   drop_console: true,
           //   drop_debugger: false,
