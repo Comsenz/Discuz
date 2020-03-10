@@ -17,7 +17,7 @@ module.exports = {
             changeOrigin: true,
             secure: false,
             pathRewrite: {
-               '^/api': '/'
+               '^/api': ''
             },
             bypass: function(req, res, proxyOptions) {
               if (req.headers.accept.indexOf("html") !== -1) {

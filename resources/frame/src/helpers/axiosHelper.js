@@ -147,11 +147,11 @@ const appFetch = function(params, options) {
   if(process.env.NODE_ENV === 'development') {
     params.baseURL = "/api";
     params.url = apiUrl;
-    // console.log(params.url);
+    console.log('dev' + params.url);
   } else {
     params.baseURL = "";
     params.url = appConfig.apiBaseUrl + apiUrl;
-    // console.log(params.url);
+    console.log('pro' + params.url);
   }
 
   params.withCredentials = true;
