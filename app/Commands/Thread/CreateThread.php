@@ -91,6 +91,12 @@ class CreateThread
             $thread->is_approved = 0;
         }
 
+        //视频文件校验
+        $file_id = Arr::get($this->data, 'attributes.file_id');
+        if ($thread->type == 2 && !$file_id) {
+            throw new ValidationException;
+        }
+
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
         $thread->type = Arr::get($this->data, 'attributes.type', 0);
