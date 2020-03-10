@@ -144,7 +144,6 @@ const appFetch = function(params, options) {
   }
 
   //如果是本地请求，就走接口代理
-  console.log(process.env.NODE_ENV);
   if(process.env.NODE_ENV === 'development') {
     params.baseURL = "/api";
     params.url = apiUrl;
