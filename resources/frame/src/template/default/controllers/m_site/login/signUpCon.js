@@ -146,7 +146,7 @@ export default {
     },
     //验证码
     initCaptcha() {
-      let tct = new TencentCaptcha(this.appID, function(res){
+      let tct = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
