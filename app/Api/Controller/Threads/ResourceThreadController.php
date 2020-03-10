@@ -47,6 +47,7 @@ class ResourceThreadController extends AbstractResourceController
     public $include = [
         'user',
         'firstPost',
+        'threadVideo',
         'firstPost.images',
         'firstPost.attachments',
         'posts',

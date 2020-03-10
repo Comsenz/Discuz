@@ -9,12 +9,12 @@ namespace App\Api\Controller\Ucenter;
 
 use App\Ucenter\Authcode;
 use App\Ucenter\Client;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\HtmlResponse;
 
 class UcenterController implements RequestHandlerInterface
 {
@@ -53,7 +53,7 @@ class UcenterController implements RequestHandlerInterface
         } else {
             $content = self::API_RETURN_FAILED;
         }
-        return new HtmlResponse((string)$content);
+        return DiscuzResponseFactory::HtmlResponse((string)$content);
     }
 
     protected function test($get, $post)

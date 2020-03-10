@@ -19,7 +19,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
-use Laminas\Diactoros\UploadedFile;
+use Nyholm\Psr7\UploadedFile;
 
 class UploadAvatar
 {

@@ -21,7 +21,8 @@ class NotificationTplSerializer extends AbstractSerializer
             'type_name' => $model->type_name,
             'title' => $model->title,
             'content' => $model->content,
-            'vars' => unserialize($model->vars)
+            'vars' => unserialize($model->vars),
+            'template_id' => $model->template_id,
         ];
     }
 }

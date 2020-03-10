@@ -7,9 +7,9 @@
 
 namespace App\Api\Controller\Wallet;
 
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
-use Discuz\Api\JsonApiResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -29,7 +29,7 @@ class UserWalletCashReviewController implements RequestHandlerInterface
     {
         $this->bus = $bus;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -37,7 +37,7 @@ class UserWalletCashReviewController implements RequestHandlerInterface
     {
         // TODO: User $actor 用户模型
         $actor = $request->getAttribute('actor');
-        
+
         // 获取请求的IP
         $ip_address = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
         $result = $this->bus->dispatch(
@@ -49,6 +49,6 @@ class UserWalletCashReviewController implements RequestHandlerInterface
                 'result' => $result
             ],
         ];
-        return new JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonApiResponse($data);
     }
 }

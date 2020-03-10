@@ -64,7 +64,7 @@ class System extends Notification
         return $this->message->notifiable($notifiable)->template($this->data);
     }
 
-    protected function getTplData($id)
+    public function getTplData($id)
     {
         return $this->tplData ? $this->tplData : $this->tplData = NotificationTpl::find($id);
     }

@@ -95,9 +95,11 @@ class CreateThread
         $thread->created_at = Carbon::now();
         $thread->type = Arr::get($this->data, 'attributes.type', 0);
 
-        // 发布长文时记录标题及价格
+        // 发布长文时记录标题及价格,发布视频时记录价格
         if ($thread->type == 1) {
             $thread->title = $title;
+        }
+        if ($thread->type != 0) {
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
         }
 
@@ -121,6 +123,14 @@ class CreateThread
             $thread->delete();
 
             throw $e;
+        }
+
+        //视频主题存储相关数据
+        if ($thread->type == 2) {
+            $threadVideo = $bus->dispatch(
+                new CreateThreadVideo($this->actor, $thread->id, $this->data)
+            );
+            $thread->setRelation('threadVideo', $threadVideo);
         }
 
         // 记录触发的审核词

@@ -15,7 +15,7 @@ class CreatePosts extends Migration
         $this->schema()->create('posts', function (Blueprint $table) {
             $table->increments('id')->comment('回复 id');
             $table->integer('user_id')->unsigned()->nullable()->comment('发表用户 id');
-            $table->integer('thread_id')->unsigned()->nullable()->comment('关联主题 id');
+            $table->integer('thread_id')->unsigned()->nullable()->index()->comment('关联主题 id');
             $table->integer('reply_post_id')->unsigned()->nullable()->comment('回复 id');
             $table->integer('reply_user_id')->unsigned()->nullable()->comment('回复用户 id');
             $table->text('content')->nullable()->comment('内容');

@@ -37,6 +37,8 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
+        'createThreadVideo' => [10],                 // 发布主题
+
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情
