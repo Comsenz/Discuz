@@ -152,7 +152,9 @@ const appFetch = function(params, options) {
   } else {
     params.baseURL = "";
     params.url = appConfig.apiBaseUrl + apiUrl;
-    console.log('pro' + params.url);
+    console.log(appConfig.apiBaseUrl);
+    console.log(apiUrl);
+    console.log('pro：' + params.url);
   }
 
   params.withCredentials = true;
