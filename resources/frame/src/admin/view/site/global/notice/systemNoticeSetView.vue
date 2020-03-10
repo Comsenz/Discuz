@@ -15,7 +15,7 @@
           </el-table-column>
 
           <el-table-column
-            prop="_data.title"
+            prop="_data.type_name"
             label="通知类型"
           >
           </el-table-column>

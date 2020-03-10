@@ -276,7 +276,6 @@ export default {
       //查看:/details/140  带id
       //编辑：/reply-to-topic  隐藏传入内容，带id
       //回帖：replyId
-
       let routeData = this.$router.resolve({
         path: "/details/" + id,
       });
