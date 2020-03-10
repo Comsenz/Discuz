@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 /**
  * 微信Post通知 - 基类
@@ -40,7 +39,7 @@ class WechatMessage extends DatabaseMessage
         $threadUrl = $this->url->to('/details/' . $threadId);
 
         return [
-            Str::words($message, 10),
+            $this->strWords($message),
             Carbon::now(),
             $threadUrl,
             Arr::get($data, 'refuse', '无'),

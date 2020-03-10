@@ -52,7 +52,7 @@ class BasePostMessage extends DatabaseMessage
 
         return [
             $this->notifiable->username,
-            '<a href="' . $threadUrl . '">' . Str::words($message, 10) . '</a>',
+            '<a href="' . $threadUrl . '">' . $this->strWords($message) . '</a>',
             Arr::get($data, 'refuse', '无')
         ];
     }
