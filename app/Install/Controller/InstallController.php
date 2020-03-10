@@ -73,8 +73,8 @@ class InstallController implements RequestHandlerInterface
             return new HtmlResponse('已安装', 500);
         }
 
-        $tablepre = Arr::get($input, 'tablePrefix', '');
-        if(strpos($tablepre, '.') !== false || intval($tablepre[0])) {
+        $tablePrefix = Arr::get($input, 'tablePrefix', null);
+        if(preg_match("/[\.\+]+/", $tablePrefix)) {
             return new HtmlResponse('表前缀格式错误', 500);
         }
 
@@ -128,7 +128,7 @@ class InstallController implements RequestHandlerInterface
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
         ];
 
@@ -140,7 +140,7 @@ class InstallController implements RequestHandlerInterface
                 'mysql' => $mysqlConfig,
                 'discuz_mysql' => array_merge($mysqlConfig, [
                     'database' => Arr::get($input, 'mysqlDatabase'),
-                    'prefix' => Arr::get($input, 'tablePrefix')
+                    'prefix' => Arr::get($input, 'tablePrefix', '')
                 ])
             ]
         );
