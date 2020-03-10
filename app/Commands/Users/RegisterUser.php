@@ -77,12 +77,13 @@ class RegisterUser
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
 
         // 注册验证码
+        $captcha = [];
         if ((bool)$settings->get('register_captcha')) {
-            $user->setAttribute('captcha', [
+            $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
                 Arr::get($this->data, 'captcha_rand_str', ''),
                 Arr::get($this->data, 'register_ip', ''),
-            ]);
+            ];
         }
 
         // 付费模式，默认注册时即到期
@@ -101,7 +102,7 @@ class RegisterUser
         );
 
         //使用该验证可不传 password_confirmation参数不检测
-        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation')));
+        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha')));
 
         $user->save();
 

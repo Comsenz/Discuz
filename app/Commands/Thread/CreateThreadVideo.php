@@ -76,11 +76,13 @@ class CreateThreadVideo
 
         $threadVideo->user_id = $this->actor->id;
         $threadVideo->thread_id = $thread->id;
+        $threadVideo->status = $threadVideo::VIDEO_STATUS_TRANSCODING;
         $threadVideo->file_id   = Arr::get($this->data, 'attributes.file_id');
         $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url');
         $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url');
 
         $threadVideo->save();
+        //调取腾讯云点播转码API
 
         return $threadVideo;
     }
