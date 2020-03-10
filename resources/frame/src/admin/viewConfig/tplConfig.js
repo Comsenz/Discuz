@@ -118,14 +118,27 @@ export default {
             }
           },
 
-          'notice-set': {
+          'wx-notice': {
             comLoad: function (resolve) {
-              require(['../view/site/global/notice/noticeSetView'], resolve)
+              require(['../view/site/global/notice/WxNoticeSetView'], resolve)
             },
             metaInfo: {
               title: '通知设置',
               name:'noticeSet',
-              attribution:'全局'
+              attribution:'全局',
+              alias:'微信通知'
+            }
+          },
+
+          'system-notice':{
+            comLoad:function (resolve) {
+              require(['../view/site/global/notice/systemNoticeSetView'],resolve)
+            },
+            metaInfo:{
+              title:'通知设置',
+              name:'noticeSet',
+              attribution:'全局',
+              alias:'系统通知'
             }
           },
 
@@ -139,6 +152,7 @@ export default {
               attribution:'全局'
             }
           },
+
           'tencent-cloud-set': {
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudSetView'], resolve)
@@ -172,6 +186,16 @@ export default {
           'tencent-cloud-config/cos':{
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCosView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+          'tencent-cloud-config/code':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCodeView'], resolve)
             },
             metaInfo: {
               title: '腾讯云设置',

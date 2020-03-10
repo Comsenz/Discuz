@@ -13,6 +13,12 @@
       </CardRow>
     </Card>
 
+    <Card header="启用验证码：">
+      <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
+        <el-checkbox v-model="register_captcha" :disabled='disabled'>新用户注册启用验证码</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="注册密码最小长度：">
       <CardRow description="新用户注册时密码最小长度，0或不填为不限制">
         <el-input v-model="pwdLength" type="number"  clearable></el-input>

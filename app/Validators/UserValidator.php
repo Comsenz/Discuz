@@ -10,10 +10,13 @@ namespace App\Validators;
 use App\Models\User;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
+use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Validation\Factory;
 
 class UserValidator extends AbstractValidator
 {
+    use QcloudTrait;
+
     /**
      * @var User
      */
@@ -23,6 +26,13 @@ class UserValidator extends AbstractValidator
      * @var SettingsRepository
      */
     protected $settings;
+
+    /**
+     * 腾讯云验证码开关。
+     *
+     * @var bool
+     */
+    protected $qCloudCaptchaSwitch = false;
 
     /**
      * The default minimum password length.
@@ -74,11 +84,14 @@ class UserValidator extends AbstractValidator
 
         $this->settings = $settings;
 
+        // 获取后台设置的腾讯云验证码开关
+        $this->qCloudCaptchaSwitch = (bool)$settings->get('qcloud_captcha', 'qcloud');
+
         // 获取后台设置的密码长度
-        $settingsPasswordLength = (int) $settings->get('password_length');
+        $settingsPasswordLength = (int)$settings->get('password_length');
 
         // 获取后台设置的密码强度
-        $settingsPasswordStrength = explode(',', trim($settings->get('password_strength'), ','));
+        $settingsPasswordStrength = array_filter(explode(',', trim($settings->get('password_strength'), ',')));
 
         // 后台设置的长度大于默认长度时，使用后台设置的长度
         $this->passwordLength = $settingsPasswordLength > $this->passwordLength
@@ -117,13 +130,31 @@ class UserValidator extends AbstractValidator
             'identity' => [
                 'required',
                 'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/',
-             ],
+            ],
             'realname' => 'required',
         ];
 
         if ($this->user) {
             $rules['password'][] = 'confirmed';
             $rules['pay_password_token'] .= ',' . ($this->user ? $this->user->id : null);
+        }
+
+        // 当腾讯云验证码开启时，且数据中有 captcha 时，检查验证码
+        if ($this->qCloudCaptchaSwitch) {
+            $rules['captcha'] = [
+                'sometimes',
+                function ($attribute, $value, $fail) {
+                    if (count($value) != 3) {
+                        $fail('验证码错误。');
+                    }
+
+                    $result = $this->describeCaptchaResult(...$value);
+
+                    if ($result['CaptchaCode'] != 1) {
+                        $fail('验证码错误。');
+                    }
+                },
+            ];
         }
 
         return $rules;
@@ -135,8 +166,8 @@ class UserValidator extends AbstractValidator
     protected function getMessages()
     {
         $messages = [
-            'username.regex' => '不能有特殊字符',
-            'identity.regex' => '身份证为15位或18位',
+            'username.regex' => '用户名不能有特殊字符。',
+            'identity.regex' => '身份证为 15 位或 18 位。',
         ];
 
         // 密码强度

@@ -48,6 +48,13 @@ export default {
           status:'',
           icon:'iconduixiangcunchu',
           setFlag: true
+        },{
+          name: '验证码',
+          type:'qcloud_captcha',
+          description: '请先配置云API，开通腾讯云的验证码服务',
+          status:'',
+          icon:'iconyanzhengma',
+          setFlag: true
         }
 
       ]
@@ -68,6 +75,8 @@ export default {
         case 'qcloud_cos':
           this.$router.push({path:'/admin/tencent-cloud-config/cos',query: {type:type}});
           break;
+        case 'qcloud_captcha':
+          this.$router.push({path:'/admin/tencent-cloud-config/code',query:{type:type}})
         default:
           this.loginStatus = 'default';
       }
@@ -111,6 +120,11 @@ export default {
           } else {
             this.tableData[5].status = false
           }
+          if (res.readdata._data.qcloud.qcloud_captcha) {
+            this.tableData[6].status = true
+          } else {
+            this.tableData[6].status = false
+          }
         }
       })
     },
@@ -121,12 +135,14 @@ export default {
         this.changeSettings('qcloud_cms_image',status);
       } else if(type == 'qcloud_cms_text') {
         this.changeSettings('qcloud_cms_text',status);
-      }else if(type == 'qcloud_sms'){
+      } else if(type == 'qcloud_sms'){
         this.changeSettings('qcloud_sms',status);
-      }else if(type == 'qcloud_faceid'){
+      } else if(type == 'qcloud_faceid'){
         this.changeSettings('qcloud_faceid',status);
-      }else if(type == 'qcloud_cos'){
+      } else if(type == 'qcloud_cos'){
         this.changeSettings('qcloud_cos',status);
+      } else if(type == 'qcloud_captcha'){
+        this.changeSettings('qcloud_captcha',status);
       }
 
 

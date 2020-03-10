@@ -14,6 +14,7 @@ use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -22,7 +23,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Laminas\Diactoros\Response\EmptyResponse;
 use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
@@ -108,7 +108,7 @@ class SetSettingsController implements RequestHandlerInterface
 
         $this->siteRevManifest->put('settings', $this->settings->all());
 
-        return new EmptyResponse(204);
+        return DiscuzResponseFactory::EmptyResponse(204);
     }
 
     /**

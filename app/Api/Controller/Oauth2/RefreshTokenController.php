@@ -22,7 +22,7 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Laminas\Diactoros\Response;
+use Nyholm\Psr7\Response;
 
 class RefreshTokenController extends AbstractResourceController
 {

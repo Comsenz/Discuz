@@ -118,6 +118,8 @@ class ForumSettingField
             'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
             'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
+            'qcloud_captcha_app_id' => $this->settings->get('qcloud_captcha_app_id', 'qcloud'),
+            'qcloud_captcha_secret_key' => $this->settings->get('qcloud_captcha_secret_key', 'qcloud'),
             'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
             'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
             'qcloud_faceid_region' => (bool)$this->settings->get('qcloud_faceid_region', 'qcloud'),

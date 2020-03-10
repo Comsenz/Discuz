@@ -46,7 +46,7 @@ import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 import axios from 'axios';
 Vue.prototype.axios = axios;
 Vue.prototype.$moment = moment;//时间转换-赋值使用
-Vue.config.devtools = false;
+Vue.config.devtools = true;
 moment.locale('zh-cn');//时间转换-需要汉化
 
 Vue.use(VueLazyload, {
@@ -159,7 +159,7 @@ const App = new Vue({
         }
 
       }*/
-      
+
     }
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'

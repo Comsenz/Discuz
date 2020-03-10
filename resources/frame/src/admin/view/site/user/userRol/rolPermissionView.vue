@@ -138,6 +138,12 @@
       </CardRow>
     </Card>
 
+    <Card>
+      <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
+        <el-checkbox v-model="checked" label="user.edit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发表内容时启用验证码</el-checkbox>
+      </CardRow>
+    </Card>
+
    <!-- <Card header="权限限制："></Card>
     <Card>
       <CardRow description="发布主题，后台管理员审核后，前台才可显示">
