@@ -86,8 +86,8 @@ class CreateThread
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
 
-        // 存在审核敏感词时，将主题放入待审核
-        if ($censor->isMod) {
+        // 存在审核敏感词/发布视频主题时，将主题放入待审核
+        if ($censor->isMod || $thread->type == 2) {
             $thread->is_approved = 0;
         }
 

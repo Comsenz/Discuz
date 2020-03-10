@@ -26,6 +26,8 @@ class ThreadVideoSerializer extends AbstractSerializer
             'id'             => $model->id,
             'user_id'        => $model->user_id,
             'thread_id'      => $model->thread_id,
+            'status'        => $model->status,
+            'reason'        => $model->reason,
             'file_id'        => $model->file_id,
             'media_url'      => $model->media_url,
             'cover_url'      => $model->cover_url,
