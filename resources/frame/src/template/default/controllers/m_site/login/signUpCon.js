@@ -19,8 +19,10 @@ export default {
 
       phoneStatus: '',       //绑定手机号状态
       siteMode: '',          //站点是否付费
-      signUpShow: true,        //触发弹出验证码的
-      appID: ''
+      signUpShow: true,      //触发弹出验证码的
+      appID: '',             //腾讯云验证码场景 id
+      captcha_ticket: '',    //腾讯云验证码返回票据
+      captcha_rand_str: ''   //腾讯云验证码返回随机字符串
     }
   },
 
@@ -79,6 +81,7 @@ export default {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
+          this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
           browserDb.setLItem('siteInfo', res.readdata);
           if (res.readdata._data.qcloud.qcloud_captcha) {
             this.signUpShow = false
@@ -97,7 +100,9 @@ export default {
             "attributes": {
               username: this.username,
               password: this.password,
-              register_reason: this.signReason
+              register_reason: this.signReason,
+              captcha_ticket: this.captcha_ticket,
+              captcha_rand_str: this.captcha_rand_str
             },
           }
         }
@@ -141,19 +146,20 @@ export default {
     },
     //验证码
     initCaptcha() {
-      if (window.TencentCaptcha === undefined) {
-        let script = document.createElement('script')
-        let head = document.getElementsByTagName('head')[0]
-        script.type = 'text/javascript'
-        script.charset = 'UTF-8'
-        script.src = 'https://ssl.captcha.qq.com/TCaptcha.js'
-        head.appendChild(script)
-      }
+      let tct = new TencentCaptcha(this.appID, function(res){
+        if (res.ret === 0) {
+          this.captcha_ticket = res.ticket;
+          this.captcha_rand_str = res.randstr;
+          //验证通过后注册
+          this.setSignData();
+        }
+      })
+
+      // 显示验证码
+      tct.show();
     },
   },
   created() {
     this.getForum();
-    this.initCaptcha()
-  },
-  mounthed() { }
+  }
 }

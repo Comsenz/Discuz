@@ -141,7 +141,7 @@
     <Card header="安全设置："></Card>
     <Card>
       <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
-        <el-checkbox v-model="checked" label="user.edit" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发表内容时启用验证码</el-checkbox>
+        <el-checkbox v-model="checked" label="createThreadWithCaptcha" :disabled="disabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发表内容时启用验证码</el-checkbox>
       </CardRow>
     </Card>
 

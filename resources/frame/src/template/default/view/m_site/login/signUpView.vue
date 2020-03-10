@@ -42,7 +42,7 @@
 
         <div class="sign-up-btn">
           <van-button @click="signUpClick" :loading="btnLoading" loading-text="注册中..." type="primary" v-if="signUpShow">注册</van-button>
-          <van-button :loading="btnLoading" loading-text="注册中..." type="primary" v-else id="TencentCaptcha" data-appid="2045086792" :data-cbfn="callback">注册(验证码)</van-button>
+          <van-button loading-text="注册中..." v-else type="primary" id="TencentCaptcha" data-appid="appID" @click="initCaptcha">注册(验证码1)</van-button>
         </div>
 
       </main>
