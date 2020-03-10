@@ -12,55 +12,66 @@ export default {
         noticeContent: '',    //用户通知内容
         query: '',            //获取当前用户的ID
         wxNoticeDescription:{
-          13:"当前标题加br标签换行:<br>\n" +
+          13:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
             "{{first.DATA}}\n" +
             "用户名：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{{remark.DATA}}\n",
-          14:'{{first.DATA}}\n' +
-            '用户名：{{keyword1.DATA}}\n' +
-            '时间：{{keyword2.DATA}}\n' +
-            '{{remark.DATA}}',
-          15:"{{first.DATA}}\n" +
+          14:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "用户名：{{keyword1.DATA}}\n" +
+            "时间：{{keyword2.DATA}}\n" +
+            "{{remark.DATA}}",
+          15:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "用户名：{{keyword1.DATA}}\n" +
             "原因：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          16:"{{first.DATA}}\n" +
+          16:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          17:"{{first.DATA}}\n" +
+          17:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "原因：{{keyword2.DATA}}\n" +
             "时间：{{keyword3.DATA}}\n" +
             "{{remark.DATA}}",
-          18:"{{first.DATA}}\n" +
+          18:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "原因：{{keyword2.DATA}}\n" +
             "时间：{{keyword3.DATA}}\n" +
             "{{remark.DATA}}",
-          19:"{{first.DATA}}\n" +
+          19:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          20:"{{first.DATA}}\n" +
+          20:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          21:"{{first.DATA}}\n" +
+          21:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "内容：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          22:"{{first.DATA}}\n" +
+          22:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "用户名：{{keyword1.DATA}}\n" +
             "原因：{{keyword2.DATA}}\n" +
             "时间：{{keyword3.DATA}}\n" +
             "{{remark.DATA}}",
-          23:"{{first.DATA}}\n" +
+          23:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "用户名：{{keyword1.DATA}}\n" +
             "时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-          24:"{{first.DATA}}\n" +
+          24:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
             "用户名：{{keyword1.DATA}}\n" +
             "原角色：{{keyword2.DATA}}\n" +
             "新角色：{{keyword2.DATA}}\n" +
