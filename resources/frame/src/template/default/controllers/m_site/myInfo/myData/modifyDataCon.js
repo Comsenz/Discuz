@@ -132,7 +132,6 @@ export default {
     },
       handleFile: function (e) {
         let file = e.target.files[0];
-
         // 获取file
       // 实例化
         let formdata = new FormData()

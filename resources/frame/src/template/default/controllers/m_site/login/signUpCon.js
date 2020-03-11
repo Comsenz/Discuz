@@ -146,6 +146,14 @@ export default {
     },
     //验证码
     initCaptcha() {
+      if (this.username === '') {
+        this.$toast("用户名不能为空");
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        return;
+      }
       let tct = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
@@ -154,7 +162,6 @@ export default {
           this.setSignData();
         }
       })
-
       // 显示验证码
       tct.show();
     },
