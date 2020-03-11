@@ -13,7 +13,7 @@ class CreatePayNotify extends Migration
     public function up()
     {
         $this->schema()->create('pay_notify', function (Blueprint $table) {
-            $table->increments('id')->comment('支付通知 id');
+            $table->id()->comment('支付通知 id');
             $table->string('payment_sn', 20)->default('')->comment('支付编号');
             $table->unsignedBigInteger('user_id')->comment('付款人 id');
             $table->string('trade_no', 64)->default('')->comment('商户平台交易号');

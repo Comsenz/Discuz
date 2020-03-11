@@ -13,7 +13,7 @@ class CreateNotificationTpls extends Migration
     public function up()
     {
         $this->schema()->create('notification_tpls', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->tinyInteger('status')->default(0)->comment('模板状态:1开启0关闭');
             $table->unsignedTinyInteger('type')->default(0)->comment('通知类型:0系统1微信2短信');
             $table->string('type_name')->default('')->comment('类型名称');

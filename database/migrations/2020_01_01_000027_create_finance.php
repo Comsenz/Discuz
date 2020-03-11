@@ -13,7 +13,7 @@ class CreateFinance extends Migration
     public function up()
     {
         $this->schema()->create('finance', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('自增ID');
+            $table->id()->comment('自增ID');
             $table->unsignedDecimal('income', 10, 2)->comment('用户充值金额');
             $table->unsignedDecimal('withdrawal', 10, 2)->comment('用户提现金额');
             $table->unsignedInteger('order_count')->comment('订单数量');

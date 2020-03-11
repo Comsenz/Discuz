@@ -18,7 +18,7 @@ class CreateUsers extends Migration
     public function up()
     {
         $this->schema()->create('users', function (Blueprint $table) {
-            $table->increments('id')->comment('用户 id');
+            $table->id()->comment('用户 id');
             $table->string('username', 100)->unique()->comment('用户名');
             $table->string('password', 100)->comment('密码');
             $table->string('pay_password', 100)->default('')->comment('支付密码');

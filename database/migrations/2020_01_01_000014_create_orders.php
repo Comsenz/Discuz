@@ -13,7 +13,7 @@ class CreateOrders extends Migration
     public function up()
     {
         $this->schema()->create('orders', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('订单 id');
+            $table->id()->comment('订单 id');
             $table->char('order_sn', 22)->default('')->comment('订单编号');
             $table->string('payment_sn', 20)->default('')->comment('支付编号');
             $table->unsignedDecimal('amount', 10, 2)->comment('订单总金额');
