@@ -82,6 +82,7 @@ class CreateThread
 
         $this->assertCan($this->actor, 'createThread');
 
+        $thread->type = Arr::get($this->data, 'attributes.type', 0);
         //视频主题设置校验
         if ($thread->type == 2 && !$settings->get('qcloud_vod', 'qcloud')) {
             throw new PermissionDeniedException;
@@ -89,7 +90,7 @@ class CreateThread
         //视频主题文件校验
         $file_id = Arr::get($this->data, 'attributes.file_id');
         if ($thread->type == 2 && !$file_id) {
-            throw new ValidationException;
+            throw new PermissionDeniedException;
         }
 
         // 敏感词校验
@@ -104,7 +105,6 @@ class CreateThread
 
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
-        $thread->type = Arr::get($this->data, 'attributes.type', 0);
 
         // 发布长文时记录标题及价格，发布视频时记录价格
         if ($thread->type == 1) {
