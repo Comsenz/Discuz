@@ -111,7 +111,8 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    if (qcloud_captcha) {
+    let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
+    if (qcloud_captcha || thread_captcha) {
       this.publishShow = false
     }
     var u = navigator.userAgent;
@@ -317,6 +318,8 @@ export default {
                 "title": this.themeTitle,
                 "type": 1,
                 "content": this.content,
+                "captcha_ticket": this.captcha_ticket,
+                "captcha_rand_str": this.captcha_rand_str
               },
               "relationships": {
                 "category": {

@@ -83,7 +83,7 @@ export default {
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
           browserDb.setLItem('siteInfo', res.readdata);
-          if (res.readdata._data.qcloud.qcloud_captcha) {
+          if (res.readdata._data.qcloud.qcloud_captcha && res.readdata._data.set_reg.register_captcha) {
             this.signUpShow = false
           }
         }
