@@ -53,7 +53,9 @@ export default {
         filterCondition: 'allThemes',
         typeWo: '全部主题'
       },
-      canCreateThread:'',
+      canCreateThread:'',       //发布主题权限
+      canCreateLongText:'',     //发布长文权限
+      canCreateVideo:'',        //发布视频主题权限
       canViewThreads:'',
       nullTip:false,
       nullWord:'',
@@ -107,8 +109,11 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
+          console.log(res,'eeeee');
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
+          this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
+          this.canCreateVideo = res.readdata._data.other.can_create_thread_video;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
@@ -310,14 +315,8 @@ export default {
       }
     },
     postCho:function(){
-      if(this.canCreateThread){
-        // alert('跳转到发布主题页');
-        this.rotate = !this.rotate;
-        this.puslishCho = !this.puslishCho;
-      } else {
-        this.$toast.fail('没有权限，请联系站点管理员');
-      }
-
+      this.rotate = !this.rotate;
+      this.puslishCho = !this.puslishCho;
     },
     
     //发布

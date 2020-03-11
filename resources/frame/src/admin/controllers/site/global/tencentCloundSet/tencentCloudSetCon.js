@@ -49,6 +49,13 @@ export default {
           icon:'iconduixiangcunchu',
           setFlag: true
         },{
+          name: '腾讯云设置',
+          type:'qcloud_vod',
+          description: '请先配置云API，开通腾讯云的云点播VOD服务，并确保有对应资源包',
+          status:'',
+          icon:'iconshipin',
+          setFlag: true
+        },{
           name: '验证码',
           type:'qcloud_captcha',
           description: '请先配置云API，开通腾讯云的验证码服务',
@@ -74,6 +81,9 @@ export default {
           break;
         case 'qcloud_cos':
           this.$router.push({path:'/admin/tencent-cloud-config/cos',query: {type:type}});
+          break;
+          case 'qcloud_vod':
+          this.$router.push({path:'/admin/tencent-cloud-config/vod',query: {type:type}});
           break;
         case 'qcloud_captcha':
           this.$router.push({path:'/admin/tencent-cloud-config/code',query:{type:type}})
@@ -141,6 +151,8 @@ export default {
         this.changeSettings('qcloud_faceid',status);
       } else if(type == 'qcloud_cos'){
         this.changeSettings('qcloud_cos',status);
+      } else if(type == 'qcloud_vod'){
+        this.changeSettings('qcloud_vod',status);
       } else if(type == 'qcloud_captcha'){
         this.changeSettings('qcloud_captcha',status);
       }
