@@ -40,17 +40,15 @@ export default {
   methods:{
     loadStatus(){
       this.appFetch({
-        url:'tags',
+        url:'forum',
         method:'get',
-        splice:'/'+this.type,
-        data:{
-        }
+        data:{}
       }).then(data=>{
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          this.appId = data.readdata[0]._data.app_id;
-          this.appSecret = data.readdata[0]._data.app_secret;
+          this.appId = data.readdata._data.passport.offiaccount_app_id;
+          this.appSecret = data.readdata._data.passport.offiaccount_app_secret;
         }
       }).catch(error=>{
       })
@@ -79,7 +77,7 @@ export default {
         }
       }).then(data=>{
         if (data.errors){
-          this.$toast.fail(data.errors[0].code);
+          this.$message.error(data.errors[0].code);
         }else {
           // this.$router.push({
           //   path: '/admin/worth-mentioning-set'
