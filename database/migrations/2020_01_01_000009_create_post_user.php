@@ -13,8 +13,8 @@ class CreatePostUser extends Migration
     public function up()
     {
         $this->schema()->create('post_user', function (Blueprint $table) {
-            $table->integer('post_id')->unsigned()->nullable()->comment('帖子 id');
-            $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
+            $table->unsignedBigInteger('post_id')->nullable()->comment('帖子 id');
+            $table->unsignedBigInteger('user_id')->nullable()->comment('用户 id');
             $table->dateTime('created_at')->comment('创建时间');
 
             $table->primary(['post_id', 'user_id']);
