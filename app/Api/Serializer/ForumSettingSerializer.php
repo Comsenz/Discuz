@@ -56,6 +56,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'set_reg' => [
                 'register_close' => (bool)$this->settings->get('register_close'),
                 'register_validate' => (bool)$this->settings->get('register_validate'),
+                'register_captcha' => (bool)$this->settings->get('register_captcha'),
                 'password_length' => (int)$this->settings->get('password_length'),
                 'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
             ],
