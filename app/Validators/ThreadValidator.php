@@ -70,29 +70,23 @@ class ThreadValidator extends AbstractValidator
                         $result = $this->describeCaptchaResult(...$value);
 
                         if ($result['CaptchaCode'] != 1) {
-                            $fail('验证码错误。');
+                            $fail(app('translator')->get('validation.wrong'));
                         }
                     } else {
-                        $fail('验证码错误。');
+                        $fail(app('translator')->get('validation.wrong'));
                     }
                 },
             ];
         }
 
-        $rules['type'] = [
+        $rules['file_id'] = [
             'required',
             function ($attribute, $value, $fail) {
-                if ($value == 2 && (!isset($this->data['file_id']) || !$this->data['file_id'])) {
-                    $fail('file id 不能为空。');
-                }
-
-                if ($value == 2 && !$this->qCloudVodSwitch) {
-                    $fail('未开启云点播。');
+                if ($this->data['type'] == 2 && !$this->qCloudVodSwitch) {
+                    $fail(app('translator')->get('validation.qcloud_vod'));
                 }
             }
         ];
-
-
 
         return $rules;
     }
