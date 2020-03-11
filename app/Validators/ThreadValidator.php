@@ -80,7 +80,7 @@ class ThreadValidator extends AbstractValidator
         }
 
         $rules['type'] = [
-            'sometimes',
+            'required',
             function ($attribute, $value, $fail) {
                 if ($value == 2 && (!isset($this->data['file_id']) || !$this->data['file_id'])) {
                     $fail('file id 不能为空。');
