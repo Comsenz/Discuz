@@ -130,10 +130,10 @@ const appFetch = function(params, options) {
 
 
   params.method = params.method ? params.method : 'get';
-  if(!apiUrl) {
-    apiUrl = "/api/" + oldUrl;
+  // if(!apiUrl) {
+  //   apiUrl = "/api/" + oldUrl;
     // return false;
-  }
+  // }
 
   /**
     * @param {[type]} splice [接收url后面拼接]

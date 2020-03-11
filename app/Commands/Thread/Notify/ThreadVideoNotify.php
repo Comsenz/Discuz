@@ -53,7 +53,7 @@ class ThreadVideoNotify
 
         if (Arr::get($this->data, 'EventType') == $EventType &&
             Arr::get($this->data, $EventName.'.ErrCode') == '0') {
-            $threadVideo = $threadVideo->findOrFail(Arr::get($this->data, $EventName.'.FileId'));
+            $threadVideo = $threadVideo->findOrFailByFileId(Arr::get($this->data, $EventName.'.FileId'));
 
             foreach (Arr::get($this->data, $EventName.'.'.$EventRes) as $key => $value) {
                 if (Arr::get($value, 'Type') == 'Transcode') {

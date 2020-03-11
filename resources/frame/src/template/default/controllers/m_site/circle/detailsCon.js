@@ -325,9 +325,10 @@ export default {
 
     //初始化请求主题详情数据
     detailsLoad(initFlag = false) {
-      let threads = 'threads/' + this.themeId;
+      // let threads = 'threads/' + this.themeId;
       return this.appFetch({
-        url: threads,
+        url: 'threads',
+        splice:'/' + this.themeId,
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
@@ -390,7 +391,7 @@ export default {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
               this.postsImages.push(urls);
-              
+
             });
             if (firstpostImageLen === 0) {
               return;
@@ -403,7 +404,7 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
             };
-            
+
           } else {
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;

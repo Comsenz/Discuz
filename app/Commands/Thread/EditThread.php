@@ -14,8 +14,10 @@ use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
 use App\Models\Thread;
+use App\Models\ThreadVideo;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
+use App\Repositories\ThreadVideoRepository;
 use App\Traits\ThreadNoticesTrait;
 use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
@@ -73,7 +75,7 @@ class EditThread
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos)
     {
         $this->events = $events;
 
@@ -98,9 +100,9 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        if (isset($attributes['price']) && ($thread->type == 1)) {
-            // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
-            $this->assertCan($this->actor, 'rename', $thread);
+        //长文、视频可以修改价格
+        if (isset($attributes['price']) && ($thread->type != 0)) {
+            $this->assertCan($this->actor, 'editPrice', $thread);
 
             $thread->price = (float) $attributes['price'];
         }
@@ -185,6 +187,21 @@ class EditThread
         $validator->valid($thread->getDirty());
 
         $thread->save();
+
+        //编辑视频
+        if ($thread->type == 2) {
+            $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
+            if ($threadVideo->file_id != $attributes['file_id']) {
+                $threadVideo->file_id = $attributes['file_id'];
+                $threadVideo->state = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+                $threadVideo->media_url = '';
+                $threadVideo->cover_url = '';
+                $threadVideo->cover_url = '';
+                $threadVideo->save();
+            }
+        }
+
+
 
         $this->dispatchEventsFor($thread, $this->actor);
 

@@ -58,13 +58,13 @@ class ThreadValidator extends AbstractValidator
             $rules['captcha'] = [
                 'sometimes',
                 function ($attribute, $value, $fail) {
-                    if (count($value) != 3) {
-                        $fail('验证码错误。');
-                    }
+                    if (count($value) == 3) {
+                        $result = $this->describeCaptchaResult(...$value);
 
-                    $result = $this->describeCaptchaResult(...$value);
-
-                    if ($result['CaptchaCode'] != 1) {
+                        if ($result['CaptchaCode'] != 1) {
+                            $fail('验证码错误。');
+                        }
+                    } else {
                         $fail('验证码错误。');
                     }
                 },
