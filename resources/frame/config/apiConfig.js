@@ -64,6 +64,7 @@ module.exports = {
   'access':'/api/refresh-token',            //刷新token
   'follow':'/api/follow',                   //关注
   'realName':'/api/users/real',             //实名认证
+  'signature':'/api/signature',             //视频签名
 
 
   /*后台*/
