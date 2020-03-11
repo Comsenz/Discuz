@@ -51,13 +51,11 @@ export default {
 				// 用户搜索
 				this.userParams['filter[username]'] = '*' + this.searchVal + '*';
 				this.userParams['page[number]'] = 1;
-
 				this.handleSearchUser(true);
 
 				// 主题搜索
 				this.themeParamd['filter[q]'] = this.searchVal;
 				this.themeParamd['page[number]'] = 1;
-
 				this.handleSearchTheme(true);
 
 			},200)

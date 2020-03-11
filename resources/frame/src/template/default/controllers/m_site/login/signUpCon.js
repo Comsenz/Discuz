@@ -83,7 +83,7 @@ export default {
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
           browserDb.setLItem('siteInfo', res.readdata);
-          if (res.readdata._data.qcloud.qcloud_captcha) {
+          if (res.readdata._data.qcloud.qcloud_captcha && res.readdata._data.set_reg.register_captcha) {
             this.signUpShow = false
           }
         }
@@ -146,6 +146,14 @@ export default {
     },
     //验证码
     initCaptcha() {
+      if (this.username === '') {
+        this.$toast("用户名不能为空");
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        return;
+      }
       let tct = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
@@ -154,7 +162,6 @@ export default {
           this.setSignData();
         }
       })
-
       // 显示验证码
       tct.show();
     },

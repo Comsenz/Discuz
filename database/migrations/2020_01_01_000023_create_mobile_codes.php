@@ -13,7 +13,7 @@ class CreateMobileCodes extends Migration
     public function up()
     {
         $this->schema()->create('mobile_codes', function (Blueprint $table) {
-            $table->increments('id')->comment('验证码 id');
+            $table->id()->comment('验证码 id');
             $table->string('mobile', 20)->default('')->comment('手机号');
             $table->string('code', 10)->default('')->comment('验证码');
             $table->string('type', 20)->default('')->comment('验证类型');
