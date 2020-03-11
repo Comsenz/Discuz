@@ -73,7 +73,7 @@ class InstallController implements RequestHandlerInterface
         }
 
         $tablePrefix = Arr::get($input, 'tablePrefix', null);
-        if(!preg_match("/^\w+$/", $tablePrefix)) {
+        if($tablePrefix && !preg_match("/^\w+$/", $tablePrefix)) {
             return DiscuzResponseFactory::HtmlResponse('表前缀格式错误', 500);
         }
 
@@ -126,7 +126,7 @@ class InstallController implements RequestHandlerInterface
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
