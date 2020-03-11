@@ -13,7 +13,7 @@ class CreateAttachments extends Migration
     public function up()
     {
         $this->schema()->create('attachments', function (Blueprint $table) {
-            $table->increments('id')->comment('附件 id');
+            $table->id()->comment('附件 id');
             $table->uuid('uuid')->comment('uuid');
             $table->unsignedInteger('user_id')->comment('用户 id');
             $table->unsignedInteger('post_id')->default(0)->comment('帖子 id');

@@ -13,7 +13,7 @@ class CreateThreads extends Migration
     public function up()
     {
         $this->schema()->create('threads', function (Blueprint $table) {
-            $table->increments('id')->comment('主题 id');
+            $table->id()->comment('主题 id');
             $table->integer('user_id')->unsigned()->nullable()->comment('创建用户 id');
             $table->integer('last_posted_user_id')->unsigned()->nullable()->comment('最后回复用户 id');
             $table->integer('category_id')->unsigned()->nullable()->comment('分类 id');

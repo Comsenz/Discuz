@@ -76,9 +76,9 @@ class ListFavoritesController extends ListThreadsController
         // 加载其他关联
         $threads->loadMissing($include);
 
-        // 截取内容
-        if (in_array('firstPost', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor);
+        // 处理付费主题内容
+        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
+            $threads = $this->cutThreadContent($threads, $actor, $include);
         }
 
         return $threads;

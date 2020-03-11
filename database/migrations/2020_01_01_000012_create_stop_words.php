@@ -13,7 +13,7 @@ class CreateStopWords extends Migration
     public function up()
     {
         $this->schema()->create('stop_words', function (Blueprint $table) {
-            $table->increments('id')->comment('敏感词 id');
+            $table->id()->comment('敏感词 id');
             $table->integer('user_id')->unsigned()->nullable()->comment('创建用户 id');
             $table->string('ugc', 10)->default('')->comment('用户内容处理方式');
             $table->string('username', 10)->default('')->comment('用户名处理方式');
