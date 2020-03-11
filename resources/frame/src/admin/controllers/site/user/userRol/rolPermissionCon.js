@@ -8,10 +8,25 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      checked:[]
+      checked:[],
+      disabled:false,  //是否可以开启验证码
     }
   },
   methods:{
+    signUpSet(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+      }).then(res=>{
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          if(res.readdata._data.qcloud.qcloud_captcha == false){
+            this.disabled = true
+          }
+        }
+      })
+    },
     /*
     * 权限列表中英文对应拿到后，在页面的label中对应填写
     * */
@@ -75,6 +90,7 @@ export default {
   },
   created(){
     this.getGroupResource();
+    this.signUpSet()
   },
   components:{
     Card,

@@ -143,6 +143,7 @@ class UpdateUser
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
+
             $this->assertCan($this->actor, 'edit.group', $user);
 
             // 获取新用户组 id

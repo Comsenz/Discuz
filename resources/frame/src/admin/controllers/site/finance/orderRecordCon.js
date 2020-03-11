@@ -52,6 +52,15 @@ export default {
   },
   methods:{
 
+    viewClick(id){
+      if (id){
+        let routeData = this.$router.resolve({
+          path: "/details/" + id,
+        });
+        window.open(routeData.href, '_blank');
+      }
+    },
+
     cashStatus(status){
       switch (status){
         case 0:
@@ -97,7 +106,7 @@ export default {
         url:'orderList',
         method:'get',
         data:{
-          include:['user','thread','thread.firstPost'],
+          include:['user','thread','thread.firstPost','payee'],
           'page[number]':this.currentPaga,
           'page[size]':10,
           'filter[order_sn]':this.orderNumber,
@@ -112,7 +121,6 @@ export default {
         }else {
           this.tableData = [];
           this.tableData = res.readdata;
-
           this.pageCount = res.meta.pageCount;
           this.total = res.meta.total;
         }
