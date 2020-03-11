@@ -319,13 +319,19 @@ export default {
       }
 
     },
-    //发布主题
-    postTopic:function(){
-      this.$router.push({ path:'/post-topic/' + this.categoryId,replace:true});
-    },
-    //发布长文
-    postLongText:function(){
-      this.$router.push({ path:'/post-longText/' + this.categoryId});
+    
+    //发布
+    postType(type){
+      if(type == 0) {
+        //发布主题
+        this.$router.push({ path:'/post-topic/' + this.categoryId,replace:true});
+      } else if(type == 1) {
+        //发布长文
+        this.$router.push({ path:'/post-longText/' + this.categoryId});
+      } else if(type == 2) {
+        //发布视频
+        this.$router.push({ path:'/post-video/' + this.categoryId});
+      }
     },
     
     //给导航添加点击状态

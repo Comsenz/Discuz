@@ -40,13 +40,19 @@
         <!-- <span v-else="" class="icon iconfont icon-closeCho"></span> -->
       </div>
       <div class="publishTypeBox" v-if="puslishCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 10) +'px' : '10px'}">
-        <div class="publishCho" @click="postTopic">
+        <div class="publishCho" @click="postType(2)">
+          <div class="iconBg">
+            <span class="icon iconfont icon-video"></span>
+          </div>
+          <div class="publishChoWo">视频</div>
+        </div>
+        <div class="publishCho" @click="postType(0)">
           <div class="iconBg">
             <span class="icon iconfont icon-theme"></span>
           </div>
           <div class="publishChoWo">主题</div>
         </div>
-        <div class="publishCho" @click="postLongText">
+        <div class="publishCho" @click="postType(1)">
           <div class="iconBg">
             <span class="icon iconfont icon-longtext"></span>
           </div>

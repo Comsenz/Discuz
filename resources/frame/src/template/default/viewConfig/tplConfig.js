@@ -225,13 +225,13 @@ export default {
       },
 
 	    'theme-det':{
-	    comLoad:function (resolve) {
-	      require(['../view/m_site/common/themeDetView'],resolve)
+        comLoad:function (resolve) {
+          require(['../view/m_site/common/themeDetView'],resolve)
+        },
+        metaInfo:{
+          title:"主题详情"
+        }
 	    },
-	    metaInfo:{
-	      title:"主题详情"
-	    }
-	  },
       'post-topic/:cateId':{
         comLoad:function (resolve) {
         require(['../view/m_site/home/postTopicView'],resolve)
@@ -248,6 +248,14 @@ export default {
         title:"发布长文"
         }
       },
+      'post-video/:cateId':{
+        comLoad:function (resolve) {
+        require(['../view/m_site/home/postVideoView'],resolve)
+        },
+        metaInfo:{
+        title:"发布视频"
+        }
+      },
       'edit-topic/:themeId':{
         comLoad:function (resolve) {
           require(['../view/m_site/home/editTopicView'],resolve)
@@ -262,6 +270,14 @@ export default {
         },
         metaInfo:{
           title:"编辑长文"
+        }
+      },
+      'edit-video/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editVideoView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑视频"
         }
       },
       //登录、注册、微信绑定模块路由

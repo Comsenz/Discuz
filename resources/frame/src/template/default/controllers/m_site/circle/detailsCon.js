@@ -331,7 +331,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
+          include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -340,6 +340,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
+          console.log(res,'~~~~~~~~~~~~~~~~~~~~~~~~~');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;

@@ -1208,7 +1208,9 @@ details.vue
     margin: 0 auto;
   }
 }
-
+.videoBox {
+  padding: 14px 0 10px 0;
+}
 
 
 //发表主题
@@ -1479,6 +1481,56 @@ details.vue
 .sureBtnCli {
   background: @main;
 }
+
+/**
+ *  发布视频
+ */
+.videoUploader {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  text-align: center;
+  .icon-add {
+    font-size: 24px;
+    color: #d8d8d8;
+    line-height: 54px;
+  }
+  .videoUpInp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    opacity: 0.8;
+  } 
+}
+.videoShow {
+  position: relative;
+  width: 160px;
+  height: 210px;
+  .videoDele {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    z-index: 10;
+    background: #d8d8d8;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    .icon-closeCho {
+      font-size: 14px;
+      color: #ffffff;
+    }
+  }
+}
+
+
+
 /**
  *  回复输入框
  */
@@ -1590,6 +1642,42 @@ details.vue
       white-space: nowrap;
     }
     .encDelete {
+      color:@corB2;
+      display: inline-block;
+      line-height: 18px;
+      margin-left: 14px;
+      font-size: 15px;
+      vertical-align: bottom;
+      .icon {
+        font-size: 16px;
+        color: @white;
+      }
+    }
+  }
+}
+.videoCon {
+  padding-top: 14px;
+  .videoChi {
+    line-height: 20px;
+    vertical-align: middle;
+    .icon-video1 {
+      float: left;
+      font-size: 17px;
+      color: #0494F9;
+    }
+    
+    .videoName {
+      float: left;
+      margin-left: 5px;
+      font-size: 15px;
+      line-height: 20px;
+      color: @main;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .videoDelete {
       color:@corB2;
       display: inline-block;
       line-height: 18px;

@@ -7,34 +7,39 @@ let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
     return {
-      headerTitle:"发布主题",
+      headerTitle:"编辑主题",
       selectSort:'',
       showPopup:false,
       categories: [],
       categoriesId: [],
+      oldCateId:'',
       cateId:'',
       content:'',
       showFacePanel: false,
       keyboard: false,
       // expressionShow: false,
-      keywordsMax: 10000,
+      keywordsMax: 1000,
       list: [],
       footMove: false,
       faceData:[],
+      fileListOne:[],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        // { url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=88704046,262850083&fm=11&gp=0.jpg', isImage: true }
+        // { url: 'https://cloud-image', isImage: true }
       ],
-      fileListOne:[],
       uploadShow:false,
-      enclosureList:[],
+      enclosureList:[
+        // {
+        //   type:'doc',
+        //   name:'saaaaaaaa',
+        // },
+      ],
       avatar: "",
-      themeId:'',
       postsId:'',
       files: {
         name: "",
-        type: '',
+        type: ""
       },
       headerImage: null,
       picValue: null,
@@ -44,6 +49,7 @@ export default {
       isPhone: false,
       themeCon:false,
       attriAttachment:false,
+      fileLength:0,
       canUploadImages:'',
       canUploadAttachments:'',
       supportImgExt: '',
@@ -59,19 +65,21 @@ export default {
       testingRes:false,
       backGo:-2,
       formdataList:[],
-      viewportWidth: '',
       viewportHeight: '',
-      nowCate: []
+      postFormScrollTop:''
+    }
+  },
 
-    }
-  },
-  computed: {
-    nowCateId: function () {
-      return this.$route.params.cateId;
-    }
-  },
   mounted () {
-    this.$nextTick(() => {
+    let postForm = document.getElementById('postForm');
+    postForm.style.height = (this.viewportHeight) + 'px';
+
+    let text = document.getElementById('post-topic-form-text');
+
+    text.addEventListener("touchstart",(e)=>{
+      // alert('触发');
+      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
@@ -83,15 +91,39 @@ export default {
           // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
         }
       });
-    })
-    //设置在pc的宽度
-    if(this.isWeixin != true && this.isPhone != true){
-      this.limitWidth();
-    }
+    });
+
+
+    /*document.getElementById('postForm').addEventListener('scroll',(e)=>{
+      console.log(document.getElementById('postForm').scrollTop);
+      this.postFormScrollTop = document.getElementById('postForm').scrollTop;
+    })*/
+
+
+    this.$nextTick(() => {
+        let textarea = this.$refs.textarea;
+        textarea.focus();
+        let prevHeight = 300;
+        textarea && autoTextarea(textarea, 5, 65535, (height) => {
+          height += 20;
+          if (height !== prevHeight) {
+            prevHeight = height;
+            let rem = height / rootFontSize;
+            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+          }
+        });
+      })
+      //设置在pc的宽度
+      if(this.isWeixin != true && this.isPhone != true){
+        this.limitWidth();
+      }
+  },
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
   },
   created(){
-    // this.cateId = this.$route.query.cateId;
-    this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
@@ -101,21 +133,11 @@ export default {
     if(this.isiOS) {
       this.encuploadShow = true;
     }
-    if(this.$route.params.themeId){
-      var themeId = this.$route.params.themeId;
-      var postsId = this.$route.params.postsId;
-      var themeContent = this.$route.params.themeContent;
-      this.themeId = themeId;
-      this.postsId = postsId;
-      this.content = themeContent;
-    }
     //初始化请求分类接口
     this.loadCategories();
     //初始化请求主题数据
-    // this.detailsLoad();
+    this.detailsLoad();
     this.getInfo();
-
-
   },
   watch: {
     'fileListOne.length': function(newVal,oldVal){
@@ -126,9 +148,6 @@ export default {
         this.limitMaxLength = true;
       }
     },
-    // 'limitMaxLength': function(newVal,oldVal){
-    //   this.limitMaxLength = newVal;
-    // },
     'enclosureList.length': function(newVal,oldVal){
       this.enclosureListLen = newVal;
       if(this.enclosureListLen >= 3){
@@ -147,46 +166,36 @@ export default {
     },
   },
   methods: {
+     //请求站点信息，用于判断是否能上传附件
     getInfo(){
-      //请求站点信息，用于判断是否能上传附件
       this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
           include: ['users'],
-        },
+        }
       }).then((res) => {
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
-          var ImgExt = '';
-          if(res.readdata._data.set_attach.support_img_ext){
-            ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
-            var ImgStr='';
-            var imgStrRes ='';
-            for(var k=0;k<ImgExt.length;k++){
-              ImgStr = '.'+ImgExt[k]+',';
-              imgStrRes = 'image/'+ImgExt[k]+',';
-              this.supportImgExt += ImgStr;
-              this.supportImgExtRes += imgStrRes;
-            }
-          } else{
-            ImgExt ='*';
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
+          var ImgStr='';
+          var imgStrRes ='';
+          for(var k=0;k<ImgExt.length;k++){
+            ImgStr = '.'+ImgExt[k]+',';
+            imgStrRes = 'image/'+ImgExt[k]+',';
+            this.supportImgExt += ImgStr;
+            this.supportImgExtRes += imgStrRes;
           }
 
-          var fileExt = '';
-          if(res.readdata._data.set_attach.support_file_ext){
-            fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
-            var fileStr='';
-            for(var k=0;k<fileExt.length;k++){
-              fileStr = '.'+fileExt[k]+',';
-              this.supportFileExt += fileStr;
-            }
-          } else{
-            fileExt ='*';
-          }
 
+          var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
+          var fileStr='';
+          for(var k=0;k<fileExt.length;k++){
+            fileStr = '.'+fileExt[k]+',';
+            this.supportFileExt += fileStr;
+          }
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
@@ -194,149 +203,111 @@ export default {
     },
     //初始化请求编辑主题数据
     detailsLoad(){
-      if(this.postsId && this.content){
-        let threads = 'threads/'+this.themeId;
-        this.appFetch({
-          url: threads,
-          method: 'get',
-          data: {
-            include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+      this.appFetch({
+        url: 'threads',
+        method: 'get',
+        splice:'/'+this.themeId,
+        data: {
+          include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+        }
+      }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          var enclosureListCon = res.readdata.firstPost.attachments;
+          var fileListCon = res.readdata.firstPost.images;
+          this.oldCateId = res.readdata.category._data.id;
+          this.selectSort = res.readdata.category._data.name;
+          this.content = res.readdata.firstPost._data.content;
+          this.postsId = res.readdata.firstPost._data.id;
+          for (let i = 0; i < enclosureListCon.length; i++) {
+            this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
           }
-        }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-          } else {
-            // this.enclosureList = res.readdata.attachments;
-            // this.fileList = res.readdata.images;
-            const initializeCateId = res.readdata.category._data.id;
-            this.selectSort = res.readdata.category._data.description;
-            if(this.cateId != initializeCateId){
-              this.cateId = initializeCateId;
-            }
+          if(this.enclosureList.length>0){
+            this.enclosureShow = true;
+          }
+          for (var i = 0; i < fileListCon.length; i++) {
+            // this.fileListOne.push({thumbUrl:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
+            this.fileListOne.push({url:fileListCon[i]._data.thumbUrl,id:fileListCon[i]._data.id});
           }
 
-        })
-      }
+          if(this.fileListOne.length>0){
+            this.uploadShow = true;
+          }
+        }
+      })
     },
     //发布主题
     publish(){
-      if(this.content == '' || this.content == null){
-        this.$toast.fail('内容不能为空');
-        return;
-      }
-      if(this.cateId == 0 || this.cateId == undefined){
-        this.$toast.fail('请选择分类');
-        return;
-      }
-      if(this.postsId && this.content){
-        let posts = 'posts/'+this.postsId;
-        this.appFetch({
-          url:posts,
-          method:"patch",
-          data: {
-            "data": {
-              "type": "posts",
-              "attributes": {
-                  "content": this.content
-              }
-            }
-          }
-        }).then((res)=>{
-          if (res.errors){
-            if (res.errors[0].detail){
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-            } else {
-              this.$toast.fail(res.errors[0].code);
-            }
-          } else {
-            console.log('主题');
-            this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo},replace:true});
-          }
-        })
-      } else {
-        this.attriAttachment = this.fileListOne.concat(this.enclosureList);
-        for(let m=0;m<this.attriAttachment.length;m++){
-          this.attriAttachment[m] = {
-            "type": "attachments",
-            "id": this.attriAttachment[m].id
-          }
+      this.attriAttachment = this.fileListOne.concat(this.enclosureList);
+      for(let m=0;m<this.attriAttachment.length;m++){
+        this.attriAttachment[m] = {
+          "type": "attachments",
+          "id": this.attriAttachment[m].id
         }
-
+      }
+      if(this.oldCateId != this.cateId){
         this.appFetch({
-          url:"threads",
-          method:"post",
+          url:'threads',
+          method:"patch",
+          splice:'/'+this.themeId,
           data:{
             "data": {
               "type": "threads",
-              "attributes": {
-                  "content": this.content,
-                  'type': 0,
-              },
+              "attributes": {},
               "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  "attachments": {
-                    "data":this.attriAttachment
-                  },
+                "category": {
+                  "data": {
+                    "type": "categories",
+                    "id": this.cateId
+                  }
+                }
               }
-
             }
           },
         }).then((res)=>{
           if (res.errors){
-            if (res.errors[0].detail){
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-            } else {
-              this.$toast.fail(res.errors[0].code);
-            }
-          } else{
-            var postThemeId = res.readdata._data.id;
-            var _this = this;
-            console.log('长文');
-            _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            // this.$router.push({ path:'/details'+'/'+this.themeId});
           }
         })
       }
+      this.appFetch({
+        url:'posts',
+        method:"patch",
+        splice:'/'+this.postsId,
+        data:{
+          "data": {
+            "type": "threads",
+            "attributes": {
+                "content": this.content,
+            },
+
+            "relationships": {
+              "attachments": {
+                "data":this.attriAttachment
+              },
+            }
+          }
+        },
+      }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.$router.replace({ path:'/details'+'/'+this.themeId});
+        }
+      })
     },
 
     //设置底部在pc里的宽度
     limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
-    },
-
-    // 删除图片
-    deleteEnclosure(id,type){
-      if(this.fileListOne.length<1){
-        this.uploadShow = false;
-      }
-      this.appFetch({
-        url:'attachment',
-        method:'delete',
-        splice:'/'+id.id,
-      })
-    },
-
-    // 删除附件
-    deleteEnc(id,type){
-      if(this.fileListOne.length<1){
-        this.uploadShow = false;
-      }
-      this.appFetch({
-        url:'attachment',
-        method:'delete',
-        splice:'/'+id.id
-      }).then(data=>{
-        var newArr = this.enclosureList.filter(item => item.id !== id.id);
-        this.enclosureList = newArr;
-
-      })
+      // document.getElementById('post-topic-footer').style.width = "640px";
+      // let viewportWidth = window.innerWidth;
+      // document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
 
     //上传之前先判断是否有权限上传图片
@@ -399,7 +370,6 @@ export default {
         }
       }
     },
-
     //上传附件
     handleEnclosure(e){
       this.testingType(e.target.files[0],this.supportFileExt);
@@ -425,12 +395,36 @@ export default {
         this.testingRes = true;
       }
     },
-    getAllEvens(arr){
-      arr => {
-        let temp = evens(arr);
-        return flat(temp);
+
+
+    // 删除图片
+    deleteEnclosure(id,type){
+      if(this.fileListOne.length<1){
+        this.uploadShow = false;
       }
+      this.appFetch({
+        url:'attachment',
+        method:'delete',
+        splice:'/'+id.id,
+      })
     },
+
+    // 删除附件
+    deleteEnc(id,type){
+      if(this.fileListOne.length<1){
+        this.uploadShow = false;
+      }
+      this.appFetch({
+        url:'attachment',
+        method:'delete',
+        splice:'/'+id.id
+      }).then(data=>{
+        var newArr = this.enclosureList.filter(item => item.id !== id.id);
+        this.enclosureList = newArr;
+
+      })
+    },
+
     // 这里写接口，上传
     uploaderEnclosure(file,isFoot,img,enclosure,index){
        this.appFetch({
@@ -444,6 +438,7 @@ export default {
         } else {
           if (img) {
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+            // this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
           }
           if (isFoot) {
@@ -452,7 +447,6 @@ export default {
             if (this.fileListOne.length>0){
               this.uploadShow = true;
             }
-
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -461,6 +455,7 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
+
           }
           this.loading = false;
         }
@@ -468,6 +463,7 @@ export default {
     },
 
     //压缩图片
+    // compressFile(file, uploadShow, wantedSize = 150000, event){
     compressFile(file, wantedSize, uploadShow, index){
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
@@ -478,6 +474,7 @@ export default {
           let formdata = new FormData();
           formdata.append('file', rst.file, file.name);
           formdata.append('isGallery', 1);
+          // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
           that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false,index);
           that.loading = false;
       }).catch(function (err) {
@@ -486,6 +483,7 @@ export default {
           /* 必然执行 */
       })
     },
+
 
     //输入框自适应高度
     clearKeywords () {
@@ -499,17 +497,17 @@ export default {
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
       textarea.focus();
     },
-    searchChange: debounce(function () {
-      let trim = this.keywords && this.keywords.trim();
-      if (!trim) {
-        this.list = [];
-        return;
-      }
-      const params = {
-        keywords: this.keywords
-      }
-      // 调api ...
-    }),
+    // searchChange: debounce(function () {
+    //   let trim = this.keywords && this.keywords.trim();
+    //   if (!trim) {
+    //     this.list = [];
+    //     return;
+    //   }
+    //   const params = {
+    //     keywords: this.keywords
+    //   }
+    //   // 调api ...
+    // }),
     handleFaceChoose (face) {
       const value = this.content;
       const el = this.$refs.textarea;
@@ -530,6 +528,11 @@ export default {
     //   this.footMove = false;
     // },
     addExpression(){
+
+      // console.log('点击' + this.postFormScrollTop);
+      // document.getElementById('postForm').scrollTop = this.postFormScrollTop;
+
+
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',
@@ -541,16 +544,18 @@ export default {
         this.faceData = data.readdata;
       })
       this.showFacePanel = !this.showFacePanel;
-      // if(this.showFacePanel == true){
-      //   // document.getElementById('showFacePanel').style.width = "640px";
-      //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
-      // }
       if(this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
       }
       this.footMove = !this.footMove;
+
+      // setTimeout(()=>{
+      //   document.getElementById('postForm').scrollTop = 700;
+      //   console.log('延迟')
+      // },1000)
+
     },
     backClick() {
       this.$router.go(-1);
@@ -559,7 +564,6 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
-      console.log(value,'====================')
       var id = value.id;
       this.cateId = id;
       var text = value.text;
@@ -575,11 +579,11 @@ export default {
           include: '',
         }
       }).then((res) => {
+
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          
           var newCategories = [];
           newCategories = res.readdata;
           for(let j = 0,len=newCategories.length; j < len; j++) {
@@ -591,34 +595,12 @@ export default {
             );
             this.categoriesId.push(newCategories[j]._data.id);
           }
-          if(this.nowCateId != 0 && this.nowCateId != undefined ){
-            var nowCate = {};
-            nowCate = newCategories.find((item) => {
-              if(item._data.id === this.nowCateId){
-                return item
-              }
-            })
-            this.nowCate = {id:nowCate._data.id,name:nowCate._data.name};
-            this.cateId = this.nowCate.id;
-            this.selectSort = this.nowCate.name;
-          } else {
-            this.selectSort = "选择分类";
-          }
-         
         }
       })
     },
     onCancel() {
       this.showPopup = false;
-    },
+    }
 
-  },
-  /*beforeRouteEnter(to,from,next){
-
-    next(vm =>{
-      if (from.name === 'circle'){
-        vm.backGo = -2
-      }
-    });
-  }*/
+  }
 }
