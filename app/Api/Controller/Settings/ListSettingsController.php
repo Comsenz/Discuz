@@ -45,16 +45,9 @@ class ListSettingsController extends AbstractListController
 
         $filter = $this->extractFilter($request);
 
+        $key = Arr::get($filter, 'key', '');
         $tag = Arr::get($filter, 'tag', 'default');
 
-        $query = Setting::query()->where('tag', $tag);
-
-        if (Arr::has($filter, 'key')) {
-            $query->orWhere('key', Arr::get($filter, 'key'));
-        }
-
-        $settings = $query->get();
-
-        return $settings;
+        return Setting::where([['key', $key], ['tag', $tag]])->get();
     }
 }
