@@ -93,7 +93,7 @@ class ResourceThreadController extends AbstractResourceController
         $this->assertCan($actor, 'viewPosts', $thread);
 
         // 付费主题对未付费用户只展示部分内容
-        if ($thread->price > 0 && in_array('firstPost', $include)) {
+        if ($thread->price > 0 && (in_array('firstPost', $include) || in_array('threadVideo', $include))) {
             // 是否付费
             if ($thread->user_id == $actor->id || $actor->isAdmin()) {
                 $paid = true;
@@ -108,11 +108,16 @@ class ResourceThreadController extends AbstractResourceController
             $thread->setAttribute('paid', $paid);
 
             // 截取内容、隐藏图片及附件
-            if (! $paid) {
+            if (in_array('firstPost', $include) && !$paid) {
                 // $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
                 $thread->firstPost->content = '';
                 $thread->firstPost->setRelation('images', collect());
                 $thread->firstPost->setRelation('attachments', collect());
+            }
+
+            // 付费视频，未付费时，隐藏视频
+            if (in_array('threadVideo', $include) && !$paid) {
+                $thread->threadVideo->file_id = '';
             }
         }
 
