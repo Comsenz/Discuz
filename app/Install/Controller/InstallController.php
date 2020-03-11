@@ -123,7 +123,7 @@ class InstallController implements RequestHandlerInterface
             'password' => Arr::get($input, 'mysqlPassword'),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
+            'prefix' => Arr::get($input, 'tablePrefix', ''),
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => 'InnoDB',
@@ -160,11 +160,9 @@ class InstallController implements RequestHandlerInterface
             [
                 'mysql' => array_merge($mysqlConfig, [
                     'database' => Arr::get($input, 'mysqlDatabase'),
-                    'prefix' => Arr::get($input, 'tablePrefix', null)
                 ])
             ]
         );
-
         $db->reconnect('mysql');
     }
 
@@ -260,7 +258,7 @@ class InstallController implements RequestHandlerInterface
     {
         $token = new AccessTokenEntity();
 
-        $token->setPrivateKey(new CryptKey(storage_path('cert/private.key')));
+        $token->setPrivateKey(new CryptKey(storage_path('cert/private.key'), '', false));
         $token->setClient(new ClientEntity());
         $token->setIdentifier($input['user_id']);
         $token->setExpiryDateTime((new DateTimeImmutable())->add(new DateInterval(AccessTokenRepository::TOKEN_EXP)));
