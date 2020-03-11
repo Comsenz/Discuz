@@ -114,7 +114,6 @@ class ForumSettingField
     public function getQCloudSettings()
     {
         return [
-            'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
             'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
             'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
@@ -168,6 +167,15 @@ class ForumSettingField
         return [
             'site_price' => $this->settings->get('site_price') ?: 0,
             'site_expire' => $this->settings->get('site_expire') ?: '',
+        ];
+    }
+
+    public function getQCloudVod()
+    {
+        return [
+            'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
+            'qcloud_vod_ext' => $this->settings->get('qcloud_vod_ext', 'qcloud'),
+            'qcloud_vod_size' => $this->settings->get('qcloud_vod_size', 'qcloud'),
         ];
     }
 }

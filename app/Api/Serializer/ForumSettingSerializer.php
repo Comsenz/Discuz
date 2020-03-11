@@ -81,12 +81,14 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 腾讯云设置
             'qcloud' => [
+                'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
                 'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
                 'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
                 'qcloud_captcha' => (bool)$this->settings->get('qcloud_captcha', 'qcloud'),
                 'qcloud_captcha_app_id' => $this->settings->get('qcloud_captcha_app_id', 'qcloud'),
                 'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
+                'qcloud_vod' => (bool)$this->settings->get('qcloud_vod', 'qcloud'),
             ],
 
             // 提现设置
@@ -121,6 +123,11 @@ class ForumSettingSerializer extends AbstractSerializer
         // 付费模式 - 满足条件返回
         if ($attributes['set_site']['site_mode'] == 'pay') {
             $attributes['set_site'] += $this->forumField->getSitePayment();
+        }
+
+        // 开启视频服务 - 满足条件返回
+        if ($attributes['qcloud']['qcloud_vod'] == '1') {
+            $attributes['qcloud'] += $this->forumField->getQCloudVod();
         }
 
         // 判断用户是否存在
