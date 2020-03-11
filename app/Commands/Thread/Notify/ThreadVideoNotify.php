@@ -8,7 +8,10 @@
 
 namespace App\Commands\Thread\Notify;
 
+use App\Censor\Censor;
 use App\Models\ThreadVideo;
+use App\Repositories\PostRepository;
+use App\Repositories\ThreadRepository;
 use App\Repositories\ThreadVideoRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -33,9 +36,12 @@ class ThreadVideoNotify
      *
      * @param Dispatcher $events
      * @param ThreadVideoRepository $threadVideo
+     * @param Censor $censor
+     * @param PostRepository $posts
+     * @param ThreadRepository $threads
      * @return string
      */
-    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideo)
+    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideo, Censor $censor, PostRepository $posts, ThreadRepository $threads)
     {
         $this->events = $events;
         $log = app('log');
@@ -47,31 +53,41 @@ class ThreadVideoNotify
 
         if (Arr::get($this->data, 'EventType') == $EventType &&
             Arr::get($this->data, $EventName.'.ErrCode') == '0') {
-            $threadVideo = $threadVideo->findOrFail(Arr::get($this->data, $EventName.'.FileId'));
+            $threadVideo = $threadVideo->findOrFailByFileId(Arr::get($this->data, $EventName.'.FileId'));
 
-            if (Arr::get($this->data, $EventName.'.'.$EventRes.'Type') == 'Transcode') {
-                if (Arr::get($this->data, $EventName.'.'.$EventRes.'TranscodeTask.ErrCode') == '0') {
-                    //转码成功
-                    $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
-                    $threadVideo->media_url = Arr::get($this->data, $EventName.'.'.$EventRes.'TranscodeTask.Output.Url');
-                } else {
-                    //转码失败
-                    $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
-                    $threadVideo->reason = Arr::get($this->data, $EventName.'.'.$EventRes.'TranscodeTask.Message');
+            foreach (Arr::get($this->data, $EventName.'.'.$EventRes) as $key => $value) {
+                if (Arr::get($value, 'Type') == 'Transcode') {
+                    if (Arr::get($value, 'TranscodeTask.ErrCode') == '0') {
+                        //转码成功
+                        $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
+                        $threadVideo->media_url = Arr::get($value, 'TranscodeTask.Output.Url');
+                    } else {
+                        //转码失败
+                        $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
+                        $threadVideo->reason = Arr::get($value, 'TranscodeTask.Message');
+                    }
                 }
-            }
 
-            if (Arr::get($this->data, $EventName.'.'.$EventRes.'Type') == 'CoverBySnapshot') {
-                if (Arr::get($this->data, $EventName.'.'.$EventRes.'CoverBySnapshotTask.ErrCode') == '0') {
-                    //截取封面图成功
-                    $threadVideo->cover_url = Arr::get($this->data, $EventName.'.'.$EventRes.'CoverBySnapshotTask.Output.Url');
+
+                if (Arr::get($value, 'Type') == 'CoverBySnapshot') {
+                    if (Arr::get($value, 'CoverBySnapshotTask.ErrCode') == '0') {
+                        //截取封面图成功
+                        $threadVideo->cover_url = Arr::get($value, 'CoverBySnapshotTask.Output.CoverUrl');
+                    }
                 }
             }
 
             $threadVideo->save();
-        }
-        //主题审核状态
 
+            //主题审核状态
+            $post = $posts->query()->where('thread_id', $threadVideo->thread_id)->firstOrFail();
+            $censor->checkText($post->content);
+            if (!$censor->isMod) {
+                $thread = $threads->findOrFail($threadVideo->thread_id);
+                $thread->is_approved = 1;
+                $thread->save();
+            }
+        }
         return 'success';
     }
 }

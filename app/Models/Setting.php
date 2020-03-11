@@ -44,7 +44,6 @@ class Setting extends Model
         'miniprogram_app_secret',
         'oplatform_app_id',
         'oplatform_app_secret',
-        'qcloud_app_id',
         'qcloud_secret_id',
         'qcloud_secret_key',
         'qcloud_sms_app_id',
