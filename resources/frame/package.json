@@ -25,6 +25,7 @@
     "postcss-pxtorem": "^4.0.1",
     "prerender-node": "^3.2.5",
     "vant": "^2.2.9",
+    "vod-js-sdk-v6": "^1.4.8",
     "vue": "^2.5.2",
     "vue-auth-image": "0.0.3",
     "vue-router": "^3.0.1",
