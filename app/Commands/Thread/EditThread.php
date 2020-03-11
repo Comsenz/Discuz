@@ -71,6 +71,7 @@ class EditThread
      * @param ThreadRepository $threads
      * @param Censor $censor
      * @param ThreadValidator $validator
+     * @param ThreadVideoRepository $threadVideos
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
@@ -184,7 +185,11 @@ class EditThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $validator->valid($thread->getDirty());
+        //视频贴验证是否上传视频
+        $file_id = Arr::get($this->data, 'attributes.file_id', '');
+        $type = $thread->type;
+
+        $validator->valid($thread->getDirty() + compact('file_id', 'type'));
 
         $thread->save();
 
@@ -193,7 +198,7 @@ class EditThread
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
             if ($threadVideo->file_id != $attributes['file_id']) {
                 $threadVideo->file_id = $attributes['file_id'];
-                $threadVideo->state = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+                $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
                 $threadVideo->media_url = '';
                 $threadVideo->cover_url = '';
                 $threadVideo->cover_url = '';

@@ -82,23 +82,13 @@ class CreateThread
 
         $this->assertCan($this->actor, 'createThread');
 
-        $thread->type = Arr::get($this->data, 'attributes.type', 0);
-        //视频主题设置校验
-        if ($thread->type == 2 && !$settings->get('qcloud_vod', 'qcloud')) {
-            throw new PermissionDeniedException;
-        }
-        //视频主题文件校验
-        $file_id = Arr::get($this->data, 'attributes.file_id');
-        if ($thread->type == 2 && !$file_id) {
-            throw new PermissionDeniedException;
-        }
-
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
 
         // 存在审核敏感词/发布视频主题时，将主题放入待审核
+        $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
         if ($censor->isMod || $thread->type == 2) {
             $thread->is_approved = 0;
         }
@@ -131,8 +121,10 @@ class CreateThread
                 $this->ip,
             ];
         }
+        //视频贴验证是否上传视频
+        $file_id = Arr::get($this->data, 'attributes.file_id', '');
 
-        $validator->valid($thread->getAttributes() + compact('captcha'));
+        $validator->valid($thread->getAttributes() + compact('captcha', 'file_id'));
 
         $thread->save();
 

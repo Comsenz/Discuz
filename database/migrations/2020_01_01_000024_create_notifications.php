@@ -13,7 +13,7 @@ class CreateNotifications extends Migration
     public function up()
     {
         $this->schema()->create('notifications', function (Blueprint $table) {
-            $table->increments('id')->comment('通知 id');
+            $table->id()->comment('通知 id');
             $table->string('type')->comment('通知类型');
             $table->morphs('notifiable');
             $table->text('data')->comment('通知内容');

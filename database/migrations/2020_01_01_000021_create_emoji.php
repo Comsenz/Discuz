@@ -13,7 +13,7 @@ class CreateEmoji extends Migration
     public function up()
     {
         $this->schema()->create('emoji', function (Blueprint $table) {
-            $table->increments('id')->comment('表情 id');
+            $table->id()->comment('表情 id');
             $table->string('category')->comment('表情分类');
             $table->string('url')->comment('表情地址');
             $table->string('code')->comment('表情符号');

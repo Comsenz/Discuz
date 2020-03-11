@@ -29,6 +29,11 @@ class ThreadValidator extends AbstractValidator
     protected $qCloudCaptchaSwitch = false;
 
     /**
+     * @var bool
+     */
+    protected $qCloudVodSwitch = false;
+
+    /**
      * 获取相关设置
      *
      * @param Factory $validator
@@ -42,6 +47,9 @@ class ThreadValidator extends AbstractValidator
 
         // 获取后台设置的腾讯云验证码开关
         $this->qCloudCaptchaSwitch = (bool)$settings->get('qcloud_captcha', 'qcloud');
+
+        // 获取后台设置的腾讯云验证码开关
+        $this->qCloudVodSwitch = (bool)$settings->get('qcloud_vod', 'qcloud');
     }
 
     /**
@@ -70,6 +78,21 @@ class ThreadValidator extends AbstractValidator
                 },
             ];
         }
+
+        $rules['type'] = [
+            'required',
+            function ($attribute, $value, $fail) {
+                if ($value == 2 && (!isset($this->data['file_id']) || !$this->data['file_id'])) {
+                    $fail('file id 不能为空。');
+                }
+
+                if ($value == 2 && !$this->qCloudVodSwitch) {
+                    $fail('未开启云点播。');
+                }
+            }
+        ];
+
+
 
         return $rules;
     }

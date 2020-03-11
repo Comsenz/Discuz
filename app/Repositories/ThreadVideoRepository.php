@@ -34,7 +34,7 @@ class ThreadVideoRepository extends AbstractRepository
     public function findOrFailByThreadId($file_id)
     {
         $query = $this->query();
-        $query->where('file_id', $file_id);
+        $query->where('thread_id', $file_id);
 
         return $query->firstOrFail();
     }

@@ -13,7 +13,7 @@ class CreateUserWalletLogs extends Migration
     public function up()
     {
         $this->schema()->create('user_wallet_logs', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('钱包明细 id');
+            $table->id()->comment('钱包明细 id');
             $table->unsignedBigInteger('user_id')->comment('明细所属用户 id');
             $table->decimal('change_available_amount', 10, 2)->comment('变动可用金额');
             $table->decimal('change_freeze_amount', 10, 2)->comment('变动冻结金额');
