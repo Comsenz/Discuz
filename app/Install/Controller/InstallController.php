@@ -73,12 +73,12 @@ class InstallController implements RequestHandlerInterface
         }
 
         $tablePrefix = Arr::get($input, 'tablePrefix', null);
-        if(preg_match("/[\.\+]+/", $tablePrefix)) {
+        if(!preg_match("/^\w+$/", $tablePrefix)) {
             return DiscuzResponseFactory::HtmlResponse('表前缀格式错误', 500);
         }
 
         try {
-            unlink($this->app->basePath('config/config.php'));
+            $this->dropConfigFile();
             //创建数据库
             $this->installDatabase($input);
             //创建配置文件
@@ -100,7 +100,7 @@ class InstallController implements RequestHandlerInterface
             //安装成功
             touch($this->app->storagePath().'/install.lock');
         } catch (Exception $e) {
-            unlink($this->app->basePath('config/config.php'));
+            $this->dropConfigFile();
             return DiscuzResponseFactory::HtmlResponse($e->getMessage(), 500);
         }
 
@@ -282,5 +282,11 @@ class InstallController implements RequestHandlerInterface
     private function getConsole()
     {
         return $this->console ?? $console = $this->app->make(Kernel::class);
+    }
+
+    protected function dropConfigFile()
+    {
+        $configFile = $this->app->basePath('config/config.php');
+        file_exists($configFile) && unlink($configFile);
     }
 }
