@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Post $firstPost
  * @property User $user
  * @property Category $category
+ * @property threadVideo $threadVideo
  * @package App\Models
  */
 class Thread extends Model
