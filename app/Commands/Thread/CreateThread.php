@@ -123,8 +123,8 @@ class CreateThread
         );
 
         // 发帖验证码
-        $captcha = [];
-        if ($this->actor->can('createThreadWithCaptcha')) {
+        $captcha = '';  // 默认为空将不走验证
+        if (!$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha')) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
                 Arr::get($this->data, 'captcha_rand_str', ''),
