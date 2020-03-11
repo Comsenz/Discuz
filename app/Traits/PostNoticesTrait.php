@@ -83,7 +83,7 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->is_long_article ? $post->thread->title : $post->formatContent();
+        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
     }
 
     /**
