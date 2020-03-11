@@ -87,6 +87,7 @@ class CreateThreadVideo
         //调取腾讯云点播转码API
         $SecretId = $settings->get('qcloud_secret_id', 'qcloud');
         $secretKey = $settings->get('qcloud_secret_key', 'qcloud');
+        $qcloudVodTranscode = $settings->get('qcloud_vod_transcode', 'qcloud');
 
         $param = [
             'Action' => 'ProcessMedia',
@@ -94,7 +95,7 @@ class CreateThreadVideo
             'MediaProcessTask.CoverBySnapshotTaskSet.0.Definition' => '10',
             'MediaProcessTask.CoverBySnapshotTaskSet.0.PositionType' => 'Time',
             'MediaProcessTask.CoverBySnapshotTaskSet.0.PositionValue' => '0',
-            'MediaProcessTask.TranscodeTaskSet.0.Definition' => '20',
+            'MediaProcessTask.TranscodeTaskSet.0.Definition' => $qcloudVodTranscode,
             'Nonce' => rand(),
             'SecretId' => $SecretId,
             'Timestamp' => Carbon::now()->timestamp,
