@@ -14,7 +14,7 @@
         data-appid="appID"
         @click="initCaptcha"
         v-else
-      >发布111</van-button>
+      >发布</van-button>
     </header>
 
     <div class="post-longText-form" id="postForm">
