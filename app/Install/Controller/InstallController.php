@@ -153,8 +153,8 @@ class InstallController implements RequestHandlerInterface
             }
         }
 
-        $pdo->query('CREATE DATABASE IF NOT EXISTS '.Arr::get($input, 'mysqlDatabase'))->execute();
-
+        $pdo->query('CREATE DATABASE '.Arr::get($input, 'mysqlDatabase').' DEFAULT CHARACTER SET = `utf8mb4` DEFAULT COLLATE = `utf8mb4_unicode_ci`')->execute();
+        
         $this->app['config']->set(
             'database.connections',
             [
