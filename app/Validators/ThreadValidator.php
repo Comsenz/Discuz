@@ -79,7 +79,6 @@ class ThreadValidator extends AbstractValidator
             ];
         }
 
-        $data = $this->data;
         $rules['type'] = [
             'sometimes',
             function ($attribute, $value, $fail) {
