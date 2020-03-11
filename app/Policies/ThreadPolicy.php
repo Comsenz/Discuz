@@ -97,4 +97,16 @@ class ThreadPolicy extends AbstractPolicy
             return true;
         }
     }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool
+     */
+    public function editPrice(User $actor, Thread $thread)
+    {
+        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
+            return true;
+        }
+    }
 }
