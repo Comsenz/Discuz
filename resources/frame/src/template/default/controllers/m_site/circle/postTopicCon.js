@@ -104,6 +104,8 @@ export default {
     let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
     if (qcloud_captcha && thread_captcha) {
       this.publishShow = false
+    } else {
+      this.publishShow = true
     }
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
