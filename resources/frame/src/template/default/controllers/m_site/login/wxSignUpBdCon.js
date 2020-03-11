@@ -251,7 +251,7 @@ export default {
     let sessionId = this.$router.history.current.query.sessionId;
     let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
     let register_captcha = browserDb.getLItem('siteInfo')._data.set_reg.register_captcha;
-    if (qcloud_captcha || register_captcha) {
+    if (qcloud_captcha && register_captcha) {
       this.signUpBdClickShow = false
     }
     // console.log('进入注册页面');
