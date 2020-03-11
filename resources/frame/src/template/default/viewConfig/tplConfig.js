@@ -690,7 +690,6 @@ export default {
         realName = res.readdata._data.qcloud.qcloud_faceid;
         canWalletPay = res.readdata._data.other.initialized_pay_password;
         modifyPhone = res.readdata._data.qcloud.qcloud_sms;
-        console.log(modifyPhone)
 
         /*
         * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
