@@ -76,7 +76,7 @@
         <ContArrange
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
-          :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
+          :themeName="items.thread._data.type === 1?items.thread._data.title:items.thread.firstPost._data.content"
           :finalPost="formatDate(items._data.createdAt)"
           :deleTime="formatDate(items._data.deletedAt)"
           :ip="items._data.ip"

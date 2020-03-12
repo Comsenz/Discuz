@@ -78,8 +78,8 @@ export default {
       this.pageNum = val;
       this.getNoticeList();
     },
-    configClick(id) {  //点击配置跳到对应的配置页面
-      this.$router.push({path:'/admin/notice-configure',query: {id:id,type:'wx'}});
+    configClick(id,typeName) {  //点击配置跳到对应的配置页面
+      this.$router.push({path:'/admin/notice-configure',query: {id:id,type:'wx',typeName:typeName}});
     }
   },
 
