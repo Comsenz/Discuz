@@ -181,7 +181,7 @@ export default {
             //微信跳转
             this.openid = openid;
             webDb.setLItem('openid', openid);
-            this.$router.push({ path: '/wx-sign-up-bd' });
+            this.$router.push({ path: '/wx-login-bd' });
           }
         } else if (res.data.attributes.location) {
           //获取地址

@@ -117,8 +117,8 @@ class ResourceThreadController extends AbstractResourceController
             }
 
             // 付费视频，未付费时，隐藏视频
-            if (in_array('threadVideo', $include) && !$paid) {
-                $thread->threadVideo->file_id = '';
+            if (in_array('threadVideo', $include) && $thread->type == 2 && !$paid) {
+                $thread->threadVideo && $thread->threadVideo->file_id = '';
             }
         }
 

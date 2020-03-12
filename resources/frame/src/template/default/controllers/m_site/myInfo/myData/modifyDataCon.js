@@ -188,7 +188,7 @@ export default {
             if (isWeixin) {
               // var userId = browserDb.getLItem('tokenId');
               localStorage.clear();
-              this.$router.push({ path: '/wx-login-bd' })
+              this.$router.push({ path: '/wx-sign-up-bd' })
             } else {
               this.modifyData()
             }
