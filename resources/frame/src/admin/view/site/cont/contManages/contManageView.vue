@@ -106,7 +106,7 @@
               <el-checkbox v-model="checkedTheme" :label="items._data.id" @change="handleCheckedCitiesChange()"></el-checkbox>
             </div>
 
-            <a slot="longText" class="cont-manage-theme__table-long-text" v-if="items._data.isLongArticle" :href="'/details/' + items._data.id" target="_blank">
+            <a slot="longText" class="cont-manage-theme__table-long-text" v-if="items._data.type === 1" :href="'/details/' + items._data.id" target="_blank">
               {{items._data.title}}
               <span  class="iconfont" :class="parseInt(items._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
             </a>

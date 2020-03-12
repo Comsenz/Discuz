@@ -324,7 +324,9 @@ export default {
               "type": "threads",
               "attributes": {
                   "content": this.content,
+                  "price": this.paySetValue,
                   'file_id': this.fileId,
+                  'file_name': this.vcVideoName,
                   'type': 2,
               },
               "relationships": {
@@ -438,6 +440,7 @@ export default {
         document.getElementById('postForm').style.height = '100%';
       }
       this.footMove = !this.footMove;
+      this.payMove = !this.payMove;
     },
     backClick() {
       this.$router.go(-1);

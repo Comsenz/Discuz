@@ -208,9 +208,9 @@ export default {
     //初始化请求编辑主题数据
     detailsLoad() {
       if (this.postsId && this.content) {
-        let threads = 'threads/' + this.themeId;
         this.appFetch({
-          url: threads,
+          url: 'threads',
+          splice: '/' + this.themeId,
           method: 'get',
           data: {
             include: ['firstPost', 'firstPost.images', 'firstPost.attachments', 'category'],
@@ -243,9 +243,9 @@ export default {
         return;
       }
       if (this.postsId && this.content) {
-        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' +this.postsId,
           method: "patch",
           data: {
             "data": {

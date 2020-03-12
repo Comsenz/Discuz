@@ -66,16 +66,16 @@
 
 <script>
 // import '../../../scss/m_site/mobileIndex';
-import editTopicCon from '../../../controllers/m_site/circle/editTopicCon';
+import editVideoCon from '../../../controllers/m_site/circle/editVideoCon';
 import { debounce, autoTextarea } from '../../../../../common/textarea.js';
 import Expression from '../../m_site/common/expressionView';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
-    name: "post-topic",
+    name: "post-video",
     components: {
       Expression,
     },
-  ...editTopicCon
+  ...editVideoCon
 }
 </script>
