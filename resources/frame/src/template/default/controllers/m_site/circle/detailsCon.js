@@ -332,7 +332,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
+          include: ['posts.replyUser','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
