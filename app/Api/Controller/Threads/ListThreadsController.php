@@ -536,8 +536,8 @@ class ListThreadsController extends AbstractListController
 
             // 付费视频，未付费时，隐藏视频
             if (in_array('threadVideo', $include)) {
-                if ($thread->price > 0 && !$thread->getAttribute('paid')) {
-                    $thread->threadVideo->file_id = '';
+                if ($thread->price > 0 && $thread->type == 2 && !$thread->getAttribute('paid')) {
+                    $thread->threadVideo && $thread->threadVideo->file_id = '';
                 }
             }
         });
