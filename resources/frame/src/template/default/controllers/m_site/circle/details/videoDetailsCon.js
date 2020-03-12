@@ -21,7 +21,7 @@ export default {
       userId: '',         //当前用户ID
       codeUrl:"",        //支付url，base64
       payLoading: false,
-      appId: '',
+      // appId: '',
       // userDet: '',
       tcPlayerId: 'tcPlayer' + Date.now(),
       player: null,
@@ -45,9 +45,10 @@ export default {
   mounted () {
     let self = this
     setTimeout(() => {
-      self.videoFileid = this.themeCon.threadVideo._data.file_id;
-      self.videoAppid = this.videoAppid
+      self.videoFileid = self.themeCon.threadVideo._data.file_id;
+      self.videoAppid = self.videoAppid
       self.$nextTick(() => {
+        console.log(self.videoFileid, self.videoAppid,'@@@@#~~~~');
         self.getVideoLang(self.videoFileid, self.videoAppid)
       })
     }, 2000)
@@ -81,12 +82,14 @@ export default {
 	methods: {
     // 初始化腾讯云播放器
     getVideoLang (fileID, appID) {
+      console.log(fileID, appID,'####~~~~');
       const playerParam = {
         fileID: fileID,
         appID: appID,
         'width': this.viewportWidth - 30,
         'coverpic' : '',
       }
+      console.log(window.TCPlayer,'lllllllllllllllllllll');
       this.player = window.TCPlayer(this.tcPlayerId, playerParam)
     },
     //点击用户名称，跳转到用户主页
