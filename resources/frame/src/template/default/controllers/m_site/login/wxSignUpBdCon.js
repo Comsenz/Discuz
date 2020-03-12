@@ -245,6 +245,7 @@ export default {
   created() {
     this.getForum();
     this.openid = webDb.getLItem('openid');
+    this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
