@@ -79,14 +79,17 @@ class ThreadValidator extends AbstractValidator
             ];
         }
 
-        $rules['file_id'] = [
-            'required',
-            function ($attribute, $value, $fail) {
-                if ($this->data['type'] == 2 && !$this->qCloudVodSwitch) {
-                    $fail(app('translator')->get('validation.qcloud_vod'));
+        //发布视频主题时验证
+        if ($this->data['type'] == 2) {
+            $rules['file_id'] = [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!$this->qCloudVodSwitch) {
+                        $fail(app('translator')->get('validation.qcloud_vod'));
+                    }
                 }
-            }
-        ];
+            ];
+        }
 
         return $rules;
     }
