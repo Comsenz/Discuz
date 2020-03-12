@@ -49,7 +49,7 @@ export default {
           icon:'iconduixiangcunchu',
           setFlag: true
         },{
-          name: '腾讯云设置',
+          name: '视频',
           type:'qcloud_vod',
           description: '请先配置云API，开通腾讯云的云点播VOD服务，并确保有对应资源包',
           status:'',

@@ -66,14 +66,14 @@ class ThreadValidator extends AbstractValidator
             $rules['captcha'] = [
                 'sometimes',
                 function ($attribute, $value, $fail) {
-                    if (count($value) == 3) {
+                    if (count(array_filter($value)) == 3) {
                         $result = $this->describeCaptchaResult(...$value);
 
                         if ($result['CaptchaCode'] != 1) {
-                            $fail(app('translator')->get('validation.wrong'));
+                            $fail(trans('validation.wrong'));
                         }
                     } else {
-                        $fail(app('translator')->get('validation.wrong'));
+                        $fail(trans('validation.wrong'));
                     }
                 },
             ];
@@ -85,7 +85,7 @@ class ThreadValidator extends AbstractValidator
                 'required',
                 function ($attribute, $value, $fail) {
                     if (!$this->qCloudVodSwitch) {
-                        $fail(app('translator')->get('validation.qcloud_vod'));
+                        $fail(trans('validation.qcloud_vod'));
                     }
                 }
             ];

@@ -10,13 +10,13 @@
 
     <Card>
       <CardRow description="允许发布长文">
-        <el-checkbox v-model="checked" label="createLongText" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布长文</el-checkbox>
+        <el-checkbox v-model="checked" label="createThreadLong" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布长文</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
       <CardRow description="允许发布视频">
-        <el-checkbox v-model="checked" label="createVideo" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布视频</el-checkbox>
+        <el-checkbox v-model="checked" label="createThreadVideo" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布视频</el-checkbox>
       </CardRow>
     </Card>
 
