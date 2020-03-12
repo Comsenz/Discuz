@@ -9,7 +9,7 @@ import TcVod from 'vod-js-sdk-v6';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
 function getSignature() {
-  console.log('000000');
+  // console.log('000000');
     return axiosHelper({
       url: 'signature',
       method: 'get', 
@@ -30,15 +30,12 @@ export default {
       content:'',
       showFacePanel: false,
       keyboard: false,
-      // expressionShow: false,
       keywordsMax: 10000,
       list: [],
       footMove: false,
       payMove: false,
       faceData:[],
-      // fileListOne:[],
       uploadShow:false,
-      // enclosureList:[],
       avatar: "",
       themeId:'',
       postsId:'',
@@ -49,7 +46,6 @@ export default {
       headerImage: null,
       picValue: null,
       upImgUrl:'',
-      // enclosureShow: false,
       isWeixin: false,
       isPhone: false,
       themeCon:false,
@@ -59,12 +55,8 @@ export default {
       supportVideoExt: '',
       supportVideoExtRes:'',
       fileSize: '',
-      // supportFileExt:'',
-      // supportFileArr:'',
       limitMaxLength:true,
       limitMaxEncLength:true,
-      // fileListOneLen:'',
-      // enclosureListLen:'',
       isiOS: false,
       encuploadShow: false,
       testingRes:false,
@@ -82,7 +74,8 @@ export default {
       videoUp: true,      //上传加号
       vcVideoName: '',
       uploaderInfos: [],
-      testingRes: false,
+      testingSizeRes: false,
+      testingTypeRes: false,
       fileId: '',
 
     }
@@ -116,10 +109,8 @@ export default {
       getSignature: getSignature
     });
     // console.log(this.tcVod,'343423');
-    // this.cateId = this.$route.query.cateId;
     var videoExt = '';
     if(browserDb.getLItem('siteInfo')){
-      console.log(browserDb.getLItem('siteInfo'),'缓存');
       this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
       videoExt = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext.split(',');
       var videoStr='';
@@ -153,32 +144,12 @@ export default {
     }
     //初始化请求分类接口
     this.loadCategories();
-    //初始化请求主题数据
-    // this.detailsLoad();
+    //初始化请求forum
     this.getInfo();
 
 
   },
   watch: {
-    // 'fileListOne.length': function(newVal,oldVal){
-    //   this.fileListOneLen = newVal;
-    //   if(this.fileListOneLen >= 12){
-    //     this.limitMaxLength = false;
-    //   } else {
-    //     this.limitMaxLength = true;
-    //   }
-    // },
-    // 'limitMaxLength': function(newVal,oldVal){
-    //   this.limitMaxLength = newVal;
-    // },
-    // 'enclosureList.length': function(newVal,oldVal){
-    //   this.enclosureListLen = newVal;
-    //   if(this.enclosureListLen >= 3){
-    //     this.limitMaxEncLength = false;
-    //   } else {
-    //     this.limitMaxEncLength = true;
-    //   }
-    // },
     showFacePanel: function(newVal,oldVal){
       this.showFacePanel = newVal;
       if(this.showFacePanel) {
@@ -204,15 +175,15 @@ export default {
       let AllUpExt = allUpext;
       if(AllUpExt.indexOf(extName + ",") == "-1"){
         this.$toast.fail("文件格式不正确!");
-        this.testingRes = false;
+        this.testingTypeRes = false;
         // return false;
       } else {
-        this.testingRes = true;
+        this.testingTypeRes = true;
       }
     },
     //验证上传文件大小是否符合设置
     testingSize(eFile,allowSize){
-      console.log(eFile,'上传的');
+      // console.log(eFile,'上传的');
       let fileSize = eFile.size;
         // 视频大小大于接口返回的最大限制值时置空
         if (fileSize / 1024 / 1024 > allowSize) {
@@ -220,9 +191,9 @@ export default {
           // this.$refs.vExampleFile.files[0] = '';
           this.$refs.vExample.reset();
           
-          this.testingRes = false;
+          this.testingSizeRes = false;
         } else {
-          this.testingRes = true;
+          this.testingSizeRes = true;
         }
     },
 
@@ -230,12 +201,10 @@ export default {
     vExampleUpload(e) {
       this.testingType(e.target.files[0],this.supportVideoExt);
       this.testingSize(e.target.files[0],this.fileSize);
-      if(this.testingRes){
+      if(this.testingSizeRes && this.testingTypeRes){
         var self = this;
         var mediaFile = this.$refs.vExampleFile.files[0];
         this.vcVideoName = this.$refs.vExampleFile.files[0].name;
-        console.log(mediaFile,'mediaFile');
-        // var coverFile = this.$refs.vcExampleCover.files[0];
         var uploader = this.tcVod.upload({
           mediaFile: mediaFile,
           // coverFile: coverFile,
@@ -247,7 +216,7 @@ export default {
           uploaderInfo.isVideoUploadSuccess = true;
         });
 
-        console.log(uploader, "uploader");
+        // console.log(uploader, "uploader");
 
         var uploaderInfo = {
           videoInfo: uploader.videoInfo,
@@ -267,13 +236,12 @@ export default {
         uploader
         .done()
         .then((doneResult) => {
-          console.log("doneResult", doneResult);
+          // console.log("doneResult", doneResult);
           uploaderInfo.fileId = doneResult.fileId;
           this.videoUp = false;
           this.videoShow = true;
           this.fileId = doneResult.fileId;
-          console.log('要提交的视频id',this.fileId);
-          // return getAntiLeechUrl(doneResult.video.url);
+          // console.log('要提交的视频id',this.fileId);
         })
         .then(function(videoUrl) {
           uploaderInfo.videoUrl = videoUrl;
@@ -343,7 +311,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            console.log('主题');
+            // console.log('主题');
             this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo},replace:true});
           }
         })
@@ -383,7 +351,7 @@ export default {
           } else{
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            console.log('视频');
+            // console.log('视频');
             _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
           }
         })
