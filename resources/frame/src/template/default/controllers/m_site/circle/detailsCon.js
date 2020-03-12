@@ -332,7 +332,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['posts.replyUser','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
+          include: ['posts.replyUser','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -612,6 +612,10 @@ export default {
             this.$router.replace({
               path: '/edit-topic' + '/' + this.themeId
             });
+          } else if(this.type== 2) {
+            this.$router.replace({
+              path: '/edit-video' + '/' + this.themeId
+            });
           }
 
         }
@@ -619,9 +623,9 @@ export default {
     },
     //主题操作接口请求
     themeOpeRequest(attri, cateId, clickType) {
-      let threads = 'threads/' + this.themeId;
       this.appFetch({
-        url: threads,
+        url: 'threads',
+        splice: '/' + this.themeId,
         method: 'patch',
         data: {
           "data": {
