@@ -1,8 +1,8 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import appCommonH from '../../../../../helpers/commonHelper';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {

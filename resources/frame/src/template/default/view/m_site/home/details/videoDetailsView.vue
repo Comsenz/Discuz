@@ -5,7 +5,7 @@
         <img
           v-if="themeCon.user && themeCon.user._data.avatarUrl"
           :src="themeCon.user._data.avatarUrl"
-          alt
+          alt=""
           @click="jumpPerDet(themeCon.user._data.id)"
           class="postHead"
         />

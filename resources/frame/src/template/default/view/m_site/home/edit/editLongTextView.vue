@@ -109,11 +109,11 @@
 </template>
 
 <script>
-import editLongTextCon from '../../../controllers/m_site/circle/editLongTextCon';
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import Expression from '../../m_site/common/expressionView';
-import  '../../../defaultLess/m_site/common/common.less';
-import  '../../../defaultLess/m_site/modules/circle.less';
+import editLongTextCon from '../../../../controllers/m_site/circle/edit/editLongTextCon';
+// import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import Expression from '../../../m_site/common/expressionView';
+import  '../../../../defaultLess/m_site/common/common.less';
+import  '../../../../defaultLess/m_site/modules/circle.less';
 
 export default {
     name: "post-topic",

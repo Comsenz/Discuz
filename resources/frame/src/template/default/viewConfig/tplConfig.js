@@ -234,7 +234,7 @@ export default {
       },
       'post-topic/:cateId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/postTopicView'], resolve)
+          require(['../view/m_site/home/post/postTopicView'], resolve)
         },
         metaInfo: {
           title: "发布主题"
@@ -242,7 +242,7 @@ export default {
       },
       'post-video/:cateId':{
         comLoad:function (resolve) {
-        require(['../view/m_site/home/postVideoView'],resolve)
+        require(['../view/m_site/home/post/postVideoView'],resolve)
         },
         metaInfo:{
         title:"发布视频"
@@ -250,7 +250,7 @@ export default {
       },
       'post-longText/:cateId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/postLongTextView'], resolve)
+          require(['../view/m_site/home/post/postLongTextView'], resolve)
         },
         metaInfo: {
           title: "发布长文"
@@ -258,7 +258,7 @@ export default {
       },
       'edit-topic/:themeId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/editTopicView'], resolve)
+          require(['../view/m_site/home/edit/editTopicView'], resolve)
         },
         metaInfo: {
           title: "编辑主题"
@@ -266,7 +266,7 @@ export default {
       },
       'edit-long-text/:themeId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/editLongTextView'], resolve)
+          require(['../view/m_site/home/edit/editLongTextView'], resolve)
         },
         metaInfo: {
           title: "编辑长文"
@@ -274,7 +274,7 @@ export default {
       },
       'edit-video/:themeId':{
         comLoad:function (resolve) {
-          require(['../view/m_site/home/editVideoView'],resolve)
+          require(['../view/m_site/home/edit/editVideoView'],resolve)
         },
         metaInfo:{
           title:"编辑视频"
