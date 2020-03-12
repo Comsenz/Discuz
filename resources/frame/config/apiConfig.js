@@ -63,7 +63,7 @@ module.exports = {
   'access':'/refresh-token',            //刷新token
   'follow':'/follow',                   //关注
   'realName':'/users/real',             //实名认证
-
+  'signature':'/signature',				//视频签名
 
   /*后台*/
   'siteinfo':'/siteinfo',               //首页-系统信息

@@ -193,6 +193,16 @@ export default {
               attribution:'全局'
             }
           },
+          'tencent-cloud-config/vod':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigVodView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
           'tencent-cloud-config/code':{
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCodeView'], resolve)

@@ -66,33 +66,30 @@ class ThreadValidator extends AbstractValidator
             $rules['captcha'] = [
                 'sometimes',
                 function ($attribute, $value, $fail) {
-                    if (count($value) == 3) {
+                    if (count(array_filter($value)) == 3) {
                         $result = $this->describeCaptchaResult(...$value);
 
                         if ($result['CaptchaCode'] != 1) {
-                            $fail('验证码错误。');
+                            $fail(trans('validation.wrong'));
                         }
                     } else {
-                        $fail('验证码错误。');
+                        $fail(trans('validation.wrong'));
                     }
                 },
             ];
         }
 
-        $rules['type'] = [
-            'required',
-            function ($attribute, $value, $fail) {
-                if ($value == 2 && (!isset($this->data['file_id']) || !$this->data['file_id'])) {
-                    $fail('file id 不能为空。');
+        //发布视频主题时验证
+        if ($this->data['type'] == 2) {
+            $rules['file_id'] = [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!$this->qCloudVodSwitch) {
+                        $fail(trans('validation.qcloud_vod'));
+                    }
                 }
-
-                if ($value == 2 && !$this->qCloudVodSwitch) {
-                    $fail('未开启云点播。');
-                }
-            }
-        ];
-
-
+            ];
+        }
 
         return $rules;
     }

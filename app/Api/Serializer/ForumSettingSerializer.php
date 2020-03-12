@@ -56,6 +56,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'set_reg' => [
                 'register_close' => (bool)$this->settings->get('register_close'),
                 'register_validate' => (bool)$this->settings->get('register_validate'),
+                'register_captcha' => (bool)$this->settings->get('register_captcha'),
                 'password_length' => (int)$this->settings->get('password_length'),
                 'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
             ],
@@ -105,6 +106,8 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),
                 'can_upload_images' => $this->actor->can('attachment.create.1'),
                 'can_create_thread' => $this->actor->can('createThread'),
+                'can_create_thread_video' => $this->actor->can('createThreadVideo'),
+                'can_create_thread_long' => $this->actor->can('createThreadLong'),
                 'can_view_threads' => $this->actor->can('viewThreads'),
                 'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
                 'can_view_user_list' => $this->actor->can('viewUserList'),

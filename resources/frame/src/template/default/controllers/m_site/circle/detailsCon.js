@@ -734,10 +734,9 @@ export default {
             }
           }
         }
-
-        let posts = 'posts/' + postId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' + postId,
           method: 'patch',
           data: {
             "data": {
@@ -803,9 +802,9 @@ export default {
               }
             }
           }
-          let posts = 'posts/' + postId;
           this.appFetch({
-            url: posts,
+            url: 'posts',
+            splice: '/' +postId,
             method: 'patch',
             data: {
               "data": {
