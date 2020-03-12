@@ -17,24 +17,17 @@ export default {
       content:'',
       showFacePanel: false,
       keyboard: false,
-      // expressionShow: false,
       keywordsMax: 1000,
       list: [],
       footMove: false,
       faceData:[],
-      fileListOne:[],
-      fileList: [
-        // Uploader 根据文件后缀来判断是否为图片文件
-        // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        // { url: 'https://cloud-image', isImage: true }
-      ],
+      // fileListOne:[],
+      // fileList: [
+      //   // Uploader 根据文件后缀来判断是否为图片文件
+      //   // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+      //   // { url: 'https://cloud-image', isImage: true }
+      // ],
       uploadShow:false,
-      enclosureList:[
-        // {
-        //   type:'doc',
-        //   name:'saaaaaaaa',
-        // },
-      ],
       avatar: "",
       postsId:'',
       files: {
@@ -64,9 +57,24 @@ export default {
       encuploadShow: false,
       testingRes:false,
       backGo:-2,
-      formdataList:[],
+      formdataList: [],
       viewportHeight: '',
-      postFormScrollTop:''
+      postFormScrollTop: '',
+      nowCate: [],
+      payValue: '免费',
+      paySetShow: false,
+      isCli: true,
+      moneyVal: '',
+      paySetValue: '',
+      videoShow: false,   //上传视频后显示
+      videoUp: true,      //上传加号
+      vcVideoName: '',
+      uploaderInfos: [],
+      testingSizeRes: false,
+      testingTypeRes: false,
+      fileId: '',
+      
+
     }
   },
 
