@@ -38,6 +38,7 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
         'createThreadVideo' => [10],            // 发布视频主题
+        'createThreadLong' => [10],             // 发布长文主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
 
         // 回复

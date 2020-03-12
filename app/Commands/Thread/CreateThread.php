@@ -80,7 +80,14 @@ class CreateThread
     {
         $this->events = $events;
 
+        // Check Permissions
         $this->assertCan($this->actor, 'createThread');
+        $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
+        if ($thread->type == 1) {
+            $this->assertCan($this->actor, 'createThreadLong');
+        } elseif ($thread->type == 2) {
+            $this->assertCan($this->actor, 'createThreadVideo');
+        }
 
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
@@ -88,7 +95,6 @@ class CreateThread
         Arr::set($this->data, 'attributes.content', $content);
 
         // 存在审核敏感词/发布视频主题时，将主题放入待审核
-        $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
         if ($censor->isMod || $thread->type == 2) {
             $thread->is_approved = 0;
         }

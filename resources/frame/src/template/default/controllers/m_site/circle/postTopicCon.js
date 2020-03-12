@@ -284,6 +284,7 @@ export default {
             "data": {
               "type": "threads",
               "attributes": {
+                "type": 0,
                 "content": this.content,
                 "captcha_ticket": this.captcha_ticket,
                 "captcha_rand_str": this.captcha_rand_str

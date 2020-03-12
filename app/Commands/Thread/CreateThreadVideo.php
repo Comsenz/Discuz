@@ -74,8 +74,6 @@ class CreateThreadVideo
 
         $thread = $thread->findOrFail($this->threadId);
 
-        $this->assertCan($this->actor, 'createThreadVideo');
-
         $threadVideo->user_id   = $this->actor->id;
         $threadVideo->thread_id = $thread->id;
         $threadVideo->status    = $threadVideo::VIDEO_STATUS_TRANSCODING;

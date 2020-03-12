@@ -1,4 +1,4 @@
-<!--移动端首页模板-->
+<!--移动端详情页模板-->
 
 <template>
     <!-- 付费站点 已登录且当前用户已付费 -->
@@ -11,6 +11,9 @@
           <normalDetail v-if="themeCon._data.type == 0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
           <!-- 付费长文内容组件 -->
           <longTextDetail v-if="themeCon._data.type == 1" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
+
+          <!-- 视屏内容组件 -->
+          <videoDetail v-if="themeCon._data.type == 2" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></videoDetail>
 
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.postCount-1}}&nbsp;回复</span>
@@ -198,6 +201,7 @@ import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUp
 import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import longTextDetail from '../home/details/longTextDetailsView';
 import normalDetail from '../home/details/normalDetailsView';
+import videoDetail from '../home/details/videoDetailsView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
@@ -207,6 +211,7 @@ export default {
       comHeader,
       normalDetail,
       longTextDetail,
+      videoDetail,
       PayMethod
     },
     ...mSiteDetailsCon

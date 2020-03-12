@@ -1,6 +1,24 @@
 <template>
   <div class="rol-permission-box">
     <Card :header="'设置权限——' + $router.history.current.query.name"></Card>
+    <Card header="内容发布权限："></Card>
+    <Card>
+      <CardRow description="允许发布主题">
+        <el-checkbox v-model="checked" label="createThread" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布主题</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布长文">
+        <el-checkbox v-model="checked" label="createLongText" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布长文</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布视频">
+        <el-checkbox v-model="checked" label="createVideo" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发布视频</el-checkbox>
+      </CardRow>
+    </Card>
 
     <Card header="前台操作权限："></Card>
     <Card>
@@ -12,12 +30,6 @@
     <Card>
       <CardRow description="查看主题的详情页的权限">
         <el-checkbox v-model="checked" label="thread.viewPosts" :disabled="$router.history.current.query.id === '1'">查看主题详情</el-checkbox>
-      </CardRow>
-    </Card>
-
-    <Card>
-      <CardRow description="发布主题的权限">
-        <el-checkbox v-model="checked" label="createThread" :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'">发表帖子</el-checkbox>
       </CardRow>
     </Card>
 

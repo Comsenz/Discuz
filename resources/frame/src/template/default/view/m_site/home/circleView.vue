@@ -35,18 +35,24 @@
         <p class="nullWord">{{nullWord}}</p>
       </div>
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix"  @click="loginJump(1)" :class="{'hide':loginHide}" :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}">{{loginWord}}</van-button>
-      <div class="fixedEdit" id="fixedEdit" v-if="canEdit" @click="postCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 15) +'px' : '15px'}" :class="{'rotate':rotate}">
+      <div class="fixedEdit" id="fixedEdit" v-if="canCreateThread || canCreateLongText || canCreateVideo" @click="postCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 15) +'px' : '15px'}" :class="{'rotate':rotate}">
         <span class="icon iconfont icon-add"></span>
         <!-- <span v-else="" class="icon iconfont icon-closeCho"></span> -->
       </div>
-      <div class="publishTypeBox" v-if="puslishCho" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 10) +'px' : '10px'}">
-        <div class="publishCho" @click="postTopic">
+      <div class="publishTypeBox" v-if="puslishCho && (canCreateThread || canCreateLongText || canCreateVideo)" :style="{'right': (!isPhone && !isWeixin) ? ((viewportWidth - 640)/2 + 10) +'px' : '10px'}">
+        <div class="publishCho" v-if="canCreateVideo" @click="postType(2)">
+          <div class="iconBg">
+            <span class="icon iconfont icon-video"></span>
+          </div>
+          <div class="publishChoWo">视频</div>
+        </div>
+        <div class="publishCho" v-if="canCreateThread" @click="postType(0)">
           <div class="iconBg">
             <span class="icon iconfont icon-theme"></span>
           </div>
           <div class="publishChoWo">主题</div>
         </div>
-        <div class="publishCho" @click="postLongText">
+        <div class="publishCho" v-if="canCreateLongText" @click="postType(1)">
           <div class="iconBg">
             <span class="icon iconfont icon-longtext"></span>
           </div>

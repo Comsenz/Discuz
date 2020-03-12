@@ -240,6 +240,14 @@ export default {
           title: "发布主题"
         }
       },
+      'post-video/:cateId':{
+        comLoad:function (resolve) {
+        require(['../view/m_site/home/postVideoView'],resolve)
+        },
+        metaInfo:{
+        title:"发布视频"
+        }
+      },
       'post-longText/:cateId': {
         comLoad: function (resolve) {
           require(['../view/m_site/home/postLongTextView'], resolve)
@@ -262,6 +270,14 @@ export default {
         },
         metaInfo: {
           title: "编辑长文"
+        }
+      },
+      'edit-video/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/editVideoView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑视频"
         }
       },
       //登录、注册、微信绑定模块路由

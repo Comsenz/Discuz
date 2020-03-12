@@ -53,12 +53,14 @@ export default {
         filterCondition: 'allThemes',
         typeWo: '全部主题'
       },
-      canCreateThread: '',
-      canViewThreads: '',
-      nullTip: false,
-      nullWord: '',
-      allowRegister: '',
-      loginWord: '登录 / 注册',
+      canCreateThread:'',       //发布主题权限
+      canCreateLongText:'',     //发布长文权限
+      canCreateVideo:'',        //发布视频主题权限
+      canViewThreads:'',
+      nullTip:false,
+      nullWord:'',
+      allowRegister:'',
+      loginWord:'登录 / 注册',
       isWeixin: false,
       isPhone: false,
       viewportWidth: '',
@@ -103,12 +105,15 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error);
-        } else {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error);
+        } else {
+          console.log(res,'eeeee');
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
+          this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
+          this.canCreateVideo = res.readdata._data.other.can_create_thread_video;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
@@ -187,12 +192,12 @@ export default {
         this.categoryId = 0;
       }
       let data = {
-        'filter[isEssence]': 'yes',
-        'filter[fromUserId]': userId,
-        'filter[categoryId]': this.categoryId,
-        'filter[isApproved]': 1,
-        'filter[isDeleted]': 'no',
-        include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+        'filter[isEssence]':'yes',
+        'filter[fromUserId]':userId,
+        'filter[categoryId]':this.categoryId,
+        'filter[isApproved]':1,
+        'filter[isDeleted]':'no',
+        include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
         'page[number]': this.pageIndex,
         'page[limit]': this.pageLimit
       }
@@ -309,23 +314,23 @@ export default {
         }
       }
     },
-    postCho: function () {
-      if (this.canCreateThread) {
-        // alert('跳转到发布主题页');
-        this.rotate = !this.rotate;
-        this.puslishCho = !this.puslishCho;
-      } else {
-        this.$toast.fail('没有权限，请联系站点管理员');
+    postCho:function(){
+      this.rotate = !this.rotate;
+      this.puslishCho = !this.puslishCho;
+    },
+    
+    //发布
+    postType(type){
+      if(type == 0) {
+        //发布主题
+        this.$router.push({ path:'/post-topic/' + this.categoryId,replace:true});
+      } else if(type == 1) {
+        //发布长文
+        this.$router.push({ path:'/post-longText/' + this.categoryId});
+      } else if(type == 2) {
+        //发布视频
+        this.$router.push({ path:'/post-video/' + this.categoryId});
       }
-
-    },
-    //发布主题
-    postTopic: function () {
-      this.$router.push({ path: '/post-topic/' + this.categoryId, replace: true });
-    },
-    //发布长文
-    postLongText: function () {
-      this.$router.push({ path: '/post-longText/' + this.categoryId });
     },
 
     //给导航添加点击状态
