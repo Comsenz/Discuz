@@ -16,6 +16,6 @@ class InfoSerializer extends AbstractSerializer
         return [
             'succeed' => (bool)$model->succeed,
             'error' => $model->error
-            ];
+        ];
     }
 }
