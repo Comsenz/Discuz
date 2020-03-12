@@ -51,12 +51,12 @@
       <div class="navBox" id="testNavBar" :class="{'fixedNavBar': isfixNav}" v-show="navShow">
         <van-tabs v-model="navActi">
           <van-tab>
-            <span slot="title" v-on:click="categoriesCho(0)">
+            <span slot="title" class="title-span" v-on:click="categoriesCho(0)">
                 全部
             </span>
           </van-tab>
           <van-tab v-for="(cateChi, index) in categories" :key="index">
-            <span slot="title" v-on:click="categoriesCho(cateChi._data.id)">
+            <span slot="title" class="title-span" v-on:click="categoriesCho(cateChi._data.id)">
                 {{cateChi._data.name}}
             </span>
           </van-tab>

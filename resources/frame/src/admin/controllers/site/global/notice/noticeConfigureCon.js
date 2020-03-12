@@ -77,7 +77,7 @@ export default {
             "新角色：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
         },   //微信通知提示语
-        wxNoticeCon:''        //微信配置ID
+        wxNoticeCon:'',        //微信配置ID
       }
     },
     components: {
@@ -86,6 +86,7 @@ export default {
     },
     created() {
       this.query = this.$route.query;
+
       this.noticeConfigure();
     },
     methods: {
