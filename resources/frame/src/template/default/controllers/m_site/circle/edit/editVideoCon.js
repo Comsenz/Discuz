@@ -1,9 +1,9 @@
 /**
- * 发布视频主题控制器
+ * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import appCommonH from '../../../../../helpers/commonHelper';
-import browserDb from '../../../../../helpers/webDbHelper';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
+import browserDb from '../../../../../../helpers/webDbHelper';
 import axiosHelper from "axiosHelper";			
 import TcVod from 'vod-js-sdk-v6';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
@@ -21,49 +21,60 @@ function getSignature() {
 export default {
   data:function () {
     return {
-      headerTitle:"发布视频",
+      headerTitle:"编辑主题",
       selectSort:'',
       showPopup:false,
       categories: [],
       categoriesId: [],
+      oldCateId:'',
       cateId:'',
       content:'',
       showFacePanel: false,
       keyboard: false,
-      keywordsMax: 10000,
+      keywordsMax: 1000,
       list: [],
       footMove: false,
       payMove: false,
       faceData:[],
+      // fileListOne:[],
+      // fileList: [
+      //   // Uploader 根据文件后缀来判断是否为图片文件
+      //   // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+      //   // { url: 'https://cloud-image', isImage: true }
+      // ],
       uploadShow:false,
       avatar: "",
-      themeId:'',
       postsId:'',
       files: {
         name: "",
-        type: '',
+        type: ""
       },
       headerImage: null,
       picValue: null,
       upImgUrl:'',
+      enclosureShow: false,
       isWeixin: false,
       isPhone: false,
       themeCon:false,
       attriAttachment:false,
+      fileLength:0,
       canUploadImages:'',
       canUploadAttachments:'',
-      supportVideoExt: '',
-      supportVideoExtRes:'',
-      fileSize: '',
+      supportImgExt: '',
+      supportImgExtRes:'',
+      supportFileExt:'',
+      supportFileArr:'',
       limitMaxLength:true,
       limitMaxEncLength:true,
+      // fileListOneLen:'',
+      // enclosureListLen:'',
       isiOS: false,
-      encuploadShow: false,
+      // encuploadShow: false,
       testingRes:false,
       backGo:-2,
-      formdataList:[],
-      viewportWidth: '',
+      formdataList: [],
       viewportHeight: '',
+      postFormScrollTop: '',
       nowCate: [],
       payValue: '免费',
       paySetShow: false,
@@ -71,22 +82,29 @@ export default {
       moneyVal: '',
       paySetValue: '',
       videoShow: false,   //上传视频后显示
-      videoUp: true,      //上传加号
+      videoUp: false,      //上传加号
       vcVideoName: '',
       uploaderInfos: [],
       testingSizeRes: false,
       testingTypeRes: false,
       fileId: '',
+      supportVideoExt: '',
+      supportVideoExtRes:'',
+      fileSize: '',
+      vcVideoName: '',
+    }
+  },
 
-    }
-  },
-  computed: {
-    nowCateId: function () {
-      return this.$route.params.cateId;
-    }
-  },
   mounted () {
-    this.$nextTick(() => {
+    let postForm = document.getElementById('postForm');
+    postForm.style.height = (this.viewportHeight) + 'px';
+
+    let text = document.getElementById('post-topic-form-text');
+
+    text.addEventListener("touchstart",(e)=>{
+      // alert('触发');
+      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
@@ -98,17 +116,38 @@ export default {
           // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
         }
       });
-    })
-    //设置在pc的宽度
-    if(this.isWeixin != true && this.isPhone != true){
-      this.limitWidth();
-    }
+    });
+
+
+    this.$nextTick(() => {
+        let textarea = this.$refs.textarea;
+        textarea.focus();
+        let prevHeight = 300;
+        textarea && autoTextarea(textarea, 5, 65535, (height) => {
+          height += 20;
+          if (height !== prevHeight) {
+            prevHeight = height;
+            let rem = height / rootFontSize;
+            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+          }
+        });
+      })
+      //设置在pc的宽度
+      if(this.isWeixin != true && this.isPhone != true){
+        this.limitWidth();
+      }
+  },
+  computed: {
+      themeId: function(){
+          return this.$route.params.themeId;
+      }
   },
   created(){
+
     this.tcVod = new TcVod({
       getSignature: getSignature
     });
-    // console.log(this.tcVod,'343423');
+
     var videoExt = '';
     if(browserDb.getLItem('siteInfo')){
       this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
@@ -124,7 +163,6 @@ export default {
     } else{
       videoExt ='*';
     }
-    this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
@@ -134,20 +172,11 @@ export default {
     if(this.isiOS) {
       this.encuploadShow = true;
     }
-    if(this.$route.params.themeId){
-      var themeId = this.$route.params.themeId;
-      var postsId = this.$route.params.postsId;
-      var themeContent = this.$route.params.themeContent;
-      this.themeId = themeId;
-      this.postsId = postsId;
-      this.content = themeContent;
-    }
     //初始化请求分类接口
     this.loadCategories();
-    //初始化请求forum
+    //初始化请求主题数据
+    this.detailsLoad();
     this.getInfo();
-
-
   },
   watch: {
     showFacePanel: function(newVal,oldVal){
@@ -163,12 +192,7 @@ export default {
 
     vExampleAdd: function() {
       this.$refs.vExampleFile.click();
-      // this.$refs.vcExampleCover.click();
     },
-    //添加封面
-    // vcExampleAddCover: function() {
-    //   this.$refs.vcExampleCover.click();
-    // },
     //验证上传格式是否符合设置
     testingType(eFile,allUpext){
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
@@ -233,9 +257,7 @@ export default {
 
         this.uploaderInfos.push(uploaderInfo);
 
-        uploader
-        .done()
-        .then((doneResult) => {
+        uploader.done().then((doneResult) => {
           // console.log("doneResult", doneResult);
           uploaderInfo.fileId = doneResult.fileId;
           this.videoUp = false;
@@ -250,30 +272,67 @@ export default {
       }
       
     },
-
-    setVcExampleCoverName: function() {
-      this.vcExampleCoverName = this.$refs.vcExampleCover.files[0].name;
-    },
+     //请求站点信息，用于判断是否能上传附件
     getInfo(){
-      //请求站点信息，用于判断是否能上传附件
       this.appFetch({
         url: 'forum',
         method: 'get',
         data: {
           include: ['users'],
-        },
+        }
       }).then((res) => {
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
+          var ImgStr='';
+          var imgStrRes ='';
+          for(var k=0;k<ImgExt.length;k++){
+            ImgStr = '.'+ImgExt[k]+',';
+            imgStrRes = 'image/'+ImgExt[k]+',';
+            this.supportImgExt += ImgStr;
+            this.supportImgExtRes += imgStrRes;
+          }
 
+          var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
+          var fileStr='';
+          for(var k=0;k<fileExt.length;k++){
+            fileStr = '.'+fileExt[k]+',';
+            this.supportFileExt += fileStr;
+          }
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
       });
     },
-    
+    //初始化请求编辑主题数据
+    detailsLoad(){
+      this.appFetch({
+        url: 'threads',
+        method: 'get',
+        splice:'/'+this.themeId,
+        data: {
+          include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category', 'threadVideo'],
+        }
+      }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          console.log(res,'resssss');
+          this.oldCateId = res.readdata.category._data.id;
+          this.selectSort = res.readdata.category._data.name;
+          this.content = res.readdata.firstPost._data.content;
+          this.postsId = res.readdata.firstPost._data.id;
+          this.vcVideoName = res.readdata.threadVideo._data.file_name;
+          this.fileId = res.readdata.threadVideo._data.file_id;
+          if(this.vcVideoName != '' && this.vcVideoName != null){
+            this.videoShow = true;
+          }
+        }
+      })
+    },
     //删除视频
     videoDeleClick(){
       this.videoShow = false;
@@ -282,98 +341,87 @@ export default {
     },
     //发布主题
     publish(){
-      if(this.content == '' || this.content == null){
-        this.$toast.fail('内容不能为空');
-        return;
-      }
-      if(this.cateId == 0 || this.cateId == undefined){
-        this.$toast.fail('请选择分类');
-        return;
-      }
-      if(this.postsId && this.content){
-        let posts = 'posts/'+this.postsId;
+      if(this.oldCateId != this.cateId){
         this.appFetch({
-          url:posts,
+          url:'threads',
           method:"patch",
-          data: {
-            "data": {
-              "type": "posts",
-              "attributes": {
-                "content": this.content
-              }
-            }
-          }
-        }).then((res)=>{
-          if (res.errors){
-            if (res.errors[0].detail){
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-            } else {
-              this.$toast.fail(res.errors[0].code);
-            }
-          } else {
-            // console.log('主题');
-            this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo},replace:true});
-          }
-        })
-      } else {
-        this.appFetch({
-          url:"threads",
-          method:"post",
+          splice:'/'+this.themeId,
           data:{
             "data": {
               "type": "threads",
               "attributes": {
-                  "content": this.content,
-                  "price": this.paySetValue,
-                  'file_id': this.fileId,
-                  'file_name': this.vcVideoName,
-                  'type': 2,
+                "price": this.paySetValue,
+                'file_id': this.fileId,
+                'file_name': this.vcVideoName,
               },
               "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  "attachments": {
-                    "data":this.attriAttachment
-                  },
+                "category": {
+                  "data": {
+                    "type": "categories",
+                    "id": this.cateId,
+                  }
+                }
               }
-
             }
           },
         }).then((res)=>{
           if (res.errors){
-            if (res.errors[0].detail){
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-            } else {
-              this.$toast.fail(res.errors[0].code);
-            }
-          } else{
-            var postThemeId = res.readdata._data.id;
-            var _this = this;
-            // console.log('视频');
-            _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            // this.$router.push({ path:'/details'+'/'+this.themeId});
           }
         })
       }
+      this.appFetch({
+        url:'posts',
+        method:"patch",
+        splice:'/'+this.postsId,
+        data:{
+          "data": {
+            "type": "threads",
+            "attributes": {
+                "content": this.content,
+                
+            },
+
+            "relationships": {
+              "attachments": {
+                "data":this.attriAttachment
+              },
+            }
+          }
+        },
+      }).then((res)=>{
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.$router.replace({ path:'/details'+'/'+this.themeId});
+        }
+      })
     },
 
-    //设置底部在pc里的宽度
-    limitWidth(){
-      document.getElementById('post-topic-footer').style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
-    },
-
-    getAllEvens(arr){
-      arr => {
-        let temp = evens(arr);
-        return flat(temp);
+    //上传之前先判断是否有权限上传图片
+    beforeHandleFile(){
+      if(!this.canUploadImages){
+        this.$toast.fail('没有上传图片的权限');
+      } else {
+        if(!this.limitMaxLength){
+          this.$toast.fail('已达上传图片上限');
+        }
       }
     },
-    
+
+    beforeHandleEnclosure(){
+      if(!this.canUploadAttachments){
+        this.$toast.fail('没有上传附件的权限');
+      } else {
+        if(!this.limitMaxEncLength){
+          this.$toast.fail('已达上传附件上限');
+        }
+      }
+    },
 
     //输入框自适应高度
     clearKeywords () {
@@ -387,17 +435,6 @@ export default {
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
       textarea.focus();
     },
-    searchChange: debounce(function () {
-      let trim = this.keywords && this.keywords.trim();
-      if (!trim) {
-        this.list = [];
-        return;
-      }
-      const params = {
-        keywords: this.keywords
-      }
-      // 调api ...
-    }),
     handleFaceChoose (face) {
       const value = this.content;
       const el = this.$refs.textarea;
@@ -412,12 +449,6 @@ export default {
         }, 0)
       }
     },
-    // handleKeyboardClick () {
-    //   this.showFacePanel = false;
-    //   this.$refs.textarea.focus();
-    //   this.footMove = false;
-    // },
-    //表情
     addExpression(){
       this.keyboard = !this.keyboard;
       this.appFetch({
@@ -430,10 +461,6 @@ export default {
         this.faceData = data.readdata;
       })
       this.showFacePanel = !this.showFacePanel;
-      // if(this.showFacePanel == true){
-      //   // document.getElementById('showFacePanel').style.width = "640px";
-      //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
-      // }
       if(this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
@@ -449,7 +476,6 @@ export default {
       this.showPopup = true;
     },
     onConfirm( value, index) {
-      // console.log(value,'====================');
       var id = value.id;
       this.cateId = id;
       var text = value.text;
@@ -465,11 +491,11 @@ export default {
           include: '',
         }
       }).then((res) => {
+
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          
           var newCategories = [];
           newCategories = res.readdata;
           for(let j = 0,len=newCategories.length; j < len; j++) {
@@ -481,20 +507,6 @@ export default {
             );
             this.categoriesId.push(newCategories[j]._data.id);
           }
-          if(this.nowCateId != 0 && this.nowCateId != undefined ){
-            var nowCate = {};
-            nowCate = newCategories.find((item) => {
-              if(item._data.id === this.nowCateId){
-                return item
-              }
-            })
-            this.nowCate = {id:nowCate._data.id,name:nowCate._data.name};
-            this.cateId = this.nowCate.id;
-            this.selectSort = this.nowCate.name;
-          } else {
-            this.selectSort = "选择分类";
-          }
-         
         }
       })
     },
@@ -533,13 +545,5 @@ export default {
       }
     },
 
-  },
-  beforeRouteEnter(to,from,next){
-    next();
-    /*next(vm =>{
-      if (from.name === 'circle'){
-        vm.backGo = -2
-      }
-    });*/
   }
 }

@@ -1,17 +1,15 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import appCommonH from '../../../../../helpers/commonHelper';
-import browserDb from '../../../../../helpers/webDbHelper';
-import '@github/markdown-toolbar-element';
-import fa from "element-ui/src/locale/lang/fa";
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
+import browserDb from '../../../../../../helpers/webDbHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data: function () {
     return {
-      headerTitle: "发布长文",
-      selectSort: '选择分类',
+      headerTitle: "发布主题",
+      selectSort: '',
       showPopup: false,
       categories: [],
       categoriesId: [],
@@ -20,11 +18,9 @@ export default {
       showFacePanel: false,
       keyboard: false,
       // expressionShow: false,
-      keywordsMax: 1000,
+      keywordsMax: 10000,
       list: [],
       footMove: false,
-      payMove: false,
-      markMove: false,
       faceData: [],
       fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
@@ -65,20 +61,13 @@ export default {
       backGo: -2,
       formdataList: [],
       viewportWidth: '',
-      themeTitle: '',
-      payValue: '免费',
-      paySetShow: false,
-      isCli: true,
-      moneyVal: '',
-      timeout: null,
-      paySetValue: '',
-      titleMaxLength: 80,
       viewportHeight: '',
-      publishShow: true, //是否触发验证码的按钮
+      nowCate: [],
+      publishShow: true, //是否显示触发验证码的发布按钮
       appID: '',         //腾讯云验证码场景 id
       captcha_ticket: '',    //腾讯云验证码返回票据
-      captcha_rand_str: '',   //腾讯云验证码返回随机字符串
-      payBtnDis: false,
+      captcha_rand_str: ''   //腾讯云验证码返回随机字符串
+
     }
   },
   computed: {
@@ -87,10 +76,9 @@ export default {
     }
   },
   mounted() {
-    this.focus('themeTitle');
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
-      // textarea.focus();
+      textarea.focus();
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
@@ -103,10 +91,11 @@ export default {
     })
     //设置在pc的宽度
     if (this.isWeixin != true && this.isPhone != true) {
-      // this.limitWidth();
+      this.limitWidth();
     }
   },
   created() {
+    // this.cateId = this.$route.query.cateId;
     this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
@@ -122,7 +111,6 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-
     if (this.isiOS) {
       this.encuploadShow = true;
     }
@@ -137,7 +125,7 @@ export default {
     //初始化请求分类接口
     this.loadCategories();
     //初始化请求主题数据
-    this.detailsLoad();
+    // this.detailsLoad();
     this.getInfo();
 
 
@@ -165,37 +153,13 @@ export default {
     showFacePanel: function (newVal, oldVal) {
       this.showFacePanel = newVal;
       if (this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
       }
     },
-    themeTitle() {
-      if (this.themeTitle.length > this.titleMaxLength) {
-        this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
-      }
-    },
-    paySetValue() {
-      /*let amtreg = /^(([0-9]\d*)(\.\d{1,2})?)$|(0\.0?([1-9]\d?))$/;
-
-      console.log(this.paySetValue);
-
-      // if (this.paySetValue === ''){
-      //   this.isCli = true;
-      // } else
-
-      if (amtreg.test(this.paySetValue)){
-        this.isCli = true;
-      } else {
-        this.isCli = false;
-      }*/
-
-    }
   },
   methods: {
-    focus(obj) {
-      document.getElementById(obj).focus();
-    },
     getInfo() {
       //请求站点信息，用于判断是否能上传附件
       this.appFetch({
@@ -268,12 +232,8 @@ export default {
         })
       }
     },
-    //发布长文
+    //发布主题
     publish() {
-      if (this.themeTitle == '' || this.themeTitle == null) {
-        this.$toast.fail('标题不能为空');
-        return;
-      }
       if (this.content == '' || this.content == null) {
         this.$toast.fail('内容不能为空');
         return;
@@ -283,15 +243,14 @@ export default {
         return;
       }
       if (this.postsId && this.content) {
-        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' +this.postsId,
           method: "patch",
           data: {
             "data": {
               "type": "posts",
               "attributes": {
-                "type": 1,
                 "content": this.content,
                 "captcha_ticket": this.captcha_ticket,
                 "captcha_rand_str": this.captcha_rand_str
@@ -306,19 +265,11 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo } });
+            console.log('主题');
+            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
           }
         })
       } else {
-        if (this.themeTitle.length < 3) {
-          this.$toast.fail('标题不得少于三个字符');
-          return false;
-        }
-        if (this.content.length < 1) {
-          this.$toast.fail('内容不得为空');
-          return false;
-        }
-
         this.attriAttachment = this.fileListOne.concat(this.enclosureList);
         for (let m = 0; m < this.attriAttachment.length; m++) {
           this.attriAttachment[m] = {
@@ -334,9 +285,7 @@ export default {
             "data": {
               "type": "threads",
               "attributes": {
-                "price": this.paySetValue,
-                "title": this.themeTitle,
-                "type": 1,
+                "type": 0,
                 "content": this.content,
                 "captcha_ticket": this.captcha_ticket,
                 "captcha_rand_str": this.captcha_rand_str
@@ -365,18 +314,19 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo } });
+            console.log('长文');
+            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
           }
         })
       }
     },
 
-    // //设置底部在pc里的宽度
-    // limitWidth(){
-    //   document.getElementById('post-topic-footer').style.width = "640px";
-    //   let viewportWidth = window.innerWidth;
-    //   document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
-    // },
+    //设置底部在pc里的宽度
+    limitWidth() {
+      document.getElementById('post-topic-footer').style.width = "640px";
+      let viewportWidth = window.innerWidth;
+      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640) / 2 + 'px';
+    },
 
     // 删除图片
     deleteEnclosure(id, type) {
@@ -564,7 +514,7 @@ export default {
       textarea.style.height = `${rem}rem`;
       rem = (height + 20) / rootFontSize;
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-      // textarea.focus();
+      textarea.focus();
     },
     searchChange: debounce(function () {
       let trim = this.keywords && this.keywords.trim();
@@ -596,7 +546,6 @@ export default {
     //   this.$refs.textarea.focus();
     //   this.footMove = false;
     // },
-
     addExpression() {
       this.keyboard = !this.keyboard;
       this.appFetch({
@@ -613,15 +562,12 @@ export default {
       //   // document.getElementById('showFacePanel').style.width = "640px";
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
-      this.footMove = !this.footMove;
-      this.payMove = !this.payMove;
-      this.markMove = !this.markMove;
       if (this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
       }
-
+      this.footMove = !this.footMove;
     },
     backClick() {
       this.$router.go(-1);
@@ -630,6 +576,7 @@ export default {
       this.showPopup = true;
     },
     onConfirm(value, index) {
+      console.log(value, '====================')
       var id = value.id;
       this.cateId = id;
       var text = value.text;
@@ -649,6 +596,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+
           var newCategories = [];
           newCategories = res.readdata;
           for (let j = 0, len = newCategories.length; j < len; j++) {
@@ -673,49 +621,14 @@ export default {
           } else {
             this.selectSort = "选择分类";
           }
+
         }
       })
     },
     onCancel() {
       this.showPopup = false;
     },
-    //设置付费金额,，显示弹框
-    paySetting() {
-      this.paySetShow = true;
-      if (this.paySetShow) {
-        setTimeout(function () {
-          document.getElementById('payMoneyInp').focus();
-        }, 200);
-      }
-    },
-    //关闭付费设置弹框
-    closePaySet() {
-      this.paySetShow = false;
-      this.paySetValue = '免费';
-    },
-    //设置付费时，实时获取输入框的值，用来判断按钮状态
-    search: function (event) {
-      // if(event.target.value != null && event.target.value > 0){
-      //   this.isCli = true;
-      // } else {
-      //   this.isCli = false;
-      // }
-    },
-    //点击确定按钮，提交付费设置
-    paySetSure() {
-      this.paySetShow = false;
-      if (this.paySetValue <= 0) {
-        this.payValue = '免费';
-      } else {
-        this.payValue = this.paySetValue + '元';
-      }
-
-    },
-    initCaptcha() {   //验证码
-      if (this.themeTitle == '' || this.themeTitle == null) {
-        this.$toast.fail('标题不能为空');
-        return;
-      }
+    initCaptcha() {   //发布主题验证码
       if (this.content == '' || this.content == null) {
         this.$toast.fail('内容不能为空');
         return;

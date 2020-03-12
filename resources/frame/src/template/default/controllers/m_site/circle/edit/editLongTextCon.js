@@ -1,9 +1,9 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
 import '@github/markdown-toolbar-element';
-import appCommonH from '../../../../../helpers/commonHelper';
+import appCommonH from '../../../../../../helpers/commonHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
