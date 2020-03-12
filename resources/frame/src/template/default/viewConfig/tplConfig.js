@@ -608,7 +608,6 @@ export default {
       'login-user',
       'login-phone',
       'sign-up',
-      'wx-login-bd',
       'pay-the-fee',
       'pay-circle-login',
       'pay-circle',
