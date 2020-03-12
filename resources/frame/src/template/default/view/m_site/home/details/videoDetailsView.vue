@@ -30,20 +30,11 @@
       </div>
     </div>
     <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div>
-    <!-- <video width="100%"
-          :id="tcPlayerId"
-          playsinline
-          webkit-playinline
-          x5-playinline>
-    </video> -->
     <div class="videoBox">
-      <img v-if="themeCon.threadVideo._data.cover_url" :src="themeCon.threadVideo._data.cover_url" alt="">
-        <video v-if="themeCon.threadVideo._data.file_id" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>
+      <img v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null" :src="themeCon.threadVideo._data.cover_url" alt="">
+      <video v-if="themeCon.threadVideo._data.file_id != '' || themeCon.threadVideo._data.file_id != null" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>
     </div>
     
-    <!-- <video id="player-container-id" preload="auto" width="100%" height="360" playsinline webkit-playsinline x5-playsinline></video> -->
-    <!-- <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div> -->
-    <!-- <div class="payTipBox" v-if="themeCon._data.price>0"> -->
     <div class="payTipBox" v-if="!themeCon._data.paid && themeCon._data.price>0">
       <p class="tipPrice">
         本内容需向作者支付&nbsp;
