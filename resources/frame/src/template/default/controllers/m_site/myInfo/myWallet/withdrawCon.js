@@ -9,6 +9,7 @@ export default {
       payee: "",
       canWithdraw: '', //可提现余额
       withdrawalAmount: '',
+      number: '',
       handlingFee: '',
       // actualCashWithdrawal:this.actual,
       phone: "", //绑定手机号
