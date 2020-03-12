@@ -263,12 +263,12 @@ export default {
       this.platform = 'mp';
       if (!code && !state) {
         this.getWatchHref();
-        // console.log('第一次请求' + code);
-        // console.log('第一次请求' + state);
+        console.log('第一次请求' + code);
+        console.log('第一次请求' + state);
       } else {
         this.getWatchHref(code, state, sessionId);
-        // console.log('第二次请求' + code);
-        // console.log('第二次请求' + state);
+        console.log('第二次请求' + code);
+        console.log('第二次请求' + state);
       }
     } else {
       this.platform = 'dev';
