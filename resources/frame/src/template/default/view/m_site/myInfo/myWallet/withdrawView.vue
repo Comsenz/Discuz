@@ -18,7 +18,7 @@
 
           <!--键盘样式-->
           <van-number-keyboard
-            v-model="withdrawalAmount"
+            v-model="number"
             :show="show"
             theme="custom"
             title="站点金额键盘"
