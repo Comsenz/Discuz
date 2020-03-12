@@ -70,7 +70,7 @@ class ThreadValidator extends AbstractValidator
                         $result = $this->describeCaptchaResult(...$value);
 
                         if ($result['CaptchaCode'] != 1) {
-                            $fail(trans('validation.wrong'));
+                            $fail(trans('validation.wrong') . "({$result['CaptchaCode']})");
                         }
                     } else {
                         $fail(trans('validation.wrong'));
