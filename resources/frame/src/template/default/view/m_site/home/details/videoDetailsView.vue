@@ -73,6 +73,7 @@
       v-if="userDet"
       :data="payList"
       v-model="show"
+      :pwd-value="value"
       :money="themeCon._data.price"
       :balance="walletBalance"
       :walletStatus="userDet._data.canWalletPay"
