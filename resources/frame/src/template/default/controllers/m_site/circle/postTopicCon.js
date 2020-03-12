@@ -102,6 +102,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
     let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
+    this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     if (qcloud_captcha && thread_captcha) {
       this.publishShow = false
     } else {

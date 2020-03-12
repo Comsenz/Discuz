@@ -122,8 +122,8 @@ class CreateThread
         $captcha = '';  // 默认为空将不走验证
         if (!$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha')) {
             $captcha = [
-                Arr::get($this->data, 'captcha_ticket', ''),
-                Arr::get($this->data, 'captcha_rand_str', ''),
+                Arr::get($this->data, 'attributes.captcha_ticket', ''),
+                Arr::get($this->data, 'attributes.captcha_rand_str', ''),
                 $this->ip,
             ];
         }
