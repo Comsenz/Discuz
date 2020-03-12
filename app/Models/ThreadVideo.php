@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property int $status
  * @property string $reason
+ * @property string $file_name
  * @property string $file_id
  * @property string $media_url
  * @property string $cover_url

@@ -78,7 +78,7 @@ export default {
       appID: '',         //腾讯云验证码场景 id
       captcha_ticket: '',    //腾讯云验证码返回票据
       captcha_rand_str: '',   //腾讯云验证码返回随机字符串
-      payBtnDis:false,
+      payBtnDis: false,
     }
   },
   computed: {
@@ -113,6 +113,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
     let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
+    this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     if (qcloud_captcha && thread_captcha) {
       this.publishShow = false
     } else {
@@ -122,10 +123,10 @@ export default {
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
-    if(this.isiOS) {
+    if (this.isiOS) {
       this.encuploadShow = true;
     }
-    if(this.$route.params.themeId){
+    if (this.$route.params.themeId) {
       var themeId = this.$route.params.themeId;
       var postsId = this.$route.params.postsId;
       var themeContent = this.$route.params.themeContent;
@@ -142,9 +143,9 @@ export default {
 
   },
   watch: {
-    'fileListOne.length': function(newVal,oldVal){
+    'fileListOne.length': function (newVal, oldVal) {
       this.fileListOneLen = newVal;
-      if(this.fileListOneLen >= 12){
+      if (this.fileListOneLen >= 12) {
         this.limitMaxLength = false;
       } else {
         this.limitMaxLength = true;
@@ -153,17 +154,17 @@ export default {
     // 'limitMaxLength': function(newVal,oldVal){
     //   this.limitMaxLength = newVal;
     // },
-    'enclosureList.length': function(newVal,oldVal){
+    'enclosureList.length': function (newVal, oldVal) {
       this.enclosureListLen = newVal;
-      if(this.enclosureListLen >= 3){
+      if (this.enclosureListLen >= 3) {
         this.limitMaxEncLength = false;
       } else {
         this.limitMaxEncLength = true;
       }
     },
-    showFacePanel: function(newVal,oldVal){
+    showFacePanel: function (newVal, oldVal) {
       this.showFacePanel = newVal;
-      if(this.showFacePanel) {
+      if (this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
@@ -174,7 +175,7 @@ export default {
         this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
       }
     },
-    paySetValue(){
+    paySetValue() {
       /*let amtreg = /^(([0-9]\d*)(\.\d{1,2})?)$|(0\.0?([1-9]\d?))$/;
 
       console.log(this.paySetValue);
@@ -192,10 +193,10 @@ export default {
     }
   },
   methods: {
-    focus(obj){
+    focus(obj) {
       document.getElementById(obj).focus();
     },
-    getInfo(){
+    getInfo() {
       //请求站点信息，用于判断是否能上传附件
       this.appFetch({
         url: 'forum',
@@ -204,35 +205,35 @@ export default {
           include: ['users'],
         },
       }).then((res) => {
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error)
         } else {
           var ImgExt = '';
-          if(res.readdata._data.set_attach.support_img_ext){
+          if (res.readdata._data.set_attach.support_img_ext) {
             ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
-            var ImgStr='';
-            var imgStrRes ='';
-            for(var k=0;k<ImgExt.length;k++){
-              ImgStr = '.'+ImgExt[k]+',';
-              imgStrRes = 'image/'+ImgExt[k]+',';
+            var ImgStr = '';
+            var imgStrRes = '';
+            for (var k = 0; k < ImgExt.length; k++) {
+              ImgStr = '.' + ImgExt[k] + ',';
+              imgStrRes = 'image/' + ImgExt[k] + ',';
               this.supportImgExt += ImgStr;
               this.supportImgExtRes += imgStrRes;
             }
-          } else{
-            ImgExt ='*';
+          } else {
+            ImgExt = '*';
           }
 
           var fileExt = '';
-          if(res.readdata._data.set_attach.support_file_ext){
+          if (res.readdata._data.set_attach.support_file_ext) {
             fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
-            var fileStr='';
-            for(var k=0;k<fileExt.length;k++){
-              fileStr = '.'+fileExt[k]+',';
+            var fileStr = '';
+            for (var k = 0; k < fileExt.length; k++) {
+              fileStr = '.' + fileExt[k] + ',';
               this.supportFileExt += fileStr;
             }
-          } else{
-            fileExt ='*';
+          } else {
+            fileExt = '*';
           }
 
           this.canUploadImages = res.readdata._data.other.can_upload_images;
@@ -241,25 +242,25 @@ export default {
       });
     },
     //初始化请求编辑主题数据
-    detailsLoad(){
-      if(this.postsId && this.content){
-        let threads = 'threads/'+this.themeId;
+    detailsLoad() {
+      if (this.postsId && this.content) {
+        let threads = 'threads/' + this.themeId;
         this.appFetch({
           url: threads,
           method: 'get',
           data: {
-            include: ['firstPost',  'firstPost.images', 'firstPost.attachments', 'category'],
+            include: ['firstPost', 'firstPost.images', 'firstPost.attachments', 'category'],
           }
         }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-          } else {
+          if (res.errors) {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
             // this.enclosureList = res.readdata.attachments;
             // this.fileList = res.readdata.images;
             const initializeCateId = res.readdata.category._data.id;
             this.selectSort = res.readdata.category._data.description;
-            if(this.cateId != initializeCateId){
+            if (this.cateId != initializeCateId) {
               this.cateId = initializeCateId;
             }
           }
@@ -268,24 +269,24 @@ export default {
       }
     },
     //发布长文
-    publish(){
-      if(this.themeTitle == '' || this.themeTitle == null){
+    publish() {
+      if (this.themeTitle == '' || this.themeTitle == null) {
         this.$toast.fail('标题不能为空');
         return;
       }
-      if(this.content == '' || this.content == null){
+      if (this.content == '' || this.content == null) {
         this.$toast.fail('内容不能为空');
         return;
       }
-      if(this.cateId == 0 || this.cateId == undefined){
+      if (this.cateId == 0 || this.cateId == undefined) {
         this.$toast.fail('请选择分类');
         return;
       }
-      if(this.postsId && this.content){
-        let posts = 'posts/'+this.postsId;
+      if (this.postsId && this.content) {
+        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url:posts,
-          method:"patch",
+          url: posts,
+          method: "patch",
           data: {
             "data": {
               "type": "posts",
