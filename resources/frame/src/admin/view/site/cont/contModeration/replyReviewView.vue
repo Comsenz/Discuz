@@ -63,6 +63,7 @@
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
+          :titleIcon="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'"
           :finalPost="formatDate(items._data.updatedAt)"
           :ip="items._data.ip"
           :userId="!items.user?'该用户被删除':items.user._data.id"

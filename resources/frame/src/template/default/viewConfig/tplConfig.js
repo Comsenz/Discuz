@@ -652,6 +652,17 @@ export default {
       'information-page'
     ];
 
+    /*
+    * 微信未登录可访问页面
+    * */
+    const wxNotLoggedInToAccessPage = [
+      'wx-login-bd',
+      'wx-sign-up-bd',
+      'supplier-all-back',
+      'site-close',
+      'information-page'
+    ];
+
 
     //公开模式下不能访问的页面
     const publicNotAccessPage = [
@@ -812,7 +823,14 @@ export default {
           if (isWeixin) {
             /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
 
-            if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd') {
+            if (res.readdata._data.set_site.site_mode === 'public') {
+              if (!browserDb.getSItem('beforeVisiting')){
+                browserDb.setSItem('beforeVisiting',to.path);
+              }
+            }
+
+            // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
+            if (wxNotLoggedInToAccessPage.includes(to.name)) {
               next();
             } else {
               next({ path: '/wx-sign-up-bd' });

@@ -32,7 +32,7 @@
 	    },
         {
             "type": "composer",
-            "url": "https://cloud.comsenz-service.com"
+            "url": "https://cloud.discuz.chat"
         }
 	],
 	"minimum-stability" : "dev",
