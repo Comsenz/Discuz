@@ -321,7 +321,6 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          console.log(res,'eressssss');
           this.themeList = [];
           this.submitForm = [];
           this.themeList = res.readdata;
