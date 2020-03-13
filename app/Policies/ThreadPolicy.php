@@ -56,7 +56,7 @@ class ThreadPolicy extends AbstractPolicy
         if (! $actor->hasPermission('viewTrashed')) {
             $query->where(function (Builder $query) use ($actor) {
                 $query->whereNull('threads.deleted_at')
-                    ->orWhere('threads.user_id', $actor->id)
+                    // ->orWhere('threads.user_id', $actor->id) // 作者是否可见
                     ->orWhere(function ($query) use ($actor) {
                         $this->events->dispatch(
                             new ScopeModelVisibility($query, $actor, 'hide')
