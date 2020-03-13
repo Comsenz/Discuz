@@ -188,16 +188,28 @@
         <span class="icon iconfont icon-closeCho" @click="closePaySet"></span>
       </div>
       <div class="payMoneyBox">
-        <span>￥</span>
-        <input
-          type="number"
+<!--        <span>￥</span>-->
+        <!--<input
           class="payMoneyInp"
           autofocus
           id="payMoneyInp"
           v-model="paySetValue"
           @keyup.enter="search"
           @input="search($event)"
+          @focus="show = true"
+        />-->
+
+        <van-field
+          v-model="paySetValue"
+          type="number"
+          clearable
+          label="￥"
+          :formatter="formatter"
+          @keyup.enter="search"
+          @input="search($event)"
         />
+
+
       </div>
       <!-- <div class="payEx">付费说明</div>
       <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain">-->

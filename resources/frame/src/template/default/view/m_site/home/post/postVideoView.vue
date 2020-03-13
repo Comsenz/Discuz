@@ -28,8 +28,8 @@
             <span class="videoName">{{vcVideoName}}</span>
             <van-icon @click="videoDeleClick()" name="clear" class="videoDelete"/>
           </div>
-        </div>    
-       
+        </div>
+
       </div>
       <van-cell title="付费设置" @click="paySetting" is-link :value="payValue" :class="{'payMove':payMove}" class="paySetting borderT" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"/>
       <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
@@ -41,7 +41,7 @@
           <span class="icon iconfont icon-down-menu post-topic-header-icon" style="color: #888888;"></span>
         </div>
       </footer>
-      <van-popup 
+      <van-popup
         v-model="paySetShow"
         class="paySetShow"
         click-overlay="closePaySet"
@@ -51,8 +51,20 @@
           <span class="icon iconfont icon-closeCho" @click="closePaySet"></span>
         </div>
         <div class="payMoneyBox">
-          <span>￥</span>
+          <!--<span>￥</span>
           <input type="number" class="payMoneyInp" autofocus id="payMoneyInp" v-model="paySetValue" @keyup.enter="search" @input="search($event)" />
+          -->
+
+          <van-field
+            v-model="paySetValue"
+            type="number"
+            clearable
+            label="￥"
+            :formatter="formatter"
+            @keyup.enter="search"
+            @input="search($event)"
+          />
+
         </div>
         <!-- <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain"> -->
