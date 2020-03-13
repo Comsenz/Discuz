@@ -81,7 +81,8 @@
         </a>
 
         <div class="cont-review-table__main" slot="main">
-          <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+          <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" :style="{'display':(items.threadVideo ? 'inline':'block')}" v-html="items.firstPost._data.contentHtml"></a>
+          <span class="iconfont iconvideo" v-if="items.threadVideo"></span>
           <div class="cont-review-table__main__cont-imgs">
             <p class="cont-review-table__main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="index">
               <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.firstPost.images,index)" :alt="item._data.fileName">
@@ -118,6 +119,8 @@
           </div>
 
           <div class="cont-review-table__footer__bottom">
+            <el-button type="text" class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 0">转码中</el-button>
+            <el-button type="text" class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 2">转码失败</el-button>
             <el-button type="text" @click="viewClick(items._data.id)">查看</el-button>
             <el-button type="text" @click="editClick(items._data.id)">编辑</el-button>
           </div>

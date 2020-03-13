@@ -403,6 +403,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     window.removeEventListener('scroll', this.footFix);
     document.removeEventListener('click', this.listenEvt);
+    this.publishTypeBox = false;
     next()
   },
 }

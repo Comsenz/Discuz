@@ -112,7 +112,8 @@
             </a>
 
             <div class="cont-manage-theme__table-main" slot="main">
-              <a class="cont-manage-theme__table-main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+              <a class="cont-manage-theme__table-main__cont-text" :href="'/details/' + items._data.id" target="_blank" :style="{'display':(items.threadVideo ? 'inline':'block')}" v-html="items.firstPost._data.contentHtml"></a>
+              <span class="iconfont iconvideo" v-if="items.threadVideo"></span>
               <div class="cont-manage-theme__table-main__cont-imgs">
                 <p class="cont-manage-theme__table-main__cont-imgs-p"  v-for="(item,index) in items.firstPost.images" :key="index" >
                   <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.firstPost.images,index)" :alt="item._data.fileName">
