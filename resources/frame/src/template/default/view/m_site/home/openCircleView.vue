@@ -22,16 +22,25 @@
             </div>
           </div>
         </div>
-        <div v-if="themeListCon">
+        <!-- <div v-if="themeListCon">
           <ThemeDet :themeList="themeListCon" :isTopShow="true" :isMoreShow="true"></ThemeDet>
+        </div> -->
+        <div v-if="themeListCon">
+          <ThemeDet :themeList.sync="themeListCon" :isTopShow="true" :isMoreShow="true" @changeStatus="loadThemeList"></ThemeDet>
         </div>
       </van-pull-refresh>
     </van-list>
+    <div class="nullTip" v-if="nullTip">
+      <van-icon name="warning-o" size="1.8rem" class="nullIcon"/>
+      <p class="nullWord">{{nullWord}}</p>
+    </div>
     <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" @click="loginJump":style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}" :class="{'hide':loginHide}">{{loginWord}}</van-button>
     <div class="gap"></div>
   </div>
 </template>
-
+<style scoped="scoped">
+  .van-pull-refresh { min-height: 300px;}
+</style>
 <script>
 // import mSiteHeaderCon from '../../../controllers/m_site/common/headerCon';
 import mSiteOpenCircleCon from '../../../controllers/m_site/circle/openCircleCon';

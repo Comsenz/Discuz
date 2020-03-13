@@ -36,6 +36,9 @@ export default {
       viewportWidth: '',
       isWeixin: false,
       isPhone: false,
+      canViewThreads:'',
+      nullTip:false,
+      nullWord:'',
 		}
 	},
   created:function(){
@@ -43,7 +46,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadThemeList();
-    this.getUserInfo();
+    // this.getUserInfo();
     // this.detailIf();
     var token = browserDb.getLItem('Authorization');
     if(token){
@@ -55,6 +58,7 @@ export default {
       this.loginBtnFix = true;
       this.loginHide = false;
     }
+    
   },
   computed: {
     userId: function(){
@@ -62,117 +66,212 @@ export default {
     },
 },
 	methods: {
-    getUserInfo(){
+    getInfo() {
+      //请求站点信息，用于判断站点是否是付费站点
       this.appFetch({
-        url: 'users',
+        url: 'forum',
         method: 'get',
-        splice:'/'+this.userId,
-        data:{
+        data: {
+          include: ['users'],
+        }
+      }).then((res) => {
+        if (res.errors){
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error);
+        } else {
+          this.siteInfo = res.readdata;
+          this.canViewThreads = res.readdata._data.other.can_view_threads;
+          // this.allowRegister = res.readdata._data.set_reg.register_close;
+          // this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
+          // if (!this.allowRegister) {
+          //   this.loginWord = '登录';
+          // }
+          
+        }
+      });
+    },
+    // getUserInfo(){
+    //   this.appFetch({
+    //     url: 'users',
+    //     method: 'get',
+    //     splice:'/'+this.userId,
+    //     data:{
+
+    //     }
+    //   }).then(res=>{
+    //     this.userInfoName = res.readdata._data.username;
+    //     this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
+    //     if(this.userInfoName){
+    //       this.invitationShow = true;
+    //     }
+    //   })
+    // },
+
+    //初始化请求主题列表数据
+    // loadThemeList(filterCondition,filterVal,initStatus=false){
+    //   if(filterCondition == 'isEssence'){
+    //  return this.appFetch({
+    //       url: 'threads',
+    //       method: 'get',
+    //       data: {
+    //         'filter[isEssence]':filterVal,
+    //         include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+    //         'page[number]': this.pageIndex,
+    //         'page[limit]': this.pageLimit
+    //       }
+    //     }).then((res) => {
+    //       if (res.errors){
+    //         this.$toast.fail(res.errors[0].code);
+    //         throw new Error(res.error)
+    //         }else{
+    //       if(initStatus){
+    //         this.themeListCon = []
+    //       }
+    //       this.themeListCon =this.themeListCon.concat(res.readdata);
+    //       this.loading = false;
+    //       this.finished = res.data.length < this.pageLimit;
+    //     }
+    //     }).catch((err)=>{
+    //       if(this.loading && this.pageIndex !== 1){
+    //         this.pageIndex--;
+    //       }
+    //       this.loading = false;
+    //     })
+
+    //   } else if(filterCondition == 'categoryId') {
+    //     return this.appFetch({
+    //       url: 'threads',
+    //       method: 'get',
+    //       data: {
+    //         'filter[categoryId]':filterVal,
+    //         include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+    //         'page[number]': this.pageIndex,
+    //         'page[limit]': this.pageLimit
+    //       }
+    //     }).then((res) => {
+    //       if (res.errors){
+    //         this.$toast.fail(res.errors[0].code);
+    //         throw new Error(res.error)
+    //         }else{
+    //       if(initStatus){
+    //         this.themeListCon = []
+    //       }
+    //       this.themeListCon =this.themeListCon.concat(res.readdata);
+    //       this.loading = false;
+    //       this.finished = res.data.length < this.pageLimit;
+    //     }
+    //     }).catch((err)=>{
+    //       if(this.loading && this.pageIndex !== 1){
+    //         this.pageIndex--;
+    //       }
+    //       this.loading = false;
+    //     })
+    //   } else {
+    //     return this.appFetch({
+    //       url: 'threads',
+    //       method: 'get',
+    //       data: {
+    //         filterValue:filterVal,
+    //         include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+    //         'page[number]': this.pageIndex,
+    //         'page[limit]': this.pageLimit
+
+    //         // page: {
+    //         //   offset: 20,
+    //         //   num: 3
+    //         // },
+    //       }
+    //     }).then((res) => {
+    //       if (res.errors){
+    //         this.$toast.fail(res.errors[0].code);
+    //         throw new Error(res.error)
+    //         }else{
+    //       if(initStatus){
+    //         this.themeListCon = []
+    //       }
+    //       this.themeListCon =this.themeListCon.concat(res.readdata);
+    //       this.loading = false;
+    //       this.finished = res.data.length < this.pageLimit;
+    //     }
+    //     }).catch((err)=>{
+    //       if(this.loading && this.pageIndex !== 1){
+    //         this.pageIndex--;
+    //       }
+    //       this.loading = false;
+    //     })
+    //   }
+    // },
+
+    loadThemeList(filterCondition, filterVal) {
+      var userId = browserDb.getLItem('tokenId');
+      if (filterVal) {
+        this.categoryId = filterVal;
+      } else {
+        this.categoryId = 0;
+      }
+      let data = {
+        'filter[isEssence]':'yes',
+        'filter[fromUserId]':userId,
+        'filter[categoryId]':this.categoryId,
+        'filter[isApproved]':1,
+        'filter[isDeleted]':'no',
+        include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+        'page[number]': this.pageIndex,
+        'page[limit]': this.pageLimit
+      }
+      if (filterVal == 0) {
+        delete data['filter[categoryId]'];
+      }
+      if (filterCondition !== 'isEssence') {
+        delete data['filter[isEssence]'];
+      }
+      if (filterCondition !== 'fromUserId') {
+        delete data['filter[fromUserId]'];
+      }
+      return this.appFetch({
+        url: 'threads',
+        method: 'get',
+        data: data,
+      }).then((res) => {
+        if (res.errors) {
+          if (res.rawData[0].code == 'permission_denied') {
+            this.nullTip = true;
+            this.nullWord = res.errors[0].code;
+          } else {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          }
+        } else {
+          console.log(res,'eeeee');
+          if (!this.canViewThreads) {
+            this.nullTip = true;
+            this.nullWord = res.errors[0].code;
+          } else {
+            if (this.themeListCon.length < 0) {
+              this.nullTip = true
+            }
+            this.themeListCon = this.themeListCon.concat(res.readdata);
+            this.loading = false;
+            this.finished = res.readdata.length < this.pageLimit;
+          }
 
         }
-      }).then(res=>{
-        this.userInfoName = res.readdata._data.username;
-        this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
-        if(this.userInfoName){
-          this.invitationShow = true;
+        console.log(this.themeListCon,'this.themeListCon');
+      }).catch((err) => {
+        if (this.loading && this.pageIndex !== 1) {
+          this.pageIndex--;
         }
+        this.loading = false;
       })
     },
 
-    //初始化请求主题列表数据
-    loadThemeList(filterCondition,filterVal,initStatus=false){
-      if(filterCondition == 'isEssence'){
-     return this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            'filter[isEssence]':filterVal,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
-          }
-        }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-            }else{
-          if(initStatus){
-            this.themeListCon = []
-          }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
-        }
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
 
-      } else if(filterCondition == 'categoryId') {
-        return this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            'filter[categoryId]':filterVal,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
-          }
-        }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-            }else{
-          if(initStatus){
-            this.themeListCon = []
-          }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
-        }
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
-      } else {
-        return this.appFetch({
-          url: 'threads',
-          method: 'get',
-          data: {
-            filterValue:filterVal,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-            'page[number]': this.pageIndex,
-            'page[limit]': this.pageLimit
 
-            // page: {
-            //   offset: 20,
-            //   num: 3
-            // },
-          }
-        }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-            }else{
-          if(initStatus){
-            this.themeListCon = []
-          }
-          this.themeListCon =this.themeListCon.concat(res.readdata);
-          this.loading = false;
-          this.finished = res.data.length < this.pageLimit;
-        }
-        }).catch((err)=>{
-          if(this.loading && this.pageIndex !== 1){
-            this.pageIndex--;
-          }
-          this.loading = false;
-        })
-      }
-    },
+
+
+
+
+
     footFix() {
       // if(this.$route.meta.oneHeader){
           var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

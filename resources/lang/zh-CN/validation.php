@@ -200,18 +200,19 @@ return [
 
         // sms
         'sms_code'              => '验证码',
-        'sms_type'              => '验证码类型',
+        'sms_type' => '验证码类型',
 
         // user
-        'pay_password'          => '支付密码',
+        'pay_password' => '支付密码',
         'pay_password_confirmation' => '支付密码',
-        'groupId'               => '用户组',
+        'groupId' => '用户组',
 
         // thread
-        'file_id'               => '视频文件',
-        'file_name'             => '视频文件名称',
-        'captcha'               => '验证码',
-        'type'                  => '类型',
+        'file_id' => '视频文件',
+        'file_name' => '视频文件名称',
+        'price' => '价格',
+        'captcha' => '验证码',
+        'type' => '类型',
 
     ],
 ];

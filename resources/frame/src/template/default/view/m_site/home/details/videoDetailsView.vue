@@ -30,13 +30,13 @@
       </div>
     </div>
     <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div>
-    <div class="videoBox" v-if="!themeCon._data.paid">
+    <div class="videoBox" v-if="themeCon._data.price > 0 && !themeCon._data.paid">
       <img class="videoCover" v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null" :src="themeCon.threadVideo._data.cover_url" alt="">
     </div>
-    <div class="videoBox" v-if="themeCon._data.paid">
+    <div class="videoBox" v-else>
       <video v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>
     </div>
-    <div class="payTipBox" v-if="!themeCon._data.paid && themeCon._data.price>0">
+    <div class="payTipBox" v-if="themeCon._data.price > 0 && !themeCon._data.paid">
       <p class="tipPrice">
         本内容需向作者支付&nbsp;
         <span>{{themeCon._data.price}}</span>&nbsp;元&nbsp;才能浏览
