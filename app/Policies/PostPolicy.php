@@ -69,7 +69,7 @@ class PostPolicy extends AbstractPolicy
         if (! $actor->hasPermission('threads.hidePosts')) {
             $query->where(function ($query) use ($actor) {
                 $query->whereNull('posts.deleted_at')
-                    ->orWhere('posts.user_id', $actor->id)
+                    // ->orWhere('posts.user_id', $actor->id) // 作者是否可见
                     ->orWhereExists(function ($query) use ($actor) {
                         $query->selectRaw('1')
                             ->from('threads')

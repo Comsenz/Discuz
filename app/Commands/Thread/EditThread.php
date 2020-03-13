@@ -189,17 +189,16 @@ class EditThread
         $type = $thread->type;
         $validAttr = $thread->getDirty() + compact('type');
         //视频贴验证是否上传视频
-        $file_id = Arr::get($this->data, 'attributes.file_id', 0);
-        if ($file_id > 0) {
-            $file_name = Arr::get($this->data, 'attributes.file_name', '');
+        $file_id = Arr::get($this->data, 'attributes.file_id');
+        $file_name = Arr::get($this->data, 'attributes.file_name');
+
+        if ($file_id !== null || $file_name !== null) {
             $validAttr += compact('file_id', 'file_name');
         }
         $validator->valid($validAttr);
 
-        $thread->save();
-
         //编辑视频
-        if ($thread->type == 2 && $file_id > 0) {
+        if ($thread->type == 2 && $file_id) {
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
             if ($threadVideo->file_id != $attributes['file_id']) {
                 $threadVideo->file_name = $attributes['file_name'];
@@ -208,10 +207,13 @@ class EditThread
                 $threadVideo->media_url = '';
                 $threadVideo->cover_url = '';
                 $threadVideo->save();
+
+                //重新上传视频修改为审核状态
+                $thread->is_approved = 0;
             }
         }
 
-
+        $thread->save();
 
         $this->dispatchEventsFor($thread, $this->actor);
 
