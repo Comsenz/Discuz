@@ -60,14 +60,16 @@
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+      </div>
     </div>
 
 </template>
 
 <script>
-// import '../../../scss/m_site/mobileIndex';
 import editVideoCon from '../../../../controllers/m_site/circle/edit/editVideoCon';
-// import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
 import Expression from '../../../m_site/common/expressionView';
 import  '../../../../defaultLess/m_site/common/common.less';
 import  '../../../../defaultLess/m_site/modules/circle.less';

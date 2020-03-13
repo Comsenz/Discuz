@@ -66,7 +66,8 @@ export default {
       backGo:-2,
       formdataList:[],
       viewportHeight: '',
-      postFormScrollTop:''
+      postFormScrollTop:'',
+      loading: false,
     }
   },
 
@@ -92,13 +93,6 @@ export default {
         }
       });
     });
-
-
-    /*document.getElementById('postForm').addEventListener('scroll',(e)=>{
-      console.log(document.getElementById('postForm').scrollTop);
-      this.postFormScrollTop = document.getElementById('postForm').scrollTop;
-    })*/
-
 
     this.$nextTick(() => {
         let textarea = this.$refs.textarea;
@@ -346,10 +340,12 @@ export default {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
            if(this.testingRes){
-             this.compressFile(file.file, 150000, false,files.length - index);
+              this.loading = true;
+              this.compressFile(file.file, 150000, false,files.length - index);
            }
          } else {
-           this.compressFile(file.file, 150000, false, files.length - index);
+            this.loading = true;
+            this.compressFile(file.file, 150000, false, files.length - index);
          }
        });
      }
@@ -363,9 +359,11 @@ export default {
         if(this.isAndroid && this.isWeixin){
           this.testingType(file,this.supportImgExt);
           if(this.testingRes){
+            this.loading = true;
             this.compressFile(file, 150000, true);
           }
         } else {
+          this.loading = true;
           this.compressFile(file, 150000, true);
         }
       }
@@ -378,6 +376,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
+        this.loading = true;
         this.uploaderEnclosure(formdata,false,false,true);
       }
 
@@ -438,14 +437,15 @@ export default {
         } else {
           if (img) {
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-            // this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.loading = false;
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length>0){
               this.uploadShow = true;
+              this.loading = false;
             }
           }
           if (enclosure) {
@@ -455,9 +455,8 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
+            this.loading = false;
           }
-          this.loading = false;
         }
       })
     },

@@ -7,9 +7,9 @@
 
 namespace App\Models;
 
+use App\Events\Group\Deleted;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
-use DomainException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -83,10 +83,8 @@ class Group extends Model
     {
         parent::boot();
 
-        static::deleting(function (self $group) {
-            if (in_array($group->id, [self::GUEST_ID, self::ADMINISTRATOR_ID, self::MEMBER_ID])) {
-                throw new DomainException('Cannot delete the default group');
-            }
+        static::deleted(function (self $group) {
+            $group->raise(new Deleted($group));
         });
     }
 

@@ -109,7 +109,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
-          console.log(res,'eeeee');
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
@@ -224,6 +223,7 @@ export default {
             throw new Error(res.error)
           }
         } else {
+          console.log(res,'eeeee');
           if (!this.canViewThreads) {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;

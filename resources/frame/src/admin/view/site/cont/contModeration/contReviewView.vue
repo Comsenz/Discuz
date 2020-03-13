@@ -69,7 +69,8 @@
       >
         <div class="cont-review-table__side" slot="side">
           <el-radio-group v-model="submitForm[index].radio" @change="radioChange($event,index)">
-            <el-radio :label="0">通过</el-radio>
+            <el-radio :label="0" :disabled="items.threadVideo && items.threadVideo._data.status == 0 || items.threadVideo && items.threadVideo._data.status == 2">通过</el-radio>
+            
             <el-radio :label="1">删除</el-radio>
             <el-radio :label="2" v-if="items._data.isApproved !== 2" :disabled="items._data.isApproved === 2">忽略</el-radio>
           </el-radio-group>
@@ -97,7 +98,15 @@
         </div>
 
         <div class="cont-review-table__footer" slot="footer">
-          <div class="cont-review-table__footer__lf">
+          <div class="cont-review-table__footer__lf" v-if="items.threadVideo">
+            <el-button type="text" :class="{'graybtn': (items.threadVideo._data.status == 0 || items.threadVideo._data.status == 2)}" v-if="items.threadVideo._data.status == 0 || items.threadVideo._data.status == 2">通过</el-button>
+            <el-button type="text" v-else @click="singleOperationSubmit(1,items.category._data.id,items._data.id,index)">通过</el-button>
+            <i></i>
+            <el-button type="text" @click="singleOperationSubmit(2,items.category._data.id,items._data.id,index)">删除</el-button>
+            <i></i>
+            <el-button type="text" v-if="items._data.isApproved !== 2" @click="singleOperationSubmit(3,items.category._data.id,items._data.id,index)">忽略</el-button>
+          </div>
+          <div class="cont-review-table__footer__lf" v-else>
             <el-button type="text" @click="singleOperationSubmit(1,items.category._data.id,items._data.id,index)">通过</el-button>
             <i></i>
             <el-button type="text" @click="singleOperationSubmit(2,items.category._data.id,items._data.id,index)">删除</el-button>

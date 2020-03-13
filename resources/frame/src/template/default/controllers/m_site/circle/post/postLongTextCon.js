@@ -79,6 +79,7 @@ export default {
       captcha_ticket: '',    //腾讯云验证码返回票据
       captcha_rand_str: '',   //腾讯云验证码返回随机字符串
       payBtnDis: false,
+      loading: false,
     }
   },
   computed: {
@@ -442,9 +443,11 @@ export default {
           if (this.isAndroid && this.isWeixin) {
             this.testingType(file.file, this.supportImgExt);
             if (this.testingRes) {
+              this.loading = true;
               this.compressFile(file.file, 150000, false, files.length - index);
             }
           } else {
+            this.loading = true;
             this.compressFile(file.file, 150000, false, files.length - index);
           }
         });
@@ -459,9 +462,11 @@ export default {
         if (this.isAndroid && this.isWeixin) {
           this.testingType(file, this.supportImgExt);
           if (this.testingRes) {
+            this.loading = true;
             this.compressFile(file, 150000, true);
           }
         } else {
+          this.loading = true;
           this.compressFile(file, 150000, true);
         }
       }
@@ -475,6 +480,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
+        this.loading = true;
         this.uploaderEnclosure(formdata, false, false, true);
       }
 
@@ -512,14 +518,16 @@ export default {
           if (img) {
             this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.loading = false;
           }
           if (isFoot) {
             this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
+              this.loading = false;
             }
-
+            
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -528,8 +536,9 @@ export default {
               name: data.readdata._data.fileName,
               id: data.readdata._data.id
             });
+            this.loading = false;
           }
-          this.loading = false;
+          
         }
       })
     },
@@ -546,7 +555,7 @@ export default {
         formdata.append('file', rst.file, file.name);
         formdata.append('isGallery', 1);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
-        that.loading = false;
+        // that.loading = false;
       }).catch(function (err) {
         /* 处理失败后执行 */
       }).always(function () {

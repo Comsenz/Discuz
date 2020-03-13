@@ -230,3 +230,6 @@
 .icon-video1:before {
   content: "\e643";
 }
+.icon-play:before {
+  content: "\e644";
+}
