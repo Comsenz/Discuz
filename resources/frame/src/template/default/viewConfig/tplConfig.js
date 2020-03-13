@@ -659,7 +659,8 @@ export default {
       'wx-login-bd',
       'wx-sign-up-bd',
       'supplier-all-back',
-      'site-close'
+      'site-close',
+      'information-page'
     ];
 
 
