@@ -186,13 +186,13 @@ class EditThread
         );
 
 
-        $validAttr = $thread->getDirty();
+        $type = $thread->type;
+        $validAttr = $thread->getDirty() + compact('type');
         //视频贴验证是否上传视频
         $file_id = Arr::get($this->data, 'attributes.file_id', 0);
         if ($file_id > 0) {
             $file_name = Arr::get($this->data, 'attributes.file_name', '');
-            $type = $thread->type;
-            $validAttr += compact('file_id', 'file_name', 'type');
+            $validAttr += compact('file_id', 'file_name');
         }
         $validator->valid($validAttr);
 
