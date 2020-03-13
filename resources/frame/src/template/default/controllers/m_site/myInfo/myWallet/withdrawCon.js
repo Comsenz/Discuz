@@ -34,7 +34,7 @@ export default {
     this.withdrawUser()
   },
   computed: {
-    lingFee() {
+    lingFee() {  //手续费
       return `${this.handlingFee1 * this.withdrawalAmount}元 （${this.handlingFee}）`;
     },
     actualCashWithdrawal() {  //实际提现金额
@@ -48,7 +48,7 @@ export default {
       this.handleReg();
     },
     onInput(value) {
-      // this.withdrawalAmount = this.withdrawalAmount + '' + value;
+      this.withdrawalAmount = this.withdrawalAmount + '' + value;
       // const realVal = parseFloat(value).toFixed(2);
       this.handleReg();
     },
@@ -134,7 +134,10 @@ export default {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
         } else {
-          this.canWithdraw = res.data.attributes.available_amount;
+          let tempVal = parseFloat(res.data.attributes.available_amount).toFixed(3);
+          let realVal = tempVal.substring(0, tempVal.length - 1)
+          this.canWithdraw = realVal //可提现金
+
           this.handlingFee = res.data.attributes.cash_tax_ratio + '%';
           this.handlingFee1 = (res.data.attributes.cash_tax_ratio / 100)
         }

@@ -18,12 +18,13 @@
 
           <!--键盘样式-->
           <van-number-keyboard
-            v-model="withdrawalAmount"
+            v-model="number"
             :show="show"
             theme="custom"
             title="站点金额键盘"
             extra-key="."
             close-button-text="完成"
+            type="number"
             @blur="show = false"
             @input="onInput"
             @delete="onDelete"

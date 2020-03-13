@@ -75,7 +75,7 @@
           </el-radio-group>
         </div>
 
-        <a slot="longText" class="cont-review-table__long-text" v-if="items._data.isLongArticle" :href="'/details/' + items._data.id" >
+        <a slot="longText" class="cont-review-table__long-text" v-if="items._data.type === 1" :href="'/details/' + items._data.id" >
           {{items._data.title}}
           <span  class="iconfont" :class="parseInt(items._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
         </a>

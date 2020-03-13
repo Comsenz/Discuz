@@ -245,12 +245,13 @@ export default {
   created() {
     this.getForum();
     this.openid = webDb.getLItem('openid');
+    this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
-    let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    let register_captcha = browserDb.getLItem('siteInfo')._data.set_reg.register_captcha;
+    let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
+    let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
     if (qcloud_captcha && register_captcha) {
       this.signUpBdClickShow = false
     }

@@ -1,4 +1,4 @@
-<!--移动端首页模板-->
+<!--移动端详情页模板-->
 
 <template>
     <!-- 付费站点 已登录且当前用户已付费 -->
@@ -11,6 +11,9 @@
           <normalDetail v-if="themeCon._data.type == 0" :themeCon="themeCon" :firstpostImageListProp="firstpostImageList"></normalDetail>
           <!-- 付费长文内容组件 -->
           <longTextDetail v-if="themeCon._data.type == 1" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></longTextDetail>
+
+          <!-- 视屏内容组件 -->
+          <videoDetail v-if="themeCon._data.type == 2" :themeCon="themeCon" :userDet="userDet" :firstpostImageListProp="firstpostImageList" v-on:listenToChildEvent="detailsLoad"></videoDetail>
 
 		    	<div class="postDetBot">
 		    		<span class="readNum">{{themeCon._data.postCount-1}}&nbsp;回复</span>
@@ -45,7 +48,7 @@
             <div class="payPerHeaChi" v-for="(reward,rewardInd) in themeCon.rewardedUsers" :key="rewardInd">
                 <img v-if="reward._data.avatarUrl" :src="reward._data.avatarUrl" @click="jumpPerDet(reward._data.id)" class="payPerHead">
                 <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" @click="jumpPerDet(reward._data.id)" class="payPerHead">
-              
+
             </div>
             <!-- <span class="foldTip" v-if="themeCon.rewardedUsers.length>5 && rewardTipShow">等{{themeCon.rewardedUsers.length}}人进行了打赏</span>
             <i @click="rewardIsFold(themeCon.rewardedUsers.length)" class="foldTag">{{rewardTipFlag}}<span class="icon iconfont icon-down-menu" :class="{'rotate180':rewardTipShow}"></span></i> -->
@@ -76,8 +79,15 @@
                   <img v-if="item.user && item.user._data.avatarUrl" :src="item.user._data.avatarUrl" class="postHead" @click="jumpPerDet(item.user._data.id)" >
                   <img v-else="" :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" @click="jumpPerDet(item.user._data.id)">
                   <div class="perDet">
-                    <div class="perName" v-if="item.user && item.user._data.username" @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</div>
-                    <div class="perName" v-else="">该用户已被删除</div>
+                    <div class="perName" v-if="item.user && item.user._data.username" @click="jumpPerDet(item.user._data.id)">
+                      <a href="javascript:;" v-if="item.user" @click="jumpPerDet(item.user._data.id)">{{item.user._data.username}}</a>
+                      <a href="javascript:;" v-else="">该用户已被删除</a>
+                      <span class="font9" v-if="item._data.replyUserId">回复</span>
+                      <a href="javascript:;" v-if="item._data.replyUserId && item.replyUser" @click="jumpPerDet(item.user._data.id)">{{item.replyUser._data.username}}</a>
+                      <a href="javascript:;" v-else-if="item._data.replyUserId && !item.replyUser">该用户已被删除</a>
+                    </div>
+                    <div class="perName" v-else>该用户已被删除</div>
+
                     <div class="postTime">{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
@@ -181,12 +191,12 @@
           :error="errorInfo"
           @payImmediatelyClick="payImmediatelyClick">
         </PayMethod>
-       
+
       <div class="loadFix" v-if="payLoading">
         <div class="loadMask"></div>
         <van-loading color="#f7f7f7"  class="loadIcon" type="spinner"/>
       </div>
-     
+
       <van-button type="primary" v-if="loginBtnFix" class="loginBtnFix" :style="{'overflow': 'hidden','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2 + 192+'px' : '30%','width': (!isPhone && !isWeixin) ? '256px' : '40%'}" @click="loginJump(1)" :class="{'hide':loginHide}">{{loginWord}}</van-button>
 
 
@@ -198,6 +208,7 @@ import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUp
 import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import longTextDetail from '../home/details/longTextDetailsView';
 import normalDetail from '../home/details/normalDetailsView';
+import videoDetail from '../home/details/videoDetailsView';
 import mSiteDetailsCon from '../../../controllers/m_site/circle/detailsCon';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
@@ -207,6 +218,7 @@ export default {
       comHeader,
       normalDetail,
       longTextDetail,
+      videoDetail,
       PayMethod
     },
     ...mSiteDetailsCon

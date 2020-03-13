@@ -44,23 +44,13 @@
                 <!-- <span class="icon iconfont icon-longtext" v-if="item._data.type == 1 && item._data.price<=0"></span> -->
                 <!-- <span class="icon iconfont icon-money1" v-else-if="item._data.price>0"></span> -->
               </div>
-              <div class="postContent" v-else-if="item.firstPost && !item._data.type == 0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
-                <!-- <a></a> -->
+              <div class="postContent" v-else-if="item.firstPost && item._data.type == 0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
+              </div>
+              <div class="postContent" v-if="item.firstPost && item._data.type == 2" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
+                <span class="postConTitle" v-html="item.firstPost._data.contentHtml"></span>
+                <img v-if="item.threadVideo" :src="item.threadVideo._data.cover_url" alt="视频封面" class="videoCover">
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
-                <!-- <div class="themeImgList">
-                  <van-image
-                    fit="cover"
-                    width="113px"
-                    height="113px"
-                    lazy-load
-                    v-for="(image,index)  in item.firstPost.imageList"
-                    :src="image"
-                    @click="imageSwiper"
-                    class=""
-                  />
-                </div> -->
-
                 <div class="themeImgList moreImg">
                   <van-image
                     fit="cover"

@@ -234,15 +234,23 @@ export default {
       },
       'post-topic/:cateId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/postTopicView'], resolve)
+          require(['../view/m_site/home/post/postTopicView'], resolve)
         },
         metaInfo: {
           title: "发布主题"
         }
       },
+      'post-video/:cateId':{
+        comLoad:function (resolve) {
+        require(['../view/m_site/home/post/postVideoView'],resolve)
+        },
+        metaInfo:{
+        title:"发布视频"
+        }
+      },
       'post-longText/:cateId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/postLongTextView'], resolve)
+          require(['../view/m_site/home/post/postLongTextView'], resolve)
         },
         metaInfo: {
           title: "发布长文"
@@ -250,7 +258,7 @@ export default {
       },
       'edit-topic/:themeId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/editTopicView'], resolve)
+          require(['../view/m_site/home/edit/editTopicView'], resolve)
         },
         metaInfo: {
           title: "编辑主题"
@@ -258,10 +266,18 @@ export default {
       },
       'edit-long-text/:themeId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/home/editLongTextView'], resolve)
+          require(['../view/m_site/home/edit/editLongTextView'], resolve)
         },
         metaInfo: {
           title: "编辑长文"
+        }
+      },
+      'edit-video/:themeId':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/home/edit/editVideoView'],resolve)
+        },
+        metaInfo:{
+          title:"编辑视频"
         }
       },
       //登录、注册、微信绑定模块路由
@@ -592,7 +608,6 @@ export default {
       'login-user',
       'login-phone',
       'sign-up',
-      'wx-login-bd',
       'pay-the-fee',
       'pay-circle-login',
       'pay-circle',

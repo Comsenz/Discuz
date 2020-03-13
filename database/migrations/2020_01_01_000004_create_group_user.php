@@ -13,8 +13,8 @@ class CreateGroupUser extends Migration
     public function up()
     {
         $this->schema()->create('group_user', function (Blueprint $table) {
-            $table->integer('group_id')->unsigned()->nullable()->comment('用户组 id');
-            $table->integer('user_id')->unsigned()->nullable()->comment('用户 id');
+            $table->unsignedBigInteger('group_id')->nullable()->comment('用户组 id');
+            $table->unsignedBigInteger('user_id')->nullable()->comment('用户 id');
 
             $table->primary(['group_id', 'user_id']);
 

@@ -197,6 +197,7 @@ class EditThread
         if ($thread->type == 2) {
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
             if ($threadVideo->file_id != $attributes['file_id']) {
+                $threadVideo->file_name = $attributes['file_name'];
                 $threadVideo->file_id = $attributes['file_id'];
                 $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
                 $threadVideo->media_url = '';

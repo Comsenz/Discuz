@@ -149,11 +149,11 @@
 
 <script>
 // import '../../../scss/m_site/mobileIndex';
-import postTopicCon from "../../../controllers/m_site/circle/postTopicCon";
-import { debounce, autoTextarea } from "../../../../../common/textarea.js";
-import Expression from "../../m_site/common/expressionView";
-import "../../../defaultLess/m_site/common/common.less";
-import "../../../defaultLess/m_site/modules/circle.less";
+import postTopicCon from "../../../../controllers/m_site/circle/post/postTopicCon";
+// import { debounce, autoTextarea } from "../../../../../../common/textarea.js";
+import Expression from "../../../m_site/common/expressionView";
+import "../../../../defaultLess/m_site/common/common.less";
+import "../../../../defaultLess/m_site/modules/circle.less";
 
 export default {
   name: "post-topic",

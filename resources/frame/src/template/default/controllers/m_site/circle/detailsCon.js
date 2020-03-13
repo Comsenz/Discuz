@@ -332,7 +332,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category'],
+          include: ['posts.replyUser','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -341,6 +341,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
+          console.log(res,'8457439574398754839789');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -612,6 +613,10 @@ export default {
             this.$router.replace({
               path: '/edit-topic' + '/' + this.themeId
             });
+          } else if(this.type== 2) {
+            this.$router.replace({
+              path: '/edit-video' + '/' + this.themeId
+            });
           }
 
         }
@@ -619,9 +624,9 @@ export default {
     },
     //主题操作接口请求
     themeOpeRequest(attri, cateId, clickType) {
-      let threads = 'threads/' + this.themeId;
       this.appFetch({
-        url: threads,
+        url: 'threads',
+        splice: '/' + this.themeId,
         method: 'patch',
         data: {
           "data": {
@@ -734,10 +739,9 @@ export default {
             }
           }
         }
-
-        let posts = 'posts/' + postId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' + postId,
           method: 'patch',
           data: {
             "data": {
@@ -803,9 +807,9 @@ export default {
               }
             }
           }
-          let posts = 'posts/' + postId;
           this.appFetch({
-            url: posts,
+            url: 'posts',
+            splice: '/' +postId,
             method: 'patch',
             data: {
               "data": {
