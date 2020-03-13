@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="" v-else ="">
-          <div class="uploadBox" v-if="uploadShow ">
+          <div class="uploadBox" v-if="uploadShow">
             <!-- <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
             </van-uploader> -->
             <van-uploader :max-count="12" :accept="supportImgExtRes" multiple="false" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')">
