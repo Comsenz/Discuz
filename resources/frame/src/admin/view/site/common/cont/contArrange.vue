@@ -21,7 +21,10 @@
               <span v-if="$attrs.author">发布于</span>
               <span v-if="$attrs.replyBy">回复主题</span>
               <p v-if="$attrs.theme">{{$attrs.theme}}</p>
-              <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >{{$attrs.themeName}}</p>
+              <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >
+                {{$attrs.themeName}}
+                <span v-if="$attrs.titleIcon" class="iconfont cont-arrange__rt-main-header__release-title-icon" :class="$attrs.titleIcon"></span>
+              </p>
             </div>
 
             <div v-if="$attrs.prply >= 0 && $attrs.browse >= 0" class="cont-arrange__rt-main-header__reply-view rt-box">

@@ -81,7 +81,7 @@
         </a>
 
         <div class="cont-review-table__main" slot="main">
-          <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+          <a class="cont-review-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml">123</a>
           <div class="cont-review-table__main__cont-imgs">
             <p class="cont-review-table__main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="index">
               <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.firstPost.images,index)" :alt="item._data.fileName">
