@@ -2,7 +2,7 @@
     <div>
       <Card header="视频配置"></Card>
       <Card header="转码模板：">
-       <CardRow description="腾讯云账户 - 云点播 - 视频转码模板中的模板ID">
+       <CardRow description="腾讯云账户 - 云点播 - 视频转码模板中的模板ID。还需在回调设置中配置下回调URL，回调URL为：http(s)://当前域名/api/threads/notify/video，回调事件请选择”视频上传完成回调“和”视频转码完成回调“。">
           <el-input v-model="vodTranscode" clearable></el-input>
         </CardRow>
       </Card>
