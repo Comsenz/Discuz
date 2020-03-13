@@ -64,6 +64,10 @@
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+      </div>
     </div>
 
 </template>

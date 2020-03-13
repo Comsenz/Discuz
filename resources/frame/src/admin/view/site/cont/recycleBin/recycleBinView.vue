@@ -115,7 +115,10 @@
               <span>原因：</span>
               <span>{{!items.user?'操作者被禁止或删除':items.lastDeletedLog._data.message}}</span>
             </div>
-
+            <div class="transcodStatus">
+              <span class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 0">转码中</span>
+              <span class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 2">转码失败</span>
+            </div>
           </div>
 
         </ContArrange>

@@ -144,6 +144,10 @@
         />
       </van-popup>
     </div>
+    <div class="loadFix" v-if="loading">
+      <div class="loadMask"></div>
+      <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+    </div>
   </div>
 </template>
 

@@ -92,6 +92,7 @@ export default {
       supportVideoExtRes:'',
       fileSize: '',
       vcVideoName: '',
+      loading: false,
     }
   },
 
@@ -226,6 +227,7 @@ export default {
       this.testingType(e.target.files[0],this.supportVideoExt);
       this.testingSize(e.target.files[0],this.fileSize);
       if(this.testingSizeRes && this.testingTypeRes){
+        this.loading = true;
         var self = this;
         var mediaFile = this.$refs.vExampleFile.files[0];
         this.vcVideoName = this.$refs.vExampleFile.files[0].name;
@@ -261,6 +263,7 @@ export default {
           // console.log("doneResult", doneResult);
           uploaderInfo.fileId = doneResult.fileId;
           this.videoUp = false;
+          this.loading =false;
           this.videoShow = true;
           this.fileId = doneResult.fileId;
           // console.log('要提交的视频id',this.fileId);

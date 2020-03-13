@@ -77,6 +77,7 @@ export default {
       testingSizeRes: false,
       testingTypeRes: false,
       fileId: '',
+      loading: false, //是否处于加载状态
 
     }
   },
@@ -202,6 +203,7 @@ export default {
       this.testingType(e.target.files[0],this.supportVideoExt);
       this.testingSize(e.target.files[0],this.fileSize);
       if(this.testingSizeRes && this.testingTypeRes){
+        this.loading = true;
         var self = this;
         var mediaFile = this.$refs.vExampleFile.files[0];
         this.vcVideoName = this.$refs.vExampleFile.files[0].name;
@@ -239,6 +241,7 @@ export default {
           // console.log("doneResult", doneResult);
           uploaderInfo.fileId = doneResult.fileId;
           this.videoUp = false;
+          this.loading = false;
           this.videoShow = true;
           this.fileId = doneResult.fileId;
           // console.log('要提交的视频id',this.fileId);
@@ -288,6 +291,10 @@ export default {
       }
       if(this.cateId == 0 || this.cateId == undefined){
         this.$toast.fail('请选择分类');
+        return;
+      }
+      if(this.vcVideoName == ''){
+        this.$toast.fail('视频不能为空');
         return;
       }
       if(this.postsId && this.content){

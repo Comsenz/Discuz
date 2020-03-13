@@ -79,7 +79,7 @@ class ThreadValidator extends AbstractValidator
             ];
         }
 
-        //发布视频主题时验证
+        //发布、更新视频主题时验证
         if ($this->data['type'] == 2) {
             $rules['file_id'] = [
                 'required',
@@ -89,6 +89,7 @@ class ThreadValidator extends AbstractValidator
                     }
                 }
             ];
+            $rules['file_name'] = 'required';
         }
 
         return $rules;

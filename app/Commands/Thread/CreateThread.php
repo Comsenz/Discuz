@@ -128,9 +128,14 @@ class CreateThread
             ];
         }
         //视频贴验证是否上传视频
-        $file_id = Arr::get($this->data, 'attributes.file_id', '');
+        $file_id = '';
+        $file_name = '';
+        if ($thread->type == 2) {
+            $file_id = Arr::get($this->data, 'attributes.file_id', '');
+            $file_name = Arr::get($this->data, 'attributes.file_name', '');
+        }
 
-        $validator->valid($thread->getAttributes() + compact('captcha', 'file_id'));
+        $validator->valid($thread->getAttributes() + compact('captcha', 'file_id', 'file_name'));
 
         $thread->save();
 
