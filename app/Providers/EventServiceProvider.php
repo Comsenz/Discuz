@@ -28,7 +28,6 @@ use App\Listeners\User\MobileBind;
 use App\Listeners\User\Notifications;
 use App\Listeners\User\ValidateLogin;
 use App\Listeners\User\WechatBind;
-use App\Listeners\User\WechatNotifications;
 use App\Listeners\Wallet\CashReviewSubscriber;
 use App\Listeners\Wallet\CreateUserWalletListener;
 use App\Policies\AttachmentPolicy;
@@ -48,7 +47,6 @@ class EventServiceProvider extends BaseEventServiceProvider
         UserVerify::class => [
             WechatBind::class,
             MobileBind::class,
-            WechatNotifications::class,
         ],
         Registered::class => [
             InviteBind::class,
