@@ -2,7 +2,7 @@
 
 namespace App\Listeners\User;
 
-use App\Events\Users\Registered;
+use App\Events\Users\UserVerify;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Notifications\System;
 
@@ -14,7 +14,7 @@ use App\Notifications\System;
  */
 class WechatNotifications
 {
-    public function handle(Registered $event)
+    public function handle(UserVerify $event)
     {
         $event->user->notify(new System(WechatRegisterMessage::class));
     }
