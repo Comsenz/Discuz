@@ -24,7 +24,7 @@ export default {
 
   created() {
     this.query = this.$route.query;
-    this.handleGetUserList();
+    // this.handleGetUserList();
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
