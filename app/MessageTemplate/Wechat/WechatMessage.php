@@ -38,7 +38,7 @@ class WechatMessage extends DatabaseMessage
         $threadId = Arr::get($data, 'raw.thread_id', 0);
 
         // 主题ID为空时跳转到首页
-        if (blank($threadId)) {
+        if (empty($threadId)) {
             $threadUrl = $this->url->to('');
         } else {
             $threadUrl = $this->url->to('/details/' . $threadId);
