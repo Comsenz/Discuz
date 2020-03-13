@@ -58,7 +58,7 @@ export default {
         }, {
           name: '验证码',
           type: 'qcloud_captcha',
-          description: '请先配置云API，开通腾讯云的验证码服务',
+          description: '请先配置云API，开通腾讯云的验证码服务，并确保有对应的资源包',
           status: '',
           icon: 'iconyanzhengma',
           setFlag: true

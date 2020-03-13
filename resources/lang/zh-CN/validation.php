@@ -209,6 +209,7 @@ return [
 
         // thread
         'file_id'               => '视频文件',
+        'file_name'             => '视频文件名称',
         'captcha'               => '验证码',
         'type'                  => '类型',
 

@@ -185,16 +185,21 @@ class EditThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        //视频贴验证是否上传视频
-        $file_id = Arr::get($this->data, 'attributes.file_id', '');
-        $type = $thread->type;
 
-        $validator->valid($thread->getDirty() + compact('file_id', 'type'));
+        $type = $thread->type;
+        $validAttr = $thread->getDirty() + compact('type');
+        //视频贴验证是否上传视频
+        $file_id = Arr::get($this->data, 'attributes.file_id', 0);
+        if ($file_id > 0) {
+            $file_name = Arr::get($this->data, 'attributes.file_name', '');
+            $validAttr += compact('file_id', 'file_name');
+        }
+        $validator->valid($validAttr);
 
         $thread->save();
 
         //编辑视频
-        if ($thread->type == 2) {
+        if ($thread->type == 2 && $file_id > 0) {
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
             if ($threadVideo->file_id != $attributes['file_id']) {
                 $threadVideo->file_name = $attributes['file_name'];

@@ -5,7 +5,7 @@
         <img
           v-if="themeCon.user && themeCon.user._data.avatarUrl"
           :src="themeCon.user._data.avatarUrl"
-          alt
+          alt=""
           @click="jumpPerDet(themeCon.user._data.id)"
           class="postHead"
         />
@@ -73,6 +73,7 @@
       v-if="userDet"
       :data="payList"
       v-model="show"
+      :pwd-value="value"
       :money="themeCon._data.price"
       :balance="walletBalance"
       :walletStatus="userDet._data.canWalletPay"
