@@ -525,8 +525,9 @@ export default {
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
+              this.loading = false;
             }
-            setTimeout("this.loading = false;",100);
+            
           }
           if (enclosure) {
             this.enclosureShow = true
