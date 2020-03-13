@@ -520,9 +520,10 @@ class ListThreadsController extends AbstractListController
             // 加载首贴时，处理内容
             if (in_array('firstPost', $include)) {
                 // 截取内容、隐藏附件
-                if ($thread->price > 0) {
-                    // 列表接口，付费主题，无论是否付费，不返回内容
+                if ($thread->price > 0 && $thread->type == 1) {
+                    // 列表接口，付费长文主题，无论是否付费，不返回内容
                     $thread->firstPost->content = '';
+
 
                     // 未付费时，隐藏图片及附件
                     if (!$thread->getAttribute('paid')) {
