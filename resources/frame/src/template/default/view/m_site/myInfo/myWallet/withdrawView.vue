@@ -14,6 +14,7 @@
             clearable
             label="提现金额 "
             placeholder="请输入提现金额"
+            :formatter="formatter"
             @touchstart.native.stop="show = true"
           />
 
@@ -33,7 +34,7 @@
 
           <van-field v-model="lingFee" label="手续费" placeholder="手续费" readonly />
 
-          <van-field v-model="actualCashWithdrawal" label="实际提现金额" placeholder="实际提现金额" />
+          <van-field v-model="actualCashWithdrawal" label="实际提现金额" placeholder="实际提现金额" readonly />
 
           <van-field v-model="phone" label="手机号" placeholder="手机号" readonly />
 

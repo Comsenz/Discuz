@@ -67,7 +67,7 @@
         </el-dialog>-->
       </CardRow>
     </Card>
-    <Card header="站长：" v-show="false">
+    <Card header="站长：">
       <CardRow description="填写站长的用户id">
         <el-input placeholder="站长" type="number" v-model="siteMasterId"></el-input>
       </CardRow>
