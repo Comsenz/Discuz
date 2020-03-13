@@ -59,6 +59,10 @@ class ThreadValidator extends AbstractValidator
     {
         $rules = [
             'title' => 'required|min:3|max:80',
+            'price' => [
+                'sometimes',
+                'regex:/^(0|[1-9]\d{0,7})(\.\d{1,2})?$/',   // decimal 10,2
+            ],
         ];
 
         // 当腾讯云验证码开启时，且数据中有 captcha 时，检查验证码
@@ -79,7 +83,7 @@ class ThreadValidator extends AbstractValidator
             ];
         }
 
-        //发布、更新视频主题时验证
+        // 发布、更新视频主题时验证
         if ($this->data['type'] == 2) {
             $rules['file_id'] = [
                 'required',
