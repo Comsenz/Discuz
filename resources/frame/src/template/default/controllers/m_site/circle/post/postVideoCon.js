@@ -4,7 +4,7 @@
 import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
-import axiosHelper from "axiosHelper";			
+import axiosHelper from "axiosHelper";
 import TcVod from 'vod-js-sdk-v6';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
@@ -12,7 +12,7 @@ function getSignature() {
   // console.log('000000');
     return axiosHelper({
       url: 'signature',
-      method: 'get', 
+      method: 'get',
     }).then((res) => {
       // console.log(res.readdata._data.signature,'~~~+++++~~~~');
       return res.readdata._data.signature;
@@ -118,7 +118,7 @@ export default {
       var videoStrRes ='';
       for(var k=0;k<videoExt.length;k++){
         videoStr = '.'+videoExt[k]+',';
-        videoStrRes = 'image/'+videoExt[k]+',';
+        videoStrRes = 'video/'+videoExt[k]+',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
@@ -162,6 +162,31 @@ export default {
   },
   methods: {
 
+    formatter(value) {
+      return this.handleReg(value);
+    },
+
+    handleReg(value) {
+      value = value.toString(); // 先转换成字符串类型
+
+      if (value.indexOf('.') == 0) {
+        value = '0.';  // 第一位就是 .
+      }
+
+      value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      if (value.indexOf(".") < 0 && value != "") {
+        value = parseFloat(value);
+      }
+
+      return value;
+    },
+
+
     vExampleAdd: function() {
       this.$refs.vExampleFile.click();
       // this.$refs.vcExampleCover.click();
@@ -191,7 +216,7 @@ export default {
           this.$toast.fail('超出视频大小限制');
           // this.$refs.vExampleFile.files[0] = '';
           this.$refs.vExample.reset();
-          
+
           this.testingSizeRes = false;
         } else {
           this.testingSizeRes = true;
@@ -251,7 +276,7 @@ export default {
           self.$refs.vExample.reset();
         });
       }
-      
+
     },
 
     setVcExampleCoverName: function() {
@@ -276,7 +301,7 @@ export default {
         }
       });
     },
-    
+
     //删除视频
     videoDeleClick(){
       this.videoShow = false;
@@ -380,7 +405,7 @@ export default {
         return flat(temp);
       }
     },
-    
+
 
     //输入框自适应高度
     clearKeywords () {
@@ -476,7 +501,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          
+
           var newCategories = [];
           newCategories = res.readdata;
           for(let j = 0,len=newCategories.length; j < len; j++) {
@@ -501,7 +526,7 @@ export default {
           } else {
             this.selectSort = "选择分类";
           }
-         
+
         }
       })
     },
@@ -524,6 +549,13 @@ export default {
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
+
+      if(this.paySetValue === '.'){                // 如果只输入一个点  变成 0.
+        this.paySetValue = '0.';
+        console.log(this.paySetValue);
+        return;
+      }
+
       // if(event.target.value != null && event.target.value > 0){
       //   this.isCli = true;
       // } else {

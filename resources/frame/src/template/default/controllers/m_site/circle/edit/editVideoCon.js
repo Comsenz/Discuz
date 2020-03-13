@@ -157,7 +157,7 @@ export default {
       var videoStrRes ='';
       for(var k=0;k<videoExt.length;k++){
         videoStr = '.'+videoExt[k]+',';
-        videoStrRes = 'image/'+videoExt[k]+',';
+        videoStrRes = 'video/'+videoExt[k]+',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }

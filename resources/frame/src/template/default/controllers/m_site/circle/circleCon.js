@@ -223,7 +223,7 @@ export default {
             throw new Error(res.error)
           }
         } else {
-          console.log(res, 'eeeee');
+          // console.log(res,'eeeee');
           if (!this.canViewThreads) {
             this.nullTip = true;
             this.nullWord = res.errors[0].code;
