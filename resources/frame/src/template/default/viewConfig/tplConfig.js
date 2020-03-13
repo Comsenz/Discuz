@@ -660,6 +660,7 @@ export default {
       'wx-sign-up-bd',
       'supplier-all-back',
       'site-close',
+      'details/:themeId'
     ];
 
 
@@ -821,6 +822,12 @@ export default {
           /*判断登录设备*/
           if (isWeixin) {
             /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
+
+            if (res.readdata._data.set_site.site_mode === 'public') {
+              if (!browserDb.getSItem('beforeVisiting')){
+                browserDb.setSItem('beforeVisiting',to.path);
+              }
+            }
 
             // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
             if (wxNotLoggedInToAccessPage.includes(to.name)) {
