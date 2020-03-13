@@ -36,7 +36,13 @@ class WechatMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $threadUrl = $this->url->to('/details/' . $threadId);
+
+        // 主题ID为空时跳转到首页
+        if (blank($threadId)) {
+            $threadUrl = $this->url->to('');
+        } else {
+            $threadUrl = $this->url->to('/details/' . $threadId);
+        }
 
         return [
             $this->strWords($message),
