@@ -9,6 +9,7 @@ export default {
       payee: "",
       canWithdraw: '', //可提现余额
       withdrawalAmount: '',
+      number: '',  //键盘输入的可提现金额
       handlingFee: '',
       // actualCashWithdrawal:this.actual,
       phone: "", //绑定手机号
@@ -48,6 +49,12 @@ export default {
       this.handleReg();
     },
     onInput(value) {
+      // var _this = this;
+      // _this.number = e.target.value;
+      // // 通过正则过滤小数点后两位
+      // e.target.value = (e.target.value.match(/^\d*(\.?\d{0,2})/g)[0]) || null;
+
+      // console.log('e', e.target.value)
       this.withdrawalAmount = this.withdrawalAmount + '' + value;
       // const realVal = parseFloat(value).toFixed(2);
       this.handleReg();

@@ -10,6 +10,7 @@
 
           <van-field
             v-model="withdrawalAmount"
+            type="number"
             clearable
             label="提现金额 "
             placeholder="请输入提现金额"
@@ -36,7 +37,7 @@
 
           <van-field v-model="phone" label="手机号" placeholder="手机号" readonly />
 
-          <van-field clearable v-model="sms" label="验证码 " placeholder="请输入验证码">
+          <van-field clearable v-model="sms" label="验证码 " type="number" placeholder="请输入验证码">
             <van-button
               slot="button"
               size="small"
