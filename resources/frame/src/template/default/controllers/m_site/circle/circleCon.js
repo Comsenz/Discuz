@@ -378,6 +378,7 @@ export default {
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');
+    this.publishTypeBox = false;
     if (this.userId) {
       this.loginBtnFix = false;
       this.loginHide = true;

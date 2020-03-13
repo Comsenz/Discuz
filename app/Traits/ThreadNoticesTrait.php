@@ -81,16 +81,13 @@ trait ThreadNoticesTrait
         $data = [
             'message' => $this->getThreadTitle($thread),
             'refuse' => $attach['refuse'],
-            'raw' => [
-                'thread_id' => $thread->id,
-            ],
         ];
 
         // 系统通知
-        $thread->user->notify(new System(PostDeleteMessage::class, $data));
+        $thread->user->notify(new System(PostDeleteMessage::class, Arr::set($data, 'raw', ['thread_id' => $thread->id])));
 
-        // 微信通知
-        $thread->user->notify(new System(WechatPostDeleteMessage::class, $data));
+        // 微信通知 (跳转到首页)
+        $thread->user->notify(new System(WechatPostDeleteMessage::class, Arr::set($data, 'raw', ['thread_id' => 0])));
     }
 
     /**

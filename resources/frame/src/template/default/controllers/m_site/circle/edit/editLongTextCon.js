@@ -396,6 +396,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
+        this.loading = true;
         this.uploaderEnclosure(formdata,false,false,true);
       }
 
