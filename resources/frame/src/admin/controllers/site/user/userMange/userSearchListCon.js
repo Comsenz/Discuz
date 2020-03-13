@@ -174,6 +174,10 @@ export default {
           cancelButtonText: '取消',
           inputPlaceholder: '请输入禁用理由'
         }).then((value) => {
+          if (value.value === null) {
+            this.$message.error('请填写禁用理由');
+            return
+          }
           // 点击提交后，将复选框内容对象放入数组
           let dataList = [];
           this.multipleSelection.forEach((v) => {
@@ -186,7 +190,6 @@ export default {
               }
             })
           });
-
           // 进行后台请求
           this.appFetch({
             method: 'PATCH',
@@ -256,6 +259,10 @@ export default {
         cancelButtonText: '取消',
         inputPlaceholder: '请输入禁用理由'
       }).then((value) => {
+        if (value.value === null) {
+          this.$message.error('请填写禁用理由');
+          return
+        }
         // 获取当前行的对象值
         const data = scope.row._data;
         // 进行后台请求
@@ -273,7 +280,7 @@ export default {
           }
         }).then(() => {
           this.handleGetUserList();
-          将禁用置灰
+          //将禁用置灰
           this.tableData[scope.$index]._data.status = 1;
         });
         // } catch(err){
