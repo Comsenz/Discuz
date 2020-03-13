@@ -176,24 +176,32 @@ export default {
         this.themeTitle = String(this.themeTitle).slice(0, this.titleMaxLength);
       }
     },
-    paySetValue() {
-      /*let amtreg = /^(([0-9]\d*)(\.\d{1,2})?)$|(0\.0?([1-9]\d?))$/;
-
-      console.log(this.paySetValue);
-
-      // if (this.paySetValue === ''){
-      //   this.isCli = true;
-      // } else
-
-      if (amtreg.test(this.paySetValue)){
-        this.isCli = true;
-      } else {
-        this.isCli = false;
-      }*/
-
-    }
   },
   methods: {
+    formatter(value) {
+      return this.handleReg(value);
+    },
+
+    handleReg(value) {
+      value = value.toString(); // 先转换成字符串类型
+
+      if (value.indexOf('.') == 0) {
+        value = '0.';  // 第一位就是 .
+      }
+
+      value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      if (value.indexOf(".") < 0 && value != "") {
+        value = parseFloat(value);
+      }
+
+      return value;
+    },
+
     focus(obj) {
       document.getElementById(obj).focus();
     },
@@ -527,7 +535,7 @@ export default {
               this.uploadShow = true;
               this.loading = false;
             }
-            
+
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -538,7 +546,7 @@ export default {
             });
             this.loading = false;
           }
-          
+
         }
       })
     },
@@ -704,6 +712,13 @@ export default {
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
+
+      if(this.paySetValue === '.'){                // 如果只输入一个点  变成 0.
+        this.paySetValue = '0.';
+        console.log(this.paySetValue);
+        return;
+      }
+
       // if(event.target.value != null && event.target.value > 0){
       //   this.isCli = true;
       // } else {
