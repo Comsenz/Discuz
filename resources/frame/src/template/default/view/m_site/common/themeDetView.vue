@@ -48,7 +48,11 @@
               </div>
               <div class="postContent" v-if="item.firstPost && item._data.type == 2" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <span class="postConTitle" v-html="item.firstPost._data.contentHtml"></span>
-                <img v-if="item.threadVideo" :src="item.threadVideo._data.cover_url" alt="视频封面" class="videoCover">
+                <div class="videoCoverBox">
+                  <span class="icon iconfont icon-play"></span>
+                  <div class="videoCoverMask"></div>
+                  <img v-if="item.threadVideo" :src="item.threadVideo._data.cover_url" alt="视频封面" class="videoCover">
+                </div>
               </div>
               <div class="themeImgBox" v-if="item.firstPost.imageList && item.firstPost.imageList.length>0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
                 <div class="themeImgList moreImg">
