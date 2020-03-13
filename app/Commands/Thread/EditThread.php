@@ -207,7 +207,6 @@ class EditThread
                 $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
                 $threadVideo->media_url = '';
                 $threadVideo->cover_url = '';
-                $threadVideo->cover_url = '';
                 $threadVideo->save();
             }
         }
