@@ -333,6 +333,10 @@ export default {
           if(this.vcVideoName != '' && this.vcVideoName != null){
             this.videoShow = true;
           }
+          if(res.readdata._data.price > 0){
+            this.payValue = res.readdata._data.price;
+            this.paySetValue = res.readdata._data.price;
+          }
         }
       })
     },
