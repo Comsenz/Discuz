@@ -266,7 +266,6 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
-      console.log(this.attriAttachment,'上传的文件');
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
