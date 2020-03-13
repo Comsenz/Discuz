@@ -348,6 +348,10 @@ export default {
     },
     //发布主题
     publish(){
+      if(this.fileId == '' || this.fileId == null){
+        this.$toast.fail('上传视频不能为空');
+        return false;
+      }
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
@@ -388,10 +392,8 @@ export default {
           "data": {
             "type": "threads",
             "attributes": {
-                "content": this.content,
-                
+                "content": this.content, 
             },
-
             "relationships": {
               "attachments": {
                 "data":this.attriAttachment
