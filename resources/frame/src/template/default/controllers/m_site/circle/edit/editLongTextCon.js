@@ -78,6 +78,7 @@ export default {
       titleMaxLength: 80,
       viewportWidth: '',
       viewportHeight: '',
+      loading: false,
     }
   },
 
@@ -324,13 +325,6 @@ export default {
       })
     },
 
-    //设置底部在pc里的宽度
-    // limitWidth(){
-    //   document.getElementById('post-topic-footer').style.width = "640px";
-    //   let viewportWidth = window.innerWidth;
-    //   document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
-    // },
-
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
       if(!this.canUploadImages){
@@ -351,51 +345,6 @@ export default {
         }
       }
     },
-
-
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   // 实例化
-    //   let formdata = new FormData()
-    //   formdata.append('file', e.file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,false,true);
-    //   this.loading = false;
-
-    // },
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   let file = e.target.files[0];
-    //   let formdata = new FormData();
-    //   formdata.append('file', file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,true,false);
-    //   this.uploadShow = true;
-    //   this.loading = false;
-    // },
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.file,this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.file, false);
-    //     }
-    //   } else {
-    //     this.compressFile(e.file, false);
-    //   }
-    // },
-
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.target.files[0],this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.target.files[0], true);
-    //     }
-    //   } else {
-    //     this.compressFile(e.target.files[0], true);
-    //   }
-    // },
     //上传图片,点击加号时
     handleFile(e){
      let files = [];
@@ -411,10 +360,12 @@ export default {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
            if(this.testingRes){
-             this.compressFile(file.file, 150000, false,files.length - index);
+              this.loading = true;
+              this.compressFile(file.file, 150000, false,files.length - index);
            }
          } else {
-           this.compressFile(file.file, 150000, false, files.length - index);
+            this.loading = true;
+            this.compressFile(file.file, 150000, false, files.length - index);
          }
        });
      }
@@ -428,9 +379,11 @@ export default {
         if(this.isAndroid && this.isWeixin){
           this.testingType(file,this.supportImgExt);
           if(this.testingRes){
+            this.loading = true;
             this.compressFile(file, 150000, true);
           }
         } else {
+          this.loading = true;
           this.compressFile(file, 150000, true);
         }
       }
@@ -503,8 +456,8 @@ export default {
         } else {
           if (img) {
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-            // this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.loading = false;
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
@@ -512,6 +465,7 @@ export default {
             if (this.fileListOne.length>0){
               this.uploadShow = true;
             }
+            setTimeout("this.loading = false;",100);
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -520,9 +474,9 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
+            this.loading = false;
           }
-          this.loading = false;
+          
         }
       })
     },
