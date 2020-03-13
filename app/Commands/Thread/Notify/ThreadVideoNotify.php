@@ -82,7 +82,7 @@ class ThreadVideoNotify
             //主题审核状态
             $post = $posts->query()->where('thread_id', $threadVideo->thread_id)->firstOrFail();
             $censor->checkText($post->content);
-            if (!$censor->isMod) {
+            if (!$censor->isMod && $threadVideo->status == ThreadVideo::VIDEO_STATUS_SUCCESS) {
                 $thread = $threads->findOrFail($threadVideo->thread_id);
                 $thread->is_approved = 1;
                 $thread->save();

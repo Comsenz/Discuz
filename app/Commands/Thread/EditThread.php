@@ -196,8 +196,6 @@ class EditThread
         }
         $validator->valid($validAttr);
 
-        $thread->save();
-
         //编辑视频
         if ($thread->type == 2 && $file_id > 0) {
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
@@ -208,10 +206,13 @@ class EditThread
                 $threadVideo->media_url = '';
                 $threadVideo->cover_url = '';
                 $threadVideo->save();
+
+                //重新上传视频修改为审核状态
+                $thread->is_approved = 0;
             }
         }
 
-
+        $thread->save();
 
         $this->dispatchEventsFor($thread, $this->actor);
 
