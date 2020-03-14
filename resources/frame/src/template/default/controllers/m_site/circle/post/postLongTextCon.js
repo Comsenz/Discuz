@@ -700,6 +700,11 @@ export default {
     //设置付费金额,，显示弹框
     paySetting() {
       this.paySetShow = true;
+
+      if (this.paySetValue === '免费'){
+        this.paySetValue = null;
+      }
+
       if (this.paySetShow) {
         setTimeout(function () {
           document.getElementById('payMoneyInp').focus();
@@ -731,7 +736,8 @@ export default {
       if (this.paySetValue <= 0) {
         this.payValue = '免费';
       } else {
-        this.payValue = this.paySetValue + '元';
+        this.paySetValue = Number(this.paySetValue);
+        this.payValue = Number(this.paySetValue) + '元';
       }
 
     },
