@@ -245,7 +245,7 @@ export default {
       if (this.postsId && this.content) {
         this.appFetch({
           url: 'posts',
-          splice: '/' +this.postsId,
+          splice: '/' + this.postsId,
           method: "patch",
           data: {
             "data": {
@@ -475,7 +475,7 @@ export default {
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
               this.loading = false;
-            } 
+            }
           }
           if (enclosure) {
             this.enclosureShow = true
@@ -486,7 +486,7 @@ export default {
             });
             this.loading = false;
           }
-          
+
         }
       })
     },
@@ -657,12 +657,19 @@ export default {
     }
 
   },
-  /*beforeRouteEnter(to,from,next){
-
-    next(vm =>{
-      if (from.name === 'circle'){
-        vm.backGo = -2
+  beforeRouteLeave(to, from, next) {
+    let tct = new TencentCaptcha(this.appID, res => {
+      if (res.ret === 0) {
+        this.captcha_ticket = res.ticket;
+        this.captcha_rand_str = res.randstr;
+        //验证通过后注册
+        this.publish();
       }
-    });
-  }*/
+    })
+    // 显示验证码
+    tct.show();
+    next()
+
+  }
+
 }
