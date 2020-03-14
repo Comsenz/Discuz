@@ -161,7 +161,6 @@ export default {
 
     //初始化请求主题列表数据
     load() {
-      console.log('000000000')
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       if (isWeixin == true) {
         //微信登录时
@@ -181,7 +180,6 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition, filterVal) {
-      console.log(this.pageIndex, '翻页')
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
