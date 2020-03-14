@@ -826,7 +826,11 @@ export default {
 
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')){
-                  browserDb.setSItem('beforeVisiting',to.path);
+                  console.log(to.name);
+                  console.log(to.path);
+                  if (!wxNotLoggedInToAccessPage.includes(to.name)){
+                    browserDb.setSItem('beforeVisiting',to.path);
+                  }
                 }
               }
 
@@ -868,7 +872,7 @@ export default {
                     next();
                     return
                   }
-                  next({path:'circle'})
+                  next('/')
                 }
               }
             }
