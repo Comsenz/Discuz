@@ -128,6 +128,7 @@ export default {
       payLoading: false,
       clickStatus: true,
       contentExamine: false, //内容审核提示
+      examineWord: '',        //内容审核提示文字
 
     }
   },
@@ -349,9 +350,19 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
-            if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
-              this.contentExamine = true
+            if(res.readdata.threadVideo && res.readdata.threadVideo._data.status == 0){
+              this.contentExamine = true;
+              this.examineWord = '视频转码中，转码成功后才能正常播放';
+            } else if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2){
+              this.contentExamine = true;
+              this.examineWord = '内容正在审核中，审核通过后才能正常显示！';
+            } else {
+              this.contentExamine = false;
             }
+            // if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
+            //   this.contentExamine = true;
+            //   this.examineWord = '内容正在审核中，审核通过后才能正常显示！';
+            // }
             if (res.readdata._data.type == 1) {
               this.themeTitle = res.readdata._data.title;
             } else if (res.readdata._data.type == 0) {

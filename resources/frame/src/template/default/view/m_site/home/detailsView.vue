@@ -6,7 +6,7 @@
     <comHeader title="详情" :menuIconShow="menuStatus"></comHeader>
     <van-pull-refresh v-model="isLoading" :head-height="0" @refresh="onRefresh">
       <div class="content marBfixed" v-if="themeShow">
-        <div class="contentExamine" v-show="contentExamine">内容正在审核中，审核通过后才能正常显示！</div>
+        <div class="contentExamine" v-show="contentExamine">{{examineWord}}</div>
         <div class="cirPostCon">
           <!-- 普通主题内容组件 -->
           <normalDetail

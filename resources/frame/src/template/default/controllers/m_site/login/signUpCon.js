@@ -1,10 +1,7 @@
-
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
-// import  '../../../scss/m_site/mobileIndex.scss';
 import browserDb from "../../../../../helpers/webDbHelper";
-import appCommonH from "../../../../../helpers/commonHelper";
-// import TCaptcha from '../common/tcaptcha';
+// import  '../../../scss/m_site/mobileIndex.scss';
 
 export default {
   data: function () {
@@ -21,6 +18,7 @@ export default {
       siteMode: '',          //站点是否付费
       signUpShow: true,      //触发弹出验证码的
       appID: '',             //腾讯云验证码场景 id
+      captcha: null,         //腾讯云验证码实例
       captcha_ticket: '',    //腾讯云验证码返回票据
       captcha_rand_str: ''   //腾讯云验证码返回随机字符串
     }
@@ -59,7 +57,7 @@ export default {
           break;
         default:
           this.error = false;
-      };
+      }
     },
 
     /*
@@ -115,7 +113,7 @@ export default {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               if (res.rawData[0].code === 'register_validate') {
-                this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' } })
+                this.$router.push({path: "information-page", query: {setInfo: 'registrationReview'}})
               } else {
                 this.$toast.fail(res.errors[0].code);
               }
@@ -130,11 +128,11 @@ export default {
             browserDb.setLItem('refreshToken', refreshToken);
 
             if (this.phoneStatus) {
-              this.$router.push({ path: 'bind-phone' });
+              this.$router.push({path: 'bind-phone'});
             } else if (this.siteMode === 'pay') {
-              this.$router.push({ path: 'pay-the-fee' });
+              this.$router.push({path: 'pay-the-fee'});
             } else if (this.siteMode === 'public') {
-              this.$router.push({ path: '/' });
+              this.$router.push({path: '/'});
             } else {
               //缺少参数，请刷新页面
             }
@@ -154,19 +152,24 @@ export default {
         this.$toast("密码不能为空");
         return;
       }
-      let tct = new TencentCaptcha(this.appID, res => {
+      this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.setSignData();
         }
-      })
+      });
       // 显示验证码
-      tct.show();
+      this.captcha.show();
     },
   },
   created() {
     this.getForum();
+  },
+  beforeRouteLeave(to, from, next) {
+    // 隐藏验证码
+    this.captcha.destroy();
+    next();
   }
 }

@@ -1,4 +1,3 @@
-
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDb from '../../../../../helpers/webDbHelper';
@@ -15,7 +14,11 @@ export default {
       platform: '',
       signReason: '',        //注册原因
       signReasonStatus: false,
-      signUpBdClickShow: true, //是否触发验证码按钮
+      signUpBdClickShow: true, // 是否触发验证码按钮
+      appID: '',               // 腾讯云验证码场景 id
+      captcha: null,           // 腾讯云验证码实例
+      captcha_ticket: '',      // 腾讯云验证码返回票据
+      captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
     }
   },
 
@@ -231,16 +234,16 @@ export default {
         this.$toast("密码不能为空");
         return;
       }
-      let tct = new TencentCaptcha(this.appID, res => {
+      this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.setSignData();
         }
-      })
+      });
       // 显示验证码
-      tct.show();
+      this.captcha.show();
     },
 
   },
@@ -280,7 +283,10 @@ export default {
         this.getWatchHrefPC(code, state, sessionId);
       }
     }
-
+  },
+  beforeRouteLeave(to, from, next) {
+    // 隐藏验证码
+    this.captcha.destroy();
+    next();
   }
-
 }
