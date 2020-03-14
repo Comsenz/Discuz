@@ -34,7 +34,8 @@
       <img class="videoCover" v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null" :src="themeCon.threadVideo._data.cover_url" alt="">
     </div>
     <div class="videoBox" v-else>
-      <video v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>
+      <img v-if="themeCon.threadVideo._data.status == 0" :src="appConfig.staticBaseUrl+'/images/transcoding.png'" alt="" class="transcodingCover">
+      <video v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null && themeCon.threadVideo._data.status == 1" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>
     </div>
     <div class="payTipBox" v-if="themeCon._data.price > 0 && !themeCon._data.paid">
       <p class="tipPrice">
