@@ -158,7 +158,7 @@ export default {
           let refreshToken = res.data.attributes.refresh_token;
           webDb.setLItem('Authorization', token);
           webDb.setLItem('tokenId', tokenId);
-          webDb.setLItem('refreshToken',refreshToken);
+          webDb.setLItem('refreshToken', refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
 
           if (beforeVisiting) {
@@ -286,7 +286,9 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
-    this.captcha.destroy();
+    if (this.captcha) {
+      this.captcha.destroy();
+    }
     next();
   }
 }

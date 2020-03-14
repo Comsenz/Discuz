@@ -669,7 +669,9 @@ export default {
   // }
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
-    this.captcha.destroy();
+    if (this.captcha) {
+      this.captcha.destroy();
+    }
     next();
   }
 }
