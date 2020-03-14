@@ -690,7 +690,7 @@ export default {
 
 
 
-    if (to.name === 'supplier-all-back'){
+    if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back'){
       next();
     } else {
       this.getForum().then((res) => {
