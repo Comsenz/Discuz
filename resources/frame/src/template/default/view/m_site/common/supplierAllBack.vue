@@ -40,7 +40,7 @@ export default {
       // webDb.setSItem('num',2);
     }*/
 
-    this.$router.go(0);
+    // this.$router.go(0);
 
     setTimeout(()=>{
       this.$router.replace({path:this.$router.history.current.query.url});
