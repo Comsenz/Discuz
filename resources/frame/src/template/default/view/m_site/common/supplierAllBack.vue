@@ -15,37 +15,7 @@ export default {
 
   },
 
-
-  beforeRouteLeave(to,from,next){
-    console.log(to.name);
-    console.log(from.name);
-
-    // if (from.name === 'login-user'){
-    //   if (this.$router.history.current.query.url === '/'){
-    //     // this.$router.go(0);
-    //     this.status = 1;
-    //   }
-    // }
-
-  },
-
-
-  watch:{
-    '$route': function(to, from) {
-      console.log(to.name);
-      console.log(from.name);
-
-      // if (from.name === 'login-user'){
-      //   if (this.$router.history.current.query.url === '/'){
-      //     this.$router.go(0);
-      //   }
-      // }
-    }
-  },
   created(){
-
-
-
 
     // if (webDb.getSItem('num')) {
     //   webDb.setSItem('num',1);
@@ -53,7 +23,6 @@ export default {
     // } else {
     //   console.log('多次进');
     // }
-
 
     /*if (webDb.getSItem('num') || webDb.getSItem('num') > 1){
 
@@ -72,6 +41,9 @@ export default {
     }*/
 
     this.$router.replace({path:this.$router.history.current.query.url});
+
+    console.log('空白页' + this.$router.history.current.query.url);
+
     // this.$router.go(0);
 
     // if (this.status != 1){

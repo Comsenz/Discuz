@@ -244,6 +244,7 @@ const appFetch = function(params, options) {
         if (isWeixin){
           browserDb.setLItem('Authorization','');
           getNewToken().then(res=>{
+            console.log('重新获取token后跳转');
             Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
@@ -291,10 +292,10 @@ const getNewToken = function (router) {
     }
   }).then(res=>{
     let token = res.data.attributes.access_token;
-    let tokenId = res.data.id;
+    // let tokenId = res.data.id;
     let refreshToken = res.data.attributes.refresh_token;
     browserDb.setLItem('Authorization', token);
-    browserDb.setLItem('tokenId', tokenId);
+    // browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
   })
