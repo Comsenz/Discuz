@@ -108,10 +108,13 @@ class ResourceThreadController extends AbstractResourceController
 
             $thread->setAttribute('paid', $paid);
 
-            // 截取内容、隐藏图片及附件
+            // 长文隐藏正文，其他截取内容显示200。隐藏图片及附件
             if (in_array('firstPost', $include) && !$paid) {
-                // $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
-                $thread->firstPost->content = '';
+                if ($thread->type == 1) {
+                    $thread->firstPost->content = '';
+                } else {
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                }
                 $thread->firstPost->setRelation('images', collect());
                 $thread->firstPost->setRelation('attachments', collect());
             }
