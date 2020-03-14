@@ -312,7 +312,28 @@ export default {
         "paySign": data.data.attributes.wechat_js.paySign //微信签名
       },
         function (res) {
+          // alert('支付唤醒');
+          if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            that.payLoading = false;
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            that.payLoading = false;
+            resolve;
+          }
 
+          /*if (res.err_msg == "get_brand_wcpay_request:ok") {
+            alert("支付成功");
+            alert(res.err_msg);
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            alert("支付过程中用户取消");             //支付取消正常走
+            alert(res.err_msg);
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            alert("支付失败");
+            alert(res.err_msg);
+            resolve;
+          }*/
 
         });
 

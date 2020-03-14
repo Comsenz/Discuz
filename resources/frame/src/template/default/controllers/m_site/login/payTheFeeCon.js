@@ -153,10 +153,10 @@ export default {
           // alert('支付唤醒');
 
           if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            this.payLoading = false;
+            that.payLoading = false;
             resolve;
           } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            this.payLoading = false;
+            that.payLoading = false;
             resolve;
           }
 
