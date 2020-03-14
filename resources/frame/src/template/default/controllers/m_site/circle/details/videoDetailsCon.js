@@ -3,23 +3,23 @@
  */
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
-import {ImagePreview} from "vant";
+import { ImagePreview } from "vant";
 export default {
-	data: function() {
-		return {
+  data: function () {
+    return {
       show: false,  //是否显示支付方式
-      payList:[
+      payList: [
         {
-          name:'钱包',
-          icon:'icon-wallet'
+          name: '钱包',
+          icon: 'icon-wallet'
         }
       ],
       qrcodeShow: false,
       walletBalance: '',  //钱包余额
-      errorInfo:'',      //密码错误提示
-      value:'',          //密码
+      errorInfo: '',      //密码错误提示
+      value: '',          //密码
       userId: '',         //当前用户ID
-      codeUrl:"",        //支付url，base64
+      codeUrl: "",        //支付url，base64
       payLoading: false,
       // appId: '',
       // userDet: '',
@@ -32,7 +32,8 @@ export default {
       loadCover: '',
       loadVideo: '',     //初始化隐藏video，加载完成后再显示出来
       coverUrl: '',         //初始化显示封面图
-		}
+      aaa: true,
+    }
   },
   props: {
     themeCon: { // 组件的list
@@ -44,21 +45,20 @@ export default {
     userDet: {
       type: Object
     },
-    
+
   },
-  mounted () {
+  mounted() {
     let self = this
     setTimeout(() => {
       self.videoFileid = self.themeCon.threadVideo._data.file_id;
       self.videoAppid = self.videoAppid;
       // self.videoFileCover = self.themeCon.threadVideo._data.cover_url;
       self.$nextTick(() => {
-
-        console.log(self.videoFileid, self.videoAppid,'@@@@#~~~~');
+        console.log(self.videoFileid, self.videoAppid, '@@@@#~~~~');
         // self.getVideoLang(self.videoFileid, self.videoAppid, self.videoFileCover)
         self.getVideoLang(self.videoFileid, self.videoAppid);
       })
-      
+
     }, 2000)
   },
   // watch:{
@@ -73,7 +73,7 @@ export default {
   //   },
   //   deep:true
   // },
-  created:function(){
+  created: function () {
     this.loadCover = true;
     this.loadVideo = false;
     this.viewportWidth = window.innerWidth;
@@ -87,8 +87,8 @@ export default {
     // console.log(this.videoAppid,'++++++++++++++++++++++++');
     this.loadUserInfo();
     this.getForum();
-    if(this.userId){
-      this.getUsers(browserDb.getLItem('tokenId')).then(res=>{
+    if (this.userId) {
+      this.getUsers(browserDb.getLItem('tokenId')).then(res => {
         this.getAuthority(res.readdata.groups[0]._data.id);
         this.walletBalance = res.readdata._data.walletBalance;
       });
@@ -100,10 +100,10 @@ export default {
       return this.$route.params.themeId;
     }
   },
-  
-	methods: {
+
+  methods: {
     // 初始化腾讯云播放器
-    getVideoLang (fileID, appID, posterImg) {
+    getVideoLang(fileID, appID, posterImg) {
       // alert(posterImg,'封面');
       this.loadCover = true;
       this.loadVideo = false;
@@ -117,27 +117,28 @@ export default {
         // 'poster': 'http://www.test.com/myimage.jpg',
         'posterImage': false,
       }
-      console.log(window.TCPlayer,'lllllllllllllllllllll');
+      console.log(window.TCPlayer, 'lllllllllllllllllllll');
       this.player = window.TCPlayer(this.tcPlayerId, playerParam);
-      this.player.ready(function() {
+      this.player.ready(() => {
         // debugger;
         this.loadCover = false;
+        console.log(this.loadCover)
         this.loadVideo = true;
-        if(this.loadCover == true) {
-          console.log('123');
-          console.log(this.loadCover,'封面显示');
-          this.loadVideo = false;
-        } else {
-          console.log('456');
-          this.loadVideo = true;
-          console.log(this.loadVideo,'视频显示');
-        }
+        // if (this.loadCover == true) {
+        //   console.log('123');
+        //   console.log(this.loadCover, '封面显示');
+        //   this.loadVideo = false;
+        // } else {
+        //   console.log('456');
+        //   this.loadVideo = true;
+        //   console.log(this.loadVideo, '视频显示');
+        // }
         // if(this.$refs.coverShow && this.$refs.videoShow){
         //   this.$refs.coverShow.setAttribute("class", "none");
         //   this.$refs.videoShow.setAttribute("class", "block");
         // }
-        
-        
+
+
         // alert(this.loadCover);
         // alert(this.loadVideo);
         // debugger;
@@ -148,72 +149,72 @@ export default {
       });
     },
     //点击用户名称，跳转到用户主页
-    jumpPerDet:function(id){
-    //   if(!this.userId){
-    //     this.$router.push({
-    //       path:'/login-user',
-    //       name:'login-user'
-    //     })
-    //   } else {
-      this.$router.push({ path:'/home-page'+'/'+id});
+    jumpPerDet: function (id) {
+      //   if(!this.userId){
+      //     this.$router.push({
+      //       path:'/login-user',
+      //       name:'login-user'
+      //     })
+      //   } else {
+      this.$router.push({ path: '/home-page' + '/' + id });
       // }
     },
     //初始化请求用户信息
-    loadUserInfo(){
-      if(!this.userId){
+    loadUserInfo() {
+      if (!this.userId) {
         return false;
       }
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+ this.userId,
+        url: 'users',
+        method: 'get',
+        splice: '/' + this.userId,
         data: {
         }
       }).then((res) => {
         this.walletBalance = res.readdata._data.walletBalance;
-        
+
       })
     },
-     /*
-    * 接口请求
-    * */
-   getForum(){
-    this.appFetch({
-      url:'forum',
-      method:'get',
-      data:{}
-    }).then(res=>{
-      if (res.errors){
-        this.$toast.fail(res.errors[0].code);
-      } else {
-        this.sitePrice = res.readdata._data.set_site.site_price;
-        let day = res.readdata._data.set_site.site_expire;
-        switch (day) {
-          case '':
-            this.siteExpire = '永久有效';
-            break;
-          case '0':
-            this.siteExpire = '永久有效';
-            break;
-          default:
-            this.siteExpire = '有效期自加入起' + day + '天';
-            break;
+    /*
+   * 接口请求
+   * */
+    getForum() {
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {}
+      }).then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.sitePrice = res.readdata._data.set_site.site_price;
+          let day = res.readdata._data.set_site.site_expire;
+          switch (day) {
+            case '':
+              this.siteExpire = '永久有效';
+              break;
+            case '0':
+              this.siteExpire = '永久有效';
+              break;
+            default:
+              this.siteExpire = '有效期自加入起' + day + '天';
+              break;
+          }
+          if (res.readdata._data.paycenter.wxpay_close === '1') {
+            this.payList.unshift({
+              name: '微信支付',
+              icon: 'icon-wxpay'
+            })
+          }
         }
-        if (res.readdata._data.paycenter.wxpay_close === '1'){
-          this.payList.unshift( {
-            name:'微信支付',
-            icon:'icon-wxpay'
-          })
-        }
-      }
-    }).catch(err=>{
-    })
-  },
+      }).catch(err => {
+      })
+    },
     //购买内容
-    buyTheme(){
+    buyTheme() {
       this.show = !this.show;
     },
-    payImmediatelyClick(data){
+    payImmediatelyClick(data) {
       //data返回选中项
 
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
@@ -221,139 +222,139 @@ export default {
 
       if (data.name === '微信支付') {
         this.show = false;
-        if (isWeixin){
+        if (isWeixin) {
           //微信
-          this.getOrderSn().then(()=>{
-            this.orderPay(12).then((res)=>{
-              if (typeof WeixinJSBridge == "undefined"){
-                if( document.addEventListener ){
+          this.getOrderSn().then(() => {
+            this.orderPay(12).then((res) => {
+              if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
                   document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-                }else if (document.attachEvent){
+                } else if (document.attachEvent) {
                   document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
                   document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
                 }
-              }else{
+              } else {
                 this.onBridgeReady(res);
               }
             })
           });
-        } else if (isPhone){
+        } else if (isPhone) {
           //手机浏览器
-          this.getOrderSn().then(()=>{
-            this.orderPay(11).then((res)=>{
+          this.getOrderSn().then(() => {
+            this.orderPay(11).then((res) => {
               this.wxPayHref = res.readdata._data.wechat_h5_link;
               window.location.href = this.wxPayHref;
 
-              const payPhone = setInterval(()=>{
-                if (this.payStatus && this.payStatusNum > 10){
+              const payPhone = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
                   clearInterval(payPhone);
                 }
                 this.getOrderStatus();
-              },3000)
+              }, 3000)
 
             })
           });
         } else {
           //pc
-          this.getOrderSn().then(()=>{
-            this.orderPay(10).then((res)=>{
+          this.getOrderSn().then(() => {
+            this.orderPay(10).then((res) => {
               this.codeUrl = res.readdata._data.wechat_qrcode;
               this.qrcodeShow = true;
-              const pay = setInterval(()=>{
-                if (this.payStatus && this.payStatusNum > 10){
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
                   clearInterval(pay);
                 }
                 this.getOrderStatus();
-              },3000)
+              }, 3000)
             })
           });
         }
       }
     },
-    onInput(key){
+    onInput(key) {
       this.value = this.value + key;
 
-      if (this.value.length === 6 ) {
-        
+      if (this.value.length === 6) {
+
         this.errorInfo = '';
-        this.getOrderSn().then(()=>{
-          this.orderPay(20,this.value).then((res)=>{
-            const pay = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
+        this.getOrderSn().then(() => {
+          this.orderPay(20, this.value).then((res) => {
+            const pay = setInterval(() => {
+              if (this.payStatus && this.payStatusNum > 10) {
                 clearInterval(pay);
               }
               this.getOrderStatus();
-            },3000)  
+            }, 3000)
           })
         })
       }
     },
     //删除
-    onDelete(){
+    onDelete() {
       this.value = this.value.slice(0, this.value.length - 1);
     },
     //关闭
-    onClose(){
+    onClose() {
       this.value = '';
       this.errorInfo = '';
       this.payLoading = false;
     },
-    onBridgeReady(data){
+    onBridgeReady(data) {
       let that = this;
 
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
-          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
-          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
-          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
-          "package":data.data.attributes.wechat_js.package,
-          "signType":"MD5",         //微信签名方式：
-          "paySign":data.data.attributes.wechat_js.paySign //微信签名
-        },
-        function(res){
-          
+        "appId": data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+        "timeStamp": data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+        "nonceStr": data.data.attributes.wechat_js.nonceStr, //随机串
+        "package": data.data.attributes.wechat_js.package,
+        "signType": "MD5",         //微信签名方式：
+        "paySign": data.data.attributes.wechat_js.paySign //微信签名
+      },
+        function (res) {
+
 
         });
 
-      const payWechat = setInterval(()=>{
-        if (this.payStatus == '1' || this.payStatusNum > 10){
+      const payWechat = setInterval(() => {
+        if (this.payStatus == '1' || this.payStatusNum > 10) {
           clearInterval(payWechat);
           return;
         }
         this.getOrderStatus();
-      },3000)
+      }, 3000)
 
     },
-    getOrderSn(){
+    getOrderSn() {
       return this.appFetch({
-        url:'orderList',
-        method:'post',
-        data:{
-          "type":3,
+        url: 'orderList',
+        method: 'post',
+        data: {
+          "type": 3,
           "thread_id": this.themeId
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.orderSn = res.readdata._data.order_sn;
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
-    orderPay(type,value){
+    orderPay(type, value) {
       return this.appFetch({
-        url:'orderPay',
-        method:'post',
-        splice:'/' + this.orderSn,
-        data:{
-          "payment_type":type,
-          'pay_password':value
+        url: 'orderPay',
+        method: 'post',
+        splice: '/' + this.orderSn,
+        data: {
+          "payment_type": type,
+          'pay_password': value
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.value = '';
-          if (res.errors[0].detail){
+          if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);
@@ -362,34 +363,34 @@ export default {
           this.payLoading = true;
           return res;
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
-    getUsersInfo(){
+    getUsersInfo() {
     },
-    getOrderStatus(){
+    getOrderStatus() {
       // alert('查询支付状态');
       // alert(this.orderSn);
       return this.appFetch({
-        url:'order',
-        method:'get',
-        splice:'/' + this.orderSn,
-        data:{
+        url: 'order',
+        method: 'get',
+        splice: '/' + this.orderSn,
+        data: {
         },
-      }).then(res=>{
+      }).then(res => {
         // const orderStatus = res.readdata._data.status;
-        if (res.errors){
-          if (res.errors[0].detail){
+        if (res.errors) {
+          if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
+            throw new Error(res.error)
           }
-        } else {
+        } else {
           this.payStatus = res.readdata._data.status;
-          this.payStatusNum ++;
-          if (this.payStatus == '1' || this.payStatusNum > 10){
-            if(this.payStatus == '1'){
+          this.payStatusNum++;
+          if (this.payStatus == '1' || this.payStatusNum > 10) {
+            if (this.payStatus == '1') {
               location.reload();
               this.sendMsgToParent();
               this.payLoading = false;
@@ -397,67 +398,67 @@ export default {
             this.rewardShow = false;
             this.qrcodeShow = false;
             this.payStatusNum = 11;
-           
+
             // clearInterval(pay);
           }
         }
         // return res;
       })
     },
-    sendMsgToParent(){
+    sendMsgToParent() {
       // alert('执行');
-      this.$emit('listenToChildEvent',true);
+      this.$emit('listenToChildEvent', true);
     },
-    getUsers(id){
+    getUsers(id) {
       return this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/' + id,
-        headers:{'Authorization': 'Bearer ' + browserDb.getLItem('Authorization')},
-        data:{
-          include:['groups']
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + browserDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
-    getAuthority(id){
+    getAuthority(id) {
       return this.appFetch({
-        url:"authority",
-        method:'get',
-        splice:'/' + id,
-        data:{
-          include:['permission']
+        url: "authority",
+        method: 'get',
+        splice: '/' + id,
+        data: {
+          include: ['permission']
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           return res
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
     imageSwiper(imgIndex, typeclick, replyItem) {
       ImagePreview({
-        images:this.firstpostImageListProp,
-        startPosition:imgIndex,    //图片预览起始位置索引 默认 0
+        images: this.firstpostImageListProp,
+        startPosition: imgIndex,    //图片预览起始位置索引 默认 0
         showIndex: true,    //是否显示页码         默认 true
         showIndicators: true, //是否显示轮播指示器 默认 false
-        loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-        
+        loop: true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+
       })
     },
 
 
-	},
-	beforeRouteLeave (to, from, next) {
-	   
-	   next()
-	}
+  },
+  beforeRouteLeave(to, from, next) {
+
+    next()
+  }
 }
