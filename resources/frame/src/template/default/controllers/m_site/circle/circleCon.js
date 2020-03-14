@@ -75,10 +75,11 @@ export default {
   created: function () {
     this.getInfo();
     this.load();
+    this.loadThemeList(); //初始化列表数据
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
-    this.onLoad();
+    // this.onLoad(); 
     this.detailIf();
     browserDb.removeSItem('beforeVisiting');
     this.token = browserDb.getLItem('Authorization');
@@ -159,6 +160,7 @@ export default {
 
     //初始化请求主题列表数据
     load() {
+      console.log('000000000')
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       if (isWeixin == true) {
         //微信登录时
@@ -177,8 +179,8 @@ export default {
     //   // }
     // },
     //初始化请求主题列表数据
-
     loadThemeList(filterCondition, filterVal) {
+      console.log(this.pageIndex, '翻页')
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
@@ -295,7 +297,7 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
-      // this.pageIndex = 0;
+      this.pageIndex = 0;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition, cateId);
     },
