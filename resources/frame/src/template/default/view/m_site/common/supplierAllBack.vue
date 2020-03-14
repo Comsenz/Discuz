@@ -40,7 +40,7 @@ export default {
       // webDb.setSItem('num',2);
     }*/
 
-    this.$router.replace({path:this.$router.history.current.query.url});
+    // this.$router.replace({path:this.$router.history.current.query.url});
 
     console.log('空白页' + this.$router.history.current.query.url);
 
