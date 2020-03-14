@@ -826,7 +826,7 @@ export default {
 
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')){
-                  if (!wxNotLoggedInToAccessPage.includes(to.path)){
+                  if (wxNotLoggedInToAccessPage.includes(to.path)){
                     browserDb.setSItem('beforeVisiting',to.path);
                   }
                 }
