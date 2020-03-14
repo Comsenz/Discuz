@@ -692,7 +692,6 @@ export default {
 
     this.getForum().then((res) => {
       console.log('初始化');
-      console.log(res);
 
       /*
       * 站点关闭，跳转到站点关闭页面
@@ -773,6 +772,7 @@ export default {
       /*已登录状态*/
 
       this.getForum().then((ress) => {
+        console.log('已经登录状态');
 
         if (ress.readdata._data.set_site.site_mode === 'pay') {
           this.getUsers(tokenId).then(res => {
