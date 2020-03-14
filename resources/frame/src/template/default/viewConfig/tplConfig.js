@@ -691,6 +691,8 @@ export default {
 
 
     this.getForum().then((res) => {
+      console.log('初始化');
+      console.log(res);
 
       /*
       * 站点关闭，跳转到站点关闭页面
