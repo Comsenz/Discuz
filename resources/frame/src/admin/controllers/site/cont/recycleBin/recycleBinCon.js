@@ -193,7 +193,7 @@ export default {
         url:'threads',
         method:'get',
         data:{
-          include: ['user','firstPost','category','deletedUser','lastDeletedLog','firstPost.images','firstPost.attachments'],
+          include: ['user','firstPost','category','deletedUser','lastDeletedLog','firstPost.images','firstPost.attachments', 'threadVideo'],
           // include:['user', 'firstPost', 'lastPostedUser','deletedUser', 'category','firstPost.images','firstPost.attachments'],
           'filter[isDeleted]':'yes',
           'filter[username]':this.searchUserName,

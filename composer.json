@@ -1,6 +1,6 @@
 {
 	"name" : "qcloud/discuz",
-	"description" : "The Discuz software open-source.",
+	"description" : "Discuz Q",
 	"type" : "project",
 	"keywords" : [
 		"discuz",
@@ -8,17 +8,17 @@
 		"forum",
 		"community"
 	],
-	"license" : "MIT",
 	"require" : {
-		"php": "^7.2",
+		"php": "^7.2.5",
 		"ext-json": "*",
-		"discuz/core": "dev-master",
+		"ext-pdo": "*",
+		"discuz/core": "^0.3",
 		"endroid/qr-code": "^3.6",
 		"league/omnipay": "^3.0",
 		"lokielse/omnipay-wechatpay": "^3.0",
-		"s9e/text-formatter": "^2.3",
-        "ext-pdo": "*"
-    },
+		"overtrue/wechat": "~4.0",
+		"s9e/text-formatter": "^2.3"
+	},
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",
@@ -31,7 +31,7 @@
 	    },
         {
             "type": "composer",
-            "url": "https://cloud.comsenz-service.com"
+            "url": "https://cloud.discuz.chat"
         }
 	],
 	"minimum-stability" : "dev",

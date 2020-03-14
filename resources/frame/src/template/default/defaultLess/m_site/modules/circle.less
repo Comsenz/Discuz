@@ -151,6 +151,9 @@ body {
       color: @cor888;
     }
   }
+  .font9 {
+    color: @cor999;
+  }
 }
 .postOpera {
   float: right;
@@ -185,6 +188,7 @@ body {
   line-height: 1.5;
   margin-bottom: 10px;
   overflow: hidden;
+  word-break: break-all;
   .postConTitle {
     // display: block;
     line-height: 1.5;
@@ -199,11 +203,43 @@ body {
   .icon-longtext, .icon-money1 {
     color: #CCCCCC;
   }
+  .videoCoverBox {
+    display: inline-block;
+    position: relative;
+    .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 9;
+      font-size: 48px;
+      line-height: 48px;
+      margin-left: -24px;
+      margin-top: -24px;
+      color: #fff;
+    }
+    .videoCoverMask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 8;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.2);
+    }
+    .videoCover {
+      display: block;
+      max-width: 100%;
+    }
+  }
+  .transcodingCover {
+    display: block;
+    width: 100%;
+  }
 }
 .listPostCon {
-  a {
-    // display: inline-block;
-  }
+  // a {
+  //   // display: inline-block;
+  // }
   .icon {
     color: #CCCCCC;
   }
@@ -296,12 +332,11 @@ body {
 .fixedEdit {
   position: fixed;
   right: 15px;
-  bottom: 54px;
+  bottom: 15px;
   z-index: 12;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   line-height: 50px;
-  // line-height: 40px;
   background: @main;
   border-radius: 50%;
   text-align: center;
@@ -312,22 +347,23 @@ body {
     color: #fff;
     font-size: 20px;
   }
-  
+
 }
 .rotate {
   transform:rotate(45deg);
   -ms-transform:rotate(45deg); 	/* IE 9 */
   -moz-transform:rotate(45deg); 	/* Firefox */
   -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
-  -o-transform:rotate(45deg); 
+  -o-transform:rotate(45deg);
   transform: rotate(45deg);
   transition: all 200ms;
 }
 .publishTypeBox {
   position: fixed;
-  bottom: 110px;
-  right: 10px;
-  width: 60px;
+  bottom: 74px;
+  right: 15px;
+  z-index: 12;
+  width: 52px;
   padding: 7px 4px;
   border: 1px solid #e5e5e5;
   border-radius: 30px;
@@ -336,18 +372,19 @@ body {
   box-shadow: 0 0 7px rgba(0,0,0,0.1);
   .iconBg {
     background: #F4F4F4;
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    margin: 0 auto 6px auto;
+    margin-bottom: 6px;
     text-align: center;
-    line-height: 46px;
+    line-height: 42px;
     .icon {
       font-size: 20px;
       color: #000000;
     }
   }
   .publishCho {
+    width: 42px;
     .publishChoWo {
       font-size: 11px;
       color: #666;
@@ -755,8 +792,8 @@ openCircleConView.vue
       height: 26px;
       width: 26px;
       // @include px2rem(margin, 0 0 7 7);
-    } 
-    
+    }
+
   }
   .foldTip {
     float: left;
@@ -765,7 +802,7 @@ openCircleConView.vue
     padding-top: 8px;
     color: #888888;
     padding-left: 8px;
-    
+
   }
   .foldTag {
     float: left;
@@ -786,7 +823,7 @@ openCircleConView.vue
       -ms-transform:rotate(180deg); 	/* IE 9 */
       -moz-transform:rotate(180deg); 	/* Firefox */
       -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
-      -o-transform:rotate(180deg); 
+      -o-transform:rotate(180deg);
       transform: rotate(180deg);
       transition: all 200ms;
     }
@@ -996,7 +1033,7 @@ details.vue
 }
 .twoChi {
   .footChi {
-    width: 50%; 
+    width: 50%;
   }
 }
 .rewardPopup {
@@ -1123,12 +1160,67 @@ details.vue
     line-height: 0;
   }
 }
-.longTextContent {
-  color: #555555;
+.videoContentText {
   line-height: 20px;
   padding-top: 10px;
   font-size: 15px;
   word-break: break-all;
+}
+.longTextContent {
+  // color: #555;
+  // line-height: 20px;
+  padding-top: 10px;
+  // font-size: 15px;
+  // word-break: break-all;
+  // p {
+  //   margin: 15px auto !important;
+  // }
+  li {
+    list-style: disc;
+    // margin: 15px !important;
+  }
+  ol {
+    list-style-type: decimal;
+    li {
+      list-style: decimal;
+    }
+  }
+  // h3 {
+  //   font-size: 21px;;
+  // }
+  // blockquote {
+  //   color: #666;
+  //   border-left: 4px solid #ddd;
+  //   padding-left: 20px;
+  //   margin-left: 0;
+  //   font-size: 15px;
+  //   font-style: italic;
+  // }
+  // code {
+  //   border: 1px solid #ddd;
+  //   background: #f6f6f6;
+  //   padding: 3px;
+  //   border-radius: 3px;
+  //   font-size: 15px;
+  // }
+  // pre {
+  //   padding: 10px;
+  //   background: #f6f6f6;
+  //   border: 1px solid #ddd;
+  //   white-space: pre-wrap;
+  //   word-wrap: break-word;
+  //   code {
+  //     display: inline;
+  //     max-width: initial;
+  //     padding: 0;
+  //     margin: 0;
+  //     overflow: initial;
+  //     line-height: inherit;
+  //     word-wrap: normal;
+  //     background-color: transparent;
+  //     border: 0;
+  //   }
+  // }
 }
 .payTipBox {
   margin: 30px 0;
@@ -1159,7 +1251,23 @@ details.vue
     margin: 0 auto;
   }
 }
-
+.videoBox {
+  padding: 14px 0 10px 0;
+  .videoCover {
+    display: block;
+    max-width: 100%;
+  }
+  .video-js {
+    max-width: 100%;
+  }
+  .videoContent {
+    width: 100%;
+    img {
+      display: block;
+      max-width: 100%;
+    }
+  }
+}
 
 
 //发表主题
@@ -1318,7 +1426,7 @@ details.vue
   font-size: 15px;
   box-sizing: border-box;
   caret-color: @main;  //光标颜色
-  
+
  }
 .post-longText-form {
   width: 100%;
@@ -1374,7 +1482,7 @@ details.vue
   text-align: left;
   padding: 18px 0;
   border-bottom: 1px solid @corE5;
-  span {
+  /*span {
     float: left;
     font-size: 24px;
     line-height: 32px;
@@ -1387,7 +1495,35 @@ details.vue
     border: none;
     width: 220px;
     text-align: left;
+  }*/
+
+  .van-cell{
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    .van-cell__title.van-field__label{
+      flex: 0;
+      span{
+        font-size: 25px;
+      }
+    }
+    .van-cell__value{
+
+      .van-field__body{
+
+        .van-field__control{
+          font-size: 35px;
+        }
+
+      }
+
+    }
+
   }
+
+
 }
 .payEx {
   padding: 16px 0 14px 0;
@@ -1430,6 +1566,56 @@ details.vue
 .sureBtnCli {
   background: @main;
 }
+
+/**
+ *  发布视频
+ */
+.videoUploader {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  text-align: center;
+  .icon-add {
+    font-size: 24px;
+    color: #d8d8d8;
+    line-height: 54px;
+  }
+  .videoUpInp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    opacity: 0.8;
+  }
+}
+.videoShow {
+  position: relative;
+  width: 160px;
+  height: 210px;
+  .videoDele {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    z-index: 10;
+    background: #d8d8d8;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    .icon-closeCho {
+      font-size: 14px;
+      color: #ffffff;
+    }
+  }
+}
+
+
+
 /**
  *  回复输入框
  */
@@ -1554,6 +1740,42 @@ details.vue
     }
   }
 }
+.videoCon {
+  padding-top: 14px;
+  .videoChi {
+    line-height: 20px;
+    vertical-align: middle;
+    .icon-video1 {
+      float: left;
+      font-size: 17px;
+      color: #0494F9;
+    }
+
+    .videoName {
+      float: left;
+      margin-left: 5px;
+      font-size: 15px;
+      line-height: 20px;
+      color: @main;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .videoDelete {
+      color:@corB2;
+      display: inline-block;
+      line-height: 18px;
+      margin-left: 14px;
+      font-size: 15px;
+      vertical-align: bottom;
+      .icon {
+        font-size: 16px;
+        color: @white;
+      }
+    }
+  }
+}
 .expressionBox {
   position: fixed;
   bottom: 0;
@@ -1654,4 +1876,16 @@ details.vue
 }
 .face-content .v-tabs__wrapper {
   display: none;
+}
+.contentExamine{
+  width:345px;
+  height:34px;
+  margin:14px 15px 0 15px;
+  border-radius:4px;
+  background:rgba(241,248,253,1);
+  border: 1px dashed #B9D8ED;
+  text-align: center;
+  line-height: 34px;
+  font-size:14px;
+  color:#336699;
 }

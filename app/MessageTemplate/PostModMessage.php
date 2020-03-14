@@ -7,7 +7,12 @@
 
 namespace App\MessageTemplate;
 
-
+/**
+ * 内容审核不通过通知
+ *
+ * Class PostModMessage
+ * @package App\MessageTemplate
+ */
 class PostModMessage extends BasePostMessage
 {
     protected $tplId = 4;

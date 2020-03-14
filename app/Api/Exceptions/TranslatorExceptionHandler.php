@@ -1,8 +1,12 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Api\Exceptions;
 
-use Discuz\Locale\AbstractLocaleException;
 use Exception;
 use App\Exceptions\TranslatorException;
 use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;

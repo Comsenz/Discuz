@@ -1,9 +1,9 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
 import '@github/markdown-toolbar-element';
-import appCommonH from '../../../../../helpers/commonHelper';
+import appCommonH from '../../../../../../helpers/commonHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
@@ -69,15 +69,16 @@ export default {
       backGo:-2,
       formdataList:[],
       themeTitle: '',   //标题
-      payValue: '',     //长文价格
+      payValue: '免费',     //长文价格
       paySetShow: false,
-      isCli: false,
+      isCli: true,
       moneyVal: '',
       timeout: null,
       paySetValue: '',
       titleMaxLength: 80,
       viewportWidth: '',
       viewportHeight: '',
+      loading: false,
     }
   },
 
@@ -174,6 +175,32 @@ export default {
     },
   },
   methods: {
+
+    formatter(value) {
+      return this.handleReg(value);
+    },
+
+    handleReg(value) {
+      value = value.toString(); // 先转换成字符串类型
+
+      if (value.indexOf('.') == 0) {
+        value = '0.';  // 第一位就是 .
+      }
+
+      value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      if (value.indexOf(".") < 0 && value != "") {
+        value = parseFloat(value);
+      }
+
+      return value;
+    },
+
+
     focus(obj){
       document.getElementById(obj).focus();
     },
@@ -324,13 +351,6 @@ export default {
       })
     },
 
-    //设置底部在pc里的宽度
-    // limitWidth(){
-    //   document.getElementById('post-topic-footer').style.width = "640px";
-    //   let viewportWidth = window.innerWidth;
-    //   document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
-    // },
-
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
       if(!this.canUploadImages){
@@ -351,51 +371,6 @@ export default {
         }
       }
     },
-
-
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   // 实例化
-    //   let formdata = new FormData()
-    //   formdata.append('file', e.file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,false,true);
-    //   this.loading = false;
-
-    // },
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   let file = e.target.files[0];
-    //   let formdata = new FormData();
-    //   formdata.append('file', file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,true,false);
-    //   this.uploadShow = true;
-    //   this.loading = false;
-    // },
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.file,this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.file, false);
-    //     }
-    //   } else {
-    //     this.compressFile(e.file, false);
-    //   }
-    // },
-
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.target.files[0],this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.target.files[0], true);
-    //     }
-    //   } else {
-    //     this.compressFile(e.target.files[0], true);
-    //   }
-    // },
     //上传图片,点击加号时
     handleFile(e){
      let files = [];
@@ -411,10 +386,12 @@ export default {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
            if(this.testingRes){
-             this.compressFile(file.file, 150000, false,files.length - index);
+              this.loading = true;
+              this.compressFile(file.file, 150000, false,files.length - index);
            }
          } else {
-           this.compressFile(file.file, 150000, false, files.length - index);
+            this.loading = true;
+            this.compressFile(file.file, 150000, false, files.length - index);
          }
        });
      }
@@ -428,9 +405,11 @@ export default {
         if(this.isAndroid && this.isWeixin){
           this.testingType(file,this.supportImgExt);
           if(this.testingRes){
+            this.loading = true;
             this.compressFile(file, 150000, true);
           }
         } else {
+          this.loading = true;
           this.compressFile(file, 150000, true);
         }
       }
@@ -443,6 +422,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
+        this.loading = true;
         this.uploaderEnclosure(formdata,false,false,true);
       }
 
@@ -503,14 +483,15 @@ export default {
         } else {
           if (img) {
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-            // this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.loading = false;
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length>0){
               this.uploadShow = true;
+              this.loading = false;
             }
           }
           if (enclosure) {
@@ -520,9 +501,9 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
+            this.loading = false;
           }
-          this.loading = false;
+          
         }
       })
     },
@@ -693,27 +674,47 @@ export default {
     //设置付费金额,，显示弹框
     paySetting(){
       this.paySetShow = true;
-      setTimeout(function () {
-        document.getElementById('payMoneyInp').focus();
-      }, 200);
+
+      if (this.payValue === '免费'){
+        this.paySetValue = null;
+      } else {
+        this.paySetValue = this.payValue.slice(0,this.payValue.length -1);
+      }
+
+      if (this.paySetShow) {
+        setTimeout(function () {
+          document.getElementById('payMoneyInp').focus();
+        }, 200);
+      }
     },
     //关闭付费设置弹框
     closePaySet(){
       this.paySetShow = false;
-      this.paySetValue = '';
+      // this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
-      if(event.target.value != null && event.target.value > '0'){
-        this.isCli = true;
-      } else {
-        this.isCli = false;
+
+      if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
+        this.paySetValue = '0.';
+        return;
       }
+
+      // if(event.target.value != null && event.target.value > '0'){
+      //   this.isCli = true;
+      // } else {
+      //   this.isCli = false;
+      // }
     },
     //点击确定按钮，提交付费设置
     paySetSure(){
       this.paySetShow = false;
-      this.payValue = this.paySetValue +'元';
+      if (this.paySetValue <= 0) {
+        this.payValue = '免费';
+      } else {
+        this.paySetValue = Number(this.paySetValue);
+        this.payValue = Number(this.paySetValue) + '元';
+      }
     },
 
   }

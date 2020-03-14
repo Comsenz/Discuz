@@ -74,7 +74,7 @@ export default {
           }
         }).then((res) => {
           if (res.errors){
-            if (res.errors[0].detail){
+            if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
@@ -213,8 +213,8 @@ export default {
           }
         }
       }).then(res => {
-        if (res.errors){
-          if (res.errors[0].detail){
+        if (res.errors) {
+          if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -13,7 +18,7 @@ class CreateInvites extends Migration
     public function up()
     {
         $this->schema()->create('invites', function (Blueprint $table) {
-            $table->increments('id')->comment('邀请 id');
+            $table->id()->comment('邀请 id');
             $table->unsignedInteger('group_id')->comment('默认用户组 id');
             $table->unsignedTinyInteger('type')->default(1)->comment('类型:1普通用户2管理员');
             $table->char('code', 32)->default('')->comment('邀请码');
@@ -22,8 +27,8 @@ class CreateInvites extends Migration
             $table->unsignedInteger('user_id')->comment('邀请用户 id');
             $table->unsignedInteger('to_user_id')->default(0)->comment('被邀请用户 id');
             $table->unsignedTinyInteger('status')->default(1)->comment('邀请码状态:0失效1生效2已使用3未使用4已过期');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

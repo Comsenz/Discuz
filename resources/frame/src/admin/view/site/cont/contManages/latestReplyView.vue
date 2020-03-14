@@ -42,7 +42,8 @@
           <ContArrange
             v-for="(items,index) in  themeList"
             :replyBy="!items.user?'该用户被删除':items.user._data.username"
-            :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
+            :themeName="items.thread._data.type === 1?items.thread._data.title:items.thread.firstPost._data.content"
+            :titleIcon="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'"
             :finalPost="formatDate(items._data.updatedAt)"
             :userId="!items.user?'该用户被删除':items.user._data.id"
             :key="items._data.id"
@@ -69,8 +70,8 @@
 
               <div class="latest-reply-theme__table-footer__lf">
                 <el-button type="text" @click="singleOperationSubmit(1,items._data.id)">删除</el-button>
-                <!--<i></i>-->
-                <!--<el-button type="text" @click="singleOperationSubmit(2,items.thread.category._data.id,items._data.id,index)">编辑</el-button>-->
+                <i></i>
+                <el-button type="text" @click="singleOperationSubmit(2,items._data.id,items.thread._data.id)">编辑</el-button>
               </div>
 
             </div>

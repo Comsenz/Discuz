@@ -8,7 +8,7 @@
 namespace App\Api\Controller\Users;
 
 use App\Models\SessionToken;
-use Laminas\Diactoros\Response\JsonResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -54,7 +54,7 @@ class ResetPayPasswordController implements RequestHandlerInterface
         $token = SessionToken::generate('reset_pay_password', null, $actor->id);
         $token->save();
 
-        return new JsonResponse([
+        return DiscuzResponseFactory::JsonResponse([
             'token' => $token->token,
             'userId' => $actor->id
         ]);

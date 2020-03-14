@@ -18,7 +18,7 @@ class CreateUsers extends Migration
     public function up()
     {
         $this->schema()->create('users', function (Blueprint $table) {
-            $table->increments('id')->comment('用户 id');
+            $table->id()->comment('用户 id');
             $table->string('username', 100)->unique()->comment('用户名');
             $table->string('password', 100)->comment('密码');
             $table->string('pay_password', 100)->default('')->comment('支付密码');
@@ -39,7 +39,7 @@ class CreateUsers extends Migration
             $table->dateTime('joined_at')->nullable()->comment('付费加入时间');
             $table->dateTime('expired_at')->nullable()->comment('付费到期时间');
             $table->dateTime('created_at')->comment('创建时间');
-            $table->dateTime('updated_at')->comment('修改时间');
+            $table->dateTime('updated_at')->comment('更新时间');
         });
     }
 

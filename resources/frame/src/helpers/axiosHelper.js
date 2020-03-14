@@ -130,10 +130,10 @@ const appFetch = function(params, options) {
 
 
   params.method = params.method ? params.method : 'get';
-  if(!apiUrl) {
-    apiUrl = "/api/" + oldUrl;
+  // if(!apiUrl) {
+  //   apiUrl = "/api/" + oldUrl;
     // return false;
-  }
+  // }
 
   /**
     * @param {[type]} splice [接收url后面拼接]
@@ -164,7 +164,8 @@ const appFetch = function(params, options) {
     'sign-up',
     'bind-phone',
     'retrieve-pwd',
-    'admin/login'
+    'admin/login',
+    'supplier-all-back'
   ];
 
 // && !requireAuth.includes(window.location.pathname)
@@ -291,10 +292,10 @@ const getNewToken = function (router) {
     }
   }).then(res=>{
     let token = res.data.attributes.access_token;
-    let tokenId = res.data.id;
+    // let tokenId = res.data.id;
     let refreshToken = res.data.attributes.refresh_token;
     browserDb.setLItem('Authorization', token);
-    browserDb.setLItem('tokenId', tokenId);
+    // browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
   })

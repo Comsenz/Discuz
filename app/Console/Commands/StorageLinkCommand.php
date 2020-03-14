@@ -12,7 +12,6 @@ use Discuz\Foundation\Application;
 
 class StorageLinkCommand extends AbstractCommand
 {
-
     protected $app;
 
     public function __construct(Application $app)

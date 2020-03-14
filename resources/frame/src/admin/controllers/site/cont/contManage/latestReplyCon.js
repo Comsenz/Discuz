@@ -126,12 +126,16 @@ export default {
       this.showViewer = false
     },
 
-    singleOperationSubmit(val,firstPostId){
+    singleOperationSubmit(val,firstPostId,threadId){
       switch (val){
         case 1:
           this.deletedPosts(firstPostId);
           break;
         case 2:
+          let routeData = this.$router.resolve({
+            path: `/reply-to-topic/${threadId}/${firstPostId}`,query:{edit:'reply'}
+          });
+          window.open(routeData.href, '_blank');
           break;
         default:
           console.log("系统错误，请刷新页面");

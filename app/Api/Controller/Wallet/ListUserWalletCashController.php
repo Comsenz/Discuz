@@ -22,6 +22,7 @@ use Discuz\Auth\AssertPermissionTrait;
 class ListUserWalletCashController extends AbstractListController
 {
     use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */

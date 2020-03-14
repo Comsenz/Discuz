@@ -12,7 +12,7 @@ export default {
     return {
       sms: '',
       newphone: '',
-    //   modifyState: true,
+      //   modifyState: true,
       bind: 'bind',
       time: 1, //发送验证码间隔时间
       insterVal: '',
@@ -34,23 +34,23 @@ export default {
   mounted() {
 
   },
-  created(){
+  created() {
     this.userPhone()
   },
   methods: {
-    userPhone(){
+    userPhone() {
       let userId = browserDb.getLItem('tokenId');
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+userId,
-        data:{
-          include:'wechat'
+        url: 'users',
+        method: 'get',
+        splice: '/' + userId,
+        data: {
+          include: 'wechat'
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-        }else{
+        } else {
           this.modifyPhone = res.readdata._data.originalMobile;         //用户手机号
           if(this.modifyPhone){
             this.titlePhone = '修改手机号'
@@ -63,39 +63,39 @@ export default {
     },
 
     //获取验证码
-    sendSmsCodePhone(){
-      var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+    sendSmsCodePhone() {
+      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
       var newphone = this.newphone;
-      if(!newphone){//未输入手机号
-       this.$toast("请输入手机号码");
-       return;
+      if (!newphone) {//未输入手机号
+        this.$toast("请输入手机号码");
+        return;
       }
-      if(!reg.test(newphone)){//手机号不合法
-       this.$toast("您输入的手机号码不合法，请重新输入");
+      if (!reg.test(newphone)) {//手机号不合法
+        this.$toast("您输入的手机号码不合法，请重新输入");
       } else {
         // 获取验证码请求
         var bind = 'bind';
         var rebind = 'rebind';
         var typeBind;
-        if(this.modifyPhone == ''){
+        if (this.modifyPhone == '') {
           typeBind = bind
-        }else{
+        } else {
           typeBind = rebind
         }
         this.appFetch({
-          url:"sendSms",
-          method:"post",
-          data:{
+          url: "sendSms",
+          method: "post",
+          data: {
             "data": {
               "attributes": {
-                mobile:this.newphone,
-                type:typeBind
+                mobile: this.newphone,
+                type: typeBind
               }
             }
           }
         }).then(res => {
           if (res.errors){
-            if (res.errors[0].detail){
+            if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
@@ -144,9 +144,9 @@ export default {
       var bind = 'bind';
       var rebind = 'rebind';
       var typeBind;
-      if(this.modifyPhone == ''){
+      if (this.modifyPhone == '') {
         typeBind = bind
-      }else{
+      } else {
         typeBind = rebind
       }
 

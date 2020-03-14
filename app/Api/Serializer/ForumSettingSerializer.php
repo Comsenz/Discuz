@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
 use App\Settings\ForumSettingField;
@@ -56,6 +57,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'set_reg' => [
                 'register_close' => (bool)$this->settings->get('register_close'),
                 'register_validate' => (bool)$this->settings->get('register_validate'),
+                'register_captcha' => (bool)$this->settings->get('register_captcha'),
                 'password_length' => (int)$this->settings->get('password_length'),
                 'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
             ],
@@ -81,10 +83,14 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 腾讯云设置
             'qcloud' => [
+                'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
                 'qcloud_close' => (bool)$this->settings->get('qcloud_close', 'qcloud'),
                 'qcloud_cos' => (bool)$this->settings->get('qcloud_cos', 'qcloud'),
+                'qcloud_captcha' => (bool)$this->settings->get('qcloud_captcha', 'qcloud'),
+                'qcloud_captcha_app_id' => $this->settings->get('qcloud_captcha_app_id', 'qcloud'),
                 'qcloud_faceid' => (bool)$this->settings->get('qcloud_faceid', 'qcloud'),
                 'qcloud_sms' => (bool)$this->settings->get('qcloud_sms', 'qcloud'),
+                'qcloud_vod' => (bool)$this->settings->get('qcloud_vod', 'qcloud'),
             ],
 
             // 提现设置
@@ -96,17 +102,21 @@ class ForumSettingSerializer extends AbstractSerializer
             'other' => [
                 // 基础信息
                 'count_threads' => Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->count(), // 统计所有主题数
+                'count_posts' => Post::where('is_approved', Post::APPROVED)->where('is_first', false)->whereNull('deleted_at')->count(), // 统计所有回复数
                 'count_users' => User::where('status', 0)->count(), // 统计所有的用户
                 // 权限 permission
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),
                 'can_upload_images' => $this->actor->can('attachment.create.1'),
                 'can_create_thread' => $this->actor->can('createThread'),
+                'can_create_thread_video' => $this->actor->can('createThreadVideo'),
+                'can_create_thread_long' => $this->actor->can('createThreadLong'),
                 'can_view_threads' => $this->actor->can('viewThreads'),
                 'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
-                'initialized_pay_password' => (bool) $this->actor->pay_password,  // 是否初始化支付密码
+                'create_thread_with_captcha' => !$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
+                'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
             ],
         ];
 
@@ -118,6 +128,11 @@ class ForumSettingSerializer extends AbstractSerializer
         // 付费模式 - 满足条件返回
         if ($attributes['set_site']['site_mode'] == 'pay') {
             $attributes['set_site'] += $this->forumField->getSitePayment();
+        }
+
+        // 开启视频服务 - 满足条件返回
+        if ($attributes['qcloud']['qcloud_vod'] == '1') {
+            $attributes['qcloud'] += $this->forumField->getQCloudVod();
         }
 
         // 判断用户是否存在

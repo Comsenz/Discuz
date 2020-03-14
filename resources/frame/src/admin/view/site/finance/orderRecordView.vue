@@ -21,8 +21,8 @@
       </div>
 
       <div class="order-record__search-condition">
-        <span class="order-record__search-condition__title">操作用户：</span>
-        <el-input clearable v-model="operationUser" placeholder="搜索操作用户"></el-input>
+        <span class="order-record__search-condition__title">发起方：</span>
+        <el-input clearable v-model="operationUser" placeholder="搜索发起方"></el-input>
       </div>
 
       <div class="order-record__search-condition">
@@ -48,7 +48,12 @@
 
         <el-table-column
           prop="user._data.username"
-          label="操作用户">
+          label="发起方">
+        </el-table-column>
+
+        <el-table-column
+          prop="payee._data.username"
+          label="收入方">
         </el-table-column>
 
         <el-table-column
@@ -56,6 +61,7 @@
           show-overflow-tooltip
           label="商品名称"
           min-width="150">
+          <template slot-scope="scope"><span :class="scope.row.thread?'cursor-pointer':''" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">{{scope.row.thread?scope.row.thread.firstPost._data.content:'注册付费'}}</span></template>
         </el-table-column>
 
         <el-table-column

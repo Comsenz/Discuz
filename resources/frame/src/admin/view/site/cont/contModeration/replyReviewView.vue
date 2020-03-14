@@ -63,6 +63,7 @@
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
           :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
+          :titleIcon="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'"
           :finalPost="formatDate(items._data.updatedAt)"
           :ip="items._data.ip"
           :userId="!items.user?'该用户被删除':items.user._data.id"
@@ -115,7 +116,7 @@
 
             <div class="cont-review-table__footer__bottom">
               <el-button type="text" @click="viewClick(items.thread._data.id)">查看</el-button>
-              <!--<el-button type="text" @click="editClick(items.thread._data.id,items._data.id)">编辑</el-button>-->
+              <el-button type="text" @click="editClick(items.thread._data.id,items._data.id)">编辑</el-button>
             </div>
 
           </div>

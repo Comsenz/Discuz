@@ -32,7 +32,6 @@ export default {
         avatarUrl:'',
         // username:'',
         mobile:'',
-	      isfixNav: false,
 	      popupShow: false,
         current:0,
         userDet:[],
@@ -120,7 +119,7 @@ export default {
     if(this.userId){
       this.loadUserInfo();
     }
-    
+
     // this.loadUserInfo();
     //把第一个分类的id值传过去，便于请求初始化主题列表
 
@@ -168,7 +167,6 @@ export default {
           this.$emit("update", this.firstCategoriesId);
         })
       }
-      
     },
 
     //初始化请求用户关注信息
@@ -244,7 +242,7 @@ export default {
           methodType = 'post';
           // this.oldFollow =  '0';
         }
-        
+
         this.followRequest(methodType,attri,intiFollowVal);
       }
      },
@@ -327,10 +325,6 @@ export default {
             // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
           };
       }
-    },
-    backUrl(){
-    // 返回上一级
-    window.history.go(-1)
     },
     LogOut(){
     },

@@ -9,6 +9,12 @@ namespace App\MessageTemplate;
 
 use Discuz\Notifications\Messages\DatabaseMessage;
 
+/**
+ * 用户角色调整通知
+ *
+ * Class GroupMessage
+ * @package App\MessageTemplate
+ */
 class GroupMessage extends DatabaseMessage
 {
     protected $tplId = 12;

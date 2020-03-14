@@ -9,7 +9,7 @@ namespace App\Api\Controller\StopWords;
 
 use App\Models\StopWord;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Http\FileResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -49,7 +49,7 @@ class ExportStopWordsController implements RequestHandlerInterface
             file_put_contents($filename, $stopWord . "\r\n", FILE_APPEND | LOCK_EX);
         }
 
-        return new FileResponse($filename, 200, [
+        return DiscuzResponseFactory::FileResponse($filename, 200, [
             'Content-Disposition' => 'attachment;filename=' . basename($filename),
         ]);
     }

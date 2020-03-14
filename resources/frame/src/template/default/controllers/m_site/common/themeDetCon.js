@@ -177,9 +177,9 @@ export default {
         this.themeOpeRequest(themeId,attri,'5', itemIndex);
        } else if(clickType == 6){
          //跳转到编辑页
-         if(!clickStatus){
+         if(clickStatus == 0){
           this.$router.push({ path:'/edit-topic'+'/'+themeId});
-         } else {
+         } else if(clickStatus == 1){
           this.$router.push({ path:'/edit-long-text'+'/'+themeId});
          }
         

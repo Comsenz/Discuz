@@ -8,7 +8,6 @@
 namespace App\Providers;
 
 use App\Models\SessionToken;
-use Carbon\Carbon;
 use Discuz\Foundation\AbstractServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Contracts\Validation\Factory as Validator;

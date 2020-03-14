@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="" v-else ="">
-          <div class="uploadBox" v-if="uploadShow ">
+          <div class="uploadBox" v-if="uploadShow">
             <!-- <van-uploader :max-count="12" :accept="supportImgExtRes" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')" multiple>
             </van-uploader> -->
             <van-uploader :max-count="12" :accept="supportImgExtRes" multiple="false" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')">
@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}">
+      <footer class="post-topic-footer" id="post-topic-footer" :class="{'footMove':footMove}" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}">
         <div class="post-topic-footer-left" :class="{'width20': encuploadShow}">
           <span  class="icon iconfont icon-label post-topic-header-icon" :class="{'icon-keyboard':keyboard}" @click="addExpression"></span>
           <span  class="icon iconfont icon-picture post-topic-header-icon uploadIcon" v-if="canUploadImages && limitMaxLength">
@@ -66,7 +66,7 @@
           <span class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-if="canUploadAttachments && limitMaxEncLength">
             <input type="file" @change="handleEnclosure" class="hiddenInput"/>
           </span>
-          <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon":class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
+          <span  class="icon iconfont icon-enclosure post-topic-header-icon uploadIcon" :class="{'hide': encuploadShow}" v-else="" @click="beforeHandleEnclosure">
           </span>
         </div>
 
@@ -81,17 +81,22 @@
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+      </div>
     </div>
 
 </template>
 
 <script>
 // import '../../../scss/m_site/mobileIndex';
-import editTopicCon from '../../../controllers/m_site/circle/editTopicCon';
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import Expression from '../../m_site/common/expressionView';
-import  '../../../defaultLess/m_site/common/common.less';
-import  '../../../defaultLess/m_site/modules/circle.less';
+// import editTopicCon from '../../../../controllers/m_site/circle/edit/editTopicCon';
+// import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import editTopicCon from '../../../../controllers/m_site/circle/edit/editTopicCon';
+import Expression from '../../../m_site/common/expressionView';
+import  '../../../../defaultLess/m_site/common/common.less';
+import  '../../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "post-topic",
     components: {

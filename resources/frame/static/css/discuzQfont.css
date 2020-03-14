@@ -223,3 +223,13 @@
 .icon-selected:before {
   content: "\e641";
 }
+
+.icon-video:before {
+  content: "\e642";
+}
+.icon-video1:before {
+  content: "\e643";
+}
+.icon-play:before {
+  content: "\e644";
+}

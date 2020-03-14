@@ -14,7 +14,7 @@ use App\Models\Order;
 use App\Repositories\AttachmentRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Http\FileResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -78,10 +78,10 @@ class ResourceAttachmentController implements RequestHandlerInterface
                 $filePath = $thumb;
             }
 
-            return new FileResponse($filePath);
+            return DiscuzResponseFactory::FileResponse($filePath);
         }
 
-        return new FileResponse($filePath, 200, [
+        return DiscuzResponseFactory::FileResponse($filePath, 200, [
             'Content-Disposition' => 'attachment;filename=' . basename($attachment->file_name),
         ]);
     }

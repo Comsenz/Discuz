@@ -37,12 +37,22 @@ class UpdateNotificationTplController extends AbstractResourceController
 
         $notificationTpl = NotificationTpl::find($id);
 
-        if ($title = Arr::get($attributes, 'title')) {
-            $notificationTpl->title = $title;
+        switch ($notificationTpl->type) {
+            case 0:
+                if ($title = Arr::get($attributes, 'title')) {
+                    $notificationTpl->title = $title;
+                }
+                if ($content = Arr::get($attributes, 'content')) {
+                    $notificationTpl->content = $content;
+                }
+                break;
+            case 1:
+                if ($template_id = Arr::get($attributes, 'template_id')) {
+                    $notificationTpl->template_id = $template_id;
+                }
+                break;
         }
-        if ($content = Arr::get($attributes, 'content')) {
-            $notificationTpl->content = $content;
-        }
+
         if (isset($attributes['status'])) {
             $notificationTpl->status = Arr::get($attributes, 'status');
         }

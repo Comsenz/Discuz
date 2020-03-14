@@ -7,11 +7,9 @@
 
 namespace App\Api\Controller\Threads;
 
-use App\Models\Order;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -76,9 +74,9 @@ class ListFavoritesController extends ListThreadsController
         // 加载其他关联
         $threads->loadMissing($include);
 
-        // 截取内容
-        if (in_array('firstPost', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor);
+        // 处理付费主题内容
+        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
+            $threads = $this->cutThreadContent($threads, $actor, $include);
         }
 
         return $threads;

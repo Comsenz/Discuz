@@ -18,6 +18,7 @@ use Tobscure\JsonApi\Document;
 class CreateUserFollowController extends AbstractCreateController
 {
     public $serializer = UserFollowSerializer::class;
+
     /**
      * @var Dispatcher
      */
