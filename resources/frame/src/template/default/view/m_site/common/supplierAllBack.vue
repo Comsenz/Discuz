@@ -72,6 +72,9 @@ export default {
     }*/
 
     this.$router.replace({path:this.$router.history.current.query.url});
+
+    console.log(this.$router.history.current.query.url);
+
     // this.$router.go(0);
 
     // if (this.status != 1){

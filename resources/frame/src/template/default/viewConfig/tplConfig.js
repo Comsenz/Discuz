@@ -829,6 +829,8 @@ export default {
               }
             }
 
+            console.log('wx：' + res);
+
             // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
             if (wxNotLoggedInToAccessPage.includes(to.name)) {
               next();
