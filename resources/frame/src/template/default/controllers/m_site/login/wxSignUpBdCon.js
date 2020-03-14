@@ -286,16 +286,10 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
-<<<<<<< HEAD
     if (this.captcha) {
       this.captcha.destroy();
     }
-=======
-    if(this.captcha.destroy()){
-      this.captcha.destroy();
-    };
 
->>>>>>> eb1a4ab0a43b42cb774f732674829dca1a699253
     next();
   }
 }
