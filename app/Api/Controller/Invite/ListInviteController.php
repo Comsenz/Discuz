@@ -12,7 +12,6 @@ use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListInviteController extends AbstractListController
 {

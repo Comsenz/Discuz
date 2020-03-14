@@ -33,5 +33,4 @@ class DialogRepository extends AbstractRepository
 
         return $query->firstOrFail();
     }
-
 }

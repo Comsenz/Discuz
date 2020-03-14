@@ -14,7 +14,6 @@ use App\Trade\Config\GatewayConfig;
 use Discuz\Api\Client;
 use Endroid\QrCode\QrCode;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Support\Facades\Log;
 use Omnipay\Omnipay;
 use Illuminate\Support\Arr;
 use App\Exceptions\TradeErrorException;

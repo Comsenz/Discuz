@@ -53,8 +53,7 @@ class SendController extends AbstractCreateController
         CacheRepository $cache,
         MobileCodeRepository $mobileCodeRepository,
         SettingsRepository $settings
-    )
-    {
+    ) {
         $this->validation = $validation;
         $this->cache = $cache;
         $this->mobileCodeRepository = $mobileCodeRepository;

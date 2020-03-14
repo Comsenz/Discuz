@@ -169,5 +169,4 @@ class ThreadListener
                 break;
         }
     }
-
 }
