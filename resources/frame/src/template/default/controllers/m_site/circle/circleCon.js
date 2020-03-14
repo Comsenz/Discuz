@@ -378,7 +378,8 @@ export default {
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');
-    this.publishTypeBox = false;
+    this.rotate = false;
+    this.puslishCho = false;
     if (this.userId) {
       this.loginBtnFix = false;
       this.loginHide = true;
@@ -404,7 +405,8 @@ export default {
   beforeRouteLeave(to, from, next) {
     window.removeEventListener('scroll', this.footFix);
     document.removeEventListener('click', this.listenEvt);
-    this.publishTypeBox = false;
+    this.rotate = false;
+    this.puslishCho = false;
     next()
   },
 }
