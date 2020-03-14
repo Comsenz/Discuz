@@ -292,10 +292,10 @@ const getNewToken = function (router) {
     }
   }).then(res=>{
     let token = res.data.attributes.access_token;
-    let tokenId = res.data.id;
+    // let tokenId = res.data.id;
     let refreshToken = res.data.attributes.refresh_token;
     browserDb.setLItem('Authorization', token);
-    browserDb.setLItem('tokenId', tokenId);
+    // browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
   })
