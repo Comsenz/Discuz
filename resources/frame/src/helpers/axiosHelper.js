@@ -164,7 +164,8 @@ const appFetch = function(params, options) {
     'sign-up',
     'bind-phone',
     'retrieve-pwd',
-    'admin/login'
+    'admin/login',
+    'supplier-all-back'
   ];
 
 // && !requireAuth.includes(window.location.pathname)
