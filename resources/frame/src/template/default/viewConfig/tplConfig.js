@@ -764,9 +764,6 @@ export default {
               next({ path: '/' })
             }
           }
-          else {
-            next();
-          }
         }
 
 
