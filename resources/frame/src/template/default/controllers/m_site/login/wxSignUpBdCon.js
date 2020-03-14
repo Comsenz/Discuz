@@ -289,7 +289,6 @@ export default {
     if (this.captcha) {
       this.captcha.destroy();
     }
-
     next();
   }
 }

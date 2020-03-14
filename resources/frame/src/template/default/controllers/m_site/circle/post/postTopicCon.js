@@ -655,18 +655,6 @@ export default {
 
   },
 
-  // destroyed: function () {
-  //   debugger
-  //   let tct = new TencentCaptcha(this.appID, res => {
-  //     if (res.ret === 0) {
-  //       this.captcha_ticket = res.ticket;
-  //       this.captcha_rand_str = res.randstr;
-  //       //验证通过后注册
-  //     }
-  //   })
-  //   // 隐藏验证码
-  //   tct.destroy();
-  // }
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
     if (this.captcha) {

@@ -3,7 +3,6 @@
 /composer.lock
 /.idea
 /config/config.php
-/storage
 .project
 .settings
 /node_modules
