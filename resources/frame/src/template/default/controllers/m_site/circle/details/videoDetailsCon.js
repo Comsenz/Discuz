@@ -90,7 +90,11 @@ export default {
         'coverpic' : '',
       }
       console.log(window.TCPlayer,'lllllllllllllllllllll');
-      this.player = window.TCPlayer(this.tcPlayerId, playerParam)
+      this.player = window.TCPlayer(this.tcPlayerId, playerParam);
+    //   this.player.ready(function() {
+    //     // 开始加载视频时触发
+    //     debugger;
+    //  });
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
