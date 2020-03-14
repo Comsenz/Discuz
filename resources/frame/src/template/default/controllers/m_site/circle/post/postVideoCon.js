@@ -10,58 +10,58 @@ let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
 function getSignature() {
   // console.log('000000');
-    return axiosHelper({
-      url: 'signature',
-      method: 'get',
-    }).then((res) => {
-      // console.log(res.readdata._data.signature,'~~~+++++~~~~');
-      return res.readdata._data.signature;
-    })
+  return axiosHelper({
+    url: 'signature',
+    method: 'get',
+  }).then((res) => {
+    // console.log(res.readdata._data.signature,'~~~+++++~~~~');
+    return res.readdata._data.signature;
+  })
 }
 export default {
-  data:function () {
+  data: function () {
     return {
-      headerTitle:"发布视频",
-      selectSort:'',
-      showPopup:false,
+      headerTitle: "发布视频",
+      selectSort: '',
+      showPopup: false,
       categories: [],
       categoriesId: [],
-      cateId:'',
-      content:'',
+      cateId: '',
+      content: '',
       showFacePanel: false,
       keyboard: false,
       keywordsMax: 10000,
       list: [],
       footMove: false,
       payMove: false,
-      faceData:[],
-      uploadShow:false,
+      faceData: [],
+      uploadShow: false,
       avatar: "",
-      themeId:'',
-      postsId:'',
+      themeId: '',
+      postsId: '',
       files: {
         name: "",
         type: '',
       },
       headerImage: null,
       picValue: null,
-      upImgUrl:'',
+      upImgUrl: '',
       isWeixin: false,
       isPhone: false,
-      themeCon:false,
-      attriAttachment:false,
-      canUploadImages:'',
-      canUploadAttachments:'',
+      themeCon: false,
+      attriAttachment: false,
+      canUploadImages: '',
+      canUploadAttachments: '',
       supportVideoExt: '',
-      supportVideoExtRes:'',
+      supportVideoExtRes: '',
       fileSize: '',
-      limitMaxLength:true,
-      limitMaxEncLength:true,
+      limitMaxLength: true,
+      limitMaxEncLength: true,
       isiOS: false,
       encuploadShow: false,
-      testingRes:false,
-      backGo:-2,
-      formdataList:[],
+      testingRes: false,
+      backGo: -2,
+      formdataList: [],
       viewportWidth: '',
       viewportHeight: '',
       nowCate: [],
@@ -78,6 +78,11 @@ export default {
       testingTypeRes: false,
       fileId: '',
       loading: false, //是否处于加载状态
+      publishShow: '',
+      appID: '',              // 腾讯云验证码场景 id
+      captcha: null,          // 腾讯云验证码实例
+      captcha_ticket: '',     // 腾讯云验证码返回票据
+      captcha_rand_str: '',   // 腾讯云验证码返回随机字符串
 
     }
   },
@@ -86,7 +91,7 @@ export default {
       return this.$route.params.cateId;
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
       textarea.focus();
@@ -101,29 +106,33 @@ export default {
       });
     })
     //设置在pc的宽度
-    if(this.isWeixin != true && this.isPhone != true){
+    if (this.isWeixin != true && this.isPhone != true) {
       this.limitWidth();
     }
   },
-  created(){
+  created() {
     this.tcVod = new TcVod({
       getSignature: getSignature
     });
+    let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
+    let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
+    this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
+    this.publishShow = !(qcloud_captcha && thread_captcha);
     // console.log(this.tcVod,'343423');
     var videoExt = '';
-    if(browserDb.getLItem('siteInfo')){
+    if (browserDb.getLItem('siteInfo')) {
       this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
       videoExt = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext.split(',');
-      var videoStr='';
-      var videoStrRes ='';
-      for(var k=0;k<videoExt.length;k++){
-        videoStr = '.'+videoExt[k]+',';
-        videoStrRes = 'video/'+videoExt[k]+',';
+      var videoStr = '';
+      var videoStrRes = '';
+      for (var k = 0; k < videoExt.length; k++) {
+        videoStr = '.' + videoExt[k] + ',';
+        videoStrRes = 'video/' + videoExt[k] + ',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
-    } else{
-      videoExt ='*';
+    } else {
+      videoExt = '*';
     }
     this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
@@ -132,10 +141,10 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    if(this.isiOS) {
+    if (this.isiOS) {
       this.encuploadShow = true;
     }
-    if(this.$route.params.themeId){
+    if (this.$route.params.themeId) {
       var themeId = this.$route.params.themeId;
       var postsId = this.$route.params.postsId;
       var themeContent = this.$route.params.themeContent;
@@ -151,9 +160,9 @@ export default {
 
   },
   watch: {
-    showFacePanel: function(newVal,oldVal){
+    showFacePanel: function (newVal, oldVal) {
       this.showFacePanel = newVal;
-      if(this.showFacePanel) {
+      if (this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
@@ -187,7 +196,7 @@ export default {
     },
 
 
-    vExampleAdd: function() {
+    vExampleAdd: function () {
       this.$refs.vExampleFile.click();
       // this.$refs.vcExampleCover.click();
     },
@@ -196,10 +205,10 @@ export default {
     //   this.$refs.vcExampleCover.click();
     // },
     //验证上传格式是否符合设置
-    testingType(eFile,allUpext){
+    testingType(eFile, allUpext) {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
-      if(AllUpExt.indexOf(extName + ",") == "-1"){
+      if (AllUpExt.indexOf(extName + ",") == "-1") {
         this.$toast.fail("文件格式不正确!");
         this.testingTypeRes = false;
         // return false;
@@ -208,26 +217,26 @@ export default {
       }
     },
     //验证上传文件大小是否符合设置
-    testingSize(eFile,allowSize){
+    testingSize(eFile, allowSize) {
       // console.log(eFile,'上传的');
       let fileSize = eFile.size;
-        // 视频大小大于接口返回的最大限制值时置空
-        if (fileSize / 1024 / 1024 > allowSize) {
-          this.$toast.fail('超出视频大小限制');
-          // this.$refs.vExampleFile.files[0] = '';
-          this.$refs.vExample.reset();
+      // 视频大小大于接口返回的最大限制值时置空
+      if (fileSize / 1024 / 1024 > allowSize) {
+        this.$toast.fail('超出视频大小限制');
+        // this.$refs.vExampleFile.files[0] = '';
+        this.$refs.vExample.reset();
 
-          this.testingSizeRes = false;
-        } else {
-          this.testingSizeRes = true;
-        }
+        this.testingSizeRes = false;
+      } else {
+        this.testingSizeRes = true;
+      }
     },
 
     //上传视频
     vExampleUpload(e) {
-      this.testingType(e.target.files[0],this.supportVideoExt);
-      this.testingSize(e.target.files[0],this.fileSize);
-      if(this.testingSizeRes && this.testingTypeRes){
+      this.testingType(e.target.files[0], this.supportVideoExt);
+      this.testingSize(e.target.files[0], this.fileSize);
+      if (this.testingSizeRes && this.testingTypeRes) {
         this.loading = true;
         var self = this;
         var mediaFile = this.$refs.vExampleFile.files[0];
@@ -236,10 +245,10 @@ export default {
           mediaFile: mediaFile,
           // coverFile: coverFile,
         });
-        uploader.on("media_progress", function(info) {
+        uploader.on("media_progress", function (info) {
           uploaderInfo.progress = info.percent;
         });
-        uploader.on("media_upload", function(info) {
+        uploader.on("media_upload", function (info) {
           uploaderInfo.isVideoUploadSuccess = true;
         });
 
@@ -252,7 +261,7 @@ export default {
           progress: 0,
           fileId: "",
           videoUrl: "",
-          cancel: function() {
+          cancel: function () {
             uploaderInfo.isVideoUploadCancel = true;
             uploader.cancel();
           }
@@ -261,28 +270,28 @@ export default {
         this.uploaderInfos.push(uploaderInfo);
 
         uploader
-        .done()
-        .then((doneResult) => {
-          // console.log("doneResult", doneResult);
-          uploaderInfo.fileId = doneResult.fileId;
-          this.videoUp = false;
-          this.loading = false;
-          this.videoShow = true;
-          this.fileId = doneResult.fileId;
-          // console.log('要提交的视频id',this.fileId);
-        })
-        .then(function(videoUrl) {
-          uploaderInfo.videoUrl = videoUrl;
-          self.$refs.vExample.reset();
-        });
+          .done()
+          .then((doneResult) => {
+            // console.log("doneResult", doneResult);
+            uploaderInfo.fileId = doneResult.fileId;
+            this.videoUp = false;
+            this.loading = false;
+            this.videoShow = true;
+            this.fileId = doneResult.fileId;
+            // console.log('要提交的视频id',this.fileId);
+          })
+          .then(function (videoUrl) {
+            uploaderInfo.videoUrl = videoUrl;
+            self.$refs.vExample.reset();
+          });
       }
 
     },
 
-    setVcExampleCoverName: function() {
+    setVcExampleCoverName: function () {
       this.vcExampleCoverName = this.$refs.vcExampleCover.files[0].name;
     },
-    getInfo(){
+    getInfo() {
       //请求站点信息，用于判断是否能上传附件
       this.appFetch({
         url: 'forum',
@@ -291,9 +300,9 @@ export default {
           include: ['users'],
         },
       }).then((res) => {
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error)
         } else {
 
           this.canUploadImages = res.readdata._data.other.can_upload_images;
@@ -303,30 +312,30 @@ export default {
     },
 
     //删除视频
-    videoDeleClick(){
+    videoDeleClick() {
       this.videoShow = false;
       this.videoUp = true;
       this.fileId = '';
     },
     //发布主题
-    publish(){
-      if(this.content == '' || this.content == null){
+    publish() {
+      if (this.content == '' || this.content == null) {
         this.$toast.fail('内容不能为空');
         return;
       }
-      if(this.cateId == 0 || this.cateId == undefined){
+      if (this.cateId == 0 || this.cateId == undefined) {
         this.$toast.fail('请选择分类');
         return;
       }
-      if(this.vcVideoName == ''){
+      if (this.vcVideoName == '') {
         this.$toast.fail('视频不能为空');
         return;
       }
-      if(this.postsId && this.content){
-        let posts = 'posts/'+this.postsId;
+      if (this.postsId && this.content) {
+        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url:posts,
-          method:"patch",
+          url: posts,
+          method: "patch",
           data: {
             "data": {
               "type": "posts",
@@ -335,71 +344,73 @@ export default {
               }
             }
           }
-        }).then((res)=>{
-          if (res.errors){
-            if (res.errors[0].detail){
+        }).then((res) => {
+          if (res.errors) {
+            if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
             // console.log('主题');
-            this.$router.replace({ path:'details'+'/'+this.themeId,query:{backGo:this.backGo},replace:true});
+            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
           }
         })
       } else {
         this.appFetch({
-          url:"threads",
-          method:"post",
-          data:{
+          url: "threads",
+          method: "post",
+          data: {
             "data": {
               "type": "threads",
               "attributes": {
-                  "content": this.content,
-                  "price": this.paySetValue,
-                  'file_id': this.fileId,
-                  'file_name': this.vcVideoName,
-                  'type': 2,
+                "content": this.content,
+                "price": this.paySetValue,
+                'file_id': this.fileId,
+                'file_name': this.vcVideoName,
+                'type': 2,
+                "captcha_ticket": this.captcha_ticket,
+                "captcha_rand_str": this.captcha_rand_str
               },
               "relationships": {
-                  "category": {
-                      "data": {
-                          "type": "categories",
-                          "id": this.cateId
-                      }
-                  },
-                  "attachments": {
-                    "data":this.attriAttachment
-                  },
+                "category": {
+                  "data": {
+                    "type": "categories",
+                    "id": this.cateId
+                  }
+                },
+                "attachments": {
+                  "data": this.attriAttachment
+                },
               }
 
             }
           },
-        }).then((res)=>{
-          if (res.errors){
-            if (res.errors[0].detail){
+        }).then((res) => {
+          if (res.errors) {
+            if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-          } else{
+          } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
             // console.log('视频');
-            _this.$router.replace({ path:'/details'+'/'+postThemeId,query:{backGo:this.backGo},replace:true});
+            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
           }
         })
       }
     },
 
     //设置底部在pc里的宽度
-    limitWidth(){
+    limitWidth() {
       document.getElementById('post-topic-footer').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640)/2+'px';
+      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640) / 2 + 'px';
     },
 
-    getAllEvens(arr){
+    getAllEvens(arr) {
       arr => {
         let temp = evens(arr);
         return flat(temp);
@@ -408,7 +419,7 @@ export default {
 
 
     //输入框自适应高度
-    clearKeywords () {
+    clearKeywords() {
       this.keywords = '';
       this.list = [];
       let textarea = this.$refs.textarea;
@@ -430,7 +441,7 @@ export default {
       }
       // 调api ...
     }),
-    handleFaceChoose (face) {
+    handleFaceChoose(face) {
       const value = this.content;
       const el = this.$refs.textarea;
       const startPos = el.selectionStart;
@@ -450,7 +461,7 @@ export default {
     //   this.footMove = false;
     // },
     //表情
-    addExpression(){
+    addExpression() {
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',
@@ -466,7 +477,7 @@ export default {
       //   // document.getElementById('showFacePanel').style.width = "640px";
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
-      if(this.showFacePanel) {
+      if (this.showFacePanel) {
         document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
@@ -480,7 +491,7 @@ export default {
     dClick() {
       this.showPopup = true;
     },
-    onConfirm( value, index) {
+    onConfirm(value, index) {
       // console.log(value,'====================');
       var id = value.id;
       this.cateId = id;
@@ -489,7 +500,7 @@ export default {
       this.selectSort = value.text;
     },
     //分类接口
-    loadCategories(){
+    loadCategories() {
       this.appFetch({
         url: 'categories',
         method: 'get',
@@ -497,30 +508,30 @@ export default {
           include: '',
         }
       }).then((res) => {
-        if (res.errors){
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
 
           var newCategories = [];
           newCategories = res.readdata;
-          for(let j = 0,len=newCategories.length; j < len; j++) {
+          for (let j = 0, len = newCategories.length; j < len; j++) {
             this.categories.push(
               {
                 'text': newCategories[j]._data.name,
-                'id':newCategories[j]._data.id
+                'id': newCategories[j]._data.id
               }
             );
             this.categoriesId.push(newCategories[j]._data.id);
           }
-          if(this.nowCateId != 0 && this.nowCateId != undefined ){
+          if (this.nowCateId != 0 && this.nowCateId != undefined) {
             var nowCate = {};
             nowCate = newCategories.find((item) => {
-              if(item._data.id === this.nowCateId){
+              if (item._data.id === this.nowCateId) {
                 return item
               }
             })
-            this.nowCate = {id:nowCate._data.id,name:nowCate._data.name};
+            this.nowCate = { id: nowCate._data.id, name: nowCate._data.name };
             this.cateId = this.nowCate.id;
             this.selectSort = this.nowCate.name;
           } else {
@@ -534,13 +545,13 @@ export default {
       this.showPopup = false;
     },
     //设置付费金额,，显示弹框
-    paySetting(){
+    paySetting() {
       this.paySetShow = true;
 
-      if (this.payValue === '免费'){
+      if (this.payValue === '免费') {
         this.paySetValue = null;
       } else {
-        this.paySetValue = this.payValue.slice(0,this.payValue.length -1);
+        this.paySetValue = this.payValue.slice(0, this.payValue.length - 1);
       }
 
       if (this.paySetShow) {
@@ -550,14 +561,14 @@ export default {
       }
     },
     //关闭付费设置弹框
-    closePaySet(){
+    closePaySet() {
       this.paySetShow = false;
       // this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
 
-      if(this.paySetValue === '.'){                // 如果只输入一个点  变成 0.
+      if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
         this.paySetValue = '0.';
         console.log(this.paySetValue);
         return;
@@ -570,7 +581,7 @@ export default {
       // }
     },
     //点击确定按钮，提交付费设置
-    paySetSure(){
+    paySetSure() {
       this.paySetShow = false;
       if (this.paySetValue <= 0) {
         this.payValue = '免费';
@@ -579,14 +590,37 @@ export default {
         this.payValue = Number(this.paySetValue) + '元';
       }
     },
+    initCaptcha() {   //发布主题验证码
+      if (this.content == '' || this.content == null) {
+        this.$toast.fail('内容不能为空');
+        return;
+      }
+      if (this.cateId == 0 || this.cateId == undefined) {
+        this.$toast.fail('请选择分类');
+        return;
+      }
+      if (this.vcVideoName == '') {
+        this.$toast.fail('视频不能为空');
+        return;
+      }
+      this.captcha = new TencentCaptcha(this.appID, res => {
+        if (res.ret === 0) {
+          this.captcha_ticket = res.ticket;
+          this.captcha_rand_str = res.randstr;
+          //验证通过后注册
+          this.publish();
+        }
+      });
+      // 显示验证码
+      this.captcha.show();
+    }
 
   },
-  beforeRouteEnter(to,from,next){
+  beforeRouteLeave(to, from, next) {
+    // 隐藏验证码
+    if (this.captcha) {
+      this.captcha.destroy();
+    }
     next();
-    /*next(vm =>{
-      if (from.name === 'circle'){
-        vm.backGo = -2
-      }
-    });*/
   }
 }
