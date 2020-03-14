@@ -152,8 +152,10 @@ export default {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
           let tokenId = res.data.id;
+          let refreshToken = res.data.attributes.refresh_token;
           webDb.setLItem('Authorization', token);
           webDb.setLItem('tokenId', tokenId);
+          webDb.setLItem('refreshToken',refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
 
           if (beforeVisiting) {
