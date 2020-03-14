@@ -245,7 +245,7 @@ const appFetch = function(params, options) {
           browserDb.setLItem('Authorization','');
           getNewToken().then(res=>{
             console.log('重新获取token后跳转');
-            Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
+            // Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
           localStorage.clear();
