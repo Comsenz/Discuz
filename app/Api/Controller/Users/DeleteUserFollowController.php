@@ -17,6 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class DeleteUserFollowController extends AbstractDeleteController
 {
     public $serializer = InfoSerializer::class;
+
     /**
      * @var Dispatcher
      */

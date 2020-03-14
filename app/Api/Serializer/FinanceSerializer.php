@@ -25,5 +25,4 @@ class FinanceSerializer extends AbstractSerializer
             'withdrawal_profit'   => $model->withdrawal_profit,
         ];
     }
-
 }

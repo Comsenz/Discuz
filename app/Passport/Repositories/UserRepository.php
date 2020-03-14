@@ -11,7 +11,6 @@ use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use Discuz\Auth\Exception\LoginFailedException;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;

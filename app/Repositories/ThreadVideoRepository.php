@@ -38,6 +38,4 @@ class ThreadVideoRepository extends AbstractRepository
 
         return $query->firstOrFail();
     }
-
-
 }

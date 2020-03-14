@@ -7,7 +7,6 @@
 
 namespace App\Commands\Users;
 
-
 use App\Exceptions\FaceidException;
 use App\Models\User;
 
@@ -15,10 +14,8 @@ use App\Validators\UserValidator;
 use Illuminate\Support\Arr;
 use App\Censor\Censor;
 
-
 class RealUser
 {
-
     /*
      * 姓名和身份证号一致
      */
@@ -57,7 +54,7 @@ class RealUser
         $res = $censor->checkReal($attributes['identity'], $attributes['realname']);
 
         //判断身份证信息与姓名是否符合
-        if(Arr::get($res, 'Result', false) != self::NAME_ID_NUMBER_MATCH){
+        if (Arr::get($res, 'Result', false) != self::NAME_ID_NUMBER_MATCH) {
             throw new FaceidException($res['Description']);
         }
         $this->actor->save();

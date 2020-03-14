@@ -6,8 +6,10 @@ This is NOT a freeware, use is subject to license terms
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__.'/app');
-    
+    ->in(__DIR__.'/app')
+    ->in(__DIR__.'/framework')
+    ->in(__DIR__.'/database');
+
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([

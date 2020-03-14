@@ -12,7 +12,6 @@ use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
-use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\Models\Group;
 use App\Models\OperationLog;
 use App\Models\User;
@@ -143,7 +142,6 @@ class UpdateUser
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
-
             $this->assertCan($this->actor, 'edit.group', $user);
 
             // 获取新用户组 id

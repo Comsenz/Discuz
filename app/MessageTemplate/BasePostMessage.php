@@ -7,11 +7,9 @@
 
 namespace App\MessageTemplate;
 
-use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 /**
  * 系统Post通知 - 基类

@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class UserFollow extends Model
 {
-
     /**
      * {@inheritdoc}
      */
