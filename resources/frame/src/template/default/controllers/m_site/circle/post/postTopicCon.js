@@ -1,9 +1,10 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import {autoTextarea, debounce} from '../../../../../../common/textarea.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
+
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data: function () {
@@ -63,10 +64,11 @@ export default {
       viewportWidth: '',
       viewportHeight: '',
       nowCate: [],
-      publishShow: true, //是否显示触发验证码的发布按钮
-      appID: '',         //腾讯云验证码场景 id
-      captcha_ticket: '',    //腾讯云验证码返回票据
-      captcha_rand_str: '',   //腾讯云验证码返回随机字符串
+      publishShow: true,      // 是否显示触发验证码的发布按钮
+      appID: '',              // 腾讯云验证码场景 id
+      captcha: null,          // 腾讯云验证码实例
+      captcha_ticket: '',     // 腾讯云验证码返回票据
+      captcha_rand_str: '',   // 腾讯云验证码返回随机字符串
       loading: false,
     }
   },
@@ -103,11 +105,7 @@ export default {
     let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
     let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
     this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
-    if (qcloud_captcha && thread_captcha) {
-      this.publishShow = false
-    } else {
-      this.publishShow = true
-    }
+    this.publishShow = !(qcloud_captcha && thread_captcha);
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
@@ -266,7 +264,7 @@ export default {
             }
           } else {
             console.log('主题');
-            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
+            this.$router.replace({path: 'details' + '/' + this.themeId, query: {backGo: this.backGo}, replace: true});
           }
         })
       } else {
@@ -315,7 +313,7 @@ export default {
             var postThemeId = res.readdata._data.id;
             var _this = this;
             console.log('长文');
-            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
+            _this.$router.replace({path: '/details' + '/' + postThemeId, query: {backGo: this.backGo}, replace: true});
           }
         })
       }
@@ -465,12 +463,12 @@ export default {
           throw new Error(data.error)
         } else {
           if (img) {
-            this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
+            this.fileList.push({url: data.readdata._data.url, id: data.readdata._data.id});
             this.loading = false;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
           }
           if (isFoot) {
-            this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
+            this.fileListOne.push({url: data.readdata._data.url, id: data.readdata._data.id});
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
@@ -622,7 +620,7 @@ export default {
                 return item
               }
             })
-            this.nowCate = { id: nowCate._data.id, name: nowCate._data.name };
+            this.nowCate = {id: nowCate._data.id, name: nowCate._data.name};
             this.cateId = this.nowCate.id;
             this.selectSort = this.nowCate.name;
           } else {
@@ -636,40 +634,30 @@ export default {
       this.showPopup = false;
     },
     initCaptcha() {   //发布主题验证码
-      if (this.content == '' || this.content == null) {
+      if (this.content === '' || this.content == null) {
         this.$toast.fail('内容不能为空');
         return;
       }
-      if (this.cateId == 0 || this.cateId == undefined) {
+      if (this.cateId === 0 || this.cateId === undefined) {
         this.$toast.fail('请选择分类');
         return;
       }
-      let tct = new TencentCaptcha(this.appID, res => {
+      this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.publish();
         }
-      })
+      });
       // 显示验证码
-      tct.show();
+      this.captcha.show();
     }
 
   },
   beforeRouteLeave(to, from, next) {
-    let tct = new TencentCaptcha(this.appID, res => {
-      if (res.ret === 0) {
-        this.captcha_ticket = res.ticket;
-        this.captcha_rand_str = res.randstr;
-        //验证通过后注册
-        this.publish();
-      }
-    })
-    // 显示验证码
-    tct.show();
-    next()
-
+    // 隐藏验证码
+    this.captcha.destroy();
+    next();
   }
-
 }

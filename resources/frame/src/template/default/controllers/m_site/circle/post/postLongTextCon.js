@@ -1,11 +1,11 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import {autoTextarea, debounce} from '../../../../../../common/textarea.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
 import '@github/markdown-toolbar-element';
-import fa from "element-ui/src/locale/lang/fa";
+
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data: function () {
@@ -74,10 +74,11 @@ export default {
       paySetValue: '',
       titleMaxLength: 80,
       viewportHeight: '',
-      publishShow: true, //是否触发验证码的按钮
-      appID: '',         //腾讯云验证码场景 id
+      publishShow: true,     //是否触发验证码的按钮
+      appID: '',             //腾讯云验证码场景 id
+      captcha: null,         //腾讯云验证码实例
       captcha_ticket: '',    //腾讯云验证码返回票据
-      captcha_rand_str: '',   //腾讯云验证码返回随机字符串
+      captcha_rand_str: '',  //腾讯云验证码返回随机字符串
       payBtnDis: false,
       loading: false,
     }
@@ -315,7 +316,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo } });
+            this.$router.replace({path: 'details' + '/' + this.themeId, query: {backGo: this.backGo}});
           }
         })
       } else {
@@ -374,7 +375,7 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo } });
+            _this.$router.replace({path: '/details' + '/' + postThemeId, query: {backGo: this.backGo}});
           }
         })
       }
@@ -524,12 +525,12 @@ export default {
           throw new Error(data.error)
         } else {
           if (img) {
-            this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
+            this.fileList.push({url: data.readdata._data.url, id: data.readdata._data.id});
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
             this.loading = false;
           }
           if (isFoot) {
-            this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
+            this.fileListOne.push({url: data.readdata._data.url, id: data.readdata._data.id});
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
@@ -683,8 +684,8 @@ export default {
               if (item._data.id === this.nowCateId) {
                 return item
               }
-            })
-            this.nowCate = { id: nowCate._data.id, name: nowCate._data.name };
+            });
+            this.nowCate = {id: nowCate._data.id, name: nowCate._data.name};
             this.cateId = this.nowCate.id;
             this.selectSort = this.nowCate.name;
           } else {
@@ -713,9 +714,8 @@ export default {
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
 
-      if(this.paySetValue === '.'){                // 如果只输入一个点  变成 0.
+      if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
         this.paySetValue = '0.';
-        console.log(this.paySetValue);
         return;
       }
 
@@ -748,25 +748,22 @@ export default {
         this.$toast.fail('请选择分类');
         return;
       }
-      let tct = new TencentCaptcha(this.appID, res => {
+      this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.publish();
         }
-      })
+      });
       // 显示验证码
-      tct.show();
+      this.captcha.show();
     }
 
   },
-  /*beforeRouteEnter(to,from,next){
-
-    next(vm =>{
-      if (from.name === 'circle'){
-        vm.backGo = -2
-      }
-    });
-  }*/
+  beforeRouteLeave(to, from, next) {
+    // 隐藏验证码
+    this.captcha.destroy();
+    next();
+  }
 }
