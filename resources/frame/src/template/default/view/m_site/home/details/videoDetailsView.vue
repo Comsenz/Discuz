@@ -29,7 +29,7 @@
         <span class="icon iconfont icon-top" v-if="themeCon._data.isSticky"></span>
       </div>
     </div>
-    <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div>
+    <div class="videoContentText" v-html="themeCon.firstPost._data.contentHtml"></div>
     <div class="videoBox" v-if="themeCon._data.price > 0 && !themeCon._data.paid">
       <img
         class="videoCover"
