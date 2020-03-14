@@ -47,7 +47,7 @@
               <div class="postContent" v-else-if="item.firstPost && item._data.type == 0" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)" v-html="item.firstPost._data.contentHtml">
               </div>
               <div class="postContent" v-if="item.firstPost && item._data.type == 2" @click="jumpThemeDet(item._data.id,item._data.canViewPosts)">
-                <span class="postConTitle" v-html="item.firstPost._data.contentHtml"></span>
+                <span class="postConTitle block" v-html="item.firstPost._data.contentHtml"></span>
                 <div class="videoCoverBox" v-if="item.threadVideo && item.threadVideo._data.status == 1">
                   <span class="icon iconfont icon-play"></span>
                   <div class="videoCoverMask"></div>

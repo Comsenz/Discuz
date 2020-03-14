@@ -9,7 +9,7 @@
       <div class="post-topic-form" id="postForm">
         <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea" autofocus placeholder="请输入内容" v-model="content" :maxlength="keywordsMax"   @focus="showFacePanel = false;footMove = false;keyboard = false;"></textarea>
         <form ref="vExample">
-          <input type="file" style="display:none;" :accept="supportVideoExtRes" ref="vExampleFile" @change="vExampleUpload" />
+          <input type="file" style="display:none;" :accept="supportVideoExtRes" capture="camera" ref="vExampleFile" @change="vExampleUpload" />
         </form>
         <div class="vedioUpBox" v-if="videoUp">
           <div class="videoUploader" @click="vExampleAdd">

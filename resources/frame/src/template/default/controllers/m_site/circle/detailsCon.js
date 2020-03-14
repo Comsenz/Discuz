@@ -326,7 +326,6 @@ export default {
 
     //初始化请求主题详情数据
     detailsLoad(initFlag = false) {
-      // let threads = 'threads/' + this.themeId;
       return this.appFetch({
         url: 'threads',
         splice: '/' + this.themeId,
@@ -342,6 +341,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          console.log(res,'5768467868678');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
