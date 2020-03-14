@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Middleware;
-
 
 use App\Models\SessionToken;
 use Carbon\Carbon;
@@ -13,7 +16,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ClearSessionMiddleware implements MiddlewareInterface
 {
-
     /**
      * @inheritDoc
      */

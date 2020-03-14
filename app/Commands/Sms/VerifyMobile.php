@@ -11,7 +11,6 @@ use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
-use App\Exceptions\SmsCodeVerifyException;
 use App\Models\MobileCode;
 use App\Models\User;
 use App\Repositories\MobileCodeRepository;

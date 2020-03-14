@@ -342,7 +342,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res,'5768467868678');
+          console.log(res, '5768467868678');
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -350,10 +350,10 @@ export default {
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
-            if(res.readdata.threadVideo && res.readdata.threadVideo._data.status == 0){
+            if (res.readdata.threadVideo && res.readdata.threadVideo._data.status == 0) {
               this.contentExamine = true;
               this.examineWord = '视频转码中，转码成功后才能正常播放';
-            } else if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2){
+            } else if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
               this.contentExamine = true;
               this.examineWord = '内容正在审核中，审核通过后才能正常显示！';
             } else {
@@ -914,6 +914,31 @@ export default {
         "package": data.data.attributes.wechat_js.package,
         "signType": "MD5",         //微信签名方式：
         "paySign": data.data.attributes.wechat_js.paySign //微信签名
+      }, function (res) {
+        // alert('支付唤醒');
+
+        if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          that.payLoading = false;
+          resolve;
+        } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          that.payLoading = false;
+          resolve;
+        }
+
+        /*if (res.err_msg == "get_brand_wcpay_request:ok") {
+          alert("支付成功");
+          alert(res.err_msg);
+          resolve;
+        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+          alert("支付过程中用户取消");             //支付取消正常走
+          alert(res.err_msg);
+          resolve;
+        } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+          alert("支付失败");
+          alert(res.err_msg);
+          resolve;
+        }*/
+
       })
 
       const payWechat = setInterval(() => {

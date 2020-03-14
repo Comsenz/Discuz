@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ThreadVideo extends Model
 {
-
     protected $table = 'thread_video';
 
     const VIDEO_STATUS_TRANSCODING = 0; //转码中
@@ -39,5 +38,4 @@ class ThreadVideo extends Model
         'created_at',
         'updated_at',
     ];
-
 }

@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Listeners;
-
 
 use App\Api\Middleware\ClearSessionMiddleware;
 use Discuz\Api\Events\ConfigMiddleware;

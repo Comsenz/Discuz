@@ -16,8 +16,8 @@ use Tobscure\JsonApi\Document;
 
 class FinanceProfileController extends AbstractResourceController
 {
-
     public $serializer = FinanceProfileSerializer::class;
+
     /**
      * @var Dispatcher
      */

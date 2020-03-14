@@ -18,6 +18,7 @@ use Tobscure\JsonApi\Document;
 class CreateDialogController extends AbstractCreateController
 {
     public $serializer = DialogSerializer::class;
+
     /**
      * @var Dispatcher
      */

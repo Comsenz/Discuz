@@ -24,11 +24,6 @@ class PostResourceSerializer extends AbstractSerializer
      */
     protected $gate;
 
-    public function __construct()
-    {
-
-    }
-
     /**
      * {@inheritdoc}
      *

@@ -191,6 +191,30 @@ export default {
   },
   methods: {
 
+    formatter(value) {
+      return this.handleReg(value);
+    },
+
+    handleReg(value) {
+      value = value.toString(); // 先转换成字符串类型
+
+      if (value.indexOf('.') == 0) {
+        value = '0.';  // 第一位就是 .
+      }
+
+      value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      if (value.indexOf(".") < 0 && value != "") {
+        value = parseFloat(value);
+      }
+
+      return value;
+    },
+
     vExampleAdd: function() {
       this.$refs.vExampleFile.click();
     },
@@ -525,7 +549,14 @@ export default {
     //设置付费金额,，显示弹框
     paySetting(){
       this.paySetShow = true;
-      if(this.paySetShow) {
+
+      if (this.payValue === '免费'){
+        this.paySetValue = null;
+      } else {
+        this.paySetValue = this.payValue.slice(0,this.payValue.length -1);
+      }
+
+      if (this.paySetShow) {
         setTimeout(function () {
           document.getElementById('payMoneyInp').focus();
         }, 200);
@@ -534,10 +565,16 @@ export default {
     //关闭付费设置弹框
     closePaySet(){
       this.paySetShow = false;
-      this.paySetValue = '免费';
+      // this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
+
+      if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
+        this.paySetValue = '0.';
+        return;
+      }
+
       // if(event.target.value != null && event.target.value > 0){
       //   this.isCli = true;
       // } else {
@@ -547,10 +584,11 @@ export default {
     //点击确定按钮，提交付费设置
     paySetSure(){
       this.paySetShow = false;
-      if(this.paySetValue <= 0){
+      if (this.paySetValue <= 0) {
         this.payValue = '免费';
       } else {
-        this.payValue = this.paySetValue +'元';
+        this.paySetValue = Number(this.paySetValue);
+        this.payValue = Number(this.paySetValue) + '元';
       }
     },
 

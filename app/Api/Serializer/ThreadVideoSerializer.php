@@ -35,6 +35,5 @@ class ThreadVideoSerializer extends AbstractSerializer
             'updated_at'     => $this->formatDate($model->updated_at),
             'created_at'     => $this->formatDate($model->created_at)
         ];
-
     }
 }

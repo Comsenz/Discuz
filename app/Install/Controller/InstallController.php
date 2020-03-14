@@ -73,7 +73,7 @@ class InstallController implements RequestHandlerInterface
         }
 
         $tablePrefix = Arr::get($input, 'tablePrefix', null);
-        if($tablePrefix && !preg_match("/^\w+$/", $tablePrefix)) {
+        if ($tablePrefix && !preg_match("/^\w+$/", $tablePrefix)) {
             return DiscuzResponseFactory::HtmlResponse('表前缀格式错误', 500);
         }
 
@@ -274,7 +274,8 @@ class InstallController implements RequestHandlerInterface
                 $this->setting->set('site_id', Arr::get($data, 'site_id'));
                 $this->setting->set('site_secret', Arr::get($data, 'site_secret'));
             })->wait();
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
     }
 
     private function getConsole()

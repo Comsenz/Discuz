@@ -10,10 +10,8 @@ namespace App\Notifications;
 use App\MessageTemplate\StatusMessage;
 use App\MessageTemplate\Wechat\WechatStatusMessage;
 use App\Models\NotificationTpl;
-use App\Models\User;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
 
 class System extends Notification
 {

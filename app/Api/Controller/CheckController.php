@@ -8,7 +8,6 @@
 namespace App\Api\Controller;
 
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Foundation\Application;
 use Discuz\Qcloud\QcloudTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
