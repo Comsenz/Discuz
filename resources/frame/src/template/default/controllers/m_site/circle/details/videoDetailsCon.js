@@ -28,6 +28,10 @@ export default {
       videoFileid: '',
       videoAppid: '',
       viewportWidth: '',
+      videoFileCover: '',
+      loadCover: '',
+      loadVideo: '',     //初始化隐藏video，加载完成后再显示出来
+      coverUrl: '',         //初始化显示封面图
 		}
   },
   props: {
@@ -46,15 +50,32 @@ export default {
     let self = this
     setTimeout(() => {
       self.videoFileid = self.themeCon.threadVideo._data.file_id;
-      self.videoAppid = self.videoAppid
+      self.videoAppid = self.videoAppid;
+      // self.videoFileCover = self.themeCon.threadVideo._data.cover_url;
       self.$nextTick(() => {
+
         console.log(self.videoFileid, self.videoAppid,'@@@@#~~~~');
-        self.getVideoLang(self.videoFileid, self.videoAppid)
+        // self.getVideoLang(self.videoFileid, self.videoAppid, self.videoFileCover)
+        self.getVideoLang(self.videoFileid, self.videoAppid);
       })
+      
     }, 2000)
   },
-
+  // watch:{
+  //   //监听得到的数据
+  //   loadCover(newData,prevData){
+  //     console.log(newData,prevData,'11111');
+  //     this.loadCover = newData;
+  //   },
+  //   loadVideo(newData,prevData){
+  //     console.log(newData,prevData,'2222');
+  //     this.loadVideo = newData;
+  //   },
+  //   deep:true
+  // },
   created:function(){
+    this.loadCover = true;
+    this.loadVideo = false;
     this.viewportWidth = window.innerWidth;
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
@@ -72,29 +93,59 @@ export default {
         this.walletBalance = res.readdata._data.walletBalance;
       });
     }
-    
+    this.coverUrl = this.themeCon.threadVideo._data.cover_url
   },
   computed: {
     themeId: function () {
       return this.$route.params.themeId;
     }
   },
+  
 	methods: {
     // 初始化腾讯云播放器
-    getVideoLang (fileID, appID) {
-      console.log(fileID, appID,'####~~~~');
+    getVideoLang (fileID, appID, posterImg) {
+      // alert(posterImg,'封面');
+      this.loadCover = true;
+      this.loadVideo = false;
+      // debugger;
+      // console.log(fileID, appID,'####~~~~');
       const playerParam = {
         fileID: fileID,
         appID: appID,
         'width': this.viewportWidth - 30,
-        'coverpic' : '',
+        // 'poster': posterImg,
+        // 'poster': 'http://www.test.com/myimage.jpg',
+        'posterImage': false,
       }
       console.log(window.TCPlayer,'lllllllllllllllllllll');
       this.player = window.TCPlayer(this.tcPlayerId, playerParam);
-    //   this.player.ready(function() {
-    //     // 开始加载视频时触发
-    //     debugger;
-    //  });
+      this.player.ready(function() {
+        // debugger;
+        this.loadCover = false;
+        this.loadVideo = true;
+        if(this.loadCover == true) {
+          console.log('123');
+          console.log(this.loadCover,'封面显示');
+          this.loadVideo = false;
+        } else {
+          console.log('456');
+          this.loadVideo = true;
+          console.log(this.loadVideo,'视频显示');
+        }
+        // if(this.$refs.coverShow && this.$refs.videoShow){
+        //   this.$refs.coverShow.setAttribute("class", "none");
+        //   this.$refs.videoShow.setAttribute("class", "block");
+        // }
+        
+        
+        // alert(this.loadCover);
+        // alert(this.loadVideo);
+        // debugger;
+        // alert(this.loadCover);
+        // 开始加载视频时触发
+        // posterImage: true;
+        // debugger;
+      });
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet:function(id){
