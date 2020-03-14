@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 

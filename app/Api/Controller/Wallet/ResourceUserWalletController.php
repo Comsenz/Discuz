@@ -20,6 +20,7 @@ use Discuz\Auth\AssertPermissionTrait;
 class ResourceUserWalletController extends AbstractResourceController
 {
     use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */

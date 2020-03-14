@@ -28,8 +28,7 @@ class TradeErrorExceptionHandler implements ExceptionHandlerInterface
         return $e instanceof TradeErrorException;
     }
 
-
-       /**
+    /**
      * Handle the provided exception.
      *
      * @param  $e

@@ -37,6 +37,4 @@ class StatusMessage extends DatabaseMessage
             $refuse
         ];
     }
-
-
 }

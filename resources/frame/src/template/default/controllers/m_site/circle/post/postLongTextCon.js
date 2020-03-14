@@ -701,8 +701,10 @@ export default {
     paySetting() {
       this.paySetShow = true;
 
-      if (this.paySetValue === '免费'){
+      if (this.payValue === '免费'){
         this.paySetValue = null;
+      } else {
+        this.paySetValue = this.payValue.slice(0,this.payValue.length -1);
       }
 
       if (this.paySetShow) {

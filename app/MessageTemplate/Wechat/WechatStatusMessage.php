@@ -49,6 +49,4 @@ class WechatStatusMessage extends DatabaseMessage
             $refuse,
         ];
     }
-
-
 }
