@@ -690,87 +690,90 @@ export default {
 
 
 
-    this.getForum().then((res) => {
-      console.log('初始化');
-
-      /*
-      * 站点关闭，跳转到站点关闭页面
-      * */
-      if (res.errors) {
-        if (res.rawData[0].code === 'site_closed') {
-          if (to.name === 'login-user') {
-            next();
-          } else {
-            if (to.name === 'site-close') {
-              next();
-              return;
-            } else {
-              next({ path: '/site-close' });
-              return;
-            }
-
-          }
-        }
-      } else {
-        siteMode = res.readdata._data.set_site.site_mode;
-        registerClose = res.readdata._data.set_reg.register_close;
-        realName = res.readdata._data.qcloud.qcloud_faceid;
-        canWalletPay = res.readdata._data.other.initialized_pay_password;
-        modifyPhone = res.readdata._data.qcloud.qcloud_sms;
+    if (to.name === 'supplier-all-back'){
+      next();
+    } else {
+      this.getForum().then((res) => {
+        console.log('初始化');
 
         /*
-        * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
+        * 站点关闭，跳转到站点关闭页面
         * */
-        if (to.name === 'sign-up') {
-          if (!Authorization && !tokenId && !registerClose) {
-            if (siteMode === 'pay') {
-              next({ path: '/pay-circle' });
-              return
+        if (res.errors) {
+          if (res.rawData[0].code === 'site_closed') {
+            if (to.name === 'login-user') {
+              next();
             } else {
-              next({ path: '/' });
-              return
+              if (to.name === 'site-close') {
+                next();
+                return;
+              } else {
+                next({ path: '/site-close' });
+                return;
+              }
+
             }
           }
-        } else if (to.name === 'real-name') {
-          if (Authorization) {
-            this.getUsers(tokenId).then(data => {
-              if (realName === true && data.readdata._data.realname === '') {
-                next({ path: '/real-name' });
+        } else {
+          siteMode = res.readdata._data.set_site.site_mode;
+          registerClose = res.readdata._data.set_reg.register_close;
+          realName = res.readdata._data.qcloud.qcloud_faceid;
+          canWalletPay = res.readdata._data.other.initialized_pay_password;
+          modifyPhone = res.readdata._data.qcloud.qcloud_sms;
+
+          /*
+          * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
+          * */
+          if (to.name === 'sign-up') {
+            if (!Authorization && !tokenId && !registerClose) {
+              if (siteMode === 'pay') {
+                next({ path: '/pay-circle' });
                 return
               } else {
-                next({ path: '/' })
+                next({ path: '/' });
+                return
               }
-            })
-          } else {
-            next({ path: '/' });
-            return;
-          }
+            }
+          } else if (to.name === 'real-name') {
+            if (Authorization) {
+              this.getUsers(tokenId).then(data => {
+                if (realName === true && data.readdata._data.realname === '') {
+                  next({ path: '/real-name' });
+                  return
+                } else {
+                  next({ path: '/' })
+                }
+              })
+            } else {
+              next({ path: '/' });
+              return;
+            }
 
-        } else if (to.name === 'verify-pay-pwd') {
-          if (canWalletPay) {
-            next();
-            return
-          } else {
-            next({ path: '/setup-pay-pwd' })
+          } else if (to.name === 'verify-pay-pwd') {
+            if (canWalletPay) {
+              next();
+              return
+            } else {
+              next({ path: '/setup-pay-pwd' })
+            }
+          } else if (to.name === 'bind-new-phone' || to.name === 'modify-phone') {
+            if (modifyPhone) {
+              next();
+              return
+            } else {
+              next({ path: '/' })
+            }
           }
-        } else if (to.name === 'bind-new-phone' || to.name === 'modify-phone') {
-          if (modifyPhone) {
+          else {
             next();
-            return
-          } else {
-            next({ path: '/' })
           }
         }
-        else {
-          next();
-        }
-      }
 
 
-      if (tokenId && Authorization) {
-        /*已登录状态*/
+        if (tokenId && Authorization) {
+          /*已登录状态*/
 
-        // this.getForum().then((ress) => {
+          // this.getForum().then((ress) => {
           console.log('已经登录状态');
 
           if (res.readdata._data.set_site.site_mode === 'pay') {
@@ -811,13 +814,13 @@ export default {
 
           }
 
-        // })
+          // })
 
 
-      } else {
-        /*未登录状态*/
+        } else {
+          /*未登录状态*/
 
-        // this.getForum().then(res => {
+          // this.getForum().then(res => {
 
           if (res.readdata._data.passport.offiaccount_close === '1') {
             /*判断登录设备*/
@@ -906,14 +909,13 @@ export default {
           }
 
 
-        // })
+          // })
 
-      }
-
-
-    });
+        }
 
 
+      });
+    }
 
 
 
