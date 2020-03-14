@@ -295,9 +295,9 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
-      this.pageIndex = 0;
+      // this.pageIndex = 0;
       this.themeListCon = [];
-      // this.loadThemeList();
+      this.loadThemeList(this.filterInfo.filterCondition, cateId);
     },
     //跳转到登录页
     loginJump: function (isWx) {
