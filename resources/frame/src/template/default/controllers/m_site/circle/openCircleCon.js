@@ -40,7 +40,7 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 0,//页码
+      pageIndex: 1,//页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       canEdit: true,
@@ -72,7 +72,8 @@ export default {
       userInfoAvatarUrl: '',
       userInfoName: '',
       invitationShow: false,
-      offiaccountClose: ''
+      offiaccountClose: '',
+      loadStatus: false,
     }
   },
   created: function () {
@@ -303,16 +304,17 @@ export default {
       } else {
         this.filterInfo.typeWo = '全部主题';
       }
+      // this.loadStatus = true;
       this.filterInfo.filterCondition = themeType;
       this.pageIndex = 1;
       this.themeListCon = [];
-
       this.loadThemeList(this.filterInfo.filterCondition, this.categoryId);
     },
 
     //点击分类
     categoriesChoice(cateId) {
-      // this.pageIndex = 0;
+      this.loadStatus = true;
+      this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition, cateId);
     },
@@ -321,13 +323,13 @@ export default {
       let wxCode = this.load();
 
       if (wxCode == 1) {
-        this.$router.push({path: '/login-user'});
+        this.$router.push({ path: '/login-user' });
       } else if (wxCode == 2) {
         //是微信
         if (this.offiaccountClose == '1') {
-          this.$router.push({path: '/wx-sign-up-bd'});
+          this.$router.push({ path: '/wx-sign-up-bd' });
         } else {
-          this.$router.push({path: '/login-user'});
+          this.$router.push({ path: '/login-user' });
         }
       }
     },
@@ -340,13 +342,13 @@ export default {
     postType(type) {
       if (type == 0) {
         //发布主题
-        this.$router.push({path: '/post-topic/' + this.categoryId, replace: true});
+        this.$router.push({ path: '/post-topic/' + this.categoryId, replace: true });
       } else if (type == 1) {
         //发布长文
-        this.$router.push({path: '/post-longText/' + this.categoryId});
+        this.$router.push({ path: '/post-longText/' + this.categoryId });
       } else if (type == 2) {
         //发布视频
-        this.$router.push({path: '/post-video/' + this.categoryId});
+        this.$router.push({ path: '/post-video/' + this.categoryId });
       }
     },
 
@@ -375,9 +377,14 @@ export default {
       this.showScreen = false;
     },
     onLoad() {    //上拉加载
+      if (this.loadStatus === true) {
+        this.loadStatus = false;
+        this.pageIndex = 1;
+      } else {
+        this.pageIndex++;
+        this.loadThemeList(this.filterCondition, this.categoryId);
+      }
       this.loading = true;
-      this.pageIndex++;
-      this.loadThemeList(this.filterCondition, this.categoryId);
     },
     onRefresh() {    //下拉刷新
       this.pageIndex = 1;
