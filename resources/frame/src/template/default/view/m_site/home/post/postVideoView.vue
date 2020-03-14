@@ -58,6 +58,7 @@
           <van-field
             v-model="paySetValue"
             type="number"
+            maxlength="10"
             clearable
             label="￥"
             :formatter="formatter"

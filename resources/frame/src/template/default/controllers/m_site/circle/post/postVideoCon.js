@@ -545,7 +545,7 @@ export default {
     //关闭付费设置弹框
     closePaySet(){
       this.paySetShow = false;
-      this.paySetValue = '免费';
+      // this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
     search: function (event) {
@@ -565,10 +565,11 @@ export default {
     //点击确定按钮，提交付费设置
     paySetSure(){
       this.paySetShow = false;
-      if(this.paySetValue <= 0){
+      if (this.paySetValue <= 0) {
         this.payValue = '免费';
       } else {
-        this.payValue = this.paySetValue +'元';
+        this.paySetValue = Number(this.paySetValue);
+        this.payValue = Number(this.paySetValue) + '元';
       }
     },
 
