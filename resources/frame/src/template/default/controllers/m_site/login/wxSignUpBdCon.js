@@ -286,7 +286,10 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
-    this.captcha.destroy();
+    if(this.captcha.destroy()){
+      this.captcha.destroy();
+    };
+
     next();
   }
 }
