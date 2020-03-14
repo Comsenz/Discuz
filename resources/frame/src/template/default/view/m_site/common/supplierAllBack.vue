@@ -47,7 +47,7 @@ export default {
     },700);
 
 
-    console.log('空白页' + this.$router.history.current.query.url);
+    // console.log('空白页' + this.$router.history.current.query.url);
 
     // this.$router.go(0);
 

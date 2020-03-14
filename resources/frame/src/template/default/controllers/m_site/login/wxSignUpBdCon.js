@@ -264,10 +264,11 @@ export default {
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
+    webDb.setLItem('sessionId',sessionId);
 
     if (isWeixin) {
       this.platform = 'mp';
-      if (!code && !state) {
+      if (!code && !state && !sessionId) {
         this.getWatchHref();
         // console.log('第一次请求' + code);
         // console.log('第一次请求' + state);
