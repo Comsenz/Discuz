@@ -421,7 +421,6 @@ export default {
           } else {
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
-            console.log(this.themeCon.posts, '数组')
             this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
