@@ -293,9 +293,9 @@ export default {
         return;
       }
       if (this.postsId && this.content) {
-        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' + this.postsId,
           method: "patch",
           data: {
             "data": {
