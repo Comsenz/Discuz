@@ -199,7 +199,7 @@ export default {
                 },
                 {
                   id:32,
-                  title:'回帖',
+                  title:'回复',
                   name:'recycleBin',
                   icon:'iconhuishouzhan',
                 }
@@ -467,7 +467,7 @@ export default {
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/recycle-bin'});
           break;
-        case '回帖':
+        case '回复':
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/recycle-bin-reply'});
           break;
@@ -577,7 +577,7 @@ export default {
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
             break;
-          case '回帖':
+          case '回复':
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
             break;
