@@ -96,7 +96,7 @@
       </div>
 
       <div class="latest-reply-footer">
-        <el-button size="small" type="primary" @click="deleteAllClick">全部删除</el-button>
+        <el-button size="small" type="primary" @click="deleteAllClick">提交</el-button>
       </div>
     </div>
 </template>
