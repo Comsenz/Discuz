@@ -67,7 +67,7 @@ export default {
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 0, //页码
+      pageIndex: 1, //页码
       pageLimit: 20,
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       groupId: '',
@@ -142,7 +142,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
-    this.onLoad();
+    // this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
     this.getUser();
@@ -346,6 +346,7 @@ export default {
           // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
+            // this.themeCon.posts = [];
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
@@ -412,15 +413,15 @@ export default {
             } else {
               var firstpostImage = [];
               for (let i = 0; i < firstpostImageLen; i++) {
-                // let src = 'https://2020.comsenz-service.com/api/attachments/';
-                // firstpostImage.push(this.themeCon.firstPost.images[i]._data.url);
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
               }
               this.firstpostImageList = firstpostImage;
             };
 
           } else {
+            // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
+            console.log(this.themeCon.posts, '数组')
             this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
@@ -1123,6 +1124,7 @@ export default {
 
 
     onLoad() { //上拉加载
+      // alert('9999999')
       this.loading = true;
       this.pageIndex++;
       this.detailsLoad();
