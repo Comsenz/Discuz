@@ -13,9 +13,12 @@ use App\Traits\UserTrait;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
+use Discuz\Qcloud\QcloudTrait;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -23,6 +26,7 @@ class ListUsersController extends AbstractListController
 {
     use AssertPermissionTrait;
     use UserTrait;
+    use QcloudTrait;
 
     /**
      * {@inheritdoc}
@@ -75,6 +79,19 @@ class ListUsersController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        try {
+            $a = $this->report(['url' => 'alsdjflk'])->then(function (ResponseInterface $response) {
+                $data = json_decode($response->getBody()->getContents(), true);
+                dump($data);
+//                $this->setting->set('site_id', Arr::get($data, 'site_id'));
+//                $this->setting->set('site_secret', Arr::get($data, 'site_secret'));
+            }, function ($a) {
+                dd($a);
+            })->wait();
+        } catch (\Exception $e) {
+        }
+        dd('ok', $a);
 
         $this->assertCan($actor, 'viewUserList');
 
