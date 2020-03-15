@@ -870,7 +870,7 @@ export default {
                     next();
                     return
                   }
-                  next('/')
+                  next();
                 }
               }
             }
@@ -898,11 +898,11 @@ export default {
                 }
                 next({ path: 'pay-circle' });
               } else {
-                if (to.name === '/') {
+                if (to.name === 'circle') {
                   next();
                   return
                 }
-                next('/')
+                next()
               }
             }
           }
