@@ -70,7 +70,6 @@ export default {
       token: '',
       userId: '',
       offiaccountClose: '',
-      loadStatus: false,
     }
   },
   created: function () {
@@ -118,6 +117,9 @@ export default {
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
+          // if (this.canViewThreads === true) {
+          //   this.loadThemeList(); //初始化列表数据
+          // }
           if (!this.allowRegister) {
             this.loginWord = '登录';
           }
@@ -180,6 +182,7 @@ export default {
     // },
     //初始化请求主题列表数据
     loadThemeList(filterCondition, filterVal) {
+      this.loading = true;
       var userId = browserDb.getLItem('tokenId');
       // if(!this.categoryId){
       //   this.categoryId = this.firstCategoriesId;
@@ -225,18 +228,18 @@ export default {
           }
         } else {
           // console.log(res,'eeeee');
-          if (!this.canViewThreads) {
-            this.nullTip = true;
-            this.nullWord = res.errors[0].code;
-          } else {
-            if (this.themeListCon.length < 0) {
-              this.nullTip = true
-            }
-            this.themeListCon = this.themeListCon.concat(res.readdata);
-            this.loading = false;
-            this.finished = res.readdata.length < this.pageLimit;
+          // if (this.canViewThreads === false) {
+          //   this.nullTip = true;
+          //   this.nullWord = res.errors[0].code;
+          // } else {
+          // this.themeListCon = res.readdata;
+          this.themeListCon = this.themeListCon.concat(res.readdata);
+          this.loading = false;
+          this.finished = res.readdata.length < this.pageLimit;
+          if (this.themeListCon.length < 0) {
+            this.nullTip = true
           }
-
+          // }
         }
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
@@ -296,7 +299,6 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
-      this.loadStatus = true;
       this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition, cateId);
@@ -360,14 +362,10 @@ export default {
       this.showScreen = false;
     },
     onLoad() {    //上拉加载
-      if (this.loadStatus === true) {
-        this.loadStatus = false
-        this.pageIndex = 1
-      } else {
+      if (this.loading) {
         this.pageIndex++;
         this.loadThemeList(this.filterCondition, this.categoryId);
       }
-      this.loading = true;
     },
     onRefresh() {    //下拉刷新
       this.pageIndex = 1;
