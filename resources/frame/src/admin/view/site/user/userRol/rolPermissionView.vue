@@ -27,7 +27,7 @@
         <el-checkbox
           v-model="checked"
           label="createThreadVideo"
-          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          :disabled="videoDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
         >发布视频</el-checkbox>
       </CardRow>
     </Card>
