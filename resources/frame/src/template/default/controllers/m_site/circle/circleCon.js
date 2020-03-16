@@ -362,10 +362,10 @@ export default {
       this.showScreen = false;
     },
     onLoad() {    //上拉加载
-      if (this.loading) {
-        this.pageIndex++;
-        this.loadThemeList(this.filterCondition, this.categoryId);
-      }
+      // if (this.loading) {
+      this.pageIndex++;
+      this.loadThemeList(this.filterCondition, this.categoryId);
+      // }
     },
     onRefresh() {    //下拉刷新
       this.pageIndex = 1;

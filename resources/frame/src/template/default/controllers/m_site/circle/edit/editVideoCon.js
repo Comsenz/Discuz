@@ -347,7 +347,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res,'resssss');
+          // console.log(res,'resssss');
           this.oldCateId = res.readdata.category._data.id;
           this.selectSort = res.readdata.category._data.name;
           this.content = res.readdata.firstPost._data.content;
