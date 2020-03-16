@@ -102,7 +102,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'other' => [
                 // 基础信息
                 'count_threads' => Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->count(), // 统计所有主题数
-                'count_posts' => Post::where('is_approved', Post::APPROVED)->where('is_first', false)->whereNull('deleted_at')->count(), // 统计所有回复数
+                'count_posts' => Post::where('is_approved', Post::APPROVED)->whereNull('deleted_at')->count(), // 统计所有回复数
                 'count_users' => User::where('status', 0)->count(), // 统计所有的用户
                 // 权限 permission
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),
