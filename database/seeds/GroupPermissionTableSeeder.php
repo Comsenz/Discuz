@@ -92,7 +92,7 @@ class GroupPermissionTableSeeder extends Seeder
         'dialog.message.create' => [],         // 创建会话消息
 
         // 关注
-        'userFollow.create' => [],             // 创建关注
+        'userFollow.create' => [10],             // 创建关注
     ];
 
     /**
