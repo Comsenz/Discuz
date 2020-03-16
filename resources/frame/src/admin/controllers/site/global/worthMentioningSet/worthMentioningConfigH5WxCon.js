@@ -35,7 +35,6 @@ export default {
   created() {
     var type = this.$route.query.type;
     this.type = type;
-    console.log(this.type)
     this.loadStatus();
   },
   methods: {
