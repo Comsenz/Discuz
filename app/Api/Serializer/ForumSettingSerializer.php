@@ -64,14 +64,14 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 第三方登录设置
             'passport' => [
-                'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
-                'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
-                'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),       // 微信PC 开关
+                'offiaccount_close' => (bool)$this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
+                'miniprogram_close' => (bool)$this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
+                'oplatform_close' => (bool)$this->settings->get('oplatform_close', 'wx_oplatform'),       // 微信PC 开关
             ],
 
             // 支付设置
             'paycenter' => [
-                'wxpay_close' => $this->settings->get('wxpay_close', 'wxpay'),
+                'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
             ],
 
             // 附件设置
