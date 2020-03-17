@@ -15,7 +15,7 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       allowRegister: '',
-
+      limitList: '',
 		}
   },
   computed: {
@@ -32,7 +32,9 @@ export default {
     this.loadSite();
   },
 	methods: {
+    
     loadSite(initStatus = false){
+      console.log('执行');
       //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
@@ -50,13 +52,14 @@ export default {
 
       //请求初始化角色信息数据
     return  this.appFetch({
-        url: 'groups',
+        url: 'invite',
         method: 'get',
-        splice:'/' + this.roleId,
+        splice:'/' + this.code,
         data: {
         }
       }).then((res) => {
-        this.roleResult = res.readdata._data.name;
+        this.roleResult = res.readdata.group._data.name;
+        this.limitList = res.readdata.group;
       });
     },
 
