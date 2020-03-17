@@ -1030,15 +1030,18 @@ export default {
         // return res;
       })
     },
-
-
-
-    onLoad() { //上拉加载
-      // alert('9999999')
+    //打赏过程中关闭pc端微信扫码支付
+    closeQrCode(){
+      this.qrcodeShow = false;
+      this.payLoading = false;
+    },
+    //上拉加载
+    onLoad() {
       this.loading = true;
       this.pageIndex++;
       this.detailsLoad();
     },
+    
     onRefresh() {
       this.pageIndex = 1
       this.detailsLoad(true).then((res) => {
