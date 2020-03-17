@@ -646,34 +646,6 @@ export default {
     ];
 
 
-  /*
-  * 未登录可访问页面
-  * */
-  const notLoggedInToAccessPage = [
-    'login-user',
-    'login-phone',
-    'sign-up',
-    'bind-phone',
-    'pay-the-fee',
-    'retrieve-pwd',
-    'pay-circle-con/:themeId/:groupId',
-    'open-circle-con',
-    'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
-    'open-circle/:userId',
-    'details/:themeId',
-    'home-page/:userId',
-    'pay-status',
-    'wx-login-bd',
-    'wx-sign-up-bd',
-    'welink-sign-up-bd',
-    'welink-login-bd',
-    'supplier-all-back',
-    'circle-invite',
-    'site-close',
-    'information-page'
-  ];
-
-
   //公开模式下不能访问的页面
   const publicNotAccessPage = [
     // 'pay-the-fee',
@@ -717,15 +689,6 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page'
-    ];
-
-
-    //公开模式下不能访问的页面
-    const publicNotAccessPage = [
-      // 'pay-the-fee',
-      'pay-circle-con/:themeId/:groupId',
-      // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
-      // 'pay-status',
     ];
 
 
@@ -888,16 +851,13 @@ export default {
                   }
                 }
               }
-
               // console.log('wx：' + res);
-
               // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
               } else {
                 next({ path: '/wx-sign-up-bd' });
               }
-
               //微信
             } else {
               if (notLoggedInToAccessPage.includes(to.name)) {
@@ -932,13 +892,6 @@ export default {
               }
             }
 
-          }else if(isWeLink) {
-              /*华为welinkApp，跳转到welink绑定页，改成跳转到welink注册绑定*/
-              if (to.name === 'welink-sign-up-bd' || to.name === 'welink-login-bd') {
-                  next();
-              } else {
-                  next({path:'/welink-sign-up-bd'});
-              }
           }else {
             if (notLoggedInToAccessPage.includes(to.name)){
               /*符合，未登录可以访问站点*/
@@ -971,13 +924,7 @@ export default {
               }
             }
           }
-
-
-          // })
-
         }
-
-
       });
     }
 
