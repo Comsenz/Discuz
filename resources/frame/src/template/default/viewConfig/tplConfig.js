@@ -313,22 +313,6 @@ export default {
           title: "微信注册绑定账号"
         }
       },
-       'welink-login-bd':{
-            comLoad:function (resolve) {
-                require(['../view/m_site/login/welinkLoginBdView'],resolve)
-            },
-            metaInfo:{
-                title:"WeLink登录绑定账号"
-            }
-        },
-      'welink-sign-up-bd':{
-          comLoad:function (resolve) {
-              require(['../view/m_site/login/welinkSignUpBdView'],resolve)
-          },
-          metaInfo:{
-              title:"WeLink注册绑定账号"
-          }
-      },
       'sign-up':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/signUpView'],resolve)
@@ -616,8 +600,7 @@ export default {
   beforeEnter: function(to, form, next) {
   //判断设备
   let isWeixin = appCommonH.isWeixin().isWeixin;
-  let isPhone = appCommonH.isWeixin().isPhone;
-  let isWeLink = appCommonH.isWeLink().isWeLink;
+  let isPhone = appCommonH.isWeixin().isPhon
 
 
     /*
@@ -733,7 +716,7 @@ export default {
 
             }
           }
-          
+
         } else {
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
@@ -1006,10 +989,10 @@ export default {
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
         let siteInfoStat = res.readdata._data.set_site.site_stat;
-        app.bus.$emit('stat',siteInfoStat)   
+        app.bus.$emit('stat',siteInfoStat)
         return res;
-      } 
-     
+      }
+
     }).catch(err => {
     })
   },

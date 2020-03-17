@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 
 return [
-    'debug' => true,
+    'debug' => false,
     'locale' => 'zh-CN',
     'fallback_locale' => 'zh-CN',
     'timezone' => 'Asia/Shanghai',
