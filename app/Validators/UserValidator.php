@@ -166,8 +166,8 @@ class UserValidator extends AbstractValidator
     protected function getMessages()
     {
         $messages = [
-            'username.regex' => '用户名不能有特殊字符。',
-            'identity.regex' => '身份证为 15 位或 18 位。',
+            'username.regex' => trans('user.username_error'),
+            'identity.regex' => trans('user.identity_error'),
         ];
 
         // 密码强度
