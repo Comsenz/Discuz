@@ -714,6 +714,9 @@ export default {
 
             }
           }
+          if(res.rawData[0].code == 'not_install'){
+            window.location.href = res.rawData[0].details.installUrl;
+          }
         } else {
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;

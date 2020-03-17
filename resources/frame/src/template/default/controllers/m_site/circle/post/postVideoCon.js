@@ -353,6 +353,7 @@ export default {
             }
           } else {
             // console.log('主题');
+            this.loading = true;
             this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
           }
         })
@@ -394,6 +395,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
+            this.loading = true;
             var postThemeId = res.readdata._data.id;
             var _this = this;
             // console.log('视频');

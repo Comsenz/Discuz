@@ -485,6 +485,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          this.loading = true;
           this.$router.replace({path:'/details'+'/'+this.themeId,query:{backGo:this.backGo},replace: true})
         }
       })

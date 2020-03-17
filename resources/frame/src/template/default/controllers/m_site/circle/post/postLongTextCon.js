@@ -316,6 +316,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
+            this.loading = true;
             this.$router.replace({path: 'details' + '/' + this.themeId, query: {backGo: this.backGo}});
           }
         })
@@ -373,6 +374,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
+            this.loading = true;
             var postThemeId = res.readdata._data.id;
             var _this = this;
             _this.$router.replace({path: '/details' + '/' + postThemeId, query: {backGo: this.backGo}});
