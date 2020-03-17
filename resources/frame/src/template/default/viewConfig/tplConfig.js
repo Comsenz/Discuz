@@ -600,7 +600,7 @@ export default {
   beforeEnter: function(to, form, next) {
   //判断设备
   let isWeixin = appCommonH.isWeixin().isWeixin;
-  let isPhone = appCommonH.isWeixin().isPhon
+    let isPhone = appCommonH.isWeixin().isPhone;
 
 
     /*
