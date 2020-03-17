@@ -8,7 +8,6 @@
 namespace App\Api\Controller\Invite;
 
 use App\Api\Serializer\InviteSerializer;
-use App\Models\Invite;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Support\Arr;
@@ -27,7 +26,7 @@ class ResourceInviteController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['group'];
+    public $include = ['group', 'group.permission'];
 
     /**
      * ResourceInviteController constructor.
@@ -45,12 +44,6 @@ class ResourceInviteController extends AbstractResourceController
     {
         $code = Arr::get($request->getQueryParams(), 'code');
 
-        $query = $this->invite->query()->where(['code' => $code])->first();
-
-//        $query->load('group', 'group.permission');
-
-//        dd($query->toArray());
-
-        return $query;
+        return $this->invite->query()->where('code', $code)->first();
     }
 }
