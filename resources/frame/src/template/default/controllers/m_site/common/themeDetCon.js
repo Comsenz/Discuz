@@ -248,7 +248,6 @@ export default {
         attri.isLiked = true;
       }
       // attri.isLiked = clickStatus;
-      // let posts = 'posts/'+postId;
       this.appFetch({
         url:'posts',
         method:'patch',

@@ -365,7 +365,7 @@ export default {
               title: '回收站',
               name:'recycleBin',
               attribution:'内容',
-              alias:'回帖'
+              alias:'回复'
             }
           },
 

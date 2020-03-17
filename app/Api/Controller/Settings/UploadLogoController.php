@@ -71,7 +71,6 @@ class UploadLogoController extends AbstractResourceController
             $tmpFile,
             $file->getClientFilename(),
             $file->getClientMediaType(),
-            $file->getSize(),
             $file->getError(),
             true
         );

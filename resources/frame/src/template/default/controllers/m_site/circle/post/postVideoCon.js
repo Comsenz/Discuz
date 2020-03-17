@@ -120,7 +120,7 @@ export default {
     this.publishShow = !(qcloud_captcha && thread_captcha);
     // console.log(this.tcVod,'343423');
     var videoExt = '';
-    if (browserDb.getLItem('siteInfo')) {
+    if (browserDb.getLItem('siteInfo') && browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext) {
       this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
       videoExt = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext.split(',');
       var videoStr = '';
@@ -331,10 +331,11 @@ export default {
         this.$toast.fail('视频不能为空');
         return;
       }
+      this.loading = true;
       if (this.postsId && this.content) {
-        let posts = 'posts/' + this.postsId;
         this.appFetch({
-          url: posts,
+          url: 'posts',
+          splice: '/' + this.postsId,
           method: "patch",
           data: {
             "data": {
@@ -351,6 +352,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             // console.log('主题');
             this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
@@ -393,6 +395,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;

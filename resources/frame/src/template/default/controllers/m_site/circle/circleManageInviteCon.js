@@ -1,7 +1,7 @@
 /**
- * pc 端首页控制器
+ * 邀请页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -15,18 +15,26 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,
       allowRegister: '',
-
+      limitList: '',
 		}
-	},
+  },
+  computed: {
+    code: function () {
+      return this.$route.query.code;
+    }
+  },
   //用于数据初始化
   created: function(){
-    // var roleId = this.$route.query.groupId;
+    console.log(this.code,'WWWWWWWWWWWWWWWWWWWWWWW');
+    
     var roleId = '10';
     this.roleId = roleId;
     this.loadSite();
   },
 	methods: {
+    
     loadSite(initStatus = false){
+      console.log('执行');
       //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
@@ -44,13 +52,14 @@ export default {
 
       //请求初始化角色信息数据
     return  this.appFetch({
-        url: 'groups',
+        url: 'invite',
         method: 'get',
-        splice:'/' + this.roleId,
+        splice:'/' + this.code,
         data: {
         }
       }).then((res) => {
-        this.roleResult = res.readdata._data.name;
+        this.roleResult = res.readdata.group._data.name;
+        this.limitList = res.readdata.group;
       });
     },
 
@@ -70,6 +79,9 @@ export default {
 		},
 		//跳转到注册页
 		registerJump:function(){
+      if(this.code != '' || this.code != null){
+        browserDb.setSItem('code',this.code)
+      }
 			this.$router.push({ path:'sign-up'})
 		},
 		/**

@@ -9,40 +9,20 @@ namespace App\Settings;
 
 use App\Models\Setting;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingRepository;
-use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Support\Arr;
 
 class SettingsRepository implements ContractsSettingRepository
 {
-    protected $cache;
-
-    protected $key = 'settings';
-
     protected $settings = null;
-
-    public function __construct(Factory $cache)
-    {
-        $this->cache = $cache;
-    }
 
     public function all()
     {
-        $settings = $this->settings ?? $this->cache->get($this->key);
-
-        if (true || !$settings) {
-            $settings = [];
-
-            Setting::all()->each(function ($setting) use (&$settings) {
-                $tag = $setting['tag'] ?? 'default';
-                $settings[$tag][$setting['key']] = $setting['value'];
-            });
-            $settings = collect($settings);
-
-            $this->cache->put($this->key, $settings);
-            $this->settings = $settings;
-        }
-
-        return $settings;
+        $settings = [];
+        Setting::all()->each(function ($setting) use (&$settings) {
+            $tag = $setting['tag'] ?? 'default';
+            $settings[$tag][$setting['key']] = $setting['value'];
+        });
+        return $this->settings ?? $this->settings = collect($settings);
     }
 
     public function get($key, $tag = 'default', $default = '')
@@ -73,14 +53,13 @@ class SettingsRepository implements ContractsSettingRepository
 
         $query->$method(compact('key', 'value', 'tag'));
 
-        return $this->cache->put($this->key, collect($settings));
+        return true;
     }
 
     public function delete($key, $tag = 'default')
     {
         Setting::where([['key', $key], ['tag', $tag]])->delete();
         $settings = $this->all()->toArray();
-        Arr::pull($settings, $tag.'.'.$key);
-        return $this->cache->put($this->key, collect($settings));
+        return Arr::pull($settings, $tag.'.'.$key);
     }
 }

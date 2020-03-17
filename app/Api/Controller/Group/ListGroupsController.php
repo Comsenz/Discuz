@@ -10,6 +10,7 @@ namespace App\Api\Controller\Group;
 use App\Api\Serializer\GroupSerializer;
 use App\Models\Group;
 use Discuz\Api\Controller\AbstractListController;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -35,8 +36,15 @@ class ListGroupsController extends AbstractListController
 
         $include = $this->extractInclude($request);
 
-        return Group::when($isDefault, function ($query, $isDefault) {
+        $groups = Group::when($isDefault, function ($query, $isDefault) {
             return $query->where('default', $isDefault);
-        })->where('id', '<>', Group::UNPAID)->get()->load($include);
+        })->where('id', '<>', Group::UNPAID);
+
+        // 判断如果是邀请页使用数据 则 不返回游客
+        if (Arr::get($request->getQueryParams(), 'type') == 'invite') {
+            $groups->whereNotIn('id', [7]);
+        }
+
+        return $groups->get()->load($include);
     }
 }

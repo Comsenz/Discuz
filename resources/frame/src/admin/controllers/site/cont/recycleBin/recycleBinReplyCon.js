@@ -210,7 +210,6 @@ export default {
               type: 'posts',
               id: item._data.id,
               attributes: {
-                isApproved: 0,
                 isDeleted: true,
                 message: '',
               }
