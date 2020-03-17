@@ -302,7 +302,8 @@ export default {
         });
       } else if (!selectStatus) {
         this.appFetch({
-          url: 'threads/batch',
+          url: 'threads',
+          splice: '/batch',
           method: 'patch',
           data: { data: themeData }
         }).then(res => {

@@ -321,7 +321,7 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          console.log(res,'审核的数据');
+          // console.log(res,'审核的数据');
           this.themeList = [];
           this.submitForm = [];
           this.themeList = res.readdata;

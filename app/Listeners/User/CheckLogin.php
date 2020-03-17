@@ -43,8 +43,8 @@ class CheckLogin
         $request = $this->app->make(ServerRequestInterface::class);
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
 
-        $userLoginFailCount = $this->userLoginFailLog->getDataByIp($ip);
-        $maxTime = $this->userLoginFailLog->getLastFailTime($ip);
+        $userLoginFailCount = $this->userLoginFailLog->getCount($ip, $event->user->username);
+        $maxTime = $this->userLoginFailLog->getLastFailTime($ip, $event->user->username);
 
         //set current count
         ++$userLoginFailCount;

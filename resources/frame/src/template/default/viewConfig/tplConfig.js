@@ -313,9 +313,25 @@ export default {
           title: "微信注册绑定账号"
         }
       },
-      'sign-up': {
-        comLoad: function (resolve) {
-          require(['../view/m_site/login/signUpView'], resolve)
+       'welink-login-bd':{
+            comLoad:function (resolve) {
+                require(['../view/m_site/login/welinkLoginBdView'],resolve)
+            },
+            metaInfo:{
+                title:"WeLink登录绑定账号"
+            }
+        },
+      'welink-sign-up-bd':{
+          comLoad:function (resolve) {
+              require(['../view/m_site/login/welinkSignUpBdView'],resolve)
+          },
+          metaInfo:{
+              title:"WeLink注册绑定账号"
+          }
+      },
+      'sign-up':{
+        comLoad:function (resolve) {
+          require(['../view/m_site/login/signUpView'],resolve)
         },
         metaInfo: {
           title: "注册账号"
@@ -596,10 +612,13 @@ export default {
    * @param  {Function} next [description]
    * @return {[type]}        [description]
    */
-  beforeEnter: function (to, form, next) {
-    //判断设备
-    let isWeixin = appCommonH.isWeixin().isWeixin;
-    let isPhone = appCommonH.isWeixin().isPhone;
+
+  beforeEnter: function(to, form, next) {
+  //判断设备
+  let isWeixin = appCommonH.isWeixin().isWeixin;
+  let isPhone = appCommonH.isWeixin().isPhone;
+  let isWeLink = appCommonH.isWeLink().isWeLink;
+
 
     /*
     * 登录且付费不能访问的页面列表
@@ -625,6 +644,15 @@ export default {
       'sign-up',
       'retrieve-pwd'
     ];
+
+
+  //公开模式下不能访问的页面
+  const publicNotAccessPage = [
+    // 'pay-the-fee',
+    'pay-circle-con/:themeId/:groupId',
+    // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
+    // 'pay-status',
+  ];
 
 
     /*
@@ -661,15 +689,6 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page'
-    ];
-
-
-    //公开模式下不能访问的页面
-    const publicNotAccessPage = [
-      // 'pay-the-fee',
-      'pay-circle-con/:themeId/:groupId',
-      // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
-      // 'pay-status',
     ];
 
 
@@ -714,6 +733,7 @@ export default {
 
             }
           }
+          
         } else {
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
@@ -819,7 +839,7 @@ export default {
 
           // this.getForum().then(res => {
 
-          if (res.readdata._data.passport.offiaccount_close === '1') {
+          if (res.readdata._data.passport.offiaccount_close == true) {
             /*判断登录设备*/
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
@@ -831,16 +851,13 @@ export default {
                   }
                 }
               }
-
               // console.log('wx：' + res);
-
               // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
               } else {
                 next({ path: '/wx-sign-up-bd' });
               }
-
               //微信
             } else {
               if (notLoggedInToAccessPage.includes(to.name)) {
@@ -870,12 +887,13 @@ export default {
                     next();
                     return
                   }
-                  next('/')
+                  next();
                 }
               }
             }
-          } else {
-            if (notLoggedInToAccessPage.includes(to.name)) {
+
+          }else {
+            if (notLoggedInToAccessPage.includes(to.name)){
               /*符合，未登录可以访问站点*/
               /*判断站点模式*/
               if (res.readdata._data.set_site.site_mode === 'public') {
@@ -898,21 +916,15 @@ export default {
                 }
                 next({ path: 'pay-circle' });
               } else {
-                if (to.name === '/') {
+                if (to.name === 'circle') {
                   next();
                   return
                 }
-                next('/')
+                next()
               }
             }
           }
-
-
-          // })
-
         }
-
-
       });
     }
 
@@ -987,8 +999,15 @@ export default {
       method: 'get',
       data: {}
     }).then(res => {
-      browserDb.setLItem('siteInfo', res.readdata);
-      return res;
+      if (res.errors) {
+        if(res.rawData[0].code == 'not_install'){
+          window.location.href = res.rawData[0].detail.installUrl;
+        }
+      } else {
+        browserDb.setLItem('siteInfo', res.readdata);
+        return res;
+      } 
+     
     }).catch(err => {
     })
   },

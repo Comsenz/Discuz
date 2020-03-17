@@ -10,6 +10,7 @@ export default {
     return {
       checked:[],
       disabled:false,  //是否可以开启验证码
+      videoDisabled: false,
     }
   },
   methods:{
@@ -23,6 +24,9 @@ export default {
         }else {
           if(res.readdata._data.qcloud.qcloud_captcha == false){
             this.disabled = true
+          }
+          if(res.readdata._data.qcloud.qcloud_vod == false){
+            this.videoDisabled = true
           }
         }
       })

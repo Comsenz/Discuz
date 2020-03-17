@@ -44,7 +44,7 @@ export default {
           cancelButtonText: '取消',
           inputPlaceholder:'请输入否决原因'
         }).then((value)=>{
-          console.log(value);
+          // console.log(value);
           this.editUser(id,3,value.value)
         }).catch((err) => {
         });
@@ -118,7 +118,7 @@ export default {
           'page[size]':10,
         }
       }).then(res=>{
-        console.log(res);
+        // console.log(res);
         this.total = res.meta.total;
         this.pageCount = res.meta.pageCount;
         this.tableData = res.readdata;

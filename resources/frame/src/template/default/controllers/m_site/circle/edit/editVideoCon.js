@@ -347,7 +347,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          console.log(res,'resssss');
+          // console.log(res,'resssss');
           this.oldCateId = res.readdata.category._data.id;
           this.selectSort = res.readdata.category._data.name;
           this.content = res.readdata.firstPost._data.content;
@@ -376,6 +376,7 @@ export default {
         this.$toast.fail('上传视频不能为空');
         return false;
       }
+      this.loading = true;
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
@@ -427,8 +428,9 @@ export default {
         },
       }).then((res)=>{
         if (res.errors){
+          this.loading = false;
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error);   
         } else {
           this.$router.replace({ path:'/details'+'/'+this.themeId});
         }

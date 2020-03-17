@@ -26,12 +26,14 @@ class UserLoginFailLogRepository extends AbstractRepository
     /**
      * Get user fail login log num limit 5 by ip.
      * @param $ip
-     * @return
+     * @param $username
+     * @return mixed
      */
-    public function getDataByIp($ip)
+    public function getCount($ip, $username)
     {
         return $this->query()
             ->where(['ip'=>$ip])
+            ->where(['username'=>$username])
             ->sum('count');
     }
 
@@ -39,12 +41,14 @@ class UserLoginFailLogRepository extends AbstractRepository
      * Get user last login time.
      *
      * @param $ip
+     * @param $username
      * @return string
      */
-    public function getLastFailTime($ip)
+    public function getLastFailTime($ip, $username)
     {
         return $this->query()
             ->where(['ip'=>$ip])
+            ->where(['username'=>$username])
             ->max('updated_at');
     }
 }

@@ -117,7 +117,7 @@ export default {
               this.siteExpire = '有效期自加入起' + day + '天';
               break;
           }
-          if (res.readdata._data.paycenter.wxpay_close === '1') {
+          if (res.readdata._data.paycenter.wxpay_close == true) {
             this.payList.unshift({
               name: '微信支付',
               icon: 'icon-wxpay'

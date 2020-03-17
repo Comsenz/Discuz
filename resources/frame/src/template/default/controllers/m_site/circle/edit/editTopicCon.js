@@ -241,7 +241,8 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
-      console.log(this.attriAttachment,'上传的文件');
+      this.loading = true;
+      // console.log(this.attriAttachment,'上传的文件');
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
@@ -290,6 +291,7 @@ export default {
         },
       }).then((res)=>{
         if (res.errors){
+          this.loading = false;
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {

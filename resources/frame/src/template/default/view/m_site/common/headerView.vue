@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="headeGap" v-if="!searchIconShow && !menuIconShow"></div>
+      <div class="headeGap" v-if="!searchIconShow && !menuIconShow && !followShow"></div>
       <div class="headOpe" v-if="searchIconShow || menuIconShow">
         <!-- <span class="icon iconfont icon-search" v-show="backIconShow"></span> -->
         <span class="icon iconfont icon-search" @click="searchJump" v-show="searchIconShow"></span>
