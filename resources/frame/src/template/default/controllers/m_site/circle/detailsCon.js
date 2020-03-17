@@ -137,8 +137,6 @@ export default {
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    // alert('是否是Android：'+isAndroid);
-    // alert('是否是iOS：'+isiOS);
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.getInfo();
@@ -158,10 +156,6 @@ export default {
       this.$router.go(0);
       browserDb.setSItem('beforeState', 2);
     }
-
-    // if(!this.wxpay){
-    //   this.twoChi = true;
-    // }
   },
 
   computed: {
@@ -210,7 +204,6 @@ export default {
       this.likeTipFlag = this.likeTipShow ? '展开' : '收起';
       this.hideStyle = this.likeTipShow ? '' : 'display:none';
       document.getElementById('likedUserList').innerHTML = this.userArr(this.themeCon.firstPost.likedUsers, true);
-      // this.userArrStatus = true;
     },
     rewardIsFold(allLen) {
       this.rewardTipShow = !this.rewardTipShow;
@@ -220,12 +213,8 @@ export default {
     //设置底部在pc里的宽度
     limitWidth(limitId) {
       let viewportWidth = window.innerWidth;
-      // if(limitId){
       document.getElementById(limitId).style.width = "640px";
       document.getElementById(limitId).style.marginLeft = (viewportWidth - 640) / 2 + 'px';
-      // }
-      // document.getElementById('detailsFooter').style.width = "640px";
-      // document.getElementById('detailsFooter').style.marginLeft = (viewportWidth - 640)/2+'px';
     },
     getInfo() {
       //请求站点信息，用于判断站点是否是付费站点
@@ -256,7 +245,7 @@ export default {
             //   //判断站点信息是否付费，用户是否登录，用户是否已支付
             this.detailIf(this.isPayVal, false);
           }
-          if (res.readdata._data.paycenter.wxpay_close === '1') {
+          if (res.readdata._data.paycenter.wxpay_close == true ) {
             this.payList.unshift({
               name: '微信支付',
               icon: 'icon-wxpay'
@@ -343,10 +332,8 @@ export default {
           throw new Error(res.error)
         } else {
           this.likeLen = res.readdata.firstPost.likedUsers.length;
-          // document.getElementById('likedUserList').innerHTML = this.userArr(res.readdata.firstPost.likedUsers,false);
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
-            // this.themeCon.posts = [];
             this.collectStatus = res.readdata._data.isFavorite;
             this.essenceStatus = res.readdata._data.isEssence;
             this.stickyStatus = res.readdata._data.isSticky;
@@ -359,10 +346,6 @@ export default {
             } else {
               this.contentExamine = false;
             }
-            // if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
-            //   this.contentExamine = true;
-            //   this.examineWord = '内容正在审核中，审核通过后才能正常显示！';
-            // }
             if (res.readdata._data.type == 1) {
               this.themeTitle = res.readdata._data.title;
             } else if (res.readdata._data.type == 0) {
@@ -438,24 +421,7 @@ export default {
     //主题详情图片放大轮播
     imageSwiper(imgIndex, typeclick, replyItem) {
       if (typeclick == 'detailImg') {
-        //主题详情图片预览
-        // ImagePreview({
-        //   images:this.firstpostImageList,
-        //   startPosition:imgIndex,    //图片预览起始位置索引 默认 0
-        //   showIndex: true,    //是否显示页码         默认 true
-        //   showIndicators: true, //是否显示轮播指示器 默认 false
-        //   loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
-        //   closeOnPopstate: true
-        // asyncClose: true,
-        // onChange:function(){
-        // },
-        // onClose:function (url) {
-        // }
-        // onClose:function (url) {  //回调参数,官方文档解释的不是很清楚。。。
-        //   //回调参数类型 url:{ index:Number(当前图片的索引值), url:当前图片的URL }
-        //   var num = url.index, url_link = url.url;
-        // }
-        // })
+        //当点击详情页内容图片时
       } else if (typeclick == 'replyImg') {
         //主题回复图片预览
         ImagePreview({
@@ -495,10 +461,6 @@ export default {
       }
       return s;
     },
-    //主题详情图片放大轮播index值监听
-    // onChange(index) {
-    //   this.index = index + 1;
-    // },
     //分享，复制浏览器地址
     shareTheme() {
       let Url = '';
@@ -537,12 +499,7 @@ export default {
     //跳转到登录页
     loginJump: function () {
       browserDb.setSItem('beforeVisiting', this.$route.path);
-      // this.$router.push({
-      //   path: '/login-user'
-      // });
-
       this.$router.replace({ path: '/login-user' });
-
       browserDb.setLItem('themeId', this.themeId);
     },
     //跳转到注册页
@@ -554,14 +511,7 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet: function (id) {
-      //   if(!this.token){
-      //     this.$router.push({
-      //       path:'/login-user',
-      //       name:'login-user'
-      //     })
-      //   } else {
       this.$router.push({ path: '/home-page' + '/' + id });
-      // }
     },
 
     //主题管理
@@ -615,7 +565,6 @@ export default {
           content = '';
           this.themeOpeRequest(attri, cateId, '4');
         } else {
-          // content = content
           //跳转到编辑页页
           if (this.type == 1) {
             this.$router.replace({
@@ -719,7 +668,6 @@ export default {
           this.$toast.success('删除成功');
           this.pageIndex = 1;
           this.postsList.splice(postIndex, 1);
-          // this.detailsLoad(true);
         }
       })
     },
@@ -792,20 +740,6 @@ export default {
         })
       } else {
         let attri = new Object();
-        // if (type == 2) {
-        //   if(!postsCanLike){
-        //     this.$toast.fail('没有权限，请联系站点管理员');
-        //     return false;
-        //   } else {
-        //     if (isLike) {
-        //       //如果已点赞
-        //       attri.isLiked = false;
-        //     } else {
-        //       //如果未点赞
-        //       attri.isLiked = true;
-        //     }
-        //   }
-        // } else
         if (type == 3) {
           if (!this.canLike) {
             this.$toast.fail('没有权限，请联系站点管理员');
@@ -842,11 +776,6 @@ export default {
                 value._data.id === this.userId && likedUsers.splice(key, 1);
               });
               this.likeLen = this.likeLen - 1;
-              // for(var i = 0; i < this.likedUsers.length; i++){
-              //   if(this.likedUsers[i]._data.id === this.userId){
-              //       this.likedUsers.splice(i,1);
-              //   }
-              // }
               this.userArr(this.likedUsers);
               this.themeCon.firstPost._data.isLiked = false;
               this.themeIsLiked = false;
@@ -879,7 +808,6 @@ export default {
         } else {
           this.rewardShow = true;
           if (this.isWeixin != true && this.isPhone != true && this.rewardShow) {
-            // this.limitWidth('rewardPopup');
           }
         }
 
@@ -923,20 +851,6 @@ export default {
           that.payLoading = false;
           resolve;
         }
-
-        /*if (res.err_msg == "get_brand_wcpay_request:ok") {
-          alert("支付成功");
-          alert(res.err_msg);
-          resolve;
-        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-          alert("支付过程中用户取消");             //支付取消正常走
-          alert(res.err_msg);
-          resolve;
-        } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-          alert("支付失败");
-          alert(res.err_msg);
-          resolve;
-        }*/
 
       })
 
@@ -1091,8 +1005,6 @@ export default {
         data: {
         },
       }).then(res => {
-
-        // const orderStatus = res.readdata._data.status;
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -1106,12 +1018,11 @@ export default {
           if (this.payStatus == '1' || this.payStatusNum > 10) {
             this.rewardShow = false;
             this.qrcodeShow = false;
+            this.payLoading = false;
             this.show = false;
             if (this.payStatus == '1') {
               this.rewardedUsers.unshift({ _data: { avatarUrl: this.currentUserAvatarUrl, id: this.userId } });
-              this.payLoading = false;
               this.$toast.success('支付成功');
-              // this.themeCon.rewardedUsers.length = this.themeCon.rewardedUsers.length + 1;
             }
             this.payStatusNum = 11;
           }
