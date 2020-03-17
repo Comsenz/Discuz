@@ -42,7 +42,7 @@
       <div class="loginOpera">
         <a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
         <a href="javascript:;" @click="registerJump" class="regiJoin" v-if="allowRegister">接受邀请，注册</a>
-        <p class="payMoney">￥{{siteInfo._data.set_site.site_price}} / 永久有效</p>
+        <p v-if="siteInfo._data.set_site.site_price" class="payMoney">￥{{siteInfo._data.set_site.site_price}} / 永久有效</p>
       </div>
 	</van-pull-refresh>
     </div>
@@ -52,7 +52,9 @@
 import Header from '../../m_site/common/headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteCircleManageInviteCon from '../../../controllers/m_site/circle/circleManageInviteCon';
-// import '../../../scss/m_site/mobileIndex.scss';
+import '../../../defaultLess/m_site/common/common.less';
+import '../../../defaultLess/m_site/modules/circle.less';
+import '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "circleInviteView",
     components:{

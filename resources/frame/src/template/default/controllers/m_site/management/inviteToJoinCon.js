@@ -154,11 +154,12 @@ export default {
       if (inviteItem._data.status === 0) {
         return;
       }
+      console.log(inviteItem._data.code,'1223444');
       var textarea = document.createElement('textarea');
       textarea.style.position = 'absolute';
       textarea.style.opacity = '0';
       textarea.style.height = '0';
-      textarea.textContent = `${appConfig.baseUrl}?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
+      textarea.textContent = `${appConfig.baseUrl}circle-manage-invite?code=${inviteItem._data.code}&group_id=${inviteItem._data.group_id}`;
       this.$toast.success('邀请链接已复制成功');
       document.body.appendChild(textarea);
       textarea.select(textarea, '链接链接');
