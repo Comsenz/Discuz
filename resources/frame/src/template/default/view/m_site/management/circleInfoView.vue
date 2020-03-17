@@ -65,7 +65,7 @@
           	<div class="powerTit">作为{{limitList._data.name}}，您将获得以下权限</div>
           	<div class="powerList">
           		<div class="powerClassify">权限列表</div>
-              <div class="" v-for="(limit,index) in limitList.permission">
+              <div class="" v-for="(limit) in limitList.permission" :key="limit">
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'viewThreads'">查看主题列表<i class="iconfont icon-selected"></i></p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'thread.viewPosts'">查看主题<i class="iconfont icon-selected"></i></p>
                 <p class="powerChi" v-if="limit._data.permission && limit._data.permission == 'createThread'">发表主题<i class="iconfont icon-selected"></i></p>

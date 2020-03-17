@@ -58,6 +58,10 @@ Vue.use(VueLazyload, {
 });
 Vue.prototype.$utils = utils; //注册全局方法
 Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
+let app = {};
+
+app.bus = new Vue(); //后台财务统计echarts图标
+
 // Vue.use(tacptcha)
 //实例化根目录
 // const appRouter = RConfig.init();
@@ -68,7 +72,6 @@ Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
 //   	template: '<router-view></router-view>'
 // }).$mount('#app');
 
-window.app = App;//实例化根目录
 const appRouter = RConfig.init();
 
 const keepAliveUrl = ['circle'];
@@ -96,7 +99,10 @@ const App = new Vue({
     }
   },
   created(){
-    this.siteInfoStat = browserDb.getLItem('siteInfo')._data.set_site.site_stat;
+    app.bus.$on('stat',(arg)=> {
+      // console.log('on监听参数====',arg)
+      this.siteInfoStat = arg;
+    })
   },
   watch: {
     '$route': function(to, from) {
@@ -167,4 +173,6 @@ const App = new Vue({
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
 }).$mount('#app');
-window.app = App;
+
+
+window.app = app;//实例化根目录
