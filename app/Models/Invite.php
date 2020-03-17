@@ -99,6 +99,6 @@ class Invite extends Model
 
     public function group()
     {
-        return $this->hasOne(Group::class, 'id');
+        return $this->belongsTo(Group::class);
     }
 }
