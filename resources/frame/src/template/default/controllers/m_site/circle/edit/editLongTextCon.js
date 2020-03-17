@@ -292,6 +292,7 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
+      this.loading = true;
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
@@ -316,6 +317,7 @@ export default {
           },
         }).then((res)=>{
           if (res.errors){
+            this.loading = false;
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
@@ -343,10 +345,10 @@ export default {
         },
       }).then((res)=>{
         if (res.errors){
+          this.loading = false;
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.loading = true;
           this.$router.replace({ path:'/details'+'/'+this.themeId});
         }
       })

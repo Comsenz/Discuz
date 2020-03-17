@@ -820,7 +820,7 @@ export default {
 
           // this.getForum().then(res => {
 
-          if (res.readdata._data.passport.offiaccount_close === '1') {
+          if (res.readdata._data.passport.offiaccount_close == true) {
             /*判断登录设备*/
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/

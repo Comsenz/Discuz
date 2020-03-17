@@ -404,6 +404,7 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
+      this.loading = true;
       var posts = '';
       var methodType = '';
       var  dataCon = '';
@@ -479,6 +480,7 @@ export default {
         
       }).then(res =>{
         if (res.errors){
+          this.loading = false;
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
