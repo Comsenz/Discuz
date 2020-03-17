@@ -144,14 +144,14 @@ class UserValidator extends AbstractValidator
             $rules['captcha'] = [
                 'sometimes',
                 function ($attribute, $value, $fail) {
-                    if (count($value) != 3) {
-                        $fail('验证码错误。');
-                    }
+                    if (count(array_filter($value)) == 3) {
+                        $result = $this->describeCaptchaResult(...$value);
 
-                    $result = $this->describeCaptchaResult(...$value);
-
-                    if ($result['CaptchaCode'] != 1) {
-                        $fail('验证码错误。');
+                        if ($result['CaptchaCode'] != 1) {
+                            $fail(trans('validation.wrong') . "({$result['CaptchaCode']})");
+                        }
+                    } else {
+                        $fail(trans('validation.wrong'));
                     }
                 },
             ];

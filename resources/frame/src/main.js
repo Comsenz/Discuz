@@ -19,6 +19,7 @@ import './extend/viewBase/elementuiInit'; //引入element组件
 import Echarts from 'echarts'; //引入Echarts
 
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
+// import '../../frame/src/template/default/controllers/m_site/common/tcaptcha'; //引入腾讯验证码
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
@@ -48,7 +49,7 @@ import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
 import axios from 'axios';
 Vue.prototype.axios = axios;
 Vue.prototype.$moment = moment;//时间转换-赋值使用
-Vue.config.devtools = true;
+Vue.config.devtools = false;
 moment.locale('zh-cn');//时间转换-需要汉化
 
 Vue.use(VueLazyload, {
@@ -56,8 +57,8 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
-Vue.prototype.$echarts = Echarts; //
-
+Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
+// Vue.use(tacptcha)
 //实例化根目录
 // const appRouter = RConfig.init();
 // const App = new Vue({

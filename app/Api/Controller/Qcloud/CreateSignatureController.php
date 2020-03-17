@@ -18,6 +18,7 @@ use Tobscure\JsonApi\Document;
 class CreateSignatureController extends AbstractCreateController
 {
     public $serializer = SignatureSerializer::class;
+
     /**
      * @var Dispatcher
      */
@@ -42,6 +43,5 @@ class CreateSignatureController extends AbstractCreateController
         return $this->bus->dispatch(
             new CreateSignature($actor, $data)
         );
-
     }
 }

@@ -112,7 +112,7 @@ export default {
           this.loadStatus();
         }
       }).catch(error=>{
-        cthis.$message.error('修改失败');
+        this.$message.error('修改失败');
       })
     }
   }

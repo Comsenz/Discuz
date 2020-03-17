@@ -52,6 +52,4 @@ class DialogSerializer extends AbstractSerializer
     {
         return $this->hasOne($model, DialogMessageSerializer::class);
     }
-
-
 }

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Illuminate\Database\Seeder;
 use App\Models\Category;
 
@@ -18,6 +23,5 @@ class CategoriesTableSeeder extends Seeder
         $category->description = '默认分类';
         $category->ip = '127.0.0.1';
         $category->save();
-
     }
 }

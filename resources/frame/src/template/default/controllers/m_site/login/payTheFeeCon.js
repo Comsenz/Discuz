@@ -153,10 +153,10 @@ export default {
           // alert('支付唤醒');
 
           if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            this.payLoading = false;
+            that.payLoading = false;
             resolve;
           } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            this.payLoading = false;
+            that.payLoading = false;
             resolve;
           }
 
@@ -253,7 +253,7 @@ export default {
               this.siteExpire = '有效期自加入起' + day + '天';
               break;
           }
-          if (res.readdata._data.paycenter.wxpay_close === '1'){
+          if (res.readdata._data.paycenter.wxpay_close == true){
             this.payList.unshift( {
               name:'微信支付',
               icon:'icon-wxpay'

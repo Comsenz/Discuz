@@ -60,7 +60,7 @@ export default {
           method: 'get',
           data: {
             'filter[userId]':this.userId,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit,
             'filter[isDeleted]':'no'

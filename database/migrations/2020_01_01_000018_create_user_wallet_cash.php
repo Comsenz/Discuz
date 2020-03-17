@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -13,7 +18,7 @@ class CreateUserWalletCash extends Migration
     public function up()
     {
         $this->schema()->create('user_wallet_cash', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('提现 id');
+            $table->id()->comment('提现 id');
             $table->unsignedBigInteger('user_id')->comment('提现用户 id');
             $table->unsignedBigInteger('cash_sn')->comment('提现交易编号');
             $table->unsignedDecimal('cash_charge', 10, 2)->comment('提现手续费');

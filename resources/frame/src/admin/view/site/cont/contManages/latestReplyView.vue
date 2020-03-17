@@ -42,7 +42,8 @@
           <ContArrange
             v-for="(items,index) in  themeList"
             :replyBy="!items.user?'该用户被删除':items.user._data.username"
-            :themeName="items.thread._data.isLongArticle?items.thread._data.title:items.thread.firstPost._data.content"
+            :themeName="items.thread._data.type === 1?items.thread._data.title:items.thread.firstPost._data.content"
+            :titleIcon="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'"
             :finalPost="formatDate(items._data.updatedAt)"
             :userId="!items.user?'该用户被删除':items.user._data.id"
             :key="items._data.id"
@@ -95,7 +96,7 @@
       </div>
 
       <div class="latest-reply-footer">
-        <el-button size="small" type="primary" @click="deleteAllClick">全部删除</el-button>
+        <el-button size="small" type="primary" @click="deleteAllClick">提交</el-button>
       </div>
     </div>
 </template>

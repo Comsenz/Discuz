@@ -62,7 +62,7 @@ export default {
             method: 'get',
             //   data:this.userParams
             data: {
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
+              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
               'filter[q]': this.searchVal.trim(),
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit

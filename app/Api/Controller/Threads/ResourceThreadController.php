@@ -52,6 +52,7 @@ class ResourceThreadController extends AbstractResourceController
         'firstPost.attachments',
         'posts',
         'posts.user',
+        'posts.replyUser',
         'posts.thread',
         'posts.images',
     ];
@@ -93,7 +94,7 @@ class ResourceThreadController extends AbstractResourceController
         $this->assertCan($actor, 'viewPosts', $thread);
 
         // 付费主题对未付费用户只展示部分内容
-        if ($thread->price > 0 && in_array('firstPost', $include)) {
+        if ($thread->price > 0 && (in_array('firstPost', $include) || in_array('threadVideo', $include))) {
             // 是否付费
             if ($thread->user_id == $actor->id || $actor->isAdmin()) {
                 $paid = true;
@@ -107,12 +108,23 @@ class ResourceThreadController extends AbstractResourceController
 
             $thread->setAttribute('paid', $paid);
 
-            // 截取内容、隐藏图片及附件
-            if (! $paid) {
-                // $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
-                $thread->firstPost->content = '';
+            // 长文隐藏正文，其他截取内容显示200。隐藏图片及附件
+            if (in_array('firstPost', $include) && !$paid) {
+                if ($thread->type == 1) {
+                    $thread->firstPost->content = '';
+                } else {
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                }
                 $thread->firstPost->setRelation('images', collect());
                 $thread->firstPost->setRelation('attachments', collect());
+            }
+
+            // 付费视频，未付费时，隐藏视频
+            if (in_array('threadVideo', $include) && $thread->type == 2 && !$paid) {
+                if ($thread->threadVideo) {
+                    $thread->threadVideo->file_id = '';
+                    $thread->threadVideo->media_url = '';
+                }
             }
         }
 

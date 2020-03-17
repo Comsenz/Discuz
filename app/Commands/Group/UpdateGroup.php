@@ -8,7 +8,6 @@
 namespace App\Commands\Group;
 
 use App\Events\Group\Saving;
-use App\Models\Group;
 use App\Repositories\GroupRepository;
 use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;

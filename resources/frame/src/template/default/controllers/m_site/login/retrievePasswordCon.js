@@ -182,7 +182,7 @@ export default {
         method:"get",
         splice:'/' + this.tokenId
       }).then(res=>{
-        console.log(res);
+        // console.log(res);
         if (res.errors){
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

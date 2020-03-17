@@ -37,7 +37,8 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
-        'createThreadVideo' => [10],            // 发布视频主题
+        'createThreadVideo' => [],            // 发布视频主题
+        'createThreadLong' => [10],             // 发布长文主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
 
         // 回复
@@ -91,7 +92,7 @@ class GroupPermissionTableSeeder extends Seeder
         'dialog.message.create' => [],         // 创建会话消息
 
         // 关注
-        'userFollow.create' => [],             // 创建关注
+        'userFollow.create' => [10],             // 创建关注
     ];
 
     /**

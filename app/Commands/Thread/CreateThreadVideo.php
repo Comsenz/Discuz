@@ -7,14 +7,13 @@
 
 namespace App\Commands\Thread;
 
-use App\Censor\Censor;
-use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
+use App\Repositories\ThreadRepository;
+use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
+use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 
@@ -22,6 +21,9 @@ class CreateThreadVideo
 {
     use AssertPermissionTrait;
     use EventsDispatchTrait;
+    use QcloudTrait;
+
+    const API_URL = 'vod.tencentcloudapi.com';
 
     /**
      * The user performing the action.
@@ -59,28 +61,28 @@ class CreateThreadVideo
 
     /**
      * @param EventDispatcher $events
-     * @param BusDispatcher $bus
-     * @param Censor $censor
-     * @param Thread $thread
+     * @param SettingsRepository $settings
+     * @param ThreadRepository $thread
      * @param ThreadVideo $threadVideo
      * @return ThreadVideo
-     * @throws PermissionDeniedException
      */
-    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadVideo $threadVideo)
+    public function handle(EventDispatcher $events, SettingsRepository $settings, ThreadRepository $thread, ThreadVideo $threadVideo)
     {
         $this->events = $events;
 
         $thread = $thread->findOrFail($this->threadId);
 
-        $this->assertCan($this->actor, 'createThreadVideo');
-
-        $threadVideo->user_id = $this->actor->id;
+        $threadVideo->user_id   = $this->actor->id;
         $threadVideo->thread_id = $thread->id;
+        $threadVideo->status    = $threadVideo::VIDEO_STATUS_TRANSCODING;
+        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name');
         $threadVideo->file_id   = Arr::get($this->data, 'attributes.file_id');
-        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url');
-        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url');
+        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url')?:'';
+        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url')?:'';
 
         $threadVideo->save();
+        //腾讯云点播转码
+        $this->transcodeVideo($threadVideo->file_id);
 
         return $threadVideo;
     }

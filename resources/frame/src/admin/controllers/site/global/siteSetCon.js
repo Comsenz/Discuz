@@ -85,7 +85,7 @@ export default {
           this.siteAuthorScale = data.readdata._data.set_site.site_author_scale;
           this.siteMasterScale = data.readdata._data.set_site.site_master_scale;
           // this.siteLogoFile = data.readdata._data.siteLogoFile;
-          this.siteRecord = data.readdata._data.set_site.site_icp;
+          this.siteRecord = data.readdata._data.set_site.site_record;
           this.siteStat = data.readdata._data.set_site.site_stat;
           this.siteClose = data.readdata._data.set_site.site_close;
           this.siteMasterId = data.readdata._data.set_site.site_author.id;

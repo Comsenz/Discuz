@@ -15,7 +15,7 @@
           </el-table-column>
 
           <el-table-column
-            prop="_data.title"
+            prop="_data.type_name"
             label="通知类型"
           >
           </el-table-column>
@@ -40,7 +40,7 @@
               <div v-if="scope.row._data.status == 1">
                 <el-button
                   size="mini"
-                  @click="configClick(scope.row._data.id)">
+                  @click="configClick(scope.row._data.id,scope.row._data.type_name)">
                   配置
                 </el-button>
 

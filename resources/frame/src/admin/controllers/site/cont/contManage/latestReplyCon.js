@@ -81,6 +81,14 @@ export default {
       this.isIndeterminate = false;
     },
 
+    handleCheckedCitiesChange(index, id, status) {
+
+      let checkedCount = this.checkedTheme.length;
+      this.checkAll = checkedCount === this.themeListAll.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.themeListAll.length;
+
+    },
+
     handleCurrentChange(val){
       document.getElementsByClassName('index-main-con__main')[0].scrollTop = 0;
       this.isIndeterminate = false;
@@ -90,12 +98,25 @@ export default {
     },
 
     deleteAllClick(){
-      let deleList = [];
+      /*let deleList = [];
       this.themeList.forEach((item,index)=>{
         deleList.push(item._data.id)
+      });*/
+
+      let data = []
+
+      this.checkedTheme.forEach((item)=>{
+        data.push(
+          {
+            "id": item,
+            "attributes": {
+              "isDeleted": true
+            }
+          },
+        )
       });
 
-      this.deletedPostsBatch(deleList.join(','))
+      this.deletedPostsBatch(data)
     },
 
     imgShowClick(list,imgIndex){
@@ -182,18 +203,26 @@ export default {
     },
     deletedPostsBatch(data){
       this.appFetch({
-        url:'postBatch',
-        method:'delete',
-        splice:data,
+        url:'postsBatch',
+        method:'PATCH',
+        data:{
+          data:data
+        }
       }).then(res=>{
-        if (res.errors){
-          this.$message.error(res.errors[0].code);
+        if (res.meta){
+          res.meta.forEach((item,index)=>{
+            setTimeout(()=>{
+              this.$message.error(item.code)
+            },(index+1) * 500);
+          });
         }else {
           this.getPostsList(Number(webDb.getLItem('currentPag')) || 1);
           this.$message({
             message: '操作成功',
             type: 'success'
           });
+          this.isIndeterminate = false;
+          this.checkAll = false;
         }
       }).catch(err=>{
         console.log(err);
@@ -201,9 +230,16 @@ export default {
     },
     deletedPosts(id){
       this.appFetch({
-        url:'postBatch',
-        method:'delete',
-        splice:id
+        url:'posts',
+        method:'patch',
+        splice:'/'+id,
+        data:{
+          data:{
+            "attributes": {
+              "isDeleted": true
+            }
+          }
+        }
       }).then(res=>{
         if (res.errors){
           this.$message.error(res.errors[0].code);

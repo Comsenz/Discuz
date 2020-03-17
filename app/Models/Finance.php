@@ -51,5 +51,4 @@ class Finance extends Model
         'withdrawal_profit',
         'created_at',
         ];
-
 }

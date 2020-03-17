@@ -124,7 +124,7 @@ export default {
 				url:'threads',
 				method:'get',
 				data:{
-					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers'],
+					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers', 'threadVideo'],
 					'filter[isDeleted]':'no',
 					'filter[categoryId]':'',
 					'page[number]': this.pageIndex,

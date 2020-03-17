@@ -119,6 +119,8 @@ return [
     'uuid'                 => ':attribute 必须是有效的 UUID。',
 
     'session_token'        => '令牌已失效。',
+    'wrong'                => ':attribute 错误。',
+    'qcloud_vod'           => '未开启腾讯云 云点播 服务。',
 
     /*
     |--------------------------------------------------------------------------
@@ -198,11 +200,19 @@ return [
 
         // sms
         'sms_code'              => '验证码',
-        'sms_type'              => '验证码类型',
+        'sms_type' => '验证码类型',
 
         // user
-        'pay_password'          => '支付密码',
+        'pay_password' => '支付密码',
         'pay_password_confirmation' => '支付密码',
-        'groupId'               => '用户组',
+        'groupId' => '用户组',
+
+        // thread
+        'file_id' => '视频文件',
+        'file_name' => '视频文件名称',
+        'price' => '价格',
+        'captcha' => '验证码',
+        'type' => '类型',
+
     ],
 ];

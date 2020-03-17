@@ -10,7 +10,6 @@ namespace App\Censor;
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
-use GuzzleHttp\Psr7\Uri;
 use Illuminate\Support\Arr;
 
 class Censor

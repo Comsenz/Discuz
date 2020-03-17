@@ -91,7 +91,10 @@ export default {
                 if (beforeVisiting) {
                   this.$router.replace({path: beforeVisiting});
                   browserDb.setSItem('beforeState',1);
-                  // this.$router.go(0);
+                  setTimeout(()=>{
+                    this.$router.go(0);
+                  },800)
+
                 } else {
                   // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
                   this.$router.push({path: '/'});
@@ -112,6 +115,8 @@ export default {
         }
 
       }).catch(err => {
+        console.log(err);
+        this.btnLoading = false;
       })
 
     },

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Illuminate\Database\Seeder;
 use App\Models\NotificationTpl;
 
@@ -79,14 +84,16 @@ class NotificationTplSeeder extends Seeder
                 'content' => $this->getWechatFormat([
                     'first' => '你的注册申请审核不通过',
                     'keyword1' => '用户名：{username}',
-                    'keyword2' => '原因：{reason}',
+                    'keyword3' => '原因：{reason}',
+                    'keyword2' => '时间：{dateline}',
                     'remark' => '点击重新提交申请',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
                     '{username}' => '用户名',
-                    '{reason}' => '原因',
+                    '{dateline}' => '时间',
                     '{redirecturl}' => '跳转地址',
+                    '{reason}' => '原因',
                 ])
             ],
             [
@@ -122,9 +129,9 @@ class NotificationTplSeeder extends Seeder
                 ]),
                 'vars' => serialize([
                     '{content}' => '内容',
-                    '{reason}' => '原因',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
+                    '{reason}' => '原因',
                 ])
             ],
             [
@@ -142,9 +149,9 @@ class NotificationTplSeeder extends Seeder
                 ]),
                 'vars' => serialize([
                     '{content}' => '内容',
-                    '{reason}' => '原因',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
+                    '{reason}' => '原因',
                 ])
             ],
             [
@@ -216,9 +223,9 @@ class NotificationTplSeeder extends Seeder
                 ]),
                 'vars' => serialize([
                     '{username}' => '用户名',
-                    '{reason}' => '原因',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
+                    '{reason}' => '原因',
                 ])
             ],
             [

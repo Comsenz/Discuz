@@ -9,8 +9,6 @@ namespace App\Traits;
 
 use App\MessageTemplate\PostDeleteMessage;
 use App\MessageTemplate\PostModMessage;
-use App\MessageTemplate\PostOrderMessage;
-use App\MessageTemplate\PostStickMessage;
 use App\MessageTemplate\PostThroughMessage;
 use App\MessageTemplate\Wechat\WechatPostDeleteMessage;
 use App\MessageTemplate\Wechat\WechatPostModMessage;
@@ -83,7 +81,7 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->is_long_article ? $post->thread->title : $post->formatContent();
+        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
     }
 
     /**

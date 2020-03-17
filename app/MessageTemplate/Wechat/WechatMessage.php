@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 /**
  * 微信Post通知 - 基类
@@ -37,10 +36,16 @@ class WechatMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $threadUrl = $this->url->to('/details/' . $threadId);
+
+        // 主题ID为空时跳转到首页
+        if (empty($threadId)) {
+            $threadUrl = $this->url->to('');
+        } else {
+            $threadUrl = $this->url->to('/details/' . $threadId);
+        }
 
         return [
-            Str::words($message, 10),
+            $this->strWords($message),
             Carbon::now(),
             $threadUrl,
             Arr::get($data, 'refuse', '无'),

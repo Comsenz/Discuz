@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="postTitle">{{themeCon._data.title}}</div>
-    <div class="longTextContent" v-html="themeCon.firstPost._data.contentHtml"></div>
+    <div class="longTextContent markdown-body" v-html="themeCon.firstPost._data.contentHtml"></div>
     <!-- <div class="payTipBox" v-if="themeCon._data.price>0"> -->
     <div class="payTipBox" v-if="!themeCon._data.paid && themeCon._data.price>0">
       <p class="tipPrice">
@@ -143,6 +143,7 @@
       v-if="userDet"
       :data="payList"
       v-model="show"
+      :pwd-value="value"
       :money="themeCon._data.price"
       :balance="walletBalance"
       :walletStatus="userDet._data.canWalletPay"
@@ -162,10 +163,12 @@ import mSiteLongTextDetailsCon from "../../../../controllers/m_site/circle/detai
 import PayMethod from "../../../../view/m_site/common/pay/paymentMethodView";
 import "../../../../defaultLess/m_site/common/common.less";
 import "../../../../defaultLess/m_site/modules/circle.less";
+import markDownCss from 'github-markdown-css';
 export default {
   name: "longTextDetailsView",
   components: {
-    PayMethod
+    PayMethod,
+    markDownCss
   },
   ...mSiteLongTextDetailsCon
 };

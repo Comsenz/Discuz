@@ -7,11 +7,9 @@
 
 namespace App\MessageTemplate;
 
-use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 /**
  * 系统Post通知 - 基类
@@ -52,7 +50,7 @@ class BasePostMessage extends DatabaseMessage
 
         return [
             $this->notifiable->username,
-            '<a href="' . $threadUrl . '">' . Str::words($message, 10) . '</a>',
+            '<a href="' . $threadUrl . '">' . $this->strWords($message) . '</a>',
             Arr::get($data, 'refuse', '无')
         ];
     }

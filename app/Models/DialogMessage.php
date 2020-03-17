@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DialogMessage extends Model
 {
-
     /**
      * {@inheritdoc}
      */
@@ -48,7 +47,6 @@ class DialogMessage extends Model
      */
     protected $fillable = [];
 
-
     public function getMessageTextAttribute($value)
     {
         return static::$formatter->unparse($value);
@@ -62,7 +60,6 @@ class DialogMessage extends Model
     public function setMessageTextAttribute($value)
     {
         $this->attributes['message_text'] = $value ? static::$formatter->parse($value, $this) : null;
-
     }
 
     public function setParsedMessageTextAttribute($value)

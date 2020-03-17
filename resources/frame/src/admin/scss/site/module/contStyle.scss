@@ -27,8 +27,17 @@
     margin-top: 15PX;
   }
 }
-
-
+/*
+  转码状态颜色样式
+  */
+.transcoding_status {
+  color: #f00 !important;
+}
+.graybtn {
+  span {
+    color: #C0C4CC;
+  }
+}
 /*
   内容管理：最新主题
   */
@@ -393,7 +402,12 @@
   width: 100%;
   height: 100%;
   color: $titleColor;
-
+  .iconvideo {
+    line-height: 20PX;
+    font-size: 16PX;
+    display: inline-block;
+    vertical-align: bottom;
+  }
   .cont-review-header{
     width: 100%;
     height: 100PX;       //根据设计图算的出来的效果不一样，写了一个大概
@@ -460,7 +474,6 @@
       }
 
     }
-
   }
 
   .cont-review-table{
@@ -1006,6 +1019,10 @@
 
     &__footer{
       color: $commentColor;
+      width: 100%;
+      .transcodStatus {
+        float: right;
+      }
       div{
         display: inline-block;
       }

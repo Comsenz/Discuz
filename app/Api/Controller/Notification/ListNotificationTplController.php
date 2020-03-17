@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Api\Controller\Notification;
-
 
 use App\Api\Serializer\NotificationTplSerializer;
 use App\Models\NotificationTpl;
@@ -38,7 +41,8 @@ class ListNotificationTplController extends AbstractListController
 
         $type = Arr::get($request->getQueryParams(), 'type', 0);
 
-        $tpl = $this->tpl->where('type', $type)->get();
+        // TODO 注册审核通知有问题暂时剔除不使用
+        $tpl = $this->tpl->where('type', $type)->whereNotIn('id', [14, 15])->get();
 
         return $tpl;
     }

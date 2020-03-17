@@ -13,7 +13,7 @@
       </Card>
 
       <Card header="单次提现最小金额（元）">
-        <CardRow description="用户每次提现的最小金额">
+        <CardRow description="用户每次提现的最小金额（微信支付要求最低不能少于0.3元）">
           <el-input clearable type="number" v-model="minAmount"></el-input>
         </CardRow>
       </Card>

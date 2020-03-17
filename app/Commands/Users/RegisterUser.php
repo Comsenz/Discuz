@@ -77,7 +77,7 @@ class RegisterUser
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
 
         // 注册验证码
-        $captcha = [];
+        $captcha = '';  // 默认为空将不走验证
         if ((bool)$settings->get('register_captcha')) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),

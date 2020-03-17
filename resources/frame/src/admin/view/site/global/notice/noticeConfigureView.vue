@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card header="配置"></Card>
+    <Card :header="query.typeName"></Card>
 
     <Card header="用户角色通知标题：" v-if="query.type==='system'">
       <CardRow description="系统发送的信息标题，不支持HTML，不超过75字节">

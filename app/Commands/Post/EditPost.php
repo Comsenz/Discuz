@@ -154,7 +154,7 @@ class EditPost
             }
         }
 
-//        $post->save();
+        $post->save();
 
         $post->raise(new Saved($post, $this->actor, $this->data));
 

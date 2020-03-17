@@ -1,62 +1,61 @@
 /**
  * 移动端header控制器
  */
-import {Bus} from '../../../store/bus.js';
+import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
 export default {
-	data: function() {
+  data: function () {
     return {
-		    headBackShow: false,
-		    oneHeader: false,
-		    twoHeader: false,
-		    threeHeader: false,
-		    fourHeader: false,
-		    isfixNav: false,
-		    // isfixHead: false,
-		    isShow: false,
-		    isHeadShow: false,
-		    showHeader: false,
-	      showMask: false,
-	      title:'',
-	      // invitePerDet: false,
-	      // menuIconShow:false,
-	      // searchIconShow: false,
-		    // navShow: false,
-		    navActi:0,
-		    perDet:{
-		    	themeNum: '1222',
-		    	memberNum: '1222',
-		    	circleLeader: '站长名称'
-		    },
-        avatarUrl:'',
-        // username:'',
-        mobile:'',
-	      isfixNav: false,
-	      popupShow: false,
-        current:0,
-        userDet:[],
-        categories:[],
-        siteInfo: false,
-        username:'',
-        isPayVal:'',
-        isWeixin: false,
-        isPhone: false,
-        firstCategoriesId:'',
-        logo:false,
-        viewportWidth:'',
-        userId:'',
-        followDet:'',
-        followFlag:'',
-        intiFollowVal:'0',
-        noticeSum: 0,
-        intiFollowChangeVal: '0',
-        oldFollow: false,
-        equalId: false,
-        clickStatus: true,
-	  }
+      headBackShow: false,
+      oneHeader: false,
+      twoHeader: false,
+      threeHeader: false,
+      fourHeader: false,
+      isfixNav: false,
+      // isfixHead: false,
+      isShow: false,
+      isHeadShow: false,
+      showHeader: false,
+      showMask: false,
+      title: '',
+      // invitePerDet: false,
+      // menuIconShow:false,
+      // searchIconShow: false,
+      // navShow: false,
+      navActi: 0,
+      perDet: {
+        themeNum: '1222',
+        memberNum: '1222',
+        circleLeader: '站长名称'
+      },
+      avatarUrl: '',
+      // username:'',
+      mobile: '',
+      popupShow: false,
+      current: 0,
+      userDet: [],
+      categories: [],
+      siteInfo: false,
+      username: '',
+      isPayVal: '',
+      isWeixin: false,
+      isPhone: false,
+      firstCategoriesId: '',
+      logo: false,
+      viewportWidth: '',
+      userId: '',
+      followDet: '',
+      followFlag: '',
+      intiFollowVal: '0',
+      noticeSum: 0,
+      intiFollowChangeVal: '0',
+      oldFollow: false,
+      equalId: false,
+      clickStatus: true,
+    }
   },
-	props: {
+  props: {
     // personInfo: { // 组件用户信息
     //   type: false
     // },
@@ -103,9 +102,9 @@ export default {
       return this.$route.params.userId;
     }
   },
-  created(){
+  created() {
     this.userId = browserDb.getLItem('tokenId');
-    if(this.userId == this.personUserId ){
+    if (this.userId == this.personUserId) {
       this.equalId = true;
     } else {
       this.equalId = false;
@@ -114,31 +113,31 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadCategories();
-    if(this.followShow) {
+    if (this.followShow) {
       this.loadUserFollowInfo();
     }
-    if(this.userId){
+    if (this.userId) {
       this.loadUserInfo();
     }
-    
+
     // this.loadUserInfo();
     //把第一个分类的id值传过去，便于请求初始化主题列表
 
   },
   watch: {
-    'isfixNav': function(newVal,oldVal){
-        this.isfixNav = newVal;
+    'isfixNav': function (newVal, oldVal) {
+      this.isfixNav = newVal;
     }
   },
-  methods:{
+  methods: {
     //设置底部在pc里的宽度
-    limitWidth(){
+    limitWidth() {
       document.getElementById('testNavBar').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('testNavBar').style.marginLeft = (viewportWidth - 640)/2+'px';
+      document.getElementById('testNavBar').style.marginLeft = (viewportWidth - 640) / 2 + 'px';
     },
     //初始化请站点信息和分类接口
-    loadCategories(){
+    loadCategories() {
       //请求站点信息
       this.appFetch({
         url: 'forum',
@@ -148,13 +147,13 @@ export default {
         }
       }).then((res) => {
         this.siteInfo = res.readdata;
-        if(res.readdata._data.set_site.site_logo){
+        if (res.readdata._data.set_site.site_logo) {
           this.logo = res.readdata._data.set_site.site_logo;
         }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;
       })
-      if(this.navShow){
+      if (this.navShow) {
         //请求分类接口
         this.appFetch({
           url: 'categories',
@@ -168,22 +167,21 @@ export default {
           this.$emit("update", this.firstCategoriesId);
         })
       }
-      
     },
 
     //初始化请求用户关注信息
-    loadUserFollowInfo(){
+    loadUserFollowInfo() {
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+ this.personUserId,
+        url: 'users',
+        method: 'get',
+        splice: '/' + this.personUserId,
         data: {
         }
       }).then((res) => {
         this.followDet = res.readdata;
-        if(res.readdata._data.follow == '1'){
+        if (res.readdata._data.follow == '1') {
           this.followFlag = '已关注';
-        } else if(res.readdata._data.follow == '0'){
+        } else if (res.readdata._data.follow == '0') {
           this.followFlag = '关注TA';
         } else {
           this.followFlag = '相互关注';
@@ -192,44 +190,48 @@ export default {
       })
     },
     //初始化请求用户信息
-    loadUserInfo(){
-      if(!this.userId){
+    loadUserInfo() {
+      if (!this.userId) {
         return false;
       }
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+ this.userId,
+        url: 'users',
+        method: 'get',
+        splice: '/' + this.userId,
         data: {
         }
       }).then((res) => {
-
-        if(!res.data.attributes.typeUnreadNotifications.liked) {
-          res.data.attributes.typeUnreadNotifications.liked = 0;
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          // throw new Error(res.error);
+        } else {
+          if (!res.data.attributes.typeUnreadNotifications.liked) {
+            res.data.attributes.typeUnreadNotifications.liked = 0;
+          }
+          if (!res.data.attributes.typeUnreadNotifications.replied) {
+            res.data.attributes.typeUnreadNotifications.replied = 0;
+          }
+          if (!res.data.attributes.typeUnreadNotifications.rewarded) {
+            res.data.attributes.typeUnreadNotifications.rewarded = 0;
+          }
+          if (!res.data.attributes.typeUnreadNotifications.system) {
+            res.data.attributes.typeUnreadNotifications.system = 0;
+          }
+          this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
         }
-        if(!res.data.attributes.typeUnreadNotifications.replied) {
-          res.data.attributes.typeUnreadNotifications.replied = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.rewarded) {
-          res.data.attributes.typeUnreadNotifications.rewarded = 0;
-        }
-        if(!res.data.attributes.typeUnreadNotifications.system) {
-          res.data.attributes.typeUnreadNotifications.system = 0;
-        }
-        this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
       })
     },
 
     //管理关注操作
-    followCli (intiFollowVal) {
+    followCli(intiFollowVal) {
       var token = browserDb.getLItem('Authorization');
-      if(!token){
-        browserDb.setSItem('beforeVisiting',this.$route.path);
+      if (!token) {
+        browserDb.setSItem('beforeVisiting', this.$route.path);
         this.$router.push({
           path: '/login-user'
         });
       } else {
-        if(!this.clickStatus){
+        if (!this.clickStatus) {
           return false;
         }
         this.clickStatus = false;
@@ -244,46 +246,46 @@ export default {
           methodType = 'post';
           // this.oldFollow =  '0';
         }
-        
-        this.followRequest(methodType,attri,intiFollowVal);
+
+        this.followRequest(methodType, attri, intiFollowVal);
       }
-     },
-
-     //关注，取消关注
-     followRequest(methodType,attri,intiFollowVal){
-      this.appFetch({
-          url: 'follow',
-          method: methodType,
-          data: {
-            "data": {
-              "type": "user_follow",
-              "attributes": attri
-            },
-
-          }
-        }).then((res) => {
-          if (res.errors){
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-          } else {
-            if(methodType == 'delete'){
-              this.intiFollowVal = '0';
-              this.followDet._data.fansCount =this.followDet._data.fansCount - 1;
-            } else {
-              if(this.oldFollow == '1' || this.oldFollow == '0') {
-                this.followDet._data.fansCount=this.followDet._data.fansCount + 1;
-                this.intiFollowVal = '1';
-              } else {
-                this.followDet._data.fansCount =this.followDet._data.fansCount + 1;
-                this.intiFollowVal = '2';
-              }
-              // this.intiFollowVal = intiFollowVal;
-            }
-            this.clickStatus = true;
-          }
-        })
     },
-    backUrl () {
+
+    //关注，取消关注
+    followRequest(methodType, attri, intiFollowVal) {
+      this.appFetch({
+        url: 'follow',
+        method: methodType,
+        data: {
+          "data": {
+            "type": "user_follow",
+            "attributes": attri
+          },
+
+        }
+      }).then((res) => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          if (methodType == 'delete') {
+            this.intiFollowVal = '0';
+            this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
+          } else {
+            if (this.oldFollow == '1' || this.oldFollow == '0') {
+              this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
+              this.intiFollowVal = '1';
+            } else {
+              this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
+              this.intiFollowVal = '2';
+            }
+            // this.intiFollowVal = intiFollowVal;
+          }
+          this.clickStatus = true;
+        }
+      })
+    },
+    backUrl() {
       // 返回上一级
       window.history.go(-1)
     },
@@ -292,57 +294,53 @@ export default {
       this.popupShow = true;
     },
     //给导航添加点击状态
-    categoriesCho(cateId){
-      this.$emit('categoriesChoice',cateId);
+    categoriesCho(cateId) {
+      this.$emit('categoriesChoice', cateId);
     },
 
     searchJump() {
-      this.$router.push({ path:'/search'});
+      this.$router.push({ path: '/search' });
     },
 
     // 先分别获得id为testNavBar的元素距离顶部的距离和页面滚动的距离
     // 比较他们的大小来确定是否添加fixedHead样式
     // 比较他们的大小来确定是否添加fixedNavBar样式
-    handleTabFix(){
-      if(this.headFixed){
+    handleTabFix() {
+      if (this.headFixed) {
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-          var offsetTop = document.querySelector('#testNavBar').offsetTop;
-          if(scrollTop > offsetTop){
-            this.showHeader = true;
-            // this.isfixHead = true;
-            this.isfixNav = true;
-            if(this.isWeixin != true && this.isPhone != true){
-              this.limitWidth();
-            }
-            //
-            // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
-            // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
-          } else {
-            this.showHeader = false;
-            // this.isfixHead = false;
-            this.isfixNav = false;
-            let viewportWidth = window.innerWidth;
-            document.getElementById('testNavBar').style.marginLeft ='0px';
-            // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
-            // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
-          };
+        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+        if (scrollTop > offsetTop) {
+          this.showHeader = true;
+          // this.isfixHead = true;
+          this.isfixNav = true;
+          if (this.isWeixin != true && this.isPhone != true) {
+            this.limitWidth();
+          }
+          //
+          // scrollTop > offsetTop ? this.isfixHead = true : this.isfixHead = false;
+          // scrollTop < offsetTop ? this.isfixNav = true : this.isfixNav = false
+        } else {
+          this.showHeader = false;
+          // this.isfixHead = false;
+          this.isfixNav = false;
+          let viewportWidth = window.innerWidth;
+          document.getElementById('testNavBar').style.marginLeft = '0px';
+          // scrollTop > offsetTop ? this.isfixHead = false : this.isfixHead = true;
+          // scrollTop < offsetTop ? this.isfixNav = false : this.isfixNav = true
+        };
       }
     },
-    backUrl(){
-    // 返回上一级
-    window.history.go(-1)
+    LogOut() {
     },
-    LogOut(){
-    },
-    bindEvent (typeName) {
+    bindEvent(typeName) {
       if (typeName == 1) {
         this.LogOut()
       }
     },
   },
 
-  mounted: function() {
-    window.addEventListener('scroll', this.handleTabFix,true);
+  mounted: function () {
+    window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeDestroy() {
     // alert('销毁');
@@ -352,7 +350,7 @@ export default {
     // alert('销毁2');
     window.removeEventListener('scroll', this.handleTabFix);
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     // alert('销毁3');
     window.removeEventListener('scroll', this.handleTabFix);
     next();
