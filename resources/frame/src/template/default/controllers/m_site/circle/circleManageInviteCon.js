@@ -1,7 +1,7 @@
 /**
- * pc 端首页控制器
+ * 邀请页控制器
  */
-
+import browserDb from '../../../../../helpers/webDbHelper';
 export default {
 	data: function() {
 		return {
@@ -17,10 +17,16 @@ export default {
       allowRegister: '',
 
 		}
-	},
+  },
+  computed: {
+    code: function () {
+      return this.$route.query.code;
+    }
+  },
   //用于数据初始化
   created: function(){
-    // var roleId = this.$route.query.groupId;
+    console.log(this.code,'WWWWWWWWWWWWWWWWWWWWWWW');
+    
     var roleId = '10';
     this.roleId = roleId;
     this.loadSite();
@@ -70,6 +76,9 @@ export default {
 		},
 		//跳转到注册页
 		registerJump:function(){
+      if(this.code != '' || this.code != null){
+        browserDb.setSItem('code',this.code)
+      }
 			this.$router.push({ path:'sign-up'})
 		},
 		/**

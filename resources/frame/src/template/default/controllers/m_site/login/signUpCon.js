@@ -1,7 +1,6 @@
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import browserDb from "../../../../../helpers/webDbHelper";
-// import  '../../../scss/m_site/mobileIndex.scss';
 
 export default {
   data: function () {
@@ -20,7 +19,8 @@ export default {
       appID: '',             //腾讯云验证码场景 id
       captcha: null,         //腾讯云验证码实例
       captcha_ticket: '',    //腾讯云验证码返回票据
-      captcha_rand_str: ''   //腾讯云验证码返回随机字符串
+      captcha_rand_str: '',   //腾讯云验证码返回随机字符串
+      code: '',               //从邀请码链接进来时存的code
     }
   },
 
@@ -100,7 +100,8 @@ export default {
               password: this.password,
               register_reason: this.signReason,
               captcha_ticket: this.captcha_ticket,
-              captcha_rand_str: this.captcha_rand_str
+              captcha_rand_str: this.captcha_rand_str,
+              code: this.code
             },
           }
         }
@@ -166,11 +167,16 @@ export default {
   },
   created() {
     this.getForum();
+    this.code = browserDb.getSItem('code');
   },
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
     if (this.captcha) {
       this.captcha.destroy();
+    }
+    //清空code
+    if(this.code){
+      browserDb.removeSItem('code');
     }
     next();
   }
