@@ -297,6 +297,22 @@ export default {
           title:"微信注册绑定账号"
         }
       },
+       'welink-login-bd':{
+            comLoad:function (resolve) {
+                require(['../view/m_site/login/welinkLoginBdView'],resolve)
+            },
+            metaInfo:{
+                title:"WeLink登录绑定账号"
+            }
+        },
+      'welink-sign-up-bd':{
+          comLoad:function (resolve) {
+              require(['../view/m_site/login/welinkSignUpBdView'],resolve)
+          },
+          metaInfo:{
+              title:"WeLink注册绑定账号"
+          }
+      },
       'sign-up':{
         comLoad:function (resolve) {
           require(['../view/m_site/login/signUpView'],resolve)
@@ -584,6 +600,7 @@ export default {
   //判断设备
   let isWeixin = appCommonH.isWeixin().isWeixin;
   let isPhone = appCommonH.isWeixin().isPhone;
+  let isWeLink = appCommonH.isWeLink().isWeLink;
 
   /*
   * 登录且付费不能访问的页面列表
@@ -631,6 +648,8 @@ export default {
     'pay-status',
     'wx-login-bd',
     'wx-sign-up-bd',
+    'welink-sign-up-bd',
+    'welink-login-bd',
     'supplier-all-back',
     'circle-invite',
     'site-close',
@@ -783,9 +802,7 @@ export default {
 
     } else {
       /*未登录状态*/
-
       this.getForum().then(res=>{
-
         if (res.readdata._data.passport.offiaccount_close === '1'){
           /*判断登录设备*/
           if (isWeixin){
@@ -796,9 +813,14 @@ export default {
             } else {
               next({path:'/wx-sign-up-bd'});
             }
-
-            //微信
-          } else {
+          }else if(isWeLink) {
+              /*华为welinkApp，跳转到welink绑定页，改成跳转到welink注册绑定*/
+              if (to.name === 'welink-sign-up-bd' || to.name === 'welink-login-bd') {
+                  next();
+              } else {
+                  next({path:'/welink-sign-up-bd'});
+              }
+          }else {
             if (notLoggedInToAccessPage.includes(to.name)){
               /*符合，未登录可以访问站点*/
               /*判断站点模式*/
