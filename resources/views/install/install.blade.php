@@ -80,7 +80,7 @@ $(function() {
     $.post('', $(this).serialize())
       .done(function(data) {
           localStorage.clear();
-          localStorage.setItem('officeDb_Authorization', data.token);
+          localStorage.setItem('officeDb_Authorization', JSON.stringify(data.token));
           window.location.href = '/';
       })
       .fail(function(data) {
