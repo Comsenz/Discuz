@@ -844,13 +844,13 @@ export default {
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
 
-              /*if (browserDb.getSItem('wxData')) {
+              if (browserDb.getSItem('wxData')) {
                 browserDb.setSItem('wxData',false);
                 localStorage.clear();
                 console.log('第一次进');
               } else {
                 console.log('多次进');
-              }*/
+              }
 
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')){
