@@ -146,7 +146,7 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
     this.getUser();
-    this.detailsLoad(true);
+    this.detailsLoad(true);       //初始化详情页列表数据
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
@@ -327,6 +327,7 @@ export default {
 
     //初始化请求主题详情数据
     detailsLoad(initFlag = false) {
+      // this.loading = true;
       return this.appFetch({
         url: 'threads',
         splice: '/' + this.themeId,
@@ -1123,7 +1124,6 @@ export default {
 
 
     onLoad() { //上拉加载
-      // alert('9999999')
       this.loading = true;
       this.pageIndex++;
       this.detailsLoad();
@@ -1153,3 +1153,5 @@ export default {
   }
 
 }
+
+
