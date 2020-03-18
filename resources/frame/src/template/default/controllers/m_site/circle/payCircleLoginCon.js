@@ -57,6 +57,7 @@ export default {
 	created() {
 		this.getInfo();
 		this.getUsers();
+
 	},
 	methods: {
 		//请求站点信息，用于判断站点是否是付费站点
@@ -82,6 +83,12 @@ export default {
 						this.siteUsername = '暂无站长信息';
 					}
 					this.sitePrice = res.readdata._data.set_site.site_price;
+					if (res.readdata._data.paycenter.wxpay_close == true) {
+						this.payList.unshift({
+							name: '微信支付',
+							icon: 'icon-wxpay'
+						})
+					}
 				}
 			});
 		},
@@ -317,9 +324,12 @@ export default {
 					// include:['groups']
 				}
 			}).then(res => {
+				console.log(res)
 				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 				} else {
+					this.walletBalance = res.readdata._data.walletBalance;
+					this.walletStatus = res.readdata._data.canWalletPay;
 					this.loginUserInfo = res.data.attributes.username
 				}
 			}).catch(err => {
