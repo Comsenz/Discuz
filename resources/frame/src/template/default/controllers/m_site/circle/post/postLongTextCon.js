@@ -292,6 +292,7 @@ export default {
         this.$toast.fail('请选择分类');
         return;
       }
+      this.loading = true;
       if (this.postsId && this.content) {
         this.appFetch({
           url: 'posts',
@@ -315,6 +316,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             this.$router.replace({path: 'details' + '/' + this.themeId, query: {backGo: this.backGo}});
           }
@@ -372,6 +374,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;

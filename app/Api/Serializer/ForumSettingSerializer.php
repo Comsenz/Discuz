@@ -36,7 +36,7 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         // 获取logo完整地址
-        $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
+        $logo = $this->forumField->siteUrlSplicing($this->settings->get('site_logo'));
 
         $attributes = [
             // 站点设置
@@ -51,6 +51,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
+                'site_record' => $this->settings->get('site_record'),
             ],
 
             // 注册设置
@@ -64,14 +65,14 @@ class ForumSettingSerializer extends AbstractSerializer
 
             // 第三方登录设置
             'passport' => [
-                'offiaccount_close' => $this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
-                'miniprogram_close' => $this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
-                'oplatform_close' => $this->settings->get('oplatform_close', 'wx_oplatform'),       // 微信PC 开关
+                'offiaccount_close' => (bool)$this->settings->get('offiaccount_close', 'wx_offiaccount'), // 微信H5 开关
+                'miniprogram_close' => (bool)$this->settings->get('miniprogram_close', 'wx_miniprogram'), // 微信小程序 开关
+                'oplatform_close' => (bool)$this->settings->get('oplatform_close', 'wx_oplatform'),       // 微信PC 开关
             ],
 
             // 支付设置
             'paycenter' => [
-                'wxpay_close' => $this->settings->get('wxpay_close', 'wxpay'),
+                'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
             ],
 
             // 附件设置
@@ -102,7 +103,7 @@ class ForumSettingSerializer extends AbstractSerializer
             'other' => [
                 // 基础信息
                 'count_threads' => Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->count(), // 统计所有主题数
-                'count_posts' => Post::where('is_approved', Post::APPROVED)->where('is_first', false)->whereNull('deleted_at')->count(), // 统计所有回复数
+                'count_posts' => Post::where('is_approved', Post::APPROVED)->whereNull('deleted_at')->count(), // 统计所有回复数
                 'count_users' => User::where('status', 0)->count(), // 统计所有的用户
                 // 权限 permission
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),

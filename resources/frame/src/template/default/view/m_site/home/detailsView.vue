@@ -294,6 +294,7 @@
       round
       close-icon-position="top-right"
       closeable
+      @close="closeQrCode"
       class="qrCodeBox"
       get-container="body"
     >

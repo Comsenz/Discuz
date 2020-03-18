@@ -331,6 +331,7 @@ export default {
         this.$toast.fail('视频不能为空');
         return;
       }
+      this.loading = true;
       if (this.postsId && this.content) {
         this.appFetch({
           url: 'posts',
@@ -351,6 +352,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             // console.log('主题');
             this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
@@ -393,6 +395,7 @@ export default {
             } else {
               this.$toast.fail(res.errors[0].code);
             }
+            this.loading = false;
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
