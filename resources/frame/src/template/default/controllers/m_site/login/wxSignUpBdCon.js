@@ -43,6 +43,27 @@ export default {
 
     },
 
+    //验证码
+    initCaptcha() {
+      if (this.username === '') {
+        this.$toast("用户名不能为空");
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        return;
+      }
+      this.captcha = new TencentCaptcha(this.appID, res => {
+        if (res.ret === 0) {
+          this.captcha_ticket = res.ticket;
+          this.captcha_rand_str = res.randstr;
+          //验证通过后注册
+          this.setSignData();
+        }
+      });
+      // 显示验证码
+      this.captcha.show();
+    },
 
     /*
     * 接口请求
@@ -223,27 +244,6 @@ export default {
       }).catch(err => {
         console.log(err);
       })
-    },
-    //验证码
-    initCaptcha() {
-      if (this.username === '') {
-        this.$toast("用户名不能为空");
-        return;
-      }
-      if (this.password === '') {
-        this.$toast("密码不能为空");
-        return;
-      }
-      this.captcha = new TencentCaptcha(this.appID, res => {
-        if (res.ret === 0) {
-          this.captcha_ticket = res.ticket;
-          this.captcha_rand_str = res.randstr;
-          //验证通过后注册
-          this.setSignData();
-        }
-      });
-      // 显示验证码
-      this.captcha.show();
     },
 
   },
