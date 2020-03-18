@@ -61,7 +61,7 @@ class DeleteInvite
     {
         $invite = $inviteRepository->findOrFail($this->inviteId, $this->actor);
 
-        //$this->assertCan($this->actor, 'delete', $invite);
+        $this->assertCan($this->actor, 'delete', $invite);
         $invite->status = 0;
         $invite->save();
 
