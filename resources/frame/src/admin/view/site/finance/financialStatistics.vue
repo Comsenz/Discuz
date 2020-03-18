@@ -6,7 +6,7 @@
           <div class="financial-title">{{item.title}}</div>
           <span class="iconfont" :class="item.icon"></span>
           <span class="financial-con">
-            ¥
+            <span v-if="item.iconShow">¥</span>
             <span class="financial-num">{{item.num}}</span>
           </span>
         </div>
