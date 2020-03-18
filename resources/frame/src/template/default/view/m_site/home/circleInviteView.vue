@@ -56,7 +56,9 @@
 import mSiteCircleInviteCon from '../../../controllers/m_site/circle/circleInviteCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common/headerView';
-// import '../../../scss/m_site/mobileIndex.scss';
+import '../../../defaultLess/m_site/common/common.less';
+import '../../../defaultLess/m_site/modules/circle.less';
+import '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "circleInviteView",
     components:{
