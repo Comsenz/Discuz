@@ -11,6 +11,7 @@ use App\Rules\Settings\CashMaxSum;
 use App\Rules\Settings\CashMinSum;
 use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudSecretVerify;
+use App\Rules\Settings\SupportExt;
 use Discuz\Foundation\AbstractValidator;
 use Illuminate\Validation\Factory;
 
@@ -34,6 +35,8 @@ class SetSettingValidator extends AbstractValidator
             'cash_max_sum' => ['gte:0', new CashMaxSum($this->filterDefault('cash_sum_limit', 0))],
             'cash_sum_limit' => ['gte:0', new CashSumLimit()],
             'site_mode' => ['in:pay,public'],
+            'support_img_ext' => [new SupportExt()],
+            'support_file_ext' => [new SupportExt()],
         ];
 
         return $rules;

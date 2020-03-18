@@ -19,4 +19,8 @@ return [
     'limit_exceed_5000' => '单日提现总金额 不能超过 5000',
 
     'setting_fill_register_reason' => '注册时的注册原因必须必填',
+
+    // 附件
+    'support_img_ext_php_format_error' => '图片扩展名不允许设置.php后缀',
+    'support_file_ext_php_format_error' => '附件扩展名不允许设置.php后缀',
 ];
