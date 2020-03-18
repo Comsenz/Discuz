@@ -47,10 +47,8 @@ export default {
   methods: {
     payImmediatelyClick(data) {
       //data返回选中项
-
       let isWeixin = this.appCommonH.isWeixin().isWeixin;
       let isPhone = this.appCommonH.isWeixin().isPhone;
-
       if (data.name === '微信支付') {
         this.show = false;
         if (isWeixin) {
@@ -76,7 +74,6 @@ export default {
               console.log(res)
               this.wxPayHref = res.readdata._data.wechat_h5_link;
               window.location.href = this.wxPayHref;
-
               const payPhone = setInterval(() => {
                 if (this.payStatus && this.payStatusNum > 10) {
                   clearInterval(payPhone);
@@ -140,7 +137,6 @@ export default {
 
     onBridgeReady(data) {
       let that = this;
-
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
         "appId": data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
@@ -160,21 +156,6 @@ export default {
             that.payLoading = false;
             resolve;
           }
-
-          /*if (res.err_msg == "get_brand_wcpay_request:ok") {
-            alert("支付成功");
-            alert(res.err_msg);
-            resolve;
-          } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-            alert("支付过程中用户取消");             //支付取消正常走
-            alert(res.err_msg);
-            resolve;
-          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-            alert("支付失败");
-            alert(res.err_msg);
-            resolve;
-          }*/
-
         });
 
       setTimeout(() => {
