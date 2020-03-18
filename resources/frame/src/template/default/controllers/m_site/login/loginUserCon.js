@@ -6,7 +6,7 @@ import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSign
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter';
 import browserDb from '../../../../../helpers/webDbHelper';
 
-import {mapMutations,mapState} from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   data: function () {
@@ -17,23 +17,23 @@ export default {
       btnLoading: false,
       wxLoginShow: true,
       isOne: false,
-      siteMode:'',           //站点模式
-      phoneStatus:'',        //是否开启手机绑定
-      wxHref:'',             //微信获取openid链接
-      isPC:false,            //是否PC端
-      isCodeState:0,         //第一次不带参数，第二次带参数。超过两次再请求不带参数
-      wxStatus:"",           //微信登录
-      siteClosed:true,      //站点关闭
+      siteMode: '',           //站点模式
+      phoneStatus: '',        //是否开启手机绑定
+      wxHref: '',             //微信获取openid链接
+      isPC: false,            //是否PC端
+      isCodeState: 0,         //第一次不带参数，第二次带参数。超过两次再请求不带参数
+      wxStatus: "",           //微信登录
+      siteClosed: true,      //站点关闭
     }
   },
   /*
   * 映射appSiteModule/state内定义的属性
   * */
-  computed:mapState({
-    status:state => state.appSiteModule.status,
+  computed: mapState({
+    status: state => state.appSiteModule.status,
   }),
 
-  mounted(){
+  mounted() {
 
   },
 
@@ -42,8 +42,8 @@ export default {
     * 映射mutation内方法
     * */
     ...mapMutations({
-      setStatus:'appSiteModule/SET_STATUS',
-      setOpenId:'appSiteModule/SET_OPENID'
+      setStatus: 'appSiteModule/SET_STATUS',
+      setOpenId: 'appSiteModule/SET_OPENID'
     }),
 
     loginClick() {
@@ -63,8 +63,8 @@ export default {
         }
       }).then(res => {
         this.btnLoading = false;
-        if (res.errors){
-          if (res.errors[0].detail){
+        if (res.errors) {
+          if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);
@@ -76,36 +76,35 @@ export default {
           let refreshToken = res.data.attributes.refresh_token;
           browserDb.setLItem('Authorization', token);
           browserDb.setLItem('tokenId', tokenId);
-          browserDb.setLItem('refreshToken',refreshToken);
+          browserDb.setLItem('refreshToken', refreshToken);
 
-          this.getUsers(tokenId).then(res=>{
-            if (res.errors){
-              let errorInfo = this.appCommonH.errorHandling(res.errors,true);
+          this.getUsers(tokenId).then(res => {
+            if (res.errors) {
+              let errorInfo = this.appCommonH.errorHandling(res.errors, true);
               this.$toast.fail(errorInfo[0].errorDetail);
             } else {
               if (res.readdata._data.paid) {
                 browserDb.setLItem('foregroundUser', res.data.attributes.username);
                 let beforeVisiting = browserDb.getSItem('beforeVisiting');
-
-
                 if (beforeVisiting) {
-                  this.$router.replace({path: beforeVisiting});
-                  browserDb.setSItem('beforeState',1);
-                  setTimeout(()=>{
+                  this.$router.replace({ path: beforeVisiting });
+                  browserDb.setSItem('beforeState', 1);
+                  setTimeout(() => {
                     this.$router.go(0);
-                  },800)
+                  }, 800)
 
                 } else {
                   // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
-                  this.$router.push({path: '/'});
+                  this.$router.push({ path: '/' });
+                  debugger
                   this.$router.go(0);
                 }
 
               } else {
                 if (this.siteMode === 'pay') {
-                  this.$router.push({path: 'pay-circle-login'});
+                  this.$router.push({ path: 'pay-circle-login' });
                 } else if (this.siteMode === 'public') {
-                  this.$router.push({path: '/'});
+                  this.$router.push({ path: '/' });
                 } else {
                   //缺少参数，请刷新页面
                 }
@@ -122,34 +121,34 @@ export default {
     },
 
     loginWxClick() {
-     this.getWxLogin().then(res=>{
-       if (res.errors){
-         this.$toast.fail(res.errors[0].code);
-       }else {
-         window.location.href = res.readdata._data.location
-       }
-     })
+      this.getWxLogin().then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          window.location.href = res.readdata._data.location
+        }
+      })
     },
 
     loginPhoneClick() {
-      this.$router.push({path: '/login-phone'})
+      this.$router.push({ path: '/login-phone' })
     },
 
     /*
     * 接口请求
     * */
-    getForum(){
+    getForum() {
       this.appFetch({
-        url:'forum',
-        method:'get',
-        data:{}
-      }).then(res=>{
+        url: 'forum',
+        method: 'get',
+        data: {}
+      }).then(res => {
         // if (res.errors){
         //   this.$toast.fail(res.errors[0].code);
         // } else {
 
-        if (res.errors){
-          if (res.rawData[0].code === 'site_closed'){
+        if (res.errors) {
+          if (res.rawData[0].code === 'site_closed') {
             this.siteClosed = false;
             // alert('true');
           } else {
@@ -164,7 +163,7 @@ export default {
 
 
         // }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
     /*getWatchHref(code,state){
@@ -193,32 +192,32 @@ export default {
       }).catch(err=>{
       })
     },*/
-    getUsers(id){
+    getUsers(id) {
       return this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/' + id,
-        headers:{'Authorization': 'Bearer ' + browserDb.getLItem('Authorization')},
-        data:{
-          include:['groups']
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + browserDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
-    getWxLogin(){
+    getWxLogin() {
       return this.appFetch({
-        url:'wxLogin',
-        method:"get",
-        data:{}
-      }).then(res=>{
+        url: 'wxLogin',
+        method: "get",
+        data: {}
+      }).then(res => {
         return res
-      }).catch(err=>{
+      }).catch(err => {
       })
     }
   },
