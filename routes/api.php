@@ -231,8 +231,6 @@ $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInvit
 | Emoji
 |--------------------------------------------------------------------------
 */
-
-$route->get('/emojiLoad', 'emoji.load', ApiController\Emoji\AutoloadEmojiController::class);
 $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
 
 /*
@@ -253,14 +251,3 @@ $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowCon
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
 
-/*
-|--------------------------------------------------------------------------
-| Dialog
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
-$route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
-$route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
-$route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
-$route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
