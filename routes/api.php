@@ -224,7 +224,6 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{code}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
 $route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);
-$route->patch('/invite/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
