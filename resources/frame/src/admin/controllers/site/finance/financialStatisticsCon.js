@@ -7,13 +7,14 @@ export default {
 					num: "0",
 					icon: 'iconchongzhi',
 					key: 'totalIncome',
-
+					iconShow: true,
 				},
 				{
 					title: "用户总提现",
 					num: "0",
 					icon: 'icontixian',
 					key: 'totalWithdrawal',
+					iconShow: true,
 
 				},
 				{
@@ -21,6 +22,7 @@ export default {
 					num: "0",
 					icon: 'iconqianbaozongjine',
 					key: 'totalWallet',
+					iconShow: true,
 
 				},
 				{
@@ -28,6 +30,7 @@ export default {
 					num: "0",
 					icon: 'icondingdanzongshu',
 					key: 'orderCount',
+					iconShow: false,
 
 				},
 				{
@@ -35,6 +38,7 @@ export default {
 					num: "0",
 					icon: 'iconcaiwutongji',
 					key: 'totalProfit',
+					iconShow: true,
 
 				},
 				{
@@ -42,6 +46,7 @@ export default {
 					num: "0",
 					icon: 'iconshouxufeishouru',
 					key: 'withdrawalProfit',
+					iconShow: true,
 
 				},
 				{
@@ -49,6 +54,7 @@ export default {
 					num: "0",
 					icon: 'icondashangtichengshouru',
 					key: 'orderRoyalty',
+					iconShow: true,
 
 				},
 				{
@@ -56,6 +62,7 @@ export default {
 					num: "0",
 					icon: 'iconzhucejiarushouru',
 					key: 'totalRegisterProfit',
+					iconShow: true,
 
 				},
 

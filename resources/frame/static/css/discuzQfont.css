@@ -221,7 +221,7 @@
   content: "\e640";
 }
 .icon-selected:before {
-  content: "\e641";
+  content: "\e645";
 }
 
 .icon-video:before {
