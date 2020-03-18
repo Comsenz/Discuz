@@ -12,6 +12,7 @@ use App\Models\User;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Str;
 
 class LoadEmoji
 {
@@ -59,9 +60,7 @@ class LoadEmoji
     {
         $this->events = $events;
 
-//        $this->assertRegistered($this->actor);
-//        $this->assertCan($this->actor, 'emoji.loadEmoji');
-
+        $this->assertAdmin($this->actor);
 
         if ($this->category == 'all') {
             $emojies = $this->loadEmoji('emoji');
@@ -82,17 +81,27 @@ class LoadEmoji
                 }
             }
         } else {
-            if (is_dir('emoji'.DIRECTORY_SEPARATOR.$this->category)) {
+            $path = 'emoji' . DIRECTORY_SEPARATOR . $this->category;
+
+            if (Str::contains($path, '..')) {
+                throw new \Exception('Invalid emoji path');
+            }
+
+            if (is_dir($path)) {
 
                 //删除
                 Emoji::where('category', '=', $this->category)->delete();
 
-                $emojies = $this->loadEmoji('emoji'.DIRECTORY_SEPARATOR.$this->category);
+                $emojies = $this->loadEmoji($path);
 
                 foreach ($emojies as $emojy) {
+                    if (!is_string($emojy)) {
+                        continue;
+                    }
+
                     $code_name = self::LEFT_DELIMITER . substr(basename($emojy), 0, strrpos(basename($emojy), '.')) . self::RIGHT_DELIMITER;
 
-                    $data[] = ['url' => $emojy, 'code' => $code_name, 'category' => $this->category, 'created_at'=>date('Y-m-d H:i:s', time()), 'updated_at'=>date('Y-m-d H:i:s', time())];
+                    $data[] = ['url' => $emojy, 'code' => $code_name, 'category' => $this->category, 'created_at' => date('Y-m-d H:i:s', time()), 'updated_at' => date('Y-m-d H:i:s', time())];
                 }
                 Emoji::insert($data);
             }

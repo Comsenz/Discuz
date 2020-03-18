@@ -23,9 +23,7 @@ class ExportStopWordsController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $actor = $request->getAttribute('actor');
-
-        $this->assertAdmin($actor);
+        $this->assertAdmin($request->getAttribute('actor'));
 
         // 使用 LazyCollection
         $stopWords = StopWord::cursor()->map(function ($stopWord) {
