@@ -61,7 +61,14 @@
           show-overflow-tooltip
           label="商品名称"
           min-width="150">
-          <template slot-scope="scope"><span :class="scope.row.thread?'cursor-pointer':''" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">{{scope.row.thread?scope.row.thread.firstPost._data.content:'注册付费'}}</span></template>
+          <template slot-scope="scope">
+            <span :class="scope.row.thread?'cursor-pointer':''" v-if="scope.row.thread && scope.row.thread._data.type === 1" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
+              {{scope.row.thread._data.title}}
+            </span>
+            <span :class="scope.row.thread?'cursor-pointer':''" v-else @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
+              {{scope.row.thread?scope.row.thread.firstPost._data.content:'注册付费'}}
+            </span>
+          </template>
         </el-table-column>
 
         <el-table-column

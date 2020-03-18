@@ -4,6 +4,7 @@
 import browserDb from '../../../helpers/webDbHelper';
 import appFetch from '../../../helpers/axiosHelper';
 import appCommonH from '../../../helpers/commonHelper';
+import fa from "element-ui/src/locale/lang/fa";
 
 export default {
   /**
@@ -646,13 +647,13 @@ export default {
     ];
 
 
-  //公开模式下不能访问的页面
-  const publicNotAccessPage = [
-    // 'pay-the-fee',
-    'pay-circle-con/:themeId/:groupId',
-    // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
-    // 'pay-status',
-  ];
+    //公开模式下不能访问的页面
+    const publicNotAccessPage = [
+      // 'pay-the-fee',
+      'pay-circle-con/:themeId/:groupId',
+      // 'pay-circle',         //付费站点,逻辑内做判断，如果访问除去'/'的页面，都要跳到该页面
+      // 'pay-status',
+    ];
 
 
     /*
@@ -713,7 +714,6 @@ export default {
       next();
     } else {
       this.getForum().then((res) => {
-        // console.log('初始化');
 
         /*
         * 站点关闭，跳转到站点关闭页面
@@ -733,7 +733,7 @@ export default {
 
             }
           }
-          
+
         } else {
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
@@ -844,6 +844,14 @@ export default {
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
 
+              /*if (browserDb.getSItem('wxData')) {
+                browserDb.setSItem('wxData',false);
+                localStorage.clear();
+                console.log('第一次进');
+              } else {
+                console.log('多次进');
+              }*/
+
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')){
                   if (!wxNotLoggedInToAccessPage.includes(to.name)){
@@ -851,14 +859,11 @@ export default {
                   }
                 }
               }
-              // console.log('wx：' + res);
-              // if (to.name === 'wx-sign-up-bd' || to.name === 'wx-login-bd' || to.name === 'site-close') {
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
               } else {
                 next({ path: '/wx-sign-up-bd' });
               }
-              //微信
             } else {
               if (notLoggedInToAccessPage.includes(to.name)) {
                 /*符合，未登录可以访问站点*/
@@ -1006,10 +1011,10 @@ export default {
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
         let siteInfoStat = res.readdata._data.set_site.site_stat;
-        app.bus.$emit('stat',siteInfoStat)   
+        app.bus.$emit('stat',siteInfoStat)
         return res;
-      } 
-     
+      }
+
     }).catch(err => {
     })
   },
