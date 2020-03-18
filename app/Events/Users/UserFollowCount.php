@@ -11,7 +11,6 @@ use App\Models\User;
 
 class UserFollowCount
 {
-
     /**
      * @var User
      */

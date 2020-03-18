@@ -81,7 +81,7 @@ class CreateUserWalletCash
             //提现间隔时间
             $cash_record = UserWalletCash::where('created_at', '>=', $time_before)->first();
             if (!empty($cash_record)) {
-               throw new WalletException('cash_interval_time');
+                throw new WalletException('cash_interval_time');
             }
         }
         //提现金额

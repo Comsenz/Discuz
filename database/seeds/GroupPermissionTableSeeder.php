@@ -37,6 +37,9 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
+        'createThreadVideo' => [],            // 发布视频主题
+        'createThreadLong' => [10],             // 发布长文主题
+        'createThreadWithCaptcha' => [],        // 发布主题验证验证码
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情
@@ -84,15 +87,12 @@ class GroupPermissionTableSeeder extends Seeder
         'statistic.financeProfile' => [],       // 财务概况
         'statistic.financeChart' => [],         // 财务图表
 
-        //短消息
+        // 短消息
         'dialog.create' => [],                 // 创建会话
         'dialog.message.create' => [],         // 创建会话消息
 
-        //关注
-        'userFollow.create' => [],                 // 创建关注
-
-
-
+        // 关注
+        'userFollow.create' => [10],             // 创建关注
     ];
 
     /**

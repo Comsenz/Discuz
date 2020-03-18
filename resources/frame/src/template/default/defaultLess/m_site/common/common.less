@@ -77,9 +77,9 @@ body { height: inherit;}
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2200;
+  z-index: 11;
   .loadMask {
-    background: rgba(0,0, 0, 0.6);
+    background: rgba(0,0, 0, 0);
     width: 100%;
     height: 100%;
   }
@@ -91,7 +91,10 @@ body { height: inherit;}
     margin-top: -15px;
   }
 }
-
+.markdown-body {
+  color: #303133 !important;
+}
+.borderT { border-top: 1px solid @corE5;}
 .bgEd { min-height: 100%; background: #EDEDED; }
 .nullTip {
   text-align: center;
@@ -149,6 +152,7 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
 .overHide { overflow: hidden;}
 .hide { display: none;}
 .relative { position: relative;}
+.block { display: block;}
 .qq-emotion {
     display: inline-block;
     height: 20px;
@@ -219,6 +223,9 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
   height: 11px;
   border-top: 1px solid @gray-light;
   border-bottom: 1px solid @gray-light;
+}
+.title-span{
+  display: block;
 }
 
 .fixedHead {
@@ -453,7 +460,7 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
   line-height: 16px;
   min-width: 16px;
   background: #FA5151;
-  font-size: 7px;
+  font-size: 11px;
   color: #fff;
   padding: 0 4px;
   border-radius: 8px;
@@ -574,14 +581,16 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
   .header-icon{
     fill:@main;
     position: absolute;
-    left: 16px;
+    left: 10px;
     cursor: pointer;
+    padding: 6px;
   }
   .comHeadMenu {
     fill:@main;
     position: absolute;
-    right: 16px;
+    right: 10px;
     cursor: pointer;
+    padding: 6px;
   }
 
 }

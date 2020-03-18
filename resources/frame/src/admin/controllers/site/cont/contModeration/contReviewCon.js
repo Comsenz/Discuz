@@ -276,7 +276,6 @@ export default {
       //查看:/details/140  带id
       //编辑：/reply-to-topic  隐藏传入内容，带id
       //回帖：replyId
-
       let routeData = this.$router.resolve({
         path: "/details/" + id,
       });
@@ -305,7 +304,7 @@ export default {
         url:'threads',
         method:'get',
         data:{
-          include:['user', 'firstPost', 'lastPostedUser', 'category','firstPost.images','firstPost.attachments'],
+          include:['user', 'firstPost', 'lastPostedUser', 'category','firstPost.images','firstPost.attachments', 'threadVideo'],
           'filter[isDeleted]':'no',
           'filter[username]':this.searchUserName,
           'page[number]':pageNumber,
@@ -322,6 +321,7 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
+          // console.log(res,'审核的数据');
           this.themeList = [];
           this.submitForm = [];
           this.themeList = res.readdata;

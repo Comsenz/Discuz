@@ -1,9 +1,8 @@
 /**
  * 发布主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import '@github/markdown-toolbar-element';
-import appCommonH from '../../../../../helpers/commonHelper';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import appCommonH from '../../../../../../helpers/commonHelper';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 export default {
   data:function () {
@@ -22,8 +21,6 @@ export default {
       keywordsMax: 1000,
       list: [],
       footMove: false,
-      payMove: false,
-      markMove: false,
       faceData:[],
       fileListOne:[],
       fileList: [
@@ -68,32 +65,24 @@ export default {
       testingRes:false,
       backGo:-2,
       formdataList:[],
-      themeTitle: '',   //标题
-      payValue: '免费',     //长文价格
-      paySetShow: false,
-      isCli: true,
-      moneyVal: '',
-      timeout: null,
-      paySetValue: '',
-      titleMaxLength: 80,
-      viewportWidth: '',
       viewportHeight: '',
+      postFormScrollTop:'',
+      loading: false,
     }
   },
 
   mounted () {
-    this.focus('themeTitle');
     let postForm = document.getElementById('postForm');
     postForm.style.height = (this.viewportHeight) + 'px';
 
-    let text = document.getElementById('textarea_id');
+    let text = document.getElementById('post-topic-form-text');
 
     text.addEventListener("touchstart",(e)=>{
       // alert('触发');
       // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
 
       let textarea = this.$refs.textarea;
-      // textarea.focus();
+      textarea.focus();
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
@@ -105,10 +94,9 @@ export default {
       });
     });
 
-
-      this.$nextTick(() => {
+    this.$nextTick(() => {
         let textarea = this.$refs.textarea;
-        // textarea.focus();
+        textarea.focus();
         let prevHeight = 300;
         textarea && autoTextarea(textarea, 5, 65535, (height) => {
           height += 20;
@@ -121,7 +109,7 @@ export default {
       })
       //设置在pc的宽度
       if(this.isWeixin != true && this.isPhone != true){
-        // this.limitWidth();
+        this.limitWidth();
       }
   },
   computed: {
@@ -130,14 +118,12 @@ export default {
       }
   },
   created(){
-    this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    
     if(this.isiOS) {
       this.encuploadShow = true;
     }
@@ -167,16 +153,13 @@ export default {
     showFacePanel: function(newVal,oldVal){
       this.showFacePanel = newVal;
       if(this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
       }
     },
   },
   methods: {
-    focus(obj){
-      document.getElementById(obj).focus();
-    },
      //请求站点信息，用于判断是否能上传附件
     getInfo(){
       this.appFetch({
@@ -231,13 +214,6 @@ export default {
           this.oldCateId = res.readdata.category._data.id;
           this.selectSort = res.readdata.category._data.name;
           this.content = res.readdata.firstPost._data.content;
-          this.themeTitle = res.readdata._data.title;
-          if(res.readdata._data.price > 0){
-            this.payValue = res.readdata._data.price;
-            this.paySetValue = res.readdata._data.price;
-            this.isCli = true;
-          }
-          
           this.postsId = res.readdata.firstPost._data.id;
           for (let i = 0; i < enclosureListCon.length; i++) {
             this.enclosureList.push({type:enclosureListCon[i]._data.extension,name:enclosureListCon[i]._data.fileName,id:enclosureListCon[i]._data.id});
@@ -265,6 +241,8 @@ export default {
           "id": this.attriAttachment[m].id
         }
       }
+      this.loading = true;
+      // console.log(this.attriAttachment,'上传的文件');
       if(this.oldCateId != this.cateId){
         this.appFetch({
           url:'threads',
@@ -273,10 +251,7 @@ export default {
           data:{
             "data": {
               "type": "threads",
-              "attributes": {
-                "price": this.paySetValue,
-                "title": this.themeTitle,
-              },
+              "attributes": {},
               "relationships": {
                 "category": {
                   "data": {
@@ -303,8 +278,8 @@ export default {
         data:{
           "data": {
             "type": "threads",
-            "attributes": {             
-              "content": this.content,
+            "attributes": {
+                "content": this.content,
             },
 
             "relationships": {
@@ -316,6 +291,7 @@ export default {
         },
       }).then((res)=>{
         if (res.errors){
+          this.loading = false;
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
@@ -325,11 +301,11 @@ export default {
     },
 
     //设置底部在pc里的宽度
-    // limitWidth(){
-    //   document.getElementById('post-topic-footer').style.width = "640px";
-    //   let viewportWidth = window.innerWidth;
-    //   document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
-    // },
+    limitWidth(){
+      // document.getElementById('post-topic-footer').style.width = "640px";
+      // let viewportWidth = window.innerWidth;
+      // document.getElementById('post-topic-footer').style.marginLeft = (viewportWidth - 640)/2+'px';
+    },
 
     //上传之前先判断是否有权限上传图片
     beforeHandleFile(){
@@ -352,50 +328,6 @@ export default {
       }
     },
 
-
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   // 实例化
-    //   let formdata = new FormData()
-    //   formdata.append('file', e.file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,false,true);
-    //   this.loading = false;
-
-    // },
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   let file = e.target.files[0];
-    //   let formdata = new FormData();
-    //   formdata.append('file', file);
-    //   formdata.append('isGallery', 1);
-    //   this.uploaderEnclosure(formdata,true,false);
-    //   this.uploadShow = true;
-    //   this.loading = false;
-    // },
-    //上传图片,点击加号时
-    // handleFile(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.file,this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.file, false);
-    //     }
-    //   } else {
-    //     this.compressFile(e.file, false);
-    //   }
-    // },
-
-    // //上传图片，点击底部Icon时
-    // handleFileUp(e){
-    //   if(this.isAndroid && this.isWeixin){
-    //     this.testingType(e.target.files[0],this.supportImgExt);
-    //     if(this.testingRes){
-    //       this.compressFile(e.target.files[0], true);
-    //     }
-    //   } else {
-    //     this.compressFile(e.target.files[0], true);
-    //   }
-    // },
     //上传图片,点击加号时
     handleFile(e){
      let files = [];
@@ -411,10 +343,12 @@ export default {
          if(this.isAndroid && this.isWeixin){
            this.testingType(file.file,this.supportImgExt);
            if(this.testingRes){
-             this.compressFile(file.file, 150000, false,files.length - index);
+              this.loading = true;
+              this.compressFile(file.file, 150000, false,files.length - index);
            }
          } else {
-           this.compressFile(file.file, 150000, false, files.length - index);
+            this.loading = true;
+            this.compressFile(file.file, 150000, false, files.length - index);
          }
        });
      }
@@ -428,9 +362,11 @@ export default {
         if(this.isAndroid && this.isWeixin){
           this.testingType(file,this.supportImgExt);
           if(this.testingRes){
+            this.loading = true;
             this.compressFile(file, 150000, true);
           }
         } else {
+          this.loading = true;
           this.compressFile(file, 150000, true);
         }
       }
@@ -443,6 +379,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
+        this.loading = true;
         this.uploaderEnclosure(formdata,false,false,true);
       }
 
@@ -503,14 +440,15 @@ export default {
         } else {
           if (img) {
             this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-            // this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.loading = false;
           }
           if (isFoot) {
             this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length>0){
               this.uploadShow = true;
+              this.loading = false;
             }
           }
           if (enclosure) {
@@ -520,9 +458,8 @@ export default {
                name:data.readdata._data.fileName,
                id:data.readdata._data.id
             });
-
+            this.loading = false;
           }
-          this.loading = false;
         }
       })
     },
@@ -549,35 +486,6 @@ export default {
       })
     },
 
-    //这里写接口，上传
-    // uploaderEnclosure(file,isFoot,enclosure){
- //    uploaderEnclosure(file,isFoot,img,enclosure){
- //       this.appFetch({
- //         url:'attachment',
- //         method:'post',
- //         data:file,
-
- //       }).then(data=>{
- //         if (data.errors){
- //           this.$toast.fail(data.errors[0].code);
- //           throw new Error(data.error)
- //         }else{
- //            if(img){
- //              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
- //              this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
- //            }
- //            if(isFoot){
- //              this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
- //            }
-
- //             if(enclosure){
- //               this.enclosureShow = true;
- //               this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
- //             }
- //            this.$toast.success('提交成功');
- //         }
- //       })
- //   },
 
     //输入框自适应高度
     clearKeywords () {
@@ -589,19 +497,19 @@ export default {
       textarea.style.height = `${rem}rem`;
       rem = (height + 20) / rootFontSize;
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-      // textarea.focus();
+      textarea.focus();
     },
-    searchChange: debounce(function () {
-      let trim = this.keywords && this.keywords.trim();
-      if (!trim) {
-        this.list = [];
-        return;
-      }
-      const params = {
-        keywords: this.keywords
-      }
-      // 调api ...
-    }),
+    // searchChange: debounce(function () {
+    //   let trim = this.keywords && this.keywords.trim();
+    //   if (!trim) {
+    //     this.list = [];
+    //     return;
+    //   }
+    //   const params = {
+    //     keywords: this.keywords
+    //   }
+    //   // 调api ...
+    // }),
     handleFaceChoose (face) {
       const value = this.content;
       const el = this.$refs.textarea;
@@ -622,7 +530,10 @@ export default {
     //   this.footMove = false;
     // },
     addExpression(){
-      let text = document.getElementById('postForm');
+
+      // console.log('点击' + this.postFormScrollTop);
+      // document.getElementById('postForm').scrollTop = this.postFormScrollTop;
+
 
       this.keyboard = !this.keyboard;
       this.appFetch({
@@ -636,15 +547,17 @@ export default {
       })
       this.showFacePanel = !this.showFacePanel;
       if(this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 340) + 'px';
-        text.style.paddingBottom = '50px';
+        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
       } else {
         document.getElementById('postForm').style.height = '100%';
-        text.style.paddingBottom = '150px';
       }
       this.footMove = !this.footMove;
-      this.payMove = !this.payMove;
-      this.markMove = !this.markMove;
+
+      // setTimeout(()=>{
+      //   document.getElementById('postForm').scrollTop = 700;
+      //   console.log('延迟')
+      // },1000)
+
     },
     backClick() {
       this.$router.go(-1);
@@ -659,7 +572,7 @@ export default {
       this.showPopup = false;
       this.selectSort = value.text;
     },
-
+    //分类接口
     loadCategories(){
       this.appFetch({
         url: 'categories',
@@ -689,36 +602,7 @@ export default {
     },
     onCancel() {
       this.showPopup = false;
-    },
-    //设置付费金额,，显示弹框
-    paySetting(){
-      this.paySetShow = true;
-      setTimeout(function () {
-        document.getElementById('payMoneyInp').focus();
-      }, 200);
-    },
-    //关闭付费设置弹框
-    closePaySet(){
-      this.paySetShow = false;
-      this.paySetValue = '免费';
-    },
-    //设置付费时，实时获取输入框的值，用来判断按钮状态
-    search: function (event) {
-      // if(event.target.value != null && event.target.value > '0'){
-      //   this.isCli = true;
-      // } else {
-      //   this.isCli = false;
-      // }
-    },
-    //点击确定按钮，提交付费设置
-    paySetSure(){
-      this.paySetShow = false;
-      if(this.paySetValue <= 0){
-        this.payValue = '免费';
-      } else {
-        this.payValue = this.paySetValue +'元';
-      }
-    },
+    }
 
   }
 }

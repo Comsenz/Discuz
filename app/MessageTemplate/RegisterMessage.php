@@ -10,6 +10,12 @@ namespace App\MessageTemplate;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Notifications\Messages\DatabaseMessage;
 
+/**
+ * 新用户注册并加入后
+ *
+ * Class RegisterMessage
+ * @package App\MessageTemplate
+ */
 class RegisterMessage extends DatabaseMessage
 {
     protected $settings;

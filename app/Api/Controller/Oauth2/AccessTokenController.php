@@ -8,20 +8,17 @@
 namespace App\Api\Controller\Oauth2;
 
 use App\Passport\Repositories\AccessTokenRepository;
-use App\Passport\Repositories\ClientRepository;
 use App\Passport\Repositories\RefreshTokenRepository;
-use App\Passport\Repositories\ScopeRepository;
 use App\Passport\Repositories\UserRepository;
 use DateInterval;
 use Discuz\Foundation\Application;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\PasswordGrant;
-use Laminas\Diactoros\Response;
+use Nyholm\Psr7\Response;
 
 class AccessTokenController implements RequestHandlerInterface
 {

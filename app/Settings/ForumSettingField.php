@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
@@ -114,10 +119,11 @@ class ForumSettingField
     public function getQCloudSettings()
     {
         return [
-            'qcloud_app_id' => $this->settings->get('qcloud_app_id', 'qcloud'),
             'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
             'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
+            'qcloud_captcha_app_id' => $this->settings->get('qcloud_captcha_app_id', 'qcloud'),
+            'qcloud_captcha_secret_key' => $this->settings->get('qcloud_captcha_secret_key', 'qcloud'),
             'qcloud_cms_image' => (bool)$this->settings->get('qcloud_cms_image', 'qcloud'),
             'qcloud_cms_text' => (bool)$this->settings->get('qcloud_cms_text', 'qcloud'),
             'qcloud_faceid_region' => (bool)$this->settings->get('qcloud_faceid_region', 'qcloud'),
@@ -128,6 +134,7 @@ class ForumSettingField
             'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
             'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
+            'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
         ];
     }
 
@@ -166,6 +173,14 @@ class ForumSettingField
         return [
             'site_price' => $this->settings->get('site_price') ?: 0,
             'site_expire' => $this->settings->get('site_expire') ?: '',
+        ];
+    }
+
+    public function getQCloudVod()
+    {
+        return [
+            'qcloud_vod_ext' => $this->settings->get('qcloud_vod_ext', 'qcloud'),
+            'qcloud_vod_size' => $this->settings->get('qcloud_vod_size', 'qcloud'),
         ];
     }
 }

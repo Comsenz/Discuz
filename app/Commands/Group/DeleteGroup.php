@@ -7,40 +7,55 @@
 
 namespace App\Commands\Group;
 
+use App\Models\User;
 use App\Repositories\GroupRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteGroup
 {
     use AssertPermissionTrait;
+    use EventsDispatchTrait;
 
+    /**
+     * @var int
+     */
     protected $id;
 
+    /**
+     * @var User
+     */
     protected $actor;
 
-    protected $groups;
-
-    public function __construct($id, $actor)
+    /**
+     * @param int $id
+     * @param User $actor
+     */
+    public function __construct($id, User $actor)
     {
         $this->id = $id;
         $this->actor = $actor;
     }
 
-    public function handle(GroupRepository $groups)
-    {
-        $this->groups = $groups;
-        return call_user_func([$this, '__invoke']);
-    }
-
     /**
+     * @param GroupRepository $groups
+     * @param Dispatcher $events
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function __invoke()
+    public function handle(GroupRepository $groups, Dispatcher $events)
     {
-        $group = $this->groups->findOrFail($this->id, $this->actor);
+        $this->events = $events;
+
+        $group = $groups->findOrFail($this->id, $this->actor);
 
         $this->assertCan($this->actor, 'delete', $group);
 
         $group->delete();
+
+        $this->dispatchEventsFor($group, $this->actor);
+
+        return $group;
     }
 }

@@ -56,6 +56,7 @@ export default {
         showIndex: true,    //是否显示页码         默认 true
         showIndicators: true, //是否显示轮播指示器 默认 false
         loop:true,            //是否开启循环播放  貌似循环播放是不起作用的。。。
+        closeOnPopstate: true
         
       })
     },

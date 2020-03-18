@@ -7,7 +7,12 @@
 
 namespace App\MessageTemplate;
 
-
+/**
+ * 内容审核通过通知
+ *
+ * Class PostThroughMessage
+ * @package App\MessageTemplate
+ */
 class PostThroughMessage extends BasePostMessage
 {
     protected $tplId = 5;

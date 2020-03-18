@@ -14,8 +14,10 @@ use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
 use App\Models\Thread;
+use App\Models\ThreadVideo;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
+use App\Repositories\ThreadVideoRepository;
 use App\Traits\ThreadNoticesTrait;
 use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
@@ -69,11 +71,12 @@ class EditThread
      * @param ThreadRepository $threads
      * @param Censor $censor
      * @param ThreadValidator $validator
+     * @param ThreadVideoRepository $threadVideos
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator)
+    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos)
     {
         $this->events = $events;
 
@@ -98,9 +101,9 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        if (isset($attributes['price']) && $thread->is_long_article) {
-            // TODO: 修改价格暂时不设新的权限，使用修改标题的权限
-            $this->assertCan($this->actor, 'rename', $thread);
+        //长文、视频可以修改价格
+        if (isset($attributes['price']) && ($thread->type != 0)) {
+            $this->assertCan($this->actor, 'editPrice', $thread);
 
             $thread->price = (float) $attributes['price'];
         }
@@ -182,7 +185,33 @@ class EditThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $validator->valid($thread->getDirty());
+
+        $type = $thread->type;
+        $validAttr = $thread->getDirty() + compact('type');
+        //视频贴验证是否上传视频
+        $file_id = Arr::get($this->data, 'attributes.file_id');
+        $file_name = Arr::get($this->data, 'attributes.file_name');
+
+        if ($file_id !== null || $file_name !== null) {
+            $validAttr += compact('file_id', 'file_name');
+        }
+        $validator->valid($validAttr);
+
+        //编辑视频
+        if ($thread->type == 2 && $file_id) {
+            $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
+            if ($threadVideo->file_id != $attributes['file_id']) {
+                $threadVideo->file_name = $attributes['file_name'];
+                $threadVideo->file_id = $attributes['file_id'];
+                $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+                $threadVideo->media_url = '';
+                $threadVideo->cover_url = '';
+                $threadVideo->save();
+
+                //重新上传视频修改为审核状态
+                $thread->is_approved = 0;
+            }
+        }
 
         $thread->save();
 

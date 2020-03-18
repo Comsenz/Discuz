@@ -8,7 +8,6 @@
 namespace App\Providers;
 
 use App\Models\SessionToken;
-use Carbon\Carbon;
 use Discuz\Foundation\AbstractServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Contracts\Validation\Factory as Validator;
@@ -32,9 +31,6 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
      */
     public function boot(Validator $validator)
     {
-        // 清除过期 session_token
-        SessionToken::where('expired_at', '<', Carbon::now())->delete();
-
         // 自定义验证规则
         $validator->extend('session_token', function ($attribute, $value, $parameters, $validator) {
             // 至少需要一个参数即 scope

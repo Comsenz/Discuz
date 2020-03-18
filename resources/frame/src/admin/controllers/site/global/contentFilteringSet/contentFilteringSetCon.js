@@ -10,16 +10,16 @@ import webDb from '../../../../../helpers/webDbHelper'
 import appConfig from "../../../../../../config/appConfig";
 
 export default {
-  data:function () {
+  data: function () {
     let token = webDb.getLItem('Authorization');
 
     return {
       tableData: [],
       multipleSelection: [],
-      tableDataLength:'',
+      tableDataLength: '',
       // disabled:true,
-      createCategoriesStatus:false,   //添加分类状态
-      exportUrl: appConfig.baseUrl+'/api/stop-words/export?token=Bearer ' + token,
+      createCategoriesStatus: false,   //添加分类状态
+      exportUrl: appConfig.baseUrl + '/api/stop-words/export?token=Bearer ' + token,
       options: [
         {
           value: '{IGNORE}',
@@ -27,7 +27,7 @@ export default {
         }, {
           value: '{MOD}',
           label: '审核'
-        },{
+        }, {
           value: '{BANNED}',
           label: '禁用'
         },
@@ -39,60 +39,60 @@ export default {
 
       optionsUser: [
         {
-        value: '{IGNORE}',
-        label: '不处理'
-        },{
+          value: '{IGNORE}',
+          label: '不处理'
+        }, {
           value: '{BANNED}',
           label: '禁用'
         },
-      // {
-      //   value: '{MOD}',
-      //   label: '审核'
-      // }
+        // {
+        //   value: '{MOD}',
+        //   label: '审核'
+        // }
       ],
-      serachVal:'',
-      checked:false,
-      searchData :[],//搜索后的数据
-      replace:true,
-      inputFind:false,
-      radio2:"1",
-      total:0, //总条数
-      pageLimit:20, //每页多少条
-      pageNum:0, //当前页
+      serachVal: '',
+      checked: false,
+      searchData: [],//搜索后的数据
+      replace: true,
+      inputFind: false,
+      radio2: "1",
+      total: 0, //总条数
+      pageLimit: 20, //每页多少条
+      pageNum: 0, //当前页
       userLoadMoreStatus: true,
       userLoadMorePageChange: false,
       // loginStatus:'',  //default  batchSet
-      deleteStatus:true,
+      deleteStatus: true,
       // contentParams: {
       //   'filter[p]': '',
       //   'page[number]': 1,
       // }
 
-      deleteList:[],
-      tableAdd:false,
+      deleteList: [],
+      tableAdd: false,
 
     }
   },
-  created(){
-    this.handleSearchUser(true);  //初始化页面数据
+  created() {
+    // this.handleSearchUser(true);  //初始化页面数据
     // this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
     // this.handleSearchUser(Number(webDb.getLItem('currentPag'))||1);
   },
-  beforeRouteEnter(to,from,next){
+  beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (to.name !== from.name && from.name !== null){
+      if (to.name !== from.name && from.name !== null) {
         vm.getCreated(true)
-      }else {
+      } else {
         vm.getCreated(false)
       }
     })
   },
-  methods:{
-    getCreated(state){
-      if(state){
-        this.pageNum  = 1
+  methods: {
+    getCreated(state) {
+      if (state) {
+        this.pageNum = 1
       } else {
-        this.pageNum  = Number(webDb.getLItem('currentPag'))||1;
+        this.pageNum = Number(webDb.getLItem('currentPag')) || 1;
       }
       this.handleSearchUser(true)
 
@@ -116,20 +116,20 @@ export default {
       this.pageNum = 1;
       this.handleSearchUser(true);
     },
-    async handleSearchUser(initStatus = false){
-      try{
+    async handleSearchUser(initStatus = false) {
+      try {
         const response = await this.appFetch({
-          url:'serachWords',
-          method:'get',
-          data:{
-            'filter[q]':this.serachVal,
+          url: 'serachWords',
+          method: 'get',
+          data: {
+            'filter[q]': this.serachVal,
             "page[limit]": this.pageLimit,
             "page[number]": this.pageNum
           }
         })
-        if (response.errors){
+        if (response.errors) {
           this.$message.error(response.errors[0].code);
-        }else {
+        } else {
           if (initStatus) {
             this.tableData = [];
           }
@@ -144,131 +144,131 @@ export default {
             return v;
           });
         }
-      } catch(err){
+      } catch (err) {
 
       } finally {
         this.userLoadMorePageChange = false;
       }
     },
 
-    handleLoadMoreUser(){
+    handleLoadMoreUser() {
       this.userLoadMorePageChange = true;
       this.handleSearchUser();
     },
 
-    selectChange(scope){
-      if(scope){
-        if(scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}'){
+    selectChange(scope) {
+      if (scope) {
+        if (scope.row._data.ugc !== '{REPLACE}' && scope.row._data.username !== '{REPLACE}') {
           this.tableData[scope.$index]._data.replacement = '';
         }
       }
     },
 
-    async loginStatus(){  //批量提交接口
+    async loginStatus() {  //批量提交接口
 
-      let result = this.tableData.filter((v)=>{
+      let result = this.tableData.filter((v) => {
         return v._data.addInputFlag;
       })
 
       result = result.concat(this.multipleSelection);
 
-      try{
-        if(this.tableData.length === 0){
+      try {
+        if (this.tableData.length === 0) {
           return;
         }
 
         let words = [];
 
-        for(let i = 0,len = this.tableData.length; i < len; i++){
+        for (let i = 0, len = this.tableData.length; i < len; i++) {
           const _data = this.tableData[i]._data;
-          const { ugc, username, find, replacement} = _data;
-          if(replacement === '' && ugc === '{REPLACE}' && username === '{REPLACE}'){
+          const { ugc, username, find, replacement } = _data;
+          if (replacement === '' && ugc === '{REPLACE}' && username === '{REPLACE}') {
             continue;
           }
           let item = '';
 
-          if(ugc === '{REPLACE}' && username === '{REPLACE}'){
+          if (ugc === '{REPLACE}' && username === '{REPLACE}') {
             item = `${find}=${replacement}`
-          } else if(ugc === '{REPLACE}' && username !== '{REPLACE}'){
+          } else if (ugc === '{REPLACE}' && username !== '{REPLACE}') {
             item = `${find}=${replacement}|${username}`
-          } else if(username === '{REPLACE}' && ugc !== '{REPLACE}'){
+          } else if (username === '{REPLACE}' && ugc !== '{REPLACE}') {
             item = `${find}=${replacement}|${ugc}`
-          } else if(username !== '{REPLACE}' && ugc !== '{REPLACE}'){
+          } else if (username !== '{REPLACE}' && ugc !== '{REPLACE}') {
             item = `${find}=${ugc}|${username}`
           }
 
           words.push(item);
         }
 
-        if(words.length === 0){
+        if (words.length === 0) {
           return;
         }
 
         await this.appFetch({
-          url:'batchSubmit',
-          method:'post',
+          url: 'batchSubmit',
+          method: 'post',
           standard: false,
-          data:{
+          data: {
             "data": {
               "type": "stop-words",
               "words": words,
-              "overwrite":true
-          }
+              "overwrite": true
+            }
           }
         })
         // if (res.errors){
         //   this.$message.error(res.errors[0].code);
         // }else{
-          // this.pageNum  = 1
-          this.handleSearchUser(true);
-          this.$message({message: '提交成功', type: 'success'});
+        // this.pageNum  = 1
+        this.handleSearchUser(true);
+        this.$message({ message: '提交成功', type: 'success' });
         // }
 
-      } catch(err){
-        console.error(err,'function loginStatus error')
+      } catch (err) {
+        console.error(err, 'function loginStatus error')
       }
 
     },
-    tableContAdd(){
-        this.tableData.push({
-          _data:{
-            find:"",
-            username:"",
-            ugc:"",
-            replacement: "",
-            addInputFlag:true,
-          }
-        })
-        this.tableAdd = true
+    tableContAdd() {
+      this.tableData.push({
+        _data: {
+          find: "",
+          username: "",
+          ugc: "",
+          replacement: "",
+          addInputFlag: true,
+        }
+      })
+      this.tableAdd = true
     },
-    deleteWords(){
+    deleteWords() {
       this.deleteList = []
-      for(var i =0;i<this.multipleSelection.length;i++){
+      for (var i = 0; i < this.multipleSelection.length; i++) {
         this.deleteList.push(this.multipleSelection[i]._data.id)
       }
       this.appFetch({
-        url:'deleteWords',
-        method:'delete',
-        splice:this.deleteList.join(","),
-        data:{
+        url: 'deleteWords',
+        method: 'delete',
+        splice: this.deleteList.join(","),
+        data: {
 
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$message.error(res.errors[0].code);
-        }else{
+        } else {
           this.handleSearchUser(true);
         }
       })
 
     },
-    handleCurrentChange(val){
+    handleCurrentChange(val) {
       this.pageNum = val
       this.handleSearchUser(true)
     }
 
   },
-  components:{
+  components: {
     Card,
     CardRow,
     TableContAdd,

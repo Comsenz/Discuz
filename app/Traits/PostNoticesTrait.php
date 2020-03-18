@@ -9,9 +9,10 @@ namespace App\Traits;
 
 use App\MessageTemplate\PostDeleteMessage;
 use App\MessageTemplate\PostModMessage;
-use App\MessageTemplate\PostOrderMessage;
-use App\MessageTemplate\PostStickMessage;
 use App\MessageTemplate\PostThroughMessage;
+use App\MessageTemplate\Wechat\WechatPostDeleteMessage;
+use App\MessageTemplate\Wechat\WechatPostModMessage;
+use App\MessageTemplate\Wechat\WechatPostThroughMessage;
 use App\Models\Post;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
@@ -40,6 +41,7 @@ trait PostNoticesTrait
             ],
         ];
         $post->user->notify(new System(PostDeleteMessage::class, $data));
+        $post->user->notify(new System(WechatPostDeleteMessage::class, $data));
     }
 
     /**
@@ -61,9 +63,13 @@ trait PostNoticesTrait
         if ($post->is_approved == 1) {
             // 发送通过通知
             $post->user->notify(new System(PostThroughMessage::class, $data));
+            // 发送微信通知
+            $post->user->notify(new System(WechatPostThroughMessage::class, $data));
         } elseif ($post->is_approved == 2) {
             // 忽略就发送不通过通知
             $post->user->notify(new System(PostModMessage::class, $data));
+            // 发送微信通知
+            $post->user->notify(new System(WechatPostModMessage::class, $data));
         }
     }
 
@@ -75,7 +81,7 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->is_long_article ? $post->thread->title : $post->formatContent();
+        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
     }
 
     /**

@@ -1,15 +1,14 @@
 <template>
   <div>
-    <Card header="配置"></Card>
+    <Card :header="query.typeName"></Card>
 
-    <Card header="用户角色通知标题：">
-      <CardRow description="系统发送的信息标题，不支持HTML，不超过75字节
-">
+    <Card header="用户角色通知标题：" v-if="query.type==='system'">
+      <CardRow description="系统发送的信息标题，不支持HTML，不超过75字节">
         <el-input type="text" maxlength="75" v-model="noticeTitle" ></el-input>
       </CardRow>
     </Card>
 
-    <Card header="用户角色通知内容：">
+    <Card header="用户角色通知内容：" v-if="query.type==='system'">
       <CardRow row
         description="系统发送的信息内容，标题内容均支持变量替换，可以使用如下变量:<br>
                     {username}：用户名
@@ -22,6 +21,12 @@
                     {reason}：原因"
       >
         <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 5}" v-model="noticeContent" clearable></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="模板ID" v-if="query.type==='wx'">
+      <CardRow row :description="wxNoticeDescription[query.id]">
+        <el-input type="text" maxlength="75" v-model="wxNoticeCon" ></el-input>
       </CardRow>
     </Card>
 

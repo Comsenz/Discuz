@@ -19,6 +19,7 @@ import './extend/viewBase/elementuiInit'; //引入element组件
 import Echarts from 'echarts'; //引入Echarts
 
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
+// import '../../frame/src/template/default/controllers/m_site/common/tcaptcha'; //引入腾讯验证码
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import axiosHelper from "axiosHelper";							//ajax 请求封装
@@ -34,6 +35,8 @@ import lrz from 'lrz';     //图片压缩
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
+import welinkH5 from '../static/js/hwh5-cloudonline';
+Vue.prototype.$welinkH5 = welinkH5;
 
 import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
@@ -54,8 +57,12 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
-Vue.prototype.$echarts = Echarts; //
+Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
+let app = {};
 
+app.bus = new Vue(); //后台财务统计echarts图标
+
+// Vue.use(tacptcha)
 //实例化根目录
 // const appRouter = RConfig.init();
 // const App = new Vue({
@@ -65,7 +72,6 @@ Vue.prototype.$echarts = Echarts; //
 //   	template: '<router-view></router-view>'
 // }).$mount('#app');
 
-window.app = App;//实例化根目录
 const appRouter = RConfig.init();
 
 const keepAliveUrl = ['circle'];
@@ -93,7 +99,10 @@ const App = new Vue({
     }
   },
   created(){
-    this.siteInfoStat = browserDb.getLItem('siteInfo')._data.set_site.site_stat;
+    app.bus.$on('stat',(arg)=> {
+      // console.log('on监听参数====',arg)
+      this.siteInfoStat = arg;
+    })
   },
   watch: {
     '$route': function(to, from) {
@@ -159,9 +168,11 @@ const App = new Vue({
         }
 
       }*/
-      
+
     }
   },
   template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
 }).$mount('#app');
-window.app = App;
+
+
+window.app = app;//实例化根目录

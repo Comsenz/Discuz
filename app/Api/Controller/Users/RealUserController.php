@@ -42,7 +42,7 @@ class RealUserController extends AbstractCreateController
 
         $data = $request->getParsedBody()->get('data', []);
         return $this->bus->dispatch(
-            new RealUser( $data, $actor)
+            new RealUser($data, $actor)
         );
     }
 }

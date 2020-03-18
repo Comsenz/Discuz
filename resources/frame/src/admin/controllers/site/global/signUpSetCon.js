@@ -9,6 +9,8 @@ export default {
       register_validate:'',   //注册审核
       pwdLength:'',           //密码长度
       checkList:[],           //密码规则
+      register_captcha:'',    //验证码开始
+      disabled:true,            //是否可以开启验证码
     }
   },
   created(){
@@ -31,6 +33,10 @@ export default {
           this.register_validate = res.readdata._data.set_reg.register_validate;
           this.pwdLength = res.readdata._data.set_reg.password_length;
           this.checkList = res.readdata._data.set_reg.password_strength;
+          this.register_captcha = res.readdata._data.set_reg.register_captcha;
+          if(res.readdata._data.qcloud.qcloud_captcha == true){
+            this.disabled = false
+          }
         }
       })
     },
@@ -66,6 +72,13 @@ export default {
             },
             {
               "attributes":{
+                "key":'register_captcha',
+                "value":this.register_captcha,
+                "tag": 'default'
+              }
+            },
+            {
+              "attributes":{
                 "key":'password_length',
                 "value":this.pwdLength,
                 "tag": 'default'
@@ -79,9 +92,6 @@ export default {
                }
             }
            ]
-          // "register_close": this.checked,
-          // "password_length":this.pwdLength,
-
         }
       }).then(data=>{
         if (data.errors){

@@ -14,6 +14,7 @@ export default {
       radio:'',
       alternateRadio:'',    //默认级别选中备份
       radioName:'',         //默认级别名称
+      radioIndex:'',        //默认级别序号
       deleteStatus:true,
       multipleSelection:[],
       addStatus:false
@@ -34,8 +35,9 @@ export default {
 
     },*/
 
-    radioChange(val){
+    radioChange(val,index){
       this.radioName = val._data.name;
+      this.radioIndex = index;
     },
 
     checkSelectable(row){
@@ -83,7 +85,8 @@ export default {
         let singleData = {
           "type": "groups",
           "attributes": {
-            "name": ""
+            "name": "",
+            'default':''
           }
         };    //单个
 
@@ -107,6 +110,10 @@ export default {
           * 单个添加用户组写法
           * */
           singleData.attributes.name = this.tableData[i]._data.name;
+        }
+
+        if (this.radioIndex + 1 === this.tableData.length){
+          singleData.attributes.default = 1;
         }
 
         this.postGroups(singleData);

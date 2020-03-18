@@ -155,6 +155,16 @@ appCommonH.isWeixin = function(){
     isWeixin,isPhone,isPc
   }
 }
+/**
+ * 是否是WeLink
+ * @return {Boolean} [description]
+ */
+appCommonH.isWeLink = function(){
+    var isWeLink = navigator.userAgent.indexOf('HuaWei-AnyOffice') > -1
+    return {
+        isWeLink
+    }
+}
 
 /**
  * 获取cookie

@@ -39,6 +39,7 @@ class ListThreadsController extends AbstractListController
     public $include = [
         'user',
         'firstPost',
+        'threadVideo',
         'lastPostedUser',
         'category',
     ];
@@ -193,9 +194,9 @@ class ListThreadsController extends AbstractListController
         // 加载其他关联
         $threads->loadMissing($include);
 
-        // 截取内容
-        if (in_array('firstPost', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor);
+        // 处理付费主题内容
+        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
+            $threads = $this->cutThreadContent($threads, $actor, $include);
         }
 
         return $threads;
@@ -486,15 +487,16 @@ class ListThreadsController extends AbstractListController
      *
      * @param Collection $threads
      * @param User $actor
+     * @param array $include
      * @return Collection
      */
-    protected function cutThreadContent(Collection $threads, User $actor)
+    protected function cutThreadContent(Collection $threads, User $actor, array $include)
     {
         // 需付费主题
         $notFreeThreads = $threads->where('price', '>', 0)->pluck('id');
 
         // 已付费主题
-        if ($notFreeThreads && ! $actor->isAdmin()) {
+        if ($notFreeThreads && !$actor->isAdmin()) {
             $paidThreads = Order::whereIn('thread_id', $notFreeThreads)
                 ->where('user_id', $actor->id)
                 ->where('status', Order::ORDER_STATUS_PAID)
@@ -505,26 +507,42 @@ class ListThreadsController extends AbstractListController
         }
 
         // 主题内容处理
-        $threads->map(function (Thread $thread) use ($actor, $notFreeThreads, $paidThreads) {
-            // 付费主题
+        $threads->map(function (Thread $thread) use ($notFreeThreads, $paidThreads, $actor, $include) {
+            // 付费主题，是否付费
             if ($notFreeThreads->contains($thread->id)) {
-                // 是否付费
                 if ($thread->user_id == $actor->id || $paidThreads->contains($thread->id)) {
                     $thread->setAttribute('paid', true);
                 } else {
                     $thread->setAttribute('paid', false);
-
-                    // 隐藏图片及附件
-                    $thread->firstPost->setRelation('images', collect());
-                    $thread->firstPost->setRelation('attachments', collect());
                 }
             }
 
-            // 截取内容
-            if ($thread->price > 0) {
-                $thread->firstPost->content = '';
-            } else {
-                $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+            // 加载首贴时，处理内容
+            if (in_array('firstPost', $include)) {
+                // 截取内容、隐藏附件
+                if ($thread->price > 0 && $thread->type == 1) {
+                    // 列表接口，付费长文主题，无论是否付费，不返回内容
+                    $thread->firstPost->content = '';
+
+
+                    // 未付费时，隐藏图片及附件
+                    if (!$thread->getAttribute('paid')) {
+                        $thread->firstPost->setRelation('images', collect());
+                        $thread->firstPost->setRelation('attachments', collect());
+                    }
+                } else {
+                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                }
+            }
+
+            // 付费视频，未付费时，隐藏视频
+            if (in_array('threadVideo', $include)) {
+                if ($thread->price > 0 && $thread->type == 2 && !$thread->getAttribute('paid')) {
+                    if ($thread->threadVideo) {
+                        $thread->threadVideo->file_id = '';
+                        $thread->threadVideo->media_url = '';
+                    }
+                }
             }
         });
 

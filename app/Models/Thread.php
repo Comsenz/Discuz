@@ -36,10 +36,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_approved
  * @property bool $is_sticky
  * @property bool $is_essence
- * @property bool $is_long_article
+ * @property int $type
  * @property Post $firstPost
  * @property User $user
  * @property Category $category
+ * @property threadVideo $threadVideo
  * @package App\Models
  */
 class Thread extends Model
@@ -57,9 +58,9 @@ class Thread extends Model
      * {@inheritdoc}
      */
     protected $casts = [
+        'type' => 'integer',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
-        'is_long_article' => 'boolean',
     ];
 
     /**
@@ -294,6 +295,11 @@ class Thread extends Model
         $user = $user ?: static::$stateUser;
 
         return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
+    }
+
+    public function threadVideo()
+    {
+        return $this->hasOne(ThreadVideo::class);
     }
 
     /**

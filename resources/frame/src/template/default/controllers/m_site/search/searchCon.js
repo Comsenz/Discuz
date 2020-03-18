@@ -3,7 +3,7 @@
  */
 import browserDb from '../../../../../helpers/webDbHelper';
 export default {
-  	data: function () {
+	data: function () {
 		return {
 			searchVal: '',
 			userParams: {
@@ -15,7 +15,7 @@ export default {
 				'include': 'groups'
 			},
 			themeParamd: {
-				include: ['user', 'firstPost'],
+				include: ['user', 'firstPost', 'threadVideo'],
 				'filter[q]': '',
 				'filter[isDeleted]': 'no',
 				'page[limit]': 5,
@@ -33,58 +33,56 @@ export default {
 			timerSearch: null, // 延迟器
 			searchMaxSum: 3,
 		}
-  	},
+	},
 
 	methods: {
 		onSearch(val) {
 			clearTimeout(this.timerSearch);
 			this.searchVal = val;
-			if(this.searchVal === ''){
+			if (this.searchVal === '') {
 				this.searchUserList = [];
 				this.searchThemeList = [];
 				return;
 			}
-			this.timerSearch = setTimeout(()=>{
+			this.timerSearch = setTimeout(() => {
 
 				this.firstComeIn = false;
 
 				// 用户搜索
 				this.userParams['filter[username]'] = '*' + this.searchVal + '*';
 				this.userParams['page[number]'] = 1;
-
 				this.handleSearchUser(true);
 
 				// 主题搜索
 				this.themeParamd['filter[q]'] = this.searchVal;
 				this.themeParamd['page[number]'] = 1;
-
 				this.handleSearchTheme(true);
 
-			},200)
+			}, 200)
 		},
 		onCancel() {
-			this.$router.push({ path:'/'});
+			this.$router.push({ path: '/' });
 		},
 
-		async handleSearchUser(initStatus = false){
-			if(initStatus){
+		async handleSearchUser(initStatus = false) {
+			if (initStatus) {
 				this.searchUserList = [];
 			}
-			if(this.userLoading){
+			if (this.userLoading) {
 				return;
 			}
 			this.userLoading = true;
-			try{
+			try {
 				const currentPageNum = this.userParams['page[number]'];
 				await this.appFetch({
-					url:'users',
-					methods:'get',
+					url: 'users',
+					methods: 'get',
 					data: this.userParams
-				}).then(data=>{
+				}).then(data => {
 					this.userLoadMoreStatus = data.readdata.length > this.searchMaxSum;
-					this.searchUserList = data.readdata.splice(0,3);
-				}).catch(err=>{
-					if(this.userLoadMorePageChange && this.userParams['page[number]'] > 1){
+					this.searchUserList = data.readdata.splice(0, 3);
+				}).catch(err => {
+					if (this.userLoadMorePageChange && this.userParams['page[number]'] > 1) {
 						this.userParams['page[number]'] = currentPageNum - 1;
 					}
 				})
@@ -95,33 +93,33 @@ export default {
 			}
 		},
 
-		handleLoadMoreUser(){
+		handleLoadMoreUser() {
 			// // this.userParams['page[number]']++;
 			// // this.userParams['page[limit]'] = 10;
 			// this.userLoadMorePageChange = true;
 			// this.handleSearchUser();
-			this.$router.push({path: '/circle-members', query: {searchWord: this.searchVal}})
+			this.$router.push({ path: '/circle-members', query: { searchWord: this.searchVal } })
 		},
 
-		async handleSearchTheme(initStatus = false){
-			if(initStatus){
+		async handleSearchTheme(initStatus = false) {
+			if (initStatus) {
 				this.searchThemeList = [];
 			}
-			if(this.themeLoading){
+			if (this.themeLoading) {
 				return;
 			}
 			this.themeLoading = true;
 			try {
 				const currentPageNum = this.themeParamd['page[number]'];
 				await this.appFetch({
-					url:'searchThreads',
-					method:'get',
+					url: 'searchThreads',
+					method: 'get',
 					data: this.themeParamd
-				}).then(data=>{
+				}).then(data => {
 					this.themeLoadMoreStatus = data.readdata.length > this.searchMaxSum;
-					this.searchThemeList = data.readdata.splice(0,3);
-				}).catch(err=>{
-					if(this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1){
+					this.searchThemeList = data.readdata.splice(0, 3);
+				}).catch(err => {
+					if (this.themeLoadMorePageChange && this.themeParamd['page[number]'] > 1) {
 						this.themeParamd['page[number]'] = currentPageNum - 1;
 					}
 				})
@@ -132,21 +130,21 @@ export default {
 			}
 		},
 
-		handleLoadMoreTheme(){
+		handleLoadMoreTheme() {
 			// // this.themeParamd['page[number]']++;
 			// // this.themeParamd['page[limit]'] = 10;
 			// this.themeLoadMorePageChange = true;
 			// this.handleSearchTheme();
-			this.$router.push({path: '/theme-search', query: {searchWord: this.searchVal}})
+			this.$router.push({ path: '/theme-search', query: { searchWord: this.searchVal } })
 		},
 
 		//点击用户名称，跳转到用户主页
-		jumpPerDet:function(id){
-			  this.$router.push({ path:'/home-page'+'/'+id});
-		  },
+		jumpPerDet: function (id) {
+			this.$router.push({ path: '/home-page' + '/' + id });
+		},
 		//点击主题内容，跳转到详情页
-		jumpDetails:function(id){
-			this.$router.push({ path:'/details'+'/'+id});
+		jumpDetails: function (id) {
+			this.$router.push({ path: '/details' + '/' + id });
 		},
 
 	},
@@ -156,5 +154,5 @@ export default {
 	},
 	beforeRouteLeave(to, from, next) {
 		next()
-  }
+	}
 }

@@ -13,7 +13,6 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 class EmojiSerializer extends AbstractSerializer
 {
-
     protected $url;
 
     public function __construct(UrlGenerator $url)

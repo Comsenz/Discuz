@@ -56,7 +56,7 @@ class ThreadPolicy extends AbstractPolicy
         if (! $actor->hasPermission('viewTrashed')) {
             $query->where(function (Builder $query) use ($actor) {
                 $query->whereNull('threads.deleted_at')
-                    ->orWhere('threads.user_id', $actor->id)
+                    // ->orWhere('threads.user_id', $actor->id) // 作者是否可见
                     ->orWhere(function ($query) use ($actor) {
                         $this->events->dispatch(
                             new ScopeModelVisibility($query, $actor, 'hide')
@@ -92,6 +92,18 @@ class ThreadPolicy extends AbstractPolicy
      * @return bool|null
      */
     public function hide(User $actor, Thread $thread)
+    {
+        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Thread $thread
+     * @return bool
+     */
+    public function editPrice(User $actor, Thread $thread)
     {
         if ($thread->user_id == $actor->id || $actor->isAdmin()) {
             return true;

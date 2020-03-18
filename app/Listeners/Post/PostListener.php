@@ -15,6 +15,7 @@ use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\MessageTemplate\PostMessage;
+use App\MessageTemplate\Wechat\WechatPostMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
@@ -189,10 +190,15 @@ class PostListener
         if ($event->post->user) {
             // 判断是否是自己
             if ($event->actor->id != $event->post->user->id) {
-                $event->post->user->notify(new System(PostMessage::class, [
+                $build = [
                     'message' => $event->post->content,
                     'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'is_first'])
-                ]));
+                ];
+                // 系统通知
+                $event->post->user->notify(new System(PostMessage::class, $build));
+
+                // 微信通知
+                $event->post->user->notify(new System(WechatPostMessage::class, $build));
             }
         }
     }
@@ -239,7 +245,7 @@ class PostListener
 
         switch ($event->data['notice_type']) {
             case 'isApproved':  // 内容审核通知
-                $this->postIsApproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                $this->postisapproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
                 break;
             case 'isDeleted':   // 内容删除通知
                 $this->postIsDeleted($event->post, ['refuse' => $this->reasonValue($event->data)]);

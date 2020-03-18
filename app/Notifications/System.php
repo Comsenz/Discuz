@@ -8,11 +8,10 @@
 namespace App\Notifications;
 
 use App\MessageTemplate\StatusMessage;
+use App\MessageTemplate\Wechat\WechatStatusMessage;
 use App\Models\NotificationTpl;
-use App\Models\User;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
 
 class System extends Notification
 {
@@ -39,16 +38,20 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
         if ($this->message instanceof StatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getOriginal('status'));
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
+        }
+
+        if ($this->message instanceof WechatStatusMessage) {
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
         }
 
         $this->getTplData($tplId);
 
         $this->message->setTplData($this->tplData);
 
-        //开启状态发送系统消息
+        // 开启状态发送系统消息
         if (!is_null($this->tplData) && $this->tplData->status == NotificationTpl::OPEN) {
-            return ['database'];
+            return (array)NotificationTpl::enumType($this->tplData->type);
         }
 
         return [];
@@ -59,7 +62,12 @@ class System extends Notification
         return $this->message->notifiable($notifiable)->template($this->data);
     }
 
-    protected function getTplData($id)
+    public function toWechat($notifiable)
+    {
+        return $this->message->notifiable($notifiable)->template($this->data);
+    }
+
+    public function getTplData($id)
     {
         return $this->tplData ? $this->tplData : $this->tplData = NotificationTpl::find($id);
     }
@@ -75,9 +83,10 @@ class System extends Notification
      *
      * @param $status
      * @param $originStatus
+     * @param $type int 0系统 1微信
      * @return int
      */
-    public function discTpl($status, $originStatus)
+    public function discTpl($status, $originStatus, $type = 0)
     {
         $id = 0;
         if ($status == $originStatus) {
@@ -95,8 +104,26 @@ class System extends Notification
                 $id = 10; // 账号禁用通知
             } elseif ($originStatus == 2 && $status == 3) { // 2审核中 变 审核拒绝
                 $id = 3; // 审核拒绝通知
+            } else {
+                $id = 0; // 错误状态下：2审核中变成禁用等 是不允许的
             }
         }
+
+        // 判断和系统通知的对应关系通知
+        if ($type == 1) {
+            $wechat = [
+                11 => 23,
+                2 => 14,
+                10 => 22,
+                3 => 15,
+            ];
+            if (array_key_exists($id, $wechat)) {
+                $id = $wechat[$id];
+            }
+        }
+
+        // 设值tplID
+        $this->message->setTplId($id);
 
         return $id;
     }

@@ -24,6 +24,7 @@ use Illuminate\Validation\ValidationException;
 class PayOrder
 {
     use AssertPermissionTrait;
+
     /**
      * 订单编号
      *

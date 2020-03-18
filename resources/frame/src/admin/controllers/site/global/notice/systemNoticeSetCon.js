@@ -1,5 +1,5 @@
 /*
-* 用户角色控制器
+* 系统通知管理器
 * */
 
 import Card from '../../../../view/site/common/card/card';
@@ -20,24 +20,20 @@ export default {
     this.getNoticeList();
   },
   methods: {
-    getNoticeList() {   //初始化通知设置列表
-      // alert('执行');
+    getNoticeList() {
+      //初始化通知设置列表
       this.appFetch({
         url: 'noticeList',
         method: 'get',
-        data: {}
+        data: {
+          type:0
+        }
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
           this.tableData = res.readdata;
-          // this.id = res.readdata._data.id;
           this.total = res.readdata.length;
-          // this.pageNum = res.meta.pageCount;
-          // this.total = res.meta ? res.meta.total : 0;
-          this.tableData.forEach((item) => {
-            // item.index = (currentPage-1)*pageSize+index+1
-          })
         }
       }).catch(err => {
       })
@@ -82,8 +78,8 @@ export default {
       this.pageNum = val;
       this.getNoticeList();
     },
-    configClick(id) {  //点击配置跳到对应的配置页面
-      this.$router.push({path:'/admin/notice-configure',query: {id:id}});
+    configClick(id,typeName) {  //点击配置跳到对应的配置页面
+      this.$router.push({path:'/admin/notice-configure',query: {id:id,type:'system',typeName:typeName}});
     }
   },
 
@@ -93,3 +89,4 @@ export default {
     Page
   }
 }
+

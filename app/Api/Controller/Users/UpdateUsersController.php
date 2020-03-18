@@ -9,6 +9,7 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\InfoSerializer;
 use App\Commands\Users\UpdateUser;
+use App\Models\User;
 use Discuz\Api\Controller\AbstractListController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -28,10 +29,28 @@ class UpdateUsersController extends AbstractListController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $actor = $request->getAttribute('actor');
         $multipleData = Arr::get($request->getParsedBody(), 'data', []);
+
         $list = collect();
         foreach ($multipleData as $data) {
-            $list->push($this->bus->dispatch(new UpdateUser(Arr::get($data, 'attributes.id'), ['data' => $data], $request->getAttribute('actor'))));
+            $id = Arr::get($data, 'attributes.id');
+
+            try {
+                $item = $this->bus->dispatch(
+                    new UpdateUser($id, ['data' => $data], $actor)
+                );
+
+                $item->succeed = true;
+            } catch (\Exception $e) {
+                $item = new User;
+
+                $item->id = $id;
+                $item->succeed = false;
+                $item->error = $e->getMessage();
+            }
+
+            $list->push($item);
         }
 
         return $list;

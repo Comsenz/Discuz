@@ -29,6 +29,13 @@ input[type="number"]{
   display:inline-block;
 }
 
+/*
+  链接手势
+*/
+.cursor-pointer{
+  cursor:pointer;
+}
+
 
 /*使用Card组件时，去掉底部边框*/
 .footer-btn{

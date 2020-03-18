@@ -7,9 +7,8 @@
       </header>
 
       <div class="post-longText-form" id="postForm">
-        
         <input type="text" placeholder="请输入标题" autofocus id="themeTitle" v-model="themeTitle" class="pubThemeTitle">
-        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; payMove=false; markMove=false; keyboard = false;"></textarea>        
+        <textarea id="textarea_id" class="markdownText" name="post-topic" ref="textarea" placeholder="请输入内容" v-model="content" @focus="showFacePanel = false; footMove = false; payMove=false; markMove=false; keyboard = false;"></textarea>
 
         <!-- <textarea class="reply-box" id="post-topic-form-text" name="post-topic" ref="textarea"  placeholder="请输入内容" v-model="content" :maxlength="keywordsMax" @change="searchChange" @focus="showFacePanel = false; footMove = false; keyboard = false;"></textarea> -->
         <div class="uploadBox" v-if="isAndroid && isWeixin">
@@ -19,7 +18,7 @@
           </div>
         </div>
         <div class="" v-else ="">
-          <div class="uploadBox" v-if="uploadShow ">
+          <div class="uploadBox" v-if="uploadShow">
             <van-uploader :max-count="12" :accept="supportImgExtRes" multiple="false" :after-read="handleFile" v-model="fileListOne" @delete="deleteEnclosure($event,'img')">
             </van-uploader>
           </div>
@@ -92,8 +91,21 @@
           <span class="icon iconfont icon-closeCho" @click="closePaySet"></span>
         </div>
         <div class="payMoneyBox">
-          <span>￥</span>
-          <input type="number" class="payMoneyInp" autofocus id="payMoneyInp" v-model="paySetValue" @keyup.enter="search" @input="search($event)" />
+          <!--<span>￥</span>-->
+          <!--<input type="number" class="payMoneyInp" id="payMoneyInp" v-model="paySetValue" autofocus="autofocus" @keyup.enter="search" @input="search($event)" />-->
+
+          <van-field
+            v-model="paySetValue"
+            type="number"
+            maxlength="10"
+            clearable
+            label="￥"
+            :formatter="formatter"
+            @keyup.enter="search"
+            @input="search($event)"
+          />
+
+
         </div>
         <!-- <div class="payEx">付费说明</div>
         <input type="text" placeholder="这篇内容付费方可查看全部内容…" class="payExplain"> -->
@@ -105,22 +117,26 @@
           <van-picker :columns='categories' show-toolbar title="选择分类"  @cancel="onCancel" @confirm="onConfirm"  />
         </van-popup>
       </div>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+      </div>
     </div>
 
 </template>
 
 <script>
-import postLongTextCon from '../../../controllers/m_site/circle/postLongTextCon';
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
-import Expression from '../../m_site/common/expressionView';
-import  '../../../defaultLess/m_site/common/common.less';
-import  '../../../defaultLess/m_site/modules/circle.less';
+import editLongTextCon from '../../../../controllers/m_site/circle/edit/editLongTextCon';
+// import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
+import Expression from '../../../m_site/common/expressionView';
+import  '../../../../defaultLess/m_site/common/common.less';
+import  '../../../../defaultLess/m_site/modules/circle.less';
 
 export default {
     name: "post-topic",
     components: {
       Expression,
     },
-  ...postLongTextCon
+  ...editLongTextCon
 }
 </script>

@@ -7,7 +7,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\User;
 use Discuz\Foundation\AbstractRepository;
@@ -30,5 +29,4 @@ class DialogMessageRepository extends AbstractRepository
         $query = $this->query();
         return $query->firstOrFail();
     }
-
 }

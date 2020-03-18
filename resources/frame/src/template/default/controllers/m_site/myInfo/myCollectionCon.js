@@ -48,7 +48,7 @@ export default {
         url:'collection',
         method:'get',
         data:{
-          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers','lastThreePosts.replyUser','firstPost.images'],
+          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers','lastThreePosts.replyUser','firstPost.images', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }

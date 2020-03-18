@@ -53,8 +53,7 @@ class SendController extends AbstractCreateController
         CacheRepository $cache,
         MobileCodeRepository $mobileCodeRepository,
         SettingsRepository $settings
-    )
-    {
+    ) {
         $this->validation = $validation;
         $this->cache = $cache;
         $this->mobileCodeRepository = $mobileCodeRepository;
@@ -76,7 +75,7 @@ class SendController extends AbstractCreateController
 
         // 直接使用用户手机号
         if ($type === 'verify' || $type === 'reset_pay_pwd') {
-            $data['mobile'] = $actor->getOriginal('mobile');
+            $data['mobile'] = $actor->getRawOriginal('mobile');
         }
 
         // 手机号验证规则
@@ -96,7 +95,7 @@ class SendController extends AbstractCreateController
             $mobileRule = 'required|unique:users,mobile';
         } elseif ($type == 'rebind') {
             // 如果是重新绑定，需要在验证旧手机后 10 分钟内
-            $unverified = MobileCode::where('mobile', $actor->getOriginal('mobile'))
+            $unverified = MobileCode::where('mobile', $actor->getRawOriginal('mobile'))
                 ->where('type', 'verify')
                 ->where('state', 1)
                 ->where('updated_at', '<', Carbon::now()->addMinutes(10))
@@ -106,7 +105,7 @@ class SendController extends AbstractCreateController
                 function ($attribute, $value, $fail) use ($actor, $unverified) {
                     if ($unverified) {
                         $fail('请验证旧的手机号。');
-                    } elseif ($value == $actor->getOriginal('mobile')) {
+                    } elseif ($value == $actor->getRawOriginal('mobile')) {
                         $fail('请输入新的手机号。');
                     }
                 },

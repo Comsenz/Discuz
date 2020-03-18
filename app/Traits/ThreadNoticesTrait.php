@@ -12,6 +12,11 @@ use App\MessageTemplate\PostModMessage;
 use App\MessageTemplate\PostOrderMessage;
 use App\MessageTemplate\PostStickMessage;
 use App\MessageTemplate\PostThroughMessage;
+use App\MessageTemplate\Wechat\WechatPostDeleteMessage;
+use App\MessageTemplate\Wechat\WechatPostModMessage;
+use App\MessageTemplate\Wechat\WechatPostOrderMessage;
+use App\MessageTemplate\Wechat\WechatPostStickMessage;
+use App\MessageTemplate\Wechat\WechatPostThroughMessage;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
@@ -30,12 +35,18 @@ trait ThreadNoticesTrait
      */
     private function sendIsSticky($thread)
     {
-        $thread->user->notify(new System(PostOrderMessage::class, [
+        $build = [
             'message' => $this->getThreadTitle($thread),
             'raw' => [
                 'thread_id' => $thread->id,
             ],
-        ]));
+        ];
+
+        // 系统通知
+        $thread->user->notify(new System(PostOrderMessage::class, $build));
+
+        // 微信通知
+        $thread->user->notify(new System(WechatPostOrderMessage::class, $build));
     }
 
     /**
@@ -45,12 +56,18 @@ trait ThreadNoticesTrait
      */
     private function sendIsEssence($thread)
     {
-        $thread->user->notify(new System(PostStickMessage::class, [
+        $build = [
             'message' => $this->getThreadTitle($thread),
             'raw' => [
                 'thread_id' => $thread->id,
             ],
-        ]));
+        ];
+
+        // 系统通知
+        $thread->user->notify(new System(PostStickMessage::class, $build));
+
+        // 微信通知
+        $thread->user->notify(new System(WechatPostStickMessage::class, $build));
     }
 
     /**
@@ -64,11 +81,13 @@ trait ThreadNoticesTrait
         $data = [
             'message' => $this->getThreadTitle($thread),
             'refuse' => $attach['refuse'],
-            'raw' => [
-                'thread_id' => $thread->id,
-            ],
         ];
-        $thread->user->notify(new System(PostDeleteMessage::class, $data));
+
+        // 系统通知
+        $thread->user->notify(new System(PostDeleteMessage::class, Arr::set($data, 'raw', ['thread_id' => $thread->id])));
+
+        // 微信通知 (跳转到首页)
+        $thread->user->notify(new System(WechatPostDeleteMessage::class, Arr::set($data, 'raw', ['thread_id' => 0])));
     }
 
     /**
@@ -90,9 +109,13 @@ trait ThreadNoticesTrait
         if ($thread->is_approved == 1) {
             // 发送通过通知
             $thread->user->notify(new System(PostThroughMessage::class, $data));
+            // 微信通知
+            $thread->user->notify(new System(WechatPostThroughMessage::class, $data));
         } elseif ($thread->is_approved == 2) {
             // 忽略就发送不通过通知
             $thread->user->notify(new System(PostModMessage::class, $data));
+            // 微信通知
+            $thread->user->notify(new System(WechatPostModMessage::class, $data));
         }
     }
 
@@ -133,7 +156,7 @@ trait ThreadNoticesTrait
      */
     public function checkOriginal($thread, $field)
     {
-        if ($thread->{$field} != $thread->getOriginal($field)) {
+        if ($thread->{$field} != $thread->getRawOriginal($field)) {
             return true;
         }
 

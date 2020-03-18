@@ -9,12 +9,15 @@ namespace App\Providers;
 
 use App\Events\Group\Created as GroupCreated;
 use App\Events\Group\Saving as GroupSaving;
+use App\Events\Group\Deleted as GroupDeleted;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\UserVerify;
+use App\Listeners\AddApiMiddleware;
 use App\Listeners\Group\ChangeDefaultGroup;
+use App\Listeners\Group\ResetDefaultGroup;
 use App\Listeners\Group\SetDefaultPermission;
 use App\Listeners\User\BanLogin;
 use App\Listeners\User\ChangeLastActived;
@@ -35,6 +38,7 @@ use App\Policies\UserPolicy;
 use App\Policies\UserWalletCashPolicy;
 use App\Policies\UserWalletLogsPolicy;
 use App\Policies\UserWalletPolicy;
+use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceProvider;
 
 class EventServiceProvider extends BaseEventServiceProvider
@@ -42,7 +46,7 @@ class EventServiceProvider extends BaseEventServiceProvider
     protected $listen = [
         UserVerify::class => [
             WechatBind::class,
-            MobileBind::class
+            MobileBind::class,
         ],
         Registered::class => [
             InviteBind::class,
@@ -68,7 +72,13 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         GroupSaving::class => [
             ChangeDefaultGroup::class
-        ]
+        ],
+        GroupDeleted::class => [
+            ResetDefaultGroup::class
+        ],
+        ConfigMiddleware::class => [
+            AddApiMiddleware::class
+        ],
     ];
 
     protected $subscribe = [

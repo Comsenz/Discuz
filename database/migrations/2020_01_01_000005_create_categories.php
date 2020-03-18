@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -13,7 +18,7 @@ class CreateCategories extends Migration
     public function up()
     {
         $this->schema()->create('categories', function (Blueprint $table) {
-            $table->smallIncrements('id')->comment('分类 id');
+            $table->id()->comment('分类 id');
             $table->string('name')->default('')->comment('分类名称');
             $table->text('description')->comment('分类描述');
             $table->string('icon')->default('')->comment('分类图标');

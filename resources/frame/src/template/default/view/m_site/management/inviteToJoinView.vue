@@ -56,7 +56,6 @@
 import Header from '../../m_site/common/headerView';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import mSiteInviteToJoinCon from '../../../controllers/m_site/management/inviteToJoinCon';
-// import  '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {

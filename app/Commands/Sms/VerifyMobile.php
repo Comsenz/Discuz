@@ -11,7 +11,6 @@ use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
-use App\Exceptions\SmsCodeVerifyException;
 use App\Models\MobileCode;
 use App\Models\User;
 use App\Repositories\MobileCodeRepository;
@@ -103,7 +102,7 @@ class VerifyMobile
         $this->controller->serializer = UserSerializer::class;
         if ($this->actor->exists) {
             // 删除验证身份的验证码
-            MobileCode::where('mobile', $this->actor->getOriginal('mobile'))
+            MobileCode::where('mobile', $this->actor->getRawOriginal('mobile'))
                 ->where('type', 'verify')
                 ->where('state', 1)
                 ->where('updated_at', '<', Carbon::now()->addMinutes(10))

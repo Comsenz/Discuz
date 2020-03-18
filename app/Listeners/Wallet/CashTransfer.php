@@ -189,7 +189,6 @@ class CashTransfer
      */
     public function transferFailure($cash_id, $data, bool $is_thaw = false)
     {
-
         $user_wallet_cash = UserWalletCash::find($cash_id);
         $cash_apply_amount = $user_wallet_cash->cash_apply_amount;//提现申请金额
         $user_id = $user_wallet_cash->user_id;//提现用户
