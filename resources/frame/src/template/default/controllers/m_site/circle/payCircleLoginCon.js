@@ -90,6 +90,7 @@ export default {
 			browserDb.removeLItem('tokenId');
 			browserDb.removeLItem('Authorization');
 			this.$router.push({ path: '/login-user' });
+			localStorage.clear();
 		},
 
 		getUsersInfo() {
