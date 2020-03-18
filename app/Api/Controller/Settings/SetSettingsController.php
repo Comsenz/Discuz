@@ -93,7 +93,7 @@ class SetSettingsController implements RequestHandlerInterface
         }
 
         /**
-         * @property SetSettingValidator
+         * @see SetSettingValidator
          */
         $validator = $settings->pluck('value', 'key')->all();
         $this->validator->valid($validator);
