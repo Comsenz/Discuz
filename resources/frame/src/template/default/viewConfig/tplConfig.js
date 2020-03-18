@@ -837,8 +837,6 @@ export default {
         } else {
           /*未登录状态*/
 
-          // this.getForum().then(res => {
-
           if (res.readdata._data.passport.offiaccount_close == true) {
             /*判断登录设备*/
             if (isWeixin) {
@@ -847,6 +845,7 @@ export default {
               if (!browserDb.getSItem('wxData')) {
                 browserDb.setSItem('wxData',false);
                 localStorage.clear();
+                browserDb.setLItem('siteInfo', res.readdata);
                 console.log('第一次进');
               } else {
                 console.log('多次进');
