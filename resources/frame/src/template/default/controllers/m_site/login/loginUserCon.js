@@ -95,9 +95,12 @@ export default {
 
                 } else {
                   // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
+                  // debugger
                   this.$router.push({ path: '/' });
-                  debugger
-                  this.$router.go(0);
+                  if (!(this.siteMode === 'pay')) {
+                    this.$router.go(0);
+                  }
+
                 }
 
               } else {
