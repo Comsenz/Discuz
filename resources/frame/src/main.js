@@ -18,6 +18,17 @@ import './extend/viewBase/elementuiInit'; //引入element组件
 
 import Echarts from 'echarts'; //引入Echarts
 
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+  locale: "zh", // 定义默认语言为中文
+  messages: {
+    zh: require("../static/languages/zh.json"),
+    en: require("../static/languages/en.json")
+  }
+});
+
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 // import '../../frame/src/template/default/controllers/m_site/common/tcaptcha'; //引入腾讯验证码
 
@@ -91,6 +102,7 @@ const App = new Vue({
   router: appRouter,
   store: appStore,
   moment: moment,
+  i18n,
   data:function(){
     return {
       keepAliveStatus:false,

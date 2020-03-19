@@ -1,0 +1,12 @@
+{
+  "webName": "展会系统",
+  "home": "系统首页",
+  "setUp": "个人设置",
+  "changePassword": "修改密码",
+  "Logout": "退出登录",
+  "eventManagement": "展会管理",
+  "admin": {
+    "siteHome": "站点首页"
+  }
+}
+
