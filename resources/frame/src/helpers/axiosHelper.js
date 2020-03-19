@@ -238,7 +238,7 @@ const appFetch = function(params, options) {
       return data.data;
     } else {
 
-      if (data.data.errors[0].code === 'access_denied' || data.data.rawData[0].code === 'access_denied'){
+      if (data.data.errors[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
         let isWeixin = appCommonH.isWeixin().isWeixin;
 
@@ -261,7 +261,8 @@ const appFetch = function(params, options) {
       });
 
       if (data.data.rawData[0].code === 'access_denied' && appCommonH.isWeixin().isWeixin){
-        delete data.data.errors;
+        //为什么注释delete，因为删除后上面的判断没有errors，导致报错。也导致接口请求走catch
+        // delete data.data.errors;
       }
 
       return data.data;
