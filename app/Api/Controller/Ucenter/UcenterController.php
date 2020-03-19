@@ -22,7 +22,7 @@ class UcenterController implements RequestHandlerInterface
 
     const API_RETURN_FAILED = -1;
 
-    const UC_KEY = '123';  //后期取配置
+    const UC_KEY = '';  //后期取配置
 
     /**
      * @inheritDoc
@@ -31,9 +31,6 @@ class UcenterController implements RequestHandlerInterface
     {
         $ucenterClient = new Client();
         $ucenterClient->setRequest($request);
-
-        dd($ucenterClient->uc_user_login('admin', 'admin'));
-
 
         $content = '';
         $code = Arr::get($request->getQueryParams(), 'code');
