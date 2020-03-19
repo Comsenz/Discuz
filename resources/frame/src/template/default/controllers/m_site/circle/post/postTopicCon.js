@@ -441,8 +441,9 @@ export default {
     testingType(eFile, allUpext) {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
+      console.log(extName,'~~~~~~~~~');
       if (AllUpExt.indexOf(extName + ",") == "-1") {
-        this.$toast.fail("文件格式不正确!");
+        this.$toast.fail("文件类型不允许!");
         this.testingRes = false;
         this.loading = false;
         // return false;
