@@ -195,11 +195,12 @@
                         >该用户已被删除</a>
                       </div>
                       <div class="perName" v-else>该用户已被删除</div>
-                      <div class="perExamine"><i></i>审核中</div>
+                      <div class="perExamine" v-if="item._data.isApproved != 1">
+                        <i class="icon iconfont icon-sigh"></i>审核中
+                      </div>
                       <div
                         class="postTime"
                       >{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
-                      <span class="icon iconfont icon-sigh"></span>
                     </div>
                   </div>
                 </div>
