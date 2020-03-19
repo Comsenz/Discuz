@@ -1,3 +1,7 @@
+/*
+* 微信注册绑定管理器
+* */
+
 import LoginHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import LoginFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import webDb from '../../../../../helpers/webDbHelper';
@@ -279,7 +283,7 @@ export default {
       }
     } else {
       this.platform = 'dev';
-      if (this.openid === '') {
+      if (this.openid === '' || this.openid === null || this.openid === undefined) {
         //PC端：没有openid
         this.getWatchHrefPC(code, state, sessionId);
       }
