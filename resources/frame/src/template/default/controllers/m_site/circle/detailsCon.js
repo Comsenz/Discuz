@@ -129,6 +129,7 @@ export default {
       clickStatus: true,
       contentExamine: false, //内容审核提示
       examineWord: '',        //内容审核提示文字
+      ExamineStatus: '' //审核中状态
 
     }
   },

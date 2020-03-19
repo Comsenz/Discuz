@@ -4,6 +4,9 @@
       <Card header="名称：">
         <CardRow description="填写存储桶基本配置中的空间名称">
           <el-input v-model="cosName" clearable></el-input>
+          <template #tail>
+            <a href="https://cloud.tencent.com/product/cos" target="_blank">未申请？点此申请</a>
+          </template>
         </CardRow>
       </Card>
       <Card header="地域：">

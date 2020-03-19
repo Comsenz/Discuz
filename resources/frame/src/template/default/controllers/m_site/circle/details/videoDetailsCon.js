@@ -55,7 +55,7 @@ export default {
       self.videoAppid = self.videoAppid;
       self.videoAppidChild = self.videoAppidChild;
       var videoId;
-      if (self.videoAppid == '' || self.videoAppid == '0' || self.videoAppid == null) {
+      if (self.videoAppidChild != '' || self.videoAppidChild != '0' || self.videoAppidChild != null) {
         videoId = self.videoAppidChild
       } else {
         videoId = self.videoAppid

@@ -5,6 +5,9 @@
       <Card header="APPID：">
         <CardRow description="腾讯云帐号 - 验证码 - APPID列表中，详情基础配置中的APPID">
           <el-input v-model="appId" clearable></el-input>
+          <template #tail>
+            <a href="https://cloud.tencent.com/product/captcha" target="_blank">未申请？点此申请</a>
+          </template>
         </CardRow>
       </Card>
 
