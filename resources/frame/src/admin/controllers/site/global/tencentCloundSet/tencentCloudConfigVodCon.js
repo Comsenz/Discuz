@@ -7,6 +7,7 @@ export default {
       vodTranscode: '', //转码模板
       vodExt: '',
       vodSize: '',//短信签名
+      subApplication: '',//子应用
 
     }
   },
@@ -28,6 +29,7 @@ export default {
           this.vodTranscode = res.readdata._data.qcloud.qcloud_vod_transcode;
           this.vodExt = res.readdata._data.qcloud.qcloud_vod_ext;
           this.vodSize = res.readdata._data.qcloud.qcloud_vod_size;
+          this.subApplication = res.readdata._data.qcloud.qcloud_vod_sub_app_id;
         }
       })
     },
@@ -41,6 +43,13 @@ export default {
         method: 'post',
         data: {
           "data": [
+            {
+              "attributes": {
+                "key": 'qcloud_vod_sub_app_id',
+                "value": this.subApplication,
+                "tag": "qcloud"
+              }
+            },
             {
               "attributes": {
                 "key": 'qcloud_vod_transcode',
@@ -69,6 +78,7 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.$message({ message: '提交成功', type: 'success' });
+          this.tencentCloudSms()  //提交成功后获取新数据
         }
       })
     }

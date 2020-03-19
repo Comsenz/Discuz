@@ -64,6 +64,7 @@ class GroupPermissionTableSeeder extends Seeder
         // 站点
         'viewSiteInfo' => [],                   // 查看站点信息权限
         'checkVersion' => [],                   // 检查是否有新版权限
+        'setting.site' => [],                   // 上传站点logo
 
         // 订单
         'order.create' => [6, 10],              // 创建订单

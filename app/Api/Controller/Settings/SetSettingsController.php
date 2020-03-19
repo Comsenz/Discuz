@@ -9,7 +9,6 @@ namespace App\Api\Controller\Settings;
 
 use App\Models\Group;
 use App\Settings\SettingsRepository;
-use App\Settings\SiteRevManifest;
 use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -17,13 +16,13 @@ use Discuz\Foundation\Application;
 use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
@@ -33,16 +32,13 @@ class SetSettingsController implements RequestHandlerInterface
 
     protected $settings;
 
-    protected $siteRevManifest;
-
     protected $validator;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app, SetSettingValidator $validator)
+    public function __construct(CacheRepository $cache, SettingsRepository $settings, Application $app, SetSettingValidator $validator)
     {
         $this->cache = $cache;
         $this->app = $app;
         $this->settings = $settings;
-        $this->siteRevManifest = $siteRevManifest;
         $this->validator = $validator;
     }
 
@@ -115,8 +111,6 @@ class SetSettingsController implements RequestHandlerInterface
                 Arr::get($setting, 'tag')
             );
         });
-
-        $this->siteRevManifest->put('settings', $this->settings->all());
 
         return DiscuzResponseFactory::EmptyResponse(204);
     }
