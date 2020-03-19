@@ -95,13 +95,13 @@ class System extends Notification
 
         if ($status == 0) {
             if ($originStatus == 1) {
-                $id = 11; // 账号解除禁用通知
+                $id = 11; // 帐号解除禁用通知
             } else {
                 $id = 2; // 审核通过通知
             }
         } else {
             if ($originStatus == 0 && $status == 1) {
-                $id = 10; // 账号禁用通知
+                $id = 10; // 帐号禁用通知
             } elseif ($originStatus == 2 && $status == 3) { // 2审核中 变 审核拒绝
                 $id = 3; // 审核拒绝通知
             } else {

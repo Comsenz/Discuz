@@ -71,13 +71,14 @@ body { height: inherit;}
 .icon-alipay{
   color:#4394D3 !important;
 }
+//loading
 .loadFix {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 11;
+  z-index: 2200;
   .loadMask {
     background: rgba(0,0, 0, 0);
     width: 100%;
@@ -89,6 +90,68 @@ body { height: inherit;}
     left: 50%;
     margin-left: -15px;
     margin-top: -15px;
+  }
+}
+//pc端微信支付二维码弹框
+.qrCodeBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 290px;
+  height: 410px;
+  .popupTit {
+    display: block;
+    font-size: 13px;
+    line-height: 18px;
+    color: @cor888;
+    padding: 18px 0 0 0;
+    text-align: center;
+  }
+  .payNum {
+    line-height: 42px;
+    font-size: 24px;
+    padding: 18px 0;
+    margin: 0 15px 12px 15px;
+    border-bottom: 1px solid @gray-light;
+    text-align: center;
+    span {
+      font-size: 35px;
+    }
+  }
+  .payType {
+    margin: 0 15px 17px 15px;
+    line-height: 18px;
+    font-size: 13px;
+    overflow: hidden;
+    .typeLeft {
+      float: left;
+      color: @cor888;
+    }
+    .typeRight {
+      float: right;
+      color: @cor444;
+      .icon {
+        font-size: 15px;
+        margin-right: 7px;
+        color: #09BB07;
+      }
+    }
+  }
+  .qrCode {
+    display: block;
+     width: 190px;
+     height: 190px;
+     margin-top: 17px;
+     margin-bottom: 7px;
+     margin-left: auto;
+     margin-right: auto;
+  }
+  .payTip {
+    font-size: 15px;
+    color: @cor333;
+    line-height: 21px;
+    margin-top: 20px;
+    text-align: center;
   }
 }
 .markdown-body {

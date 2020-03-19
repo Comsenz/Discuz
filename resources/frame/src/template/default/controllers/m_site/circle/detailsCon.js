@@ -799,7 +799,7 @@ export default {
 
 
     //打赏
-    showRewardPopup: function () {
+    showRewardPopup() {
       if (!this.token) {
         this.$router.push({
           path: '/login-user',

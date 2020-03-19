@@ -26,7 +26,8 @@ export default {
       tcPlayerId: 'tcPlayer' + Date.now(),
       player: null,
       videoFileid: '',
-      videoAppid: '',
+      videoAppid: '',  //主ID
+      videoAppidChild: '', //子ID
       viewportWidth: '',
       videoFileCover: '',
       loadCover: '',
@@ -52,10 +53,17 @@ export default {
     setTimeout(() => {
       self.videoFileid = self.themeCon.threadVideo._data.file_id;
       self.videoAppid = self.videoAppid;
+      self.videoAppidChild = self.videoAppidChild;
+      var videoId;
+      if (self.videoAppid == '' || self.videoAppid == '0' || self.videoAppid == null) {
+        videoId = self.videoAppidChild
+      } else {
+        videoId = self.videoAppid
+      }
       // self.videoFileCover = self.themeCon.threadVideo._data.cover_url;
       self.$nextTick(() => {
         // self.getVideoLang(self.videoFileid, self.videoAppid, self.videoFileCover)
-        self.getVideoLang(self.videoFileid, self.videoAppid);
+        self.getVideoLang(self.videoFileid, videoId);
       })
 
     }, 2000)
@@ -71,6 +79,7 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.userId = browserDb.getLItem('tokenId');
     this.videoAppid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_app_id;
+    this.videoAppidChild = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_sub_app_id;
     this.loadUserInfo();
     this.getForum();
     if (this.userId) {

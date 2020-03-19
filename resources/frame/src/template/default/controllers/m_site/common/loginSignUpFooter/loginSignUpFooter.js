@@ -23,17 +23,17 @@ export default {
     signUpClick(){
       this.$router.push('sign-up')
     },
-    //注册，绑定微信新账号
+    //注册，绑定微信新帐号
     wxSignUpBdClick(){
       this.$router.push('/wx-sign-up-bd');
     },
 
-    //登录微信账号
+    //登录微信帐号
     wxLoginBdClick(){
       this.$router.push('/wx-login-bd')
     },
 
-    //已有账号立即登录
+    //已有帐号立即登录
     loginClick(){
       this.$router.push('/login-user')
     },
