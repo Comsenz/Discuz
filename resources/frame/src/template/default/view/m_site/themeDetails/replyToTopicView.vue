@@ -44,6 +44,10 @@
         </div>
       </footer>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" id="showFacePanel" class="expressionBox" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333" class="loadIcon" type="spinner" />
+      </div>
     </div>
 </template>
 
