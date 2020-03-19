@@ -36,7 +36,7 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         // 获取logo完整地址
-        $logo = $this->forumField->siteUrlSplicing($this->settings->get('site_logo'));
+        $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
 
         $attributes = [
             // 站点设置

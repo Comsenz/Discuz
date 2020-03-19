@@ -144,7 +144,7 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
     this.getUser();
-    this.detailsLoad(true);
+    this.detailsLoad(true);       //初始化详情页列表数据
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
@@ -245,7 +245,7 @@ export default {
             //   //判断站点信息是否付费，用户是否登录，用户是否已支付
             this.detailIf(this.isPayVal, false);
           }
-          if (res.readdata._data.paycenter.wxpay_close == true ) {
+          if (res.readdata._data.paycenter.wxpay_close == true) {
             this.payList.unshift({
               name: '微信支付',
               icon: 'icon-wxpay'
@@ -316,6 +316,7 @@ export default {
 
     //初始化请求主题详情数据
     detailsLoad(initFlag = false) {
+      // this.loading = true;
       return this.appFetch({
         url: 'threads',
         splice: '/' + this.themeId,
@@ -466,9 +467,11 @@ export default {
       let Url = '';
       if (this.isPayVal === 'pay') {
         Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
+
       } else {
         Url = appConfig.baseUrl + '/details/' + this.themeId;
       }
+      console.log(Url, '00000')
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
@@ -1031,7 +1034,7 @@ export default {
       })
     },
     //打赏过程中关闭pc端微信扫码支付
-    closeQrCode(){
+    closeQrCode() {
       this.qrcodeShow = false;
       this.payLoading = false;
     },
@@ -1041,7 +1044,7 @@ export default {
       this.pageIndex++;
       this.detailsLoad();
     },
-    
+
     onRefresh() {
       this.pageIndex = 1
       this.detailsLoad(true).then((res) => {
@@ -1067,3 +1070,5 @@ export default {
   }
 
 }
+
+

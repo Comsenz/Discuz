@@ -23,7 +23,6 @@ $route->get('/uc', 'uc', ApiController\Ucenter\UcenterController::class);
 
 $route->post('/settings', 'settings', ApiController\Settings\SetSettingsController::class);
 $route->get('/settings', 'settings.list', ApiController\Settings\ListSettingsController::class);
-$route->get('/settings/{tags}', 'settings.list.tags', ApiController\Settings\TagsSettingsController::class);
 $route->post('/settings/logo', 'settings.upload.logo', ApiController\Settings\UploadLogoController::class);
 $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\DeleteLogoController::class);
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
@@ -225,7 +224,6 @@ $route->get('/invite', 'invite.list', ApiController\Invite\ListInviteController:
 $route->get('/invite/{code}', 'invite.resource', ApiController\Invite\ResourceInviteController::class);
 $route->get('/userInviteCode', 'invite.userInviteCode', ApiController\Invite\UserInviteCodeController::class);
 $route->post('/invite', 'invite.create.admin', ApiController\Invite\CreateAdminInviteController::class);
-$route->patch('/invite/{id}', 'invites.update', ApiController\Invite\UpdateInviteController::class);
 $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInviteController::class);
 
 /*
@@ -233,8 +231,6 @@ $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInvit
 | Emoji
 |--------------------------------------------------------------------------
 */
-
-$route->get('/emojiLoad', 'emoji.load', ApiController\Emoji\AutoloadEmojiController::class);
 $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
 
 /*
@@ -255,14 +251,3 @@ $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowCon
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
 
-/*
-|--------------------------------------------------------------------------
-| Dialog
-|--------------------------------------------------------------------------
-*/
-
-$route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
-$route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
-$route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
-$route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
-$route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);

@@ -17,7 +17,7 @@ class FinanceCreate extends AbstractCommand
 {
     protected $signature = 'finance:create';
 
-    protected $description = '统计前一天的财务情况';
+    protected $description = 'Count the financial situation of the previous day.';
 
     protected $finance;
 
@@ -62,6 +62,6 @@ class FinanceCreate extends AbstractCommand
             ]
         );
 
-        $this->info($date . '财务概况统计完成');
+        $this->info($date . ' ' . $this->signature);
     }
 }

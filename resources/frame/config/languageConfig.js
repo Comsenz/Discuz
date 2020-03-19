@@ -40,9 +40,10 @@ const config = {
   register_validate:'账号审核中,请审核通过尝试',
   mobile_is_already_bind:'手机已经绑定',
   setting_fill_register_reason:'注册时的注册原因必须必填',
-  faceid_error:'身份信息验证不通过'
-
-
+  faceid_error:'身份信息验证不通过',
+  invalid_emoji_path:'无效的表情目录',
+  notification_is_missing_template_config:'微信推送信息不全',
+  tencent_secret_key_error:'腾讯云Secretid或SecretKey不正确',
 };
 
 Vue.prototype.getLang = function(key) {

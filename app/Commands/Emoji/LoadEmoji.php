@@ -84,7 +84,7 @@ class LoadEmoji
             $path = 'emoji' . DIRECTORY_SEPARATOR . $this->category;
 
             if (Str::contains($path, '..')) {
-                throw new \Exception('Invalid emoji path');
+                throw new \Exception('invalid_emoji_path');
             }
 
             if (is_dir($path)) {
