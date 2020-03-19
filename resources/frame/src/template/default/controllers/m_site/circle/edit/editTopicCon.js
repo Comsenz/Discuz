@@ -436,6 +436,7 @@ export default {
        }).then(data=>{
         if (data.errors){
           this.$toast.fail(data.errors[0].code);
+          this.loading = false;
           throw new Error(data.error)
         } else {
           if (img) {
