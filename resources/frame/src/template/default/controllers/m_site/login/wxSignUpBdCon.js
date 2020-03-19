@@ -239,7 +239,6 @@ export default {
             webDb.setSItem('beforeState', 1);
           } else {
             this.$router.push({ path: '/' });
-            this.$router.go(0);
           }
 
         } else {
