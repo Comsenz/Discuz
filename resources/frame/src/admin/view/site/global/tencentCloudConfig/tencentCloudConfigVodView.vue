@@ -2,8 +2,11 @@
   <div>
     <Card header="视频配置"></Card>
     <Card header="子应用：">
-      <CardRow description="请填写子应用 ID，如果不填写、填写0或填写开发者的腾讯云 AppId，则操作的子应用为“主应用”">
+      <CardRow description="请填写子应用 ID，如果不填写、填写0或填写开发者的腾讯云 AppId，则操作的子应用为“主应用”。">
         <el-input v-model="subApplication" clearable></el-input>
+        <template #tail>
+          <a href="https://cloud.tencent.com/product/vod" target="_blank">未申请？点此申请</a>
+        </template>
       </CardRow>
     </Card>
 
