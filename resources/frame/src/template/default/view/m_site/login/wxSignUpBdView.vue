@@ -40,9 +40,9 @@
 
 <script>
 import "../../../defaultLess/m_site/modules/loginSignUpModule.less";
-import wxLoginBdCon from "../../../controllers/m_site/login/wxSignUpBdCon";
+import wxSignUpBdCon from "../../../controllers/m_site/login/wxSignUpBdCon";
 export default {
   name: "wx-sign-up-bd",
-  ...wxLoginBdCon
+  ...wxSignUpBdCon
 };
 </script>

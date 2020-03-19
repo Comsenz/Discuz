@@ -47,7 +47,7 @@ export default {
     }),
 
     loginClick() {
-      this.setStatus('啊啦啦啦');
+      // this.setStatus('啊啦啦啦');
       this.btnLoading = true;
 
       if (this.userName === '' || this.userName === undefined || this.userName === null){
@@ -127,9 +127,6 @@ export default {
           this.btnLoading = false;
         })
       }
-
-
-
 
     },
 
