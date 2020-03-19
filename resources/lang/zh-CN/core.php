@@ -9,10 +9,10 @@ return [
     'post_change_detail' => ':user 你好，你的发布的内容 ":message" 已被修改',
     // 解除禁用通知
     'status_normal_change' => '解除禁用通知',
-    'status_normal_change_detail' => ':user 你好，你的账号已解除禁用',
+    'status_normal_change_detail' => ':user 你好，你的帐号已解除禁用',
     // 帐号禁用通知
     'status_ban_change' => '帐号禁用通知',
-    'status_ban_change_detail' => ':user 你好，你的账号已禁用，原因：:refuse',
+    'status_ban_change_detail' => ':user 你好，你的帐号已禁用，原因：:refuse',
     // 加入
     'register' => '欢迎加入:sitename',
     'register_detail' => ':user 你好，你已经成为:sitename 的:group ，请您在发表言论时，遵守当地法律法规。祝你在这里玩的愉快',

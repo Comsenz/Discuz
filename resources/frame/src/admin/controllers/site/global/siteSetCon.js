@@ -30,6 +30,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       fileList:[],
+      deleBtn: false,
     }
   },
 
@@ -71,6 +72,9 @@ export default {
           this.siteIntroduction = data.readdata._data.set_site.site_introduction;
           this.siteMode = data.readdata._data.set_site.site_mode;
           this.imageUrl = data.readdata._data.set_site.site_logo;
+          if(this.imageUrl != '' && this.imageUrl != null){
+            this.deleBtn = true;
+          }
           this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
             this.imgWidht = res.width;
             this.imgHeight = res.height;
@@ -106,9 +110,13 @@ export default {
     },
     //删除已上传logo
     deleteImage(file, fileList) {
+      if(this.deleBtn == false){
+        return
+      }
       let logoFormData = new FormData()
       logoFormData.append('logo', file.raw);
       // this.uploaderLogo(logoFormData);
+      this.imageUrl = '';
       this.appFetch({
         url:'logo',
         method:'delete',
@@ -118,6 +126,7 @@ export default {
           this.$message.error(data.errors[0].code);
         }else {
           this.$message('删除成功');
+          this.deleBtn = false;
         }
       }).catch(error=>{
       })
@@ -209,6 +218,7 @@ export default {
             this.imgHeight = res.height;
           })
           this.$message({message: '上传成功', type: 'success'});
+          this.deleBtn = true;
         }
       }).catch(error=>{
       })

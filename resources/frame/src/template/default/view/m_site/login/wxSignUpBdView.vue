@@ -3,8 +3,8 @@
     <LoginHeader></LoginHeader>
     <main class="wx-sign-up-bd-main">
       <div class="wx-sign-up-bd-title-box">
-        <h2 class="wx-sign-up-bd-title-box-h2">微信绑定账号</h2>
-        <div class="wx-sign-up-main-desc">你的微信号未绑定账号，注册即可完成绑定</div>
+        <h2 class="wx-sign-up-bd-title-box-h2">注册绑定帐号</h2>
+        <div class="wx-sign-up-main-desc">你的微信号未绑定帐号，注册即可完成绑定</div>
       </div>
 
       <form class="wx-sign-up-bd-form" action>
@@ -40,9 +40,9 @@
 
 <script>
 import "../../../defaultLess/m_site/modules/loginSignUpModule.less";
-import wxLoginBdCon from "../../../controllers/m_site/login/wxSignUpBdCon";
+import wxSignUpBdCon from "../../../controllers/m_site/login/wxSignUpBdCon";
 export default {
   name: "wx-sign-up-bd",
-  ...wxLoginBdCon
+  ...wxSignUpBdCon
 };
 </script>

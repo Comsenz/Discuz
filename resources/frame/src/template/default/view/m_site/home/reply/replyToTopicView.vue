@@ -44,14 +44,18 @@
         </div>
       </footer>
       <Expression :faceData="faceData" @onFaceChoose="handleFaceChoose" v-if="showFacePanel" id="showFacePanel" class="expressionBox" :style="{'overflow': 'hidden','width': (!isPhone && !isWeixin) ? '640px' : '100%','left': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"></Expression>
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333" class="loadIcon" type="spinner" />
+      </div>
     </div>
 </template>
 
 <script>
-import Expression from '../../m_site/common/expressionView';
-import replyToTopicCon from '../../../controllers/m_site/themeDetails/replyToTopicCon';
-import  '../../../defaultLess/m_site/common/common.less';
-import  '../../../defaultLess/m_site/modules/circle.less';
+import Expression from '../../../m_site/common/expressionView';
+import replyToTopicCon from '../../../../controllers/m_site/circle/reply/replyToTopicCon';
+import  '../../../../defaultLess/m_site/common/common.less';
+import  '../../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "reply-to-topic-view",
     components: {

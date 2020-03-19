@@ -238,7 +238,7 @@ const appFetch = function(params, options) {
       return data.data;
     } else {
 
-      if (data.data.errors[0].code === 'access_denied'){
+      if (data.data.errors[0].code === 'access_denied' || data.data.rawData[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
         let isWeixin = appCommonH.isWeixin().isWeixin;
 
@@ -262,11 +262,6 @@ const appFetch = function(params, options) {
 
       if (data.data.rawData[0].code === 'access_denied' && appCommonH.isWeixin().isWeixin){
         delete data.data.errors;
-      }
-
-      if (data.data.rawData[0].code === 'access_denied'){
-        browserDb.removeLItem('Authorization');
-        Router.init().go(0);
       }
 
       return data.data;

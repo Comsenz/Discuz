@@ -503,8 +503,9 @@ export default {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
       if (AllUpExt.indexOf(extName + ",") == "-1") {
-        this.$toast.fail("文件格式不正确!");
+        this.$toast.fail("文件类型不允许!");
         this.testingRes = false;
+        this.loading = false;
         // return false;
       } else {
         this.testingRes = true;
@@ -525,7 +526,9 @@ export default {
       }).then(data => {
         if (data.errors) {
           this.$toast.fail(data.errors[0].code);
-          throw new Error(data.error)
+          this.loading = false;
+          throw new Error(data.error);
+          
         } else {
           if (img) {
             this.fileList.push({url: data.readdata._data.url, id: data.readdata._data.id});

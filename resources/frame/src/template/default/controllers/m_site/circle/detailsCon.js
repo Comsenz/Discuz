@@ -799,7 +799,7 @@ export default {
 
 
     //打赏
-    showRewardPopup: function () {
+    showRewardPopup() {
       if (!this.token) {
         this.$router.push({
           path: '/login-user',
@@ -989,7 +989,7 @@ export default {
         if (res.errors) {
           this.value = '';
           if (res.errors[0].detail) {
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
           } else {
             this.$toast.fail(res.errors[0].code);
           }
