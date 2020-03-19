@@ -18,8 +18,18 @@ import './extend/viewBase/elementuiInit'; //引入element组件
 
 import Echarts from 'echarts'; //引入Echarts
 
+import VueI18n from 'vue-i18n'
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+  locale: "zh", // 定义默认语言为中文
+  messages: {
+    zh: require("../static/languages/zh.json"),
+    en: require("../static/languages/en.json")
+  }
+});
+
 import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
-import VueI18n from 'vue-i18n';  //引入语言包
 // import '../../frame/src/template/default/controllers/m_site/common/tcaptcha'; //引入腾讯验证码
 
 import appConfigInit from "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
@@ -62,17 +72,6 @@ Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
 let app = {};
 
 app.bus = new Vue(); //后台财务统计echarts图标
-Vue.use(VueI18n) // 通过插件的形式挂载
-
-
-// const i18n = new VueI18n({
-//   locale: 'zh-CN',    // 语言标识
-//   //this.$i18n.locale // 通过切换locale的值来实现语言切换
-//   messages: {
-//     'zh-CN': require('./common/lang/zh.js'),   // 中文语言包
-//     'en-US': require('./common/lang/eh.js')    // 英文语言包
-//   }
-// })
 
 // Vue.use(tacptcha)
 //实例化根目录
@@ -90,9 +89,9 @@ const keepAliveUrl = ['circle'];
 
 // const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId', 'home-page/:userId', 'login-user'];
+const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId','login-user'];
 
-browserDb.setSItem('homeStatus', 1);
+browserDb.setSItem('homeStatus',1);
 
 
 const Authorization = browserDb.getLItem('Authorization');
@@ -103,22 +102,22 @@ const App = new Vue({
   router: appRouter,
   store: appStore,
   moment: moment,
-  // i18n,  // 
-  data: function () {
+  i18n,
+  data:function(){
     return {
-      keepAliveStatus: false,
-      status: 0,
+      keepAliveStatus:false,
+      status:0,
       siteInfoStat: ''
     }
   },
-  created() {
-    app.bus.$on('stat', (arg) => {
+  created(){
+    app.bus.$on('stat',(arg)=> {
       // console.log('on监听参数====',arg)
       this.siteInfoStat = arg;
     })
   },
   watch: {
-    '$route': function (to, from) {
+    '$route': function(to, from) {
 
       const Authorization = browserDb.getLItem('Authorization');
       const tokenId = browserDb.getLItem('tokenId');
@@ -148,7 +147,7 @@ const App = new Vue({
       } else {
         // console.log(33);
         this.keepAliveStatus = false;
-        browserDb.setSItem('homeStatus', 2);
+        browserDb.setSItem('homeStatus',2);
       }
 
 
@@ -184,7 +183,7 @@ const App = new Vue({
 
     }
   },
-  template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
+  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
 }).$mount('#app');
 
 
