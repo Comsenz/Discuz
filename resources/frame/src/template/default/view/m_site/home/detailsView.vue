@@ -296,6 +296,7 @@
       closeable
       @close="closeQrCode"
       class="qrCodeBox"
+      :z-index="2201"
       get-container="body"
     >
       <span class="popupTit">立即支付</span>
