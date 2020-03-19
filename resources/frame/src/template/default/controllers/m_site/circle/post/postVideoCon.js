@@ -211,6 +211,7 @@ export default {
       if (AllUpExt.indexOf(extName + ",") == "-1") {
         this.$toast.fail("文件格式不正确!");
         this.testingTypeRes = false;
+        this.loading = false;
         // return false;
       } else {
         this.testingTypeRes = true;
