@@ -59,7 +59,7 @@ class CheckLogin
         }
 
         //password not match
-        if (! is_null($event->password) && ! $event->user->checkPassword($event->password)) {
+        if ($event->password !== '' && !$event->user->checkPassword($event->password)) {
             if ($userLoginFailCount == 1) {
                 //first time set fail log
                 UserLoginFailLog::writeLog($ip, $event->user->id, $event->user->username);

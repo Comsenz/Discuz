@@ -199,6 +199,7 @@
                       <div
                         class="postTime"
                       >{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+                      <span class="icon iconfont icon-sigh"></span>
                     </div>
                   </div>
                 </div>
