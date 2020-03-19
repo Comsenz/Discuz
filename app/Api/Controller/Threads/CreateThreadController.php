@@ -53,10 +53,6 @@ class CreateThreadController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        $this->bus->dispatch(
-            new CheckFloodgate($actor)
-        );
-
         return $this->bus->dispatch(
             new CreateThread($actor, $request->getParsedBody()->get('data', []), $ip)
         );

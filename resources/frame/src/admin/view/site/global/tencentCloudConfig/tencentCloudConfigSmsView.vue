@@ -15,7 +15,7 @@
         <CardRow description="填写在腾讯云已配置并审核通过的短信验证码的模板的ID">
           <el-input v-model="smsId" clearable></el-input>
           <template #tail>
-            <a href="https://cloud.tencent.com/product/sms" target="_blank" style="margin-left: 15px">未申请？点此申请</a>
+            <a href="https://cloud.tencent.com/product/sms" target="_blank">未申请？点此申请</a>
           </template>
         </CardRow>
       </Card>
