@@ -366,7 +366,7 @@ export default {
       //主题详情页模块
       'reply-to-topic/:themeId/:replyId': {
         comLoad: function (resolve) {
-          require(['../view/m_site/themeDetails/replyToTopicView'], resolve)
+          require(['../view/m_site/home/reply/replyToTopicView'], resolve)
         },
         metaInfo: {
           title: "回复主题"

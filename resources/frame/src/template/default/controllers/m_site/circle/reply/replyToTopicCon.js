@@ -2,11 +2,11 @@
 * 回复主题控制器
 * */
 
-import {Bus} from '../../../store/bus.js';
-import { debounce, autoTextarea } from '../../../../../common/textarea.js';
+import {Bus} from '../../../../store/bus.js';
+import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
-import appCommonH from '../../../../../helpers/commonHelper';
-import browserDb from '../../../../../helpers/webDbHelper';
+import appCommonH from '../../../../../../helpers/commonHelper';
+import browserDb from '../../../../../../helpers/webDbHelper';
 
 
 export default {
