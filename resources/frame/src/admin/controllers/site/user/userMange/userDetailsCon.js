@@ -36,7 +36,8 @@ export default {
         }
       ],
       value: '',
-      query: {}
+      query: {},
+      deleBtn: false,
     }
   },
 
@@ -63,6 +64,9 @@ export default {
         }else{
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
+          if(this.imageUrl != '' && this.imageUrl != null){
+            this.deleBtn = true;
+          }
           this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v)=>{
             return  v._data.id
@@ -85,6 +89,9 @@ export default {
     handleRemove(file, fileList) {
     },
     deleteImage(){
+      if(this.deleBtn == false){
+        return
+      }
       this.imageUrl = '';
       this.appFetch({
         url:'deleteAvatar',
@@ -97,6 +104,7 @@ export default {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
+          this.deleBtn = false;
           this.$message.success('删除成功');
         }
       })
@@ -143,6 +151,7 @@ export default {
             } else {
               this.$message.success('上传成功');
               this.imageUrl = res.readdata._data.avatarUrl;
+              this.deleBtn = true;
             }
 
           })
