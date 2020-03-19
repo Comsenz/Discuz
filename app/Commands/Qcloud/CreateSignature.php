@@ -46,8 +46,9 @@ class CreateSignature
         $this->assertRegistered($this->actor);
 
         $secretId = $this->settings->get('qcloud_secret_id', 'qcloud');
-        $secret_key = $this->settings->get('qcloud_secret_key', 'qcloud');
-        if (!$secretId || !$secret_key) {
+        $secretKey = $this->settings->get('qcloud_secret_key', 'qcloud');
+        $subAppId = $this->settings->get('qcloud_vod_sub_app_id', 'qcloud') ?: 0;
+        if (!$secretId || !$secretKey) {
             throw new PermissionDeniedException;
         }
 
@@ -57,10 +58,11 @@ class CreateSignature
             'secretId'         => $secretId,
             'currentTimeStamp' => $currentTime,
             'expireTime'       => $currentTime + self::EXPIRETIME,
+            'vodSubAppId'       => $subAppId,
             'random'           => rand(),
         ];
 
         $original = http_build_query($original);
-        return [base64_encode(hash_hmac('SHA1', $original, $secret_key, true).$original)];
+        return [base64_encode(hash_hmac('SHA1', $original, $secretKey, true).$original)];
     }
 }
