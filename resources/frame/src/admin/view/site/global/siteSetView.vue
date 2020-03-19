@@ -61,7 +61,7 @@
           </div>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <el-button type="text" @click="deleteImage">删除</el-button>
+        <el-button type="text" :style="{'opacity':deleBtn?'1':'0'}" @click="deleteImage">删除</el-button>
         <!-- <el-dialog :visible.sync="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>-->
