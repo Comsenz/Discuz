@@ -247,6 +247,7 @@ export default {
           } else {
             if (img) {
               this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
+              this.loading = false;
               this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
             }
             if (isFoot) {
@@ -254,8 +255,10 @@ export default {
               // 当上传一个文件成功 时，显示组件，否则不处理
               if (this.fileListOne.length>0){
                 this.uploadShow = true;
+                this.loading = false;
               }
             }
+            this.loading = false;
           }
         })
     },
@@ -273,7 +276,6 @@ export default {
           formdata.append('isGallery', 1);
           // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
           that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false,index);
-          that.loading = false;
       }).catch(function (err) {
           /* 处理失败后执行 */
       }).always(function () {
