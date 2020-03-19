@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Commands\Post\CheckFloodgate;
 use App\Commands\Thread\CreateThread;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -52,10 +53,9 @@ class CreateThreadController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        // TODO: 检查发帖频率
-        // if (! $request->getAttribute('bypassFloodgate')) {
-        //     $this->floodgate->assertNotFlooding($actor);
-        // }
+        $this->bus->dispatch(
+            new CheckFloodgate($actor)
+        );
 
         return $this->bus->dispatch(
             new CreateThread($actor, $request->getParsedBody()->get('data', []), $ip)
