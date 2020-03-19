@@ -54,10 +54,6 @@ class CreatePostController extends AbstractCreateController
         $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
-        $this->bus->dispatch(
-            new CheckFloodgate($actor)
-        );
-
         return $this->bus->dispatch(
             new CreatePost($threadId, $actor, $data, $ip)
         );
