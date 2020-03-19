@@ -50,76 +50,86 @@ export default {
       this.setStatus('啊啦啦啦');
       this.btnLoading = true;
 
-      this.appFetch({
-        url: "login",
-        method: "post",
-        data: {
-          "data": {
-            "attributes": {
-              username: this.userName,
-              password: this.password,
-            },
-          }
-        }
-      }).then(res => {
+      if (this.userName === '' || this.userName === undefined || this.userName === null){
+        this.$toast.fail('请输入您的用户名！');
         this.btnLoading = false;
-        if (res.errors) {
-          if (res.errors[0].detail) {
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-          } else {
-            this.$toast.fail(res.errors[0].code);
+      } else if (this.password === '' || this.password === undefined || this.password === null){
+        this.$toast.fail('请输入密码！');
+        this.btnLoading = false;
+      } else {
+        this.appFetch({
+          url: "login",
+          method: "post",
+          data: {
+            "data": {
+              "attributes": {
+                username: this.userName,
+                password: this.password,
+              },
+            }
           }
-        } else {
-          this.$toast.success('登录成功');
-          let token = res.data.attributes.access_token;
-          let tokenId = res.data.id;
-          let refreshToken = res.data.attributes.refresh_token;
-          browserDb.setLItem('Authorization', token);
-          browserDb.setLItem('tokenId', tokenId);
-          browserDb.setLItem('refreshToken', refreshToken);
-
-          this.getUsers(tokenId).then(res => {
-            if (res.errors) {
-              let errorInfo = this.appCommonH.errorHandling(res.errors, true);
-              this.$toast.fail(errorInfo[0].errorDetail);
+        }).then(res => {
+          this.btnLoading = false;
+          if (res.errors) {
+            if (res.errors[0].detail) {
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
-              if (res.readdata._data.paid) {
-                browserDb.setLItem('foregroundUser', res.data.attributes.username);
-                let beforeVisiting = browserDb.getSItem('beforeVisiting');
-                if (beforeVisiting) {
-                  this.$router.replace({ path: beforeVisiting });
-                  browserDb.setSItem('beforeState', 1);
-                  setTimeout(() => {
-                    this.$router.go(0);
-                  }, 800)
+              this.$toast.fail(res.errors[0].code);
+            }
+          } else {
+            this.$toast.success('登录成功');
+            let token = res.data.attributes.access_token;
+            let tokenId = res.data.id;
+            let refreshToken = res.data.attributes.refresh_token;
+            browserDb.setLItem('Authorization', token);
+            browserDb.setLItem('tokenId', tokenId);
+            browserDb.setLItem('refreshToken', refreshToken);
 
-                } else {
-                  // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
-                  // debugger
-                  this.$router.push({ path: '/' });
-                  if (!(this.siteMode === 'pay')) {
-                    this.$router.go(0);
+            this.getUsers(tokenId).then(res => {
+              if (res.errors) {
+                let errorInfo = this.appCommonH.errorHandling(res.errors, true);
+                this.$toast.fail(errorInfo[0].errorDetail);
+              } else {
+                if (res.readdata._data.paid) {
+                  browserDb.setLItem('foregroundUser', res.data.attributes.username);
+                  let beforeVisiting = browserDb.getSItem('beforeVisiting');
+                  if (beforeVisiting) {
+                    this.$router.replace({ path: beforeVisiting });
+                    browserDb.setSItem('beforeState', 1);
+                    setTimeout(() => {
+                      this.$router.go(0);
+                    }, 800)
+
+                  } else {
+                    // this.$router.push({path:'/supplier-all-back',query:{url:'/'}});
+                    // debugger
+                    this.$router.push({ path: '/' });
+                    if (!(this.siteMode === 'pay')) {
+                      this.$router.go(0);
+                    }
+
                   }
 
-                }
-
-              } else {
-                if (this.siteMode === 'pay') {
-                  this.$router.push({ path: 'pay-circle-login' });
-                } else if (this.siteMode === 'public') {
-                  this.$router.push({ path: '/' });
                 } else {
-                  //缺少参数，请刷新页面
+                  if (this.siteMode === 'pay') {
+                    this.$router.push({ path: 'pay-circle-login' });
+                  } else if (this.siteMode === 'public') {
+                    this.$router.push({ path: '/' });
+                  } else {
+                    //缺少参数，请刷新页面
+                  }
                 }
               }
-            }
-          })
-        }
+            })
+          }
+        }).catch(err => {
+          console.log(err);
+          this.btnLoading = false;
+        })
+      }
 
-      }).catch(err => {
-        console.log(err);
-        this.btnLoading = false;
-      })
+
+
 
     },
 
