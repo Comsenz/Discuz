@@ -197,7 +197,6 @@ export default {
           } else {
             fileExt = '*';
           }
-
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
