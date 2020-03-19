@@ -21,7 +21,7 @@
       </Card>
 
       <Card header="短信签名：">
-        <CardRow description="腾讯云账户 - 访问管理 - 访问密钥 - API密钥的SecretId">
+        <CardRow description="填写在腾讯云已配置并审核通过的短信签名内容">
           <el-input v-model="smsSignature" clearable></el-input>
         </CardRow>
       </Card>
