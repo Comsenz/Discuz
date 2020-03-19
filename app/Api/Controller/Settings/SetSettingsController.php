@@ -92,6 +92,16 @@ class SetSettingsController implements RequestHandlerInterface
             }
         }
 
+        // 扩展名统一改为小写
+        $settings->transform(function ($item, $key) {
+            $extArr = ['default_support_img_ext','default_support_file_ext','qcloud_vod_ext'];
+            if (in_array($key, $extArr)) {
+                $item['value'] = strtolower($item['value']);
+            }
+            return $item;
+        });
+
+
         /**
          * @see SetSettingValidator
          */
