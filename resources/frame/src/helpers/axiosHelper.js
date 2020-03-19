@@ -264,6 +264,11 @@ const appFetch = function(params, options) {
         delete data.data.errors;
       }
 
+      if (data.data.rawData[0].code === 'access_denied'){
+        browserDb.removeLItem('Authorization');
+        Router.init().go(0);
+      }
+
       return data.data;
     }
   });
