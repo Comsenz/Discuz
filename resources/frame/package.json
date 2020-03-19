@@ -2,7 +2,7 @@
   "name": "anatman",
   "version": "1.0.0",
   "description": "vue+webpack+router+vuex+sass 便捷式开发框架",
-  "author": "李刚",
+  "author": "Tencent",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --max-new-space-size=4096 --mode development --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
