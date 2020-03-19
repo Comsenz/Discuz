@@ -214,7 +214,7 @@ class NotificationTplSeeder extends Seeder
                 'type_name' => '帐号禁用通知',
                 'title' => '微信通知',
                 'content' => $this->getWechatFormat([
-                    'first' => '你的账号已禁用',
+                    'first' => '你的帐号已禁用',
                     'keyword1' => '用户名：{username}',
                     'keyword2' => '原因：{reason}',
                     'keyword3' => '时间：{dateline}',
@@ -234,7 +234,7 @@ class NotificationTplSeeder extends Seeder
                 'type_name' => '用户解除禁用通知',
                 'title' => '微信通知',
                 'content' => $this->getWechatFormat([
-                    'first' => '你的账号已解除禁用',
+                    'first' => '你的帐号已解除禁用',
                     'keyword1' => '用户名：{username}',
                     'keyword2' => '时间：{dateline}',
                     'remark' => '点击查看',
@@ -424,7 +424,7 @@ class NotificationTplSeeder extends Seeder
                 'type' => 0,
                 'type_name' => '帐号禁用通知',
                 'title' => '帐号禁用通知',
-                'content' => '{username}你好，你的账号已禁用，原因：{reason}',
+                'content' => '{username}你好，你的帐号已禁用，原因：{reason}',
                 'vars' => serialize([
                     '{username}' => '用户名',
                     '{reason}' => '原因'
@@ -435,7 +435,7 @@ class NotificationTplSeeder extends Seeder
                 'type' => 0,
                 'type_name' => '用户解除禁用通知',
                 'title' => '解除禁用通知',
-                'content' => '{username}你好，你的账号已解除禁用',
+                'content' => '{username}你好，你的帐号已解除禁用',
                 'vars' => serialize([
                     '{username}' => '用户名'
                 ])

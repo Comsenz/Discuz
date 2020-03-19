@@ -3,13 +3,13 @@
     <Card header="微信支付配置"></Card>
 
     <Card header="APPID：">
-      <CardRow description="appid是微信公众账号或开放平台APP的唯一标识">
+      <CardRow description="appid是微信公众帐号或开放平台APP的唯一标识">
         <el-input v-model="appId"></el-input>
       </CardRow>
     </Card>
 
     <Card header="微信支付的商户号（mch_id）：">
-      <CardRow description="商户申请微信支付后，由微信支付分配的商户收款账号">
+      <CardRow description="商户申请微信支付后，由微信支付分配的商户收款帐号">
         <el-input v-model="mchId"></el-input>
       </CardRow>
     </Card>

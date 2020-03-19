@@ -118,13 +118,13 @@
 <script>
 // var player = TCPlayer("player-container-id", { // player-container-id 为播放器容器ID，必须与html中一致
 //     fileID: "5285890799770145722", // 请传入需要播放的视频fileID 必须
-//     appID: "1251099537", // 请传入点播账号的appID 必须
+//     appID: "1251099537", // 请传入点播帐号的appID 必须
 //     autoplay: false //是否自动播放
 //     //其他参数请在开发文档中查看
 // });
 // var player = TCPlayer("player-container-id", { // player-container-id 为播放器容器ID，必须与html中一致
 //     fileID: "5285890799770145722", // 请传入需要播放的视频fileID 必须
-//     appID: "1251099537", // 请传入点播账号的appID 必须
+//     appID: "1251099537", // 请传入点播帐号的appID 必须
 //     autoplay: false //是否自动播放
 //     //其他参数请在开发文档中查看
 // });

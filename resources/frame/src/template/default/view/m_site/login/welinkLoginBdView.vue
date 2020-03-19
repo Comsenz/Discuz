@@ -3,8 +3,8 @@
       <LoginHeader></LoginHeader>
       <main class="wx-login-bd-main">
         <div class="wx-login-bd-title-box">
-          <h2 class="wx-login-bd-title-h2">WeLink绑定账号</h2>
-          <div class="wx-login-main-desc">登录并绑定WeLink账号</div>
+          <h2 class="wx-login-bd-title-h2">WeLink绑定帐号</h2>
+          <div class="wx-login-main-desc">登录并绑定WeLink帐号</div>
         </div>
 
         <form class="wx-login-bd-form">
