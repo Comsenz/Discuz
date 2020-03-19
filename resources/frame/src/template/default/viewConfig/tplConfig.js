@@ -303,7 +303,7 @@ export default {
           require(['../view/m_site/login/wxLoginBdView'], resolve)
         },
         metaInfo: {
-          title: "微信登录绑定账号"
+          title: "微信登录绑定帐号"
         }
       },
       'wx-sign-up-bd': {
@@ -311,7 +311,7 @@ export default {
           require(['../view/m_site/login/wxSignUpBdView'], resolve)
         },
         metaInfo: {
-          title: "微信注册绑定账号"
+          title: "微信注册绑定帐号"
         }
       },
        'welink-login-bd':{
@@ -319,7 +319,7 @@ export default {
                 require(['../view/m_site/login/welinkLoginBdView'],resolve)
             },
             metaInfo:{
-                title:"WeLink登录绑定账号"
+                title:"WeLink登录绑定帐号"
             }
         },
       'welink-sign-up-bd':{
@@ -327,7 +327,7 @@ export default {
               require(['../view/m_site/login/welinkSignUpBdView'],resolve)
           },
           metaInfo:{
-              title:"WeLink注册绑定账号"
+              title:"WeLink注册绑定帐号"
           }
       },
       'sign-up':{
@@ -335,7 +335,7 @@ export default {
           require(['../view/m_site/login/signUpView'],resolve)
         },
         metaInfo: {
-          title: "注册账号"
+          title: "注册帐号"
         }
       },
       'bind-phone': {
