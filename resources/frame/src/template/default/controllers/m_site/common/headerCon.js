@@ -359,5 +359,8 @@ export default {
     // alert('销毁3');
     window.removeEventListener('scroll', this.handleTabFix);
     next();
-  }
+  },
+  activated() {
+    this.popupShow = false;
+  },
 }

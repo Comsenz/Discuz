@@ -5,100 +5,103 @@ import Header from '../../../view/m_site/common/headerView';
 import browserDb from '../../../../../helpers/webDbHelper';
 import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 export default {
-    data: function () {
-        return {
-            headOpeShow: false,
-            isfixNav: false,
-            current: 0,
-            siteInfo: false,
-            siteUsername: '',  //站长
-            joinedAt: '',    //加入时间
-            sitePrice: '',   //加入价格
-            username: '',   //当前用户名
-            loading: false,  //是否处于加载状态
-            finished: false, //是否已加载完所有数据
-            isLoading: false, //是否处于下拉刷新状态
-            pageIndex: 1,//页码
-            pageLimit: 20,
-            offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-            loginUserInfo: '',
-            sitePrice: '',      //付费站点价钱
-            siteExpire: '',     //到期时间
-            orderSn: '',        //订单号
-            wxPayHref: '',      //微信支付链接
-            qrcodeShow: false,  //pc端显示二维码
-            codeUrl: "",        //支付url，base64
-            amountNum: '',      //支付价钱
-            payStatus: false,   //支付状态
-            payStatusNum: 0,    //支付状态次数
-            authorityList: '',  //权限列表
-            tokenId: '',        //用户ID
-            dialogShow: false,  //微信支付确认弹框
-            groupId: '',        //用户组ID
-            limitList: [],      //用户组权限
-            payList: [
-                {
-                    name: '钱包',
-                    icon: 'icon-wallet'
-                }
-            ],     //支付方式
-            show: false,        //是否显示支付方式
-            errorInfo: '',      //密码错误提示
-            value: '',          //密码
-            walletBalance: '',  //钱包余额
-            walletStatus: '',    //钱包支付密码状态
-            payLoading: false,
-        }
-    },
-    components: {
-        Header,
-        PayMethod
-    },
-    created() {
-        this.getInfo();
-        this.getUsers();
+	data: function () {
+		return {
+			headOpeShow: false,
+			isfixNav: false,
+			current: 0,
+			siteInfo: false,
+			siteUsername: '',  //站长
+			joinedAt: '',    //加入时间
+			sitePrice: '',   //加入价格
+			username: '',   //当前用户名
+			loading: false,  //是否处于加载状态
+			finished: false, //是否已加载完所有数据
+			isLoading: false, //是否处于下拉刷新状态
+			pageIndex: 1,//页码
+			pageLimit: 20,
+			offset: 100, //滚动条与底部距离小于 offset 时触发load事件
+			loginUserInfo: '',
+			sitePrice: '',      //付费站点价钱
+			siteExpire: '',     //到期时间
+			orderSn: '',        //订单号
+			wxPayHref: '',      //微信支付链接
+			qrcodeShow: false,  //pc端显示二维码
+			codeUrl: "",        //支付url，base64
+			amountNum: '',      //支付价钱
+			payStatus: false,   //支付状态
+			payStatusNum: 0,    //支付状态次数
+			authorityList: '',  //权限列表
+			tokenId: '',        //用户ID
+			dialogShow: false,  //微信支付确认弹框
+			groupId: '',        //用户组ID
+			limitList: [],      //用户组权限
+			payList: [         //注册时不能使用钱包
+				// {
+				// 	name: '钱包',
+				// 	icon: 'icon-wallet'
+				// }
+			],     //支付方式
+			show: false,        //是否显示支付方式
+			errorInfo: '',      //密码错误提示
+			value: '',          //密码
+			walletBalance: '',  //钱包余额
+			walletStatus: '',    //钱包支付密码状态
+			payLoading: false,
+		}
+	},
+	components: {
+		Header,
+		PayMethod
+	},
+	created() {
+		this.getInfo();
+		this.getUsers();
 
-    },
-    methods: {
-        //请求站点信息，用于判断站点是否是付费站点
-        getInfo(initStatus = false) {
-            return this.appFetch({
-                url: 'forum',
-                method: 'get',
-                data: {
-                    include: ['users'],
-                }
-            }).then((res) => {
-                if (res.errors) {
-                    this.$toast.fail(res.errors[0].code);
-                    throw new Error(res.error)
-                } else {
-                    if (initStatus) {
-                        this.siteInfo = []
-                    }
-                    this.siteInfo = res.readdata;
-                    if (res.readdata._data.set_site.site_author) {
-                        this.siteUsername = res.readdata._data.set_site.site_author.username;;
-                    } else {
-                        this.siteUsername = '暂无站长信息';
-                    }
-                    this.sitePrice = res.readdata._data.set_site.site_price;
-                    if (res.readdata._data.paycenter.wxpay_close == true) {
-                        this.payList.unshift({
-                            name: '微信支付',
-                            icon: 'icon-wxpay'
-                        })
-                    }
-                }
-            });
-        },
-        //退出登录
-        signOut() {
-            browserDb.removeLItem('tokenId');
-            browserDb.removeLItem('Authorization');
-            this.$router.push({ path: '/login-user' });
-            localStorage.clear();
-        },
+	},
+	methods: {
+		//请求站点信息，用于判断站点是否是付费站点
+		getInfo(initStatus = false) {
+			return this.appFetch({
+				url: 'forum',
+				method: 'get',
+				data: {
+					include: ['users'],
+				}
+			}).then((res) => {
+				console.log(res.readdata._data.paycenter.wxpay_close)
+				if (res.errors) {
+					this.$toast.fail(res.errors[0].code);
+					throw new Error(res.error)
+				} else {
+					if (initStatus) {
+						this.siteInfo = []
+					}
+					this.siteInfo = res.readdata;
+					if (res.readdata._data.set_site.site_author) {
+						this.siteUsername = res.readdata._data.set_site.site_author.username;;
+					} else {
+						this.siteUsername = '暂无站长信息';
+					}
+					this.sitePrice = res.readdata._data.set_site.site_price;
+					if (res.readdata._data.paycenter.wxpay_close == true) {
+						this.payList.unshift({
+							name: '微信支付',
+							icon: 'icon-wxpay'
+						})
+					} else {
+						this.$toast("暂未开启支付");
+					}
+				}
+			});
+		},
+		//退出登录
+		signOut() {
+			browserDb.removeLItem('tokenId');
+			browserDb.removeLItem('Authorization');
+			this.$router.push({ path: '/login-user' });
+			localStorage.clear();
+		},
 
         getUsersInfo() {
             this.appFetch({

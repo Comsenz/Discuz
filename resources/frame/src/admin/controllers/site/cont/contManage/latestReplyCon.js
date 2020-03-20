@@ -8,6 +8,7 @@ import Page from '../../../../view/site/common/page/page';
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import webDb from 'webDbHelper';
 import moment from 'moment';
+import commonHelper from '../../../../../helpers/commonHelper'
 
 
 export default {
@@ -161,6 +162,10 @@ export default {
         default:
           console.log("系统错误，请刷新页面");
       }
+    },
+
+    titleIcon(item){
+      return commonHelper.titleIcon(item);
     },
 
     /*
