@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
  * @property string $uuid
  * @property int $user_id
  * @property int $post_id
+ * @property int $order
  * @property int $is_gallery
  * @property int $is_sound
  * @property int $is_approved
@@ -88,21 +89,23 @@ class Attachment extends Model
      *
      * @param int $user_id 用户id
      * @param int $post_id 回复id
+     * @param int $order 排序
      * @param int $isGallery 是否是帖子图片
      * @param int $isSound 是否是音频：0文件1音频2视频
      * @param int $isApproved 是否合法（敏感图）
-     * @param int $is_remote 是否远程附件
      * @param string $attachment 系统生成的名称
      * @param string $file_path 文件路径
      * @param string $file_name 文件原名称
      * @param int $file_size 文件大小
      * @param string $file_type 文件类型
+     * @param int $is_remote 是否远程附件
      * @param string $ip 创建的IP地址
      * @return static
      */
     public static function creation(
         $user_id,
         $post_id,
+        $order,
         $isGallery,
         $isSound,
         $isApproved,
@@ -121,6 +124,7 @@ class Attachment extends Model
         $attach->uuid = Str::uuid();
         $attach->user_id = $user_id;
         $attach->post_id = $post_id;
+        $attach->order = $order;
         $attach->is_gallery = $isGallery;
         $attach->is_sound = $isSound;
         $attach->is_approved = $isApproved;

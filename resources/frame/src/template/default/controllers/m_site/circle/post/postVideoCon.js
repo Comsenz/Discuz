@@ -127,10 +127,13 @@ export default {
       var videoStrRes = '';
       for (var k = 0; k < videoExt.length; k++) {
         videoStr = '.' + videoExt[k] + ',';
-        videoStrRes = 'video/' + videoExt[k] + ',';
+        // videoStrRes = 'video/' + videoExt[k] + ',';
+        videoStrRes = '.'+ videoExt[k] + ',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
+      this.supportVideoExtRes = 'video/*,' + this.supportVideoExtRes;
+      this.supportVideoExtRes = this.supportVideoExtRes.substring(0,this.supportVideoExtRes.length - 1);
     } else {
       videoExt = '*';
     }

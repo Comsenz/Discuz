@@ -6,13 +6,13 @@
     <div v-if="siteInfo">
       <Header :logoShow="true" :perDetShow="true"></Header>
       <div class="gap"></div>
-      <div class="circlePL">
+      <!-- <div class="circlePL">
       	<div class="circleLoBox">
         	<span class="circleIcon">站点图标</span>
           <img v-if="siteInfo._data.set_site.site_logo" :src="siteInfo._data.set_site.site_logo" class="circleLogo">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
         </div>
-      </div>
+      </div> -->
       <div class="circleInfo padB0 lastBorNone">
       	<h1 class="cirInfoTit">站点简介</h1>
       	<p class="cirInfoWord">{{siteInfo._data.set_site.site_introduction}}</p>
