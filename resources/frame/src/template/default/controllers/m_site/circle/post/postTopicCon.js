@@ -394,11 +394,12 @@ export default {
             this.testingType(file.file, this.supportImgExt);
             if (this.testingRes) {
               this.loading = true;
-              this.compressFile(file.file, 150000, false, files.length - index);
+              this.compressFile(file.file, 150000, false, index, files.length - index);
             }
           } else {
             this.loading = true;
-            this.compressFile(file.file, 150000, false, files.length - index);
+            // this.compressFile(file.file, 150000, false, files.length - index, index);
+            this.compressFile(file.file, 150000, false, index, files.length - index);
           }
         });
       }
@@ -413,11 +414,11 @@ export default {
           this.testingType(file, this.supportImgExt);
           if (this.testingRes) {
             this.loading = true;
-            this.compressFile(file, 150000, true);
+            this.compressFile(file, 150000, true,i, file.length - i);
           }
         } else {
           this.loading = true;
-          this.compressFile(file, 150000, true);
+          this.compressFile(file, 150000, true,i, file.length - i);
         }
       }
     },
@@ -440,7 +441,6 @@ export default {
     testingType(eFile, allUpext) {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
-      console.log(extName,'~~~~~~~~~');
       if (AllUpExt.indexOf(extName + ",") == "-1") {
         this.$toast.fail("文件类型不允许!");
         this.testingRes = false;
@@ -497,7 +497,9 @@ export default {
     },
 
     //压缩图片
-    compressFile(file, wantedSize, uploadShow, index) {
+    compressFile(file, wantedSize, uploadShow, index, indexSum) {
+      console.log(index,'4444');
+      // return;
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -507,6 +509,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', rst.file, file.name);
         formdata.append('isGallery', 1);
+        formdata.append('order', index);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
         // that.loading = false;
       }).catch(function (err) {
