@@ -348,6 +348,23 @@ appCommonH.timeago = function(dateTimeStamp){
   return result;
 }
 
+/**
+* 返回根据主题类型和是否付费显示图标
+* @param {[type]} item [主题]
+* */
+appCommonH.titleIcon = function(item){
+  let icon = '';
+
+  if (parseInt(item.price) > 0){
+    icon = 'iconmoney';
+  } else if (item.type === 1){
+    icon = 'iconchangwen'
+  } else {
+    icon = '';
+  }
+
+  return icon;
+}
 
 
 
