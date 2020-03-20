@@ -55,7 +55,8 @@ export default {
       self.videoAppid = self.videoAppid;
       self.videoAppidChild = self.videoAppidChild;
       var videoId;
-      if (self.videoAppidChild != '' || self.videoAppidChild != '0' || self.videoAppidChild != null) {
+      // if (self.videoAppidChild != '' || self.videoAppidChild != '0' || self.videoAppidChild != null) {
+      if (!!self.videoAppidChild && self.videoAppidChild != '0') {
         videoId = self.videoAppidChild
       } else {
         videoId = self.videoAppid
@@ -99,6 +100,7 @@ export default {
   methods: {
     // 初始化腾讯云播放器
     getVideoLang(fileID, appID, posterImg) {
+
       this.loadCover = true;
       this.loadVideo = false;
       const playerParam = {
