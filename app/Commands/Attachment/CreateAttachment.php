@@ -65,6 +65,11 @@ class CreateAttachment
     public $isSound;
 
     /**
+     * @var int
+     */
+    public $order;
+
+    /**
      * 是否合法 0 不合法 1 合法
      *
      * @var int
@@ -77,16 +82,18 @@ class CreateAttachment
      * @param User $actor 执行操作的用户.
      * @param UploadedFileInterface $file
      * @param string $ipAddress 请求来源的IP地址.
-     * @param bool $isGallery    是否是帖子图片
-     * @param int  $isSound      是否是音频：0文件1音频2视频
+     * @param bool $isGallery 是否是帖子图片
+     * @param int $isSound 是否是音频：0文件 1音频 2视频
+     * @param int $order
      */
-    public function __construct($actor, UploadedFileInterface $file, string $ipAddress, bool $isGallery, $isSound)
+    public function __construct($actor, UploadedFileInterface $file, string $ipAddress, bool $isGallery, $isSound, $order = 0)
     {
         $this->actor = $actor;
         $this->file = $file;
         $this->ipAddress = $ipAddress;
         $this->isGallery = $isGallery;
         $this->isSound = $isSound;
+        $this->order = $order;
     }
 
     /**
@@ -173,6 +180,7 @@ class CreateAttachment
         $attachment = Attachment::creation(
             $this->actor->id,
             0,
+            $this->order,
             $this->isGallery,
             $this->isSound,
             $this->isApproved,

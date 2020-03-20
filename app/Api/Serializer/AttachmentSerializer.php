@@ -85,15 +85,16 @@ class AttachmentSerializer extends AbstractSerializer
         $fixWidth = CreateAttachment::FIX_WIDTH;
 
         $attributes = [
-            'isGallery'         => $model->is_gallery,
-            'isRemote'          => $model->is_remote,
-            'url'               => $url,
-            'attachment'        => $model->attachment,
-            'extension'         => Str::afterLast($model->attachment, '.'),
-            'fileName'          => $model->file_name,
-            'filePath'          => $model->file_path,
-            'fileSize'          => (int) $model->file_size,
-            'fileType'          => $model->file_type,
+            'order' => $model->order,
+            'isGallery' => $model->is_gallery,
+            'isRemote' => $model->is_remote,
+            'url' => $url,
+            'attachment' => $model->attachment,
+            'extension' => Str::afterLast($model->attachment, '.'),
+            'fileName' => $model->file_name,
+            'filePath' => $model->file_path,
+            'fileSize' => (int)$model->file_size,
+            'fileType' => $model->file_type,
         ];
 
         if ($model->is_gallery) {
