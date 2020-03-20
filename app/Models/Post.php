@@ -360,7 +360,7 @@ class Post extends Model
      */
     public function images()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', true);
+        return $this->hasMany(Attachment::class)->where('is_gallery', true)->orderBy('order');
     }
 
     /**
@@ -370,7 +370,7 @@ class Post extends Model
      */
     public function attachments()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', false);
+        return $this->hasMany(Attachment::class)->where('is_gallery', false)->orderBy('order');
     }
 
     /**
