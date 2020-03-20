@@ -10,9 +10,7 @@
     </van-popup>
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
-      <div class="invitePerDet aaa" v-show="invitePerDet">
-        <!-- <div class="invitePerDet" v-show="invitePerDet"> -->
-        <!-- <img src="../../../../../../static/images/noavatar.gif" class="inviteHead"> -->
+      <div class="invitePerDet" v-show="invitePerDet">
         <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt class="inviteHead" />
         <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt class="inviteHead" />
         <div
@@ -63,7 +61,6 @@
       </div>
       <div class="logoBox" v-show="logoShow">
         <img v-if="logo" :src="logo" class="logo" />
-        <img v-else :src="appConfig.staticBaseUrl+'/images/logo.png'" class="logo" />
       </div>
 
       <div class="circleDet" v-show="perDetShow" v-if="siteInfo">
