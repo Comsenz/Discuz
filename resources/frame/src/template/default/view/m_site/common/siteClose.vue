@@ -41,6 +41,8 @@
     font-size: 15px;
     color:#000;
     opacity: 0.5;
+    margin-right: auto;
+    margin-left: auto;
 }
 .login{
      width:100%;

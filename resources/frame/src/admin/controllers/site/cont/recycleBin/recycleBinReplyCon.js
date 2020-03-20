@@ -9,6 +9,7 @@ import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+import commonHelper from "../../../../../helpers/commonHelper";
 
 
 export default {
@@ -65,6 +66,11 @@ export default {
   },
 
   methods:{
+
+    titleIcon(item){
+      return commonHelper.titleIcon(item);
+    },
+
     imgShowClick(list,imgIndex){
       this.url = [];
       let urlList = [];
