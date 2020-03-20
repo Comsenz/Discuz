@@ -54,7 +54,7 @@ class RegisterController extends AbstractCreateController
         $this->assertPermission((bool)$this->settings->get('register_close'));
 
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
-        $attributes['register_ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $attributes['register_ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
 
         $this->bus->dispatch(
             new RegisterUser($request->getAttribute('actor'), $attributes)
