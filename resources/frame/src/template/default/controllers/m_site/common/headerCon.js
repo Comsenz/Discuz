@@ -4,6 +4,7 @@
 import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
+import appConfig from '../../../../../../config/appConfig';
 export default {
   data: function () {
     return {
@@ -146,9 +147,13 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
+        console.log(res.readdata._data.set_site.site_logo);
         this.siteInfo = res.readdata;
-        if (res.readdata._data.set_site.site_logo) {
-          this.logo = res.readdata._data.set_site.site_logo;
+
+        this.logo = res.readdata._data.set_site.site_logo;
+        if(res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null){
+          console.log('空');
+          this.logo = appConfig.staticBaseUrl+'/images/logo.png';
         }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;

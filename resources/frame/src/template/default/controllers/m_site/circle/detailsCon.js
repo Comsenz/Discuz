@@ -902,9 +902,9 @@ export default {
           //手机浏览器
           this.getOrderSn(this.amountNum).then(() => {
             this.orderPay(11).then((res) => {
+              console.log
               this.wxPayHref = res.readdata._data.wechat_h5_link;
               window.location.href = this.wxPayHref;
-
               const payPhone = setInterval(() => {
                 if (this.payStatus && this.payStatusNum > 10) {
                   clearInterval(payPhone);
@@ -939,15 +939,17 @@ export default {
         this.errorInfo = '';
         this.getOrderSn(this.amountNum).then(() => {
           this.orderPay(20, this.value).then((res) => {
-            const pay = setInterval(() => {
-              if (this.payStatus && this.payStatusNum > 10) {
-                clearInterval(pay);
-                return;
-              }
-              this.getOrderStatus();
-            }, 3000)
-
-
+            if (res.errors) {
+            } else {
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(pay);
+                  return;
+                }
+                this.getOrderStatus();
+              }, 3000)
+            }
+            
           })
         })
       }
@@ -997,9 +999,8 @@ export default {
           }
         } else {
           this.payLoading = true;
-          return res;
         }
-
+        return res;
       })
     },
     getOrderStatus() {

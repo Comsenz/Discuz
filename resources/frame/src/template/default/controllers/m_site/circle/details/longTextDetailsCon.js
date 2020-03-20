@@ -196,12 +196,16 @@ export default {
         this.errorInfo = '';
         this.getOrderSn().then(() => {
           this.orderPay(20, this.value).then((res) => {
-            const pay = setInterval(() => {
-              if (this.payStatus && this.payStatusNum > 10) {
-                clearInterval(pay);
-              }
-              this.getOrderStatus();
-            }, 3000)
+            if (res.errors) {
+            } else {
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(pay);
+                }
+                this.getOrderStatus();
+              }, 3000)
+            }
+            
           })
         })
       }
@@ -344,8 +348,9 @@ export default {
           }
         } else {
           this.payLoading = true;
-          return res;
+          
         }
+        return res;
       }).catch(err => {
       })
     },
