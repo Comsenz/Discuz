@@ -929,7 +929,7 @@ export default {
             }
           }
         }
-      });
+      })
     }
 
 
@@ -1007,14 +1007,16 @@ export default {
         if(res.rawData[0].code == 'not_install'){
           window.location.href = res.rawData[0].detail.installUrl;
         }
+        return res;
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
         let siteInfoStat = res.readdata._data.set_site.site_stat;
-        app.bus.$emit('stat',siteInfoStat)
+        app.bus.$emit('stat',siteInfoStat);
         return res;
       }
 
     }).catch(err => {
+      console.log(err);
     })
   },
 

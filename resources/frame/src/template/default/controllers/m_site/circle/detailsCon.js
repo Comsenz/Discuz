@@ -342,6 +342,7 @@ export default {
             if (res.readdata.threadVideo && res.readdata.threadVideo._data.status == 0) {
               this.contentExamine = true;
               this.examineWord = '视频转码中，转码成功后才能正常播放';
+              console.log()
             } else if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
               this.contentExamine = true;
               this.examineWord = '内容正在审核中，审核通过后才能正常显示！';

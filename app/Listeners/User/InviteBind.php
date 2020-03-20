@@ -36,6 +36,7 @@ class InviteBind
 
                 if ($invite) {
                     $invite->to_user_id = $event->user->id;
+                    $invite->status = 2;
                     $invite->save();
                 }
             } else {
