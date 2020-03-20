@@ -98,6 +98,14 @@ export default {
 
 
   },
+  beforeRouteLeave(to, from, next) {
+    // 隐藏验证码
+    if (this.captcha) {
+      this.captcha.destroy();
+    }
+    next();
+  },
+
   components: {
     Card,
     CardRow
