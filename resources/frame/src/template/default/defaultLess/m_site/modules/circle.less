@@ -996,6 +996,14 @@ openCircleConView.vue
 主题详情页
 details.vue
 */
+.circleDetCon * {
+  -moz-user-select:text; /* Firefox私有属性 */
+  -webkit-user-select:text; /* WebKit内核私有属性 */
+  -ms-user-select:text; /* IE私有属性(IE10及以后) */
+  -khtml-user-select:text; /* KHTML内核私有属性 */
+  -o-user-select:text; /* Opera私有属性 */
+  user-select:text; /* CSS3属性 */
+}
 .marBfixed {
   margin-bottom: 52px;
   overflow: hidden;
