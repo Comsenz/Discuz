@@ -226,10 +226,12 @@ export default {
             var imgStrRes = '';
             for (var k = 0; k < ImgExt.length; k++) {
               ImgStr = '.' + ImgExt[k] + ',';
-              imgStrRes = 'image/' + ImgExt[k] + ',';
+              imgStrRes = '.' + ImgExt[k] + ',';
               this.supportImgExt += ImgStr;
               this.supportImgExtRes += imgStrRes;
             }
+            this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
+            this.supportImgExtRes = this.supportImgExtRes.substring(0,this.supportImgExtRes.length - 1);
           } else {
             ImgExt = '*';
           }

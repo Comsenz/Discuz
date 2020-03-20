@@ -102,22 +102,22 @@ export default {
 
     let text = document.getElementById('post-topic-form-text');
 
-    text.addEventListener("touchstart",(e)=>{
-      // alert('触发');
-      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+    // text.addEventListener("touchstart",(e)=>{
+    //   // alert('触发');
+    //   // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
 
-      let textarea = this.$refs.textarea;
-      textarea.focus();
-      let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 65535, (height) => {
-        height += 20;
-        if (height !== prevHeight) {
-          prevHeight = height;
-          let rem = height / rootFontSize;
-          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-        }
-      });
-    });
+    //   let textarea = this.$refs.textarea;
+    //   textarea.focus();
+    //   let prevHeight = 300;
+    //   textarea && autoTextarea(textarea, 5, 65535, (height) => {
+    //     height += 20;
+    //     if (height !== prevHeight) {
+    //       prevHeight = height;
+    //       let rem = height / rootFontSize;
+    //       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+    //     }
+    //   });
+    // });
 
 
     this.$nextTick(() => {
@@ -157,10 +157,12 @@ export default {
       var videoStrRes ='';
       for(var k=0;k<videoExt.length;k++){
         videoStr = '.'+videoExt[k]+',';
-        videoStrRes = 'video/'+videoExt[k]+',';
+        videoStrRes = '.'+videoExt[k]+',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
+      this.supportVideoExtRes = 'video/*,' + this.supportVideoExtRes;
+      this.supportVideoExtRes = this.supportVideoExtRes.substring(0,this.supportVideoExtRes.length - 1);
     } else{
       videoExt ='*';
     }

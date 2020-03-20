@@ -89,23 +89,23 @@ export default {
 
     let text = document.getElementById('textarea_id');
 
-    text.addEventListener("touchstart",(e)=>{
-      // alert('触发');
-      // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
+    // text.addEventListener("touchstart",(e)=>{
+    //   // alert('触发');
+    //   // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
 
-      let textarea = this.$refs.textarea;
-      // textarea.focus();
-      let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 65535, (height) => {
-        height += 20;
-        if (height !== prevHeight) {
-          prevHeight = height;
-          let rem = height / rootFontSize;
-          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-        }
-      });
-    });
-
+    //   let textarea = this.$refs.textarea;
+    //   // textarea.focus();
+    //   let prevHeight = 300;
+    //   textarea && autoTextarea(textarea, 5, 65535, (height) => {
+    //     height += 20;
+    //     if (height !== prevHeight) {
+    //       prevHeight = height;
+    //       let rem = height / rootFontSize;
+    //       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+    //     }
+    //   });
+    // });
+      
 
       this.$nextTick(() => {
         let textarea = this.$refs.textarea;
@@ -222,11 +222,12 @@ export default {
           var imgStrRes ='';
           for(var k=0;k<ImgExt.length;k++){
             ImgStr = '.'+ImgExt[k]+',';
-            imgStrRes = 'image/'+ImgExt[k]+',';
+            imgStrRes = '.'+ImgExt[k]+',';
             this.supportImgExt += ImgStr;
             this.supportImgExtRes += imgStrRes;
           }
-
+          this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
+          this.supportImgExtRes = this.supportImgExtRes.substring(0,this.supportImgExtRes.length - 1);
 
           var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
           var fileStr='';
