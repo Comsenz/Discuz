@@ -15,10 +15,8 @@ use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\SupportExt;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory;
-use TencentCloud\Common\Exception\TencentCloudSDKException;
 
 class SetSettingValidator extends AbstractValidator
 {
@@ -29,15 +27,6 @@ class SetSettingValidator extends AbstractValidator
     public $message = 'set_error';
 
     protected $settings;
-
-    /**
-     * 需要验证基于腾讯Api的值
-     * @var array
-     */
-    protected $qcloudVerify = [
-        'qcloud_captcha_app_id',
-        'qcloud_captcha_secret_key',
-    ];
 
     public function __construct(Factory $validator, SettingsRepository $settings)
     {
@@ -73,7 +62,6 @@ class SetSettingValidator extends AbstractValidator
             ];
         }
 
-//        dd($rules);
         return $rules;
     }
 
