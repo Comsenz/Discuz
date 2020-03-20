@@ -36,11 +36,11 @@ export default {
 			dialogShow: false,  //微信支付确认弹框
 			groupId: '',        //用户组ID
 			limitList: [],      //用户组权限
-			payList: [
-				{
-					name: '钱包',
-					icon: 'icon-wallet'
-				}
+			payList: [         //注册时不能使用钱包
+				// {
+				// 	name: '钱包',
+				// 	icon: 'icon-wallet'
+				// }
 			],     //支付方式
 			show: false,        //是否显示支付方式
 			errorInfo: '',      //密码错误提示
@@ -69,6 +69,7 @@ export default {
 					include: ['users'],
 				}
 			}).then((res) => {
+				console.log(res.readdata._data.paycenter.wxpay_close)
 				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 					throw new Error(res.error)
@@ -88,6 +89,8 @@ export default {
 							name: '微信支付',
 							icon: 'icon-wxpay'
 						})
+					} else {
+						this.$toast("暂未开启支付");
 					}
 				}
 			});
