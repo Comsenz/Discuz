@@ -51,6 +51,7 @@ class QcloudSecretVerify extends AbstractRule
             // 签名
             $clientProfile = new ClientProfile();
             $clientProfile->setHttpProfile($httpProfile);
+
             $client = new MsClient($cred, '', $clientProfile);
 
             $req = new DescribeUserBaseInfoInstanceRequest();
