@@ -202,8 +202,8 @@ export default {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.payLoading = true;
-          return res;
         }
+        return res;
       }).catch(err => {
       })
     },
@@ -404,13 +404,15 @@ export default {
         this.errorInfo = '';
         this.getOrderSn().then(() => {
           this.orderPay(20, this.value).then((res) => {
-            const pay = setInterval(() => {
-              if (this.payStatus && this.payStatusNum > 10) {
-                clearInterval(pay);
-              }
-              this.getUsersInfo()
-            }, 3000)
-
+            if (res.errors) {
+            } else {
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(pay);
+                }
+                this.getUsersInfo()
+              }, 3000)
+            }            
 
           })
         })
