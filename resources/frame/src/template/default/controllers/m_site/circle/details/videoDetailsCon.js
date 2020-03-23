@@ -182,7 +182,15 @@ export default {
     },
     //购买内容
     buyTheme() {
-      this.show = !this.show;
+      if(this.userId){
+        this.show = !this.show;
+      } else {
+        browserDb.setSItem('beforeVisiting', this.$route.path);
+        browserDb.setLItem('themeId', this.themeId);
+        this.$router.push({
+          path: '/login-user'
+        });
+      }
     },
     payImmediatelyClick(data) {
       //data返回选中项
