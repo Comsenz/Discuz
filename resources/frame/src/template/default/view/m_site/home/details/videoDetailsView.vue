@@ -38,21 +38,12 @@
         alt
       /> -->
       <div class="postImgList" v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null">
-        <div v-if="isWeixin || isPhone">
           <van-image 
             lazy-load
             class="videoCover"
             :src="themeCon.threadVideo._data.cover_url"
             fit="contain"
           />
-        </div>
-        <div v-else>
-          <van-image
-            lazy-load
-            fit="contain"
-            :src="themeCon.threadVideo._data.cover_url"
-          />
-        </div>
       </div>
     </div>
     <div class="videoBox" v-else>
@@ -67,21 +58,12 @@
         v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null && themeCon.threadVideo._data.status == 1"
       >
         <div class="postImgList" v-show="loadCover">
-          <div v-if="isWeixin || isPhone">
             <van-image
               lazy-load
               :src="coverUrl"
               fit="contain"
-              @click="imageSwiper(index,'detailImg')"
             />
-          </div>
-          <div v-else>
-            <van-image
-              lazy-load
-              fit="contain"
-              :src="coverUrl"
-            />
-          </div>
+          
         </div>
         <!-- <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" /> -->
         <div v-show="loadVideo">
