@@ -71,8 +71,15 @@
               class="postDetR"
               @click="themeOpera(themeCon.firstPost._data.id,1,themeCon.category._data.id,themeCon.firstPost._data.content)"
             >{{collectFlag}}</a>
-            <a href="javascript:;" class="postDetR" @click="shareTheme">分享</a>
-            <input type="text" onfocus="this.blur()" hidden readonly="readonly" value="点击复制代码" />
+            <a href="javascript:;" class="postDetR" @click="shareTheme">分享9</a>
+            <input
+              type="text"
+              readonly="readonly"
+              @focus.prevent="stopKeyborad"
+              ref="address"
+              hidden
+              value="点击复制代码"
+            />
           </div>
         </div>
 

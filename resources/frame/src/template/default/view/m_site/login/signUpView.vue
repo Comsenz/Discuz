@@ -47,6 +47,7 @@
           loading-text="注册中..."
           v-else
           type="primary"
+          :loading="btnLoading"
           id="TencentCaptcha"
           data-appid="appID"
           @click="initCaptcha"

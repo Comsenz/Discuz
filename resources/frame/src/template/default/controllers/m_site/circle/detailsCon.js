@@ -502,6 +502,14 @@ export default {
       this.$toast.success('分享链接已复成功');
       // document.body.removeChild(oInput);
     },
+
+    stopKeyborad() {
+      // this.showcount = true;
+      // this.$refs.address.setAttribute('readonly', 'readonly');
+      alert(11111)
+      document.activeElement.blur();
+
+    },
     //退出登录
     signOut() {
       browserDb.removeLItem('tokenId');
