@@ -23,6 +23,7 @@ export default {
       captcha: null,           // 腾讯云验证码实例
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
+      btnLoading:false,        //注册按钮状态
     }
   },
 
@@ -33,6 +34,18 @@ export default {
 
   methods: {
     signUpBdClick() {
+      this.btnLoading = true;
+
+      if (this.userName === '') {
+        this.$toast("用户名不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        this.btnLoading = false;
+        return;
+      }
 
       if (this.signReasonStatus) {
         if (this.signReason.length < 1) {
@@ -49,7 +62,7 @@ export default {
 
     //验证码
     initCaptcha() {
-      if (this.username === '') {
+      if (this.userName === '') {
         this.$toast("用户名不能为空");
         return;
       }
@@ -109,6 +122,7 @@ export default {
           }
         }
       }).then(res => {
+        this.btnLoading = false;
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -145,6 +159,7 @@ export default {
 
       }).catch(err => {
         console.log(err);
+        this.btnLoading = false;
       })
     },
     getWatchHref(code, state, sessionId) {
@@ -263,7 +278,6 @@ export default {
     if (qcloud_captcha && register_captcha) {
       this.signUpBdClickShow = false
     }
-    // console.log('进入注册页面');
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
@@ -273,12 +287,8 @@ export default {
       this.platform = 'mp';
       if (!code && !state && !sessionId) {
         this.getWatchHref();
-        // console.log('第一次请求' + code);
-        // console.log('第一次请求' + state);
       } else {
         this.getWatchHref(code, state, sessionId);
-        // console.log('第二次请求' + code);
-        // console.log('第二次请求' + state);
       }
     } else {
       this.platform = 'dev';

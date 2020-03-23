@@ -58,8 +58,10 @@ export default {
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
       submitForm:[],              //提交操作表单
-      showViewer:false,      //预览图
-      url:[]
+      showViewer:false,           //预览图
+      url:[],
+      subLoading:false,           //提交按钮状态
+      btnLoading:0,               //0表示没有loading状态，1：全部还原、2：全部删除
     }
   },
 
@@ -120,6 +122,7 @@ export default {
     },
 
     submitClick() {
+      this.subLoading = true;
 
       this.deleteStatusList = [];
       let isDeleted = [];
@@ -151,6 +154,7 @@ export default {
     },
 
     allOperationsSubmit(val){
+      this.btnLoading = val;
       let deleteStr = '';
       switch (val){
         case 1:
@@ -269,6 +273,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -292,6 +298,8 @@ export default {
         method:'delete',
         splice:'/'+ data
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{

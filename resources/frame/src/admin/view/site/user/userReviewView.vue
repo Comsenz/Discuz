@@ -66,7 +66,7 @@
       </div>
 
       <Card class="footer-btn">
-        <el-button type="primary" @click="allOperation('pass')">通过</el-button>
+        <el-button type="primary" :loading="btnLoading" @click="allOperation('pass')">通过</el-button>
         <el-button type="primary" plain @click="allOperation('no')">否决</el-button>
         <el-popover
           placement="top"

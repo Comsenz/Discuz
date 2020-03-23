@@ -246,7 +246,6 @@
 
 <script>
 import "../../../defaultLess/m_site/modules/loginSignUpModule.less";
-// import "../../../defaultLess/m_site/modules/circle.less";
 import "../../../defaultLess/m_site/modules/circle.less";
 import payTheFeeCon from "../../../controllers/m_site/login/payTheFeeCon";
 export default {

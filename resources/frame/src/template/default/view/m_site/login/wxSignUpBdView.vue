@@ -24,7 +24,7 @@
       </form>
 
       <div class="wx-sign-up-bd-btn">
-        <van-button type="primary" @click="signUpBdClick" v-if="signUpBdClickShow">注册并绑定</van-button>
+        <van-button type="primary" @click="signUpBdClick" :loading="btnLoading" v-if="signUpBdClickShow">注册并绑定</van-button>
         <van-button
           type="primary"
           id="TencentCaptcha"

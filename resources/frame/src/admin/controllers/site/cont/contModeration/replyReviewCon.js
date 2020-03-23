@@ -116,7 +116,9 @@ export default {
       ignoreStatus:true,          //全部忽略是否显示
       submitForm:[],              //操作理由表单
       showViewer:false,           //预览图
-      url:[]
+      url:[],
+      subLoading:false,           //提交按钮状态
+      btnLoading:0,               //0表示没有loading状态，1：全部通过、2：全部删除、3：全部忽略
 
       //未审核0，已审核\通过1，已忽略2
     }
@@ -216,6 +218,7 @@ export default {
     },
 
     submitClick() {
+      this.subLoading = true;
       this.patchPostsBatch(this.submitForm);
     },
 
@@ -234,6 +237,8 @@ export default {
     },
 
     allOperationsSubmit(val){
+      this.btnLoading = val;
+
       switch (val){
         case 1:
           this.submitForm.forEach((item,index)=>{
@@ -387,6 +392,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -413,6 +420,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {

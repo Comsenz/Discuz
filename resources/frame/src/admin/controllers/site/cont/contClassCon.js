@@ -8,14 +8,14 @@ import TableContAdd from '../../../view/site/common/table/tableContAdd';
 export default {
   data:function () {
     return {
-      categoriesList: [],         //分类列表
-      categoriesListLength:'',    //分类列表长度
-
-      createCategoriesStatus:false,   //添加分类状态
-
+      categoriesList: [],           //分类列表
+      categoriesListLength:'',      //分类列表长度
+      createCategoriesStatus:false, //添加分类状态
       deleteStatus:true,
-      multipleSelection:[],        //分类多选列表
-      visible:false
+      multipleSelection:[],         //分类多选列表
+      visible:false,
+      delLoading:false,             //删除按钮状态
+      subLoading:false,             //提交按钮状态
     }
   },
 
@@ -42,6 +42,7 @@ export default {
     },
 
     submitClick(){     //提交
+      this.subLoading = true;
 
       /*if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
@@ -87,6 +88,7 @@ export default {
     },
 
     deleteAllClick(){
+      this.delLoading = true;
       let id = [];
       this.multipleSelection.forEach((item,index)=>{
         if (index < this.multipleSelection.length){
@@ -133,6 +135,7 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
+        this.subLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -154,6 +157,7 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
+        this.delLoading = false;
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
@@ -189,6 +193,7 @@ export default {
                   "data": datas
                 }
               }).then(res=>{
+                this.subLoading = false;
                 if (res.meta){
                   res.meta.forEach((item,index)=>{
                     setTimeout(()=>{
@@ -206,26 +211,28 @@ export default {
     },
     batchUpdateCategories(data){
       return  this.appFetch({
-              url:'categoriesBatchUpdate',      //批量修改分类
-              method:'patch',
-              data:{
-                  data
-              }
-            }).then(res=>{
-              if (res.meta){
-                res.meta.forEach((item,index)=>{
-                  setTimeout(()=>{
-                    this.$message.error(item.message.name[0])
-                  },(index+1) * 500);
-                });
-              } else {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success'
-                });
-              }
-            }).catch(err=>{
-            })
+                url:'categoriesBatchUpdate',      //批量修改分类
+                method:'patch',
+                data:{
+                    data
+                }
+              }).then(res=>{
+                this.subLoading = false;
+                if (res.meta){
+                  res.meta.forEach((item,index)=>{
+                    setTimeout(()=>{
+                      this.$message.error(item.message.name[0])
+                    },(index+1) * 500);
+                  });
+                } else {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
+                }
+              }).catch(err=>{
+        console.log(err);
+      })
     }
   },
 
