@@ -95,8 +95,6 @@ class RegisterUser
             $user->status = 2;
         }
 
-        $user->raise(new Registered($user, $this->actor, $this->data));
-
         $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)
         );
@@ -105,6 +103,8 @@ class RegisterUser
         $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha')));
 
         $user->save();
+
+        $user->raise(new Registered($user, $this->actor, $this->data));
 
         $this->dispatchEventsFor($user, $this->actor);
 

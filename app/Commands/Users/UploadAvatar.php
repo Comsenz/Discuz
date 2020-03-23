@@ -109,7 +109,13 @@ class UploadAvatar
             );
 
             $this->validator->valid(['avatar' => $file]);
+
             $image = (new ImageManager())->make($tmpFile);
+
+            // 压缩头像 100 * 100
+            $image->resize(100, 100, function ($constraint) {
+                $constraint->upsize();          // 避免文件变大
+            })->save();
 
             $this->avatarUploader->upload($user, $image);
 

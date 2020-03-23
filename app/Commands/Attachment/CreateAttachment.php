@@ -29,7 +29,7 @@ class CreateAttachment
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
-    const FIX_WIDTH = 600;
+    const FIX_WIDTH = 500;
 
     /**
      * 执行操作的用户.
