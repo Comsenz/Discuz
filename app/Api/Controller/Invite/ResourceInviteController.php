@@ -26,7 +26,7 @@ class ResourceInviteController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['group', 'group.permission'];
+    public $include = ['group', 'group.permission','user'];
 
     /**
      * ResourceInviteController constructor.

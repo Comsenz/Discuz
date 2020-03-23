@@ -42,4 +42,14 @@ class InviteSerializer extends AbstractSerializer
     {
         return $this->hasOne($user, GroupSerializer::class);
     }
+
+    /**
+     * @param $invite
+     * @return Relationship
+     */
+    protected function user($invite)
+    {
+        return $this->hasOne($invite, UserSerializer::class);
+    }
+
 }
