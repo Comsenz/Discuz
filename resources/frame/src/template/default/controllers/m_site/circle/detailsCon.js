@@ -493,6 +493,14 @@ export default {
       oInput.style.display = 'none';
       this.$toast.success('分享链接已复制成功');
     },
+
+    stopKeyborad() {
+      // this.showcount = true;
+      // this.$refs.address.setAttribute('readonly', 'readonly');
+      alert(11111)
+      document.activeElement.blur();
+
+    },
     //退出登录
     signOut() {
       browserDb.removeLItem('tokenId');
@@ -949,7 +957,7 @@ export default {
                 this.getOrderStatus();
               }, 3000)
             }
-            
+
           })
         })
       }

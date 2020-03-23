@@ -27,7 +27,7 @@ export default {
       pageLimit: 15,
       isWeixin: false,
       isPhone: false,
-      viewportWidth:'',
+      viewportWidth: '',
     }
   },
   components: {
