@@ -13,10 +13,11 @@
               clearable
               v-model="userName"
               label="用户名"
-              placeholder="请输入您的用户名"
+              placeholder="请输入用户名"
             />
 
             <van-field
+              clearable
               type="password"
               v-model="password"
               label="密码"
@@ -26,7 +27,7 @@
         </form>
 
         <div class="wx-login-bd-btn">
-          <van-button type="primary" @click="loginBdClick">登录并绑定</van-button>
+          <van-button type="primary" :loading="btnLoading" @click="loginBdClick">登录并绑定</van-button>
         </div>
 
       </main>

@@ -229,7 +229,7 @@
       </el-table>
 
       <Card class="footer-btn">
-        <el-button @click="submitClick" type="primary">提交</el-button>
+        <el-button @click="submitClick" :loading="subLoading" type="primary">提交</el-button>
       </Card>
     </div>
   </div>

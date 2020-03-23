@@ -17,7 +17,9 @@ export default {
       radioIndex:'',        //默认级别序号
       deleteStatus:true,
       multipleSelection:[],
-      addStatus:false
+      addStatus:false,
+      btnLoading:false,     //提交按钮状态
+      delLoading:false,     //删除按钮状态
     }
   },
   methods:{
@@ -74,6 +76,7 @@ export default {
     },
 
     submitClick(){
+      this.btnLoading = true;
       /*if (this.addStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
@@ -143,6 +146,7 @@ export default {
     },
 
     deleteClick(){
+      this.delLoading = true;
       let data = {
         id:[]
       };
@@ -184,6 +188,7 @@ export default {
           data
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -224,6 +229,7 @@ export default {
           data
         }
       }).then(res=>{
+        this.delLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -250,6 +256,7 @@ export default {
           }
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -270,6 +277,7 @@ export default {
           data
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {

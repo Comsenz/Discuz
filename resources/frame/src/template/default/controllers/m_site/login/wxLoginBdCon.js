@@ -13,9 +13,10 @@ export default {
       userName: '',    //用户名
       password: '',    //密码
       siteMode: '',    //站点信息
-      openid: '',       //微信openid
+      openid: '',      //微信openid
       wxurl: '',
-      platform: ''
+      platform: '',
+      btnLoading:false //按钮loading状态
     }
   },
 
@@ -26,6 +27,19 @@ export default {
 
   methods: {
     loginBdClick() {
+      this.btnLoading = true;
+
+      if (this.userName === '') {
+        this.$toast("用户名不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        this.btnLoading = false;
+        return;
+      }
+
       this.appFetch({
         url: "login",
         method: "post",
@@ -40,6 +54,7 @@ export default {
           }
         }
       }).then(res => {
+        this.btnLoading = false;
 
         if (res.errors) {
           if (res.errors[0].detail) {
@@ -81,6 +96,7 @@ export default {
 
         }
       }).catch(err => {
+        this.btnLoading = false;
       })
 
     },
@@ -88,6 +104,83 @@ export default {
     /*
     * 接口请求
     * */
+
+    getForum() {
+      this.appFetch({
+        url: 'forum',
+        method: 'get',
+        data: {}
+      }).then(res => {
+        this.siteMode = res.readdata._data.set_site.site_mode;
+        webDb.setLItem('siteInfo', res.readdata);
+      }).catch(err => {
+      })
+    },
+    getUsers(id) {
+      return this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
+        }
+      }).then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
+      }).catch(err => {
+      })
+    },
+    /*getWatchHrefPC(code, state, sessionId) {
+      this.appFetch({
+        url: 'wxLogin',
+        method: 'get',
+        data: {
+          code: code,
+          state: state,
+          sessionId: sessionId,
+        }
+      }).then(res => {
+        if (res.errors) {
+
+          let wxStatus = res.errors[0].status;
+          let openid = res.errors[0].user.openid;
+
+          if (wxStatus == 400) {
+            //微信跳转
+            this.openid = openid;
+            webDb.setLItem('openid', openid);
+            this.$router.push({ path: '/wx-login-bd' });
+          }
+        } else if (res.data.attributes.location) {
+          //获取地址
+          this.wxurl = res.data.attributes.location;
+          window.location.href = res.data.attributes.location;
+        } else if (res.data.attributes.access_token) {
+
+          this.$toast.success('登录成功');
+          let token = res.data.attributes.access_token;
+          let tokenId = res.data.id;
+          webDb.setLItem('Authorization', token);
+          webDb.setLItem('tokenId', tokenId);
+          let beforeVisiting = webDb.getSItem('beforeVisiting');
+
+          if (beforeVisiting) {
+            this.$router.replace({ path: beforeVisiting });
+            webDb.setSItem('beforeState', 1);
+          } else {
+            this.$router.push({ path: '/' });
+          }
+
+        } else {
+          //任何情况都不符合
+        }
+      }).catch(err => {
+      })
+    },
     getWatchHref(code, state, sessionId) {
       this.appFetch({
         url: 'wechat',
@@ -134,84 +227,7 @@ export default {
         }
       }).catch(err => {
       })
-    },
-    getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
-        this.siteMode = res.readdata._data.set_site.site_mode;
-        webDb.setLItem('siteInfo', res.readdata);
-      }).catch(err => {
-      })
-    },
-    getUsers(id) {
-      return this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + id,
-        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
-        data: {
-          include: ['groups']
-        }
-      }).then(res => {
-        if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
-        } else {
-          return res;
-        }
-      }).catch(err => {
-      })
-    },
-    getWatchHrefPC(code, state, sessionId) {
-      this.appFetch({
-        url: 'wxLogin',
-        method: 'get',
-        data: {
-          code: code,
-          state: state,
-          sessionId: sessionId,
-        }
-      }).then(res => {
-        if (res.errors) {
-
-          let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
-
-          if (wxStatus == 400) {
-            //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
-            this.$router.push({ path: '/wx-login-bd' });
-          }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location;
-        } else if (res.data.attributes.access_token) {
-
-          this.$toast.success('登录成功');
-          let token = res.data.attributes.access_token;
-          let tokenId = res.data.id;
-          webDb.setLItem('Authorization', token);
-          webDb.setLItem('tokenId', tokenId);
-          let beforeVisiting = webDb.getSItem('beforeVisiting');
-
-          if (beforeVisiting) {
-            this.$router.replace({ path: beforeVisiting });
-            webDb.setSItem('beforeState', 1);
-          } else {
-            this.$router.push({ path: '/' });
-          }
-
-        } else {
-          //任何情况都不符合
-        }
-      }).catch(err => {
-      })
-    }
-
+    },*/
   },
   created() {
     let code = this.$router.history.current.query.code;
@@ -219,25 +235,11 @@ export default {
     let sessionId = this.$router.history.current.query.sessionId;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     this.openid = webDb.getLItem('openid');
-    // console.log('进入登录页');
-
-
-    // webDb.setLItem('code',code);
-    // webDb.setLItem('state',state);
 
     if (isWeixin) {
       this.platform = 'mp';
-      if (!code && !state) {
-        // this.getWatchHref()
-      } else {
-        // this.getWatchHref(code,state,sessionId);
-      }
     } else {
       this.platform = 'dev';
-      if (this.openid === '') {
-        //PC端：没有openid
-        // this.getWatchHrefPC(code,state,sessionId);
-      }
     }
 
     this.getForum();

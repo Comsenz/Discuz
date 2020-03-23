@@ -45,8 +45,8 @@
       <TableContAdd cont="新增" @tableContAddClick="addList"></TableContAdd>
 
       <Card class="footer-btn">
-        <el-button type="primary" size="medium" @click="submitClick" >提交</el-button>
-        <el-button  size="medium" :disabled="deleteStatus" @click="deleteClick" >删除</el-button>
+        <el-button type="primary" :loading="btnLoading" size="medium" @click="submitClick" >提交</el-button>
+        <el-button  size="medium" :loading="delLoading" :disabled="deleteStatus" @click="deleteClick" >删除</el-button>
       </Card>
 
     </div>

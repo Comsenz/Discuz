@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -76,10 +77,12 @@ class SessionToken extends Model
      * @param int|null $userId
      * @return bool
      */
-    public static function check(string $token, string $scope, int $userId = null)
+    public static function check(string $token, string $scope = null, int $userId = null)
     {
         return self::where('token', $token)
-            ->where('scope', $scope)
+            ->when($scope, function (Builder $query, $scope) {
+                $query->where('scope', $scope);
+            })
             ->where('user_id', $userId)
             ->where('expired_at', '>', Carbon::now())
             ->exists();
@@ -91,10 +94,12 @@ class SessionToken extends Model
      * @param int|null $userId
      * @return SessionToken
      */
-    public static function get(string $token, string $scope, int $userId = null)
+    public static function get(string $token, string $scope = null, int $userId = null)
     {
         return self::where('token', $token)
-            ->where('scope', $scope)
+            ->when($scope, function (Builder $query, $scope) {
+                $query->where('scope', $scope);
+            })
             ->where('user_id', $userId)
             ->where('expired_at', '>', Carbon::now())
             ->first();

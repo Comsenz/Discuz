@@ -10,6 +10,7 @@ import moment from 'moment';
 import webDb from 'webDbHelper';
 import { mapState, mapMutations } from 'vuex';
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+import fa from "element-ui/src/locale/lang/fa";
 
 export default {
   data: function () {
@@ -39,20 +40,20 @@ export default {
           name: '所有分类',
           id: 0
         }
-      ],   //选择站点列表
-      categoryId: '',       //选择站点选中
+      ], //选择站点列表
+      categoryId: '',        //选择站点选中
 
       toppingRadio: 2,       //是否置顶
       essenceRadio: 2,       //是否精华
 
-      checkAll: false,      //全选状态
+      checkAll: false,       //全选状态
       checkAllNum: 0,        //多选打勾数
-      themeListAll: [],    //主题列表全部
+      themeListAll: [],      //主题列表全部
       checkedTheme: [],      //多选列表初始化
-      isIndeterminate: false,   //全选不确定状态
+      isIndeterminate: false,//全选不确定状态
 
       themeList: [],         //主题列表
-      currentPag: 1,        //当前页数
+      currentPag: 1,         //当前页数
       total: 0,              //主题列表总条数
       pageCount: 1,          //总页数
       showViewer: false,     //预览图
@@ -91,7 +92,7 @@ export default {
         pageSelect: '10',         //每页显示数
         themeAuthor: '',          //主题作者
         themeKeyWords: '',        //主题关键词
-        dataValue: ['', ''],            //发表时间范围
+        dataValue: ['', ''],      //发表时间范围
         viewedTimesMin: '',       //被浏览次数最小
         viewedTimesMax: '',       //被浏览次数最大
         numberOfRepliesMin: '',   //被回复数最小
@@ -115,6 +116,7 @@ export default {
           id: '3'
         }
       ],
+      subLoading:false,     //提交按钮状态
 
     }
   },
@@ -225,6 +227,7 @@ export default {
     },
 
     submitClick() {
+      this.subLoading = true;
 
       let themeData = [];         //操作主题数据
       let attributes = {};        //操作选项
@@ -236,32 +239,6 @@ export default {
         }
       };  //主题分类关系
       let selectStatus = false;
-
-      switch (this.operatingSelect) {
-        case 'class':
-          if (this.categoryId) {
-            relationships.category.data.id = this.categoryId;
-          } else {
-            selectStatus = true;
-          }
-          break;
-        case 'sticky':
-          attributes.isSticky = this.toppingRadio === 1 ? true : false;
-          break;
-        case 'delete':
-          attributes.isDeleted = true;
-          break;
-        case 'marrow':
-          attributes.isEssence = this.essenceRadio === 1 ? true : false;
-          break;
-        default:
-          selectStatus = true;
-          this.$message({
-            showClose: true,
-            message: '操作选项错误，请重新选择或刷新页面(F5)',
-            type: 'warning'
-          });
-      }
 
       if (this.operatingSelect === 'class') {
         this.checkedTheme.forEach((item, index) => {
@@ -286,6 +263,35 @@ export default {
         });
       }
 
+      switch (this.operatingSelect) {
+        case 'class':
+          if (this.categoryId) {
+            relationships.category.data.id = this.categoryId;
+          } else {
+            selectStatus = true;
+          }
+          break;
+        case 'sticky':
+          attributes.isSticky = this.toppingRadio === 1 ? true : false;
+          break;
+        case 'delete':
+          attributes.isDeleted = true;
+          break;
+        case 'marrow':
+          attributes.isEssence = this.essenceRadio === 1 ? true : false;
+          break;
+        default:
+          selectStatus = true;
+          this.subLoading = false;
+          if (themeData.length > 0){
+            this.$message({
+              showClose: true,
+              message: '操作选项错误，请重新选择或刷新页面(F5)',
+              type: 'warning'
+            });
+          }
+      }
+
       /*if (selectStatus){
         this.$message({
           showClose: true,
@@ -297,7 +303,7 @@ export default {
       if (themeData.length < 1) {
         this.$message({
           showClose: true,
-          message: '主题列表为空，请选择主题',
+          message: '操作主题列表为空，请选择主题',
           type: 'warning'
         });
       } else if (!selectStatus) {
@@ -307,6 +313,7 @@ export default {
           method: 'patch',
           data: { data: themeData }
         }).then(res => {
+          this.subLoading = false;
           if (res.errors) {
             this.$message.error(res.errors[0].code);
           } else {

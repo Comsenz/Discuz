@@ -7,6 +7,7 @@ import Card from '../../../view/site/common/card/card';
 import Page from '../../../view/site/common/page/page';
 import tableNoList from '../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
+import el from "element-ui/src/locale/lang/el";
 
 
 export default {
@@ -18,6 +19,7 @@ export default {
       currentPaga: 1,             //当前页数
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
+      btnLoading:false,           //按钮状态
     }
   },
 
@@ -57,39 +59,59 @@ export default {
       let userList = [];
 
       if (val === 'pass'){
-        this.multipleSelection.forEach((item)=>{
-          userList.push({
-            "attributes": {
-              "id":item._data.id,
-              "status": '0',
-            }
-          })
-        });
-        this.patchEditUser(userList);
-      } else if (val === 'no'){
-        this.$MessageBox.prompt('', '提示', {
-          confirmButtonText: '提交',
-          cancelButtonText: '取消',
-          inputPlaceholder:'请输入否决原因'
-        }).then((value)=>{
+        this.btnLoading = true;
+        if (this.multipleSelection.length < 1){
+          this.$message.warning('请选择审核用户');
+          this.btnLoading = false;
+        } else {
           this.multipleSelection.forEach((item)=>{
             userList.push({
               "attributes": {
                 "id":item._data.id,
-                "status": '1',
-                "refuse_message": value.value
+                "status": '0',
               }
             })
           });
           this.patchEditUser(userList);
-        }).catch((err) => {
-        });
+        }
+
+      } else if (val === 'no'){
+
+        if (this.multipleSelection.length < 1){
+          this.$message.warning('请选择否决用户');
+          this.btnLoading = false;
+        } else {
+          this.$MessageBox.prompt('', '提示', {
+            confirmButtonText: '提交',
+            cancelButtonText: '取消',
+            inputPlaceholder: '请输入否决原因'
+          }).then((value) => {
+            this.multipleSelection.forEach((item) => {
+              userList.push({
+                "attributes": {
+                  "id": item._data.id,
+                  "status": '1',
+                  "refuse_message": value.value
+                }
+              })
+            });
+            this.patchEditUser(userList);
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
       } else if (val === 'del'){
-        this.multipleSelection.forEach((item)=>{
-          userList.push(item._data.id)
-        });
-        this.patchDeleteUser(userList);
-        this.visible = false;
+
+        if (this.multipleSelection.length < 1){
+          this.$message.warning('请选择删除用户');
+          this.btnLoading = false;
+        } else {
+          this.multipleSelection.forEach((item) => {
+            userList.push(item._data.id)
+          });
+          this.patchDeleteUser(userList);
+          this.visible = false;
+        }
       }
 
 
@@ -138,6 +160,7 @@ export default {
           }
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -158,6 +181,7 @@ export default {
           "data": dataList
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
