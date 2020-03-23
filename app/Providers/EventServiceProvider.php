@@ -19,6 +19,7 @@ use App\Listeners\AddApiMiddleware;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
 use App\Listeners\Group\SetDefaultPermission;
+use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\BanLogin;
 use App\Listeners\User\ChangeLastActived;
 use App\Listeners\User\ChckoutSite;
@@ -51,7 +52,8 @@ class EventServiceProvider extends BaseEventServiceProvider
         Registered::class => [
             InviteBind::class,
             CreateUserWalletListener::class,
-            Notifications::class
+            Notifications::class,
+            AddDefaultGroup::class
         ],
         // 登录后事件监听
         Logining::class => [

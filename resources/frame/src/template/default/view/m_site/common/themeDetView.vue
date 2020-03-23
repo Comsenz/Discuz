@@ -129,12 +129,21 @@
                 >
                   <span class="icon iconfont icon-play"></span>
                   <div class="videoCoverMask"></div>
-                  <img
+                  <!-- <img
                     v-if="item.threadVideo"
                     :src="item.threadVideo._data.cover_url"
                     alt="视频封面"
                     class="videoCover"
-                  />
+                  /> -->
+                    <van-image 
+                      v-if="item.threadVideo"
+                      lazy-load
+                      class="videoCover"
+                      style="max-height:300px;overflow:hidden;"
+                      :src="item.threadVideo._data.cover_url"
+                      fit="scale-down"
+                      alt="视频封面"
+                    />
                 </div>
               </div>
               <div

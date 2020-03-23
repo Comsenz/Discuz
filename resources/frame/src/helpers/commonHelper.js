@@ -414,6 +414,39 @@ appCommonH.formatDate = function(data,format){
   return moment(data).format('YYYY-MM-DD HH:mm')
 };
 
+/**
+ * 设置页面标题
+ * @param {[type]} type [页面：(detail:详情，circle:首页)]
+ * @param {[data]} data [主题数据]
+ * @param {[title]} title [页面标题]
+ * */
+appCommonH.setPageTitle = function (type,data,title) {
+
+  if (type === 'detail'){
+    switch (data.readdata._data.type) {
+      case 0:
+        title = data.readdata.firstPost._data.content.slice(0,80) + ' - Powered by Discuz! Q';
+        break;
+      case 1:
+        title = data.readdata._data.title + ' - Powered by Discuz! Q';
+        break;
+      case 2:
+        title = data.readdata.firstPost._data.content.slice(0,80) + ' - Powered by Discuz! Q';
+        break;
+      default:
+        title = '主题详情页 - Powered by Discuz! Q';
+    }
+  } else if (type === 'circle'){
+    title =  data.readdata._data.set_site.site_name + ' - Powered by Discuz! Q';
+  } else {
+    title = title;
+  }
+
+  return document.title = title;
+};
+
+
+
 if(!Vue.prototype.appCommonH) {
 	Vue.prototype.appCommonH = appCommonH;
 }
