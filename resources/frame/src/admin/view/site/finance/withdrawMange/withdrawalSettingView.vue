@@ -6,7 +6,7 @@
         </CardRow>
       </Card>
 
-      <Card header="提现手续费率（百分之）">
+      <Card header="提现手续费率（范围为：0-1，例如：0.03）">
         <CardRow description="用户每次提现平台收取的手续费，0或不填则不收取手续费">
           <el-input clearable type="number" v-model="withdrawalFee"></el-input>
         </CardRow>
