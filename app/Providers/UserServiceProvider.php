@@ -31,8 +31,6 @@ class UserServiceProvider extends ServiceProvider
     {
         $events = $this->app->make('events');
 
-        $events->listen(Saving::class, AddDefaultGroup::class);
-
         // 订阅事件
         $events->subscribe(UserListener::class);
     }

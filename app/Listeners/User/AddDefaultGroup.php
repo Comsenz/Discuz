@@ -7,19 +7,18 @@
 
 namespace App\Listeners\User;
 
-use App\Events\Users\Saving;
+use App\Events\Users\Registered;
 use App\Models\Group;
-use App\Models\User;
 
 class AddDefaultGroup
 {
-    public function handle(Saving $event)
+    public function handle(Registered $event)
     {
         $user = $event->user;
         $defaultGroup = Group::where('default', true)->first();
 
-        $user->saved(function (User $user) use ($defaultGroup) {
+        if (!$event->user->groups) {
             $user->groups()->sync($defaultGroup->id);
-        });
+        }
     }
 }
