@@ -145,12 +145,15 @@ export default {
     },
     //验证码
     initCaptcha() {
+      this.btnLoading = true;
       if (this.username === '') {
         this.$toast("用户名不能为空");
+        this.btnLoading = false;
         return;
       }
       if (this.password === '') {
         this.$toast("密码不能为空");
+        this.btnLoading = false;
         return;
       }
       this.captcha = new TencentCaptcha(this.appID, res => {
