@@ -465,6 +465,10 @@ export default {
       }
       return s;
     },
+    copyFocus(obj){
+      obj.blur;
+      document.body.removeChild(obj);       
+    },
     //分享，复制浏览器地址
     shareTheme() {
       let Url = '';
@@ -488,11 +492,15 @@ export default {
       oInput.value = this.themeTitle + '  ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
+      oInput.readOnly = true;
+      oInput.id= 'copyInp';
       document.execCommand("Copy");
+      oInput.setAttribute('onfocus',this.copyFocus(oInput));
       // 执行浏览器复制命令
       oInput.className = 'oInput';
       oInput.style.display = 'none';
-      this.$toast.success('分享链接已复制成功');
+      this.$toast.success('分享链接已复成功');
+      // document.body.removeChild(oInput);
     },
     //退出登录
     signOut() {
