@@ -333,6 +333,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          appCommonH.setPageTitle('detail',res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
@@ -949,7 +950,7 @@ export default {
                 this.getOrderStatus();
               }, 3000)
             }
-            
+
           })
         })
       }

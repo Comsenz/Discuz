@@ -22,7 +22,7 @@ export default {
           require(['../view/m_site/home/circleView'], resolve)
         },
         metaInfo: {
-          title: "站点首页",
+          title: "正在加载",
           oneHeader: true
         }
       },
@@ -132,7 +132,7 @@ export default {
           require(['../view/m_site/home/detailsView'], resolve)
         },
         metaInfo: {
-          title: "主题详情页",
+          title: "正在加载",
           oneHeader: true
         }
       },
@@ -620,7 +620,6 @@ export default {
   let isPhone = appCommonH.isWeixin().isPhone;
   let isWeLink = appCommonH.isWeLink().isWeLink;
 
-
     /*
     * 登录且付费不能访问的页面列表
     * */
@@ -714,6 +713,12 @@ export default {
       next();
     } else {
       this.getForum().then((res) => {
+
+        //首页时修改标题
+        if(to.name === 'circle'){
+          appCommonH.setPageTitle('circle',res);
+        }
+
 
         /*
         * 站点关闭，跳转到站点关闭页面
