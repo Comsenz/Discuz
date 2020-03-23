@@ -41,7 +41,7 @@ class SetSettingValidator extends AbstractValidator
             'qcloud_secret_id' => ['filled', new QcloudSecretVerify($this->faker('qcloud_secret_key'))],
             'password_length' => ['gte:0'],
             'cash_interval_time' => ['gte:0'],
-            'cash_rate' => ['gte:0', 'max:100'],  // 提现手续费率
+            'cash_rate' => ['gte:0', 'max:1'],  // 提现手续费率
             'cash_min_sum' => ['gte:0', new CashMinSum($this->faker('cash_max_sum', 0), $this->faker('cash_sum_limit', 0))],
             'cash_max_sum' => ['gte:0', new CashMaxSum($this->faker('cash_sum_limit', 0))],
             'cash_sum_limit' => ['gte:0', new CashSumLimit()],
