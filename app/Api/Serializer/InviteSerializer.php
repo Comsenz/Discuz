@@ -16,7 +16,7 @@ class InviteSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-        return [
+        $attributes =  [
             'group_id' => $model->group_id,
             'type' => $model->type,
             'code' => $model->code,
@@ -26,6 +26,12 @@ class InviteSerializer extends AbstractSerializer
             'to_user_id' => $model->to_user_id,
             'status' => $model->status,
         ];
+
+        if (!$model->to_user_id && $model->endtime < time()) {
+            $attributes['status'] = 3; // 已过期
+        }
+
+        return $attributes;
     }
 
     /**
@@ -36,4 +42,14 @@ class InviteSerializer extends AbstractSerializer
     {
         return $this->hasOne($user, GroupSerializer::class);
     }
+
+    /**
+     * @param $invite
+     * @return Relationship
+     */
+    protected function user($invite)
+    {
+        return $this->hasOne($invite, UserSerializer::class);
+    }
+
 }

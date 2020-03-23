@@ -139,7 +139,6 @@
                       v-if="item.threadVideo"
                       lazy-load
                       class="videoCover"
-                      style="max-height:300px;overflow:hidden;"
                       :src="item.threadVideo._data.cover_url"
                       fit="scale-down"
                       alt="视频封面"
