@@ -59,6 +59,7 @@ export default {
       total:0,              //主题列表总条数
       pageCount:1,          //总页数
       showViewer:false,     //预览图
+      subLoading:false,     //提交按钮状态
 
     }
   },
@@ -99,12 +100,14 @@ export default {
     },
 
     deleteAllClick(){
+      this.subLoading = true;
+
       /*let deleList = [];
       this.themeList.forEach((item,index)=>{
         deleList.push(item._data.id)
       });*/
 
-      let data = []
+      let data = [];
 
       this.checkedTheme.forEach((item)=>{
         data.push(
@@ -214,6 +217,7 @@ export default {
           data:data
         }
       }).then(res=>{
+        this.subLoading = false;
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{

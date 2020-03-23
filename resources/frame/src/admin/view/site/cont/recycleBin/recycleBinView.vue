@@ -141,9 +141,9 @@
       </div>
 
       <div class="recycle-bin-footer footer-btn">
-        <el-button size="small" type="primary" @click="submitClick">提交</el-button>
-        <el-button type="text" @click="allOperationsSubmit(1)">全部还原</el-button>
-        <el-button type="text" @click="allOperationsSubmit(2)">全部删除</el-button>
+        <el-button size="small" :loading="subLoading" type="primary" @click="submitClick">提交</el-button>
+        <el-button type="text" :loading="btnLoading === 1" @click="allOperationsSubmit(1)">全部还原</el-button>
+        <el-button type="text" :loading="btnLoading === 2" @click="allOperationsSubmit(2)">全部删除</el-button>
         <!-- <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox> -->
       </div>
 

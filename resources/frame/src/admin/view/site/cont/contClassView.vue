@@ -67,7 +67,7 @@
         <TableContAdd @tableContAddClick="tableContAdd" cont="添加内容分类"></TableContAdd>
 
         <Card class="footer-btn" >
-          <el-button type="primary" size="medium" @click="submitClick" >提交</el-button>
+          <el-button type="primary" :loading="subLoading" size="medium" @click="submitClick" >提交</el-button>
 
           <el-popover
             width="100"
@@ -78,10 +78,8 @@
               <el-button type="text" size="mini" @click="visible = false">取消</el-button>
               <el-button type="danger" size="mini"  @click="deleteAllClick" >确定</el-button>
             </div>
-            <el-button size="medium" style="margin-left: 10PX" :disabled="deleteStatus"  slot="reference">删除</el-button>
+            <el-button size="medium" style="margin-left: 10PX" :loading="delLoading" :disabled="deleteStatus"  slot="reference">删除</el-button>
           </el-popover>
-
-          <!--<el-button  size="medium" :disabled="deleteStatus" @click="deleteAllClick" >删除</el-button>-->
         </Card>
       </div>
     </div>

@@ -12,11 +12,13 @@ export default {
       withdrawalFee:'',        //提现手续费率
       minAmount:'',            //最小金额
       maxAmount:'',            //最大金额
-      amountCap:''             //金额上限
+      amountCap:'',            //金额上限
+      subLoading:false,        //提现按钮状态
     }
   },
   methods:{
     submitClick(){
+      this.subLoading = true;
       this.postWithdrawalSettings();
     },
 
@@ -67,6 +69,7 @@ export default {
           ]
         }
       }).then(res=>{
+        this.subLoading = false;
         if (res.errors){
           res.errors.forEach((item,index)=>{
             setTimeout(()=>{

@@ -46,7 +46,6 @@
       <footer class="login-footer">
         <p>Powered by Discuz! Q</p>
       </footer>
-      <!--<p>{{this.$store.state.login.loginState}}</p>-->
     </div>
 </template>
 

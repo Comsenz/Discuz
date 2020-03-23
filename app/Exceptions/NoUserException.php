@@ -11,16 +11,16 @@ use Exception;
 
 class NoUserException extends Exception
 {
-    protected $user;
+    protected $token;
 
-    public function setUser($user)
+    public function setToken($token)
     {
-        $this->user = $user;
+        $this->token = $token;
         return $this;
     }
 
-    public function getUser()
+    public function getToken()
     {
-        return $this->user;
+        return $this->token->token;
     }
 }
