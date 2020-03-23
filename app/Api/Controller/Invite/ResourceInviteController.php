@@ -42,8 +42,6 @@ class ResourceInviteController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $this->assertAdmin($request->getAttribute('actor'));
-
         $code = Arr::get($request->getQueryParams(), 'code');
 
         return $this->invite->query()->where('code', $code)->first();

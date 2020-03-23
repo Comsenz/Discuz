@@ -76,14 +76,8 @@ class InviteRepository extends AbstractRepository
 
         $query->each(function ($item) {
             if ($item->status == 1) {
-                if (!empty($item->to_user_id)) {
-                    $item->status = 2; // 已使用
-                }
-                if (!$item->to_user_id && $item->endtime > time()) {
-                    $item->status = 3; // 未使用
-                }
                 if (!$item->to_user_id && $item->endtime < time()) {
-                    $item->status = 4; // 已过期
+                    $item->status = 3; // 已过期
                 }
             }
         });
