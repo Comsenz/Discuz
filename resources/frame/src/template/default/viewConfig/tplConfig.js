@@ -168,7 +168,7 @@ export default {
           require(['../view/m_site/home/circleManageInviteView'], resolve)
         },
         metaInfo: {
-          title: "站点管理里的邀请",
+          title: "邀请注册",
           oneHeader: true
         }
       },
@@ -241,12 +241,12 @@ export default {
           title: "发布主题"
         }
       },
-      'post-video/:cateId':{
-        comLoad:function (resolve) {
-        require(['../view/m_site/home/post/postVideoView'],resolve)
+      'post-video/:cateId': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/home/post/postVideoView'], resolve)
         },
-        metaInfo:{
-        title:"发布视频"
+        metaInfo: {
+          title: "发布视频"
         }
       },
       'post-longText/:cateId': {
@@ -273,12 +273,12 @@ export default {
           title: "编辑长文"
         }
       },
-      'edit-video/:themeId':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/home/edit/editVideoView'],resolve)
+      'edit-video/:themeId': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/home/edit/editVideoView'], resolve)
         },
-        metaInfo:{
-          title:"编辑视频"
+        metaInfo: {
+          title: "编辑视频"
         }
       },
       //登录、注册、微信绑定模块路由
@@ -314,25 +314,25 @@ export default {
           title: "微信注册绑定帐号"
         }
       },
-       'welink-login-bd':{
-            comLoad:function (resolve) {
-                require(['../view/m_site/login/welinkLoginBdView'],resolve)
-            },
-            metaInfo:{
-                title:"WeLink登录绑定帐号"
-            }
+      'welink-login-bd': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/login/welinkLoginBdView'], resolve)
         },
-      'welink-sign-up-bd':{
-          comLoad:function (resolve) {
-              require(['../view/m_site/login/welinkSignUpBdView'],resolve)
-          },
-          metaInfo:{
-              title:"WeLink注册绑定帐号"
-          }
+        metaInfo: {
+          title: "WeLink登录绑定帐号"
+        }
       },
-      'sign-up':{
-        comLoad:function (resolve) {
-          require(['../view/m_site/login/signUpView'],resolve)
+      'welink-sign-up-bd': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/login/welinkSignUpBdView'], resolve)
+        },
+        metaInfo: {
+          title: "WeLink注册绑定帐号"
+        }
+      },
+      'sign-up': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/login/signUpView'], resolve)
         },
         metaInfo: {
           title: "注册帐号"
@@ -614,11 +614,11 @@ export default {
    * @return {[type]}        [description]
    */
 
-  beforeEnter: function(to, form, next) {
-  //判断设备
-  let isWeixin = appCommonH.isWeixin().isWeixin;
-  let isPhone = appCommonH.isWeixin().isPhone;
-  let isWeLink = appCommonH.isWeLink().isWeLink;
+  beforeEnter: function (to, form, next) {
+    //判断设备
+    let isWeixin = appCommonH.isWeixin().isWeixin;
+    let isPhone = appCommonH.isWeixin().isPhone;
+    let isWeLink = appCommonH.isWeLink().isWeLink;
 
     /*
     * 登录且付费不能访问的页面列表
@@ -709,14 +709,14 @@ export default {
 
 
 
-    if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back'){
+    if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
       next();
     } else {
       this.getForum().then((res) => {
 
         //首页时修改标题
-        if(to.name === 'circle'){
-          appCommonH.setPageTitle('circle',res);
+        if (to.name === 'circle') {
+          appCommonH.setPageTitle('circle', res);
         }
 
 
@@ -857,9 +857,9 @@ export default {
               }*/
 
               if (res.readdata._data.set_site.site_mode === 'public') {
-                if (!browserDb.getSItem('beforeVisiting')){
-                  if (!wxNotLoggedInToAccessPage.includes(to.name)){
-                    browserDb.setSItem('beforeVisiting',to.path);
+                if (!browserDb.getSItem('beforeVisiting')) {
+                  if (!wxNotLoggedInToAccessPage.includes(to.name)) {
+                    browserDb.setSItem('beforeVisiting', to.path);
                   }
                 }
               }
@@ -901,8 +901,8 @@ export default {
               }
             }
 
-          }else {
-            if (notLoggedInToAccessPage.includes(to.name)){
+          } else {
+            if (notLoggedInToAccessPage.includes(to.name)) {
               /*符合，未登录可以访问站点*/
               /*判断站点模式*/
               if (res.readdata._data.set_site.site_mode === 'public') {
@@ -1009,14 +1009,14 @@ export default {
       data: {}
     }).then(res => {
       if (res.errors) {
-        if(res.rawData[0].code == 'not_install'){
+        if (res.rawData[0].code == 'not_install') {
           window.location.href = res.rawData[0].detail.installUrl;
         }
         return res;
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
         let siteInfoStat = res.readdata._data.set_site.site_stat;
-        app.bus.$emit('stat',siteInfoStat);
+        app.bus.$emit('stat', siteInfoStat);
         return res;
       }
 

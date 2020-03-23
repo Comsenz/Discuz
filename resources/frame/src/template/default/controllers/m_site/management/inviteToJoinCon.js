@@ -66,15 +66,15 @@ export default {
           splice: '?type=invite',
           method: 'get'
         })
-        if (response.errors){
+        if (response.errors) {
           this.$toast.fail(response.errors[0].code);
           throw new Error(response.error)
-        }else{
-        this.choList = response.data;
-        for (let val of this.choList) {
-          this.getGroupNameById[val.id] = val.attributes.name;
+        } else {
+          this.choList = response.data;
+          for (let val of this.choList) {
+            this.getGroupNameById[val.id] = val.attributes.name;
+          }
         }
-      }
       } catch (err) {
         this.$toast("邀请码类型获取失败，请刷新重试");
       }
@@ -97,10 +97,10 @@ export default {
             'page[limit]': this.pageLimit
           }
         }).then(res => {
-          if (res.errors){
+          if (res.errors) {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
-          }else{
+          } else {
             this.finished = res.readdata.length < this.pageLimit; //数据全部加载完成
             if (initStatus) {
               this.inviteList = [];
@@ -111,10 +111,10 @@ export default {
           }
         })
       } catch (err) {
-		    this.$toast("邀请列表获取失败");
-		    if(this.loading && this.pageIndex !== 1){
-			  this.pageIndex--;
-		  }
+        this.$toast("邀请列表获取失败");
+        if (this.loading && this.pageIndex !== 1) {
+          this.pageIndex--;
+        }
       }
     },
 
@@ -151,7 +151,7 @@ export default {
       }
     },
 
-	copyToClipBoard(inviteItem) { //复制
+    copyToClipBoard(inviteItem) { //复制
       if (inviteItem._data.status === 0) {
         return;
       }
@@ -178,38 +178,40 @@ export default {
       }
       const id = inviteItem._data.id;
       try {
-        await this.appFetch({
+        const res = await this.appFetch({
           url: 'invite',
           method: 'delete',
           splice: `/${id}`
         })
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
-        }else{
-        this.checkSubmit();
+        } else {
+          this.getInviteList();
         }
-      } catch (err) {
+      }
+      catch (err) {
+        console.log(err)
         this.$toast("邀请码操作失败！");
       }
 
     },
     onLoad() { //上拉加载
-	  this.loading = true;
-	  this.pageIndex++;
-	  this.getInviteList();
+      this.loading = true;
+      this.pageIndex++;
+      this.getInviteList();
     },
     onRefresh() { //下拉刷新
 
-        this.pageIndex = 1;
-        this.getInviteList(true).then(res=>{
-          this.$toast('刷新成功');
-          this.isLoading = false;
-          this.finished = false;
-        }).catch((err)=>{
-          this.$toast('刷新失败');
-          this.isLoading = false;
-        });
+      this.pageIndex = 1;
+      this.getInviteList(true).then(res => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+        this.finished = false;
+      }).catch((err) => {
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      });
 
     }
   },
