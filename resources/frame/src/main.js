@@ -11,7 +11,7 @@ import "../config/languageConfig";
 
 import 'vant/lib/index.css';             //引入vant样式
 import './extend/viewBase/vantuiInit';   //引入vant组件
-import '@vant/touch-emulator';           //引入vant桌面配置
+// import '@vant/touch-emulator';           //引入vant桌面配置
 
 import 'element-ui/lib/theme-chalk/index.css'; //引入element样式
 import './extend/viewBase/elementuiInit'; //引入element组件
