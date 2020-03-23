@@ -59,14 +59,6 @@ export default {
           title: "微信"
         }
       },
-      'index': {
-        comLoad: function (resolve) {
-          require(['../view/m_site/home/indexView'], resolve)
-        },
-        metaInfo: {
-          title: "移动端首页"
-        }
-      },
       'search': {
         comLoad: function (resolve) {
           require(['../view/m_site/search/searchView'], resolve)
