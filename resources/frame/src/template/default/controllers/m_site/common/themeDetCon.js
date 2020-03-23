@@ -181,6 +181,8 @@ export default {
           this.$router.push({ path:'/edit-topic'+'/'+themeId});
          } else if(clickStatus == 1){
           this.$router.push({ path:'/edit-long-text'+'/'+themeId});
+         } else if(clickStatus == 2){
+          this.$router.push({ path:'/edit-video'+'/'+themeId});
          }
         
        } else if(clickType == 7){

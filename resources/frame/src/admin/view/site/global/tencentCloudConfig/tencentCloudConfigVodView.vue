@@ -18,7 +18,7 @@
       </CardRow>
     </Card>
     <Card header="支持的视频扩展名:">
-      <CardRow description="多个请用,隔开，例如 WMV、RM、MOV、MPEG、MP4、3GP、FLV、AVI、RMVB">
+      <CardRow description="多个请用,隔开，例如 WMV,RM,MOV,MPEG,MP4,3GP,FLV,AVI,RMVB">
         <el-input v-model="vodExt" clearable></el-input>
       </CardRow>
     </Card>
