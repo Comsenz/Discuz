@@ -17,6 +17,8 @@ export default {
       allowRegister: '',
       limitList: '',
       userInfo: '',
+      tipsCode: '',
+      tipsStatus: '',
     }
   },
   computed: {
@@ -26,7 +28,7 @@ export default {
   },
   //用于数据初始化
   created: function () {
-    console.log(this.code, 'WWWWWWWWWWWWWWWWWWWWWWW');
+    // console.log(this.code, 'WWWWWWWWWWWWWWWWWWWWWWW');
 
     var roleId = '10';
     this.roleId = roleId;
@@ -35,7 +37,7 @@ export default {
   methods: {
 
     loadSite(initStatus = false) {
-      console.log('执行');
+      // console.log('执行');
       //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
@@ -59,10 +61,23 @@ export default {
         data: {
         }
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.userInfo = res.readdata.user;
         this.roleResult = res.readdata.group._data.name;
         this.limitList = res.readdata.group;
+        // console.log(res.readdata._data.status)
+        if (res.readdata._data.status == 0) {
+          this.tipsStatus = true;
+          this.tipsCode = '该邀请码已失效，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+        } else if (res.readdata._data.status == 2) {
+          this.tipsStatus = true;
+          this.tipsCode = '该邀请码已使用，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+        } else if (res.readdata._data.status == 3) {
+          this.tipsStatus = true;
+          this.tipsCode = '该邀请码已过期，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+        } else {
+          this.tipsStatus = false;
+        }
       });
     },
 

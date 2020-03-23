@@ -3,7 +3,7 @@
 <template>
   <div class="circleCon" v-if="siteInfo">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div class="tips">11111</div>
+      <div class="tips" v-show="tipsStatus">{{tipsCode}}</div>
       <Header
         :searchIconShow="false"
         :perDetShow="true"
