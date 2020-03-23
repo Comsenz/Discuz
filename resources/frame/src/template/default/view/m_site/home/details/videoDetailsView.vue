@@ -31,12 +31,29 @@
     </div>
     <div class="videoContentText" v-html="themeCon.firstPost._data.contentHtml"></div>
     <div class="videoBox" v-if="themeCon._data.price > 0 && !themeCon._data.paid">
-      <img
+      <!-- <img
         class="videoCover"
         v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null"
         :src="themeCon.threadVideo._data.cover_url"
         alt
-      />
+      /> -->
+      <div class="postImgList" v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null">
+        <div v-if="isWeixin || isPhone">
+          <van-image 
+            lazy-load
+            class="videoCover"
+            :src="themeCon.threadVideo._data.cover_url"
+            fit="contain"
+          />
+        </div>
+        <div v-else>
+          <van-image
+            lazy-load
+            fit="contain"
+            :src="themeCon.threadVideo._data.cover_url"
+          />
+        </div>
+      </div>
     </div>
     <div class="videoBox" v-else>
       <img
@@ -49,9 +66,24 @@
         class="videoContent"
         v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null && themeCon.threadVideo._data.status == 1"
       >
-        <!-- <img :src="coverUrl" alt="" :style="{'display': loadCover?'block':'none'}" ref="coverShow">
-        <video :style="{'display': loadVideo?'block':'none'}" ref="videoShow" :id="tcPlayerId" preload="auto" width="100%" playsinline webkit-playsinline x5-playsinline></video>-->
-        <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" />
+        <div class="postImgList" v-show="loadCover">
+          <div v-if="isWeixin || isPhone">
+            <van-image
+              lazy-load
+              :src="coverUrl"
+              fit="contain"
+              @click="imageSwiper(index,'detailImg')"
+            />
+          </div>
+          <div v-else>
+            <van-image
+              lazy-load
+              fit="contain"
+              :src="coverUrl"
+            />
+          </div>
+        </div>
+        <!-- <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" /> -->
         <div v-show="loadVideo">
           <video
             :id="tcPlayerId"

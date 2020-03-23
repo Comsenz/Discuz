@@ -45,7 +45,6 @@
           <van-image
             lazy-load
             v-for="(image,index)  in firstpostImageListProp"
-            key="index"
             :src="image"
             @click="imageSwiper(index,'detailImg')"
             :key="index"
@@ -55,7 +54,6 @@
           <van-image
             lazy-load
             v-for="(image,index)  in firstpostImageListProp"
-            key="index"
             :src="image"
             :key="index"
           />
