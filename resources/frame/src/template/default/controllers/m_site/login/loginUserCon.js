@@ -131,13 +131,16 @@ export default {
     },
 
     loginWxClick() {
-      this.getWxLogin().then(res => {
+      /*this.getWxLogin().then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           window.location.href = res.readdata._data.location
         }
-      })
+      })*/
+
+      window.location.href = '/api/oauth/wechat/pc';
+
     },
 
     loginPhoneClick() {

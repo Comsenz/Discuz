@@ -612,8 +612,6 @@ export default {
     let isPhone = appCommonH.isWeixin().isPhone;
     let isWeLink = appCommonH.isWeLink().isWeLink;
 
-    console.log(to.name);
-
     /*
     * 登录且付费不能访问的页面列表
     * */

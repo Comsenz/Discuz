@@ -10,7 +10,7 @@ module.exports = {
   'smsVerify':'/sms/verify',            //短信验证
   'wechat':'/oauth/wechat/user',        //微信接口
   'authority':'/groups',                //权限列表
-  'wxLogin':'/oauth/wechat/pc',         // 微信登录列表
+  'wxPcLogin':'/oauth/wechat/pc/user',         // 微信登录列表
 
   'categories':'/categories',           //分类列表
   'categoriesDelete':'/categories',     //分类单个删除
