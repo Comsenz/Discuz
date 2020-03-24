@@ -35,7 +35,7 @@ class BaseQcloud extends AbstractRule
         $this->qcloudSecretKey =  $this->settings->get('qcloud_secret_key', 'qcloud');
 
         if (blank($this->qcloudSecretId) || blank($this->qcloudSecretKey)) {
-            throw new TencentCloudSDKException(500, 'tencent_secret_key_error');
+            throw new TencentCloudSDKException('tencent_secret_key_error');
         }
     }
 }
