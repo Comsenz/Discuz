@@ -14,7 +14,7 @@ export default {
       password: "",
       phoneStatus: "",
       siteMode: '',
-      openid: '',
+      wxtoken: '',
       platform: '',
       signReason: '',        //注册原因
       signReasonStatus: false,
@@ -113,7 +113,7 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              openid: this.openid,
+              token: this.wxtoken,
               platform: this.platform,
               register_reason: this.signReason,
               captcha_ticket: this.captcha_ticket,
@@ -172,24 +172,18 @@ export default {
           sessionId: sessionId,
         }
       }).then(res => {
-        // console.log(res);
-
         if (res.errors) {
+          let wxtoken = res.errors[0].token;
 
-          let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
-
-          if (wxStatus == 400) {
-            //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
-            this.$router.push({ path: '/wx-sign-up-bd' });
+          if (res.rawData[0].code === 'no_bind_user') {
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
           }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          // console.log('获取地址');
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location
+        // } else if (res.data.attributes.location) {
+        //   //获取地址
+        //   // console.log('获取地址');
+        //   this.wxurl = res.data.attributes.location;
+        //   window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -217,7 +211,7 @@ export default {
     },
     getWatchHrefPC(code, state, sessionId) {
       this.appFetch({
-        url: 'wxLogin',
+        url: 'wxPcLogin',
         method: 'get',
         data: {
           code: code,
@@ -227,19 +221,16 @@ export default {
       }).then(res => {
         if (res.errors) {
 
-          let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
-
-          if (wxStatus == 400) {
+          let wxtoken = res.errors[0].user.wxtoken;
+          if (res.rawData[0].code === 'no_bind_user') {
             //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
-            this.$router.push({ path: '/wx-sign-up-bd' });
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
           }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location;
+        // } else if (res.data.attributes.location) {
+        //   //获取地址
+        //   this.wxurl = res.data.attributes.location;
+        //   window.location.href = res.data.attributes.location;
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -267,7 +258,7 @@ export default {
   },
   created() {
     this.getForum();
-    this.openid = webDb.getLItem('openid');
+    this.wxtoken = webDb.getLItem('wxtoken');
     this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
@@ -286,14 +277,15 @@ export default {
     if (isWeixin) {
       this.platform = 'mp';
       if (!code && !state && !sessionId) {
-        this.getWatchHref();
+        // this.getWatchHref();
+        window.location.href = '/api/oauth/wechat';
       } else {
         this.getWatchHref(code, state, sessionId);
       }
     } else {
       this.platform = 'dev';
-      if (this.openid === '' || this.openid === null || this.openid === undefined) {
-        //PC端：没有openid
+      if (this.wxtoken === '' || this.wxtoken === null || this.wxtoken === undefined) {
+        //PC端：没有wxtoken
         this.getWatchHrefPC(code, state, sessionId);
       }
     }

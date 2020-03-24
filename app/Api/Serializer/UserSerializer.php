@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -34,6 +35,8 @@ class UserSerializer extends AbstractSerializer
 
     /**
      * {@inheritdoc}
+     *
+     * @param User $model
      */
     public function getDefaultAttributes($model)
     {
@@ -91,25 +94,14 @@ class UserSerializer extends AbstractSerializer
     }
 
     /**
-     * 判断头像 - 是否用微信头像
+     * 获取头像地址
      *
-     * @param $model
+     * @param User $model
      * @return string
      */
-    public function getAvatarUrl($model)
+    public function getAvatarUrl(User $model)
     {
-        $model->load('wechat');
-
-        $avatar = '';
-        if (empty($model->avatar)) {
-            if (!empty($model->wechat)) {
-                $avatar = $model->wechat->headimgurl;
-            }
-        } else {
-            $avatar = $model->avatar;
-        }
-
-        return !empty($avatar) ? $avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
+        return $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
     }
 
     /**

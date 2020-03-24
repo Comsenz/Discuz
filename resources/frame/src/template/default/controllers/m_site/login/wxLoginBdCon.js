@@ -13,7 +13,7 @@ export default {
       userName: '',    //用户名
       password: '',    //密码
       siteMode: '',    //站点信息
-      openid: '',      //微信openid
+      wxtoken: '',      //微信wxtoken
       wxurl: '',
       platform: '',
       btnLoading:false //按钮loading状态
@@ -48,7 +48,7 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              openid: this.openid,
+              token: this.wxtoken,
               platform: this.platform
             },
           }
@@ -147,12 +147,12 @@ export default {
         if (res.errors) {
 
           let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
+          let wxtoken = res.errors[0].user.wxtoken;
 
           if (wxStatus == 400) {
             //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
             this.$router.push({ path: '/wx-login-bd' });
           }
         } else if (res.data.attributes.location) {
@@ -194,12 +194,12 @@ export default {
         if (res.errors) {
 
           let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
+          let wxtoken = res.errors[0].user.wxtoken;
 
           if (wxStatus == 400) {
             //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
             this.$router.push({ path: '/wx-login-bd' });
           }
         } else if (res.data.attributes.location) {
@@ -234,7 +234,7 @@ export default {
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
     let isWeixin = appCommonH.isWeixin().isWeixin;
-    this.openid = webDb.getLItem('openid');
+    this.wxtoken = webDb.getLItem('wxtoken');
 
     if (isWeixin) {
       this.platform = 'mp';

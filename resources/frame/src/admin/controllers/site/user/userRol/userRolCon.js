@@ -140,6 +140,7 @@ export default {
     singleDelete(index,id){
       if (index > this.alternateLength-1){
         this.tableData.pop();
+        this.addStatus = false;
       } else {
         this.singleDeleteGroup(id);
       }

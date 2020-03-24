@@ -97,6 +97,10 @@
         <div class="publishChoWo">长文</div>
       </div>
     </div>
+    <div class="loadFix" v-if="loading1">
+      <div class="loadMask"></div>
+      <van-loading color="#333333" class="loadIcon" type="spinner" />
+    </div>
   </div>
 </template>
 <style scoped="scoped">

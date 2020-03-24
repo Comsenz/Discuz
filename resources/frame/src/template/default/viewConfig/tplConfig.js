@@ -111,14 +111,14 @@ export default {
           oneHeader: true
         }
       },
-      'open-circle-con/:themeId': {
-        comLoad: function (resolve) {
-          require(['../view/m_site/home/openCircleConView'], resolve)
-        },
-        metaInfo: {
-          title: "公开站点，内容页的分享"
-        }
-      },
+      // 'open-circle-con/:themeId': {
+      //   comLoad: function (resolve) {
+      //     require(['../view/m_site/home/openCircleConView'], resolve)
+      //   },
+      //   metaInfo: {
+      //     title: "公开站点，内容页的分享"
+      //   }
+      // },
       'details/:themeId': {
         comLoad: function (resolve) {
           require(['../view/m_site/home/detailsView'], resolve)
@@ -680,7 +680,8 @@ export default {
       'wx-sign-up-bd',
       'supplier-all-back',
       'site-close',
-      'information-page'
+      'information-page',
+      '/api/oauth/wechat'
     ];
 
 
@@ -705,13 +706,6 @@ export default {
       next();
     } else {
       this.getForum().then((res) => {
-
-        //首页时修改标题
-        if (to.name === 'circle') {
-          appCommonH.setPageTitle('circle', res);
-        }
-
-
         /*
         * 站点关闭，跳转到站点关闭页面
         * */

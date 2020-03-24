@@ -19,8 +19,9 @@ export default {
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
-      btnContent:'发送验证码',
-      mobileConfirmed:'',
+      btnContent: '发送验证码',
+      mobileConfirmed: '',
+      loading: '' //loading状态
     }
   },
 
@@ -35,17 +36,17 @@ export default {
     userInformation() {
       var userId = browserDb.getLItem('tokenId');
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+userId,
-        data:{
+        url: 'users',
+        method: 'get',
+        splice: '/' + userId,
+        data: {
 
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-        }else{
-        this.phoneNum = res.data.attributes.mobile
+        } else {
+          this.phoneNum = res.data.attributes.mobile
         }
       })
     },
@@ -61,6 +62,7 @@ export default {
       // }
       var modifyState = this.modifyState
       if (modifyState) {
+        // this.loading = true;
         this.appFetch({
           url: 'sendSms',
           method: 'post',
@@ -73,16 +75,16 @@ export default {
             }
           }
         }).then((res) => {
-          if (res.errors){
+          if (res.errors) {
             if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-          }else{
-          this.insterVal = res.data.attributes.interval;
-          this.time = this.insterVal;
-          this.timer();
+          } else {
+            this.insterVal = res.data.attributes.interval;
+            this.time = this.insterVal;
+            this.timer();
           }
         })
       } else {
@@ -99,16 +101,16 @@ export default {
             }
           }
         }).then((res) => {
-          if (res.errors){
-            if (res.errors[0].detail){
+          if (res.errors) {
+            if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
               this.$toast.fail(res.errors[0].code);
             }
-          }else{
-          this.insterVal = res.data.attributes.interval;
-          this.time = this.insterVal;
-          this.timerNext();
+          } else {
+            this.insterVal = res.data.attributes.interval;
+            this.time = this.insterVal;
+            this.timerNext();
           }
         })
       }
@@ -124,7 +126,7 @@ export default {
         this.$toast("验证码不能为空");
         return;
       }
-
+      this.loading = true;
       this.appFetch({
         url: "smsVerify",
         method: "post",
@@ -138,17 +140,17 @@ export default {
           }
         }
       }).then(res => {
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-        }else{
-        this.sms = '';
-        this.modifyState = !this.modifyState;
-        this.mobileConfirmed = res.readdata._data.mobileConfirmed
-        if(this.mobileConfirmed ==true){
-          this.$toast("手机号验证成功");
-          this.$router.push({path:'/bind-new-phone'});
+        } else {
+          this.sms = '';
+          this.modifyState = !this.modifyState;
+          this.mobileConfirmed = res.readdata._data.mobileConfirmed
+          if (this.mobileConfirmed == true) {
+            this.$toast("手机号验证成功");
+            this.$router.push({ path: '/bind-new-phone' });
+          }
         }
-      }
       })
       // .catch((err) => {
       //   this.$toast("手机号验证失败，请重试");
@@ -199,7 +201,7 @@ export default {
         this.$toast("验证码不能为空");
         return;
       }
-
+      this.loading = true;
       this.appFetch({
         url: "smsVerify",
         method: "post",
@@ -219,13 +221,13 @@ export default {
           } else {
             this.$toast.fail(res.errors[0].code);
           }
-        }else{
-        this.mobileConfirmed =res.readdata._data.mobileConfirmed;
-        if(this.mobileConfirmed == true){
-          this.$toast("手机号修改成功");
-          this.$router.push({path:'../view/m_site/home/circleView'});
+        } else {
+          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
+          if (this.mobileConfirmed == true) {
+            this.$toast("手机号修改成功");
+            this.$router.push({ path: '../view/m_site/home/circleView' });
+          }
         }
-      }
       })
       // .catch((err)=>{
       //   this.$toast("手机号修改失败，请重试");

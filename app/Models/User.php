@@ -47,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property string $realname
  * @property Group $groups
  * @property UserWallet $userWallet
+ * @property UserWechat $wechat
  * @package App\Models
  * @method truncate()
  * @method static find($id)

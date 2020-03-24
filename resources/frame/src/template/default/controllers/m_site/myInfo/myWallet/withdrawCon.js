@@ -24,6 +24,7 @@ export default {
       wechatNickname: '',
       mobileConfirmed: '',//验证验证码是否正确
       handlingFee1: '',
+      loading: '', //loading状态
     }
   },
 
@@ -36,9 +37,7 @@ export default {
   },
   computed: {
     lingFee() {  //手续费
-      // let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount * 100) / 100;
-      let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount);
-      console.log(lingFee)
+      let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount * 100) / 100;
       return `${lingFee}元 （${this.handlingFee}）`;
     },
     actualCashWithdrawal() {  //实际提现金额
@@ -160,8 +159,8 @@ export default {
           let realVal = tempVal.substring(0, tempVal.length - 1)
           this.canWithdraw = realVal //可提现金
 
-          this.handlingFee = (res.data.attributes.cash_tax_ratio * 100) + '%'; //提现手续费
-          this.handlingFee1 = res.data.attributes.cash_tax_ratio;
+          this.handlingFee = (res.data.attributes.cash_tax_ratio * 100) + '%';
+          this.handlingFee1 = res.data.attributes.cash_tax_ratio
         }
       })
     },
@@ -171,10 +170,10 @@ export default {
       if (this.canWithdraw == 0.00 || this.phone == '') {
         this.sendStatus = false
       }
-      // if (!this.wechatNickname) {
-      //   this.$toast('请绑定微信')
-      //   return
-      // }
+      if (!this.wechatNickname) {
+        this.$toast('请绑定微信')
+        return
+      }
       var phone = this.phone
       if (!phone) {
         this.$toast('请先绑定手机号')
@@ -236,6 +235,7 @@ export default {
         this.$toast('可提现金额不足')
         return
       }
+      this.loading = true;
       this.appFetch({  //提交后验证验证码
         url: 'smsVerify',
         method: 'post',
@@ -271,6 +271,7 @@ export default {
         this.$toast('请绑定微信')
         return
       }
+      this.loading = true;
       this.appFetch({
         url: 'cash',
         method: "post",

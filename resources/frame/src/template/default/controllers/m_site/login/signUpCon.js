@@ -26,19 +26,19 @@ export default {
       passwordStrengthRegex: [
         {
           'name': '数字',
-          'pattern': '/\d+/',
+          'pattern': '\\d+',
         },
         {
           'name': '小写字母',
-          'pattern': '/[a-z]+/',
+          'pattern': '[a-z]+',
         },
         {
           'name': '符号',
-          'pattern': '/[^a-zA-z0-9]+/',
+          'pattern': '[^a-zA-z0-9]+',
         },
         {
           'name': '大写字母',
-          'pattern': '/[A-Z]+/',
+          'pattern': '[A-Z]+',
         },
       ]
     }
@@ -170,17 +170,17 @@ export default {
       this.btnLoading = true;
       if (this.username === '') {
         this.$toast("用户名不能为空");
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
       if (this.password === '') {
         this.$toast("密码不能为空");
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
       if (this.password.length < this.password_length) {
         this.$toast(`密码至少为${this.password_length}个字符`);
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
 
@@ -188,9 +188,11 @@ export default {
       this.password_strength.forEach(v => {
         if (!this.verification(this.passwordStrengthRegex[v])) {
           regFlag = false;
+          return
         }
-      })
+      });
       if (!regFlag) {
+        this.btnLoading = false;
         return;
       }
 
@@ -200,6 +202,9 @@ export default {
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.setSignData();
+        }
+        if (res.ret === 2) {
+          this.btnLoading = false;
         }
       });
       // 显示验证码
@@ -212,6 +217,8 @@ export default {
       if (!reg.test(this.password)) {
         this.$toast(`密码中必须包含${regxInfo.name}`);
         return false;
+      } else {
+        return true;
       }
     },
   },
