@@ -23,15 +23,15 @@ export default {
       loading: false,  //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageSize:'',//每页的条数
+      pageSize: '',//每页的条数
       pageIndex: 1,//页码
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      searchTimeout:null,
-      serHide:true,
-      serShow:false,
+      searchTimeout: null,
+      serHide: true,
+      serShow: false,
       isWeixin: false,
       isPhone: false,
-      viewportWidth:'',
+      viewportWidth: '',
     }
   },
   //用于数据初始化
@@ -43,12 +43,12 @@ export default {
   },
   methods: {
     //搜索框切换
-    serToggle(){
+    serToggle() {
       this.serHide = false;
       this.serShow = true;
       this.$refs.serInp.focus();
-      },
-      onCancel() {
+    },
+    onCancel() {
     },
     //选中复选框
     toggle(id) {
@@ -92,9 +92,9 @@ export default {
         'page[number]': 1,
       }
       clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout(()=>{
-                this.getSearchValUserList(true);
-            },300)
+      this.searchTimeout = setTimeout(() => {
+        this.getSearchValUserList(true);
+      }, 300)
     },
 
     // 接口请求
@@ -105,22 +105,22 @@ export default {
           url: 'users',
           data: this.userParams
         })
-        if (response.errors){
+        if (response.errors) {
           this.$toast.fail(response.errors[0].code);
           throw new Error(response.error)
-          }else{
-        if (initStatus) {
-          this.userList = [];
+        } else {
+          if (initStatus) {
+            this.userList = [];
+          }
+
+          this.userList = this.userList.concat(response.readdata).map((v, i) => {
+            var obj = v;
+            obj.checkStatus = false;
+            return obj
+          });
+
+          this.finished = response.readdata.length < this.userParams['page[limit]'];
         }
-
-        this.userList = this.userList.concat(response.readdata).map((v, i) => {
-          var obj = v;
-          obj.checkStatus = false;
-          return obj
-        });
-
-        this.finished = response.readdata.length < this.userParams['page[limit]'];
-      }
       } catch (err) {
         console.error(err, 'membersManagementCon.js getSearchValUserList');
         const currentPageNum = this.userParams['page[number]'];
@@ -139,12 +139,12 @@ export default {
           url: 'groups',
           method: 'get'
         })
-        if (response.errors){
+        if (response.errors) {
           this.$toast.fail(response.errors[0].code);
           throw new Error(response.error)
-          }else{
-        this.choList = response.data;
-          }
+        } else {
+          this.choList = response.data;
+        }
       } catch (err) {
         console.error(err, 'membersManagementCon.js getOperaType');
         // 这个地方需要写一个提示语  如果这个接口请求步成功的话  当前页面的操作就进行不了
@@ -189,14 +189,14 @@ export default {
             data
           }
         })
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
-          }else{
+        } else {
           this.result = [];
           this.userParams['page[number]'] = 1;
           this.getSearchValUserList(true);
-          }
+        }
       } catch (err) {
         console.error(err, 'handleSubmit error');
         this.$toast("修改成员状态失败");
@@ -209,30 +209,30 @@ export default {
     // 	this.userLoadMorePageChange = true;
     // 	this.getSearchValUserList();
     // },
-    async onLoad(){    //上拉加载
-      try{
+    async onLoad() {    //上拉加载
+      try {
         this.userLoadMorePageChange = true;
         this.loading = true;
         this.userParams['page[number]']++;
         await this.getSearchValUserList();
 
-      } catch(err){
+      } catch (err) {
 
-      } finally{
+      } finally {
         this.loading = false;
       }
-      },
-    onRefresh(){
+    },
+    onRefresh() {
       this.userParams['page[number]'] = 1;
       this.result = [];
       this.getSearchValUserList(true);
       this.$toast('刷新成功');
       this.isLoading = false;
       this.finished = false;
-      },
-      headerBack(){
+    },
+    headerBack() {
       this.$router.go(-1)
-      }
+    }
   },
 
   mounted: function () {
