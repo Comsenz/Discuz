@@ -175,18 +175,17 @@ export default {
         console.log(res);
 
         if (res.errors) {
-          let wxStatus = res.errors[0].status;
           let wxtoken = res.errors[0].token;
 
           if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
           }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          // console.log('获取地址');
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location
+        // } else if (res.data.attributes.location) {
+        //   //获取地址
+        //   // console.log('获取地址');
+        //   this.wxurl = res.data.attributes.location;
+        //   window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -214,7 +213,7 @@ export default {
     },
     getWatchHrefPC(code, state, sessionId) {
       this.appFetch({
-        url: 'wxLogin',
+        url: 'wxPcLogin',
         method: 'get',
         data: {
           code: code,
@@ -224,19 +223,16 @@ export default {
       }).then(res => {
         if (res.errors) {
 
-          let wxStatus = res.errors[0].status;
           let wxtoken = res.errors[0].user.wxtoken;
-
-          if (wxStatus == 400) {
+          if (res.rawData[0].code === 'no_bind_user') {
             //微信跳转
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
-            this.$router.push({ path: '/wx-sign-up-bd' });
           }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location;
+        // } else if (res.data.attributes.location) {
+        //   //获取地址
+        //   this.wxurl = res.data.attributes.location;
+        //   window.location.href = res.data.attributes.location;
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
