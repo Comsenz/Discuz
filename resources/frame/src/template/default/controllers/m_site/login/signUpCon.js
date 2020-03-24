@@ -168,20 +168,21 @@ export default {
     },
     //验证码
     initCaptcha() {
-      // this.btnLoading = true;
+      this.btnLoading = true;
+
       if (this.username === '') {
         this.$toast("用户名不能为空");
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
       if (this.password === '') {
         this.$toast("密码不能为空");
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
       if (this.password.length < this.password_length) {
         this.$toast(`密码至少为${this.password_length}个字符`);
-        // this.btnLoading = false;
+        this.btnLoading = false;
         return;
       }
 
@@ -190,7 +191,7 @@ export default {
         if (!this.verification(this.passwordStrengthRegex[v])) {
           regFlag = false;
         }
-      })
+      });
 
       this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
@@ -198,6 +199,9 @@ export default {
           this.captcha_rand_str = res.randstr;
           //验证通过后注册
           this.setSignData();
+        }
+        if (res.ret === 2){
+          this.btnLoading = false;
         }
       });
       // 显示验证码
