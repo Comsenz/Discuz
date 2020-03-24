@@ -26,19 +26,19 @@ export default {
       passwordStrengthRegex: [
         {
           'name': '数字',
-          'pattern': '/\d+/',
+          'pattern': '\\d+',
         },
         {
           'name': '小写字母',
-          'pattern': '/[a-z]+/',
+          'pattern': '[a-z]+',
         },
         {
           'name': '符号',
-          'pattern': '/[^a-zA-z0-9]+/',
+          'pattern': '[^a-zA-z0-9]+',
         },
         {
           'name': '大写字母',
-          'pattern': '/[A-Z]+/',
+          'pattern': '[A-Z]+',
         },
       ]
     }
@@ -102,6 +102,7 @@ export default {
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
           this.password_length = res.readdata._data.set_reg.password_length;
           this.password_strength = res.readdata._data.set_reg.password_strength;
+          // console.log(this.password_strength)
           browserDb.setLItem('siteInfo', res.readdata);
           if (res.readdata._data.qcloud.qcloud_captcha && res.readdata._data.set_reg.register_captcha) {
             this.signUpShow = false
@@ -167,7 +168,7 @@ export default {
     },
     //验证码
     initCaptcha() {
-      this.btnLoading = true;
+      // this.btnLoading = true;
       if (this.username === '') {
         this.$toast("用户名不能为空");
         // this.btnLoading = false;
@@ -190,9 +191,6 @@ export default {
           regFlag = false;
         }
       })
-      if (!regFlag) {
-        return;
-      }
 
       this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
