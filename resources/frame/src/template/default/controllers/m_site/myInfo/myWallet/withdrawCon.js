@@ -159,8 +159,8 @@ export default {
           let realVal = tempVal.substring(0, tempVal.length - 1)
           this.canWithdraw = realVal //可提现金
 
-          this.handlingFee = res.data.attributes.cash_tax_ratio + '%';
-          this.handlingFee1 = (res.data.attributes.cash_tax_ratio / 100)
+          this.handlingFee = (res.data.attributes.cash_tax_ratio * 100) + '%';
+          this.handlingFee1 = res.data.attributes.cash_tax_ratio
         }
       })
     },
