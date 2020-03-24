@@ -46,7 +46,6 @@ class SetSettingValidator extends AbstractValidator
             'site_mode' => ['in:pay,public'],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
-            'qcloud_vod' => ['filled', new QcloudVodVerify()],
         ];
 
         // 腾讯云验证码特殊处理
@@ -59,6 +58,10 @@ class SetSettingValidator extends AbstractValidator
                     $this->faker('qcloud_captcha_randstr')
                 )
             ];
+        }
+
+        if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
+            $rules['qcloud_vod'] =  ['filled', new QcloudVodVerify()];
         }
 
         return $rules;
