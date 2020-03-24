@@ -7,9 +7,24 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $user_id
+ * @property string $mp_openid
+ * @property string $dev_openid
+ * @property string $min_openid
+ * @property string $nickname
+ * @property int $sex
+ * @property string $province
+ * @property string $city
+ * @property string $country
+ * @property string $headimgurl
+ * @property string $privilege
+ * @property string $unionid
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @method static create($user)
  * @method static where(...$params)
  */
