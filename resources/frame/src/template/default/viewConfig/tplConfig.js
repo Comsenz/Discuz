@@ -111,7 +111,7 @@ export default {
           oneHeader: true
         }
       },
-      'open-circle-con': {
+      'open-circle-con/:themeId': {
         comLoad: function (resolve) {
           require(['../view/m_site/home/openCircleConView'], resolve)
         },
