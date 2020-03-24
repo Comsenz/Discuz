@@ -111,14 +111,14 @@ export default {
           oneHeader: true
         }
       },
-      'open-circle-con/:themeId': {
-        comLoad: function (resolve) {
-          require(['../view/m_site/home/openCircleConView'], resolve)
-        },
-        metaInfo: {
-          title: "公开站点，内容页的分享"
-        }
-      },
+      // 'open-circle-con/:themeId': {
+      //   comLoad: function (resolve) {
+      //     require(['../view/m_site/home/openCircleConView'], resolve)
+      //   },
+      //   metaInfo: {
+      //     title: "公开站点，内容页的分享"
+      //   }
+      // },
       'details/:themeId': {
         comLoad: function (resolve) {
           require(['../view/m_site/home/detailsView'], resolve)
