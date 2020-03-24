@@ -127,7 +127,7 @@ class SendController extends AbstractCreateController
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($data['mobile'], $type);
 
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
         if (!is_null($mobileCode) && $mobileCode->exists) {
             $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION, $ip);

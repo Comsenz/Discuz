@@ -10,7 +10,9 @@ namespace App\Passport\Repositories;
 use App\Api\Serializer\TokenSerializer;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
+use App\Models\UserLoginFailLog;
 use Discuz\Auth\Exception\LoginFailedException;
+use Discuz\Auth\Exception\LoginFailuresTimesToplimitException;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
@@ -47,10 +49,8 @@ class UserRepository implements UserRepositoryInterface
         if (! $user) {
             throw new LoginFailedException;
         }
-        $this->events->dispatch(new Logining($user, $username, $password));
 
-        // checkout
-        $this->events->dispatch(new Logind($user));
+        $this->events->dispatch(new Logining($user, $username, $password));
 
         static::$user = $user;
 

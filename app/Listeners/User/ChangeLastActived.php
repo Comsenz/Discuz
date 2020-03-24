@@ -41,7 +41,7 @@ class ChangeLastActived
     {
         $user = $event->user;
         $request = $this->app->make(ServerRequestInterface::class);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
         // 检查用户是否加入站点
         if ($this->settings->get('site_mode') == 'pay') {

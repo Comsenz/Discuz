@@ -39,7 +39,7 @@ class UserWalletCashReviewController implements RequestHandlerInterface
         $actor = $request->getAttribute('actor');
 
         // 获取请求的IP
-        $ip_address = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $ip_address = ip($request->getServerParams());
         $result = $this->bus->dispatch(
             new UserWalletCashReview($actor, $request->getParsedBody(), $ip_address)
         );
