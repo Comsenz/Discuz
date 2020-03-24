@@ -60,8 +60,12 @@ class SetSettingValidator extends AbstractValidator
             ];
         }
 
-        if (Arr::has($this->data, 'qcloud_vod')) {
+        //只有开启时需要验证
+        if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
             $rules['qcloud_vod'] =  ['filled', new QcloudVodVerify()];
+        }
+        if (Arr::has($this->data, 'qcloud_vod_sub_app_id')) {
+            $rules['qcloud_vod_sub_app_id'] =  [new QcloudVodVerify()];
         }
 
         return $rules;

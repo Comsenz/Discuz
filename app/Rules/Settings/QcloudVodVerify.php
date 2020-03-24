@@ -45,21 +45,22 @@ class QcloudVodVerify extends BaseQcloud
      */
     public function passes($attribute, $value)
     {
-        //只有开启时需要验证
-        if ($value == 1) {
-            if (!$this->settings->get('qcloud_vod_transcode', 'qcloud')) {
-                throw new TencentCloudSDKException(500, 'tencent_vod_transcode_error');
-            }
+        if (!$this->settings->get('qcloud_vod_transcode', 'qcloud')) {
+            throw new TencentCloudSDKException(500, 'tencent_vod_transcode_error');
+        }
 
-            try {
-                $this->describeStorageData();
-            } catch (TencentCloudSDKException $e) {
-                $message = 'tencent_vod_error';
-                if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
-                    $message = 'tencent_vod_subappid_error';
-                }
-                throw new TencentCloudSDKException(500, $message);
+        try {
+            //设置开启关闭时获取设置好的sub_app_id进行验证
+            if ($attribute == 'qcloud_vod') {
+                $value = null;
             }
+            $this->describeStorageData($value);
+        } catch (TencentCloudSDKException $e) {
+            $message = 'tencent_vod_error';
+            if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
+                $message = 'tencent_vod_subappid_error';
+            }
+            throw new TencentCloudSDKException(500, $message);
         }
         return true;
     }
