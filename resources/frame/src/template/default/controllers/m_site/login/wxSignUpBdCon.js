@@ -175,16 +175,12 @@ export default {
         console.log(res);
 
         if (res.errors) {
-
           let wxStatus = res.errors[0].status;
           let wxtoken = res.errors[0].token;
 
-          // if (res.errors[0].code === 'no_bind_user') {
-          if (wxStatus == 400){
-            //微信跳转
+          if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
-            // this.$router.push({ path: '/wx-sign-up-bd' });
           }
         } else if (res.data.attributes.location) {
           //获取地址
