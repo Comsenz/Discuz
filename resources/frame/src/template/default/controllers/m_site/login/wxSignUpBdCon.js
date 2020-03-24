@@ -286,7 +286,8 @@ export default {
     if (isWeixin) {
       this.platform = 'mp';
       if (!code && !state && !sessionId) {
-        this.getWatchHref();
+        // this.getWatchHref();
+        window.location.href = '/api/oauth/wechat';
       } else {
         this.getWatchHref(code, state, sessionId);
       }

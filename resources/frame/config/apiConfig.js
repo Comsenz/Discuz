@@ -8,7 +8,7 @@ module.exports = {
   'users':'/users',                     //用户信息
   'sendSms':'/sms/send',                //发送验证码
   'smsVerify':'/sms/verify',            //短信验证
-  'wechat':'/oauth/wechat',             //微信接口
+  'wechat':'/oauth/wechat/user',        //微信接口
   'authority':'/groups',                //权限列表
   'wxLogin':'/oauth/wechat/pc',         // 微信登录列表
 
@@ -37,7 +37,7 @@ module.exports = {
   'updateWallet':'/wallet/user/',       //更新用户钱包
   'cash':'/wallet/cash',                //提现
   'collection':'/favorites',            //我的收藏
-  // 'changePassword':'api/users/',         //修改密码
+  // 'changePassword':'api/users/',     //修改密码
   'noticeList':'/notificationUnread',   //通知列表未读信息
   // 'searchUser':'/users',             //用户搜索
   'searchThreads':'/threads',           //搜索
@@ -45,7 +45,7 @@ module.exports = {
   'posts':'/posts',                     //回复审核修改-单条
   'postsBatch':'/posts/batch',          //回复主题修改-批量
 
-  // 'getCircle': '/circle/getCircle',      //获取circle信息
+  // 'getCircle': '/circle/getCircle',  //获取circle信息
 
   'pay':'/trade/pay/order',             //支付订单\
   'verifyPayPwd':'/users/pay-password/reset', //验证支付密码
@@ -57,13 +57,13 @@ module.exports = {
   'groupPermission':'/permission',      //修改用户组权限
   'deleteNotification':'/notification', //删除通知里的回复我的
   'wechatDelete':'/users/' ,            //修改资料里的解绑微信
-  'wechatBind':'/oauth/wechat',          //去绑定微信
+  'wechatBind':'/oauth/wechat',         //去绑定微信
   'postBatch':'/posts/batch/',          //删除回复接口[批量]
 
   'access':'/refresh-token',            //刷新token
   'follow':'/follow',                   //关注
   'realName':'/users/real',             //实名认证
-  'signature':'/signature',				//视频签名
+  'signature':'/signature',				      //视频签名
 
   /*后台*/
   'siteinfo':'/siteinfo',               //首页-系统信息
@@ -73,13 +73,13 @@ module.exports = {
   'serachWords':'/stop-words',          //查询敏感词接口[列表]
   'exportWords':'/stop-words/export',   //导出敏感词
   'logo':'/settings/logo',              //上传站点logo
-  'siteinfo':'/siteinfo',                //站点基本信息
+  'siteinfo':'/siteinfo',               //站点基本信息
   'deleteWords':'/stop-words/',         //删除敏感词
   'deleteAvatar':'/users',              //删除用户头像
   'exportUser':'/export/users?',        //用户信息导出
-  'statistic':'/statistic/finance',    //获取资金概况
-  'statisticChart':'/statistic/financeChart',//获取盈利图表数据
+  'statistic':'/statistic/finance',     //获取资金概况
+  'statisticChart':'/statistic/financeChart',     //获取盈利图表数据
   'noticeList':'/notification/tpl',               //通知设置列表
-  'notification':'/notification/tpl/', //修改系统消息模版[通知设置]
+  'notification':'/notification/tpl/',   //修改系统消息模版[通知设置]
   'noticeConfigure':'/notification/tpl/', //通知配置列表
 }
