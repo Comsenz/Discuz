@@ -36,9 +36,7 @@ export default {
   },
   computed: {
     lingFee() {  //手续费
-      // let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount * 100) / 100;
-      let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount);
-      console.log(lingFee)
+      let lingFee = Math.round(this.handlingFee1 * this.withdrawalAmount * 100) / 100;
       return `${lingFee}元 （${this.handlingFee}）`;
     },
     actualCashWithdrawal() {  //实际提现金额
@@ -160,8 +158,8 @@ export default {
           let realVal = tempVal.substring(0, tempVal.length - 1)
           this.canWithdraw = realVal //可提现金
 
-          this.handlingFee = (res.data.attributes.cash_tax_ratio * 100) + '%'; //提现手续费
-          this.handlingFee1 = res.data.attributes.cash_tax_ratio;
+          this.handlingFee = res.data.attributes.cash_tax_ratio + '%';
+          this.handlingFee1 = (res.data.attributes.cash_tax_ratio / 100)
         }
       })
     },
@@ -171,10 +169,10 @@ export default {
       if (this.canWithdraw == 0.00 || this.phone == '') {
         this.sendStatus = false
       }
-      // if (!this.wechatNickname) {
-      //   this.$toast('请绑定微信')
-      //   return
-      // }
+      if (!this.wechatNickname) {
+        this.$toast('请绑定微信')
+        return
+      }
       var phone = this.phone
       if (!phone) {
         this.$toast('请先绑定手机号')

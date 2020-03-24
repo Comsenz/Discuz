@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -43,8 +42,8 @@ class CreateUserWalletCash
 
     /**
      * 初始化命令参数
-     * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
+     * @param User $actor 执行操作的用户.
+     * @param Collection $data 请求的数据.
      */
     public function __construct(User $actor, Collection $data)
     {
@@ -54,8 +53,13 @@ class CreateUserWalletCash
 
     /**
      * 执行命令
-     * @return model UserWallet
-     * @throws Exception
+     * @param Validator $validator
+     * @param ConnectionInterface $db
+     * @param SettingsRepository $setting
+     * @return UserWallet
+     * @throws ValidationException
+     * @throws WalletException
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
@@ -99,7 +103,7 @@ class CreateUserWalletCash
         $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
         $tax_amount = sprintf('%.2f', ceil($tax_amount * 100) / 100); //格式化手续费
 
-        $remark = Arr::get($this->data, 'remark');
+        $remark = Arr::get($this->data, 'remark', '');
         //开始事务
         $db->beginTransaction();
         try {
