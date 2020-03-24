@@ -27,6 +27,13 @@ class WechatBind
             $openid = Arr::get($session, 'payload.openid');
             if (in_array($scope, ['wechat', 'wechatweb', 'min'])) {
                 UserWechat::where($this->platform[$scope], $openid)->update(['user_id' => $events->user->id]);
+
+                // 如果用户没有头像，绑定微信时设置微信头像
+                if (!$events->user->avatar) {
+                    $events->user->avatar = Arr::get($session, 'payload.headimgurl', '');
+
+                    $events->user->save();
+                }
             }
         }
     }
