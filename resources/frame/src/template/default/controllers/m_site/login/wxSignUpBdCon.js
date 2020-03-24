@@ -14,7 +14,7 @@ export default {
       password: "",
       phoneStatus: "",
       siteMode: '',
-      openid: '',
+      wxtoken: '',
       platform: '',
       signReason: '',        //注册原因
       signReasonStatus: false,
@@ -113,7 +113,7 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              openid: this.openid,
+              wxtoken: this.wxtoken,
               platform: this.platform,
               register_reason: this.signReason,
               captcha_ticket: this.captcha_ticket,
@@ -172,18 +172,18 @@ export default {
           sessionId: sessionId,
         }
       }).then(res => {
-        // console.log(res);
+        console.log(res);
 
         if (res.errors) {
 
           let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
+          let wxtoken = res.errors[0].token;
 
-          if (wxStatus == 400) {
+          if (res.errors[0].code === 'no_bind_user') {
             //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
-            this.$router.push({ path: '/wx-sign-up-bd' });
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
+            // this.$router.push({ path: '/wx-sign-up-bd' });
           }
         } else if (res.data.attributes.location) {
           //获取地址
@@ -228,12 +228,12 @@ export default {
         if (res.errors) {
 
           let wxStatus = res.errors[0].status;
-          let openid = res.errors[0].user.openid;
+          let wxtoken = res.errors[0].user.wxtoken;
 
           if (wxStatus == 400) {
             //微信跳转
-            this.openid = openid;
-            webDb.setLItem('openid', openid);
+            this.wxtoken = wxtoken;
+            webDb.setLItem('wxtoken', wxtoken);
             this.$router.push({ path: '/wx-sign-up-bd' });
           }
         } else if (res.data.attributes.location) {
@@ -267,7 +267,7 @@ export default {
   },
   created() {
     this.getForum();
-    this.openid = webDb.getLItem('openid');
+    this.wxtoken = webDb.getLItem('wxtoken');
     this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
@@ -293,8 +293,8 @@ export default {
       }
     } else {
       this.platform = 'dev';
-      if (this.openid === '' || this.openid === null || this.openid === undefined) {
-        //PC端：没有openid
+      if (this.wxtoken === '' || this.wxtoken === null || this.wxtoken === undefined) {
+        //PC端：没有wxtoken
         this.getWatchHrefPC(code, state, sessionId);
       }
     }
