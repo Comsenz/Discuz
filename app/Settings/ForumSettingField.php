@@ -181,6 +181,7 @@ class ForumSettingField
         return [
             'qcloud_vod_ext' => $this->settings->get('qcloud_vod_ext', 'qcloud'),
             'qcloud_vod_size' => $this->settings->get('qcloud_vod_size', 'qcloud'),
+            'qcloud_vod_sub_app_id' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud'),
         ];
     }
 }
