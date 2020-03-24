@@ -46,7 +46,7 @@ class QcloudVodVerify extends BaseQcloud
     public function passes($attribute, $value)
     {
         if (!$this->settings->get('qcloud_vod_transcode', 'qcloud')) {
-            throw new TencentCloudSDKException(500, 'tencent_vod_transcode_error');
+            throw new TencentCloudSDKException('tencent_vod_transcode_error');
         }
 
         try {
@@ -60,7 +60,7 @@ class QcloudVodVerify extends BaseQcloud
             if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
                 $message = 'tencent_vod_subappid_error';
             }
-            throw new TencentCloudSDKException(500, $message);
+            throw new TencentCloudSDKException($message);
         }
         return true;
     }

@@ -65,7 +65,7 @@ class QcloudSecretVerify extends AbstractRule
             $str = $resp->toJsonString();
 
         } catch (TencentCloudSDKException $e) {
-            throw new TencentCloudSDKException(500, 'tencent_secret_key_error');
+            throw new TencentCloudSDKException('tencent_secret_key_error');
         }
 
         return true;
