@@ -24,6 +24,7 @@ export default {
       wechatNickname: '',
       mobileConfirmed: '',//验证验证码是否正确
       handlingFee1: '',
+      loading: '', //loading状态
     }
   },
 
@@ -234,6 +235,7 @@ export default {
         this.$toast('可提现金额不足')
         return
       }
+      this.loading = true;
       this.appFetch({  //提交后验证验证码
         url: 'smsVerify',
         method: 'post',
@@ -269,6 +271,7 @@ export default {
         this.$toast('请绑定微信')
         return
       }
+      this.loading = true;
       this.appFetch({
         url: 'cash',
         method: "post",

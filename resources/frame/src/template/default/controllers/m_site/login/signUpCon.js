@@ -102,7 +102,6 @@ export default {
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
           this.password_length = res.readdata._data.set_reg.password_length;
           this.password_strength = res.readdata._data.set_reg.password_strength;
-          // console.log(this.password_strength)
           browserDb.setLItem('siteInfo', res.readdata);
           if (res.readdata._data.qcloud.qcloud_captcha && res.readdata._data.set_reg.register_captcha) {
             this.signUpShow = false
@@ -169,7 +168,6 @@ export default {
     //验证码
     initCaptcha() {
       this.btnLoading = true;
-
       if (this.username === '') {
         this.$toast("用户名不能为空");
         this.btnLoading = false;
@@ -190,8 +188,13 @@ export default {
       this.password_strength.forEach(v => {
         if (!this.verification(this.passwordStrengthRegex[v])) {
           regFlag = false;
+          return
         }
       });
+      if (!regFlag) {
+        this.btnLoading = false;
+        return;
+      }
 
       this.captcha = new TencentCaptcha(this.appID, res => {
         if (res.ret === 0) {
@@ -200,7 +203,7 @@ export default {
           //验证通过后注册
           this.setSignData();
         }
-        if (res.ret === 2){
+        if (res.ret === 2) {
           this.btnLoading = false;
         }
       });
@@ -214,6 +217,8 @@ export default {
       if (!reg.test(this.password)) {
         this.$toast(`密码中必须包含${regxInfo.name}`);
         return false;
+      } else {
+        return true;
       }
     },
   },

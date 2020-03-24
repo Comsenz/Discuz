@@ -53,6 +53,11 @@
       <div class="withdraw-operating">
         <van-button type="primary" @click="withdraw">提交</van-button>
       </div>
+
+      <div class="loadFix" v-if="loading">
+        <div class="loadMask"></div>
+        <van-loading color="#333333" class="loadIcon" type="spinner" />
+      </div>
     </main>
   </div>
 </template>
