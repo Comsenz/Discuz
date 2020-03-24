@@ -113,7 +113,7 @@ export default {
             "attributes": {
               username: this.userName,
               password: this.password,
-              wxtoken: this.wxtoken,
+              token: this.wxtoken,
               platform: this.platform,
               register_reason: this.signReason,
               captcha_ticket: this.captcha_ticket,
