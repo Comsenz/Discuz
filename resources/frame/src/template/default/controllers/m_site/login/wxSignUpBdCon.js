@@ -179,7 +179,8 @@ export default {
           let wxStatus = res.errors[0].status;
           let wxtoken = res.errors[0].token;
 
-          if (res.errors[0].code === 'no_bind_user') {
+          // if (res.errors[0].code === 'no_bind_user') {
+          if (wxStatus == 400){
             //微信跳转
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
