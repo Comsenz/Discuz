@@ -333,7 +333,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          appCommonH.setPageTitle('detail',res);
+          appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
@@ -343,7 +343,6 @@ export default {
             if (res.readdata.threadVideo && res.readdata.threadVideo._data.status == 0) {
               this.contentExamine = true;
               this.examineWord = '视频转码中，转码成功后才能正常播放';
-              console.log()
             } else if (res.readdata._data.isApproved === 0 || res.readdata._data.isApproved === 2) {
               this.contentExamine = true;
               this.examineWord = '内容正在审核中，审核通过后才能正常显示！';
@@ -465,6 +464,10 @@ export default {
       }
       return s;
     },
+    copyFocus(obj) {
+      obj.blur;
+      document.body.removeChild(obj);
+    },
     //分享，复制浏览器地址
     shareTheme() {
       let Url = '';
@@ -474,7 +477,7 @@ export default {
       } else {
         Url = appConfig.baseUrl + '/details/' + this.themeId;
       }
-      console.log(Url, '00000')
+      // console.log(Url, '00000')
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
@@ -488,17 +491,20 @@ export default {
       oInput.value = this.themeTitle + '  ' + Url;
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
+      oInput.readOnly = true;
+      oInput.id = 'copyInp';
       document.execCommand("Copy");
+      oInput.setAttribute('onfocus', this.copyFocus(oInput));
       // 执行浏览器复制命令
       oInput.className = 'oInput';
       oInput.style.display = 'none';
-      this.$toast.success('分享链接已复制成功');
+      this.$toast.success('分享链接已复成功');
+      // document.body.removeChild(oInput);
     },
 
     stopKeyborad() {
       // this.showcount = true;
       // this.$refs.address.setAttribute('readonly', 'readonly');
-      alert(11111)
       document.activeElement.blur();
 
     },
@@ -911,7 +917,6 @@ export default {
           //手机浏览器
           this.getOrderSn(this.amountNum).then(() => {
             this.orderPay(11).then((res) => {
-              console.log
               this.wxPayHref = res.readdata._data.wechat_h5_link;
               window.location.href = this.wxPayHref;
               const payPhone = setInterval(() => {
