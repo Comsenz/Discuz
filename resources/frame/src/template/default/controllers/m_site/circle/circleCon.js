@@ -70,6 +70,7 @@ export default {
       token: '',
       userId: '',
       offiaccountClose: '',
+      webTitle:'',              //首页标题
     }
   },
   created: function () {
@@ -112,6 +113,7 @@ export default {
         } else {
           //修改标题
           appCommonH.setPageTitle('circle', res);
+          this.webTitle =  res.readdata._data.set_site.site_name + ' - Powered by Discuz! Q';
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
@@ -385,6 +387,7 @@ export default {
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');
+    document.title = this.webTitle;
     this.rotate = false;
     this.puslishCho = false;
     if (this.userId) {
