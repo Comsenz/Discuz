@@ -60,7 +60,7 @@ class SetSettingValidator extends AbstractValidator
             ];
         }
 
-        if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
+        if (Arr::has($this->data, 'qcloud_vod')) {
             $rules['qcloud_vod'] =  ['filled', new QcloudVodVerify()];
         }
 
