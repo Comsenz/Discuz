@@ -44,6 +44,8 @@ const config = {
   invalid_emoji_path: '无效的表情目录',
   notification_is_missing_template_config: '微信推送信息不全',
   tencent_secret_key_error: '腾讯云Secretid或SecretKey不正确',
+  tencent_vod_transcode_error:'腾讯云云点播转码模板未设置',
+  tencent_vod_subappid_error:'腾讯云云点播子应用错误',
 };
 
 Vue.prototype.getLang = function (key) {

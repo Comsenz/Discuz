@@ -12,8 +12,8 @@ use App\Rules\Settings\CashMinSum;
 use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudCaptchaVerify;
 use App\Rules\Settings\QcloudSecretVerify;
+use App\Rules\Settings\QcloudVodVerify;
 use App\Rules\Settings\SupportExt;
-use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory;
@@ -28,11 +28,9 @@ class SetSettingValidator extends AbstractValidator
 
     protected $settings;
 
-    public function __construct(Factory $validator, SettingsRepository $settings)
+    public function __construct(Factory $validator)
     {
         parent::__construct($validator);
-
-        $this->settings = $settings;
     }
 
     protected function getRules()
@@ -48,6 +46,7 @@ class SetSettingValidator extends AbstractValidator
             'site_mode' => ['in:pay,public'],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
+            'qcloud_vod' => ['filled', new QcloudVodVerify()],
         ];
 
         // 腾讯云验证码特殊处理
