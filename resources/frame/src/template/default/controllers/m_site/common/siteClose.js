@@ -18,9 +18,11 @@ export default {
         }
       }).then(res => {
         if (res.errors) {
-          this.closeReason = res.errors[0].detail;
-          if (res.errors[0].detail == null) {
-            this.closeReason = '站点已关闭'
+          // this.closeReason = res.errors[0].detail;
+          if (res.errors[0].detail == null || res.errors[0].detail == '') {
+            // this.closeReason = '站点已关闭'
+          } else {
+            this.closeReason = res.errors[0].detail;
           }
         }
         // this.closeReason = res.readdata._data.siteCloseMsg
