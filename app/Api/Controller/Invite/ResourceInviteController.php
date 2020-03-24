@@ -44,6 +44,6 @@ class ResourceInviteController extends AbstractResourceController
     {
         $code = Arr::get($request->getQueryParams(), 'code');
 
-        return $this->invite->query()->where('code', $code)->first();
+        return $this->invite->query()->where('code', $code)->firstOrFail();
     }
 }
