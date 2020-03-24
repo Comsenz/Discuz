@@ -333,7 +333,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          appCommonH.setPageTitle('detail',res);
+          appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
           if (initFlag) {
@@ -465,9 +465,9 @@ export default {
       }
       return s;
     },
-    copyFocus(obj){
+    copyFocus(obj) {
       obj.blur;
-      document.body.removeChild(obj);       
+      document.body.removeChild(obj);
     },
     //分享，复制浏览器地址
     shareTheme() {
@@ -478,7 +478,7 @@ export default {
       } else {
         Url = appConfig.baseUrl + '/details/' + this.themeId;
       }
-      console.log(Url, '00000')
+      // console.log(Url, '00000')
       // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
       var oInput = document.createElement('input');
       var reTag = /<img(?:.|\s)*?>/g;
@@ -493,9 +493,9 @@ export default {
       document.body.appendChild(oInput);
       oInput.select(); // 选择对象
       oInput.readOnly = true;
-      oInput.id= 'copyInp';
+      oInput.id = 'copyInp';
       document.execCommand("Copy");
-      oInput.setAttribute('onfocus',this.copyFocus(oInput));
+      oInput.setAttribute('onfocus', this.copyFocus(oInput));
       // 执行浏览器复制命令
       oInput.className = 'oInput';
       oInput.style.display = 'none';
@@ -506,7 +506,6 @@ export default {
     stopKeyborad() {
       // this.showcount = true;
       // this.$refs.address.setAttribute('readonly', 'readonly');
-      alert(11111)
       document.activeElement.blur();
 
     },
