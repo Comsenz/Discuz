@@ -13,15 +13,16 @@ use App\Commands\Users\RegisterUser;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
+use App\User\Bind;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use App\Passport\Repositories\UserRepository as CurrentUser;
 
 class RegisterController extends AbstractCreateController
 {
@@ -35,38 +36,48 @@ class RegisterController extends AbstractCreateController
 
     protected $app;
 
-    public function __construct(Dispatcher $bus, UserRepository $users, SettingsRepository $settings, Application $app)
+    protected $bind;
+
+    public function __construct(Dispatcher $bus, UserRepository $users, SettingsRepository $settings, Application $app, Bind $bind)
     {
         $this->bus = $bus;
         $this->users = $users;
         $this->settings = $settings;
         $this->app = $app;
+        $this->bind = $bind;
     }
 
     public $serializer = TokenSerializer::class;
 
     /**
      * {@inheritdoc}
-     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertPermission((bool)$this->settings->get('register_close'));
 
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
-        $attributes['register_ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $attributes['register_ip'] = ip($request->getServerParams());
 
-        $this->bus->dispatch(
+        $user = $this->bus->dispatch(
             new RegisterUser($request->getAttribute('actor'), $attributes)
         );
 
-        unset($attributes['password']);
+        if ($token = Arr::get($attributes, 'token')) {
+            $this->bind->wechat($token, $user);
+            // 在注册绑定微信后 发送注册微信通知
+            $user->notify(new System(WechatRegisterMessage::class));
+        }
 
-        $result = $this->bus->dispatch(new GenJwtToken($attributes));
+        if ($mobile = Arr::get($attributes, 'mobile')) {
+            $this->bind->mobile($mobile, $user);
+        }
 
-        // 在注册绑定微信后 发送注册微信通知
-        $this->app->make(CurrentUser::class)->getUser()->notify(new System(WechatRegisterMessage::class));
+        $response = $this->bus->dispatch(
+            new GenJwtToken(Arr::only($attributes, 'username'))
+        );
 
-        return $result;
+        return json_decode($response->getBody());
     }
 }

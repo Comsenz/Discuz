@@ -51,7 +51,7 @@ class CreateThreadController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $ip = ip($request->getServerParams());
 
         return $this->bus->dispatch(
             new CreateThread($actor, $request->getParsedBody()->get('data', []), $ip)

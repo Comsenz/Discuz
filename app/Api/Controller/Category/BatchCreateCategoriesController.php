@@ -42,7 +42,7 @@ class BatchCreateCategoriesController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $ip = ip($request->getServerParams());
 
         $result = $this->bus->dispatch(
             new BatchCreateCategories($actor, $data, $ip)
