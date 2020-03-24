@@ -706,13 +706,6 @@ export default {
       next();
     } else {
       this.getForum().then((res) => {
-
-        //首页时修改标题
-        if (to.name === 'circle') {
-          appCommonH.setPageTitle('circle', res);
-        }
-
-
         /*
         * 站点关闭，跳转到站点关闭页面
         * */

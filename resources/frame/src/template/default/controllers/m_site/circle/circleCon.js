@@ -79,7 +79,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
-    // this.onLoad(); 
+    // this.onLoad();
     this.detailIf();
     browserDb.removeSItem('beforeVisiting');
     this.token = browserDb.getLItem('Authorization');
@@ -110,6 +110,8 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
+          //修改标题
+          appCommonH.setPageTitle('circle', res);
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
