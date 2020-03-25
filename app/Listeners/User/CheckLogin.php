@@ -41,7 +41,7 @@ class CheckLogin
     public function handle(Logining $event)
     {
         $request = $this->app->make(ServerRequestInterface::class);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
         $userLoginFailCount = $this->userLoginFailLog->getCount($ip, $event->user->username);
         $maxTime = $this->userLoginFailLog->getLastFailTime($ip, $event->user->username);

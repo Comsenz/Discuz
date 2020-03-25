@@ -71,7 +71,9 @@ export default {
       userId: '',
       offiaccountClose: '',
       webTitle: '',              //首页标题
-      loading1: ''
+      loading1: '', //loading状态
+      recordNumber: '', //网站备案信息
+      isRecordNumber: ''//是否显示备案信息
     }
   },
   created: function () {
@@ -122,6 +124,12 @@ export default {
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
+          this.recordNumber = res.readdata._data.set_site.site_record;
+          if (res.readdata._data.set_site.site_record == '') {
+            this.isRecordNumber = false;
+          } else {
+            this.isRecordNumber = true;
+          }
           // if (this.canViewThreads === true) {
           //   this.loadThemeList(); //初始化列表数据
           // }

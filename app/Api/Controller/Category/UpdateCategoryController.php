@@ -43,7 +43,7 @@ class UpdateCategoryController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $categoryId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $ip = ip($request->getServerParams());
 
         return $this->bus->dispatch(
             new EditCategory($categoryId, $actor, $data, $ip)

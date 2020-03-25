@@ -65,7 +65,7 @@ class InstallController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $input = $request->getParsedBody();
-        $input['ip'] = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $input['ip'] = ip($request->getServerParams());
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
 
         if ($this->app->isInstall()) {

@@ -14,7 +14,6 @@ use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
-use App\Events\Users\UserVerify;
 use App\Listeners\AddApiMiddleware;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
@@ -25,10 +24,8 @@ use App\Listeners\User\ChangeLastActived;
 use App\Listeners\User\ChckoutSite;
 use App\Listeners\User\CheckLogin;
 use App\Listeners\User\InviteBind;
-use App\Listeners\User\MobileBind;
 use App\Listeners\User\Notifications;
 use App\Listeners\User\ValidateLogin;
-use App\Listeners\User\WechatBind;
 use App\Listeners\Wallet\CashReviewSubscriber;
 use App\Listeners\Wallet\CreateUserWalletListener;
 use App\Policies\AttachmentPolicy;
@@ -45,10 +42,6 @@ use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceP
 class EventServiceProvider extends BaseEventServiceProvider
 {
     protected $listen = [
-        UserVerify::class => [
-            WechatBind::class,
-            MobileBind::class,
-        ],
         Registered::class => [
             InviteBind::class,
             CreateUserWalletListener::class,
