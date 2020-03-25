@@ -24,6 +24,8 @@ class UserWalletFailLogs extends Model
      */
     protected $table = 'user_wallet_fail_logs';
 
+    public $timestamps = false;
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +43,7 @@ class UserWalletFailLogs extends Model
         $log = new static();
         $log->ip = $ip;
         $log->user_id = $user_id;
+        $log->created_at = Carbon::now();
         return $log->save();
     }
 }
