@@ -19,7 +19,6 @@
         autofocus
         placeholder="请输入内容"
         v-model="content"
-        :maxlength="keywordsMax"
         @focus="showFacePanel = false;footMove = false;keyboard = false;"
       ></textarea>
       <!-- <div class="uploadBox" v-if="uploadShow">
