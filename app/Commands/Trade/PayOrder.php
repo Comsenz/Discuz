@@ -115,9 +115,11 @@ class PayOrder
             throw new \Exception('uninitialized_pay_password');
         }
 
+        // 验证错误次数
+        $failCount = $this->userWalletFailLogs->getCountByUserId($this->actor->id);
         if (
             $this->data->get('payment_type') == 20
-            && $this->userWalletFailLogs->getCountByUserId($this->actor->id) > UserWalletFailLogs::TOPLIMIT
+            && $failCount > UserWalletFailLogs::TOPLIMIT
         ) {
             throw new \Exception('pay_password_failures_times_toplimit');
         }
@@ -145,6 +147,10 @@ class PayOrder
 
         if ($validator_info->fails()) {
             throw new ValidationException($validator_info);
+        }
+        // 正确后清除错误记录
+        if ($failCount > 0) {
+            UserWalletFailLogs::deleteAll($this->actor->id);
         }
 
         $order_info = Order::where('user_id', $this->actor->id)

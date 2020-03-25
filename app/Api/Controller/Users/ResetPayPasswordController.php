@@ -41,7 +41,8 @@ class ResetPayPasswordController implements RequestHandlerInterface
     {
         $actor = $request->getAttribute('actor');
         //验证错误次数
-        if ($this->userWalletFailLogs->getCountByUserId($actor->id) > UserWalletFailLogs::TOPLIMIT) {
+        $failCount = $this->userWalletFailLogs->getCountByUserId($actor->id);
+        if ($failCount > UserWalletFailLogs::TOPLIMIT) {
             throw new \Exception('pay_password_failures_times_toplimit');
         }
 
@@ -63,6 +64,11 @@ class ResetPayPasswordController implements RequestHandlerInterface
                 }
             ],
         ])->validate();
+
+        // 正确后清除错误记录
+        if ($failCount > 0) {
+            UserWalletFailLogs::deleteAll($actor->id);
+        }
 
         $token = SessionToken::generate('reset_pay_password', null, $actor->id);
         $token->save();
