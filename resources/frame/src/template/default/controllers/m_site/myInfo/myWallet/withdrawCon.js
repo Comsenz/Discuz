@@ -257,6 +257,7 @@ export default {
           this.mobileConfirmed = res.readdata._data.mobileConfirmed;
           if (this.mobileConfirmed == true) {
             this.$toast("提现申请已提交，请等待审核");
+            this.loading = false;
             // this.$router.push({path:'/modify-data'});
           }
         }
@@ -286,6 +287,7 @@ export default {
           // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
           this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
           this.handlingFee = res.data.attributes.cash_charge;//提现手续费
+          this.loading = false;
           // this.handlingFee1 = (this.handlingFee/100)
         }
       })

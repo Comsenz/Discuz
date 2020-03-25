@@ -248,7 +248,7 @@ export default {
           // this.themeListCon = res.readdata;
           this.themeListCon = this.themeListCon.concat(res.readdata);
           this.loading = false;
-          this.loading1 = false;
+          // this.loading1 = false;
           this.finished = res.readdata.length < this.pageLimit;
           if (this.themeListCon.length < 0) {
             this.nullTip = true
@@ -313,7 +313,10 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
-      this.loading1 = true;
+      if (this.categoryId === cateId) {
+        return
+      }
+      // this.loading1 = true;
       this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition, cateId);
@@ -395,7 +398,7 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-    }
+    },
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');

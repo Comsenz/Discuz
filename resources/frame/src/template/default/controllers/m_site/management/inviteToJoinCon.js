@@ -172,8 +172,9 @@ export default {
     },
 
     // 置为无效的点击事件
-    async resetDelete(inviteItem) {
-      if (inviteItem._data.status === 0) {
+    async resetDelete(inviteItem, index) {
+      console.log(this.inviteList, 'inviteList');
+      if (inviteItem._data.status !== 1) {
         return;
       }
       const id = inviteItem._data.id;
@@ -187,7 +188,8 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.getInviteList();
+          // this.getInviteList();
+          this.inviteList[index]._data.status = 0;
         }
       }
       catch (err) {
