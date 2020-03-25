@@ -8,6 +8,7 @@
 namespace App\Repositories;
 
 use App\Models\UserWalletFailLogs;
+use Carbon\Carbon;
 use Discuz\Foundation\AbstractRepository;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -23,7 +24,6 @@ class UserWalletFailLogsRepository extends AbstractRepository
         return UserWalletFailLogs::query();
     }
 
-
     /**
      * get fail data by user_id
      * @param $user_id
@@ -32,7 +32,8 @@ class UserWalletFailLogsRepository extends AbstractRepository
     public function getCountByUserId($user_id)
     {
         return $this->query()
-            ->where(['user_id'=>$user_id])
+            ->where('user_id', $user_id)
+            ->whereBetween('created_at', [Carbon::today(),Carbon::tomorrow()])
             ->count();
     }
 }
