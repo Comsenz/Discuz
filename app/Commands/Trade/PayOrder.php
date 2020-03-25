@@ -11,6 +11,8 @@ namespace App\Commands\Trade;
 use App\Exceptions\TradeErrorException;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\UserWalletFailLogs;
+use App\Repositories\UserWalletFailLogsRepository;
 use App\Settings\SettingsRepository;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\PayTrade;
@@ -68,6 +70,11 @@ class PayOrder
     protected $payment_type;
 
     /**
+     * @var UserWalletFailLogsRepository
+     */
+    protected $userWalletFailLogs;
+
+    /**
      * 初始化命令参数
      * @param string $order_sn 订单编号.
      * @param User $actor 执行操作的用户.
@@ -85,19 +92,20 @@ class PayOrder
      * @param Validator $validator
      * @param SettingsRepository $setting
      * @param UrlGenerator $url
+     * @param UserWalletFailLogsRepository $userWalletFailLogs
      * @return Order
      * @throws PermissionDeniedException
      * @throws TradeErrorException
      * @throws ValidationException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     * @throws \Exception
      */
-    public function handle(Validator $validator, SettingsRepository $setting, UrlGenerator $url)
+    public function handle(Validator $validator, SettingsRepository $setting, UrlGenerator $url, UserWalletFailLogsRepository $userWalletFailLogs)
     {
         $this->assertCan($this->actor, 'trade.pay.order');
 
         $this->setting = $setting;
         $this->url     = $url;
+        $this->userWalletFailLogs = $userWalletFailLogs;
 
         // 使用钱包支付时，检查是否设置支付密码
         if (
@@ -105,6 +113,13 @@ class PayOrder
             && empty($this->actor->pay_password)
         ) {
             throw new \Exception('uninitialized_pay_password');
+        }
+
+        if (
+            $this->data->get('payment_type') == 20
+            && $this->userWalletFailLogs->getCountByUserId($this->actor->id) > 2
+        ) {
+            throw new \Exception('pay_password_failures_times_toplimit');
         }
 
         $validator_info = $validator->make($this->data->toArray(), [
@@ -118,6 +133,10 @@ class PayOrder
                         $this->data->get('payment_type') == 20
                         && ! $this->actor->checkWalletPayPassword($value)
                     ) {
+                        //记录钱包密码错误日志
+                        $request = app('request');
+                        UserWalletFailLogs::build(ip($request->getServerParams()), $this->actor->id);
+
                         $fail(trans('trade.wallet_pay_password_error'));
                     }
                 }
