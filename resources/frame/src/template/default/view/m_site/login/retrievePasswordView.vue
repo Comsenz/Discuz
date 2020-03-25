@@ -4,7 +4,8 @@
       <main class="retrieve-password-main">
 
         <div class="login-module-title-box">
-          <h2 class="login-module-title">忘记密码</h2>
+          <h2 class="login-module-title" v-if="type === 'reset_pwd'">忘记密码</h2>
+          <h2 class="login-module-title" v-else>忘记支付密码</h2>
         </div>
 
         <div class="login-module-form">
