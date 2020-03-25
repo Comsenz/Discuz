@@ -54,8 +54,8 @@
     </Card>
 
     <Card header="用户角色：">
-      <CardRow description="设置允许参与设置的用户组，可多选">
-        <el-select v-model="userRole" multiple  placeholder="请选择">
+      <CardRow description="设置允许参与搜索的用户组">
+        <el-select v-model="userRole" placeholder="请选择">
           <el-option
             v-for="item in options"
             :disabled="item.value === '6' || item.value === '7'"

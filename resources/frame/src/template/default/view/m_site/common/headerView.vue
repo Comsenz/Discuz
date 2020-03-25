@@ -16,8 +16,10 @@
         <div
           class="inviteName"
           v-if="invitePerDet && userInfoName"
-          v-model="userInfoName"
-        >{{userInfoName}}</div>
+          v-model="userInfoName">
+          {{userInfoName}}
+          <p class="groupsName" v-if="showGroups.status">({{showGroups.name}})</p>
+        </div>
         <!-- <div class="inviteName" v-else="">该用户已被删除</div> -->
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
         <div class="followBox" v-if="followShow && followDet">
