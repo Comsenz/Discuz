@@ -245,6 +245,13 @@ class User extends Model
         return $this;
     }
 
+    public function changeUpdateAt()
+    {
+        $this->updated_at = Carbon::now();
+
+        return $this;
+    }
+
     /**
      * Check if a given password matches the user's password.
      *
