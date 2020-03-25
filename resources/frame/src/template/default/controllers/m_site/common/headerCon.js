@@ -107,8 +107,6 @@ export default {
     }
   },
   created() {
-
-    console.log(this.showGroups);
     this.userId = browserDb.getLItem('tokenId');
     if (this.userId == this.personUserId) {
       this.equalId = true;
@@ -153,7 +151,6 @@ export default {
         }
       }).then((res) => {
         this.siteInfo = res.readdata;
-
         this.logo = res.readdata._data.set_site.site_logo;
         if(res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null){
           this.logo = appConfig.staticBaseUrl+'/images/logo.png';

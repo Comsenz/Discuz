@@ -89,101 +89,49 @@ const keepAliveUrl = ['circle'];
 
 // const noKeepAliveUrl = ['login-user','my-notice','modify-data','my-wallet','my-collection','my-follow','login-phone'];
 
-const noKeepAliveUrl2 = ['details/:themeId','home-page/:userId','login-user'];
+const noKeepAliveUrl2 = ['details/:themeId', 'home-page/:userId', 'login-user'];
 
-browserDb.setSItem('homeStatus',1);
-
-
+browserDb.setSItem('homeStatus', 1);
 const Authorization = browserDb.getLItem('Authorization');
 const tokenId = browserDb.getLItem('tokenId');
-
 
 const App = new Vue({
   router: appRouter,
   store: appStore,
   moment: moment,
   i18n,
-  data:function(){
+  data: function () {
     return {
-      keepAliveStatus:false,
-      status:0,
+      keepAliveStatus: false,
+      status: 0,
       siteInfoStat: ''
     }
   },
-  created(){
-    app.bus.$on('stat',(arg)=> {
+  created() {
+    app.bus.$on('stat', (arg) => {
       // console.log('on监听参数====',arg)
       this.siteInfoStat = arg;
     })
+    document.write(this.siteInfoStat);
   },
   watch: {
-    '$route': function(to, from) {
+    '$route': function (to, from) {
 
       const Authorization = browserDb.getLItem('Authorization');
       const tokenId = browserDb.getLItem('tokenId');
 
-
-
-      /*if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
-        this.keepAliveStatus = false;
-        console.log(1);
-      } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
-        this.keepAliveStatus = true;
-        console.log(2);
-      } else {
-        console.log(3);
-        this.keepAliveStatus = false;
-        browserDb.setSItem('homeStatus',2);
-      }*/
-
-
-
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
-        // console.log(11);
       } else if (keepAliveUrl.includes(to.name)) {
         this.keepAliveStatus = true;
-        // console.log(22);
       } else {
-        // console.log(33);
         this.keepAliveStatus = false;
-        browserDb.setSItem('homeStatus',2);
+        browserDb.setSItem('homeStatus', 2);
       }
-
-
-      /*if (Authorization && tokenId){
-
-        if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
-          this.keepAliveStatus = false;
-          console.log(1);
-        } else if (keepAliveUrl.includes(to.name) && (browserDb.getSItem('homeStatus') === 2)) {
-          this.keepAliveStatus = true;
-          console.log(2);
-        } else {
-          console.log(3);
-          this.keepAliveStatus = false;
-          browserDb.setSItem('homeStatus',2);
-        }
-
-      } else {
-
-        if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
-          this.keepAliveStatus = false;
-          console.log(11);
-        } else if (keepAliveUrl.includes(to.name)) {
-          this.keepAliveStatus = true;
-          console.log(22);
-        } else {
-          console.log(33);
-          this.keepAliveStatus = false;
-          browserDb.setSItem('homeStatus',2);
-        }
-
-      }*/
 
     }
   },
-  template:'<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
+  template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
 }).$mount('#app');
 
 

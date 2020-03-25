@@ -45,6 +45,7 @@ class ListPostsController extends AbstractListController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'user.groups',
         'thread.category',
         'thread.firstPost',
         'deletedUser',

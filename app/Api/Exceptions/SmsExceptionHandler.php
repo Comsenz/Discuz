@@ -57,7 +57,7 @@ class SmsExceptionHandler implements ExceptionHandlerInterface
             return [
                 'gateway' => $gateway,
                 'status' => $result['status'],
-                'detail' => $result['exception']->raw,
+                'detail' => [$result['exception']->raw],
             ];
         }, array_keys($messages), $messages);
     }
