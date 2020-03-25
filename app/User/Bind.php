@@ -9,6 +9,7 @@ use App\Models\UserWechat;
 use App\Repositories\MobileCodeRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Bind
 {
@@ -34,6 +35,13 @@ class Bind
         $openid = Arr::get($session, 'payload.openid');
         if (in_array($scope, ['wechat', 'wechatweb', 'min'])) {
             UserWechat::where($this->platform[$scope], $openid)->update(['user_id' => $user->id]);
+
+            // 如果用户没有头像，绑定微信时设置微信头像
+            if (!$user->avatar) {
+                $user->avatar = Str::replaceFirst('http://', 'https://', Arr::get($session, 'payload.headimgurl', ''));
+
+                $user->save();
+            }
         }
     }
 
