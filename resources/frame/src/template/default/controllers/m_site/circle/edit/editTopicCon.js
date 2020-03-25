@@ -96,10 +96,12 @@ export default {
 
     this.$nextTick(() => {
       let textarea = this.$refs.textarea;
-      textarea.focus();
+      // textarea.focus();
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
+        this.$refs.postForm.scrollTop = this.$refs.textarea.clientHeight - this.viewportHeight + 400;
+        this.$refs.postForm.scrollTop += this.$refs.postForm.scrollTop + 20;
         if (height !== prevHeight) {
           prevHeight = height;
           let rem = height / rootFontSize;
@@ -532,11 +534,6 @@ export default {
     //   this.footMove = false;
     // },
     addExpression() {
-
-      // console.log('点击' + this.postFormScrollTop);
-      // document.getElementById('postForm').scrollTop = this.postFormScrollTop;
-
-
       this.keyboard = !this.keyboard;
       this.appFetch({
         url: 'emojis',

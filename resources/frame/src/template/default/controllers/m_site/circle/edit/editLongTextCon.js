@@ -88,8 +88,7 @@ export default {
     let postForm = document.getElementById('postForm');
     postForm.style.height = (this.viewportHeight) + 'px';
 
-    let text = document.getElementById('textarea_id');
-
+    // let text = document.getElementById('textarea_id');
     // text.addEventListener("touchstart",(e)=>{
     //   // alert('触发');
     //   // this.showFacePanel = false;this.footMove = false;this.keyboard = false;
@@ -114,6 +113,8 @@ export default {
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
+        this.$refs.postForm.scrollTop = this.$refs.textarea.clientHeight - this.viewportHeight + 400;
+        this.$refs.postForm.scrollTop += this.$refs.postForm.scrollTop + 20;
         if (height !== prevHeight) {
           prevHeight = height;
           let rem = height / rootFontSize;
@@ -176,9 +177,6 @@ export default {
     },
   },
   methods: {
-    handleScroll(e) {
-      console.log(e.target.scrollTop)
-    },
     formatter(value) {
       return this.handleReg(value);
     },
@@ -538,36 +536,6 @@ export default {
       })
     },
 
-    //这里写接口，上传
-    // uploaderEnclosure(file,isFoot,enclosure){
-    //    uploaderEnclosure(file,isFoot,img,enclosure){
-    //       this.appFetch({
-    //         url:'attachment',
-    //         method:'post',
-    //         data:file,
-
-    //       }).then(data=>{
-    //         if (data.errors){
-    //           this.$toast.fail(data.errors[0].code);
-    //           throw new Error(data.error)
-    //         }else{
-    //            if(img){
-    //              this.fileList.push({url:data.readdata._data.url,id:data.readdata._data.id});
-    //              this.fileListOne[this.fileListOne.length-1].id = data.data.attributes.id;
-    //            }
-    //            if(isFoot){
-    //              this.fileListOne.push({url:data.readdata._data.url,id:data.readdata._data.id});
-    //            }
-
-    //             if(enclosure){
-    //               this.enclosureShow = true;
-    //               this.enclosureList.push({type:data.readdata._data.extension,name:data.readdata._data.fileName,id:data.readdata._data.id});
-    //             }
-    //            this.$toast.success('提交成功');
-    //         }
-    //       })
-    //   },
-
     //输入框自适应高度
     clearKeywords() {
       this.keywords = '';
@@ -577,6 +545,7 @@ export default {
       let rem = height / rootFontSize;
       textarea.style.height = `${rem}rem`;
       rem = (height + 20) / rootFontSize;
+      this.$refs.postForm.scrollTop = textarea.style.height - 1000;
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
       // textarea.focus();
     },

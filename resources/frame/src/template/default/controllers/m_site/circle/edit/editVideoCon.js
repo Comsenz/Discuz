@@ -9,12 +9,10 @@ import TcVod from 'vod-js-sdk-v6';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
 function getSignature() {
-  // console.log('000000');
   return axiosHelper({
     url: 'signature',
     method: 'get',
   }).then((res) => {
-    // console.log(res.readdata._data.signature,'~~~+++++~~~~');
     return res.readdata._data.signature;
   })
 }
@@ -126,6 +124,8 @@ export default {
       let prevHeight = 300;
       textarea && autoTextarea(textarea, 5, 65535, (height) => {
         height += 20;
+        this.$refs.postForm.scrollTop = this.$refs.textarea.clientHeight - this.viewportHeight + 400;
+        this.$refs.postForm.scrollTop += this.$refs.postForm.scrollTop + 20;
         if (height !== prevHeight) {
           prevHeight = height;
           let rem = height / rootFontSize;
@@ -235,7 +235,6 @@ export default {
     },
     //验证上传文件大小是否符合设置
     testingSize(eFile, allowSize) {
-      // console.log(eFile,'上传的');
       let fileSize = eFile.size;
       // 视频大小大于接口返回的最大限制值时置空
       if (fileSize / 1024 / 1024 > allowSize) {
@@ -350,7 +349,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res,'resssss');
           this.oldCateId = res.readdata.category._data.id;
           this.selectSort = res.readdata.category._data.name;
           this.content = res.readdata.firstPost._data.content;
