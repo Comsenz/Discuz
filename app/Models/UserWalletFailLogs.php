@@ -48,4 +48,9 @@ class UserWalletFailLogs extends Model
         $log->created_at = Carbon::now();
         return $log->save();
     }
+
+    public static function deleteAll($user_id)
+    {
+        self::query()->where('user_id', $user_id)->delete();
+    }
 }
