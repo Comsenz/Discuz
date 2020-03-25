@@ -313,6 +313,9 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
+      if (this.categoryId === cateId && this.loading1) {
+        return
+      }
       this.loading1 = true;
       this.pageIndex = 1;
       this.themeListCon = [];
@@ -395,7 +398,7 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-    }
+    },
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');

@@ -1061,7 +1061,7 @@ export default {
       this.pageIndex++;
       this.detailsLoad();
     },
-
+    //下拉刷新
     onRefresh() {
       this.pageIndex = 1
       this.detailsLoad(true).then((res) => {
@@ -1073,6 +1073,7 @@ export default {
         this.isLoading = false;
       })
     },
+
 
   },
   mounted: function () {

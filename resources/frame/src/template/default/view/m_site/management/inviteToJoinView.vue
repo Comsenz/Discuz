@@ -31,13 +31,13 @@
                 <td>
                   <a
                     href="javascript:;"
-                    :class="['copyA', inviteLi._data.status === 0 && 'font9']"
+                    :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
                     @click="copyToClipBoard(inviteLi)"
                   >复制</a>
                   <a
                     href="javascript:;"
-                    :class="['invalidA', inviteLi._data.status === 0 && 'font9']"
-                    @click="resetDelete(inviteLi)"
+                    :class="['invalidA', inviteLi._data.status !== 1 && 'font9']"
+                    @click="resetDelete(inviteLi,index)"
                   >置为无效</a>
                 </td>
               </tr>

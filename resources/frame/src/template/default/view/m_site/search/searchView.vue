@@ -76,7 +76,7 @@
         </div>
         <!-- 为长文时 -->
         <div class="postContent" @click="jumpDetails(item._data.id)" v-if="item._data.type == 1">
-          <a href="javascript:;" class="postConTitle" v-html="item._data.title"></a>
+          <a href="javascript:;" class="postConTitle">{{item._data.title}}</a>
           <span class="icon iconfont icon-longtext" v-if="item._data.type== 1"></span>
         </div>
         <!-- 为视频时 -->

@@ -16,9 +16,9 @@ use App\Passport\Entities\AccessTokenEntity;
 
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
-    const TOKEN_EXP = 'P1D';
+    const TOKEN_EXP = 'P30D';
 
-    const REFER_TOKEN_EXP = 'P1Y';
+    const REFER_TOKEN_EXP = 'P30D';
 
     /**
      * {@inheritdoc}
