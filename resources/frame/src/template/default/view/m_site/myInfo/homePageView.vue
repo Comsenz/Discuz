@@ -12,7 +12,7 @@
     >
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <div class="content">
-            <Header :userInfoAvatarUrl="userAvatar" :followShow="true" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :perDetShow="false"></Header>
+            <Header :showGroups="userGroups" :userInfoAvatarUrl="userAvatar" :followShow="true" :userInfoName="username" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :perDetShow="false"></Header>
             <div class="gap"></div>
             <ThemeDet :themeList="OthersThemeList"></ThemeDet>
           </div>

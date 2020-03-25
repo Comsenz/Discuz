@@ -19,14 +19,18 @@ export default {
       pageIndex: 1,//页码
       pageLimit: 20,//每页20条
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
-      token: ''
+      token: '',
+      userGroups:{
+        status:false,
+        name:''
+      },   //用户组
     }
   },
   created(){
     this.imgUrl = "../../../../../../../static/images/noavatar.gif";
     this.token = browserDb.getLItem('Authorization');
     this.loadTheme();
-    
+
   },
 
   computed: {
@@ -43,7 +47,7 @@ export default {
           method: 'get',
           splice:'/'+this.userId,
           data: {
-            include: 'groups',
+            include: ['groups'],
           }
         }).then((res) => {
           if (res.errors){
@@ -52,15 +56,17 @@ export default {
           }else{
           this.username = res.readdata._data.username;
           this.userAvatar = res.readdata._data.avatarUrl;
+          this.userGroups.status = res.readdata._data.showGroups;
+          this.userGroups.name = res.readdata.groups[0]._data.name;
           }
         });
-        
+
         this.appFetch({
           url: 'threads',
           method: 'get',
           data: {
             'filter[userId]':this.userId,
-            include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+            include: ['user', 'firstPost', 'user.groups','firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
             'page[number]': this.pageIndex,
             'page[limit]': this.pageLimit,
             'filter[isDeleted]':'no'
@@ -85,7 +91,7 @@ export default {
           }
           this.loading = false;
         })
-      
+
     },
     onLoad(){    //上拉加载
       this.loading = true;

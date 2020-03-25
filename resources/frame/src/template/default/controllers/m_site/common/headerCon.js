@@ -97,6 +97,9 @@ export default {
     followShow: { //组件是否显示关注信息
       followShow: false
     },
+    showGroups:{  //组件是否显示用户组名称
+      type:Object
+    }
   },
   computed: {
     personUserId: function () {
@@ -104,6 +107,8 @@ export default {
     }
   },
   created() {
+
+    console.log(this.showGroups);
     this.userId = browserDb.getLItem('tokenId');
     if (this.userId == this.personUserId) {
       this.equalId = true;
@@ -147,12 +152,10 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res.readdata._data.set_site.site_logo);
         this.siteInfo = res.readdata;
 
         this.logo = res.readdata._data.set_site.site_logo;
         if(res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null){
-          console.log('空');
           this.logo = appConfig.staticBaseUrl+'/images/logo.png';
         }
         //把站点是否收费的值存储起来，以便于传到父页面
