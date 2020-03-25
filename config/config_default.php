@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 
 return [
-    'debug' => true,
+    'debug' => false,
     'locale' => 'zh-CN',
     'fallback_locale' => 'zh-CN',
     'timezone' => 'Asia/Shanghai',
@@ -39,7 +39,7 @@ return [
         'default' => [
             'url' => '',
             'host' => '127.0.0.1',
-            'password' => '123',
+            'password' => '',
             'port' => 6379,
             'database' => 0
         ],
@@ -47,7 +47,7 @@ return [
         'cache' => [
             'url' => '',
             'host' => '127.0.0.1',
-            'password' => '123',
+            'password' => '',
             'port' => 6379,
             'database' => 1
         ],
