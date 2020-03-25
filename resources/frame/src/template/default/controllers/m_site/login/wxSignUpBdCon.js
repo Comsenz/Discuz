@@ -172,8 +172,6 @@ export default {
           sessionId: sessionId,
         }
       }).then(res => {
-        console.log(res);
-
         if (res.errors) {
           let wxtoken = res.errors[0].token;
 

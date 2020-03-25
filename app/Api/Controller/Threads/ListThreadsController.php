@@ -125,7 +125,7 @@ class ListThreadsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['favoriteState']);
+        $include = array_merge($this->extractInclude($request), ['favoriteState', 'firstPost.likeState']);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -193,6 +193,17 @@ class ListThreadsController extends AbstractListController
 
         // 加载其他关联
         $threads->loadMissing($include);
+
+        // 设置对应关系，以解决 N + 1 问题
+        if ($relations = array_intersect($include, ['firstPost'])) {
+            $threads->map(function ($thread) use ($relations) {
+                foreach ($relations as $relation) {
+                    if ($thread->$relation) {
+                        $thread->$relation->thread = $thread;
+                    }
+                }
+            });
+        }
 
         // 处理付费主题内容
         if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {

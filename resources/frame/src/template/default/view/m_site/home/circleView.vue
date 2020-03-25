@@ -50,6 +50,7 @@
         </div>
       </van-pull-refresh>
     </van-list>
+    <div class="recordNumber" v-show="isRecordNumber">{{recordNumber}}</div>
     <div class="nullTip" v-if="nullTip">
       <van-icon name="warning-o" size="1.8rem" class="nullIcon" />
       <p class="nullWord">{{nullWord}}</p>
@@ -96,6 +97,10 @@
         </div>
         <div class="publishChoWo">长文</div>
       </div>
+    </div>
+    <div class="loadFix" v-if="loading1">
+      <div class="loadMask"></div>
+      <van-loading color="#333333" class="loadIcon" type="spinner" />
     </div>
   </div>
 </template>

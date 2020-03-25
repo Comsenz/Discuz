@@ -92,12 +92,14 @@ class PayTrade
         $gateway->setApiKey(Arr::get($config, 'api_key'));
         $gateway->setNotifyUrl(Arr::get($config, 'notify_url'));
 
+        $request = app('request');
+
         //订单信息
         $order = [
             'body'             => $order_info['body'],
             'out_trade_no'     => $order_info['payment_sn'],
             'total_fee'        => bcmul((string) $order_info['amount'], '100', 0),
-            'spbill_create_ip' => self::getClientIp(),
+            'spbill_create_ip' => ip($request->getServerParams()),
             'fee_type'         => 'CNY',
         ];
 
@@ -142,23 +144,5 @@ class PayTrade
             throw new TradeErrorException($message, 500);
         }
         return $result;
-    }
-
-    /**
-     * 获取客户端ip地址
-     * @return string ip
-     */
-    private static function getClientIp()
-    {
-        if (getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
-            $ip = getenv('HTTP_CLIENT_IP');
-        } elseif (getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-            $ip = getenv('HTTP_X_FORWARDED_FOR');
-        } elseif (getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
-            $ip = getenv('REMOTE_ADDR');
-        } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches[0] : '';
     }
 }

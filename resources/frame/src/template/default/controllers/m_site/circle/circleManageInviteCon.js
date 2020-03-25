@@ -61,22 +61,27 @@ export default {
         data: {
         }
       }).then((res) => {
-        // console.log(res);
-        this.userInfo = res.readdata.user;
-        this.roleResult = res.readdata.group._data.name;
-        this.limitList = res.readdata.group;
-        // console.log(res.readdata._data.status)
-        if (res.readdata._data.status == 0) {
-          this.tipsStatus = true;
-          this.tipsCode = '该邀请码已失效，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
-        } else if (res.readdata._data.status == 2) {
-          this.tipsStatus = true;
-          this.tipsCode = '该邀请码已使用，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
-        } else if (res.readdata._data.status == 3) {
-          this.tipsStatus = true;
-          this.tipsCode = '该邀请码已过期，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+        if (res.errors) {
+          this.$toast.fail('该邀请码不存在，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！')
+          this.$router.push({ path: '/' });
         } else {
-          this.tipsStatus = false;
+          // console.log(res);
+          this.userInfo = res.readdata.user;
+          this.roleResult = res.readdata.group._data.name;
+          this.limitList = res.readdata.group;
+          // console.log(res.readdata._data.status)
+          if (res.readdata._data.status == 0) {
+            this.tipsStatus = true;
+            this.tipsCode = '该邀请码已失效，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+          } else if (res.readdata._data.status == 2) {
+            this.tipsStatus = true;
+            this.tipsCode = '该邀请码已使用，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+          } else if (res.readdata._data.status == 3) {
+            this.tipsStatus = true;
+            this.tipsCode = '该邀请码已过期，请联系站长获取新的邀请码,若继续注册将以默认角色加入本站！'
+          } else {
+            this.tipsStatus = false;
+          }
         }
       });
     },

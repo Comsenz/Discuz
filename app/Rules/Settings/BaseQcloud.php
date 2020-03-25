@@ -23,18 +23,19 @@ class BaseQcloud extends AbstractRule
 
     protected $qcloudSecretKey;
 
+    protected $settings;
     /**
      * BaseQcloud constructor.
      */
     protected function __construct()
     {
-        $settings = app()->make(SettingsRepository::class);
+        $this->settings = app()->make(SettingsRepository::class);
 
-        $this->qcloudSecretId =  $settings->get('qcloud_secret_id', 'qcloud');
-        $this->qcloudSecretKey =  $settings->get('qcloud_secret_key', 'qcloud');
+        $this->qcloudSecretId =  $this->settings->get('qcloud_secret_id', 'qcloud');
+        $this->qcloudSecretKey =  $this->settings->get('qcloud_secret_key', 'qcloud');
 
         if (blank($this->qcloudSecretId) || blank($this->qcloudSecretKey)) {
-            throw new TencentCloudSDKException(500, 'tencent_secret_key_error');
+            throw new TencentCloudSDKException('tencent_secret_key_error');
         }
     }
 }

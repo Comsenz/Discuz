@@ -70,6 +70,10 @@ export default {
       token: '',
       userId: '',
       offiaccountClose: '',
+      webTitle: '',              //首页标题
+      loading1: '', //loading状态
+      recordNumber: '', //网站备案信息
+      isRecordNumber: ''//是否显示备案信息
     }
   },
   created: function () {
@@ -79,7 +83,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
-    // this.onLoad(); 
+    // this.onLoad();
     this.detailIf();
     browserDb.removeSItem('beforeVisiting');
     this.token = browserDb.getLItem('Authorization');
@@ -110,6 +114,9 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
+          //修改标题
+          appCommonH.setPageTitle('circle', res);
+          this.webTitle = res.readdata._data.set_site.site_name + ' - Powered by Discuz! Q';
           this.siteInfo = res.readdata;
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canCreateLongText = res.readdata._data.other.can_create_thread_long;
@@ -117,6 +124,12 @@ export default {
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
+          this.recordNumber = res.readdata._data.set_site.site_record;
+          if (res.readdata._data.set_site.site_record == '') {
+            this.isRecordNumber = false;
+          } else {
+            this.isRecordNumber = true;
+          }
           // if (this.canViewThreads === true) {
           //   this.loadThemeList(); //初始化列表数据
           // }
@@ -235,6 +248,7 @@ export default {
           // this.themeListCon = res.readdata;
           this.themeListCon = this.themeListCon.concat(res.readdata);
           this.loading = false;
+          this.loading1 = false;
           this.finished = res.readdata.length < this.pageLimit;
           if (this.themeListCon.length < 0) {
             this.nullTip = true
@@ -299,9 +313,11 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
+      this.loading1 = true;
       this.pageIndex = 1;
       this.themeListCon = [];
       this.loadThemeList(this.filterInfo.filterCondition, cateId);
+
     },
     //跳转到登录页
     loginJump: function (isWx) {
@@ -383,6 +399,7 @@ export default {
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');
+    document.title = this.webTitle;
     this.rotate = false;
     this.puslishCho = false;
     if (this.userId) {
