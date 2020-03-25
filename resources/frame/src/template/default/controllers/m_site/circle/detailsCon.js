@@ -1073,6 +1073,12 @@ export default {
         this.isLoading = false;
       })
     },
+    //微信内分享
+    // wxRegister(callback) {
+    //   let shareParam = {
+    //     url: window.location.href.split("#")[0]
+    //   };
+    // }
 
 
   },

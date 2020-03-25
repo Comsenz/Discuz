@@ -166,7 +166,7 @@ export default {
     },
 
 
-    sendVerificationCode() {
+    sendVerificationCode() { //发送验证吗
       if (this.canWithdraw == 0.00 || this.phone == '') {
         this.sendStatus = false
       }
@@ -177,6 +177,17 @@ export default {
       var phone = this.phone
       if (!phone) {
         this.$toast('请先绑定手机号')
+        return
+      }
+
+      var withdrawalAmount = this.withdrawalAmount;
+      var canWithdraw = this.canWithdraw
+      if (!withdrawalAmount) {
+        this.$toast('请输入提现金额')
+        return
+      }
+      if (canWithdraw == 0.00) {
+        this.$toast('可提现金额不足')
         return
       }
       this.appFetch({
@@ -219,7 +230,6 @@ export default {
     },
 
     withdraw() {   //提交
-
       var withdrawalAmount = this.withdrawalAmount;
       var sms = this.sms;
       var canWithdraw = this.canWithdraw
@@ -252,6 +262,7 @@ export default {
       }).then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
+          this.loading = false;
           // throw new Error(res.error)
         } else {
           this.mobileConfirmed = res.readdata._data.mobileConfirmed;
@@ -260,37 +271,39 @@ export default {
             this.loading = false;
             // this.$router.push({path:'/modify-data'});
           }
+          var phone = this.phone
+          if (!phone) {
+            this.$toast('请先绑定手机号')
+            return
+          }
+          if (!this.wechatNickname) {
+            this.$toast('请绑定微信')
+            return
+          }
+          this.loading = true;
+          this.appFetch({
+            url: 'cash',
+            method: "post",
+            data: {
+              cash_apply_amount: this.withdrawalAmount
+            }
+          }).then((res) => {
+            if (res.errors) {
+              this.$toast.fail(res.errors[0].code);
+              this.loading = false;
+              // throw new Error(res.error)
+            } else {
+              // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
+              this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
+              this.handlingFee = res.data.attributes.cash_charge;//提现手续费
+              this.loading = false;
+              // this.handlingFee1 = (this.handlingFee/100)
+            }
+          })
         }
       })
 
-      var phone = this.phone
-      if (!phone) {
-        this.$toast('请先绑定手机号')
-        return
-      }
-      if (!this.wechatNickname) {
-        this.$toast('请绑定微信')
-        return
-      }
-      this.loading = true;
-      this.appFetch({
-        url: 'cash',
-        method: "post",
-        data: {
-          cash_apply_amount: this.withdrawalAmount
-        }
-      }).then((res) => {
-        if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
-          // throw new Error(res.error)
-        } else {
-          // this.actualCashWithdrawal = res.data.attributes.cash_actual_amount; //实际提现金额
-          this.canWithdraw = res.data.attributes.cash_apply_amount; //用户申请提现的金额
-          this.handlingFee = res.data.attributes.cash_charge;//提现手续费
-          this.loading = false;
-          // this.handlingFee1 = (this.handlingFee/100)
-        }
-      })
+
 
     },
 
