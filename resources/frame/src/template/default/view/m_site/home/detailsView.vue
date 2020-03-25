@@ -71,7 +71,7 @@
               class="postDetR"
               @click="themeOpera(themeCon.firstPost._data.id,1,themeCon.category._data.id,themeCon.firstPost._data.content)"
             >{{collectFlag}}</a>
-            <a href="javascript:;" class="postDetR" @click="shareTheme">分享9</a>
+            <a href="javascript:;" class="postDetR" @click="shareTheme">分享</a>
             <input
               type="text"
               readonly="readonly"

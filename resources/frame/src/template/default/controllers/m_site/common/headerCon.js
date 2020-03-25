@@ -147,13 +147,11 @@ export default {
           include: ['users'],
         }
       }).then((res) => {
-        console.log(res.readdata._data.set_site.site_logo);
         this.siteInfo = res.readdata;
-
         this.logo = res.readdata._data.set_site.site_logo;
-        if(res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null){
-          console.log('空');
-          this.logo = appConfig.staticBaseUrl+'/images/logo.png';
+        if (res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null) {
+          //当接口获取到的Logo为空时
+          this.logo = appConfig.staticBaseUrl + '/images/logo.png';
         }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;
