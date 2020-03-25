@@ -117,7 +117,7 @@ class PayOrder
 
         if (
             $this->data->get('payment_type') == 20
-            && $this->userWalletFailLogs->getCountByUserId($this->actor->id) > 2
+            && $this->userWalletFailLogs->getCountByUserId($this->actor->id) > UserWalletFailLogs::TOPLIMIT
         ) {
             throw new \Exception('pay_password_failures_times_toplimit');
         }
