@@ -41,7 +41,7 @@ class ResetPayPasswordController implements RequestHandlerInterface
     {
         $actor = $request->getAttribute('actor');
         //验证错误次数
-        if ($this->userWalletFailLogs->getCountByUserId($actor->id) > 2) {
+        if ($this->userWalletFailLogs->getCountByUserId($actor->id) > UserWalletFailLogs::TOPLIMIT) {
             throw new \Exception('pay_password_failures_times_toplimit');
         }
 

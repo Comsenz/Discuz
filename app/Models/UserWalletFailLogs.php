@@ -26,6 +26,8 @@ class UserWalletFailLogs extends Model
 
     public $timestamps = false;
 
+    const TOPLIMIT = 2;
+
     /**
      * {@inheritdoc}
      */
