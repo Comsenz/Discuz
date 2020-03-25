@@ -46,7 +46,7 @@ const config = {
   tencent_secret_key_error: '腾讯云Secretid或SecretKey不正确',
   tencent_vod_transcode_error:'腾讯云云点播转码模板未设置',
   tencent_vod_subappid_error:'腾讯云云点播子应用错误',
-  pay_password_failures_times_toplimit:'您输入的密码错误次数已超限，请在次日重试或重置。',
+  pay_password_failures_times_toplimit:'您输入的密码错误次数已超限，请在次日重试或重置',
 };
 
 Vue.prototype.getLang = function (key) {
