@@ -107,9 +107,6 @@ export default {
         }
       }).then(res => {
         this.btnLoading = false;
-        this.$router.push({
-          path:'/circle',
-        });
 
         if (res.errors){
           if (res.errors[0].detail){
