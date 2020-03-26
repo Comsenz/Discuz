@@ -11,7 +11,7 @@
             <div class="modify-data-avatar-box">
               <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
               <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else>
-              <img class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+              <img v-if="isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
             </div>
           </div>
           <i class="modify-data-avatar-right">

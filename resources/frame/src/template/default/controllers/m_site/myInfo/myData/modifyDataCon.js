@@ -24,7 +24,8 @@ export default {
       canWalletPay: '',      //钱包密码
       realNameShow: 'true',      //实名认证是否显示
       openid: '',       //微信openid
-      myModifyPhone: ''
+      myModifyPhone: '',
+      isReal:false,     //是否实名认证
     }
   },
 
@@ -109,6 +110,7 @@ export default {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.isReal = res.readdata._data.isReal;              //实名认证
           this.modifyPhone = res.readdata._data.mobile;         //用户手机号
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id

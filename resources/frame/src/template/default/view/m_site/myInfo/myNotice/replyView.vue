@@ -17,7 +17,8 @@
           :stateTitle="stateTitle"
           :userId="item._data.user_id"
           :time="$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')"
-          :userName="item._data.user_name">
+          :userName="item._data.user_name"
+          :isReal="item._data.isReal">
           <div slot="operating" @click.prevent="deleteReply(item._data.id)">删除</div>
         </ContHeader>
         <div class="likePostContent" @click="jumpDetails(item._data.thread_id)">
