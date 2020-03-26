@@ -107,9 +107,6 @@ export default {
         }
       }).then(res => {
         this.btnLoading = false;
-        this.$router.push({
-          path:'/circle',
-        });
 
         if (res.errors){
           if (res.errors[0].detail){
@@ -118,12 +115,10 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          if (!res.errors) {
-            if (this.siteMode === 'pay') {
-              this.$router.push({path: 'pay-the-fee'});
-            } else if (this.siteMode === 'public') {
-              this.$router.push({path: '/'});
-            }
+          if (this.siteMode === 'pay') {
+            this.$router.push({path: 'pay-the-fee'});
+          } else if (this.siteMode === 'public') {
+            this.$router.push({path: '/'});
           }
         }
 

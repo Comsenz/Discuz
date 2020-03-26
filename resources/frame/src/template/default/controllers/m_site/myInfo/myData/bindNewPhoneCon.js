@@ -24,6 +24,7 @@ export default {
       modifyPhone:'',       //用户手机号
       titlePhone:'',     //标题
       headerShow:false,
+      btnLoading:false   //按钮loading状态
     }
   },
 
@@ -130,14 +131,17 @@ export default {
     },
 
     bindNewPhone() { //修改新的手机号后提交验证码
+      this.btnLoading = true;
 
       if (this.newphone === '') {
         this.$toast("手机号码不能为空，请重新输入");
+        this.btnLoading = false;
         return;
       }
 
       if (this.sms === '') {
         this.$toast("验证码不能为空");
+        this.btnLoading = false;
         return;
       }
 
@@ -163,6 +167,7 @@ export default {
           }
         }
       }).then(res => {
+        this.btnLoading = false;
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -175,6 +180,7 @@ export default {
       }
 
       }).catch((err)=>{
+        this.btnLoading = false;
         this.$toast("手机号绑定失败，请重试");
       });
     }

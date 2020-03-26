@@ -11,21 +11,14 @@
       </div>
 
       <div class="change-pwd-operating">
-        <van-button type="primary" @click="subm()">提交</van-button>
+        <van-button :loading="btnLoading" loading-text="提交中" type="primary" @click="subm">提交</van-button>
       </div>
 
-      <div class="loadFix" v-if="loading">
-        <div class="loadMask"></div>
-        <van-loading color="#333333" class="loadIcon" type="spinner" />
-      </div>
     </main>
   </div>
 </template>
 
 <script>
-// import '../../../less/m_site/myInfo/myInfo.less';
-// import  '../../../scss/m_site/myInfo/myInfo.scss';
-
 import "../../../../defaultLess/m_site/modules/myInfo.less";
 import changePwdCon from "../../../../controllers/m_site/myInfo/myData/changePwdCon";
 export default {

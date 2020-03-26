@@ -14,6 +14,7 @@ export default {
       newpwd: "", //新密码
       confirmpwd: '', //确认密码
       loading: '', //loading状态
+      btnLoading:false, //提交按钮loading状态
     }
   },
 
@@ -51,6 +52,8 @@ export default {
 
       this.loading = true;
 
+      this.btnLoading = true;
+
       const userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url: 'users',
@@ -68,6 +71,7 @@ export default {
           }
         }
       }).then((res) => {
+        this.btnLoading = false;
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

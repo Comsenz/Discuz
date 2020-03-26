@@ -13,7 +13,9 @@
         :focused="showKeyboard"
         @focus="showKeyboard = true"
       />
-      <p class="forGetPwd" v-if="pwdShow" @click="$router.push({path:'retrieve-pwd',query:{type:'forget'}})">忘记密码</p>
+      <p class="forGetPwd" v-if="pwdShow || modifyPhone" @click="$router.push({path:'retrieve-pwd',query:{type:'forget'}})">忘记密码</p>
+
+      <van-loading v-if="loading" >验证中...</van-loading>
 
       <van-number-keyboard
         safe-area-inset-bottom

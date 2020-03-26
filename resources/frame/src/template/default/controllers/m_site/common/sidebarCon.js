@@ -17,6 +17,7 @@ export default {
       username:'',
       userId:'',
       mobile:'',
+      isReal:false,           //实名认证
       // userId:'',
       userInfo:{},
       isWeixin:false,
@@ -127,6 +128,7 @@ export default {
       this.username = res.readdata._data.username;
       this.mobile = res.readdata._data.mobile;
       this.userId = res.readdata._data.id;
+      this.isReal = res.readdata._data.isReal;
     })
 
   },

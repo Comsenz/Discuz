@@ -33,11 +33,11 @@ export default {
         // this.serShow = false;
         this.onSearch(this.searchVal);
       }else{
-      
+
       }
       // this.inputSearchVal =  this.$route.query.searchWord;
     }
-    this.onSearch(this.searchVal); 
+    this.onSearch(this.searchVal);
   },
   methods: {
     //搜索框切换
@@ -62,7 +62,7 @@ export default {
             method: 'get',
             //   data:this.userParams
             data: {
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+              include: ['user', 'firstPost','user.groups', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
               'filter[q]': this.searchVal.trim(),
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
