@@ -45,12 +45,10 @@ class BasePostMessage extends DatabaseMessage
          * ]
          **/
         $message = Arr::get($data, 'message', '');
-        $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $threadUrl = $this->url->to('/details/' . $threadId);
 
         return [
             $this->notifiable->username,
-            '<a href="' . $threadUrl . '">' . $this->strWords($message) . '</a>',
+            $this->strWords($message),
             Arr::get($data, 'refuse', '无')
         ];
     }

@@ -156,7 +156,8 @@ export default {
     if (browserDb.getSItem('beforeState') === 1) {
       this.$router.go(0);
       browserDb.setSItem('beforeState', 2);
-    }
+    };
+    this.wxRegister() // 微信分享
   },
 
   computed: {
@@ -324,7 +325,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['posts.replyUser', 'user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
+          include: ['posts.replyUser', 'user.groups','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -1079,12 +1080,13 @@ export default {
         url: window.location.href.split("#")[0]
       };
       this.appFetch({
-        url: 'forum',
+        url: 'weChatShare',
         method: 'get',
         data: {
 
         }
       }).then((res) => {
+        console.log(res)
         // let appId = data.data.appId;
         // let nonceStr = data.data.nonceStr;
         // let signature = data.data.signature;

@@ -2,8 +2,13 @@
   <div v-model="themeCon">
     <div class="postTop">
 		  <div class="postPer">
-				<img v-if="themeCon.user && themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="" @click="jumpPerDet(themeCon.user._data.id)" class="postHead">
-				<img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else="" @click="jumpPerDet(themeCon.user._data.id)">
+
+        <div  class="avatar-box">
+          <img v-if="themeCon.user && themeCon.user._data.avatarUrl" :src="themeCon.user._data.avatarUrl" alt="用户头像" @click="jumpPerDet(themeCon.user._data.id)" class="user-img">
+          <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="postHead" v-else @click="jumpPerDet(themeCon.user._data.id)">
+          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+        </div>
+
 				<div class="perDet">
 					<div class="perName" v-if="themeCon.user" @click="jumpPerDet(themeCon.user._data.id)">{{themeCon.user._data.username}}</div>
 					<div class="perName" v-else="">该用户已被删除</div>
@@ -79,7 +84,7 @@
 				<span v-else="" class="icon iconfont icon-doubt"></span>
 				<span class="fileName">{{attachment._data.fileName}}</span>
 			</a>
-		</div>		    	
+		</div>
   </div>
 </template>
 
@@ -90,7 +95,7 @@ import  '../../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "normalDetailsView",
     components:{
-    	
+
     },
     ...mSiteNormalDetailsCon
 }
