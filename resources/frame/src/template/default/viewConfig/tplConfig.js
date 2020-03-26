@@ -435,7 +435,7 @@ export default {
           require(['../view/m_site/myInfo/myWallet/frozenAmountView'], resolve)
         },
         metaInfo: {
-          title: "冻结资金"
+          title: "冻结金额"
         }
       },
       'withdrawals-record': {
