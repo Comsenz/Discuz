@@ -15,6 +15,7 @@
           <img :src="userInfoAvatarUrl" alt="用户头像" class="user-img" />
           <img
             class="icon-yirenzheng"
+            v-if="isReal"
             src="../../../../../../static/images/authIcon.svg"
             alt="实名认证"
           />
