@@ -2,7 +2,8 @@
   <header class="cont-header-box">
     <div class="avatar-box">
       <a :href="'/home-page/'+this.$attrs.userId" class="img-box">
-        <img :src="imgUrl" alt="用户头像">
+        <img :src="imgUrl" alt="用户头像" />
+        <img class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
       </a>
     </div>
 

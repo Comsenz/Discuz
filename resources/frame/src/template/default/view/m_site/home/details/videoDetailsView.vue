@@ -2,19 +2,24 @@
   <div v-model="themeCon">
     <div class="postTop">
       <div class="postPer">
-        <img
-          v-if="themeCon.user && themeCon.user._data.avatarUrl"
-          :src="themeCon.user._data.avatarUrl"
-          alt
-          @click="jumpPerDet(themeCon.user._data.id)"
-          class="postHead"
-        />
-        <img
-          :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
-          class="postHead"
-          v-else
-          @click="jumpPerDet(themeCon.user._data.id)"
-        />
+
+        <div class="avatar-box">
+          <img
+            :src="themeCon.user._data.avatarUrl"
+            @click="jumpPerDet(themeCon.user._data.id)"
+            class="user-img"
+            v-if="themeCon.user && themeCon.user._data.avatarUrl"
+          />
+          <img
+            :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
+            class="postHead"
+            v-else
+            @click="jumpPerDet(themeCon.user._data.id)"
+          />
+          <img class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+        </div>
+
+
         <div class="perDet">
           <div
             class="perName"
@@ -38,7 +43,7 @@
         alt
       /> -->
       <div class="postImgList" v-if="themeCon.threadVideo._data.file_id == '' || themeCon.threadVideo._data.file_id == null">
-          <van-image 
+          <van-image
             lazy-load
             class="videoCover"
             :src="themeCon.threadVideo._data.cover_url"
@@ -63,7 +68,7 @@
               :src="coverUrl"
               fit="contain"
             />
-          
+
         </div>
         <!-- <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" /> -->
         <div v-show="loadVideo">

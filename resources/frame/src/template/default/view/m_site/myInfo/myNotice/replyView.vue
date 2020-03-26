@@ -44,9 +44,6 @@
 </template>
 
 <script>
-// import '../../../less/m_site/myInfo/myInfo.less';
-// import  '../../../scss/m_site/mobileIndex.scss';
-
 import '../../../../defaultLess/m_site/common/common.less';
 import '../../../../defaultLess/m_site/modules/myInfo.less';
 import replyCon from '../../../../controllers/m_site/myInfo/myNotice/replyCon';
