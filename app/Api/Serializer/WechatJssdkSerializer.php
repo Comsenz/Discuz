@@ -8,9 +8,8 @@
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
-use Illuminate\Support\Arr;
 
-class SignatureSerializer extends AbstractSerializer
+class WechatJssdkSerializer extends AbstractSerializer
 {
     protected $type = 'signature';
 
@@ -23,7 +22,14 @@ class SignatureSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'signature' => Arr::first($model),
+            'debug' => $model['debug'],
+            'beta' => $model['beta'],
+            'jsApiList' => $model['jsApiList'],
+            'appId' => $model['appId'],
+            'nonceStr' => $model['nonceStr'],
+            'timestamp' => $model['timestamp'],
+            'url' => $model['url'],
+            'signature' => $model['signature'],
         ];
     }
 
