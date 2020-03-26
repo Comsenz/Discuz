@@ -48,7 +48,7 @@ class UserSerializer extends AbstractSerializer
             'id'                => (int) $model->id,
             'username'          => $model->username,
             'avatarUrl'         => $this->getAvatarUrl($model),
-            'isreal'            => $this->getIsReal($model),
+            'isReal'            => $this->getIsReal($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
