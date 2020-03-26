@@ -18,10 +18,10 @@ class AddOrderToAttachments extends Migration
     public function up()
     {
         $this->schema()->table('attachments', function (Blueprint $table) {
-            $table->unsignedTinyInteger('order')->default(0)->after('post_id');
+            $table->unsignedTinyInteger('order')->default(0)->after('post_id')->comment('附件排序');
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
