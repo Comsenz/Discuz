@@ -79,8 +79,10 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
+$route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
 
+$route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
 /*
 |--------------------------------------------------------------------------
 | Users

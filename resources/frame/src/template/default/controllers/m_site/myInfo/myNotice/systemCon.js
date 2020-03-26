@@ -5,10 +5,10 @@ import SystemHeader from '../../../../view/m_site/common/loginSignUpHeader/login
 
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      systemResList:[],
-      stateTitle:'打赏了我',
+      systemResList: [],
+      stateTitle: '打赏了我',
       pageIndex: 1,
       pageLimit: 20,
       loading: false,
@@ -18,56 +18,60 @@ export default {
 
     }
   },
-  components:{
+  components: {
     SystemHeader
   },
-  created(){
+  created() {
     this.systemList();
   },
-  methods:{
-    systemList(initStatus=false){
-     return this.appFetch({
-        url:'notice',
-        method:'get',
-        data:{
+  methods: {
+    // 跳转到详情页
+    jumpDetails(id) {
+      this.$router.push({path: '/details/' + id});
+    },
+    systemList(initStatus = false) {
+      return this.appFetch({
+        url: 'notice',
+        method: 'get',
+        data: {
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit,
           'filter[type]': 'system',
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          if(initStatus){
+          if (initStatus) {
             this.systemResList = []
           }
-          this.systemResList =this.systemResList.concat(res.readdata);
+          this.systemResList = this.systemResList.concat(res.readdata);
           this.loading = false;
           this.finished = res.data.length < this.pageLimit;
         }
-      }).catch((err)=>{
-        if(this.loading && this.pageIndex !== 1){
+      }).catch((err) => {
+        if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
         }
         this.loading = false;
       })
     },
-    onLoad(){    //上拉加载
+    onLoad() {    //上拉加载
       this.loading = true;
       this.pageIndex++;
       this.systemList();
     },
-    onRefresh(){
-        this.pageIndex = 1
-        this.systemList(true).then(()=>{
-          this.$toast('刷新成功');
-          this.isLoading = false;
-          this.finished = false;
-        }).catch((err)=>{
-          this.$toast('刷新失败');
-          this.isLoading = false;
-        })
+    onRefresh() {
+      this.pageIndex = 1
+      this.systemList(true).then(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+        this.finished = false;
+      }).catch((err) => {
+        this.$toast('刷新失败');
+        this.isLoading = false;
+      })
     }
   },
 

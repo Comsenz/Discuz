@@ -110,7 +110,7 @@ export default {
 					this.$toast.fail(res.errors[0].code);
 					// throw new Error(res.error)
         }else{
-          this.$toast.success('删除成功'); 
+          this.$toast.success('删除成功');
           this.pageIndex = 1;
           this.deleteList(true)
 				}
@@ -124,7 +124,7 @@ export default {
 				url:'threads',
 				method:'get',
 				data:{
-					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers', 'threadVideo'],
+					include:['user','user.groups','firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers', 'threadVideo'],
 					'filter[isDeleted]':'no',
 					'filter[categoryId]':'',
 					'page[number]': this.pageIndex,
@@ -198,7 +198,7 @@ export default {
 			this.pageIndex++;
 			this.deleteList();
 		  },
-	  
+
 		  onRefresh(){
 			this.pageIndex = 1;
 			this.deleteList(true).then((res)=>{

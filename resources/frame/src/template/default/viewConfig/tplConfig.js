@@ -169,7 +169,7 @@ export default {
           require(['../view/m_site/management/managementCirclesView'], resolve)
         },
         metaInfo: {
-          title: "管理站点",
+          title: "站点管理",
           threeHeader: true
         }
       },
@@ -361,7 +361,7 @@ export default {
           require(['../view/m_site/home/reply/replyToTopicView'], resolve)
         },
         metaInfo: {
-          title: "回复主题"
+          title: "内容回复"
         }
       },
 
@@ -411,7 +411,7 @@ export default {
           require(['../view/m_site/myInfo/myWallet/withdrawView'], resolve)
         },
         metaInfo: {
-          title: "提款"
+          title: "提现"
         }
       },
       'wallet-details': {
@@ -435,7 +435,7 @@ export default {
           require(['../view/m_site/myInfo/myWallet/frozenAmountView'], resolve)
         },
         metaInfo: {
-          title: "冻结资金"
+          title: "冻结金额"
         }
       },
       'withdrawals-record': {

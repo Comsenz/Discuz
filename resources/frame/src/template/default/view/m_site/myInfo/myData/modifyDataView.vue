@@ -8,8 +8,11 @@
             <p class="modify-data-avatar-title-img">头像</p>
           </div>
           <div class="modify-data-avatar-img">
-            <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
-            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else="">
+            <div class="modify-data-avatar-box">
+              <img :src="headPortrait" alt="我的头像" v-if="headPortrait">
+              <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="resUserHead" v-else>
+              <img v-if="isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+            </div>
           </div>
           <i class="modify-data-avatar-right">
             <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>

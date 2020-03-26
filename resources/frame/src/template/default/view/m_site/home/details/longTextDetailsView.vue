@@ -2,19 +2,24 @@
   <div v-model="themeCon">
     <div class="postTop">
       <div class="postPer">
-        <img
-          v-if="themeCon.user && themeCon.user._data.avatarUrl"
-          :src="themeCon.user._data.avatarUrl"
-          alt
-          @click="jumpPerDet(themeCon.user._data.id)"
-          class="postHead"
-        />
-        <img
-          :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
-          class="postHead"
-          v-else
-          @click="jumpPerDet(themeCon.user._data.id)"
-        />
+
+        <div  class="avatar-box">
+          <img
+            :src="themeCon.user._data.avatarUrl"
+            @click="jumpPerDet(themeCon.user._data.id)"
+            class="user-img"
+            v-if="themeCon.user && themeCon.user._data.avatarUrl"
+          />
+          <img
+            :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
+            class="postHead"
+            v-else
+            @click="jumpPerDet(themeCon.user._data.id)"
+          />
+          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+        </div>
+
+
         <div class="perDet">
           <div
             class="perName"

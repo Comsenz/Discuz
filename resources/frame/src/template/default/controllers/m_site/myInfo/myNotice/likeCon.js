@@ -43,7 +43,8 @@ export default {
           'filter[type]': 'liked',
         }
       }).then(res=>{
-        if (res.errors){
+       console.log(res);
+       if (res.errors){
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         }else{
@@ -85,7 +86,7 @@ export default {
       this.loading = true;
       this.pageIndex++;
       this.myLikeList();
-  
+
     },
     onRefresh(){
         this.pageIndex = 1

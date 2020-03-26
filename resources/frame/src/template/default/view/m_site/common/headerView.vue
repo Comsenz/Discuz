@@ -11,8 +11,9 @@
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
-        <div v-if="userInfoAvatarUrl" class="inviteHead">
-          <img :src="userInfoAvatarUrl" alt="用户头像" class="user-img" />
+        <div class="home-page-avatar-box">
+          <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="用户头像" class="user-img" />
+          <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="inviteHead" />
           <img
             class="icon-yirenzheng"
             v-if="isReal"
@@ -21,7 +22,6 @@
           />
         </div>
 
-        <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt class="inviteHead" />
         <div class="inviteName" v-if="invitePerDet && userInfoName" v-model="userInfoName">
           {{userInfoName}}
           <p class="groupsName" v-if="showGroups && showGroups.status">({{showGroups.name}})</p>

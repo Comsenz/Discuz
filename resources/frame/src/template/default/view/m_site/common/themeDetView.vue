@@ -7,21 +7,23 @@
             <div class>
               <div class="postTop">
                 <div class="postPer">
-                  <div class="postHeaderAvatar" v-if="item.user && item.user._data.avatarUrl">
+                  <div class="avatar-box" >
                     <img
                       :src="item.user._data.avatarUrl"
                       @click="jumpPerDet(item.user._data.id)"
-                      class="postHead"
+                      class="user-img"
+                      v-if="item.user && item.user._data.avatarUrl"
                     />
-                    <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+                    <img
+                      :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
+                      class="postHead"
+                      v-else
+                      @click="jumpPerDet(item.user._data.id)"
+                    />
+                    <img v-if="item.user._data.isReal" class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
                   </div>
 
-                  <img
-                    :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
-                    class="postHead"
-                    v-else
-                    @click="jumpPerDet(item.user._data.id)"
-                  />
+
                   <div class="perDet">
                     <div
                       class="perName"
