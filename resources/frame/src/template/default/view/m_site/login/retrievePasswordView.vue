@@ -4,7 +4,8 @@
       <main class="retrieve-password-main">
 
         <div class="login-module-title-box">
-          <h2 class="login-module-title">忘记密码</h2>
+          <h2 class="login-module-title" v-if="type === 'reset_pwd'">忘记密码</h2>
+          <h2 class="login-module-title" v-else>忘记钱包密码</h2>
         </div>
 
         <div class="login-module-form">
@@ -34,6 +35,7 @@
               label="新密码"
               clearable
               v-model="newpwd"
+              type="password"
               placeholder="请输入新密码"
             />
 
@@ -43,7 +45,7 @@
               label="新密码"
               clearable
               v-model="payPassword"
-              type="number"
+              type="password"
               maxlength="6"
               placeholder="请输入新密码"
             />
@@ -53,7 +55,7 @@
               label="确认密码"
               clearable
               v-model="payPasswordConfirmation"
-              type="number"
+              type="password"
               maxlength="6"
               placeholder="请输入新密码"
             />

@@ -61,7 +61,11 @@
           </div>
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <el-button type="text" :style="{'opacity':deleBtn?'1':'0','cursor':deleBtn?'pointer':'auto'}" @click="deleteImage">删除</el-button>
+        <el-button
+          type="text"
+          :style="{'opacity':deleBtn?'1':'0','cursor':deleBtn?'pointer':'auto'}"
+          @click="deleteImage"
+        >删除</el-button>
         <!-- <el-dialog :visible.sync="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>-->
@@ -72,7 +76,7 @@
         <el-input placeholder="站长" type="number" v-model="siteMasterId"></el-input>
       </CardRow>
     </Card>
-    <Card header="站点模式：">
+    <Card header="站点模式：" class="card-radio-con">
       <CardRow description="你的Discuz!Q 站点的运行模式">
         <el-radio @change="radioChange('public')" v-model="radio" label="1">公开模式</el-radio>
         <el-radio @change="radioChange('pay')" v-model="radio" label="2">付费模式</el-radio>
@@ -96,8 +100,7 @@
               placeholder="天数"
               type="number"
               v-model="siteExpire"
-            ></el-input>
-天后
+            ></el-input>天后
           </CardRow>
         </Card>
       </div>
@@ -139,7 +142,7 @@
       </CardRow>
     </Card>
 
-    <Card header="关闭站点：">
+    <Card header="关闭站点：" class="card-radio-con">
       <CardRow description="暂时将网站关闭，其他人无法访问，但不影响管理员访问">
         <el-radio @change="radioChangeClose('1')" v-model="radio2" label="1">是</el-radio>
         <el-radio @change="radioChangeClose('2')" v-model="radio2" label="2">否</el-radio>

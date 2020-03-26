@@ -71,6 +71,71 @@ body { height: inherit;}
 .icon-alipay{
   color:#4394D3 !important;
 }
+
+//用户组名称
+.groupsName{
+  color: @cor888;
+  font-size: 12px;
+}
+
+
+//用户实名认证图标
+.icon-yirenzheng{
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  font-size: 12px;
+}
+
+//用户头像
+.user-img{
+   width: 100%;
+   height: 100%;
+   border-radius: 4px;
+ }
+
+//首页列表、个人主页主题列表头像
+.avatar-box {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  margin-right: 10px;
+  float: left;
+}
+
+//个人主页-头部头像
+.home-page-avatar-box{
+  display: block;
+  height: 46px;
+  width: 46px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  position: relative;
+}
+
+//侧边栏-头像
+.side-bar-avatar-box{
+  float: left;
+  width: 58px;
+  height: 58px;
+  position: relative;
+  .side-user-img{
+    width: 58px;
+    height: 58px;
+    border-radius: 4px;
+  }
+  .icon-yirenzheng{
+    width: 12px;
+    height: 12px;
+  }
+}
+
+
+
+
+
 //loading
 .loadFix {
   position: fixed;
@@ -238,7 +303,6 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
 }
 .logo {
   display: block;
-  max-height: 40px;
   margin: 0 auto;
 }
 .circleDet {
@@ -712,8 +776,13 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
     width: 40px;
     height: 100%;
     .img-box{
+      position: relative;
       img{
         @imgWH();
+      }
+      .icon-yirenzheng{
+        width: 12px;
+        height: 12px;
       }
     }
   }
@@ -823,12 +892,6 @@ input:-ms-input-placeholder, textarea::-moz-placeholder {
   内容主体内容
   包括：内容、引用内容、回复内容
  */
-
-//内容主体图片大小
-@imgWH:{
-  width: 40px;
-  height: 40px;
-}
 
 .cont-main-box{
   padding: 0 15px 10px 15px;

@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property string $union_id
  * @property string $last_login_ip
  * @property string $register_ip
+ * @property string $register_reason
  * @property int $thread_count
  * @property int $follow_count
  * @property int $fans_count
@@ -46,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property string $identity
  * @property string $realname
  * @property Group $groups
+ * @property userFollow $follow
  * @property UserWallet $userWallet
  * @property UserWechat $wechat
  * @package App\Models
@@ -241,6 +243,13 @@ class User extends Model
     public function changeMobileActive($active)
     {
         $this->mobile_confirmed = $active;
+
+        return $this;
+    }
+
+    public function changeUpdateAt()
+    {
+        $this->updated_at = Carbon::now();
 
         return $this;
     }

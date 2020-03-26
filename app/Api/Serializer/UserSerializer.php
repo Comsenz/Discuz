@@ -60,8 +60,9 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
-            'registerReason'    => $model->register_reason,     // 注册原因
-            'banReason'         => '',                          // 禁用原因
+            'showGroups'        => $model->hasPermission('showGroups'),     // 是否显示用户组
+            'registerReason'    => $model->register_reason,                 // 注册原因
+            'banReason'         => '',                                      // 禁用原因
         ];
 
         // 判断禁用原因

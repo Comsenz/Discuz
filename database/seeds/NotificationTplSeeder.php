@@ -48,7 +48,7 @@ class NotificationTplSeeder extends Seeder
                     'first' => '你好，欢迎加入{sitename}',
                     'keyword1' => '用户名：{username}',
                     'keyword2' => '时间：{dateline}',
-                    'remark' => '请您在发表言论时，遵守当地法律法规。祝你在这里玩的愉快',
+                    'remark' => '请你在发表言论时，遵守当地法律法规。祝你在这里玩的愉快',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
@@ -323,7 +323,7 @@ class NotificationTplSeeder extends Seeder
                 'type' => 0,
                 'type_name' => '新用户注册并加入后',
                 'title' => '欢迎加入{sitename}',
-                'content' => '{username}你好，你已经成为{sitename} 的{groupname} ，请您在发表言论时，遵守当地法律法规。祝你在这里玩的愉快。',
+                'content' => '{username}你好，你已经成为{sitename} 的{groupname} ，请你在发表言论时，遵守当地法律法规。祝你在这里玩的愉快。',
                 'vars' => serialize([
                     '{username}' => '用户名',
                     '{sitename}' => '站点名称',

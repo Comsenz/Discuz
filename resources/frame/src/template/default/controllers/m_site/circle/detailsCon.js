@@ -156,7 +156,8 @@ export default {
     if (browserDb.getSItem('beforeState') === 1) {
       this.$router.go(0);
       browserDb.setSItem('beforeState', 2);
-    }
+    };
+    this.wxRegister() // 微信分享
   },
 
   computed: {
@@ -324,7 +325,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['posts.replyUser', 'user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
+          include: ['posts.replyUser', 'user.groups','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -1061,7 +1062,7 @@ export default {
       this.pageIndex++;
       this.detailsLoad();
     },
-
+    //下拉刷新
     onRefresh() {
       this.pageIndex = 1
       this.detailsLoad(true).then((res) => {
@@ -1073,6 +1074,64 @@ export default {
         this.isLoading = false;
       })
     },
+    //微信内分享
+    wxRegister(callback) {
+      let shareParam = {
+        url: window.location.href.split("#")[0]
+      };
+      this.appFetch({
+        url: 'weChatShare',
+        method: 'get',
+        data: {
+
+        }
+      }).then((res) => {
+        console.log(res)
+        // let appId = data.data.appId;
+        // let nonceStr = data.data.nonceStr;
+        // let signature = data.data.signature;
+        // let timestamp = data.data.timestamp;
+        wx.config({
+          debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: appId,         // 必填，公众号的唯一标识
+          timestamp: timestamp, // 必填，生成签名的时间戳
+          nonceStr: nonceStr,   // 必填，生成签名的随机串
+          signature: signature, // 必填，签名，见附录1
+          jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+          ]
+        });
+      })
+    },
+    ShareTimeline(opstion) {
+      //分享给朋友
+      wx.onMenuShareAppMessage({
+        title: opstion.title, // 分享标题
+        link: opstion.link, // 分享链接
+        imgUrl: opstion.imgUrl, // 分享图标
+        desc: opstion.dec, // 分享描述
+        success() {
+          opstion.success()
+        },
+        cancel() {
+          opstion.error()
+        }
+      });
+      wx.onMenuShareTimeline({
+        title: opstion.title, // 分享标题
+        link: opstion.link, // 分享链接
+        imgUrl: opstion.imgUrl, // 分享图标
+        desc: opstion.dec, // 分享描述
+        success() {
+          opstion.success()
+        },
+        cancel() {
+          opstion.error()
+        }
+      })
+    }
+
 
   },
   mounted: function () {

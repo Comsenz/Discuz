@@ -28,7 +28,16 @@ $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Passport Settings
+|--------------------------------------------------------------------------
+*/
+
 $route->get('/signature', 'signature', ApiController\Qcloud\CreateSignatureController::class);
+$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +142,7 @@ $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThr
 $route->delete('/threads/batch/{ids}', 'threads.batchDelete', ApiController\Threads\BatchDeleteThreadsController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->post('/threads/notify/video', 'threads.notify.video', ApiController\Threads\Notify\ThreadVideoNotifyController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Posts

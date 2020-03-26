@@ -71,7 +71,7 @@
               class="postDetR"
               @click="themeOpera(themeCon.firstPost._data.id,1,themeCon.category._data.id,themeCon.firstPost._data.content)"
             >{{collectFlag}}</a>
-            <a href="javascript:;" class="postDetR" @click="shareTheme">分享9</a>
+            <a href="javascript:;" class="postDetR" @click="shareTheme">分享</a>
             <input
               type="text"
               readonly="readonly"
@@ -166,18 +166,23 @@
               <div class="commentPostDet">
                 <div class="postTop">
                   <div class="postPer">
-                    <img
-                      v-if="item.user && item.user._data.avatarUrl"
-                      :src="item.user._data.avatarUrl"
-                      class="postHead"
-                      @click="jumpPerDet(item.user._data.id)"
-                    />
-                    <img
-                      v-else
-                      :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
-                      class="postHead"
-                      @click="jumpPerDet(item.user._data.id)"
-                    />
+                    <div  class="avatar-box">
+                      <img
+                        class="user-img"
+                        :src="item.user._data.avatarUrl"
+                        @click="jumpPerDet(item.user._data.id)"
+                        v-if="item.user && item.user._data.avatarUrl"
+                      />
+                      <img
+                        v-else
+                        :src="appConfig.staticBaseUrl+'/images/noavatar.gif'"
+                        class="postHead"
+                        @click="jumpPerDet(item.user._data.id)"
+                      />
+                      <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+                    </div>
+
+
                     <div class="perDet">
                       <div
                         class="perName"

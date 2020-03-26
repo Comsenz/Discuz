@@ -12,7 +12,7 @@ import browserDb from '../../../../../../helpers/webDbHelper';
 export default {
   data:function () {
     return {
-      headerTitle:"回复主题",
+      headerTitle:"内容回复",
       // content:'',
       showFacePanel: false,
       keyboard: false,

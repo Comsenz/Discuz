@@ -3,6 +3,7 @@
  */
 import appCommonH from '../../../../../helpers/commonHelper';
 import browserDb from '../../../../../helpers/webDbHelper';
+
 export default {
   data: function() {
       return {
@@ -184,7 +185,7 @@ export default {
          } else if(clickStatus == 2){
           this.$router.push({ path:'/edit-video'+'/'+themeId});
          }
-        
+
        } else if(clickType == 7){
          //回复
          this.$router.push({
@@ -340,7 +341,7 @@ export default {
     jumpPerDet:function(id){
       this.$router.push({ path:'/home-page'+'/'+id});
     },
-    
+
   },
   mounted: function() {
     document.addEventListener('click', this.disappear, false);

@@ -61,6 +61,7 @@ class ResourceThreadController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'user.groups',
         'category',
         'firstPost.likedUsers',
         'posts.likedUsers',

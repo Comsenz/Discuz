@@ -1,10 +1,10 @@
 <template>
   <div class="pay-password-box">
-    <setUpPayPwdHeader title="设置支付密码"></setUpPayPwdHeader>
+    <setUpPayPwdHeader title="设置钱包密码"></setUpPayPwdHeader>
 
     <div class="pay-password-box_title">
-      <h1>设置支付密码</h1>
-      <p>请设置钱包支付密码，用于支付验证</p>
+      <h1>设置钱包密码</h1>
+      <p>请设置钱包密码，用于钱包支付验证</p>
     </div>
 
     <van-password-input

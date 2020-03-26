@@ -3,8 +3,12 @@
      <div class="sideCon" @click="$router.push({path:'/home-page/'+userId})">
        <div class="sideUserBox" v-model="userInfo">
          <!-- <img src="appConfig.staticBaseUrl/static/images/noavatar.gif" class="userHead"> -->
-        <img :src="avatarUrl" alt="" class="userHead" v-if="avatarUrl != '' && avatarUrl != null ">
-         <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else="">
+         <div  class="side-bar-avatar-box">
+           <img :src="avatarUrl" v-if="avatarUrl != '' && avatarUrl != null " class="side-user-img" >
+           <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else>
+           <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+         </div>
+
          <div class="userDet">
            <div class="userName" v-if="username != undefined">{{username}}</div>
            <div class="userPhone" v-if="mobile != undefined">{{mobile}}</div>
@@ -50,6 +54,7 @@
 </template>
 
 <script>
+  import '../../../defaultLess/m_site/common/common.less'
   import mSiteSidebar from '../../../controllers/m_site/common/sidebarCon';
   export default {
     name: "sidebar",

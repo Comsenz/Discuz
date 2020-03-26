@@ -8,7 +8,6 @@
 namespace App\Commands\Thread;
 
 use App\Events\Thread\Saving;
-use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
@@ -79,16 +78,10 @@ class BatchEditThreads
                         $thread->is_approved = $attributes['isApproved'];
                         $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
                         // 内容审核通知
-                        $thread->raise(new ThreadNotices(
-                            $thread,
-                            $this->actor,
-                            ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
-                        ));
-
                         $thread->raise(new ThreadWasApproved(
                             $thread,
                             $this->actor,
-                            ['message' => $approvedMsg]
+                            ['notice_type' => 'isApproved', 'message' => $approvedMsg]
                         ));
                     }
                 } else {
@@ -103,7 +96,8 @@ class BatchEditThreads
                         $thread->is_sticky = $attributes['isSticky'];
                         // 批量置顶通知
                         if ($attributes['isSticky']) {
-                            $thread->raise(new ThreadNotices(
+                            // 内容置顶通知
+                            $thread->raise(new ThreadWasApproved(
                                 $thread,
                                 $this->actor,
                                 ['notice_type' => 'isSticky']
@@ -122,7 +116,7 @@ class BatchEditThreads
                         $thread->is_essence = $attributes['isEssence'];
                         // 内容精华通知
                         if ($attributes['isEssence']) {
-                            $thread->raise(new ThreadNotices(
+                            $thread->raise(new ThreadWasApproved(
                                 $thread,
                                 $this->actor,
                                 ['notice_type' => 'isEssence']
@@ -141,15 +135,10 @@ class BatchEditThreads
                         $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                         if ($attributes['isDeleted']) {
-                            $thread->hide($this->actor, $message);
                             // 内容删除通知
-                            $thread->raise(new ThreadNotices(
-                                $thread,
-                                $this->actor,
-                                ['notice_type' => 'isDeleted', 'refuse' => $message]
-                            ));
+                            $thread->hide($this->actor, ['message' => $message]);
                         } else {
-                            $thread->restore($this->actor, $message);
+                            $thread->restore($this->actor, ['message' => $message]);
                         }
                     }
                 } else {

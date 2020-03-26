@@ -30,14 +30,26 @@
                 <td v-if="inviteLi._data.status ==3">已过期</td>
                 <td>
                   <a
+                    v-if="inviteLi._data.status ==1"
                     href="javascript:;"
-                    :class="['copyA', inviteLi._data.status === 0 && 'font9']"
+                    :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
                     @click="copyToClipBoard(inviteLi)"
                   >复制</a>
                   <a
+                    v-else
                     href="javascript:;"
-                    :class="['invalidA', inviteLi._data.status === 0 && 'font9']"
-                    @click="resetDelete(inviteLi)"
+                    :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
+                  >复制</a>
+                  <a
+                    v-if="inviteLi._data.status ==1"
+                    href="javascript:;"
+                    :class="['invalidA', inviteLi._data.status !== 1 && 'font9']"
+                    @click="resetDelete(inviteLi,index)"
+                  >置为无效</a>
+                  <a
+                    v-else
+                    href="javascript:;"
+                    :class="['invalidA', inviteLi._data.status !== 1 && 'font9']"
                   >置为无效</a>
                 </td>
               </tr>
