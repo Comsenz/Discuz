@@ -73,7 +73,7 @@ export default {
       webTitle: '',              //首页标题
       loading1: '', //loading状态
       recordNumber: '', //网站备案信息
-      isRecordNumber: ''//是否显示备案信息
+      isRecordNumber: '',   //是否显示备案信息
     }
   },
   created: function () {
@@ -213,7 +213,7 @@ export default {
         'filter[categoryId]': this.categoryId,
         'filter[isApproved]': 1,
         'filter[isDeleted]': 'no',
-        include: ['user', 'firstPost','user.groups', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+        include: ['user', 'firstPost', 'user.groups', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
         'page[number]': this.pageIndex,
         'page[limit]': this.pageLimit
       }
