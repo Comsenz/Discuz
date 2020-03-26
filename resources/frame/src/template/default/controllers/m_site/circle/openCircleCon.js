@@ -79,6 +79,7 @@ export default {
   created: function () {
     this.getInfo();
     this.getUserInfo();
+    this.loadThemeList();
     this.load();
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;

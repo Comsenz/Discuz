@@ -30,9 +30,15 @@
                 <td v-if="inviteLi._data.status ==3">已过期</td>
                 <td>
                   <a
+                    v-if="inviteLi._data.status ==1"
                     href="javascript:;"
                     :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
                     @click="copyToClipBoard(inviteLi)"
+                  >复制</a>
+                  <a
+                    v-else
+                    href="javascript:;"
+                    :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
                   >复制</a>
                   <a
                     href="javascript:;"
