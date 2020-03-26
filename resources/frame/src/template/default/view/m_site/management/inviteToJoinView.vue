@@ -41,9 +41,15 @@
                     :class="['copyA', inviteLi._data.status !== 1 && 'font9']"
                   >复制</a>
                   <a
+                    v-if="inviteLi._data.status ==1"
                     href="javascript:;"
                     :class="['invalidA', inviteLi._data.status !== 1 && 'font9']"
                     @click="resetDelete(inviteLi,index)"
+                  >置为无效</a>
+                  <a
+                    v-else
+                    href="javascript:;"
+                    :class="['invalidA', inviteLi._data.status !== 1 && 'font9']"
                   >置为无效</a>
                 </td>
               </tr>
