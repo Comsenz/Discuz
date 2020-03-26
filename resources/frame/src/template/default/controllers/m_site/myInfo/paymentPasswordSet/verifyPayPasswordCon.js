@@ -11,7 +11,8 @@ export default {
       value: '',
       showKeyboard: true,
       pwdShow:true,
-      modifyPhone:''        //是否绑定手机号
+      modifyPhone:'',        //是否绑定手机号
+      loading:false,         //验证状态
     }
   },
   methods:{
@@ -30,6 +31,7 @@ export default {
     * 接口请求
     * */
     setPwd(){
+      this.loading = true;
       this.appFetch({
         url:"verifyPayPwd",
         method:"post",
@@ -38,6 +40,7 @@ export default {
         }
       }).then(res=>{
         // console.log(res);
+        this.loading = false;
         if (res.errors){
           this.value = '';
           if (res.errors[0].detail){

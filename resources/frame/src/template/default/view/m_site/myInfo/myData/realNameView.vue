@@ -10,13 +10,13 @@
       </div>
 
       <div class="change-pwd-operating">
-        <van-button type="primary" @click="subm()">提交</van-button>
+        <van-button :loading="loading" type="primary" @click="subm">提交</van-button>
       </div>
 
-      <div class="loadFix" v-if="loading">
-        <div class="loadMask"></div>
-        <van-loading color="#333333" class="loadIcon" type="spinner" />
-      </div>
+<!--      <div class="loadFix" v-if="loading">-->
+<!--        <div class="loadMask"></div>-->
+<!--        <van-loading color="#333333" class="loadIcon" type="spinner" />-->
+<!--      </div>-->
     </main>
   </div>
 </template>

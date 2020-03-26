@@ -26,6 +26,7 @@ export default {
       openid: '',       //微信openid
       myModifyPhone: '',
       isReal:false,     //是否实名认证
+      updataLoading:false,  //上传状态
     }
   },
 
@@ -134,6 +135,8 @@ export default {
     },
     handleFile: function (e) {  //上传头像
       let file = e.target.files[0];
+      this.updataLoading = true;
+
       // 获取file
       // 实例化
       let formdata = new FormData()
@@ -146,6 +149,8 @@ export default {
         splice: userId + '/avatar',
         data: formdata
       }).then(res => {
+        this.updataLoading = false;
+        
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -153,6 +158,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          this.$toast('上传头像成功!');
           this.headPortrait = res.data.attributes.avatarUrl;
           this.modifyData()
         }

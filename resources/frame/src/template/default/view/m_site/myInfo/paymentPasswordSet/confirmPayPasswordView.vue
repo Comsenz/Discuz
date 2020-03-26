@@ -23,7 +23,7 @@
         @blur="showKeyboard = false"
       />
 
-      <van-button type="primary" @click="submitClick">完成</van-button>
+      <van-button type="primary" :loading="subLoading" loading-text="提交中" @click="submitClick">完成</van-button>
 
     </div>
 </template>

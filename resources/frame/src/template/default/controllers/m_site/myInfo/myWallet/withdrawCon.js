@@ -24,7 +24,7 @@ export default {
       wechatNickname: '',
       mobileConfirmed: '',//验证验证码是否正确
       handlingFee1: '',
-      loading: '', //loading状态
+      loading: false, //loading状态
     }
   },
 
@@ -260,6 +260,7 @@ export default {
           }
         }
       }).then(res => {
+        this.loading = false;
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           this.loading = false;

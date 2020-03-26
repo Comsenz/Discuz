@@ -24,22 +24,18 @@
       </div>
 
       <div class="modify-phone-operating">
-        <van-button type="primary" @click="bindNewPhone">提交</van-button>
+        <van-button type="primary" :loading="btnLoading" loading-text="提交中" @click="bindNewPhone">提交</van-button>
       </div>
 
-      <div class="loadFix" v-if="loading">
-        <div class="loadMask"></div>
-        <van-loading color="#333333" class="loadIcon" type="spinner" />
-      </div>
+<!--      <div class="loadFix" v-if="loading">-->
+<!--        <div class="loadMask"></div>-->
+<!--        <van-loading color="#333333" class="loadIcon" type="spinner" />-->
+<!--      </div>-->
     </main>
   </div>
 </template>
 
 <script>
-// import '../../../scss/m_site/myInfo/myInfo.scss';
-// import '../../../less/m_site/myInfo/myInfo.less';
-// import  '../../../scss/m_site/mobileIndex.scss';
-
 import "../../../../defaultLess/m_site/modules/myInfo.less";
 import "../../../../defaultLess/m_site/common/common.less";
 import modifyPhoneCon from "../../../../controllers/m_site/myInfo/myData/bindNewPhoneCon.js";
