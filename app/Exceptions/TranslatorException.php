@@ -11,7 +11,7 @@ use Discuz\Locale\AbstractLocaleException;
 use Exception;
 
 /**
- * 本地化语言包-捕获异常
+ * 本地化语言包 - 捕获异常
  *
  * Class TranslatorException
  * @example throw new TranslatorException('user_error', ['not_match']);
