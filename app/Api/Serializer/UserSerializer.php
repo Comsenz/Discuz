@@ -48,7 +48,7 @@ class UserSerializer extends AbstractSerializer
             'id'                => (int) $model->id,
             'username'          => $model->username,
             'avatarUrl'         => $this->getAvatarUrl($model),
-            'isreal'            => $this->getIsreal($model),
+            'isreal'            => $this->getIsReal($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
@@ -112,7 +112,7 @@ class UserSerializer extends AbstractSerializer
      * @param User $model
      * @return string
      */
-    public function getIsreal(User $model)
+    public function getIsReal(User $model)
     {
         if(isset($model->realname) && $model->realname != null){
             return true;
