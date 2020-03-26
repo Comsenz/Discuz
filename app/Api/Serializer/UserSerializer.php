@@ -48,6 +48,7 @@ class UserSerializer extends AbstractSerializer
             'id'                => (int) $model->id,
             'username'          => $model->username,
             'avatarUrl'         => $this->getAvatarUrl($model),
+            'isreal'            => $this->getIsreal($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
@@ -103,6 +104,21 @@ class UserSerializer extends AbstractSerializer
     public function getAvatarUrl(User $model)
     {
         return $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
+    }
+
+    /**
+     * 是否实名认证
+     *
+     * @param User $model
+     * @return string
+     */
+    public function getIsreal(User $model)
+    {
+        if(isset($model->realname) && $model->realname != null){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
