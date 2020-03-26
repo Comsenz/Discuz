@@ -20,20 +20,20 @@
 
   .login-main{
     width: 400PX;
-    height: 450PX;
+    height: 420PX;
     background-color: white;
     box-shadow:0 0 12PX 0 rgba(88,88,90,0.21);
     border-radius:4PX;
 
     .login-header{
-      padding: 55PX 105PX 5PX;
+      padding: 55PX 0 5PX;
 
       a{
-        height: 60PX;
+        height: 40PX;
         display: block;
         text-align: center;
         img{
-          height: 100%;
+          max-height: 40PX;
         }
       }
 

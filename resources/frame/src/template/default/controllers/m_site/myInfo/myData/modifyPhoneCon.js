@@ -21,7 +21,7 @@ export default {
       isGray: false,
       btnContent: '发送验证码',
       mobileConfirmed: '',
-      loading: '' //loading状态
+      loading: false, //loading状态
     }
   },
 
@@ -140,6 +140,7 @@ export default {
           }
         }
       }).then(res => {
+        this.loading = false;
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -191,6 +192,7 @@ export default {
     // },
 
     bindNewPhone() { //修改新的手机号后提交验证码
+      this.loading = true;
 
       if (this.phoneNum === '') {
         this.$toast("手机号码不能为空，请重新输入");
@@ -215,6 +217,7 @@ export default {
           }
         }
       }).then(res => {
+        this.loading = false;
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

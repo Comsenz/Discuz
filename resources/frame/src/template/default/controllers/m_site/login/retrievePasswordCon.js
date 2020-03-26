@@ -120,12 +120,12 @@ export default {
     //提交新密码
     submissionPassword(){
 
-      var reg=11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
+      var reg = 11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
 
       if (this.phoneNum.length < 1){
         this.$toast('请输入手机号');
         return
-      } else if (!reg.test(this.phoneNum)){
+      } else if (!reg.test(this.phoneNum) && this.type === 'reset_pwd'){
         this.$toast('请输入正确的手机号');
         return;
       } else if (this.verifyNum.length < 1) {

@@ -11,13 +11,19 @@
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
-        <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt class="inviteHead" />
+        <div v-if="userInfoAvatarUrl" class="inviteHead">
+          <img :src="userInfoAvatarUrl" alt="用户头像" class="user-img"  />
+          <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+        </div>
+
         <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" alt class="inviteHead" />
         <div
           class="inviteName"
           v-if="invitePerDet && userInfoName"
-          v-model="userInfoName"
-        >{{userInfoName}}</div>
+          v-model="userInfoName">
+          {{userInfoName}}
+          <p class="groupsName" v-if="showGroups.status">({{showGroups.name}})</p>
+        </div>
         <!-- <div class="inviteName" v-else="">该用户已被删除</div> -->
         <p class="inviteWo" v-show="invitationShow">邀请您加入</p>
         <div class="followBox" v-if="followShow && followDet">

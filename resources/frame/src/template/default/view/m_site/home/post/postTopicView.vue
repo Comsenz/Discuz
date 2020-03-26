@@ -25,7 +25,6 @@
         ref="textarea"
         placeholder="请输入内容"
         v-model="content"
-        :maxlength="keywordsMax"
         @change="searchChange"
         @focus="showFacePanel = false; footMove = false; keyboard = false;"
       ></textarea>
@@ -146,7 +145,7 @@
     </div>
     <div class="loadFix" v-if="loading">
       <div class="loadMask"></div>
-      <van-loading color="#333333"  class="loadIcon" type="spinner"/>
+      <van-loading color="#333333" class="loadIcon" type="spinner" />
     </div>
   </div>
 </template>

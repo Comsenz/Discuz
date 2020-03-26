@@ -25,7 +25,6 @@
         ref="textarea"
         placeholder="请输入内容"
         v-model="content"
-        :maxlength="keywordsMax"
         @change="searchChange"
         @focus="showFacePanel = false; footMove = false; keyboard = false;"
       ></textarea>

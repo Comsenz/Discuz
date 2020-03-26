@@ -16,11 +16,13 @@ class SetDefaultPermission
     {
         $groupId = $event->group->id;
 
-        // 默认权限：收藏、点赞、打赏
+        // 默认权限：收藏、点赞、创建订单、支付订单、提现
         $defaultPermission = collect([
             'thread.favorite',
             'thread.likePosts',
-            'order.create'
+            'order.create',
+            'trade.pay.order',
+            'cash.create',
         ])->map(function ($item) use ($groupId) {
             return [
                 'group_id' => $groupId,

@@ -213,7 +213,7 @@ export default {
         'filter[categoryId]': this.categoryId,
         'filter[isApproved]': 1,
         'filter[isDeleted]': 'no',
-        include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+        include: ['user', 'firstPost','user.groups', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
         'page[number]': this.pageIndex,
         'page[limit]': this.pageLimit
       }
@@ -313,6 +313,9 @@ export default {
 
     //点击分类
     categoriesChoice(cateId) {
+      if (this.categoryId === cateId && this.loading1) {
+        return
+      }
       this.loading1 = true;
       this.pageIndex = 1;
       this.themeListCon = [];
@@ -395,7 +398,7 @@ export default {
         this.$toast('刷新失败');
         this.isLoading = false;
       })
-    }
+    },
   },
   activated() {
     this.userId = browserDb.getLItem('tokenId');

@@ -8,6 +8,8 @@
 namespace App\Api\Controller\Users;
 
 use App\Models\SessionToken;
+use App\Models\UserWalletFailLogs;
+use App\Repositories\UserWalletFailLogsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,12 +23,15 @@ class ResetPayPasswordController implements RequestHandlerInterface
      */
     protected $validator;
 
+    protected $userWalletFailLogs;
+
     /**
      * @param Validator $validator
      */
-    public function __construct(Validator $validator)
+    public function __construct(Validator $validator, UserWalletFailLogsRepository $userWalletFailLogs)
     {
         $this->validator = $validator;
+        $this->userWalletFailLogs = $userWalletFailLogs;
     }
 
     /**
@@ -35,6 +40,12 @@ class ResetPayPasswordController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = $request->getAttribute('actor');
+        //验证错误次数
+        $failCount = $this->userWalletFailLogs->getCountByUserId($actor->id);
+        if ($failCount > UserWalletFailLogs::TOPLIMIT) {
+            throw new \Exception('pay_password_failures_times_toplimit');
+        }
+
         $pay_password = $request->getParsedBody()->get('pay_password', '');
 
         $this->validator->make(compact('pay_password'), [
@@ -42,14 +53,22 @@ class ResetPayPasswordController implements RequestHandlerInterface
                 'bail',
                 'required',
                 'digits:6',
-                function ($attribute, $value, $fail) use ($actor) {
+                function ($attribute, $value, $fail) use ($actor,$request) {
                     // 验证支付密码
                     if (! $actor->checkWalletPayPassword($value)) {
+                        //记录钱包密码错误日志
+                        UserWalletFailLogs::build(ip($request->getServerParams()), $actor->id);
+
                         $fail(trans('trade.wallet_pay_password_error'));
                     }
                 }
             ],
         ])->validate();
+
+        // 正确后清除错误记录
+        if ($failCount > 0) {
+            UserWalletFailLogs::deleteAll($actor->id);
+        }
 
         $token = SessionToken::generate('reset_pay_password', null, $actor->id);
         $token->save();
