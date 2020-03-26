@@ -15,7 +15,7 @@ return [
     'status_ban_change_detail' => ':user 你好，你的帐号已禁用，原因：:refuse',
     // 加入
     'register' => '欢迎加入:sitename',
-    'register_detail' => ':user 你好，你已经成为:sitename 的:group ，请您在发表言论时，遵守当地法律法规。祝你在这里玩的愉快',
+    'register_detail' => ':user 你好，你已经成为:sitename 的:group ，请你在发表言论时，遵守当地法律法规。祝你在这里玩的愉快',
     // 注册审核通知
     'status_mod_change' => '注册审核通知',
     'status_refuse_change_detail' => ':user 你好，你的注册申请审核不通过，原因：:refuse',

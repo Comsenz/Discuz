@@ -12,13 +12,13 @@ use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Saving;
-use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
 use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\PostMod;
+use App\Models\Thread;
 use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
@@ -113,11 +113,16 @@ class ThreadListener
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
         // 审核通过时，清除记录的敏感词
-        PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+        if ($event->thread->is_approved == Thread::APPROVED) {
+            PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+        }
 
         $action = $this->transLogAction($event->thread->is_approved);
 
         OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+
+        // 发送操作通知
+        $this->threadNotices($event->data['notice_type'], $event);
     }
 
     /**
@@ -130,6 +135,9 @@ class ThreadListener
         $action = 'hide';
 
         OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+
+        // 发送删除通知
+        $this->threadNotices('isDeleted', $event);
     }
 
     /**
@@ -145,16 +153,17 @@ class ThreadListener
     /**
      * 操作主题时，发送对应通知
      *
-     * @param ThreadNotices $event
+     * @param $noticeType
+     * @param $event
      */
-    public function whenThreadNotices(ThreadNotices $event)
+    public function threadNotices($noticeType, $event)
     {
         // 判断是修改自己的主题 则不发送通知
         if ($event->thread->user_id == $event->actor->id) {
             return;
         }
 
-        switch ($event->data['notice_type']) {
+        switch ($noticeType) {
             case 'isApproved':  // 内容审核通知
                 $this->sendIsApproved($event->thread, ['refuse' => $this->reasonValue($event->data)]);
                 break;

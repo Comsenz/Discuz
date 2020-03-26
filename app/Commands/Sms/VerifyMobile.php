@@ -13,6 +13,7 @@ use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Models\MobileCode;
 use App\Models\User;
+use App\Models\UserWalletFailLogs;
 use App\Repositories\MobileCodeRepository;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
@@ -70,7 +71,11 @@ class VerifyMobile
                 'password' => ''
             ];
 
-            return $this->bus->dispatch(new GenJwtToken($params));
+            $response = $this->bus->dispatch(
+                new GenJwtToken($params)
+            );
+
+            return json_decode($response->getBody());
         }
 
         throw new PermissionDeniedException;
@@ -139,6 +144,9 @@ class VerifyMobile
             ]);
             $this->mobileCode->user->changePayPassword($this->params['pay_password']);
             $this->mobileCode->user->save();
+
+            // 清空支付密码错误次数
+            UserWalletFailLogs::deleteAll($this->mobileCode->user->id);
         }
         return $this->mobileCode->user;
     }
