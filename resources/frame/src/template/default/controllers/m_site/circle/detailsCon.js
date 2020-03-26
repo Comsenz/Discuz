@@ -325,7 +325,7 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['posts.replyUser', 'user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
+          include: ['posts.replyUser', 'user.groups','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
