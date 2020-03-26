@@ -15,6 +15,7 @@ use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Tobscure\JsonApi\Document;
@@ -70,6 +71,8 @@ class WechatOffiaccountJSSDKController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $url = Arr::get($request->getQueryParams(), 'url');
+
         $config = [
             'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
@@ -83,8 +86,6 @@ class WechatOffiaccountJSSDKController extends AbstractCreateController
             'updateAppMessageShareData',
             'updateTimelineShareData',
         ];
-
-        $url = $this->url->to('');
 
         $app->jssdk->setUrl($url);
 
