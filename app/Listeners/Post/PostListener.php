@@ -10,7 +10,6 @@ namespace App\Listeners\Post;
 use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
-use App\Events\Post\PostNotices;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
@@ -40,7 +39,7 @@ class PostListener
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
         $events->listen(Created::class, [$this, 'RelatedPost']);
 
-        // 审核回复
+        // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
 
         // 隐藏回复
@@ -58,9 +57,6 @@ class PostListener
 
         // 添加完数据后
         $events->listen(Saved::class, [$this, 'whenPostWasSaved']);
-
-        // 通知主题
-        $events->listen(PostNotices::class, [$this, 'whenPostNotices']);
     }
 
     /**
@@ -73,18 +69,52 @@ class PostListener
         $post = $event->post;
         $actor = $event->actor;
 
-        // 如果当前用户不是主题作者，则通知主题作者
-        if ($post->thread->user_id != $actor->id) {
-            $post->thread->user->notify(new Replied($post));
-        }
+        if ($post->is_approved == Post::APPROVED) {
+            // 如果当前用户不是主题作者，也是合法的，则通知主题作者
+            if ($post->thread->user_id != $actor->id) {
+                $post->thread->user->notify(new Replied($post));
+            }
 
-        // 如果被回复的用户不是当前用户，也不是主题作者，则通知被回复的人
-        if (
-            $post->reply_post_id
-            && $post->reply_user_id != $actor->id
-            && $post->reply_user_id != $post->thread->user_id
-        ) {
-            $post->replyUser->notify(new Replied($post));
+            // 如果被回复的用户不是当前用户，也不是主题作者，也是合法的，则通知被回复的人
+            if (
+                $post->reply_post_id
+                && $post->reply_user_id != $actor->id
+                && $post->reply_user_id != $post->thread->user_id
+            ) {
+                $post->replyUser->notify(new Replied($post));
+            }
+        }
+    }
+
+    /**
+     * 判断用户是否发表内容时是否@其他人
+     *
+     * @param Created $event
+     */
+    public function RelatedPost(Created $event)
+    {
+        // 判断帖子合法 再发送通知
+        if ($event->post->is_approved == Post::APPROVED) {
+            $post = $event->post;
+            $post_content = $post->content;
+            $actor = $event->actor;
+
+            // 过滤多空格，转化HTML代码
+            $post_content = preg_replace(['/(\s+)/', '/@/', '/</', '/>/'], [' ', ' @', '&lt;', '&gt;'], $post_content);
+
+            // 用户正则 格式：@名字[空格]
+            $user_pattern = "/@([^\r\n]*?)[:|：|，|,|#|\s]/i";
+
+            // 提取用户
+            preg_match_all($user_pattern, $post_content, $userArr);
+
+            if (!empty($userArr[1])) {
+                $relatedIds = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
+                foreach ($relatedIds as $relatedId) {
+                    // Fixme 调用Related和@的人对应不上接不到通知
+                    // $relatedId->notify(new Related($post));
+                }
+            }
         }
     }
 
@@ -107,9 +137,9 @@ class PostListener
             if ($bool) {
                 // 如果是首贴，将主题设为待审核
                 if ($post->is_first) {
-                    $post->thread->is_approved = 0;
+                    $post->thread->is_approved = Thread::UNAPPROVED;
                 }
-                $post->is_approved = 0;
+                $post->is_approved = Post::UNAPPROVED;
             }
 
             Attachment::where('user_id', $actor->id)
@@ -128,24 +158,28 @@ class PostListener
     }
 
     /**
-     * 审核主题时，记录操作
+     * 操作审核回复时，触发行为动作
+     * 1. 记录操作
+     * 2. 触发通知(包括微信通知)
      *
      * @param PostWasApproved $event
      */
     public function whenPostWasApproved(PostWasApproved $event)
     {
-        // 审核通过时，清除记录的敏感词
-        PostMod::where('post_id', $event->post->id)->delete();
-
-        if ($event->post->is_approved == 1) {
+        if ($event->post->is_approved == Thread::APPROVED) {
+            // 审核通过时，清除记录的敏感词
+            PostMod::where('post_id', $event->post->id)->delete();
             $action = 'approve';
-        } elseif ($event->post->is_approved == 2) {
+        } elseif ($event->post->is_approved == Thread::IGNORED) {
             $action = 'ignore';
         } else {
             $action = 'disapprove';
         }
 
         OperationLog::writeLog($event->actor, $event->post, $action, $event->data['message']);
+
+        // 发送审核通知
+        $this->postNotices('isApproved', $event);
     }
 
     /**
@@ -156,6 +190,30 @@ class PostListener
     public function whenPostWasHidden(Hidden $event)
     {
         OperationLog::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
+
+        // 发送删除通知
+        $this->postNotices('isDeleted', $event);
+    }
+
+    /**
+     * 发送通知
+     *
+     * @param $noticeType
+     * @param $event
+     */
+    public function postNotices($noticeType, $event)
+    {
+        // 触发通知 判断不是修改自己的主题 则发送通知
+        if ($event->post->user_id != $event->actor->id) {
+            switch ($noticeType) {
+                case 'isApproved':  // 内容审核通知
+                    $this->postisapproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                    break;
+                case 'isDeleted':   // 内容删除通知
+                    $this->postIsDeleted($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                    break;
+            }
+        }
     }
 
     /**
@@ -203,53 +261,4 @@ class PostListener
         }
     }
 
-    /**
-     * 判断用户是否发表内容时是否@其他人
-     *
-     * @param Created $event
-     */
-    public function RelatedPost(Created $event)
-    {
-        $post = $event->post;
-        $post_content = $post->content;
-        $actor = $event->actor;
-
-        // 过滤多空格，转化HTML代码
-        $post_content = preg_replace(['/(\s+)/', '/@/', '/</', '/>/'], [' ', ' @', '&lt;', '&gt;'], $post_content);
-
-        // 用户正则
-        $user_pattern = "/@([^\r\n]*?)[:|：|，|,|#|\s]/i";
-
-        // 提取用户
-        preg_match_all($user_pattern, $post_content, $userArr);
-
-        if (!empty($userArr[1])) {
-            $relatedids = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
-            foreach ($relatedids as $relatedid) {
-                $relatedid->notify(new Related($post));
-            }
-        }
-    }
-
-    /**
-     * 操作回复内容时，发送对应通知
-     *
-     * @param PostNotices $event
-     */
-    public function whenPostNotices(PostNotices $event)
-    {
-        // 判断是修改自己的主题 则不发送通知
-        if ($event->post->user_id == $event->actor->id) {
-            return;
-        }
-
-        switch ($event->data['notice_type']) {
-            case 'isApproved':  // 内容审核通知
-                $this->postisapproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
-                break;
-            case 'isDeleted':   // 内容删除通知
-                $this->postIsDeleted($event->post, ['refuse' => $this->reasonValue($event->data)]);
-                break;
-        }
-    }
 }

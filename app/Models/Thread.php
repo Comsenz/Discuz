@@ -83,16 +83,16 @@ class Thread extends Model
      * Hide the thread.
      *
      * @param User $actor
-     * @param string $message
+     * @param array $options
      * @return $this
      */
-    public function hide(User $actor, $message = '')
+    public function hide(User $actor, $options = [])
     {
         if (! $this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 
-            $this->raise(new Hidden($this, $actor, ['message' => $message]));
+            $this->raise(new Hidden($this, $actor, $options));
         }
 
         return $this;
@@ -102,16 +102,16 @@ class Thread extends Model
      * Restore the thread.
      *
      * @param User $actor
-     * @param string $message
+     * @param array $options
      * @return $this
      */
-    public function restore(User $actor, $message = '')
+    public function restore(User $actor, $options = [])
     {
         if ($this->deleted_at !== null) {
             $this->deleted_at = null;
             $this->deleted_user_id = null;
 
-            $this->raise(new Restored($this, $actor, ['message' => $message]));
+            $this->raise(new Restored($this, $actor, $options));
         }
 
         return $this;

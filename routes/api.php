@@ -28,7 +28,16 @@ $route->delete('/settings/logo', 'settings.delete.logo', ApiController\Settings\
 $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Passport Settings
+|--------------------------------------------------------------------------
+*/
+
 $route->get('/signature', 'signature', ApiController\Qcloud\CreateSignatureController::class);
+$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -70,8 +79,8 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
-$route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Users
@@ -131,6 +140,7 @@ $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThr
 $route->delete('/threads/batch/{ids}', 'threads.batchDelete', ApiController\Threads\BatchDeleteThreadsController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->post('/threads/notify/video', 'threads.notify.video', ApiController\Threads\Notify\ThreadVideoNotifyController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Posts
