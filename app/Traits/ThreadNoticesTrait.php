@@ -138,9 +138,9 @@ trait ThreadNoticesTrait
      */
     public function reasonValue($attach)
     {
-        if (Arr::has($attach, 'refuse')) {
-            if (!empty($attach['refuse'])) {
-                return $attach['refuse'];
+        if (Arr::has($attach, 'message')) {
+            if (!empty($attach['message'])) {
+                return $attach['message'];
             }
         }
 

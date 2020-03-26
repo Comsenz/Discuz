@@ -14,6 +14,7 @@ use App\MessageTemplate\Wechat\WechatPostDeleteMessage;
 use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\MessageTemplate\Wechat\WechatPostThroughMessage;
 use App\Models\Post;
+use App\Notifications\Replied;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
@@ -65,6 +66,10 @@ trait PostNoticesTrait
             $post->user->notify(new System(PostThroughMessage::class, $data));
             // 发送微信通知
             $post->user->notify(new System(WechatPostThroughMessage::class, $data));
+            // 发送回复人的主题通知 (回复自己主题不发送通知)
+            if ($post->user_id != $post->thread->user_id) {
+                $post->thread->user->notify(new Replied($post));
+            }
         } elseif ($post->is_approved == 2) {
             // 忽略就发送不通过通知
             $post->user->notify(new System(PostModMessage::class, $data));
@@ -92,9 +97,9 @@ trait PostNoticesTrait
      */
     public function reasonValue($attach)
     {
-        if (Arr::has($attach, 'refuse')) {
-            if (!empty($attach['refuse'])) {
-                return $attach['refuse'];
+        if (Arr::has($attach, 'message')) {
+            if (!empty($attach['message'])) {
+                return $attach['message'];
             }
         }
 

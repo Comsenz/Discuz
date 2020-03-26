@@ -10,7 +10,6 @@ namespace App\Commands\Thread;
 use App\Censor\Censor;
 use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
-use App\Events\Thread\ThreadNotices;
 use App\Events\Thread\ThreadWasApproved;
 use App\Events\Users\UserRefreshCount;
 use App\Models\Thread;
@@ -113,17 +112,12 @@ class EditThread
             if ($thread->is_approved != $attributes['isApproved']) {
                 $thread->is_approved = $attributes['isApproved'];
                 $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
-                // 内容审核通知
-                $thread->raise(new ThreadNotices(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isApproved', 'refuse' => $approvedMsg]
-                ));
 
+                // 内容审核通知
                 $thread->raise(new ThreadWasApproved(
                     $thread,
                     $this->actor,
-                    ['message' => $approvedMsg]
+                    ['notice_type' => 'isApproved', 'message' => $approvedMsg]
                 ));
             }
         }
@@ -135,7 +129,7 @@ class EditThread
                 // 置顶后 通知发帖人置顶消息
                 if ($attributes['isSticky']) {
                     // 内容置顶通知
-                    $thread->raise(new ThreadNotices(
+                    $thread->raise(new ThreadWasApproved(
                         $thread,
                         $this->actor,
                         ['notice_type' => 'isSticky']
@@ -150,7 +144,7 @@ class EditThread
                 $thread->is_essence = $attributes['isEssence'];
                 // 内容精华通知
                 if ($attributes['isEssence']) {
-                    $thread->raise(new ThreadNotices(
+                    $thread->raise(new ThreadWasApproved(
                         $thread,
                         $this->actor,
                         ['notice_type' => 'isEssence']
@@ -165,15 +159,10 @@ class EditThread
                 $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                 if ($attributes['isDeleted']) {
-                    $thread->hide($this->actor, $message);
                     // 内容删除通知
-                    $thread->raise(new ThreadNotices(
-                        $thread,
-                        $this->actor,
-                        ['notice_type' => 'isDeleted', 'refuse' => $message]
-                    ));
+                    $thread->hide($this->actor, ['message' => $message]);
                 } else {
-                    $thread->restore($this->actor, $message);
+                    $thread->restore($this->actor, ['message' => $message]);
                 }
             }
         }
@@ -184,7 +173,6 @@ class EditThread
         $this->events->dispatch(
             new Saving($thread, $this->actor, $this->data)
         );
-
 
         $type = $thread->type;
         $validAttr = $thread->getDirty() + compact('type');

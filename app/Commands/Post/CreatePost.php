@@ -161,6 +161,8 @@ class CreatePost
         // 存在审核敏感词时，将回复内容放入待审核
         if ($censor->isMod) {
             $post->is_approved = 0;
+        } else {
+            $post->is_approved = 1;
         }
 
         $post->raise(new Created($post, $this->actor, $this->data));
