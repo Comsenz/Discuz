@@ -53,8 +53,10 @@ import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
 
+
 /* start 设置引入的模板路径 start */
 import RConfig from "./admin/viewConfig/tpl";					//获取路由对象
+
 /* end 设置引入的模板路径 end */
 
 import axios from 'axios';
@@ -92,8 +94,8 @@ const keepAliveUrl = ['circle'];
 const noKeepAliveUrl2 = ['details/:themeId', 'home-page/:userId', 'login-user'];
 
 browserDb.setSItem('homeStatus', 1);
-const Authorization = browserDb.getLItem('Authorization');
-const tokenId = browserDb.getLItem('tokenId');
+// const Authorization = browserDb.getLItem('Authorization');
+// const tokenId = browserDb.getLItem('tokenId');
 
 const App = new Vue({
   router: appRouter,
@@ -104,21 +106,20 @@ const App = new Vue({
     return {
       keepAliveStatus: false,
       status: 0,
-      siteInfoStat: ''
+      siteInfoStat: '',
     }
   },
   created() {
     app.bus.$on('stat', (arg) => {
-      // console.log('on监听参数====',arg)
       this.siteInfoStat = arg;
     })
-    document.write(this.siteInfoStat);
+
   },
+
   watch: {
     '$route': function (to, from) {
-
-      const Authorization = browserDb.getLItem('Authorization');
-      const tokenId = browserDb.getLItem('tokenId');
+      // const Authorization = browserDb.getLItem('Authorization');
+      // const tokenId = browserDb.getLItem('tokenId');
 
       if (!noKeepAliveUrl2.includes(from.name) && from.name !== null) {
         this.keepAliveStatus = false;
@@ -129,10 +130,14 @@ const App = new Vue({
         browserDb.setSItem('homeStatus', 2);
       }
 
+    },
+    'siteInfoStat': function (newVal, oldVal) {
+      this.siteInfoStat = newVal;
+      let ia = document.querySelector('#printCasLogout');
+      ia.contentDocument.write(this.siteInfoStat);
     }
   },
-  template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view><div class="footer_stats" v-html="siteInfoStat"></div></div>'
+  template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
 }).$mount('#app');
-
 
 window.app = app;//实例化根目录
