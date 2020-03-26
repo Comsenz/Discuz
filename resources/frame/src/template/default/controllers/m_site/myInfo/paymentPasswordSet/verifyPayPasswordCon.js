@@ -11,6 +11,7 @@ export default {
       value: '',
       showKeyboard: true,
       pwdShow:true,
+      modifyPhone:''        //是否绑定手机号
     }
   },
   methods:{
@@ -56,6 +57,7 @@ export default {
   },
   created(){
     this.pwdShow = webDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    this.modifyPhone = this.$route.query.modifyPhone;
   },
   components: {
     verifyPayPwdHeader
