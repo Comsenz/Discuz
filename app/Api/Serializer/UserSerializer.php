@@ -50,19 +50,19 @@ class UserSerializer extends AbstractSerializer
             'avatarUrl'         => $this->getAvatarUrl($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
-            'fansCount' => (int)$model->fans_count,
-            'follow' => $model->follow,
-            'status' => $model->status,
-            'loginAt' => $this->formatDate($model->login_at),
-            'joinedAt' => $this->formatDate($model->joined_at),
-            'expiredAt' => $this->formatDate($model->expired_at),
-            'createdAt' => $this->formatDate($model->created_at),
-            'updatedAt' => $this->formatDate($model->updated_at),
-            'canEdit' => $canEdit,
-            'canDelete' => $gate->allows('delete', $model),
-            'showGroups' => $gate->allows('showGroups'), // 是否显示用户组
-            'registerReason' => $model->register_reason,     // 注册原因
-            'banReason' => '',                          // 禁用原因
+            'fansCount'         => (int) $model->fans_count,
+            'follow'            => $model->follow,
+            'status'            => $model->status,
+            'loginAt'           => $this->formatDate($model->login_at),
+            'joinedAt'          => $this->formatDate($model->joined_at),
+            'expiredAt'         => $this->formatDate($model->expired_at),
+            'createdAt'         => $this->formatDate($model->created_at),
+            'updatedAt'         => $this->formatDate($model->updated_at),
+            'canEdit'           => $canEdit,
+            'canDelete'         => $gate->allows('delete', $model),
+            'showGroups'        => $gate->allows('showGroups', $model),     // 是否显示用户组
+            'registerReason'    => $model->register_reason,                 // 注册原因
+            'banReason'         => '',                                      // 禁用原因
         ];
 
         // 判断禁用原因
