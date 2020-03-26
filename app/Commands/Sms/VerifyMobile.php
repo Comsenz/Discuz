@@ -71,7 +71,11 @@ class VerifyMobile
                 'password' => ''
             ];
 
-            return $this->bus->dispatch(new GenJwtToken($params));
+            $response = $this->bus->dispatch(
+                new GenJwtToken($params)
+            );
+
+            return json_decode($response->getBody());
         }
 
         throw new PermissionDeniedException;

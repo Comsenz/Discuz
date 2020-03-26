@@ -1,9 +1,9 @@
 <template>
     <div class="pay-password-box">
-      <confirmPayPwdHeader title="设置支付密码"></confirmPayPwdHeader>
+      <confirmPayPwdHeader title="设置钱包密码"></confirmPayPwdHeader>
 
       <div class="pay-password-box_title">
-        <h1>设置支付密码</h1>
+        <h1>设置钱包密码</h1>
         <p>请再次填写以确认</p>
       </div>
 

@@ -84,7 +84,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             $wechatUser->setRawAttributes($data);
             $wechatUser->save();
 
-            return $this->bus->dispatch(new GenJwtToken($params));
+            $response = $this->bus->dispatch(
+                new GenJwtToken($params)
+            );
+
+            return json_decode($response->getBody());
         }
 
         $this->error($user, $actor, $wechatUser);

@@ -5,15 +5,16 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-use Illuminate\Database\Seeder;
 use App\Models\GroupPermission;
+use Illuminate\Database\Seeder;
 
 class GroupPermissionTableSeeder extends Seeder
 {
-    /*
-    * 默认用户组 1 为超级管理员有以下的所有权限
-    * @var array
-    */
+    /**
+     * 默认用户组 1 为超级管理员有以下的所有权限
+     *
+     * @var array
+     */
     protected $permissions = [
         // 用户
         'user.view' => [7, 10],                 // 查看某个用户信息权限
@@ -37,7 +38,7 @@ class GroupPermissionTableSeeder extends Seeder
         'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
-        'createThreadVideo' => [],            // 发布视频主题
+        'createThreadVideo' => [],              // 发布视频主题
         'createThreadLong' => [10],             // 发布长文主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
 
@@ -93,7 +94,7 @@ class GroupPermissionTableSeeder extends Seeder
         'dialog.message.create' => [],         // 创建会话消息
 
         // 关注
-        'userFollow.create' => [10],             // 创建关注
+        'userFollow.create' => [10],           // 创建关注
     ];
 
     /**
