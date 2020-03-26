@@ -1,10 +1,10 @@
 <template>
     <div class="pay-password-box">
-      <verifyPayPwdHeader title="设置支付密码"></verifyPayPwdHeader>
+      <verifyPayPwdHeader title="设置钱包密码"></verifyPayPwdHeader>
 
       <div class="pay-password-box_title">
         <h1>验证身份</h1>
-        <p>请输入支付密码，以验证身份</p>
+        <p>请输入钱包密码，以验证身份</p>
       </div>
 
       <van-password-input
