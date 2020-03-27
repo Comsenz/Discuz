@@ -1131,57 +1131,36 @@ export default {
         this.isLoading = false;
       })
     },
-
     // 微信分享
     wxShare() {
       let title = this.themeCon._data.type == 1
         ? this.themeCon._data.title
         : this.themeCon._data.content;
-
+      var reTag = /<img(?:.|\s)*?>/g;
+      var reTag2 = /(<\/?br.*?>)/gi;
+      var reTag3 = /(<\/?p.*?>)/gi;
+      this.title = this.title.replace(reTag, '');
+      this.title = this.title.replace(reTag2, '');
+      this.title = this.title.replace(reTag3, '');
+      this.title = this.title.replace(/\s+/g, "");
       let desc = this.themeCon._data.type == 1
         ? this.themeCon._data.title
         : this.themeCon._data.content;
-      let logo = this.themeCon.firstPost.images[0]
-        ? this.themeCon.firstPost.images[0]
-        : `${appConfig.baseUrl}/static/images/logo.png`;
-
+      console.log(this.themeCon)
+      console.log(this.themeCon.firstPost.images[0]._data.url)
+      let logo = this.themeCon.firstPost.images[0]._data.url
+        ? this.themeCon.firstPost.images[0]._data.url
+        : `${appConfig.baseUrl}/static/images/wxshare.png`;
+      console.log(logo)
       let data = {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
-        link: window.location.href.split("#")[0],                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: logo        // 分享图标
       }
-
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
-    // ShareTimeline(opstion) {
-    //   //分享给朋友
-    //   wx.updateAppMessageShareData({
-    //     title: opstion.title, // 分享标题
-    //     link: opstion.link, // 分享链接
-    //     imgUrl: opstion.imgUrl, // 分享图标
-    //     desc: opstion.dec, // 分享描述
-    //     success() {
-    //       opstion.success()
-    //     },
-    //     cancel() {
-    //       opstion.error()
-    //     }
-    //   });
-    //   wx.updateTimelineShareData({
-    //     title: opstion.title, // 分享标题
-    //     link: opstion.link, // 分享链接
-    //     imgUrl: opstion.imgUrl, // 分享图标
-    //     desc: opstion.dec, // 分享描述
-    //     success() {
-    //       opstion.success()
-    //     },
-    //     cancel() {
-    //       opstion.error()
-    //     }
-    //   })
-    // }
   },
   mounted: function () {
     document.addEventListener('click', this.listenEvt, false);

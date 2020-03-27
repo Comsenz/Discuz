@@ -682,7 +682,8 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page',
-      '/api/oauth/wechat'
+      '/api/oauth/wechat',
+      '/api/oauth/wechat/pc'
     ];
 
 
@@ -732,13 +733,12 @@ export default {
           site_desc = res.readdata._data.set_site.site_introduction;
           site_logo = res.readdata._data.set_site.site_logo
             ? res.readdata._data.set_site.site_logo
-            : `${appConfig.baseUrl}/static/images/logo.png`;
+            : `${appConfig.baseUrl}/static/images/wxshare.png`;
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
           realName = res.readdata._data.qcloud.qcloud_faceid;
           canWalletPay = res.readdata._data.other.initialized_pay_password;
           modifyPhone = res.readdata._data.qcloud.qcloud_sms;
-          console.log(site_logo, 'logo')
 
           /*
           * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -785,13 +785,8 @@ export default {
           }
         }
 
-
         if (tokenId && Authorization) {
           /*已登录状态*/
-
-          // this.getForum().then((ress) => {
-          // console.log('已经登录状态');
-
           if (res.readdata._data.set_site.site_mode === 'pay') {
             this.getUsers(tokenId).then(userInfo => {
               /*获取用户付费状态并判断*/
@@ -819,7 +814,6 @@ export default {
                 }
               }
             })
-
           } else {
             if (signInAndPayForAccess.includes(to.name)) {
               // next(form.path)
@@ -827,29 +821,14 @@ export default {
             } else {
               next();
             }
-
           }
-
-          // })
-
 
         } else {
           /*未登录状态*/
-
           if (res.readdata._data.passport.offiaccount_close == true) {
             /*判断登录设备*/
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
-
-              /*if (!browserDb.getSItem('wxData')) {
-                browserDb.setSItem('wxData',false);
-                localStorage.clear();
-                browserDb.setLItem('siteInfo', res.readdata);
-                console.log('第一次进');
-              } else {
-                console.log('多次进');
-              }*/
-
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')) {
                   if (!wxNotLoggedInToAccessPage.includes(to.name)) {
@@ -930,12 +909,16 @@ export default {
         }
 
         // 微信分享
-        if (isWeixin) {
+        console.log(to.name, '9333')
+        if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
           this.wxShare({
             title: site_name,
             desc: site_desc,
             logo: site_logo
           })
+        }
+        else {
+          this.noShare()
         }
       })
     }
@@ -1048,10 +1031,14 @@ export default {
         timestamp: timestamp, // 必填，生成签名的时间戳
         nonceStr: nonceStr,   // 必填，生成签名的随机串
         signature: signature, // 必填，签名，见附录1
-        jsApiList: jsApiList
+        jsApiList: [
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'hideMenuItems'
+        ]
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        if (to.name === 'details/:themeId') {
+        if (to.name === 'details/:themeId' && to.name === '/') {
           let data = {
             title: shareData.title,       // 分享标题
             desc: shareData.desc,         // 分享描述
@@ -1064,5 +1051,12 @@ export default {
       });
     })
   },
+  noShare() {
+    wx.ready(() => {
+      wx.hideMenuItems({
+        menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+      });
+    })
+  }
 
 };
