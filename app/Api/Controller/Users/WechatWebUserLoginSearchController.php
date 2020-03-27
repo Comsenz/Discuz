@@ -7,19 +7,24 @@
 
 namespace App\Api\Controller\Users;
 
+use App\Api\Serializer\TokenSerializer;
+use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\WebUserSearch;
+use App\MessageTemplate\Wechat\WechatRegisterMessage;
+use App\Notifications\System;
 use Discuz\Api\Controller\AbstractResourceController;
-use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Tobscure\JsonApi\Document;
 
-class WechatWebUserLoginSearchController implements RequestHandlerInterface
+class WechatWebUserLoginSearchController extends AbstractResourceController
 {
 
     protected $bus;
+
+    public $serializer = TokenSerializer::class;
 
     public function __construct( Dispatcher $bus)
     {
@@ -27,11 +32,14 @@ class WechatWebUserLoginSearchController implements RequestHandlerInterface
     }
 
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $scene_str = $request->getParsedBody()->get('scene_str');
-        return $this->bus->dispatch(
+        $this->bus->dispatch(
             new WebUserSearch($scene_str)
         );
+
+
+
     }
 }
