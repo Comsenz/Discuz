@@ -733,7 +733,7 @@ export default {
           site_desc = res.readdata._data.set_site.site_introduction;
           site_logo = res.readdata._data.set_site.site_logo
             ? res.readdata._data.set_site.site_logo
-            : `${appConfig.baseUrl}/static/images/logo.png`;
+            : `${appConfig.baseUrl}/static/images/wxshare.png`;
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
           realName = res.readdata._data.qcloud.qcloud_faceid;
@@ -909,12 +909,16 @@ export default {
         }
 
         // 微信分享
-        if (isWeixin) {
+        console.log(to.name, '9333')
+        if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
           this.wxShare({
             title: site_name,
             desc: site_desc,
             logo: site_logo
           })
+        }
+        else {
+          this.noShare()
         }
       })
     }
@@ -1027,10 +1031,14 @@ export default {
         timestamp: timestamp, // 必填，生成签名的时间戳
         nonceStr: nonceStr,   // 必填，生成签名的随机串
         signature: signature, // 必填，签名，见附录1
-        jsApiList: jsApiList
+        jsApiList: [
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'hideMenuItems'
+        ]
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        if (to.name === 'details/:themeId') {
+        if (to.name === 'details/:themeId' && to.name === '/') {
           let data = {
             title: shareData.title,       // 分享标题
             desc: shareData.desc,         // 分享描述
@@ -1043,5 +1051,12 @@ export default {
       });
     })
   },
+  noShare() {
+    wx.ready(() => {
+      wx.hideMenuItems({
+        menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+      });
+    })
+  }
 
 };
