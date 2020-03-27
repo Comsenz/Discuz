@@ -193,7 +193,10 @@
                           href="javascript:;"
                           v-if="item.user"
                           @click="jumpPerDet(item.user._data.id)"
-                        >{{item.user._data.username}}</a>
+                        >
+                          {{item.user._data.username}}
+<!--                          <span class="groupsName" v-if="item.user._data.showGroups">({{item.user.groups?item.user.groups[0]._data.name:'无用户组'}})</span>-->
+                        </a>
                         <a href="javascript:;" v-else>该用户已被删除</a>
                         <span class="font9" v-if="item._data.replyUserId">回复</span>
                         <a
