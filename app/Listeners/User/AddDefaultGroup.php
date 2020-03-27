@@ -15,9 +15,9 @@ class AddDefaultGroup
     public function handle(Registered $event)
     {
         $user = $event->user;
-        $defaultGroup = Group::where('default', true)->first();
 
         if ($event->user->groups->isEmpty()) {
+            $defaultGroup = Group::where('default', true)->first();
             $user->groups()->sync($defaultGroup->id);
         }
     }
