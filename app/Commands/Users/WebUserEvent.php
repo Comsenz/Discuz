@@ -48,7 +48,7 @@ class WebUserEvent
     {
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
-        $wechat_user = UserWallet::where('dev_openid',$openid)->first();
+        $wechat_user = UserWallet::where('mp_openid',$openid)->first();
         if($wechat_user){
             //老用户  跟新扫描二维码用户
             SessionToken::where('token',$EventKey)->update([
