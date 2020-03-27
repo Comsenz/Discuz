@@ -372,7 +372,7 @@ export default {
           require(['../view/m_site/myInfo/myData/modifyDataView'], resolve)
         },
         metaInfo: {
-          title: "修改资料"
+          title: "我的资料"
         }
       },
       'modify-phone': {
