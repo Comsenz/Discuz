@@ -415,7 +415,7 @@ export default {
                 firstpostImageOriginal.push(this.themeCon.firstPost.images[i]._data.url);
               }
               this.firstpostImageList = firstpostImage;
-              // this.firstpostImageListOriginal = firstpostImageOriginal;
+              this.firstpostImageListOriginal = firstpostImageOriginal;
             };
 
           } else {
