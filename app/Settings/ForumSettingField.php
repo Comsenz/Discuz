@@ -20,7 +20,6 @@ class ForumSettingField
 
     protected $encrypter;
 
-    protected $app;
     /**
      * ForumSettingField constructor.
      *
@@ -28,12 +27,11 @@ class ForumSettingField
      * @param UrlGenerator $url
      * @param Encrypter $encrypter
      */
-    public function __construct(SettingsRepository $settings, UrlGenerator $url, Encrypter $encrypter,Application $app)
+    public function __construct(SettingsRepository $settings, UrlGenerator $url, Encrypter $encrypter)
     {
         $this->settings = $settings;
         $this->url = $url;
         $this->encrypter = $encrypter;
-        $this->app = $app;
     }
 
     /**
@@ -93,7 +91,7 @@ class ForumSettingField
             'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
             'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
 
-            'oplatform_url' => $this->app->config('site_url').'/oauth/wechat/web/user/event',
+            'oplatform_url' =>  $this->url->route('wechat.web.user.event'),
             'oplatform_app_token' =>$this->settings->get('oplatform_app_token', 'wx_oplatform'),
             'oplatform_app_aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform'),
         ];
