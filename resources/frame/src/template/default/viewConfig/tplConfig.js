@@ -682,7 +682,8 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page',
-      '/api/oauth/wechat'
+      '/api/oauth/wechat',
+      '/api/oauth/wechat/pc'
     ];
 
 
@@ -784,7 +785,6 @@ export default {
           }
         }
 
-
         if (tokenId && Authorization) {
           /*已登录状态*/
           if (res.readdata._data.set_site.site_mode === 'pay') {
@@ -814,7 +814,6 @@ export default {
                 }
               }
             })
-
           } else {
             if (signInAndPayForAccess.includes(to.name)) {
               // next(form.path)
@@ -822,12 +821,10 @@ export default {
             } else {
               next();
             }
-
           }
 
         } else {
           /*未登录状态*/
-
           if (res.readdata._data.passport.offiaccount_close == true) {
             /*判断登录设备*/
             if (isWeixin) {
