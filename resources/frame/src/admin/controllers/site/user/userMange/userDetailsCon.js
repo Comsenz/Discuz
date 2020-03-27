@@ -24,15 +24,15 @@ export default {
       realname: '', //实名认证是否显示
       optionsStatus: [
         {
-          value: '0',
+          value: 0,
           label: '正常'
         },
         {
-          value: '1',
+          value: 1,
           label: '禁用'
         },
         {
-          value: '2',
+          value: 2,
           label: '审核'
         }
       ],
