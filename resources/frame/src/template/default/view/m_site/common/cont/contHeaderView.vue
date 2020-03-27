@@ -1,18 +1,18 @@
 <template>
   <header class="cont-header-box">
     <div class="avatar-box">
-      <a :href="'/home-page/'+this.$attrs.userId" class="img-box">
+      <a :href="'/home-page/'+$attrs.userId" class="img-box">
         <img :src="imgUrl" alt="用户头像" />
-        <img class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+<!--        <img v-if="$attrs.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">-->
       </a>
     </div>
 
     <div class="text-box">
       <h3 class="user-name">
-        <a class="user-name-text" :href="'/home-page/'+this.$attrs.userId">{{this.$attrs.userName}}</a>
-        <span class="text-status">{{this.$attrs.stateTitle}}{{this.$attrs.amount}}</span>
+        <a class="user-name-text" :href="'/home-page/'+$attrs.userId">{{$attrs.userName}}</a>
+        <span class="text-status">{{$attrs.stateTitle}}{{$attrs.amount}}</span>
       </h3>
-      <h4 class="time">{{this.$attrs.time}}</h4>
+      <h4 class="time">{{$attrs.time}}</h4>
     </div>
 
     <div class="operating-box">
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-// import '../../../../less/m_site/common/cont/contHeader.less';
 import '../../../../defaultLess/m_site/common/common.less'
 import contHeaderCon from '../../../../controllers/m_site/common/contCon/contHeaderCon'
 export default {

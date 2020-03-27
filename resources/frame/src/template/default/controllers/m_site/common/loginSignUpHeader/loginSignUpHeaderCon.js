@@ -52,11 +52,15 @@ export default {
       // this.$router.back(-1);
 
       // alert(window.history.length);
+
+      if(this.$route.name === 'modify-data'){
+        this.$router.push('/');
+        return;
+      }
+
       if(document.referrer == '' && (window.history.length == 0 || window.history.length < 3)){
-        // alert('上一级为空时');
         window.location.href = appConfig.baseUrl;
       } else {
-        // alert('有上一级');
         this.$router.go(-1);
       }
 

@@ -20,7 +20,7 @@
                       v-else
                       @click="jumpPerDet(item.user._data.id)"
                     />
-                    <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+                    <img v-if="item.user._data.isReal" class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
                   </div>
 
 

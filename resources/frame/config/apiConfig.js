@@ -64,7 +64,7 @@ module.exports = {
   'follow': '/follow',                   //关注
   'realName': '/users/real',             //实名认证
   'signature': '/signature',				      //视频签名
-  'weChatShare': '/api/offiaccount/jssdk',  //微信分享
+  'weChatShare': '/offiaccount/jssdk',  //微信分享
 
   /*后台*/
   'siteinfo': '/siteinfo',               //首页-系统信息

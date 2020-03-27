@@ -14,7 +14,7 @@
           <el-table-column
             label="级别名称">
             <template slot-scope="scope">
-              <el-input v-model="scope.row._data.name"></el-input>
+              <el-input maxlength="10" v-model="scope.row._data.name"></el-input>
             </template>
           </el-table-column>
 

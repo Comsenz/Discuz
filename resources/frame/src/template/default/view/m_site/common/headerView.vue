@@ -11,16 +11,18 @@
     <!-- 侧边栏 -E -->
     <div class="headerBox" v-if="$route.meta.oneHeader">
       <div class="invitePerDet" v-show="invitePerDet">
-        <div  class="home-page-avatar-box">
+        <div class="home-page-avatar-box">
           <img v-if="userInfoAvatarUrl" :src="userInfoAvatarUrl" alt="用户头像" class="user-img" />
           <img v-else :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="inviteHead" />
-          <img class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+          <img
+            class="icon-yirenzheng"
+            v-if="isReal"
+            src="../../../../../../static/images/authIcon.svg"
+            alt="实名认证"
+          />
         </div>
 
-        <div
-          class="inviteName"
-          v-if="invitePerDet && userInfoName"
-          v-model="userInfoName">
+        <div class="inviteName" v-if="invitePerDet && userInfoName" v-model="userInfoName">
           {{userInfoName}}
           <p class="groupsName" v-if="showGroups && showGroups.status">({{showGroups.name}})</p>
         </div>

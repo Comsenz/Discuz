@@ -157,7 +157,6 @@ export default {
       this.$router.go(0);
       browserDb.setSItem('beforeState', 2);
     };
-    this.wxRegister() // 微信分享
   },
 
   computed: {
@@ -471,35 +470,93 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme() {
-      let Url = '';
-      if (this.isPayVal === 'pay') {
-        Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
+      let shareParam = {
+        url: window.location.href.split("#")[0]
+      };
+      this.appFetch({
+        url: 'weChatShare',
+        method: 'get',
+        data: {
 
-      } else {
-        Url = appConfig.baseUrl + '/details/' + this.themeId;
-      }
-      // console.log(Url, '00000')
-      // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
-      var oInput = document.createElement('input');
-      var reTag = /<img(?:.|\s)*?>/g;
-      var reTag2 = /(<\/?br.*?>)/gi;
-      var reTag3 = /(<\/?p.*?>)/gi;
-      this.themeTitle = this.themeTitle.replace(reTag, '');
-      this.themeTitle = this.themeTitle.replace(reTag2, '');
-      this.themeTitle = this.themeTitle.replace(reTag3, '');
-      this.themeTitle = this.themeTitle.replace(/\s+/g, "");
-      this.themeTitle = this.cutString(this.themeTitle, 40);
-      oInput.value = this.themeTitle + '  ' + Url;
-      document.body.appendChild(oInput);
-      oInput.select(); // 选择对象
-      oInput.readOnly = true;
-      oInput.id = 'copyInp';
-      document.execCommand("Copy");
-      oInput.setAttribute('onfocus', this.copyFocus(oInput));
-      // 执行浏览器复制命令
-      oInput.className = 'oInput';
-      oInput.style.display = 'none';
-      this.$toast.success('分享链接已复成功');
+        }
+      }).then((res) => {
+        console.log(res)
+        console.log(res.readdata._data.jsApiList, '77777')
+        let appId = res.readdata._data.appId;
+        let nonceStr = res.readdata._data.nonceStr;
+        let signature = res.readdata._data.signature;
+        let timestamp = res.readdata._data.timestamp;
+        let jsApiList = res.readdata._data.jsApiList;
+        wx.config({
+          debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: appId,         // 必填，公众号的唯一标识
+          timestamp: timestamp, // 必填，生成签名的时间戳
+          nonceStr: nonceStr,   // 必填，生成签名的随机串
+          signature: signature, // 必填，签名，见附录1
+          jsApiList: jsApiList
+        });
+        console.log(jsApiList)
+        wx.checkJsApi({
+          jsApiList: jsApiList, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+          success: (res) => {
+            console.log(res, '9999999')
+            // 以键值对的形式返回，可用的api值true，不可用为false
+            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+          }
+        });
+        wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
+          wx.updateAppMessageShareData({
+            title: '', // 分享标题
+            desc: '', // 分享描述
+            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '', // 分享图标
+            success: () => {
+              // 设置成功
+            }
+          })
+        });
+
+        wx.ready(() => {      //需在用户可能点击分享按钮前就先调用
+          wx.updateTimelineShareData({
+            title: '', // 分享标题
+            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '', // 分享图标
+            success: () => {
+              // 设置成功
+            }
+          })
+        });
+
+      })
+      // let Url = '';
+      // if (this.isPayVal === 'pay') {
+      //   Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
+
+      // } else {
+      //   Url = appConfig.baseUrl + '/details/' + this.themeId;
+      // }
+      // // console.log(Url, '00000')
+      // // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+      // var oInput = document.createElement('input');
+      // var reTag = /<img(?:.|\s)*?>/g;
+      // var reTag2 = /(<\/?br.*?>)/gi;
+      // var reTag3 = /(<\/?p.*?>)/gi;
+      // this.themeTitle = this.themeTitle.replace(reTag, '');
+      // this.themeTitle = this.themeTitle.replace(reTag2, '');
+      // this.themeTitle = this.themeTitle.replace(reTag3, '');
+      // this.themeTitle = this.themeTitle.replace(/\s+/g, "");
+      // this.themeTitle = this.cutString(this.themeTitle, 40);
+      // oInput.value = this.themeTitle + '  ' + Url;
+      // document.body.appendChild(oInput);
+      // oInput.select(); // 选择对象
+      // oInput.readOnly = true;
+      // oInput.id = 'copyInp';
+      // document.execCommand("Copy");
+      // oInput.setAttribute('onfocus', this.copyFocus(oInput));
+      // // 执行浏览器复制命令
+      // oInput.className = 'oInput';
+      // oInput.style.display = 'none';
+      // this.$toast.success('分享链接已复成功');
       // document.body.removeChild(oInput);
     },
 
@@ -1074,65 +1131,34 @@ export default {
         this.isLoading = false;
       })
     },
-    //微信内分享
-    wxRegister(callback) {
-      let shareParam = {
-        url: window.location.href.split("#")[0]
-      };
-      this.appFetch({
-        url: 'weChatShare',
-        method: 'get',
-        data: {
 
-        }
-      }).then((res) => {
-        console.log(res)
-        // let appId = data.data.appId;
-        // let nonceStr = data.data.nonceStr;
-        // let signature = data.data.signature;
-        // let timestamp = data.data.timestamp;
-        wx.config({
-          debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: appId,         // 必填，公众号的唯一标识
-          timestamp: timestamp, // 必填，生成签名的时间戳
-          nonceStr: nonceStr,   // 必填，生成签名的随机串
-          signature: signature, // 必填，签名，见附录1
-          jsApiList: [
-            'onMenuShareTimeline',
-            'onMenuShareAppMessage'
-          ]
-        });
-      })
-    },
-    ShareTimeline(opstion) {
-      //分享给朋友
-      wx.onMenuShareAppMessage({
-        title: opstion.title, // 分享标题
-        link: opstion.link, // 分享链接
-        imgUrl: opstion.imgUrl, // 分享图标
-        desc: opstion.dec, // 分享描述
-        success() {
-          opstion.success()
-        },
-        cancel() {
-          opstion.error()
-        }
-      });
-      wx.onMenuShareTimeline({
-        title: opstion.title, // 分享标题
-        link: opstion.link, // 分享链接
-        imgUrl: opstion.imgUrl, // 分享图标
-        desc: opstion.dec, // 分享描述
-        success() {
-          opstion.success()
-        },
-        cancel() {
-          opstion.error()
-        }
-      })
-    }
-
-
+    // ShareTimeline(opstion) {
+    //   //分享给朋友
+    //   wx.updateAppMessageShareData({
+    //     title: opstion.title, // 分享标题
+    //     link: opstion.link, // 分享链接
+    //     imgUrl: opstion.imgUrl, // 分享图标
+    //     desc: opstion.dec, // 分享描述
+    //     success() {
+    //       opstion.success()
+    //     },
+    //     cancel() {
+    //       opstion.error()
+    //     }
+    //   });
+    //   wx.updateTimelineShareData({
+    //     title: opstion.title, // 分享标题
+    //     link: opstion.link, // 分享链接
+    //     imgUrl: opstion.imgUrl, // 分享图标
+    //     desc: opstion.dec, // 分享描述
+    //     success() {
+    //       opstion.success()
+    //     },
+    //     cancel() {
+    //       opstion.error()
+    //     }
+    //   })
+    // }
   },
   mounted: function () {
     document.addEventListener('click', this.listenEvt, false);

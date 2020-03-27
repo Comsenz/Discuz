@@ -16,7 +16,7 @@
             v-else
             @click="jumpPerDet(themeCon.user._data.id)"
           />
-          <img class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
         </div>
 
 

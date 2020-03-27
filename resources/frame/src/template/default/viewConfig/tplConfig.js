@@ -694,13 +694,14 @@ export default {
     /*
     * 前台路由全局处理
     * */
+    var site_name = '';     //站点名称
+    var site_desc = '';     //站点描述
+    var site_logo = ''      //站点 logo
     var registerClose = ''; //注册是否关闭
     var siteMode = '';      //站点模式
     var realName = '';      //实名认证是否关闭
     var canWalletPay = '';  //钱包密码设置
     var modifyPhone = '';   //短信验证是否关闭
-
-
 
     if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
       next();
@@ -726,6 +727,11 @@ export default {
           }
 
         } else {
+          site_name = res.readdata._data.set_site.site_name;
+          site_desc = res.readdata._data.set_site.site_introduction;
+          site_logo = res.readdata._data.set_site.site_logo
+            ? res.readdata._data.set_site.site_logo
+            : './static/images/logo.png';
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
           realName = res.readdata._data.qcloud.qcloud_faceid;
@@ -920,6 +926,15 @@ export default {
             }
           }
         }
+
+        // 微信分享
+        if (isWeixin) {
+          this.wxShare({
+            title: site_name,
+            desc: site_desc,
+            logo: site_logo
+          })
+        }
       })
     }
 
@@ -1008,6 +1023,42 @@ export default {
 
     }).catch(err => {
       console.log(err);
+    })
+  },
+  //分享，复制浏览器地址
+  wxShare(shareData) {
+    console.log(1, shareData);
+    let url = window.location.href.split("#")[0];
+    appFetch({
+      url: 'weChatShare',
+      method: 'get',
+      data: {
+        url
+      }
+    }).then((res) => {
+      let appId = res.readdata._data.appId;
+      let nonceStr = res.readdata._data.nonceStr;
+      let signature = res.readdata._data.signature;
+      let timestamp = res.readdata._data.timestamp;
+      let jsApiList = res.readdata._data.jsApiList;
+      wx.config({
+        debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: appId,         // 必填，公众号的唯一标识
+        timestamp: timestamp, // 必填，生成签名的时间戳
+        nonceStr: nonceStr,   // 必填，生成签名的随机串
+        signature: signature, // 必填，签名，见附录1
+        jsApiList: jsApiList
+      });
+      wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
+        let data = {
+          title: shareData.title,       // 分享标题
+          desc: shareData.desc,         // 分享描述
+          link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: shareData.logo        // 分享图标
+        }
+        wx.updateAppMessageShareData(data);
+        wx.updateTimelineShareData(data)
+      });
     })
   },
 

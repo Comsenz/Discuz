@@ -24,7 +24,9 @@ export default {
       canWalletPay: '',      //钱包密码
       realNameShow: 'true',      //实名认证是否显示
       openid: '',       //微信openid
-      myModifyPhone: ''
+      myModifyPhone: '',
+      isReal:false,     //是否实名认证
+      updataLoading:false,  //上传状态
     }
   },
 
@@ -70,9 +72,9 @@ export default {
         case 'change-pay-pwd':
           //设置钱包密码','跳转设置钱包密码页面
           if (this.canWalletPay) {
-            this.$router.replace({ path: 'verify-pay-pwd' });
+            this.$router.push({ path: 'verify-pay-pwd',query:{modifyPhone:this.modifyPhone}});
           } else {
-            this.$router.replace({ path: 'setup-pay-pwd' });
+            this.$router.push({ path: 'setup-pay-pwd' });
           }
           break;
         default:
@@ -109,6 +111,7 @@ export default {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.isReal = res.readdata._data.isReal;              //实名认证
           this.modifyPhone = res.readdata._data.mobile;         //用户手机号
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id
@@ -132,6 +135,8 @@ export default {
     },
     handleFile: function (e) {  //上传头像
       let file = e.target.files[0];
+      this.updataLoading = true;
+
       // 获取file
       // 实例化
       let formdata = new FormData()
@@ -144,6 +149,8 @@ export default {
         splice: userId + '/avatar',
         data: formdata
       }).then(res => {
+        this.updataLoading = false;
+        
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -151,6 +158,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          this.$toast('上传头像成功!');
           this.headPortrait = res.data.attributes.avatarUrl;
           this.modifyData()
         }

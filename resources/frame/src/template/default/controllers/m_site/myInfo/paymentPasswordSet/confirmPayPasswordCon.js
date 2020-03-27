@@ -13,7 +13,8 @@ export default {
       confirmValue:'',
       showKeyboard: true,
       errorInfo:'',
-      userId:''
+      userId:'',
+      subLoading:false
     }
   },
   methods:{
@@ -30,6 +31,7 @@ export default {
         this.errorInfo = '请保持支付密码一致'
       } else {
         this.errorInfo = '';
+        this.subLoading = true;
         this.editUser(this.userId);
       }
     },
@@ -50,6 +52,7 @@ export default {
           }
         }
       }).then(res=>{
+        this.subLoading = false;
         if (res.errors){
           if (res.errors[0].detail){
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

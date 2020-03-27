@@ -51,13 +51,13 @@
       </div>
 
       <div class="withdraw-operating">
-        <van-button type="primary" @click="withdraw">提交</van-button>
+        <van-button type="primary" :loading="loading" loading-text="提交中" @click="withdraw">提交</van-button>
       </div>
 
-      <div class="loadFix" v-if="loading">
+      <!--<div class="loadFix" v-if="loading">
         <div class="loadMask"></div>
         <van-loading color="#333333" class="loadIcon" type="spinner" />
-      </div>
+      </div>-->
     </main>
   </div>
 </template>
