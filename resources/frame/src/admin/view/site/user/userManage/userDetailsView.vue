@@ -81,7 +81,7 @@
         >
           <el-option
             v-for="item in optionsStatus"
-            :disabled="item.value ===2"
+            :disabled="item.value ==='2'"
             :key="item.value"
             :label="item.label"
             :value="item.value"
