@@ -8,6 +8,7 @@
 namespace App\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\Application;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Encryption\Encrypter;
 
@@ -89,6 +90,10 @@ class ForumSettingField
             // - 微信 PC
             'oplatform_app_id' => $this->settings->get('oplatform_app_id', 'wx_oplatform'),
             'oplatform_app_secret' => $this->settings->get('oplatform_app_secret', 'wx_oplatform'),
+
+            'oplatform_url' =>  $this->url->route('wechat.web.user.event'),
+            'oplatform_app_token' =>$this->settings->get('oplatform_app_token', 'wx_oplatform'),
+            'oplatform_app_aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform'),
         ];
     }
 
