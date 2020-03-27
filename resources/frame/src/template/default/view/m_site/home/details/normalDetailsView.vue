@@ -42,7 +42,7 @@
     </div>
     <div class="postContent" v-html="themeCon.firstPost._data.contentHtml"></div>
 
-    <div class="postImgBox" v-if="firstpostImageListProp.length>0">
+    <div class="postImgBox">
       <div class="postImgList">
         <div v-if="isWeixin || isPhone">
           <van-image

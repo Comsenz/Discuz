@@ -386,37 +386,34 @@ export default {
             this.themeUserId = res.readdata.user._data.id;
             this.type = res.readdata._data.type;
 
-            // 初始化时获取微信分享数据
-            this.wxShare();
-
             if (res.readdata.firstPost._data.isLiked) {
               this.themeIsLiked = true;
             } else {
               this.themeIsLiked = false;
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
-            var firstpostImageLen = this.themeCon.firstPost.images.length;
-
+            var firstpostImageLen = this.themeCon.firstPost.images.length
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
               this.postsImages.push(urls);
 
             });
+
             if (firstpostImageLen === 0) {
               return;
             } else {
-
               var firstpostImage = [];
+              var firstpostImageOriginal = [];
               for (let i = 0; i < firstpostImageLen; i++) {
-                // console.log(this.themeCon.firstPost.images[i]._data.thumbUrl, '长度');
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
                 firstpostImageOriginal.push(this.themeCon.firstPost.images[i]._data.url);
               }
               this.firstpostImageList = firstpostImage;
               this.firstpostImageListOriginal = firstpostImageOriginal;
             };
-
+            // 初始化时获取微信分享数据
+            this.wxShare();
           } else {
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
