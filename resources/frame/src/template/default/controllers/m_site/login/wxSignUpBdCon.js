@@ -278,7 +278,7 @@ export default {
       this.platform = 'mp';
       if (!code && !state && !sessionId) {
         // this.getWatchHref();
-        // window.location.href = '/api/oauth/wechat';
+        window.location.href = '/api/oauth/wechat';
       } else {
         this.getWatchHref(code, state, sessionId);
       }
