@@ -732,7 +732,7 @@ export default {
           site_desc = res.readdata._data.set_site.site_introduction;
           site_logo = res.readdata._data.set_site.site_logo
             ? res.readdata._data.set_site.site_logo
-            : `${appConfig.baseUrl}/static/images/logo.png`;
+            : `${appConfig.baseUrl}/static/images/wxshare.png`;
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
           realName = res.readdata._data.qcloud.qcloud_faceid;
@@ -937,6 +937,9 @@ export default {
             logo: site_logo
           })
         }
+        // else {
+        //   this.noShare()
+        // }
       })
     }
 
@@ -1051,7 +1054,7 @@ export default {
         jsApiList: jsApiList
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        if (to.name === 'details/:themeId') {
+        if (to.name === 'details/:themeId' && to.name === '/') {
           let data = {
             title: shareData.title,       // 分享标题
             desc: shareData.desc,         // 分享描述
@@ -1064,5 +1067,11 @@ export default {
       });
     })
   },
+  noShare() {
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+      // 通过下面这个API隐藏右上角按钮
+      WeixinJSBridge.call('hideOptionMenu');
+    });
+  }
 
 };

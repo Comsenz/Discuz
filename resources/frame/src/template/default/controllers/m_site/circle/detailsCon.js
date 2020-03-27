@@ -483,45 +483,7 @@ export default {
     //分享，复制浏览器地址
     shareTheme() {
       // if (this.isWeixin) {
-      //   let url = window.location.href.split("#")[0];
-      //   console.log(url)
-      //   this.appFetch({
-      //     url: 'weChatShare',
-      //     method: 'get',
-      //     data: {
-      //       url
-      //     }
-      //   }).then((res) => {
-      //     let appId = res.readdata._data.appId;
-      //     let nonceStr = res.readdata._data.nonceStr;
-      //     let signature = res.readdata._data.signature;
-      //     let timestamp = res.readdata._data.timestamp;
-      //     let jsApiList = res.readdata._data.jsApiList;
-      //     wx.config({
-      //       debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      //       appId: appId,         // 必填，公众号的唯一标识
-      //       timestamp: timestamp, // 必填，生成签名的时间戳
-      //       nonceStr: nonceStr,   // 必填，生成签名的随机串
-      //       signature: signature, // 必填，签名，见附录1
-      //       jsApiList: jsApiList
-      //       // jsApiList: [
-      //       //   'updateAppMessageShareData',
-      //       //   'updateTimelineShareData'
-      //       // ]
-      //     });
-      //     // console.log('111')
-      //     // wx.ready(() => {
-      //     wx.updateAppMessageShareData({  //分享给朋友
-      //       title: '是你吗', // 分享标题
-      //       desc: '是我啊', // 分享描述
-      //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      //       imgUrl: '../../../../static/images/logo.png', // 分享图标
-      //       success: function () {
-      //         // 设置成功
-      //         alert('222')
-      //       }
-      //     });
-      //   })
+
       // } else {
       let Url = '';
       if (this.isPayVal === 'pay') {
@@ -1124,7 +1086,6 @@ export default {
         this.isLoading = false;
       })
     },
-
     // 微信分享
     wxShare() {
       let title = this.themeCon._data.type == 1
@@ -1135,48 +1096,20 @@ export default {
         ? this.themeCon._data.title
         : this.themeCon._data.content;
       console.log(this.themeCon)
-      console.log(this.firstpostImageList)
+      console.log(this.themeCon.firstPost.images[0]._data.url)
       let logo = this.themeCon.firstPost.images[0]
         ? this.themeCon.firstPost.images[0]
-        : `${appConfig.baseUrl}/static/images/logo.png`;
-
+        : `${appConfig.baseUrl}/static/images/wxshare.png`;
+      console.log(logo)
       let data = {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
-        link: window.location.href.split("#")[0],                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: logo        // 分享图标
       }
-
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
-    // ShareTimeline(opstion) {
-    //   //分享给朋友
-    //   wx.updateAppMessageShareData({
-    //     title: opstion.title, // 分享标题
-    //     link: opstion.link, // 分享链接
-    //     imgUrl: opstion.imgUrl, // 分享图标
-    //     desc: opstion.dec, // 分享描述
-    //     success() {
-    //       opstion.success()
-    //     },
-    //     cancel() {
-    //       opstion.error()
-    //     }
-    //   });
-    //   wx.updateTimelineShareData({
-    //     title: opstion.title, // 分享标题
-    //     link: opstion.link, // 分享链接
-    //     imgUrl: opstion.imgUrl, // 分享图标
-    //     desc: opstion.dec, // 分享描述
-    //     success() {
-    //       opstion.success()
-    //     },
-    //     cancel() {
-    //       opstion.error()
-    //     }
-    //   })
-    // }
   },
   mounted: function () {
     document.addEventListener('click', this.listenEvt, false);
