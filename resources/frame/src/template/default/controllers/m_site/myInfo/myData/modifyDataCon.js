@@ -233,7 +233,7 @@ export default {
         // })
       } else {
 
-        window.location.href = '/api/oauth/wechat';
+        window.location.href = '/api/oauth/wechat/pc';
 
         /*this.appFetch({     //pc端绑定
           url: 'wxPcLogin',
