@@ -5,6 +5,7 @@ import browserDb from '../../../helpers/webDbHelper';
 import appFetch from '../../../helpers/axiosHelper';
 import appCommonH from '../../../helpers/commonHelper';
 import fa from "element-ui/src/locale/lang/fa";
+import appConfig from '../../../../config/appConfig'
 
 export default {
   /**
@@ -731,12 +732,13 @@ export default {
           site_desc = res.readdata._data.set_site.site_introduction;
           site_logo = res.readdata._data.set_site.site_logo
             ? res.readdata._data.set_site.site_logo
-            : './static/images/logo.png';
+            : `${appConfig.baseUrl}/static/images/logo.png`;
           siteMode = res.readdata._data.set_site.site_mode;
           registerClose = res.readdata._data.set_reg.register_close;
           realName = res.readdata._data.qcloud.qcloud_faceid;
           canWalletPay = res.readdata._data.other.initialized_pay_password;
           modifyPhone = res.readdata._data.qcloud.qcloud_sms;
+          console.log(site_logo, 'logo')
 
           /*
           * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -1027,7 +1029,6 @@ export default {
   },
   //分享，复制浏览器地址
   wxShare(shareData) {
-    console.log(1, shareData);
     let url = window.location.href.split("#")[0];
     appFetch({
       url: 'weChatShare',
@@ -1050,14 +1051,16 @@ export default {
         jsApiList: jsApiList
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        let data = {
-          title: shareData.title,       // 分享标题
-          desc: shareData.desc,         // 分享描述
-          link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: shareData.logo        // 分享图标
+        if (to.name === 'details/:themeId') {
+          let data = {
+            title: shareData.title,       // 分享标题
+            desc: shareData.desc,         // 分享描述
+            link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: shareData.logo        // 分享图标
+          }
+          wx.updateAppMessageShareData(data);
+          wx.updateTimelineShareData(data)
         }
-        wx.updateAppMessageShareData(data);
-        wx.updateTimelineShareData(data)
       });
     })
   },
