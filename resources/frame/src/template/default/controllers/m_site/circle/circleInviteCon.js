@@ -16,7 +16,6 @@ export default {
   created: function () {
     this.loadSite();
     var userId = browserDb.getLItem('tokenId');
-    console.log('23456666');
   },
   methods: {
     //请求初始化用户信息数据
