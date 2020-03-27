@@ -61,18 +61,18 @@ class WebUserEvent
             $app = new Application($this->wx_config);
             $user = $app->user->get($openid);
             $user_wechats= new UserWechat();
-            $user->mp_openid = $user_wechats->openid;
-            $user->nickname  = $user_wechats->nickname;
-            $user->sex       = $user_wechats->sex;
-            $user->province  = $user_wechats->province;
-            $user->city      = $user_wechats->city;
-            $user->country   = $user_wechats->country;
-            $user->headimgurl= $user_wechats->headimgurl;
+            $user_wechats->openid = $user->mp_openid;
+            $user_wechats->nickname =  $user->nickname;
+            $user_wechats->sex = $user->sex;
+            $user_wechats->province =$user->province;
+            $user_wechats->city = $user->city;
+            $user_wechats->country = $user->country;
+            $user_wechats->headimgurl = $user->headimgurl;
             SessionToken::where('token',$EventKey)->update([
                 'scope'=>'wechat',
                 'payload'=>['openid'=>$openid]
             ]);
-            if($user->save()){
+            if($user_wechats->save()){
                 $text = new Text();
                 $text->content = trans('login.WebNewUser_login_success');
             }
