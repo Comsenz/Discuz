@@ -9,16 +9,15 @@ namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
 use App\Models\Group;
+use Illuminate\Support\Arr;
 
 class AddDefaultGroup
 {
     public function handle(Registered $event)
     {
-        $user = $event->user;
-
-        if ($event->user->groups->isEmpty()) {
+        if (!Arr::get($event->data, 'code')) {
             $defaultGroup = Group::where('default', true)->first();
-            $user->groups()->sync($defaultGroup->id);
+            $event->user->groups()->sync($defaultGroup->id);
         }
     }
 }
