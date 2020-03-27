@@ -1091,14 +1091,20 @@ export default {
       let title = this.themeCon._data.type == 1
         ? this.themeCon._data.title
         : this.themeCon._data.content;
-
+      var reTag = /<img(?:.|\s)*?>/g;
+      var reTag2 = /(<\/?br.*?>)/gi;
+      var reTag3 = /(<\/?p.*?>)/gi;
+      this.title = this.title.replace(reTag, '');
+      this.title = this.title.replace(reTag2, '');
+      this.title = this.title.replace(reTag3, '');
+      this.title = this.title.replace(/\s+/g, "");
       let desc = this.themeCon._data.type == 1
         ? this.themeCon._data.title
         : this.themeCon._data.content;
       console.log(this.themeCon)
       console.log(this.themeCon.firstPost.images[0]._data.url)
-      let logo = this.themeCon.firstPost.images[0]
-        ? this.themeCon.firstPost.images[0]
+      let logo = this.themeCon.firstPost.images[0]._data.url
+        ? this.themeCon.firstPost.images[0]._data.url
         : `${appConfig.baseUrl}/static/images/wxshare.png`;
       console.log(logo)
       let data = {
