@@ -932,11 +932,15 @@ export default {
         // 微信分享
         console.log(to.name, '9333')
         if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
+
+          console.log(to.name);
+          // alert(site_logo)
+
           this.wxShare({
             title: site_name,
             desc: site_desc,
             logo: site_logo
-          })
+          }, to)
         }
         else {
           this.noShare()
@@ -1032,8 +1036,9 @@ export default {
     })
   },
   //分享，复制浏览器地址
-  wxShare(shareData) {
+  wxShare(shareData, toName) {
     let url = window.location.href.split("#")[0];
+    // alert(shareData.imgUrl);
     appFetch({
       url: 'weChatShare',
       method: 'get',
@@ -1059,13 +1064,16 @@ export default {
         ]
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        if (to.name === 'details/:themeId' && to.name === '/') {
+
+        if (toName.name === 'details/:themeId' || toName.name === 'circle') {
+
           let data = {
             title: shareData.title,       // 分享标题
             desc: shareData.desc,         // 分享描述
             link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             imgUrl: shareData.logo        // 分享图标
           }
+
           wx.updateAppMessageShareData(data);
           wx.updateTimelineShareData(data)
         }
@@ -1073,6 +1081,7 @@ export default {
     })
   },
   noShare() {
+    alert(9999)
     wx.ready(() => {
       wx.hideMenuItems({
         menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
