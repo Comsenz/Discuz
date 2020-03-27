@@ -738,7 +738,6 @@ export default {
           realName = res.readdata._data.qcloud.qcloud_faceid;
           canWalletPay = res.readdata._data.other.initialized_pay_password;
           modifyPhone = res.readdata._data.qcloud.qcloud_sms;
-          console.log(site_logo, 'logo')
 
           /*
           * 注册关闭，未登录状态，进入注册页面后跳转到对应的站点页面
@@ -788,10 +787,6 @@ export default {
 
         if (tokenId && Authorization) {
           /*已登录状态*/
-
-          // this.getForum().then((ress) => {
-          // console.log('已经登录状态');
-
           if (res.readdata._data.set_site.site_mode === 'pay') {
             this.getUsers(tokenId).then(userInfo => {
               /*获取用户付费状态并判断*/
@@ -830,9 +825,6 @@ export default {
 
           }
 
-          // })
-
-
         } else {
           /*未登录状态*/
 
@@ -840,16 +832,6 @@ export default {
             /*判断登录设备*/
             if (isWeixin) {
               /*微信设备，跳转到微信绑定页，改成跳转到微信注册绑定*/
-
-              /*if (!browserDb.getSItem('wxData')) {
-                browserDb.setSItem('wxData',false);
-                localStorage.clear();
-                browserDb.setLItem('siteInfo', res.readdata);
-                console.log('第一次进');
-              } else {
-                console.log('多次进');
-              }*/
-
               if (res.readdata._data.set_site.site_mode === 'public') {
                 if (!browserDb.getSItem('beforeVisiting')) {
                   if (!wxNotLoggedInToAccessPage.includes(to.name)) {
