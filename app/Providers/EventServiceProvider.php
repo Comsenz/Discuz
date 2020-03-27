@@ -44,9 +44,9 @@ class EventServiceProvider extends BaseEventServiceProvider
     protected $listen = [
         Registered::class => [
             InviteBind::class,
+            AddDefaultGroup::class,
             CreateUserWalletListener::class,
-            Notifications::class,
-            AddDefaultGroup::class
+            Notifications::class
         ],
         // 登录后事件监听
         Logining::class => [
