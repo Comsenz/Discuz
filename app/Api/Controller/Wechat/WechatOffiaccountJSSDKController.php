@@ -72,6 +72,9 @@ class WechatOffiaccountJSSDKController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $url = Arr::get($request->getQueryParams(), 'url');
+        if (blank($url)) {
+            throw new TranslatorException('wechat_invalid_unknown_url_exception');
+        }
 
         $config = [
             'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
