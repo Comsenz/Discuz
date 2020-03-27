@@ -150,7 +150,7 @@ export default {
         data: formdata
       }).then(res => {
         this.updataLoading = false;
-        
+
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -206,7 +206,8 @@ export default {
     },
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
-        this.appFetch({
+        window.location.href = '/api/oauth/wechat';
+        /*this.appFetch({
           url: 'wechatBind',
           method: 'get',
           data: {}
@@ -216,7 +217,7 @@ export default {
           } else {
             window.location.href = res.readdata._data.location
           }
-        })
+        })*/
       } else if (this.isPhone) {
         this.$toast.fail('请在微信客户端中进行绑定操作');
         // this.appFetch({
@@ -231,8 +232,11 @@ export default {
         //   }
         // })
       } else {
-        this.appFetch({     //pc端绑定
-          url: 'wxLogin',
+
+        window.location.href = '/api/oauth/wechat';
+
+        /*this.appFetch({     //pc端绑定
+          url: 'wxPcLogin',
           method: 'get',
           data: {}
         }).then(res => {
@@ -241,7 +245,7 @@ export default {
           } else {
             window.location.href = res.readdata._data.location
           }
-        })
+        })*/
       }
 
     },
