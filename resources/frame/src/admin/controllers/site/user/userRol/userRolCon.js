@@ -191,8 +191,12 @@ export default {
       }).then(res=>{
         this.btnLoading = false;
         if (res.errors){
-          this.$message.error(res.errors[0].code);
-        }else {
+          if (res.errors[0].detail){
+            this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$message.error(res.errors[0].code);
+          }
+        } else {
           this.$message({
             message: '提交成功！',
             type: 'success'
