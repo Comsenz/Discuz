@@ -24,15 +24,15 @@ export default {
       realname: '', //实名认证是否显示
       optionsStatus: [
         {
-          value: 0,
+          value: '0',
           label: '正常'
         },
         {
-          value: 1,
+          value: '1',
           label: '禁用'
         },
         {
-          value: 2,
+          value: '2',
           label: '审核'
         }
       ],
@@ -63,7 +63,6 @@ export default {
         if (response.errors) {
           this.$message.error(response.errors[0].code);
         } else {
-          console.log(response)
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
           if (this.imageUrl != '' && this.imageUrl != null) {
@@ -71,7 +70,7 @@ export default {
           }
           this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v) => {
-            return v._data.id
+            return v._data.name
           });
           if (response.readdata.wechat) {
             this.wechatNickName = response.readdata.wechat._data.nickname
@@ -216,7 +215,7 @@ export default {
             value: v.id,
             label: v.attributes.name
           }
-        })
+        });
       } catch (err) {
         console.error(err, 'getUserList')
       }
