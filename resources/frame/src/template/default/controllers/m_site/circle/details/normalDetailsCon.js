@@ -3,7 +3,7 @@
  */
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
-import {ImagePreview} from "vant";
+import { ImagePreview } from "vant";
 export default {
   data: function () {
     return {
@@ -16,6 +16,9 @@ export default {
       type: Object
     },
     firstpostImageListProp: {
+      type: Array
+    },
+    firstpostImageListOriginalProp: {
       type: Array
     },
   },
@@ -50,9 +53,8 @@ export default {
     },
 
     imageSwiper(imgIndex, typeclick, replyItem) {
-      alert(11111)
       ImagePreview({
-        images: this.firstpostImageListProp,
+        images: this.firstpostImageListOriginalProp,
         startPosition: imgIndex,    //图片预览起始位置索引 默认 0
         showIndex: true,    //是否显示页码         默认 true
         showIndicators: true, //是否显示轮播指示器 默认 false

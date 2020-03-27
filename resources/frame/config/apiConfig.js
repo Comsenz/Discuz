@@ -57,7 +57,7 @@ module.exports = {
   'groupPermission': '/permission',      //修改用户组权限
   'deleteNotification': '/notification', //删除通知里的回复我的
   'wechatDelete': '/users/',            //修改资料里的解绑微信
-  'wechatBind': '/oauth/wechat',         //去绑定微信
+  'wechatBind': '/oauth/wechat/user',         //去绑定微信
   'postBatch': '/posts/batch/',          //删除回复接口[批量]
 
   'access': '/refresh-token',            //刷新token
