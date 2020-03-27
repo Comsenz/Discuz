@@ -7,7 +7,7 @@
 
 namespace App\Api\Controller\Users;
 
-class WechatUserController extends AbstractWechatUserController
+class WechatWebUserController extends AbstractWechatUserController
 {
     protected function getDriver()
     {
