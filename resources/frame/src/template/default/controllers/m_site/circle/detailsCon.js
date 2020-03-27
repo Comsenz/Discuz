@@ -4,6 +4,7 @@
 import appConfig from "../../../../../../../frame/config/appConfig";
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
+// import appConfig from '../../../../../../config/appConfig';
 import filters from '../../../../../common/filters';
 import { ImagePreview } from "vant";
 export default {
@@ -129,7 +130,8 @@ export default {
       clickStatus: true,
       contentExamine: false, //内容审核提示
       examineWord: '',        //内容审核提示文字
-      ExamineStatus: '' //审核中状态
+      ExamineStatus: '',//审核中状态
+      logo: '', //站点logo
 
     }
   },
@@ -144,8 +146,10 @@ export default {
     // this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
     this.token = browserDb.getLItem('Authorization');
+    // this.shareTheme();
     this.getUser();
     this.detailsLoad(true);       //初始化详情页列表数据
+    // this.wxShare();
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
@@ -231,6 +235,7 @@ export default {
           throw new Error(res.error)
         } else {
           this.siteInfo = res.readdata;
+          this.logo = res.readdata._data.set_site.site_logo;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
           if (this.wxpay == '0' || this.wxpay == false) {
             this.twoChi = true;
@@ -314,7 +319,6 @@ export default {
         }
       }
     },
-
     //初始化请求主题详情数据
     detailsLoad(initFlag = false) {
       // this.loading = true;
@@ -324,11 +328,12 @@ export default {
         method: 'get',
         data: {
           'filter[isDeleted]': 'no',
-          include: ['posts.replyUser', 'user.groups','user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
+          include: ['posts.replyUser', 'user.groups', 'user', 'posts', 'posts.user', 'posts.likedUsers', 'posts.images', 'firstPost', 'firstPost.likedUsers', 'firstPost.images', 'firstPost.attachments', 'rewardedUsers', 'category', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
+        console.log(res);
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -381,6 +386,12 @@ export default {
             this.rewardedUsers = res.readdata.rewardedUsers;
             this.themeUserId = res.readdata.user._data.id;
             this.type = res.readdata._data.type;
+
+            // 初始化时获取微信分享数据
+            console.log('1')
+            this.wxShare();
+            console.log('2')
+
             if (res.readdata.firstPost._data.isLiked) {
               this.themeIsLiked = true;
             } else {
@@ -402,6 +413,7 @@ export default {
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
               }
               this.firstpostImageList = firstpostImage;
+              console.log(this.firstpostImageList, '789')
             };
 
           } else {
@@ -470,94 +482,79 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme() {
-      let shareParam = {
-        url: window.location.href.split("#")[0]
-      };
-      this.appFetch({
-        url: 'weChatShare',
-        method: 'get',
-        data: {
-
-        }
-      }).then((res) => {
-        console.log(res)
-        console.log(res.readdata._data.jsApiList, '77777')
-        let appId = res.readdata._data.appId;
-        let nonceStr = res.readdata._data.nonceStr;
-        let signature = res.readdata._data.signature;
-        let timestamp = res.readdata._data.timestamp;
-        let jsApiList = res.readdata._data.jsApiList;
-        wx.config({
-          debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: appId,         // 必填，公众号的唯一标识
-          timestamp: timestamp, // 必填，生成签名的时间戳
-          nonceStr: nonceStr,   // 必填，生成签名的随机串
-          signature: signature, // 必填，签名，见附录1
-          jsApiList: jsApiList
-        });
-        console.log(jsApiList)
-        wx.checkJsApi({
-          jsApiList: jsApiList, // 需要检测的JS接口列表，所有JS接口列表见附录2,
-          success: (res) => {
-            console.log(res, '9999999')
-            // 以键值对的形式返回，可用的api值true，不可用为false
-            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-          }
-        });
-        wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-          wx.updateAppMessageShareData({
-            title: '', // 分享标题
-            desc: '', // 分享描述
-            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: '', // 分享图标
-            success: () => {
-              // 设置成功
-            }
-          })
-        });
-
-        wx.ready(() => {      //需在用户可能点击分享按钮前就先调用
-          wx.updateTimelineShareData({
-            title: '', // 分享标题
-            link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: '', // 分享图标
-            success: () => {
-              // 设置成功
-            }
-          })
-        });
-
-      })
-      // let Url = '';
-      // if (this.isPayVal === 'pay') {
-      //   Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
-
+      // if (this.isWeixin) {
+      //   let url = window.location.href.split("#")[0];
+      //   console.log(url)
+      //   this.appFetch({
+      //     url: 'weChatShare',
+      //     method: 'get',
+      //     data: {
+      //       url
+      //     }
+      //   }).then((res) => {
+      //     let appId = res.readdata._data.appId;
+      //     let nonceStr = res.readdata._data.nonceStr;
+      //     let signature = res.readdata._data.signature;
+      //     let timestamp = res.readdata._data.timestamp;
+      //     let jsApiList = res.readdata._data.jsApiList;
+      //     wx.config({
+      //       debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      //       appId: appId,         // 必填，公众号的唯一标识
+      //       timestamp: timestamp, // 必填，生成签名的时间戳
+      //       nonceStr: nonceStr,   // 必填，生成签名的随机串
+      //       signature: signature, // 必填，签名，见附录1
+      //       jsApiList: jsApiList
+      //       // jsApiList: [
+      //       //   'updateAppMessageShareData',
+      //       //   'updateTimelineShareData'
+      //       // ]
+      //     });
+      //     // console.log('111')
+      //     // wx.ready(() => {
+      //     wx.updateAppMessageShareData({  //分享给朋友
+      //       title: '是你吗', // 分享标题
+      //       desc: '是我啊', // 分享描述
+      //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+      //       imgUrl: '../../../../static/images/logo.png', // 分享图标
+      //       success: function () {
+      //         // 设置成功
+      //         alert('222')
+      //       }
+      //     });
+      //   })
       // } else {
-      //   Url = appConfig.baseUrl + '/details/' + this.themeId;
+      let Url = '';
+      if (this.isPayVal === 'pay') {
+        Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
+
+      } else {
+        Url = appConfig.baseUrl + '/details/' + this.themeId;
+      }
+      // console.log(Url, '00000')
+      // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+      var oInput = document.createElement('input');
+      var reTag = /<img(?:.|\s)*?>/g;
+      var reTag2 = /(<\/?br.*?>)/gi;
+      var reTag3 = /(<\/?p.*?>)/gi;
+      this.themeTitle = this.themeTitle.replace(reTag, '');
+      this.themeTitle = this.themeTitle.replace(reTag2, '');
+      this.themeTitle = this.themeTitle.replace(reTag3, '');
+      this.themeTitle = this.themeTitle.replace(/\s+/g, "");
+      this.themeTitle = this.cutString(this.themeTitle, 40);
+      oInput.value = this.themeTitle + '  ' + Url;
+      document.body.appendChild(oInput);
+      oInput.select(); // 选择对象
+      oInput.readOnly = true;
+      oInput.id = 'copyInp';
+      document.execCommand("Copy");
+      oInput.setAttribute('onfocus', this.copyFocus(oInput));
+      // 执行浏览器复制命令
+      oInput.className = 'oInput';
+      oInput.style.display = 'none';
+      this.$toast.success('分享链接已复成功');
+      document.body.removeChild(oInput);
       // }
-      // // console.log(Url, '00000')
-      // // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
-      // var oInput = document.createElement('input');
-      // var reTag = /<img(?:.|\s)*?>/g;
-      // var reTag2 = /(<\/?br.*?>)/gi;
-      // var reTag3 = /(<\/?p.*?>)/gi;
-      // this.themeTitle = this.themeTitle.replace(reTag, '');
-      // this.themeTitle = this.themeTitle.replace(reTag2, '');
-      // this.themeTitle = this.themeTitle.replace(reTag3, '');
-      // this.themeTitle = this.themeTitle.replace(/\s+/g, "");
-      // this.themeTitle = this.cutString(this.themeTitle, 40);
-      // oInput.value = this.themeTitle + '  ' + Url;
-      // document.body.appendChild(oInput);
-      // oInput.select(); // 选择对象
-      // oInput.readOnly = true;
-      // oInput.id = 'copyInp';
-      // document.execCommand("Copy");
-      // oInput.setAttribute('onfocus', this.copyFocus(oInput));
-      // // 执行浏览器复制命令
-      // oInput.className = 'oInput';
-      // oInput.style.display = 'none';
-      // this.$toast.success('分享链接已复成功');
-      // document.body.removeChild(oInput);
+
     },
 
     stopKeyborad() {
@@ -750,7 +747,6 @@ export default {
       })
     },
 
-
     //回复点赞
     replyOpera(postId, type, isLike, postsCanLike, postIndex) {
       if (!this.token) {
@@ -871,8 +867,6 @@ export default {
       }
     },
 
-
-
     //打赏
     showRewardPopup() {
       if (!this.token) {
@@ -907,7 +901,6 @@ export default {
         browserDb.setLItem('replyQuote', quoteCon);
       }
     },
-
 
     onBridgeReady(data) {
       let that = this;
@@ -1132,6 +1125,31 @@ export default {
       })
     },
 
+    // 微信分享
+    wxShare() {
+      let title = this.themeCon._data.type == 1
+        ? this.themeCon._data.title
+        : this.themeCon._data.content;
+
+      let desc = this.themeCon._data.type == 1
+        ? this.themeCon._data.title
+        : this.themeCon._data.content;
+      console.log(this.themeCon)
+      console.log(this.firstpostImageList)
+      let logo = this.themeCon.firstPost.images[0]
+        ? this.themeCon.firstPost.images[0]
+        : `${appConfig.baseUrl}/static/images/logo.png`;
+
+      let data = {
+        title: title,       // 分享标题
+        desc: desc,         // 分享描述
+        link: window.location.href.split("#")[0],                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: logo        // 分享图标
+      }
+
+      wx.updateAppMessageShareData(data);
+      wx.updateTimelineShareData(data);
+    }
     // ShareTimeline(opstion) {
     //   //分享给朋友
     //   wx.updateAppMessageShareData({
