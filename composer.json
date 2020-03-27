@@ -12,7 +12,7 @@
 		"php": "^7.2.5",
 		"ext-json": "*",
 		"ext-pdo": "*",
-		"discuz/core": "^0.3",
+		"discuz/core": "^0.4",
 		"endroid/qr-code": "^3.6",
 		"ezyang/htmlpurifier": "^4.12",
 		"league/omnipay": "^3.0",
