@@ -166,7 +166,7 @@
               <div class="commentPostDet">
                 <div class="postTop">
                   <div class="postPer">
-                    <div  class="avatar-box">
+                    <div class="avatar-box">
                       <img
                         class="user-img"
                         :src="item.user._data.avatarUrl"
@@ -179,9 +179,13 @@
                         class="postHead"
                         @click="jumpPerDet(item.user._data.id)"
                       />
-                      <img v-if="item.user._data.isReal" class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+                      <img
+                        v-if="item.user._data.isReal"
+                        class="icon-yirenzheng"
+                        src="../../../../../../static/images/authIcon.svg"
+                        alt="实名认证"
+                      />
                     </div>
-
 
                     <div class="perDet">
                       <div
@@ -195,7 +199,7 @@
                           @click="jumpPerDet(item.user._data.id)"
                         >
                           {{item.user._data.username}}
-<!--                          <span class="groupsName" v-if="item.user._data.showGroups">({{item.user.groups?item.user.groups[0]._data.name:'无用户组'}})</span>-->
+                          <!--                          <span class="groupsName" v-if="item.user._data.showGroups">({{item.user.groups?item.user.groups[0]._data.name:'无用户组'}})</span>-->
                         </a>
                         <a href="javascript:;" v-else>该用户已被删除</a>
                         <span class="font9" v-if="item._data.replyUserId">回复</span>
