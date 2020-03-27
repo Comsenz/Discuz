@@ -134,7 +134,7 @@ const App = new Vue({
     'siteInfoStat': function (newVal, oldVal) {
       this.siteInfoStat = newVal;
       let ia = document.querySelector('#printCasLogout');
-      ia.contentDocument.write(this.siteInfoStat);
+      // ia.contentDocument.write(this.siteInfoStat);
     }
   },
   template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'

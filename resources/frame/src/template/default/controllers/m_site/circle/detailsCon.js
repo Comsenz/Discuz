@@ -148,7 +148,6 @@ export default {
     // this.shareTheme();
     this.getUser();
     this.detailsLoad(true);       //初始化详情页列表数据
-    // this.wxShare();
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
@@ -377,6 +376,7 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
+            // alert(this.themeCon._data.type, 'dddd222222222');
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -392,7 +392,8 @@ export default {
               this.themeIsLiked = false;
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
-            var firstpostImageLen = this.themeCon.firstPost.images.length
+            var firstpostImageLen = this.themeCon.firstPost.images.length;
+            // console.log(firstpostImageLen);
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
@@ -400,9 +401,8 @@ export default {
 
             });
 
-            if (firstpostImageLen === 0) {
-              return;
-            } else {
+            if (firstpostImageLen > 0) {
+              // return;
               var firstpostImage = [];
               var firstpostImageOriginal = [];
               for (let i = 0; i < firstpostImageLen; i++) {
@@ -411,17 +411,21 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
               this.firstpostImageListOriginal = firstpostImageOriginal;
+              // console.log(this.firstpostImageList[0], '~~~~~~@@@@@');
             };
             // 初始化时获取微信分享数据
-            this.wxShare();
+            // console.log(123)
+            // this.wxShare();
           } else {
+            // console.log(456);
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
-
+        this.wxShare();
+        // console.log(333)
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
@@ -1129,36 +1133,72 @@ export default {
     },
     // 微信分享
     wxShare() {
-      let title = this.themeCon._data.type == 1
-        ? this.themeCon._data.title
-        : this.themeCon._data.content;
-      var reTag = /<img(?:.|\s)*?>/g;
-      var reTag2 = /(<\/?br.*?>)/gi;
-      var reTag3 = /(<\/?p.*?>)/gi;
-      this.title = this.title.replace(reTag, '');
-      this.title = this.title.replace(reTag2, '');
-      this.title = this.title.replace(reTag3, '');
-      this.title = this.title.replace(/\s+/g, "");
-      let desc = this.themeCon._data.type == 1
-        ? this.themeCon._data.title
-        : this.themeCon._data.content;
-      console.log(this.themeCon)
-      console.log(this.themeCon.firstPost.images[0]._data.url)
-      let logo = this.themeCon.firstPost.images[0]._data.url
-        ? this.themeCon.firstPost.images[0]._data.url
-        : `${appConfig.baseUrl}/static/images/wxshare.png`;
-      console.log(logo)
+      // console.log(222);
+      let title = '';
+      let desc = '';
+      let logo = '';
+      // alert(this.themeCon._data.type, '类型')
+      if (this.themeCon._data.type == 0) {
+        //普通主题
+        // alert(this.themeCon._data.type);
+        title = this.themeCon.firstPost._data.content;
+        desc = this.themeCon.firstPost._data.content;
+        // logo = this.firstpostImageList[0];
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      } else if (this.themeCon._data.type == 1) {
+        // alert(this.themeCon._data.title);
+        title = this.themeCon._data.title;
+        desc = this.themeCon._data.title;
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images / wxshare.png';
+        }
+        logo = this.firstpostImageList[0];
+      } else if (this.themeCon._data.type == 2) {
+        // alert(this.themeCon._data.type);
+        title = this.themeCon.firstPost._data.content;
+        desc = this.themeCon.firstPost._data.content;
+        logo = this.themeCon.threadVideo._data.cover_url;
+      }
+      // let title = this.themeCon._data.type == 1
+      //   ? this.themeCon._data.title
+      //   : this.themeCon._data.content;
+      // var reTag = /<img(?:.|\s)*?>/g;
+      // var reTag2 = /(<\/?br.*?>)/gi;
+      // var reTag3 = /(<\/?p.*?>)/gi;
+      // this.title = this.title.replace(reTag, '');
+      // this.title = this.title.replace(reTag2, '');
+      // this.title = this.title.replace(reTag3, '');
+      // this.title = this.title.replace(/\s+/g, "");
+      // let desc = this.themeCon._data.type == 1
+      //   ? this.themeCon._data.title
+      //   : this.themeCon._data.content;
+      // console.log(this.themeCon, '3')
+      // console.log(this.themeCon.firstPost.images[0]._data.url, '4')
+      // console.log(`${appConfig.baseUrl}/static/images/wxshare.png`, '5')
+
+      // let logo = this.firstpostImageList[0]
+      //   ? this.firstpostImageList[0]
+      //   : `${appConfig.baseUrl}/static/images/wxshare.png`;
+      // alert(logo)
       let data = {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: logo        // 分享图标
       }
+      // console.log(data, '88888')
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {
+    // this.wxShare();
     document.addEventListener('click', this.listenEvt, false);
   },
   destroyed: function () {
