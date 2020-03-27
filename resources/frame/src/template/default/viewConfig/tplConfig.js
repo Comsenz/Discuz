@@ -930,16 +930,17 @@ export default {
         }
 
         // 微信分享
-        if (isWeixin) {
+        console.log(to.name, '9333')
+        if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
           this.wxShare({
             title: site_name,
             desc: site_desc,
             logo: site_logo
           })
         }
-        // else {
-        //   this.noShare()
-        // }
+        else {
+          this.noShare()
+        }
       })
     }
 
@@ -1051,7 +1052,11 @@ export default {
         timestamp: timestamp, // 必填，生成签名的时间戳
         nonceStr: nonceStr,   // 必填，生成签名的随机串
         signature: signature, // 必填，签名，见附录1
-        jsApiList: jsApiList
+        jsApiList: [
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'hideMenuItems'
+        ]
       });
       wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
         if (to.name === 'details/:themeId' && to.name === '/') {
@@ -1068,10 +1073,11 @@ export default {
     })
   },
   noShare() {
-    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-      // 通过下面这个API隐藏右上角按钮
-      WeixinJSBridge.call('hideOptionMenu');
-    });
+    wx.ready(() => {
+      wx.hideMenuItems({
+        menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+      });
+    })
   }
 
 };
