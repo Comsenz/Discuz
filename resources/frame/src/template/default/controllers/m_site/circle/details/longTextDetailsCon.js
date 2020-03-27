@@ -31,6 +31,9 @@ export default {
     firstpostImageListProp: {
       type: Array
     },
+    firstpostImageListOriginalProp: {
+      type: Array
+    },
     userDet: {
       type: Object
     },
@@ -129,7 +132,7 @@ export default {
     },
     //购买内容
     buyTheme() {
-      if(this.userId){
+      if (this.userId) {
         this.show = !this.show;
       } else {
         browserDb.setSItem('beforeVisiting', this.$route.path);
@@ -213,7 +216,7 @@ export default {
                 this.getOrderStatus();
               }, 3000)
             }
-            
+
           })
         })
       }
@@ -356,7 +359,7 @@ export default {
           }
         } else {
           this.payLoading = true;
-          
+
         }
         return res;
       }).catch(err => {
@@ -442,7 +445,7 @@ export default {
     },
     imageSwiper(imgIndex, typeclick, replyItem) {
       ImagePreview({
-        images: this.firstpostImageListProp,
+        images: this.firstpostImageListOriginalProp,
         startPosition: imgIndex,    //图片预览起始位置索引 默认 0
         showIndex: true,    //是否显示页码         默认 true
         showIndicators: true, //是否显示轮播指示器 默认 false

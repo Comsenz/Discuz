@@ -13,6 +13,7 @@
             v-if="themeCon._data.type == 0"
             :themeCon="themeCon"
             :firstpostImageListProp="firstpostImageList"
+            :firstpostImageListOriginalProp="firstpostImageListOriginal"
           ></normalDetail>
           <!-- 付费长文内容组件 -->
           <longTextDetail
@@ -20,6 +21,7 @@
             :themeCon="themeCon"
             :userDet="userDet"
             :firstpostImageListProp="firstpostImageList"
+            :firstpostImageListOriginalProp="firstpostImageListOriginal"
             v-on:listenToChildEvent="detailsLoad"
           ></longTextDetail>
 

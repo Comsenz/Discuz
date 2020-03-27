@@ -50,10 +50,8 @@ export default {
       likedClass: '',
       imageShow: false,
       index: 1,
-      firstpostImageList: [
-        // 'https://img.yzcdn.cn/2.jpg',
-        // 'https://img.yzcdn.cn/2.jpg'
-      ],
+      firstpostImageList: [],     //主题详情页图片（缩略图）
+      firstpostImageListOriginal: [],      //主题详情页图片（原图）
       siteMode: '',
       isPaid: '',
       situation1: false,
@@ -334,11 +332,11 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
-        console.log(res);
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          // console.log(res.readdata, '@@@@@~~~~~');
           appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -389,9 +387,7 @@ export default {
             this.type = res.readdata._data.type;
 
             // 初始化时获取微信分享数据
-            console.log('1')
             this.wxShare();
-            console.log('2')
 
             if (res.readdata.firstPost._data.isLiked) {
               this.themeIsLiked = true;
@@ -400,6 +396,7 @@ export default {
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
+
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
@@ -409,12 +406,15 @@ export default {
             if (firstpostImageLen === 0) {
               return;
             } else {
+
               var firstpostImage = [];
               for (let i = 0; i < firstpostImageLen; i++) {
+                // console.log(this.themeCon.firstPost.images[i]._data.thumbUrl, '长度');
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+                firstpostImageOriginal.push(this.themeCon.firstPost.images[i]._data.url);
               }
               this.firstpostImageList = firstpostImage;
-              console.log(this.firstpostImageList, '789')
+              this.firstpostImageListOriginal = firstpostImageOriginal;
             };
 
           } else {
@@ -1140,8 +1140,6 @@ export default {
       let desc = this.themeCon._data.type == 1
         ? this.themeCon._data.title
         : this.themeCon._data.content;
-      console.log(this.themeCon)
-      console.log(this.firstpostImageList)
       let logo = this.themeCon.firstPost.images[0]
         ? this.themeCon.firstPost.images[0]
         : `${appConfig.baseUrl}/static/images/logo.png`;
