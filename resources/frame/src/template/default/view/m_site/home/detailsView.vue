@@ -13,6 +13,7 @@
             v-if="themeCon._data.type == 0"
             :themeCon="themeCon"
             :firstpostImageListProp="firstpostImageList"
+            :firstpostImageListOriginalProp="firstpostImageListOriginal"
           ></normalDetail>
           <!-- 付费长文内容组件 -->
           <longTextDetail
@@ -20,6 +21,7 @@
             :themeCon="themeCon"
             :userDet="userDet"
             :firstpostImageListProp="firstpostImageList"
+            :firstpostImageListOriginalProp="firstpostImageListOriginal"
             v-on:listenToChildEvent="detailsLoad"
           ></longTextDetail>
 
@@ -354,7 +356,11 @@
       <div class="loadMask"></div>
       <van-loading color="#333333" class="loadIcon" type="spinner" />
     </div>
-
+    <div class="mask" v-if="wxShareTip"></div>
+    <div class="wxShareTip" v-if="wxShareTip" @click="wxShareClose">
+      <img src="../../../../../../static/images/sharePoint.png" alt class="sharePoint" />
+      <img src="../../../../../../static/images/shareKnow.png" alt class="shareKnow" />
+    </div>
     <van-button
       type="primary"
       v-if="loginBtnFix"

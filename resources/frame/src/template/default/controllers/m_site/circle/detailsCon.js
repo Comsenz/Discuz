@@ -50,10 +50,8 @@ export default {
       likedClass: '',
       imageShow: false,
       index: 1,
-      firstpostImageList: [
-        // 'https://img.yzcdn.cn/2.jpg',
-        // 'https://img.yzcdn.cn/2.jpg'
-      ],
+      firstpostImageList: [],     //主题详情页图片（缩略图）
+      firstpostImageListOriginal: [],      //主题详情页图片（原图）
       siteMode: '',
       isPaid: '',
       situation1: false,
@@ -132,6 +130,7 @@ export default {
       examineWord: '',        //内容审核提示文字
       ExamineStatus: '',//审核中状态
       logo: '', //站点logo
+      wxShareTip: false,
 
     }
   },
@@ -333,11 +332,11 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
-        console.log(res);
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
+          // console.log(res.readdata, '@@@@@~~~~~');
           appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -388,9 +387,7 @@ export default {
             this.type = res.readdata._data.type;
 
             // 初始化时获取微信分享数据
-            console.log('1')
             this.wxShare();
-            console.log('2')
 
             if (res.readdata.firstPost._data.isLiked) {
               this.themeIsLiked = true;
@@ -399,6 +396,7 @@ export default {
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
+
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
@@ -408,12 +406,15 @@ export default {
             if (firstpostImageLen === 0) {
               return;
             } else {
+
               var firstpostImage = [];
               for (let i = 0; i < firstpostImageLen; i++) {
+                // console.log(this.themeCon.firstPost.images[i]._data.thumbUrl, '长度');
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
+                firstpostImageOriginal.push(this.themeCon.firstPost.images[i]._data.url);
               }
               this.firstpostImageList = firstpostImage;
-              console.log(this.firstpostImageList, '789')
+              this.firstpostImageListOriginal = firstpostImageOriginal;
             };
 
           } else {
@@ -482,41 +483,84 @@ export default {
     },
     //分享，复制浏览器地址
     shareTheme() {
-      // if (this.isWeixin) {
-
-      // } else {
-      let Url = '';
-      if (this.isPayVal === 'pay') {
-        Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
-
+      if (this.isWeixin) {
+        this.wxShareTip = true;
+        //   let url = window.location.href.split("#")[0];
+        //   console.log(url)
+        //   this.appFetch({
+        //     url: 'weChatShare',
+        //     method: 'get',
+        //     data: {
+        //       url
+        //     }
+        //   }).then((res) => {
+        //     let appId = res.readdata._data.appId;
+        //     let nonceStr = res.readdata._data.nonceStr;
+        //     let signature = res.readdata._data.signature;
+        //     let timestamp = res.readdata._data.timestamp;
+        //     let jsApiList = res.readdata._data.jsApiList;
+        //     wx.config({
+        //       debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //       appId: appId,         // 必填，公众号的唯一标识
+        //       timestamp: timestamp, // 必填，生成签名的时间戳
+        //       nonceStr: nonceStr,   // 必填，生成签名的随机串
+        //       signature: signature, // 必填，签名，见附录1
+        //       jsApiList: jsApiList
+        //       // jsApiList: [
+        //       //   'updateAppMessageShareData',
+        //       //   'updateTimelineShareData'
+        //       // ]
+        //     });
+        //     // console.log('111')
+        //     // wx.ready(() => {
+        //     wx.updateAppMessageShareData({  //分享给朋友
+        //       title: '是你吗', // 分享标题
+        //       desc: '是我啊', // 分享描述
+        //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        //       imgUrl: '../../../../static/images/logo.png', // 分享图标
+        //       success: function () {
+        //         // 设置成功
+        //         alert('222')
+        //       }
+        //     });
+        //   })
       } else {
-        Url = appConfig.baseUrl + '/details/' + this.themeId;
-      }
-      // console.log(Url, '00000')
-      // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
-      var oInput = document.createElement('input');
-      var reTag = /<img(?:.|\s)*?>/g;
-      var reTag2 = /(<\/?br.*?>)/gi;
-      var reTag3 = /(<\/?p.*?>)/gi;
-      this.themeTitle = this.themeTitle.replace(reTag, '');
-      this.themeTitle = this.themeTitle.replace(reTag2, '');
-      this.themeTitle = this.themeTitle.replace(reTag3, '');
-      this.themeTitle = this.themeTitle.replace(/\s+/g, "");
-      this.themeTitle = this.cutString(this.themeTitle, 40);
-      oInput.value = this.themeTitle + '  ' + Url;
-      document.body.appendChild(oInput);
-      oInput.select(); // 选择对象
-      oInput.readOnly = true;
-      oInput.id = 'copyInp';
-      document.execCommand("Copy");
-      oInput.setAttribute('onfocus', this.copyFocus(oInput));
-      // 执行浏览器复制命令
-      oInput.className = 'oInput';
-      oInput.style.display = 'none';
-      this.$toast.success('分享链接已复成功');
-      document.body.removeChild(oInput);
-      // }
+        let Url = '';
+        if (this.isPayVal === 'pay') {
+          Url = appConfig.baseUrl + '/pay-circle-con/' + this.themeId + '/' + this.groupId;
 
+        } else {
+          Url = appConfig.baseUrl + '/details/' + this.themeId;
+        }
+        // console.log(Url, '00000')
+        // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
+        var oInput = document.createElement('input');
+        var reTag = /<img(?:.|\s)*?>/g;
+        var reTag2 = /(<\/?br.*?>)/gi;
+        var reTag3 = /(<\/?p.*?>)/gi;
+        this.themeTitle = this.themeTitle.replace(reTag, '');
+        this.themeTitle = this.themeTitle.replace(reTag2, '');
+        this.themeTitle = this.themeTitle.replace(reTag3, '');
+        this.themeTitle = this.themeTitle.replace(/\s+/g, "");
+        this.themeTitle = this.cutString(this.themeTitle, 40);
+        oInput.value = this.themeTitle + '  ' + Url;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        oInput.readOnly = true;
+        oInput.id = 'copyInp';
+        document.execCommand("Copy");
+        oInput.setAttribute('onfocus', this.copyFocus(oInput));
+        // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        this.$toast.success('分享链接已复成功');
+        document.body.removeChild(oInput);
+      }
+
+    },
+    //关闭微信分享提示
+    wxShareClose() {
+      this.wxShareTip = false;
     },
 
     stopKeyborad() {
