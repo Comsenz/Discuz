@@ -16,37 +16,11 @@ export default {
   created: function () {
     this.loadSite();
     var userId = browserDb.getLItem('tokenId');
-
+    console.log('23456666');
   },
   methods: {
     //请求初始化用户信息数据
     loadSite() {
-      var userId = browserDb.getLItem('tokenId');
-      if (!userId) {
-        return
-      } else {
-        this.appFetch({
-          url: 'users',
-          method: 'get',
-          splice: '/' + userId,
-          data: {
-            include: 'groups',
-          }
-        }).then((res) => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
-          } else {
-            this.roleList = res.readdata.groups;
-            if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
-              this.joinedAt = res.readdata._data.createdAt;
-            } else {
-              this.joinedAt = res.readdata._data.joinedAt;
-            }
-          }
-        })
-      }
-
       //请求初始化站点信息数据
       this.appFetch({
         url: 'forum',
@@ -81,6 +55,32 @@ export default {
           this.limitList = res.readdata[0];
         }
       });
+      var userId = browserDb.getLItem('tokenId');
+      if (!userId) {
+        return
+      } else {
+        this.appFetch({
+          url: 'users',
+          method: 'get',
+          splice: '/' + userId,
+          data: {
+            include: 'groups',
+          }
+        }).then((res) => {
+          if (res.errors) {
+            this.$toast.fail(res.errors[0].code);
+            throw new Error(res.error)
+          } else {
+            this.roleList = res.readdata.groups;
+            if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
+              this.joinedAt = res.readdata._data.createdAt;
+            } else {
+              this.joinedAt = res.readdata._data.joinedAt;
+            }
+          }
+        })
+      }
+
 
     },
     //查看更多站点成员

@@ -408,13 +408,14 @@ export default {
             } else {
 
               var firstpostImage = [];
+              var firstpostImageOriginal = [];
               for (let i = 0; i < firstpostImageLen; i++) {
-                // console.log(this.themeCon.firstPost.images[i]._data.thumbUrl, '长度');
+                console.log(this.themeCon.firstPost.images, '长度');
                 firstpostImage.push(this.themeCon.firstPost.images[i]._data.thumbUrl);  //缩略图
                 firstpostImageOriginal.push(this.themeCon.firstPost.images[i]._data.url);
               }
               this.firstpostImageList = firstpostImage;
-              this.firstpostImageListOriginal = firstpostImageOriginal;
+              // this.firstpostImageListOriginal = firstpostImageOriginal;
             };
 
           } else {
