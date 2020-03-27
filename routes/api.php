@@ -29,7 +29,6 @@ $route->get('/siteinfo', 'site.info', ApiController\SiteInfoController::class);
 $route->get('/check', 'check', ApiController\CheckController::class);
 $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | Passport Settings
@@ -81,9 +80,6 @@ $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserC
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
 $route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
 $route->get('/oauth/wechat/web/user/event','wechat.web.user.event',ApiController\Users\WechatWebUserLoginEventController::class);
 $route->post('/oauth/wechat/web/user/serach','wechat.web.user.search',ApiController\Users\WechatWebUserLoginSearchController::class);
