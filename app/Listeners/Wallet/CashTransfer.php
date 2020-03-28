@@ -83,7 +83,7 @@ class CashTransfer
     {
         //获取用户openid
         $user_id = $event->cash_record->user_id;
-        $user_wecaht = UserWechat::find($user_id);
+        $user_wecaht = UserWallet::where('user_id', $user_id)->first();
         if (isset($user_wecaht->mp_openid)) {
             $openid = $user_wecaht->mp_openid;
         } else {
