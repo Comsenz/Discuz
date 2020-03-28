@@ -60,7 +60,7 @@
 
     <Card header="用户角色：">
       <CardRow description="设置允许参与搜索的用户组">
-        <el-select v-model="userRole" placeholder="请选择">
+        <el-select v-model="userRole[0]" placeholder="请选择">
           <el-option
             v-for="item in options"
             :disabled="item.value === '6' || item.value === '7'"

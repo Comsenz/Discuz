@@ -159,7 +159,6 @@ export default {
           this.imageUrl = res.readdata._data.avatarUrl;
           this.deleBtn = true;
         }
-
       })
     },
 
@@ -199,7 +198,6 @@ export default {
         } else {
           this.$message({ message: '提交成功', type: 'success' });
         }
-
       })
     },
 
