@@ -123,7 +123,7 @@ class ForumSettingField
      */
     public function getQCloudSettings()
     {
-        return [
+        $settings = [
             'qcloud_secret_id' => $this->settings->get('qcloud_secret_id', 'qcloud'),
             'qcloud_secret_key' => $this->settings->get('qcloud_secret_key', 'qcloud'),
             'qcloud_token' => $this->settings->get('qcloud_token', 'qcloud'),
@@ -141,6 +141,8 @@ class ForumSettingField
             'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
             'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
         ];
+        $settings += $this->getQCloudVod();
+        return $settings;
     }
 
     /**

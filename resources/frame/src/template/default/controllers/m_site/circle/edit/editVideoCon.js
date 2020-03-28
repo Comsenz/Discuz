@@ -89,7 +89,6 @@ export default {
       supportVideoExt: '',
       supportVideoExtRes: '',
       fileSize: '',
-      vcVideoName: '',
       loading: false,
     }
   },

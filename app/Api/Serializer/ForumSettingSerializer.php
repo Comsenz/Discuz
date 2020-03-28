@@ -132,7 +132,7 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         // 开启视频服务 - 满足条件返回
-        if ($attributes['qcloud']['qcloud_vod'] || $this->actor->isAdmin()) {
+        if ($attributes['qcloud']['qcloud_vod']) {
             $attributes['qcloud'] += $this->forumField->getQCloudVod();
         } else {
             //未开启vod服务 不可发布视频主题
