@@ -70,7 +70,7 @@ export default {
           }
           this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v) => {
-            return v._data.name
+            return v._data.id
           });
           if (response.readdata.wechat) {
             this.wechatNickName = response.readdata.wechat._data.nickname
