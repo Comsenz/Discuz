@@ -62,13 +62,11 @@ class QcloudCaptchaVerify extends BaseQcloud
 
             $req = new DescribeCaptchaResultRequest();
 
-            $request = app('request');
-
             $params = [
                 'CaptchaType' => 9,
                 'Ticket' => $this->ticket,
                 'Randstr' => $this->randStr,
-                'UserIp' => ip($request->getServerParams()),
+                'UserIp' => $_SERVER['REMOTE_ADDR'] ?: '127.0.0.1',
                 'CaptchaAppId' => (int) $appId,
                 'AppSecretKey' => $this->key,
             ];
