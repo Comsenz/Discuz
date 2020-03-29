@@ -47,7 +47,7 @@ export default {
     forgetSendSmsCode(){
 
       if (this.type !== 'reset_pay_pwd'){
-        var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+        var reg=11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
         var phoneNum = this.phoneNum;
         if(!phoneNum){//未输入手机号
           this.$toast("请输入手机号码");
