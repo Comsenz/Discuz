@@ -119,7 +119,9 @@ class ThreadListener
 
         $action = $this->transLogAction($event->thread->is_approved);
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+        $message = $event->data['message'] ?? '';
+
+        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
 
         // 发送操作通知
         $this->threadNotices($event->data['notice_type'], $event);
@@ -134,7 +136,9 @@ class ThreadListener
     {
         $action = 'hide';
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+        $message = $event->data['message'] ?? '';
+
+        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
 
         // 发送删除通知
         $this->threadNotices('isDeleted', $event);
