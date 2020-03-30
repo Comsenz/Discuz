@@ -37,7 +37,7 @@ class ChangeLastActived
     /**
      * @param Logind $event
      */
-    public function handle(Logind $event)
+    public function handle($event)
     {
         $user = $event->user;
         $request = $this->app->make(ServerRequestInterface::class);

@@ -12,7 +12,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 
 class BanLogin
 {
-    public function handle(Logind $event)
+    public function handle($event)
     {
         $user = $event->user;
         if ($user->status == 1) {

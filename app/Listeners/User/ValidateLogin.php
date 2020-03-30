@@ -12,7 +12,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 
 class ValidateLogin
 {
-    public function handle(Logind $event)
+    public function handle($event)
     {
         $user = $event->user;
         if ($user->status == 2) {
