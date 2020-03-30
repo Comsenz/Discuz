@@ -9,7 +9,7 @@ namespace App\Commands\Users;
 use App\Models\SessionToken;
 use App\Models\UserWallet;
 use App\Models\UserWechat;
-use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 
@@ -44,7 +44,7 @@ class WebUserEvent
                 }
             }
         });
-        return $app->server->serve();
+        return DiscuzResponseFactory::XmlResponse($app->server->serve());
     }
     protected function event($message)
     {
