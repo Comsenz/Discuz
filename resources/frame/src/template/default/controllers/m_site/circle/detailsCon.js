@@ -7,6 +7,7 @@ import appCommonH from '../../../../../helpers/commonHelper';
 // import appConfig from '../../../../../../config/appConfig';
 import filters from '../../../../../common/filters';
 import { ImagePreview } from "vant";
+import { wxShare, noShare } from '../../../viewConfig/tplConfig';
 export default {
   data: function () {
     return {
@@ -424,7 +425,7 @@ export default {
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
-        this.wxShare();
+        this.wxShareDetail();  //调用微信分享
         // console.log(333)
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
@@ -1132,11 +1133,11 @@ export default {
       })
     },
     // 微信分享
-    wxShare() {
+    wxShareDetail() {
       // console.log(222);
-      let title = '';
-      let desc = '';
-      let logo = '';
+      var title = '';
+      var desc = '';
+      var logo = '';
       // alert(this.themeCon._data.type, '类型')
       if (this.themeCon._data.type == 0) {
         //普通主题
@@ -1149,17 +1150,18 @@ export default {
         } else {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
-      } else if (this.themeCon._data.type == 1) {
+        console.log(logo)
+      } else if (this.themeCon._data.type == 1) {   //长文类型
         // alert(this.themeCon._data.title);
         title = this.themeCon._data.title;
         desc = this.themeCon._data.title;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
         } else {
-          logo = appConfig.baseUrl + '/static/images / wxshare.png';
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
-        logo = this.firstpostImageList[0];
-      } else if (this.themeCon._data.type == 2) {
+        // logo = this.firstpostImageList[0];
+      } else if (this.themeCon._data.type == 2) {  //视频类型
         // alert(this.themeCon._data.type);
         title = this.themeCon.firstPost._data.content;
         desc = this.themeCon.firstPost._data.content;
@@ -1192,13 +1194,14 @@ export default {
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: logo        // 分享图标
       }
-      // console.log(data, '88888')
+      console.log(data, '88888')
+      wxShare(data, { name: 'circle' })
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {
-    // this.wxShare();
+    console.log(wxShare, 'wxShare111111');
     document.addEventListener('click', this.listenEvt, false);
   },
   destroyed: function () {
