@@ -6,7 +6,7 @@
   
 }
 .van-icon {
-  font-family: "van-discuzQ";
+  font: 14px/1 "van-discuzQ" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
