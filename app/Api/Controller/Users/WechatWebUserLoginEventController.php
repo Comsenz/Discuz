@@ -41,6 +41,8 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $wx_config = [
+            'app_id'=>$this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
+            'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('offiaccount_token', 'wx_offiaccount'),
             'aes_key' => $this->settings->get('offiaccount_aes_key', 'wx_offiaccount')
         ];

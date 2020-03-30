@@ -10,6 +10,7 @@ use App\Models\SessionToken;
 use App\Models\UserWallet;
 use App\Models\UserWechat;
 use Discuz\Foundation\Application;
+use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 
 class WebUserEvent
@@ -30,7 +31,7 @@ class WebUserEvent
 
     public function handle()
     {
-        $app = new Application($this->wx_config);
+        $app =Factory::officialAccount($this->wx_config);
         $app->server->setMessageHandler(function ($message) {
             if ($message->MsgType == 'event') {
                 switch ($message->Event) {
@@ -58,7 +59,7 @@ class WebUserEvent
             $text->content = trans('login.WebUser_login_success');
         }else{
             //新用户,跳转绑定页面
-            $app = new Application($this->wx_config);
+            $app = Factory::officialAccount($this->wx_config);
             $user = $app->user->get($openid);
             $user_wechats= new UserWechat();
             $user_wechats->openid = $user->mp_openid;
