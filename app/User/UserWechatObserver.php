@@ -27,4 +27,26 @@ class UserWechatObserver
     {
         dd('updated');
     }
+
+    /**
+     * 监听数据即将保存的事件。
+     *
+     * @param  UserWechat $userWechat
+     * @return void
+     */
+    public function saving(UserWechat $userWechat)
+    {
+        dd('saving');
+    }
+
+    /**
+     * 监听数据保存后的事件。
+     *
+     * @param  UserWechat $userWechat
+     * @return void
+     */
+    public function saved(UserWechat $userWechat)
+    {
+        dd('saved');
+    }
 }
