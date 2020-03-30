@@ -32,7 +32,7 @@ class WebUserEvent
     public function handle()
     {
         $app =Factory::officialAccount($this->wx_config);
-        $app->server->setMessageHandler(function ($message) {
+        $app->server->push(function ($message) {
             if ($message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
