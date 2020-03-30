@@ -81,8 +81,9 @@ $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWe
 $route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\WechatWebUserController::class);
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
-$route->get('/oauth/wechat/web/user/event','wechat.web.user.event',ApiController\Users\WechatWebUserLoginEventController::class);
-$route->post('/oauth/wechat/web/user/serach','wechat.web.user.search',ApiController\Users\WechatWebUserLoginSearchController::class);
+$route->get('/oauth/wechat/web/user/event', 'wechat.web.user.event', ApiController\Users\WechatWebUserLoginEventController::class);
+$route->post('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Users
@@ -264,4 +265,3 @@ $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\S
 $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowController::class);
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
-
