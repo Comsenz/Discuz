@@ -163,7 +163,7 @@ export default {
     },
 
     submission() {
-      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
+      var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/; //手机号正则验证
       var mobile = this.userInfo.originalMobile;
       if (mobile == '') {
 

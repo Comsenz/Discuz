@@ -14,6 +14,7 @@ use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
+use App\Events\Users\RegisteredCheck;
 use App\Listeners\AddApiMiddleware;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
@@ -47,6 +48,11 @@ class EventServiceProvider extends BaseEventServiceProvider
             AddDefaultGroup::class,
             CreateUserWalletListener::class,
             Notifications::class
+        ],
+        RegisteredCheck::class => [
+            BanLogin::class,
+            ValidateLogin::class,
+            ChangeLastActived::class
         ],
         // 登录后事件监听
         Logining::class => [
