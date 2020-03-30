@@ -44,6 +44,7 @@ class WebUserEvent
                 }
             }
         });
+        return $app->server->serve();
     }
     protected function event($message)
     {
