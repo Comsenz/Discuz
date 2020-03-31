@@ -13,7 +13,10 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use EasyWeChat\Factory;
 use Psr\Http\Server\RequestHandlerInterface;
+use Discuz\Http\DiscuzResponseFactory;
+
 
 class WechatWebUserLoginEventController implements RequestHandlerInterface
 {
@@ -41,15 +44,20 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $request = Arr::get($request->getQueryParams(), '');
+        $request = Arr::get($request->getQueryParams(), 'echostr');
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('oplatform_app_token', 'wx_oplatform'),
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
-        return $this->bus->dispatch(
-            new WebUserEvent($wx_config,$request)
+        $app = Factory::officialAccount($wx_config);
+        $this->bus->dispatch(
+            new WebUserEvent($wx_config,$app)
         );
+        if(Arr::get($request->getQueryParams(), 'echostr') && $app->server->validate()) {
+            return DiscuzResponseFactory::HtmlResponse('success');
+        }
+        return  DiscuzResponseFactory::XmlResponse($app->server->serve());
     }
 }
