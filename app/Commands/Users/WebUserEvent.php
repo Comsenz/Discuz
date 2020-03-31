@@ -17,17 +17,26 @@ use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    protected $app;
+    /**
+     * 微信参数
+     *
+     * @var string
+     */
+    public $wx_config;
+    public $request;
 
-    public function __construct($app)
+    public function __construct(array $wx_config, $request)
     {
-        $this->app = $app;
+        $this->wx_config = $wx_config;
+        $this->request = $request;
     }
+
 
     public function handle()
     {
-        return $this->app->server->validate()->push(function ($message) {
-            if ($message['MsgType'] == 'event') {
+        $app =Factory::officialAccount($this->wx_config);
+        $app->server->push(function ($message) {
+            if ($message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
@@ -36,8 +45,11 @@ class WebUserEvent
                 }
             }
         });
+        if(isset($this->request->echostr) ){
+            return DiscuzResponseFactory::HtmlResponse($this->request->getcontent);
+        }
+        return DiscuzResponseFactory::XmlResponse('success');
     }
-
     protected function event($message)
     {
         $openid = $message->FromUserName;
