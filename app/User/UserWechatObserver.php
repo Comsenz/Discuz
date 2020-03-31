@@ -5,6 +5,8 @@ namespace App\User;
 use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;
 use Carbon\Carbon;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Http\UrlGenerator;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
@@ -14,9 +16,15 @@ class UserWechatObserver
 
     protected $app;
 
-    public function __construct(Filesystem $filesystem)
+    protected $settings;
+
+    protected $url;
+
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
         $this->filesystem = $filesystem;
+        $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -39,8 +47,13 @@ class UserWechatObserver
 
         // 微信存储本地头像 用到的 HttpClient()
         $wechatImg = $userWechat->headimgurl;
-        $path = $userWechat->user_id . '.png';
-        $avatarPath = $this->filesystem->url($path);
+        $avatarPath = $userWechat->user_id . '.png';
+
+        // 判断是否开启云储存
+        if ($this->settings->get('qcloud_cos', 'qcloud')) {
+            $uri = $this->filesystem->url($avatarPath);
+            $avatarPath = $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath();
+        }
 
         $httpClient = new Client();
 
