@@ -17,26 +17,21 @@ use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    /**
-     * 微信参数
-     *
-     * @var string
-     */
-    public $wx_config;
-    public $request;
 
-    public function __construct(array $wx_config, $request)
+    protected $app;
+
+    public function __construct($app)
     {
-        $this->wx_config = $wx_config;
-        $this->request = $request;
+        $this->app = $app;
     }
 
 
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
-        $app->server->push(function ($message) {
-            if ($message->MsgType == 'event') {
+
+
+        $this->app->server->push(function ($message) {
+            if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
@@ -45,10 +40,6 @@ class WebUserEvent
                 }
             }
         });
-        if(isset($this->request->echostr) ){
-            return DiscuzResponseFactory::HtmlResponse($this->request->getcontent);
-        }
-        return DiscuzResponseFactory::XmlResponse('success');
     }
     protected function event($message)
     {
@@ -64,8 +55,7 @@ class WebUserEvent
             $text->content = trans('login.WebUser_login_success');
         }else{
             //新用户,跳转绑定页面
-            $app = Factory::officialAccount($this->wx_config);
-            $user = $app->user->get($openid);
+            $user = $this->app->user->get($openid);
             $user_wechats= new UserWechat();
             $user_wechats->openid = $user->mp_openid;
             $user_wechats->nickname =  $user->nickname;
