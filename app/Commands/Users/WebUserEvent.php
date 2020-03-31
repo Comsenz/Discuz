@@ -36,7 +36,7 @@ class WebUserEvent
     {
         $app =Factory::officialAccount($this->wx_config);
         $app->server->push(function ($message) {
-            if ($message->MsgType == 'event') {
+            if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
