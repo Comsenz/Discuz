@@ -25,7 +25,7 @@ class WebUserEvent
     public $wx_config;
     public $request;
 
-    public function __construct(array $wx_config,array $request)
+    public function __construct(array $wx_config, $request)
     {
         $this->wx_config = $wx_config;
         $this->request = $request;
