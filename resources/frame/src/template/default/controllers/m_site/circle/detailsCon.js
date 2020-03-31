@@ -132,6 +132,7 @@ export default {
       ExamineStatus: '',//审核中状态
       logo: '', //站点logo
       wxShareTip: false,
+      siteName: '', //站点名称
 
     }
   },
@@ -142,6 +143,7 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.siteName = browserDb.getLItem('siteInfo')._data.set_site.site_name;
     this.getInfo();
     // this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
@@ -234,6 +236,7 @@ export default {
           throw new Error(res.error)
         } else {
           this.siteInfo = res.readdata;
+          // this.siteName = this.siteInfo._data.set_site.site_name;
           this.logo = res.readdata._data.set_site.site_logo;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
           if (this.wxpay == '0' || this.wxpay == false) {
@@ -336,7 +339,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res.readdata, '@@@@@~~~~~');
           appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -478,6 +480,9 @@ export default {
         }
       }
       return s;
+    },
+    removeHtmlTag(str) {
+      return str.replace(/<[^>]+>/g, "");  //正则去掉所有的html标记
     },
     copyFocus(obj) {
       obj.blur;
@@ -1095,67 +1100,44 @@ export default {
     },
     // 微信分享
     wxShareDetail() {
-      // console.log(222);
       var title = '';
       var desc = '';
       var logo = '';
-      // alert(this.themeCon._data.type, '类型')
-      if (this.themeCon._data.type == 0) {
-        //普通主题
-        // alert(this.themeCon._data.type);
-        title = this.themeCon.firstPost._data.content;
-        desc = this.themeCon.firstPost._data.content;
-        // logo = this.firstpostImageList[0];
-        if (this.firstpostImageList.length > 0) {
-          logo = this.firstpostImageList[0];
-        } else {
-          logo = appConfig.baseUrl + '/static/images/wxshare.png';
-        }
-        console.log(logo)
-      } else if (this.themeCon._data.type == 1) {   //长文类型
-        // alert(this.themeCon._data.title);
-        title = this.themeCon._data.title;
-        desc = this.themeCon._data.title;
-        if (this.firstpostImageList.length > 0) {
-          logo = this.firstpostImageList[0];
-        } else {
-          logo = appConfig.baseUrl + '/static/images/wxshare.png';
-        }
-        // logo = this.firstpostImageList[0];
-      } else if (this.themeCon._data.type == 2) {  //视频类型
-        // alert(this.themeCon._data.type);
-        title = this.themeCon.firstPost._data.content;
-        desc = this.themeCon.firstPost._data.content;
-        logo = this.themeCon.threadVideo._data.cover_url;
-      }
-      // let title = this.themeCon._data.type == 1
-      //   ? this.themeCon._data.title
-      //   : this.themeCon._data.content;
-      // var reTag = /<img(?:.|\s)*?>/g;
-      // var reTag2 = /(<\/?br.*?>)/gi;
-      // var reTag3 = /(<\/?p.*?>)/gi;
-      // this.title = this.title.replace(reTag, '');
-      // this.title = this.title.replace(reTag2, '');
-      // this.title = this.title.replace(reTag3, '');
-      // this.title = this.title.replace(/\s+/g, "");
-      // let desc = this.themeCon._data.type == 1
-      //   ? this.themeCon._data.title
-      //   : this.themeCon._data.content;
-      // console.log(this.themeCon, '3')
-      // console.log(this.themeCon.firstPost.images[0]._data.url, '4')
-      // console.log(`${appConfig.baseUrl}/static/images/wxshare.png`, '5')
+      if (this.themeCon._data.type == 0) {  //普通主题
 
-      // let logo = this.firstpostImageList[0]
-      //   ? this.firstpostImageList[0]
-      //   : `${appConfig.baseUrl}/static/images/wxshare.png`;
-      // alert(logo)
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        title = shareContent + this.siteName;
+        desc = shareContent;
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      } else if (this.themeCon._data.type == 1) {   //长文类型
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        title = this.themeCon._data.title + this.siteName;
+        desc = shareContent;
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      } else if (this.themeCon._data.type == 2) {  //视频类型
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        title = shareContent + this.siteName;
+        desc = shareContent;
+        if (this.themeCon.threadVideo._data.cover_url) {
+          logo = this.themeCon.threadVideo._data.cover_url;
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      }
       let data = {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        logo        // 分享图标
+        logo               // 分享图标
       }
-      // console.log(data, '88888')
       wxShare(data, { name: 'circle' })
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);

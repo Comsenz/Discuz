@@ -43,8 +43,10 @@
               slot="button"
               size="small"
               type="default"
+              :disabled="disabled"
               @click="sendVerificationCode"
               :sendStatus="sendStatus"
+              :class="{'grayBg':isGray}"
             >{{btnContent}}</van-button>
           </van-field>
         </van-cell-group>
