@@ -5,21 +5,26 @@ namespace App\User;
 use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;
 use Carbon\Carbon;
-use Discuz\Foundation\Application;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Http\UrlGenerator;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 class UserWechatObserver
 {
-    protected $file;
+    protected $filesystem;
 
     protected $app;
 
-    public function __construct(Filesystem $file, Application $app)
+    protected $settings;
+
+    protected $url;
+
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
-        $this->file = $file;
-        $this->app = $app;
+        $this->filesystem = $filesystem;
+        $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -44,6 +49,12 @@ class UserWechatObserver
         $wechatImg = $userWechat->headimgurl;
         $avatarPath = $userWechat->user_id . '.png';
 
+        // 判断是否开启云储存
+        if ($this->settings->get('qcloud_cos', 'qcloud')) {
+            $uri = $this->filesystem->url($avatarPath);
+            $avatarPath = $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath();
+        }
+
         $httpClient = new Client();
 
         $response = $httpClient->request('get', $wechatImg);
@@ -56,7 +67,7 @@ class UserWechatObserver
 
         $user->changeAvatar($avatarPath);
 
-        $this->file->put($avatarPath, $img);
+        $this->filesystem->put($avatarPath, $img);
 
         $user->avatar_at = Carbon::now()->toDateTimeString();
         $user->save();

@@ -21,7 +21,7 @@ export default {
       },   //用户组
       userInfoAvatarUrl: '',
       followDet: '',      //当前访问的用户信息
-      oldFollow: '',
+      oldFollow: false,
       intiFollowVal: '',
       clickStatus: true,
 
@@ -55,8 +55,16 @@ export default {
           include: ['groups'],
         }
       }).then((res) => {
+        // console.log(res, '######');
         this.followDet = res.readdata;
         this.isReal = res.readdata._data.isReal;
+        if (res.readdata._data.follow == '1') {
+          this.followFlag = '已关注';
+        } else if (res.readdata._data.follow == '0') {
+          this.followFlag = '关注TA';
+        } else {
+          this.followFlag = '相互关注';
+        }
         this.intiFollowVal = res.readdata._data.follow;
         this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
         if (res.readdata._data.avatarUrl != '' && res.readdata._data.avatarUrl != null) {
@@ -104,6 +112,7 @@ export default {
 
     //管理关注操作
     followCli(intiFollowVal) {
+      let methodType = '';
       var token = browserDb.getLItem('Authorization');
       if (!token) {
         browserDb.setSItem('beforeVisiting', this.$route.path);
@@ -116,16 +125,13 @@ export default {
         }
         this.clickStatus = false;
         let attri = new Object();
-        let methodType = '';
         if (intiFollowVal == '1' || intiFollowVal == '2') {
           attri.to_user_id = this.userId;
           methodType = 'delete';
           this.oldFollow = intiFollowVal;
-          this.followDet._data.followCount = this.followDet._data.followCount - 1;
         } else {
           attri.to_user_id = this.userId;
           methodType = 'post';
-          this.followDet._data.followCount = this.followDet._data.followCount + 1;
           // this.oldFollow =  '0';
         }
 
@@ -154,10 +160,10 @@ export default {
             this.intiFollowVal = '0';
             this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
           } else {
-            if (this.oldFollow == '1' || this.oldFollow == '0') {
+            if (res.readdata._data.is_mutual && res.readdata._data.is_mutual == 0) {
               this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
               this.intiFollowVal = '1';
-            } else {
+            } else if (res.readdata._data.is_mutual && res.readdata._data.is_mutual == 1) {
               this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
               this.intiFollowVal = '2';
             }
