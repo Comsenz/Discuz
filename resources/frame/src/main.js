@@ -107,6 +107,9 @@ const App = new Vue({
       keepAliveStatus: false,
       status: 0,
       siteInfoStat: '',
+      safescripts: {},
+      evalscripts: [],
+      JSLOADED: [],
     }
   },
   created() {
@@ -133,9 +136,107 @@ const App = new Vue({
     },
     'siteInfoStat': function (newVal, oldVal) {
       this.siteInfoStat = newVal;
-      let ia = document.querySelector('#printCasLogout');
+      // let ia = document.querySelector('#printCasLogout');
       // ia.contentDocument.write(this.siteInfoStat);
+      // console.log(this.siteInfoStat, '!!!!!!@@@@@@');
+      // let ia = document.head || document.getElementsByTagName('head')[0];
+      // console.log(ia, '~~~~~');
+      // ia.innerHTML += this.siteInfoStat;
+      // console.log(ia, '~~~~~');
+      this.evalscript(this.siteInfoStat);
     }
+  },
+  methods: {
+    evalscript(s) {
+      if (s.indexOf('<script') == -1) return s;
+      var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
+      var arr = [];
+      while (arr = p.exec(s)) {
+        var p1 = /<script[^\>]*?src=\"([^\>]*?)\"[^\>]*?(reload=\"1\")?(?:charset=\"([\w\-]+?)\")?><\/script>/i;
+        var arr1 = [];
+        arr1 = p1.exec(arr[0]);
+        if (arr1) {
+          this.appendscript(arr1[1], '', arr1[2], arr1[3]);
+        } else {
+          p1 = /<script(.*?)>([^\x00]+?)<\/script>/i;
+          arr1 = p1.exec(arr[0]);
+          this.appendscript('', arr1[2], arr1[1].indexOf('reload=') != -1);
+        }
+      }
+      return s;
+    },
+
+    //  var safescripts = {}, evalscripts = [];
+
+    appendscript(src, text, reload, charset) {
+      var id = this.hash(src + text);
+      if (!reload && this.in_array(id, this.evalscripts)) return;
+      if (reload && $('#' + id)[0]) {
+        $('#' + id)[0].parentNode.removeChild($('#' + id)[0]);
+      }
+
+      this.evalscripts.push(id);
+      var scriptNode = document.createElement("script");
+      scriptNode.type = "text/javascript";
+      scriptNode.id = id;
+      scriptNode.charset = charset ? charset : (!document.charset ? document.characterSet : document.charset);
+      try {
+        if (src) {
+          scriptNode.src = src;
+          scriptNode.onloadDone = false;
+          scriptNode.onload = () => {
+            scriptNode.onloadDone = true;
+            this.JSLOADED[src] = 1;
+          };
+          scriptNode.onreadystatechange = function () {
+            if ((scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') && !scriptNode.onloadDone) {
+              scriptNode.onloadDone = true;
+              this.JSLOADED[src] = 1;
+            }
+          };
+        } else if (text) {
+          scriptNode.text = text;
+        }
+        document.getElementsByTagName('head')[0].appendChild(scriptNode);
+      } catch (e) { }
+    },
+    hash(string, length) {
+      var length = length ? length : 32;
+      var start = 0;
+      var i = 0;
+      var result = '';
+      var filllen;
+      filllen = length - string.length % length;
+      for (i = 0; i < filllen; i++) {
+        string += "0";
+      }
+      while (start < string.length) {
+        result = this.stringxor(result, string.substr(start, length));
+        start += length;
+      }
+      return result;
+    },
+    stringxor(s1, s2) {
+      var s = '';
+      var hash = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var max = Math.max(s1.length, s2.length);
+      for (var i = 0; i < max; i++) {
+        var k = s1.charCodeAt(i) ^ s2.charCodeAt(i);
+        s += hash.charAt(k % 52);
+      }
+      return s;
+    },
+    in_array(needle, haystack) {
+      if (typeof needle == 'string' || typeof needle == 'number') {
+        for (var i in haystack) {
+          if (haystack[i] == needle) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+
   },
   template: '<div style="width: 100%;height: 100%"><keep-alive><router-view v-if="keepAliveStatus"></router-view></keep-alive><router-view v-if="!keepAliveStatus"></router-view></div>'
 }).$mount('#app');
