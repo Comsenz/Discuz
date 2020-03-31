@@ -17,35 +17,16 @@ use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    /**
-     * 微信参数
-     *
-     * @var string
-     */
-    public $settings;
-    public $qrcode;
+    protected $app;
 
-    public function __construct(array $wx_config)
+    public function __construct($app)
     {
-        $this->wx_config = $wx_config;
+        $this->app = $app;
     }
 
-
-    /**
-     * @return \EasyWeChat\Kernel\Clauses\Clause|\Psr\Http\Message\ResponseInterface
-     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
-     */
     public function handle()
     {
-        $app = Factory::officialAccount($this->wx_config);
-
-        if(Arr::get($this->wx_config, 'echostr') && $app->server->validate()) {
-            return DiscuzResponseFactory::HtmlResponse('success');
-        }
-
-        return $app->server->validate()->push(function ($message) {
+        return $this->app->server->validate()->push(function ($message) {
             if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
@@ -56,6 +37,7 @@ class WebUserEvent
             }
         });
     }
+
     protected function event($message)
     {
         $openid = $message->FromUserName;
