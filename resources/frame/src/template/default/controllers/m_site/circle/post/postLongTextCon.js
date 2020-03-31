@@ -1,7 +1,7 @@
 /**
  * 发布主题控制器
  */
-import {autoTextarea, debounce} from '../../../../../../common/textarea.js';
+import { autoTextarea, debounce } from '../../../../../../common/textarea.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
 import browserDb from '../../../../../../helpers/webDbHelper';
 import '@github/markdown-toolbar-element';
@@ -231,7 +231,7 @@ export default {
               this.supportImgExtRes += imgStrRes;
             }
             this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
-            this.supportImgExtRes = this.supportImgExtRes.substring(0,this.supportImgExtRes.length - 1);
+            this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
           } else {
             ImgExt = '*';
           }
@@ -320,16 +320,18 @@ export default {
             }
             this.loading = false;
           } else {
-            this.$router.replace({path: 'details' + '/' + this.themeId, query: {backGo: this.backGo}});
+            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo } });
           }
         })
       } else {
         if (this.themeTitle.length < 3) {
           this.$toast.fail('标题不得少于三个字符');
+          this.loading = false;
           return false;
         }
         if (this.content.length < 1) {
           this.$toast.fail('内容不得为空');
+          this.loading = false;
           return false;
         }
 
@@ -380,7 +382,7 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.replace({path: '/details' + '/' + postThemeId, query: {backGo: this.backGo}});
+            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo } });
           }
         })
       }
@@ -530,15 +532,15 @@ export default {
           this.$toast.fail(data.errors[0].code);
           this.loading = false;
           throw new Error(data.error);
-          
+
         } else {
           if (img) {
-            this.fileList.push({url: data.readdata._data.url, id: data.readdata._data.id});
+            this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
             this.loading = false;
           }
           if (isFoot) {
-            this.fileListOne.push({url: data.readdata._data.url, id: data.readdata._data.id});
+            this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
@@ -693,7 +695,7 @@ export default {
                 return item
               }
             });
-            this.nowCate = {id: nowCate._data.id, name: nowCate._data.name};
+            this.nowCate = { id: nowCate._data.id, name: nowCate._data.name };
             this.cateId = this.nowCate.id;
             this.selectSort = this.nowCate.name;
           } else {
@@ -709,10 +711,10 @@ export default {
     paySetting() {
       this.paySetShow = true;
 
-      if (this.payValue === '免费'){
+      if (this.payValue === '免费') {
         this.paySetValue = null;
       } else {
-        this.paySetValue = this.payValue.slice(0,this.payValue.length -1);
+        this.paySetValue = this.payValue.slice(0, this.payValue.length - 1);
       }
 
       if (this.paySetShow) {
