@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
+
     protected $app;
 
     public function __construct($app)
@@ -24,10 +25,13 @@ class WebUserEvent
         $this->app = $app;
     }
 
+
     public function handle()
     {
-        return $this->app->server->validate()->push(function ($message) {
-            if ($message['MsgType'] == 'event') {
+
+
+        $this->app->server->push(function ($message) {
+            if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
@@ -37,7 +41,6 @@ class WebUserEvent
             }
         });
     }
-
     protected function event($message)
     {
         $openid = $message->FromUserName;
@@ -52,8 +55,7 @@ class WebUserEvent
             $text->content = trans('login.WebUser_login_success');
         }else{
             //新用户,跳转绑定页面
-            $app = Factory::officialAccount($this->wx_config);
-            $user = $app->user->get($openid);
+            $user = $this->app->user->get($openid);
             $user_wechats= new UserWechat();
             $user_wechats->openid = $user->mp_openid;
             $user_wechats->nickname =  $user->nickname;

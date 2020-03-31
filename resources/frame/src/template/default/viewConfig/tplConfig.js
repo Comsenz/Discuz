@@ -911,6 +911,7 @@ export default {
         // 微信分享
         // console.log(to.name, '9333')
         if (isWeixin && (to.name === 'circle' || to.name === 'details/:themeId')) {
+          // alert(111)
           ShowShare();
           if (isWeixin && to.name === 'circle') {
             wxShare({
@@ -921,6 +922,7 @@ export default {
           }
         }
         else {
+          // alert(222)
           noShare() //禁止分享
         }
       })
@@ -1092,11 +1094,11 @@ export function wxShare(shareData, toName) {
       jsApiList: [
         'updateAppMessageShareData',
         'updateTimelineShareData',
-        'hideMenuItems'
+        'hideMenuItems',
+        'showMenuItems'
       ]
     });
     wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-      // if (to.name === 'details/:themeId' && to.name === 'circle') {
       if (toName.name === 'circle') {
         let data = {
           title: shareData.title,       // 分享标题
@@ -1104,12 +1106,10 @@ export function wxShare(shareData, toName) {
           link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: shareData.logo        // 分享图标
         }
-
         wx.updateAppMessageShareData(data);   //分享给朋友
         wx.updateTimelineShareData(data)  //分享到朋友圈
-        // console.log(data, 'data')
       }
-      // }
+
     });
   })
 };
