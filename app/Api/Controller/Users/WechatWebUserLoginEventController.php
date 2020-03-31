@@ -9,14 +9,12 @@ namespace App\Api\Controller\Users;
 
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
-use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Tobscure\JsonApi\Document;
 
-class WechatWebUserLoginEventController extends AbstractResourceController
+class WechatWebUserLoginEventController implements RequestHandlerInterface
 {
     /**
      * 微信参数
@@ -40,7 +38,7 @@ class WechatWebUserLoginEventController extends AbstractResourceController
     }
 
 
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
