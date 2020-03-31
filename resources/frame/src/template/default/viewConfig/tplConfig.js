@@ -1068,7 +1068,7 @@ export default {
 
 export function wxShare(shareData, toName) {
   // alert(shareData)
-  console.log(shareData)
+  // console.log(shareData)
   let url = window.location.href.split("#")[0];
   appFetch({
     url: 'weChatShare',
@@ -1103,10 +1103,11 @@ export function wxShare(shareData, toName) {
           link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: shareData.logo        // 分享图标
         }
-        wx.updateAppMessageShareData(data);
-        wx.updateTimelineShareData(data)
-      }
 
+        wx.updateAppMessageShareData(data);   //分享给朋友
+        wx.updateTimelineShareData(data)  //分享到朋友圈
+        // console.log(data, 'data')
+      }
       // }
     });
   })
