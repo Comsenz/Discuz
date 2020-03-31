@@ -34,7 +34,7 @@ class WebUserEvent
     {
         $app = new Application($this->wx_config);
         $app->server->push(function ($message) {
-            if ($message['MsgType'] == 'event') {
+            if ($message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                         $this->event($message);
