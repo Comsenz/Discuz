@@ -35,6 +35,9 @@ class WebUserEvent
     public function handle()
     {
         $app =Factory::officialAccount($this->wx_config);
+        if(isset($this->request) && $app->server->validate()){
+            return DiscuzResponseFactory::HtmlResponse('success');
+        }
         $app->server->push(function ($message) {
             if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
@@ -45,9 +48,6 @@ class WebUserEvent
                 }
             }
         });
-        if(isset($this->request) && $app->server->validate()){
-            return DiscuzResponseFactory::HtmlResponse('success');
-        }
         return DiscuzResponseFactory::XmlResponse($app->server->serve());
     }
     protected function event($message)
