@@ -45,10 +45,10 @@ class WebUserEvent
                 }
             }
         });
-        if(isset($this->request->echostr) ){
-            return DiscuzResponseFactory::HtmlResponse($this->request->getcontent);
+        if(isset($this->request) && $app->server->validate()){
+            return DiscuzResponseFactory::HtmlResponse('success');
         }
-        return DiscuzResponseFactory::XmlResponse('success');
+        return DiscuzResponseFactory::XmlResponse($app->server->serve());
     }
     protected function event($message)
     {
