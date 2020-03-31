@@ -12,6 +12,7 @@ use App\Settings\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
