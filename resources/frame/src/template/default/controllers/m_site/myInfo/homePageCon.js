@@ -128,11 +128,9 @@ export default {
           attri.to_user_id = this.userId;
           methodType = 'delete';
           this.oldFollow = intiFollowVal;
-          this.followDet._data.followCount = this.followDet._data.followCount - 1;
         } else {
           attri.to_user_id = this.userId;
           methodType = 'post';
-          this.followDet._data.followCount = this.followDet._data.followCount + 1;
           // this.oldFollow =  '0';
         }
 
