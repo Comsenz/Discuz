@@ -23,22 +23,19 @@ class WebUserEvent
      * @var string
      */
     public $wx_config;
-    public $request;
+    protected $app;
 
-    public function __construct(array $wx_config, $request)
+    public function __construct(array $wx_config, $app)
     {
         $this->wx_config = $wx_config;
-        $this->request = $request;
+        $this->app = $app;
     }
 
 
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
-        if(isset($this->request) && $app->server->validate()){
-            return DiscuzResponseFactory::HtmlResponse('success');
-        }
-        $app->server->push(function ($message) {
+
+        $this->app->server->push(function ($message) {
             if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
@@ -48,7 +45,6 @@ class WebUserEvent
                 }
             }
         });
-        return DiscuzResponseFactory::XmlResponse($app->server->serve());
     }
     protected function event($message)
     {
@@ -64,8 +60,7 @@ class WebUserEvent
             $text->content = trans('login.WebUser_login_success');
         }else{
             //新用户,跳转绑定页面
-            $app = Factory::officialAccount($this->wx_config);
-            $user = $app->user->get($openid);
+            $user = $this->app->user->get($openid);
             $user_wechats= new UserWechat();
             $user_wechats->openid = $user->mp_openid;
             $user_wechats->nickname =  $user->nickname;
