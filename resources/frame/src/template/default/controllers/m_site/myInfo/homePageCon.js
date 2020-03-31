@@ -161,7 +161,7 @@ export default {
             this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
           } else {
             this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
-            console.log(res.readdata._data.is_mutual, '~~~~~');
+            // console.log(res.readdata._data.is_mutual, '~~~~~');
             if (res.readdata._data.is_mutual == 0) {
               this.intiFollowVal = '1';
             } else {
