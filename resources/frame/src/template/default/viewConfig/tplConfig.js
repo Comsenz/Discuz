@@ -1098,7 +1098,7 @@ export function wxShare(shareData, toName) {
       // if (to.name === 'details/:themeId' && to.name === 'circle') {
       if (toName.name === 'circle') {
         let data = {
-          title: `${shareData.title}- Powered by Discuz! Q`,       // 分享标题
+          title: shareData.title,       // 分享标题
           desc: shareData.desc,         // 分享描述
           link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: shareData.logo        // 分享图标

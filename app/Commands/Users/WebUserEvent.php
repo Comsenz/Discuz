@@ -13,6 +13,7 @@ use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
+use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
@@ -30,22 +31,30 @@ class WebUserEvent
     }
 
 
+    /**
+     * @return \EasyWeChat\Kernel\Clauses\Clause|\Psr\Http\Message\ResponseInterface
+     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \ReflectionException
+     */
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
-        $app->server->push(function ($message) {
-            if ($message->MsgType == 'event') {
+        $app = Factory::officialAccount($this->wx_config);
+
+        if(Arr::get($this->wx_config, 'echostr') && $app->server->validate()) {
+            return DiscuzResponseFactory::HtmlResponse('success');
+        }
+
+        return $app->server->validate()->push(function ($message) {
+            if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
-                        $this->event($message);
-                        break;
                     case "SCAN":
                         $this->event($message);
                         break;
                 }
             }
         });
-        return $app->server->serve();
     }
     protected function event($message)
     {
