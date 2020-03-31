@@ -160,14 +160,13 @@ export default {
             this.intiFollowVal = '0';
             this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
           } else {
+            this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
+
             if (res.readdata._data.is_mutual && res.readdata._data.is_mutual == 0) {
-              this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
               this.intiFollowVal = '1';
-            } else if (res.readdata._data.is_mutual && res.readdata._data.is_mutual == 1) {
-              this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
+            } else {
               this.intiFollowVal = '2';
             }
-            // this.intiFollowVal = intiFollowVal;
           }
           this.clickStatus = true;
         }
