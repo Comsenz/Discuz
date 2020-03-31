@@ -36,7 +36,7 @@
 
           <van-field v-model="actualCashWithdrawal" label="实际提现金额" placeholder="实际提现金额" readonly />
 
-          <van-field v-model="phone" label="手机号" placeholder="手机号" readonly />
+          <van-field v-model="phone" label="手机号" placeholder="请先去我的资料绑定手机号" readonly />
 
           <van-field clearable v-model="sms" label="验证码 " type="number" placeholder="请输入验证码">
             <van-button
