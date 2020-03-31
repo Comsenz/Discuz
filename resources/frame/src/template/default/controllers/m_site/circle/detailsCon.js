@@ -7,6 +7,7 @@ import appCommonH from '../../../../../helpers/commonHelper';
 // import appConfig from '../../../../../../config/appConfig';
 import filters from '../../../../../common/filters';
 import { ImagePreview } from "vant";
+import { wxShare, noShare } from '../../../viewConfig/tplConfig';
 export default {
   data: function () {
     return {
@@ -424,7 +425,7 @@ export default {
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
-        this.wxShare();
+        this.wxShareDetail();  //调用微信分享
         // console.log(333)
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
@@ -486,45 +487,6 @@ export default {
     shareTheme() {
       if (this.isWeixin) {
         this.wxShareTip = true;
-        //   let url = window.location.href.split("#")[0];
-        //   console.log(url)
-        //   this.appFetch({
-        //     url: 'weChatShare',
-        //     method: 'get',
-        //     data: {
-        //       url
-        //     }
-        //   }).then((res) => {
-        //     let appId = res.readdata._data.appId;
-        //     let nonceStr = res.readdata._data.nonceStr;
-        //     let signature = res.readdata._data.signature;
-        //     let timestamp = res.readdata._data.timestamp;
-        //     let jsApiList = res.readdata._data.jsApiList;
-        //     wx.config({
-        //       debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        //       appId: appId,         // 必填，公众号的唯一标识
-        //       timestamp: timestamp, // 必填，生成签名的时间戳
-        //       nonceStr: nonceStr,   // 必填，生成签名的随机串
-        //       signature: signature, // 必填，签名，见附录1
-        //       jsApiList: jsApiList
-        //       // jsApiList: [
-        //       //   'updateAppMessageShareData',
-        //       //   'updateTimelineShareData'
-        //       // ]
-        //     });
-        //     // console.log('111')
-        //     // wx.ready(() => {
-        //     wx.updateAppMessageShareData({  //分享给朋友
-        //       title: '是你吗', // 分享标题
-        //       desc: '是我啊', // 分享描述
-        //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        //       imgUrl: '../../../../static/images/logo.png', // 分享图标
-        //       success: function () {
-        //         // 设置成功
-        //         alert('222')
-        //       }
-        //     });
-        //   })
       } else {
         let Url = '';
         if (this.isPayVal === 'pay') {
@@ -1132,11 +1094,11 @@ export default {
       })
     },
     // 微信分享
-    wxShare() {
+    wxShareDetail() {
       // console.log(222);
-      let title = '';
-      let desc = '';
-      let logo = '';
+      var title = '';
+      var desc = '';
+      var logo = '';
       // alert(this.themeCon._data.type, '类型')
       if (this.themeCon._data.type == 0) {
         //普通主题
@@ -1149,17 +1111,18 @@ export default {
         } else {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
-      } else if (this.themeCon._data.type == 1) {
+        console.log(logo)
+      } else if (this.themeCon._data.type == 1) {   //长文类型
         // alert(this.themeCon._data.title);
         title = this.themeCon._data.title;
         desc = this.themeCon._data.title;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
         } else {
-          logo = appConfig.baseUrl + '/static/images / wxshare.png';
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
-        logo = this.firstpostImageList[0];
-      } else if (this.themeCon._data.type == 2) {
+        // logo = this.firstpostImageList[0];
+      } else if (this.themeCon._data.type == 2) {  //视频类型
         // alert(this.themeCon._data.type);
         title = this.themeCon.firstPost._data.content;
         desc = this.themeCon.firstPost._data.content;
@@ -1190,15 +1153,16 @@ export default {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: logo        // 分享图标
+        logo        // 分享图标
       }
       // console.log(data, '88888')
+      wxShare(data, { name: 'circle' })
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {
-    // this.wxShare();
+    // console.log(wxShare, 'wxShare111111');
     document.addEventListener('click', this.listenEvt, false);
   },
   destroyed: function () {

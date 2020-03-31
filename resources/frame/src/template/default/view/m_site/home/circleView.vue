@@ -50,7 +50,9 @@
         </div>
       </van-pull-refresh>
     </van-list>
-    <div class="recordNumber" v-show="isRecordNumber"><a href="http://www.beian.miit.gov.cn" target="_blank">{{recordNumber}}</a></div>
+    <div class="recordNumber" v-show="isRecordNumber">
+      <a href="http://www.beian.miit.gov.cn" target="_blank">{{recordNumber}}</a>
+    </div>
     <div class="nullTip" v-if="nullTip">
       <van-icon name="warning-o" size="1.8rem" class="nullIcon" />
       <p class="nullWord">{{nullWord}}</p>

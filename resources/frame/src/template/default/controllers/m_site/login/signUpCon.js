@@ -100,6 +100,7 @@ export default {
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
+          console.log(this.appID)
           this.password_length = res.readdata._data.set_reg.password_length;
           this.password_strength = res.readdata._data.set_reg.password_strength;
           browserDb.setLItem('siteInfo', res.readdata);
