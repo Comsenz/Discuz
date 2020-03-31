@@ -55,7 +55,7 @@ export default {
           include: ['groups'],
         }
       }).then((res) => {
-        console.log(res, '######');
+        // console.log(res, '######');
         this.followDet = res.readdata;
         this.isReal = res.readdata._data.isReal;
         if (res.readdata._data.follow == '1') {
