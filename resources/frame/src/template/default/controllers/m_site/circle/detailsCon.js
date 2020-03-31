@@ -335,6 +335,7 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
+        console.log(res, '0000')
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -1115,8 +1116,12 @@ export default {
         }
       } else if (this.themeCon._data.type == 1) {   //长文类型
         var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        if (this.themeCon._data.price > 0) {
+          desc = ''
+        } else {
+          desc = shareContent;
+        }
         title = this.themeCon._data.title + ' - ' + this.siteName;
-        desc = shareContent;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
         } else {
