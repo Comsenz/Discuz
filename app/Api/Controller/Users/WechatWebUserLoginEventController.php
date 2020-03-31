@@ -9,6 +9,8 @@ namespace App\Api\Controller\Users;
 
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
+use Discuz\Http\DiscuzResponseFactory;
+use EasyWeChat\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,8 +48,15 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
             'token' => $this->settings->get('oplatform_app_token', 'wx_oplatform'),
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
+
+        $app = Factory::officialAccount($wx_config);
+
+        if(Arr::get($request->getQueryParams(), 'echostr') && $app->server->validate()) {
+            return DiscuzResponseFactory::HtmlResponse('success');
+        }
+
         return $this->bus->dispatch(
-            new WebUserEvent($wx_config)
+            new WebUserEvent($app)
         );
     }
 }
