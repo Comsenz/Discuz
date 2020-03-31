@@ -10,6 +10,7 @@ use App\Models\SessionToken;
 use App\Models\UserWallet;
 use App\Models\UserWechat;
 use Discuz\Http\DiscuzResponseFactory;
+use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 
@@ -31,7 +32,8 @@ class WebUserEvent
 
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
+//        $app =Factory::officialAccount($this->wx_config);
+        $app = new Application($this->wx_config);
         $app->server->push(function ($message) {
             if ($message->MsgType == 'event') {
                 switch ($message->Event) {
@@ -44,7 +46,7 @@ class WebUserEvent
                 }
             }
         });
-        return DiscuzResponseFactory::XmlResponse($app->server->serve()->send());
+        return $app->server->serve();
     }
     protected function event($message)
     {

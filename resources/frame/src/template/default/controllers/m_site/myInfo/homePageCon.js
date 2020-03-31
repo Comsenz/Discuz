@@ -21,7 +21,7 @@ export default {
       },   //用户组
       userInfoAvatarUrl: '',
       followDet: '',      //当前访问的用户信息
-      oldFollow: '',
+      oldFollow: false,
       intiFollowVal: '',
       clickStatus: true,
 
@@ -57,6 +57,13 @@ export default {
       }).then((res) => {
         this.followDet = res.readdata;
         this.isReal = res.readdata._data.isReal;
+        if (res.readdata._data.follow == '1') {
+          this.followFlag = '已关注';
+        } else if (res.readdata._data.follow == '0') {
+          this.followFlag = '关注TA';
+        } else {
+          this.followFlag = '相互关注';
+        }
         this.intiFollowVal = res.readdata._data.follow;
         this.userInfoAvatarUrl = res.readdata._data.avatarUrl;
         if (res.readdata._data.avatarUrl != '' && res.readdata._data.avatarUrl != null) {
@@ -121,11 +128,9 @@ export default {
           attri.to_user_id = this.userId;
           methodType = 'delete';
           this.oldFollow = intiFollowVal;
-          this.followDet._data.followCount = this.followDet._data.followCount - 1;
         } else {
           attri.to_user_id = this.userId;
           methodType = 'post';
-          this.followDet._data.followCount = this.followDet._data.followCount + 1;
           // this.oldFollow =  '0';
         }
 
