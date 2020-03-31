@@ -1106,7 +1106,7 @@ export default {
       if (this.themeCon._data.type == 0) {  //普通主题
 
         var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
-        title = shareContent + this.siteName;
+        title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
@@ -1115,7 +1115,7 @@ export default {
         }
       } else if (this.themeCon._data.type == 1) {   //长文类型
         var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
-        title = this.themeCon._data.title + this.siteName;
+        title = this.themeCon._data.title + ' - ' + this.siteName;
         desc = shareContent;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
@@ -1124,7 +1124,7 @@ export default {
         }
       } else if (this.themeCon._data.type == 2) {  //视频类型
         var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
-        title = shareContent + this.siteName;
+        title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.themeCon.threadVideo._data.cover_url) {
           logo = this.themeCon.threadVideo._data.cover_url;
