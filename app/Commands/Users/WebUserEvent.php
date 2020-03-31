@@ -13,40 +13,31 @@ use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
+use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    /**
-     * 微信参数
-     *
-     * @var string
-     */
-    public $settings;
-    public $qrcode;
+    protected $app;
 
-    public function __construct(array $wx_config)
+    public function __construct($app)
     {
-        $this->wx_config = $wx_config;
+        $this->app = $app;
     }
-
 
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
-        $app->server->push(function ($message) {
-            if ($message->MsgType == 'event') {
+        return $this->app->server->validate()->push(function ($message) {
+            if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
-                        $this->event($message);
-                        break;
                     case "SCAN":
                         $this->event($message);
                         break;
                 }
             }
         });
-        return $app->server->serve();
     }
+
     protected function event($message)
     {
         $openid = $message->FromUserName;
