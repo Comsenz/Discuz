@@ -15,8 +15,8 @@
             <div class="systemTime">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</div>
             <div class="systemDet">
               <a href="javascript:;" v-if="item._data.raw && item._data.raw.thread_id > 0"
-                 @click="jumpDetails(item._data.raw.thread_id)">{{item._data.content}}</a>
-              <a href="javascript:;" v-else>{{item._data.content}}</a>
+                 @click="jumpDetails(item._data.raw.thread_id)" v-html="item._data.content"></a>
+              <a href="javascript:;" v-else v-html="item._data.content"></a>
             </div>
           </div>
         </main>

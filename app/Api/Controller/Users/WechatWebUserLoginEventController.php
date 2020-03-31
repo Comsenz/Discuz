@@ -9,12 +9,14 @@ namespace App\Api\Controller\Users;
 
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
+use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Tobscure\JsonApi\Document;
 
-class WechatWebUserLoginEventController implements RequestHandlerInterface
+class WechatWebUserLoginEventController extends AbstractResourceController
 {
     /**
      * 微信参数
@@ -38,13 +40,13 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
     }
 
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $wx_config = [
-            'app_id'=>$this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
+            'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'token' => $this->settings->get('offiaccount_token', 'wx_offiaccount'),
-            'aes_key' => $this->settings->get('offiaccount_aes_key', 'wx_offiaccount')
+            'token' => $this->settings->get('oplatform_app_token', 'wx_oplatform'),
+            'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
         return $this->bus->dispatch(
             new WebUserEvent($wx_config)

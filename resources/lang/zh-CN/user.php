@@ -15,4 +15,6 @@ return [
     'not_match_used_password' => '原密码不匹配',
     'username_error' => '用户名不能有特殊字符。',
     'identity_error' => '身份证为 15 位或 18 位。',
+
+    'user_avatar_update_sync_fail' => '用户同步微信头像失败',
 ];
