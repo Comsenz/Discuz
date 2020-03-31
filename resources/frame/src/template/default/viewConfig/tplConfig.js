@@ -912,7 +912,7 @@ export default {
         // console.log(to.name, '9333')
         if (isWeixin && (to.name === 'circle' || to.name === 'details/:themeId')) {
           // alert(111)
-          // ShowShare();
+          ShowShare();
           if (isWeixin && to.name === 'circle') {
             wxShare({
               title: site_name,
@@ -1094,7 +1094,8 @@ export function wxShare(shareData, toName) {
       jsApiList: [
         'updateAppMessageShareData',
         'updateTimelineShareData',
-        'hideMenuItems'
+        'hideMenuItems',
+        'showMenuItems'
       ]
     });
     wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
@@ -1123,10 +1124,10 @@ export function noShare() {
     });
   })
 };
-// export function ShowShare() {
-//   // wx.ready(() => {
-//   wx.showMenuItems({
-//     menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-//   });
-//   // })
-// }
+export function ShowShare() {
+  // wx.ready(() => {
+  wx.showMenuItems({
+    menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+  });
+  // })
+}
