@@ -32,8 +32,7 @@ class WebUserEvent
 
     public function handle()
     {
-//        $app =Factory::officialAccount($this->wx_config);
-        $app = new Application($this->wx_config);
+        $app =Factory::officialAccount($this->wx_config);
         $app->server->push(function ($message) {
             if ($message->MsgType == 'event') {
                 switch ($message->Event) {
