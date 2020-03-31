@@ -10,6 +10,7 @@ use App\Models\SessionToken;
 use App\Models\UserWallet;
 use App\Models\UserWechat;
 use Discuz\Http\DiscuzResponseFactory;
+use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 
@@ -31,9 +32,9 @@ class WebUserEvent
 
     public function handle()
     {
-        $app =Factory::officialAccount($this->wx_config);
+        $app = new Application($this->wx_config);
         $app->server->push(function ($message) {
-            if ($message->MsgType == 'event') {
+            if ($message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                         $this->event($message);

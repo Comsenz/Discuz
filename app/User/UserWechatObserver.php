@@ -5,21 +5,18 @@ namespace App\User;
 use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;
 use Carbon\Carbon;
-use Discuz\Foundation\Application;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 class UserWechatObserver
 {
-    protected $file;
+    protected $filesystem;
 
     protected $app;
 
-    public function __construct(Filesystem $file, Application $app)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->file = $file;
-        $this->app = $app;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -42,7 +39,8 @@ class UserWechatObserver
 
         // 微信存储本地头像 用到的 HttpClient()
         $wechatImg = $userWechat->headimgurl;
-        $avatarPath = $userWechat->user_id . '.png';
+        $path = $userWechat->user_id . '.png';
+        $avatarPath = $this->filesystem->url($path);
 
         $httpClient = new Client();
 
@@ -56,7 +54,7 @@ class UserWechatObserver
 
         $user->changeAvatar($avatarPath);
 
-        $this->file->put($avatarPath, $img);
+        $this->filesystem->put($avatarPath, $img);
 
         $user->avatar_at = Carbon::now()->toDateTimeString();
         $user->save();
