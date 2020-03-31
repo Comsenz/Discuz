@@ -9,8 +9,6 @@ namespace App\Api\Controller\Users;
 
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
-use Discuz\Http\DiscuzResponseFactory;
-use EasyWeChat\Factory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -43,21 +41,15 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $request = Arr::get($request->getQueryParams(), '');
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('oplatform_app_token', 'wx_oplatform'),
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
-
-        $app = Factory::officialAccount($wx_config);
-
-        if(Arr::get($request->getQueryParams(), 'echostr') && $app->server->validate()) {
-            return DiscuzResponseFactory::HtmlResponse('success');
-        }
-
         return $this->bus->dispatch(
-            new WebUserEvent($app)
+            new WebUserEvent($wx_config,$request)
         );
     }
 }

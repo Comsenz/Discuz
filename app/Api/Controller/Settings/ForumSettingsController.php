@@ -36,6 +36,6 @@ class ForumSettingsController extends AbstractResourceController
             $data['users'] = User::orderBy('created_at', 'desc')->limit(5)->get(['id', 'username', 'avatar']);
         }
 
-        return ['id' => 1];
+        return $data + ['id' => 1];
     }
 }
