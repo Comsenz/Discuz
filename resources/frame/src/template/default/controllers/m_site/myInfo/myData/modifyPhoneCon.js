@@ -22,6 +22,7 @@ export default {
       btnContent: '发送验证码',
       mobileConfirmed: '',
       loading: false, //loading状态
+      disabled: false, //按钮状态
     }
   },
 

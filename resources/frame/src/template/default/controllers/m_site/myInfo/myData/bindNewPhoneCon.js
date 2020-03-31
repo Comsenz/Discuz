@@ -24,7 +24,7 @@ export default {
       modifyPhone:'',       //用户手机号
       titlePhone:'',     //标题
       headerShow:false,
-      btnLoading:false   //按钮loading状态
+      btnLoading: false   //按钮loading状态
     }
   },
 
