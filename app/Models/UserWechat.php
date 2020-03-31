@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $unionid
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property User $user
  * @method static create($user)
  * @method static where(...$params)
  */

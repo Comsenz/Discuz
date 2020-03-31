@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Settings\SettingsRepository;
 use App\Tools\AttachmentUploadTool;
 use App\Tools\ImageUploadTool;
+use App\User\UserWechatObserver;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Encryption\Encrypter;
@@ -41,6 +42,11 @@ class SettingsServiceProvider extends ServiceProvider
             if (Arr::get($qcloud, 'qcloud_cos', false)) {
                 $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
                     return $app->make(Factory::class)->disk('attachment');
+                });
+
+                // 上传头像驱动地址
+                $this->app->when([UserWechatObserver::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
+                    return $app->make(Factory::class)->disk('avatar_cos');
                 });
             }
         }

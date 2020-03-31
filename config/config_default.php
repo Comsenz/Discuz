@@ -91,6 +91,12 @@ return [
                 'url' => 'avatar',
                 'visibility' => 'public',
             ],
+            'avatar_cos' => [
+                'driver' => 'cos',
+                'root' => storage_path('app/public/avatars'),
+                'url' => 'avatar',
+                'visibility' => 'public',
+            ],
             'attachment' => [
                 'driver' => 'cos',
                 'root'   => storage_path('app/public/attachment'),
