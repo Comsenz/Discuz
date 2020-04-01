@@ -57,6 +57,7 @@ class DeleteUserFollow
     public function __invoke(UserFollow $userFollow, UserFollowRepository $userFollowRepository, User $user, Dispatcher $events)
     {
         $this->events = $events;
+        $this->assertRegistered($this->actor);
 
         $userFollowRes = $userFollowRepository->findOrFail($this->to_user_id, $this->from_user_id, $this->actor);
 
