@@ -38,6 +38,7 @@ class WebUserEvent
     }
     protected function event($message)
     {
+        return new Text('11111');
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
         $wechatuser = UserWechat::where('mp_openid',$openid)->first();
@@ -46,7 +47,8 @@ class WebUserEvent
             SessionToken::where('token',$EventKey)->update([
                     'user_id'=>$wechatuser['user_id'],
                 ]);
-           return new Text(trans('login.WebUser_login_success'));
+            $text = trans('login.WebUser_login_success');
+            return new Text($text);
         }else{
             //新用户,跳转绑定页面
             $user = $this->app->user->get($openid);
@@ -64,7 +66,8 @@ class WebUserEvent
                 'payload'=>['openid'=>$openid]
             ]);
             if($user_wechats->save()){
-                return new Text(trans('login.WebNewUser_login_success'));
+                $text = trans('login.WebNewUser_login_success');
+                return new Text($text);
             }
         }
     }
