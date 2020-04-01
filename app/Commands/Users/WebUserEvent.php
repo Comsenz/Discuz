@@ -23,7 +23,7 @@ class WebUserEvent
 
     public function handle()
     {
-
+        return new Text('11111');
         $this->app->server->push(function ($message) {
             if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
@@ -38,7 +38,7 @@ class WebUserEvent
     }
     protected function event($message)
     {
-        return new Text('11111');
+
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
         $wechatuser = UserWechat::where('mp_openid',$openid)->first();
