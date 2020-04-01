@@ -23,6 +23,7 @@ use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\BanLogin;
 use App\Listeners\User\ChangeLastActived;
 use App\Listeners\User\CheckLogin;
+use App\Listeners\User\CheckoutSite;
 use App\Listeners\User\InviteBind;
 use App\Listeners\User\Notifications;
 use App\Listeners\User\ValidateLogin;
@@ -38,7 +39,7 @@ use App\Policies\UserWalletLogsPolicy;
 use App\Policies\UserWalletPolicy;
 use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceProvider;
-use Discuz\Http\Middleware\CheckoutSite;
+
 
 class EventServiceProvider extends BaseEventServiceProvider
 {
