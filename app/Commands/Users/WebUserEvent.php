@@ -14,6 +14,7 @@ use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class WebUserEvent
 {
@@ -45,6 +46,7 @@ class WebUserEvent
     {
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
+        file_put_contents('a.log',$message);
         $wechat_user = UserWallet::where('mp_openid',$openid)->first();
         if($wechat_user){
             //老用户  跟新扫描二维码用户
