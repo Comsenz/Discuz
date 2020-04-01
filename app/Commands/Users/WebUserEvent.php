@@ -23,7 +23,6 @@ class WebUserEvent
     public function handle()
     {
         $this->app->server->push(function ($message) {
-            return new Text('$message->MsgType');
             if (isset($message->MsgType) && $message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
