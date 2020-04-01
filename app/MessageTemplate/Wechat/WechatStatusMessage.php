@@ -44,7 +44,7 @@ class WechatStatusMessage extends DatabaseMessage
 
         return [
             $this->notifiable->username,
-            Carbon::now(),
+            Carbon::now()->toDateTimeString(),
             $this->url->to(''),
             $refuse,
         ];

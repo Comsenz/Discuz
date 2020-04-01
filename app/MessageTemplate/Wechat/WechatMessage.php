@@ -46,7 +46,7 @@ class WechatMessage extends DatabaseMessage
 
         return [
             $this->strWords($message),
-            Carbon::now(),
+            Carbon::now()->toDateTimeString(),
             $threadUrl,
             Arr::get($data, 'refuse', '无'),
         ];
