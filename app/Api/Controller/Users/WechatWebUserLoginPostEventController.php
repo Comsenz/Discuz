@@ -10,12 +10,10 @@ namespace App\Api\Controller\Users;
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use EasyWeChat\Factory;
 use Psr\Http\Server\RequestHandlerInterface;
-use Discuz\Http\DiscuzResponseFactory;
 
 
 class WechatWebUserLoginPostEventController implements RequestHandlerInterface
