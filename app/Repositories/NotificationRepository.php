@@ -26,17 +26,14 @@ class NotificationRepository extends AbstractRepository
     }
 
     /**
-     * Find a Notification by ID, optionally making sure it is visible to a certain
-     * user, or throw an exception.
-     *
-     * @param int $id
-     * @param User|null $actor
-     * @return Post
+     * @param $id
+     * @param User $actor
+     * @return Builder|\Illuminate\Database\Eloquent\Model
      */
-    public function findOrFail($id, User $actor = null)
+    public function findOrFail($id, User $actor)
     {
-        $query = DatabaseNotification::where('id', $id);
+        $query = $this->query()->where('id', $id)->where('notifiable_id', $actor->id);
 
-        return $query;
+        return $query->firstOrFail();
     }
 }
