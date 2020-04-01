@@ -23,6 +23,7 @@ class WebUserEvent
     public function handle()
     {
         $this->app->server->push(function ($message) {
+            return new Text($message->MsgType);
             if (isset($message->MsgType) && $message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
@@ -36,7 +37,6 @@ class WebUserEvent
 
     protected function event($message)
     {
-        return new Text('aa');
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
