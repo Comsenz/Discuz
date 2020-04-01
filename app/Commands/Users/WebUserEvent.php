@@ -23,7 +23,6 @@ class WebUserEvent
 
     public function handle()
     {
-        return new Text('11111');
         $this->app->server->push(function ($message) {
             if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
