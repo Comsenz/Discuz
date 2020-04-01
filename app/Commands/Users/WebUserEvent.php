@@ -42,11 +42,11 @@ class WebUserEvent
     {
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
-        $wechat_user = UserWechat::where('mp_openid',$openid)->first();
-        if($wechat_user){
+        $wechatuser = UserWechat::where('mp_openid',$openid)->first();
+        if($wechatuser){
             //老用户  跟新扫描二维码用户
             SessionToken::where('token',$EventKey)->update([
-                    'user_id'=>$wechat_user['user_id'],
+                    'user_id'=>$wechatuser['user_id'],
                 ]);
             $text = new Text();
             $text->content = trans('login.WebUser_login_success');
