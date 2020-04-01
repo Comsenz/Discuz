@@ -7,14 +7,9 @@
 
 namespace App\Commands\Users;
 use App\Models\SessionToken;
-use App\Models\UserWallet;
 use App\Models\UserWechat;
 use Discuz\Http\DiscuzResponseFactory;
-use EasyWeChat\OfficialAccount\Application;
-use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 
 class WebUserEvent
 {
@@ -29,6 +24,7 @@ class WebUserEvent
 
     public function handle()
     {
+
         $this->app->server->push(function ($message) {
             if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
@@ -65,6 +61,7 @@ class WebUserEvent
             $user_wechats->city = $user->city;
             $user_wechats->country = $user->country;
             $user_wechats->headimgurl = $user->headimgurl;
+
             SessionToken::where('token',$EventKey)->update([
                 'scope'=>'wechat',
                 'payload'=>['openid'=>$openid]
