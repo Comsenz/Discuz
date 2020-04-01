@@ -58,66 +58,18 @@ export default {
     },
     handleReg(value) {
       value = value.toString(); // 先转换成字符串类型
-
       if (value.indexOf('.') == 0) {
         value = '0.';  // 第一位就是 .
       }
-
       value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
       value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
       value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
       value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
-
       //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
       if (value.indexOf(".") < 0 && value != "") {
         value = parseFloat(value);
       }
-
       return value;
-      // ---------- 分割线 ----------
-      // // if(this.withdrawalAmount === '.'){                // 如果只输入一个点  变成 0.
-      // //   this.withdrawalAmount = '0.';
-      // //   return;
-      // // }
-      // const numF = parseFloat(this.withdrawalAmount);
-      // // if(isNaN(numF)){                                  // 如果输入的小数点后面有不是数字的部分
-      // //   this.withdrawalAmount = '';
-      // //   return;
-      // // }
-      // const num = Number(this.withdrawalAmount);
-      // // if(num > Number.MAX_SAFE_INTEGER){                // 输入的值超出了js的最大安全数
-      // //   this.withdrawalAmount = '';
-      // //   return;
-      // // }
-      // const whthDiawArr = this.withdrawalAmount.split('.');
-
-      // // if(whthDiawArr.length > 2){                        // 输入了超过两个小数点 只保留前面的一个小数点
-      // //   this.withdrawalAmount = whthDiawArr[0].replace(/[^0-9\.]/g, '') + '.' + whthDiawArr[1].replace(/[^0-9\.]/g, '');
-      // //   return;
-      // // }
-      // // this.withdrawalAmount = this.withdrawalAmount.replace(/[^0-9\.]/g, ''); // 去掉不是数字的部分
-      // // if(this.withdrawalAmount[0] === '.'){              // 如果字符串第一个位置是小数点 就加0(和第一个判断不一样)
-      // //   this.withdrawalAmount = '0' + this.withdrawalAmount;
-      // // }
-
-      // switch (true) {
-      //   case this.withdrawalAmount === '.':
-      //     this.withdrawalAmount = '0.';
-      //     break;
-      //   case isNaN(numF):
-      //   case num > Number.MAX_SAFE_INTEGER:
-      //     this.withdrawalAmount = '';
-      //     break;
-      //   case whthDiawArr.length > 2:
-      //     this.withdrawalAmount = whthDiawArr[0].replace(/[^0-9\.]/g, '') + '.' + whthDiawArr[1].replace(/[^0-9\.]/g, '');
-      //     break;
-      //   default:
-      //     this.withdrawalAmount = this.withdrawalAmount.replace(/[^0-9\.]/g, ''); // 去掉不是数字的部分
-      //     break;
-      // }
-      // if (this.withdrawalAmount[0] === '.') {              // 如果字符串第一个位置是小数点 就加0(和第一个判断不一样)
-      //   this.withdrawalAmount = '0' + this.withdrawalAmount;
-      // };
     },
     onDelete() {
       this.withdrawalAmount = this.withdrawalAmount.slice(0, -1);
@@ -269,7 +221,7 @@ export default {
           if (this.mobileConfirmed == true) {
             this.$toast("提现申请已提交，请等待审核");
             this.loading = false;
-            // this.$router.push({path:'/modify-data'});
+            this.$router.push({ path: '/my-wallet' });  //提现成功后跳转到钱包首页
           }
           var phone = this.phone
           if (!phone) {

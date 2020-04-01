@@ -17,13 +17,13 @@ export default {
       time: 1, //发送验证码间隔时间
       insterVal: '',
       isGray: false,
-      btnContent:'发送验证码',
-      mobileConfirmed:'',//验证验证码是否正确
-      backGo:1,
-      disabled:false,
-      modifyPhone:'',       //用户手机号
-      titlePhone:'',     //标题
-      headerShow:false,
+      btnContent: '发送验证码',
+      mobileConfirmed: '',//验证验证码是否正确
+      backGo: 1,
+      disabled: false,
+      modifyPhone: '',       //用户手机号
+      titlePhone: '',     //标题
+      headerShow: false,
       btnLoading: false   //按钮loading状态
     }
   },
@@ -46,16 +46,16 @@ export default {
         method: 'get',
         splice: '/' + userId,
         data: {
-          include: 'wechat'
+          // include: 'wechat'  
         }
       }).then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.modifyPhone = res.readdata._data.originalMobile;         //用户手机号
-          if(this.modifyPhone){
+          if (this.modifyPhone) {
             this.titlePhone = '修改手机号'
-          }else{
+          } else {
             this.titlePhone = '绑定新手机号'
           }
           this.headerShow = true
@@ -95,7 +95,7 @@ export default {
             }
           }
         }).then(res => {
-          if (res.errors){
+          if (res.errors) {
             if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
             } else {
@@ -103,7 +103,7 @@ export default {
             }
             // this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail);
             // throw new Error(res.error)
-          }else{
+          } else {
             this.insterVal = res.data.attributes.interval;
             this.time = this.insterVal;
             this.timer();
@@ -113,20 +113,20 @@ export default {
 
 
     },
-    timer(){
+    timer() {
       // alert('执行');
-      if(this.time>1){
+      if (this.time > 1) {
         // alert('2222');
-       this.time--;
-       this.btnContent = this.time+"s后重新获取";
-       this.disabled = true;
-       var timer = setTimeout(this.timer,1000);
-       this.isGray = true;
-      }else if(this.time == 1){
-       this.btnContent = "获取验证码";
-       clearTimeout(timer);
-       this.disabled = false;
-       this.isGray = false;
+        this.time--;
+        this.btnContent = this.time + "s后重新获取";
+        this.disabled = true;
+        var timer = setTimeout(this.timer, 1000);
+        this.isGray = true;
+      } else if (this.time == 1) {
+        this.btnContent = "获取验证码";
+        clearTimeout(timer);
+        this.disabled = false;
+        this.isGray = false;
       }
     },
 
@@ -168,18 +168,18 @@ export default {
         }
       }).then(res => {
         this.btnLoading = false;
-        if (res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
-        }else{
-        this.mobileConfirmed =res.readdata._data.mobileConfirmed;
-        if(this.mobileConfirmed == true){
-          this.$toast("手机号绑定成功");
-          this.$router.push({path:'/modify-data',query:{backGo:this.backGo}});
+        } else {
+          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
+          if (this.mobileConfirmed == true) {
+            this.$toast("手机号绑定成功");
+            this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
+          }
         }
-      }
 
-      }).catch((err)=>{
+      }).catch((err) => {
         this.btnLoading = false;
         this.$toast("手机号绑定失败，请重试");
       });
@@ -204,12 +204,12 @@ export default {
     }
   },
 
-  beforeRouteEnter(to,from,next){
+  beforeRouteEnter(to, from, next) {
 
-    next(vm=>{
-      if(from.name === 'modify-phone'){
+    next(vm => {
+      if (from.name === 'modify-phone') {
         vm.backGo = -4
-      }else {
+      } else {
         vm.backGo = -3
       }
     })

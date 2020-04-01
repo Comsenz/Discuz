@@ -839,7 +839,11 @@ export default {
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
               } else {
-                next({ path: '/wx-sign-up-bd' });
+                if (res.readdata._data.set_site.site_mode === 'public') {
+                  next({ path: 'wx-sign-up-bd' });
+                } else if (res.readdata._data.set_site.site_mode === 'pay') {
+                  next({ path: 'pay-circle' });
+                }
               }
             } else {
               if (notLoggedInToAccessPage.includes(to.name)) {
@@ -909,9 +913,7 @@ export default {
         }
 
         // 微信分享
-        // console.log(to.name, '9333')
         if (isWeixin && (to.name === 'circle' || to.name === 'details/:themeId')) {
-          // alert(111)
           ShowShare();
           if (isWeixin && to.name === 'circle') {
             wxShare({
@@ -920,9 +922,7 @@ export default {
               logo: site_logo
             }, to)
           }
-        }
-        else {
-          // alert(222)
+        } else {
           noShare() //禁止分享
         }
       })
@@ -1015,63 +1015,9 @@ export default {
       console.log(err);
     })
   },
-  //分享，复制浏览器地址
-  // wxShare(shareData, toName) {
-  //   let url = window.location.href.split("#")[0];
-  //   appFetch({
-  //     url: 'weChatShare',
-  //     method: 'get',
-  //     data: {
-  //       url
-  //     }
-  //   }).then((res) => {
-  //     let appId = res.readdata._data.appId;
-  //     let nonceStr = res.readdata._data.nonceStr;
-  //     let signature = res.readdata._data.signature;
-  //     let timestamp = res.readdata._data.timestamp;
-  //     let jsApiList = res.readdata._data.jsApiList;
-  //     wx.config({
-  //       debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-  //       appId: appId,         // 必填，公众号的唯一标识
-  //       timestamp: timestamp, // 必填，生成签名的时间戳
-  //       nonceStr: nonceStr,   // 必填，生成签名的随机串
-  //       signature: signature, // 必填，签名，见附录1
-  //       jsApiList: [
-  //         'updateAppMessageShareData',
-  //         'updateTimelineShareData',
-  //         'hideMenuItems'
-  //       ]
-  //     });
-  //     wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-  //       // if (to.name === 'details/:themeId' && to.name === 'circle') {
-  //       if (toName.name === 'circle') {
-  //         let data = {
-  //           title: shareData.title,       // 分享标题
-  //           desc: shareData.desc,         // 分享描述
-  //           link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-  //           imgUrl: shareData.logo        // 分享图标
-  //         }
-  //         wx.updateAppMessageShareData(data);
-  //         wx.updateTimelineShareData(data)
-  //       }
-
-  //       // }
-  //     });
-  //   })
-  // },
-  // noShare() {
-  //   wx.ready(() => {
-  //     wx.hideMenuItems({
-  //       menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-  //     });
-  //   })
-  // }
-
 };
 
 export function wxShare(shareData, toName) {
-  // alert(shareData)
-  // console.log(shareData)
   let url = window.location.href.split("#")[0];
   appFetch({
     url: 'weChatShare',
