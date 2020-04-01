@@ -421,7 +421,6 @@ appCommonH.formatDate = function(data,format){
  * @param {[title]} title [页面标题]
  * */
 appCommonH.setPageTitle = function (type,data,title) {
-
   if (type === 'detail'){
     switch (data.readdata._data.type) {
       case 0:

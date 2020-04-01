@@ -54,7 +54,6 @@
 <script>
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import '../../../defaultLess/m_site/common/common.less'
-
 import loginCon from '../../../controllers/m_site/login/loginUserCon';
 export default {
     name: "login-view",

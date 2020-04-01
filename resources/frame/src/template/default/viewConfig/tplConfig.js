@@ -355,6 +355,16 @@ export default {
           title: "支付费用"
         }
       },
+      'wx-qr-code':{
+        comLoad: function (resolve) {
+          require(['../view/m_site/login/wxQRcodeView'], resolve)
+        },
+        metaInfo: {
+          title: "微信PC扫码"
+        }
+      },
+
+
 
       //主题详情页模块
       'reply-to-topic/:themeId/:replyId': {
@@ -682,6 +692,8 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page',
+      'pay-circle-login',
+      'pay-circle',
       '/api/oauth/wechat',
       '/api/oauth/wechat/pc'
     ];
@@ -839,7 +851,11 @@ export default {
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
               } else {
-                next({ path: '/wx-sign-up-bd' });
+                if (res.readdata._data.set_site.site_mode === 'public') {
+                  next({path: 'wx-sign-up-bd'});
+                } else if (res.readdata._data.set_site.site_mode === 'pay'){
+                  next({path:'pay-circle'});
+                }
               }
             } else {
               if (notLoggedInToAccessPage.includes(to.name)) {
@@ -909,7 +925,6 @@ export default {
         }
 
         // 微信分享
-        console.log(to.name, '9333')
         if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
           this.wxShare({
             title: site_name,
