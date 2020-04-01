@@ -9,7 +9,9 @@ namespace App\Api\Controller\Users;
 
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use EasyWeChat\Factory;
@@ -52,5 +54,10 @@ class WechatWebUserLoginPostEventController implements RequestHandlerInterface
         return $this->bus->dispatch(
             new WebUserEvent($app)
         );
+        $response  = $app->server->serve();
+        if (Arr::get($request->getQueryParams(), 'echostr')) {
+            return DiscuzResponseFactory::HtmlResponse($response->getContent());
+        }
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
 }

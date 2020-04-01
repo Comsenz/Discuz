@@ -52,5 +52,6 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
         if (Arr::get($request->getQueryParams(), 'echostr')) {
             return DiscuzResponseFactory::HtmlResponse($response->getContent());
         }
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
 }

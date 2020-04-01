@@ -35,8 +35,7 @@ class WebUserEvent
                 }
             }
         });
-        $response  = $this->app->server->serve();
-        return  DiscuzResponseFactory::XmlResponse($response->getContent());
+
     }
     protected function event($message)
     {
