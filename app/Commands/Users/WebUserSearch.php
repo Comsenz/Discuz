@@ -36,6 +36,7 @@ class WebUserSearch
         $this->bus = $bus;
         $this->users = $users;
         $session = SessionToken::get($this->scene_str);
+        dd($session);
         $user_id = Arr::get($session, 'user_id');
         $user = User::where('id', $user_id)->first();
         if (isset($user->id) && $user->id != null) {
