@@ -41,12 +41,14 @@ class WebUserEvent
                 }
             }
         });
+        $response  = $this->app->server->serve();
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
     protected function event($message)
     {
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
-        $wechat_user = UserWallet::where('mp_openid',$openid)->first();
+        $wechat_user = UserWechat::where('mp_openid','11111111')->first();
         if($wechat_user){
             //老用户  跟新扫描二维码用户
             SessionToken::where('token',$EventKey)->update([
