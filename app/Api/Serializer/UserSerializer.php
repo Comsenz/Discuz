@@ -89,6 +89,7 @@ class UserSerializer extends AbstractSerializer
             $attributes += [
                 'canWalletPay'  => $gate->allows('walletPay', $model),
                 'walletBalance' => $model->userWallet->available_amount,
+                'bindWechat'    => $model->bindWechat,
             ];
         }
 
@@ -119,15 +120,6 @@ class UserSerializer extends AbstractSerializer
         }else{
             return false;
         }
-    }
-
-    /**
-     * @param $user
-     * @return Relationship
-     */
-    public function wechat($user)
-    {
-        return $this->hasOne($user, UserWechatSerializer::class);
     }
 
     /**

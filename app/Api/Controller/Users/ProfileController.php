@@ -27,7 +27,7 @@ class ProfileController extends AbstractResourceController
 
     public $serializer = UserSerializer::class;
 
-    public $optionalInclude = ['wechat', 'groups'];
+    public $optionalInclude = ['groups'];
 
     protected $users;
 
@@ -55,6 +55,8 @@ class ProfileController extends AbstractResourceController
         $id = Arr::get($request->getQueryParams(), 'id');
 
         $user = $this->users->findOrFail($id, $actor);
+
+        $user->bindWechat = is_null($user->wechat) ? false : true;
 
         if ($actor->id === $user->id) {
             $this->serializer = UserProfileSerializer::class;
