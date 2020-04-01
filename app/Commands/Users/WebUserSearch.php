@@ -8,6 +8,7 @@
 namespace App\Commands\Users;
 
 use App\Exceptions\NoUserException;
+use App\Exceptions\QrcodeImgException;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Repositories\UserRepository;
@@ -38,13 +39,16 @@ class WebUserSearch
         $session = SessionToken::get($this->scene_str);
         $user_id = Arr::get($session, 'user_id');
         $user = User::where('id', $user_id)->first();
-        if (isset($user->id) && $user->id != null) {
-            $response = $this->bus->dispatch(
-                new GenJwtToken($user->username)
-            );
-            return json_decode($response->getBody());
-        } else {
-            throw (new NoUserException())->setToken($session);
+        if($session->payload || isset($user->id) && $user->id != null ){
+            if (isset($user->id) && $user->id != null) {
+                $response = $this->bus->dispatch(
+                    new GenJwtToken($user->username)
+                );
+                return json_decode($response->getBody());
+            } else {
+                throw (new NoUserException())->setToken($session);
+            }
         }
+        throw new QrcodeImgException(trans('login.WebUser_img_paylod_error'));
     }
 }
