@@ -45,11 +45,15 @@ class Liked extends Notification
 
     public function toDatabase()
     {
+        $content = $this->post->thread->type == 1
+            ? $this->post->thread->title
+            : $this->post->formatContent();
+
         return [
             'thread_id' => $this->post->thread->id,
-            'thread_title' => $this->post->thread->title,
+            'thread_title' => htmlspecialchars($this->post->thread->title),
             'post_id' => $this->post->id,
-            'post_content' => $this->post->thread->type == 1 ? $this->post->thread->title : $this->post->formatContent(),
+            'post_content' => htmlspecialchars($content),
             'user_id' => $this->actor->id,
             'user_name' => $this->actor->username,
             'user_avatar' => $this->actor->avatar ? $this->actor->avatar . '?' . Carbon::parse($this->actor->avatar_at)->timestamp : '',
