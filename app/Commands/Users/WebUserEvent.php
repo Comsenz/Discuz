@@ -47,8 +47,7 @@ class WebUserEvent
             SessionToken::where('token',$EventKey)->update([
                     'user_id'=>$wechatuser['user_id'],
                 ]);
-            $text = new Text();
-            $text->content = trans('login.WebUser_login_success');
+           return new Text(trans('login.WebUser_login_success'));
         }else{
             //新用户,跳转绑定页面
             $user = $this->app->user->get($openid);
@@ -66,8 +65,7 @@ class WebUserEvent
                 'payload'=>['openid'=>$openid]
             ]);
             if($user_wechats->save()){
-                $text = new Text();
-                $text->content = trans('login.WebNewUser_login_success');
+                return new Text(trans('login.WebNewUser_login_success'));
             }
         }
     }
