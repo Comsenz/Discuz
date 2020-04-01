@@ -44,7 +44,7 @@ class WebUserSearch
             );
             return json_decode($response->getBody());
         } else {
-            throw (new NoUserException())->setToken($session->token);
+            throw (new NoUserException())->setToken($session);
         }
     }
 }
