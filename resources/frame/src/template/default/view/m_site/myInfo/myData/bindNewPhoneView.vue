@@ -27,10 +27,10 @@
         <van-button type="primary" :loading="btnLoading" loading-text="提交中" @click="bindNewPhone">提交</van-button>
       </div>
 
-<!--      <div class="loadFix" v-if="loading">-->
-<!--        <div class="loadMask"></div>-->
-<!--        <van-loading color="#333333" class="loadIcon" type="spinner" />-->
-<!--      </div>-->
+      <!--      <div class="loadFix" v-if="loading">-->
+      <!--        <div class="loadMask"></div>-->
+      <!--        <van-loading color="#333333" class="loadIcon" type="spinner" />-->
+      <!--      </div>-->
     </main>
   </div>
 </template>

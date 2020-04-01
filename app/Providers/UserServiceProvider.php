@@ -11,6 +11,7 @@ use App\Events\Users\Saving;
 use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\UserListener;
 use App\User\AvatarUploader;
+use App\User\UserWechatObserver;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -20,7 +21,7 @@ class UserServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->when(AvatarUploader::class)
+        $this->app->when([AvatarUploader::class, UserWechatObserver::class])
             ->needs(Filesystem::class)
             ->give(function (Application $app) {
                 return $app->make(Factory::class)->disk('avatar');

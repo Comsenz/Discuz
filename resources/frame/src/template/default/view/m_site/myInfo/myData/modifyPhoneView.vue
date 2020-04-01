@@ -20,6 +20,8 @@
               slot="button"
               size="small"
               type="default"
+              :disabled="disabled"
+              :class="{'grayBg':isGray}"
               @click="sendSmsCodePhone"
             >{{ btnContent }}</van-button>
           </van-field>
@@ -27,8 +29,20 @@
       </div>
 
       <div class="modify-phone-operating">
-        <van-button :loading="loading" loading-text="验证中" type="primary" v-if="modifyState" @click="nextStep">下一步</van-button>
-        <van-button :loading="loading" loading-text="提交中" type="primary" v-else @click="bindNewPhone">提交</van-button>
+        <van-button
+          :loading="loading"
+          loading-text="验证中"
+          type="primary"
+          v-if="modifyState"
+          @click="nextStep"
+        >下一步</van-button>
+        <van-button
+          :loading="loading"
+          loading-text="提交中"
+          type="primary"
+          v-else
+          @click="bindNewPhone"
+        >提交</van-button>
       </div>
 
       <div class="loadFix" v-if="loading">

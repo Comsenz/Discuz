@@ -34,14 +34,14 @@ class Bind
         $scope = Arr::get($session, 'scope');
         $openid = Arr::get($session, 'payload.openid');
         if (in_array($scope, ['wechat', 'wechatweb', 'min'])) {
-            UserWechat::where($this->platform[$scope], $openid)->update(['user_id' => $user->id]);
+            $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
+            $wechat->user_id = $user->id;
 
-            // 如果用户没有头像，绑定微信时设置微信头像
-            if (!$user->avatar) {
-                $user->avatar = Str::replaceFirst('http://', 'https://', Arr::get($session, 'payload.headimgurl', ''));
-
-                $user->save();
-            }
+            /**
+             * 如果用户没有头像，绑定微信时观察者中设置绑定微信用户头像
+             * @see UserWechatObserver
+             */
+            $wechat->save();
         }
     }
 

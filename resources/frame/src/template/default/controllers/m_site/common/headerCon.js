@@ -348,7 +348,8 @@ export default {
   },
 
   mounted: function () {
-    window.addEventListener('scroll', this.handleTabFix, true);
+    this.handleTabFix()
+    // window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeDestroy() {
     // alert('销毁');

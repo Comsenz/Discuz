@@ -9,34 +9,31 @@ namespace App\Commands\Users;
 use App\Models\SessionToken;
 use App\Models\UserWallet;
 use App\Models\UserWechat;
-use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
+use EasyWeChat\OfficialAccount\Application;
+use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
+use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    /**
-     * 微信参数
-     *
-     * @var string
-     */
-    public $settings;
-    public $qrcode;
 
-    public function __construct(array $wx_config)
+    protected $app;
+
+    public function __construct($app)
     {
-        $this->wx_config = $wx_config;
+        $this->app = $app;
     }
 
 
     public function handle()
     {
-        $app = new Application($this->wx_config);
-        $app->server->setMessageHandler(function ($message) {
-            if ($message->MsgType == 'event') {
+
+
+        $this->app->server->push(function ($message) {
+            if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
-                        $this->event($message);
-                        break;
                     case "SCAN":
                         $this->event($message);
                         break;
@@ -58,8 +55,7 @@ class WebUserEvent
             $text->content = trans('login.WebUser_login_success');
         }else{
             //新用户,跳转绑定页面
-            $app = new Application($this->wx_config);
-            $user = $app->user->get($openid);
+            $user = $this->app->user->get($openid);
             $user_wechats= new UserWechat();
             $user_wechats->openid = $user->mp_openid;
             $user_wechats->nickname =  $user->nickname;

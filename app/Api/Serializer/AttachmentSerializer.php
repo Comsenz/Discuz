@@ -43,6 +43,7 @@ class AttachmentSerializer extends AbstractSerializer
      * @param UrlGenerator $url
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(UrlGenerator $url, Filesystem $filesystem, SettingsRepository $settings)
     {

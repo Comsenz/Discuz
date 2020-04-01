@@ -139,7 +139,7 @@ class ListOrdersController extends AbstractListController
                             $title = str_replace("\n", '', $title);
                         }
 
-                        $order->thread->title = $title;
+                        $order->thread->title = htmlspecialchars($title);
                     }
                 });
         }

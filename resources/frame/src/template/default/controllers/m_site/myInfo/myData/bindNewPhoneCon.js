@@ -24,7 +24,7 @@ export default {
       modifyPhone:'',       //用户手机号
       titlePhone:'',     //标题
       headerShow:false,
-      btnLoading:false   //按钮loading状态
+      btnLoading: false   //按钮loading状态
     }
   },
 
@@ -65,7 +65,7 @@ export default {
 
     //获取验证码
     sendSmsCodePhone() {
-      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+      var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
       var newphone = this.newphone;
       if (!newphone) {//未输入手机号
         this.$toast("请输入手机号码");
