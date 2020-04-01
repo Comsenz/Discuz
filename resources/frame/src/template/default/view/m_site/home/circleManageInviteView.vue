@@ -235,7 +235,7 @@
         <p
           v-if="siteInfo._data.set_site.site_price"
           class="payMoney"
-        >￥{{siteInfo._data.set_site.site_price}} / 永久有效</p>
+        >￥{{siteInfo._data.set_site.site_price}} / {{siteInfo._data.set_site.site_expire === '0' || siteInfo._data.set_site.site_expire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.set_site.site_expire +'天'}}</p>
       </div>
     </van-pull-refresh>
   </div>

@@ -204,7 +204,9 @@
     <div class="loginOpera">
       <a href="javascript:;" @click="loginJump" class="mustLogin">已注册，登录</a>
       <a href="javascript:;" @click="registerJump" class="regiJoin" v-if="allowRegister">接受邀请，注册</a>
-      <p class="payMoney">￥{{siteInfo._data.set_site.site_price}} / 永久有效</p>
+      <p
+        class="payMoney"
+      >￥{{siteInfo._data.set_site.site_price}} / {{siteInfo._data.set_site.site_expire === '0' || siteInfo._data.set_site.site_expire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.set_site.site_expire +'天'}}</p>
     </div>
   </div>
 </template>
