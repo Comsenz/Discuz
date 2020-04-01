@@ -29,8 +29,6 @@ class WebUserEvent
 
     public function handle()
     {
-
-
         $this->app->server->push(function ($message) {
             if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
@@ -48,7 +46,7 @@ class WebUserEvent
     {
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
-        $wechat_user = UserWechat::where('mp_openid','11111111')->first();
+        $wechat_user = UserWechat::where('mp_openid',$openid)->first();
         if($wechat_user){
             //老用户  跟新扫描二维码用户
             SessionToken::where('token',$EventKey)->update([

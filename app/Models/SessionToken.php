@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
  * @property Carbon $created_at
  * @property Carbon $expired_at
  * @package App\Models
+ * @method static where(...$params)
  */
 class SessionToken extends Model
 {

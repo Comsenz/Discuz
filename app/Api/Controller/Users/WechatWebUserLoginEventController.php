@@ -7,7 +7,6 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -16,7 +15,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use EasyWeChat\Factory;
 use Psr\Http\Server\RequestHandlerInterface;
 use Discuz\Http\DiscuzResponseFactory;
-
 
 class WechatWebUserLoginEventController implements RequestHandlerInterface
 {
@@ -41,7 +39,6 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
         $this->bus = $bus;
     }
 
-
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $wx_config = [
@@ -52,7 +49,7 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
         ];
         $app = Factory::officialAccount($wx_config);
         $response  = $app->server->serve();
-        if(Arr::get($request->getQueryParams(), 'echostr')) {
+        if (Arr::get($request->getQueryParams(), 'echostr')) {
             return DiscuzResponseFactory::HtmlResponse($response->getContent());
         }
     }
