@@ -14,6 +14,7 @@ use EasyWeChat\OfficialAccount\Application;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class WebUserEvent
 {

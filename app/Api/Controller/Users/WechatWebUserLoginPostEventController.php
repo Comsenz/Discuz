@@ -18,7 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Discuz\Http\DiscuzResponseFactory;
 
 
-class WechatWebUserLoginEventController implements RequestHandlerInterface
+class WechatWebUserLoginPostEventController implements RequestHandlerInterface
 {
     /**
      * 微信参数
@@ -51,9 +51,10 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
         $app = Factory::officialAccount($wx_config);
+        $this->bus->dispatch(
+            new WebUserEvent($app)
+        );
         $response  = $app->server->serve();
-        if(Arr::get($request->getQueryParams(), 'echostr')) {
-            return DiscuzResponseFactory::HtmlResponse($response->getContent());
-        }
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
 }
