@@ -8,7 +8,6 @@
 namespace App\Commands\Users;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
-use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\Kernel\Messages\Text;
 
 class WebUserEvent
@@ -30,7 +29,7 @@ class WebUserEvent
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
-                        $this->event($message);
+                        return $this->event($message);
                         break;
                 }
             }
