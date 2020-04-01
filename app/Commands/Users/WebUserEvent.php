@@ -65,6 +65,6 @@ class WebUserEvent
                 $text = trans('login.WebNewUser_login_success');
             }
         }
-        return new Text($text);
+        return new Text(111);
     }
 }
