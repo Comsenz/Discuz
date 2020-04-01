@@ -41,8 +41,7 @@ class ListNotificationTplController extends AbstractListController
 
         $type = Arr::get($request->getQueryParams(), 'type', 0);
 
-        // TODO 注册审核通知有问题暂时剔除不使用
-        $tpl = $this->tpl->where('type', $type)->whereNotIn('id', [14, 15])->get();
+        $tpl = $this->tpl->where('type', $type)->get();
 
         return $tpl;
     }

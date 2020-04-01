@@ -6,8 +6,8 @@ let apiConfig = require("./apiConfig.js");
 var appConfig = {
   port: '8883',                          //本地调试端口
   devHostName: 'local.test.discuz.com',  //本地调试域名
-  devApiUrl: 'https://dq.comsenz-service.com',   //本地调试接口域名
-
+  // devApiUrl: 'https://dq.comsenz-service.com',   //本地调试接口域名
+  devApiUrl: 'http://discuz.com',   //本地调试接口域名
   baseUrl: '',                           //网站根目录
   apiBaseUrl: '',                        //网站根目录
   staticBaseUrl: '',                     //静态文件根目录

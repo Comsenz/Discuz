@@ -37,11 +37,6 @@ class ListUsersController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['wechat'];
-
-    /**
-     * {@inheritdoc}
-     */
     public $sortFields = ['createdAt'];
 
     /**
