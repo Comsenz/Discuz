@@ -51,7 +51,7 @@ class WechatWebUserLoginPostEventController implements RequestHandlerInterface
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
         $app = Factory::officialAccount($wx_config);
-        return $this->bus->dispatch(
+        $this->bus->dispatch(
             new WebUserEvent($app)
         );
         $response  = $app->server->serve();
