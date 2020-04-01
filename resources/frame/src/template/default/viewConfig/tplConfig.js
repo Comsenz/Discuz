@@ -838,7 +838,7 @@ export default {
               }
               if (wxNotLoggedInToAccessPage.includes(to.name)) {
                 next();
-              } else {
+              } else {  //修改微信登录注册流程
                 if (res.readdata._data.set_site.site_mode === 'public') {
                   next({ path: 'wx-sign-up-bd' });
                 } else if (res.readdata._data.set_site.site_mode === 'pay') {
@@ -1000,10 +1000,29 @@ export default {
       data: {}
     }).then(res => {
       if (res.errors) {
+
         if (res.rawData[0].code == 'not_install') {
           window.location.href = res.rawData[0].detail.installUrl;
+          return
         }
+
+        if (res.errors[0].detail) {
+          this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+        } else {
+          this.$toast.fail(res.errors[0].code);
+        }
+
+        setTimeout(() => {
+          browserDb.clearLAll();
+          location.reload();
+        }, 1500);
+
         return res;
+
+        // if (res.rawData[0].code == 'not_install') {
+        //   window.location.href = res.rawData[0].detail.installUrl;
+        // }
+        // return res;
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
         let siteInfoStat = res.readdata._data.set_site.site_stat;
