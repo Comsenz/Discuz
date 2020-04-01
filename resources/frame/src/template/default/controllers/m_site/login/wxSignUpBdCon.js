@@ -23,7 +23,7 @@ export default {
       captcha: null,           // 腾讯云验证码实例
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
-      btnLoading:false,        //注册按钮状态
+      btnLoading: false,        //注册按钮状态
     }
   },
 
@@ -179,11 +179,11 @@ export default {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
           }
-        // } else if (res.data.attributes.location) {
-        //   //获取地址
-        //   // console.log('获取地址');
-        //   this.wxurl = res.data.attributes.location;
-        //   window.location.href = res.data.attributes.location
+          // } else if (res.data.attributes.location) {
+          //   //获取地址
+          //   // console.log('获取地址');
+          //   this.wxurl = res.data.attributes.location;
+          //   window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -227,10 +227,10 @@ export default {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
           }
-        // } else if (res.data.attributes.location) {
-        //   //获取地址
-        //   this.wxurl = res.data.attributes.location;
-        //   window.location.href = res.data.attributes.location;
+          // } else if (res.data.attributes.location) {
+          //   //获取地址
+          //   this.wxurl = res.data.attributes.location;
+          //   window.location.href = res.data.attributes.location;
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -254,6 +254,24 @@ export default {
         console.log(err);
       })
     },
+    getUsers(id) {
+      return this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
+        }
+      }).then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          return res;
+        }
+      }).catch(err => {
+      })
+    },
 
   },
   created() {
@@ -272,7 +290,7 @@ export default {
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
-    webDb.setLItem('sessionId',sessionId);
+    webDb.setLItem('sessionId', sessionId);
 
     if (isWeixin) {
       this.platform = 'mp';

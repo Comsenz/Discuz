@@ -25,8 +25,8 @@ export default {
       realNameShow: 'true',      //实名认证是否显示
       openid: '',       //微信openid
       myModifyPhone: '',
-      isReal:false,     //是否实名认证
-      updataLoading:false,  //上传状态
+      isReal: false,     //是否实名认证
+      updataLoading: false,  //上传状态
     }
   },
 
@@ -72,7 +72,7 @@ export default {
         case 'change-pay-pwd':
           //设置钱包密码','跳转设置钱包密码页面
           if (this.canWalletPay) {
-            this.$router.push({ path: 'verify-pay-pwd',query:{modifyPhone:this.modifyPhone}});
+            this.$router.push({ path: 'verify-pay-pwd', query: { modifyPhone: this.modifyPhone } });
           } else {
             this.$router.push({ path: 'setup-pay-pwd' });
           }
