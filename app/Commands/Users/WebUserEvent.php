@@ -36,6 +36,7 @@ class WebUserEvent
 
     protected function event($message)
     {
+        return new Text('aa');
         $openid = $message->FromUserName;
         $EventKey = $message->EventKey;
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
