@@ -63,7 +63,9 @@
             <a href="javascript:;" class="signOut" @click="signOut">退出</a>
           </p>
           <a href="javascript:;" class="regiJoin" @click="payClick(sitePrice)">付费，获得成员权限</a>
-          <p class="payMoney">￥{{sitePrice}} / 永久有效</p>
+          <p
+            class="payMoney"
+          >￥{{sitePrice}} / {{siteInfo._data.set_site.site_expire === '0' || siteInfo._data.set_site.site_expire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.set_site.site_expire +'天'}}</p>
         </div>
 
         <van-popup
