@@ -85,7 +85,7 @@ class EditPost
             $content = $censor->checkText($attributes['content']);
 
             // 存在审核敏感词时，将主题放入待审核
-            if ($censor->isMod) {
+            if ($censor->isMod && $post->is_first != 1) {
                 $post->is_approved = 0;
             }
 

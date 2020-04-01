@@ -44,7 +44,6 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $request = Arr::get($request->getQueryParams(), 'echostr');
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
@@ -53,11 +52,12 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
         ];
         $app = Factory::officialAccount($wx_config);
         $this->bus->dispatch(
-            new WebUserEvent($wx_config,$app)
+            new WebUserEvent($app)
         );
-        if(Arr::get($request->getQueryParams(), 'echostr') && $app->server->validate()) {
-            return DiscuzResponseFactory::HtmlResponse('success');
+        $response  = $app->server->serve();
+        if(Arr::get($request->getQueryParams(), 'echostr')) {
+            return DiscuzResponseFactory::HtmlResponse($response->getContent());
         }
-        return  DiscuzResponseFactory::XmlResponse($app->server->serve());
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
 }

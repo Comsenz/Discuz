@@ -17,17 +17,11 @@ use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
-    /**
-     * 微信参数
-     *
-     * @var string
-     */
-    public $wx_config;
+
     protected $app;
 
-    public function __construct(array $wx_config, $app)
+    public function __construct($app)
     {
-        $this->wx_config = $wx_config;
         $this->app = $app;
     }
 
@@ -35,8 +29,9 @@ class WebUserEvent
     public function handle()
     {
 
+
         $this->app->server->push(function ($message) {
-            if ($message['MsgType'] == 'event') {
+            if (isset($message['MsgType']) && $message['MsgType'] == 'event') {
                 switch ($message->Event) {
                     case 'subscribe':
                     case "SCAN":
