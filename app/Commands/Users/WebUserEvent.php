@@ -32,6 +32,11 @@ class WebUserEvent
         });
     }
 
+    /**
+     * @param $message
+     * @return Text
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     protected function event($message)
     {
         $openid = $message['FromUserName'];
@@ -39,15 +44,15 @@ class WebUserEvent
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
         if ($wechatuser) {
             //老用户  跟新扫描二维码用户
-            SessionToken::where('token', $EventKey)->update([
+            SessionToken::get($EventKey)->update([
                     'user_id'=>$wechatuser['user_id'],
                 ]);
             $text = trans('login.WebUser_login_success');
         } else {
             //新用户,跳转绑定页面
             $user = $this->app->user->get($openid);
-            $user_wechats= new UserWechat();
-            $user_wechats->openid = $user->mp_openid;
+            $user_wechats = new UserWechat();
+            $user_wechats->mp_openid = $user->openid;
             $user_wechats->nickname =  $user->nickname;
             $user_wechats->sex = $user->sex;
             $user_wechats->province =$user->province;
@@ -55,9 +60,9 @@ class WebUserEvent
             $user_wechats->country = $user->country;
             $user_wechats->headimgurl = $user->headimgurl;
 
-            SessionToken::where('token', $EventKey)->update([
+            SessionToken::get($EventKey)->update([
                 'scope'=>'wechat',
-                'payload'=>['openid'=>$openid]
+                'payload'=> $user
             ]);
             if ($user_wechats->save()) {
                 $text = trans('login.WebNewUser_login_success');

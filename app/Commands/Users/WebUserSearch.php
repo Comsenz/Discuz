@@ -37,18 +37,26 @@ class WebUserSearch
         $this->bus = $bus;
         $this->users = $users;
         $session = SessionToken::get($this->scene_str);
-        $user_id = Arr::get($session, 'user_id');
-        $user = User::where('id', $user_id)->first();
-        if($session->payload || isset($user->id) && $user->id != null ){
-            if (isset($user->id) && $user->id != null) {
+
+        $data = [
+            'type' => null,
+            'payload' => null
+        ];;
+        if(!is_null($session)) {
+            if($session->user_id) {
+                $user = User::find($session->user_id);
                 $response = $this->bus->dispatch(
-                    new GenJwtToken($user->username)
+                    new GenJwtToken(Arr::only($user->toArray(), 'username'))
                 );
-                return json_decode($response->getBody());
+
+                $data['type'] = 'login';
+                $data['payload'] = json_decode($response->getBody());
             } else {
-                throw (new NoUserException())->setToken($session);
+                $data['type'] = 'bind';
+                $data['payload'] = $session;
             }
         }
-        throw new QrcodeImgException(trans('login.WebUser_img_paylod_error'));
+
+        return $data;
     }
 }
