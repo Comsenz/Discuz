@@ -74,7 +74,7 @@ export default {
                 }
               });
               num ++;
-              if (num > 5){
+              if (num > 8){
                 clearInterval(inQuire);
               }
             },3000);

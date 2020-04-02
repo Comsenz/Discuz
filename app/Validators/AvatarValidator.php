@@ -20,7 +20,7 @@ class AvatarValidator extends AbstractValidator
             'avatar' => [
                 'required',
                 'mimes:jpeg,png,bmp,gif',
-                'max:5120'
+                'max:10240'
             ]
         ];
     }
