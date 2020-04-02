@@ -126,7 +126,7 @@ class ListThreadsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['favoriteState', 'firstPost.likeState']);
+        $include = array_merge($this->extractInclude($request), ['favoriteState']);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 

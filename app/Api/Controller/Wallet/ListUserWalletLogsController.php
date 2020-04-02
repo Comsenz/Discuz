@@ -140,7 +140,7 @@ class ListUserWalletLogsController extends AbstractListController
                             $title = str_replace("\n", '', $title);
                         }
 
-                        $log->order->thread->title = $title;
+                        $log->order->thread->title = htmlspecialchars($title);
                     }
                 });
         }

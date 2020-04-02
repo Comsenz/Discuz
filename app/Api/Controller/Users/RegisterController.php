@@ -10,6 +10,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterUser;
+use App\Events\Users\RegisteredCheck;
 use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -20,6 +21,7 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -38,13 +40,16 @@ class RegisterController extends AbstractCreateController
 
     protected $bind;
 
-    public function __construct(Dispatcher $bus, UserRepository $users, SettingsRepository $settings, Application $app, Bind $bind)
+    protected $events;
+
+    public function __construct(Dispatcher $bus, UserRepository $users, SettingsRepository $settings, Application $app, Bind $bind, Events $events)
     {
         $this->bus = $bus;
         $this->users = $users;
         $this->settings = $settings;
         $this->app = $app;
         $this->bind = $bind;
+        $this->events = $events;
     }
 
     public $serializer = TokenSerializer::class;
@@ -73,6 +78,8 @@ class RegisterController extends AbstractCreateController
         if ($mobile = Arr::get($attributes, 'mobile')) {
             $this->bind->mobile($mobile, $user);
         }
+
+        $this->events->dispatch(new RegisteredCheck($user));
 
         $response = $this->bus->dispatch(
             new GenJwtToken(Arr::only($attributes, 'username'))

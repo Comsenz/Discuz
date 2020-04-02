@@ -14,7 +14,7 @@ use App\Trade\TransferTrade;
 use App\Settings\SettingsRepository;
 use Illuminate\Database\ConnectionInterface;
 use App\Models\UserWalletCash;
-use App\Models\UserWechat;
+use App\Models\User;
 use App\Models\UserWalletLog;
 use App\Models\UserWallet;
 use Carbon\Carbon;
@@ -83,7 +83,8 @@ class CashTransfer
     {
         //获取用户openid
         $user_id = $event->cash_record->user_id;
-        $user_wecaht = UserWechat::find($user_id);
+        $user_wecaht = User::findOrfail($user_id)->wechat;
+
         if (isset($user_wecaht->mp_openid)) {
             $openid = $user_wecaht->mp_openid;
         } else {

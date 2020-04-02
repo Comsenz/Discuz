@@ -18,8 +18,9 @@
 		"league/omnipay": "^3.0",
 		"lokielse/omnipay-wechatpay": "^3.0",
 		"overtrue/wechat": "~4.0",
-		"s9e/text-formatter": "^2.3"
-	},
+		"s9e/text-formatter": "^2.3",
+        "doctrine/dbal": "^2.0"
+    },
 	"config" : {
 		"optimize-autoloader" : true,
 		"preferred-install" : "dist",

@@ -6,6 +6,7 @@
  */
 
 namespace App\Commands\Users;
+
 use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\User;
@@ -20,28 +21,30 @@ class WebUserSearch
      * @var string
      */
     public $scene_str;
+
     protected $bus;
+
     public $users;
+
     public function __construct(string $scene_str)
     {
         $this->scene_str = $scene_str;
     }
 
-    public function handle(Dispatcher $bus,UserRepository $users)
+    public function handle(Dispatcher $bus, UserRepository $users)
     {
         $this->bus = $bus;
         $this->users = $users;
         $session = SessionToken::get($this->scene_str);
         $user_id = Arr::get($session, 'user_id');
-        $user = User::where('id',$user_id)->first();
-        if(isset($user->id) && $user->id != null){
+        $user = User::where('id', $user_id)->first();
+        if (isset($user->id) && $user->id != null) {
             $response = $this->bus->dispatch(
                 new GenJwtToken($user->username)
             );
             return json_decode($response->getBody());
-
-        }else{
-            throw (new NoUserException())->setToken($session->token);
+        } else {
+            throw (new NoUserException())->setToken($session);
         }
     }
 }
