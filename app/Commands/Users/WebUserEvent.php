@@ -10,6 +10,7 @@ namespace App\Commands\Users;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
 use EasyWeChat\Kernel\Messages\Text;
+use Illuminate\Support\Arr;
 
 class WebUserEvent
 {
@@ -52,13 +53,15 @@ class WebUserEvent
             //新用户,跳转绑定页面
             $user = $this->app->user->get($openid);
             $user_wechats = new UserWechat();
-            $user_wechats->mp_openid = $user->openid;
-            $user_wechats->nickname =  $user->nickname;
-            $user_wechats->sex = $user->sex;
-            $user_wechats->province =$user->province;
-            $user_wechats->city = $user->city;
-            $user_wechats->country = $user->country;
-            $user_wechats->headimgurl = $user->headimgurl;
+            $user_wechats->mp_openid = Arr::get($user, 'openid');
+            $user_wechats->nickname =  Arr::get($user, 'nickname');
+            $user_wechats->sex = Arr::get($user, 'sex');
+            $user_wechats->province = Arr::get($user, 'province');
+            $user_wechats->city = Arr::get($user, 'city');
+            $user_wechats->country = Arr::get($user, 'country');
+            $user_wechats->headimgurl = Arr::get($user, 'headimgurl');
+            $user_wechats->unionid = Arr::get($user, 'unionid');
+
 
             SessionToken::get($EventKey, 'wechat')->update([
                 'scope'=>'wechat',
