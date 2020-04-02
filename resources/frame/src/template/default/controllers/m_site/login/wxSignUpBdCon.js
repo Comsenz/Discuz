@@ -186,7 +186,7 @@ export default {
             if (res.rawData[0].code === 'register_validate') {
               this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
             } else if (res.rawData[0].code === 'ban_user'){
-              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
+              this.$router.push({ path: "information-page", query: { setInfo: 'banUser' }})
             } else {
               this.$toast.fail(res.errors[0].code);
             }
