@@ -355,6 +355,16 @@ export default {
           title: "支付费用"
         }
       },
+      'wx-qr-code':{
+        comLoad: function (resolve) {
+          require(['../view/m_site/login/wxQRcodeView'], resolve)
+        },
+        metaInfo: {
+          title: "微信PC扫码"
+        }
+      },
+
+
 
       //主题详情页模块
       'reply-to-topic/:themeId/:replyId': {
@@ -840,9 +850,9 @@ export default {
                 next();
               } else {
                 if (res.readdata._data.set_site.site_mode === 'public') {
-                  next({ path: 'wx-sign-up-bd' });
-                } else if (res.readdata._data.set_site.site_mode === 'pay') {
-                  next({ path: 'pay-circle' });
+                  next({path: 'wx-sign-up-bd'});
+                } else if (res.readdata._data.set_site.site_mode === 'pay'){
+                  next({path:'pay-circle'});
                 }
               }
             } else {
@@ -1000,9 +1010,23 @@ export default {
       data: {}
     }).then(res => {
       if (res.errors) {
+
         if (res.rawData[0].code == 'not_install') {
           window.location.href = res.rawData[0].detail.installUrl;
+          return
         }
+
+        if (res.errors[0].detail){
+          alert(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+        } else {
+          alert(res.errors[0].code);
+        }
+
+        setTimeout(()=>{
+          localStorage.clear();
+          location.reload();
+        },1500);
+
         return res;
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
@@ -1015,6 +1039,7 @@ export default {
       console.log(err);
     })
   },
+
 };
 
 export function wxShare(shareData, toName) {
@@ -1051,14 +1076,14 @@ export function wxShare(shareData, toName) {
           desc: shareData.desc,         // 分享描述
           link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: shareData.logo        // 分享图标
-        }
+        };
         wx.updateAppMessageShareData(data);   //分享给朋友
         wx.updateTimelineShareData(data)  //分享到朋友圈
       }
 
     });
   })
-};
+}
 
 export function noShare() {
   wx.ready(() => {
@@ -1066,7 +1091,8 @@ export function noShare() {
       menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
     });
   })
-};
+}
+
 export function ShowShare() {
   wx.ready(() => {
     wx.showMenuItems({

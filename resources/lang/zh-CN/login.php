@@ -4,5 +4,5 @@ return [
     'WebUser_img_error' => '二维码生成失败',
     'WebUser_login_success' => '登录成功',
     'WebNewUser_login_success' => '扫码成功',
-    'WebUser_img_paylod_error' => '用户未扫码',
+    'WebUser_img_payload_error' => '用户未扫码',
 ];

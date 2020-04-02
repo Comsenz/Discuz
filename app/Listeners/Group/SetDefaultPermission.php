@@ -25,6 +25,7 @@ class SetDefaultPermission
             'thread.favorite',              // 收藏
             'thread.likePosts',             // 点赞
             'userFollow.create',            // 关注
+            'user.view',                    // 查看个人信息，目前仅用于前台显示权限
             'order.create',                 // 创建订单
             'trade.pay.order',              // 支付订单
             'cash.create',                  // 提现
