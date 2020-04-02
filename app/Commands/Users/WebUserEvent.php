@@ -44,7 +44,7 @@ class WebUserEvent
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
         if ($wechatuser) {
             //老用户  跟新扫描二维码用户
-            SessionToken::get($EventKey)->update([
+            SessionToken::get($EventKey, 'wechat')->update([
                     'user_id'=>$wechatuser['user_id'],
                 ]);
             $text = trans('login.WebUser_login_success');
@@ -60,7 +60,7 @@ class WebUserEvent
             $user_wechats->country = $user->country;
             $user_wechats->headimgurl = $user->headimgurl;
 
-            SessionToken::get($EventKey)->update([
+            SessionToken::get($EventKey, 'wechat')->update([
                 'scope'=>'wechat',
                 'payload'=> $user
             ]);

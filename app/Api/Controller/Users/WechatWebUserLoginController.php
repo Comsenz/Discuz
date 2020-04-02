@@ -7,12 +7,10 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Serializer\SessionSerializer;
+use App\Api\Serializer\QrSerializer;
 use App\Commands\Users\WebUserQrcode;
 use App\Settings\SettingsRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -26,13 +24,12 @@ class WechatWebUserLoginController implements RequestHandlerInterface
      */
     protected $settings;
     protected $bus;
-    public $serializer = SessionSerializer::class;
+    public $serializer = QrSerializer::class;
 
     public function __construct(SettingsRepository $setting, Dispatcher $bus)
     {
         $this->settings = $setting;
         $this->bus = $bus;
-
     }
 
 
@@ -43,9 +40,8 @@ class WechatWebUserLoginController implements RequestHandlerInterface
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
         ];
 
-        $sessionId = Arr::get($request->getQueryParams(), 'sessionId', Str::random());
         return $this->bus->dispatch(
-            new WebUserQrcode($wx_config,$sessionId)
+            new WebUserQrcode($wx_config)
         );
     }
 }

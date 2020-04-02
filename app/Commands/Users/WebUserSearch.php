@@ -36,7 +36,7 @@ class WebUserSearch
     {
         $this->bus = $bus;
         $this->users = $users;
-        $session = SessionToken::get($this->scene_str);
+        $session = SessionToken::get($this->scene_str, 'wechat');
 
         $data = [
             'type' => null,
