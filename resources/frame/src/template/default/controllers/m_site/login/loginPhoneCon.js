@@ -146,7 +146,7 @@ export default {
     * 接口请求
     * */
     getForum(){
-      this.appFetch({
+      return this.appFetch({
         url:'forum',
         method:'get',
         data:{}
@@ -158,6 +158,7 @@ export default {
           this.siteMode = res.readdata._data.set_site.site_mode;
           browserDb.setLItem('siteInfo', res.readdata);
         }
+        return res
       }).catch(err=>{
       })
     },
@@ -189,23 +190,24 @@ export default {
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
-   this.getForum();
-
-    if (isWeixin === true) {
-      //微信登录
-
-      // this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
-    } else if (isPhone === true) {
-      //手机浏览器登录
-
-      this.wxLoginShow = false;
-      this.isOne = true;
-    } else {
-      //pc登录'
-      this.isPC = true;
-
-      // this.getWatchHref();
-    }
+   this.getForum().then(res=>{
+     if (isWeixin === true) {
+       //微信登录
+       if (!res.readdata._data.passport.offiaccount_close) {
+         this.wxLoginShow = false;
+       }
+     } else if (isPhone === true) {
+       //手机浏览器登录
+       this.wxLoginShow = false;
+       this.isOne = true;
+     } else {
+       //pc登录'
+       if (!res.readdata._data.passport.offiaccount_close) {
+         this.wxLoginShow = false;
+       }
+       this.isPC = true;
+     }
+   });
 
   }
 
