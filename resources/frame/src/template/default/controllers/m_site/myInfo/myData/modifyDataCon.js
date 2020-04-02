@@ -6,6 +6,7 @@
 import ModifyHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import browserDb from '../../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../../helpers/commonHelper';
+import { correctImg } from '../../../../../../common/utils/correctImg';
 
 export default {
   data: function () {
@@ -133,10 +134,13 @@ export default {
 
 
     },
-    handleFile: function (e) {  //上传头像
-      let file = e.target.files[0];
-      this.updataLoading = true;
+    handleFile: async function (e) {  //上传头像
 
+      let file = e.target.files[0];
+      // this.updataLoading = true;
+
+      const newfile = await correctImg(file);
+      file = newfile || file;
       // 获取file
       // 实例化
       let formdata = new FormData()
