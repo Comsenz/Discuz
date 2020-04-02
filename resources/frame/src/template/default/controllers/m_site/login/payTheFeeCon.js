@@ -24,10 +24,15 @@ export default {
       dialogShow: false,  //微信支付确认弹框
       groupId: '',        //用户组ID
       limitList: [],      //用户组权限
+      payWxShow: true,      //微信支付状态
       payList: [
+        // {
+        //   name: '钱包',
+        //   icon: 'icon-wallet'
+        // },
         {
-          name: '钱包',
-          icon: 'icon-wallet'
+          name: '微信支付',
+          icon: 'icon-wxpay'
         }
       ],     //支付方式
       show: false,        //是否显示支付方式
@@ -119,7 +124,7 @@ export default {
                 this.getUsersInfo()
               }, 3000)
             }
-            
+
           })
         })
       }
@@ -210,9 +215,12 @@ export default {
     },
 
     payClick() {
-      // this.show = !this.show;
-      this.show = true;
+      if (this.payWxShow) this.show = true;
+      else {
+        this.$toast.fail('请配置微信支付');
+      }
     },
+
 
     /*
     * 接口请求
@@ -239,11 +247,8 @@ export default {
               this.siteExpire = '有效期自加入起' + day + '天';
               break;
           }
-          if (res.readdata._data.paycenter.wxpay_close == true) {
-            this.payList.unshift({
-              name: '微信支付',
-              icon: 'icon-wxpay'
-            })
+          if (res.readdata._data.paycenter.wxpay_close !== true) {
+            this.payWxShow = false;
           }
         }
       }).catch(err => {

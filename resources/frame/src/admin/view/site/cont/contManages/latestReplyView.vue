@@ -96,7 +96,7 @@
       </div>
 
       <div class="latest-reply-footer">
-        <el-button size="small" type="primary" :loading="subLoading" @click="deleteAllClick">提交</el-button>
+        <el-button size="small" type="primary" :loading="subLoading" @click="deleteAllClick">删除</el-button>
       </div>
     </div>
 </template>

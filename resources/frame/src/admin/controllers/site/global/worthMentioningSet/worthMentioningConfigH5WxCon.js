@@ -16,8 +16,8 @@ export default {
           appIdDescription: '填写申请公众号后，你获得的APPID ',
           appSecretDescription: '填写申请公众号后，你获得的App secret',
           serverUrl:'服务器地址URL',
-          appToken:'随便填写或随机生成',
-          encodingAESKey:'随便填写或随机生成',
+          appToken:'填写长度为3-32字符，必须为英文或数字的字符。或',
+          encodingAESKey:'消息加密密钥由43位字符组成，可随机修改，字符范围为A-Z，a-z，0-9。或',
           url: 'https://mp.weixin.qq.com/',
         },
         wx_miniprogram: {
