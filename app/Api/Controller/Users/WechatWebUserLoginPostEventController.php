@@ -7,16 +7,18 @@
 
 namespace App\Api\Controller\Users;
 
+use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use EasyWeChat\Factory;
 use Psr\Http\Server\RequestHandlerInterface;
-use Discuz\Http\DiscuzResponseFactory;
 
-class WechatWebUserLoginEventController implements RequestHandlerInterface
+
+class WechatWebUserLoginPostEventController implements RequestHandlerInterface
 {
     /**
      * 微信参数
@@ -39,6 +41,7 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
         $this->bus = $bus;
     }
 
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $wx_config = [
@@ -48,9 +51,11 @@ class WechatWebUserLoginEventController implements RequestHandlerInterface
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
         $app = Factory::officialAccount($wx_config);
+        $this->bus->dispatch(
+            new WebUserEvent($app)
+        );
         $response  = $app->server->serve();
 
-        return DiscuzResponseFactory::HtmlResponse($response->getContent());
-
+        return  DiscuzResponseFactory::XmlResponse($response->getContent());
     }
 }

@@ -1,3 +1,7 @@
+/*
+* 注册页面
+* */
+
 import SignUpHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
 import SignUpFooter from '../../../view/m_site/common/loginSignUpFooter/loginSignUpFooter'
 import browserDb from "../../../../../helpers/webDbHelper";

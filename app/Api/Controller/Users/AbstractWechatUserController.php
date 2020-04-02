@@ -10,9 +10,11 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Commands\Users\GenJwtToken;
+use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
+use App\Passport\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
@@ -21,6 +23,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Discuz\Contracts\Socialite\Factory;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Contracts\Events\Dispatcher as Events;
 
 abstract class AbstractWechatUserController extends AbstractResourceController
 {
@@ -32,12 +35,15 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected $validation;
 
-    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation)
+    protected $events;
+
+    public function __construct(Factory $socialite, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events)
     {
         $this->socialite = $socialite;
         $this->bus = $bus;
         $this->cache = $cache;
         $this->validation = $validation;
+        $this->events = $events;
     }
 
     public $serializer = TokenSerializer::class;
@@ -87,6 +93,10 @@ abstract class AbstractWechatUserController extends AbstractResourceController
             $response = $this->bus->dispatch(
                 new GenJwtToken($params)
             );
+
+            if($response->getStatusCode() === 200) {
+                $this->events->dispatch(new Logind($wechatUser->user));
+            }
 
             return json_decode($response->getBody());
         }

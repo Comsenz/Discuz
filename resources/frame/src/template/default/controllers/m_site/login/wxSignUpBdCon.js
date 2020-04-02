@@ -23,7 +23,7 @@ export default {
       captcha: null,           // 腾讯云验证码实例
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
-      btnLoading:false,        //注册按钮状态
+      btnLoading: false,        //注册按钮状态
     }
   },
 
@@ -179,6 +179,18 @@ export default {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
           }
+
+          if (res.errors[0].detail) {
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            if (res.rawData[0].code === 'register_validate') {
+              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
+            } else if (res.rawData[0].code === ' ban_user'){
+              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+          }
         // } else if (res.data.attributes.location) {
         //   //获取地址
         //   // console.log('获取地址');
@@ -195,12 +207,15 @@ export default {
           webDb.setLItem('refreshToken', refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
 
-          if (beforeVisiting) {
-            this.$router.replace({ path: beforeVisiting });
-            webDb.setSItem('beforeState', 1);
-          } else {
-            this.$router.push({ path: '/' });
-          }
+          this.getUsers(tokenId).then(()=>{
+            webDb.setLItem('foregroundUser', res.data.attributes.username);
+            if (beforeVisiting) {
+              this.$router.replace({ path: beforeVisiting });
+              webDb.setSItem('beforeState', 1);
+            } else {
+              this.$router.push({ path: '/' });
+            }
+          });
 
         } else {
           //任何情况都不符合
@@ -227,10 +242,10 @@ export default {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
           }
-        // } else if (res.data.attributes.location) {
-        //   //获取地址
-        //   this.wxurl = res.data.attributes.location;
-        //   window.location.href = res.data.attributes.location;
+          // } else if (res.data.attributes.location) {
+          //   //获取地址
+          //   this.wxurl = res.data.attributes.location;
+          //   window.location.href = res.data.attributes.location;
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -254,7 +269,28 @@ export default {
         console.log(err);
       })
     },
-
+    getUsers(id) {
+      return this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
+        }
+      }).then(res => {
+        if (res.errors) {
+          if (res.errors[0].detail) {
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
+        } else {
+          return res;
+        }
+      }).catch(err => {
+      })
+    },
   },
   created() {
     this.getForum();
@@ -272,7 +308,7 @@ export default {
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
-    webDb.setLItem('sessionId',sessionId);
+    webDb.setLItem('sessionId', sessionId);
 
     if (isWeixin) {
       this.platform = 'mp';

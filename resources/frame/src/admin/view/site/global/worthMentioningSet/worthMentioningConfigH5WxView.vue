@@ -12,15 +12,39 @@
       </CardRow>
     </Card>
 
-
     <Card header="App secret：">
       <CardRow :description="typeCopywriting[type].appSecretDescription">
         <el-input v-model="appSecret"></el-input>
       </CardRow>
     </Card>
 
+    <Card header="服务器地址(URL)：" v-if="type === 'wx_offiaccount'">
+      <CardRow :description="typeCopywriting[type].serverUrl">
+        <p>{{serverUrl}}</p>
+      </CardRow>
+    </Card>
+
+    <Card header="令牌(Token)：" v-if="type === 'wx_offiaccount'">
+      <CardRow :description="typeCopywriting[type].appToken">
+        <el-input v-model="appToken"></el-input>
+
+        <template #tail>
+          <span class="random-btn"  @click="randomClick('token')">随机生成</span>
+        </template>
+      </CardRow>
+    </Card>
+
+    <Card header="消息加解密密匙(EncodingAESKey)：" v-if="type === 'wx_offiaccount'">
+      <CardRow :description="typeCopywriting[type].encodingAESKey">
+        <el-input v-model="encodingAESKey"></el-input>
+
+        <template #tail>
+          <span class="random-btn" @click="randomClick('aes')">随机生成</span>
+        </template>
+      </CardRow>
+    </Card>
+
     <Card class="footer-btn">
-      <!-- <el-button type="primary" size="medium" @click="$router.push({path:'/admin/worth-mentioning-set'})" >提交</el-button> -->
       <el-button type="primary" size="medium" @click="submitConfiguration" >提交</el-button>
     </Card>
   </div>

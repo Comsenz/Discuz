@@ -6,6 +6,7 @@
 import ModifyHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import browserDb from '../../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../../helpers/commonHelper';
+import { correctImg } from '../../../../../../common/utils/correctImg';
 
 export default {
   data: function () {
@@ -25,8 +26,8 @@ export default {
       realNameShow: 'true',      //实名认证是否显示
       openid: '',       //微信openid
       myModifyPhone: '',
-      isReal:false,     //是否实名认证
-      updataLoading:false,  //上传状态
+      isReal: false,     //是否实名认证
+      updataLoading: false,  //上传状态
     }
   },
 
@@ -72,7 +73,7 @@ export default {
         case 'change-pay-pwd':
           //设置钱包密码','跳转设置钱包密码页面
           if (this.canWalletPay) {
-            this.$router.push({ path: 'verify-pay-pwd',query:{modifyPhone:this.modifyPhone}});
+            this.$router.push({ path: 'verify-pay-pwd', query: { modifyPhone: this.modifyPhone } });
           } else {
             this.$router.push({ path: 'setup-pay-pwd' });
           }
@@ -133,10 +134,13 @@ export default {
 
 
     },
-    handleFile: function (e) {  //上传头像
-      let file = e.target.files[0];
-      this.updataLoading = true;
+    handleFile: async function (e) {  //上传头像
 
+      let file = e.target.files[0];
+      // this.updataLoading = true;
+
+      const newfile = await correctImg(file);
+      file = newfile || file;
       // 获取file
       // 实例化
       let formdata = new FormData()
