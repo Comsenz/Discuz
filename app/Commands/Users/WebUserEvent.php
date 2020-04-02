@@ -23,21 +23,19 @@ class WebUserEvent
     public function handle()
     {
         $this->app->server->push(function ($message) {
-            if (isset($message->MsgType) && $message->MsgType == 'event') {
-                switch ($message->Event) {
-                    case 'subscribe':
-                    case 'SCAN':
-                        return $this->event($message);
-                        break;
-                }
+            switch ($message['Event']) {
+                case 'subscribe':
+                case 'SCAN':
+                    return $this->event($message);
+                    break;
             }
         });
     }
 
     protected function event($message)
     {
-        $openid = $message->FromUserName;
-        $EventKey = $message->EventKey;
+        $openid = $message['FromUserName'];
+        $EventKey = $message['EventKey'];
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
         if ($wechatuser) {
             //老用户  跟新扫描二维码用户
