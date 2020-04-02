@@ -1,7 +1,6 @@
 <template>
-  <div class="home-page-box">
-    <comHeader v-if="username" :title="username+'的个人主页'"></comHeader>
-    <!-- <comHeader v-else="" title="该用户已被删除的个人主页"></comHeader> -->
+  <div class="home-page-box" v-if="followDet" v-model="followDet">
+    <comHeader v-if="followDet._data.username" :title="followDet._data.username+'的个人主页'"></comHeader>
     <van-list
       v-model="loading"
       :finished="finished"
@@ -12,7 +11,7 @@
     >
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <div class="content">
-          <Header
+          <!-- <Header
             :showGroups="userGroups"
             :userInfoAvatarUrl="userAvatar"
             :followShow="true"
@@ -24,7 +23,63 @@
             :searchIconShow="false"
             :menuIconShow="false"
             :perDetShow="false"
-          ></Header>
+          ></Header>-->
+          <div class="personHead">
+            <div class="perHeadCon">
+              <div class="perHeadImgBox">
+                <img :src="followDet._data.avatarUrl" alt="用户头像" class="perHeadImg" />
+                <img
+                  class="icon-yirenzheng"
+                  v-if="followDet._data.isReal"
+                  src="../../../../../../static/images/authIcon.svg"
+                  alt="实名认证"
+                />
+              </div>
+              <div class="userDetInfo">
+                <h1 class="userDetName">{{followDet._data.username}}</h1>
+                <span class="userDetRole">{{followDet.groups[0]._data.name}}</span>
+              </div>
+              <div class="userOpera">
+                <!-- <a href="javascript:;" class="perLetter">私信</a> -->
+                <a
+                  href="javascript:;"
+                  class="followStatus"
+                  v-if="intiFollowVal == '0'"
+                  @click="followCli(intiFollowVal)"
+                >关注TA</a>
+                <a
+                  href="javascript:;"
+                  class="followStatus"
+                  v-else-if="intiFollowVal == '2'"
+                  @click="followCli(intiFollowVal)"
+                >相互关注</a>
+                <a
+                  href="javascript:;"
+                  class="followStatus"
+                  v-else-if="intiFollowVal == '1'"
+                  @click="followCli(intiFollowVal)"
+                >已关注</a>
+              </div>
+            </div>
+          </div>
+          <div class="personDetails">
+            <div class="personDetChi">
+              <h2 class="personDetNum">{{followDet._data.threadCount}}</h2>
+              <div class="personDetType">主题</div>
+            </div>
+            <div class="personDetChi">
+              <h2 class="personDetNum">{{followDet._data.followCount}}</h2>
+              <div class="personDetType">关注</div>
+            </div>
+            <div class="personDetChi">
+              <h2 class="personDetNum">{{followDet._data.fansCount}}</h2>
+              <div class="personDetType">粉丝</div>
+            </div>
+            <!-- <div class="personDetChi">
+              <h2 class="personDetNum">{{followDet._data.followCount}}</h2>
+              <div class="personDetType">点赞</div>
+            </div>-->
+          </div>
           <div class="gap"></div>
           <ThemeDet :themeList="OthersThemeList"></ThemeDet>
         </div>

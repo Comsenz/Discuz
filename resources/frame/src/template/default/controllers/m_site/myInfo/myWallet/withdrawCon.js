@@ -25,6 +25,7 @@ export default {
       mobileConfirmed: '',//验证验证码是否正确
       handlingFee1: '',
       loading: false, //loading状态
+      disabled: false, //按钮状态
     }
   },
 
@@ -213,9 +214,7 @@ export default {
       })
     }, //发送验证码
     timer() {
-      // alert('执行');
       if (this.time > 1) {
-        // alert('2222');
         this.time--;
         this.btnContent = this.time + "s后重新获取";
         this.disabled = true;
@@ -290,7 +289,8 @@ export default {
             }
           }).then((res) => {
             if (res.errors) {
-              this.$toast.fail(res.errors[0].code);
+              this.$toast.fail(res.errors[0].detail[0]);
+              // this.$toast.fail(res.errors[0].code);
               this.loading = false;
               // throw new Error(res.error)
             } else {
@@ -303,9 +303,6 @@ export default {
           })
         }
       })
-
-
-
     },
 
   }

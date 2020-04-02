@@ -925,15 +925,18 @@ export default {
         }
 
         // 微信分享
-        if (isWeixin && (to.name === 'details/:themeId' || to.name === 'circle')) {
-          this.wxShare({
-            title: site_name,
-            desc: site_desc,
-            logo: site_logo
-          })
+        if (isWeixin && (to.name === 'circle' || to.name === 'details/:themeId')) {
+          ShowShare();
+          if (isWeixin && to.name === 'circle') {
+            wxShare({
+              title: site_name,
+              desc: site_desc,
+              logo: site_logo
+            }, to)
+          }
         }
         else {
-          this.noShare()
+          noShare() //禁止分享
         }
       })
     }
@@ -1010,9 +1013,23 @@ export default {
       data: {}
     }).then(res => {
       if (res.errors) {
+
         if (res.rawData[0].code == 'not_install') {
           window.location.href = res.rawData[0].detail.installUrl;
+          return
         }
+
+        if (res.errors[0].detail){
+          alert(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+        } else {
+          alert(res.errors[0].code);
+        }
+
+        setTimeout(()=>{
+          localStorage.clear();
+          location.reload();
+        },1500);
+
         return res;
       } else {
         browserDb.setLItem('siteInfo', res.readdata);
@@ -1025,53 +1042,64 @@ export default {
       console.log(err);
     })
   },
-  //分享，复制浏览器地址
-  wxShare(shareData) {
-    let url = window.location.href.split("#")[0];
-    appFetch({
-      url: 'weChatShare',
-      method: 'get',
-      data: {
-        url
-      }
-    }).then((res) => {
-      let appId = res.readdata._data.appId;
-      let nonceStr = res.readdata._data.nonceStr;
-      let signature = res.readdata._data.signature;
-      let timestamp = res.readdata._data.timestamp;
-      let jsApiList = res.readdata._data.jsApiList;
-      wx.config({
-        debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: appId,         // 必填，公众号的唯一标识
-        timestamp: timestamp, // 必填，生成签名的时间戳
-        nonceStr: nonceStr,   // 必填，生成签名的随机串
-        signature: signature, // 必填，签名，见附录1
-        jsApiList: [
-          'updateAppMessageShareData',
-          'updateTimelineShareData',
-          'hideMenuItems'
-        ]
-      });
-      wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
-        if (to.name === 'details/:themeId' && to.name === '/') {
-          let data = {
-            title: shareData.title,       // 分享标题
-            desc: shareData.desc,         // 分享描述
-            link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: shareData.logo        // 分享图标
-          }
-          wx.updateAppMessageShareData(data);
-          wx.updateTimelineShareData(data)
-        }
-      });
-    })
-  },
-  noShare() {
-    wx.ready(() => {
-      wx.hideMenuItems({
-        menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-      });
-    })
-  }
 
 };
+
+export function wxShare(shareData, toName) {
+  let url = window.location.href.split("#")[0];
+  appFetch({
+    url: 'weChatShare',
+    method: 'get',
+    data: {
+      url
+    }
+  }).then((res) => {
+    let appId = res.readdata._data.appId;
+    let nonceStr = res.readdata._data.nonceStr;
+    let signature = res.readdata._data.signature;
+    let timestamp = res.readdata._data.timestamp;
+    let jsApiList = res.readdata._data.jsApiList;
+    wx.config({
+      debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: appId,         // 必填，公众号的唯一标识
+      timestamp: timestamp, // 必填，生成签名的时间戳
+      nonceStr: nonceStr,   // 必填，生成签名的随机串
+      signature: signature, // 必填，签名，见附录1
+      jsApiList: [
+        'updateAppMessageShareData',
+        'updateTimelineShareData',
+        'hideMenuItems',
+        'showMenuItems'
+      ]
+    });
+    wx.ready(() => {   //需在用户可能点击分享按钮前就先调用
+      if (toName.name === 'circle') {
+        let data = {
+          title: shareData.title,       // 分享标题
+          desc: shareData.desc,         // 分享描述
+          link: url,                    // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: shareData.logo        // 分享图标
+        };
+        wx.updateAppMessageShareData(data);   //分享给朋友
+        wx.updateTimelineShareData(data)  //分享到朋友圈
+      }
+
+    });
+  })
+}
+
+export function noShare() {
+  wx.ready(() => {
+    wx.hideMenuItems({
+      menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+    });
+  })
+}
+
+export function ShowShare() {
+  wx.ready(() => {
+    wx.showMenuItems({
+      menuList: ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:copyUrl'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+    });
+  })
+}

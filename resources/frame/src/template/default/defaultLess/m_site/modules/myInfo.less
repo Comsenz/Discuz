@@ -193,6 +193,127 @@ h2,h3,h4{
 /**
   我的主页
  */
+.personHead {
+  padding: 24px 15px;
+  .perHeadCon {
+    height: 46px;
+    .perHeadImgBox {
+      width: 46px;
+      height: 46px;
+      overflow: visible;
+      position: relative;
+      float: left;
+      .perHeadImg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+      }
+      .icon-yirenzheng {
+        position: absolute;
+        bottom: -3px;
+        right: -3px;
+        width: 12px;
+        height: 12px;
+      }
+    }
+    .userDetInfo {
+      float: left;
+      height: 46px;
+      margin-left: 10px;
+      max-width: 130px;
+      .userDetName {
+        font-size: 18px;
+        line-height: 20px;
+        text-align: left;
+        margin-bottom: 10px;
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .userDetRole {
+        display: block;
+        font-size: 12px;
+        line-height: 12px;
+        color: #939393;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .userOpera {
+      float: right;
+      text-align: right;
+      padding-top: 8px;
+      a {
+        // display: inline-block;
+        font-size: 14px;
+        // line-height: 26px;
+        border-radius: 13px;
+        margin-left: 8px;
+        padding: 6px 12px;
+      }
+      .perLetter {
+        color: @main;
+        background:#f2f2f2;
+      }
+      .followStatus {
+        background: @main;
+        color: #ffffff;
+      }
+    }
+  }
+}
+.personDetails {
+  padding: 0 15px 24px 15px;
+  overflow: hidden;
+  .personDetChi {
+    position: relative;
+    float: left;
+    width: 33.33%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: center;
+    .personDetNum {
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 19px;
+      margin-bottom: 3px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .personDetType {
+      font-size: 12px;
+      color: #9d9d9d;
+      line-height: 17px;
+    }
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 12px;
+      width: 1px;
+      height: 24px;
+      background: #f6f6f6;
+    }
+    &:last-child {
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 12px;
+        width: 1px;
+        height: 24px;
+        background: transparent;
+      }
+    }
+  }
+}
+
 
 //内容页面-头像
 .avatar-img{
@@ -433,6 +554,7 @@ h2,h3,h4{
         opacity:0;
         width: 100%;
         height: 100%;
+        z-index: 5;
         // width:143rem;
         // height:3rem;
       }
@@ -597,5 +719,8 @@ h2,h3,h4{
   }
 
 }
+
+
+
 
 

@@ -70,7 +70,7 @@ export default {
           }
           this.reasonsForDisable = this.userInfo.banReason;
           this.userRole = response.readdata.groups.map((v) => {
-            return v._data.name
+            return v._data.id
           });
           if (response.readdata.wechat) {
             this.wechatNickName = response.readdata.wechat._data.nickname
@@ -159,12 +159,11 @@ export default {
           this.imageUrl = res.readdata._data.avatarUrl;
           this.deleBtn = true;
         }
-
       })
     },
 
     submission() {
-      var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/; //手机号正则验证
+      var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/; //手机号正则验证
       var mobile = this.userInfo.originalMobile;
       if (mobile == '') {
 
@@ -199,7 +198,6 @@ export default {
         } else {
           this.$message({ message: '提交成功', type: 'success' });
         }
-
       })
     },
 

@@ -7,6 +7,7 @@ import appCommonH from '../../../../../helpers/commonHelper';
 // import appConfig from '../../../../../../config/appConfig';
 import filters from '../../../../../common/filters';
 import { ImagePreview } from "vant";
+import { wxShare, noShare } from '../../../viewConfig/tplConfig';
 export default {
   data: function () {
     return {
@@ -131,6 +132,7 @@ export default {
       ExamineStatus: '',//审核中状态
       logo: '', //站点logo
       wxShareTip: false,
+      siteName: '', //站点名称
 
     }
   },
@@ -141,6 +143,7 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.siteName = browserDb.getLItem('siteInfo')._data.set_site.site_name;
     this.getInfo();
     // this.onLoad();
     this.userId = browserDb.getLItem('tokenId');
@@ -148,7 +151,6 @@ export default {
     // this.shareTheme();
     this.getUser();
     this.detailsLoad(true);       //初始化详情页列表数据
-    // this.wxShare();
     window.likeIsFold = this.likeIsFold;
     if (!this.themeCon) {
       this.themeShow = false;
@@ -234,6 +236,7 @@ export default {
           throw new Error(res.error)
         } else {
           this.siteInfo = res.readdata;
+          // this.siteName = this.siteInfo._data.set_site.site_name;
           this.logo = res.readdata._data.set_site.site_logo;
           this.wxpay = res.readdata._data.paycenter.wxpay_close;
           if (this.wxpay == '0' || this.wxpay == false) {
@@ -332,11 +335,11 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
+        // console.log(res, '0000')
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res.readdata, '@@@@@~~~~~');
           appCommonH.setPageTitle('detail', res);
           this.likeLen = res.readdata.firstPost.likedUsers.length;
           this.finished = res.readdata.posts.length < this.pageLimit;
@@ -377,6 +380,7 @@ export default {
             }
             this.themeShow = true;
             this.themeCon = res.readdata;
+            // alert(this.themeCon._data.type, 'dddd222222222');
             this.canLike = res.readdata.firstPost._data.canLike;
             this.canViewPosts = res.readdata._data.canViewPosts;
             this.canReply = res.readdata._data.canReply;
@@ -392,7 +396,8 @@ export default {
               this.themeIsLiked = false;
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
-            var firstpostImageLen = this.themeCon.firstPost.images.length
+            var firstpostImageLen = this.themeCon.firstPost.images.length;
+            // console.log(firstpostImageLen);
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
@@ -400,9 +405,8 @@ export default {
 
             });
 
-            if (firstpostImageLen === 0) {
-              return;
-            } else {
+            if (firstpostImageLen > 0) {
+              // return;
               var firstpostImage = [];
               var firstpostImageOriginal = [];
               for (let i = 0; i < firstpostImageLen; i++) {
@@ -411,17 +415,21 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
               this.firstpostImageListOriginal = firstpostImageOriginal;
+              // console.log(this.firstpostImageList[0], '~~~~~~@@@@@');
             };
             // 初始化时获取微信分享数据
-            this.wxShare();
+            // console.log(123)
+            // this.wxShare();
           } else {
+            // console.log(456);
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
             this.likeLen = themeCon.firstPost.likedUsers.length;
           }
         }
-
+        this.wxShareDetail();  //调用微信分享
+        // console.log(333)
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
@@ -474,6 +482,9 @@ export default {
       }
       return s;
     },
+    removeHtmlTag(str) {
+      return str.replace(/<[^>]+>/g, "");  //正则去掉所有的html标记
+    },
     copyFocus(obj) {
       obj.blur;
       document.body.removeChild(obj);
@@ -482,45 +493,6 @@ export default {
     shareTheme() {
       if (this.isWeixin) {
         this.wxShareTip = true;
-        //   let url = window.location.href.split("#")[0];
-        //   console.log(url)
-        //   this.appFetch({
-        //     url: 'weChatShare',
-        //     method: 'get',
-        //     data: {
-        //       url
-        //     }
-        //   }).then((res) => {
-        //     let appId = res.readdata._data.appId;
-        //     let nonceStr = res.readdata._data.nonceStr;
-        //     let signature = res.readdata._data.signature;
-        //     let timestamp = res.readdata._data.timestamp;
-        //     let jsApiList = res.readdata._data.jsApiList;
-        //     wx.config({
-        //       debug: true,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        //       appId: appId,         // 必填，公众号的唯一标识
-        //       timestamp: timestamp, // 必填，生成签名的时间戳
-        //       nonceStr: nonceStr,   // 必填，生成签名的随机串
-        //       signature: signature, // 必填，签名，见附录1
-        //       jsApiList: jsApiList
-        //       // jsApiList: [
-        //       //   'updateAppMessageShareData',
-        //       //   'updateTimelineShareData'
-        //       // ]
-        //     });
-        //     // console.log('111')
-        //     // wx.ready(() => {
-        //     wx.updateAppMessageShareData({  //分享给朋友
-        //       title: '是你吗', // 分享标题
-        //       desc: '是我啊', // 分享描述
-        //       link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        //       imgUrl: '../../../../static/images/logo.png', // 分享图标
-        //       success: function () {
-        //         // 设置成功
-        //         alert('222')
-        //       }
-        //     });
-        //   })
       } else {
         let Url = '';
         if (this.isPayVal === 'pay') {
@@ -1128,37 +1100,56 @@ export default {
       })
     },
     // 微信分享
-    wxShare() {
-      let title = this.themeCon._data.type == 1
-        ? this.themeCon._data.title
-        : this.themeCon._data.content;
-      var reTag = /<img(?:.|\s)*?>/g;
-      var reTag2 = /(<\/?br.*?>)/gi;
-      var reTag3 = /(<\/?p.*?>)/gi;
-      this.title = this.title.replace(reTag, '');
-      this.title = this.title.replace(reTag2, '');
-      this.title = this.title.replace(reTag3, '');
-      this.title = this.title.replace(/\s+/g, "");
-      let desc = this.themeCon._data.type == 1
-        ? this.themeCon._data.title
-        : this.themeCon._data.content;
-      console.log(this.themeCon)
-      console.log(this.themeCon.firstPost.images[0]._data.url)
-      let logo = this.themeCon.firstPost.images[0]._data.url
-        ? this.themeCon.firstPost.images[0]._data.url
-        : `${appConfig.baseUrl}/static/images/wxshare.png`;
-      console.log(logo)
+    wxShareDetail() {
+      var title = '';
+      var desc = '';
+      var logo = '';
+      if (this.themeCon._data.type == 0) {  //普通主题
+
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        title = shareContent + ' - ' + this.siteName;
+        desc = shareContent;
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      } else if (this.themeCon._data.type == 1) {   //长文类型
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        if (this.themeCon._data.price > 0) {
+          desc = ''
+        } else {
+          desc = shareContent;
+        }
+        title = this.themeCon._data.title + ' - ' + this.siteName;
+        if (this.firstpostImageList.length > 0) {
+          logo = this.firstpostImageList[0];
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      } else if (this.themeCon._data.type == 2) {  //视频类型
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        title = shareContent + ' - ' + this.siteName;
+        desc = shareContent;
+        if (this.themeCon.threadVideo._data.cover_url) {
+          logo = this.themeCon.threadVideo._data.cover_url;
+        } else {
+          logo = appConfig.baseUrl + '/static/images/wxshare.png';
+        }
+      }
       let data = {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: logo        // 分享图标
+        logo               // 分享图标
       }
+      wxShare(data, { name: 'circle' })
       wx.updateAppMessageShareData(data);
       wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {
+    // console.log(wxShare, 'wxShare111111');
     document.addEventListener('click', this.listenEvt, false);
   },
   destroyed: function () {
