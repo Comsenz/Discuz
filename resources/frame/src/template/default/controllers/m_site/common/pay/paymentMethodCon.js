@@ -32,77 +32,77 @@
 import webDb from '../../../../../../helpers/webDbHelper';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      paySelectShow:false,           //支付方式弹框
-      payImmediatelyShow:false,      //立即支付弹框
+      paySelectShow: false,           //支付方式弹框
+      payImmediatelyShow: false,      //立即支付弹框
       radio: 0,                      //选中的支付方式
-      descriptionShow:false,         //钱包描述是否显示
+      descriptionShow: false,         //钱包描述是否显示
       showKeyboard: false,           //键盘是否显示
     }
   },
-  props:{
-    value:{
-      type:Boolean,
-      default:false
-  },
-    money:{
-      type:String,
-      default:'0.00'
+  props: {
+    value: {
+      type: Boolean,
+      default: false
     },
-    balance:{
-      type:String,
-      default:'0.00'
+    money: {
+      type: String,
+      default: '0.00'
     },
-    data:{
-      type:Array,
-      default:[
+    balance: {
+      type: String,
+      default: '0.00'
+    },
+    data: {
+      type: Array,
+      default: [
         {
-          name:'钱包',
-          icon:''
+          name: '钱包',
+          icon: ''
         }
       ]
     },
-    error:{
-      type:String
+    error: {
+      type: String
     },
-    walletStatus:{
-      type:Boolean,
-      default:false
+    walletStatus: {
+      type: Boolean,
+      default: false
     },
-    payUrl:{
-      type:String
+    payUrl: {
+      type: String
     },
-    pwdValue:{
-      type:String,
-      default:''
+    pwdValue: {
+      type: String,
+      default: ''
     }
   },
-  methods:{
+  methods: {
     onInput(key) {
-      this.$emit('oninput',key);
+      this.$emit('oninput', key);
     },
     onDelete() {
       this.$emit('delete');
     },
-    onClose(){
+    onClose() {
       this.$emit('close');
     },
-    payImmediatelyClick(){
+    payImmediatelyClick() {
       this.showKeyboard = true;
-      if (this.data[this.radio].name === '钱包'){
+      if (this.data[this.radio].name === '钱包') {
         this.paySelectShow = !this.paySelectShow;
         this.payImmediatelyShow = !this.payImmediatelyShow
       }
-      this.$emit('payImmediatelyClick',this.data[this.radio])
+      this.$emit('payImmediatelyClick', this.data[this.radio])
     },
-    payStatusClick(){
-      if (this.payUrl){
-        this.$router.push({path:'/' + this.payUrl});
-        webDb.setLItem('payUrl',this.$route.fullPath);
+    payStatusClick() {
+      if (this.payUrl) {
+        this.$router.push({ path: '/' + this.payUrl });
+        webDb.setLItem('payUrl', this.$route.fullPath);
       }
     },
-    clickOverlay(){
+    clickOverlay() {
       this.$emit('input', false);
       this.$emit('clickOverlay');
       this.radio = 0;
@@ -110,18 +110,18 @@ export default {
       this.payImmediatelyShow = false;
     }
   },
-  watch:{
-    value(val){
+  watch: {
+    value(val) {
       this.paySelectShow = val;
       this.descriptionShow = parseFloat(this.money) > parseFloat(this.balance);
-      if (!val){
+      if (!val) {
         this.paySelectBox = false;
         this.payImmediatelyShow = false;
         this.showKeyboard = false;
       }
     },
-    payImmediatelyShow(val){
-      if (!val){
+    payImmediatelyShow(val) {
+      if (!val) {
         // this.pwdValue = '';
       }
     }

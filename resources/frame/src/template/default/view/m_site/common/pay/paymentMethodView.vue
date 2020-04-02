@@ -27,6 +27,7 @@
               <div
                 class="way-to-choose_cont-select_cell"
                 v-for="(item,index) in data"
+                :key="index"
                 @click="!descriptionShow && walletStatus?radio = index:''"
               >
                 <div class="way-to-choose_cont-select_cell-left">
