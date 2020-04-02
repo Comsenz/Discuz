@@ -2,12 +2,12 @@
 import appCommonH from '../../../../../../helpers/commonHelper';
 import appConfig from "../../../../../../../../frame/config/appConfig";
 export default {
-  data:function () {
+  data: function () {
     return {
-      headerTitle:this.title,
+      headerTitle: this.title,
       // menuIconShow: this.menuIconShow,
-      pageName:"",
-      popupShow:false,
+      pageName: "",
+      popupShow: false,
       // avatarUrl:'',
       // username:'',
       // mobile:''
@@ -17,10 +17,10 @@ export default {
 
     }
   },
-  props:{
-    title:{
-      default:'',
-      type:String,
+  props: {
+    title: {
+      default: '',
+      type: String,
     },
     menuIconShow: { // 组件是否显示菜单按钮
       menuIconShow: false
@@ -31,18 +31,18 @@ export default {
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
   },
-  methods:{
+  methods: {
     //设置Header在pc里的宽度
-    limitWidth(){
+    limitWidth() {
       document.getElementById('comHeader').style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('comHeader').style.marginLeft = (viewportWidth - 640)/2+'px';
+      document.getElementById('comHeader').style.marginLeft = (viewportWidth - 640) / 2 + 'px';
     },
     showPopup() {
       //侧边栏显示
       this.popupShow = true;
     },
-    headerBack(){
+    headerBack() {
       let backGo = this.$route.query.backGo;
 
       // this.$router.go(-1);
@@ -53,12 +53,14 @@ export default {
 
       // alert(window.history.length);
 
-      if(this.$route.name === 'modify-data'){
+      const sidePageList = ['my-wallet', 'modify-data'];
+
+      if (sidePageList.includes(this.$route.name)) {
         this.$router.push('/');
         return;
       }
 
-      if(document.referrer == '' && (window.history.length == 0 || window.history.length < 3)){
+      if (document.referrer == '' && (window.history.length == 0 || window.history.length < 3)) {
         window.location.href = appConfig.baseUrl;
       } else {
         this.$router.go(-1);
@@ -86,9 +88,9 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     //设置在pc的宽度
-    if(this.isWeixin != true && this.isPhone != true){
+    if (this.isWeixin != true && this.isPhone != true) {
       this.limitWidth();
     }
   },
