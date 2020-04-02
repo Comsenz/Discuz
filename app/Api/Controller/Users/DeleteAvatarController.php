@@ -35,7 +35,7 @@ class DeleteAvatarController extends AbstractResourceController
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|mixed
+     * @return \App\Models\User|mixed
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)

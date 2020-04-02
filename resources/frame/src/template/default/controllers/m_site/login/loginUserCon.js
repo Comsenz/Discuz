@@ -139,7 +139,9 @@ export default {
         }
       })*/
 
-      window.location.href = '/api/oauth/wechat/pc';
+      this.$router.push({path:'wx-qr-code'});
+
+      // window.location.href = '/api/oauth/wechat/pc';
 
     },
 
@@ -156,26 +158,17 @@ export default {
         method: 'get',
         data: {}
       }).then(res => {
-        // if (res.errors){
-        //   this.$toast.fail(res.errors[0].code);
-        // } else {
-
         if (res.errors) {
           if (res.rawData[0].code === 'site_closed') {
             this.siteClosed = false;
-            // alert('true');
           } else {
             this.siteClosed = true;
           }
-
+        } else {
+          this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
+          this.siteMode = res.readdata._data.set_site.site_mode;
+          browserDb.setLItem('siteInfo', res.readdata);
         }
-
-        this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
-        this.siteMode = res.readdata._data.set_site.site_mode;
-        browserDb.setLItem('siteInfo', res.readdata);
-
-
-        // }
       }).catch(err => {
       })
     },
@@ -235,14 +228,10 @@ export default {
     }
   },
   created() {
-    // localStorage.clear();
-
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
-
     //获取到code 和 state再访问getWatchHref接口，把code和state拼接到接口url里。
-
     if (isWeixin === true) {
       //微信登录
     } else if (isPhone === true) {
@@ -255,7 +244,6 @@ export default {
     }
 
     this.getForum();
-
   },
   components: {
     LoginHeader,

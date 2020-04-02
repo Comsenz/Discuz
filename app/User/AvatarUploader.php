@@ -10,13 +10,15 @@ namespace App\User;
 use App\Censor\Censor;
 use App\Exceptions\UploadException;
 use App\Models\User;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use Discuz\Http\UrlGenerator;
 use Intervention\Image\Image;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 class AvatarUploader
 {
-    protected $file;
+    protected $filesystem;
 
     protected $censor;
 
@@ -29,11 +31,17 @@ class AvatarUploader
      */
     public $avatarPath;
 
-    public function __construct(Filesystem $file, Censor $censor, Application $app)
+    public $settings;
+
+    public $url;
+
+    public function __construct(Filesystem $filesystem, Censor $censor, Application $app, SettingsRepository $settings, UrlGenerator $url)
     {
-        $this->file = $file;
         $this->censor = $censor;
         $this->app = $app;
+        $this->filesystem = $filesystem;
+        $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -56,9 +64,17 @@ class AvatarUploader
 
         $this->avatarPath = $user->id . '.png';
 
-        $user->changeAvatar($this->avatarPath);
+        // 判断是否开启云储存
+        if ($this->settings->get('qcloud_cos', 'qcloud')) {
+            $this->avatarPath = 'public/avatar/' . $this->avatarPath; // 云目录
+            $uri = $this->filesystem->url($this->avatarPath);
+            $avatarUrl = $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath();
+            $user->changeAvatar($avatarUrl);
+        } else {
+            $user->changeAvatar($this->avatarPath);
+        }
 
-        $this->file->put($this->avatarPath, $encodedImage);
+        $this->filesystem->put($this->avatarPath, $encodedImage);
     }
 
     /**
@@ -70,11 +86,13 @@ class AvatarUploader
     {
         $avatarPath = $user->getRawOriginal('avatar');
 
+        // save后事件
         $user->saved(function () use ($avatarPath) {
             $this->deleteFile($avatarPath);
         });
 
         $user->changeAvatar('');
+        $user->avatar_at = null;
     }
 
     /**
@@ -84,8 +102,8 @@ class AvatarUploader
      */
     public function deleteFile($avatarPath)
     {
-        if ($this->file->has($avatarPath)) {
-            $this->file->delete($avatarPath);
+        if ($this->filesystem->has($avatarPath)) {
+            $this->filesystem->delete($avatarPath);
         }
     }
 }

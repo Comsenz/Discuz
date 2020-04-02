@@ -82,5 +82,8 @@ module.exports = {
   'statisticChart': '/statistic/financeChart',     //获取盈利图表数据
   'noticeList': '/notification/tpl',               //通知设置列表
   'notification': '/notification/tpl/',   //修改系统消息模版[通知设置]
-  'noticeConfigure': '/notification/tpl/', //通知配置列表
+  'noticeConfigure': '/notification/tpl/', //通知配置列表,
+
+  'wxPcUrl':'/oauth/wechat/web/user',     //获取微信pcUrl
+  'wxLoginStatus':'/oauth/wechat/web/user/serach', //获取微信扫码用户状态
 }

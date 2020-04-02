@@ -60,7 +60,6 @@
 </template>
 
 <script>
-// import TCaptcha from '../../../controllers/m_site/common/tcaptcha';
 import "../../../defaultLess/m_site/modules/loginSignUpModule.less";
 import signUpCon from "../../../controllers/m_site/login/signUpCon";
 export default {
