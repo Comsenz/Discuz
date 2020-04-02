@@ -43,34 +43,38 @@ class WebUserEvent
         $openid = $message['FromUserName'];
         $EventKey = $message['EventKey'];
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
-        if ($wechatuser) {
+
+        if ($wechatuser && $wechatuser->user_id) {
             //老用户  跟新扫描二维码用户
             SessionToken::get($EventKey, 'wechat')->update([
-                    'user_id'=>$wechatuser['user_id'],
+                    'user_id'=>$wechatuser->user_id,
                 ]);
-            $text = trans('login.WebUser_login_success');
-        } else {
-            //新用户,跳转绑定页面
-            $user = $this->app->user->get($openid);
-            $user_wechats = new UserWechat();
-            $user_wechats->mp_openid = Arr::get($user, 'openid');
-            $user_wechats->nickname =  Arr::get($user, 'nickname');
-            $user_wechats->sex = Arr::get($user, 'sex');
-            $user_wechats->province = Arr::get($user, 'province');
-            $user_wechats->city = Arr::get($user, 'city');
-            $user_wechats->country = Arr::get($user, 'country');
-            $user_wechats->headimgurl = Arr::get($user, 'headimgurl');
-            $user_wechats->unionid = Arr::get($user, 'unionid');
-
-
-            SessionToken::get($EventKey, 'wechat')->update([
-                'scope'=>'wechat',
-                'payload'=> $user
-            ]);
-            if ($user_wechats->save()) {
-                $text = trans('login.WebNewUser_login_success');
-            }
+            return new Text(trans('login.WebUser_login_success'));
         }
-        return new Text($text);
+
+        if(is_null($wechatuser)) {
+            $wechatuser = new UserWechat();
+        }
+
+        //新用户,跳转绑定页面
+        $user = $this->app->user->get($openid);
+
+        $wechatuser->mp_openid = Arr::get($user, 'openid');
+        $wechatuser->nickname =  Arr::get($user, 'nickname');
+        $wechatuser->sex = Arr::get($user, 'sex');
+        $wechatuser->province = Arr::get($user, 'province');
+        $wechatuser->city = Arr::get($user, 'city');
+        $wechatuser->country = Arr::get($user, 'country');
+        $wechatuser->headimgurl = Arr::get($user, 'headimgurl');
+        $wechatuser->unionid = Arr::get($user, 'unionid');
+
+        SessionToken::get($EventKey, 'wechat')->update([
+            'scope'=>'wechat',
+            'payload'=> $user
+        ]);
+
+        $wechatuser->save();
+
+        return new Text(trans('login.WebNewUser_login_success'));
     }
 }
