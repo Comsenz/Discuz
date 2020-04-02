@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Settings\SettingsRepository;
 use App\Tools\AttachmentUploadTool;
 use App\Tools\ImageUploadTool;
+use App\User\AvatarUploader;
 use App\User\UserWechatObserver;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
 use Discuz\Foundation\Application;
@@ -45,7 +46,7 @@ class SettingsServiceProvider extends ServiceProvider
                 });
 
                 // 上传头像驱动地址
-                $this->app->when([UserWechatObserver::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
+                $this->app->when([UserWechatObserver::class, AvatarUploader::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
                     return $app->make(Factory::class)->disk('avatar_cos');
                 });
             }
