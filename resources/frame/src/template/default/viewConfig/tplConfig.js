@@ -355,7 +355,7 @@ export default {
           title: "支付费用"
         }
       },
-      'wx-qr-code':{
+      'wx-qr-code': {
         comLoad: function (resolve) {
           require(['../view/m_site/login/wxQRcodeView'], resolve)
         },
@@ -850,9 +850,9 @@ export default {
                 next();
               } else {
                 if (res.readdata._data.set_site.site_mode === 'public') {
-                  next({path: 'wx-sign-up-bd'});
-                } else if (res.readdata._data.set_site.site_mode === 'pay'){
-                  next({path:'pay-circle'});
+                  next({ path: 'wx-sign-up-bd' });
+                } else if (res.readdata._data.set_site.site_mode === 'pay') {
+                  next({ path: 'pay-circle' });
                 }
               }
             } else {
@@ -1016,16 +1016,16 @@ export default {
           return
         }
 
-        if (res.errors[0].detail){
+        if (res.errors[0].detail) {
           alert(res.errors[0].code + '\n' + res.errors[0].detail[0]);
         } else {
           alert(res.errors[0].code);
         }
 
-        setTimeout(()=>{
+        setTimeout(() => {
           localStorage.clear();
           location.reload();
-        },1500);
+        }, 1500);
 
         return res;
       } else {
