@@ -63,7 +63,6 @@ class AvatarUploader
         $encodedImage = $image->fit(200, 200)->encode('png');
 
         $this->avatarPath = $user->id . '.png';
-        $avatarUrl = $user->id . '.png';
 
         // 判断是否开启云储存
         if ($this->settings->get('qcloud_cos', 'qcloud')) {
@@ -75,7 +74,7 @@ class AvatarUploader
             $user->changeAvatar($this->avatarPath);
         }
 
-        $this->filesystem->put($avatarUrl, $encodedImage);
+        $this->filesystem->put($this->avatarPath, $encodedImage);
     }
 
     /**

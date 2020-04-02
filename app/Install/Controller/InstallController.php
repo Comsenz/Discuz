@@ -66,7 +66,8 @@ class InstallController implements RequestHandlerInterface
     {
         $input = $request->getParsedBody();
         $input['ip'] = ip($request->getServerParams());
-        $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost();
+        $port  = $request->getUri()->getPort();
+        $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
         if ($this->app->isInstall()) {
             return DiscuzResponseFactory::HtmlResponse('已安装', 500);

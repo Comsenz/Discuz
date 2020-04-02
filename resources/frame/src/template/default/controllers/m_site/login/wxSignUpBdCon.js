@@ -185,8 +185,8 @@ export default {
           } else {
             if (res.rawData[0].code === 'register_validate') {
               this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
-            } else if (res.rawData[0].code === ' ban_user'){
-              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
+            } else if (res.rawData[0].code === 'ban_user'){
+              this.$router.push({ path: "information-page", query: { setInfo: 'banUser' }})
             } else {
               this.$toast.fail(res.errors[0].code);
             }
@@ -207,8 +207,8 @@ export default {
           webDb.setLItem('refreshToken', refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
 
-          this.getUsers(tokenId).then(()=>{
-            webDb.setLItem('foregroundUser', res.data.attributes.username);
+          this.getUsers(tokenId).then((data)=>{
+            webDb.setLItem('foregroundUser', data.data.attributes.username);
             if (beforeVisiting) {
               this.$router.replace({ path: beforeVisiting });
               webDb.setSItem('beforeState', 1);
