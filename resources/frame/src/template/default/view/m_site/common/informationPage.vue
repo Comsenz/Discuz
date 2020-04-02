@@ -3,7 +3,7 @@
       <van-icon class="information-icon" :name="setInfo[$route.query.setInfo].icon" :color="setInfo[$route.query.setInfo].iconColor" size="64" />
       <p class="title">{{setInfo[$route.query.setInfo].title}}</p>
       <span class="comment">{{setInfo[$route.query.setInfo].comment}}</span>
-      <div class="login">
+      <div class="login" v-if="!appCommonH.isWeixin().isWeixin">
         <van-button type="primary" @click="btnClick">{{setInfo[$route.query.setInfo].btnText}}</van-button>
       </div>
     </div>

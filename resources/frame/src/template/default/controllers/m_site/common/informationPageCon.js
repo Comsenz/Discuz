@@ -3,6 +3,7 @@
 * 提示信息页管理器
 * 这里可以统一接口提示信息，按照data里setInfo写法就可以了。跳转页面的时候需要在url里添加query参数
 * */
+import appCommonH from "../../../../../helpers/commonHelper";
 
 export default {
   data: function () {
