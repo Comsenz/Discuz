@@ -51,7 +51,7 @@ class WebUserSearch
 
                 $data['type'] = 'login';
                 $data['payload'] = json_decode($response->getBody());
-            } else {
+            } elseif($session->payload) {
                 $data['type'] = 'bind';
                 $data['payload'] = $session;
             }
