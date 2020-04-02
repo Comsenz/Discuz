@@ -692,8 +692,6 @@ export default {
       'supplier-all-back',
       'site-close',
       'information-page',
-      'pay-circle-login',
-      'pay-circle',
       '/api/oauth/wechat',
       '/api/oauth/wechat/pc'
     ];
@@ -934,8 +932,7 @@ export default {
               logo: site_logo
             }, to)
           }
-        }
-        else {
+        } else {
           noShare() //禁止分享
         }
       })

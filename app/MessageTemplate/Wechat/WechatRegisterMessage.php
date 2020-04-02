@@ -43,7 +43,7 @@ class WechatRegisterMessage extends DatabaseMessage
         return [
             $this->settings->get('site_name'),
             $this->notifiable->username,
-            Carbon::now(),
+            Carbon::now()->toDateTimeString(),
 //            $this->notifiable->groups->pluck('name')->join('、'), // 用户组
             $this->url->to(''),
         ];

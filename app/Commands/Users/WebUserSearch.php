@@ -7,12 +7,13 @@
 
 namespace App\Commands\Users;
 
-use App\Exceptions\NoUserException;
+use App\Events\Users\Logind;
 use App\Models\SessionToken;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Contracts\Events\Dispatcher as Events;
 
 class WebUserSearch
 {
@@ -31,20 +32,33 @@ class WebUserSearch
         $this->scene_str = $scene_str;
     }
 
-    public function handle(Dispatcher $bus, UserRepository $users)
+    public function handle(Dispatcher $bus, UserRepository $users, Events $events)
     {
         $this->bus = $bus;
         $this->users = $users;
-        $session = SessionToken::get($this->scene_str);
-        $user_id = Arr::get($session, 'user_id');
-        $user = User::where('id', $user_id)->first();
-        if (isset($user->id) && $user->id != null) {
-            $response = $this->bus->dispatch(
-                new GenJwtToken($user->username)
-            );
-            return json_decode($response->getBody());
-        } else {
-            throw (new NoUserException())->setToken($session);
+        $session = SessionToken::get($this->scene_str, 'wechat');
+
+        $data = [
+            'type' => null,
+            'payload' => null
+        ];;
+        if(!is_null($session)) {
+            if($session->user_id) {
+                $response = $this->bus->dispatch(
+                    new GenJwtToken(Arr::only($session->user->toArray(), 'username'))
+                );
+
+                if($response->getStatusCode() === 200) {
+                    $events->dispatch(new Logind($session->user));
+                }
+                $data['type'] = 'login';
+                $data['payload'] = json_decode($response->getBody());
+            } elseif($session->payload) {
+                $data['type'] = 'bind';
+                $data['payload'] = $session;
+            }
         }
+
+        return $data;
     }
 }

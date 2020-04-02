@@ -71,8 +71,11 @@ class RegisterController extends AbstractCreateController
 
         if ($token = Arr::get($attributes, 'token')) {
             $this->bind->wechat($token, $user);
-            // 在注册绑定微信后 发送注册微信通知
-            $user->notify(new System(WechatRegisterMessage::class));
+            // 判断是否开启了注册审核
+            if (!(bool)$this->settings->get('register_validate')) {
+                // 在注册绑定微信后 发送注册微信通知
+                $user->notify(new System(WechatRegisterMessage::class));
+            }
         }
 
         if ($mobile = Arr::get($attributes, 'mobile')) {

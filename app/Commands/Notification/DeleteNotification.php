@@ -55,10 +55,13 @@ class DeleteNotification
      * @param Dispatcher $events
      * @param NotificationRepository $notification
      * @return void
+     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
      */
     public function handle(Dispatcher $events, NotificationRepository $notification)
     {
         $this->events = $events;
+
+        $this->assertRegistered($this->actor);
 
         $notification = $notification->findOrFail($this->notificationId, $this->actor);
 

@@ -40,11 +40,15 @@ class Rewarded extends Notification
 
     public function toDatabase()
     {
+        $content = $this->order->thread->type == 1
+            ? $this->order->thread->title
+            : $this->order->thread->firstPost->formatContent();
+
         return [
             'order_id' => $this->order->id,
             'thread_id' => $this->order->thread->id,
-            'thread_title' => $this->order->thread->title,
-            'content' => $this->order->thread->firstPost->formatContent(),
+            'thread_title' => htmlspecialchars($this->order->thread->title),
+            'content' => htmlspecialchars($content),
             'amount' => $this->order->amount - $this->order->master_amount,
             'user_id' => $this->order->user->id,
             'user_name' => $this->order->user->username,

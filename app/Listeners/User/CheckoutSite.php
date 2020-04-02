@@ -11,7 +11,7 @@ use App\Events\Users\Logind;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
 
-class ChckoutSite
+class CheckoutSite
 {
     use AssertPermissionTrait;
 

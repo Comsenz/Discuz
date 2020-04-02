@@ -27,7 +27,7 @@ class ProfileController extends AbstractResourceController
 
     public $serializer = UserSerializer::class;
 
-    public $optionalInclude = ['wechat', 'groups'];
+    public $optionalInclude = ['groups'];
 
     protected $users;
 
@@ -55,8 +55,13 @@ class ProfileController extends AbstractResourceController
         $id = Arr::get($request->getQueryParams(), 'id');
 
         $user = $this->users->findOrFail($id, $actor);
+        $isSelf = $user->id === $actor->id;
 
-        if ($actor->id === $user->id) {
+        if($isSelf || $actor->isAdmin()) {
+            $this->optionalInclude = array_merge($this->optionalInclude, ['wechat']);
+        }
+
+        if ($isSelf) {
             $this->serializer = UserProfileSerializer::class;
         } else {
             //获取关注情况
