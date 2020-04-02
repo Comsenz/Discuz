@@ -7,17 +7,15 @@
 
 namespace App\Api\Controller\Users;
 
-use App\Api\Serializer\SessionSerializer;
+use App\Api\Serializer\QrSerializer;
 use App\Commands\Users\WebUserQrcode;
 use App\Settings\SettingsRepository;
+use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+use Tobscure\JsonApi\Document;
 
-class WechatWebUserLoginController implements RequestHandlerInterface
+class WechatWebUserLoginController extends AbstractResourceController
 {
     /**
      * 微信参数
@@ -26,26 +24,27 @@ class WechatWebUserLoginController implements RequestHandlerInterface
      */
     protected $settings;
     protected $bus;
-    public $serializer = SessionSerializer::class;
+    public $serializer = QrSerializer::class;
 
     public function __construct(SettingsRepository $setting, Dispatcher $bus)
     {
         $this->settings = $setting;
         $this->bus = $bus;
-
     }
 
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    /**
+     * @inheritDoc
+     */
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
             'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
         ];
 
-        $sessionId = Arr::get($request->getQueryParams(), 'sessionId', Str::random());
         return $this->bus->dispatch(
-            new WebUserQrcode($wx_config,$sessionId)
+            new WebUserQrcode($wx_config)
         );
     }
 }

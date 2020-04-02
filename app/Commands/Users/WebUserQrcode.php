@@ -6,9 +6,9 @@
  */
 
 namespace App\Commands\Users;
+
 use App\Exceptions\QrcodeImgException;
 use App\Models\SessionToken;
-use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\Factory;
 
 class WebUserQrcode
@@ -20,30 +20,26 @@ class WebUserQrcode
      */
     protected $wx_config;
 
-    protected $sessionId;
-
-    public function __construct(array $wx_config,string $sessionId)
+    public function __construct(array $wx_config)
     {
         $this->wx_config = $wx_config;
-        $this->sessionId = $sessionId;
     }
 
 
     public function handle()
     {
         $app = Factory::officialAccount($this->wx_config);
-        $token = SessionToken::generate('', null);
+        $token = SessionToken::generate('wechat');
         $result = $app->qrcode->temporary($token->token,  60*5);
         $url = $app->qrcode->url($result['ticket']);
         if (!$token->save()){
             throw new QrcodeImgException(trans('login.WebUser_img_error'));
         }
-        $data = [
-            'code' => 200,
+
+        return [
             'scene_str' => $token->token,
             'img' => $url,
         ];
-        return DiscuzResponseFactory::JsonResponse($data);
 
     }
 

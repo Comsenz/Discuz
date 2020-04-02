@@ -82,7 +82,8 @@ $route->get('/oauth/wechat/pc/user', 'wechat.pc.user', ApiController\Users\Wecha
 $route->get('/oauth/welink', 'welink.login', ApiController\Users\WelinkLoginController::class);
 $route->get('/oauth/wechat/web/user', 'wechat.web.user', ApiController\Users\WechatWebUserLoginController::class);
 $route->get('/oauth/wechat/web/user/event', 'wechat.web.user.event', ApiController\Users\WechatWebUserLoginEventController::class);
-$route->post('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
+$route->post('/oauth/wechat/web/user/event', 'wechat.web.user.postevent', ApiController\Users\WechatWebUserLoginPostEventController::class);
+$route->get('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
 
 /*
 |--------------------------------------------------------------------------

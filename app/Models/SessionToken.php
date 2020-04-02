@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
  * @property Carbon $created_at
  * @property Carbon $expired_at
  * @package App\Models
+ * @method static where(...$params)
  */
 class SessionToken extends Model
 {
@@ -32,6 +33,8 @@ class SessionToken extends Model
      * {@inheritdoc}
      */
     public $timestamps = false;
+
+    protected $fillable = ['user_id', 'payload'];
 
     /**
      * {@inheritdoc}
@@ -96,11 +99,14 @@ class SessionToken extends Model
      */
     public static function get(string $token, string $scope = null, int $userId = null)
     {
-        return self::where('token', $token)
+        return self::query()
+            ->where('token', $token)
             ->when($scope, function (Builder $query, $scope) {
                 $query->where('scope', $scope);
             })
-            ->where('user_id', $userId)
+            ->when($userId, function (Builder $query, $userId) {
+                $query->where('user_id', $userId);
+            })
             ->where('expired_at', '>', Carbon::now())
             ->first();
     }
