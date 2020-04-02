@@ -17,7 +17,7 @@ class GroupPermissionTableSeeder extends Seeder
      */
     protected $permissions = [
         // 用户
-        'user.view' => [7, 10],                 // 查看某个用户信息权限
+        'user.view' => [],                      // 查看某个用户信息权限
         'user.view.mobile' => [],               // 是否能查看用户真实手机号
         'user.edit' => [],                      // 编辑某个用户信息权限，除自己以外
         'user.delete' => [],                    // 删除某个用户信息权限
@@ -44,7 +44,7 @@ class GroupPermissionTableSeeder extends Seeder
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情
-        'thread.deletePosts' => [10],           // 删除回复
+        'thread.hidePosts' => [],               // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
 
         // 内容审核
