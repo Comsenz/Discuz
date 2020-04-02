@@ -20,4 +20,9 @@ class QrSerializer extends AbstractSerializer
             'img' => $model['img']
         ];
     }
+
+    public function getId($model)
+    {
+        return 1;
+    }
 }
