@@ -208,6 +208,7 @@ export default {
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
         window.location.href = '/api/oauth/wechat';
+        localStorage.clear();
         /*this.appFetch({
           url: 'wechatBind',
           method: 'get',
