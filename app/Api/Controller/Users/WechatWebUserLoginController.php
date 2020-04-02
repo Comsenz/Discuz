@@ -10,12 +10,12 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\QrSerializer;
 use App\Commands\Users\WebUserQrcode;
 use App\Settings\SettingsRepository;
+use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+use Tobscure\JsonApi\Document;
 
-class WechatWebUserLoginController implements RequestHandlerInterface
+class WechatWebUserLoginController extends AbstractResourceController
 {
     /**
      * 微信参数
@@ -33,7 +33,10 @@ class WechatWebUserLoginController implements RequestHandlerInterface
     }
 
 
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    /**
+     * @inheritDoc
+     */
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $wx_config = [
             'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
