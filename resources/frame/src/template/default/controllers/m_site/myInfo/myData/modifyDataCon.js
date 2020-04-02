@@ -1,8 +1,6 @@
 /**
  * 修改资料
  */
-
-
 import ModifyHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
 import browserDb from '../../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../../helpers/commonHelper';
@@ -137,7 +135,7 @@ export default {
     handleFile: async function (e) {  //上传头像
 
       let file = e.target.files[0];
-      // this.updataLoading = true;
+      this.updataLoading = true;
 
       const newfile = await correctImg(file);
       file = newfile || file;
@@ -145,7 +143,6 @@ export default {
       // 实例化
       let formdata = new FormData()
       formdata.append('avatar', file)
-
       let userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url: 'upload',
@@ -154,7 +151,6 @@ export default {
         data: formdata
       }).then(res => {
         this.updataLoading = false;
-
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -162,6 +158,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          // alert(res)
           this.$toast('上传头像成功!');
           this.headPortrait = res.data.attributes.avatarUrl;
           this.modifyData()
@@ -211,6 +208,7 @@ export default {
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
         window.location.href = '/api/oauth/wechat';
+        localStorage.clear();
         /*this.appFetch({
           url: 'wechatBind',
           method: 'get',

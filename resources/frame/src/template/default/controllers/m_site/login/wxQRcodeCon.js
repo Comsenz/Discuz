@@ -64,12 +64,15 @@ export default {
                   webDb.setLItem('refreshToken', refreshToken);
                   let beforeVisiting = webDb.getSItem('beforeVisiting');
 
-                  if (beforeVisiting) {
-                    this.$router.replace({ path: beforeVisiting });
-                    webDb.setSItem('beforeState', 1);
-                  } else {
-                    this.$router.push({ path: '/' });
-                  }
+                  this.getUsers(tokenId).then((data)=>{
+                    webDb.setLItem('foregroundUser', data.data.attributes.username);
+                    if (beforeVisiting) {
+                      this.$router.replace({ path: beforeVisiting });
+                      webDb.setSItem('beforeState', 1);
+                    } else {
+                      this.$router.push({ path: '/' });
+                    }
+                  });
 
                 }
               });
@@ -100,6 +103,28 @@ export default {
       }).catch(err=>{
         console.log(err);
       })
-    }
+    },
+    getUsers(id) {
+      return this.appFetch({
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
+        }
+      }).then(res => {
+        if (res.errors) {
+          if (res.errors[0].detail) {
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
+        } else {
+          return res;
+        }
+      }).catch(err => {
+      })
+    },
   },
 }

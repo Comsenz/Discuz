@@ -377,7 +377,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // console.log(res,'~~~~~');
           this.canEdit = res.readdata._data.canEdit;
           if (!this.canEdit) {
             this.$toast.fail('您没有权限进行此操作');
@@ -419,7 +418,6 @@ export default {
       var dataCon = '';
       if (this.queryEdit == 'reply') {
         //当编辑回复时
-        posts = 'posts/' + this.replyId;
         methodType = 'patch';
         dataCon = {
           "data": {
@@ -433,6 +431,24 @@ export default {
             },
           }
         }
+        this.appFetch({
+          url: 'posts',
+          method: methodType,
+          data: dataCon,
+          splice: '/' + this.replyId,
+        }).then(res => {
+          if (res.errors) {
+            this.loading = false;
+            if (res.errors[0].detail) {
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+          } else {
+            this.loading = true;
+            this.$router.replace({ path: '/details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true })
+          }
+        })
       } else {
         //当正常回复时
         posts = 'posts';
@@ -481,25 +497,25 @@ export default {
             }
           }
         }
-      }
-      this.appFetch({
-        url: posts,
-        method: methodType,
-        data: dataCon,
+        this.appFetch({
+          url: posts,
+          method: methodType,
+          data: dataCon,
 
-      }).then(res => {
-        if (res.errors) {
-          this.loading = false;
-          if (res.errors[0].detail) {
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+        }).then(res => {
+          if (res.errors) {
+            this.loading = false;
+            if (res.errors[0].detail) {
+              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
           } else {
-            this.$toast.fail(res.errors[0].code);
+            this.loading = true;
+            this.$router.replace({ path: '/details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true })
           }
-        } else {
-          this.loading = true;
-          this.$router.replace({ path: '/details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true })
-        }
-      })
+        })
+      }
 
     },
 
