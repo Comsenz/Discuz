@@ -33,6 +33,10 @@ export default {
       })
     },
     Submission() {   //点击提交
+      if (this.appId == '' || this.secretId == '') {
+        this.$message({ message: '请先填写配置项' });
+        return
+      }
       this.captcha = new TencentCaptcha(this.appId, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
