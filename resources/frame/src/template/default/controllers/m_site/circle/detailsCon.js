@@ -1099,7 +1099,7 @@ export default {
       var logo = '';
       if (this.themeCon._data.type == 0) {  //普通主题
 
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.firstpostImageList.length > 0) {
@@ -1108,7 +1108,7 @@ export default {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 1) {   //长文类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         if (this.themeCon._data.price > 0) {
           desc = ''
         } else {
@@ -1121,7 +1121,7 @@ export default {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 2) {  //视频类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.themeCon.threadVideo._data.cover_url) {
