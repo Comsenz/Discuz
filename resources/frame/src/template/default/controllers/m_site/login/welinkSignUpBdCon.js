@@ -126,7 +126,6 @@ export default {
           sessionId: sessionId,
         }
       }).then(res => {
-        return false;
 
         if (res.errors) {
 

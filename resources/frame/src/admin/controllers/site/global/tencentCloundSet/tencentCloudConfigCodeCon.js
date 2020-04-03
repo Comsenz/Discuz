@@ -30,7 +30,6 @@ export default {
           this.appId = res.readdata._data.qcloud.qcloud_captcha_app_id;
           this.secretId = res.readdata._data.qcloud.qcloud_captcha_secret_key;
           this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
-          console.log(this.appID)
         }
       })
     },

@@ -164,6 +164,7 @@ export default {
           break;
         default:
           console.log("系统错误，请刷新页面");
+          this.$message.error("系统错误，请刷新页面");
       }
     },
 
