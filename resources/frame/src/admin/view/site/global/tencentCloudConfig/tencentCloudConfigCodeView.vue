@@ -1,7 +1,6 @@
 <template>
   <div>
     <Card header="验证码配置"></Card>
-
     <Card header="APPID：">
       <CardRow description="腾讯云帐号 - 验证码 - APPID列表中，详情基础配置中的APPID">
         <el-input v-model="appId" clearable></el-input>
@@ -23,7 +22,7 @@
         size="medium"
         @click="Submission"
         id="TencentCaptcha"
-        data-appid="appID"
+        data-appid="appId"
       >提交</el-button>
     </Card>
   </div>

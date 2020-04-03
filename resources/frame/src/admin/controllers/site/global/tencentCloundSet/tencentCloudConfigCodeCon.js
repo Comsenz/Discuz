@@ -29,13 +29,12 @@ export default {
         } else {
           this.appId = res.readdata._data.qcloud.qcloud_captcha_app_id;
           this.secretId = res.readdata._data.qcloud.qcloud_captcha_secret_key;
-          this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
-          console.log(this.appID)
+          // this.appID = res.readdata._data.qcloud.qcloud_captcha_app_id;
         }
       })
     },
     Submission() {   //点击提交
-      this.captcha = new TencentCaptcha(this.appID, res => {
+      this.captcha = new TencentCaptcha(this.appId, res => {
         if (res.ret === 0) {
           this.captcha_ticket = res.ticket;
           this.captcha_rand_str = res.randstr;
