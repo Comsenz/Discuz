@@ -37,7 +37,7 @@
           </div>
 
           <div class="login-phone-method-icon">
-            <div class="login-phone-method-icon-box" :class="{'justifyCenter':isOne}">
+            <div class="login-phone-method-icon-box" :class="{'justifyCenter':phoneStatus !== wxLoginShow}">
               <i @click="loginUserClick" class="login-phone-method-icon-ring iconfont">
                 <span class="icon iconfont icon-yonghu" style="color:rgba(136, 136, 136, 1);"></span>
               </i>

@@ -55,7 +55,6 @@ export default {
           include: ['groups'],
         }
       }).then((res) => {
-        // console.log(res, '######');
         this.followDet = res.readdata;
         this.isReal = res.readdata._data.isReal;
         if (res.readdata._data.follow == '1') {
@@ -161,7 +160,6 @@ export default {
             this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
           } else {
             this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
-            // console.log(res.readdata._data.is_mutual, '~~~~~');
             if (res.readdata._data.is_mutual == 0) {
               this.intiFollowVal = '1';
             } else {

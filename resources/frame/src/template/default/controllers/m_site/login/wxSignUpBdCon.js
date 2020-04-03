@@ -184,18 +184,17 @@ export default {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             if (res.rawData[0].code === 'register_validate') {
-              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' }})
-            } else if (res.rawData[0].code === 'ban_user'){
-              this.$router.push({ path: "information-page", query: { setInfo: 'banUser' }})
+              this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' } })
+            } else if (res.rawData[0].code === 'ban_user') {
+              this.$router.push({ path: "information-page", query: { setInfo: 'banUser' } })
             } else {
               this.$toast.fail(res.errors[0].code);
             }
           }
-        // } else if (res.data.attributes.location) {
-        //   //获取地址
-        //   // console.log('获取地址');
-        //   this.wxurl = res.data.attributes.location;
-        //   window.location.href = res.data.attributes.location
+          // } else if (res.data.attributes.location) {
+          //   //获取地址
+          //   this.wxurl = res.data.attributes.location;
+          //   window.location.href = res.data.attributes.location
         } else if (res.data.attributes.access_token) {
 
           this.$toast.success('登录成功');
@@ -207,7 +206,7 @@ export default {
           webDb.setLItem('refreshToken', refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
 
-          this.getUsers(tokenId).then((data)=>{
+          this.getUsers(tokenId).then((data) => {
             webDb.setLItem('foregroundUser', data.data.attributes.username);
             if (beforeVisiting) {
               this.$router.replace({ path: beforeVisiting });

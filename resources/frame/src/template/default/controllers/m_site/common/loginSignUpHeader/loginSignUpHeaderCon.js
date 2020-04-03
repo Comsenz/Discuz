@@ -44,10 +44,7 @@ export default {
     },
     headerBack() {
       let backGo = this.$route.query.backGo;
-
       // this.$router.go(-1);
-
-      // console.log('回退');
 
       // this.$router.back(-1);
 

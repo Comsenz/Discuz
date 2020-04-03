@@ -153,7 +153,7 @@ export default {
     * 接口请求
     * */
     getForum() {
-      this.appFetch({
+     return   this.appFetch({
         url: 'forum',
         method: 'get',
         data: {}
@@ -169,6 +169,7 @@ export default {
           this.siteMode = res.readdata._data.set_site.site_mode;
           browserDb.setLItem('siteInfo', res.readdata);
         }
+        return res
       }).catch(err => {
       })
     },
@@ -231,19 +232,25 @@ export default {
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
-    //获取到code 和 state再访问getWatchHref接口，把code和state拼接到接口url里。
-    if (isWeixin === true) {
-      //微信登录
-    } else if (isPhone === true) {
-      //手机浏览器登录
-      this.wxLoginShow = false;
-      this.isOne = true;
-    } else {
-      //pc登录
-      this.isPC = true;
-    }
+    this.getForum().then(res=>{
+      if (isWeixin === true) {
+        //微信登录
+        if (!res.readdata._data.passport.offiaccount_close) {
+          this.wxLoginShow = false;
+        }
+      } else if (isPhone === true) {
+        //手机浏览器登录
+        this.wxLoginShow = false;
+        this.isOne = true;
+      } else {
+        //pc登录'
+        if (!res.readdata._data.passport.offiaccount_close) {
+          this.wxLoginShow = false;
+        }
+        this.isPC = true;
+      }
+    });
 
-    this.getForum();
   },
   components: {
     LoginHeader,

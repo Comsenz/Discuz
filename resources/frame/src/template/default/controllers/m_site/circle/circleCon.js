@@ -240,7 +240,6 @@ export default {
             throw new Error(res.error)
           }
         } else {
-          // console.log(res,'eeeee');
           // if (this.canViewThreads === false) {
           //   this.nullTip = true;
           //   this.nullWord = res.errors[0].code;
