@@ -159,6 +159,7 @@ export default {
             this.intiFollowVal = '0';
             this.followDet._data.fansCount = this.followDet._data.fansCount - 1;
           } else {
+            this.followDet._data.fansCount = this.followDet._data.fansCount + 1;
             if (res.readdata._data.is_mutual == 0) {
               this.intiFollowVal = '1';
             } else {
