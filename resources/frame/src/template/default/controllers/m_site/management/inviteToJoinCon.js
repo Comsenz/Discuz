@@ -173,7 +173,6 @@ export default {
 
     // 置为无效的点击事件
     async resetDelete(inviteItem, index) {
-      console.log(this.inviteList, 'inviteList');
       // if (inviteItem._data.status != 1) {
       //   return;
       // }

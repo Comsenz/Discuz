@@ -74,13 +74,11 @@ export default {
         this.$refs.vcVideo.files[0] = null
         return
       }
-      console.log(this.$refs.vcVideo.files[0])
     },
     // 提交视频
     vcAddUpload () {
       var self = this
       var mediaFile = this.$refs.vcVideo.files[0]
-      console.log(mediaFile)
       var uploader = this.tcVod.upload({
         // 媒体文件（视频或音频或图片），类型为 File
         // signature: this.sign,
@@ -94,7 +92,6 @@ export default {
       uploader.on('media_upload', function (info) {
         uploaderInfo.isVideoUploadSuccess = true
       })
-      console.log(uploader, 'uploader')
 
       var uploaderInfo = {
         videoInfo: uploader.videoInfo,
@@ -155,8 +152,6 @@ export default {
     },
     getSignature () {
       API.getTencentVideoSign().then(res => {
-        console.log(res.data.code)
-        console.log(res.data.data.sign)
         if (res.data.code === 200) {
           return res.data.data.sign
         }
