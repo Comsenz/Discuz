@@ -9,6 +9,7 @@ namespace App\Api\Serializer;
 
 use App\Models\Post;
 use App\Models\Thread;
+use App\Models\User;
 use App\Models\UserWalletCash;
 use Discuz\Api\Serializer\AbstractSerializer;
 
@@ -21,6 +22,9 @@ class SiteInfoSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        // 待审核用户数
+        $unapprovedUsers = User::where('status', 2)->count();
+
         // 待审核主题数
         $unapprovedThreads = Thread::where('is_approved', Thread::UNAPPROVED)
             ->whereNull('deleted_at')->count();
@@ -28,6 +32,9 @@ class SiteInfoSerializer extends AbstractSerializer
         // 待审核回复数
         $unapprovedPosts = Post::where('is_approved', Post::UNAPPROVED)
             ->whereNull('deleted_at')->where('is_first', false)->count();
+
+        // 待审核提申请现数
+        $unapprovedMoneys = UserWalletCash::where('cash_status', UserWalletCash::STATUS_REVIEW)->count();
 
         return [
             'version' => $model['version'],
@@ -46,9 +53,10 @@ class SiteInfoSerializer extends AbstractSerializer
             'cache_dir_writable' => $model['cache_dir_writable'],
             'app_size' => $model['app_size'],
             'packages' => $model['packages'],
+            'unapprovedUsers' => $unapprovedUsers,
             'unapprovedThreads' => $unapprovedThreads,
             'unapprovedPosts' => $unapprovedPosts,
-            'unapprovedMoneys' => UserWalletCash::where('cash_status', UserWalletCash::STATUS_REVIEW)->count(),
+            'unapprovedMoneys' => $unapprovedMoneys,
         ];
     }
 
