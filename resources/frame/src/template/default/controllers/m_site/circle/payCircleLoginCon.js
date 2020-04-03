@@ -13,7 +13,6 @@ export default {
 			siteInfo: false,
 			siteUsername: '',  //站长
 			joinedAt: '',    //加入时间
-			sitePrice: '',   //加入价格
 			username: '',   //当前用户名
 			loading: false,  //是否处于加载状态
 			finished: false, //是否已加载完所有数据
@@ -74,7 +73,6 @@ export default {
 					include: ['users'],
 				}
 			}).then((res) => {
-				// console.log(res.readdata._data.paycenter.wxpay_close)
 				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 					throw new Error(res.error)
@@ -185,7 +183,6 @@ export default {
 					//手机浏览器
 					this.getOrderSn().then(() => {
 						this.orderPay(11).then((res) => {
-							// console.log(res)
 							this.wxPayHref = res.readdata._data.wechat_h5_link;
 							window.location.href = this.wxPayHref;
 							const payPhone = setInterval(() => {
@@ -340,7 +337,6 @@ export default {
 					// include:['groups']
 				}
 			}).then(res => {
-				// console.log(res)
 				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 				} else {

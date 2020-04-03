@@ -76,7 +76,6 @@ export default {
           //手机浏览器
           this.getOrderSn().then(() => {
             this.orderPay(11).then((res) => {
-              console.log(res)
               this.wxPayHref = res.readdata._data.wechat_h5_link;
               window.location.href = this.wxPayHref;
               const payPhone = setInterval(() => {

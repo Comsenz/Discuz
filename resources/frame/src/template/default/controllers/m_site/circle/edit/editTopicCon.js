@@ -245,7 +245,6 @@ export default {
         }
       }
       this.loading = true;
-      // console.log(this.attriAttachment,'上传的文件');
       if (this.oldCateId != this.cateId) {
         this.appFetch({
           url: 'threads',
@@ -551,12 +550,6 @@ export default {
         document.getElementById('postForm').style.height = '100%';
       }
       this.footMove = !this.footMove;
-
-      // setTimeout(()=>{
-      //   document.getElementById('postForm').scrollTop = 700;
-      //   console.log('延迟')
-      // },1000)
-
     },
     backClick() {
       this.$router.go(-1);
