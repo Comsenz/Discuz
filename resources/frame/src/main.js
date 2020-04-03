@@ -137,13 +137,6 @@ const App = new Vue({
     },
     'siteInfoStat': function (newVal, oldVal) {
       this.siteInfoStat = newVal;
-      // let ia = document.querySelector('#printCasLogout');
-      // ia.contentDocument.write(this.siteInfoStat);
-      // console.log(this.siteInfoStat, '!!!!!!@@@@@@');
-      // let ia = document.head || document.getElementsByTagName('head')[0];
-      // console.log(ia, '~~~~~');
-      // ia.innerHTML += this.siteInfoStat;
-      // console.log(ia, '~~~~~');
       this.evalscript(this.siteInfoStat);
     }
   },

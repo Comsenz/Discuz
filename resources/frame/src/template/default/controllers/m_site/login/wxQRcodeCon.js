@@ -5,24 +5,24 @@
 import webDb from "../../../../../helpers/webDbHelper";
 
 export default {
-  data:function(){
+  data: function () {
     return {
-      siteName:'Discuz Q',    //站点名称
-      wxUrl:'',               //微信扫码二维码
-      sceneStr:'',            //微信scenestr
+      siteName: 'Discuz Q',    //站点名称
+      wxUrl: '',               //微信扫码二维码
+      sceneStr: '',            //微信scenestr
     }
   },
   created() {
     this.getWxUrl();
     this.siteName = webDb.getLItem('siteInfo')._data.set_site.site_name;
   },
-  methods:{
-    getWxUrl(){
+  methods: {
+    getWxUrl() {
       this.appFetch({
-        url:'wxPcUrl',
-        method:'get',
-        data:{}
-      }).then(res=>{
+        url: 'wxPcUrl',
+        method: 'get',
+        data: {}
+      }).then(res => {
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -35,11 +35,11 @@ export default {
 
           let num = 0;
 
-          if (this.sceneStr.length > 1){
-            const inQuire = setInterval(()=>{
-              this.getUserStatus().then((data)=>{
+          if (this.sceneStr.length > 1) {
+            const inQuire = setInterval(() => {
+              this.getUserStatus().then((data) => {
                 if (data.errors) {
-                  if (data.rawData[0].code !== 'qrcode_error'){
+                  if (data.rawData[0].code !== 'qrcode_error') {
                     if (data.rawData[0].code === 'no_bind_user') {
                       let wxtoken = data.errors[0].token;
                       webDb.setLItem('wxtoken', wxtoken);
@@ -64,7 +64,7 @@ export default {
                   webDb.setLItem('refreshToken', refreshToken);
                   let beforeVisiting = webDb.getSItem('beforeVisiting');
 
-                  this.getUsers(tokenId).then((data)=>{
+                  this.getUsers(tokenId).then((data) => {
                     webDb.setLItem('foregroundUser', data.data.attributes.username);
                     if (beforeVisiting) {
                       this.$router.replace({ path: beforeVisiting });
@@ -76,31 +76,30 @@ export default {
 
                 }
               });
-              num ++;
-              if (num > 8){
+              num++;
+              if (num > 8) {
                 clearInterval(inQuire);
               }
-            },3000);
+            }, 3000);
           } else {
             this.$toast.fail('请刷新页面，获取二维码');
           }
 
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err);
       })
     },
-    getUserStatus(){
+    getUserStatus() {
       return this.appFetch({
-        url:"wxLoginStatus",
-        method:"get",
-        data:{
+        url: "wxLoginStatus",
+        method: "get",
+        data: {
           'scene_str': this.sceneStr
         }
-      }).then(res=>{
-        // console.log(res);
+      }).then(res => {
         return res;
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err);
       })
     },

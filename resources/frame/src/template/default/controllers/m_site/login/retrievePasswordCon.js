@@ -7,69 +7,69 @@ import retrievePWDFooter from '../../../view/m_site/common/loginSignUpFooter/log
 import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      newpwd:"",
-      verifyNum:"",
-      phoneNum:"",               //手机号
-      type:'',
-      btnContent:"获取验证码",     //获取验证码按钮内文字
-      time:1,                    //发送验证码间隔时间
-      disabled:false,            //按钮状态
-      insterVal:'',
+      newpwd: "",
+      verifyNum: "",
+      phoneNum: "",               //手机号
+      type: '',
+      btnContent: "获取验证码",     //获取验证码按钮内文字
+      time: 1,                    //发送验证码间隔时间
+      disabled: false,            //按钮状态
+      insterVal: '',
       isGray: false,
-      btnLoading:false,
-      data:{},
-      payPassword:'',
-      payPasswordConfirmation:'',
-      tokenId:'',
+      btnLoading: false,
+      data: {},
+      payPassword: '',
+      payPasswordConfirmation: '',
+      tokenId: '',
     }
   },
 
-  components:{
+  components: {
     retrievePWDHeader,
     retrievePWDFooter
   },
 
-  created(){
+  created() {
     this.tokenId = webDb.getLItem('tokenId');
 
     if (this.$route.query.type && this.$route.query.type === 'forget') {
       this.type = 'reset_pay_pwd';
       this.getUserInfo();
-    }else {
+    } else {
       this.type = 'reset_pwd';
     }
   },
 
-  methods:{
+  methods: {
     //获取验证码
-    forgetSendSmsCode(){
+    forgetSendSmsCode() {
 
-      if (this.type !== 'reset_pay_pwd'){
-        var reg=11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
+      if (this.type !== 'reset_pay_pwd') {
+        var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
         var phoneNum = this.phoneNum;
-        if(!phoneNum){//未输入手机号
+        if (!phoneNum) {//未输入手机号
           this.$toast("请输入手机号码");
           return;
         }
-        if(!reg.test(phoneNum)){//手机号不合法
+        if (!reg.test(phoneNum)) {//手机号不合法
           this.$toast("您输入的手机号码不合法，请重新输入");
         } else {
           //获取验证码请求
           this.appFetch({
-            url:"sendSms",
-            method:"post",
-            data:{
+            url: "sendSms",
+            method: "post",
+            data: {
               "data": {
                 "attributes": {
-                  mobile:this.phoneNum,
-                  type:this.type
+                  mobile: this.phoneNum,
+                  type: this.type
                 }
               }
             }
           }).then(res => {
-            if (res.errors){
+            if (res.errors) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
             } else {
               this.insterVal = res.data.attributes.interval;
@@ -82,17 +82,17 @@ export default {
       } else {
         //获取验证码请求
         this.appFetch({
-          url:"sendSms",
-          method:"post",
-          data:{
+          url: "sendSms",
+          method: "post",
+          data: {
             "data": {
               "attributes": {
-                type:this.type
+                type: this.type
               }
             }
           }
         }).then(res => {
-          if (res.errors){
+          if (res.errors) {
             this.$toast.fail(res.errors[0].code);
           } else {
             this.insterVal = res.data.attributes.interval;
@@ -103,29 +103,29 @@ export default {
       }
 
     },
-    timer(){
-      if(this.time>1){
-       this.time--;
-       this.btnContent = this.time+"s后重新获取";
-       this.disabled = true;
-       var timer = setTimeout(this.timer,1000);
-       this.isGray = true;
-      }else if(this.time == 1){
-       this.btnContent = "获取验证码";
-       clearTimeout(timer);
-       this.disabled = false;
-       this.isGray = false;
+    timer() {
+      if (this.time > 1) {
+        this.time--;
+        this.btnContent = this.time + "s后重新获取";
+        this.disabled = true;
+        var timer = setTimeout(this.timer, 1000);
+        this.isGray = true;
+      } else if (this.time == 1) {
+        this.btnContent = "获取验证码";
+        clearTimeout(timer);
+        this.disabled = false;
+        this.isGray = false;
       }
     },
     //提交新密码
-    submissionPassword(){
+    submissionPassword() {
 
-      var reg = 11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
+      var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
 
-      if (this.phoneNum.length < 1){
+      if (this.phoneNum.length < 1) {
         this.$toast('请输入手机号');
         return
-      } else if (!reg.test(this.phoneNum) && this.type === 'reset_pwd'){
+      } else if (!reg.test(this.phoneNum) && this.type === 'reset_pwd') {
         this.$toast('请输入正确的手机号');
         return;
       } else if (this.verifyNum.length < 1) {
@@ -176,27 +176,26 @@ export default {
     /*
     * 接口请求
     * */
-    getUserInfo(){
+    getUserInfo() {
       this.appFetch({
-        url:"users",
-        method:"get",
-        splice:'/' + this.tokenId
-      }).then(res=>{
-        // console.log(res);
-        if (res.errors){
-          if (res.errors[0].detail){
+        url: "users",
+        method: "get",
+        splice: '/' + this.tokenId
+      }).then(res => {
+        if (res.errors) {
+          if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          if (this.type === 'reset_pay_pwd'){
+          if (this.type === 'reset_pay_pwd') {
             this.phoneNum = res.readdata._data.mobile;
-          }else {
+          } else {
             this.phoneNum = res.readdata._data.originalMobile;
           }
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err);
       })
     }

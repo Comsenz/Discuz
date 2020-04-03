@@ -155,7 +155,6 @@ export default {
       if (inviteItem._data.status === 0) {
         return;
       }
-      // console.log(inviteItem._data.code,'1223444');
       var textarea = document.createElement('textarea');
       textarea.style.position = 'absolute';
       textarea.style.opacity = '0';

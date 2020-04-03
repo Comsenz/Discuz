@@ -183,7 +183,7 @@ export default {
               this.supportImgExtRes += imgStrRes;
             }
             this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
-            this.supportImgExtRes = this.supportImgExtRes.substring(0,this.supportImgExtRes.length - 1);
+            this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
           } else {
             ImgExt = '*';
           }
@@ -266,8 +266,6 @@ export default {
             }
             this.loading = false;
           } else {
-            console.log('主题');
-            
             this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
           }
         })
@@ -317,7 +315,6 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            console.log('长文');
             _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
           }
         })
@@ -416,11 +413,11 @@ export default {
           this.testingType(file, this.supportImgExt);
           if (this.testingRes) {
             this.loading = true;
-            this.compressFile(file, 150000, true,i, file.length - i);
+            this.compressFile(file, 150000, true, i, file.length - i);
           }
         } else {
           this.loading = true;
-          this.compressFile(file, 150000, true,i, file.length - i);
+          this.compressFile(file, 150000, true, i, file.length - i);
         }
       }
     },
@@ -469,7 +466,7 @@ export default {
           this.$toast.fail(data.errors[0].code);
           this.loading = false;
           throw new Error(data.error);
-          
+
         } else {
           if (img) {
             this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
@@ -500,7 +497,6 @@ export default {
 
     //压缩图片
     compressFile(file, wantedSize, uploadShow, index, indexSum) {
-      console.log(index,'4444');
       // return;
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)

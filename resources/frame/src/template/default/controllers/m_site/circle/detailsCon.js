@@ -335,7 +335,6 @@ export default {
           'page[limit]': this.pageLimit
         }
       }).then((res) => {
-        // console.log(res, '0000')
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -397,7 +396,6 @@ export default {
             }
             this.themeIsLiked = res.readdata.firstPost._data.isLiked;
             var firstpostImageLen = this.themeCon.firstPost.images.length;
-            // console.log(firstpostImageLen);
             this.postsList.map(post => {
               let urls = [];
               post.images.map(image => urls.push(image._data.url));
@@ -415,13 +413,10 @@ export default {
               }
               this.firstpostImageList = firstpostImage;
               this.firstpostImageListOriginal = firstpostImageOriginal;
-              // console.log(this.firstpostImageList[0], '~~~~~~@@@@@');
             };
             // 初始化时获取微信分享数据
-            // console.log(123)
             // this.wxShare();
           } else {
-            // console.log(456);
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
@@ -429,7 +424,6 @@ export default {
           }
         }
         this.wxShareDetail();  //调用微信分享
-        // console.log(333)
       }).catch((err) => {
         if (this.loading && this.pageIndex !== 1) {
           this.pageIndex--;
@@ -501,7 +495,6 @@ export default {
         } else {
           Url = appConfig.baseUrl + '/details/' + this.themeId;
         }
-        // console.log(Url, '00000')
         // var Url= appConfig.baseUrl+'/pay-circle-con/'+ this.themeId + '/' + this.groupId;
         var oInput = document.createElement('input');
         var reTag = /<img(?:.|\s)*?>/g;
@@ -1106,7 +1099,7 @@ export default {
       var logo = '';
       if (this.themeCon._data.type == 0) {  //普通主题
 
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.firstpostImageList.length > 0) {
@@ -1115,7 +1108,7 @@ export default {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 1) {   //长文类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         if (this.themeCon._data.price > 0) {
           desc = ''
         } else {
@@ -1128,7 +1121,7 @@ export default {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 2) {  //视频类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 20);
+        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         title = shareContent + ' - ' + this.siteName;
         desc = shareContent;
         if (this.themeCon.threadVideo._data.cover_url) {
@@ -1149,7 +1142,6 @@ export default {
     }
   },
   mounted: function () {
-    // console.log(wxShare, 'wxShare111111');
     document.addEventListener('click', this.listenEvt, false);
   },
   destroyed: function () {

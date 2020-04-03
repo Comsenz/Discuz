@@ -267,8 +267,6 @@ export default {
           uploaderInfo.isVideoUploadSuccess = true;
         });
 
-        // console.log(uploader, "uploader");
-
         var uploaderInfo = {
           videoInfo: uploader.videoInfo,
           isVideoUploadSuccess: false,
@@ -285,13 +283,11 @@ export default {
         this.uploaderInfos.push(uploaderInfo);
 
         uploader.done().then((doneResult) => {
-          // console.log("doneResult", doneResult);
           uploaderInfo.fileId = doneResult.fileId;
           this.videoUp = false;
           this.loading = false;
           this.videoShow = true;
           this.fileId = doneResult.fileId;
-          // console.log('要提交的视频id',this.fileId);
         })
           .then(function (videoUrl) {
             uploaderInfo.videoUrl = videoUrl;

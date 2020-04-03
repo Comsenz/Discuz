@@ -9,12 +9,10 @@ import TcVod from 'vod-js-sdk-v6';
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
 function getSignature() {
-  // console.log('000000');
   return axiosHelper({
     url: 'signature',
     method: 'get',
   }).then((res) => {
-    // console.log(res.readdata._data.signature,'~~~+++++~~~~');
     return res.readdata._data.signature;
   })
 }
@@ -118,7 +116,6 @@ export default {
     let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
     this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     this.publishShow = !(qcloud_captcha && thread_captcha);
-    // console.log(this.tcVod,'343423');
     var videoExt = '';
     if (browserDb.getLItem('siteInfo') && browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext) {
       this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
@@ -128,12 +125,12 @@ export default {
       for (var k = 0; k < videoExt.length; k++) {
         videoStr = '.' + videoExt[k] + ',';
         // videoStrRes = 'video/' + videoExt[k] + ',';
-        videoStrRes = '.'+ videoExt[k] + ',';
+        videoStrRes = '.' + videoExt[k] + ',';
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
       this.supportVideoExtRes = 'video/*,' + this.supportVideoExtRes;
-      this.supportVideoExtRes = this.supportVideoExtRes.substring(0,this.supportVideoExtRes.length - 1);
+      this.supportVideoExtRes = this.supportVideoExtRes.substring(0, this.supportVideoExtRes.length - 1);
     } else {
       videoExt = '*';
     }
@@ -222,7 +219,6 @@ export default {
     },
     //验证上传文件大小是否符合设置
     testingSize(eFile, allowSize) {
-      // console.log(eFile,'上传的');
       let fileSize = eFile.size;
       // 视频大小大于接口返回的最大限制值时置空
       if (fileSize / 1024 / 1024 > allowSize) {
@@ -256,8 +252,6 @@ export default {
           uploaderInfo.isVideoUploadSuccess = true;
         });
 
-        // console.log(uploader, "uploader");
-
         var uploaderInfo = {
           videoInfo: uploader.videoInfo,
           isVideoUploadSuccess: false,
@@ -276,13 +270,11 @@ export default {
         uploader
           .done()
           .then((doneResult) => {
-            // console.log("doneResult", doneResult);
             uploaderInfo.fileId = doneResult.fileId;
             this.videoUp = false;
             this.loading = false;
             this.videoShow = true;
             this.fileId = doneResult.fileId;
-            // console.log('要提交的视频id',this.fileId);
           })
           .then(function (videoUrl) {
             uploaderInfo.videoUrl = videoUrl;
@@ -358,7 +350,6 @@ export default {
             }
             this.loading = false;
           } else {
-            // console.log('主题');
             this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
           }
         })
@@ -403,7 +394,6 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            // console.log('视频');
             _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
           }
         })
@@ -499,7 +489,6 @@ export default {
       this.showPopup = true;
     },
     onConfirm(value, index) {
-      // console.log(value,'====================');
       var id = value.id;
       this.cateId = id;
       var text = value.text;
@@ -577,7 +566,6 @@ export default {
 
       if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
         this.paySetValue = '0.';
-        console.log(this.paySetValue);
         return;
       }
 
