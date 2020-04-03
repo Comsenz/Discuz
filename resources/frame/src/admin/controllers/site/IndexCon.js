@@ -480,7 +480,7 @@ export default {
           this.$router.push({path:'/admin/withdrawal-setting'});
           break;
         default:
-          alert("当前没有页面哦");
+          this.$message.error("没有当前页面，跳转404页面");
           // this.$router.push({path:'/admin/home'});
           console.log("没有当前页面，跳转404页面");
       }
@@ -535,6 +535,7 @@ export default {
           break;
         default :
           console.log("获取菜单出错");
+          this.$message.error("获取菜单出错");
       }
 
       /*
@@ -590,10 +591,10 @@ export default {
             this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[1].title;
             break;
           default:
-            // alert("当前没有页面哦");
             // this.$router.push({path:'/admin/home'});
             this.sideSubmenu = [];
             console.log("当下没有侧边栏子菜单");
+            this.$message.error("当下没有侧边栏子菜单");
         }
       }
 
