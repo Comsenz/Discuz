@@ -13,6 +13,7 @@ use App\Models\ThreadVideo;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
 use App\Repositories\ThreadVideoRepository;
+use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Support\Arr;
@@ -20,6 +21,7 @@ use Illuminate\Support\Arr;
 class ThreadVideoNotify
 {
     use EventsDispatchTrait;
+    use QcloudTrait;
 
     protected $data;
 
@@ -40,6 +42,7 @@ class ThreadVideoNotify
      * @param PostRepository $posts
      * @param ThreadRepository $threads
      * @return string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(Dispatcher $events, ThreadVideoRepository $threadVideo, Censor $censor, PostRepository $posts, ThreadRepository $threads)
     {
@@ -47,32 +50,34 @@ class ThreadVideoNotify
         $log = app('log');
         $log->info('vod_notify', $this->data);
 
-        $EventType = 'ProcedureStateChanged';
-        $EventName = 'ProcedureStateChangeEvent';
-        $EventRes  = 'MediaProcessResultSet';
+        //只处理视频处理类型的通知
+        if (Arr::get($this->data, 'EventType') != 'ProcedureStateChanged') {
+            return 'pass';
+        }
+        $taskDetail  = $this->describeTaskDetail(Arr::get($this->data, 'ProcedureStateChangeEvent.TaskId'));
+        if ($taskDetail && $taskDetail->TaskType == 'Procedure' && $taskDetail->Status == 'FINISH') {
+            if ($taskDetail->ProcedureTask->Status == 'FINISH') {
+                $threadVideo = $threadVideo->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
 
-        if (Arr::get($this->data, 'EventType') == $EventType &&
-            Arr::get($this->data, $EventName.'.ErrCode') == '0') {
-            $threadVideo = $threadVideo->findOrFailByFileId(Arr::get($this->data, $EventName.'.FileId'));
-
-            foreach (Arr::get($this->data, $EventName.'.'.$EventRes) as $key => $value) {
-                if (Arr::get($value, 'Type') == 'Transcode') {
-                    if (Arr::get($value, 'TranscodeTask.ErrCode') == '0') {
-                        //转码成功
-                        $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
-                        $threadVideo->media_url = Arr::get($value, 'TranscodeTask.Output.Url');
-                    } else {
-                        //转码失败
-                        $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
-                        $threadVideo->reason = Arr::get($value, 'TranscodeTask.Message');
+                foreach ($taskDetail->ProcedureTask->MediaProcessResultSet as $key => $value) {
+                    if ($value->Type == 'Transcode') {
+                        if ($value->TranscodeTask->ErrCode == 0) {
+                            //转码成功
+                            $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
+                            $threadVideo->media_url = $value->TranscodeTask->Output->Url;
+                        } else {
+                            //转码失败
+                            $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
+                            $threadVideo->reason = $value->TranscodeTask->Message;
+                        }
                     }
-                }
 
 
-                if (Arr::get($value, 'Type') == 'CoverBySnapshot') {
-                    if (Arr::get($value, 'CoverBySnapshotTask.ErrCode') == '0') {
-                        //截取封面图成功
-                        $threadVideo->cover_url = Arr::get($value, 'CoverBySnapshotTask.Output.CoverUrl');
+                    if ($value->Type == 'CoverBySnapshot') {
+                        if ($value->CoverBySnapshotTask->ErrCode == 0) {
+                            //截取封面图成功
+                            $threadVideo->cover_url = $value->CoverBySnapshotTask->Output->CoverUrl;
+                        }
                     }
                 }
             }
@@ -88,6 +93,7 @@ class ThreadVideoNotify
                 $thread->save();
             }
         }
+
         return 'success';
     }
 }
