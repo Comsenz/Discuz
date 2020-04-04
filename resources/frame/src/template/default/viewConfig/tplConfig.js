@@ -1024,7 +1024,7 @@ export default {
 
         setTimeout(() => {
           localStorage.clear();
-          location.reload();
+          // location.reload();
         }, 1500);
 
         return res;
