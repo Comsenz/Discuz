@@ -31,6 +31,18 @@
       </div>
 
       <div class="order-record__search-condition">
+        <span class="order-record__search-condition__title">订单状态：</span>
+        <el-select v-model="value" clearable placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+
+      <div class="order-record__search-condition">
         <el-button  type="primary" size="medium" @click="searchClick">搜索</el-button>
       </div>
     </div>

@@ -38,7 +38,8 @@ export default {
       this.$router.push({path:'/login-user'})
     },
     wxLoginClick(){
-      this.$router.push({path:'/wx-login-bd'})
+      // this.$router.push({path:'/wx-login-bd'})
+      this.$router.push({path:'wx-qr-code'});
     },
 
     getCode(){
