@@ -457,6 +457,7 @@ export default {
     },
     // 这里写接口，上传
     uploaderEnclosure(file, isFoot, img, enclosure, index) {
+      // console.log(index);
       this.appFetch({
         url: 'attachment',
         method: 'post',
@@ -468,10 +469,11 @@ export default {
           throw new Error(data.error);
 
         } else {
+
           if (img) {
             this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             this.loading = false;
-            this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            this.fileListOne[this.fileListOne.length - index - 1].id = data.data.attributes.id;
           }
           if (isFoot) {
             this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
