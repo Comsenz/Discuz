@@ -30,7 +30,6 @@ class ThreadVideoSerializer extends AbstractSerializer
             'reason'         => $model->reason,
             'file_name'      => $model->file_name,
             'file_id'        => $model->file_id,
-            'media_url'      => $model->media_url,
             'cover_url'      => $model->cover_url,
             'updated_at'     => $this->formatDate($model->updated_at),
             'created_at'     => $this->formatDate($model->created_at)

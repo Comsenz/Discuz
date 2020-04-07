@@ -12,6 +12,7 @@ use App\Rules\Settings\CashMinSum;
 use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudCaptchaVerify;
 use App\Rules\Settings\QcloudSecretVerify;
+use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodVerify;
 use App\Rules\Settings\SupportExt;
 use Discuz\Foundation\AbstractValidator;
@@ -66,6 +67,9 @@ class SetSettingValidator extends AbstractValidator
         }
         if (Arr::has($this->data, 'qcloud_vod_sub_app_id')) {
             $rules['qcloud_vod_sub_app_id'] =  [new QcloudVodVerify()];
+        }
+        if (Arr::has($this->data, 'qcloud_vod_cover_template')) {
+            $rules['qcloud_vod_cover_template'] =  [new QcloudVodCoverTemplateVerify()];
         }
 
         return $rules;

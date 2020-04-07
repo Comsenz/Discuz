@@ -1016,15 +1016,15 @@ export default {
           return
         }
 
-        if (res.errors[0].detail) {
-          alert(res.errors[0].code + '\n' + res.errors[0].detail[0]);
-        } else {
-          alert(res.errors[0].code);
-        }
+        // if (res.errors[0].detail) {
+        //   alert(res.errors[0].code + '\n' + res.errors[0].detail[0]);
+        // } else {
+        //   alert(res.errors[0].code);
+        // }
 
         setTimeout(() => {
           localStorage.clear();
-          location.reload();
+          // location.reload();
         }, 1500);
 
         return res;

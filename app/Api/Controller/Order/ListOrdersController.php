@@ -187,8 +187,8 @@ class ListOrdersController extends AbstractListController
         $order_username = Arr::get($filter, 'username'); //订单创建人
         $order_product = Arr::get($filter, 'product'); //商品
 
-        $query->when(!is_null($status), function ($query) use ($status) {
-            $query->where('status', $status);
+        $query->when($status !== '', function ($query) use ($status) {
+            $query->where('status', (int) $status);
         });
         $query->when($order_user, function ($query) use ($order_user) {
             $query->where('user_id', $order_user);
