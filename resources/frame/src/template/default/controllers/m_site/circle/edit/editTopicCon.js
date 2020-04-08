@@ -204,8 +204,6 @@ export default {
               this.supportFileExtRes += fileStrRes;
             }
           }
-
-          console.log(this.supportImgExt, this.supportFileExt, '格式');
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
@@ -359,17 +357,17 @@ export default {
           if (this.isAndroid && this.isWeixin) {
             if (this.supportImgExt == '' || this.supportImgExt == null) {
               this.loading = true;
-              this.compressFile(file.file, 150000, false, files.length - index);
+              this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
             } else {
               this.testingType(file.file, this.supportImgExt);
               if (this.testingRes) {
                 this.loading = true;
-                this.compressFile(file.file, 150000, false, files.length - index);
+                this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
               }
             }
           } else {
             this.loading = true;
-            this.compressFile(file.file, 150000, false, files.length - index);
+            this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
           }
         });
       }
@@ -384,17 +382,17 @@ export default {
         if (this.isAndroid && this.isWeixin) {
           if (this.supportImgExt == '' || this.supportImgExt == null) {
             this.loading = true;
-            this.compressFile(file.file, 150000, false, files.length - index);
+            this.compressFile(file.file, 150000, false, this.fileListOne.length + i, file.length - i);
           } else {
             this.testingType(file, this.supportImgExt);
             if (this.testingRes) {
               this.loading = true;
-              this.compressFile(file, 150000, true);
+              this.compressFile(file, 150000, true, this.fileListOne.length + i, file.length - i);
             }
           }
         } else {
           this.loading = true;
-          this.compressFile(file, 150000, true);
+          this.compressFile(file, 150000, true, this.fileListOne.length + i, file.length - i);
         }
       }
     },
@@ -478,7 +476,8 @@ export default {
         } else {
           if (img) {
             this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
-            this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            // this.fileListOne[this.fileListOne.length - index - 1].id = data.data.attributes.id;
+            this.fileListOne[index - 1].id = data.data.attributes.id;
             this.loading = false;
           }
           if (isFoot) {
@@ -503,8 +502,7 @@ export default {
     },
 
     //压缩图片
-    // compressFile(file, uploadShow, wantedSize = 150000, event){
-    compressFile(file, wantedSize, uploadShow, index) {
+    compressFile(file, wantedSize, uploadShow, index, indexSum) {
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -514,7 +512,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', rst.file, file.name);
         formdata.append('isGallery', 1);
-        // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+        formdata.append('order', index);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
         that.loading = false;
       }).catch(function (err) {
