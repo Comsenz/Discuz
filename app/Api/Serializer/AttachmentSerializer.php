@@ -100,7 +100,8 @@ class AttachmentSerializer extends AbstractSerializer
 
         if ($model->is_gallery) {
             $attributes['thumbUrl'] = $model->is_remote
-                ? $this->cosFilesystem->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
+                // ? $this->cosFilesystem->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
+                ? $this->cosFilesystem->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x'.$fixWidth
                 : Str::replaceLast('.', '_thumb.', $url);
         }
 
