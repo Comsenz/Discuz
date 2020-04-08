@@ -7,6 +7,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AvatarCleanCommand;
 use App\Console\Commands\FinanceCreate;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
 {
     public $commands = [
         FinanceCreate::class,
+        AvatarCleanCommand::class,
     ];
 
     /**
@@ -26,5 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('finance:create')->daily();
+
+        // 维护
+        $schedule->command('maintain:avatar-clean')->daily();
     }
 }
