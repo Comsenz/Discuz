@@ -6,17 +6,18 @@ import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
-  data:function () {
+  data: function () {
     return {
       options: [],
       username: '',
       userUID: '',
       userRole: [],
-      checked:false,
+      checked: false,
       userPhone: '',
       userWeChat: 'no',
-      userStatus:[],
-      disabled:true,//禁用表单上的游客
+      userStatus: [],
+      isReal: 'no', //是否实名认证
+      disabled: true,//禁用表单上的游客
       optionsStatus: [
         {
           value: '',
@@ -35,72 +36,76 @@ export default {
           label: '审核'
         }
       ],
-      value:''
+      value: ''
     }
   },
 
-  created(){
+  created() {
     this.getUserList();
   },
 
-  methods:{
-    checkedStatus(str){
-      setTimeout(()=>{
-        if (str){
-          let gd =  document.getElementsByClassName('index-main-con__main')[0];
-          gd.scrollTo(0,gd.scrollHeight);
+  methods: {
+    checkedStatus(str) {
+      setTimeout(() => {
+        if (str) {
+          let gd = document.getElementsByClassName('index-main-con__main')[0];
+          gd.scrollTo(0, gd.scrollHeight);
         }
-      },300);
+      }, 300);
     },
-    searchBtn(){
+    searchBtn() {
       let query = {
         username: this.username.trim(),
         userUID: this.userUID.trim(),
         userRole: this.userRole,
-        userStatus:this.userStatus,
+        userStatus: this.userStatus,
         userPhone: this.userPhone.trim(),
         userWeChat: this.userWeChat,
+        isReal: this.isReal,
+
       };
-      if(!this.checked){
+      if (!this.checked) {
         this.userPhone = '';
         this.userWeChat = 'no';
+        this.isReal = 'no';
 
-        if(query.username + query.userUID + query.userRole +query.userStatus === ''){
+        if (query.username + query.userUID + query.userRole + query.userStatus === '') {
           query = {};
         } else {
           delete query.userPhone;
           delete query.userWeChat;
+          delete query.isReal;
         }
       }
-      this.$router.push({path:'/admin/user-search-list', query})
+      this.$router.push({ path: '/admin/user-search-list', query })
     },
 
-    async getUserList(){
-      try{
+    async getUserList() {
+      try {
         const response = await this.appFetch({
           method: 'get',
           url: 'groups'
         });
-        if (response.errors){
+        if (response.errors) {
           this.$message.error(response.errors[0].code);
-        }else{
+        } else {
           const data = response.data;
-          this.options = data.map((v)=>{
+          this.options = data.map((v) => {
             return {
-                value: v.id,
-                label: v.attributes.name
+              value: v.id,
+              label: v.attributes.name
             }
           })
         }
 
-      } catch(err){
+      } catch (err) {
         console.error(err, 'getUserList')
       }
     },
 
   },
 
-  components:{
+  components: {
     Card,
     CardRow
   }
