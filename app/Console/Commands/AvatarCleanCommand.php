@@ -14,9 +14,9 @@ use Illuminate\Contracts\Filesystem\Factory;
 
 class AvatarCleanCommand extends AbstractCommand
 {
-    protected $signature = 'maintain:avatar-clean';
+    protected $signature = 'clear:avatar';
 
-    protected $description = '维护:清理本地/COS未使用的头像';
+    protected $description = '清理本地/COS未使用的头像';
 
     protected $app;
 
@@ -52,7 +52,7 @@ class AvatarCleanCommand extends AbstractCommand
 
             $img = $user->id . '.png';
 
-            $nowAvatar = $user->getAttributes()['avatar'];
+            $nowAvatar = $user->getRawOriginal('avatar');
 
             // 判断是否是cos地址
             if (substr_count($nowAvatar, 'http') > 0) {

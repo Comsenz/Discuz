@@ -30,6 +30,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('finance:create')->daily();
 
         // 维护
-        $schedule->command('maintain:avatar-clean')->daily();
+        $schedule->command('clear:avatar')->daily();
     }
 }
