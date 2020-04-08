@@ -38,7 +38,8 @@ export default {
       this.$router.push({path:'/login-user'})
     },
     wxLoginClick(){
-      this.$router.push({path:'/wx-login-bd'})
+      // this.$router.push({path:'/wx-login-bd'})
+      this.$router.push({path:'wx-qr-code'});
     },
 
     getCode(){
@@ -202,7 +203,7 @@ export default {
        this.isOne = true;
      } else {
        //pc登录'
-       if (!res.readdata._data.passport.offiaccount_close) {
+       if (!res.readdata._data.passport.oplatform_close) {
          this.wxLoginShow = false;
        }
        this.isPC = true;

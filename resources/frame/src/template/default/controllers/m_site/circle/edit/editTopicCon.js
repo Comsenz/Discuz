@@ -175,23 +175,34 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
-          var ImgStr = '';
-          var imgStrRes = '';
-          for (var k = 0; k < ImgExt.length; k++) {
-            ImgStr = '.' + ImgExt[k] + ',';
-            imgStrRes = '.' + ImgExt[k] + ',';
-            this.supportImgExt += ImgStr;
-            this.supportImgExtRes += imgStrRes;
+          if (res.readdata._data.set_attach.support_img_ext == '' || res.readdata._data.set_attach.support_img_ext == null) {
+            this.supportImgExt = '';
+            this.supportImgExtRes = ''
+          } else {
+            var ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
+            var ImgStr = '';
+            var imgStrRes = '';
+            for (var k = 0; k < ImgExt.length; k++) {
+              ImgStr = '.' + ImgExt[k] + ',';
+              imgStrRes = '.' + ImgExt[k] + ',';
+              this.supportImgExt += ImgStr;
+              this.supportImgExtRes += imgStrRes;
+            }
+            this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
+            this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
           }
-          this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
-          this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
-
-          var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
-          var fileStr = '';
-          for (var k = 0; k < fileExt.length; k++) {
-            fileStr = '.' + fileExt[k] + ',';
-            this.supportFileExt += fileStr;
+          if (res.readdata._data.set_attach.support_file_ext == '' || res.readdata._data.set_attach.support_img_ext == null) {
+            this.supportFileExt = '';
+            this.supportFileExtRes = ''
+          } else {
+            var fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
+            var fileStr = '';
+            var fileStrRes = '';
+            for (var k = 0; k < fileExt.length; k++) {
+              fileStr = '.' + fileExt[k] + ',';
+              this.supportFileExt += fileStr;
+              this.supportFileExtRes += fileStrRes;
+            }
           }
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
@@ -341,16 +352,22 @@ export default {
       if (!this.limitMaxLength) {
         this.$toast.fail('已达上传图片上限');
       } else {
+
         files.map((file, index) => {
           if (this.isAndroid && this.isWeixin) {
-            this.testingType(file.file, this.supportImgExt);
-            if (this.testingRes) {
+            if (this.supportImgExt == '' || this.supportImgExt == null) {
               this.loading = true;
-              this.compressFile(file.file, 150000, false, files.length - index);
+              this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
+            } else {
+              this.testingType(file.file, this.supportImgExt);
+              if (this.testingRes) {
+                this.loading = true;
+                this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
+              }
             }
           } else {
             this.loading = true;
-            this.compressFile(file.file, 150000, false, files.length - index);
+            this.compressFile(file.file, 150000, false, this.fileListOne.length + index, files.length - index);
           }
         });
       }
@@ -361,29 +378,45 @@ export default {
       let fileListNowLen = e.target.files.length + this.fileListOne.length <= 12 ? e.target.files.length : 12 - this.fileListOne.length;
       for (var i = 0; i < fileListNowLen; i++) {
         var file = e.target.files[i];
+
         if (this.isAndroid && this.isWeixin) {
-          this.testingType(file, this.supportImgExt);
-          if (this.testingRes) {
+          if (this.supportImgExt == '' || this.supportImgExt == null) {
             this.loading = true;
-            this.compressFile(file, 150000, true);
+            this.compressFile(file.file, 150000, false, this.fileListOne.length + i, file.length - i);
+          } else {
+            this.testingType(file, this.supportImgExt);
+            if (this.testingRes) {
+              this.loading = true;
+              this.compressFile(file, 150000, true, this.fileListOne.length + i, file.length - i);
+            }
           }
         } else {
           this.loading = true;
-          this.compressFile(file, 150000, true);
+          this.compressFile(file, 150000, true, this.fileListOne.length + i, file.length - i);
         }
       }
     },
     //上传附件
     handleEnclosure(e) {
-      this.testingType(e.target.files[0], this.supportFileExt);
-      if (this.testingRes) {
+      if (this.supportFileExt == '' || this.supportFileExt == null) {
         let file = e.target.files[0];
         let formdata = new FormData();
         formdata.append('file', file);
         formdata.append('isGallery', 0);
         this.loading = true;
         this.uploaderEnclosure(formdata, false, false, true);
+      } else {
+        this.testingType(e.target.files[0], this.supportFileExt);
+        if (this.testingRes) {
+          let file = e.target.files[0];
+          let formdata = new FormData();
+          formdata.append('file', file);
+          formdata.append('isGallery', 0);
+          this.loading = true;
+          this.uploaderEnclosure(formdata, false, false, true);
+        }
       }
+
 
     },
 
@@ -443,7 +476,8 @@ export default {
         } else {
           if (img) {
             this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
-            this.fileListOne[this.fileListOne.length - index].id = data.data.attributes.id;
+            // this.fileListOne[this.fileListOne.length - index - 1].id = data.data.attributes.id;
+            this.fileListOne[index - 1].id = data.data.attributes.id;
             this.loading = false;
           }
           if (isFoot) {
@@ -468,8 +502,7 @@ export default {
     },
 
     //压缩图片
-    // compressFile(file, uploadShow, wantedSize = 150000, event){
-    compressFile(file, wantedSize, uploadShow, index) {
+    compressFile(file, wantedSize, uploadShow, index, indexSum) {
       const curSize = file.size || file.length * 0.8
       const quality = Math.max(wantedSize / curSize, 0.8)
       let that = this;
@@ -479,7 +512,7 @@ export default {
         let formdata = new FormData();
         formdata.append('file', rst.file, file.name);
         formdata.append('isGallery', 1);
-        // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
+        formdata.append('order', index);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
         that.loading = false;
       }).catch(function (err) {

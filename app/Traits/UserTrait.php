@@ -66,6 +66,15 @@ trait UserTrait
                 ->whereIn('group_id', $group_id);
         }
 
+        // 是否实名认证
+        if ($isReal = Arr::get($filter, 'isReal')) {
+            if ($isReal == 'yes') {
+                $query->where('realname', '<>', '');
+            } elseif ($isReal == 'no') {
+                $query->where('realname', '');
+            }
+        }
+
         // 是否绑定微信
         if ($weChat = Arr::get($filter, 'wechat')) {
             if ($weChat == 'yes') {

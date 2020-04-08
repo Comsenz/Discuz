@@ -47,7 +47,20 @@ export default {
 
       pageCount:0,
       currentPaga:1,
-      total:0
+      total:0,
+
+      options: [
+        {
+          value: '0',
+          label: '待付款'
+        },
+        {
+          value: '1',
+          label: '已付款'
+        }
+      ],
+      value: '',
+      status:'2'
     }
   },
   methods:{
@@ -81,7 +94,7 @@ export default {
       } else if(this.orderTime[0] !== '' && this.orderTime[1] !== ''){
         this.orderTime[0] = this.orderTime[0] + '-00-00-00';
         this.orderTime[1] = this.orderTime[1] + '-24-00-00';
-      };
+      }
       this.currentPaga = 1;
       this.getOrderList();
     },
@@ -113,7 +126,8 @@ export default {
           'filter[product]':this.commodity,
           'filter[username]':this.operationUser,
           'filter[start_time]':this.orderTime[0],
-          'filter[end_time]':this.orderTime[1]
+          'filter[end_time]':this.orderTime[1],
+          'filter[status]':this.value
         }
       }).then(res=>{
         if (res.errors){

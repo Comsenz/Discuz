@@ -20,7 +20,14 @@ export default {
         description: '用户在小程序使用微信授权登录',
         status:'',
         icon:'iconxiaochengxu'
-      }]
+      }, {
+        name: 'PC端微信扫码登录',
+        type:'oplatform_close',
+        tag: 'wx_oplatform',
+        description: '用户在PC的网页使用微信扫码登录',
+        status:'',
+        icon:'iconweixin'
+        }]
       // settingStatus:{}
     }
   },

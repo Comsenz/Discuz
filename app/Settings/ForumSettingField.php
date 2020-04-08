@@ -140,6 +140,7 @@ class ForumSettingField
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
             'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
             'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
+            'qcloud_vod_cover_template' => $this->settings->get('qcloud_vod_cover_template', 'qcloud'),
         ];
         $settings += $this->getQCloudVod();
         return $settings;

@@ -48,6 +48,6 @@ class TokenSerializer extends AbstractSerializer
 
     public function users($model)
     {
-        return $this->hasOne(['users' => static::$user], UserSerializer::class);
+        return $this->hasOne(['users' => static::$user], UserProfileSerializer::class);
     }
 }

@@ -244,7 +244,7 @@ export default {
         this.isOne = true;
       } else {
         //pc登录'
-        if (!res.readdata._data.passport.offiaccount_close) {
+        if (!res.readdata._data.passport.oplatform_close) {
           this.wxLoginShow = false;
         }
         this.isPC = true;

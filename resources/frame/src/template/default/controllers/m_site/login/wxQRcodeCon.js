@@ -43,14 +43,14 @@ export default {
                     if (data.rawData[0].code === 'no_bind_user') {
                       let wxtoken = data.errors[0].token;
                       webDb.setLItem('wxtoken', wxtoken);
-                      this.$router.push({ path: 'wx-login-bd' });
+                      this.$router.push({path:'wx-login-bd'});
+                      clearInterval(inQuire);
                     } else {
                       if (data.errors[0].detail) {
                         this.$toast.fail(data.errors[0].code + '\n' + data.errors[0].detail[0])
                       } else {
                         this.$toast.fail(data.errors[0].code);
                       }
-                      clearInterval(inQuire);
                     }
                   }
                 } else if (data.data.attributes.access_token) {

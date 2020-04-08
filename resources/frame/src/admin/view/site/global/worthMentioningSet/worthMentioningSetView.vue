@@ -38,6 +38,7 @@
                 <el-button
                   size="mini"
                   @click="configClick(scope.row.tag)"
+                  v-if="scope.row.type !== 'oplatform_close'"
                 >配置</el-button>
                 <el-button
                   size="mini"
