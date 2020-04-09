@@ -2,7 +2,7 @@
   <div>
     <Card header="视频配置"></Card>
     <Card header="子应用：">
-      <CardRow description="请填写子应用 ID，如果不填写、填写0或填写开发者的腾讯云 AppId，则操作的子应用为“主应用”。">
+      <CardRow description="请填写子应用 ID，如果没有开启子应用，此处留空即可，留空将自动采用主应用。">
         <el-input v-model="subApplication" clearable></el-input>
         <template #tail>
           <a href="https://cloud.tencent.com/product/vod" target="_blank">未申请？点此申请</a>
@@ -24,7 +24,7 @@
       </CardRow>
     </Card>
     <Card header="支持的视频扩展名:">
-      <CardRow description="多个请用,隔开，例如 WMV,RM,MOV,MPEG,MP4,3GP,FLV,AVI,RMVB">
+      <CardRow description="多个请用,隔开，例如 wmv,rm,mov,mpeg,mp4,3gp,flv,avi,rmvb">
         <el-input v-model="vodExt" clearable></el-input>
       </CardRow>
     </Card>
