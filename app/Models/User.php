@@ -599,4 +599,13 @@ class User extends Model
     {
         static::$hasher = $hasher;
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeHaveAvatar($query)
+    {
+        return $query->whereNotNull('avatar');
+    }
 }
