@@ -14,8 +14,8 @@
           <el-input v-model="cosArea" clearable></el-input>
         </CardRow>
       </Card>
-      <Card header="数据万象处理域名：">
-        <CardRow description="填写Bucket管理-域名管理中的图片处理域名">
+      <Card header="访问域名：">
+        <CardRow description="填写存储桶基本配置中的访问域名">
           <el-input v-model="cosDomainName" clearable></el-input>
         </CardRow>
       </Card>

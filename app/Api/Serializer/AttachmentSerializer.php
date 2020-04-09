@@ -71,36 +71,31 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        $path = $model->file_path.'/'.$model->attachment;
-
-        if ($model->is_remote) {
-            $uri = $this->cosFilesystem->getAdapter()->getUrl($path);
-        } else {
-            $uri = $this->filesystem->url($path);
-        }
+        $path = $model->file_path . '/' . $model->attachment;
 
         $url = $model->is_remote
-            ? $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath()
-            : $this->url->to(str_replace('public', '/storage', $model->file_path) . '/' . $model->attachment);
+            ? $this->cosFilesystem->getAdapter()->getUrl($path)
+            : $this->url->to(str_replace('public', '/storage', $path));
 
         $fixWidth = CreateAttachment::FIX_WIDTH;
 
         $attributes = [
-            'order' => $model->order,
-            'isGallery' => $model->is_gallery,
-            'isRemote' => $model->is_remote,
-            'url' => $url,
-            'attachment' => $model->attachment,
-            'extension' => Str::afterLast($model->attachment, '.'),
-            'fileName' => $model->file_name,
-            'filePath' => $model->file_path,
-            'fileSize' => (int)$model->file_size,
-            'fileType' => $model->file_type,
+            'order'             => $model->order,
+            'isGallery'         => $model->is_gallery,
+            'isRemote'          => $model->is_remote,
+            'url'               => $url,
+            'attachment'        => $model->attachment,
+            'extension'         => Str::afterLast($model->attachment, '.'),
+            'fileName'          => $model->file_name,
+            'filePath'          => $model->file_path,
+            'fileSize'          => (int) $model->file_size,
+            'fileType'          => $model->file_type,
         ];
 
+        // 图片缩略图地址
         if ($model->is_gallery) {
             $attributes['thumbUrl'] = $model->is_remote
-                ? $this->cosFilesystem->getAdapter()->getPicUrl($path).'?imageMogr2/thumbnail/'.$fixWidth.'x/interlace/0'
+                ? $url . '?imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
                 : Str::replaceLast('.', '_thumb.', $url);
         }
 
