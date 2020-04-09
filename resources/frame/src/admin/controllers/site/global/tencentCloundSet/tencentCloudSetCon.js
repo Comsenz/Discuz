@@ -44,7 +44,7 @@ export default {
         }, {
           name: '对象存储',
           type: 'qcloud_cos',
-          description: '请先配置云API，开通腾讯云的对象存储及数据万象服务，并确保有对应资源包',
+          description: '请先配置云API，开通腾讯云的对象存储服务，并确保有对应资源包',
           status: '',
           icon: 'iconduixiangcunchu',
           setFlag: true

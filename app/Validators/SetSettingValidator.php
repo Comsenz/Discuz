@@ -13,8 +13,10 @@ use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudCaptchaVerify;
 use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
+use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
 use App\Rules\Settings\SupportExt;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory;
@@ -29,9 +31,11 @@ class SetSettingValidator extends AbstractValidator
 
     protected $settings;
 
-    public function __construct(Factory $validator)
+    public function __construct(Factory $validator, SettingsRepository $settings)
     {
         parent::__construct($validator);
+
+        $this->settings = $settings;
     }
 
     protected function getRules()
@@ -61,12 +65,18 @@ class SetSettingValidator extends AbstractValidator
             ];
         }
 
-        //只有开启时需要验证
+        //开启验证
         if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
-            $rules['qcloud_vod'] =  ['filled', new QcloudVodVerify()];
+            $rules['qcloud_vod'] =  ['filled',
+                new QcloudVodTranscodeVerify($this->settings->get('qcloud_vod_transcode', 'qcloud')),
+                new QcloudVodVerify($this->settings->get('qcloud_vod_sub_app_id', 'qcloud'))];
         }
+
         if (Arr::has($this->data, 'qcloud_vod_sub_app_id')) {
             $rules['qcloud_vod_sub_app_id'] =  [new QcloudVodVerify()];
+        }
+        if (Arr::has($this->data, 'qcloud_vod_transcode')) {
+            $rules['qcloud_vod_transcode'] =  [new QcloudVodTranscodeVerify()];
         }
         if (Arr::has($this->data, 'qcloud_vod_cover_template')) {
             $rules['qcloud_vod_cover_template'] =  [new QcloudVodCoverTemplateVerify()];

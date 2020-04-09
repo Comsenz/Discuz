@@ -58,6 +58,7 @@ export default {
           userPhone,
           userStatus,
           userWeChat,
+          isReal,
         } = this.query;
         const response = await this.appFetch({
           method: "get",
@@ -71,6 +72,7 @@ export default {
             "filter[wechat]": userWeChat,
             "page[limit]": this.pageLimit,
             "page[number]": this.pageNum,
+            "filter[isReal]": isReal
           }
         });
         if (response.errors) {
@@ -105,6 +107,7 @@ export default {
           userPhone,
           userStatus,
           userWeChat,
+          isReal,
         } = this.query;
         const response = await this.appFetch({
           method: 'get',
@@ -117,6 +120,7 @@ export default {
             "filter[mobile]": userPhone,
             "filter[status]": userStatus,
             "filter[wechat]": userWeChat,
+            "filter[isReal]": isReal
           },
           responseType: 'arraybuffer'
         });

@@ -8,16 +8,15 @@
 namespace App\Rules\Settings;
 
 use Discuz\Qcloud\QcloudTrait;
-use Illuminate\Support\Arr;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
 
 /**
- * 腾讯云云点播 - 验证
+ * 腾讯云云点播转码模板 - 验证
  *
- * Class QcloudVodVerify
+ * Class QcloudVodTranscodeVerify
  * @package App\Rules\Settings
  */
-class QcloudVodVerify extends BaseQcloud
+class QcloudVodTranscodeVerify extends BaseQcloud
 {
     use QcloudTrait;
 
@@ -33,13 +32,13 @@ class QcloudVodVerify extends BaseQcloud
 
     private $randStr;
 
-    protected $subAppId;
+    protected $transcode;
 
-    public function __construct($subAppId = '')
+    public function __construct($transcode = '')
     {
         parent::__construct();
 
-        $this->subAppId = $subAppId;
+        $this->transcode = $transcode;
     }
 
     /**
@@ -53,16 +52,15 @@ class QcloudVodVerify extends BaseQcloud
         try {
             //开启视频开关时通过setting的值进行验证
             if ($attribute == 'qcloud_vod') {
-                $value = $this->subAppId;
+                $value = $this->transcode;
             }
 
-            $this->describeStorageData($value);
+            $res = $this->DescribeTranscodeTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            $message = 'tencent_vod_error';
-            if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
-                $message = 'tencent_vod_subappid_error';
-            }
-            throw new TencentCloudSDKException($message);
+            throw new TencentCloudSDKException('qcloud_vod_'.$e->getErrorCode());
+        }
+        if ($res->TotalCount == 0) {
+            throw new TencentCloudSDKException('tencent_vod_transcode_error');
         }
         return true;
     }

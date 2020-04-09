@@ -46,7 +46,6 @@ class QcloudVodCoverTemplateVerify extends BaseQcloud
      */
     public function passes($attribute, $value)
     {
-        dd($value);
         try {
             $res = $this->describeSnapshotByTimeOffsetTemplates($value);
         } catch (TencentCloudSDKException $e) {

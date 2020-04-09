@@ -234,8 +234,12 @@ export default {
         //   }
         // })
       } else {
+        this.$toast.fail('请在微信客户端中进行绑定操作');
 
-        window.location.href = '/api/oauth/wechat/pc';
+        // window.location.href = '/api/oauth/wechat/pc';
+
+        // this.$router.push({path:'wx-qr-code'});
+        // browserDb.setSItem('beforeVisiting','modify-data');
 
         /*this.appFetch({     //pc端绑定
           url: 'wxPcLogin',

@@ -13,6 +13,7 @@ use App\Models\User;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Discuz\Http\UrlGenerator;
+use Illuminate\Contracts\Filesystem\Factory;
 use Intervention\Image\Image;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
@@ -67,8 +68,7 @@ class AvatarUploader
         // 判断是否开启云储存
         if ($this->settings->get('qcloud_cos', 'qcloud')) {
             $this->avatarPath = 'public/avatar/' . $this->avatarPath; // 云目录
-            $uri = $this->filesystem->url($this->avatarPath);
-            $avatarUrl = $uri->getScheme() . '://' . $uri->getHost() . $uri->getPath();
+            $avatarUrl = $this->filesystem->url($this->avatarPath);
             $user->changeAvatar($avatarUrl);
         } else {
             $user->changeAvatar($this->avatarPath);
@@ -87,8 +87,8 @@ class AvatarUploader
         $avatarPath = $user->getRawOriginal('avatar');
 
         // save后事件
-        $user->saved(function () use ($avatarPath) {
-            $this->deleteFile($avatarPath);
+        $user->saved(function () use ($user, $avatarPath) {
+            $this->deleteFile($user, $avatarPath);
         });
 
         $user->changeAvatar('');
@@ -96,14 +96,26 @@ class AvatarUploader
     }
 
     /**
-     * 上传失败则删除本地图片资源
+     * 上传失败则删除 本地/COS 图片资源
      *
+     * @param User $user
      * @param $avatarPath
      */
-    public function deleteFile($avatarPath)
+    public function deleteFile(User $user, $avatarPath)
     {
-        if ($this->filesystem->has($avatarPath)) {
-            $this->filesystem->delete($avatarPath);
+        // 判断是否是cos地址
+        if (substr_count($avatarPath, 'http') > 0) {
+            $cosPath = 'public/avatar/' . $user->id . '.png';
+            // 判断是否关闭了腾讯COS
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                $this->filesystem->delete($cosPath);
+            } else {
+                $this->app->make(Factory::class)->disk('avatar_cos')->delete($cosPath);
+            }
+        } else {
+            if ($this->filesystem->has($avatarPath)) {
+                $this->filesystem->delete($avatarPath);
+            }
         }
     }
 }

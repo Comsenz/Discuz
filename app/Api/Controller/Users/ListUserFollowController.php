@@ -10,6 +10,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserFollowSerializer;
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
+use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
@@ -45,6 +46,11 @@ class ListUserFollowController extends AbstractListController
     public $userFollowCount;
 
     /**
+     * @var UserRepository
+     */
+    public $user;
+
+    /**
      * {@inheritdoc}
      */
     public $optionalInclude = ['fromUser', 'toUser'];
@@ -58,10 +64,12 @@ class ListUserFollowController extends AbstractListController
     /**
      * @param UserFollowRepository $userFollow
      * @param UrlGenerator $url
+     * @param UserRepository $user
      */
-    public function __construct(UserFollowRepository $userFollow, UrlGenerator $url)
+    public function __construct(UserFollowRepository $userFollow, UrlGenerator $url, UserRepository $user)
     {
         $this->userFollow = $userFollow;
+        $this->user = $user;
         $this->url = $url;
     }
 
@@ -109,18 +117,23 @@ class ListUserFollowController extends AbstractListController
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
         $join_field = '';
+        $user = '';
         $query = $this->userFollow->query();
 
-        $type = Arr::get($filter, 'type', 1);
+        $type = (int) Arr::get($filter, 'type', 1);
         $username = Arr::get($filter, 'username');
+        if ($user_id = (int) Arr::get($filter, 'user_id')) {
+            $user = $this->user->findOrFail($user_id);
+        }
+        $user_id = $user ? $user->id : $actor->id;
 
         if ($type == 1) {
             //我的关注
-            $query->where('from_user_id', $actor->id)->with('toUser');
+            $query->where('from_user_id', $user_id)->with('toUser');
             $join_field = 'to_user_id';
         } elseif ($type == 2) {
             //我的粉丝
-            $query->where('to_user_id', $actor->id)->with('fromUser');
+            $query->where('to_user_id', $user_id)->with('fromUser');
             $join_field = 'from_user_id';
         }
 

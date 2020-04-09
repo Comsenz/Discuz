@@ -8,6 +8,7 @@ export default {
       vodExt: '',
       vodSize: '',//短信签名
       subApplication: '',//子应用
+      screenshot: '', //截图模版
 
     }
   },
@@ -30,6 +31,7 @@ export default {
           this.vodExt = res.readdata._data.qcloud.qcloud_vod_ext;
           this.vodSize = res.readdata._data.qcloud.qcloud_vod_size;
           this.subApplication = res.readdata._data.qcloud.qcloud_vod_sub_app_id;
+          this.screenshot = res.readdata._data.qcloud.qcloud_vod_cover_template;
         }
       })
     },
@@ -54,6 +56,13 @@ export default {
               "attributes": {
                 "key": 'qcloud_vod_transcode',
                 "value": this.vodTranscode,
+                "tag": "qcloud"
+              }
+            },
+            {
+              "attributes": {
+                "key": 'qcloud_vod_cover_template',
+                "value": this.screenshot,
                 "tag": "qcloud"
               }
             },

@@ -41,7 +41,7 @@ class WebUserEvent
     protected function event($message)
     {
         $openid = $message['FromUserName'];
-        $EventKey = $message['EventKey'];
+        $EventKey = str_replace('qrscene_', '', $message['EventKey']);
         $wechatuser = UserWechat::where('mp_openid', $openid)->first();
 
         if ($wechatuser && $wechatuser->user_id) {
