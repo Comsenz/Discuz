@@ -79,9 +79,8 @@ export default {
       catch(err){
         this.$message({
           showClose: true,
-          message: '提交失败！'
+          message: err
         });
-        // this.$message.error('操作失败！');
       }
   }
   },
