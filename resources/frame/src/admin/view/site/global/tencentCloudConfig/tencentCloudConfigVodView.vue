@@ -17,6 +17,12 @@
         <el-input v-model="vodTranscode" clearable></el-input>
       </CardRow>
     </Card>
+
+    <Card header="截图模板：">
+      <CardRow description="请填写腾讯云账户 - 云点播 - 视频处理设置 - 模板设置 - 截图模板中的模板ID，如果不填写则采用默认截图模板">
+        <el-input v-model="screenshot" clearable></el-input>
+      </CardRow>
+    </Card>
     <Card header="支持的视频扩展名:">
       <CardRow description="多个请用,隔开，例如 WMV,RM,MOV,MPEG,MP4,3GP,FLV,AVI,RMVB">
         <el-input v-model="vodExt" clearable></el-input>
