@@ -10,17 +10,6 @@ export default {
       rewardShow: false,
       themeCon: false,
       themeShow: false,
-      rewardNumList: [
-        { rewardNum: '0.01' },
-        { rewardNum: '2' },
-        { rewardNum: '5' },
-        { rewardNum: '10' },
-        { rewardNum: '20' },
-        { rewardNum: '50' },
-        { rewardNum: '88' },
-        { rewardNum: '128' },
-        { rewardNum: '666' }
-      ],
       qrcodeShow: false,
       amountNum: '',
       codeUrl: '',
@@ -123,17 +112,7 @@ export default {
       })
 
     },
-    // detailsLoad(){
-    //   const params = {
-    //     'filter[isDeleted]':'no'
-    //   };
-    //   params.include = 'user,posts,posts.user,posts.likedUsers,firstPost,rewardedUsers,category';
-    //   let threads= 'threads/'+this.themeId;
-    //   this.apiStore.find(threads, params).then(data => {
-    //     this.themeCon = data;
-    //     this.themeShow = true;
-    //   });
-    // },
+
     //主题管理
     bindScreen: function () {
       //是否显示筛选内容
@@ -229,10 +208,7 @@ export default {
         this.detailsLoad();
       })
     },
-    //打赏
-    showRewardPopup: function () {
-      this.rewardShow = true;
-    },
+
     //跳转到回复页
     replyToJump: function (themeId, replyId, quoteCon) {
       this.$router.push({
@@ -241,70 +217,8 @@ export default {
         params: { themeId: themeId, replyQuote: quoteCon, replyId: replyId }
       })
     },
-    //打赏 生成订单
-    rewardPay(amount) {
-      this.appFetch({
-        url: "orderList",
-        method: "post",
-        data: {
-          "type": "2",
-          "thread_id": this.themeId,
-          "amount": amount
-        },
-      }).then(data => {
-        const orderSn = data.data.attributes.order_sn;
-        this.orderPay(orderSn, amount);
 
-      })
-    },
 
-    //打赏，生成订单成功后支付
-    orderPay(orderSn, amount) {
-      let isWeixin = this.appCommonH.isWeixin().isWeixin;
-      let isPhone = this.appCommonH.isWeixin().isPhone;
-      let payment_type = '';
-      if (isWeixin == true) {
-        //微信登录时
-        alert('微信支付');
-        // this.appFetch({
-        //   url:"weixin",
-        //   method:"get",
-        //   data:{
-        //   }
-        // }).then(data=>{
-        //   window.location.href = data.data.attributes.location;
-        // });
-        payment_type = "12";
-      } else if (isPhone == true) {
-        //手机浏览器登录时
-        payment_type = "11";
-      } else {
-        //pc登录
-        payment_type = "10";
-
-      }
-      let orderPay = 'trade/pay/order/' + orderSn;
-      this.appFetch({
-        url: orderPay,
-        method: "post",
-        data: {
-          'payment_type': payment_type
-        },
-      }).then(data => {
-        if (isWeixin) {
-          //如果是微信支付
-        } else if (isPhone) {
-          //如果是h5支付
-          window.location.href = data.data.attributes.wechat_h5_link;
-        } else {
-          //如果是pc支付
-          this.qrcodeShow = true;
-          this.amountNum = amount;
-          this.codeUrl = data.data.attributes.wechat_qrcode;
-        }
-
-      })
-    },
     onRefresh() {    //下拉刷新
       this.pageIndex = 1;
       this.detailsLoad(true).then(() => {
