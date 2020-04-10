@@ -19,9 +19,8 @@ use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\PostMod;
-use App\Models\User;
 use App\Models\Thread;
-use App\Notifications\Related;
+use App\Models\User;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
@@ -148,6 +147,15 @@ class PostListener
                 ->update(['post_id' => $post->id]);
         }
 
+        // 刷新主题回复数、最后一条回复
+        $thread = $post->thread;
+
+        if ($thread && $thread->exists) {
+            $thread->refreshPostCount();
+            $thread->refreshLastPost();
+            $thread->save();
+        }
+
         // 刷新被回复数
         if ($replyId = $post->reply_post_id) {
             // 回复以及修改、批量修改 全都刷新回复数
@@ -183,12 +191,13 @@ class PostListener
     }
 
     /**
-     * 隐藏主题时，记录操作
+     * 隐藏回复时
      *
      * @param Hidden $event
      */
     public function whenPostWasHidden(Hidden $event)
     {
+        // 记录操作日志
         OperationLog::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
 
         // 发送删除通知

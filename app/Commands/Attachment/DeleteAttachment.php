@@ -9,12 +9,13 @@ namespace App\Commands\Attachment;
 
 use App\Events\Attachment\Deleted;
 use App\Events\Attachment\Deleting;
+use App\Exceptions\TranslatorException;
 use App\Models\User;
 use App\Repositories\AttachmentRepository;
+use App\Tools\AttachmentUploadTool;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Str;
 
 class DeleteAttachment
 {
@@ -54,7 +55,15 @@ class DeleteAttachment
         $this->data = $data;
     }
 
-    public function handle(Dispatcher $events, AttachmentRepository $attachments)
+    /**
+     * @param Dispatcher $events
+     * @param AttachmentRepository $attachments
+     * @param AttachmentUploadTool $uploadTool
+     * @return \App\Models\Attachment
+     * @throws TranslatorException
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
+     */
+    public function handle(Dispatcher $events, AttachmentRepository $attachments, AttachmentUploadTool $uploadTool)
     {
         $this->events = $events;
 
@@ -67,21 +76,14 @@ class DeleteAttachment
         );
 
         $attachment->raise(new Deleted($attachment));
-        $attachment->delete();
 
         // 删除源文件
-        $filePath = storage_path('app/public/attachment/' . $attachment->attachment);
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
+        $result = $uploadTool->delete($attachment);
 
-        // 如果是帖子图片，删除有可能生成的缩略图
-        if ($attachment->is_gallery) {
-            $thumb = Str::replaceLast('.', '_thumb.', $filePath);
-
-            if (file_exists($thumb)) {
-                unlink($thumb);
-            }
+        if ($result) {
+            $attachment->delete();
+        } else {
+            throw new TranslatorException('post_attachment_delete_error');
         }
 
         $this->dispatchEventsFor($attachment, $this->actor);

@@ -12,4 +12,6 @@
 return [
     'post_not_fond' => '未查询到该条回复',
     'post_not_comment' => '不能回复，回复回帖的内容', // 点评
+
+    'post_attachment_delete_error' => '删除上传内容失败',
 ];
