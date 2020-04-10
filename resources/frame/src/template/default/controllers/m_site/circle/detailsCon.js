@@ -17,7 +17,7 @@ export default {
       themeShow: false,
       examineNum: 'qqqq',
       rewardNumList: [{
-        rewardNum: '0.01'
+        rewardNum: '0.1'
       },
       {
         rewardNum: '2'
