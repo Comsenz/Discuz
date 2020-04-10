@@ -93,7 +93,6 @@ class VerifyMobile
         $this->controller->serializer = UserSerializer::class;
         if ($this->actor->exists) {
             $this->actor->changeMobile($mobile);
-            $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();
             $this->mobileCode->user = $this->actor;
         }
@@ -114,7 +113,6 @@ class VerifyMobile
                 ->delete();
 
             $this->actor->changeMobile($mobile);
-            $this->actor->changeMobileActive(User::MOBILE_ACTIVE);
             $this->actor->save();
             $this->mobileCode->user = $this->actor;
         }

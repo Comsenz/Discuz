@@ -75,7 +75,6 @@ class UserSerializer extends AbstractSerializer
         if ($canEdit || $this->actor->id === $model->id) {
             $attributes += [
                 'originalMobile'    => $model->getRawOriginal('mobile'),
-                'mobileConfirmed'   => $model->mobile_confirmed,
                 'registerIp'        => $model->register_ip,
                 'lastLoginIp'       => $model->last_login_ip,
                 'identity'          => $model->identity,
