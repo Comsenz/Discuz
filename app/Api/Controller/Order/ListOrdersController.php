@@ -180,7 +180,7 @@ class ListOrdersController extends AbstractListController
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
         $order_user = (int) Arr::get($filter, 'user'); //订单所属用户
-        $status = Arr::get($filter, 'status'); //订单状态
+        $status = Arr::get($filter, 'status', ''); //订单状态
         $order_sn = Arr::get($filter, 'order_sn'); //订单编号
         $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
         $order_end_time = Arr::get($filter, 'end_time'); //订单创建结束时间

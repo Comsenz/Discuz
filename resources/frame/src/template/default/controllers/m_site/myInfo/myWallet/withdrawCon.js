@@ -217,12 +217,9 @@ export default {
           this.loading = false;
           // throw new Error(res.error)
         } else {
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          if (this.mobileConfirmed == true) {
-            this.$toast("提现申请已提交，请等待审核");
-            this.loading = false;
-            this.$router.push({ path: 'my-wallet' });  //提现成功后跳转到首页
-          }
+          this.$toast("提现申请已提交，请等待审核");
+          this.loading = false;
+          this.$router.push({ path: 'my-wallet' });  //提现成功后跳转到首页
           var phone = this.phone
           if (!phone) {
             this.$toast('请先绑定手机号')
