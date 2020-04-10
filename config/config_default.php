@@ -99,7 +99,7 @@ return [
             ],
             'attachment' => [
                 'driver' => 'local',
-                'root'   => storage_path('app/public/attachment'),
+                'root'   => storage_path('app'),
                 'url'    => 'attachment'
             ],
             'attachment_cos' => [

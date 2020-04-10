@@ -64,9 +64,12 @@ class AttachmentClearCommand extends AbstractCommand
                 $res = $this->filesystem->disk('attachment_cos')->delete($path);
                 $type = 'cos';
             } else {
-                $thumb = $attachment::replaceThumb($path);
                 $res = $this->filesystem->disk('attachment')->delete($path);
-                $this->filesystem->disk('attachment')->delete($thumb);
+                // 如果是帖子图片,删除本地缩略图
+                if ($attachment->is_gallery) {
+                    $thumb = $attachment::replaceThumb($path);
+                    $this->filesystem->disk('attachment')->delete($thumb);
+                }
                 $type = 'local';
             }
 
