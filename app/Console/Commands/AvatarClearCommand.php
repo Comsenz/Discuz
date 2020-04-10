@@ -12,7 +12,7 @@ use Discuz\Console\AbstractCommand;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
 
-class AvatarCleanCommand extends AbstractCommand
+class AvatarClearCommand extends AbstractCommand
 {
     protected $signature = 'clear:avatar';
 
