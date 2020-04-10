@@ -10,7 +10,6 @@ export default {
       rewardShow: false,
       themeCon: false,
       themeShow: false,
-      examineNum: 'qqqq',
       rewardNumList: [
         { rewardNum: '0.01' },
         { rewardNum: '2' },
