@@ -58,7 +58,7 @@ class MobileCode extends Model
      */
     protected static function genCode()
     {
-        return random_int(10000, 50000);
+        return random_int(100000, 999999);
     }
 
     public function user()
