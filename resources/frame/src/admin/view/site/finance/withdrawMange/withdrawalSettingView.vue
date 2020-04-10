@@ -1,7 +1,7 @@
 <template>
     <div class="withdrawal-setting-box">
       <Card header="提现间隔时间（天）">
-        <CardRow description="用户每次提现需间隔的时间，1天为24小时，0或不填则不限制">
+        <CardRow description="用户每次提现需间隔的时间，单位为天，0或不填则不限制">
           <el-input clearable type="number" v-model="withdrawalInterval"></el-input>
         </CardRow>
       </Card>
