@@ -51,7 +51,6 @@ class Bind
 
         if ($mobileCode) {
             $user->mobile = $mobile;
-            $user->mobile_confirmed = 1;
             $user->save();
         }
     }

@@ -30,7 +30,6 @@ use Illuminate\Support\Carbon;
  * @property string $pay_password
  * @property string $avatar
  * @property int $status
- * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
  * @property string $register_ip
@@ -61,8 +60,6 @@ class User extends Model
     use ScopeVisibilityTrait;
     use Notifiable;
 
-    const MOBILE_ACTIVE = true;
-
     /**
      * @var bool
      */
@@ -72,7 +69,6 @@ class User extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'mobile_confirmed' => 'boolean',
     ];
 
     /**
@@ -236,13 +232,6 @@ class User extends Model
     public function changeIdentity($identity)
     {
         $this->identity = $identity;
-
-        return $this;
-    }
-
-    public function changeMobileActive($active)
-    {
-        $this->mobile_confirmed = $active;
 
         return $this;
     }

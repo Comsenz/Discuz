@@ -22,7 +22,7 @@ class CreateThreads extends Migration
             $table->unsignedBigInteger('user_id')->nullable()->comment('创建用户 id');
             $table->unsignedBigInteger('last_posted_user_id')->nullable()->comment('最后回复用户 id');
             $table->integer('category_id')->unsigned()->nullable()->comment('分类 id');
-            $table->tinyInteger('type')->unsigned()->default(0)->comment('文章类型：0普通 1长文 2视频');
+            $table->tinyInteger('type')->unsigned()->default(0)->comment('类型：0普通 1长文 2视频 3图片');
             $table->string('title')->default('')->comment('标题');
             $table->decimal('price')->unsigned()->default(0)->comment('价格');
             $table->integer('post_count')->unsigned()->default(0)->comment('回复数');
