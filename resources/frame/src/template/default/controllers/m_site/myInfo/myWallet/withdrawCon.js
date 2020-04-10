@@ -213,7 +213,7 @@ export default {
       }).then(res => {
         this.loading = false;
         if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
+          this.$toast.fail(res.errors[0].detail[0]);
           this.loading = false;
           // throw new Error(res.error)
         } else {
