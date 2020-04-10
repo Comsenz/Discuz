@@ -10,10 +10,8 @@ namespace App\Api\Serializer;
 use App\Commands\Attachment\CreateAttachment;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Filesystem\CosAdapter;
 use Discuz\Http\UrlGenerator;
-use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
@@ -34,36 +32,16 @@ class AttachmentSerializer extends AbstractSerializer
      */
     protected $filesystem;
 
-    /*
-     * @var Filesystem
-     */
-    protected $cosFilesystem;
-
     /**
+     * AttachmentSerializer constructor.
      * @param UrlGenerator $url
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(UrlGenerator $url, Filesystem $filesystem, SettingsRepository $settings)
     {
         $this->url = $url;
         $this->filesystem = $filesystem;
-
-        $qcloud = $settings->tag('qcloud');
-        $config = app('config')->get('filesystems.disks.cos');
-
-        $config['region'] = Arr::get($qcloud, 'qcloud_cos_bucket_area');
-        $config['bucket'] = Arr::get($qcloud, 'qcloud_cos_bucket_name');
-        $config['ciurl'] = Arr::get($qcloud, 'qcloud_ci_url', '');
-
-        $config['credentials'] = [
-            'secretId'  => Arr::get($qcloud, 'qcloud_secret_id'),  //"云 API 密钥 SecretId";
-            'secretKey' => Arr::get($qcloud, 'qcloud_secret_key'), //"云 API 密钥 SecretKey";
-            'token' => ''
-        ];
-
-        $this->cosFilesystem = new \League\Flysystem\Filesystem(new CosAdapter($config));
     }
 
     /**
@@ -73,9 +51,7 @@ class AttachmentSerializer extends AbstractSerializer
     {
         $path = $model->file_path . '/' . $model->attachment;
 
-        $url = $model->is_remote
-            ? $this->cosFilesystem->getAdapter()->getUrl($path)
-            : $this->url->to(str_replace('public', '/storage', $path));
+        $url = $this->filesystem->disk($model->is_remote ? 'attachment_cos' : 'attachment')->url($path);
 
         $fixWidth = CreateAttachment::FIX_WIDTH;
 

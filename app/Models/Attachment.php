@@ -157,6 +157,17 @@ class Attachment extends Model
     }
 
     /**
+     * 获取替换缩略图名称
+     *
+     * @param $imgPath
+     * @return string
+     */
+    public static function replaceThumb($imgPath)
+    {
+        return Str::replaceLast('.', '_thumb.', $imgPath);
+    }
+
+    /**
      * Define the relationship with the attachment's author.
      *
      * @return BelongsTo
