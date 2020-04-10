@@ -25,7 +25,7 @@
       <p class="pending-p">
         等待审核的用户数
         <router-link
-          to="/admin/withdrawal-application"
+          to="admin/user-review"
           style="color: #336699;"
         >(&nbsp;{{siteInfo.unapprovedUsers}}&nbsp;)</router-link>
       </p>
