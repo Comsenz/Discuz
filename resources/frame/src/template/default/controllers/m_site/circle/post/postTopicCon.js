@@ -171,34 +171,45 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          var ImgExt = '';
-          if (res.readdata._data.set_attach.support_img_ext) {
-            ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
-            var ImgStr = '';
-            var imgStrRes = '';
-            for (var k = 0; k < ImgExt.length; k++) {
-              ImgStr = '.' + ImgExt[k] + ',';
-              imgStrRes = '.' + ImgExt[k] + ',';
-              this.supportImgExt += ImgStr;
-              this.supportImgExtRes += imgStrRes;
-            }
-            this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
-            this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
+          if (res.readdata._data.set_attach.support_img_ext == '' || res.readdata._data.set_attach.support_img_ext == null) {
+            this.supportImgExt = '';
+            this.supportImgExtRes = ''
           } else {
-            ImgExt = '*';
+            var ImgExt = '';
+            if (res.readdata._data.set_attach.support_img_ext) {
+              ImgExt = res.readdata._data.set_attach.support_img_ext.split(',');
+              var ImgStr = '';
+              var imgStrRes = '';
+              for (var k = 0; k < ImgExt.length; k++) {
+                ImgStr = '.' + ImgExt[k] + ',';
+                imgStrRes = '.' + ImgExt[k] + ',';
+                this.supportImgExt += ImgStr;
+                this.supportImgExtRes += imgStrRes;
+              }
+              this.supportImgExtRes = 'image/*,' + this.supportImgExtRes;
+              this.supportImgExtRes = this.supportImgExtRes.substring(0, this.supportImgExtRes.length - 1);
+            } else {
+              ImgExt = '*';
+            }
           }
 
-          var fileExt = '';
-          if (res.readdata._data.set_attach.support_file_ext) {
-            fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
-            var fileStr = '';
-            for (var k = 0; k < fileExt.length; k++) {
-              fileStr = '.' + fileExt[k] + ',';
-              this.supportFileExt += fileStr;
-            }
+          if (res.readdata._data.set_attach.support_file_ext == '' || res.readdata._data.set_attach.support_img_ext == null) {
+            this.supportFileExt = '';
+            this.supportFileExtRes = ''
           } else {
-            fileExt = '*';
+            var fileExt = '';
+            if (res.readdata._data.set_attach.support_file_ext) {
+              fileExt = res.readdata._data.set_attach.support_file_ext.split(',');
+              var fileStr = '';
+              for (var k = 0; k < fileExt.length; k++) {
+                fileStr = '.' + fileExt[k] + ',';
+                this.supportFileExt += fileStr;
+              }
+            } else {
+              fileExt = '*';
+            }
           }
+
           this.canUploadImages = res.readdata._data.other.can_upload_images;
           this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
         }
