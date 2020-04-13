@@ -68,8 +68,12 @@ class RegisterWechatMiniProgramUser
         // 敏感词校验
         try {
             $censor->checkText(Arr::get($this->data, 'username'), 'username');
+            $user = User::where('username', Arr::get($this->data, 'username'))->first();
+            if ($user) {
+                throw new CensorNotPassedException();
+            }
         } catch (CensorNotPassedException $e) {
-            $this->data['username'] = '网友' . Str::random(6);
+            $this->data['username'] = $this->getNewUsername();
         }
 
         // 审核模式，设置注册为审核状态
@@ -83,9 +87,7 @@ class RegisterWechatMiniProgramUser
             $this->data['expired_at'] = Carbon::now();
         }
 
-        //Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason', 'status'])
-        $user = User::register($this->data);
-
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason', 'status']));
 
         $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)
@@ -98,5 +100,16 @@ class RegisterWechatMiniProgramUser
         $this->dispatchEventsFor($user, $this->actor);
 
         return $user;
+    }
+
+
+    private function getNewUsername()
+    {
+        $username = '网友' . Str::random(6);
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            return $this->getNewUsername();
+        }
+        return $username;
     }
 }
