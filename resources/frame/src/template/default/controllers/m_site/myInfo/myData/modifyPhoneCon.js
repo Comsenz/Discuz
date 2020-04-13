@@ -147,11 +147,11 @@ export default {
         } else {
           this.sms = '';
           this.modifyState = !this.modifyState;
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed
-          if (this.mobileConfirmed == true) {
-            this.$toast("手机号验证成功");
-            this.$router.push({ path: '/bind-new-phone' });
-          }
+          // this.mobileConfirmed = res.readdata._data.mobileConfirmed
+          // if (this.mobileConfirmed == true) {
+          this.$toast("手机号验证成功");
+          this.$router.push({ path: '/bind-new-phone' });
+          // }
         }
       })
       // .catch((err) => {
@@ -226,11 +226,11 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          if (this.mobileConfirmed == true) {
-            this.$toast("手机号修改成功");
-            this.$router.push({ path: '../view/m_site/home/circleView' });
-          }
+          // this.mobileConfirmed = res.readdata._data.mobileConfirmed;
+          // if (this.mobileConfirmed == true) {
+          this.$toast("手机号修改成功");
+          this.$router.push({ path: '../view/m_site/home/circleView' });
+          // }
         }
       })
       // .catch((err)=>{
