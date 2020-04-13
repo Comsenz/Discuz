@@ -105,7 +105,7 @@ class RegisterWechatMiniProgramUser
 
     private function getNewUsername()
     {
-        $username = '网友' . Str::random(6);
+        $username = trans('validation.attributes.username_prefix') . Str::random(6);
         $user = User::where('username', $username)->first();
         if ($user) {
             return $this->getNewUsername();
