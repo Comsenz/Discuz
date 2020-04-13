@@ -163,6 +163,7 @@ class CreateAttachment
         }
 
         // 检测敏感图
+        $this->isApproved = 1;
         if (Str::before($this->file->getClientMediaType(), '/') == 'image') {
             $filePathName = Arr::get($uploadFile, $isRemote ? 'url' : 'path');
 
