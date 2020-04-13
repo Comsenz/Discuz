@@ -59,6 +59,7 @@ class AttachmentSerializer extends AbstractSerializer
             'order'             => $model->order,
             'isGallery'         => $model->is_gallery,
             'isRemote'          => $model->is_remote,
+            'isApproved'        => $model->is_approved,
             'url'               => $url,
             'attachment'        => $model->attachment,
             'extension'         => Str::afterLast($model->attachment, '.'),
