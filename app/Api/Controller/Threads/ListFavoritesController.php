@@ -7,6 +7,7 @@
 
 namespace App\Api\Controller\Threads;
 
+use App\Models\Order;
 use App\Models\Thread;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
@@ -68,7 +69,7 @@ class ListFavoritesController extends ListThreadsController
         // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $include)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
-            $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+            $threads = $this->loadRewardedUsers($threads, $rewardedLimit, Order::ORDER_TYPE_REWARD);
         }
 
         // 加载其他关联

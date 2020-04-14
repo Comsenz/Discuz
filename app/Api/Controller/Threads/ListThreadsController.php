@@ -57,6 +57,7 @@ class ListThreadsController extends AbstractListController
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
         'rewardedUsers',
+        'paidUsers',
         'lastDeletedLog',
     ];
 
@@ -159,7 +160,13 @@ class ListThreadsController extends AbstractListController
         // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $include)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
-            $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+            $threads = $this->loadRewardedUsers($threads, $rewardedLimit, Order::ORDER_TYPE_REWARD);
+        }
+
+        // 特殊关联：付费用户
+        if (in_array('paidUsers', $include)) {
+            $paidLimit = Arr::get($filter, 'paidLimit', 10);
+            $threads = $this->loadRewardedUsers($threads, $paidLimit, Order::ORDER_TYPE_THREAD);
         }
 
         // 特殊关联：最后一次删除的日志
@@ -468,9 +475,10 @@ class ListThreadsController extends AbstractListController
      *
      * @param Collection $threads
      * @param $limit
+     * @param int $type
      * @return Collection
      */
-    protected function loadRewardedUsers(Collection $threads, $limit)
+    protected function loadRewardedUsers(Collection $threads, $limit, $type)
     {
         $threadIds = $threads->pluck('id');
 
@@ -478,6 +486,7 @@ class ListThreadsController extends AbstractListController
             ->whereRaw($this->tablePrefix . 'a.`type` = `type`')
             ->whereRaw($this->tablePrefix . 'a.`status` = `status`')
             ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`is_anonymous` = `is_anonymous`')
             ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
@@ -487,13 +496,19 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('a.type', Order::ORDER_TYPE_REWARD)
+            ->where('a.type', $type)
+            ->where('a.is_anonymous', Order::ORDER_NOT_ANONYMOUS)
             ->orderBy('a.created_at', 'desc')
             ->orderBy('a.id', 'desc')
             ->get();
 
-        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit) {
-            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id)->take($limit));
+        if ($type == Order::ORDER_TYPE_REWARD) {
+            $relationName = 'rewardedUsers';
+        } elseif ($type == Order::ORDER_TYPE_THREAD) {
+            $relationName = 'paidUsers';
+        }
+        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relationName) {
+            $thread->setRelation($relationName, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
         });
 
         return $threads;

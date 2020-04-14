@@ -31,8 +31,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserWechat extends Model
 {
-    protected $fillable = ['user_id', 'mp_openid','dev_openid','min_openid','nickname','sex', 'city', 'headimgurl', 'unionid'];
+    protected $fillable = ['user_id', 'mp_openid','dev_openid','min_openid','nickname','sex', 'city', 'province', 'headimgurl', 'unionid'];
 
+    public static function build(array $data)
+    {
+        $userWechat = new static;
+        $userWechat->attributes = $data;
+        return $userWechat;
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -59,6 +59,7 @@ class CreateOrder
         $this->assertCan($this->actor, 'order.create');
 
         $validator_info = $validator->make($this->data->toArray(), [
+            'is_anonymous'      => 'filled|int',
             'type'      => 'required|int',
             'thread_id' => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
             'amount'    => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
@@ -128,6 +129,9 @@ class CreateOrder
             throw new OrderException('order_amount_error');
         }
 
+        //是否匿名
+        $is_anonymous = (int) $this->data->get('is_anonymous');
+
         // 支付编号
         $payment_sn = $this->getPaymentSn();
 
@@ -145,6 +149,7 @@ class CreateOrder
         $order->type       = $orderType;
         $order->thread_id  = isset($thread) ? $thread->id : null;
         $order->payee_id   = $payeeId;
+        $order->is_anonymous   = $is_anonymous > 0 ? 1 : 0;
         $order->status     = 0; //待支付
 
         //开始事务

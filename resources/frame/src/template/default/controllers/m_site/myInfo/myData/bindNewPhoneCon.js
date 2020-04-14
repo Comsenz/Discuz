@@ -172,11 +172,11 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          if (this.mobileConfirmed == true) {
-            this.$toast("手机号绑定成功");
-            this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
-          }
+          // this.mobileConfirmed = res.readdata._data.mobileConfirmed;
+          // if (this.mobileConfirmed == true) {
+          this.$toast("手机号绑定成功");
+          this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
+          // }
         }
 
       }).catch((err) => {

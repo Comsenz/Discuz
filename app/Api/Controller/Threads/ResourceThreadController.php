@@ -66,6 +66,7 @@ class ResourceThreadController extends AbstractResourceController
         'firstPost.likedUsers',
         'posts.likedUsers',
         'rewardedUsers',
+        'paidUsers',
     ];
 
     /**
@@ -146,11 +147,22 @@ class ResourceThreadController extends AbstractResourceController
                 ->where('thread_id', $thread->id)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->where('type', Order::ORDER_TYPE_REWARD)
+                ->where('is_anonymous', Order::ORDER_NOT_ANONYMOUS)
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'desc')
                 ->get();
 
             $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user')->filter());
+        }
+
+        // 特殊关联：打赏的人
+        if (in_array('rewardedUsers', $include)) {
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_REWARD);
+        }
+
+        // 特殊关联：付费用户
+        if (in_array('paidUsers', $include)) {
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_THREAD);
         }
 
         // 主题关联模型
@@ -213,5 +225,28 @@ class ResourceThreadController extends AbstractResourceController
         }
 
         return $relationships;
+    }
+
+    /**
+     * @param $thread
+     * @param $type
+     */
+    private function loadOrderUsers(Thread $thread, $type)
+    {
+        $allRewardedUser = Order::with('user')
+            ->where('thread_id', $thread->id)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->where('type', $type)
+            ->where('is_anonymous', Order::ORDER_NOT_ANONYMOUS)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        if ($type == Order::ORDER_TYPE_REWARD) {
+            $relationName = 'rewardedUsers';
+        } elseif ($type == Order::ORDER_TYPE_THREAD) {
+            $relationName = 'paidUsers';
+        }
+        $thread->setRelation($relationName, $allRewardedUser->pluck('user')->filter());
     }
 }

@@ -305,7 +305,7 @@ export default {
       }).then((res) => {
         if (res.errors) {
           this.loading = false;
-          this.$toast.fail(res.errors[0].code);
+          this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
           throw new Error(res.error)
         } else {
           this.$router.replace({ path: '/details' + '/' + this.themeId });
