@@ -478,6 +478,7 @@ class ListThreadsController extends AbstractListController
             ->whereRaw($this->tablePrefix . 'a.`type` = `type`')
             ->whereRaw($this->tablePrefix . 'a.`status` = `status`')
             ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`is_anonymous` = `is_anonymous`')
             ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
@@ -488,6 +489,7 @@ class ListThreadsController extends AbstractListController
             ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
             ->where('a.type', Order::ORDER_TYPE_REWARD)
+            ->where('a.is_anonymous', Order::ORDER_NOT_ANONYMOUS)
             ->orderBy('a.created_at', 'desc')
             ->orderBy('a.id', 'desc')
             ->get();
