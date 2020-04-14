@@ -502,8 +502,13 @@ class ListThreadsController extends AbstractListController
             ->orderBy('a.id', 'desc')
             ->get();
 
-        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit) {
-            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id)->take($limit));
+        if ($type == Order::ORDER_TYPE_REWARD) {
+            $relationName = 'rewardedUsers';
+        } elseif ($type == Order::ORDER_TYPE_THREAD) {
+            $relationName = 'rewardedUsers';
+        }
+        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relationName) {
+            $thread->setRelation($relationName, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
         });
 
         return $threads;
