@@ -66,6 +66,7 @@ class ResourceThreadController extends AbstractResourceController
         'firstPost.likedUsers',
         'posts.likedUsers',
         'rewardedUsers',
+        'paidUsers',
     ];
 
     /**
