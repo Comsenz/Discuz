@@ -47,11 +47,11 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
                 'site_url' => $this->settings->get('site_url'),
-                'site_icp' => $this->settings->get('site_icp') ?: '',
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
                 'site_record' => $this->settings->get('site_record'),
+                'site_cover' => $this->settings->get('site_cover') ?: '',
             ],
 
             // 注册设置

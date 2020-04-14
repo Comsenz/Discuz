@@ -9,8 +9,10 @@ namespace App\Providers;
 
 use App\Models\SessionToken;
 use App\Models\UserWechat;
+use App\SpecialChar\SpecialChar;
 use App\User\UserWechatObserver;
 use Discuz\Foundation\AbstractServiceProvider;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Contracts\Validation\Factory as Validator;
 
@@ -23,6 +25,9 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
      */
     public function register()
     {
+        $this->app->singleton(SpecialCharServer::class, function ($app) {
+            return new SpecialChar($app);
+        });
     }
 
     /**

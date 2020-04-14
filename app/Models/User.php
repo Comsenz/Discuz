@@ -34,6 +34,8 @@ use Illuminate\Support\Carbon;
  * @property string $last_login_ip
  * @property string $register_ip
  * @property string $register_reason
+ * @property string $signature
+ * @property string $username_bout
  * @property int $thread_count
  * @property int $follow_count
  * @property int $fans_count
@@ -239,6 +241,23 @@ class User extends Model
     public function changeUpdateAt()
     {
         $this->updated_at = Carbon::now();
+
+        return $this;
+    }
+
+    public function changeUsername($username)
+    {
+        $this->username = $username;
+
+        // 修改次数+1
+        $this->username_bout += 1;
+
+        return $this;
+    }
+
+    public function changeSignature($signature)
+    {
+        $this->signature = $signature;
 
         return $this;
     }

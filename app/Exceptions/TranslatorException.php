@@ -9,6 +9,7 @@ namespace App\Exceptions;
 
 use Discuz\Locale\AbstractLocaleException;
 use Exception;
+use Illuminate\Support\Arr;
 
 /**
  * 本地化语言包 - 捕获异常
@@ -23,6 +24,8 @@ class TranslatorException extends AbstractLocaleException
     {
         $this->message = $message;
 
+        $this->code = $code;
+
         $this->handle(func_get_args());
 
         parent::__construct($message, $code, $previous);
@@ -35,13 +38,20 @@ class TranslatorException extends AbstractLocaleException
         }
         $app = app('translator');
 
-        $this->detail = collect($args)->filter(function ($value) {
-            if (is_array($value)) {
-                return true;
-            }
-        })->flatten()->map(function ($item) use ($app) {
-            return $app->get($this->getLocaleName() . '.' . $item);
-        })->toArray();
+        /**
+         * @see TranslatorExceptionHandler
+         */
+        if (count($args) == 1) {
+            $this->detail = Arr::wrap($app->get($this->getLocaleName() . '.' . $this->message));
+        } else {
+            $this->detail = collect($args)->filter(function ($value) {
+                if (is_array($value)) {
+                    return true;
+                }
+            })->flatten()->map(function ($item) use ($app) {
+                return $app->get($this->getLocaleName() . '.' . $item);
+            })->toArray();
+        }
     }
 
     /**
@@ -52,5 +62,15 @@ class TranslatorException extends AbstractLocaleException
     public function getDetail() : array
     {
         return $this->detail;
+    }
+
+    /**
+     * 错误信息
+     *
+     * @return string
+     */
+    public function getMessageInfo() : string
+    {
+        return $this->message;
     }
 }
