@@ -52,6 +52,7 @@ class UserSerializer extends AbstractSerializer
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
+            'liked_count'         => (int) $model->liked_count,
             'follow'            => $model->follow,
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
