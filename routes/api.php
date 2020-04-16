@@ -139,6 +139,7 @@ $route->delete('/categories/{id}', 'categories.delete', ApiController\Category\D
 $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesController::class);
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/share/{id}', 'threads.share', ApiController\Threads\ShareThreadController::class);
+$route->get('/threads/likes', 'threads.likes', ApiController\Threads\ListLikesController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/batch', 'threads.batchUpdate', ApiController\Threads\BatchUpdateThreadsController::class);
@@ -146,7 +147,6 @@ $route->patch('/threads/{id}', 'threads.update', ApiController\Threads\UpdateThr
 $route->delete('/threads/batch/{ids}', 'threads.batchDelete', ApiController\Threads\BatchDeleteThreadsController::class);
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->post('/threads/notify/video', 'threads.notify.video', ApiController\Threads\Notify\ThreadVideoNotifyController::class);
-
 /*
 |--------------------------------------------------------------------------
 | Posts
@@ -267,3 +267,16 @@ $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\S
 $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowController::class);
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Dialog
+|--------------------------------------------------------------------------
+*/
+$route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
+$route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
+$route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
+$route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
+$route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
+
