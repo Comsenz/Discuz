@@ -90,6 +90,37 @@ class PostListener
     }
 
     /**
+     * 判断用户是否发表内容时是否@其他人
+     *
+     * @param Created $event
+     */
+    public function RelatedPost(Created $event)
+    {
+        // 判断帖子合法 再发送通知
+        if ($event->post->is_approved == Post::APPROVED) {
+            $post = $event->post;
+            $post_content = $post->content;
+            $actor = $event->actor;
+
+            // 过滤多空格，转化HTML代码
+            $post_content = preg_replace(['/(\s+)/', '/@/', '/</', '/>/'], [' ', ' @', '&lt;', '&gt;'], $post_content);
+
+            // 用户正则 格式：@名字[空格]
+            $user_pattern = "/@([^\r\n]*?)[:|：|，|,|#|\s]/i";
+
+            // 提取用户
+            preg_match_all($user_pattern, $post_content, $userArr);
+
+            if (!empty($userArr[1])) {
+                $relatedIds = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
+                foreach ($relatedIds as $relatedId) {
+                    $relatedId->notify(new Related($post));
+                }
+            }
+        }
+    }
+
+    /**
      * 绑定附件 & 刷新被回复数
      *
      * @param Saved $event
@@ -242,10 +273,12 @@ class PostListener
         }
     }
 
-    //@
-    public function userMentions(Saved $event) {
-
-        if($event->post->is_approved !== Thread::APPROVED) {
+    /**
+     * @param Saved $event
+     */
+    public function userMentions(Saved $event)
+    {
+        if ($event->post->is_approved !== Thread::APPROVED) {
             return;
         }
 
@@ -255,9 +288,8 @@ class PostListener
 
         User::whereIn('id', $mentioned)
             ->get()
-            ->each(function(User $user) use ($event) {
+            ->each(function (User $user) use ($event) {
                 $user->notify(new Related($event->post));
             });
     }
-
 }
