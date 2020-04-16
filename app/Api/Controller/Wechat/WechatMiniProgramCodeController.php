@@ -51,6 +51,7 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
     {
         $data = Arr::get($request->getParsedBody(), 'data', []);
 
+        $path = Arr::get($data, 'attributes.path', 'path/to/page');
         $width = Arr::get($data, 'attributes.width', '');
         $colorR = Arr::get($data, 'attributes.color.r', '');
         $colorG = Arr::get($data, 'color.g', '');
@@ -63,7 +64,7 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
 
         $app = $this->easyWechat::miniProgram($config);
 
-        return $app->app_code->get('path/to/page', [
+        return $app->app_code->get($path, [
             'width' => $width,
             'line_color' => [
                 'r' => $colorR,

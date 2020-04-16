@@ -21,6 +21,7 @@ use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
+use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
@@ -110,8 +111,7 @@ class PostListener
             if (!empty($userArr[1])) {
                 $relatedIds = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
                 foreach ($relatedIds as $relatedId) {
-                    // Fixme 调用Related和@的人对应不上接不到通知
-                    // $relatedId->notify(new Related($post));
+                    $relatedId->notify(new Related($post));
                 }
             }
         }
