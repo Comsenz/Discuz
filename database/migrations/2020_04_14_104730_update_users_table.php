@@ -15,6 +15,7 @@ class UpdateUsersTable extends Migration
         $this->schema()->table('users', function (Blueprint $table) {
             $table->integer('username_bout')->unsigned()->default(0)->comment('用户名修改次数')->after('register_reason');
             $table->string('signature')->default('')->comment('签名')->after('mobile_confirmed');
+            $table->dropColumn('mobile_confirmed');
         });
     }
 
