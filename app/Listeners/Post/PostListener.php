@@ -21,12 +21,14 @@ use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
+use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use s9e\TextFormatter\Utils;
 
 class PostListener
 {
@@ -36,7 +38,6 @@ class PostListener
     {
         // 发表回复
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
-        $events->listen(Created::class, [$this, 'RelatedPost']);
 
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
@@ -56,6 +57,9 @@ class PostListener
 
         // 添加完数据后
         $events->listen(Saved::class, [$this, 'whenPostWasSaved']);
+
+        // @
+        $events->listen(Saved::class, [$this, 'userMentions']);
     }
 
     /**
@@ -81,38 +85,6 @@ class PostListener
                 && $post->reply_user_id != $post->thread->user_id
             ) {
                 $post->replyUser->notify(new Replied($post));
-            }
-        }
-    }
-
-    /**
-     * 判断用户是否发表内容时是否@其他人
-     *
-     * @param Created $event
-     */
-    public function RelatedPost(Created $event)
-    {
-        // 判断帖子合法 再发送通知
-        if ($event->post->is_approved == Post::APPROVED) {
-            $post = $event->post;
-            $post_content = $post->content;
-            $actor = $event->actor;
-
-            // 过滤多空格，转化HTML代码
-            $post_content = preg_replace(['/(\s+)/', '/@/', '/</', '/>/'], [' ', ' @', '&lt;', '&gt;'], $post_content);
-
-            // 用户正则 格式：@名字[空格]
-            $user_pattern = "/@([^\r\n]*?)[:|：|，|,|#|\s]/i";
-
-            // 提取用户
-            preg_match_all($user_pattern, $post_content, $userArr);
-
-            if (!empty($userArr[1])) {
-                $relatedIds = User::whereIn('username', $userArr[1])->where('id', '!=', $actor->id)->get();
-                foreach ($relatedIds as $relatedId) {
-                    // Fixme 调用Related和@的人对应不上接不到通知
-                    // $relatedId->notify(new Related($post));
-                }
             }
         }
     }
@@ -268,6 +240,24 @@ class PostListener
                 $event->post->user->notify(new System(WechatPostMessage::class, $build));
             }
         }
+    }
+
+    //@
+    public function userMentions(Saved $event) {
+
+        if($event->post->is_approved !== Thread::APPROVED) {
+            return;
+        }
+
+        $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');
+
+        $event->post->mentionUsers()->sync($mentioned);
+
+        User::whereIn('id', $mentioned)
+            ->get()
+            ->each(function(User $user) use ($event) {
+                $user->notify(new Related($event->post));
+            });
     }
 
 }
