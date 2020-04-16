@@ -9,6 +9,7 @@ namespace App\Listeners\Post;
 
 use App\Events\Post\Deleted;
 use App\Events\Post\Saving;
+use App\Events\Users\UserLikedCount;
 use App\Notifications\Liked;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -68,6 +69,10 @@ class SaveLikesToDatabase
                     }
                 }
             }
+
+            //刷新用户点赞数
+            $actor->refreshUserLiked();
+            $actor->save();
         }
     }
 

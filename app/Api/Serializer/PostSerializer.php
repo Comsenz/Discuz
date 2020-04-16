@@ -169,4 +169,9 @@ class PostSerializer extends AbstractSerializer
     {
         return $this->hasOne($post, OperationLogSerializer::class);
     }
+
+
+    public function mentionUsers($post) {
+        return $this->hasMany($post, UserSerializer::class);
+    }
 }

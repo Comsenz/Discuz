@@ -21,7 +21,7 @@ class UserListener
 {
     public function subscribe(Dispatcher $events)
     {
-        // 刷新分类数
+        // 刷新主题数
         $events->listen(UserRefreshCount::class, [$this, 'refreshCount']);
 
         // 刷新用户关注数粉丝数
