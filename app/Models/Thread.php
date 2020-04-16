@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $category_id
  * @property string $title
  * @property float $price
+ * @property int $free_words
  * @property int $post_count
  * @property int $view_count
  * @property int $favorite_count
@@ -59,6 +60,8 @@ class Thread extends Model
      */
     protected $casts = [
         'type' => 'integer',
+        'price' => 'decimal:2',
+        'free_words' => 'integer',
         'is_sticky' => 'boolean',
         'is_essence' => 'boolean',
     ];
