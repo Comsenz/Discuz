@@ -28,6 +28,7 @@ use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use s9e\TextFormatter\Utils;
 
 class PostListener
 {
@@ -37,7 +38,6 @@ class PostListener
     {
         // 发表回复
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
-        $events->listen(Created::class, [$this, 'RelatedPost']);
 
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
@@ -57,6 +57,9 @@ class PostListener
 
         // 添加完数据后
         $events->listen(Saved::class, [$this, 'whenPostWasSaved']);
+
+        // @
+        $events->listen(Saved::class, [$this, 'userMentions']);
     }
 
     /**
@@ -268,6 +271,24 @@ class PostListener
                 $event->post->user->notify(new System(WechatPostMessage::class, $build));
             }
         }
+    }
+
+    //@
+    public function userMentions(Saved $event) {
+
+        if($event->post->is_approved !== Thread::APPROVED) {
+            return;
+        }
+
+        $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');
+
+        $event->post->mentionUsers()->sync($mentioned);
+
+        User::whereIn('id', $mentioned)
+            ->get()
+            ->each(function(User $user) use ($event) {
+                $user->notify(new Related($event->post));
+            });
     }
 
 }

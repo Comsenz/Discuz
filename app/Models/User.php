@@ -39,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property int $thread_count
  * @property int $follow_count
  * @property int $fans_count
+ * @property int $liked_count
  * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
@@ -395,6 +396,39 @@ class User extends Model
         return false;
     }
 
+    /**
+     * 刷新用户关注数
+     * @return $this
+     */
+    public function refreshUserFollow()
+    {
+        $this->follow_count = $this->userFollow()->count();
+        return $this;
+    }
+
+    /**
+     * 刷新用户粉丝数
+     * @return $this
+     */
+    public function refreshUserFans()
+    {
+        $this->fans_count = $this->userFans()->count();
+        return $this;
+    }
+
+    /**
+     * 刷新用户点赞主题数
+     * @return $this
+     */
+    public function refreshUserLiked()
+    {
+        $this->liked_count = $this->postUser()
+            ->join('posts', 'post_user.post_id', '=', 'posts.id')
+            ->where('posts.is_first', true)
+            ->count();
+        return $this;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | 关联模型
@@ -518,18 +552,10 @@ class User extends Model
         return $this->hasMany(UserFollow::class, 'to_user_id');
     }
 
-    public function refreshUserFollow()
+    public function postUser()
     {
-        $this->follow_count = $this->userFollow()->count();
-        return $this;
+        return $this->hasMany(PostUser::class);
     }
-
-    public function refreshUserFans()
-    {
-        $this->fans_count = $this->userFans()->count();
-        return $this;
-    }
-
     /*
     |--------------------------------------------------------------------------
     | 权限验证

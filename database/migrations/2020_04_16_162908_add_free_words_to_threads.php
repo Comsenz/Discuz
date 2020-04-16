@@ -8,7 +8,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddOrderToAttachments extends Migration
+class AddFreeWordsToThreads extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,8 @@ class AddOrderToAttachments extends Migration
      */
     public function up()
     {
-        $this->schema()->table('attachments', function (Blueprint $table) {
-            $table->unsignedTinyInteger('order')->default(0)->after('post_id')->comment('附件排序');
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->unsignedTinyInteger('free_words')->default(0)->after('price')->comment('付费主题可免费阅读字数');
         });
     }
 
@@ -29,8 +29,8 @@ class AddOrderToAttachments extends Migration
      */
     public function down()
     {
-        $this->schema()->table('attachments', function (Blueprint $table) {
-            $table->dropColumn('order');
+        $this->schema()->table('threads', function (Blueprint $table) {
+            $table->dropColumn('free_words');
         });
     }
 }

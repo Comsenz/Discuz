@@ -7,8 +7,6 @@
 
 namespace App\Providers;
 
-use App\Events\Users\Saving;
-use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\UserListener;
 use App\User\AvatarUploader;
 use App\User\UserWechatObserver;

@@ -23,6 +23,7 @@ class CreateUsers extends Migration
             $table->string('password', 100)->comment('密码');
             $table->string('pay_password', 100)->default('')->comment('支付密码');
             $table->string('mobile', 20)->default('')->comment('手机号');
+            $table->tinyInteger('mobile_confirmed')->unsigned()->default(0)->comment('手机号是否验证');
             $table->ipAddress('last_login_ip')->default('')->comment('最后登录 ip 地址');
             $table->ipAddress('register_ip')->default('')->comment('注册ip');
             $table->string('register_reason', 50)->default('')->comment('注册原因');

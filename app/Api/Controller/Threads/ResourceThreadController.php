@@ -67,6 +67,8 @@ class ResourceThreadController extends AbstractResourceController
         'posts.likedUsers',
         'rewardedUsers',
         'paidUsers',
+        'posts.mentionUsers',
+        'firstPost.mentionUsers',
     ];
 
     /**
@@ -135,9 +137,7 @@ class ResourceThreadController extends AbstractResourceController
         $thread->increment('view_count');
 
         // 帖子及其关联模型
-        if (in_array('posts', $include)) {
-            $postRelationships = $this->getPostRelationships($include);
-
+        if (($postRelationships = $this->getPostRelationships($include)) || in_array('posts', $include)) {
             $this->includePosts($thread, $request, $postRelationships);
         }
 
