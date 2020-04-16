@@ -273,10 +273,12 @@ class PostListener
         }
     }
 
-    //@
-    public function userMentions(Saved $event) {
-
-        if($event->post->is_approved !== Thread::APPROVED) {
+    /**
+     * @param Saved $event
+     */
+    public function userMentions(Saved $event)
+    {
+        if ($event->post->is_approved !== Thread::APPROVED) {
             return;
         }
 
@@ -286,9 +288,8 @@ class PostListener
 
         User::whereIn('id', $mentioned)
             ->get()
-            ->each(function(User $user) use ($event) {
+            ->each(function (User $user) use ($event) {
                 $user->notify(new Related($event->post));
             });
     }
-
 }
