@@ -56,7 +56,7 @@ class OrderSubscriber
         if ($order->type == Order::ORDER_TYPE_THREAD && $order->status == Order::ORDER_STATUS_PAID) {
             $thread = Thread::where('id', $order->thread_id)->first();
             if ($thread) {
-                $thread->refreshPostCount();
+                $thread->refreshPaidCount();
                 $thread->save();
             }
         }
