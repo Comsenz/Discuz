@@ -21,13 +21,12 @@ class NotificationSerializer extends AbstractSerializer
 
     public function getDefaultAttributes($model)
     {
-        $result = [
+        $result = array_merge([
             'id'            => $model->id,
             'user_id'       => $model->notifiable_id,
-            'type'          => $model->type,
             'read_at'       => $this->formatDate($model->read_at),
             'created_at'    => $this->formatDate($model->created_at),
-        ];
+        ], $model->data);
 
         if (Arr::get($model, 'have_thread', false)) {
             $result = array_merge($result, [
@@ -36,7 +35,7 @@ class NotificationSerializer extends AbstractSerializer
                 'user_name' => $model->username,
                 'user_avatar' => $model->avatar,
                 'content' => $model->content,
-                'thread_created_at' => $model->thread_created_at,
+                'thread_created_at' => $this->formatDate($model->thread_created_at),
             ]);
         }
 

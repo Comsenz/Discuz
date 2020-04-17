@@ -155,7 +155,7 @@ class ListNotificationController extends AbstractListController
                 $item->username = $thread->user->username;
                 $item->avatar = $thread->user->avatar;
                 $item->content = Str::limit($content, 80, '...');
-                $item->thread_created_at = date($thread->created_at);
+                $item->thread_created_at = $thread->created_at;
             });
         }
 
