@@ -9,6 +9,7 @@ namespace App\Listeners\Order;
 
 use App\Events\Order\Updated;
 use App\Models\Group;
+use App\Models\Thread;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -49,6 +50,15 @@ class OrderSubscriber
         // 打赏主题的订单，支付成功后通知主题作者
         if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
             $order->payee->notify(new Rewarded($order));
+        }
+
+        //更新主题付费数
+        if ($order->type == Order::ORDER_TYPE_THREAD && $order->status == Order::ORDER_STATUS_PAID) {
+            $thread = Thread::where('id', $order->thread_id)->first();
+            if ($thread) {
+                $thread->refreshPostCount();
+                $thread->save();
+            }
         }
     }
 }
