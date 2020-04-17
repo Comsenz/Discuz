@@ -497,7 +497,7 @@ class ListThreadsController extends AbstractListController
             ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
             ->where('a.type', $type)
-            ->where('a.is_anonymous', Order::ORDER_NOT_ANONYMOUS)
+            ->where('a.is_anonymous', false)
             ->orderBy('a.created_at', 'desc')
             ->orderBy('a.id', 'desc')
             ->get();
