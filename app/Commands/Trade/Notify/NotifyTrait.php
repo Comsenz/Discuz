@@ -97,7 +97,7 @@ trait NotifyTrait
 
                 if ($order_info->type == Order::ORDER_TYPE_THREAD) {
                     //更新主题付费数
-                    $thread = Thread::where('id', $order_info->payee_id)->first();
+                    $thread = Thread::where('id', $order_info->thread_id)->first();
                     if ($thread) {
                         $thread->refreshPostCount();
                         $thread->save();
