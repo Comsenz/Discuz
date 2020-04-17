@@ -9,6 +9,7 @@ namespace App\Commands\Trade\Notify;
 
 use App\Models\Order;
 use App\Models\PayNotify;
+use App\Models\Thread;
 use App\Models\UserWallet;
 use App\Models\UserWalletLog;
 use App\Settings\SettingsRepository;
@@ -92,6 +93,15 @@ trait NotifyTrait
                         null,
                         $order_info->id
                     );
+                }
+
+                if ($order_info->type == Order::ORDER_TYPE_THREAD) {
+                    //更新主题付费数
+                    $thread = Thread::where('id', $order_info->payee_id)->first();
+                    if ($thread) {
+                        $thread->refreshPostCount();
+                        $thread->save();
+                    }
                 }
 
                 return $order_info;

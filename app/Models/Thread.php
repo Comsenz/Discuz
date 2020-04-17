@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $free_words
  * @property int $post_count
  * @property int $view_count
+ * @property int $paid_count
  * @property int $favorite_count
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -172,6 +173,20 @@ class Thread extends Model
         $this->post_count = $this->replies()
             ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
+            ->count();
+
+        return $this;
+    }
+
+    /**
+     * 刷新付费数量
+     * @return $this
+     */
+    public function refreshPaidCount()
+    {
+        $this->paid_count = $this->orders()
+            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->where('status', Order::ORDER_STATUS_PAID)
             ->count();
 
         return $this;
