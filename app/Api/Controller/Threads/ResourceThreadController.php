@@ -147,7 +147,7 @@ class ResourceThreadController extends AbstractResourceController
                 ->where('thread_id', $thread->id)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->where('type', Order::ORDER_TYPE_REWARD)
-                ->where('is_anonymous', Order::ORDER_NOT_ANONYMOUS)
+                ->where('is_anonymous', false)
                 ->orderBy('created_at', 'desc')
                 ->orderBy('id', 'desc')
                 ->get();
@@ -237,7 +237,7 @@ class ResourceThreadController extends AbstractResourceController
             ->where('thread_id', $thread->id)
             ->where('status', Order::ORDER_STATUS_PAID)
             ->where('type', $type)
-            ->where('is_anonymous', Order::ORDER_NOT_ANONYMOUS)
+            ->where('is_anonymous', false)
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->get();

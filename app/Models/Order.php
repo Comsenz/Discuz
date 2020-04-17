@@ -63,11 +63,15 @@ class Order extends Model
     const REGISTER_PAYEE_ID = 0;
 
     /**
-     * 是否匿名
+     * {@inheritdoc}
      */
-    const ORDER_NOT_ANONYMOUS = 0; //没匿名
-
-    const ORDER_IS_ANONYMOUS = 1;  //匿名
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'master_amount' => 'decimal:2',
+        'type' => 'integer',
+        'status' => 'integer',
+        'is_anonymous' => 'boolean',
+    ];
 
     /**
      * Define the relationship with the order's owner.
