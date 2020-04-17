@@ -10,10 +10,9 @@ namespace App\Notifications;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
-class Liked extends Notification
+class Liked extends System
 {
     use Queueable;
 
@@ -22,29 +21,30 @@ class Liked extends Notification
     public $actor;
 
     /**
-     * Create a new notification instance.
+     * 当前驱动名称
+     * @var
+     */
+    public $channel;
+
+    /**
+     * LikedTest constructor.
      *
      * @param Post $post
      * @param $actor
+     * @param $likedMessageClass
+     * @param $build
      */
-    public function __construct(Post $post, $actor)
+    public function __construct(Post $post, $actor, $likedMessageClass, $build)
     {
+        $this->setChannelName($likedMessageClass);
+
+        parent::__construct($likedMessageClass, $build);
+
         $this->post = $post;
         $this->actor = $actor;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['database'];
-    }
-
-    public function toDatabase()
+    public function toDatabase($notifiable)
     {
         // 长文点赞通知内容为标题
         if ($this->post->thread->type == 1) {
@@ -70,5 +70,27 @@ class Liked extends Notification
             'user_name' => $this->actor->username,
             'user_avatar' => $this->actor->avatar ? $this->actor->avatar . '?' . Carbon::parse($this->actor->avatar_at)->timestamp : '',
         ];
+    }
+
+    public function toWechat($notifiable)
+    {
+        return $this->message->notifiable($notifiable)->template($this->data);
+    }
+
+    /**
+     * 设置驱动名称
+     *
+     * @param $strClass
+     */
+    protected function setChannelName($strClass)
+    {
+        switch ($strClass) {
+            case 'App\MessageTemplate\Wechat\WechatLikedMessage':
+                $this->channel = 'wechat';
+                break;
+            default:
+                $this->channel = 'database';
+                break;
+        }
     }
 }

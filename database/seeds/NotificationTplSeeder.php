@@ -511,7 +511,107 @@ class NotificationTplSeeder extends Seeder
                     '{oldgroupname}' => '老用户组',
                     '{newgroupname}' => '新用户组'
                 ])
-            ]
+            ],
+            [
+                'status' => 1,
+                'type' => 1,
+                'type_name' => '内容回复通知',
+                'title' => '微信通知',
+                'content' => $this->getSystemFormat([
+                    'thread_id' => '{thread_id}',
+                    'thread_title' => '{thread_title}',
+                    'post_id' => '{post_id}',
+                    'post_content' => '{post_content}',
+                    'user_id' => '{user_id}',
+                ]),
+                'vars' => serialize([
+                    'thread_id' => '主题ID',
+                    'thread_title' => '主题标题',
+                    'post_id' => '帖子ID',
+                    'post_content' => '帖子标题',
+                    'user_id' => '用户ID',
+                ])
+            ],
+            [
+                'status' => 0,
+                'type' => 1,
+                'type_name' => '内容点赞通知',
+                'title' => '微信通知',
+                'content' => $this->getSystemFormat([
+                    'first' => '{username}点赞了你',
+                    'keyword1' => '{content}',
+                    'keyword2' => '{dateline}',
+                    'remark' => '点击查看',
+                    'redirect_url' => '{redirecturl}',
+                ]),
+                'vars' => serialize([
+                    '{username}' => '用户名',
+                    '{content}' => '点赞内容',
+                    '{dateline}' => '通知时间',
+                    '{redirecturl}' => '跳转地址',
+                ])
+            ],
+            [
+                'status' => 0,
+                'type' => 1,
+                'type_name' => '内容打赏通知',
+                'title' => '微信通知',
+                'content' => $this->getSystemFormat([
+                    'first' => '{username}打赏了你{money}',
+                    'keyword1' => '{content}',
+                    'keyword2' => '{dateline}',
+                    'remark' => '点击查看',
+                    'redirect_url' => '{redirecturl}',
+                ]),
+                'vars' => serialize([
+                    '{username}' => '用户名',
+                    '{money}' => '金额',
+                    '{content}' => '打赏内容',
+                    '{dateline}' => '通知时间',
+                    '{redirecturl}' => '跳转地址',
+                ])
+            ],
         ];
+    }
+
+    /**
+     * 系统通知 - 特殊处理通知格式
+     *
+     * @param $arr
+     * @return false|string
+     */
+    public function getSystemFormat($arr)
+    {
+        $result = [
+            'data' => [
+                'first' => [
+                    'value' => $arr['first'],
+                    'color' => '#173177'
+                ],
+                'keyword1' => [
+                    'value' => $arr['keyword1'],
+                    'color' => '#173177'
+                ],
+                'keyword2' => [
+                    'value' => $arr['keyword2'],
+                    'color' => '#173177'
+                ],
+                'remark' => [
+                    'value' => $arr['remark'],
+                    'color' => '#173177'
+                ],
+            ],
+            'redirect_url' => $arr['redirect_url'],
+        ];
+
+        if (array_key_exists('keyword3', $arr)) {
+            $key3 = [
+                'value' => $arr['keyword3'],
+                'color' => '#173177'
+            ];
+            $result['data']['keyword3'] = $key3;
+        }
+
+        return json_encode($result);
     }
 }
