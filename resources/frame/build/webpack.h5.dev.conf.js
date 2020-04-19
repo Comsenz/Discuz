@@ -8,17 +8,25 @@ function resolve(dir) {
   return path.resolve(__dirname, "../" + dir);
 }
 
+const VERSION = new Date().getTime();
+
 module.exports = {
   devtool: "#source-map",
   entry: {
-    app: resolve("src/h5-main.js")
+    app: resolve("src/h5-main.js"),
+    admin: resolve("src/admin-main.js")
+  },
+  output: {
+    filename: "static/js/[name].js?v=" + VERSION,
+    chunkFilename: "static/js/[id].[chunkhash].js?v=" + VERSION,
+    publicPath: "/"
   },
   optimization: {
     noEmitOnErrors: true,
     namedModules: true
   },
   resolve: {
-    modules: [resolve("src/helpers"), resolve("node_modules")],
+    modules: [resolve("src/helpers"), resolve("node_modules"), resolve("src/admin/scss")],
     extensions: [".js", ".vue", ".json", ".css", ".less", ".scss"],
     alias: {
       vue: "vue/dist/vue.esm.js",
@@ -30,14 +38,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: "vue-loader",
-        include: resolve("src"),
-        exclude: [/node_modules/, resolve("src/admin/")]
+        include: [resolve("src"), resolve("node_modules/element-ui")],
       },
       {
         test: /\.js$/,
         loader: "babel-loader",
         include: resolve("src"),
-        exclude: [/node_modules/, resolve("src/admin/")]
+        exclude: [/node_modules/]
       },
       {
         test: /\.css$/,
@@ -57,6 +64,15 @@ module.exports = {
               )}";`
             }
           }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          "vue-style-loader",
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
         ]
       },
       {
@@ -88,7 +104,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "index.html",
-      inject: true
+      inject: false,
+      templateParameters: {
+        version: VERSION
+      }
     }),
     new CopyWebpackPlugin([
       {
@@ -109,7 +128,9 @@ module.exports = {
   devServer: {
     clientLogLevel: "info",
     historyApiFallback: {
-      rewrites: [{ from: /.*/, to: "/index.html" }]
+      rewrites: [
+        { from: /.*/, to: "/index.html" },
+      ]
     },
     contentBase: false,
     proxy: {
@@ -117,11 +138,6 @@ module.exports = {
         target: "https://discuz.chat",
         changeOrigin: true,
         secure: false,
-        bypass: function(req, res, proxyOptions) {
-          if (req.headers.accept.indexOf("html") !== -1) {
-            return "/index.html";
-          }
-        }
       }
     }
   }

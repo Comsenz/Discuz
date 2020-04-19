@@ -23,18 +23,16 @@ const VERSION = new Date().getTime();
 module.exports = {
   devtool: false,
   entry: {
-    app: resolve("src/h5-main.js")
+    app: resolve("src/h5-main.js"),
+    admin: resolve("src/admin-main.js")
   },
   output: {
     path: resolvePublic(),
-    filename: "static/js/[name].[chunkhash].js?v=" + VERSION,
-    chunkFilename: "static/js/[id].[chunkhash].js?v=" + VERSION
+    filename: "static/js/[name].js?v=" + VERSION,
+    chunkFilename: "static/js/[id].[chunkhash].js?v=" + VERSION,
+    publicPath: "/"
   },
   optimization: {
-    concatenateModules: true,
-    runtimeChunk: {
-      name: "manifest"
-    },
     minimizer: [
       new TerserPlugin({
         cache: true,
@@ -73,14 +71,13 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: "vue-loader",
-        include: resolve("src"),
-        exclude: [/node_modules/, resolve("src/admin/")]
+        include: [resolve("src"), resolve("node_modules/element-ui")],
       },
       {
         test: /\.js$/,
         loader: "babel-loader",
         include: resolve("src"),
-        exclude: [/node_modules/, resolve("src/admin/")]
+        exclude: [/node_modules/]
       },
       {
         test: /\.css$/,
@@ -100,6 +97,15 @@ module.exports = {
               )}";`
             }
           }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        loader: [
+          "vue-style-loader",
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
         ]
       },
       {
@@ -134,7 +140,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: "index.html",
       template: "index.html",
-      inject: true
+      inject: false,
+      templateParameters: {
+        version: VERSION
+      }
     }),
     new webpack.HashedModuleIdsPlugin(),
     new CopyWebpackPlugin([

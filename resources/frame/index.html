@@ -196,6 +196,15 @@
   <iframe id="printCasLogout" style="display: none;"></iframe>
 </body>
 <script>
+  var appjs = document.createElement("script");
+  appjs.type = "text/javascript";
+  appjs.async = true;
+  if (window.location.href.indexOf("/admin") !== -1) {
+    appjs.src = "/static/js/admin.js?v<%= version %>"
+  } else {
+    appjs.src = "/static/js/app.js?v<%= version %>"
+  }
+  document.getElementsByTagName("body")[0].appendChild(appjs);
   //vconsole 调试
   if (window.location.href.indexOf("debug=1") !== -1) {
     var jsScript = document.createElement("script");
