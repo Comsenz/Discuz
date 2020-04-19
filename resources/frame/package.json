@@ -1,12 +1,14 @@
 {
-  "name": "anatman",
+  "name": "dzq",
   "version": "1.0.0",
-  "description": "vue+webpack+router+vuex+sass 便捷式开发框架",
+  "description": "Discuz! Q",
   "author": "Tencent",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --max-new-space-size=4096 --mode development --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
-    "build": "node --max_old_space_size=4096 build/build.js"
+    "build": "node --max_old_space_size=4096 build/build.js",
+    "dev-h5": "webpack-dev-server --progress --config build/webpack.h5.dev.conf.js",
+    "build-h5": "node --max_old_space_size=4096 build/build.h5.js"
   },
   "dependencies": {
     "@github/markdown-toolbar-element": "^1.1.1",
@@ -49,7 +51,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^3.2.0",
     "exif-js": "^2.3.0",
-    "fibers": "^3.1.0",
+    "fibers": "^4.0.2",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^3.2.0",
