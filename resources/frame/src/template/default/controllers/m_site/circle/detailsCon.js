@@ -219,8 +219,11 @@ export default {
     //设置底部在pc里的宽度
     limitWidth(limitId) {
       let viewportWidth = window.innerWidth;
-      document.getElementById(limitId).style.width = "640px";
-      document.getElementById(limitId).style.marginLeft = (viewportWidth - 640) / 2 + 'px';
+      let elem = document.getElementById(limitId);
+      if (elem) {
+        elem.style.width = "640px";
+        elem.style.marginLeft = (viewportWidth - 640) / 2 + 'px';
+      }
     },
     getInfo() {
       //请求站点信息，用于判断站点是否是付费站点
@@ -420,7 +423,7 @@ export default {
             // this.themeCon.posts = res.readdata.posts;
             this.themeCon.posts = this.themeCon.posts.concat(res.readdata.posts);
             this.loading = false;
-            this.likeLen = themeCon.firstPost.likedUsers.length;
+            this.likeLen = this.themeCon.firstPost.likedUsers.length;
           }
         }
         this.wxShareDetail();  //调用微信分享
