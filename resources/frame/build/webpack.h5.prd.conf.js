@@ -23,7 +23,7 @@ const VERSION = new Date().getTime();
 module.exports = {
   devtool: false,
   entry: {
-    app: resolve("src/main.js")
+    app: resolve("src/h5-main.js")
   },
   output: {
     path: resolvePublic(),

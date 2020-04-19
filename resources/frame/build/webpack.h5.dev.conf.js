@@ -11,7 +11,7 @@ function resolve(dir) {
 module.exports = {
   devtool: "#source-map",
   entry: {
-    app: resolve("src/main.js")
+    app: resolve("src/h5-main.js")
   },
   optimization: {
     noEmitOnErrors: true,
