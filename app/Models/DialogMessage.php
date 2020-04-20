@@ -76,6 +76,27 @@ class DialogMessage extends Model
         return $messageText;
     }
 
+    public static function build($user_id, $dialog_id, $message_text)
+    {
+        $dialogMessage = new static();
+
+        $dialogMessage->user_id      = $user_id;
+        $dialogMessage->dialog_id    = $dialog_id;
+        $dialogMessage->message_text = $message_text;
+
+        return $dialogMessage;
+    }
+
+    public static function setFormatter(Formatter $formatter)
+    {
+        static::$formatter = $formatter;
+    }
+
+    public static function getFormatter()
+    {
+        return static::$formatter;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
