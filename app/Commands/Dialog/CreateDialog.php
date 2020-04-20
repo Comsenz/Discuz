@@ -12,6 +12,7 @@ use App\Models\Dialog;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
@@ -54,6 +55,10 @@ class CreateDialog
         $recipient = Arr::get($this->attributes, 'recipient_username');
 
         $recipientUser = $user->query()->where('username', $recipient)->firstOrFail();
+
+        if ($sender == $recipientUser->id) {
+            throw new PermissionDeniedException();
+        }
 
         $dialogRes = $dialog::buildOrFetch($sender, $recipientUser->id);
 
