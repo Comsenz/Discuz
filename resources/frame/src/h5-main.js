@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import "babel-polyfill";
-import 'amfe-flexible/index.js'
 //将jquery 放入全局变量
 import jQuery from "jquery";
 window.$ = jQuery;

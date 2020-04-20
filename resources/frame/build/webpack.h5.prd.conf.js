@@ -97,9 +97,11 @@ module.exports = {
           {
             loader: "less-loader",
             options: {
-              hack: `true; @import "${resolve(
-                "src/template/default/defaultLess/m_site/common/theme.less"
-              )}";`
+              modifyVars: {
+                hack: `true; @import "${resolve(
+                  "src/template/default/defaultLess/m_site/common/theme.less"
+                )}";`
+              }
             }
           }
         ]

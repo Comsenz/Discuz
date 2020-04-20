@@ -13,7 +13,7 @@ const webpackConfig = require("./webpack.h5.prd.conf");
 const spinner = ora("building for production...");
 spinner.start();
 
-rm(path.resolve(__dirname, "../../public/static"), err => {
+rm(path.resolve(__dirname, "../../../public/static"), err => {
   webpack(webpackConfig, (err, stats) => {
     spinner.stop();
     if (err) throw err;

@@ -169,8 +169,8 @@
         clearTimeout(d), d = setTimeout(c, 300)
       }, !1), a.addEventListener("pageshow", function (a) {
         a.persisted && (clearTimeout(d), d = setTimeout(c, 300))
-      }, !1), "complete" === e.readyState ? e.body.style.fontSize = 12 * i + "px" : e.addEventListener("DOMContentLoaded", function () {
-        e.body.style.fontSize = 12 * i + "px"
+      }, !1), "complete" === e.readyState ? 1 : e.addEventListener("DOMContentLoaded", function () {
+        1
       }, !1), c(), k.dpr = a.dpr = i, k.refreshRem = c, k.rem2px = function (a) {
         var b = parseFloat(a) * this.rem;
         return "string" == typeof a && a.match(/rem$/) && (b += "px"), b
