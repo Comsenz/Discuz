@@ -82,7 +82,7 @@ class CreateThreadVideo
         $threadVideo->user_id   = $this->actor->id;
         $threadVideo->thread_id = isset($thread) ? $thread->id : $this->threadId;
         $threadVideo->status    = $threadVideo::VIDEO_STATUS_TRANSCODING;
-        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name');
+        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name')?:'';
         $threadVideo->file_id   = $file_id;
         $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url')?:'';
         $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url')?:'';
