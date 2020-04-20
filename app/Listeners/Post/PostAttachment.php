@@ -34,14 +34,14 @@ class PostAttachment
         $attachments = Arr::get($event->data, 'relationships.attachments.data');
 
         switch ($event->post->thread->type) {
-            // 文本
-            case 0:
-                // 文字帖不能有附件
-                if ($attachments) {
-                    throw new \Exception('cannot_create_text_thread_with_attachment');
-                }
-
-                break;
+            // // 文本
+            // case 0:
+            //     // 文字帖不能有附件
+            //     if ($attachments) {
+            //         throw new \Exception('cannot_create_text_thread_with_attachments');
+            //     }
+            //
+            //     break;
             // // 帖子
             // case 1:
             // // 视频
@@ -57,7 +57,7 @@ class PostAttachment
                     ->exists();
 
                 if (!$images) {
-                    throw new \Exception('cannot_create_image_thread_without_attachment');
+                    throw new \Exception('cannot_create_image_thread_without_attachments');
                 }
 
                 break;

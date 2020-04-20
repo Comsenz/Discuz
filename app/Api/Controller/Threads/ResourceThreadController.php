@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
@@ -103,7 +104,8 @@ class ResourceThreadController extends AbstractResourceController
             if ($thread->user_id == $actor->id || $actor->isAdmin()) {
                 $paid = true;
             } else {
-                $paid = Order::where('user_id', $actor->id)
+                $paid = Order::query()
+                    ->where('user_id', $actor->id)
                     ->where('thread_id', $thread->id)
                     ->where('status', Order::ORDER_STATUS_PAID)
                     ->where('type', Order::ORDER_TYPE_THREAD)
@@ -112,15 +114,34 @@ class ResourceThreadController extends AbstractResourceController
 
             $thread->setAttribute('paid', $paid);
 
-            // 长文隐藏正文，其他截取内容显示200。隐藏图片及附件
+            /**
+             * 详情内容处理
+             *
+             * 0. 普通帖子不能设为付费帖无需处理
+             * 1. 长文帖子未付费仅展示免费阅读部分
+             * 2. 视频帖子未付费仅展示封面
+             * 3. 图片帖子未付费仅展示高斯模糊图
+             */
+
             if (in_array('firstPost', $include) && !$paid) {
-                if ($thread->type == 1) {
-                    $thread->firstPost->content = '';
-                } else {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                switch ($thread->type) {
+                    // 帖子
+                    case 1:
+                        $thread->firstPost->content = Str::of($thread->firstPost->content)
+                                ->substr(0, $thread->free_words) . Post::SUMMARY_END_WITH;
+
+                        $thread->firstPost->setRelation('images', collect());
+                        $thread->firstPost->setRelation('attachments', collect());
+                        break;
+                    // 图片
+                    case 3:
+                        $thread->firstPost->load('images');
+
+                        $thread->firstPost->images->map(function (Attachment $image) {
+                            $image->setAttribute('blur', true);
+                        });
+                        break;
                 }
-                $thread->firstPost->setRelation('images', collect());
-                $thread->firstPost->setRelation('attachments', collect());
             }
 
             // 付费视频，未付费时，隐藏视频
