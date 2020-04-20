@@ -106,7 +106,7 @@ export default {
       const playerParam = {
         fileID: fileID,
         appID: appID,
-        'width': this.viewportWidth - 30,
+        'width': appCommonH.isWeixin().isPc ? 640 : this.viewportWidth - 30,
         // 'poster': posterImg,
         // 'poster': 'http://www.test.com/myimage.jpg',
         'posterImage': false,

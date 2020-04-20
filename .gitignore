@@ -7,4 +7,7 @@
 .settings
 /node_modules
 .php_cs.cache
-
+/public/static
+/public/index.html
+/public/storage
+/storage/install.lock
