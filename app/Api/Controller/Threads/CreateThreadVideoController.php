@@ -11,6 +11,8 @@ use App\Api\Serializer\ThreadVideoSerializer;
 use App\Commands\Thread\CreateThreadVideo;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -26,12 +28,17 @@ class CreateThreadVideoController extends AbstractCreateController
      */
     protected $bus;
 
+
+    protected $validation;
+
     /**
      * @param Dispatcher $bus
+     * @param Factory $validation
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(Dispatcher $bus, Factory  $validation)
     {
         $this->bus = $bus;
+        $this->validation = $validation;
     }
 
     /**
@@ -40,6 +47,12 @@ class CreateThreadVideoController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
+
+        $this->validation->make($attributes, [
+            'file_id' => 'required',
+        ])->validate();
 
         return $this->bus->dispatch(
             new CreateThreadVideo($actor, 0, $request->getParsedBody()->get('data', []))
