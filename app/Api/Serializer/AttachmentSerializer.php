@@ -49,6 +49,16 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        // 是否返回模糊图
+        $blur = (bool) $model->getAttribute('blur');
+
+        if ($blur) {
+            $parts = explode('.', $model->attachment);
+            $parts[0] = md5($parts[0]);
+
+            $model->attachment = implode('_blur.', $parts);
+        }
+
         $path = $model->file_path . '/' . $model->attachment;
 
         $url = $this->filesystem->disk($model->is_remote ? 'attachment_cos' : 'attachment')->url($path);
@@ -71,9 +81,13 @@ class AttachmentSerializer extends AbstractSerializer
 
         // 图片缩略图地址
         if ($model->is_gallery) {
-            $attributes['thumbUrl'] = $model->is_remote
-                ? $url . '?imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
-                : Str::replaceLast('.', '_thumb.', $url);
+            if ($blur) {
+                $attributes['thumbUrl'] = $url;
+            } else {
+                $attributes['thumbUrl'] = $model->is_remote
+                    ? $url . '?imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
+                    : Str::replaceLast('.', '_thumb.', $url);
+            }
         }
 
         return $attributes;

@@ -121,6 +121,8 @@ class CreateAttachment
             throw new UploadException();
         }
 
+        $this->file->isGallery = $this->isGallery;
+
         $uploadTool->upload($this->file, 'public/attachment');
 
         $this->events->dispatch(
@@ -149,17 +151,22 @@ class CreateAttachment
 
         $isRemote = $uploadFile['isRemote'];
 
-        // 生成缩略图
+        // TODO：放入事件？
+        // 本地图片处理
         if ($this->isGallery && !$isRemote && $this->isSound == 0) {
-            $imgPath = Arr::get($uploadFile, 'path');
-            $thumbPath = Str::replaceLast('.', '_thumb.', $imgPath);
+            $img = (new ImageManager())->make(Arr::get($uploadFile, 'path'));
 
-            $img = (new ImageManager())->make($imgPath);
+            $thumbPath = Str::replaceLast($img->filename, $img->filename . '_thumb', $img->basePath());
+            $blurPath = Str::replaceLast($img->filename, md5($img->filename) . '_blur', $img->basePath());
 
+            // 生成缩略图
             $img->resize(self::FIX_WIDTH, null, function ($constraint) {
                 $constraint->aspectRatio();     // 保持纵横比
                 $constraint->upsize();          // 避免文件变大
             })->save($thumbPath);
+
+            // 生成模糊图
+            $img->blur(75)->save($blurPath);
         }
 
         // 检测敏感图
