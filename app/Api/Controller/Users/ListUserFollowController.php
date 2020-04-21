@@ -53,7 +53,7 @@ class ListUserFollowController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['fromUser', 'toUser'];
+    public $optionalInclude = ['fromUser', 'toUser', 'fromUser.groups', 'toUser.groups'];
 
     /* The relationships that are included by default.
      *
@@ -88,6 +88,7 @@ class ListUserFollowController extends AbstractListController
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
 
         $userFollow = $this->search($actor, $filter, $limit, $offset);
 
@@ -98,6 +99,8 @@ class ListUserFollowController extends AbstractListController
             $limit,
             $this->userFollowCount
         );
+
+        $userFollow->loadMissing($include);
 
         $document->setMeta([
             'total' => $this->userFollowCount,
