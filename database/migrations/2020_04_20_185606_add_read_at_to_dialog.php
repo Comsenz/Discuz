@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddReadAtToDialogMessage extends Migration
+class AddReadAtToDialog extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddReadAtToDialogMessage extends Migration
      */
     public function up()
     {
-        $this->schema()->table('dialog_message', function (Blueprint $table) {
-            $table->dateTime('read_at')->nullable()->after('message_text')->comment('阅读时间');
+        $this->schema()->table('dialog', function (Blueprint $table) {
+            $table->dateTime('read_at')->nullable()->after('recipient_user_id')->comment('阅读时间');
         });
     }
 
@@ -24,7 +24,7 @@ class AddReadAtToDialogMessage extends Migration
      */
     public function down()
     {
-        $this->schema()->table('dialog_message', function (Blueprint $table) {
+        $this->schema()->table('dialog', function (Blueprint $table) {
             $table->dropColumn('read_at');
         });
     }
