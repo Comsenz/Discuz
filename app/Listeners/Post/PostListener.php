@@ -14,7 +14,11 @@ use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\MessageTemplate\PostMessage;
+use App\MessageTemplate\RelatedMessage;
+use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostMessage;
+use App\MessageTemplate\Wechat\WechatRelatedMessage;
+use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Attachment;
 use App\Models\OperationLog;
 use App\Models\Post;
@@ -66,6 +70,7 @@ class PostListener
      * 发送通知
      *
      * @param Created $event
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function whenPostWasCreated(Created $event)
     {
@@ -75,7 +80,17 @@ class PostListener
         if ($post->is_approved == Post::APPROVED) {
             // 如果当前用户不是主题作者，也是合法的，则通知主题作者
             if ($post->thread->user_id != $actor->id) {
-                $post->thread->user->notify(new Replied($post));
+                // 数据库通知
+                $post->thread->user->notify(new Replied($post, $actor, RepliedMessage::class));
+
+                // 微信通知
+                $post->thread->user->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
+                    'message' => $post->getSummaryContent(80)['content'],
+                    'subject' => $post->getSummaryContent(80)['first_content'],
+                    'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
+                        'actor_username' => $actor->username    // 发送人姓名
+                    ]),
+                ]));
             }
 
             // 如果被回复的用户不是当前用户，也不是主题作者，也是合法的，则通知被回复的人
@@ -84,7 +99,19 @@ class PostListener
                 && $post->reply_user_id != $actor->id
                 && $post->reply_user_id != $post->thread->user_id
             ) {
-                $post->replyUser->notify(new Replied($post));
+                // 数据库通知
+                $post->replyUser->notify(new Replied($post, $actor, RepliedMessage::class));
+
+                // 去掉回复引用
+                $post->replyPost->filterPostContent(80);
+                // 微信通知
+                $post->replyUser->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
+                    'message' => $post->getSummaryContent(80)['content'],
+                    'subject' => $post->replyPost->formatContent(), // 解析content
+                    'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
+                        'actor_username' => $actor->username    // 发送人姓名
+                    ]),
+                ]));
             }
         }
     }
@@ -258,7 +285,14 @@ class PostListener
         User::whereIn('id', $mentioned)
             ->get()
             ->each(function (User $user) use ($event) {
-                $user->notify(new Related($event->post));
+                // 数据库通知
+                $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
+
+                // 微信通知
+                $user->notify(new Related($event->post, $event->actor, WechatRelatedMessage::class, [
+                    'message' => $event->post->getSummaryContent(80)['content'],
+                    'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
+                ]));
             });
     }
 }

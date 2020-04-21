@@ -11,14 +11,14 @@ use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * 内容点赞通知
+ * 内容回复通知
  *
- * Class LikedMessage
- * @package App\MessageTemplate\Wechat
+ * Class RepliedMessage
+ * @package App\MessageTemplate
  */
-class LikedMessage extends DatabaseMessage
+class RepliedMessage extends DatabaseMessage
 {
-    protected $tplId = 26;
+    protected $tplId = 25;
 
     protected $url;
 

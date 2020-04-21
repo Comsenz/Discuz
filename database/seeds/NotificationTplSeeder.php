@@ -509,6 +509,14 @@ class NotificationTplSeeder extends Seeder
                 'content' => '',
                 'vars' => '',
             ],
+            [
+                'status' => 1,
+                'type' => 0,
+                'type_name' => '内容@通知',
+                'title' => '内容通知',
+                'content' => '',
+                'vars' => '',
+            ],
 
             /*
             |--------------------------------------------------------------------------
@@ -572,6 +580,25 @@ class NotificationTplSeeder extends Seeder
                     '{username}' => '用户名',
                     '{money}' => '金额',
                     '{content}' => '打赏内容',
+                    '{dateline}' => '通知时间',
+                    '{redirecturl}' => '跳转地址',
+                ])
+            ],
+            [
+                'status' => 0,
+                'type' => 1,
+                'type_name' => '内容@通知',
+                'title' => '微信内容通知',
+                'content' => $this->getWechatFormat([
+                    'first' => '{username}@了你',
+                    'keyword1' => '{content}',
+                    'keyword2' => '{dateline}',
+                    'remark' => '点击查看',
+                    'redirect_url' => '{redirecturl}',
+                ]),
+                'vars' => serialize([
+                    '{username}' => '用户名',
+                    '{content}' => '@内容',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
                 ])

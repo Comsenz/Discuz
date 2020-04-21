@@ -9,8 +9,6 @@ namespace App\Notifications;
 
 use App\Models\Post;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Str;
-use Discuz\SpecialChar\SpecialCharServer;
 
 /**
  * 点赞通知
@@ -33,27 +31,21 @@ class Liked extends System
     public $channel;
 
     /**
-     * @var
-     * @method purify()
-     */
-    public $special;
-
-    /**
      * LikedTest constructor.
      *
      * @param Post $post
      * @param $actor
-     * @param $likedMessageClass
+     * @param $messageClass
      * @param $build
      */
-    public function __construct(Post $post, $actor, $likedMessageClass = '', $build = [])
+    public function __construct(Post $post, $actor, $messageClass = '', $build = [])
     {
-        $this->setChannelName($likedMessageClass);
+        $this->setChannelName($messageClass);
 
         $this->post = $post;
         $this->actor = $actor;
 
-        parent::__construct($likedMessageClass, $build);
+        parent::__construct($messageClass, $build);
     }
 
     /**
@@ -65,8 +57,6 @@ class Liked extends System
      */
     public function toDatabase($notifiable)
     {
-        $this->special = app()->make(SpecialCharServer::class);
-
         $build = [
             'user_id' => $this->actor->id,
             'thread_id' => 0,
@@ -86,6 +76,7 @@ class Liked extends System
 
     /**
      * @param & $build
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function build(&$build)
     {
@@ -93,54 +84,25 @@ class Liked extends System
          * 判断是否是楼中楼的回复
          */
         if ($this->post->reply_post_id) {
-
-            $this->post->content = $this->strOf($this->post->content);
-            $content = $this->post->formatContent();
-
-            $build['post_content'] = $content;
+            $build['post_content'] = $this->post->getSummaryContent(80)['content'];
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['post_created_at'] = $this->post->created_at->toDateTimeString();
-
         } else {
             /**
-             * 判断长文点赞通知内容为标题
+             * 长文点赞通知内容为标题
              */
-            if ($this->post->thread->type == 1) {
-                $content = $this->strOf($this->post->thread->title);
-                $content = $this->special->purify($content);
-            } else {
-                // 引用回复去除引用部分
-                if ($this->post->reply_post_id) {
-                    $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                    $this->post->content = preg_replace($pattern, '', $this->post->content);
-                }
+            $content = $this->post->getSummaryContent(80)['content'];
 
-                $this->post->content = $this->strOf($this->post->content);
-                $content = $this->post->formatContent();
-
-                // 不是长文没有标题则使用首贴内容
-                $this->post->thread->firstPost->content = $this->strOf($this->post->thread->firstPost->content);
-                $firstContent = $this->post->thread->firstPost->formatContent();
-            }
+            // 不是长文没有标题则使用首贴内容
+            $firstContent = $this->post->getSummaryContent(80)['first_content'];
 
             $build['thread_id'] = $this->post->thread->id;
             $build['thread_user_id'] = $this->post->thread->user_id;
-            $build['thread_title'] = $firstContent ?? $this->special->purify($this->post->thread->title);
+            $build['thread_title'] = $firstContent;
             $build['thread_created_at'] = $this->post->thread->created_at->toDateTimeString();
             $build['post_content'] = $content;
             $build['post_created_at'] = $this->post->created_at->toDateTimeString();
         }
-    }
-
-    /**
-     * 截取字数
-     *
-     * @param $string
-     * @return \Illuminate\Support\Stringable
-     */
-    public function strOf($string)
-    {
-        return Str::of($string)->substr(0, 80);
     }
 
     /**
@@ -154,9 +116,11 @@ class Liked extends System
             case 'App\MessageTemplate\Wechat\WechatLikedMessage':
                 $this->channel = 'wechat';
                 break;
+            case 'App\MessageTemplate\LikedMessage':
             default:
                 $this->channel = 'database';
                 break;
         }
     }
+
 }

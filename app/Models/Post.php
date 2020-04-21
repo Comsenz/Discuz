@@ -15,11 +15,13 @@ use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -43,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property User $replyUser
  * @property User $deletedUser
  * @property PostMod $stopWords
+ * @property mixed replyPost
  * @package App\Models
  */
 class Post extends Model
@@ -165,6 +168,70 @@ class Post extends Model
         }
 
         return $content;
+    }
+
+    /**
+     * 获取 Content & firstContent
+     *
+     * @param int $substr
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getSummaryContent($substr = 0)
+    {
+        $special = app()->make(SpecialCharServer::class);
+
+        $build = [
+            'content' => '',
+            'first_content' => '',
+        ];
+
+        /**
+         * 判断是否是楼中楼的回复
+         */
+        if ($this->reply_post_id) {
+            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+            $content = $this->formatContent();
+        } else {
+            /**
+             * 判断长文点赞通知内容为标题
+             */
+            if ($this->thread->type == 1) {
+                $content = $substr ? Str::of($this->thread->title)->substr(0, $substr) : $this->thread->title;
+                $content = $special->purify($content);
+            } else {
+                // 引用回复去除引用部分
+                $this->filterPostContent();
+
+                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+                $content = $this->formatContent();
+
+                // 不是长文没有标题则使用首贴内容
+                $this->thread->firstPost->content = $substr ? Str::of($this->thread->firstPost->content)->substr(0, $substr) : $this->thread->firstPost->content;
+                $firstContent = $this->thread->firstPost->formatContent();
+            }
+        }
+
+        $build['content'] = $content;
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->title);
+
+        return $build;
+    }
+
+    /**
+     * 引用回复去除引用部分
+     *
+     * @param int $substr
+     */
+    public function filterPostContent($substr = 0)
+    {
+        // 引用回复去除引用部分
+        $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+        $this->content = preg_replace($pattern, '', $this->content);
+
+        if ($substr) {
+            $this->content = Str::of($this->content)->substr(0, $substr);
+        }
     }
 
     /**
@@ -311,6 +378,16 @@ class Post extends Model
     public function replyUser()
     {
         return $this->belongsTo(User::class, 'reply_user_id');
+    }
+
+    /**
+     * Define the relationship with the post's content post.
+     *
+     * @return BelongsTo
+     */
+    public function replyPost()
+    {
+        return $this->belongsTo(Post::class, 'reply_post_id');
     }
 
     /**

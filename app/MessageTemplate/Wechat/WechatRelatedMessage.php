@@ -13,14 +13,14 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 
 /**
- * 内容点赞通知 - 微信
+ * 内容@通知 - 微信
  *
- * Class WechatLikedMessage
+ * Class WechatRelatedMessage
  * @package App\MessageTemplate\Wechat
  */
-class WechatLikedMessage extends DatabaseMessage
+class WechatRelatedMessage extends DatabaseMessage
 {
-    protected $tplId = 30;
+    protected $tplId = 32;
 
     protected $url;
 
@@ -38,8 +38,12 @@ class WechatLikedMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
+        $replyPostId = Arr::get($data, 'raw.reply_post_id', 0); // 楼中楼时不为0
 
-        // 主题ID为空时跳转到首页
+        /**
+         * TODO 判断是否是楼中楼
+         * 主题ID为空时跳转到首页
+         */
         if (empty($threadId)) {
             $threadUrl = $this->url->to('');
         } else {
@@ -47,10 +51,10 @@ class WechatLikedMessage extends DatabaseMessage
         }
 
         return [
-            $this->notifiable->username,
-            $this->strWords($message),
-            Carbon::now()->toDateTimeString(),
-            $threadUrl,
+            $this->notifiable->username,        // 用户名
+            $this->strWords($message),          // @内容
+            Carbon::now()->toDateTimeString(),  // 通知时间
+            $threadUrl,                         // 跳转地址
         ];
     }
 }
