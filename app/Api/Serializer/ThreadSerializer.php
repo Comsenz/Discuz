@@ -45,6 +45,7 @@ class ThreadSerializer extends AbstractSerializer
             'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
+            'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
             'paidCount'         => (int) $model->paid_count,
