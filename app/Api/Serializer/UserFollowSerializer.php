@@ -12,7 +12,7 @@ use Tobscure\JsonApi\Relationship;
 
 class UserFollowSerializer extends AbstractSerializer
 {
-    protected $type = 'user_follow';
+    protected $type = 'follow';
 
     public function getDefaultAttributes($model)
     {
