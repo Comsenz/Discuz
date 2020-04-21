@@ -57,10 +57,17 @@ class CreateDialogMessage
         $dialogRes = $dialog->findOrFail($dialog_id, $this->actor);
 
         $dialogMessage = DialogMessage::build($this->actor->id, $dialog_id, $message_text);
-        $dialogMessage->save();
+        $dialogMessageRes = $dialogMessage->save();
 
-        if ($dialogMessage) {
+        if ($dialogMessageRes) {
+            //发送新消息后设置对方未读
+            if ($dialogRes->sender_user_id == $this->actor->id) {
+                $dialogRes->recipient_read_at = null;
+            } else {
+                $dialogRes->sender_read_at = null;
+            }
             $dialogRes->dialog_message_id = $dialogMessage->id;
+
             $dialogRes->save();
         }
 

@@ -10,11 +10,14 @@ namespace App\Api\Controller\Dialog;
 use App\Api\Serializer\DialogMessageSerializer;
 use App\Models\User;
 use App\Repositories\DialogMessageRepository;
+use App\Repositories\DialogRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -27,6 +30,11 @@ class ListDialogMessageController extends AbstractListController
      * {@inheritdoc}
      */
     public $serializer = DialogMessageSerializer::class;
+
+    /**
+     * @var DialogRepository
+     */
+    protected $dialogs;
 
     /**
      * @var DialogMessageRepository
@@ -44,6 +52,10 @@ class ListDialogMessageController extends AbstractListController
     public $dialogMessageCount;
 
     /**
+     * @var ValidationFactory
+     */
+    public $validation;
+    /**
      * {@inheritdoc}
      */
     public $optionalInclude = ['user'];
@@ -55,12 +67,16 @@ class ListDialogMessageController extends AbstractListController
     public $include = [];
 
     /**
+     * @param DialogRepository $dialogs
      * @param DialogMessageRepository $dialogMessage
+     * @param ValidationFactory $validation
      * @param UrlGenerator $url
      */
-    public function __construct(DialogMessageRepository $dialogMessage, UrlGenerator $url)
+    public function __construct(DialogRepository $dialogs, DialogMessageRepository $dialogMessage, ValidationFactory $validation, UrlGenerator $url)
     {
+        $this->dialogs = $dialogs;
         $this->dialogMessage = $dialogMessage;
+        $this->validation = $validation;
         $this->url = $url;
     }
 
@@ -79,6 +95,20 @@ class ListDialogMessageController extends AbstractListController
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+
+        $this->validation->make(
+            ['dialog_id' => Arr::get($filter, 'dialog_id')],
+            ['dialog_id' => 'required']
+        )->validate();
+
+        //设置登录用户已读
+        $dialog = $this->dialogs->findOrFail($filter['dialog_id'], $actor);
+        if ($dialog->sender_user_id == $actor->id) {
+            $type = 'sender';
+        } else {
+            $type = 'recipient';
+        }
+        $dialog->setRead($type);
 
         $dialogMessages = $this->search($actor, $filter, $limit, $offset);
 
