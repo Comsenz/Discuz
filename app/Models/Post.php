@@ -132,7 +132,7 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        if ($this->is_first && ($this->thread->type ==1)) {
+        if ($this->is_first && ($this->thread->type == 1)) {
             $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
             $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
@@ -158,7 +158,7 @@ class Post extends Model
     {
         $content = $this->attributes['content'] ?: '';
 
-        if ($this->is_first && ($this->thread->type ==1)) {
+        if ($this->is_first && ($this->thread->type == 1)) {
             $content = $content ? static::$markdownFormatter->render($content) : '';
         } else {
             $content = $content ? static::$formatter->render($content) : '';
@@ -227,7 +227,7 @@ class Post extends Model
      */
     public function hide(User $actor, $options = [])
     {
-        if (! $this->deleted_at) {
+        if (!$this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 
@@ -386,7 +386,8 @@ class Post extends Model
         return $this->hasOne(PostUser::class)->where('user_id', $user ? $user->id : null);
     }
 
-    public function mentionUsers() {
+    public function mentionUsers()
+    {
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
 

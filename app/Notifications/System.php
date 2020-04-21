@@ -13,6 +13,12 @@ use App\Models\NotificationTpl;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
 
+/**
+ * 系统通知
+ *
+ * Class System
+ * @package App\Notifications
+ */
 class System extends Notification
 {
     protected $data;
@@ -37,6 +43,7 @@ class System extends Notification
     public function via($notifiable)
     {
         $tplId = $this->message->getTplId();
+
         if ($this->message instanceof StatusMessage) {
             $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
         }
@@ -45,6 +52,7 @@ class System extends Notification
             $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
         }
 
+        // set tplData
         $this->getTplData($tplId);
 
         $this->message->setTplData($this->tplData);

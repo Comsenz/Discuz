@@ -9,7 +9,7 @@ namespace App\Listeners\Post;
 
 use App\Events\Post\Deleted;
 use App\Events\Post\Saving;
-use App\MessageTemplate\Wechat\LikedMessage;
+use App\MessageTemplate\LikedMessage;
 use App\MessageTemplate\Wechat\WechatLikedMessage;
 use App\Notifications\Liked;
 use Carbon\Carbon;
@@ -71,15 +71,15 @@ class SaveLikesToDatabase
                             'raw' => Arr::only($post->toArray(), ['id', 'thread_id', 'is_first'])
                         ];
                         // 数据库通知
-                        $post->user->notify(new Liked($post, $actor, LikedMessage::class, $build));
+                        $post->user->notify(new Liked($post, $actor, LikedMessage::class));
 
                         // 微信通知
-                        // $post->user->notify(new Liked($post, $actor, WechatLikedMessage::class, $build));
+                        $post->user->notify(new Liked($post, $actor, WechatLikedMessage::class, $build));
                     }
                 }
             }
 
-            //刷新用户点赞数
+            // 刷新用户点赞数
             $actor->refreshUserLiked();
             $actor->save();
         }

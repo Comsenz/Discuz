@@ -20,7 +20,7 @@ use Illuminate\Support\Arr;
  */
 class WechatLikedMessage extends DatabaseMessage
 {
-    protected $tplId = 26;
+    protected $tplId = 29;
 
     protected $url;
 

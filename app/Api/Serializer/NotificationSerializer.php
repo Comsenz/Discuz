@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Support\Arr;
 
@@ -23,21 +24,18 @@ class NotificationSerializer extends AbstractSerializer
     {
         $result = array_merge([
             'id'            => $model->id,
+            'type'          => $model->type,
             'user_id'       => $model->notifiable_id,
+            'user_name'     => $model->username ?: '',
+            'user_avatar'   => $model->avatar ?: '',
             'read_at'       => $this->formatDate($model->read_at),
             'created_at'    => $this->formatDate($model->created_at),
         ], $model->data);
 
-        if (Arr::get($model, 'have_thread', false)) {
-            $result = array_merge($result, [
-                'thread_id' => $model->thread_id,
-                'post_id' => $model->post_id,
-                'user_name' => $model->username,
-                'user_avatar' => $model->avatar,
-                'content' => $model->content,
-                'thread_created_at' => $this->formatDate($model->thread_created_at),
-            ]);
-        }
+        $result = array_merge($result, [
+            'user_name' => $model->username ?: '',
+            'user_avatar' => $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
+        ]);
 
         return $result;
     }

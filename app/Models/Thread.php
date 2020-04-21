@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Category $category
  * @property threadVideo $threadVideo
  * @package App\Models
+ * @method static find($id)
  */
 class Thread extends Model
 {

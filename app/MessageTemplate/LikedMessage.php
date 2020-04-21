@@ -5,7 +5,7 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\MessageTemplate\Wechat;
+namespace App\MessageTemplate;
 
 use Carbon\Carbon;
 use Discuz\Notifications\Messages\DatabaseMessage;
@@ -35,15 +35,6 @@ class LikedMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        dd('contentReplaceVars-database');
-        dd($data);
-
-        return [
-            $this->notifiable->username,
-            $this->settings->get('site_name'),
-            Carbon::now()->toDateTimeString(),
-//            $this->notifiable->groups->pluck('name')->join('、'), // 用户组
-            $this->url->to(''),
-        ];
+        return $data;
     }
 }

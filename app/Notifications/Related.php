@@ -12,6 +12,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
+/**
+ * @通知
+ *
+ * Class Related
+ * @package App\Notifications
+ */
 class Related extends Notification
 {
     use Queueable;

@@ -12,6 +12,10 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 use Discuz\Foundation\Application;
 
+/**
+ * Class SpecialChar
+ * @package App\SpecialChar
+ */
 class SpecialChar implements SpecialCharServer
 {
     /**

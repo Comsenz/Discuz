@@ -8,10 +8,16 @@
 namespace App\Notifications;
 
 use App\Models\Post;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Str;
+use Discuz\SpecialChar\SpecialCharServer;
 
+/**
+ * 点赞通知
+ *
+ * Class Liked
+ * @package App\Notifications
+ */
 class Liked extends System
 {
     use Queueable;
@@ -27,6 +33,12 @@ class Liked extends System
     public $channel;
 
     /**
+     * @var
+     * @method purify()
+     */
+    public $special;
+
+    /**
      * LikedTest constructor.
      *
      * @param Post $post
@@ -34,47 +46,101 @@ class Liked extends System
      * @param $likedMessageClass
      * @param $build
      */
-    public function __construct(Post $post, $actor, $likedMessageClass, $build)
+    public function __construct(Post $post, $actor, $likedMessageClass = '', $build = [])
     {
         $this->setChannelName($likedMessageClass);
 
-        parent::__construct($likedMessageClass, $build);
-
         $this->post = $post;
         $this->actor = $actor;
+
+        parent::__construct($likedMessageClass, $build);
     }
 
+    /**
+     * 数据库驱动通知
+     *
+     * @param $notifiable
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function toDatabase($notifiable)
     {
-        // 长文点赞通知内容为标题
-        if ($this->post->thread->type == 1) {
-            $content = htmlspecialchars($this->post->thread->title);
-        } else {
-            // 引用回复去除引用部分
-            if ($this->post->reply_post_id) {
-                $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                $this->post->content = preg_replace($pattern, '', $this->post->content);
-            }
+        $this->special = app()->make(SpecialCharServer::class);
 
-            $this->post->content = Str::limit($this->post->content, Post::SUMMARY_LENGTH);
-
-            $content = $this->post->formatContent();
-        }
-
-        return [
-            'thread_id' => $this->post->thread->id,
-            'thread_title' => htmlspecialchars($this->post->thread->title),
-            'post_id' => $this->post->id,
-            'post_content' => $content,
+        $build = [
             'user_id' => $this->actor->id,
-            'user_name' => $this->actor->username,
-            'user_avatar' => $this->actor->avatar ? $this->actor->avatar . '?' . Carbon::parse($this->actor->avatar_at)->timestamp : '',
+            'thread_id' => 0,
+            'thread_user_id' => 0,
+            'thread_title' => '',
+            'thread_created_at' => '',
+            'post_id' => $this->post->id,
+            'post_content' => '',
+            'reply_post_id' => 0, // 根据该字段判断是否是楼中楼
+            'post_created_at' => '',
         ];
+
+        $this->build($build);
+
+        return $build;
     }
 
-    public function toWechat($notifiable)
+    /**
+     * @param & $build
+     */
+    public function build(&$build)
     {
-        return $this->message->notifiable($notifiable)->template($this->data);
+        /**
+         * 判断是否是楼中楼的回复
+         */
+        if ($this->post->reply_post_id) {
+
+            $this->post->content = $this->strOf($this->post->content);
+            $content = $this->post->formatContent();
+
+            $build['post_content'] = $content;
+            $build['reply_post_id'] = $this->post->reply_post_id;
+            $build['post_created_at'] = $this->post->created_at->toDateTimeString();
+
+        } else {
+            /**
+             * 判断长文点赞通知内容为标题
+             */
+            if ($this->post->thread->type == 1) {
+                $content = $this->strOf($this->post->thread->title);
+                $content = $this->special->purify($content);
+            } else {
+                // 引用回复去除引用部分
+                if ($this->post->reply_post_id) {
+                    $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+                    $this->post->content = preg_replace($pattern, '', $this->post->content);
+                }
+
+                $this->post->content = $this->strOf($this->post->content);
+                $content = $this->post->formatContent();
+
+                // 不是长文没有标题则使用首贴内容
+                $this->post->thread->firstPost->content = $this->strOf($this->post->thread->firstPost->content);
+                $firstContent = $this->post->thread->firstPost->formatContent();
+            }
+
+            $build['thread_id'] = $this->post->thread->id;
+            $build['thread_user_id'] = $this->post->thread->user_id;
+            $build['thread_title'] = $firstContent ?? $this->special->purify($this->post->thread->title);
+            $build['thread_created_at'] = $this->post->thread->created_at->toDateTimeString();
+            $build['post_content'] = $content;
+            $build['post_created_at'] = $this->post->created_at->toDateTimeString();
+        }
+    }
+
+    /**
+     * 截取字数
+     *
+     * @param $string
+     * @return \Illuminate\Support\Stringable
+     */
+    public function strOf($string)
+    {
+        return Str::of($string)->substr(0, 80);
     }
 
     /**

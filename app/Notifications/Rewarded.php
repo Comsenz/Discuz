@@ -13,6 +13,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
+/**
+ * 打赏通知
+ *
+ * Class Rewarded
+ * @package App\Notifications
+ */
 class Rewarded extends Notification
 {
     use Queueable;
@@ -51,15 +57,14 @@ class Rewarded extends Notification
             $content = $this->order->thread->firstPost->formatContent();
         }
 
+        // 'thread_created_at' => $this->order->thread->created_at),
         return [
+            'user_id' => $this->order->user->id,
             'order_id' => $this->order->id,
             'thread_id' => $this->order->thread->id,
             'thread_title' => htmlspecialchars($this->order->thread->title),
             'content' => $content,
             'amount' => $this->order->amount - $this->order->master_amount,
-            'user_id' => $this->order->user->id,
-            'user_name' => $this->order->user->username,
-            'user_avatar' => $this->order->user->avatar,
         ];
     }
 }

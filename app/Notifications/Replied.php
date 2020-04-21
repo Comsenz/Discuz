@@ -12,6 +12,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
+/**
+ * 回复通知
+ *
+ * Class Replied
+ * @package App\Notifications
+ */
 class Replied extends Notification
 {
     use Queueable;
@@ -52,13 +58,11 @@ class Replied extends Notification
         $content = $this->post->formatContent();
 
         return [
+            'user_id' => $this->post->user->id,
             'thread_id' => $this->post->thread->id,
             'thread_title' => htmlspecialchars($this->post->thread->title),
             'post_id' => $this->post->id,
             'post_content' => $content,
-            'user_id' => $this->post->user->id,
-            'user_name' => $this->post->user->username,
-            'user_avatar' => $this->post->user->avatar,
         ];
     }
 }

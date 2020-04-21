@@ -8,15 +8,12 @@
 namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
-use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -70,7 +67,7 @@ class ListNotificationController extends AbstractListController
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return Collection|mixed
+     * @return mixed
      * @throws \Discuz\Auth\Exception\NotAuthenticatedException
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      */
@@ -133,31 +130,14 @@ class ListNotificationController extends AbstractListController
 
         $data = $query->get();
 
-        if (in_array($type, $this->type)) {
-            $data->map(function ($item) {
-                // 这里单独查询主题作者,因为@回复时不一定是通知人
-                $thread = Thread::with(['user' => function ($query) {
-                    $query->select(['id', 'username', 'avatar']);
-                }, 'firstPost' => function ($query) {
-                    $query->select(['id', 'thread_id', 'content']);
-                }])->where('id', Arr::get($item->data, 'thread_id'))->first();
-
-                // 判断是否是主题帖子
-                if ($thread->type == 1) {
-                    $content = $thread->title;
-                } else {
-                    $content = $thread->firstPost->content;
-                }
-
-                $item->have_thread = true;
-                $item->thread_id = $thread->id;
-                $item->post_id = $thread->firstPost->id;
-                $item->username = $thread->user->username;
-                $item->avatar = $thread->user->avatar;
-                $item->content = Str::limit($content, 80, '...');
-                $item->thread_created_at = $thread->created_at;
-            });
-        }
+        // 获取通知里当前的用户名称和头像
+        $data->map(function ($item) {
+            if ($item->type != 'system') {
+                $user = User::findOrfail(Arr::get($item->data, 'user_id'));
+                $item->username = $user->username;
+                $item->avatar = $user->avatar;
+            }
+        });
 
         return $data;
     }
