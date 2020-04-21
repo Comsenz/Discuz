@@ -13,7 +13,8 @@ class AddReadAtToDialog extends Migration
     public function up()
     {
         $this->schema()->table('dialog', function (Blueprint $table) {
-            $table->dateTime('read_at')->nullable()->after('recipient_user_id')->comment('阅读时间');
+            $table->dateTime('sender_read_at')->nullable()->after('recipient_user_id')->comment('发送人阅读时间');
+            $table->dateTime('recipient_read_at')->nullable()->after('recipient_user_id')->comment('收信人阅读时间');
         });
     }
 
@@ -25,7 +26,8 @@ class AddReadAtToDialog extends Migration
     public function down()
     {
         $this->schema()->table('dialog', function (Blueprint $table) {
-            $table->dropColumn('read_at');
+            $table->dropColumn('sender_read_at');
+            $table->dropColumn('recipient_read_at');
         });
     }
 }
