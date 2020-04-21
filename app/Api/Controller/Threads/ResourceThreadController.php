@@ -162,20 +162,6 @@ class ResourceThreadController extends AbstractResourceController
             $this->includePosts($thread, $request, $postRelationships);
         }
 
-        // 打赏的用户
-        if (in_array('rewardedUsers', $include)) {
-            $allRewardedUser = Order::with('user')
-                ->where('thread_id', $thread->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->where('is_anonymous', false)
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
-                ->get();
-
-            $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user')->filter());
-        }
-
         // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $include)) {
             $this->loadOrderUsers($thread, Order::ORDER_TYPE_REWARD);
@@ -251,10 +237,22 @@ class ResourceThreadController extends AbstractResourceController
     /**
      * @param $thread
      * @param $type
+     * @return Thread
      */
     private function loadOrderUsers(Thread $thread, $type)
     {
-        $allRewardedUser = Order::with('user')
+        switch ($type) {
+            case Order::ORDER_TYPE_REWARD:
+                $relation = 'rewardedUsers';
+                break;
+            case Order::ORDER_TYPE_THREAD:
+                $relation = 'paidUsers';
+                break;
+            default:
+                return $thread;
+        }
+
+        $orderUsers = Order::with('user')
             ->where('thread_id', $thread->id)
             ->where('status', Order::ORDER_STATUS_PAID)
             ->where('type', $type)
@@ -263,11 +261,6 @@ class ResourceThreadController extends AbstractResourceController
             ->orderBy('id', 'desc')
             ->get();
 
-        if ($type == Order::ORDER_TYPE_REWARD) {
-            $relationName = 'rewardedUsers';
-        } elseif ($type == Order::ORDER_TYPE_THREAD) {
-            $relationName = 'paidUsers';
-        }
-        $thread->setRelation($relationName, $allRewardedUser->pluck('user')->filter());
+        return $thread->setRelation($relation, $orderUsers->pluck('user')->filter());
     }
 }
