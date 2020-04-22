@@ -53,7 +53,7 @@ class OrderSubscriber
         // 打赏主题的订单，支付成功后通知主题作者
         if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
             // 数据库通知
-            // $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
+            $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
 
             // 微信通知
             $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
@@ -62,13 +62,9 @@ class OrderSubscriber
                     'actor_username' => $order->user->username    // 发送人姓名
                 ]),
             ]));
-            $order->payee->notify(new Rewarded($order));
-            //更新主题打赏数
-            $thread = Thread::where('id', $order->thread_id)->first();
-            if ($thread) {
-                $thread->refreshRewardedCount();
-                $thread->save();
-            }
+
+            // 更新主题打赏数
+            $order->thread->refreshRewardedCount()->save();
         }
 
         //更新主题付费数
