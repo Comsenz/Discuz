@@ -42,19 +42,6 @@ class ListNotificationController extends AbstractListController
     public $notificationCount;
 
     /**
-     * 1回复我的 2点赞我的 3打赏我的 4@我的
-     *
-     * @attention 该数组类型的通知表中必须要有thread_id
-     * @var array
-     */
-    protected $type = [
-        1 => 'replied',
-        2 => 'liked',
-        3 => 'rewarded',
-        4 => 'related',
-    ];
-
-    /**
      * @param NotificationRepository $notifications
      * @param UrlGenerator $url
      */
@@ -109,11 +96,6 @@ class ListNotificationController extends AbstractListController
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
         $type = Arr::get($filter, 'type');
-        if (!empty($type)) {
-            if (array_key_exists($type, $this->type)) {
-                $type = $this->type[$type];
-            }
-        }
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {
