@@ -80,7 +80,14 @@ class UploadLogoController extends AbstractResourceController
             ]
         )->validate();
 
-        $fileName = 'logo.'.$verifyFile->getClientOriginalExtension();
+        // 是否是背景图
+        $isBackgroundImage = (bool) Arr::get($request->getParsedBody(), 'isBackgroundImage');
+
+        // 写入配置表的名字
+        $settingName = $isBackgroundImage ? 'background_image' : 'logo';
+
+        // 文件名
+        $fileName = $settingName . '.' . $verifyFile->getClientOriginalExtension();
 
         try {
             $this->filesystem->disk('public')->put($fileName, $file->getStream());
@@ -88,7 +95,7 @@ class UploadLogoController extends AbstractResourceController
             throw new $e;
         }
 
-        $this->settings->set('logo', $fileName);
+        $this->settings->set($settingName, $fileName);
 
         return [
             'key' => 'logo',

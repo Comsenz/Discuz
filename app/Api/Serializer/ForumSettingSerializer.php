@@ -37,6 +37,7 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         // 获取logo完整地址
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
+        $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
 
         $attributes = [
             // 站点设置
@@ -46,6 +47,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
+                'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
                 'site_url' => $this->settings->get('site_url'),
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
@@ -109,8 +111,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),
                 'can_upload_images' => $this->actor->can('attachment.create.1'),
                 'can_create_thread' => $this->actor->can('createThread'),
-                'can_create_thread_video' => $this->actor->can('createThreadVideo'),
                 'can_create_thread_long' => $this->actor->can('createThreadLong'),
+                'can_create_thread_video' => $this->actor->can('createThreadVideo'),
+                'can_create_thread_image' => $this->actor->can('createThreadImage'),
                 'can_view_threads' => $this->actor->can('viewThreads'),
                 'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
                 'can_view_user_list' => $this->actor->can('viewUserList'),
