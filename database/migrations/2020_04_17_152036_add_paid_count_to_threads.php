@@ -14,6 +14,7 @@ class AddPaidCountToThreads extends Migration
     {
         $this->schema()->table('threads', function (Blueprint $table) {
             $table->unsignedInteger('paid_count')->default(0)->after('view_count')->comment('付费数');
+            $table->unsignedInteger('rewarded_count')->default(0)->after('view_count')->comment('打赏数');
 
         });
     }
@@ -27,6 +28,7 @@ class AddPaidCountToThreads extends Migration
     {
         $this->schema()->table('threads', function (Blueprint $table) {
             $table->dropColumn('paid_count');
+            $table->dropColumn('rewarded_count');
         });
     }
 }

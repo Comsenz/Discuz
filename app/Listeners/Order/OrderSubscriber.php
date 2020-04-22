@@ -62,6 +62,13 @@ class OrderSubscriber
                     'actor_username' => $order->user->username    // 发送人姓名
                 ]),
             ]));
+            $order->payee->notify(new Rewarded($order));
+            //更新主题打赏数
+            $thread = Thread::where('id', $order->thread_id)->first();
+            if ($thread) {
+                $thread->refreshRewardedCount();
+                $thread->save();
+            }
         }
 
         //更新主题付费数
