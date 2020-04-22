@@ -85,17 +85,17 @@ class Replied extends System
          * 判断是否是楼中楼的回复
          */
         if ($this->post->reply_post_id) {
-            $build['post_content'] = $this->post->getSummaryContent(80)['content'];
+            $build['post_content'] = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['content'];
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['post_created_at'] = $this->post->created_at->toDateTimeString();
         } else {
             /**
              * 长文点赞通知内容为标题
              */
-            $content = $this->post->getSummaryContent(80)['content'];
+            $content = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['content'];
 
             // 不是长文没有标题则使用首贴内容
-            $firstContent = $this->post->getSummaryContent(80)['first_content'];
+            $firstContent = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['first_content'];
 
             $build['thread_id'] = $this->post->thread->id;
             $build['thread_user_id'] = $this->post->thread->user_id;

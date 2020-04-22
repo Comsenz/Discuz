@@ -46,7 +46,7 @@ use Illuminate\Support\Str;
  * @property User $replyUser
  * @property User $deletedUser
  * @property PostMod $stopWords
- * @property mixed replyPost
+ * @property Post replyPost
  * @package App\Models
  */
 class Post extends Model
@@ -58,6 +58,11 @@ class Post extends Model
      * 摘要长度
      */
     const SUMMARY_LENGTH = 100;
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const NOTICE_LENGTH = 80;
 
     /**
      * 摘要结尾
@@ -202,8 +207,7 @@ class Post extends Model
              * 判断长文点赞通知内容为标题
              */
             if ($this->thread->type == 1) {
-                $content = $substr ? Str::of($this->thread->title)->substr(0, $substr) : $this->thread->title;
-                $content = $special->purify($content);
+                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
             } else {
                 // 引用回复去除引用部分
                 $this->filterPostContent();
@@ -211,9 +215,7 @@ class Post extends Model
                 $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
                 $content = $this->formatContent();
 
-                // 不是长文没有标题则使用首贴内容
-                $this->thread->firstPost->content = $substr ? Str::of($this->thread->firstPost->content)->substr(0, $substr) : $this->thread->firstPost->content;
-                $firstContent = $this->thread->firstPost->formatContent();
+                $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
             }
         }
 

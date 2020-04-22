@@ -538,7 +538,7 @@ class NotificationTplSeeder extends Seeder
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
-                    '{username}' => '用户名',
+                    '{username}' => '回复人用户名',
                     '{content}' => '回复内容',
                     '{subject}' => '原文内容',
                     '{dateline}' => '通知时间',
@@ -558,7 +558,7 @@ class NotificationTplSeeder extends Seeder
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
-                    '{username}' => '用户名',
+                    '{username}' => '点赞人用户名',
                     '{content}' => '点赞内容',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
@@ -577,7 +577,7 @@ class NotificationTplSeeder extends Seeder
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
-                    '{username}' => '用户名',
+                    '{username}' => '打赏人用户名',
                     '{money}' => '金额',
                     '{content}' => '打赏内容',
                     '{dateline}' => '通知时间',
@@ -597,7 +597,7 @@ class NotificationTplSeeder extends Seeder
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
-                    '{username}' => '用户名',
+                    '{username}' => '@人用户名',
                     '{content}' => '@内容',
                     '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',

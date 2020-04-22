@@ -31,6 +31,13 @@ class System extends Notification
 
     protected $settings;
 
+    /**
+     * System constructor.
+     *
+     * @param $type
+     * @param array $data
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __construct($type, $data = [])
     {
         $this->type = $type;

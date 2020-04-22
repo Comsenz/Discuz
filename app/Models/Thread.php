@@ -12,12 +12,14 @@ use App\Events\Thread\Restored;
 use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -45,6 +47,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property threadVideo $threadVideo
  * @package App\Models
  * @method static find($id)
+ * @property string getContentByType
+ * @property int refreshPaidCount
  */
 class Thread extends Model
 {
@@ -56,6 +60,11 @@ class Thread extends Model
     const APPROVED = 1;
 
     const IGNORED = 2;
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const CONTENT_LENGTH = 80;
 
     /**
      * {@inheritdoc}
@@ -120,6 +129,29 @@ class Thread extends Model
         }
 
         return $this;
+    }
+
+    /**
+     * 根据类型获取 Thread content
+     *
+     * @param int $substr
+     * @return \Illuminate\Support\Stringable|string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getContentByType($substr = 0)
+    {
+        $special = app()->make(SpecialCharServer::class);
+
+        if ($this->type == 1) {
+            $content = $substr ? Str::of($this->title)->substr(0, $substr) : $this->title;
+            $content = $special->purify($content);
+        } else {
+            // 不是长文没有标题则使用首贴内容
+            $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
+            $content = $this->firstPost->formatContent();
+        }
+
+        return $content;
     }
 
     /**
