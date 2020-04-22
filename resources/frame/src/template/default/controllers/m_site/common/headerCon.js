@@ -349,7 +349,7 @@ export default {
 
   mounted: function () {
     this.handleTabFix()
-    // window.addEventListener('scroll', this.handleTabFix, true);
+    window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeDestroy() {
     // alert('销毁');
