@@ -7,11 +7,12 @@
 
 namespace App\Providers;
 
-use App\Events\Users\Saving;
-use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\UserListener;
+use App\Models\User;
+use App\Models\UserWechat;
+use App\Observer\UserObserver;
+use App\Observer\UserWechatObserver;
 use App\User\AvatarUploader;
-use App\User\UserWechatObserver;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -34,5 +35,9 @@ class UserServiceProvider extends ServiceProvider
 
         // 订阅事件
         $events->subscribe(UserListener::class);
+
+        //添加Observer
+        User::observe(UserObserver::class);
+        UserWechat::observe(UserWechatObserver::class);
     }
 }
