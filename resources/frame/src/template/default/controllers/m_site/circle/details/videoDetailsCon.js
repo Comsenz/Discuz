@@ -50,24 +50,18 @@ export default {
   },
   mounted() {
     let self = this
-    setTimeout(() => {
-      self.videoFileid = self.themeCon.threadVideo._data.file_id;
-      self.videoAppid = self.videoAppid;
-      self.videoAppidChild = self.videoAppidChild;
-      var videoId;
-      // if (self.videoAppidChild != '' || self.videoAppidChild != '0' || self.videoAppidChild != null) {
-      if (!!self.videoAppidChild && self.videoAppidChild != '0') {
-        videoId = self.videoAppidChild
-      } else {
-        videoId = self.videoAppid
-      }
-      // self.videoFileCover = self.themeCon.threadVideo._data.cover_url;
-      self.$nextTick(() => {
-        // self.getVideoLang(self.videoFileid, self.videoAppid, self.videoFileCover)
-        self.getVideoLang(self.videoFileid, videoId);
-      })
-
-    }, 2000)
+    self.videoFileid = self.themeCon.threadVideo._data.file_id;
+    self.videoAppid = self.videoAppid;
+    self.videoAppidChild = self.videoAppidChild;
+    var videoId;
+    if (!!self.videoAppidChild && self.videoAppidChild != '0') {
+      videoId = self.videoAppidChild
+    } else {
+      videoId = self.videoAppid
+    }
+    self.$nextTick(() => {
+      self.getVideoLang(self.videoFileid, videoId);
+    })
   },
   created: function () {
     this.loadCover = true;
@@ -100,23 +94,30 @@ export default {
   methods: {
     // 初始化腾讯云播放器
     getVideoLang(fileID, appID, posterImg) {
-
       this.loadCover = true;
       this.loadVideo = false;
       const playerParam = {
         fileID: fileID,
         appID: appID,
-        'width': appCommonH.isWeixin().isPc ? 640 : this.viewportWidth - 30,
-        // 'poster': posterImg,
-        // 'poster': 'http://www.test.com/myimage.jpg',
-        'posterImage': false,
+        width: appCommonH.isWeixin().isPc ? 580 : this.viewportWidth * 0.9,
+        posterImage: false,
+        autoplay: true,
+        preload: 'auto',
+        controlBar: {
+          playbackRateMenuButton: false,
+          volumePanel: false
+        }
       }
       this.player = window.TCPlayer(this.tcPlayerId, playerParam);
-      this.player.ready(() => {
-        // debugger;
-        this.loadCover = false;
-        this.loadVideo = true;
-      });
+      var self = this;
+      this.player.on('loadeddata', function() {
+        if (self.player.videoHeight() > 400) {
+          self.player.height(400);
+          self.player.width(400 * self.player.videoWidth() / self.player.videoHeight());
+        }
+        self.loadCover = false;
+        self.loadVideo = true;
+      })
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet: function (id) {

@@ -61,20 +61,14 @@
         alt
         class="transcodingCover"
       />
-      <div
+      <div style="text-align: center"
         class="videoContent"
         v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null && themeCon.threadVideo._data.status == 1"
       >
-        <div class="postImgList" v-show="loadCover">
-            <van-image
-              lazy-load
-              :src="coverUrl"
-              fit="contain"
-            />
-
+        <div v-show="loadCover" style="display: inline-block">
+          <van-loading type="circular" size="24px">视频加载中...</van-loading>
         </div>
-        <!-- <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" /> -->
-        <div v-show="loadVideo">
+        <div v-show="loadVideo" style="display: inline-block">
           <video
             :id="tcPlayerId"
             preload="auto"
