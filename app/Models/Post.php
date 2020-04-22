@@ -40,6 +40,7 @@ use Illuminate\Support\Str;
  * @property bool $is_first
  * @property bool $is_comment
  * @property bool $is_approved
+ * @property Attachment $images
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
@@ -54,10 +55,14 @@ class Post extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 摘要长度（多字节字符通常是单字节字符的两倍宽度）
-     * https://www.php.net/manual/zh/function.mb-strwidth.php
+     * 摘要长度
      */
-    const SUMMARY_LENGTH = 200;
+    const SUMMARY_LENGTH = 100;
+
+    /**
+     * 摘要结尾
+     */
+    const SUMMARY_END_WITH = '...';
 
     const UNAPPROVED = 0;
 

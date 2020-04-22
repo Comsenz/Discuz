@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
@@ -105,6 +106,7 @@ class ListThreadsController extends AbstractListController
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(ThreadRepository $threads, UrlGenerator $url)
     {
@@ -529,7 +531,8 @@ class ListThreadsController extends AbstractListController
 
         // 已付费主题
         if ($notFreeThreads && !$actor->isAdmin()) {
-            $paidThreads = Order::whereIn('thread_id', $notFreeThreads)
+            $paidThreads = Order::query()
+                ->whereIn('thread_id', $notFreeThreads)
                 ->where('user_id', $actor->id)
                 ->where('status', Order::ORDER_STATUS_PAID)
                 ->where('type', Order::ORDER_TYPE_THREAD)
@@ -539,9 +542,9 @@ class ListThreadsController extends AbstractListController
         }
 
         // 主题内容处理
-        $threads->map(function (Thread $thread) use ($notFreeThreads, $paidThreads, $actor, $include) {
+        $threads->map(function (Thread $thread) use ($paidThreads, $actor, $include) {
             // 付费主题，是否付费
-            if ($notFreeThreads->contains($thread->id)) {
+            if ($thread->price > 0) {
                 if ($thread->user_id == $actor->id || $paidThreads->contains($thread->id)) {
                     $thread->setAttribute('paid', true);
                 } else {
@@ -549,21 +552,39 @@ class ListThreadsController extends AbstractListController
                 }
             }
 
+            /**
+             * 列表内容处理
+             *
+             * 0. 普通帖子不能设为付费帖无需处理
+             * 1. 长文帖子无论如何不返回内容
+             * 2. 视频帖子未付费仅展示封面
+             * 3. 图片帖子未付费仅展示高斯模糊图
+             */
+
             // 加载首贴时，处理内容
             if (in_array('firstPost', $include)) {
-                // 截取内容、隐藏附件
-                if ($thread->price > 0 && $thread->type == 1) {
-                    // 列表接口，付费长文主题，无论是否付费，不返回内容
-                    $thread->firstPost->content = '';
+                // 长文帖子无论如何不返回内容，其他类型截取部分内容
+                $thread->firstPost->content = $thread->type == 1
+                    ? ''
+                    : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
 
+                // 付费内容未付费处理
+                if ($thread->price > 0 && !$thread->getAttribute('paid')) {
+                    switch ($thread->type) {
+                        // 帖子
+                        case 1:
+                            $thread->firstPost->setRelation('images', collect());
+                            $thread->firstPost->setRelation('attachments', collect());
+                            break;
+                        // 图片
+                        case 3:
+                            $thread->firstPost->load('images');
 
-                    // 未付费时，隐藏图片及附件
-                    if (!$thread->getAttribute('paid')) {
-                        $thread->firstPost->setRelation('images', collect());
-                        $thread->firstPost->setRelation('attachments', collect());
+                            $thread->firstPost->images->map(function (Attachment $image) {
+                                $image->setAttribute('blur', true);
+                            });
+                            break;
                     }
-                } else {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
                 }
             }
 

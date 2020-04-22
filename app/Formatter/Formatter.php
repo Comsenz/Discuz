@@ -129,7 +129,7 @@ class Formatter
         $configurator->HTMLElements->allowElement('span');
         $configurator->HTMLElements->allowAttribute('span', 'class');
 
-        //  USERMENTION
+        // USERMENTION
         $tagName = 'USERMENTION';
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');

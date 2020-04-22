@@ -40,11 +40,16 @@ class ShareThreadController extends ResourceThreadController
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $include = $this->extractInclude($request);
 
-        $thread = Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->findOrFail($threadId);
+        $thread = Thread::query()
+            ->where('is_approved', Thread::APPROVED)
+            ->whereNull('deleted_at')
+            ->findOrFail($threadId);
 
         $thread->loadMissing($include);
 
-        $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+        $thread->firstPost->content = $thread->price > 0
+            ? ''
+            : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
 
         return $thread;
     }

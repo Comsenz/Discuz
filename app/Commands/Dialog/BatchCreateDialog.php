@@ -65,6 +65,10 @@ class BatchCreateDialog
                 $result['meta'][] = ['name' => $recipient, 'message' => ' not found '];
                 continue;
             }
+            if ($sender == $recipientUser->id) {
+                $result['meta'][] = ['name' => $recipient, 'message' => ' permission denied '];
+                continue;
+            }
 
             $result['data'][] = $dialogRes = $dialog::buildOrFetch($sender, $recipientUser->id);
 

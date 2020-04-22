@@ -113,8 +113,8 @@ class CreateThread
         if ($thread->type != 0) {
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
 
-            // 付费内容可阅读字数
-            if ($thread->price) {
+            // 付费长文帖可设置免费阅读字数
+            if ($thread->type == 1 && $thread->price) {
                 $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
             }
         }

@@ -61,28 +61,38 @@ class CreateThreadVideo
 
     /**
      * @param EventDispatcher $events
-     * @param SettingsRepository $settings
-     * @param ThreadRepository $thread
+     * @param ThreadRepository $threads
      * @param ThreadVideo $threadVideo
      * @return ThreadVideo
      */
-    public function handle(EventDispatcher $events, SettingsRepository $settings, ThreadRepository $thread, ThreadVideo $threadVideo)
+    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadVideo $threadVideo)
     {
         $this->events = $events;
 
-        $thread = $thread->findOrFail($this->threadId);
+        //传入主题ID时更新数据
+        if ($this->threadId) {
+            $thread = $threads->findOrFail($this->threadId);
+        }
+        $file_id = Arr::get($this->data, 'attributes.file_id');
+        $threadVideoRes = $threadVideo->where('file_id', $file_id)->first();
+        if ($threadVideoRes) {
+            $threadVideo = $threadVideoRes;
+        }
 
         $threadVideo->user_id   = $this->actor->id;
-        $threadVideo->thread_id = $thread->id;
+        $threadVideo->thread_id = isset($thread) ? $thread->id : $this->threadId;
         $threadVideo->status    = $threadVideo::VIDEO_STATUS_TRANSCODING;
-        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name');
-        $threadVideo->file_id   = Arr::get($this->data, 'attributes.file_id');
+        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name')?:'';
+        $threadVideo->file_id   = $file_id;
         $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url')?:'';
         $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url')?:'';
 
         $threadVideo->save();
-        //腾讯云点播转码
-        $this->transcodeVideo($threadVideo->file_id);
+
+        if (isset($thread)) {
+            //发布文章时，通知腾讯云点播转码
+            $this->transcodeVideo($threadVideo->file_id);
+        }
 
         return $threadVideo;
     }

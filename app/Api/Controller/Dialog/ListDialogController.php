@@ -80,7 +80,7 @@ class ListDialogController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
 
-        $userFollow = $this->search($actor, $filter, $limit, $offset);
+        $dialogs = $this->search($actor, $filter, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('dialog.list'),
@@ -95,7 +95,7 @@ class ListDialogController extends AbstractListController
             'pageCount' => ceil($this->dialogCount / $limit),
         ]);
 
-        return $userFollow;
+        return $dialogs;
     }
 
     /**

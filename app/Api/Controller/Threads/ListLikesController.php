@@ -60,22 +60,6 @@ class ListLikesController extends ListThreadsController
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
 
-        // 特殊关联：最新三条回复
-        if (in_array('lastThreePosts', $include)) {
-            $threads = $this->loadLastThreePosts($threads);
-        }
-
-        // 特殊关联：点赞的人
-        if (in_array('firstPost.likedUsers', $include)) {
-            $likedLimit = Arr::get($filter, 'likedLimit', 10);
-            $threads = $this->loadLikedUsers($threads, $likedLimit);
-        }
-
-        // 特殊关联：打赏的人
-        if (in_array('rewardedUsers', $include)) {
-            $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
-            $threads = $this->loadRewardedUsers($threads, $rewardedLimit, Order::ORDER_TYPE_REWARD);
-        }
         // 加载其他关联
         $threads->loadMissing($include);
 
