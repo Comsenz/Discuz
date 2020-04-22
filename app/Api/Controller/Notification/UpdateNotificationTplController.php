@@ -14,6 +14,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use RuntimeException;
 
 class UpdateNotificationTplController extends AbstractResourceController
 {
@@ -54,6 +55,11 @@ class UpdateNotificationTplController extends AbstractResourceController
         }
 
         if (isset($attributes['status'])) {
+            if ($notificationTpl->type == 1 && empty($notificationTpl->template_id)) {
+                // 验证是否设置模板ID
+                throw new RuntimeException('notification_is_missing_template_config');
+            }
+
             $notificationTpl->status = Arr::get($attributes, 'status');
         }
 

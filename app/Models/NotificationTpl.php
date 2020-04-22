@@ -9,6 +9,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class NotificationTpl
+ *
+ * @package App\Models
+ * @method static find($id)
+ */
 class NotificationTpl extends Model
 {
     const OPEN = 1;

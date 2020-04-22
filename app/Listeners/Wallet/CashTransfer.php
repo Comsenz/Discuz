@@ -77,7 +77,8 @@ class CashTransfer
 
     /**
      * 微信企业付
-     * @param  Cash   $event 事件参数
+     * @param Cash $event 事件参数
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function wecahtTransfer(Cash $event)
     {
