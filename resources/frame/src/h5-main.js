@@ -1,8 +1,6 @@
 import Vue from 'vue';
-import "babel-polyfill";
+//import "babel-polyfill";
 //将jquery 放入全局变量
-import jQuery from "jquery";
-window.$ = jQuery;
 import "../config/languageConfig";
 
 import 'vant/lib/index.css';             //引入vant样式
@@ -26,7 +24,12 @@ import "commonHelper";						//公共函数封装
 
 import browserDb from "webDbHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
-import moment from 'moment';                  //导入文件 momnet时间转换
+import dayjs from 'dayjs';                  //导入文件 momnet时间转换
+import 'dayjs/locale/zh-cn';
+dayjs.locale('zh-cn');//时间转换-需要汉化
+var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
+
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 import 'lrz';     //图片压缩
@@ -34,10 +37,9 @@ import 'lrz';     //图片压缩
 import wx from 'weixin-js-sdk';
 Vue.prototype.$wx = wx;
 
-import welinkH5 from '../static/js/hwh5-cloudonline';
-Vue.prototype.$welinkH5 = welinkH5;
+//import welinkH5 from '../static/js/hwh5-cloudonline';
+//Vue.prototype.$welinkH5 = welinkH5;
 
-import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
 
@@ -49,9 +51,8 @@ import "axiosHelper";							//ajax 请求封装
 
 import axios from 'axios';
 Vue.prototype.axios = axios;
-Vue.prototype.$moment = moment;//时间转换-赋值使用
+Vue.prototype.$dayjs = dayjs;//时间转换-赋值使用
 Vue.config.devtools = process.env.NODE_ENV === "development";
-moment.locale('zh-cn');//时间转换-需要汉化
 
 Vue.use(VueLazyload, {
   // loading: require('img/loading.png'),//加载中图片，一定要有，不然会一直重复加载占位图
@@ -73,7 +74,6 @@ browserDb.setSItem('homeStatus', 1);
 const App = new Vue({
   router: appRouter,
   store: appStore,
-  moment: moment,
   i18n,
   data: function () {
     return {

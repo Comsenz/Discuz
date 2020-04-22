@@ -5,7 +5,6 @@ import appConfig from "../../../../../../../frame/config/appConfig";
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
 // import appConfig from '../../../../../../config/appConfig';
-import filters from '../../../../../common/filters';
 import { ImagePreview } from "vant";
 import { wxShare, noShare } from '../../../viewConfig/tplConfig';
 export default {

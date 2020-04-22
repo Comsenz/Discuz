@@ -35,7 +35,7 @@
                     <div class="perName" v-else>该用户已被删除</div>
                     <div
                       class="postTime"
-                    >{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+                    >{{$dayjs(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
                 <div class="postOpera">

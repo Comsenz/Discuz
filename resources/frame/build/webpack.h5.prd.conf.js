@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 function resolve(dir) {
   return path.resolve(__dirname, "../" + dir);
@@ -164,7 +165,8 @@ module.exports = {
         to: "static",
         ignore: [".*"]
       }
-    ])
+    ]),
+    new BundleAnalyzerPlugin()
   ],
   node: {
     setImmediate: false,

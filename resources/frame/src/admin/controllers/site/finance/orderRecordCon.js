@@ -5,7 +5,6 @@
 import Card from '../../../view/site/common/card/card';
 import Page from '../../../view/site/common/page/page';
 import webDb from 'webDbHelper';
-import moment from "moment/moment";
 
 
 export default {
@@ -108,7 +107,7 @@ export default {
     * 格式化日期
     * */
     formatDate(data){
-      return moment(data).format('YYYY-MM-DD HH:mm')
+      return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
 
     /*

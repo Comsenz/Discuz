@@ -102,7 +102,7 @@
     </Card>-->
 
     <Card header="注册时间：">
-      <p>{{$moment(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
+      <p>{{$dayjs(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="注册IP：">
@@ -110,7 +110,7 @@
     </Card>
 
     <Card header="最后登录时间：" v-if="userInfo.loginAt">
-      <p>{{$moment(userInfo.loginAt).format('YYYY-MM-DD HH:mm')}}</p>
+      <p>{{$dayjs(userInfo.loginAt).format('YYYY-MM-DD HH:mm')}}</p>
     </Card>
 
     <Card header="最后登录IP：">

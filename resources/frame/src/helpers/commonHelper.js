@@ -5,7 +5,6 @@
 import Vue from "vue";
 import appFetch from "axiosHelper.js";
 import appConfig from "../../config/appConfig";
-import moment from "moment/moment";
 
 const appCommonH = {};
 
@@ -411,7 +410,7 @@ appCommonH.closePage = function() {
  * @param {[type]} format [description]
  */
 appCommonH.formatDate = function(data,format){
-  return moment(data).format('YYYY-MM-DD HH:mm')
+  return Vue.prototype.$dayjs(data).format('YYYY-MM-DD HH:mm')
 };
 
 /**

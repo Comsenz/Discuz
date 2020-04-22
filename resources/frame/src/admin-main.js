@@ -37,7 +37,9 @@ import "commonHelper";						//公共函数封装
 
 import browserDb from "webDbHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
-import moment from 'moment';                  //导入文件 momnet时间转换
+import dayjs from 'dayjs';                  //导入文件 momnet时间转换
+import 'dayjs/locale/zh-cn';
+dayjs.locale('zh-cn');//时间转换-需要汉化
 import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 import 'lrz';     //图片压缩
@@ -49,7 +51,6 @@ Vue.prototype.$wx = wx;
 import welinkH5 from '../static/js/hwh5-cloudonline';
 Vue.prototype.$welinkH5 = welinkH5;
 
-import filters from "./common/filters";   //过滤器
 import commonHeader from './template/default/view/m_site/common/loginSignUpHeader/loginSignUpHeader.vue';
 Vue.component('commonHeader', commonHeader);
 
@@ -64,9 +65,8 @@ import "axiosHelper";							//ajax 请求封装
 
 import axios from 'axios';
 Vue.prototype.axios = axios;
-Vue.prototype.$moment = moment;//时间转换-赋值使用
+Vue.prototype.$dayjs = dayjs;//时间转换-赋值使用
 Vue.config.devtools = process.env.NODE_ENV === "development";
-moment.locale('zh-cn');//时间转换-需要汉化
 
 Vue.use(VueLazyload, {
   // loading: require('img/loading.png'),//加载中图片，一定要有，不然会一直重复加载占位图
@@ -77,16 +77,6 @@ Vue.prototype.$echarts = Echarts; //后台财务统计echarts图标
 let app = {};
 
 app.bus = new Vue(); //后台财务统计echarts图标
-
-// Vue.use(tacptcha)
-//实例化根目录
-// const appRouter = RConfig.init();
-// const App = new Vue({
-//   	router: appRouter,
-//   	store: appStore,
-//     moment: moment,
-//   	template: '<router-view></router-view>'
-// }).$mount('#app');
 
 const appRouter = RConfig.init();
 
@@ -103,7 +93,6 @@ browserDb.setSItem('homeStatus', 1);
 const App = new Vue({
   router: appRouter,
   store: appStore,
-  moment: moment,
   i18n,
   data: function () {
     return {
