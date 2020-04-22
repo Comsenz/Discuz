@@ -50,6 +50,12 @@ class OrderSubscriber
         // 打赏主题的订单，支付成功后通知主题作者
         if ($order->type == Order::ORDER_TYPE_REWARD && $order->status == Order::ORDER_STATUS_PAID) {
             $order->payee->notify(new Rewarded($order));
+            //更新主题打赏数
+            $thread = Thread::where('id', $order->thread_id)->first();
+            if ($thread) {
+                $thread->refreshRewardedCount();
+                $thread->save();
+            }
         }
 
         //更新主题付费数

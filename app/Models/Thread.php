@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $post_count
  * @property int $view_count
  * @property int $paid_count
+ * @property int $rewarded_count
  * @property int $favorite_count
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -187,6 +188,20 @@ class Thread extends Model
     {
         $this->paid_count = $this->orders()
             ->where('type', Order::ORDER_TYPE_THREAD)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->count();
+
+        return $this;
+    }
+
+    /**
+     * 刷新打赏数量
+     * @return $this
+     */
+    public function refreshRewardedCount()
+    {
+        $this->rewarded_count = $this->orders()
+            ->where('type', Order::ORDER_TYPE_REWARD)
             ->where('status', Order::ORDER_STATUS_PAID)
             ->count();
 
