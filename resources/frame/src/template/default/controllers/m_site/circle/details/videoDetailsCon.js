@@ -106,11 +106,17 @@ export default {
         controlBar: {
           playbackRateMenuButton: false,
           volumePanel: false
-        }
+        },
       }
       this.player = window.TCPlayer(this.tcPlayerId, playerParam);
       var self = this;
-      this.player.on('loadeddata', function() {
+      this.player.on('ready', function() {
+        if (self.isWeixin) {
+          self.loadCover = false;
+          self.loadVideo = true;
+        }
+      });
+      this.player.on('loadedmetadata', function() {
         if (self.player.videoHeight() > 400) {
           self.player.height(400);
           self.player.width(400 * self.player.videoWidth() / self.player.videoHeight());

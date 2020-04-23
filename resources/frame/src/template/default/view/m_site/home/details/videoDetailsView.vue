@@ -75,7 +75,7 @@
             width="100%"
             playsinline
             webkit-playsinline
-            x5-playsinline
+            x5-video-player-type="h5-page"
           ></video>
         </div>
       </div>
