@@ -58,7 +58,7 @@ class ListDialogMessageController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['user'];
+    public $optionalInclude = ['user','user.groups'];
 
     /* The relationships that are included by default.
      *
@@ -95,6 +95,7 @@ class ListDialogMessageController extends AbstractListController
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
 
         $this->validation->make(
             ['dialog_id' => Arr::get($filter, 'dialog_id')],
@@ -119,6 +120,8 @@ class ListDialogMessageController extends AbstractListController
             $limit,
             $this->dialogMessageCount
         );
+
+        $dialogMessages->loadMissing($include);
 
         $document->setMeta([
             'total' => $this->dialogMessageCount,
