@@ -1,6 +1,4 @@
 import Vue from 'vue';
-//import "babel-polyfill";
-//将jquery 放入全局变量
 import "../config/languageConfig";
 
 import 'vant/lib/index.css';             //引入vant样式
@@ -21,9 +19,11 @@ import '../static/css/reset.css'; //引入清除浏览器默认样式CSS
 
 import "../config/appConfigInit";			//appConfig 对象进一步处理加工，如放在vue原型中
 import "commonHelper";						//公共函数封装
-
 import browserDb from "webDbHelper";						//公共函数封装
+
 import appStore from "./admin/store/index";							//vuex 初始化
+
+// import and init dayjs
 import dayjs from 'dayjs';                  //导入文件 momnet时间转换
 import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');//时间转换-需要汉化
@@ -52,6 +52,7 @@ import "axiosHelper";							//ajax 请求封装
 import axios from 'axios';
 Vue.prototype.axios = axios;
 Vue.prototype.$dayjs = dayjs;//时间转换-赋值使用
+
 Vue.config.devtools = process.env.NODE_ENV === "development";
 
 Vue.use(VueLazyload, {
@@ -59,14 +60,13 @@ Vue.use(VueLazyload, {
   // error: require('img/error.png')  //加载失败图片
 });
 Vue.prototype.$utils = utils; //注册全局方法
-let app = {};
 
+let app = {};
 app.bus = new Vue(); 
 
 const appRouter = RConfig.init();
 
 const keepAliveUrl = ['circle'];
-
 const noKeepAliveUrl2 = ['details/:themeId', 'home-page/:userId', 'login-user'];
 
 browserDb.setSItem('homeStatus', 1);

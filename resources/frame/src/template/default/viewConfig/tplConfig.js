@@ -5,7 +5,7 @@ import browserDb from '../../../helpers/webDbHelper';
 import appFetch from '../../../helpers/axiosHelper';
 import appCommonH from '../../../helpers/commonHelper';
 import fa from "element-ui/src/locale/lang/fa";
-import appConfig from '../../../../config/appConfig'
+import appConfig from '../../../../config/appConfig';
 
 export default {
   /**
@@ -617,7 +617,7 @@ export default {
    * @return {[type]}        [description]
    */
 
-  beforeEnter: function (to, form, next) {
+  beforeEnter: function (appStore, to, form, next) {
     //判断设备
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let isPhone = appCommonH.isWeixin().isPhone;
@@ -718,10 +718,7 @@ export default {
     if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
       next();
     } else {
-      this.getForum().then((res) => {
-        /*
-        * 站点关闭，跳转到站点关闭页面
-        * */
+      appStore.dispatch('appSiteModule/loadForum').then(res => {
         if (res.errors) {
           if (res.rawData[0].code === 'site_closed') {
             if (to.name === 'login-user') {

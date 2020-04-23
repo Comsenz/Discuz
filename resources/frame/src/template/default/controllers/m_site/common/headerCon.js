@@ -5,6 +5,8 @@ import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
 import appConfig from '../../../../../../config/appConfig';
+import { mapState } from "vuex";
+
 export default {
   data: function () {
     return {
@@ -106,7 +108,11 @@ export default {
   computed: {
     personUserId: function () {
       return this.$route.params.userId;
-    }
+    },
+    ...mapState({
+      forum: state => state.appSiteModule.forum,
+      forumState: state => state.appSiteModule.forumState
+    }),
   },
   created() {
     this.userId = browserDb.getLItem('tokenId');
@@ -133,6 +139,11 @@ export default {
   watch: {
     'isfixNav': function (newVal, oldVal) {
       this.isfixNav = newVal;
+    },
+    forumState(newValue, oldValue) {
+      if (newValue === "FORUM_LOADED" || newValue === "FORUM_ERROR") {
+        this.setForumInfo(this.forum);
+      }
     }
   },
   methods: {
@@ -142,16 +153,7 @@ export default {
       let viewportWidth = window.innerWidth;
       document.getElementById('testNavBar').style.marginLeft = (viewportWidth - 640) / 2 + 'px';
     },
-    //初始化请站点信息和分类接口
-    loadCategories() {
-      //请求站点信息
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+    setForumInfo(res) {
         this.siteInfo = res.readdata;
         this.logo = res.readdata._data.set_site.site_logo;
         if (res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null) {
@@ -159,7 +161,14 @@ export default {
         }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;
-      })
+    },
+    //初始化请站点信息和分类接口
+    loadCategories() {
+      if (this.forumState === "FORUM_LOADED") {
+        this.setForumInfo(this.forum);
+      } else {
+        this.$store.dispatch("appSiteModule/loadForum");
+      }
       if (this.navShow) {
         //请求分类接口
         this.appFetch({

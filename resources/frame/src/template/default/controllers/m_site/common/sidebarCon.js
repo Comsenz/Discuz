@@ -5,6 +5,8 @@ import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appConfig from "../../../../../../../frame/config/appConfig";
 import appCommonH from '../../../../../helpers/commonHelper';
+import { mapState } from "vuex";
+
 export default {
   //接收站点是否收费的值
   props: {
@@ -91,11 +93,22 @@ export default {
       // wxOfficial:''  //微信公众号
     }
   },
+  computed: mapState({
+    forum: state => state.appSiteModule.forum,
+    forumState: state => state.appSiteModule.forumState
+  }),
   created: function () {
     this.isPayValue = this.isPayVal;
     this.getUserInfo();
     this.getInfo();
     this.onLoad()
+  },
+  watch: {
+    forumState(newValue, oldValue) {
+      if (newValue === "FORUM_LOADED" || newValue === "FORUM_ERROR") {
+        this.setInfo(this.forum);
+      }
+    }
   },
   methods: {
     //获取用户信息
@@ -132,35 +145,34 @@ export default {
       })
 
     },
+    setInfo(res) {
+      if (res.errors) {
+        this.$toast.fail(res.errors[0].code);
+        throw new Error(res.error)
+      } else {
+        this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
+        this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
+        this.canCreateInvite = res.readdata._data.other.can_create_invite;
+        var manaObj = {
+          text: '站点管理',
+          name: 'management-circles',
+          path: '/management-circles', // 跳转路径
+          enentType: ''
+        };
+        // 判断当用户组拥有批量管理主题、修改用户组、邀请加入权限中的任意一项时才会显示该菜单
+        if (this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite) {
+          // alert('执行2')
+          // this.sidebarList2.splice(1,1);
+          this.sidebarList2.splice(1, 0, manaObj);
+        }
+      }
+    },
     getInfo() {
-      //请求站点信息，用于判断站点是否是付费站点
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-        }
-      }).then((res) => {
-        if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
-        } else {
-          this.canBatchEditThreads = res.readdata._data.other.can_batch_edit_threads;
-          this.canEditUserGroup = res.readdata._data.other.can_editUser_group;
-          this.canCreateInvite = res.readdata._data.other.can_create_invite;
-          var manaObj = {
-            text: '站点管理',
-            name: 'management-circles',
-            path: '/management-circles', // 跳转路径
-            enentType: ''
-          };
-          // 判断当用户组拥有批量管理主题、修改用户组、邀请加入权限中的任意一项时才会显示该菜单
-          if (this.canBatchEditThreads || this.canEditUserGroup || this.canCreateInvite) {
-            // alert('执行2')
-            // this.sidebarList2.splice(1,1);
-            this.sidebarList2.splice(1, 0, manaObj);
-          }
-        }
-      });
+      if (this.forumState === "FORUM_LOADED") {
+        this.setInfo(this.forum);
+      } else {
+        this.$store.dispatch("appSiteModule/loadForum");
+      }
     },
     onLoad() {
       let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;

@@ -1,5 +1,6 @@
 import frontTplConfig from "./tplConfig";
 import baseTpl from "../../../extend/viewBase/baseTpl";
+import appStore from "../../../admin/store/index";							//vuex 初始化
 
 const defaultConfig = new baseTpl(frontTplConfig);
 
@@ -29,7 +30,7 @@ defaultConfig.beforeEnterModule = function(Router) {
 	 * @return {[type]}       [description]
 	 */
 	Router.beforeEach(function(to, form, next) {
-        frontTplConfig.beforeEnter(to, form, next);
+        frontTplConfig.beforeEnter(appStore, to, form, next);
 	});
 
   Router.onError((error) => {

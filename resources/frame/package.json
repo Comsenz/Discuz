@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server --max-new-space-size=4096 --mode development --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
     "build": "node --max_old_space_size=4096 build/build.js",
-    "dev-h5": "webpack-dev-server --progress --config build/webpack.h5.dev.conf.js",
+    "dev-h5": "webpack-dev-server --progress --config build/webpack.h5.dev.conf.js --host 0.0.0.0",
     "build-h5": "node --max_old_space_size=4096 build/build.h5.js"
   },
   "dependencies": {
