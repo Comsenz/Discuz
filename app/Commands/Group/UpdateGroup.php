@@ -58,6 +58,7 @@ class UpdateGroup
         $group->type = Arr::get($this->data, 'attributes.type', '');
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
+        $group->is_display = (bool) Arr::get($this->data, 'attributes.isDisplay');
 
         $this->validator->valid($group->getDirty());
 
