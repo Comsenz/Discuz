@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Notification;
 
 use App\Api\Serializer\NotificationSerializer;
+use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\NotificationRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -107,17 +108,41 @@ class ListNotificationController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
-        //type markAsRead
+        // type markAsRead
         $actor->unreadNotifications()->where('type', $type)->get()->markAsRead();
 
         $data = $query->get();
 
+        // 非系统通知
+        $list = $data->where('type', '<>', 'system')->pluck('data');
+
+        // 用户 IDs
+        $userIds = collect($list)->pluck('user_id')->filter()->unique()->values();
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        // 主题 ID
+        $threadIds = collect($list)->pluck('thread_id')->filter()->unique()->values();
+        // 主题及其作者与作者用户组
+        $threads = Thread::with('user', 'user.groups')->whereIn('id', $threadIds)->get()->keyBy('id');
+
         // 获取通知里当前的用户名称和头像
-        $data->map(function ($item) {
+        $data->map(function ($item) use ($users, $threads) {
             if ($item->type != 'system') {
-                $user = User::findOrfail(Arr::get($item->data, 'user_id'));
-                $item->username = $user->username;
-                $item->avatar = $user->avatar;
+                /**
+                 * 解决 N+1 问题
+                 */
+                $user = $users->get(Arr::get($item->data, 'user_id'));
+                $item->user_name = $user->username;
+                $item->user_avatar = $user->avatar;
+                // 查询主题相关内容
+                if (Arr::has($item->data, 'thread_username')) {
+                    $item->thread_username = $item->data->thread_username;
+                } elseif (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
+                    // 获取主题作者用户组
+                    $threadUser = $threads->get($threadID)->user;
+                    $item->thread_user_name = $threadUser->username;
+                    $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
+                }
             }
         });
 

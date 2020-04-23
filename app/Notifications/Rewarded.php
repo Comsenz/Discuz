@@ -28,8 +28,6 @@ class Rewarded extends System
 
     public $channel;
 
-    public $special;
-
     /**
      * Rewarded constructor.
      *
@@ -46,8 +44,6 @@ class Rewarded extends System
         $this->order = $order;
         $this->actor = $actor;
 
-        $this->special = app()->make(SpecialCharServer::class);
-
         parent::__construct($messageClass, $build);
     }
 
@@ -63,10 +59,10 @@ class Rewarded extends System
         $build = [
             'user_id' => $this->order->user->id,  // 付款人ID
             'order_id' => $this->order->id,
-            'thread_id' => $this->order->thread->id,
-            'thread_title' => $this->special->purify($this->order->thread->title),
+            'thread_id' => $this->order->thread->id,   // 必传
+            'thread_username' => $this->order->thread->user->username, // 必传主题用户名
+            'thread_title' => '',
             'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
-            'content' => '',
             'amount' => $this->order->amount - $this->order->master_amount,
         ];
 
@@ -83,7 +79,7 @@ class Rewarded extends System
     {
         $content = $this->order->thread->getContentByType(Thread::CONTENT_LENGTH);
 
-        $build['content'] = $content;
+        $build['thread_title'] = $content;
     }
 
     /**
