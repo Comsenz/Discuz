@@ -64,8 +64,8 @@ class Related extends System
     {
         $build = [
             'user_id' => $this->actor->id,
-            'thread_id' => 0,
-            'thread_user_id' => 0,
+            'thread_id' => 0, // 必传
+            'thread_username' => '', // 必传主题用户名
             'thread_title' => '',
             'thread_created_at' => '',
             'post_id' => $this->post->id,
@@ -102,7 +102,7 @@ class Related extends System
             $firstContent = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['first_content'];
 
             $build['thread_id'] = $this->post->thread->id;
-            $build['thread_user_id'] = $this->post->thread->user_id;
+            $build['thread_username'] = $this->post->thread->user->username;
             $build['thread_title'] = $firstContent;
             $build['thread_created_at'] = $this->post->thread->created_at->toDateTimeString();
             $build['post_content'] = $content;
