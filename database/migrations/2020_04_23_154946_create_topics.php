@@ -12,7 +12,7 @@ class CreateTopic extends Migration
      */
     public function up()
     {
-        $this->schema()->create('topic', function (Blueprint $table) {
+        $this->schema()->create('topics', function (Blueprint $table) {
             $table->id()->comment('话题ID');
             $table->unsignedBigInteger('user_id')->nullable()->comment('user_id');
             $table->text('content')->nullable()->comment('话题名称');
@@ -28,6 +28,6 @@ class CreateTopic extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('topic');
+        $this->schema()->dropIfExists('topics');
     }
 }
