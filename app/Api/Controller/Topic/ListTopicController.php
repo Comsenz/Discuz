@@ -13,10 +13,10 @@ use App\Repositories\TopicRepository;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -53,7 +53,7 @@ class ListTopicController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['user', 'threads'];
+    public $optionalInclude = ['user'];
 
     /* The relationships that are included by default.
      *
@@ -80,13 +80,12 @@ class ListTopicController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
 
-        $topic = $this->search($actor, $filter, $limit, $offset);
+        $topic = $this->search($filter, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('topics.list'),
@@ -107,16 +106,18 @@ class ListTopicController extends AbstractListController
     }
 
     /**
-     * @param User $actor
      * @param array $filter
      * @param null $limit
      * @param int $offset
      * @return Collection
      */
-    public function search(User $actor, $filter, $limit = null, $offset = 0)
+    public function search($filter, $limit = null, $offset = 0)
     {
-        $join_field = '';
         $query = $this->topics->query();
+        if ($content = Arr::get($filter, 'content')) {
+            $query->where('content', 'like', '%'.$content.'%');
+        }
+
 
         $this->topicCount = $limit > 0 ? $query->count() : null;
 
