@@ -32,6 +32,6 @@ class CreatePostMentionsUser extends Migration
      */
     public function down()
     {
-        $this->schema()->dropIfExists('post_mentions_users');
+        $this->schema()->dropIfExists('post_mentions_user');
     }
 }

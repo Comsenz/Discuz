@@ -82,10 +82,12 @@ class ListUserFollowController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-
-        $this->assertRegistered($actor);
-
         $filter = $this->extractFilter($request);
+        //没传用户ID需要登陆
+        if (!Arr::get($filter, 'user_id')) {
+            $this->assertRegistered($actor);
+        }
+
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);

@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\User;
+use App\Repositories\UserFollowRepository;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -25,12 +26,16 @@ class UserSerializer extends AbstractSerializer
      */
     protected $gate;
 
+    protected $userFollow;
+
     /**
      * @param Gate $gate
+     * @param UserFollowRepository $userFollow
      */
-    public function __construct(Gate $gate)
+    public function __construct(Gate $gate, UserFollowRepository $userFollow)
     {
         $this->gate = $gate;
+        $this->userFollow = $userFollow;
     }
 
     /**
@@ -55,7 +60,7 @@ class UserSerializer extends AbstractSerializer
             'likedCount'        => (int) $model->liked_count,
             'signature'         => $model->signature,
             'usernameBout'     => (int) $model->username_bout,
-            'follow'            => $model->follow,
+            'follow'            => $this->userFollow->findFollowDetail($this->actor->id, $model->id), //TODO 解决N+1
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
             'joinedAt'          => $this->formatDate($model->joined_at),
@@ -116,9 +121,9 @@ class UserSerializer extends AbstractSerializer
      */
     public function getIsReal(User $model)
     {
-        if(isset($model->realname) && $model->realname != null){
+        if (isset($model->realname) && $model->realname != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

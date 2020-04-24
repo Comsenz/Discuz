@@ -57,15 +57,12 @@ class ProfileController extends AbstractResourceController
         $user = $this->users->findOrFail($id, $actor);
         $isSelf = $user->id === $actor->id;
 
-        if($isSelf || $actor->isAdmin()) {
+        if ($isSelf || $actor->isAdmin()) {
             $this->optionalInclude = array_merge($this->optionalInclude, ['wechat']);
         }
 
         if ($isSelf) {
             $this->serializer = UserProfileSerializer::class;
-        } else {
-            //获取关注情况
-            $user->follow = $this->userFollow->findFollowDetail($actor->id, $user->id);
         }
 
         // 付费模式是否过期
