@@ -31,7 +31,7 @@ class Topic extends Model
     ];
 
     /**
-     * Define the relationship with the from_user.
+     * Define the relationship with the user.
      *
      * @return belongsTo
      */
@@ -41,7 +41,7 @@ class Topic extends Model
     }
 
     /**
-     * Define the relationship with the to_user.
+     * Define the relationship with the threads.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
