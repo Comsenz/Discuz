@@ -1,6 +1,7 @@
 // 表单模块 actions
 import Vue from "vue";
 import { SET_FORUM, SET_FORUM_STATUS } from "./mutationTypes";
+import browserDb from '../../../helpers/webDbHelper';
 
 export default {
   loadForum({ commit, state }) {
@@ -30,6 +31,7 @@ export default {
               return;
             }
           } else {
+            browserDb.setLItem('siteInfo', res.readdata);
             commit(SET_FORUM_STATUS, "FORUM_LOADED");
           }
           resolve(res);
