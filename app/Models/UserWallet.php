@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Carbon\Carbon $updated_at
  * @property User $user
  * @package App\Models
+ * @method truncate()
  */
 class UserWallet extends Model
 {

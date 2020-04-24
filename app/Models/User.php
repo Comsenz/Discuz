@@ -54,6 +54,7 @@ use Illuminate\Support\Carbon;
  * @property UserWechat $wechat
  * @package App\Models
  * @method truncate()
+ * @method HaveAvatar()
  * @method static find($id)
  * @method static whereIn($field, $ids)
  * @method static findOrfail($id)
