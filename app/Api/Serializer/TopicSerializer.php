@@ -27,7 +27,6 @@ class TopicSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'id'               => $model->id,
             'user_id'          => $model->user_id,
             'content'          => $model->content,
             'updated_at'       => $this->formatDate($model->updated_at),
