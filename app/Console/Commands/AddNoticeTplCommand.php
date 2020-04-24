@@ -81,7 +81,7 @@ class AddNoticeTplCommand extends AbstractCommand
         });
 
         $this->question('');
-        $this->question('更新通知系统[完成]');
+        $this->question('执行新增通知脚本[完成]');
 
         $bar->finish();
     }
