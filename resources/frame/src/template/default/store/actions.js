@@ -25,6 +25,10 @@ export default {
           commit(SET_FORUM, res);
           if (res.errors) {
             commit(SET_FORUM_STATUS, "FORUM_ERROR");
+            if (res.rawData[0].code == "not_install") {
+              window.location.href = res.rawData[0].detail.installUrl;
+              return;
+            }
           } else {
             commit(SET_FORUM_STATUS, "FORUM_LOADED");
           }
