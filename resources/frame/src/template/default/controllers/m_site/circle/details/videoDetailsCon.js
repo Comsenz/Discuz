@@ -60,8 +60,8 @@ export default {
       videoId = self.videoAppid
     }
     self.$nextTick(() => {
-      self.getVideoLang(self.videoFileid, videoId);
-    })
+        self.getVideoLang(self.videoFileid, videoId);
+    });
   },
   created: function () {
     this.loadCover = true;
@@ -96,10 +96,11 @@ export default {
     getVideoLang(fileID, appID, posterImg) {
       this.loadCover = true;
       this.loadVideo = false;
+      const maxWidth = appCommonH.isWeixin().isPc ? 580 : this.viewportWidth * 0.9;
       const playerParam = {
         fileID: fileID,
         appID: appID,
-        width: appCommonH.isWeixin().isPc ? 580 : this.viewportWidth * 0.9,
+        width: maxWidth,
         posterImage: false,
         autoplay: true,
         preload: 'auto',
@@ -108,22 +109,34 @@ export default {
           volumePanel: false
         },
       }
-      this.player = window.TCPlayer(this.tcPlayerId, playerParam);
+      this.player = TCPlayer(this.tcPlayerId, playerParam);
       var self = this;
-      this.player.on('ready', function() {
-        if (self.isWeixin) {
+      if (this.isiOS && this.isWeixin) {
+        this.player.ready(function() {
           self.loadCover = false;
           self.loadVideo = true;
-        }
-      });
+        });
+      }
       this.player.on('loadedmetadata', function() {
-        if (self.player.videoHeight() > 400) {
-          self.player.height(400);
-          self.player.width(400 * self.player.videoWidth() / self.player.videoHeight());
-        }
-        self.loadCover = false;
-        self.loadVideo = true;
-      })
+        self.adjustVideoAspect(maxWidth);
+      });
+      this.player.on('timeupdate', function() {
+        self.adjustVideoAspect(maxWidth);
+      });
+    },
+    adjustVideoAspect: function(maxWidth) {
+      if (this.player.videoHeight() > 400) {
+        this.player.height(400);
+        this.player.width(400 * this.player.videoWidth() / this.player.videoHeight());
+      } else if (this.player.videoWidth < maxWidth) {
+        this.player.width(this.player.videoWidth);
+      }
+      if (this.player.width() > maxWidth) {
+        this.player.width(maxWidth);
+        this.player.height(maxWidth * this.player.videoHeight() / this.player.videoWidth());
+      }
+      this.loadCover = false;
+      this.loadVideo = true;
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet: function (id) {
