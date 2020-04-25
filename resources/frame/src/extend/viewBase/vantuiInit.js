@@ -8,6 +8,7 @@ import {
   Button,
   Popup,
   Cell,
+  CellGroup,
   Tab,
   Tabs,
   Field,
@@ -33,6 +34,7 @@ Vue.use(RadioGroup)
   .use(Button)
   .use(Popup)
   .use(Cell)
+  .use(CellGroup)
   .use(Tab)
   .use(Tabs)
   .use(Field)
