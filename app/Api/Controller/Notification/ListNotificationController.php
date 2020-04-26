@@ -136,12 +136,14 @@ class ListNotificationController extends AbstractListController
                 $item->user_avatar = $user->avatar;
                 // 查询主题相关内容
                 if (Arr::has($item->data, 'thread_username')) {
-                    $item->thread_username = $item->data->thread_username;
+                    $item->thread_user_name = Arr::get($item->data, 'thread_username', '');
                 } elseif (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
-                    $threadUser = $threads->get($threadID)->user;
-                    $item->thread_user_name = $threadUser->username;
-                    $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
+                    if (!empty($threads->get($threadID))) {
+                        $threadUser = $threads->get($threadID)->user;
+                        $item->thread_user_name = $threadUser->username;
+                        $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
+                    }
                 }
             }
         });

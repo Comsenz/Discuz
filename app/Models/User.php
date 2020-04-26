@@ -54,7 +54,7 @@ use Illuminate\Support\Carbon;
  * @property UserWechat $wechat
  * @package App\Models
  * @method truncate()
- * @method HaveAvatar()
+ * @method hasAvatar()
  * @method static find($id)
  * @method static whereIn($field, $ids)
  * @method static findOrfail($id)
@@ -641,7 +641,7 @@ class User extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeHaveAvatar($query)
+    public function scopeHasAvatar($query)
     {
         return $query->whereNotNull('avatar');
     }
