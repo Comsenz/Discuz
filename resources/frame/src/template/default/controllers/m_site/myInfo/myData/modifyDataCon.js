@@ -82,22 +82,6 @@ export default {
     },
 
     modifyData() {
-      // this.appFetch({
-      //   url:'forum',
-      //   method:'get',
-      //   data:{
-
-      //   }
-      // }).then(res=>{
-      //   if (res.errors){
-      //     this.$message.error(res.errors[0].code);
-      //   }else {
-      //     if(res.readdata._data.qcloud.qcloud_facdid == false){
-      //       this.realNameShow = false
-      //     }
-      //   }
-      // })
-
       let userId = browserDb.getLItem('tokenId');
       this.appFetch({
         url: 'users',

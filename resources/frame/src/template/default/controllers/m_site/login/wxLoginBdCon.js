@@ -106,15 +106,10 @@ export default {
     * */
 
     getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteMode = res.readdata._data.set_site.site_mode;
         webDb.setLItem('siteInfo', res.readdata);
-      }).catch(err => {
-      })
+      });
     },
     getUsers(id) {
       return this.appFetch({

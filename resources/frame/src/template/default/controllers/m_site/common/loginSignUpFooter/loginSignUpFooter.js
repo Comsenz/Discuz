@@ -52,17 +52,12 @@ export default {
     },
 
     getForum(){
-      this.appFetch({
-        url:'forum',
-        method:'get',
-        data:{}
-      }).then(res=>{
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteMode = res.readdata._data.set_site.site_mode;
         this.registerClose = res.readdata._data.set_reg.register_close;
         this.qcloudSms = res.readdata._data.qcloud.qcloud_sms;
         webDb.setLItem('siteInfo',res.readdata);
-      }).catch(err=>{
-      })
+      });
     }
 
   },

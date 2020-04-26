@@ -3,7 +3,6 @@
  */
 import browserDb from "../../../../../helpers/webDbHelper";
 import appCommonH from "../../../../../helpers/commonHelper";
-import { mapState } from "vuex";
 
 export default {
   data: function() {
@@ -77,10 +76,6 @@ export default {
       isRecordNumber: "" //是否显示备案信息
     };
   },
-  computed: mapState({
-    forum: state => state.appSiteModule.forum,
-    forumState: state => state.appSiteModule.forumState
-  }),
   created: function() {
     this.loadInfo();
     this.load();
@@ -93,65 +88,53 @@ export default {
     browserDb.removeSItem("beforeVisiting");
     this.token = browserDb.getLItem("Authorization");
   },
-  watch: {
-    forumState(newValue, oldValue) {
-      if (newValue === "FORUM_LOADED" || newValue === "FORUM_ERROR") {
-        this.setInfo(this.forum);
-      }
-    }
-  },
   methods: {
     receive: function(val_1) {
       this.firstCategoriesId = val_1;
       // this.Initialization = true;
       // this.loadThemeList();
     },
-    setInfo(res) {
-      if (res.errors) {
-        this.$toast.fail(res.errors[0].code);
-        throw new Error(res.error);
-      } else {
-        var res = this.forum;
-        appCommonH.setPageTitle("circle", res);
-        this.webTitle =
-          res.readdata._data.set_site.site_name + " - Powered by Discuz! Q";
-        this.siteInfo = res.readdata;
-        this.canCreateThread = res.readdata._data.other.can_create_thread;
-        this.canCreateLongText =
-          res.readdata._data.other.can_create_thread_long;
-        this.canCreateVideo = res.readdata._data.other.can_create_thread_video;
-        this.canViewThreads = res.readdata._data.other.can_view_threads;
-        this.allowRegister = res.readdata._data.set_reg.register_close;
-        this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
-        this.recordNumber = res.readdata._data.set_site.site_record;
-        if (res.readdata._data.set_site.site_record == "") {
-          this.isRecordNumber = false;
-        } else {
-          this.isRecordNumber = true;
-        }
-        // if (this.canViewThreads === true) {
-        //   this.loadThemeList(); //初始化列表数据
-        // }
-        if (!this.allowRegister) {
-          this.loginWord = "登录";
-        }
-        // this.siteUsername = res.readdata._data.siteAuthor.username;
-        this.sitePrice = res.readdata._data.set_site.site_price;
-        //把站点是否收费的值存储起来，以便于传到父页面
-        this.isPayVal = res.readdata._data.set_site.site_mode;
-        if (this.isPayVal != null && this.isPayVal != "") {
-          this.isPayVal = res.readdata._data.set_site.site_mode;
-          //判断站点信息是否付费，用户是否登录，用户是否已支付
-          // this.detailIf(this.isPayVal,false);
-        }
-      }
-    },
     loadInfo() {
-      if (this.forumState === "FORUM_LOADED") {
-        this.setInfo(this.forum);
-      } else {
-        this.$store.dispatch("appSiteModule/loadForum");
-      }
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error);
+        } else {
+          var res = this.forum;
+          appCommonH.setPageTitle("circle", res);
+          this.webTitle =
+            res.readdata._data.set_site.site_name + " - Powered by Discuz! Q";
+          this.siteInfo = res.readdata;
+          this.canCreateThread = res.readdata._data.other.can_create_thread;
+          this.canCreateLongText =
+            res.readdata._data.other.can_create_thread_long;
+          this.canCreateVideo = res.readdata._data.other.can_create_thread_video;
+          this.canViewThreads = res.readdata._data.other.can_view_threads;
+          this.allowRegister = res.readdata._data.set_reg.register_close;
+          this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
+          this.recordNumber = res.readdata._data.set_site.site_record;
+          if (res.readdata._data.set_site.site_record == "") {
+            this.isRecordNumber = false;
+          } else {
+            this.isRecordNumber = true;
+          }
+          // if (this.canViewThreads === true) {
+          //   this.loadThemeList(); //初始化列表数据
+          // }
+          if (!this.allowRegister) {
+            this.loginWord = "登录";
+          }
+          // this.siteUsername = res.readdata._data.siteAuthor.username;
+          this.sitePrice = res.readdata._data.set_site.site_price;
+          //把站点是否收费的值存储起来，以便于传到父页面
+          this.isPayVal = res.readdata._data.set_site.site_mode;
+          if (this.isPayVal != null && this.isPayVal != "") {
+            this.isPayVal = res.readdata._data.set_site.site_mode;
+            //判断站点信息是否付费，用户是否登录，用户是否已支付
+            // this.detailIf(this.isPayVal,false);
+          }
+        }
+      });
     },
     //首页，逻辑判断
     detailIf() {

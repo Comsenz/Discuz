@@ -77,13 +77,7 @@ export default {
       }
 
 
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
@@ -95,7 +89,6 @@ export default {
           }
         }
       });
-      return load
     },
 
     //查看更多站点成员

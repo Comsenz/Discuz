@@ -208,13 +208,7 @@ export default {
     },
     getInfo() {
       //请求站点信息，用于判断是否能上传附件
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        },
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)

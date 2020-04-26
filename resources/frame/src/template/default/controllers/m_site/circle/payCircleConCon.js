@@ -72,13 +72,7 @@ export default {
   methods: {
     getInfo() {
       //请求站点信息，用于判断站点是否是付费站点
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
