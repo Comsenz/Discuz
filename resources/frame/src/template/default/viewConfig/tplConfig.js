@@ -967,6 +967,8 @@ export default {
         const scale = document.documentElement.clientWidth / 320;
         // 设置页面根节点字体大小
         document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+        let viewportWidth = window.innerWidth;
+        document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640) / 2 + 'px';
       }
       // 初始化
       setRem();
@@ -977,8 +979,6 @@ export default {
 
       document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
       document.getElementsByTagName("body")[0].style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640) / 2 + 'px';
     }
 
   },
