@@ -384,6 +384,7 @@ class ListThreadsController extends AbstractListController
                 ->where(function ($query) use ($queryWord) {
                     $queryWord = explode(',', $queryWord);
                     foreach ($queryWord as $word) {
+                        $query->orWhere('threads.title', 'like', "%{$word}%");
                         $query->orWhere('posts.content', 'like', "%{$word}%");
                     }
                 });
