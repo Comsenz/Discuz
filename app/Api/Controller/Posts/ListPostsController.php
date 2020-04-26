@@ -48,6 +48,8 @@ class ListPostsController extends AbstractListController
         'user.groups',
         'thread.category',
         'thread.firstPost',
+        'lastThreeComments',
+        'lastThreeComments.user',
         'deletedUser',
         'lastDeletedLog',
     ];
@@ -80,13 +82,20 @@ class ListPostsController extends AbstractListController
     protected $postCount;
 
     /**
+     * @var string
+     */
+    protected $tablePrefix;
+
+    /**
      * @param PostRepository $posts
      * @param UrlGenerator $url
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(PostRepository $posts, UrlGenerator $url)
     {
         $this->posts = $posts;
         $this->url = $url;
+        $this->tablePrefix = config('database.connections.mysql.prefix');
     }
 
     /**
@@ -119,6 +128,11 @@ class ListPostsController extends AbstractListController
         ]);
 
         Post::setStateUser($actor);
+
+        // 特殊关联：最后三条点评
+        if (in_array('lastThreeComments', $include)) {
+            $posts = $this->loadLastThreeComments($posts);
+        }
 
         // 特殊关联：最后一次删除的日志
         if (in_array('lastDeletedLog', $include)) {
@@ -190,6 +204,7 @@ class ListPostsController extends AbstractListController
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
         $query->where('posts.is_first', false);
+        $query->where('posts.is_comment', false);
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
@@ -279,5 +294,45 @@ class ListPostsController extends AbstractListController
         });
 
         // event(new ConfigurePostsQuery($query, $filter));
+    }
+
+    /**
+     * 特殊关联：最新三条点评
+     *
+     * @param Collection $posts
+     * @return Collection
+     */
+    public function loadLastThreeComments(Collection $posts)
+    {
+        $postIds = $posts->pluck('id');
+
+        $subSql = Post::query()
+            ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
+            ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
+            ->toSql();
+
+        $allLastThreeComments = Post::query()
+            ->from('posts', 'a')
+            ->whereRaw('(' . $subSql . ') < ?', [3])
+            ->whereIn('reply_post_id', $postIds)
+            ->whereNull('deleted_at')
+            ->where('is_approved', Post::APPROVED)
+            ->where('is_first', false)
+            ->where('is_comment', true)
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->map(function (Post $post) {
+                // 截取内容
+                $post->content = Str::limit($post->content, 70);
+
+                return $post;
+            });
+
+        $posts->map(function (Post $post) use ($allLastThreeComments) {
+            $post->setRelation('lastThreeComments', $allLastThreeComments->where('reply_post_id', $post->id)->take(3));
+        });
+
+        return $posts;
     }
 }
