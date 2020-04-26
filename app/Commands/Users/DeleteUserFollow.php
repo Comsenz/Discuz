@@ -61,14 +61,17 @@ class DeleteUserFollow
 
         $userFollowRes = $userFollowRepository->findOrFail($this->to_user_id, $this->from_user_id, $this->actor);
 
-        $toUser = $user->findOrFail($this->to_user_id);
         $deleteRes = $userFollowRes->delete();
 
         //取消互相关注
         if ($this->to_user_id) {
             $toUserFollow = $userFollow->where(['to_user_id'=>$this->actor->id,'from_user_id'=>$this->to_user_id,'is_mutual'=>1])->first();
+            $toUser = $user->findOrFail($this->to_user_id);
+            $fromUser = $this->actor;
         } else {
             $toUserFollow = $userFollow->where(['to_user_id'=>$this->from_user_id,'from_user_id'=>$this->actor->id,'is_mutual'=>1])->first();
+            $toUser = $this->actor;
+            $fromUser = $user->findOrFail($this->from_user_id);
         }
         if ($toUserFollow) {
             $toUserFollow->is_mutual = 0;
@@ -76,7 +79,7 @@ class DeleteUserFollow
         }
 
         $this->events->dispatch(
-            new UserFollowCount($this->actor, $toUser)
+            new UserFollowCount($fromUser, $toUser)
         );
 
         return $deleteRes;
