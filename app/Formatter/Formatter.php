@@ -8,6 +8,7 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
+use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
 use Discuz\Http\UrlGenerator;
@@ -136,6 +137,12 @@ class Formatter
         $tag->filterChain->prepend([static::class, 'addUserId']);
         $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
 
+        //topic
+        $tagName = 'TOPIC';
+        $configurator->tags->add($tagName)->attributes->add('id');
+        $tag->filterChain->prepend([static::class, 'addTopicId']);
+        $configurator->Preg->match('/\B#(?<content>[a-z0-9_\x{4e00}-\x{9fa5}]+)#/i', $tagName);
+
         return $configurator;
     }
 
@@ -205,4 +212,18 @@ class Formatter
             return true;
         }
     }
+
+
+    /**
+     * @param $tag
+     * @return bool
+     */
+    public static function addTopicId($tag)
+    {
+        if ($topic = Topic::where('content', $tag->getAttribute('content'))->first()) {
+            $tag->setAttribute('id', $topic->id);
+            return true;
+        }
+    }
+
 }

@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  * @package App\Models
+ * @method static find($id)
+ * @method static where($column, $array)
  */
 class Topic extends Model
 {
