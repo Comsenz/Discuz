@@ -100,7 +100,6 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error);
         } else {
-          var res = this.forum;
           appCommonH.setPageTitle("circle", res);
           this.webTitle =
             res.readdata._data.set_site.site_name + " - Powered by Discuz! Q";
