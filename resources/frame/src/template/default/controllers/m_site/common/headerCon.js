@@ -310,7 +310,9 @@ export default {
     handleTabFix() {
       if (this.headFixed) {
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+        var topElem = document.querySelector("#testNavBar");
+        if (!topElem) return;
+        var offsetTop = topElem.offsetTop;
         if (scrollTop > offsetTop) {
           this.showHeader = true;
           // this.isfixHead = true;
