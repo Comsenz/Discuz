@@ -407,17 +407,20 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
-        $subSql = Post::selectRaw('count(*)')
+        $subSql = Post::query()
+            ->selectRaw('count(*)')
             ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
             ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
 
-        $allLastThreePosts = Post::from('posts', 'a')
+        $allLastThreePosts = Post::query()
+            ->from('posts', 'a')
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('thread_id', $threadIds)
             ->whereNull('deleted_at')
             ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
+            ->where('is_comment', false)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
@@ -451,12 +454,14 @@ class ListThreadsController extends AbstractListController
     {
         $firstPostIds = $threads->pluck('firstPost.id');
 
-        $subSql = PostUser::selectRaw('count(*)')
+        $subSql = PostUser::query()
+            ->selectRaw('count(*)')
             ->whereRaw($this->tablePrefix . 'a.`post_id` = `post_id`')
             ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
-        $allLikes = User::from('post_user', 'a')
+        $allLikes = User::query()
+            ->from('post_user', 'a')
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('post_id', $firstPostIds)
@@ -482,9 +487,21 @@ class ListThreadsController extends AbstractListController
      */
     protected function loadRewardedUsers(Collection $threads, $limit, $type)
     {
+        switch ($type) {
+            case Order::ORDER_TYPE_REWARD:
+                $relation = 'rewardedUsers';
+                break;
+            case Order::ORDER_TYPE_THREAD:
+                $relation = 'paidUsers';
+                break;
+            default:
+                return $threads;
+        }
+
         $threadIds = $threads->pluck('id');
 
-        $subSql = Order::selectRaw('count(*)')
+        $subSql = Order::query()
+            ->selectRaw('count(*)')
             ->whereRaw($this->tablePrefix . 'a.`type` = `type`')
             ->whereRaw($this->tablePrefix . 'a.`status` = `status`')
             ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
@@ -492,7 +509,8 @@ class ListThreadsController extends AbstractListController
             ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
-        $allRewardedUser = User::from('orders', 'a')
+        $allRewardedUser = User::query()
+            ->from('orders', 'a')
             ->join('users', 'a.user_id', '=', 'users.id')
             ->select('a.thread_id', 'users.*')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
@@ -504,13 +522,8 @@ class ListThreadsController extends AbstractListController
             ->orderBy('a.id', 'desc')
             ->get();
 
-        if ($type == Order::ORDER_TYPE_REWARD) {
-            $relationName = 'rewardedUsers';
-        } elseif ($type == Order::ORDER_TYPE_THREAD) {
-            $relationName = 'paidUsers';
-        }
-        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relationName) {
-            $thread->setRelation($relationName, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
+        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relation) {
+            $thread->setRelation($relation, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
         });
 
         return $threads;
