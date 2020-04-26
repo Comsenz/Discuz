@@ -186,8 +186,6 @@ class UpdateUser
         }
 
         if ($username = Arr::get($attributes, 'username')) {
-            $this->assertCan($this->actor, 'edit.username', $user);
-
             // 敏感词校验
             $this->censor->checkText($username, 'username');
             if ($this->censor->isMod) {
@@ -211,8 +209,6 @@ class UpdateUser
         }
 
         if ($signature = Arr::get($attributes, 'signature')) {
-            $this->assertCan($this->actor, 'edit.signature', $user);
-
             // 敏感词校验
             $this->censor->checkText($signature);
             if ($this->censor->isMod) {
