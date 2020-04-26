@@ -268,6 +268,7 @@ $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\S
 $route->post('/follow', 'follow.create', ApiController\Users\CreateUserFollowController::class);
 $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowController::class);
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
+$route->delete('/follow/{id}/{type}', 'follow.delete.type', ApiController\Users\DeleteUserFollowByTypeController::class);
 
 
 /*
