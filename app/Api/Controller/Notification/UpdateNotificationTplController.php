@@ -55,12 +55,13 @@ class UpdateNotificationTplController extends AbstractResourceController
         }
 
         if (isset($attributes['status'])) {
-            if ($notificationTpl->type == 1 && empty($notificationTpl->template_id)) {
+            $status = Arr::get($attributes, 'status');
+            if ($status == 1 && $notificationTpl->type == 1 && empty($notificationTpl->template_id)) {
                 // 验证是否设置模板ID
                 throw new RuntimeException('notification_is_missing_template_config');
             }
 
-            $notificationTpl->status = Arr::get($attributes, 'status');
+            $notificationTpl->status = $status;
         }
 
         $notificationTpl->save();
