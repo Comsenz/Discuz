@@ -143,6 +143,8 @@ export default {
           webDb.setLItem('tokenId', tokenId);
           webDb.setLItem('refreshToken', refreshToken);
 
+          this.$store.dispatch("appSiteModule/invalidateForum");
+
           this.getForum().then(() => {
             if (this.phoneStatus) {
               this.$router.push({ path: 'bind-phone' });
