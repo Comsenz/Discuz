@@ -32,7 +32,7 @@ class GroupSerializer extends AbstractSerializer
             'color'             => $model->color,
             'icon'              => $model->icon,
             'default'           => $model->default,
-            'isDisplay'         => $model->is_display,
+            'isDisplay'         => (bool) $model->is_display,
         ];
     }
 
