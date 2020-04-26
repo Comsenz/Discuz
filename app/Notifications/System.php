@@ -109,7 +109,7 @@ class System extends Notification
             }
         }
 
-        // 判断和系统通知的对应关系通知
+        // 判断和系统通知的对应微信通知关系
         if ($type == 1) {
             $wechat = [
                 11 => 23,
