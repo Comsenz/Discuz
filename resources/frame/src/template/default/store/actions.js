@@ -32,6 +32,8 @@ export default {
             }
           } else {
             browserDb.setLItem("siteInfo", res.readdata);
+            let siteInfoStat = res.readdata._data.set_site.site_stat;
+            app.bus.$emit('stat', siteInfoStat);
             commit(SET_FORUM_STATUS, "FORUM_LOADED");
           }
           resolve(res);
