@@ -7,7 +7,7 @@
 
 namespace App\Models;
 
-use App\Formatter\Formatter;
+use App\Formatter\DialogMessageFormatter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +38,7 @@ class DialogMessage extends Model
     /**
      * The text formatter instance.
      *
-     * @var Formatter
+     * @var DialogMessageFormatter
      */
     protected static $formatter;
 
@@ -87,7 +87,7 @@ class DialogMessage extends Model
         return $dialogMessage;
     }
 
-    public static function setFormatter(Formatter $formatter)
+    public static function setFormatter(DialogMessageFormatter $formatter)
     {
         static::$formatter = $formatter;
     }

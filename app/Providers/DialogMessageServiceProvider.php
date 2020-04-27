@@ -7,7 +7,7 @@
 
 namespace App\Providers;
 
-use App\Formatter\Formatter;
+use App\Formatter\DialogMessageFormatter;
 use App\Models\DialogMessage;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -29,6 +29,6 @@ class DialogMessageServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        DialogMessage::setFormatter($this->app->make(Formatter::class));
+        DialogMessage::setFormatter($this->app->make(DialogMessageFormatter::class));
     }
 }

@@ -9,14 +9,14 @@ namespace App\Formatter;
 
 use s9e\TextFormatter\Configurator;
 
-class MarkdownFormatter extends BaseFormatter
+class DialogMessageFormatter extends BaseFormatter
 {
     /**
      * Flush the cache so that the formatter components are regenerated.
      */
     public function flush()
     {
-        $this->cache->forget('markdownFormatter');
+        $this->cache->forget('dialogMessageFormatter');
     }
 
     /**
@@ -26,7 +26,7 @@ class MarkdownFormatter extends BaseFormatter
     {
         $formatter = $this->getConfigurator()->finalize();
 
-        $this->cache->forever('markdownFormatter', $formatter);
+        $this->cache->forever('dialogMessageFormatter', $formatter);
     }
 
     /**
@@ -34,6 +34,7 @@ class MarkdownFormatter extends BaseFormatter
      */
     protected function getConfigurator()
     {
+
         $configurator = parent::getConfigurator();
 
         parent::confEmoji($configurator);
@@ -43,8 +44,6 @@ class MarkdownFormatter extends BaseFormatter
         parent::confUserMention($configurator);
 
         parent::confTopic($configurator);
-
-        $configurator->plugins->load('Litedown');
 
         return $configurator;
     }
@@ -57,12 +56,12 @@ class MarkdownFormatter extends BaseFormatter
      */
     protected function getComponent($name)
     {
-        $formatter = $this->cache->get('markdownFormatter');
+        $formatter = $this->cache->get('dialogMessageFormatter');
 
         if (! $formatter) {
             $this->cacheFormatter();
 
-            $formatter = $this->cache->get('markdownFormatter');
+            $formatter = $this->cache->get('dialogMessageFormatter');
         }
 
         return $formatter[$name];

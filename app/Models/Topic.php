@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @package App\Models
  * @method static find($id)
  * @method static where($column, $array)
+ * @method static firstOrCreate($attributes, $values)
  */
 class Topic extends Model
 {
@@ -31,6 +32,12 @@ class Topic extends Model
         'updated_at',
         'created_at',
     ];
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = ['user_id', 'content'];
+
 
     /**
      * Define the relationship with the user.
