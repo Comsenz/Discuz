@@ -80,6 +80,7 @@ class UserSerializer extends AbstractSerializer
                 'identity'          => $model->identity,
                 'realname'          => $model->realname,
                 'mobile'            => $model->mobile,
+                'hasPassword'       => $model->password ? true : false,
             ];
         }
 
