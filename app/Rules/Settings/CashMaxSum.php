@@ -50,9 +50,8 @@ class CashMaxSum extends AbstractRule
     }
 
     /**
-     * Get the validation error message.
-     *
-     * @return string|array
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function message()
     {
