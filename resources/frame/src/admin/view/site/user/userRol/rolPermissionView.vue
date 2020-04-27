@@ -207,6 +207,17 @@
       </CardRow>
     </Card>
 
+    <Card header="用户信息权限："></Card>
+    <Card>
+      <CardRow description="开启后将可以修改用户名1次">
+        <el-checkbox
+          v-model="checked"
+          label="user.edit.username"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >修改用户名</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="其他设置："></Card>
     <Card>
       <CardRow description="开启后将在用户名后显示角色">
