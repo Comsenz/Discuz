@@ -13,25 +13,26 @@ use App\Models\Post;
 use App\Repositories\PostRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ResourcePostController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
     /**
+     * @var PostRepository
+     */
+    protected $posts;
+
+    /**
      * {@inheritdoc}
      */
     public $serializer = PostSerializer::class;
-
-    /**
-     * @var Post
-     */
-    public $post;
-
-    public $posts;
 
     /**
      * {@inheritdoc}
@@ -44,57 +45,87 @@ class ResourcePostController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'commentPosts',
+        'commentPosts.user',
+        'commentPosts.replyUser',
+        'commentPosts.mentionUsers',
+        'commentPosts.images',
         'images',
         'attachments',
     ];
 
     /**
-     * ResourcePostController constructor.
-     * @param Post $post
      * @param PostRepository $posts
      */
-    public function __construct(Post $post, PostRepository $posts)
+    public function __construct(PostRepository $posts)
     {
-        $this->post = $post;
         $this->posts = $posts;
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return mixed
+     * {@inheritdoc}
+     * @throws InvalidParameterException
+     * @throws PermissionDeniedException
      * @throws TranslatorException
-     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $id = Arr::get($request->getQueryParams(), 'id');
+        $postId = Arr::get($request->getQueryParams(), 'id');
         $actor = $request->getAttribute('actor');
-        $include = array_merge($this->extractInclude($request), ['comment_posts']);
+        $include = $this->extractInclude($request);
 
-        $post = $this->posts->findOrFail($id);
+        $post = $this->posts->findOrFail($postId, $actor);
+
+        $this->assertCan($actor, 'viewPosts', $post);
+
         if ($post->is_first || $post->is_comment) {
-            throw new TranslatorException('post_not_fond');
+            throw new TranslatorException('post_not_found');
         }
 
-        // 查询点评List 及其关联模型
-        if (in_array('comment_posts', $include)) {
-            $commentPostRelationships = $this->getPostRelationships($include);
-
-            $reply = $this->post->query()->whereVisibleTo($actor)->where([
-                'reply_post_id' => $id,
-                'is_comment' => true,
-            ])->get();
-            $reply->load($commentPostRelationships);
-
-            // 设置 回复回帖的所有内容
-            $post->setRelation('commentPosts', $reply);
+        if (($postRelationships = $this->getPostRelationships($include)) || in_array('commentPosts', $include)) {
+            $this->includePosts($post, $request, $postRelationships);
         }
-
-        $include = array_diff($include, ['comment_posts']);
-        $post->load($include);
 
         return $post;
+    }
+
+    /**
+     * @param Post $post
+     * @param ServerRequestInterface $request
+     * @param array $include
+     * @throws InvalidParameterException
+     */
+    private function includePosts(Post $post, ServerRequestInterface $request, array $include)
+    {
+        $actor = $request->getAttribute('actor');
+        $limit = $this->extractLimit($request);
+        $offset = $this->extractOffset($request);
+
+        $isDeleted = Arr::get($this->extractFilter($request), 'isDeleted');
+
+        $comments = $post->newQuery()
+            ->whereVisibleTo($actor)
+            ->when($isDeleted, function (Builder $query, $isDeleted) use ($actor) {
+                if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
+                    // 只看回收站帖子
+                    $query->whereNotNull('posts.deleted_at');
+                } elseif ($isDeleted == 'no') {
+                    // 不看回收站帖子
+                    $query->whereNull('posts.deleted_at');
+                }
+            })
+            ->where('reply_post_id', $post->id)
+            ->where('is_comment', true)
+            ->orderBy('created_at')
+            ->skip($offset)
+            ->take($limit)
+            ->with($include)
+            ->get()
+            ->each(function (Post $comment) use ($post) {
+                $comment->replyPost = $post;
+            });
+
+        $post->setRelation('commentPosts', $comments);
     }
 
     /**
@@ -103,7 +134,7 @@ class ResourcePostController extends AbstractResourceController
      */
     private function getPostRelationships(array $include)
     {
-        $prefixLength = strlen($prefix = 'comment_posts.');
+        $prefixLength = strlen($prefix = 'commentPosts.');
         $relationships = [];
 
         foreach ($include as $relationship) {

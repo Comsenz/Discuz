@@ -8,30 +8,10 @@
 namespace App\Api\Serializer;
 
 use App\Models\Post;
-use Discuz\Api\Serializer\AbstractSerializer;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
-class PostSerializer extends AbstractSerializer
+class PostSerializer extends BasicPostSerializer
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $type = 'posts';
-
-    /**
-     * @var Gate
-     */
-    protected $gate;
-
-    /**
-     * @param Gate $gate
-     */
-    public function __construct(Gate $gate)
-    {
-        $this->gate = $gate;
-    }
-
     /**
      * {@inheritdoc}
      *
@@ -39,43 +19,10 @@ class PostSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        $gate = $this->gate->forUser($this->actor);
+        $attributes = parent::getDefaultAttributes($model);
 
-        $canEdit = $gate->allows('edit', $model);
-
-        $attributes = [
-            'replyUserId'       => $model->reply_user_id,
-            'content'           => $model->content,
-            'contentHtml'       => $model->formatContent(),
-            'replyCount'        => $model->reply_count,
-            'likeCount'         => $model->like_count,
-            'createdAt'         => $this->formatDate($model->created_at),
-            'updatedAt'         => $this->formatDate($model->updated_at),
-            'isFirst'           => (bool) $model->is_first,
-            'isApproved'        => (int) $model->is_approved,
-            'canEdit'           => $canEdit,
-            'canApprove'        => $gate->allows('approve', $model),
-            'canDelete'         => $gate->allows('delete', $model),
-            'canHide'           => $gate->allows('hide', $model),
-        ];
-
-        // 判断是否有点评数据
-        if (!empty($model->commentPosts)) {
-            $attributes['commentPosts'] = $model->commentPosts;
-        }
-
-        if ($canEdit || $this->actor->id === $model->user_id) {
-            $attributes += [
-                'ip'            => $model->ip,
-            ];
-        }
-
-        if ($model->deleted_at) {
-            $attributes['isDeleted'] = true;
-            $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
-        }
-
-        Post::setStateUser($this->actor);
+        $attributes['isFirst'] = (bool) $model->is_first;
+        $attributes['isComment'] = false;
 
         return $attributes;
     }
@@ -84,94 +31,17 @@ class PostSerializer extends AbstractSerializer
      * @param $post
      * @return Relationship
      */
-    protected function user($post)
-    {
-        return $this->hasOne($post, UserSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    protected function replyUser($post)
-    {
-        return $this->hasOne($post, UserSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
     protected function commentPosts($post)
     {
-        return $this->hasMany($post, PostSerializer::class);
+        return $this->hasMany($post, CommentPostSerializer::class);
     }
 
     /**
      * @param $post
      * @return Relationship
      */
-    protected function deletedUser($post)
+    protected function lastThreeComments($post)
     {
-        return $this->hasOne($post, UserSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    protected function thread($post)
-    {
-        return $this->hasOne($post, ThreadSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    protected function images($post)
-    {
-        return $this->hasMany($post, AttachmentSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    protected function attachments($post)
-    {
-        return $this->hasMany($post, AttachmentSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    protected function likedUsers($post)
-    {
-        return $this->hasMany($post, UserSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    public function logs($post)
-    {
-        return $this->hasMany($post, OperationLogSerializer::class);
-    }
-
-    /**
-     * @param $post
-     * @return Relationship
-     */
-    public function lastDeletedLog($post)
-    {
-        return $this->hasOne($post, OperationLogSerializer::class);
-    }
-
-
-    public function mentionUsers($post) {
-        return $this->hasMany($post, UserSerializer::class);
+        return $this->hasMany($post, CommentPostSerializer::class);
     }
 }

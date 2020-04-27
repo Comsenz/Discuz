@@ -61,7 +61,8 @@ class Rewarded extends System
             'order_id' => $this->order->id,
             'thread_id' => $this->order->thread->id,   // 必传
             'thread_username' => $this->order->thread->user->username, // 必传主题用户名
-            'thread_title' => '',
+            'thread_title' => $this->order->thread->title,
+            'content' => '',  // 兼容原数据
             'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
             'amount' => $this->order->amount - $this->order->master_amount,
         ];
@@ -79,7 +80,7 @@ class Rewarded extends System
     {
         $content = $this->order->thread->getContentByType(Thread::CONTENT_LENGTH);
 
-        $build['thread_title'] = $content;
+        $build['content'] = $content;
     }
 
     /**

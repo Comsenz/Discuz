@@ -40,9 +40,9 @@ class AvatarClearCommand extends AbstractCommand
     {
         // test data
         // $array = [130, 344, 343, 342];
-        // $users = $this->user->HaveAvatar()->whereIn('id', $array)->get();
+        // $users = $this->user->hasAvatar()->whereIn('id', $array)->get();
 
-        $users = $this->user->HaveAvatar()->get();
+        $users = $this->user->hasAvatar()->get();
 
         $bar = $this->createProgressBar(count($users));
 
