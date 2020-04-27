@@ -4,7 +4,7 @@
     <main>
       <div class="change-username-main my-info-form">
         <van-cell-group>
-          <van-field label="新用户名" v-model="newusername" type="text" placeholder="请输入您希望设置的新用户名" />
+          <van-field label="新用户名" v-model="newusername" type="text" placeholder="用户名只可修改一次" />
         </van-cell-group>
       </div>
 
