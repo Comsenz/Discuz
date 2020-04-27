@@ -249,12 +249,14 @@ class User extends Model
         return $this;
     }
 
-    public function changeUsername($username)
+    public function changeUsername($username, $isAdmin = false)
     {
         $this->username = $username;
 
-        // 修改次数+1
-        $this->username_bout += 1;
+        if (!$isAdmin) {
+            // 修改次数+1
+            $this->username_bout += 1;
+        }
 
         return $this;
     }

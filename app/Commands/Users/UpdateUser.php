@@ -195,7 +195,8 @@ class UpdateUser
             // 过滤内容
             $username = $this->specialChar->purify($username);
 
-            if (!$this->actor->isAdmin()) {
+            $isAdmin = $this->actor->isAdmin();
+            if (!$isAdmin) {
                 if ($user->username_bout >= $this->settings->get('username_bout', 'default', 1)) {
                     throw new TranslatorException('user_username_bout_limit_error');
                 }
@@ -205,7 +206,7 @@ class UpdateUser
                 throw new TranslatorException('user_username_already_exists');
             }
 
-            $user->changeUsername($username);
+            $user->changeUsername($username, $isAdmin);
         }
 
         if ($signature = Arr::get($attributes, 'signature')) {
