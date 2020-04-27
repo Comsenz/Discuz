@@ -50,6 +50,7 @@ class ListPostsController extends AbstractListController
         'thread.firstPost',
         'lastThreeComments',
         'lastThreeComments.user',
+        'lastThreeComments.replyUser',
         'deletedUser',
         'lastDeletedLog',
     ];
@@ -308,6 +309,9 @@ class ListPostsController extends AbstractListController
 
         $subSql = Post::query()
             ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`is_first` = `is_first`')
+            ->whereRaw($this->tablePrefix . 'a.`is_comment` = `is_comment`')
+            ->whereRaw($this->tablePrefix . 'a.`is_approved` = `is_approved`')
             ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
             ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
@@ -317,9 +321,9 @@ class ListPostsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('reply_post_id', $postIds)
             ->whereNull('deleted_at')
-            ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
             ->where('is_comment', true)
+            ->where('is_approved', Post::APPROVED)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
