@@ -18,7 +18,6 @@ use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Filesystem\Factory;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\Filesystem as ContractsFilesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -54,7 +53,7 @@ class SettingsServiceProvider extends ServiceProvider
             });
 
             $this->app->when([AvatarUploader::class, UserWechatObserver::class])
-                ->needs(Filesystem::class)
+                ->needs(ContractsFilesystem::class)
                 ->give(function (Application $app) use($avatarDisk) {
                     return $app->make(Factory::class)->disk($avatarDisk);
                 });
