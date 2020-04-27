@@ -4,18 +4,18 @@
 
     <main class="sign-up-main">
       <div class="login-module-title-box">
-        <p class="login-module-title">注册</p>
+        <p class="login-module-title">注册新用户</p>
       </div>
 
       <form class="login-module-form">
         <van-cell-group>
-          <van-field clearable label="用户名" placeholder="请输入您的用户名" v-model="username" />
+          <van-field clearable label="用户名" placeholder="请输入您希望使用的用户名" v-model="username" />
 
           <van-field
             clearable
             type="password"
             label="密码"
-            placeholder="请填写密码"
+            placeholder="请设置您的密码"
             v-model="password"
             :error="error"
             :error-message="errorMessage"
