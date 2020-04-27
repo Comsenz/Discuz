@@ -147,7 +147,7 @@ export default {
     * 接口请求
     * */
     getForum(){
-      this.$store.dispatch("appSiteModule/loadForum").then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
