@@ -17,6 +17,7 @@ use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,7 +31,7 @@ class ResourceThreadController extends AbstractResourceController
     /**
      * @var ThreadRepository
      */
-    protected $thread;
+    protected $threads;
 
     /**
      * @var PostRepository
@@ -73,12 +74,12 @@ class ResourceThreadController extends AbstractResourceController
     ];
 
     /**
-     * @param ThreadRepository $thread
+     * @param ThreadRepository $threads
      * @param PostRepository $posts
      */
-    public function __construct(ThreadRepository $thread, PostRepository $posts)
+    public function __construct(ThreadRepository $threads, PostRepository $posts)
     {
-        $this->thread = $thread;
+        $this->threads = $threads;
         $this->posts = $posts;
     }
 
@@ -93,8 +94,7 @@ class ResourceThreadController extends AbstractResourceController
         $actor = $request->getAttribute('actor');
         $include = $this->extractInclude($request);
 
-        // 主题
-        $thread = $this->thread->findOrFail($threadId, $actor);
+        $thread = $this->threads->findOrFail($threadId, $actor);
 
         $this->assertCan($actor, 'viewPosts', $thread);
 
@@ -194,7 +194,7 @@ class ResourceThreadController extends AbstractResourceController
 
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
-            ->when($isDeleted, function ($query, $isDeleted) use ($actor) {
+            ->when($isDeleted, function (Builder $query, $isDeleted) use ($actor) {
                 if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                     // 只看回收站帖子
                     $query->whereNotNull('posts.deleted_at');
@@ -209,7 +209,7 @@ class ResourceThreadController extends AbstractResourceController
             ->take($limit)
             ->with($include)
             ->get()
-            ->each(function ($post) use ($thread) {
+            ->each(function (Post $post) use ($thread) {
                 $post->thread = $thread;
             });
 
