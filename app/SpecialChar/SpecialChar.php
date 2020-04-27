@@ -81,6 +81,8 @@ class SpecialChar implements SpecialCharServer
 
         // 清除空标签
         $this->config->set('AutoFormat.RemoveEmpty', true);
+
+        $this->config->set('Cache.SerializerPath', storage_path('cache'));
     }
 
     public function setConfig()
