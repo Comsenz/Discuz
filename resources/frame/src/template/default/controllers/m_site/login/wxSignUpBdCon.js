@@ -86,11 +86,7 @@ export default {
     * 接口请求
     * */
     getForum() {
-      return this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -98,7 +94,6 @@ export default {
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
         }
-
       }).catch(err => {
         console.log(err);
       })

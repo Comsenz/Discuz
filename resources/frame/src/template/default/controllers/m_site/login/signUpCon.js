@@ -88,7 +88,7 @@ export default {
     * 接口请求
     * */
     getForum() {
-      this.$store.dispatch("appSiteModule/loadForum").then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -107,7 +107,6 @@ export default {
             this.signUpShow = false
           }
         }
-      }).catch(err => {
       })
     },
     setSignData() {
@@ -128,9 +127,8 @@ export default {
           }
         }
       }).then(res => {
-        this.btnLoading = false;
-
         this.getForum().then(() => {
+          this.btnLoading = false;
           if (res.errors) {
             if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
