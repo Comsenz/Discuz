@@ -9,16 +9,16 @@ namespace App\Providers;
 
 use App\Api\Serializer\AttachmentSerializer;
 use App\Models\Setting;
+use App\Observer\UserWechatObserver;
 use App\Settings\SettingsRepository;
 use App\Tools\AttachmentUploadTool;
 use App\Tools\ImageUploadTool;
 use App\User\AvatarUploader;
-use App\User\UserWechatObserver;
 use Discuz\Contracts\Setting\SettingsRepository as ContractsSettingsRepository;
-use Discuz\Filesystem\CosAdapter;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\Filesystem as ContractsFilesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -41,20 +41,23 @@ class SettingsServiceProvider extends ServiceProvider
             $settings = $this->app->make(ContractsSettingsRepository::class);
             $qcloud = $settings->tag('qcloud');
 
-            if (Arr::get($qcloud, 'qcloud_cos', false)) {
-                $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
-                    return $app->make(Factory::class)->disk('attachment_cos');
-                });
+            $attachmentDisk = 'attachment';
+            $avatarDisk = 'avatar';
 
-                // 上传头像驱动地址
-                $this->app->when([UserWechatObserver::class, AvatarUploader::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
-                    return $app->make(Factory::class)->disk('avatar_cos');
-                });
-            } else {
-                $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) {
-                    return $app->make(Factory::class)->disk('attachment');
-                });
+            if (Arr::get($qcloud, 'qcloud_cos', false)) {
+                $attachmentDisk = 'attachment_cos';
+                $avatarDisk = 'avatar_cos';
             }
+
+            $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) use($attachmentDisk) {
+                return $app->make(Factory::class)->disk($attachmentDisk);
+            });
+
+            $this->app->when([AvatarUploader::class, UserWechatObserver::class])
+                ->needs(Filesystem::class)
+                ->give(function (Application $app) use($avatarDisk) {
+                    return $app->make(Factory::class)->disk($avatarDisk);
+                });
         }
     }
 }
