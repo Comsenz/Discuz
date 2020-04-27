@@ -52,15 +52,6 @@ export default {
       })
     },
     sendSmsCodePhone() { //发送验证码
-      // var reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/; //手机号正则验证
-      // var newphone = this.newphone;
-      // if (!newphone) { //未输入手机号
-      //   this.$toast("请输入手机号码");
-      //   return;
-      // }
-      // if (!reg.test(newphone)) { //手机号不合法
-      //   this.$toast("您输入的手机号码不合法，请重新输入");
-      // }
       var modifyState = this.modifyState
       if (modifyState) {
         // this.loading = true;
@@ -70,7 +61,6 @@ export default {
           data: {
             "data": {
               "attributes": {
-                // 'mobile': this.phoneNum,
                 'type': 'verify'
               }
             }
@@ -111,7 +101,7 @@ export default {
           } else {
             this.insterVal = res.data.attributes.interval;
             this.time = this.insterVal;
-            this.timerNext();
+            this.timer();
           }
         })
       }
@@ -147,11 +137,8 @@ export default {
         } else {
           this.sms = '';
           this.modifyState = !this.modifyState;
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed
-          if (this.mobileConfirmed == true) {
-            this.$toast("手机号验证成功");
-            this.$router.push({ path: '/bind-new-phone' });
-          }
+          this.time = 1;
+          this.bind = "rebind";
         }
       })
       // .catch((err) => {
@@ -160,9 +147,7 @@ export default {
     },
 
     timer() {
-      // alert('执行');
       if (this.time > 1) {
-        // alert('2222');
         this.time--;
         this.btnContent = this.time + "s后重新获取";
         this.disabled = true;
@@ -226,10 +211,9 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          if (this.mobileConfirmed == true) {
+          if (this.newphone === res.readdata._data.originalMobile) {
             this.$toast("手机号修改成功");
-            this.$router.push({ path: '../view/m_site/home/circleView' });
+            this.$router.push({ path: '/modify-data' });
           }
         }
       })

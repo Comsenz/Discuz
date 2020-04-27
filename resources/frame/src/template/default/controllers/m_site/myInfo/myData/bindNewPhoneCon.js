@@ -172,8 +172,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          if (this.mobileConfirmed == true) {
+          if (this.newphone === res.readdata._data.originalMobile) {
             this.$toast("手机号绑定成功");
             this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
           }
