@@ -7,6 +7,7 @@
 
 namespace App\Traits;
 
+use App\Models\DenyUser;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -19,8 +20,9 @@ trait UserTrait
      *
      * @param Builder $query
      * @param array $filter
+     * @param User|null $actor
      */
-    private function applyFilters(Builder $query, array $filter)
+    private function applyFilters(Builder $query, array $filter, User $actor = null)
     {
         // 多个/单个 用户id
         if ($ids = Arr::get($filter, 'id')) {
@@ -77,10 +79,23 @@ trait UserTrait
 
         // 是否绑定微信
         if ($weChat = Arr::get($filter, 'wechat')) {
-            if ($weChat == 'yes') {
+            if ($weChat === 'yes') {
                 $query->has('wechat');
-            } elseif ($weChat == 'no') {
+            } elseif ($weChat === 'no') {
                 $query->doesntHave('wechat');
+            }
+        }
+
+        // 是否已
+        if ($deny = Arr::get($filter, 'deny')) {
+            if($deny === 'yes') {
+                $query->addSelect([
+                    'denyStatus' => DenyUser::query()
+                        ->select('user_id')
+                        ->where('user_id',  $actor->id)
+                        ->whereRaw('deny_user_id = id')
+                        ->limit(1)
+                ]);
             }
         }
     }

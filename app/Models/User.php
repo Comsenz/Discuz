@@ -454,16 +454,6 @@ class User extends Model
     }
 
     /**
-     * Define the relationship with the user's profiles.
-     *
-     * @return HasOne
-     */
-    public function userProfiles()
-    {
-        return $this->hasOne(UserProfile::class);
-    }
-
-    /**
      * Define the relationship with the user's posts.
      *
      * @return HasMany
@@ -644,5 +634,21 @@ class User extends Model
     public function scopeHasAvatar($query)
     {
         return $query->whereNotNull('avatar');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deny()
+    {
+        return $this->belongsToMany(User::class, 'deny_users', 'user_id', 'deny_user_id', null, null, 'deny');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function denyFrom()
+    {
+        return $this->belongsToMany(User::class, 'deny_users', 'deny_user_id', 'user_id', null, null, 'denyFrom');
     }
 }
