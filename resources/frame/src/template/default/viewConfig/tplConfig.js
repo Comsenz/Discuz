@@ -409,6 +409,14 @@ export default {
           title: "修改密码"
         }
       },
+      'change-username': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/myInfo/myData/changeUsernameView'], resolve)
+        },
+        metaInfo: {
+          title: "修改用户名"
+        }
+      },
       'real-name': {
         comLoad: function (resolve) {
           require(['../view/m_site/myInfo/myData/realNameView'], resolve)

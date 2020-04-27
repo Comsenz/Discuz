@@ -24,6 +24,7 @@
           <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
         </i>
       </div>
+      <van-cell title="用户名" @click="myModify('modify-username')" is-link :value="username" />
       <div class="myModifyPhone" v-show="myModifyPhone">
         <van-cell
           title="手机号"

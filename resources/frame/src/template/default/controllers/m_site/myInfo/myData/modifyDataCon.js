@@ -10,6 +10,8 @@ export default {
   data: function () {
     return {
       headPortrait: '',      //头像
+      username: '',
+      showModifyUsername: false,
       modifyPhone: '',       //修改手机号
       changePwd: '',         //修改密码
       bindType: '',          //绑定类型
@@ -59,6 +61,9 @@ export default {
         case 'modify-phone':
           this.$router.push('/modify-phone'); //修改手机号
           break;
+        case 'modify-username':
+          this.$router.push('/change-username'); //修改密码
+          break;
         case 'change-pwd':
           this.$router.push('/change-pwd'); //修改密码
           break;
@@ -95,6 +100,7 @@ export default {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.isReal = res.readdata._data.isReal;              //实名认证
+          this.username = res.readdata._data.username;
           this.modifyPhone = res.readdata._data.mobile;         //用户手机号
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id
