@@ -54,7 +54,7 @@ export default {
           }
         } else {
           this.$toast("用户名修改成功");
-          this.$router.push({ path: '../view/m_site/home/circleView' });
+          this.$router.push({ path: '/modify-data' });
         }
       })
     },

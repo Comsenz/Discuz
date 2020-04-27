@@ -80,13 +80,10 @@ export default {
           }
         } else {
           this.$toast("密码修改成功");
-          this.$router.push({ path: '../view/m_site/home/circleView' });
+          this.$router.push({ path: '/modify-data' });
         }
 
       })
-      // .catch((err)=>{
-      //   this.$toast("密码修改失败，请重试");
-      // })
     },
   }
 
