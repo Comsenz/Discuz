@@ -7,17 +7,24 @@
 
 namespace App\Api\Controller\Users;
 
+use App\Api\Serializer\SessionSerializer;
 use App\Models\SessionToken;
 use App\Models\UserWalletFailLogs;
 use App\Repositories\UserWalletFailLogsRepository;
-use Discuz\Http\DiscuzResponseFactory;
-use Psr\Http\Message\ResponseInterface;
+use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Illuminate\Validation\Factory as Validator;
+use Tobscure\JsonApi\Document;
 
-class ResetPayPasswordController implements RequestHandlerInterface
+class ResetPayPasswordController extends AbstractResourceController
 {
+
+    use AssertPermissionTrait;
+
+    public $serializer = SessionSerializer::class;
+
     /**
      * @var Validator
      */
@@ -34,19 +41,23 @@ class ResetPayPasswordController implements RequestHandlerInterface
         $this->userWalletFailLogs = $userWalletFailLogs;
     }
 
+
     /**
      * @inheritDoc
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $this->assertRegistered($actor);
+
         //验证错误次数
         $failCount = $this->userWalletFailLogs->getCountByUserId($actor->id);
         if ($failCount > UserWalletFailLogs::TOPLIMIT) {
             throw new \Exception('pay_password_failures_times_toplimit');
         }
 
-        $pay_password = $request->getParsedBody()->get('pay_password', '');
+        $pay_password = Arr::get($request->getParsedBody(), 'data.attributes.pay_password');
 
         $this->validator->make(compact('pay_password'), [
             'pay_password' => [
@@ -73,9 +84,8 @@ class ResetPayPasswordController implements RequestHandlerInterface
         $token = SessionToken::generate('reset_pay_password', null, $actor->id);
         $token->save();
 
-        return DiscuzResponseFactory::JsonResponse([
-            'token' => $token->token,
-            'userId' => $actor->id
-        ]);
+        return [
+            'sessionId' => $token->token
+        ];
     }
 }

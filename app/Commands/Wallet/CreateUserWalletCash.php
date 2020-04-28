@@ -66,6 +66,8 @@ class CreateUserWalletCash
         // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'cash.create');
 
+        $this->data = collect(Arr::get($this->data, 'data.attributes'));
+
         $cash_setting = $setting->tag('cash');
         $cash_interval_time = (int)Arr::get($cash_setting, 'cash_interval_time', 0);//提现间隔
         $cash_rate = (float)Arr::get($cash_setting, 'cash_rate', 0);//提现手续费
