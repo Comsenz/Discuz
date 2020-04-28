@@ -64,6 +64,9 @@ class PostListener
 
         // @
         $events->listen(Saved::class, [$this, 'userMentions']);
+
+        // #话题#
+        $events->listen(Saved::class, [$this, 'threadTopic']);
     }
 
     /**
@@ -297,5 +300,16 @@ class PostListener
                 'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
             ]));
         });
+    }
+
+    public function threadTopic(Saved $event)
+    {
+
+        $topic = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
+
+        if ($event->post->is_first) {
+            $event->post->thread->threadTopic()->sync($topic);
+        }
+
     }
 }
