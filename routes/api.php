@@ -103,6 +103,8 @@ $route->patch('/users', 'users.update', ApiController\Users\UpdateUsersControlle
 $route->delete('/users/{id}', 'user.delete', ApiController\Users\DeleteUserController::class);
 $route->delete('/users', 'users.delete', ApiController\Users\DeleteUsersController::class);
 $route->post('/users/{id}/avatar', 'user.upload.avatar', ApiController\Users\UploadAvatarController::class);
+$route->post('/users/{id}/deny', 'user.deny', ApiController\Users\CreateDenyUserController::class);
+$route->delete('/users/{id}/deny', 'user.delete.deny', ApiController\Users\DeleteDenyUserController::class);
 $route->delete('/users/{id}/avatar', 'user.delete.avatar', ApiController\Users\DeleteAvatarController::class);
 $route->delete('/users/{id}/wechat', 'user.delete.wechat', ApiController\Users\UnbindWechatController::class);
 $route->get('/export/users', 'export.users', ApiController\Users\ExportUserController::class);

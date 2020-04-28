@@ -16,6 +16,7 @@ use App\Events\Users\RefreshTokend;
 use App\Events\Users\Registered;
 use App\Events\Users\RegisteredCheck;
 use App\Listeners\AddApiMiddleware;
+use App\Listeners\DenyUser\DeleteFollow;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
 use App\Listeners\Group\SetDefaultPermission;
@@ -39,7 +40,7 @@ use App\Policies\UserWalletLogsPolicy;
 use App\Policies\UserWalletPolicy;
 use Discuz\Api\Events\ConfigMiddleware;
 use Discuz\Foundation\Suppor\Providers\EventServiceProvider as BaseEventServiceProvider;
-
+use App\Events\DenyUsers\Saved as DenyUserSaved;
 
 class EventServiceProvider extends BaseEventServiceProvider
 {
@@ -81,6 +82,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         ConfigMiddleware::class => [
             AddApiMiddleware::class
         ],
+        DenyUserSaved::class => [
+            DeleteFollow::class
+        ]
     ];
 
     protected $subscribe = [

@@ -113,7 +113,7 @@ class ListUsersController extends AbstractListController
     {
         $query = $this->users->query()->whereVisibleTo($actor);
 
-        $this->applyFilters($query, $filter);
+        $this->applyFilters($query, $filter, $actor);
 
         $this->userCount = $limit > 0 ? $query->count() : null;
 
