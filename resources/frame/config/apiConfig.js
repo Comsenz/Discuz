@@ -30,7 +30,7 @@ module.exports = {
   'circleInfo': '/circleInfo',           //站点信息
   'themeNavListCon': '/themeNavListCon', //主题列表
   'walletFrozen': '/wallet/log',         //冻结金额
-  'orderList': '/order',                 //订单明细,打赏支付
+  'orderList': '/orders',                 //订单明细,打赏支付
   'orderPay': '/trade/pay/order',        //订单支付
   'order': '/order',                     //订单支付
   'walletDetails': '/wallet/log',       //钱包明细
