@@ -56,6 +56,6 @@ class Topic extends Model
      */
     public function threads()
     {
-        return $this->belongsToMany(Thread::class)->withTimestamps();
+        return $this->belongsToMany(Thread::class)->withPivot('created_at');
     }
 }

@@ -371,8 +371,7 @@ class Thread extends Model
 
     public function threadTopic()
     {
-        return $this->belongsToMany(Topic::class)
-            ->withPivot('created_at');
+        return $this->belongsToMany(Topic::class)->withPivot('created_at');
     }
 
 
