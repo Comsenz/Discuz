@@ -34,14 +34,7 @@ export default {
     loadSite() {
       const userId = browserDb.getLItem('tokenId');
       if (userId != '' && userId != null) {
-        var load = this.appFetch({
-          url: 'users',
-          method: 'get',
-          splice: '/' + userId,
-          data: {
-            include: 'groups',
-          }
-        }).then((res) => {
+        this.$store.dispatch("appSiteModule/loadUser").then(res => {
           if (res.errors) {
             this.$toast.fail(res.errors[0].code);
             // throw new Error(res.error)

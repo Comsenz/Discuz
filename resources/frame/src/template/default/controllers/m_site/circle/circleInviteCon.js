@@ -47,31 +47,20 @@ export default {
           this.limitList = res.readdata[0];
         }
       });
-      var userId = browserDb.getLItem('tokenId');
-      if (!userId) {
-        return
-      } else {
-        this.appFetch({
-          url: 'users',
-          method: 'get',
-          splice: '/' + userId,
-          data: {
-            include: 'groups',
-          }
-        }).then((res) => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.roleList = res.readdata.groups;
+          if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
+            this.joinedAt = res.readdata._data.createdAt;
           } else {
-            this.roleList = res.readdata.groups;
-            if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
-              this.joinedAt = res.readdata._data.createdAt;
-            } else {
-              this.joinedAt = res.readdata._data.joinedAt;
-            }
+            this.joinedAt = res.readdata._data.joinedAt;
           }
-        })
-      }
+        }
+      }).catch(() => {
+      });
 
 
     },

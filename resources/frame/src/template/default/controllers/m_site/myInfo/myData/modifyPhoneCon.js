@@ -212,6 +212,7 @@ export default {
           }
         } else {
           if (this.newphone === res.readdata._data.originalMobile) {
+            this.$store.dispatch("appSiteModule/invalidateUser");
             this.$toast("手机号修改成功");
             this.$router.push({ path: '/modify-data' });
           }

@@ -323,14 +323,7 @@ export default {
 			})
 		},
 		getUsers() {
-			return this.appFetch({
-				url: 'users',
-				method: 'get',
-				splice: '/' + browserDb.getLItem('tokenId'),
-				data: {
-					// include:['groups']
-				}
-			}).then(res => {
+			return this.$store.dispatch("appSiteModule/loadUser").then(res => {
 				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 				} else {

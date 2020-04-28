@@ -53,6 +53,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
+          this.$store.dispatch("appSiteModule/invalidateUser");
           this.$toast("用户名修改成功");
           this.$router.push({ path: '/modify-data' });
         }

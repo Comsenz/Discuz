@@ -5,7 +5,10 @@ import {
   SET_STATUS,
   SET_OPENID,
   SET_FORUM,
-  SET_FORUM_STATUS
+  SET_FORUM_STATE,
+  SET_FORUM_PROMISE,
+  SET_USER,
+  SET_USER_STATE
 } from "./mutationTypes";
 
 export default {
@@ -21,7 +24,16 @@ export default {
   [SET_FORUM](state, payload) {
     state.forum = payload;
   },
-  [SET_FORUM_STATUS](state, payload) {
+  [SET_FORUM_STATE](state, payload) {
     state.forumState = payload;
+  },
+  [SET_FORUM_PROMISE](state, payload) {
+    state.forumPromise = payload;
+  },
+  [SET_USER](state, payload) {
+    state.user = payload;
+  },
+  [SET_USER_STATE](state, payload) {
+    state.userState = payload;
   }
 };

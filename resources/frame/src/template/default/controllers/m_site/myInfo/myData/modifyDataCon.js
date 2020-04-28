@@ -62,7 +62,7 @@ export default {
           this.$router.push('/modify-phone'); //修改手机号
           break;
         case 'modify-username':
-          this.$router.push('/change-username'); //修改密码
+          this.$router.push('/change-username'); //修改用户名
           break;
         case 'change-pwd':
           this.$router.push('/change-pwd'); //修改密码
@@ -87,15 +87,7 @@ export default {
     },
 
     modifyData() {
-      let userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: 'wechat'
-        }
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -110,13 +102,11 @@ export default {
           } else {
             this.wechatNickname = false
           }
-          // if(res.readdata)
           if (res.readdata._data.realname !== '') {
             this.realName = `${res.readdata._data.realname}  ${res.readdata._data.identity}`
           } else {
             this.realName = false
           }
-          // this.modifyData()
         }
       })
 
@@ -148,7 +138,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          // alert(res)
+          this.$store.dispatch("appSiteModule/invalidateUser");
           this.$toast('上传头像成功!');
           this.headPortrait = res.data.attributes.avatarUrl;
           this.modifyData()
@@ -183,6 +173,7 @@ export default {
           if (res.errors) {
             this.$toast.fail(res.errors[0].code);
           } else {
+            this.$store.dispatch("appSiteModule/invalidateUser");
             let isWeixin = this.appCommonH.isWeixin().isWeixin;
             if (isWeixin) {
               // var userId = browserDb.getLItem('tokenId');

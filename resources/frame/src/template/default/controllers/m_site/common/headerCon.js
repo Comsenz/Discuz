@@ -193,16 +193,7 @@ export default {
     },
     //初始化请求用户信息
     loadUserInfo() {
-      if (!this.userId) {
-        return false;
-      }
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + this.userId,
-        data: {
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error);
@@ -221,6 +212,8 @@ export default {
           }
           this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
         }
+      }).catch(() => {
+        return false;
       })
     },
 

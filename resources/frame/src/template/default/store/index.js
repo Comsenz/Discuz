@@ -10,7 +10,10 @@ export default {
       status: 0,
       openid: "",
       forum: null, //全局forum对象，保存/api/forum的返回值
-      forumState: 'FORUM_INIT'
+      forumPromise: null,
+      forumState: 'FORUM_INIT',
+      user: null, //全局user对象，保存/api/user/<id>的返回值
+      userState: 'USER_INIT'
     };
   },
   getters,

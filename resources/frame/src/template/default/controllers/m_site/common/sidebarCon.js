@@ -101,15 +101,7 @@ export default {
   methods: {
     //获取用户信息
     getUserInfo() {
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: '',
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (!res.data.attributes.typeUnreadNotifications.liked) {
           res.data.attributes.typeUnreadNotifications.liked = 0;
         }
@@ -130,8 +122,8 @@ export default {
         this.mobile = res.readdata._data.mobile;
         this.userId = res.readdata._data.id;
         this.isReal = res.readdata._data.isReal;
-      })
-
+      }).catch(() => {
+      });
     },
     getInfo() {
       this.$store.dispatch("appSiteModule/loadForum").then(res => {

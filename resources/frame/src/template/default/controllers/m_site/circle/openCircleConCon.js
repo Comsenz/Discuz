@@ -84,18 +84,9 @@ export default {
     },
     //分享
     shareTheme() {
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: '',
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-          // throw new Error(res.error)
         } else {
           if (res.readdata._data.paid) {
             this.$router.push({
@@ -109,6 +100,7 @@ export default {
             })
           }
         }
+      }).catch(() => {
       })
 
     },

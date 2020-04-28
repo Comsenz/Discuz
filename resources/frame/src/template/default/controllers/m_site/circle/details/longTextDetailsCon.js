@@ -46,14 +46,12 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.userId = browserDb.getLItem('tokenId');
-    this.loadUserInfo();
     if (this.userId) {
-      this.getUsers(browserDb.getLItem('tokenId')).then(res => {
+      this.getUsers().then(res => {
         this.getAuthority(res.readdata.groups[0]._data.id);
         this.walletBalance = res.readdata._data.walletBalance;
       });
     }
-
   },
   computed: {
     themeId: function () {
@@ -77,22 +75,6 @@ export default {
       //   } else {
       this.$router.push({ path: '/home-page' + '/' + id });
       // }
-    },
-    //初始化请求用户信息
-    loadUserInfo() {
-      if (!this.userId) {
-        return false;
-      }
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + this.userId,
-        data: {
-        }
-      }).then((res) => {
-        this.walletBalance = res.readdata._data.walletBalance;
-
-      })
     },
     /*
    * 接口请求
@@ -332,8 +314,6 @@ export default {
       }).catch(err => {
       })
     },
-    getUsersInfo() {
-    },
     getOrderStatus() {
       // alert('查询支付状态');
       // alert(this.orderSn);
@@ -375,16 +355,8 @@ export default {
       // alert('执行');
       this.$emit('listenToChildEvent', true);
     },
-    getUsers(id) {
-      return this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + id,
-        headers: { 'Authorization': 'Bearer ' + browserDb.getLItem('Authorization') },
-        data: {
-          include: ['groups']
-        }
-      }).then(res => {
+    getUsers() {
+      return this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
