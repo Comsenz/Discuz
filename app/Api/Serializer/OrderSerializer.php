@@ -15,7 +15,7 @@ class OrderSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      */
-    protected $type = 'order';
+    protected $type = 'orders';
 
     /**
      * {@inheritdoc}

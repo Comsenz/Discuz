@@ -195,9 +195,9 @@ $route->delete('/attachments/{id}', 'attachments.delete', ApiController\Attachme
  |--------------------------------------------------------------------------
  */
 
-$route->get('/order/{order_sn}', 'order.resource', ApiController\Order\ResourceOrderController::class);
-$route->post('/order', 'order.create', ApiController\Order\CreateOrderController::class);
-$route->get('/order', 'order.list', ApiController\Order\ListOrdersController::class);
+$route->get('/orders/{order_sn}', 'orders.resource', ApiController\Order\ResourceOrderController::class);
+$route->post('/orders', 'orders.create', ApiController\Order\CreateOrderController::class);
+$route->get('/orders', 'orders.list', ApiController\Order\ListOrdersController::class);
 
 /*
  |--------------------------------------------------------------------------
