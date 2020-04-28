@@ -34,5 +34,6 @@ class Kernel extends ConsoleKernel
         // 维护清理
         $schedule->command('clear:avatar')->daily();
         $schedule->command('clear:attachment')->daily();
+        $schedule->command('clear:video')->daily();
     }
 }

@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Thread;
@@ -16,6 +17,7 @@ use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,7 +31,7 @@ class ResourceThreadController extends AbstractResourceController
     /**
      * @var ThreadRepository
      */
-    protected $thread;
+    protected $threads;
 
     /**
      * @var PostRepository
@@ -66,15 +68,18 @@ class ResourceThreadController extends AbstractResourceController
         'firstPost.likedUsers',
         'posts.likedUsers',
         'rewardedUsers',
+        'paidUsers',
+        'posts.mentionUsers',
+        'firstPost.mentionUsers',
     ];
 
     /**
-     * @param ThreadRepository $thread
+     * @param ThreadRepository $threads
      * @param PostRepository $posts
      */
-    public function __construct(ThreadRepository $thread, PostRepository $posts)
+    public function __construct(ThreadRepository $threads, PostRepository $posts)
     {
-        $this->thread = $thread;
+        $this->threads = $threads;
         $this->posts = $posts;
     }
 
@@ -89,8 +94,7 @@ class ResourceThreadController extends AbstractResourceController
         $actor = $request->getAttribute('actor');
         $include = $this->extractInclude($request);
 
-        // 主题
-        $thread = $this->thread->findOrFail($threadId, $actor);
+        $thread = $this->threads->findOrFail($threadId, $actor);
 
         $this->assertCan($actor, 'viewPosts', $thread);
 
@@ -100,7 +104,8 @@ class ResourceThreadController extends AbstractResourceController
             if ($thread->user_id == $actor->id || $actor->isAdmin()) {
                 $paid = true;
             } else {
-                $paid = Order::where('user_id', $actor->id)
+                $paid = Order::query()
+                    ->where('user_id', $actor->id)
                     ->where('thread_id', $thread->id)
                     ->where('status', Order::ORDER_STATUS_PAID)
                     ->where('type', Order::ORDER_TYPE_THREAD)
@@ -109,15 +114,34 @@ class ResourceThreadController extends AbstractResourceController
 
             $thread->setAttribute('paid', $paid);
 
-            // 长文隐藏正文，其他截取内容显示200。隐藏图片及附件
+            /**
+             * 详情内容处理
+             *
+             * 0. 普通帖子不能设为付费帖无需处理
+             * 1. 长文帖子未付费仅展示免费阅读部分
+             * 2. 视频帖子未付费仅展示封面
+             * 3. 图片帖子未付费仅展示高斯模糊图
+             */
+
             if (in_array('firstPost', $include) && !$paid) {
-                if ($thread->type == 1) {
-                    $thread->firstPost->content = '';
-                } else {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, Post::SUMMARY_LENGTH);
+                switch ($thread->type) {
+                    // 帖子
+                    case 1:
+                        $thread->firstPost->content = Str::of($thread->firstPost->content)
+                                ->substr(0, $thread->free_words) . Post::SUMMARY_END_WITH;
+
+                        $thread->firstPost->setRelation('images', collect());
+                        $thread->firstPost->setRelation('attachments', collect());
+                        break;
+                    // 图片
+                    case 3:
+                        $thread->firstPost->load('images');
+
+                        $thread->firstPost->images->map(function (Attachment $image) {
+                            $image->setAttribute('blur', true);
+                        });
+                        break;
                 }
-                $thread->firstPost->setRelation('images', collect());
-                $thread->firstPost->setRelation('attachments', collect());
             }
 
             // 付费视频，未付费时，隐藏视频
@@ -134,23 +158,18 @@ class ResourceThreadController extends AbstractResourceController
         $thread->increment('view_count');
 
         // 帖子及其关联模型
-        if (in_array('posts', $include)) {
-            $postRelationships = $this->getPostRelationships($include);
-
+        if (($postRelationships = $this->getPostRelationships($include)) || in_array('posts', $include)) {
             $this->includePosts($thread, $request, $postRelationships);
         }
 
-        // 打赏的用户
+        // 特殊关联：打赏的人
         if (in_array('rewardedUsers', $include)) {
-            $allRewardedUser = Order::with('user')
-                ->where('thread_id', $thread->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->orderBy('created_at', 'desc')
-                ->orderBy('id', 'desc')
-                ->get();
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_REWARD);
+        }
 
-            $thread->setRelation('rewardedUsers', $allRewardedUser->pluck('user')->filter());
+        // 特殊关联：付费用户
+        if (in_array('paidUsers', $include)) {
+            $this->loadOrderUsers($thread, Order::ORDER_TYPE_THREAD);
         }
 
         // 主题关联模型
@@ -175,7 +194,7 @@ class ResourceThreadController extends AbstractResourceController
 
         $posts = $thread->posts()
             ->whereVisibleTo($actor)
-            ->when($isDeleted, function ($query, $isDeleted) use ($actor) {
+            ->when($isDeleted, function (Builder $query, $isDeleted) use ($actor) {
                 if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                     // 只看回收站帖子
                     $query->whereNotNull('posts.deleted_at');
@@ -190,7 +209,7 @@ class ResourceThreadController extends AbstractResourceController
             ->take($limit)
             ->with($include)
             ->get()
-            ->each(function ($post) use ($thread) {
+            ->each(function (Post $post) use ($thread) {
                 $post->thread = $thread;
             });
 
@@ -213,5 +232,35 @@ class ResourceThreadController extends AbstractResourceController
         }
 
         return $relationships;
+    }
+
+    /**
+     * @param $thread
+     * @param $type
+     * @return Thread
+     */
+    private function loadOrderUsers(Thread $thread, $type)
+    {
+        switch ($type) {
+            case Order::ORDER_TYPE_REWARD:
+                $relation = 'rewardedUsers';
+                break;
+            case Order::ORDER_TYPE_THREAD:
+                $relation = 'paidUsers';
+                break;
+            default:
+                return $thread;
+        }
+
+        $orderUsers = Order::with('user')
+            ->where('thread_id', $thread->id)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->where('type', $type)
+            ->where('is_anonymous', false)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return $thread->setRelation($relation, $orderUsers->pluck('user')->filter());
     }
 }

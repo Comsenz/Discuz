@@ -21,7 +21,7 @@ class AddOrderToAttachments extends Migration
             $table->unsignedTinyInteger('order')->default(0)->after('post_id')->comment('附件排序');
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *

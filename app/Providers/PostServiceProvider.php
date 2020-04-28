@@ -9,6 +9,7 @@ namespace App\Providers;
 
 use App\Formatter\Formatter;
 use App\Formatter\MarkdownFormatter;
+use App\Listeners\Post\PostAttachment;
 use App\Listeners\Post\PostListener;
 use App\Models\Post;
 use App\Policies\PostPolicy;
@@ -41,5 +42,7 @@ class PostServiceProvider extends AbstractServiceProvider
         // 订阅事件
         $events->subscribe(PostListener::class);
         $events->subscribe(PostPolicy::class);
+
+        $events->subscribe(PostAttachment::class);
     }
 }

@@ -46,7 +46,7 @@ class ListDialogController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['sender','recipient','dialogMessage'];
+    public $optionalInclude = ['sender','recipient','dialogMessage','sender.groups','recipient.groups'];
 
     /* The relationships that are included by default.
      *
@@ -76,11 +76,11 @@ class ListDialogController extends AbstractListController
 
         $this->assertRegistered($actor);
 
-        $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
 
-        $userFollow = $this->search($actor, $filter, $limit, $offset);
+        $dialogs = $this->search($actor, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('dialog.list'),
@@ -90,22 +90,23 @@ class ListDialogController extends AbstractListController
             $this->dialogCount
         );
 
+        $dialogs->loadMissing($include);
+
         $document->setMeta([
             'total' => $this->dialogCount,
             'pageCount' => ceil($this->dialogCount / $limit),
         ]);
 
-        return $userFollow;
+        return $dialogs;
     }
 
     /**
      * @param User $actor
-     * @param array $filter
      * @param null $limit
      * @param int $offset
      * @return Collection
      */
-    public function search(User $actor, $filter, $limit = null, $offset = 0)
+    public function search(User $actor, $limit = null, $offset = 0)
     {
         $query = $this->dialog->query();
 

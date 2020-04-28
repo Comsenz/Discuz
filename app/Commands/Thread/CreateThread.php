@@ -87,6 +87,8 @@ class CreateThread
             $this->assertCan($this->actor, 'createThreadLong');
         } elseif ($thread->type == 2) {
             $this->assertCan($this->actor, 'createThreadVideo');
+        } elseif ($thread->type == 3) {
+            $this->assertCan($this->actor, 'createThreadImage');
         }
 
         // 敏感词校验
@@ -102,12 +104,19 @@ class CreateThread
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
 
-        // 发布长文时记录标题及价格，发布视频时记录价格
+        // 长文帖需要设置标题
         if ($thread->type == 1) {
             $thread->title = $title;
         }
+
+        // 非文字贴可设置价格
         if ($thread->type != 0) {
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
+
+            // 付费长文帖可设置免费阅读字数
+            if ($thread->type == 1 && $thread->price) {
+                $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
+            }
         }
 
         $thread->setRelation('user', $this->actor);

@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $dialog_message_id
  * @property int $sender_user_id
  * @property int $recipient_user_id
+ * @property Carbon $sender_read_at
+ * @property Carbon $recipient_read_at
  * @property Carbon $updated_at
  * @property Carbon $created_at
  * @package App\Models
@@ -30,6 +32,8 @@ class Dialog extends Model
      * {@inheritdoc}
      */
     protected $dates = [
+        'sender_read_at',
+        'recipient_read_at',
         'updated_at',
         'created_at',
     ];
@@ -69,6 +73,15 @@ class Dialog extends Model
         }
 
         return $dialog;
+    }
+
+    /**
+     * 设置已读
+     * @param $type (sender|recipient)
+     */
+    public function setRead($type)
+    {
+        $this->forceFill([$type . '_read_at' => Carbon::now()])->save();
     }
 
     public function sender()

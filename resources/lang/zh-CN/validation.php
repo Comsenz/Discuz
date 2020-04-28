@@ -207,6 +207,7 @@ return [
         'pay_password' => '支付密码',
         'pay_password_confirmation' => '支付密码',
         'groupId' => '用户组',
+        'username_prefix' => '网友',
 
         // thread
         'file_id' => '视频文件',

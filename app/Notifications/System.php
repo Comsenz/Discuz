@@ -13,6 +13,12 @@ use App\Models\NotificationTpl;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
 
+/**
+ * 系统通知
+ *
+ * Class System
+ * @package App\Notifications
+ */
 class System extends Notification
 {
     protected $data;
@@ -25,6 +31,13 @@ class System extends Notification
 
     protected $settings;
 
+    /**
+     * System constructor.
+     *
+     * @param $type
+     * @param array $data
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __construct($type, $data = [])
     {
         $this->type = $type;
@@ -37,6 +50,7 @@ class System extends Notification
     public function via($notifiable)
     {
         $tplId = $this->message->getTplId();
+
         if ($this->message instanceof StatusMessage) {
             $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
         }
@@ -45,6 +59,7 @@ class System extends Notification
             $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
         }
 
+        // set tplData
         $this->getTplData($tplId);
 
         $this->message->setTplData($this->tplData);
@@ -109,7 +124,7 @@ class System extends Notification
             }
         }
 
-        // 判断和系统通知的对应关系通知
+        // 判断和系统通知的对应微信通知关系
         if ($type == 1) {
             $wechat = [
                 11 => 23,

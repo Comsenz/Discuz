@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $status
  * @property int $platform
  * @property int $payment_type
+ * @property int $is_anonymous
  * @property string $remark
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -60,6 +61,17 @@ class Order extends Model
      * 注册收款人ID
      */
     const REGISTER_PAYEE_ID = 0;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'master_amount' => 'decimal:2',
+        'type' => 'integer',
+        'status' => 'integer',
+        'is_anonymous' => 'boolean',
+    ];
 
     /**
      * Define the relationship with the order's owner.

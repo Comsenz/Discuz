@@ -15,11 +15,13 @@ use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -38,11 +40,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_first
  * @property bool $is_comment
  * @property bool $is_approved
+ * @property Attachment $images
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
  * @property User $deletedUser
  * @property PostMod $stopWords
+ * @property Post replyPost
  * @package App\Models
  */
 class Post extends Model
@@ -51,10 +55,19 @@ class Post extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 摘要长度（多字节字符通常是单字节字符的两倍宽度）
-     * https://www.php.net/manual/zh/function.mb-strwidth.php
+     * 摘要长度
      */
-    const SUMMARY_LENGTH = 200;
+    const SUMMARY_LENGTH = 100;
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const NOTICE_LENGTH = 80;
+
+    /**
+     * 摘要结尾
+     */
+    const SUMMARY_END_WITH = '...';
 
     const UNAPPROVED = 0;
 
@@ -132,7 +145,7 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        if ($this->is_first && ($this->thread->type ==1)) {
+        if ($this->is_first && ($this->thread->type == 1)) {
             $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
             $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
@@ -158,13 +171,74 @@ class Post extends Model
     {
         $content = $this->attributes['content'] ?: '';
 
-        if ($this->is_first && ($this->thread->type ==1)) {
+        if ($this->is_first && ($this->thread->type == 1)) {
             $content = $content ? static::$markdownFormatter->render($content) : '';
         } else {
             $content = $content ? static::$formatter->render($content) : '';
         }
 
         return $content;
+    }
+
+    /**
+     * 获取 Content & firstContent
+     *
+     * @param int $substr
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getSummaryContent($substr = 0)
+    {
+        $special = app()->make(SpecialCharServer::class);
+
+        $build = [
+            'content' => '',
+            'first_content' => '',
+        ];
+
+        /**
+         * 判断是否是楼中楼的回复
+         */
+        if ($this->reply_post_id) {
+            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+            $content = $this->formatContent();
+        } else {
+            /**
+             * 判断长文点赞通知内容为标题
+             */
+            if ($this->thread->type == 1) {
+                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
+            } else {
+                // 引用回复去除引用部分
+                $this->filterPostContent();
+
+                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+                $content = $this->formatContent();
+
+                $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+            }
+        }
+
+        $build['content'] = $content;
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->title);
+
+        return $build;
+    }
+
+    /**
+     * 引用回复去除引用部分
+     *
+     * @param int $substr
+     */
+    public function filterPostContent($substr = 0)
+    {
+        // 引用回复去除引用部分
+        $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+        $this->content = preg_replace($pattern, '', $this->content);
+
+        if ($substr) {
+            $this->content = Str::of($this->content)->substr(0, $substr);
+        }
     }
 
     /**
@@ -227,7 +301,7 @@ class Post extends Model
      */
     public function hide(User $actor, $options = [])
     {
-        if (! $this->deleted_at) {
+        if (!$this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 
@@ -314,6 +388,16 @@ class Post extends Model
     }
 
     /**
+     * Define the relationship with the post's content post.
+     *
+     * @return BelongsTo
+     */
+    public function replyPost()
+    {
+        return $this->belongsTo(Post::class, 'reply_post_id');
+    }
+
+    /**
      * Define the relationship with the user who hid the post.
      *
      * @return BelongsTo
@@ -384,6 +468,11 @@ class Post extends Model
         $user = $user ?: static::$stateUser;
 
         return $this->hasOne(PostUser::class)->where('user_id', $user ? $user->id : null);
+    }
+
+    public function mentionUsers()
+    {
+        return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
 
     /**

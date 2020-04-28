@@ -8,6 +8,7 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
+use App\Models\User;
 use Discuz\Cache\CacheManager;
 use Discuz\Http\UrlGenerator;
 use s9e\TextFormatter\Configurator;
@@ -128,6 +129,13 @@ class Formatter
         $configurator->HTMLElements->allowElement('span');
         $configurator->HTMLElements->allowAttribute('span', 'class');
 
+        // USERMENTION
+        $tagName = 'USERMENTION';
+        $tag = $configurator->tags->add($tagName);
+        $tag->attributes->add('id');
+        $tag->filterChain->prepend([static::class, 'addUserId']);
+        $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
+
         return $configurator;
     }
 
@@ -183,5 +191,18 @@ class Formatter
         });
 
         return $this->getComponent('renderer');
+    }
+
+    /**
+     * @param $tag
+     *
+     * @return bool
+     */
+    public static function addUserId($tag)
+    {
+        if ($user = User::where('username', $tag->getAttribute('username'))->first()) {
+            $tag->setAttribute('id', $user->id);
+            return true;
+        }
     }
 }

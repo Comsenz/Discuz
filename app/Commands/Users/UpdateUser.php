@@ -7,6 +7,7 @@
 
 namespace App\Commands\Users;
 
+use App\Censor\Censor;
 use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
@@ -19,9 +20,12 @@ use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class UpdateUser
 {
@@ -38,6 +42,12 @@ class UpdateUser
 
     protected $validator;
 
+    protected $settings;
+
+    protected $censor;
+
+    protected $specialChar;
+
     public function __construct($id, $data, User $actor)
     {
         $this->id = $id;
@@ -45,11 +55,15 @@ class UpdateUser
         $this->actor = $actor;
     }
 
-    public function handle(UserRepository $users, UserValidator $validator, Dispatcher $events)
+    public function handle(UserRepository $users, UserValidator $validator, Dispatcher $events, SettingsRepository $settings, Censor $censor, SpecialCharServer $specialChar)
     {
         $this->users = $users;
         $this->validator = $validator;
         $this->events = $events;
+        $this->settings = $settings;
+        $this->censor = $censor;
+        $this->specialChar = $specialChar;
+
         return call_user_func([$this, '__invoke']);
     }
 
@@ -75,9 +89,12 @@ class UpdateUser
         // 修改登录密码
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
             if ($isSelf) {
-                $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                if (!$verifyPwd) {
-                    throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                //小程序注册的账号密码为空，不验证旧密码
+                if ($this->actor->password != '') {
+                    $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
+                    if (!$verifyPwd) {
+                        throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                    }
                 }
 
                 $this->validator->setUser($user);
@@ -169,6 +186,46 @@ class UpdateUser
                 // 微信通知
                 $user->notify(new System(WechatGroupMessage::class, $notifyData));
             }
+        }
+
+        if ($username = Arr::get($attributes, 'username')) {
+            // 敏感词校验
+            $this->censor->checkText($username, 'username');
+            if ($this->censor->isMod) {
+                throw new TranslatorException('user_username_censor_error');
+            }
+
+            // 过滤内容
+            $username = $this->specialChar->purify($username);
+
+            if (!$this->actor->isAdmin()) {
+                if ($user->username_bout >= $this->settings->get('username_bout', 'default', 1)) {
+                    throw new TranslatorException('user_username_bout_limit_error');
+                }
+            }
+
+            if (User::where('username', $username)->exists()) {
+                throw new TranslatorException('user_username_already_exists');
+            }
+
+            $user->changeUsername($username);
+        }
+
+        if ($signature = Arr::get($attributes, 'signature')) {
+            // 敏感词校验
+            $this->censor->checkText($signature);
+            if ($this->censor->isMod) {
+                throw new TranslatorException('user_signature_censor_error');
+            }
+
+            // 过滤内容
+            $signature = $this->specialChar->purify($signature);
+
+            if (Str::of($signature)->length() > 140) {
+                throw new TranslatorException('user_signature_limit_error');
+            }
+
+            $user->changeSignature($signature);
         }
 
         $this->validator->valid($validator);

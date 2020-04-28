@@ -45,8 +45,11 @@ class ThreadSerializer extends AbstractSerializer
             'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
+            'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
+            'paidCount'         => (int) $model->paid_count,
+            'rewardedCount'     => (int) $model->rewarded_count,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,
@@ -152,6 +155,15 @@ class ThreadSerializer extends AbstractSerializer
      * @return Relationship
      */
     public function rewardedUsers($thread)
+    {
+        return $this->hasMany($thread, UserSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function paidUsers($thread)
     {
         return $this->hasMany($thread, UserSerializer::class);
     }

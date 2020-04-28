@@ -21,6 +21,8 @@ class DialogSerializer extends AbstractSerializer
             'dialog_message_id' => $model->dialog_message_id?:0,
             'sender_user_id' => $model->sender_user_id,
             'recipient_user_id'  => $model->recipient_user_id,
+            'sender_read_at' => $this->formatDate($model->sender_read_at),
+            'recipient_read_at' => $this->formatDate($model->recipient_read_at),
             'updated_at' => $this->formatDate($model->updated_at),
             'created_at' => $this->formatDate($model->created_at)
         ];

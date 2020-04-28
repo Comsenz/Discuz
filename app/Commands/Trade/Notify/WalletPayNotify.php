@@ -37,6 +37,7 @@ class WalletPayNotify
      * @param SettingsRepository $setting
      * @return array
      * @throws ErrorException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(ConnectionInterface $connection, Dispatcher $events, SettingsRepository $setting)
     {
@@ -44,6 +45,7 @@ class WalletPayNotify
         $log->info('notify', $this->data);
         $payment_sn = $this->data['payment_sn'];//商户交易号
         $trade_no = $this->data['payment_sn'];//微信交易号
+
         //开始事务
         $connection->beginTransaction();
         try {

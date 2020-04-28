@@ -8,58 +8,97 @@
 namespace App\Notifications;
 
 use App\Models\Order;
-use App\Models\Post;
+use App\Models\Thread;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Str;
 
-class Rewarded extends Notification
+/**
+ * 打赏通知
+ *
+ * Class Rewarded
+ * @package App\Notifications
+ */
+class Rewarded extends System
 {
     use Queueable;
 
     public $order;
 
+    public $actor;
+
+    public $channel;
+
     /**
-     * Create a new notification instance.
+     * Rewarded constructor.
      *
      * @param Order $order
+     * @param $actor
+     * @param string $messageClass
+     * @param array $build
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function __construct(Order $order)
+    public function __construct(Order $order, $actor, $messageClass = '', $build = [])
     {
+        $this->setChannelName($messageClass);
+
         $this->order = $order;
+        $this->actor = $actor;
+
+        parent::__construct($messageClass, $build);
     }
 
     /**
-     * Get the notification's delivery channels.
+     * 数据库驱动通知
      *
-     * @param  mixed  $notifiable
+     * @param $notifiable
      * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function via($notifiable)
+    public function toDatabase($notifiable)
     {
-        return ['database'];
-    }
-
-    public function toDatabase()
-    {
-        if ($this->order->thread->type == 1) {
-            $content = htmlspecialchars($this->order->thread->title);
-        } else {
-            $this->order->thread->firstPost->content =
-                Str::limit($this->order->thread->firstPost->content, Post::SUMMARY_LENGTH);
-
-            $content = $this->order->thread->firstPost->formatContent();
-        }
-
-        return [
+        $build = [
+            'user_id' => $this->order->user->id,  // 付款人ID
             'order_id' => $this->order->id,
-            'thread_id' => $this->order->thread->id,
-            'thread_title' => htmlspecialchars($this->order->thread->title),
-            'content' => $content,
+            'thread_id' => $this->order->thread->id,   // 必传
+            'thread_username' => $this->order->thread->user->username, // 必传主题用户名
+            'thread_title' => $this->order->thread->title,
+            'content' => '',  // 兼容原数据
+            'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
             'amount' => $this->order->amount - $this->order->master_amount,
-            'user_id' => $this->order->user->id,
-            'user_name' => $this->order->user->username,
-            'user_avatar' => $this->order->user->avatar,
         ];
+
+        $this->build($build);
+
+        return $build;
     }
+
+    /**
+     * @param $build
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function build(&$build)
+    {
+        $content = $this->order->thread->getContentByType(Thread::CONTENT_LENGTH);
+
+        $build['content'] = $content;
+    }
+
+    /**
+     * 设置驱动名称
+     *
+     * @param $strClass
+     */
+    protected function setChannelName($strClass)
+    {
+        switch ($strClass) {
+            case 'App\MessageTemplate\Wechat\WechatRewardedMessage':
+                $this->channel = 'wechat';
+                break;
+            case 'App\MessageTemplate\RewardedMessage':
+            default:
+                $this->channel = 'database';
+                break;
+        }
+    }
+
 }

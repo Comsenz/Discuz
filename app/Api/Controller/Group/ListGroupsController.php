@@ -36,13 +36,15 @@ class ListGroupsController extends AbstractListController
 
         $include = $this->extractInclude($request);
 
-        $groups = Group::when($isDefault, function ($query, $isDefault) {
-            return $query->where('default', $isDefault);
-        })->where('id', '<>', Group::UNPAID);
+        $groups = Group::query()
+            ->where('id', '<>', Group::UNPAID)
+            ->when($isDefault, function ($query, $isDefault) {
+                return $query->where('default', $isDefault);
+            });
 
         // 判断如果是邀请页使用数据 则 不返回游客
         if (Arr::get($request->getQueryParams(), 'type') == 'invite') {
-            $groups->whereNotIn('id', [7]);
+            $groups->whereNotIn('id', [Group::GUEST_ID]);
         }
 
         return $groups->get()->load($include);
