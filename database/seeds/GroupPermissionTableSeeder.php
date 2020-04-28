@@ -90,8 +90,7 @@ class GroupPermissionTableSeeder extends Seeder
         'statistic.financeChart' => [],         // 财务图表
 
         // 短消息
-        'dialog.create' => [],                 // 创建会话
-        'dialog.message.create' => [],         // 创建会话消息
+        'dialog.create' => [10],                 // 创建会话、会话消息
 
         // 关注
         'userFollow.create' => [10],           // 创建关注

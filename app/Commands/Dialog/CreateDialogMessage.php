@@ -47,7 +47,7 @@ class CreateDialogMessage
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'dialog.message.create');
+        $this->assertCan($this->actor, 'dialog.message');
 
         $dialog_id = Arr::get($this->attributes, 'dialog_id');
 
