@@ -292,7 +292,7 @@ $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListD
 |--------------------------------------------------------------------------
 */
 
-$route->post('/reports', 'reports.create', ApiController\Reports\CreateReportsController::class);
-// $route->get('/reports', 'reports.list', ApiController\Reports\ListReportsController::class);
-// $route->patch('/reports/batch', 'reports.batchUpdate', ApiController\Reports\UpdateReportsController::class);
-// $route->delete('/reports/batch', 'reports.batchDelete', ApiController\Reports\DeleteReportsController::class);
+$route->post('/reports', 'reports.create', ApiController\Report\CreateReportsController::class);
+$route->get('/reports', 'reports.list', ApiController\Report\ListReportsController::class);
+$route->patch('/reports/batch', 'reports.batchUpdate', ApiController\Report\BatchUpdateReportsController::class);
+$route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Report\BatchDeleteReportsController::class);

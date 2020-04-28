@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @package App\Models
@@ -56,5 +57,15 @@ class Report extends Model
         $report->raise(new Created($report));
 
         return $report;
+    }
+
+    /**
+     * Define the relationship with the report's author.
+     *
+     * @return BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

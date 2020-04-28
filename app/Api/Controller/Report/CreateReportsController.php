@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Api\Controller\Reports;
+namespace App\Api\Controller\Report;
 
 use App\Api\Serializer\ReportsSerializer;
 use App\Commands\Report\CreateReport;
