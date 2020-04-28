@@ -368,6 +368,14 @@ class Thread extends Model
         return $this->hasOne(ThreadVideo::class);
     }
 
+
+    public function threadTopic()
+    {
+        return $this->belongsToMany(Topic::class)
+            ->withPivot('created_at');
+    }
+
+
     /**
      * Set the user for which the state relationship should be loaded.
      *

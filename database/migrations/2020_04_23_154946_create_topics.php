@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTopic extends Migration
+class CreateTopics extends Migration
 {
     /**
      * Run the migrations.

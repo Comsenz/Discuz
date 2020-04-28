@@ -474,11 +474,6 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
-
-    public function threadTopic()
-    {
-        return $this->hasMany(Topic::class);
-    }
     /**
      * Set the user for which the state relationship should be loaded.
      *
