@@ -23,11 +23,6 @@ export default {
       list: [],
       footMove: false,
       faceData: [],
-      fileList: [
-        // Uploader 根据文件后缀来判断是否为图片文件
-        // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        // { url: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=88704046,262850083&fm=11&gp=0.jpg', isImage: true }
-      ],
       fileListOne: [],
       uploadShow: false,
       enclosureList: [],
@@ -409,24 +404,6 @@ export default {
       }
     },
 
-    //上传图片，点击底部Icon时
-    handleFileUp(e) {
-      let fileListNowLen = e.target.files.length + this.fileListOne.length <= 12 ? e.target.files.length : 12 - this.fileListOne.length;
-      for (var i = 0; i < fileListNowLen; i++) {
-        var file = e.target.files[i];
-        if (this.isAndroid && this.isWeixin) {
-          this.testingType(file, this.supportImgExt);
-          if (this.testingRes) {
-            this.loading = true;
-            this.compressFile(file, 150000, true, i, file.length - i);
-          }
-        } else {
-          this.loading = true;
-          this.compressFile(file, 150000, true, i, file.length - i);
-        }
-      }
-    },
-
     //上传附件
     handleEnclosure(e) {
       this.testingType(e.target.files[0], this.supportFileExt);
@@ -474,18 +451,12 @@ export default {
           throw new Error(data.error);
 
         } else {
-
           if (img) {
-            this.fileList.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             this.loading = false;
-            this.fileListOne[this.fileListOne.length - index - 1].id = data.data.attributes.id;
-          }
-          if (isFoot) {
             this.fileListOne.push({ url: data.readdata._data.url, id: data.readdata._data.id });
             // 当上传一个文件成功 时，显示组件，否则不处理
             if (this.fileListOne.length > 0) {
               this.uploadShow = true;
-              this.loading = false;
             }
           }
           if (enclosure) {

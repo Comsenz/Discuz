@@ -32,6 +32,7 @@
         <div class="uploadBox" v-if="uploadShow">
           <van-uploader
             :max-count="12"
+            :accept="supportImgExtRes"
             :after-read="handleFile"
             v-model="fileListOne"
             @delete="deleteEnclosure($event,'img')"
@@ -44,7 +45,7 @@
           <van-uploader
             :max-count="12"
             :accept="supportImgExtRes"
-            multiple="false"
+            multiple="true"
             :after-read="handleFile"
             v-model="fileListOne"
             @delete="deleteEnclosure($event,'img')"
@@ -85,20 +86,22 @@
           class="icon iconfont icon-picture post-topic-header-icon uploadIcon"
           v-if="canUploadImages && limitMaxLength"
         >
-          <input
-            type="file"
-            @change="handleFileUp"
+          <van-uploader
+            :max-count="12"
+            :accept="supportImgExtRes"
+            multiple="true"
+            :after-read="handleFile"
             class="hiddenInput"
             v-if="isAndroid && isWeixin"
-          />
-          <input
-            type="file"
+          ></van-uploader>
+          <van-uploader
+            :max-count="12"
             :accept="supportImgExtRes"
-            @change="handleFileUp"
+            multiple="true"
+            :after-read="handleFile"
             class="hiddenInput"
             v-else
-            multiple
-          />
+          ></van-uploader>
         </span>
         <span
           class="icon iconfont icon-picture post-topic-header-icon uploadIcon"
