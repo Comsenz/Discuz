@@ -12,7 +12,9 @@ use App\Models\SessionToken;
 use App\Models\Thread;
 use App\Observer\PostObserver;
 use App\Observer\ThreadObserver;
+use App\SpecialChar\SpecialChar;
 use Discuz\Foundation\AbstractServiceProvider;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Contracts\Validation\Factory as Validator;
 
@@ -25,6 +27,9 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
      */
     public function register()
     {
+        $this->app->singleton(SpecialCharServer::class, function ($app) {
+            return new SpecialChar($app);
+        });
     }
 
     /**
