@@ -45,6 +45,7 @@ class ResourcePostController extends AbstractResourceController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'user.groups',
         'commentPosts',
         'commentPosts.user',
         'commentPosts.user.groups',
