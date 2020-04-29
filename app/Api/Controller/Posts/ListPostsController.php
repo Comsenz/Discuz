@@ -205,7 +205,7 @@ class ListPostsController extends AbstractListController
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
         $query->where('posts.is_first', false);
-        $query->where('posts.is_comment', false);
+        // $query->where('posts.is_comment', false);
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
