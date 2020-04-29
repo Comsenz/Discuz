@@ -80,11 +80,18 @@ class UploadLogoController extends AbstractResourceController
             ]
         )->validate();
 
-        // 是否是背景图
-        $isBackgroundImage = (bool) Arr::get($request->getParsedBody(), 'isBackgroundImage');
-
         // 写入配置表的名字
-        $settingName = $isBackgroundImage ? 'background_image' : 'logo';
+        switch (Arr::get($request->getParsedBody(), 'type', 'logo')) {
+            case 'background_image':
+                $settingName = 'background_image';
+                break;
+            case 'header_logo':
+                $settingName = 'header_logo';
+                break;
+            default:
+                $settingName = 'logo';
+                break;
+        }
 
         // 文件名
         $fileName = $settingName . '.' . $verifyFile->getClientOriginalExtension();
