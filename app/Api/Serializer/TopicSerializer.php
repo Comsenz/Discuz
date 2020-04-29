@@ -29,6 +29,8 @@ class TopicSerializer extends AbstractSerializer
         return [
             'user_id'          => $model->user_id,
             'content'          => $model->content,
+            'thread_count'     => $model->thread_count,
+            'view_count'       => $model->view_count,
             'updated_at'       => $this->formatDate($model->updated_at),
             'created_at'       => $this->formatDate($model->created_at),
         ];

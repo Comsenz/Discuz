@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $user_id
  * @property string $content
+ * @property int $thread_count
+ * @property int $view_count
  * @property Carbon $updated_at
  * @property Carbon $created_at
  * @package App\Models
