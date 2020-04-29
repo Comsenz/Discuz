@@ -142,7 +142,6 @@ $route->get('/favorites', 'favorites', ApiController\Threads\ListFavoritesContro
 $route->get('/threads', 'threads.index', ApiController\Threads\ListThreadsController::class);
 $route->get('/threads/share/{id}', 'threads.share', ApiController\Threads\ShareThreadController::class);
 $route->get('/threads/likes', 'threads.likes', ApiController\Threads\ListLikesController::class);
-$route->get('/threads/topics', 'threads.topics', ApiController\Threads\ListTopicThreadsController::class);
 $route->get('/threads/{id}', 'threads.resource', ApiController\Threads\ResourceThreadController::class);
 $route->post('/threads', 'threads.create', ApiController\Threads\CreateThreadController::class);
 $route->patch('/threads/batch', 'threads.batchUpdate', ApiController\Threads\BatchUpdateThreadsController::class);
