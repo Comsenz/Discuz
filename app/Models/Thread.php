@@ -369,11 +369,15 @@ class Thread extends Model
     }
 
 
-    public function threadTopic()
+    public function topic()
     {
         return $this->belongsToMany(Topic::class)->withPivot('created_at');
     }
 
+    public function threadTopic()
+    {
+        return $this->hasMany(ThreadTopic::class);
+    }
 
     /**
      * Set the user for which the state relationship should be loaded.

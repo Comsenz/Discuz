@@ -60,7 +60,7 @@ class ListThreadsController extends AbstractListController
         'rewardedUsers',
         'paidUsers',
         'lastDeletedLog',
-        'threadTopic',
+        'topic',
     ];
 
     /**

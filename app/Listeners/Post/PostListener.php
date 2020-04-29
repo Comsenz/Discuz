@@ -308,7 +308,7 @@ class PostListener
         $topic = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
 
         if ($event->post->is_first) {
-            $event->post->thread->threadTopic()->sync($topic);
+            $event->post->thread->topic()->sync($topic);
         }
 
     }
