@@ -47,7 +47,9 @@ class ResourcePostController extends AbstractResourceController
     public $optionalInclude = [
         'commentPosts',
         'commentPosts.user',
+        'commentPosts.user.groups',
         'commentPosts.replyUser',
+        'commentPosts.replyUser.groups',
         'commentPosts.mentionUsers',
         'commentPosts.images',
         'images',
