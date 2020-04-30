@@ -266,7 +266,7 @@ class ListThreadsController extends AbstractListController
         }
 
         // 类型：0普通 1长文 2视频 3图片
-        if (($type = Arr::get($filter, 'type')) !== '') {
+        if (($type = Arr::get($filter, 'type', '')) !== '') {
             $query->where('threads.type', (int) $type);
         }
 
