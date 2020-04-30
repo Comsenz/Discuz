@@ -14,7 +14,7 @@ use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use App\Models\User;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -152,7 +152,7 @@ class UpdateUser
             // 审核后系统通知事件
             $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
-            OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
+            UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {

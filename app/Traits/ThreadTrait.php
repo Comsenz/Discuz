@@ -8,7 +8,7 @@
 namespace App\Traits;
 
 use App\Exceptions\ThreadException;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use Illuminate\Database\Eloquent\Model;
 
 trait ThreadTrait
@@ -54,7 +54,7 @@ trait ThreadTrait
      */
     public function behavior($thread)
     {
-        if (!array_key_exists($thread->is_approved, OperationLog::behavior())) {
+        if (!array_key_exists($thread->is_approved, UserActionLogs::behavior())) {
             $this->ThreadException('behavior_fail');
         }
 
@@ -80,7 +80,7 @@ trait ThreadTrait
      */
     public function actionThread($thread, $behavior)
     {
-        if (!in_array($behavior, OperationLog::getAction('thread'))) {
+        if (!in_array($behavior, UserActionLogs::getAction('thread'))) {
             $this->ThreadException('action_fail');
         }
 
@@ -121,6 +121,6 @@ trait ThreadTrait
      */
     public function transLogAction($isApproved)
     {
-        return OperationLog::behavior()[$isApproved];
+        return UserActionLogs::behavior()[$isApproved];
     }
 }

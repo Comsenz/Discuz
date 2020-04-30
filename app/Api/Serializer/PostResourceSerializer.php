@@ -59,6 +59,6 @@ class PostResourceSerializer extends AbstractSerializer
      */
     public function comment_posts($post)
     {
-        return $this->hasMany($post, OperationLogSerializer::class);
+        return $this->hasMany($post, UserActionLogsSerializer::class);
     }
 }

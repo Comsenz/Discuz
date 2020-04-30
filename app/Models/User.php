@@ -442,12 +442,12 @@ class User extends Model
 
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     public function latelyLog()
     {
-        return $this->hasOne(OperationLog::class, 'log_able_id')->orderBy('id', 'desc');
+        return $this->hasOne(UserActionLogs::class, 'log_able_id')->orderBy('id', 'desc');
     }
 
     public function wechat()

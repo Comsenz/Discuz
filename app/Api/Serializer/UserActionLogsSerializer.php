@@ -10,12 +10,12 @@ namespace App\Api\Serializer;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Support\Str;
 
-class OperationLogSerializer extends AbstractSerializer
+class UserActionLogsSerializer extends AbstractSerializer
 {
     /**
      * {@inheritdoc}
      */
-    protected $type = 'operation-logs';
+    protected $type = 'user-action-logs';
 
     /**
      * {@inheritdoc}

@@ -152,7 +152,7 @@ class BasicPostSerializer extends AbstractSerializer
      */
     public function logs($post)
     {
-        return $this->hasMany($post, OperationLogSerializer::class);
+        return $this->hasMany($post, UserActionLogsSerializer::class);
     }
 
     /**
@@ -161,6 +161,6 @@ class BasicPostSerializer extends AbstractSerializer
      */
     public function lastDeletedLog($post)
     {
-        return $this->hasOne($post, OperationLogSerializer::class);
+        return $this->hasOne($post, UserActionLogsSerializer::class);
     }
 }

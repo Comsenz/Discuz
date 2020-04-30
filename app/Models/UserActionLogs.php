@@ -23,17 +23,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property User $user
  * @package App\Models
  */
-class OperationLog extends Model
+class UserActionLogs extends Model
 {
     /**
      * {@inheritdoc}
      */
     public $timestamps = false;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $table = 'operation_log';
 
     /**
      * {@inheritdoc}
