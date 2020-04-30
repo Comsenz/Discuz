@@ -141,15 +141,10 @@ export default {
           this.$store.dispatch("appSiteModule/invalidateForum");
 
           this.getForum().then(() => {
-            if (this.phoneStatus) {
-              this.$router.push({ path: 'bind-phone' });
-            } else if (this.siteMode === 'pay') {
+            if (this.siteMode === 'pay') {
               this.$router.push({ path: 'pay-the-fee' });
-            } else if (this.siteMode === 'public') {
-              this.$router.push({ path: '/' });
-            } else {
-              //缺少参数，请刷新页面
             }
+            this.$router.push({ path: '/' });
           })
 
         }
@@ -158,6 +153,10 @@ export default {
         console.log(err);
         this.btnLoading = false;
       })
+    },
+    getRandomChars(len) {
+      var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      return Array(len).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
     },
     getWatchHref(code, state, sessionId) {
       this.appFetch({
@@ -175,6 +174,24 @@ export default {
           if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
+            this.password = "";
+            if (this.signUpBdClickShow) {
+                this.userName = "网友" + this.getRandomChars(6);
+                this.setSignData();
+            } else {
+              this.captcha = new TencentCaptcha(this.appID, res => {
+                if (res.ret === 0) {
+                  this.userName = "网友" + this.getRandomChars(6);
+                  this.captcha_ticket = res.ticket;
+                  this.captcha_rand_str = res.randstr;
+                  //验证通过后注册
+                  this.setSignData();
+                }
+              });
+              // 显示验证码
+              this.captcha.show();
+            }
+            return;
           }
 
           if (res.errors[0].detail) {
