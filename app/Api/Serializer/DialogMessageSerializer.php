@@ -17,7 +17,6 @@ class DialogMessageSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         return [
-            'id' => $model->id,
             'user_id' => $model->user_id,
             'dialog_id' => $model->dialog_id,
             'message_text' => $model->message_text,
