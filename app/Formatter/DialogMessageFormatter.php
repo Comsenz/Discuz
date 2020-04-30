@@ -39,12 +39,6 @@ class DialogMessageFormatter extends BaseFormatter
 
         parent::confEmoji($configurator);
 
-        parent::confHtml($configurator);
-
-        parent::confUserMention($configurator);
-
-        parent::confTopic($configurator);
-
         return $configurator;
     }
 
