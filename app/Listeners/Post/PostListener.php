@@ -287,10 +287,10 @@ class PostListener
 
         $users = User::whereIn('id', $mentioned)->get();
         $users->load('deny');
-        $users->filter(function($user) use ($event) {
+        $users->filter(function ($user) use ($event) {
             //把作者拉黑的用户不发通知
             return !in_array($event->post->user_id, array_column($user->deny->toArray(), 'id'));
-        })->each(function(User $user) use ($event) {
+        })->each(function (User $user) use ($event) {
             // 数据库通知
             $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
 
@@ -302,14 +302,18 @@ class PostListener
         });
     }
 
+    /**
+     * 解析话题、创建话题、存储话题主题关系、修改话题主题数/阅读数
+     * @param Saved $event
+     */
     public function threadTopic(Saved $event)
     {
-
-        $topic = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
+        $topics = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
 
         if ($event->post->is_first) {
-            $event->post->thread->topic()->sync($topic);
-        }
+            $event->post->thread->topic()->sync($topics);
 
+            $event->post->thread->topic->each->refreshTopicCount();
+        }
     }
 }

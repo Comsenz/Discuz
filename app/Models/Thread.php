@@ -43,6 +43,7 @@ use Illuminate\Support\Str;
  * @property bool $is_essence
  * @property int $type
  * @property Post $firstPost
+ * @property Topic|Collection $topic
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo

@@ -41,6 +41,27 @@ class Topic extends Model
     protected $fillable = ['user_id', 'content'];
 
 
+
+    /**
+     * refresh topic count
+     */
+    public function refreshTopicCount()
+    {
+        $threadCount = ThreadTopic::join('threads', 'threads.id', 'thread_topic.thread_id')
+            ->where('thread_topic.topic_id', $this->id)
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->whereNull('threads.deleted_at')
+            ->count();
+        $viewCount = ThreadTopic::join('threads', 'threads.id', 'thread_topic.thread_id')
+            ->where('thread_topic.topic_id', $this->id)
+            ->where('threads.is_approved', Thread::APPROVED)
+            ->whereNull('threads.deleted_at')
+            ->sum('view_count');
+        $this->thread_count = $threadCount;
+        $this->view_count = $viewCount;
+        $this->save();
+    }
+
     /**
      * Define the relationship with the user.
      *
