@@ -107,7 +107,7 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
-        $isComment = (bool) Arr::get($this->data, 'attributes.is_comment');
+        $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
