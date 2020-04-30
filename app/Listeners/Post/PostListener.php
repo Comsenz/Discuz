@@ -313,7 +313,7 @@ class PostListener
         if ($event->post->is_first) {
             $event->post->thread->topic()->sync($topics);
 
-            $event->post->thread->topic->each->refreshTopicCount();
+            $event->post->thread->topic->each->refreshTopicThreadCount();
         }
     }
 }

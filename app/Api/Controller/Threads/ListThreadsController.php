@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
 use App\Models\Thread;
+use App\Models\Topic;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -400,6 +401,10 @@ class ListThreadsController extends AbstractListController
 
         //话题文章
         if ($topic_id = Arr::get($filter, 'topic_id', '0')) {
+            //更新话题阅读数
+            $topic = Topic::find($topic_id);
+            $topic->refreshTopicViewCount();
+
             $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
                 ->where('thread_topic.topic_id', $topic_id);
         }

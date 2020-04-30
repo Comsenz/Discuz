@@ -43,21 +43,29 @@ class Topic extends Model
 
 
     /**
-     * refresh topic count
+     * refresh thread count
      */
-    public function refreshTopicCount()
+    public function refreshTopicThreadCount()
     {
         $threadCount = ThreadTopic::join('threads', 'threads.id', 'thread_topic.thread_id')
             ->where('thread_topic.topic_id', $this->id)
             ->where('threads.is_approved', Thread::APPROVED)
             ->whereNull('threads.deleted_at')
             ->count();
+        $this->thread_count = $threadCount;
+        $this->save();
+    }
+
+    /**
+     * refresh view count
+     */
+    public function refreshTopicViewCount()
+    {
         $viewCount = ThreadTopic::join('threads', 'threads.id', 'thread_topic.thread_id')
             ->where('thread_topic.topic_id', $this->id)
             ->where('threads.is_approved', Thread::APPROVED)
             ->whereNull('threads.deleted_at')
             ->sum('view_count');
-        $this->thread_count = $threadCount;
         $this->view_count = $viewCount;
         $this->save();
     }
