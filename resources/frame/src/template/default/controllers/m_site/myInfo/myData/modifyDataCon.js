@@ -178,7 +178,7 @@ export default {
             if (isWeixin) {
               // var userId = browserDb.getLItem('tokenId');
               localStorage.clear();
-              this.$router.push({ path: '/wx-sign-up-bd' })
+              this.$router.push({ path: '/wx-login-bd' })
             } else {
               this.modifyData()
             }
@@ -188,53 +188,11 @@ export default {
     },
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
-        window.location.href = '/api/oauth/wechat';
+        this.$router.push({ path: '/wx-login-bd' })
         localStorage.clear();
-        /*this.appFetch({
-          url: 'wechatBind',
-          method: 'get',
-          data: {}
-        }).then(res => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-          } else {
-            window.location.href = res.readdata._data.location
-          }
-        })*/
-      } else if (this.isPhone) {
-        this.$toast.fail('请在微信客户端中进行绑定操作');
-        // this.appFetch({
-        //   url:'wechatBind',
-        //   method:'get',
-        //   data:{}
-        // }).then(res=>{
-        //   if (res.errors){
-        //     this.$toast.fail(res.errors[0].code);
-        //   }else{
-        //   window.location.href = res.readdata._data.location
-        //   }
-        // })
       } else {
         this.$toast.fail('请在微信客户端中进行绑定操作');
-
-        // window.location.href = '/api/oauth/wechat/pc';
-
-        // this.$router.push({path:'wx-qr-code'});
-        // browserDb.setSItem('beforeVisiting','modify-data');
-
-        /*this.appFetch({     //pc端绑定
-          url: 'wxPcLogin',
-          method: 'get',
-          data: {}
-        }).then(res => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-          } else {
-            window.location.href = res.readdata._data.location
-          }
-        })*/
       }
-
     },
 
   }
