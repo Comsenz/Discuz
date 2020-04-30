@@ -178,7 +178,8 @@ export default {
             if (isWeixin) {
               // var userId = browserDb.getLItem('tokenId');
               localStorage.clear();
-              this.$router.push({ path: '/wx-login-bd' })
+              browserDb.setLItem("wx-goto-login", true);
+              this.$router.push({ path: '/wx-sign-up-bd' })
             } else {
               this.modifyData()
             }
@@ -188,7 +189,8 @@ export default {
     },
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
-        this.$router.push({ path: '/wx-login-bd' })
+        browserDb.setLItem("wx-goto-login", true);
+        this.$router.push({ path: '/wx-sign-up-bd' })
         localStorage.clear();
       } else {
         this.$toast.fail('请在微信客户端中进行绑定操作');

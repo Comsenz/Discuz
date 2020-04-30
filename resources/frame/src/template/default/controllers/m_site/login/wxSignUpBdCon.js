@@ -90,6 +90,12 @@ export default {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
+          let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
+          let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
+          if (qcloud_captcha && register_captcha) {
+            this.signUpBdClickShow = false
+          }
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
@@ -174,6 +180,12 @@ export default {
           if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
+            let gotologin = webDb.getLItem('wx-goto-login');
+            if (gotologin) {
+              webDb.removeLItem('wx-goto-login');
+              this.$router.push({ path: '/wx-login-bd' })
+              return;
+            }
             this.password = "";
             if (this.signUpBdClickShow) {
                 this.userName = "网友" + this.getRandomChars(6);
@@ -308,16 +320,10 @@ export default {
   created() {
     this.getForum();
     this.wxtoken = webDb.getLItem('wxtoken');
-    this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
-    let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
-    if (qcloud_captcha && register_captcha) {
-      this.signUpBdClickShow = false
-    }
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
