@@ -24,6 +24,16 @@ class ThreadObserver
      */
     public function created(Thread $thread)
     {
+        $this->refreshSiteThreadCount();
+    }
+
+    public function deleted(Thread $thread)
+    {
+        $this->refreshSiteThreadCount();
+    }
+
+    private function refreshSiteThreadCount()
+    {
         $this->settings->set('thread_count', Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->count());
     }
 
