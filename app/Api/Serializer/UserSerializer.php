@@ -72,7 +72,7 @@ class UserSerializer extends AbstractSerializer
             'showGroups'        => $model->hasPermission('showGroups'),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
-            'denyStatus'              => (bool)$model->denyStatus
+            'denyStatus'        => (bool)$model->denyStatus
         ];
 
         // 判断禁用原因
