@@ -205,7 +205,6 @@ class ListPostsController extends AbstractListController
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
         $query->where('posts.is_first', false);
-        // $query->where('posts.is_comment', false);
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
@@ -285,6 +284,15 @@ class ListPostsController extends AbstractListController
             } elseif ($isDeleted == 'no') {
                 // 不看回收站帖子
                 $query->whereNull('posts.deleted_at');
+            }
+        }
+
+        // 是否是评论
+        if ($isComment = Arr::get($filter, 'isComment')) {
+            if ($isComment == 'yes') {
+                $query->where('posts.is_comment', true);
+            } elseif ($isComment == 'no') {
+                $query->where('posts.is_comment', false);
             }
         }
 
