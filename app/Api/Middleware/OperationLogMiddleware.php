@@ -8,9 +8,6 @@
 namespace App\Api\Middleware;
 
 use App\Models\OperationLog;
-use App\Models\SessionToken;
-use Carbon\Carbon;
-use Discuz\Auth\AssertPermissionTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -18,8 +15,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class OperationLogMiddleware implements MiddlewareInterface
 {
-    // use AssertPermissionTrait;
-
     /**
      * @inheritDoc
      */
