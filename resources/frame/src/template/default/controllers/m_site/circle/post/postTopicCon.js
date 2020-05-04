@@ -65,6 +65,7 @@ export default {
       captcha_ticket: '',     // 腾讯云验证码返回票据
       captcha_rand_str: '',   // 腾讯云验证码返回随机字符串
       loading: false,
+      isWeixinUpload: false     // 是否使用wx.chooseImage
     }
   },
   computed: {
@@ -120,7 +121,7 @@ export default {
     //初始化请求主题数据
     // this.detailsLoad();
     this.getInfo();
-
+    this.initWxUpload();
 
   },
   watch: {
@@ -637,10 +638,80 @@ export default {
       });
       // 显示验证码
       this.captcha.show();
+    },
+
+    // 初始化微信上传
+    initWxUpload() {
+      if (this.isWeixin) {
+        let url = window.location.href.split("#")[0];
+        this.appFetch({
+          url: 'weChatShare',
+          method: 'get',
+          data: {
+            url
+          }
+        }).then((res) => {
+          let appId = res.readdata._data.appId;
+          let nonceStr = res.readdata._data.nonceStr;
+          let signature = res.readdata._data.signature;
+          let timestamp = res.readdata._data.timestamp;
+          wx.config({
+            debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: appId,         // 必填，公众号的唯一标识
+            timestamp: timestamp, // 必填，生成签名的时间戳
+            nonceStr: nonceStr,   // 必填，生成签名的随机串
+            signature: signature, // 必填，签名，见附录1
+            jsApiList: [
+              'chooseImage',
+              'getLocalImgData'
+            ]
+          });
+          this.isWeixinUpload = true;
+        });
+      }
+    },
+    weixinUpload() {
+      const self = this;
+      wx.chooseImage({
+        count: 12,
+        success: function(res) {
+          this.loading = true;
+          var localIds = res.localIds;
+          localIds.forEach(function(lId, index) {
+            wx.getLocalImgData({
+              localId: lId,
+              success: function(res) {
+                let localData = res.localData;
+                if (localData.indexOf('data:image') != 0) {
+                  //判断是否有这样的头部
+                  localData = 'data:image/jpeg;base64,' +  localData
+                }
+                let imageBase64 = localData.replace(/\r|\n/g, '').replace(/data:image\/jpg/i, 'data:image/jpeg')
+                let blob = self.base64ToBlob(imageBase64);
+                let formdata = new FormData();
+                formdata.append('file', blob, index + ".jpg");
+                formdata.append('isGallery', 1);
+                formdata.append('order', index);
+                self.uploaderEnclosure(formdata, false, true, false, index);
+              }
+            });
+          });
+        }
+      });
+      return false;
+    },
+    base64ToBlob(dataurl) {
+      let arr = dataurl.split(',');
+      let mime = arr[0].match(/:(.*?);/)[1];
+      let bstr = atob(arr[1]);
+      let n = bstr.length;
+      let u8arr = new Uint8Array(n);
+      while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
     }
-
   },
-
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
     if (this.captcha) {
