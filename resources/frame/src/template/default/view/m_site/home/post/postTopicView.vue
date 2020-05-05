@@ -46,7 +46,7 @@
           <van-uploader
             :max-count="12"
             :accept="supportImgExtRes"
-            multiple="true"
+            :show-upload="false"
             :after-read="handleFile"
             v-model="fileListOne"
             @delete="deleteEnclosure($event,'img')"

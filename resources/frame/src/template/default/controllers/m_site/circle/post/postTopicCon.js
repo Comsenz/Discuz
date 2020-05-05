@@ -360,10 +360,10 @@ export default {
     //上传之前先判断是否有权限上传图片
     beforeHandleFile() {
       if (!this.canUploadImages) {
-        this.$toast.fail('没有上传图片的权限');
+        this.$toast('没有上传图片的权限');
       } else {
         if (!this.limitMaxLength) {
-          this.$toast.fail('已达上传图片上限');
+          this.$toast('已达上传图片数量上限');
         }
       }
     },
@@ -387,28 +387,26 @@ export default {
         files = e;
       }
       if (!this.limitMaxLength) {
-        this.$toast.fail('已达上传图片上限');
-      } else {
-        files.map((file, index) => {
-          if (this.isAndroid && this.isWeixin) {
-            this.testingType(file.file, this.supportImgExt);
-            if (this.testingRes) {
-              this.loading = true;
-              this.compressFile(file.file, 150000, false, index, files.length - index);
-            }
-          } else {
-            this.loading = true;
-            // this.compressFile(file.file, 150000, false, files.length - index, index);
-            this.compressFile(file.file, 150000, false, index, files.length - index);
-          }
-        });
+        this.$toast('已达上传图片数量上限');
+        return;
       }
+      let maxUpload = 12 - this.fileListOne.length;
+      let uploadCount = 0;
+      files.map((file, index) => {
+        if (this.testingType(file.file, this.supportImgExt)) {
+          uploadCount ++;
+          if (uploadCount > maxUpload) {
+            return;
+          }
+          this.loading = true;
+          this.compressFile(file.file, 150000, false, index, files.length - index);
+        }
+      });
     },
 
     //上传附件
     handleEnclosure(e) {
-      this.testingType(e.target.files[0], this.supportFileExt);
-      if (this.testingRes) {
+      if (this.testingType(e.target.files[0], this.supportFileExt)) {
         let file = e.target.files[0];
         let formdata = new FormData();
         formdata.append('file', file);
@@ -416,7 +414,6 @@ export default {
         this.loading = true;
         this.uploaderEnclosure(formdata, false, false, true);
       }
-
     },
 
     //验证上传格式是否符合设置
@@ -424,13 +421,11 @@ export default {
       let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
       let AllUpExt = allUpext;
       if (AllUpExt.indexOf(extName + ",") == "-1") {
-        this.$toast.fail("文件类型不允许!");
-        this.testingRes = false;
+        this.$toast("文件类型不允许!");
         this.loading = false;
-        // return false;
-      } else {
-        this.testingRes = true;
+        return false;
       }
+      return true;
     },
     getAllEvens(arr) {
       arr => {
