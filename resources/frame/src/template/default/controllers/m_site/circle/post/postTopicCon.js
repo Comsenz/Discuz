@@ -638,7 +638,7 @@ export default {
     // 初始化微信上传
     initWxUpload() {
       if (this.isWeixin) {
-        let url = window.location.href.split("#")[0];
+        let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
         this.appFetch({
           url: 'weChatShare',
           method: 'get',
@@ -667,11 +667,11 @@ export default {
     },
     weixinUpload() {
       const self = this;
-      let maxUpload = 12 - this.fileListOne.length;
+      let maxUpload = 12 - self.fileListOne.length;
       wx.chooseImage({
         count: maxUpload,
         success: (res) => {
-          this.loading = true;
+          self.loading = true;
           var localIds = res.localIds;
           localIds.forEach(function(lId, index) {
             wx.getLocalImgData({

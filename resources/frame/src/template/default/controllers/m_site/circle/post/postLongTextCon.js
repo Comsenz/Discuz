@@ -746,7 +746,7 @@ export default {
     // 初始化微信上传
     initWxUpload() {
       if (this.isWeixin) {
-        let url = window.location.href.split("#")[0];
+        let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
         this.appFetch({
           url: 'weChatShare',
           method: 'get',
