@@ -34,8 +34,8 @@ import utils from "./common/urlGet";         //获取url参数
 import VueLazyload from 'vue-lazyload';       //图片懒加载
 import 'lrz';     //图片压缩
 
-import wx from 'weixin-js-sdk';
-Vue.prototype.$wx = wx;
+//import wx from 'weixin-js-sdk';
+//Vue.prototype.$wx = wx;
 
 //import welinkH5 from '../static/js/hwh5-cloudonline';
 //Vue.prototype.$welinkH5 = welinkH5;

@@ -747,6 +747,9 @@ export default {
     initWxUpload() {
       if (this.isWeixin) {
         let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
+        if (this.isiOS && window.entryUrl) {
+          url = window.entryUrl;
+        }
         this.appFetch({
           url: 'weChatShare',
           method: 'get',
@@ -776,6 +779,7 @@ export default {
     weixinUpload() {
       const self = this;
       let maxUpload = 12 - this.fileListOne.length;
+      if (maxUpload > 9) maxUpload = 9;
       wx.chooseImage({
         count: maxUpload,
         success: (res) => {

@@ -639,6 +639,9 @@ export default {
     initWxUpload() {
       if (this.isWeixin) {
         let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
+        if (this.isiOS && window.entryUrl) { // iOS下，URL必须设置为整个SPA的入口URL
+          url = window.entryUrl;
+        }
         this.appFetch({
           url: 'weChatShare',
           method: 'get',
@@ -668,6 +671,7 @@ export default {
     weixinUpload() {
       const self = this;
       let maxUpload = 12 - self.fileListOne.length;
+      if (maxUpload > 9) maxUpload = 9; // iOS上设置大于9的数字，会直接报错
       wx.chooseImage({
         count: maxUpload,
         success: (res) => {
