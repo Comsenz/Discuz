@@ -28,20 +28,7 @@
         @change="searchChange"
         @focus="showFacePanel = false; footMove = false; keyboard = false;"
       ></textarea>
-      <div class="uploadBox" v-if="isWeixinUpload">
-        <div class="uploadBox" v-if="uploadShow">
-          <van-uploader
-            :max-count="12"
-            :accept="supportImgExtRes"
-            :show-upload="false"
-            :before-read="weixinUpload"
-            v-model="fileListOne"
-            @delete="deleteEnclosure($event,'img')"
-            multiple
-          ></van-uploader>
-        </div>
-      </div>
-      <div class v-else>
+      <div class="uploadBox">
         <div class="uploadBox" v-if="uploadShow">
           <van-uploader
             :max-count="12"

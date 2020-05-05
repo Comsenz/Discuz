@@ -667,9 +667,10 @@ export default {
     },
     weixinUpload() {
       const self = this;
+      let maxUpload = 12 - this.fileListOne.length;
       wx.chooseImage({
-        count: 12,
-        success: function(res) {
+        count: maxUpload,
+        success: (res) => {
           this.loading = true;
           var localIds = res.localIds;
           localIds.forEach(function(lId, index) {
