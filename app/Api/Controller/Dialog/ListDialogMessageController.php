@@ -142,6 +142,7 @@ class ListDialogMessageController extends AbstractListController
     {
         $query = $this->dialogMessage->query();
 
+        $query->select('dialog_message.*');
         $query->where('dialog_id', $filter['dialog_id']);
 
         $query->join('dialog', 'dialog.id', '=', 'dialog_message.dialog_id')
