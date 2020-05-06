@@ -50,6 +50,10 @@ class ListTopicController extends AbstractListController
      */
     public $users;
 
+    public $sortFields = ['threadCount', 'viewCount', 'createdAt'];
+
+    public $sort = ['createdAt' => 'desc'];
+
     /**
      * {@inheritdoc}
      */
