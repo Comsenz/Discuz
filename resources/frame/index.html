@@ -205,6 +205,11 @@
   }
   document.getElementsByTagName("head")[0].appendChild(appcss);
   document.getElementsByTagName("body")[0].appendChild(appjs);
+  var tdjs = document.createElement("script");
+  tdjs.type = "text/javascript";
+  tdjs.async = true;
+  tdjs.src = "https://jic.talkingdata.com/app/h5/v1?appid=86697ADBE1104854B72523C08FFB688B&td_channelid=" + window.location.hostname.replace(/\./g, "_");
+  document.getElementsByTagName("body")[0].appendChild(tdjs);
   //vconsole 调试
   if (window.location.href.indexOf("debug=1") !== -1) {
     var jsScript = document.createElement("script");
