@@ -84,8 +84,9 @@ class ListTopicController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
+        $sort = $this->extractSort($request);
 
-        $topic = $this->search($filter, $limit, $offset);
+        $topic = $this->search($filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('topics.list'),
@@ -107,17 +108,21 @@ class ListTopicController extends AbstractListController
 
     /**
      * @param array $filter
+     * @param $sort
      * @param null $limit
      * @param int $offset
      * @return Collection
      */
-    public function search($filter, $limit = null, $offset = 0)
+    public function search($filter, $sort, $limit = null, $offset = 0)
     {
         $query = $this->topics->query();
         if ($content = Arr::get($filter, 'content')) {
             $query->where('content', 'like', '%'.$content.'%');
         }
 
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
+        }
 
         $this->topicCount = $limit > 0 ? $query->count() : null;
 
