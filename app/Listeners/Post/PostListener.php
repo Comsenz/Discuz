@@ -78,7 +78,8 @@ class PostListener
         $post = $event->post;
         $actor = $event->actor;
 
-        if ($actor->cannot('replyThread', $post->thread->category)) {
+        // 是否有权限在该主题所在分类下回复
+        if (! $event->post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
             throw new PermissionDeniedException;
         }
     }
