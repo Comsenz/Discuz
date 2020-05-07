@@ -13,6 +13,7 @@ use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
+use App\Events\Post\Saving;
 use App\MessageTemplate\PostMessage;
 use App\MessageTemplate\RelatedMessage;
 use App\MessageTemplate\RepliedMessage;
@@ -30,6 +31,7 @@ use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use s9e\TextFormatter\Utils;
@@ -41,6 +43,7 @@ class PostListener
     public function subscribe(Dispatcher $events)
     {
         // 发表回复
+        $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
 
         // 操作审核回复，触发行为动作
@@ -64,6 +67,20 @@ class PostListener
 
         // @
         $events->listen(Saved::class, [$this, 'userMentions']);
+    }
+
+    /**
+     * @param Saving $event
+     * @throws PermissionDeniedException
+     */
+    public function whenPostWasSaving(Saving $event)
+    {
+        $post = $event->post;
+        $actor = $event->actor;
+
+        if ($actor->cannot('replyThread', $post->thread->category)) {
+            throw new PermissionDeniedException;
+        }
     }
 
     /**

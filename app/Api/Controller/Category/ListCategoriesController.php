@@ -25,6 +25,12 @@ class ListCategoriesController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return Category::orderBy('sort')->get();
+        $actor = $request->getAttribute('actor');
+
+        // 仅返回可查看内容的分类
+        return Category::query()
+            ->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'))
+            ->orderBy('sort')
+            ->get();
     }
 }

@@ -38,4 +38,30 @@ class CategoryPolicy extends AbstractPolicy
     public function find(User $actor, Builder $query)
     {
     }
+
+    /**
+     * @param User $actor
+     * @param Category $category
+     * @return bool|null
+     */
+    public function createThread(User $actor, Category $category)
+    {
+        if ($actor->hasPermission('createThread')
+            && $actor->hasPermission('category'.$category->id.'.createThread')) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Category $category
+     * @return bool|null
+     */
+    public function replyThread(User $actor, Category $category)
+    {
+        if ($actor->hasPermission('thread.reply')
+            && $actor->hasPermission('category'.$category->id.'.replyThread')) {
+            return true;
+        }
+    }
 }

@@ -7,6 +7,7 @@
 
 namespace App\Policies;
 
+use App\Models\Category;
 use App\Models\Thread;
 use App\Models\User;
 use Discuz\Api\Events\ScopeModelVisibility;
@@ -37,11 +38,17 @@ class ThreadPolicy extends AbstractPolicy
     /**
      * @param User $actor
      * @param string $ability
+     * @param Thread $thread
      * @return bool|null
      */
-    public function can(User $actor, $ability)
+    public function can(User $actor, $ability, Thread $thread)
     {
         if ($actor->hasPermission('thread.' . $ability)) {
+            return true;
+        }
+
+        // 是否在当前分类下有该权限
+        if ($thread->category && $actor->hasPermission('category'.$thread->category->id.'.thread.'.$ability)) {
             return true;
         }
     }
@@ -52,6 +59,9 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
+        // 隐藏不允许当前用户查看的分类内容。
+        $query->whereNotIn('category_id', Category::getIdsWhereCannot($actor, 'viewThreads'));
+
         // 回收站
         if (! $actor->hasPermission('viewTrashed')) {
             $query->where(function (Builder $query) use ($actor) {
