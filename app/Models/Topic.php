@@ -78,7 +78,7 @@ class Topic extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function lastThread()
     {
         return $this->belongsToMany(Thread::class)->withPivot('created_at');
