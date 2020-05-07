@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Topic extends Model
 {
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +39,7 @@ class Topic extends Model
      */
     protected $fillable = ['user_id', 'content'];
 
-
+    public $lastThreadId;
 
     /**
      * refresh thread count
@@ -79,13 +78,8 @@ class Topic extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * Define the relationship with the threads.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function threads()
+    
+    public function lastThread()
     {
         return $this->belongsToMany(Thread::class)->withPivot('created_at');
     }

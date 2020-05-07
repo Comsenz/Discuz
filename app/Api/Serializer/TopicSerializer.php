@@ -37,7 +37,7 @@ class TopicSerializer extends AbstractSerializer
     }
 
     /**
-     * Define the relationship with the from_user.
+     * Define the relationship with the user.
      *
      * @param $model
      * @return Relationship
@@ -48,12 +48,12 @@ class TopicSerializer extends AbstractSerializer
     }
 
     /**
-     * Define the relationship with the to_user.
+     * Define the relationship with the lastThread.
      *
      * @param $model
      * @return Relationship
      */
-    public function threads($model)
+    public function lastThread($model)
     {
         return $this->hasMany($model, ThreadSerializer::class);
     }

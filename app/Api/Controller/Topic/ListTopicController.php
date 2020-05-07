@@ -8,7 +8,9 @@
 namespace App\Api\Controller\Topic;
 
 use App\Api\Serializer\TopicSerializer;
-use App\Models\User;
+use App\Models\Post;
+use App\Models\ThreadTopic;
+use App\Models\Topic;
 use App\Repositories\TopicRepository;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -57,7 +59,7 @@ class ListTopicController extends AbstractListController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['user'];
+    public $optionalInclude = ['user', 'lastThread', 'lastThread.firstPost', 'lastThread.firstPost.images'];
 
     /* The relationships that are included by default.
      *
@@ -78,7 +80,6 @@ class ListTopicController extends AbstractListController
     }
 
     /**
-     * 我的关注
      * {@inheritdoc}
      * @throws InvalidParameterException
      */
@@ -90,7 +91,7 @@ class ListTopicController extends AbstractListController
         $include = $this->extractInclude($request);
         $sort = $this->extractSort($request);
 
-        $topic = $this->search($filter, $sort, $limit, $offset);
+        $topics = $this->search($filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('topics.list'),
@@ -100,14 +101,27 @@ class ListTopicController extends AbstractListController
             $this->topicCount
         );
 
-        $topic->loadMissing($include);
+
+        $topicIds = $topics->pluck('id');
+        $threadTopic = ThreadTopic::query()
+            ->selectRaw(' `topic_id`, MAX(`thread_id`) as thread_id')
+            ->whereIn('topic_id', $topicIds)
+            ->groupBy('topic_id')
+            ->get();
+        $threadIds = $threadTopic->pluck('thread_id');
+        $topics->load([
+            'lastThread' => function ($query) use ($threadIds) {
+                $query->whereIn('thread_id', $threadIds);
+            }]);
+
+        $topics->loadMissing($include);
 
         $document->setMeta([
             'total' => $this->topicCount,
             'pageCount' => ceil($this->topicCount / $limit),
         ]);
 
-        return $topic;
+        return $topics;
     }
 
     /**
