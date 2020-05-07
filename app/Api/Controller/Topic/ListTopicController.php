@@ -101,20 +101,28 @@ class ListTopicController extends AbstractListController
             $this->topicCount
         );
 
-
-        $topicIds = $topics->pluck('id');
-        $threadTopic = ThreadTopic::query()
-            ->selectRaw(' `topic_id`, MAX(`thread_id`) as thread_id')
-            ->whereIn('topic_id', $topicIds)
-            ->groupBy('topic_id')
-            ->get();
-        $threadIds = $threadTopic->pluck('thread_id');
-        $topics->load([
-            'lastThread' => function ($query) use ($threadIds) {
-                $query->whereIn('thread_id', $threadIds);
-            }]);
-
+        if (in_array('lastThread', $include)) {
+            $topicIds = $topics->pluck('id');
+            $threadTopic = ThreadTopic::query()
+                ->selectRaw(' `topic_id`, MAX(`thread_id`) as thread_id')
+                ->whereIn('topic_id', $topicIds)
+                ->groupBy('topic_id')
+                ->get();
+            $threadIds = $threadTopic->pluck('thread_id');
+            $topics->load([
+                'lastThread' => function ($query) use ($threadIds) {
+                    $query->whereIn('thread_id', $threadIds);
+                }]);
+            $topics->each(function (Topic $topic) {
+                //话题包含多个 $threadIds 只保留最大的
+                if ($topic->getRelation('lastThread')->count() > 1) {
+                    $topic->setRelation('lastThread', $topic->getRelation('lastThread')->sortByDesc('id')->take(1));
+                }
+            });
+        }
         $topics->loadMissing($include);
+
+
 
         $document->setMeta([
             'total' => $this->topicCount,
