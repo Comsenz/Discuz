@@ -50,7 +50,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
                 'site_url' => $this->settings->get('site_url'),
                 'site_stat' => $this->settings->get('site_stat') ?: '',
-                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
                 'site_record' => $this->settings->get('site_record'),
                 'site_cover' => $this->settings->get('site_cover') ?: '',
