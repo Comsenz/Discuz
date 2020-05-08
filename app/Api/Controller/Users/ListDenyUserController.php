@@ -1,43 +1,26 @@
 <?php
 
-/**
- * Discuz & Tencent Cloud
- * This is NOT a freeware, use is subject to license terms
- */
 
 namespace App\Api\Controller\Users;
 
+
 use App\Api\Serializer\UserSerializer;
 use App\Repositories\UserRepository;
-use App\Traits\UserTrait;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
-use Discuz\Http\UrlGenerator;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class ListUsersController extends AbstractListController
+class ListDenyUserController extends AbstractListController
 {
+
     use AssertPermissionTrait;
-    use UserTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public $serializer = UserSerializer::class;
-
-    /**
-     * {@inheritdoc}
-     */
-    public $include = ['groups'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public $sortFields = ['createdAt'];
 
     /**
      * @var UserRepository
@@ -65,28 +48,31 @@ class ListUsersController extends AbstractListController
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertCan($actor, 'viewUserList');
+        $this->assertRegistered($actor);
 
-        $filter = $this->extractFilter($request);
+        $query = $request->getQueryParams();
+        $id = Arr::get($query, 'id');
+
+        Arr::forget($query, 'id');
+
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = $this->extractInclude($request);
 
-        $users = $this->search($actor, $filter, $sort, $limit, $offset);
-
-        $users->load($include);
+        $users = $this->search($actor, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
-            $this->url->route('users.list'),
-            $request->getQueryParams(),
+            $this->url->to('/api/users/'.$id.'/deny'),
+            $query,
             $offset,
             $limit,
             $this->userCount
@@ -100,20 +86,22 @@ class ListUsersController extends AbstractListController
         return $users;
     }
 
+
     /**
      * @param $actor
-     * @param $filter
      * @param $sort
      * @param int|null $limit
      * @param int $offset
      *
      * @return Collection
      */
-    public function search($actor, $filter, $sort, $limit = null, $offset = 0)
+    public function search($actor, $sort, $limit = null, $offset = 0)
     {
-        $query = $this->users->query()->whereVisibleTo($actor);
+        $query = $this->users->query();
 
-        $this->applyFilters($query, $filter, $actor);
+        $query->leftJoin('deny_users', 'id', '=', 'deny_user_id')->where('user_id', $actor->id);
+
+        $query->selectRaw('*, true as denyStatus');
 
         $this->userCount = $limit > 0 ? $query->count() : null;
 

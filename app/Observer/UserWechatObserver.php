@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User;
+namespace App\Observer;
 
 use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;

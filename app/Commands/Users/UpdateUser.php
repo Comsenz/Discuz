@@ -89,9 +89,12 @@ class UpdateUser
         // 修改登录密码
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
             if ($isSelf) {
-                $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                if (!$verifyPwd) {
-                    throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                //小程序注册的账号密码为空，不验证旧密码
+                if ($this->actor->password != '') {
+                    $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
+                    if (!$verifyPwd) {
+                        throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                    }
                 }
 
                 $this->validator->setUser($user);

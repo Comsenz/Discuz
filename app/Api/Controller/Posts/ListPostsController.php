@@ -50,6 +50,7 @@ class ListPostsController extends AbstractListController
         'thread.firstPost',
         'lastThreeComments',
         'lastThreeComments.user',
+        'lastThreeComments.replyUser',
         'deletedUser',
         'lastDeletedLog',
     ];
@@ -204,7 +205,6 @@ class ListPostsController extends AbstractListController
     private function applyFilters(Builder $query, array $filter, User $actor)
     {
         $query->where('posts.is_first', false);
-        $query->where('posts.is_comment', false);
 
         // 作者 ID
         if ($userId = Arr::get($filter, 'userId')) {
@@ -287,6 +287,15 @@ class ListPostsController extends AbstractListController
             }
         }
 
+        // 是否是评论
+        if ($isComment = Arr::get($filter, 'isComment')) {
+            if ($isComment == 'yes') {
+                $query->where('posts.is_comment', true);
+            } elseif ($isComment == 'no') {
+                $query->where('posts.is_comment', false);
+            }
+        }
+
         // 关键词搜索
         $queryWord = Arr::get($filter, 'q');
         $query->when($queryWord, function ($query, $queryWord) {
@@ -308,6 +317,9 @@ class ListPostsController extends AbstractListController
 
         $subSql = Post::query()
             ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`is_first` = `is_first`')
+            ->whereRaw($this->tablePrefix . 'a.`is_comment` = `is_comment`')
+            ->whereRaw($this->tablePrefix . 'a.`is_approved` = `is_approved`')
             ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
             ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
@@ -317,9 +329,9 @@ class ListPostsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('reply_post_id', $postIds)
             ->whereNull('deleted_at')
-            ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
             ->where('is_comment', true)
+            ->where('is_approved', Post::APPROVED)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {

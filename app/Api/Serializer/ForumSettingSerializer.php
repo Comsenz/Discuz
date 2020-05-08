@@ -50,7 +50,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
                 'site_url' => $this->settings->get('site_url'),
                 'site_stat' => $this->settings->get('site_stat') ?: '',
-                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username']),
+                'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
                 'site_record' => $this->settings->get('site_record'),
                 'site_cover' => $this->settings->get('site_cover') ?: '',
@@ -104,9 +104,9 @@ class ForumSettingSerializer extends AbstractSerializer
             // 其它信息(非setting中的信息)
             'other' => [
                 // 基础信息
-                'count_threads' => Thread::where('is_approved', Thread::APPROVED)->whereNull('deleted_at')->count(), // 统计所有主题数
-                'count_posts' => Post::where('is_approved', Post::APPROVED)->whereNull('deleted_at')->count(), // 统计所有回复数
-                'count_users' => User::where('status', 0)->count(), // 统计所有的用户
+                'count_threads' => (int)$this->settings->get('thread_count'), // 统计所有主题数
+                'count_posts' => (int)$this->settings->get('post_count'), // 统计所有回复数
+                'count_users' => (int)$this->settings->get('user_count'), // 统计所有的用户
                 // 权限 permission
                 'can_upload_attachments' => $this->actor->can('attachment.create.0'),
                 'can_upload_images' => $this->actor->can('attachment.create.1'),

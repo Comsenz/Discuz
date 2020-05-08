@@ -7,10 +7,12 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
 use App\Models\SessionToken;
-use App\Models\UserWechat;
+use App\Models\Thread;
+use App\Observer\PostObserver;
+use App\Observer\ThreadObserver;
 use App\SpecialChar\SpecialChar;
-use App\User\UserWechatObserver;
 use Discuz\Foundation\AbstractServiceProvider;
 use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Contracts\Support\DeferrableProvider;
@@ -48,6 +50,8 @@ class AppServiceProvider extends AbstractServiceProvider implements DeferrablePr
             return SessionToken::check($value, $parameters[0], $userId);
         });
 
-        UserWechat::observe(UserWechatObserver::class);
+
+        Thread::observe(ThreadObserver::class);
+        Post::observe(PostObserver::class);
     }
 }

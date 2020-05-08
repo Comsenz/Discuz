@@ -107,7 +107,7 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
-        $isComment = false;
+        $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
@@ -118,27 +118,18 @@ class CreatePost
                 // 不能只回复引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                 $replyContent = preg_replace($pattern, '', Arr::get($this->data, 'attributes.content'));
+
                 if (! $replyContent) {
                     throw new Exception('reply_content_cannot_null');
                 }
 
                 // 检查是否在同一主题下的
-                $replyPost = $post->where('id', $this->replyPostId)
+                $this->replyUserId = $post->where('id', $this->replyPostId)
                     ->where('thread_id', $thread->id)
-                    ->first(['user_id', 'is_comment']);
-                $this->replyUserId = $replyPost->user_id;
+                    ->value('user_id');
+
                 if (! $this->replyUserId) {
                     throw new ModelNotFoundException;
-                }
-
-                // 判断是否是点评内容
-                $isComment = Arr::get($this->data, 'attributes.is_comment', false);
-                if ($isComment) {
-                    // 判断点评的不能是点评的数据 (不允许叠点评)
-                    if ($replyPost->is_comment) {
-                        throw new TranslatorException('post_not_comment');
-                    }
-                    // TODO 可添加点评通知
                 }
             }
 

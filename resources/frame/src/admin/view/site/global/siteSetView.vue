@@ -106,8 +106,8 @@
       </div>
     </el-collapse-transition>
 
-    <Card header="主题打赏金额分成比例：">
-      <CardRow description="主题打赏的分成比例设置，两者加起来必须为10，不填时默认为作者10、平台0">
+    <Card header="金额分成比例：">
+      <CardRow description="主题打赏、付费等的分成比例设置，两者加起来必须为10，不填时默认为作者10、平台0">
         <div class="proportion-box">
           <span>作者</span>
           <el-input

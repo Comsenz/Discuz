@@ -282,17 +282,20 @@ class PostListener
 
         $event->post->mentionUsers()->sync($mentioned);
 
-        User::whereIn('id', $mentioned)
-            ->get()
-            ->each(function (User $user) use ($event) {
-                // 数据库通知
-                $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
+        $users = User::whereIn('id', $mentioned)->get();
+        $users->load('deny');
+        $users->filter(function($user) use ($event) {
+            //把作者拉黑的用户不发通知
+            return !in_array($event->post->user_id, array_column($user->deny->toArray(), 'id'));
+        })->each(function(User $user) use ($event) {
+            // 数据库通知
+            $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
 
-                // 微信通知
-                $user->notify(new Related($event->post, $event->actor, WechatRelatedMessage::class, [
-                    'message' => $event->post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                    'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
-                ]));
-            });
+            // 微信通知
+            $user->notify(new Related($event->post, $event->actor, WechatRelatedMessage::class, [
+                'message' => $event->post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
+            ]));
+        });
     }
 }

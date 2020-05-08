@@ -115,7 +115,7 @@ class ListOrdersController extends AbstractListController
         $orders = $this->search($actor, $filter, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
-            $this->url->route('order.list'),
+            $this->url->route('orders.list'),
             $request->getQueryParams(),
             $offset,
             $limit,

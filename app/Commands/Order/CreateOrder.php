@@ -16,6 +16,7 @@ use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Exception;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
@@ -57,6 +58,8 @@ class CreateOrder
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
         $this->assertCan($this->actor, 'order.create');
+
+        $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $validator_info = $validator->make($this->data->toArray(), [
             'is_anonymous'  => 'filled|int',

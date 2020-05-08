@@ -30,7 +30,7 @@ module.exports = {
   'circleInfo': '/circleInfo',           //站点信息
   'themeNavListCon': '/themeNavListCon', //主题列表
   'walletFrozen': '/wallet/log',         //冻结金额
-  'orderList': '/order',                 //订单明细,打赏支付
+  'orderList': '/orders',                 //订单明细,打赏支付
   'orderPay': '/trade/pay/order',        //订单支付
   'order': '/order',                     //订单支付
   'walletDetails': '/wallet/log',       //钱包明细
@@ -58,7 +58,7 @@ module.exports = {
   'deleteNotification': '/notification', //删除通知里的回复我的
   'wechatDelete': '/users/',            //修改资料里的解绑微信
   'wechatBind': '/oauth/wechat/user',         //去绑定微信
-  'postBatch': '/posts/batch/',          //删除回复接口[批量]
+  'postBatch': '/posts/batch',          //删除回复接口[批量]
 
   'access': '/refresh-token',            //刷新token
   'follow': '/follow',                   //关注
