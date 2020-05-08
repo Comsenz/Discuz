@@ -115,7 +115,7 @@ export default {
       // pwdVal: '',
       codeUrl: "",        //支付url，base64
       type: false,
-      //userDet: '',
+      userDet: '',
       hideStyle: '',
       likeTipShow: true,
       likeTipFlag: '展开',
@@ -133,11 +133,6 @@ export default {
       wxShareTip: false,
       siteName: '', //站点名称
 
-    }
-  },
-  props: {
-    userDet: {
-      type: Object
     }
   },
   created() {
