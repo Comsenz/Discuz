@@ -744,6 +744,13 @@ export default {
       this.captcha.show();
     },
     // 初始化微信上传
+    checkWxReady() {
+      return new Promise((resolve, reject) => {
+        wx.ready(() => resolve())
+        wx.error(err => reject(err))
+      });
+    },
+
     initWxUpload() {
       if (this.isWeixin) {
         let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
@@ -761,6 +768,11 @@ export default {
           let nonceStr = res.readdata._data.nonceStr;
           let signature = res.readdata._data.signature;
           let timestamp = res.readdata._data.timestamp;
+          this.checkWxReady().then(() => {
+            this.isWeixinUpload = true;
+          }).catch(err => {
+            this.isWeixinUpload = false;
+          });
           wx.config({
             debug: false,          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId: appId,         // 必填，公众号的唯一标识
