@@ -47,6 +47,11 @@ class CreateThreadVideo
     public $threadId;
 
     /**
+     * @var
+     */
+    public $settings;
+
+    /**
      * CreateThread constructor.
      * @param User $actor
      * @param $threadId
@@ -65,9 +70,10 @@ class CreateThreadVideo
      * @param ThreadVideo $threadVideo
      * @return ThreadVideo
      */
-    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadVideo $threadVideo)
+    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadVideo $threadVideo, SettingsRepository $settings)
     {
         $this->events = $events;
+        $this->settings = $settings;
 
         //传入主题ID时更新数据
         if ($this->threadId) {
@@ -90,8 +96,14 @@ class CreateThreadVideo
         $threadVideo->save();
 
         if (isset($thread)) {
-            //发布文章时，通知腾讯云点播转码
-            $this->transcodeVideo($threadVideo->file_id);
+            //发布文章时，转码
+            if ($this->settings->get('qcloud_vod_transcode_ads', 'qcloud')) {
+                //加密自适应
+                $this->transcodeVideo($threadVideo->file_id, 'AdaptiveDynamicStreamingTaskSet');
+            } else {
+                //普通转码
+                $this->transcodeVideo($threadVideo->file_id, 'TranscodeTaskSet');
+            }
         }
 
         return $threadVideo;

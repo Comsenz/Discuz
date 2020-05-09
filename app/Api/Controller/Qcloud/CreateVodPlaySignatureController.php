@@ -15,7 +15,7 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class CreateSignatureController extends AbstractCreateController
+class CreateVodPlaySignatureController extends AbstractCreateController
 {
     public $serializer = SignatureSerializer::class;
 
