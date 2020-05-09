@@ -9,7 +9,7 @@
 
     <Card>
       <!--<div class="user-avatar">
-        <img src="../../../../../../static/images/noavatar.gif" alt="用户头像">
+        <img src="/static/images/noavatar.gif" alt="用户头像">
         <footer>
           <el-upload
             class="upload-demo"

@@ -19,7 +19,7 @@
           <img
             v-if="themeCon.user._data.isReal"
             class="icon-yirenzheng"
-            src="../../../../../../../static/images/authIcon.svg"
+            src="/static/images/authIcon.svg"
             alt="实名认证"
           />
         </div>
