@@ -150,12 +150,12 @@ export default {
       });
     },
     onLoad() {
-      let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;
-      //微信内登录
-      let isWeixin = this.appCommonH.isWeixin().isWeixin;
-      if (isWeixin && wxOfficial == '1') {
-        this.sidebarList2.splice(1, 1);
-      }
+      // let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;
+      // //微信内登录
+      // let isWeixin = this.appCommonH.isWeixin().isWeixin;
+      // if (isWeixin && wxOfficial == '1') {
+      //   this.sidebarList2.splice(1, 1);
+      // }
     },
 
     copyFocus(obj) {
