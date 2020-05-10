@@ -89,6 +89,7 @@ export default {
       }).catch(() => {
       });
 
+      let userId = browserDb.getLItem("tokenId");
       this.appFetch({
         url: 'wallet',
         method: 'get',
