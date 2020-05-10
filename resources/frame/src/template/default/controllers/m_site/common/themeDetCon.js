@@ -60,12 +60,12 @@ export default {
   },
   created(){
     this.userId = browserDb.getLItem('tokenId');
-    this.currentUserName = browserDb.getLItem('foregroundUser');
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadPriviewImgList();
     this.forList();
+    this.getUser();
 
     document.addEventListener('click',e => {
         var screen = this.$refs.screenDiv;
@@ -105,6 +105,18 @@ export default {
         datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
+    },
+    getUser() {
+      //初始化请求User信息，用于判断当前用户是否已付费
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.currentUserName = res.readdata._data.username;
+        }
+      }).catch(() => {
+      });
     },
 
     //循环数据新建数组，用于操作管理显示隐藏下拉菜单
