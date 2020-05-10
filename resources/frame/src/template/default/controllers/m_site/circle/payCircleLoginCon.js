@@ -289,6 +289,9 @@ export default {
 				} else {
 					this.payStatus = res.readdata._data.status;
 					this.payStatusNum++;
+					if (this.payStatus == '1') {
+						this.$router.push('/');
+					}
 					if (this.payStatus == '1' || this.payStatusNum > 10) {
 						this.rewardShow = false;
 						this.qrcodeShow = false;
