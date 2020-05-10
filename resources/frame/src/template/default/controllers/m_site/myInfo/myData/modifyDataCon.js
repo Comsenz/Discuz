@@ -40,7 +40,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     if (this.isWeixin) {
-      this.tipWx = '确认解绑微信及退出登录，如果您没有设置密码/手机，将无法再次登录';
+      this.tipWx = '确认解绑微信并退出登录，如果您没有设置密码或手机等其它登录方法，将无法再次登录';
     } else {
       this.tipWx = '确认解绑微信';
     }
