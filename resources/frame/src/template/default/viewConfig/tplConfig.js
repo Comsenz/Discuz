@@ -709,8 +709,8 @@ export default {
     /*
     * 获取tokenId
     * */
-    const tokenId = browserDb.getLItem('tokenId');
-    const Authorization = browserDb.getLItem('Authorization');
+    let tokenId = browserDb.getLItem('tokenId');
+    let Authorization = browserDb.getLItem('Authorization');
 
     /*
     * 前台路由全局处理
@@ -806,8 +806,10 @@ export default {
           if (res.readdata._data.set_site.site_mode === 'pay') {
             this.getUsers(tokenId).then(userInfo => {
               if (userInfo.errors) {
-                browserDb.clearLAll();
-                next({ path: '/' })
+                browserDb.removeLItem("tokenId");
+                browserDb.removeLItem("Authorization");
+                next({ path: '/' });
+                return;
               }
               /*获取用户付费状态并判断*/
               if (userInfo.readdata._data.paid) {
