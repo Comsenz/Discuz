@@ -11,6 +11,8 @@ import {
   CellGroup,
   Tab,
   Tabs,
+  Toast,
+  Dialog,
   Field,
   Divider,
   Search,
@@ -37,6 +39,8 @@ Vue.use(RadioGroup)
   .use(CellGroup)
   .use(Tab)
   .use(Tabs)
+  .use(Toast)
+  .use(Dialog)
   .use(Field)
   .use(Divider)
   .use(Search)

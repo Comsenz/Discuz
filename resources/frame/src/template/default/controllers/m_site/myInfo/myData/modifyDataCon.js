@@ -40,9 +40,9 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     if (this.isWeixin) {
-      this.tipWx = '确认解绑微信及退出登录';
+      this.tipWx = '确认解绑微信及退出登录，如果您没有设置密码/手机，将无法再次登录';
     } else {
-      this.tipWx = '确认解绑微信'
+      this.tipWx = '确认解绑微信';
     }
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
     if (qcloud_faceid == false) {
