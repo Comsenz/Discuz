@@ -2,6 +2,7 @@
  * pay-circle控制器
  */
 import appCommonH from '../../../../../helpers/commonHelper';
+import webDb from '../../../../../helpers/webDbHelper';
 export default {
   data: function () {
     return {
@@ -67,7 +68,8 @@ export default {
     //跳转到登录页
     loginJump: function () {
       if (this.isWeixin) {
-        this.$router.push({ path: '/wx-login-bd' })
+        webDb.setLItem("wx-goto-login", true);
+        this.$router.push({ path: '/wx-sign-up-bd' })
       } else {
         this.$router.push({ path: '/login-user' })
       }
