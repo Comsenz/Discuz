@@ -56,6 +56,22 @@ export default {
     signUpClick() {
       this.btnLoading = true;
 
+      if (this.username === '') {
+        this.$toast("用户名不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password.length < this.password_length) {
+        this.$toast(`密码至少为${this.password_length}个字符`);
+        this.btnLoading = false;
+        return;
+      }
+
       if (this.signReasonStatus) {
         if (this.signReason.length < 1) {
           this.$toast.fail('请填写注册原因！');
