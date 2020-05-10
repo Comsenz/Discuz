@@ -113,6 +113,9 @@ export default {
           browserDb.setLItem('tokenId', tokenId);
           browserDb.setLItem('refreshToken',refreshToken);
 
+          this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$store.dispatch("appSiteModule/invalidateForum");
+
           this.getUsers(tokenId).then(res=>{
             if (res.readdata._data.paid){
               this.$router.push({path:'/'})

@@ -84,7 +84,8 @@ export default {
             browserDb.setLItem('Authorization', token);
             browserDb.setLItem('tokenId', tokenId);
             browserDb.setLItem('refreshToken', refreshToken);
-
+            this.$store.dispatch("appSiteModule/invalidateUser");
+            this.$store.dispatch("appSiteModule/invalidateForum");
             this.getUsers(tokenId).then(res => {
               if (res.errors) {
                 let errorInfo = this.appCommonH.errorHandling(res.errors, true);

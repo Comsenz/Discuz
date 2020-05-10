@@ -73,6 +73,7 @@ export default {
           let beforeVisiting = webDb.getSItem('beforeVisiting');
           this.$router.push({ path: webDb.getSItem('beforeVisiting') });
           this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$store.dispatch("appSiteModule/invalidateForum");
           this.getUser().then(res => {
             if (res.readdata._data.paid) {
               if (beforeVisiting) {
