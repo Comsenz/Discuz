@@ -45,6 +45,7 @@ export default {
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
+    this.getForum();
     this.userId = browserDb.getLItem('tokenId');
     if (this.userId) {
       this.getUsers().then(res => {
@@ -79,6 +80,34 @@ export default {
     /*
    * 接口请求
    * */
+    getForum() {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+        } else {
+          this.sitePrice = res.readdata._data.set_site.site_price;
+          let day = res.readdata._data.set_site.site_expire;
+          switch (day) {
+            case '':
+              this.siteExpire = '永久有效';
+              break;
+            case '0':
+              this.siteExpire = '永久有效';
+              break;
+            default:
+              this.siteExpire = '有效期自加入起' + day + '天';
+              break;
+          }
+          if (res.readdata._data.paycenter.wxpay_close == true) {
+            this.payList.unshift({
+              name: '微信支付',
+              icon: 'icon-wxpay'
+            })
+          }
+        }
+      }).catch(err => {
+      })
+    },
     //购买内容
     buyTheme() {
       if (this.userId) {
