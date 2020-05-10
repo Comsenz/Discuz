@@ -688,7 +688,8 @@ export default {
       'supplier-all-back',
       'circle-invite',
       'site-close',
-      'information-page'
+      'information-page',
+      'wx-qr-code'
     ];
 
     /*
@@ -804,6 +805,10 @@ export default {
           /*已登录状态*/
           if (res.readdata._data.set_site.site_mode === 'pay') {
             this.getUsers(tokenId).then(userInfo => {
+              if (userInfo.errors) {
+                browserDb.clearLAll();
+                next({ path: '/' })
+              }
               /*获取用户付费状态并判断*/
               if (userInfo.readdata._data.paid) {
                 /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
