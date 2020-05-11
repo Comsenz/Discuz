@@ -8,7 +8,7 @@
 namespace App\Api\Controller\Qcloud;
 
 use App\Api\Serializer\SignatureSerializer;
-use App\Commands\Qcloud\CreateSignature;
+use App\Commands\Qcloud\CreateVodUploadSignature;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -41,7 +41,7 @@ class CreateVodUploadSignatureController extends AbstractCreateController
         $data = Arr::get($request->getParsedBody(), 'data.attributes', 0);
 
         return $this->bus->dispatch(
-            new CreateSignature($actor, $data)
+            new CreateVodUploadSignature($actor, $data)
         );
     }
 }
