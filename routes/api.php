@@ -58,7 +58,8 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 |--------------------------------------------------------------------------
 */
 
-$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\Permission\UpdateGroupPermissionController::class);
+$route->post('/permission/group', 'permission.group', ApiController\Permission\SetPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------

@@ -5,7 +5,7 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\Api\Controller\GroupPermission;
+namespace App\Api\Controller\Permission;
 
 use App\Api\Serializer\GroupPermissionSerializer;
 use App\Models\Permission;
@@ -49,7 +49,12 @@ class UpdateGroupPermissionController extends AbstractListController
 
         $data = $request->getParsedBody()->get('data', []);
 
-        $groupId = Arr::get($data, 'attributes.groupId');
+        $groupId = (int) Arr::get($data, 'attributes.groupId', 0);
+
+        if (! $groupId) {
+            return DiscuzResponseFactory::EmptyResponse();
+        }
+
         $permissions = collect(Arr::get($data, 'attributes.permissions'));
 
         // 默认权限：收藏、点赞、打赏

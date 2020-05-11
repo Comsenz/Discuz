@@ -32,8 +32,10 @@ class ThreadListener
 
     public function subscribe(Dispatcher $events)
     {
+        // 分类主题
+        $events->listen(Saving::class, SaveCategoryToDatabase::class);
+
         // 发布帖子
-        $events->listen(Saving::class, [$this, 'categorizeThread']);
         $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
         $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
 
