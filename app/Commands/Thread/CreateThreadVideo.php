@@ -82,11 +82,11 @@ class CreateThreadVideo
         }
         $file_id = Arr::get($this->data, 'attributes.file_id');
         $threadVideoRes = $threadVideo->where('file_id', $file_id)->first();
-        //已关联主题的视频防止再次操作
-        if ($threadVideoRes->thread_id !=0) {
-            throw new PermissionDeniedException();
-        }
         if ($threadVideoRes) {
+            //已关联主题的视频防止再次操作
+            if ($threadVideoRes->thread_id !=0) {
+                throw new PermissionDeniedException();
+            }
             $threadVideo = $threadVideoRes;
         }
 
