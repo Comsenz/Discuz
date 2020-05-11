@@ -29,7 +29,7 @@ class SetPermissionController implements RequestHandlerInterface
 
         $body = $request->getParsedBody();
         $permission = Arr::get($body, 'permission');
-        $groupIds = Arr::get($body, 'groupIds');
+        $groupIds = Arr::get($body, 'groupIds', []);
 
         Permission::where('permission', $permission)->delete();
 
