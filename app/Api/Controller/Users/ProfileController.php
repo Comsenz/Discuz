@@ -10,6 +10,8 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Models\Group;
+use App\Models\User;
+use App\Repositories\UserFollowRepository;
 use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -25,15 +27,18 @@ class ProfileController extends AbstractResourceController
 
     public $serializer = UserSerializer::class;
 
-    public $optionalInclude = ['wechat', 'groups'];
+    public $optionalInclude = ['groups'];
 
     protected $users;
 
+    protected $userFollow;
+
     protected $settings;
 
-    public function __construct(UserRepository $users, SettingsRepository $settings)
+    public function __construct(UserRepository $users, UserFollowRepository $userFollow, SettingsRepository $settings)
     {
         $this->users = $users;
+        $this->userFollow = $userFollow;
         $this->settings = $settings;
     }
 
@@ -50,8 +55,13 @@ class ProfileController extends AbstractResourceController
         $id = Arr::get($request->getQueryParams(), 'id');
 
         $user = $this->users->findOrFail($id, $actor);
+        $isSelf = $user->id === $actor->id;
 
-        if ($actor->id === $user->id) {
+        if ($isSelf || $actor->isAdmin()) {
+            $this->optionalInclude = array_merge($this->optionalInclude, ['wechat']);
+        }
+
+        if ($isSelf) {
             $this->serializer = UserProfileSerializer::class;
         }
 
@@ -61,6 +71,13 @@ class ProfileController extends AbstractResourceController
         $include = $this->extractInclude($request);
 
         $user->load($include);
+
+        // 判断用户是否禁用
+        if ($user->status == User::enumStatus('ban')) {
+            $user->load(['latelyLog' => function ($query) {
+                $query->select()->where('action', 'ban');
+            }]);
+        }
 
         return $user;
     }

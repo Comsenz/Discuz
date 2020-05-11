@@ -6,8 +6,9 @@ export default {
 	data: function() {
 		return {
       	serHide:true,
-      	serShow:false,
+      	serShow:true,
 		searchVal: '',
+		inputSearchVal:'',
 	  	searchUserList: [],
       	userLoadMoreStatus: true,
 	  	userLoadMorePageChange: false,
@@ -26,6 +27,7 @@ export default {
 	let searchWord = '';
 	if(this.$route.query && this.$route.query.searchWord){
 		searchWord = this.$route.query.searchWord
+		this.inputSearchVal =this.$route.query.searchWord
 	}
     this.onSearch(searchWord);
 	},
@@ -66,7 +68,6 @@ export default {
 				if(initStatus){
 					this.searchUserList = [];
 				}
-				console.log(data,'搜索')
 				this.loading = false;
 				this.searchUserList = this.searchUserList.concat(data.readdata);
 				this.finished = data.readdata.length < this.pageLimit;
@@ -108,7 +109,6 @@ export default {
 	  },
 	  		//点击用户名称，跳转到用户主页
 		jumpPerDet:function(id){
-			console.log('跳转到个人主页')
 			  this.$router.push({ path:'/home-page'+'/'+id});
 		  },
 	},

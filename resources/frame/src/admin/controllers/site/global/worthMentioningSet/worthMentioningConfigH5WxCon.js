@@ -3,87 +3,118 @@ import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      loginStatus:'default',   //default h5 applets pc
-      appId:'',
-      appSecret:'',
-      type:'',
-      typeCopywriting:{
-        wx_offiaccount:{
-          title:'公众号接口配置',
-          appIdDescription:'填写申请公众号后，你获得的APPID ',
-          appSecretDescription:'填写申请公众号后，你获得的App secret',
-          url:'https://mp.weixin.qq.com/'
+      loginStatus: 'default',   //default h5 applets pc
+      appId: '',
+      appSecret: '',
+      type: '',
+      prefix: '',
+      typeCopywriting: {
+        wx_offiaccount: {
+          title: '公众号接口配置',
+          appIdDescription: '填写申请公众号后，你获得的APPID ',
+          appSecretDescription: '填写申请公众号后，你获得的App secret',
+          serverUrl:'服务器地址URL',
+          appToken:'填写长度为3-32字符，必须为英文或数字的字符。或',
+          encodingAESKey:'消息加密密钥由43位字符组成，可随机修改，字符范围为A-Z，a-z，0-9。或',
+          url: 'https://mp.weixin.qq.com/',
         },
-        wx_miniprogram:{
-          title:'小程序微信授权登录设置',
-          appIdDescription:'填写申请小程序后，你获得的APPID ',
-          appSecretDescription:'填写申请小程序后，你获得的App secret',
-          url:'https://mp.weixin.qq.com/'
+        wx_miniprogram: {
+          title: '小程序微信授权登录设置',
+          appIdDescription: '填写申请小程序后，你获得的APPID ',
+          appSecretDescription: '填写申请小程序后，你获得的App secret',
+          url: 'https://mp.weixin.qq.com/',
         },
-        wx_oplatform:{
-          title:'PC端微信扫码登录',
-          appIdDescription:'填写申请PC端微信扫码后，你获得的APPID ',
-          appSecretDescription:'填写申请PC端微信扫码后，你获得的App secret',
-          url:'https://open.weixin.qq.com/'
+        wx_oplatform: {
+          title: 'PC端微信扫码登录',
+          appIdDescription: '填写申请PC端微信扫码后，你获得的APPID ',
+          appSecretDescription: '填写申请PC端微信扫码后，你获得的App secret',
+          url: 'https://open.weixin.qq.com/',
         }
-
       },
+      serverUrl:'',             //服务器URL
+      appToken:'',              //令牌
+      encodingAESKey:'',        //消息加解密密匙
     }
   },
-  created(){
+  created() {
     var type = this.$route.query.type;
     this.type = type;
     this.loadStatus();
   },
-  methods:{
-    loadStatus(){
-      console.log(this.type);
+  methods: {
+    loadStatus() {
       this.appFetch({
-        url:'tags',
-        method:'get',
-        splice:'/'+this.type,
-        data:{
-        }
-      }).then(data=>{
-          // console.log(data);
-        if (data.errors){
+        url: 'forum',
+        method: 'get',
+        data: {}
+      }).then(data => {
+        if (data.errors) {
           this.$message.error(data.errors[0].code);
-        }else {
-          this.appId = data.readdata[0]._data.app_id;
-          this.appSecret = data.readdata[0]._data.app_secret;
+        } else {
+          // 获取对应值渲染
+          this.getPrefix(this.type, data);
         }
-      }).catch(error=>{
-        // console.log('ʧ��');
+      }).catch(error => {
       })
     },
-    submitConfiguration(){
-      this.appFetch({
-        url:'settings',
-        method:'post',
-        data:{
-          "data":[
-            {
-               "attributes":{
-                "key":"app_id",
-                "value":this.appId,
-                "tag": this.type
-               }
-             },
-             {
-               "attributes":{
-                "key":"app_secret",
-                "value":this.appSecret,
-                "tag": this.type
-               }
-            }
-          ]
+    submitConfiguration() {
+      let data = [];
+
+      data = [
+        {
+          "attributes": {
+            "key": this.prefix + "app_id",
+            "value": this.appId,
+            "tag": this.type
+          }
+        },
+        {
+          "attributes": {
+            "key": this.prefix + "app_secret",
+            "value": this.appSecret,
+            "tag": this.type
+          }
         }
-      }).then(data=>{
-        if (data.errors){
-          this.$toast.fail(data.errors[0].code);
-        }else {
+      ];
+
+      if (this.type === 'wx_offiaccount'){
+        data.push(
+          {
+            "attributes": {
+              "key": "oplatform_url",
+              "value": this.serverUrl,
+              "tag": 'wx_oplatform'
+            }
+          },
+          {
+            "attributes": {
+              "key": "oplatform_app_token",
+              "value": this.appToken,
+              "tag": 'wx_oplatform'
+            }
+          },
+          {
+            "attributes": {
+              "key": "oplatform_app_aes_key",
+              "value": this.encodingAESKey,
+              "tag": 'wx_oplatform'
+            }
+          }
+        )
+      }
+
+      this.appFetch({
+        url: 'settings',
+        method: 'post',
+        data: {
+          "data": data
+        }
+      }).then(data => {
+        if (data.errors) {
+          this.$message.error(data.errors[0].code);
+        } else {
           // this.$router.push({
           //   path: '/admin/worth-mentioning-set'
           // });
@@ -93,9 +124,44 @@ export default {
           });
         }
       })
-    }
+    },
+    getPrefix(type, data) {    // 传参
+      switch (type) {
+        case 'wx_offiaccount':
+          this.prefix = 'offiaccount_';
+          this.appId = data.readdata._data.passport.offiaccount_app_id;
+          this.appSecret = data.readdata._data.passport.offiaccount_app_secret;
+          this.serverUrl = data.readdata._data.passport.oplatform_url;
+          this.appToken = data.readdata._data.passport.oplatform_app_token;
+          this.encodingAESKey = data.readdata._data.passport.oplatform_app_aes_key;
+          break;
+        case 'wx_miniprogram':
+          this.prefix = 'miniprogram_';
+          this.appId = data.readdata._data.passport.miniprogram_app_id;
+          this.appSecret = data.readdata._data.passport.miniprogram_app_secret;
+          break;
+        case 'wx_oplatform':
+          this.prefix = 'oplatform_';
+          this.appId = data.readdata._data.passport.oplatform_app_id;
+          this.appSecret = data.readdata._data.passport.oplatform_app_secret;
+          break;
+      }
+    },
+    randomClick(type){
+      if (type === 'token'){
+        this.appToken = Math.random(Date.parse(new Date())).toString(35).substr(2);
+      } else if (type === 'aes'){
+        let aeskey = '';
+
+        for (let i = 0; i<5 ; i++){
+          aeskey += Math.random(Date.parse(new Date())).toString(35).substr(2);
+        }
+
+        this.encodingAESKey = aeskey.slice(0, 43)
+      }
+    },
   },
-  components:{
+  components: {
     Card,
     CardRow
   }

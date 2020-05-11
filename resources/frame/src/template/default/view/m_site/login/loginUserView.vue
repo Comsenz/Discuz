@@ -35,7 +35,7 @@
           </div>
 
           <div class="login-user-method-icon">
-            <div class="login-user-method-icon-box" :class="{'justifyCenter':isOne}" >
+            <div class="login-user-method-icon-box" :class="{'justifyCenter':phoneStatus !== wxLoginShow}" >
               <i @click="loginPhoneClick" class="login-user-method-icon-ring iconfont" v-if="phoneStatus">
                 <span class="icon iconfont icon-shouji" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
@@ -43,22 +43,17 @@
               <i @click="loginWxClick" class="login-user-method-icon-ring iconfont" v-show="wxLoginShow">
                 <span class="icon iconfont icon-weixin" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
-
             </div>
           </div>
         </div>
       </main>
-      <LoginFooter></LoginFooter>
+      <LoginFooter v-show="siteClosed"></LoginFooter>
     </div>
 </template>
 
 <script>
-// import '../../../../../../static/css/iconfont.css';
-// import '../../../scss/m_site/login/loginSignUpModule.scss';
-
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import '../../../defaultLess/m_site/common/common.less'
-
 import loginCon from '../../../controllers/m_site/login/loginUserCon';
 export default {
     name: "login-view",

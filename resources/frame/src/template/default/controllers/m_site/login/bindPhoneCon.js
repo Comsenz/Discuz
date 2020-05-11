@@ -16,13 +16,14 @@ export default {
       insterVal:'',
       isGray: false,
       siteMode:'',               //站点模式
+      btnLoading:false
     }
   },
 
   methods:{
     //获取验证码
     sendSmsCode(){
-      var reg=11&& /^((13|14|15|17|18)[0-9]{1}\d{8})$/;//手机号正则验证
+      var reg=11&& /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/;//手机号正则验证
       var phoneNum = this.phoneNum;
       if(!phoneNum){//未输入手机号
        this.$toast("请输入手机号码");
@@ -45,12 +46,14 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           this.insterVal = res.data.attributes.interval;
-          // console.log(this.insterVal+'555555');
           this.time = this.insterVal;
           this.timer();
         }
@@ -83,13 +86,13 @@ export default {
     //   },{
     //    emulateJSON:true
     //   }).then((response)=>{
-    //    console.log(response.body);
     //   });
     // },
 
 
     //绑定手机号
     bindPhone(){
+      this.btnLoading = true;
       this.appFetch({
         url:"smsVerify",
         method:"post",
@@ -103,25 +106,23 @@ export default {
           }
         }
       }).then(res => {
-          // console.log(res);
-          this.$router.push({
-            path:'/circle',
-          });
+        this.btnLoading = false;
 
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
-          if (!res.errors) {
-            if (this.siteMode === 'pay') {
-              this.$router.push({path: 'pay-the-fee'});
-            } else if (this.siteMode === 'public') {
-              this.$router.push({path: '/'});
-            }
+          if (this.siteMode === 'pay') {
+            this.$router.push({path: 'pay-the-fee'});
+          } else if (this.siteMode === 'public') {
+            this.$router.push({path: '/'});
           }
         }
 
        }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -137,17 +138,14 @@ export default {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log(res);
           return res.readdata._data.mobile;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
   },
 
   created(){
-    // console.log(this.time);
     this.siteMode = webDb.getLItem('siteInfo')._data.set_site.site_mode;
     let tokenId = webDb.getLItem('tokenId');
     this.getUsers(tokenId).then((res)=>{

@@ -12,11 +12,13 @@ export default {
       withdrawalFee:'',        //提现手续费率
       minAmount:'',            //最小金额
       maxAmount:'',            //最大金额
-      amountCap:''             //金额上限
+      amountCap:'',            //金额上限
+      subLoading:false,        //提现按钮状态
     }
   },
   methods:{
     submitClick(){
+      this.subLoading = true;
       this.postWithdrawalSettings();
     },
 
@@ -67,6 +69,7 @@ export default {
           ]
         }
       }).then(res=>{
+        this.subLoading = false;
         if (res.errors){
           res.errors.forEach((item,index)=>{
             setTimeout(()=>{
@@ -82,7 +85,6 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
         this.$message.error('操作失败！');
       })
     },
@@ -95,7 +97,7 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          let formData = res.data.attributes.setcash;
+          let formData = res.data.attributes.set_cash;
           this.withdrawalInterval = formData.cash_interval_time;
           this.withdrawalFee = formData.cash_rate;
           this.minAmount = formData.cash_min_sum;
@@ -103,7 +105,6 @@ export default {
           this.amountCap = formData.cash_sum_limit;
         }
       }).catch(err=>{
-        console.log(err);
         this.$message.error('初始化失败！请重新刷新页面（F5）');
       })
     }

@@ -19,7 +19,7 @@ use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
-use Laminas\Diactoros\UploadedFile;
+use Nyholm\Psr7\UploadedFile;
 
 class UploadAvatar
 {
@@ -37,6 +37,10 @@ class UploadAvatar
 
     protected $settings;
 
+    protected $actor;
+
+    protected $id;
+
     public function __construct(User $actor, $id, UploadedFile $upload_file)
     {
         $this->actor = $actor;
@@ -44,6 +48,16 @@ class UploadAvatar
         $this->upload_file = $upload_file;
     }
 
+    /**
+     * @param Application $app
+     * @param UserRepository $users
+     * @param AvatarValidator $validator
+     * @param AvatarUploader $avatarUploader
+     * @param SettingsRepository $settings
+     * @return mixed
+     * @throws PermissionDeniedException
+     * @throws UploadException
+     */
     public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader, SettingsRepository $settings)
     {
         $this->app = $app;
@@ -90,13 +104,18 @@ class UploadAvatar
                 $tmpFile,
                 $this->upload_file->getClientFilename(),
                 $this->upload_file->getClientMediaType(),
-                $this->upload_file->getSize(),
                 $this->upload_file->getError(),
                 true
             );
 
             $this->validator->valid(['avatar' => $file]);
+
             $image = (new ImageManager())->make($tmpFile);
+
+            // 压缩头像 100 * 100
+            $image->resize(100, 100, function ($constraint) {
+                $constraint->upsize();          // 避免文件变大
+            })->save();
 
             $this->avatarUploader->upload($user, $image);
 

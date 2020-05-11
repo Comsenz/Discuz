@@ -69,6 +69,26 @@ export default {
               name:'tencentCloudSet',
               icon:'icontengxunyun'
             },
+            {
+              id:7,
+              title:'通知设置',
+              name:'noticeSet',
+              icon:'icontongzhi',
+              submenu:[
+                {
+                  id:71,
+                  title:'系统通知',
+                  name:'noticeSet',
+                  icon:'icontongzhi',
+                },
+                {
+                  id:72,
+                  title:'微信通知',
+                  name:'noticeSet',
+                  icon:'icontongzhi',
+                },
+              ]
+            },
             // {
             //   id:7,
             //   title:'后台用户管理',
@@ -99,6 +119,12 @@ export default {
               title:'用户角色',
               name:'userRol',
               icon:'iconjiaoseguanli'
+            },
+            {
+              id:22,
+              title:'用户审核',
+              name:'userReview',
+              icon:'iconyonghushenhe'
             }
           ]
         },
@@ -125,12 +151,18 @@ export default {
                   name:'contManage',
                   icon:'iconneirongguanli',
                 },
+                // {
+                //   id:12,
+                //   title:'搜索',
+                //   name:'contManage',
+                //   icon:'iconneirongguanli',
+                // },
                 {
-                  id:12,
-                  title:'搜索',
+                  id:13,
+                  title:'最新回复',
                   name:'contManage',
                   icon:'iconneirongguanli',
-                }
+                },
               ]
             },
             {
@@ -167,7 +199,7 @@ export default {
                 },
                 {
                   id:32,
-                  title:'回帖',
+                  title:'回复',
                   name:'recycleBin',
                   icon:'iconhuishouzhan',
                 }
@@ -211,6 +243,12 @@ export default {
                   icon:'icontixianguanli',
                 }
               ]
+            },
+            {
+              id:43,
+              title:'财务统计',
+              name:'financialStatistics',
+              icon:'iconcaiwutongji',
             }
           ]
         }
@@ -224,7 +262,6 @@ export default {
       sideSubmenuSelect:'',      //侧边栏子菜单选中
 
       userName:'',               //用户名
-      url:''                     //网站url
 
     }
   },
@@ -314,6 +351,11 @@ export default {
         case 'tencentCloudSet':
           this.$router.push({path:'/admin/tencent-cloud-set'});
           break;
+        case 'noticeSet':
+          this.sideSubmenu = this.navList[1].submenu[7].submenu;
+          this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+          this.$router.push({path:'/admin/system-notice'});
+          break;
         case 'adminUserManage':
           this.$router.push({path:'/admin/user-manage-set'});
           break;
@@ -328,6 +370,10 @@ export default {
         case 'userRol':
           this.$router.push({path:'/admin/user-rol'});
           break;
+        case 'userReview':
+          this.$router.push({path:'/admin/user-review'});
+          break;
+
 
 
         case 'contClass':
@@ -361,6 +407,9 @@ export default {
           this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[0].title;
           this.$router.push({path:'/admin/withdrawal-application'});
           break;
+        case 'financialStatistics':
+          this.$router.push({path:'/admin/financial-statistics'})
+          break;
 
       }
 
@@ -369,14 +418,14 @@ export default {
     /*
     *  跳转到站点首页
     * */
-    // jumpIndex(){
-    //   let Url= '';
-    //   Url = appConfig.devApiUrl + '/admin';
-    //   console.log(Url);
-    //   this.$router.push({
-    //     path: Url
-    //   });
-    // },
+    jumpIndex(){
+      let Url= '';
+      Url = appConfig.baseUrl;
+
+      this.$router.push({
+        path: '/admin'
+      });
+    },
 
     /*
     *  左侧菜单的子菜单(位置对应：横向导航下面)点击事件
@@ -385,14 +434,27 @@ export default {
     sideSubmenuClick(title){
 
       switch (title){
+        case '系统通知':
+          this.sideSubmenuSelect = title;
+          this.$router.push({path:'/admin/system-notice'});
+          break;
+        case '微信通知':
+          this.sideSubmenuSelect = title;
+          this.$router.push({path:'/admin/wx-notice'});
+          break;
+
         case '最新主题':
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/cont-manage'});
           break;
-        case '搜索':
+        case '最新回复':
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/cont-manage/search'});
+          this.$router.push({path:'/admin/latest-reply'});
           break;
+        // case '搜索':
+        //   this.sideSubmenuSelect = title;
+        //   this.$router.push({path:'/admin/cont-manage/search'});
+        //   break;
         case '主题审核':
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/cont-review'});
@@ -405,7 +467,7 @@ export default {
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/recycle-bin'});
           break;
-        case '回帖':
+        case '回复':
           this.sideSubmenuSelect = title;
           this.$router.push({path:'/admin/recycle-bin-reply'});
           break;
@@ -418,7 +480,7 @@ export default {
           this.$router.push({path:'/admin/withdrawal-setting'});
           break;
         default:
-          alert("当前没有页面哦");
+          this.$message.error("没有当前页面，跳转404页面");
           // this.$router.push({path:'/admin/home'});
           console.log("没有当前页面，跳转404页面");
       }
@@ -473,6 +535,7 @@ export default {
           break;
         default :
           console.log("获取菜单出错");
+          this.$message.error("获取菜单出错");
       }
 
       /*
@@ -482,14 +545,27 @@ export default {
 
       if (sideSubmenu){
         switch (sideSubmenu){
+          case '系统通知':
+            this.sideSubmenu = this.navList[1].submenu[7].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+            break;
+          case '微信通知':
+            this.sideSubmenu = this.navList[1].submenu[7].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[1].title;
+            break;
+
           case '最新主题':
             this.sideSubmenu = this.navList[3].submenu[1].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
             break;
-          case "搜索":
+          case "最新回复":
             this.sideSubmenu = this.navList[3].submenu[1].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[1].title;
             break;
+          // case "搜索":
+          //   this.sideSubmenu = this.navList[3].submenu[1].submenu;
+          //   this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[1].title;
+          //   break;
           case "主题审核":
             this.sideSubmenu = this.navList[3].submenu[2].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
@@ -502,7 +578,7 @@ export default {
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
             break;
-          case '回帖':
+          case '回复':
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
             break;
@@ -515,10 +591,10 @@ export default {
             this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[1].title;
             break;
           default:
-            // alert("当前没有页面哦");
             // this.$router.push({path:'/admin/home'});
             this.sideSubmenu = [];
             console.log("当下没有侧边栏子菜单");
+            this.$message.error("当下没有侧边栏子菜单");
         }
       }
 
@@ -531,9 +607,8 @@ export default {
 
   },
   created(){
-    this.url = window.location.host;
     this.setDataStatus();
-   this.userName = webDb.getLItem('username');
+    this.userName = webDb.getLItem('username');
   },
   watch: {
     $route () {

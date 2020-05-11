@@ -32,8 +32,8 @@
 <script>
 import wechatCon from '../../../controllers/m_site/common/wechatCon';
 import comHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-import '../../../scss/m_site/login/loginSignUpModule.scss';
-import  '../../../scss/m_site/mobileIndex.scss';
+// import '../../../scss/m_site/login/loginSignUpModule.scss';
+// import  '../../../scss/m_site/mobileIndex.scss';
 
 export default {
     name: "wechat",

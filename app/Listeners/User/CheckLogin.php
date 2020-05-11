@@ -41,10 +41,10 @@ class CheckLogin
     public function handle(Logining $event)
     {
         $request = $this->app->make(ServerRequestInterface::class);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
-        $userLoginFailCount = $this->userLoginFailLog->getDataByIp($ip);
-        $maxTime = $this->userLoginFailLog->getLastFailTime($ip);
+        $userLoginFailCount = $this->userLoginFailLog->getCount($ip, $event->user->username);
+        $maxTime = $this->userLoginFailLog->getLastFailTime($ip, $event->user->username);
 
         //set current count
         ++$userLoginFailCount;
@@ -54,11 +54,12 @@ class CheckLogin
             throw new LoginFailuresTimesToplimitException;
         } elseif ($userLoginFailCount > self::FAIL_NUM && ($expire < Carbon::now())) {
             //reset fail count
+            $userLoginFailCount = 1;
             UserLoginFailLog::reSetFailCountByIp($ip);
         }
 
         //password not match
-        if ($event->password && ! $event->user->checkPassword($event->password)) {
+        if ($event->password !== '' && !$event->user->checkPassword($event->password)) {
             if ($userLoginFailCount == 1) {
                 //first time set fail log
                 UserLoginFailLog::writeLog($ip, $event->user->id, $event->user->username);

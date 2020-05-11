@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -11,7 +10,21 @@ namespace App\Models;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property float $available_amount
+ * @property float $freeze_amount
+ * @property int $wallet_status
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property User $user
+ * @package App\Models
+ * @method truncate()
+ */
 class UserWallet extends Model
 {
     use EventGeneratorTrait;

@@ -1,7 +1,7 @@
 /*财务导航菜单各个页面*/
 
 @import "../common/index";
-@import "../../../../../static/css/admin/iconfont.css";
+@import "../../../../../static/css/admin/discuzQfont.css";
 
 
 
@@ -150,3 +150,118 @@
   //  margin-right: 40PX;
   //}
 }
+/*
+  财务统计
+*/
+.financial-box{
+  position: relative;
+  // &::before{content:'';width:49PX;height:100%;position: absolute;top:0;left:-49PX;background:rgba(244,247,249,1);};
+  // &::after{content:'';width:49PX;height:100%;position: absolute;top:0;right:-49PX;background:rgba(244,247,249,1);};
+  // margin-left:-49PX;
+  // margin-right:-49PX;
+  // background:rgba(244,247,249,1);
+  .financial-statistics{
+    display: flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    padding-top: 18PX;
+    .financial{
+      // width:235PX;
+      width:23%;
+      height:131PX;
+      background:rgba(255,255,255,1);
+      // box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+      border:1PX solid rgba(220,223,230,1);
+      border-radius:4px;
+      margin-bottom:14PX;
+      // margin-left:24PX;
+      // background:red;
+      position: relative;
+      .financial-head{
+        width:100%;
+        height:48PX;
+        line-height:48PX;
+        border-bottom: 1PX solid rgba(235,238,245,1);
+        display: flex;
+        .financial-title{
+          color:#606266;
+          padding-left:13PX;
+          flex:2;
+        }
+        .iconfont{
+          padding-right:14PX;
+          
+        }
+      }
+      .financial-con{
+        position: absolute;
+        color:#3E4043;
+        // margin:0 auto;
+        left:14PX;
+        top:50%;
+        font-size: 30PX;
+      }
+   
+    }
+  }
+  .financial-profit,.financial-order{
+    background:rgba(255,255,255,1);
+    // box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
+    border:1PX solid rgba(220,223,230,1);
+    border-radius:4px;
+    height:560PX;
+    position: relative;
+    .financial-profit-title{
+      font-size: 14PX;
+      color:#6B6D71;
+      height:48PX;
+      display: flex;
+      justify-content:space-between;
+      flex-wrap: wrap;
+      border-bottom: 1PX solid #ccc;
+      align-items: center;
+      .iconcaiwutongji,.icondingdanzongshu{
+         margin-left:14PX;
+      }
+      .financial-profit-title-right{
+        display: flex;
+        align-items: center;
+        padding-right:14PX;
+        .active{
+          color:#3571A5
+        }
+        ul{
+          display: inline-block;
+        }
+        ul li {
+          float: left;
+          padding-right: 30PX;
+          font-size: 14PX;
+          cursor: pointer;  
+          // text-align: center;   
+      }
+      .input-class{
+        width:300PX;
+      }
+      }
+
+    }
+    .noData{
+      position: absolute;
+      height:473PX;
+      // background:red;
+      line-height: 473PX;
+      left:50%;
+    }
+    .financial-profit-chart{
+      height:473PX;
+      // background: pink;
+      margin:17px 15px 21PX 14PX;
+    }
+  }
+  .financial-order{
+    margin-top:20PX;
+  }
+
+}
+

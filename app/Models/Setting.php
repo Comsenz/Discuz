@@ -44,13 +44,14 @@ class Setting extends Model
         'miniprogram_app_secret',
         'oplatform_app_id',
         'oplatform_app_secret',
-        'qcloud_app_id',
         'qcloud_secret_id',
         'qcloud_secret_key',
         'qcloud_sms_app_id',
         'qcloud_sms_app_key',
         'qcloud_sms_template_id',
         'qcloud_sms_sign',
+        'qcloud_captcha_app_id',
+        'qcloud_captcha_secret_key',
     ];
 
     /**

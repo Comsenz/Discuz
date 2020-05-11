@@ -8,14 +8,14 @@ import TableContAdd from '../../../view/site/common/table/tableContAdd';
 export default {
   data:function () {
     return {
-      categoriesList: [],         //分类列表
-      categoriesListLength:'',    //分类列表长度
-
-      createCategoriesStatus:false,   //添加分类状态
-
+      categoriesList: [],           //分类列表
+      categoriesListLength:'',      //分类列表长度
+      createCategoriesStatus:false, //添加分类状态
       deleteStatus:true,
-      multipleSelection:[],        //分类多选列表
-      visible:false
+      multipleSelection:[],         //分类多选列表
+      visible:false,
+      delLoading:false,             //删除按钮状态
+      subLoading:false,             //提交按钮状态
     }
   },
 
@@ -41,7 +41,8 @@ export default {
       })
     },
 
-    submitClick(){
+    submitClick(){     //提交
+      this.subLoading = true;
 
       /*if (this.createCategoriesStatus && this.multipleSelection.length > 0){
         this.$message({
@@ -52,7 +53,6 @@ export default {
       } else */
 
       if (this.createCategoriesStatus){
-        console.log(this.categoriesList.slice(this.categoriesListLength, this.categoriesList.length));
         this.createCategories(this.categoriesList.slice(this.categoriesListLength,this.categoriesList.length)).then(()=>{
           this.getCategories();
           this.createCategoriesStatus = false;
@@ -77,12 +77,9 @@ export default {
     },
 
     deleteClick(id,index){
-      console.log(index);
-      console.log(this.categoriesListLength);
 
       if (this.createCategoriesStatus && index > this.categoriesListLength -1){
         this.categoriesList.splice(index,1);
-        console.log(this.categoriesList);
       } else {
         this.deleteCategories(id).then(()=>{
           this.getCategories();
@@ -91,6 +88,7 @@ export default {
     },
 
     deleteAllClick(){
+      this.delLoading = true;
       let id = [];
       this.multipleSelection.forEach((item,index)=>{
         if (index < this.multipleSelection.length){
@@ -128,7 +126,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -138,6 +135,7 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
+        this.subLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -151,7 +149,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchDeleteCategories(id){
@@ -160,8 +157,8 @@ export default {
         method:'delete',
         splice:'/'+id
       }).then(res=>{
+        this.delLoading = false;
         if (res.meta){
-          console.log(res.meta);
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
               this.$message.error(item.code)
@@ -174,7 +171,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     createCategories(data){
@@ -191,14 +187,14 @@ export default {
       });
 
       return  this.appFetch({
-                url:'createBatchCategories',
+                url:'createBatchCategories',     //批量创建分类
                 method:'post',
                 data:{
                   "data": datas
                 }
               }).then(res=>{
+                this.subLoading = false;
                 if (res.meta){
-                  console.log(res.meta);
                   res.meta.forEach((item,index)=>{
                     setTimeout(()=>{
                       this.$message.error(item.message.name[0])
@@ -211,33 +207,32 @@ export default {
                   });
                 }
               }).catch(err=>{
-                console.log(err);
               })
     },
     batchUpdateCategories(data){
       return  this.appFetch({
-              url:'categoriesBatchUpdate',
-              method:'patch',
-              data:{
-                  data
-              }
-            }).then(res=>{
-              if (res.meta){
-                console.log(res.meta);
-                res.meta.forEach((item,index)=>{
-                  setTimeout(()=>{
-                    this.$message.error(item.message.name[0])
-                  },(index+1) * 500);
-                });
-              } else {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success'
-                });
-              }
-            }).catch(err=>{
-              console.log(err);
-            })
+                url:'categoriesBatchUpdate',      //批量修改分类
+                method:'patch',
+                data:{
+                    data
+                }
+              }).then(res=>{
+                this.subLoading = false;
+                if (res.meta){
+                  res.meta.forEach((item,index)=>{
+                    setTimeout(()=>{
+                      this.$message.error(item.message.name[0])
+                    },(index+1) * 500);
+                  });
+                } else {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
+                }
+              }).catch(err=>{
+        console.log(err);
+      })
     }
   },
 

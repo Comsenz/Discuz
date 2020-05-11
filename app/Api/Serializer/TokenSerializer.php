@@ -20,6 +20,11 @@ class TokenSerializer extends AbstractSerializer
         static::$user = $user;
     }
 
+    public static function getUser()
+    {
+        return static::$user;
+    }
+
     /**
      * Get the default set of serialized attributes for a model.
      *
@@ -43,6 +48,6 @@ class TokenSerializer extends AbstractSerializer
 
     public function users($model)
     {
-        return $this->hasOne(['users' => static::$user], UserSerializer::class);
+        return $this->hasOne(['users' => static::$user], UserProfileSerializer::class);
     }
 }

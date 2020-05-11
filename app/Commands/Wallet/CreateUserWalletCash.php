@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -43,8 +42,8 @@ class CreateUserWalletCash
 
     /**
      * 初始化命令参数
-     * @param User   $actor        执行操作的用户.
-     * @param array  $data         请求的数据.
+     * @param User $actor 执行操作的用户.
+     * @param Collection $data 请求的数据.
      */
     public function __construct(User $actor, Collection $data)
     {
@@ -54,13 +53,20 @@ class CreateUserWalletCash
 
     /**
      * 执行命令
-     * @return model UserWallet
-     * @throws Exception
+     * @param Validator $validator
+     * @param ConnectionInterface $db
+     * @param SettingsRepository $setting
+     * @return UserWallet
+     * @throws ValidationException
+     * @throws WalletException
+     * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
     {
         // 判断有没有权限执行此操作
         $this->assertCan($this->actor, 'cash.create');
+
+        $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $cash_setting = $setting->tag('cash');
         $cash_interval_time = (int)Arr::get($cash_setting, 'cash_interval_time', 0);//提现间隔
@@ -81,7 +87,7 @@ class CreateUserWalletCash
             //提现间隔时间
             $cash_record = UserWalletCash::where('created_at', '>=', $time_before)->first();
             if (!empty($cash_record)) {
-               throw new WalletException('cash_interval_time');
+                throw new WalletException('cash_interval_time');
             }
         }
         //提现金额
@@ -99,7 +105,7 @@ class CreateUserWalletCash
         $tax_amount = $cash_apply_amount * $tax_ratio; //手续费
         $tax_amount = sprintf('%.2f', ceil($tax_amount * 100) / 100); //格式化手续费
 
-        $remark = Arr::get($this->data, 'remark');
+        $remark = Arr::get($this->data, 'remark', '');
         //开始事务
         $db->beginTransaction();
         try {
@@ -115,7 +121,6 @@ class CreateUserWalletCash
             }
             $cash_sn            = $this->getCashSn();
             $cash_actual_amount = sprintf('%.2f', ($cash_apply_amount - $tax_amount));
-            $cash_apply_amount  = $cash_apply_amount;
             //创建提现记录
             $cash = UserWalletCash::createCash(
                 $this->actor->id,
@@ -135,7 +140,7 @@ class CreateUserWalletCash
                 $this->actor->id,
                 -$cash_apply_amount,
                 $cash_apply_amount,
-                UserWalletLog::TYPE_CASH_SFREEZE,
+                UserWalletLog::TYPE_CASH_FREEZE,
                 app('translator')->get('wallet.cash_freeze_desc'),
                 $cash->id
             );

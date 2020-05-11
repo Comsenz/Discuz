@@ -10,13 +10,16 @@ namespace App\User;
 use App\Censor\Censor;
 use App\Exceptions\UploadException;
 use App\Models\User;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use Discuz\Http\UrlGenerator;
+use Illuminate\Contracts\Filesystem\Factory;
 use Intervention\Image\Image;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 class AvatarUploader
 {
-    protected $file;
+    protected $filesystem;
 
     protected $censor;
 
@@ -29,11 +32,17 @@ class AvatarUploader
      */
     public $avatarPath;
 
-    public function __construct(Filesystem $file, Censor $censor, Application $app)
+    public $settings;
+
+    public $url;
+
+    public function __construct(Filesystem $filesystem, Censor $censor, Application $app, SettingsRepository $settings, UrlGenerator $url)
     {
-        $this->file = $file;
         $this->censor = $censor;
         $this->app = $app;
+        $this->filesystem = $filesystem;
+        $this->settings = $settings;
+        $this->url = $url;
     }
 
     /**
@@ -56,9 +65,16 @@ class AvatarUploader
 
         $this->avatarPath = $user->id . '.png';
 
-        $user->changeAvatar($this->avatarPath);
+        // 判断是否开启云储存
+        if ($this->settings->get('qcloud_cos', 'qcloud')) {
+            $this->avatarPath = 'public/avatar/' . $this->avatarPath; // 云目录
+            $avatarUrl = $this->filesystem->url($this->avatarPath);
+            $user->changeAvatar($avatarUrl);
+        } else {
+            $user->changeAvatar($this->avatarPath);
+        }
 
-        $this->file->put($this->avatarPath, $encodedImage);
+        $this->filesystem->put($this->avatarPath, $encodedImage);
     }
 
     /**
@@ -68,24 +84,38 @@ class AvatarUploader
      */
     public function remove(User $user)
     {
-        $avatarPath = $user->getOriginal('avatar');
+        $avatarPath = $user->getRawOriginal('avatar');
 
-        $user->saved(function () use ($avatarPath) {
-            $this->deleteFile($avatarPath);
+        // save后事件
+        $user->saved(function () use ($user, $avatarPath) {
+            $this->deleteFile($user, $avatarPath);
         });
 
         $user->changeAvatar('');
+        $user->avatar_at = null;
     }
 
     /**
-     * 上传失败则删除本地图片资源
+     * 上传失败则删除 本地/COS 图片资源
      *
+     * @param User $user
      * @param $avatarPath
      */
-    public function deleteFile($avatarPath)
+    public function deleteFile(User $user, $avatarPath)
     {
-        if ($this->file->has($avatarPath)) {
-            $this->file->delete($avatarPath);
+        // 判断是否是cos地址
+        if (substr_count($avatarPath, 'http') > 0) {
+            $cosPath = 'public/avatar/' . $user->id . '.png';
+            // 判断是否关闭了腾讯COS
+            if ($this->settings->get('qcloud_cos', 'qcloud')) {
+                $this->filesystem->delete($cosPath);
+            } else {
+                $this->app->make(Factory::class)->disk('avatar_cos')->delete($cosPath);
+            }
+        } else {
+            if ($this->filesystem->has($avatarPath)) {
+                $this->filesystem->delete($avatarPath);
+            }
         }
     }
 }

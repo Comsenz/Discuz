@@ -29,6 +29,7 @@ const baseTpl = function (params) {
  */
 baseTpl.prototype.checkConfig = function() {
 	if(!this.template || !this.checkTemplate()) {
+		//template 模板配置错误
 		console.error("template 模板配置错误！");
 
 		return false;
@@ -93,7 +94,11 @@ baseTpl.prototype.getBaseRouter = function(routes) {
 			routes: routes,
 			base: appConfig.siteBasePath,
 			scrollBehavior: function(to, from, savedPosition) {
-				return {x: 0, y: 0};
+        if(savedPosition){
+          return savedPosition
+        }else{
+          return {x:0,y:0}
+        }
 			}
 		});
 
@@ -196,7 +201,6 @@ baseTpl.prototype.loadRouter = function() {
 	defaultView = {...{}, ...routes[0]};
 	defaultView.path = "*";
 	routes.push(defaultView);
-	// console.log(routes);
   	return this.getBaseRouter(routes);
 }
 

@@ -85,8 +85,14 @@
             </el-radio-group>
           </div>
 
+          <a slot="longText" class="recycle-bin-table__long-text" v-if="items._data.type === 1" :href="'/details/' + items._data.id" target="_blank">
+            {{items._data.title}}
+            <span  class="iconfont" :class="parseInt(items._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
+          </a>
+
           <div class="recycle-bin-table__main" slot="main">
-            <a class="recycle-bin-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items.firstPost._data.contentHtml"></a>
+            <a class="recycle-bin-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" :style="{'display':(items.threadVideo ? 'inline':'block')}" v-html="items.firstPost._data.contentHtml"></a>
+            <span class="iconfont iconvideo" v-if="items.threadVideo"></span>
             <div class="recycle-bin-table__main__cont-imgs">
               <p class="recycle-bin-table__main__cont-imgs-p" v-for="(item,index) in items.firstPost.images" :key="item._data.thumbUrl">
                 <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.firstPost.images,index)" :alt="item._data.fileName">
@@ -110,7 +116,10 @@
               <span>原因：</span>
               <span>{{!items.user?'操作者被禁止或删除':items.lastDeletedLog._data.message}}</span>
             </div>
-
+            <div class="transcodStatus">
+              <span class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 0">转码中</span>
+              <span class="transcoding_status" v-if="items.threadVideo && items.threadVideo._data.status == 2">转码失败</span>
+            </div>
           </div>
 
         </ContArrange>
@@ -132,9 +141,9 @@
       </div>
 
       <div class="recycle-bin-footer footer-btn">
-        <el-button size="small" type="primary" @click="submitClick">提交</el-button>
-        <el-button type="text" @click="allOperationsSubmit(1)">全部还原</el-button>
-        <el-button type="text" @click="allOperationsSubmit(2)">全部删除</el-button>
+        <el-button size="small" :loading="subLoading" type="primary" @click="submitClick">提交</el-button>
+        <el-button type="text" :loading="btnLoading === 1" @click="allOperationsSubmit(1)">全部还原</el-button>
+        <el-button type="text" :loading="btnLoading === 2" @click="allOperationsSubmit(2)">全部删除</el-button>
         <!-- <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox> -->
       </div>
 

@@ -7,6 +7,18 @@
       </CardRow>
     </Card>
 
+    <Card header="新用户审核：">
+      <CardRow description="设置新注册的用户是否需要审核">
+        <el-checkbox v-model="register_validate">新用户注册审核</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card header="启用验证码：">
+      <CardRow description="启用验证码需先在腾讯云设置中开启验证码服务">
+        <el-checkbox v-model="register_captcha" :disabled='disabled'>新用户注册启用验证码</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="注册密码最小长度：">
       <CardRow description="新用户注册时密码最小长度，0或不填为不限制">
         <el-input v-model="pwdLength" type="number"  clearable></el-input>
@@ -25,8 +37,8 @@
     </Card>
 
    <!-- <Card header="微信无感注册和登录">
-      <CardRow description="使用微信授权信息代替账号密码，适用于主要在微信内使用的场景。请先设置公众号接口和
-扫码登陆配置">
+      <CardRow description="使用微信授权信息代替帐号密码，适用于主要在微信内使用的场景。请先设置公众号接口和
+扫码登录配置">
         <el-checkbox label="大写字母">开启微信授权无感注册和登录</el-checkbox>
       </CardRow>
     </Card>-->

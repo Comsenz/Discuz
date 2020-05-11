@@ -2,6 +2,8 @@
  * 移动端主题组件控制器
  */
 import appCommonH from '../../../../../helpers/commonHelper';
+import browserDb from '../../../../../helpers/webDbHelper';
+
 export default {
   data: function() {
       return {
@@ -28,6 +30,8 @@ export default {
          isWeixin: false,
          isPhone: false,
          viewportWidth:'',
+         currentUserName: '',
+         userId: ''
 
     }
   },
@@ -55,71 +59,26 @@ export default {
     },
   },
   created(){
+    this.userId = browserDb.getLItem('tokenId');
+    this.currentUserName = browserDb.getLItem('foregroundUser');
     this.viewportWidth = window.innerWidth;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.loadPriviewImgList();
     this.forList();
-    // console.log(this.themeList[0].user._data.avatarUrl);
-
-
-    // this.getCircle();
-
-    // let requestImage = function (url, element) {
-    //             let request = new XMLHttpRequest();
-    //             request.responseType = 'blob';
-    //             request.open('get', url, true);
-    //             request.setRequestHeader('Authorization', "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIwZjQzYjczM2M3MjYxYjRjNTk0MjA4ZjhmMDcxNThlM2E4N2JhOGM3ZTQ1YzA1YTJlMmQ5YWEzZGRlMDFhMzk1MjdiMDM5NDBmNThjOTk2YiIsImlhdCI6MTU3NzUxOTQ3NywibmJmIjoxNTc3NTE5NDc3LCJleHAiOjE1Nzc2MDU4NzcsInN1YiI6IjEiLCJzY29wZXMiOltudWxsXX0.N0xGIu4_NSB2NjPyutbUyC5bEDia5DoyN0v9HObjHu-J67RomngwlVsA0zFnhqJKzMB3ky85KVXFVrrmzkXAfzNOH1Jso4Zxf-O5SkHZVpZ_vgAzvUE2poaCKGnGgOR_xW9EAcJQkEJsVQqh-Y0w2VsssYAuAcQubRCHdF5PSGhBfPo8S-LTRNKrKR-5mgPJp80RfxlZJDZYo1BPHATudS0lflxXuVu8-RfiWfVDbz2NMk8sIkDkxnlSp5lIuKm6GEeZfjddcVrr1SeS-sdwjgS7mAaF3F49RgJ_MqY1NLgOwD89IVYKBy5hlCRABKtoHMvqs2iDj9wq8BUfoNpKxw");
-    //             request.onreadystatechange = e => {
-    //                 if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
-    //                     element.src = URL.createObjectURL(request.response);
-    //                     element.onload = () => {
-    //                         URL.revokeObjectURL(element.src);
-    //                     }
-    //                 }
-    //             };
-    //             request.send(null);
-    //         }
-
-    // class AuthImg extends HTMLImageElement {
-    //   constructor() {
-    //       super();
-    //       this._lastUrl = '';
-    //   }
-
-    //   static get observedAttributes() {
-    //       return ['authSrc'];
-    //   }
-
-    //   connectedCallback() {
-    //       let url = this.getAttribute('authSrc');
-    //       if (url !== this._lastUrl) {
-    //           this._lastUrl = url;
-    //           requestImage(url, this);
-    //       }
-    //       console.log('connectedCallback() is called.');
-    //   }
-    // }
 
     document.addEventListener('click',e => {
-      console.log('444');
         var screen = this.$refs.screenDiv;
-        // var a1 = document.getElementById('a1');
-        // console.log(screen);
-        // console.log(a1.contains(e.target));
         if(document.contains(e.target)){
-          // console.log('在外');         //这句是说如果我们点击到了calss为screen以外的区域
+          //这句是说如果我们点击到了calss为screen以外的区域
           this.indexlist = -1;
         } else {
-          // console.log('在内');
         }
     })
   },
   watch:{
     //监听得到的数据
     themeList(newData,prevData){
-      // console.log(prevData);
-      // console.log(newData);
       this.themeList = newData;
       this.themeListResult = newData;
       this.loadPriviewImgList();
@@ -132,7 +91,6 @@ export default {
   //       document.addEventListener('click', function (e) {
   // 　　　　// 下面这句代码是获取 点击的区域是否包含你的菜单，如果包含，说明点击的是菜单以外，不包含则为菜单以内
   //       let flag = e.target.contains(document.getElementsByClassName('screen'))
-  //       console.log(flag)
   //       if(!flag) return
   //       _this.indexlist = -1;
 
@@ -172,7 +130,6 @@ export default {
     // themeOpera(postsId,clickType,clickStatus) {
     //   let attri = new Object();
     //    if(clickType == 2){
-    //      console.log(clickStatus);
     //      //加精
     //      this.themeOpeRequest(postsId,attri,clickStatus);
     //     attri.isEssence = clickStatus;
@@ -191,7 +148,6 @@ export default {
     //     // })
     //    } else {
     //      // content = content
-    //      // console.log(content);
     //      //跳转到发帖页
     //     this.$router.push({ path:'/edit-topic'+'/'+this.themeId});
     //    }
@@ -199,7 +155,6 @@ export default {
 
 
     themeOpera(themeId,clickType,clickStatus,itemIndex) {
-      console.log(themeId,clickType,clickStatus,itemIndex);
       let attri = new Object();
        if(clickType == 3){
          //加精
@@ -222,8 +177,15 @@ export default {
         attri.isDeleted = true;
         this.themeOpeRequest(themeId,attri,'5', itemIndex);
        } else if(clickType == 6){
-         //跳转到发帖页
-        this.$router.push({ path:'/edit-topic'+'/'+themeId});
+         //跳转到编辑页
+         if(clickStatus == 0){
+          this.$router.push({ path:'/edit-topic'+'/'+themeId});
+         } else if(clickStatus == 1){
+          this.$router.push({ path:'/edit-long-text'+'/'+themeId});
+         } else if(clickStatus == 2){
+          this.$router.push({ path:'/edit-video'+'/'+themeId});
+         }
+
        } else if(clickType == 7){
          //回复
          this.$router.push({
@@ -244,9 +206,6 @@ export default {
 
     //主题操作接口请求
     themeOpeRequest(themeId,attri,clickType, itemIndex){
-      console.log(themeId,attri,clickType, itemIndex);
-      console.log('7890');
-        // console.log(attri);
         this.appFetch({
           url:'threads',
           method:'patch',
@@ -262,9 +221,6 @@ export default {
             this.$toast.fail(res.errors[0].code);
             throw new Error(res.error)
           } else {
-            console.log(res);
-            console.log('01234');
-            // this.$emit('changeStatus', true);
 
             if(clickType == '3'){
               //加精
@@ -287,19 +243,14 @@ export default {
 
     //点赞
     replyOpera(firstPostId,clickType,clickStatus,itemIndex){
-      console.log(firstPostId,clickType,clickStatus,itemIndex);
       // return false;
-      // console.log(isLike);
       let attri = new Object();
       if (clickStatus) {
-        console.log('如果为true,提交false');
         attri.isLiked = false;
       } else {
-        console.log('如果为false,提交true');
         attri.isLiked = true;
       }
       // attri.isLiked = clickStatus;
-      // let posts = 'posts/'+postId;
       this.appFetch({
         url:'posts',
         method:'patch',
@@ -315,11 +266,21 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          if(clickType == 2){
+          if(clickStatus){
+            this.likedStatus = res.readdata._data.isLiked;
+            this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
+            this.themeList[itemIndex].firstPost.likedUsers.map((value, key, likedUsers) => {
+              value._data.id === this.userId && likedUsers.splice(key,1);
+            });
+          } else {
             //点赞
             this.likedStatus = res.readdata._data.isLiked;
             this.themeList[itemIndex].firstPost._data.isLiked = this.likedStatus;
+            this.themeList[itemIndex].firstPost.likedUsers.unshift({_data:{username:this.currentUserName,id:this.userId}})
           }
+          // if(clickType == 2){
+
+          // }
         }
       })
     },
@@ -332,16 +293,14 @@ export default {
         var themeListLen = this.themeListResult.length;
         for (let h = 0; h < themeListLen; h++) {
           // 图片地址
-          // let src = 'https://2020.comsenz-service.com/api/attachments/';
+          // let src = '/api/attachments/';
           let imageList = [];
           if(this.themeListResult[h].firstPost.images){
             for (let i = 0; i < this.themeListResult[h].firstPost.images.length; i++) {
               imageList.push(this.themeListResult[h].firstPost.images[i]._data.thumbUrl);
-              // console.log(this.themeListResult[h].firstPost.images[i]._data.url.replace(/[.]/g,'_thumb.'));
               // imageList.push(src + this.themeListResult[h].firstPost.images[i]._data.uuid);
             }
           }
-          // console.log(imageList);
           this.themeListResult[h].firstPost.imageList = imageList;
         }
       }
@@ -352,14 +311,12 @@ export default {
       this.loadPriviewImgList()
       this.imageShow = true;
       // this.priview = this.firstpostImageListResult[index];
-      console.log(this.priview);
     },
     //主题详情图片放大轮播index值监听
     onChange(index) {
       this.index = index+1;
     },
     checkAll(){
-      console.log(this.$refs);
       this.$refs.checkboxGroup.toggleAll(true);
     },
     signOutDele(){
@@ -384,22 +341,7 @@ export default {
     jumpPerDet:function(id){
       this.$router.push({ path:'/home-page'+'/'+id});
     },
-      //选中复选框
-    // toggle(id) {
-    // 	var listLen = this.userList.length;
-    // 	if (listLen === 0) return;
-    // 	var checkList = [];
-    // 	for (let i = 0; i < listLen; i++) {
-    // 		let checkid = this.userList[i].id();
-    // 		if (checkid === id) {
-    // 			this.userList[i].checkStatus = !this.userList[i].checkStatus;
-    // 		}
-    // 		if (this.userList[i].checkStatus) {
-    // 			checkList.push(this.userList[i].username());
-    // 		}
-    // 	}
-    // 	this.result = checkList;
-    // },
+
   },
   mounted: function() {
     document.addEventListener('click', this.disappear, false);

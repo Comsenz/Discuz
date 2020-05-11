@@ -7,9 +7,12 @@
 
 namespace App\Commands\Users;
 
+use App\Censor\Censor;
 use App\Events\Users\ChangeUserStatus;
+use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
+use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\OperationLog;
 use App\Models\User;
@@ -17,9 +20,12 @@ use App\Notifications\System;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\EventsDispatchTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class UpdateUser
 {
@@ -36,6 +42,12 @@ class UpdateUser
 
     protected $validator;
 
+    protected $settings;
+
+    protected $censor;
+
+    protected $specialChar;
+
     public function __construct($id, $data, User $actor)
     {
         $this->id = $id;
@@ -43,11 +55,15 @@ class UpdateUser
         $this->actor = $actor;
     }
 
-    public function handle(UserRepository $users, UserValidator $validator, Dispatcher $events)
+    public function handle(UserRepository $users, UserValidator $validator, Dispatcher $events, SettingsRepository $settings, Censor $censor, SpecialCharServer $specialChar)
     {
         $this->users = $users;
         $this->validator = $validator;
         $this->events = $events;
+        $this->settings = $settings;
+        $this->censor = $censor;
+        $this->specialChar = $specialChar;
+
         return call_user_func([$this, '__invoke']);
     }
 
@@ -70,11 +86,15 @@ class UpdateUser
 
         $attributes = Arr::get($this->data, 'data.attributes');
 
+        // 修改登录密码
         if ($newPassword = Arr::get($attributes, 'newPassword')) {
             if ($isSelf) {
-                $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
-                if (!$verifyPwd) {
-                    throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                //小程序注册的账号密码为空，不验证旧密码
+                if ($this->actor->password != '') {
+                    $verifyPwd = $user->checkPassword(Arr::get($attributes, 'password'));
+                    if (!$verifyPwd) {
+                        throw new TranslatorException('user_update_error', ['not_match_used_password']);
+                    }
                 }
 
                 $this->validator->setUser($user);
@@ -82,6 +102,31 @@ class UpdateUser
             }
             $user->changePassword($newPassword);
             $validator['password'] = $newPassword;
+        }
+
+        // 修改支付密码
+        if ($payPassword = Arr::get($attributes, 'payPassword')) {
+            if ($isSelf) {
+                // 当原支付密码为空时，视为初始化支付密码，不需要验证 pay_password_token
+                // 当原支付密码不为空时，则需验证 pay_password_token
+                if ($user->pay_password) {
+                    $this->validator->setUser($user);
+                    $validator['pay_password_token'] = Arr::get($attributes, 'pay_password_token');
+                }
+
+                $validator['pay_password'] = $payPassword;
+                $validator['pay_password_confirmation'] = Arr::get($attributes, 'pay_password_confirmation');
+
+                $user->changePayPassword($payPassword);
+
+                // 修改支付密码事件
+                $user->raise(new PayPasswordChanged($user));
+            }
+        } elseif ($removePayPassword = Arr::get($attributes, 'removePayPassword')) {
+            // 清除支付密码，管理员操作，不能与设置支付密码同时进行
+            if (! empty($user->pay_password) && $this->actor->isAdmin()) {
+                $user->pay_password = '';
+            }
         }
 
         if (Arr::has($attributes, 'mobile')) {
@@ -107,11 +152,10 @@ class UpdateUser
             $logMsg = Arr::get($attributes, 'refuse_message', ''); // 拒绝原因
             $actionType = User::enumStatus($status);
 
-            $user->raise(new ChangeUserStatus($user, $logMsg));
+            // 审核后系统通知事件
+            $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
             OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
-            // TODO 如果是拒绝 添加系统通知
-            // if ($actionType == 'refuse') {}
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
@@ -136,8 +180,52 @@ class UpdateUser
                     'old' => $oldGroups,
                 ];
 
+                // 系统通知
                 $user->notify(new System(GroupMessage::class, $notifyData));
+
+                // 微信通知
+                $user->notify(new System(WechatGroupMessage::class, $notifyData));
             }
+        }
+
+        if ($username = Arr::get($attributes, 'username')) {
+            // 敏感词校验
+            $this->censor->checkText($username, 'username');
+            if ($this->censor->isMod) {
+                throw new TranslatorException('user_username_censor_error');
+            }
+
+            // 过滤内容
+            $username = $this->specialChar->purify($username);
+
+            if (!$this->actor->isAdmin()) {
+                if ($user->username_bout >= $this->settings->get('username_bout', 'default', 1)) {
+                    throw new TranslatorException('user_username_bout_limit_error');
+                }
+            }
+
+            if (User::where('username', $username)->exists()) {
+                throw new TranslatorException('user_username_already_exists');
+            }
+
+            $user->changeUsername($username);
+        }
+
+        if ($signature = Arr::get($attributes, 'signature')) {
+            // 敏感词校验
+            $this->censor->checkText($signature);
+            if ($this->censor->isMod) {
+                throw new TranslatorException('user_signature_censor_error');
+            }
+
+            // 过滤内容
+            $signature = $this->specialChar->purify($signature);
+
+            if (Str::of($signature)->length() > 140) {
+                throw new TranslatorException('user_signature_limit_error');
+            }
+
+            $user->changeSignature($signature);
         }
 
         $this->validator->valid($validator);

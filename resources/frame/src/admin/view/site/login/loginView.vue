@@ -46,14 +46,13 @@
       <footer class="login-footer">
         <p>Powered by Discuz! Q</p>
       </footer>
-      <!--<p>{{this.$store.state.login.loginState}}</p>-->
     </div>
 </template>
 
 <script>
 import loginCon from '../../../controllers/site/login/loginCon';
 import '../../../scss/site/module/loginStyle.scss';
-import '../../../../../static/css/admin/iconfont.css'
+import '../../../../../static/css/admin/discuzQfont.css'
 export default {
   name: "login-view",
   ...loginCon

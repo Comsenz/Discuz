@@ -8,10 +8,12 @@
 namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadSerializer;
+use App\Models\Attachment;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
 use App\Models\Thread;
+use App\Models\Topic;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -39,6 +41,7 @@ class ListThreadsController extends AbstractListController
     public $include = [
         'user',
         'firstPost',
+        'threadVideo',
         'lastPostedUser',
         'category',
     ];
@@ -47,6 +50,7 @@ class ListThreadsController extends AbstractListController
      * {@inheritdoc}
      */
     public $optionalInclude = [
+        'user.groups',
         'deletedUser',
         'firstPost.images',
         'firstPost.attachments',
@@ -55,19 +59,9 @@ class ListThreadsController extends AbstractListController
         'lastThreePosts.user',
         'lastThreePosts.replyUser',
         'rewardedUsers',
+        'paidUsers',
         'lastDeletedLog',
-    ];
-
-    /**
-     * 特殊关联，无法通过 with 预加载
-     */
-    public $specialInclude = [
-        'firstPost.likedUsers',
-        'lastThreePosts',
-        'lastThreePosts.user',
-        'lastThreePosts.replyUser',
-        'rewardedUsers',
-        'lastDeletedLog',
+        'topic',
     ];
 
     /**
@@ -87,7 +81,7 @@ class ListThreadsController extends AbstractListController
      */
     public $sort = [
         'isSticky' => 'desc',
-        'updatedAt' => 'desc',
+        'createdAt' => 'desc',
         'id' => 'desc',
     ];
 
@@ -114,6 +108,7 @@ class ListThreadsController extends AbstractListController
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(ThreadRepository $threads, UrlGenerator $url)
     {
@@ -136,7 +131,7 @@ class ListThreadsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $load = array_merge($this->extractInclude($request), ['favoriteState']);
+        $include = array_merge($this->extractInclude($request), ['favoriteState']);
 
         $threads = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -155,31 +150,32 @@ class ListThreadsController extends AbstractListController
 
         Thread::setStateUser($actor);
 
-        // TODO: load -> loadMissing
-        $threads = $threads->load(array_diff($load, $this->specialInclude));
-
-        $specialLoad = array_intersect($this->specialInclude, $load);
-
         // 特殊关联：最新三条回复
-        if (in_array('lastThreePosts', $specialLoad)) {
+        if (in_array('lastThreePosts', $include)) {
             $threads = $this->loadLastThreePosts($threads);
         }
 
-        // 特殊关联：喜欢的人
-        if (in_array('firstPost.likedUsers', $specialLoad)) {
+        // 特殊关联：点赞的人
+        if (in_array('firstPost.likedUsers', $include)) {
             $likedLimit = Arr::get($filter, 'likedLimit', 10);
             $threads = $this->loadLikedUsers($threads, $likedLimit);
         }
 
         // 特殊关联：打赏的人
-        if (in_array('rewardedUsers', $specialLoad)) {
+        if (in_array('rewardedUsers', $include)) {
             $rewardedLimit = Arr::get($filter, 'rewardedLimit', 10);
-            $threads = $this->loadRewardedUsers($threads, $rewardedLimit);
+            $threads = $this->loadRewardedUsers($threads, $rewardedLimit, Order::ORDER_TYPE_REWARD);
+        }
+
+        // 特殊关联：付费用户
+        if (in_array('paidUsers', $include)) {
+            $paidLimit = Arr::get($filter, 'paidLimit', 10);
+            $threads = $this->loadRewardedUsers($threads, $paidLimit, Order::ORDER_TYPE_THREAD);
         }
 
         // 特殊关联：最后一次删除的日志
-        if (in_array('lastDeletedLog', $specialLoad)) {
-            $threads->map(function ($thread) {
+        if (in_array('lastDeletedLog', $include)) {
+            $threads->map(function (Thread $thread) {
                 $log = $thread->logs()
                     ->with('user')
                     ->where('action', 'hide')
@@ -194,7 +190,7 @@ class ListThreadsController extends AbstractListController
         if (Arr::get($filter, 'highlight') == 'yes') {
             $threads->load('firstPost.stopWords');
 
-            $threads->map(function ($thread) {
+            $threads->map(function (Thread $thread) {
                 if ($thread->firstPost->stopWords) {
                     $stopWords = explode(',', $thread->firstPost->stopWords->stop_word);
                     $replaceWords = array_map(function ($word) {
@@ -207,18 +203,23 @@ class ListThreadsController extends AbstractListController
             });
         }
 
-        // 付费主题，不返回内容
-        if (! $actor->isAdmin()) {
-            $allRewardedThreads = Order::where('user_id', $actor->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_REWARD)
-                ->pluck('thread_id');
+        // 加载其他关联
+        $threads->loadMissing($include);
 
-            $threads->map(function ($thread) use ($allRewardedThreads) {
-                if ($thread->price > 0 && ! $allRewardedThreads->contains($thread->id)) {
-                    $thread->firstPost->content = Str::limit($thread->firstPost->content, 50);
+        // 设置对应关系，以解决 N + 1 问题
+        if ($relations = array_intersect($include, ['firstPost'])) {
+            $threads->map(function ($thread) use ($relations) {
+                foreach ($relations as $relation) {
+                    if ($thread->$relation) {
+                        $thread->$relation->thread = $thread;
+                    }
                 }
             });
+        }
+
+        // 处理付费主题内容
+        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
+            $threads = $this->cutThreadContent($threads, $actor, $include);
         }
 
         return $threads;
@@ -263,6 +264,11 @@ class ListThreadsController extends AbstractListController
         // 分类
         if ($categoryId = Arr::get($filter, 'categoryId')) {
             $query->where('threads.category_id', $categoryId);
+        }
+
+        // 类型：0普通 1长文 2视频 3图片
+        if (($type = Arr::get($filter, 'type', '')) !== '') {
+            $query->where('threads.type', (int) $type);
         }
 
         // 作者 ID
@@ -354,7 +360,7 @@ class ListThreadsController extends AbstractListController
         $isApproved = Arr::get($filter, 'isApproved');
         if ($isApproved === '1') {
             $query->where('threads.is_approved', Thread::APPROVED);
-        } elseif ($actor->can('approvePosts')) {
+        } elseif ($actor->hasPermission('thread.approvePosts')) {
             if ($isApproved === '0') {
                 $query->where('threads.is_approved', Thread::UNAPPROVED);
             } elseif ($isApproved === '2') {
@@ -364,7 +370,7 @@ class ListThreadsController extends AbstractListController
 
         // 回收站
         if ($isDeleted = Arr::get($filter, 'isDeleted')) {
-            if ($isDeleted == 'yes' && $actor->can('viewTrashed')) {
+            if ($isDeleted == 'yes' && $actor->hasPermission('viewTrashed')) {
                 // 只看回收站帖子
                 $query->whereNotNull('threads.deleted_at');
             } elseif ($isDeleted == 'no') {
@@ -380,9 +386,27 @@ class ListThreadsController extends AbstractListController
                 ->where(function ($query) use ($queryWord) {
                     $queryWord = explode(',', $queryWord);
                     foreach ($queryWord as $word) {
+                        $query->orWhere('threads.title', 'like', "%{$word}%");
                         $query->orWhere('posts.content', 'like', "%{$word}%");
                     }
                 });
+        }
+
+        //关注的人的文章
+        $fromUserId = Arr::get($filter, 'fromUserId');
+        if ($fromUserId && $fromUserId == $actor->id) {
+            $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
+                ->where('user_follow.from_user_id', $fromUserId);
+        }
+
+        //话题文章
+        if ($topic_id = Arr::get($filter, 'topic_id', '0')) {
+            //更新话题阅读数
+            $topic = Topic::find($topic_id);
+            $topic->refreshTopicViewCount();
+
+            $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
+                ->where('thread_topic.topic_id', $topic_id);
         }
     }
 
@@ -396,29 +420,36 @@ class ListThreadsController extends AbstractListController
     {
         $threadIds = $threads->pluck('id');
 
-        $subSql = Post::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
-            ->whereRaw($this->tablePrefix . 'a.id < id')
+        $subSql = Post::query()
+            ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
 
-        $allLastThreePosts = Post::from('posts', 'a')
+        $allLastThreePosts = Post::query()
+            ->from('posts', 'a')
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('thread_id', $threadIds)
             ->whereNull('deleted_at')
-            ->where('is_approved', 1)
+            ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
+            ->where('is_comment', false)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
+                // 引用回复去除引用部分
                 if ($post->reply_post_id) {
                     $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                     $post->content = preg_replace($pattern, '', $post->content);
                 }
 
+                // 截取内容
+                $post->content = Str::limit($post->content, 70);
+
                 return $post;
             });
 
-        $threads->map(function ($thread) use ($allLastThreePosts) {
+        $threads->map(function (Thread $thread) use ($allLastThreePosts) {
             $thread->setRelation('lastThreePosts', $allLastThreePosts->where('thread_id', $thread->id)->take(3));
         });
 
@@ -426,7 +457,7 @@ class ListThreadsController extends AbstractListController
     }
 
     /**
-     * 特殊关联：喜欢的人
+     * 特殊关联：点赞的人
      *
      * @param Collection $threads
      * @param $limit
@@ -436,19 +467,21 @@ class ListThreadsController extends AbstractListController
     {
         $firstPostIds = $threads->pluck('firstPost.id');
 
-        $subSql = PostUser::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.post_id = post_id')
-            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+        $subSql = PostUser::query()
+            ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`post_id` = `post_id`')
+            ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
-        $allLikes = User::from('post_user', 'a')
+        $allLikes = User::query()
+            ->from('post_user', 'a')
             ->leftJoin('users', 'a.user_id', '=', 'users.id')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
             ->whereIn('post_id', $firstPostIds)
             ->orderBy('a.created_at', 'desc')
             ->get();
 
-        $threads->map(function ($thread) use ($allLikes, $limit) {
+        $threads->map(function (Thread $thread) use ($allLikes, $limit) {
             if ($thread->firstPost) {
                 $thread->firstPost->setRelation('likedUsers', $allLikes->where('post_id', $thread->firstPost->id)->take($limit));
             }
@@ -462,29 +495,134 @@ class ListThreadsController extends AbstractListController
      *
      * @param Collection $threads
      * @param $limit
+     * @param int $type
      * @return Collection
      */
-    protected function loadRewardedUsers(Collection $threads, $limit)
+    protected function loadRewardedUsers(Collection $threads, $limit, $type)
     {
+        switch ($type) {
+            case Order::ORDER_TYPE_REWARD:
+                $relation = 'rewardedUsers';
+                break;
+            case Order::ORDER_TYPE_THREAD:
+                $relation = 'paidUsers';
+                break;
+            default:
+                return $threads;
+        }
+
         $threadIds = $threads->pluck('id');
 
-        $subSql = Order::selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.thread_id = thread_id')
-            ->whereRaw($this->tablePrefix . 'a.created_at < created_at')
+        $subSql = Order::query()
+            ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`type` = `type`')
+            ->whereRaw($this->tablePrefix . 'a.`status` = `status`')
+            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`is_anonymous` = `is_anonymous`')
+            ->whereRaw($this->tablePrefix . 'a.`created_at` < `created_at`')
             ->toSql();
 
-        $allRewardedUser = User::from('orders', 'a')
+        $allRewardedUser = User::query()
+            ->from('orders', 'a')
             ->join('users', 'a.user_id', '=', 'users.id')
             ->select('a.thread_id', 'users.*')
             ->whereRaw('(' . $subSql . ') < ?', [$limit])
-            ->whereIn('thread_id', $threadIds)
+            ->whereIn('a.thread_id', $threadIds)
             ->where('a.status', Order::ORDER_STATUS_PAID)
-            ->where('type', Order::ORDER_TYPE_REWARD)
+            ->where('a.type', $type)
+            ->where('a.is_anonymous', false)
             ->orderBy('a.created_at', 'desc')
+            ->orderBy('a.id', 'desc')
             ->get();
 
-        $threads->map(function ($thread) use ($allRewardedUser, $limit) {
-            $thread->setRelation('rewardedUsers', $allRewardedUser->where('thread_id', $thread->id)->take($limit));
+        $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relation) {
+            $thread->setRelation($relation, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
+        });
+
+        return $threads;
+    }
+
+    /**
+     * 付费主题对未付费用户只展示部分内容
+     *
+     * @param Collection $threads
+     * @param User $actor
+     * @param array $include
+     * @return Collection
+     */
+    protected function cutThreadContent(Collection $threads, User $actor, array $include)
+    {
+        // 需付费主题
+        $notFreeThreads = $threads->where('price', '>', 0)->pluck('id');
+
+        // 已付费主题
+        if ($notFreeThreads && !$actor->isAdmin()) {
+            $paidThreads = Order::query()
+                ->whereIn('thread_id', $notFreeThreads)
+                ->where('user_id', $actor->id)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->pluck('thread_id');
+        } else {
+            $paidThreads = $notFreeThreads;
+        }
+
+        // 主题内容处理
+        $threads->map(function (Thread $thread) use ($paidThreads, $actor, $include) {
+            // 付费主题，是否付费
+            if ($thread->price > 0) {
+                if ($thread->user_id == $actor->id || $paidThreads->contains($thread->id)) {
+                    $thread->setAttribute('paid', true);
+                } else {
+                    $thread->setAttribute('paid', false);
+                }
+            }
+
+            /**
+             * 列表内容处理
+             *
+             * 0. 普通帖子不能设为付费帖无需处理
+             * 1. 长文帖子无论如何不返回内容
+             * 2. 视频帖子未付费仅展示封面
+             * 3. 图片帖子未付费仅展示高斯模糊图
+             */
+
+            // 加载首贴时，处理内容
+            if (in_array('firstPost', $include)) {
+                // 长文帖子无论如何不返回内容，其他类型截取部分内容
+                $thread->firstPost->content = $thread->type == 1
+                    ? ''
+                    : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
+
+                // 付费内容未付费处理
+                if ($thread->price > 0 && !$thread->getAttribute('paid')) {
+                    switch ($thread->type) {
+                        // 帖子
+                        case 1:
+                            $thread->firstPost->setRelation('images', collect());
+                            $thread->firstPost->setRelation('attachments', collect());
+                            break;
+                        // 图片
+                        case 3:
+                            $thread->firstPost->load('images');
+
+                            $thread->firstPost->images->map(function (Attachment $image) {
+                                $image->setAttribute('blur', true);
+                            });
+                            break;
+                    }
+                }
+            }
+
+            // 付费视频，未付费时，隐藏视频
+            if (in_array('threadVideo', $include)) {
+                if ($thread->price > 0 && $thread->type == 2 && !$thread->getAttribute('paid')) {
+                    if ($thread->threadVideo) {
+                        $thread->threadVideo->file_id = '';
+                        $thread->threadVideo->media_url = '';
+                    }
+                }
+            }
         });
 
         return $threads;

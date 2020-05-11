@@ -20,6 +20,8 @@ class AddThreadFavoriteAttribute
             if ($favoriteState = $event->model->favoriteState) {
                 $event->attributes['isFavorite'] = true;
                 $event->attributes['favoriteAt'] = $event->formatDate($favoriteState->created_at);
+            } else {
+                $event->attributes['isFavorite'] = false;
             }
         }
     }

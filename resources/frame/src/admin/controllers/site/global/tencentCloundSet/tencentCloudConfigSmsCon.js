@@ -17,16 +17,12 @@ export default {
     this.tencentCloudSms()
   },
   methods:{
-    configClick(type){
-
-    },
     tencentCloudSms(){
       this.appFetch({
         url:'forum',
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res)
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {

@@ -19,6 +19,24 @@ input[type="number"]{
 }
 
 
+/*
+  公共样式：表情样式
+*/
+.qq-emotion{
+  width: 20PX;
+  height: 20PX;
+  vertical-align: text-bottom;
+  display:inline-block;
+}
+
+/*
+  链接手势
+*/
+.cursor-pointer{
+  cursor:pointer;
+}
+
+
 /*使用Card组件时，去掉底部边框*/
 .footer-btn{
   border-bottom: 0;

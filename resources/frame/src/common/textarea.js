@@ -49,9 +49,11 @@ export const autoTextarea = function (elem, extra, maxHeight, callback) {
     if (elem.scrollHeight > minHeight) {
       if (maxHeight && elem.scrollHeight > maxHeight) {
         height = maxHeight - padding;
-        style.overflowY = 'auto';
+        // style.overflowY = 'auto';
+        style.overflowY = 'hidden';
       } else {
         height = elem.scrollHeight - padding;
+        // style.overflowY = 'scroll';
         style.overflowY = 'hidden';
       };
       style.height = height + extra + 'px';

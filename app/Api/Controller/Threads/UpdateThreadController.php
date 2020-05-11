@@ -22,6 +22,8 @@ class UpdateThreadController extends AbstractCreateController
      */
     public $serializer = ThreadSerializer::class;
 
+    public $include = ['threadVideo'];
+
     /**
      * {@inheritdoc}
      */

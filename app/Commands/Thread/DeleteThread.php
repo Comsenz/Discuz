@@ -15,6 +15,7 @@ use App\Repositories\ThreadRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteThread
@@ -58,10 +59,11 @@ class DeleteThread
     /**
      * @param Dispatcher $events
      * @param ThreadRepository $threads
+     * @param BusDispatcher $bus
      * @return Thread
      * @throws PermissionDeniedException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads)
+    public function handle(Dispatcher $events, ThreadRepository $threads, BusDispatcher $bus)
     {
         $this->events = $events;
 
@@ -75,6 +77,11 @@ class DeleteThread
 
         $thread->raise(new Deleted($thread));
         $thread->delete();
+
+        //删除视频、视频文件
+        $bus->dispatch(
+            new DeleteThreadVideo($thread)
+        );
 
         $this->dispatchEventsFor($thread, $this->actor);
 

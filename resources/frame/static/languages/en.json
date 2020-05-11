@@ -1,0 +1,12 @@
+
+{
+  "webName": "webName",
+  "home": "home",
+  "setUp": "setUp",
+  "changePassword": "changePassword",
+  "Logout": "Logout",
+  "eventManagement": "eventManagement",
+  "admin": {
+    "siteHome": "siteHome"
+  }
+}

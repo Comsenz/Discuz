@@ -1,22 +1,19 @@
 <template>
-    <div class="panel-box">
+    <div class="panel-box" @click="boxClick">
 
       <div class="panel-header">
         <div class="panel-header-lf">
-          <span>{{titles}}</span>
+          <span v-html="titles"></span>
         </div>
 
         <div class="panel-header-rh">
-          <!--<span :class="parseInt(this.nums) >= 0?'add-orange':''">
-            {{nums}}
-          </span>-->
           <span :class="status?'add-orange':''">
             {{nums}}
           </span>
         </div>
       </div>
 
-      <div class="panel-bottom">
+      <div class="panel-bottom" @click="labelClick">
         <slot name="label"></slot>
       </div>
 
@@ -25,9 +22,11 @@
 
 <script>
 import panelCon from '../../../controllers/m_site/common/panelCon'
-import '../../../less/m_site/common/panel.less'
+import '../../../defaultLess/m_site/common/common.less';
+
 export default {
     name: "panel",
   ...panelCon
 }
+
 </script>

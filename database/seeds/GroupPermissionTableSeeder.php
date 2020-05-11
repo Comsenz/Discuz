@@ -5,15 +5,16 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-use Illuminate\Database\Seeder;
 use App\Models\GroupPermission;
+use Illuminate\Database\Seeder;
 
 class GroupPermissionTableSeeder extends Seeder
 {
-    /*
-    * 默认用户组 1 为超级管理员有以下的所有权限
-    * @var array
-    */
+    /**
+     * 默认用户组 1 为超级管理员有以下的所有权限
+     *
+     * @var array
+     */
     protected $permissions = [
         // 用户
         'user.view' => [7, 10],                 // 查看某个用户信息权限
@@ -34,13 +35,20 @@ class GroupPermissionTableSeeder extends Seeder
         // 主题
         'viewThreads' => [7, 10],               // 查看主题列表
         'createThread' => [10],                 // 发布主题
+        'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
+        'createThreadVideo' => [],              // 发布视频主题
+        'createThreadLong' => [10],             // 发布长文主题
+        'createThreadWithCaptcha' => [],        // 发布主题验证验证码
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情
-        'thread.deletePosts' => [10],           // 删除回复
+        'thread.hidePosts' => [],               // 删除回复
         'thread.likePosts' => [10],             // 点赞回复
+
+        // 内容审核
+        'thread.approvePosts' => [],            // 审核主题或回复
 
         // 回收站
         'viewTrashed' => [],                    // 查看回收站
@@ -48,7 +56,7 @@ class GroupPermissionTableSeeder extends Seeder
         // 附件
         'attachment.create.0' => [10],          // 上传附件
         'attachment.create.1' => [10],          // 上传图片
-        'attachment.delete' => [10],            // 删除附件
+        'attachment.delete' => [],              // 删除附件
 
         // 敏感词
         'stopWord.create' => [],                // 创建敏感词
@@ -57,6 +65,7 @@ class GroupPermissionTableSeeder extends Seeder
         // 站点
         'viewSiteInfo' => [],                   // 查看站点信息权限
         'checkVersion' => [],                   // 检查是否有新版权限
+        'setting.site' => [],                   // 上传站点logo
 
         // 订单
         'order.create' => [6, 10],              // 创建订单
@@ -80,6 +89,11 @@ class GroupPermissionTableSeeder extends Seeder
         'statistic.financeProfile' => [],       // 财务概况
         'statistic.financeChart' => [],         // 财务图表
 
+        // 短消息
+        'dialog.create' => [10],                 // 创建会话、会话消息
+
+        // 关注
+        'userFollow.create' => [10],           // 创建关注
     ];
 
     /**

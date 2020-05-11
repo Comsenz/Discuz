@@ -8,27 +8,28 @@
 namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
+use Tobscure\JsonApi\Relationship;
 
 class UserWalletLogSerializer extends AbstractSerializer
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $type = 'user_wallet_log';
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultAttributes($model)
     {
-        $title = '';
-        if (isset($model->order_id) && !empty($model->order_id)) {
-
-            $title = $model->order->thread->firstPost->formatContent();
-        }
         return [
             'id' => $model->id,
-            'change_available_amount' => $model->change_available_amount,
-            'change_freeze_amount' => $model->change_freeze_amount,
-            'change_type' => $model->change_type,
-            'change_desc' => $model->change_desc,
-            'title' => $title,
-            'updated_at' => $this->formatDate($model->updated_at),
-            'created_at' => $this->formatDate($model->created_at),
+            'change_available_amount'   => $model->change_available_amount,
+            'change_freeze_amount'      => $model->change_freeze_amount,
+            'change_type'               => $model->change_type,
+            'change_desc'               => $model->change_desc,
+            'updated_at'                => $this->formatDate($model->updated_at),
+            'created_at'                => $this->formatDate($model->created_at),
         ];
     }
 
@@ -63,7 +64,7 @@ class UserWalletLogSerializer extends AbstractSerializer
      * @param $log
      * @return Relationship
      */
-    protected function Order($log)
+    protected function order($log)
     {
         return $this->hasOne($log, OrderSerializer::class);
     }

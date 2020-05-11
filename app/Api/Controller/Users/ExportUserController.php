@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Traits\UserTrait;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\Application;
-use Discuz\Http\FileResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Support\Arr;
@@ -48,7 +48,7 @@ class ExportUserController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-//        $this->assertAdmin($request->getAttribute('actor'));
+        $this->assertAdmin($request->getAttribute('actor'));
 
         $filter = new Parameters($request->getQueryParams());
         $filters = $filter->getFilter() ?: [];
@@ -65,7 +65,7 @@ class ExportUserController implements RequestHandlerInterface
             new UsersExport($filename, $data)
         );
 
-        return new FileResponse($filename);
+        return DiscuzResponseFactory::FileResponse($filename);
     }
 
     private function data($filters)

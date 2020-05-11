@@ -4,7 +4,7 @@
 @section('content')
 <h2>安装 Discuz! Q</h2>
 
-<p>请查看安装文档，根据文档完成安装 <a href="https://www.discuz.net/docs/install.html" target="_blank">Discuz! Q</a>.</p>
+<p>请查看安装文档，根据文档完成安装 <a href="https://discuz.chat/docs/install.html" target="_blank">Discuz! Q</a>.</p>
 
 <form method="post">
   <div id="error" style="display:none"></div>
@@ -79,7 +79,8 @@ $(function() {
 
     $.post('', $(this).serialize())
       .done(function(data) {
-          localStorage.setItem('officeDb_Authorization', data.token);
+          localStorage.clear();
+          localStorage.setItem('officeDb_Authorization', JSON.stringify(data.token));
           window.location.href = '/';
       })
       .fail(function(data) {

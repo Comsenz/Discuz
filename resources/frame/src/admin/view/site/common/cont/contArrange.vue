@@ -21,7 +21,10 @@
               <span v-if="$attrs.author">发布于</span>
               <span v-if="$attrs.replyBy">回复主题</span>
               <p v-if="$attrs.theme">{{$attrs.theme}}</p>
-              <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >123{{$attrs.themeName}}</p>
+              <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >
+                {{$attrs.themeName}}
+                <span v-if="$attrs.titleIcon" class="iconfont cont-arrange__rt-main-header__release-title-icon" :class="$attrs.titleIcon"></span>
+              </p>
             </div>
 
             <div v-if="$attrs.prply >= 0 && $attrs.browse >= 0" class="cont-arrange__rt-main-header__reply-view rt-box">
@@ -55,6 +58,9 @@
             </div>
 
             <slot name="header"></slot>
+          </div>
+          <div class="cont-arrange__rt-main-long-text" v-if="$slots.longText">
+            <slot name="longText"></slot>
           </div>
           <div class="cont-arrange__rt-main-box" ref="contMain" v-bind:style="{'height':showContStatus? mainHeight + 30 + 'px':mainHeight>78?'78PX':''}"
           ><!--三元运算方法意思：高度不超过78PX也就是三行，不设置高度，高度自适应。如果超过78PX，则设置高度为78PX，显示'显示内容'组件。-->

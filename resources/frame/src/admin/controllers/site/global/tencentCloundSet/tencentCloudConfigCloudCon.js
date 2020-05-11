@@ -1,5 +1,5 @@
 
-/**云api配置 */
+/**云API配置 */
 import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
@@ -13,7 +13,7 @@ export default {
     }
   },
   created(){
-    this.tencentCloudList()//初始化云api配置
+    this.tencentCloudList()//初始化云API配置
     var type = this.$route.query.type;
     this.type = type;
   },
@@ -29,7 +29,6 @@ export default {
 
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -78,12 +77,10 @@ export default {
       })
     }
       catch(err){
-        console.log(err)
         this.$message({
           showClose: true,
-          message: '提交失败！'
+          message: err
         });
-        // this.$message.error('操作失败！');
       }
   }
   },

@@ -1,7 +1,7 @@
 /*用户导航各个页面*/
 
 @import "../common/index";
-@import "../../../../../static/css/admin/iconfont.css";
+@import "../../../../../static/css/admin/discuzQfont.css";
 
 
 /*
@@ -231,3 +231,33 @@
   }
 }
 
+
+/*
+  用户审核
+*/
+.user-review-box{
+
+  .user-review-table{
+    margin: 15PX 0 15PX 0;
+
+    .el-table th > .cell{
+      padding-left: 17PX;
+    }
+
+    .el-button + .el-button{
+      padding-left: 10PX;
+      padding-right: 20PX;
+    }
+  }
+
+  .footer-btn{
+
+    .el-button--primary{
+      margin-right: 20PX;
+    }
+
+    .el-button--text{
+      margin-left: 20PX;
+    }
+  }
+}

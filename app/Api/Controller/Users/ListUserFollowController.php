@@ -10,6 +10,7 @@ namespace App\Api\Controller\Users;
 use App\Api\Serializer\UserFollowSerializer;
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
+use App\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
@@ -45,9 +46,14 @@ class ListUserFollowController extends AbstractListController
     public $userFollowCount;
 
     /**
+     * @var UserRepository
+     */
+    public $user;
+
+    /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['fromUser', 'toUser'];
+    public $optionalInclude = ['fromUser', 'toUser', 'fromUser.groups', 'toUser.groups'];
 
     /* The relationships that are included by default.
      *
@@ -58,10 +64,12 @@ class ListUserFollowController extends AbstractListController
     /**
      * @param UserFollowRepository $userFollow
      * @param UrlGenerator $url
+     * @param UserRepository $user
      */
-    public function __construct(UserFollowRepository $userFollow, UrlGenerator $url)
+    public function __construct(UserFollowRepository $userFollow, UrlGenerator $url, UserRepository $user)
     {
         $this->userFollow = $userFollow;
+        $this->user = $user;
         $this->url = $url;
     }
 
@@ -74,12 +82,15 @@ class ListUserFollowController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-
-        $this->assertRegistered($actor);
-
         $filter = $this->extractFilter($request);
+        //没传用户ID需要登陆
+        if (!Arr::get($filter, 'user_id')) {
+            $this->assertRegistered($actor);
+        }
+
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
+        $include = $this->extractInclude($request);
 
         $userFollow = $this->search($actor, $filter, $limit, $offset);
 
@@ -91,9 +102,11 @@ class ListUserFollowController extends AbstractListController
             $this->userFollowCount
         );
 
+        $userFollow->loadMissing($include);
+
         $document->setMeta([
             'total' => $this->userFollowCount,
-            'size' => $limit,
+            'pageCount' => ceil($this->userFollowCount / $limit),
         ]);
 
         return $userFollow;
@@ -108,17 +121,32 @@ class ListUserFollowController extends AbstractListController
      */
     public function search(User $actor, $filter, $limit = null, $offset = 0)
     {
+        $join_field = '';
+        $user = '';
         $query = $this->userFollow->query();
 
-        $follow = Arr::get($filter, 'follow', 1);
+        $type = (int) Arr::get($filter, 'type', 1);
+        $username = Arr::get($filter, 'username');
+        if ($user_id = (int) Arr::get($filter, 'user_id')) {
+            $user = $this->user->findOrFail($user_id);
+        }
+        $user_id = $user ? $user->id : $actor->id;
 
-        if ($follow == 1) {
+        if ($type == 1) {
             //我的关注
-            $query->where('from_user_id', $actor->id)->with('toUser');
-        } elseif ($follow == 2) {
-
+            $query->where('from_user_id', $user_id)->with('toUser');
+            $join_field = 'to_user_id';
+        } elseif ($type == 2) {
             //我的粉丝
-            $query->where('to_user_id', $actor->id)->with('fromUser');
+            $query->where('to_user_id', $user_id)->with('fromUser');
+            $join_field = 'from_user_id';
+        }
+
+        if ($username) {
+            $query->join('users', 'users.id', '=', 'user_follow.'.$join_field)
+                ->where(function ($query) use ($username) {
+                    $query->where('users.username', 'like', "%{$username}%");
+                });
         }
 
         $this->userFollowCount = $limit > 0 ? $query->count() : null;

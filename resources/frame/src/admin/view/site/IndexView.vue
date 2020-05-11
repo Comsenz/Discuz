@@ -3,7 +3,7 @@
     <el-header height="80px" class="index-header">
       <h1 class="index-header__icon">
         <a href="/admin/home">
-          <img src="../../../../static/images/admin-logo.png"  alt="Logo">
+          <img src="../../../../static/images/admin-logo-x2.png"  alt="Logo">
         </a>
       </h1>
 
@@ -22,7 +22,7 @@
       <div class="index-header__info-menu">
         <span>您好，{{userName}}</span>
         <span @click="quitClick">&nbsp;[退出]</span>
-        <span class="site-home" ><a :href="url +'/admin'" target="_top">站点首页</a></span>
+        <span class="site-home" ><a :href="appConfig.baseUrl" target="_blank">{{$t('admin.siteHome')}}</a></span>
       </div>
 
     </el-header>

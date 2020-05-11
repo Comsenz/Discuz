@@ -90,4 +90,20 @@ class Invite extends Model
         // 返回模型
         return $invite;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 关联模型
+    |--------------------------------------------------------------------------
+    */
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

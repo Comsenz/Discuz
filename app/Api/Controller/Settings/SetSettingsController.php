@@ -9,21 +9,20 @@ namespace App\Api\Controller\Settings;
 
 use App\Models\Group;
 use App\Settings\SettingsRepository;
-use App\Settings\SiteRevManifest;
 use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\Application;
+use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Laminas\Diactoros\Response\EmptyResponse;
-use Illuminate\Support\Arr;
 
 class SetSettingsController implements RequestHandlerInterface
 {
@@ -33,16 +32,13 @@ class SetSettingsController implements RequestHandlerInterface
 
     protected $settings;
 
-    protected $siteRevManifest;
-
     protected $validator;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, SiteRevManifest $siteRevManifest, Application $app, SetSettingValidator $validator)
+    public function __construct(CacheRepository $cache, SettingsRepository $settings, Application $app, SetSettingValidator $validator)
     {
         $this->cache = $cache;
         $this->app = $app;
         $this->settings = $settings;
-        $this->siteRevManifest = $siteRevManifest;
         $this->validator = $validator;
     }
 
@@ -69,8 +65,8 @@ class SetSettingsController implements RequestHandlerInterface
 
         // 只要传了其中一个，就检查分成比例相加是否为 10
         if ($siteAuthorScale || $siteMasterScale) {
-            $siteAuthorScale = abs($siteAuthorScale['value']);
-            $siteMasterScale = abs($siteMasterScale['value']);
+            $siteAuthorScale = abs(Arr::get($siteAuthorScale, 'value', 0));
+            $siteMasterScale = abs(Arr::get($siteMasterScale, 'value', 0));
             $sum = $siteAuthorScale + $siteMasterScale;
 
             if ($sum === 10) {
@@ -92,8 +88,18 @@ class SetSettingsController implements RequestHandlerInterface
             }
         }
 
+        // 扩展名统一改为小写
+        $settings->transform(function ($item, $key) {
+            $extArr = ['default_support_img_ext','default_support_file_ext','qcloud_qcloud_vod_ext'];
+            if (in_array($key, $extArr)) {
+                $item['value'] = strtolower($item['value']);
+            }
+            return $item;
+        });
+
+
         /**
-         * @property SetSettingValidator
+         * @see SetSettingValidator
          */
         $validator = $settings->pluck('value', 'key')->all();
         $this->validator->valid($validator);
@@ -106,9 +112,7 @@ class SetSettingsController implements RequestHandlerInterface
             );
         });
 
-        $this->siteRevManifest->put('settings', $this->settings->all());
-
-        return new EmptyResponse(204);
+        return DiscuzResponseFactory::EmptyResponse(204);
     }
 
     /**

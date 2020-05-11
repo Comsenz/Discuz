@@ -8,7 +8,6 @@
 namespace App\Commands\Group;
 
 use App\Events\Group\Saving;
-use App\Models\Group;
 use App\Repositories\GroupRepository;
 use App\Validators\GroupValidator;
 use Discuz\Auth\AssertPermissionTrait;
@@ -59,15 +58,13 @@ class UpdateGroup
         $group->type = Arr::get($this->data, 'attributes.type', '');
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
+        $group->is_display = (bool) Arr::get($this->data, 'attributes.isDisplay');
 
-        // 修改时调用脏数据Dirty
         $this->validator->valid($group->getDirty());
 
-        //先把表的其它默认组清空， 再设置当前组为默认组
-        if ($value = Arr::get($this->data, 'attributes.default', 0)) {
-            $this->event->dispatch(new Saving($group, $this->actor, []));
-            $group->default = Group::DEFAULT;
-        }
+        $this->event->dispatch(
+            new Saving($group, $this->actor, $this->data)
+        );
 
         $group->save();
 

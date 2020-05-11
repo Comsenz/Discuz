@@ -1,37 +1,40 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\MessageTemplate;
 
-
-use App\Models\User;
-use Discuz\Foundation\Application;
 use Discuz\Notifications\Messages\DatabaseMessage;
-use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Support\Arr;
 
+/**
+ * 根据用户状态变更 发送不同的通知
+ *
+ * Class StatusMessage
+ * @package App\MessageTemplate
+ */
 class StatusMessage extends DatabaseMessage
 {
-    protected $translator;
-
-    public function __construct(Application $app)
+    protected function titleReplaceVars()
     {
-        $this->translator = $app->make('translator');
+        return [];
     }
 
-    protected function getTitle() {
-        $actionType = User::enumStatus($this->notifiable->status);
-        return $this->translator->get("core.status_{$actionType}_change");
-    }
-
-    protected function getContent($data)
+    protected function contentReplaceVars($data)
     {
-        $actionType = User::enumStatus($this->notifiable->status);
-        $replace = [
-            'user' => $this->notifiable->username,
-        ];
-        if($this->notifiable->status) {
-            $replace['refuse'] = $data['refuse'];
+        $refuse = '无';
+        if (Arr::has($data, 'refuse')) {
+            if (!empty($data['refuse'])) {
+                $refuse = $data['refuse'];
+            }
         }
-        return $this->translator->get("core.status_{$actionType}_change_detail", $replace);
+
+        return [
+            $this->notifiable->username,
+            $refuse
+        ];
     }
 }

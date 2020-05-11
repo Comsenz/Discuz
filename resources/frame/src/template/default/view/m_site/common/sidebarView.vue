@@ -3,19 +3,24 @@
      <div class="sideCon" @click="$router.push({path:'/home-page/'+userId})">
        <div class="sideUserBox" v-model="userInfo">
          <!-- <img src="appConfig.staticBaseUrl/static/images/noavatar.gif" class="userHead"> -->
-        <img :src="avatarUrl" alt="" class="userHead" v-if="avatarUrl != '' && avatarUrl != null ">
-         <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else="">
+         <div  class="side-bar-avatar-box">
+           <img :src="avatarUrl" v-if="avatarUrl != '' && avatarUrl != null " class="side-user-img" >
+           <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else>
+           <img v-if="isReal" class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+         </div>
+
          <div class="userDet">
            <div class="userName" v-if="username != undefined">{{username}}</div>
            <div class="userPhone" v-if="mobile != undefined">{{mobile}}</div>
-           <span class="icon iconfont icon-right-arrow jumpJtr" style="text-align:center"></span>
          </div>
+         <span class="icon iconfont icon-right-arrow jumpJtr" style="text-align:center"></span>
        </div>
      </div>
      <div class="sideCon" v-for="(item, i) in sidebarList1" :key="i">
        <div class="sideItem" @click="sidebarUrl(item.path,item.enentType)">
        <!-- <router-link class="sideItem" :to="{path: item.path, query: item.query}" v-if="item.path"> -->
           <span class="itemTit">{{item.text}}</span>
+          <i class="noticeSum" type="danger" v-show ='item.noticeSum === 0 ? false:true'>{{item.noticeSum}}</i>
           <span class="icon iconfont icon-right-arrow jumpJtr"></span>
          </div>
        <!-- </router-link> -->
@@ -49,6 +54,7 @@
 </template>
 
 <script>
+  import '../../../defaultLess/m_site/common/common.less'
   import mSiteSidebar from '../../../controllers/m_site/common/sidebarCon';
   export default {
     name: "sidebar",

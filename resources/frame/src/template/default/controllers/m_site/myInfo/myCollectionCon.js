@@ -18,7 +18,7 @@ export default {
       // contText:'我们来看一下程序员经常去的 14 个顶级开发者社区，如果你还不知道它们，那么赶紧去看看，也许会有意想不到的收获。',
       // aaa:[],
       collectionList:[
-        
+
       ],
       list: [],
       loading: false,  //是否处于加载状态
@@ -39,9 +39,8 @@ export default {
   //   this.myCollection()
   // },
   created(){
-    this.imgUrl = "../../../../../../../static/images/mytx.png"
+    this.imgUrl = "../../../../../../../static/images/noavatar.gif"
     this.myCollection();
-    // console.log(typeof this.aaa);
   },
   methods:{
     myCollection(initStatus = false){
@@ -49,7 +48,7 @@ export default {
         url:'collection',
         method:'get',
         data:{
-          include:['user', 'firstPost', 'lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers'],
+          include:['user', 'firstPost', 'user.groups','lastThreePosts', 'lastThreePosts.user', 'firstPost.likedUsers', 'rewardedUsers','lastThreePosts.replyUser','firstPost.images', 'threadVideo'],
           'page[number]': this.pageIndex,
           'page[limit]': this.pageLimit
         }
@@ -88,7 +87,7 @@ export default {
             this.isLoading = false;
           })
       }
-    
+
   }
-  
+
 }

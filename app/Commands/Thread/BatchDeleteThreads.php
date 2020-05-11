@@ -12,6 +12,7 @@ use App\Events\Thread\Deleting;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class BatchDeleteThreads
@@ -54,9 +55,10 @@ class BatchDeleteThreads
     /**
      * @param Dispatcher $events
      * @param ThreadRepository $threads
+     * @param BusDispatcher $bus
      * @return array
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads)
+    public function handle(Dispatcher $events, ThreadRepository $threads, BusDispatcher $bus)
     {
         $this->events = $events;
 
@@ -82,6 +84,11 @@ class BatchDeleteThreads
 
                 $thread->raise(new Deleted($thread));
                 $thread->delete();
+
+                //删除视频、视频文件
+                $bus->dispatch(
+                    new DeleteThreadVideo($thread)
+                );
 
                 $result['data'][] = $thread;
 

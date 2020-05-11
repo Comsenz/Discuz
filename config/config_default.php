@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 
 return [
-    'debug' => true,
+    'debug' => false,
     'locale' => 'zh-CN',
     'fallback_locale' => 'zh-CN',
     'timezone' => 'Asia/Shanghai',
@@ -23,6 +23,7 @@ return [
             'prefix' => 'DummyDbPrefix',
             'prefix_indexes' => true,
             'strict' => true,
+            'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => '',
             ]) : [],
@@ -38,7 +39,7 @@ return [
         'default' => [
             'url' => '',
             'host' => '127.0.0.1',
-            'password' => '123',
+            'password' => '',
             'port' => 6379,
             'database' => 0
         ],
@@ -46,7 +47,7 @@ return [
         'cache' => [
             'url' => '',
             'host' => '127.0.0.1',
-            'password' => '123',
+            'password' => '',
             'port' => 6379,
             'database' => 1
         ],
@@ -90,21 +91,32 @@ return [
                 'url' => 'avatar',
                 'visibility' => 'public',
             ],
+            'avatar_cos' => [
+                'driver' => 'cos',
+                'root' => storage_path('app/public/avatars'),
+                'url' => 'avatar',
+                'visibility' => 'public',
+            ],
             'attachment' => [
                 'driver' => 'local',
+                'root'   => storage_path('app'),
+                'url'    => 'attachment'
+            ],
+            'attachment_cos' => [
+                'driver' => 'cos',
                 'root'   => storage_path('app/public/attachment'),
                 'url'    => 'attachment'
             ],
             'cos' => [
                 'driver' => 'cos',
-                'region' => 'ap-beijing', //设置一个默认的存储桶地域
+                'region' => '', //设置一个默认的存储桶地域
                 'schema' => 'https', //协议头部，默认为http
-                'bucket' => 'test-1251011534',
+                'bucket' => '',
                 'read_from_cdn' => false, //是否从cdn读取，如果为true ， 设置cdn地址
                 'credentials'=> [
-                    'secretId'  => 'COS_SECRETID',  //"云 API 密钥 SecretId";
-                    'secretKey' => 'COS_SECRETKEY', //"云 API 密钥 SecretKey";
-                    'token' => 'token' //"临时密钥 token";
+                    'secretId'  => '',  //"云 API 密钥 SecretId";
+                    'secretKey' => '', //"云 API 密钥 SecretKey";
+                    'token' => '' //"临时密钥 token";
                 ]
             ]
         ]
@@ -127,14 +139,16 @@ return [
     //加载ServiceProvider
     'providers' => [
         App\Formatter\FormatterServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\SettingsServiceProvider::class,
+        App\Passport\Oauth2ServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
         App\Providers\CategoryServiceProvider::class,
-        App\Providers\UserServiceProvider::class,
-        App\Providers\ThreadServiceProvider::class,
-        App\Providers\PostServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
-        App\Passport\Oauth2ServiceProvider::class
+        App\Providers\PostServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        App\Providers\ThreadServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+        App\Providers\DialogMessageServiceProvider::class,
     ],
     'sms' => [
         // HTTP 请求的超时时间（秒）
@@ -156,9 +170,9 @@ return [
                 'file' => storage_path('log/easy-sms.log')
             ],
             'qcloud' => [
-                'sdk_app_id' => '1400255781', // SDK APP ID
-                'app_key' => 'ba1fb474836fd933b39d9c612e1a46a1', // APP KEY
-                'sign_name' => 'zixunicom', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
+                'sdk_app_id' => '', // SDK APP ID
+                'app_key' => '', // APP KEY
+                'sign_name' => '', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
             ],
         ],
     ]

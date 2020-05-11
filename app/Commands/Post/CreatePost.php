@@ -11,6 +11,7 @@ use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
+use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\User;
@@ -106,6 +107,8 @@ class CreatePost
 
         $isFirst = empty($thread->last_posted_user_id);
 
+        $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
+
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
@@ -142,12 +145,15 @@ class CreatePost
             $this->ip,
             $this->replyPostId,
             $this->replyUserId,
-            $isFirst
+            $isFirst,
+            $isComment
         );
 
         // 存在审核敏感词时，将回复内容放入待审核
         if ($censor->isMod) {
             $post->is_approved = 0;
+        } else {
+            $post->is_approved = 1;
         }
 
         $post->raise(new Created($post, $this->actor, $this->data));
@@ -163,7 +169,7 @@ class CreatePost
         // 记录触发的审核词
         if ($post->is_approved == 0 && $censor->wordMod) {
             $stopWords = new PostMod;
-            $stopWords->stop_word = implode(',', $censor->wordMod);
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
             $post->stopWords()->save($stopWords);
         }

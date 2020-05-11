@@ -12,23 +12,24 @@ use App\Models\MobileCode;
 use App\Repositories\MobileCodeRepository;
 use App\SmsMessages\SendCodeMessage;
 use Discuz\Api\Controller\AbstractCreateController;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Qcloud\QcloudTrait;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 class SendController extends AbstractCreateController
 {
-    public $serializer = SmsSendSerializer::class;
-
     use QcloudTrait;
 
     const CODE_EXCEPTION = 5; //单位：分钟
 
     const CODE_INTERVAL = 60; //单位：秒
+
+    public $serializer = SmsSendSerializer::class;
 
     protected $validation;
 
@@ -36,11 +37,27 @@ class SendController extends AbstractCreateController
 
     protected $mobileCodeRepository;
 
-    public function __construct(ValidationFactory $validation, CacheRepository $cache, MobileCodeRepository $mobileCodeRepository)
-    {
+    protected $settings;
+
+    protected $type = [
+        'login',
+        'bind',
+        'rebind',
+        'reset_pwd',
+        'reset_pay_pwd',
+        'verify',
+    ];
+
+    public function __construct(
+        ValidationFactory $validation,
+        CacheRepository $cache,
+        MobileCodeRepository $mobileCodeRepository,
+        SettingsRepository $settings
+    ) {
         $this->validation = $validation;
         $this->cache = $cache;
         $this->mobileCodeRepository = $mobileCodeRepository;
+        $this->settings = $settings;
     }
 
     /**
@@ -56,19 +73,61 @@ class SendController extends AbstractCreateController
 
         $type = Arr::get($data, 'type');
 
-        if ($type === 'verify') {
-            $data['mobile'] = $actor->getOriginal('mobile');
+        // 直接使用用户手机号
+        if ($type === 'verify' || $type === 'reset_pay_pwd') {
+            $data['mobile'] = $actor->getRawOriginal('mobile');
         }
 
-        // 如果已经绑定，不能再发送绑定短息
+        // 手机号验证规则
+        if (!(bool)$this->settings->get('qcloud_sms', 'qcloud')) {
+            // 未开启短息服务不发送短信
+            $mobileRule = [
+                function ($attribute, $value, $fail) {
+                    $fail('短信服务未开启。');
+                },
+            ];
+        } elseif ($type == 'bind') {
+            // 判断手机号是否已经被绑定
+            if ($actor->mobile) {
+                throw new \Exception('mobile_is_already_bind');
+            }
+
+            $mobileRule = 'required|unique:users,mobile';
+        } elseif ($type == 'rebind') {
+            // 如果是重新绑定，需要在验证旧手机后 10 分钟内
+            $unverified = MobileCode::where('mobile', $actor->getRawOriginal('mobile'))
+                ->where('type', 'verify')
+                ->where('state', 1)
+                ->where('updated_at', '<', Carbon::now()->addMinutes(10))
+                ->doesntExist();
+
+            $mobileRule = [
+                function ($attribute, $value, $fail) use ($actor, $unverified) {
+                    if ($unverified) {
+                        $fail('请验证旧的手机号。');
+                    } elseif ($value == $actor->getRawOriginal('mobile')) {
+                        $fail('请输入新的手机号。');
+                    }
+                },
+                'required',
+                'unique:users,mobile',
+            ];
+        } elseif (in_array($type, ['login', 'reset_pwd', 'reset_pay_pwd'])) {
+            // 如果已经绑定，不能再发送绑定短息
+            // 如果重设密码，必须要已绑定的手机号
+            $mobileRule = 'required|exists:users,mobile';
+        } else {
+            $mobileRule = 'required';
+        }
+
         $this->validation->make($data, [
-            'mobile' => in_array($type, ['bind', 'rebind']) ? 'required|unique:users,mobile' : 'required',
-            'type' => 'required'
+            'mobile' => $mobileRule,
+            'type' => 'required|in:' . implode(',', $this->type),
         ])->validate();
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($data['mobile'], $type);
 
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
         if (!is_null($mobileCode) && $mobileCode->exists) {
             $mobileCode = $mobileCode->refrecode(self::CODE_EXCEPTION, $ip);

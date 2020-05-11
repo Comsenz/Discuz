@@ -1,68 +1,172 @@
 
-import PayHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader'
-import "../../../scss/var.scss";
+/*
+* 支付费用控制器
+* */
+
+import PayHeader from '../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
+import PayMethod from '../../../view/m_site/common/pay/paymentMethodView';
 import webDb from '../../../../../helpers/webDbHelper';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      sitePrice:'',     //付费站点价钱
-      siteExpire:'',    //到期时间
-      orderSn:'',       //订单号
-      wxPayHref:'',     //微信支付链接
-      qrcodeShow:false,
-      codeUrl:"",        //支付url，base64
-      amountNum:'',      //支付价钱
-      payStatus:false,   //支付状态
-      payStatusNum:0,    //支付状态次数
-      authorityList:'',  //权限列表
-      tokenId:'',        //用户ID
-      dialogShow:false,  //微信支付确认弹框
-      groupId:'',        //用户组ID
-      limitList:[]       //用户组权限
+      sitePrice: '',      //付费站点价钱
+      siteExpire: '',     //到期时间
+      orderSn: '',        //订单号
+      wxPayHref: '',      //微信支付链接
+      qrcodeShow: false,  //pc端显示二维码
+      codeUrl: "",        //支付url，base64
+      amountNum: '',      //支付价钱
+      payStatus: false,   //支付状态
+      payStatusNum: 0,    //支付状态次数
+      authorityList: '',  //权限列表
+      tokenId: '',        //用户ID
+      dialogShow: false,  //微信支付确认弹框
+      groupId: '',        //用户组ID
+      limitList: [],      //用户组权限
+      payWxShow: true,      //微信支付状态
+      payList: [
+        // {
+        //   name: '钱包',
+        //   icon: 'icon-wallet'
+        // },
+        {
+          name: '微信支付',
+          icon: 'icon-wxpay'
+        }
+      ],     //支付方式
+      show: false,        //是否显示支付方式
+      errorInfo: '',      //密码错误提示
+      value: '',          //密码
+      walletBalance: '',  //钱包余额
+      walletStatus: '',    //钱包支付密码状态
+      payLoading: false,
     }
   },
 
-  components:{
-    PayHeader
+  components: {
+    PayHeader,
+    PayMethod
   },
 
-  methods:{
-    leapFrogClick(){
-      this.$router.push({path:'pay-circle-login'})
+  methods: {
+    payImmediatelyClick(data) {
+      //data返回选中项
+      let isWeixin = this.appCommonH.isWeixin().isWeixin;
+      let isPhone = this.appCommonH.isWeixin().isPhone;
+      if (data.name === '微信支付') {
+        this.show = false;
+        if (isWeixin) {
+          //微信
+          this.getOrderSn().then(() => {
+            this.orderPay(12).then((res) => {
+              if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
+                } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
+                  document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
+                }
+              } else {
+                this.onBridgeReady(res);
+              }
+            })
+          });
+        } else if (isPhone) {
+          //手机浏览器
+          this.getOrderSn().then(() => {
+            this.orderPay(11).then((res) => {
+              this.wxPayHref = res.readdata._data.wechat_h5_link;
+              window.location.href = this.wxPayHref;
+              const payPhone = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(payPhone);
+                }
+                this.getUsersInfo()
+              }, 3000)
+
+            })
+          });
+        } else {
+          //pc
+          this.getOrderSn().then(() => {
+            this.orderPay(10).then((res) => {
+              this.codeUrl = res.readdata._data.wechat_qrcode;
+              this.qrcodeShow = true;
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(pay);
+                }
+                this.getUsersInfo()
+              }, 3000)
+            })
+          });
+        }
+      }
+
     },
 
-    onBridgeReady(data){
-      let that = this;
+    onInput(key) {
 
+      this.value = this.value + key;
+
+      if (this.value.length === 6) {
+        this.errorInfo = '';
+        this.getOrderSn().then(() => {
+          this.orderPay(20, this.value).then((res) => {
+            if (res.errors) {
+            } else {
+              const pay = setInterval(() => {
+                if (this.payStatus && this.payStatusNum > 10) {
+                  clearInterval(pay);
+                }
+                this.getUsersInfo()
+              }, 3000)
+            }
+
+          })
+        })
+      }
+    },
+    //删除
+    onDelete() {
+      this.value = this.value.slice(0, this.value.length - 1);
+    },
+    //关闭
+    onClose() {
+      this.value = '';
+      this.errorInfo = '';
+      this.payLoading = false;
+    },
+
+    leapFrogClick() {
+      this.$router.push({ path: 'pay-circle-login' })
+    },
+
+    onBridgeReady(data) {
+      let that = this;
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
-          "appId":data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
-          "timeStamp":data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
-          "nonceStr":data.data.attributes.wechat_js.nonceStr, //随机串
-          "package":data.data.attributes.wechat_js.package,
-          "signType":"MD5",         //微信签名方式：
-          "paySign":data.data.attributes.wechat_js.paySign //微信签名
-        },
-        function(res){
+        "appId": data.data.attributes.wechat_js.appId,     //公众号名称，由商户传入
+        "timeStamp": data.data.attributes.wechat_js.timeStamp,         //时间戳，自1970年以来的秒数
+        "nonceStr": data.data.attributes.wechat_js.nonceStr, //随机串
+        "package": data.data.attributes.wechat_js.package,
+        "signType": "MD5",         //微信签名方式：
+        "paySign": data.data.attributes.wechat_js.paySign //微信签名
+      },
+        function (res) {
           // alert('支付唤醒');
-          // if (res.err_msg == "get_brand_wcpay_request:ok") {
-          //   alert("支付成功");
-          //   alert(res.err_msg);
-          //   resolve;
-          // } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-          //   alert("支付过程中用户取消");             //支付取消正常走
-          //   alert(res.err_msg);
-          //   resolve;
-          // } else if (res.err_msg == "get_brand_wcpay_request:fail") {
-          //   alert("支付失败");
-          //   alert(res.err_msg);
-          //   resolve;
-          // }
 
+          if (res.err_msg == "get_brand_wcpay_request:cancel") {
+            that.payLoading = false;
+            resolve;
+          } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+            that.payLoading = false;
+            resolve;
+          }
         });
 
-      setTimeout(()=>{
+      setTimeout(() => {
         const toast = that.$toast.loading({
           duration: 0, // 持续展示 toast
           forbidClick: true,
@@ -71,23 +175,32 @@ export default {
         let second = 5;
         const timer = setInterval(() => {
           second--;
-          this.getUsers(that.tokenId).then(res=>{
-            console.log(second);
+          this.getUsers(that.tokenId).then(res => {
 
-            if (res.errors){
+            if (res.errors) {
               clearInterval(timer);
               toast.message = '支付失败，请重新支付！';
-              setTimeout(()=>{
+              setTimeout(() => {
                 toast.clear();
-              },2000)
+              }, 2000)
             } else {
-              if (second > 0 || !res.readdata._data.paid){
+              if (second > 0 || !res.readdata._data.paid) {
                 toast.message = `正在查询订单...`;
-              } else if (res.readdata._data.paid){
+              } else if (res.readdata._data.paid) {
                 clearInterval(timer);
+                webDb.setLItem('foregroundUser', res.data.attributes.username);
+                this.show = false;
+                this.payLoading = false;
                 toast.message = '支付成功，正在跳转首页...';
                 toast.clear();
-                that.$router.push({path:'/'});
+
+                let beforeVisiting = webDb.getSItem('beforeVisiting');
+
+                if (beforeVisiting) {
+                  this.$router.push({ path: beforeVisiting })
+                } else {
+                  this.$router.push({ path: '/' })
+                }
               } else {
                 clearInterval(timer);
                 toast.message = '支付失败，请重新支付！';
@@ -96,104 +209,28 @@ export default {
             }
           });
         }, 1000);
-      },3000);
+      }, 3000);
 
     },
 
-    payClick(){
-      let isWeixin = this.appCommonH.isWeixin().isWeixin;
-      let isPhone = this.appCommonH.isWeixin().isPhone;
-
-      if (isWeixin){
-        console.log('微信');
-        this.getOrderSn().then(()=>{
-          this.orderPay(12).then((res)=>{
-            if (typeof WeixinJSBridge == "undefined"){
-              if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(res), false);
-              }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(res));
-                document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(res));
-              }
-            }else{
-              this.onBridgeReady(res);
-            }
-          })
-        });
-      } else if (isPhone){
-        console.log('手机浏览器');
-        this.getOrderSn().then(()=>{
-          this.orderPay(11).then((res)=>{
-            this.wxPayHref = res.readdata._data.wechat_h5_link;
-            window.location.href = this.wxPayHref;
-
-            const payPhone = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
-                clearInterval(payPhone);
-              }
-              this.getUsersInfo()
-            },3000)
-
-          })
-        });
-      } else {
-        console.log('pc');
-        this.getOrderSn().then(()=>{
-          this.orderPay(10).then((res)=>{
-            console.log(res);
-            this.codeUrl = res.readdata._data.wechat_qrcode;
-            this.qrcodeShow = true;
-            const pay = setInterval(()=>{
-              if (this.payStatus && this.payStatusNum > 10){
-                clearInterval(pay);
-              }
-              this.getUsersInfo()
-            },3000)
-          })
-        });
+    payClick() {
+      if (this.payWxShow) this.show = true;
+      else {
+        this.$toast.fail('请配置微信支付');
       }
     },
-
-    completePayment(){
-     this.getUsers(this.tokenId).then(res=>{
-       if (res.errors){
-         this.$toast.message = '支付失败，请重新支付！';
-       } else {
-         if (res.readdata._data.paid){
-           this.$toast.message = '支付成功，正在跳转首页...';
-           this.dialogShow = false;
-         } else {
-           this.$toast.message = '支付失败，请重新支付！';
-         }
-       }
-     })
-    },
-
-    /*groupListDealWith(key){
-
-      const config = {
-        default: '默认权限',
-        viewThreads:'查看主题列表',
-        thread.viewPosts:'查看主题',
-        createThread:'发表主题',
-        thread.reply:'回复主题'
-      };
-
-      return config[key] ? config[key] : config['default'];
-    },*/
 
 
     /*
     * 接口请求
     * */
-    getForum(){
+    getForum() {
       this.appFetch({
-        url:'forum',
-        method:'get',
-        data:{}
-      }).then(res=>{
-        console.log(res);
-        if (res.errors){
+        url: 'forum',
+        method: 'get',
+        data: {}
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.sitePrice = res.readdata._data.set_site.site_price;
@@ -209,124 +246,121 @@ export default {
               this.siteExpire = '有效期自加入起' + day + '天';
               break;
           }
+          if (res.readdata._data.paycenter.wxpay_close !== true) {
+            this.payWxShow = false;
+          }
         }
-      }).catch(err=>{
-        console.log(err);
+      }).catch(err => {
       })
     },
-    getOrderSn(){
+    getOrderSn() {
       return this.appFetch({
-        url:'orderList',
-        method:'post',
-        data:{
-          "type":1
+        url: 'orderList',
+        method: 'post',
+        data: {
+          "type": 1
         }
-      }).then(res=>{
-        console.log(res);
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.orderSn = res.readdata._data.order_sn;
         }
-      }).catch(err=>{
-        console.log(err);
+      }).catch(err => {
       })
     },
-    orderPay(type){
+    orderPay(type, value) {
       return this.appFetch({
-        url:'orderPay',
-        method:'post',
-        splice:'/' + this.orderSn,
-        data:{
-          "payment_type":type
+        url: 'orderPay',
+        method: 'post',
+        splice: '/' + this.orderSn,
+        data: {
+          "payment_type": type,
+          'pay_password': value
         }
-      }).then(res=>{
-        console.log(res);
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
+          this.value = '';
         } else {
-          return res;
+          this.payLoading = true;
         }
-      }).catch(err=>{
-        console.log(err);
+        return res;
+      }).catch(err => {
       })
     },
-    getUsersInfo(){
+    getUsersInfo() {
       this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/' + webDb.getLItem('tokenId'),
-        data:{
-          include:['groups']
+        url: 'users',
+        method: 'get',
+        splice: '/' + webDb.getLItem('tokenId'),
+        data: {
+          include: ['groups']
         }
-      }).then(res=>{
-        console.log(res);
-        console.log(res.readdata._data.paid);
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
+          this.value = '';
         } else {
           this.payStatus = res.readdata._data.paid;
           this.payStatusNum = +1;
           if (this.payStatus) {
             this.qrcodeShow = false;
+            this.show = false;
+            this.payLoading = false;
             this.$router.push('/');
             this.payStatusNum = 11;
-            clearInterval(pay);
+            // clearInterval(time);
           }
         }
-      }).catch(err=>{
-        console.log(err);
+      }).catch(err => {
       })
     },
-    getUsers(id){
+    getUsers(id) {
       return this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/' + id,
-        headers:{'Authorization': 'Bearer ' + webDb.getLItem('Authorization')},
-        data:{
-          include:['groups']
+        url: 'users',
+        method: 'get',
+        splice: '/' + id,
+        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
+        data: {
+          include: ['groups']
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
-          console.log(res);
           return res;
         }
-      }).catch(err=>{
-        console.log(err);
+      }).catch(err => {
       })
     },
-    getAuthority(id){
+    getAuthority(id) {
       return this.appFetch({
-        url:"authority",
-        method:'get',
-        splice:'/' + id,
-        data:{
-          include:['permission']
+        url: "authority",
+        method: 'get',
+        splice: '/' + id,
+        data: {
+          include: ['permission']
         }
-      }).then(res=>{
-        console.log(res);
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           return res
         }
-      }).catch(err=>{
-        console.log(err);
+      }).catch(err => {
       })
     },
-    getGroups(){
+    getGroups() {
       this.appFetch({
-        url:'groups',
-        method:'get',
-        data:{
-          include:['permission'],
-          'filter[isDefault]':1
+        url: 'groups',
+        method: 'get',
+        data: {
+          include: ['permission'],
+          'filter[isDefault]': 1
         }
-      }).then(res=>{
-        if(res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.groupId = res.readdata[0]._data.id;
@@ -334,16 +368,16 @@ export default {
         }
       })
     },
-    getGroupsList(){
+    getGroupsList() {
       this.appFetch({
         url: 'groups',
         method: 'get',
-        splice:'/'+this.groupId,
+        splice: '/' + this.groupId,
         data: {
           include: ['permission'],
         }
       }).then((res) => {
-        if(res.errors){
+        if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.limitList = res.readdata;
@@ -359,11 +393,13 @@ export default {
     }
 
   },
-  created(){
+  created() {
     this.getForum();
     this.getGroups();
-    this.getUsers(webDb.getLItem('tokenId')).then(res=>{
-      this.getAuthority(res.readdata.groups[0]._data.id)
+    this.getUsers(webDb.getLItem('tokenId')).then(res => {
+      this.getAuthority(res.readdata.groups[0]._data.id);
+      this.walletBalance = res.readdata._data.walletBalance;
+      this.walletStatus = res.readdata._data.canWalletPay;
     });
     this.tokenId = webDb.getLItem('tokenId');
     this.amountNum = webDb.getLItem('siteInfo')._data.set_site.site_price;

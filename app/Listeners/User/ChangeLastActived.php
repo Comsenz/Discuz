@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Listeners\User;
-
 
 use App\Events\Users\Logind;
 use App\Models\Group;
@@ -34,11 +37,11 @@ class ChangeLastActived
     /**
      * @param Logind $event
      */
-    public function handle(Logind $event)
+    public function handle($event)
     {
         $user = $event->user;
         $request = $this->app->make(ServerRequestInterface::class);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR');
+        $ip = ip($request->getServerParams());
 
         // 检查用户是否加入站点
         if ($this->settings->get('site_mode') == 'pay') {
@@ -64,5 +67,4 @@ class ChangeLastActived
 
         $user->save();
     }
-
 }

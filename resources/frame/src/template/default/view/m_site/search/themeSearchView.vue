@@ -7,10 +7,10 @@
             <span class="icon iconfont icon-back headBack" @click="headerBack" ></span>
             <h1 class="headTit">{{$route.meta.title}}</h1>
         </div>
-        <div class="serBox" @click="serToggle" v-show="serHide">
-          <input type="text" name="" placeholder="搜索" class="serInp">
+        <!-- <div class="serBox" @click="serToggle" v-show="serHide">
+          <input type="text" name="" placeholder="搜索" class="serInp" v-model="inputSearchVal">
           <i class="icon iconfont icon-search"></i>
-        </div>
+        </div> -->
         <form action="/">
           <van-search
             v-model="searchVal"
@@ -18,7 +18,6 @@
             ref="serInp"
             placeholder="搜索主题"
             background="#f8f8f8"
-            show-action
             @input="onSearch"
             @cancel="onCancel"
             class="searchCon"
@@ -61,7 +60,7 @@ import ThemeDet from '../common/themeDetView'
 // import  '../../../scss/m_site/mobileIndex.scss';
 import  '../../../defaultLess/m_site/common/common.less';
 import  '../../../defaultLess/m_site/modules/circle.less';
-import '../../../less/m_site/myInfo/myInfo.less';
+import  '../../../defaultLess/m_site/modules/myInfo.less';
 import  '../../../defaultLess/m_site/modules/manageCircle.less';
 export default {
     name: "themeSearchView",

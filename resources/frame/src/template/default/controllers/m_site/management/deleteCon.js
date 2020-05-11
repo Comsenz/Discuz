@@ -83,12 +83,11 @@ export default {
 		this.deleteList();
 	},
 	mounted() {
-
 		Bus.$emit('setHeader', ['标题标题3443453454ee', 'fasle', 'false']);
+		window.addEventListener('scroll', this.footFix, true);
 	},
 	methods: {
 		async deleteAllClick(value) {
-		console.log(value)
 			let data = [];
 			for (let i = 0; i < value.length; i++) {
 				data.push({
@@ -101,19 +100,19 @@ export default {
 			}
 
 			await this.appFetch({
-				url:'threadsBatch',
-				method:'patch',
-				data:{
-					'data':data
+				url: 'threadsBatch',
+				method: 'patch',
+				data: {
+					'data': data
 				}
-			}).then(res=>{
-				if (res.errors){
+			}).then(res => {
+				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 					// throw new Error(res.error)
-        }else{
-          this.$toast.success('删除成功'); 
-          this.pageIndex = 1;
-          this.deleteList(true)
+				} else {
+					this.$toast.success('删除成功');
+					this.pageIndex = 1;
+					this.deleteList(true)
 				}
 			})
 
@@ -122,47 +121,42 @@ export default {
 
 		deleteList(initStatus = false) {
 			return this.appFetch({
-				url:'threads',
-				method:'get',
-				data:{
-					include:['user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers'],
-					'filter[isDeleted]':'no',
-					'filter[categoryId]':'',
+				url: 'threads',
+				method: 'get',
+				data: {
+					include: ['user', 'user.groups', 'firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers', 'threadVideo'],
+					'filter[isDeleted]': 'no',
+					'filter[categoryId]': '',
 					'page[number]': this.pageIndex,
 					'page[limit]': this.pageLimit
 				}
-			}).then(res=>{
-				if (res.errors){
+			}).then(res => {
+				if (res.errors) {
 					this.$toast.fail(res.errors[0].code);
 					throw new Error(res.error)
-				  }else{
-				if(initStatus){
-				this.themeListCon = []
+				} else {
+					if (initStatus) {
+						this.themeListCon = []
+					}
+					this.themeListCon = this.themeListCon.concat(res.readdata);
+					this.loading = false;
+					this.finished = res.readdata.length < this.pageLimit;
 				}
-				console.log(res.readdata)
-				this.themeListCon =this.themeListCon.concat(res.readdata);
-				this.loading = false;
-				this.finished = res.readdata.length < this.pageLimit;
-			}
-			}).catch((err)=>{
-				if(this.loading && this.pageIndex !== 1){
-				  this.pageIndex--;
+			}).catch((err) => {
+				if (this.loading && this.pageIndex !== 1) {
+					this.pageIndex--;
 				}
 				this.loading = false;
-			  })
-			// console.log('1234');
+			})
 			// const params = {'filter[isDeleted]':'no','filter[categoryId]':''};
 			// params.include = 'user,firstPost,lastThreePosts,lastThreePosts.user,firstPost.likedUsers,rewardedUsers';
 			// // params.filter['isDeleted'] = 'no';
 			// this.apiStore.find('threads', params).then(data => {
-			// 	// console.log(data[0].firstPost().id());
-			// 	// console.log(data[0].user().username());
 			// 	this.themeListCon = data;
 			// });
 		},
 
 		checkAll: function (checkAll) {
-			console.log(this.$refs);
 			this.$refs.checkboxGroup.toggleAll(true);
 			//   this.checked = !this.checked;
 
@@ -199,29 +193,27 @@ export default {
 			//是否显示筛选内容
 			this.showScreen = false;
 		},
-		onLoad(){
-			console.log('onLoadonLoadonLoad')
+		onLoad() {
 			this.loading = true;
 			this.pageIndex++;
 			this.deleteList();
-		  },
-	  
-		  onRefresh(){
-			this.pageIndex = 1;
-			this.deleteList(true).then((res)=>{
-			  this.$toast('刷新成功');
-			  this.finished = false;
-			  this.isLoading = false;
-			}).catch((err)=>{
-			  this.$toast('刷新失败');
-			  this.isLoading = false;
-			})
-		  },
+		},
 
-		  headerBack(){
-			console.log("回退");
+		onRefresh() {
+			this.pageIndex = 1;
+			this.deleteList(true).then((res) => {
+				this.$toast('刷新成功');
+				this.finished = false;
+				this.isLoading = false;
+			}).catch((err) => {
+				this.$toast('刷新失败');
+				this.isLoading = false;
+			})
+		},
+
+		headerBack() {
 			this.$router.go(-1)
-		  }
+		}
 
 
 	},

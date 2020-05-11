@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
+ * @property string $mobile
+ * @property string $code
+ * @property string $type
+ * @property string $ip
+ * @property int $state
+ * @property \Carbon\Carbon $expired_at
  * @property mixed user
  */
 class MobileCode extends Model
@@ -52,7 +58,7 @@ class MobileCode extends Model
      */
     protected static function genCode()
     {
-        return random_int(10000, 50000);
+        return random_int(100000, 999999);
     }
 
     public function user()

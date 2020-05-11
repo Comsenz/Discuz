@@ -46,20 +46,24 @@ class VerifyController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $data = Arr::get($request->getParsedBody(), 'data.attributes');
+        $data = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $type = Arr::get($data, 'type');
 
-        if ($type === 'verify') {
-            $data['mobile'] = $actor->getOriginal('mobile');
+        if ($type === 'verify' || $type === 'reset_pay_pwd') {
+            $data['mobile'] = $actor->getRawOriginal('mobile');
         }
 
         $mobile = Arr::get($data, 'mobile');
         $code = Arr::get($data, 'code');
 
+        $data['sms_type'] = $type;
+        $data['sms_code'] = $code;
+
         $this->validation->make($data, [
-            'type' => 'required',
-            'code' => 'required'
+            'mobile' => 'required',
+            'sms_type' => 'required',
+            'sms_code' => 'required'
         ])->validate();
 
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);

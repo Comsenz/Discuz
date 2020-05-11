@@ -7,16 +7,7 @@
 
 namespace App\Api\Controller\Users;
 
-
-class WechatWebLoginController extends AbstractWechatLoginController {
-
-    protected function getDriver()
-    {
-        return 'wechatweb';
-    }
-
-    protected function getType()
-    {
-        return 'dev_openid';
-    }
+class WechatWebLoginController extends AbstractWechatLoginController
+{
+    public $type = 'wechatweb';
 }

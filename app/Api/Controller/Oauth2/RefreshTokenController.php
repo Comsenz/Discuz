@@ -12,7 +12,6 @@ use App\Passport\Repositories\AccessTokenRepository;
 use App\Passport\Repositories\RefreshTokenRepository;
 use DateInterval;
 use Discuz\Api\Controller\AbstractResourceController;
-use Discuz\Auth\Guest;
 use Discuz\Foundation\Application;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -20,9 +19,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
+use Nyholm\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Laminas\Diactoros\Response;
 
 class RefreshTokenController extends AbstractResourceController
 {
@@ -74,9 +73,6 @@ class RefreshTokenController extends AbstractResourceController
         }
         try {
             $response = $server->respondToAccessTokenRequest($request, new Response());
-
-            // TODO: 刷新 token 无法获取用户 id 暂时返回 0
-            TokenSerializer::setUser(new Guest());
 
             return json_decode((string)$response->getBody());
         } catch (Exception $e) {

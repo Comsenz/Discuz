@@ -23,17 +23,17 @@ export default {
     signUpClick(){
       this.$router.push('sign-up')
     },
-    //注册，绑定微信新账号
+    //注册，绑定微信新帐号
     wxSignUpBdClick(){
       this.$router.push('/wx-sign-up-bd');
     },
 
-    //登录微信账号
+    //登录微信帐号
     wxLoginBdClick(){
       this.$router.push('/wx-login-bd')
     },
 
-    //已有账号立即登录
+    //已有帐号立即登录
     loginClick(){
       this.$router.push('/login-user')
     },
@@ -48,7 +48,6 @@ export default {
           this.$router.push({path:'/'});
           break;
         default:
-          console.log("参数错误，请重新刷新页面");
       }
     },
 
@@ -58,13 +57,11 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         this.siteMode = res.readdata._data.set_site.site_mode;
         this.registerClose = res.readdata._data.set_reg.register_close;
         this.qcloudSms = res.readdata._data.qcloud.qcloud_sms;
         webDb.setLItem('siteInfo',res.readdata);
       }).catch(err=>{
-        console.log(err);
       })
     }
 

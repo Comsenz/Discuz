@@ -47,13 +47,26 @@ class CreateUserFollow
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'create', $userFollow);
+        $this->assertCan($this->actor, 'userFollow.create');
         if ($this->actor->id == $this->to_user_id) {
             throw new PermissionDeniedException();
         }
         $toUser = $user->findOrFail($this->to_user_id);
 
-        $userFollow = $userFollow->firstOrCreate(['from_user_id'=>$this->actor->id,'to_user_id'=>$this->to_user_id]);
+        //判断是否需要设置互相关注
+        $toUserFollow = $userFollow->where(['from_user_id'=>$this->to_user_id,'to_user_id'=>$this->actor->id])->first();
+        $is_mutual = 0;
+        if ($toUserFollow) {
+            $is_mutual = 1;
+            $toUserFollow->is_mutual = 1;
+            $toUserFollow->save();
+        }
+
+        $userFollow = $userFollow->firstOrCreate(
+            ['from_user_id'=>$this->actor->id,'to_user_id'=>$this->to_user_id],
+            ['is_mutual'=>$is_mutual]
+        );
+
 
         $this->events->dispatch(
             new UserFollowCount($this->actor, $toUser)

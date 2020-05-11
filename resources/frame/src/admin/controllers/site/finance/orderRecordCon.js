@@ -47,10 +47,32 @@ export default {
 
       pageCount:0,
       currentPaga:1,
-      total:0
+      total:0,
+
+      options: [
+        {
+          value: '0',
+          label: '待付款'
+        },
+        {
+          value: '1',
+          label: '已付款'
+        }
+      ],
+      value: '',
+      status:'2'
     }
   },
   methods:{
+
+    viewClick(id){
+      if (id){
+        let routeData = this.$router.resolve({
+          path: "/details/" + id,
+        });
+        window.open(routeData.href, '_blank');
+      }
+    },
 
     cashStatus(status){
       switch (status){
@@ -61,7 +83,7 @@ export default {
           return "已付款";
           break;
         default:
-          console.log("获取状态失败，请刷新页面！");
+          //获取状态失败，请刷新页面
           return "未知状态";
       }
     },
@@ -72,13 +94,12 @@ export default {
       } else if(this.orderTime[0] !== '' && this.orderTime[1] !== ''){
         this.orderTime[0] = this.orderTime[0] + '-00-00-00';
         this.orderTime[1] = this.orderTime[1] + '-24-00-00';
-      };
+      }
       this.currentPaga = 1;
       this.getOrderList();
     },
 
     handleCurrentChange(val){
-      console.log(val);
       this.currentPaga = val;
       this.getOrderList();
     },
@@ -98,37 +119,33 @@ export default {
         url:'orderList',
         method:'get',
         data:{
-          include:['user','thread','thread.firstPost'],
+          include:['user','thread','thread.firstPost','payee'],
           'page[number]':this.currentPaga,
           'page[size]':10,
           'filter[order_sn]':this.orderNumber,
           'filter[product]':this.commodity,
           'filter[username]':this.operationUser,
           'filter[start_time]':this.orderTime[0],
-          'filter[end_time]':this.orderTime[1]
+          'filter[end_time]':this.orderTime[1],
+          'filter[status]':this.value
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
           this.tableData = [];
           this.tableData = res.readdata;
-
           this.pageCount = res.meta.pageCount;
           this.total = res.meta.total;
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.currentPaga = 1;
       } else {
-        console.log(state);
         this.currentPaga = Number(webDb.getLItem('currentPag'))||1;
       };
       this.getOrderList();
@@ -141,7 +158,6 @@ export default {
   beforeRouteEnter (to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
         vm.getCreated(false)

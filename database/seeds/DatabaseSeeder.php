@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 use Illuminate\Database\Seeder;
 
@@ -17,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupPermissionTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
         $this->call(EmojiTableSeeder::class);
+        $this->call(NotificationTplSeeder::class);
     }
 }

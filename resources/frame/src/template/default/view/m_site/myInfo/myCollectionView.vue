@@ -44,7 +44,7 @@
       </div> -->
     <!-- </main> -->
   <!-- </div> -->
-   <div class="reply-my-box my-info-money-header">
+   <div class="reply-my-box">
     <comHeader title="我的收藏"></comHeader>
     <van-list
     v-model="loading"
@@ -56,11 +56,9 @@
     >
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="content" >
-              <!-- <Header :userInfoList="collectionList" :navShow="false" :invitePerDet="true" :headFixed="false" :logoShow="false" :searchIconShow="false" :menuIconShow="false" :invitationShow="false" :perDetShow="false"></Header> -->
-          <!-- <div class="gap"></div> -->
-              <ThemeDet :themeList="collectionList" :isMoreShow="false"></ThemeDet>
-          </div>
-      </van-pull-refresh>
+        <ThemeDet :themeList="collectionList" :isMoreShow="false"></ThemeDet>
+      </div>
+    </van-pull-refresh>
   </van-list>
 
     <!-- <footer class="my-info-money-footer"></footer> -->

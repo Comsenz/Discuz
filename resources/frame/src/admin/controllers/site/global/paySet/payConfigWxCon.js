@@ -15,32 +15,26 @@ export default {
 
   created(){
     var type = this.$route.query.type;
-    console.log(type);
     this.type = type;
     this.loadStatus();
   },
   methods:{
     loadStatus(){
-      console.log('初始化');
       //初始化
       this.appFetch({
-        url:'tags',
+        url:'forum',
         method:'get',
-        splice:'/'+this.type,
-        data:{
-        }
+        data:{}
       }).then(data=>{
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
-          console.log(data);
-          this.appId = data.readdata[0]._data.app_id;
-          this.mchId = data.readdata[0]._data.mch_id;
-          this.apiKey = data.readdata[0]._data.api_key;
-          this.appSecret = data.readdata[0]._data.app_secret;
+          this.appId = data.readdata._data.paycenter.app_id;
+          this.mchId = data.readdata._data.paycenter.mch_id;
+          this.apiKey = data.readdata._data.paycenter.api_key;
+          this.appSecret = data.readdata._data.paycenter.app_secret;
         }
       }).catch(error=>{
-        // console.log('ʧ��');
       })
     },
     submitConfiguration(){
@@ -81,7 +75,6 @@ export default {
            ]
         }
       }).then(data=>{
-        // console.log(data)
         // this.$router.push({
         //   path:'/admin/pay-set'
         // });
@@ -95,13 +88,6 @@ export default {
         }
       })
     }
-
-
-
-
-    // configClick(){
-    //   this.loginStatus = 'wx'
-    // }
   },
   components:{
     Card,

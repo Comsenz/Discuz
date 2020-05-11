@@ -30,7 +30,7 @@
 
 
         <div class="bind-phone-btn">
-          <van-button type="primary" @click="bindPhone()">提交</van-button>
+          <van-button type="primary" :loading="btnLoading" @click="bindPhone()">提交</van-button>
         </div>
 
       </main>
@@ -39,9 +39,6 @@
 </template>
 
 <script>
-// import '../../../scss/m_site/login/loginSignUpModule.scss';
-// import  '../../../scss/m_site/mobileIndex.scss';
-
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import '../../../defaultLess/m_site/common/common.less'
 

@@ -19,7 +19,8 @@ export default {
       wxLoginShow: true,
       phoneStatus:'',
       isOne: false,
-      siteMode:''
+      siteMode:'',
+      btnLoading:false
     }
   },
 
@@ -37,11 +38,11 @@ export default {
       this.$router.push({path:'/login-user'})
     },
     wxLoginClick(){
-      this.$router.push({path:'/wx-login-bd'})
+      // this.$router.push({path:'/wx-login-bd'})
+      this.$router.push({path:'wx-qr-code'});
     },
 
     getCode(){
-      console.log(this.btnContent);
 
       this.appFetch({
         url:'sendSms',
@@ -55,14 +56,12 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0]);
         } else {
           this.$toast.success('发送成功');
         }
       }).catch(err=>{
-        console.log(err);
       });
 
       this.time = 60;
@@ -84,6 +83,7 @@ export default {
     },
 
     phoneLoginClick(){
+      this.btnLoading = true;
       this.appFetch({
         url:'smsVerify',
         method:'post',
@@ -97,10 +97,13 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
-
+        this.btnLoading = false;
         if (res.errors){
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].detail){
+            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
         } else {
           this.$toast.success('登录成功');
           let token = res.data.attributes.access_token;
@@ -114,12 +117,13 @@ export default {
             if (res.readdata._data.paid){
               this.$router.push({path:'/'})
             } else {
+              browserDb.setLItem('foregroundUser', res.data.attributes.username);
               if (this.siteMode === 'pay'){
                 this.$router.push({path:'pay-circle-login'});
               } else if (this.siteMode === 'public'){
                 this.$router.push({path:'/'});
               } else {
-                console.log("缺少参数，请刷新页面");
+               //缺少参数，请刷新页面"
               }
             }
 
@@ -130,12 +134,11 @@ export default {
           } else if (this.siteMode === 'public'){
             this.$router.push({path:'/'});
           } else {
-            console.log("缺少参数，请刷新页面");
+            //缺少参数，请刷新页面"
           }*/
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -144,12 +147,11 @@ export default {
     * 接口请求
     * */
     getForum(){
-      this.appFetch({
+      return this.appFetch({
         url:'forum',
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -157,8 +159,8 @@ export default {
           this.siteMode = res.readdata._data.set_site.site_mode;
           browserDb.setLItem('siteInfo', res.readdata);
         }
+        return res
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUsers(id){
@@ -171,44 +173,42 @@ export default {
           include:['groups']
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {
           return res;
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 
   },
 
   mounted(){
-    console.log(this.status);
   },
 
   created(){
     let isWeixin = this.appCommonH.isWeixin().isWeixin;
     let isPhone = this.appCommonH.isWeixin().isPhone;
 
-   this.getForum();
-
-    if (isWeixin === true) {
-      console.log('微信登录');
-
-      // this.getWatchHref(this.$router.history.current.query.code,this.$router.history.current.query.state);
-    } else if (isPhone === true) {
-      console.log('手机浏览器登录');
-
-      this.wxLoginShow = false;
-      this.isOne = true;
-    } else {
-      console.log('pc登录');
-      this.isPC = true;
-
-      // this.getWatchHref();
-    }
+   this.getForum().then(res=>{
+     if (isWeixin === true) {
+       //微信登录
+       if (!res.readdata._data.passport.offiaccount_close) {
+         this.wxLoginShow = false;
+       }
+     } else if (isPhone === true) {
+       //手机浏览器登录
+       this.wxLoginShow = false;
+       this.isOne = true;
+     } else {
+       //pc登录'
+       if (!res.readdata._data.passport.oplatform_close) {
+         this.wxLoginShow = false;
+       }
+       this.isPC = true;
+     }
+   });
 
   }
 

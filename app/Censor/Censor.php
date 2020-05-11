@@ -91,17 +91,19 @@ class Censor
      */
     public function checkText($content, $type = 'ugc')
     {
-        // 设置关闭时，直接返回原内容
-        if (!$this->setting->get('censor', 'default', true)) {
-            return $content;
-        }
+        if (!blank($content)) {
+            // 设置关闭时，直接返回原内容
+            if (!$this->setting->get('censor', 'default', true)) {
+                return $content;
+            }
 
-        // 本地敏感词校验
-        $content = $this->localStopWordsCheck($content, $type);
+            // 本地敏感词校验
+            $content = $this->localStopWordsCheck($content, $type);
 
-        // 腾讯云敏感词校验
-        if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
-            $content = $this->tencentCloudCheck($content);
+            // 腾讯云敏感词校验
+            if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
+                $content = $this->tencentCloudCheck($content);
+            }
         }
 
         return $content;
@@ -170,24 +172,27 @@ class Censor
     /**
      * 检测敏感图片
      *
-     * @param string $filePathname 图片绝对路径
+     * @param mixed $filePathname 图片绝对路径
+     * @param bool $isRemote 是否是远程图片
      */
-    public function checkImage(string $filePathname)
+    public function checkImage($filePathname, $isRemote = false)
     {
         if ($this->setting->get('qcloud_cms_image', 'qcloud', false)) {
             $qcloud = $this->app->make('qcloud');
 
-            $base64 = base64_encode(file_get_contents($filePathname));
+            $params = [];
+
+            if ($isRemote) {
+                $params['FileUrl'] = $filePathname;
+            } else {
+                $params['FileContent'] = base64_encode(file_get_contents($filePathname));
+            }
 
             /**
              * TODO: 如果config配置图片不是放在本地这里需要修改base64为 传输 FileUrl地址路径
              * @property \Discuz\Qcloud\QcloudManage
              */
-            $result = $qcloud->service('cms')->ImageModeration([
-                'FileContent' => $base64,
-                'FileMD5' => '',
-                'FileUrl' => ''
-            ]);
+            $result = $qcloud->service('cms')->ImageModeration($params);
             $data = Arr::get($result, 'Data', []);
 
             if (!empty($data)) {
@@ -195,17 +200,17 @@ class Censor
             }
         }
     }
+
     /**
      * 检验身份证号码和姓名是否真实
      *
      * @param string $identity 身份证号码
      * @param string $realname 姓名
-     * @return string
+     * @return array
      */
-    public function checkReal(string $identity ,string $realname)
+    public function checkReal(string $identity, string $realname)
     {
         $qcloud = $this->app->make('qcloud');
-        $result = $qcloud->service('faceid')->idCardVerification($identity, $realname);
-        return $result;
+        return $qcloud->service('faceid')->idCardVerification($identity, $realname);
     }
 }

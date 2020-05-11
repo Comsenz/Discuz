@@ -7,6 +7,8 @@
 
 namespace App\Passport\Repositories;
 
+use App\Api\Serializer\TokenSerializer;
+use App\Models\User;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
@@ -14,9 +16,9 @@ use App\Passport\Entities\AccessTokenEntity;
 
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
-    const TOKEN_EXP = 'P1D';
+    const TOKEN_EXP = 'P30D';
 
-    const REFER_TOKEN_EXP = 'P1Y';
+    const REFER_TOKEN_EXP = 'P30D';
 
     /**
      * {@inheritdoc}
@@ -53,6 +55,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
             $accessToken->addScope($scope);
         }
         $accessToken->setUserIdentifier($userIdentifier);
+        TokenSerializer::setUser(TokenSerializer::getUser() ?? new User(['id' => $userIdentifier]));
         return $accessToken;
     }
 }

@@ -6,8 +6,11 @@ export default {
   data:function () {
     return {
       checked:'',
-      pwdLength:'',   //密码长度
-      checkList:[],   //密码规则
+      register_validate:'',   //注册审核
+      pwdLength:'',           //密码长度
+      checkList:[],           //密码规则
+      register_captcha:'',    //验证码开始
+      disabled:true,            //是否可以开启验证码
     }
   },
   created(){
@@ -26,11 +29,14 @@ export default {
           this.$message.error(res.errors[0].code);
         }else {
           // this.pwdLength = res.readdata._data.setreg.password_length
-          this.checked = res.readdata._data.setreg.register_close
-          this.pwdLength = res.readdata._data.setreg.password_length
-          this.checkList = res.readdata._data.setreg.password_strength.split(',')
-          console.log(this.checkList)
-          console.log(res)
+          this.checked = res.readdata._data.set_reg.register_close;
+          this.register_validate = res.readdata._data.set_reg.register_validate;
+          this.pwdLength = res.readdata._data.set_reg.password_length;
+          this.checkList = res.readdata._data.set_reg.password_strength;
+          this.register_captcha = res.readdata._data.set_reg.register_captcha;
+          if(res.readdata._data.qcloud.qcloud_captcha == true){
+            this.disabled = false
+          }
         }
       })
     },
@@ -56,13 +62,29 @@ export default {
               "value":this.checked,
               "tag": 'default'
              }
-            },{
+            },
+            {
+              "attributes":{
+                "key":'register_validate',
+                "value":this.register_validate,
+                "tag": 'default'
+              }
+            },
+            {
+              "attributes":{
+                "key":'register_captcha',
+                "value":this.register_captcha,
+                "tag": 'default'
+              }
+            },
+            {
               "attributes":{
                 "key":'password_length',
                 "value":this.pwdLength,
                 "tag": 'default'
                }
-            },{
+            },
+            {
               "attributes":{
                 "key":'password_strength',
                 "value":passwordStrength,
@@ -70,12 +92,8 @@ export default {
                }
             }
            ]
-          // "register_close": this.checked,
-          // "password_length":this.pwdLength,
-
         }
       }).then(data=>{
-        console.log(data)
         if (data.errors){
           if (data.errors[0].detail){
             this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])

@@ -118,6 +118,10 @@ return [
     'url'                  => ':attribute 格式不正确。',
     'uuid'                 => ':attribute 必须是有效的 UUID。',
 
+    'session_token'        => '令牌已失效。',
+    'wrong'                => ':attribute 错误。',
+    'qcloud_vod'           => '未开启腾讯云 云点播 服务。',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -132,6 +136,10 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+        ],
+
+        'pay_password' => [
+            'required_if' => '使用钱包支付时，请输入支付密码。',
         ],
     ],
 
@@ -158,7 +166,7 @@ return [
         'country'               => '国家',
         'address'               => '地址',
         'phone'                 => '电话',
-        'mobile'                => '手机',
+        'mobile'                => '手机号',
         'age'                   => '年龄',
         'sex'                   => '性别',
         'gender'                => '性别',
@@ -177,7 +185,7 @@ return [
         'available'             => '可用的',
         'size'                  => '大小',
 
-        // 新增
+        // stop words
         'ugc'                   => '用户内容',
         'find'                  => '敏感词',
         'replacement'           => '替换词',
@@ -189,8 +197,24 @@ return [
         'cash_min_sum'          => '单次提现最小金额',
         'cash_max_sum'          => '单次提现最大金额',
         'cash_sum_limit'        => '每日提现总金额上限',
+        'cash_apply_amount'     => '提现金额',
+
+        // sms
+        'sms_code'              => '验证码',
+        'sms_type' => '验证码类型',
 
         // user
+        'pay_password' => '支付密码',
+        'pay_password_confirmation' => '支付密码',
         'groupId' => '用户组',
+        'username_prefix' => '网友',
+
+        // thread
+        'file_id' => '视频文件',
+        'file_name' => '视频文件名称',
+        'price' => '价格',
+        'captcha' => '验证码',
+        'type' => '类型',
+
     ],
 ];

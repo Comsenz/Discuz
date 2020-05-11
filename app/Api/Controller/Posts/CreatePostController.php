@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
+use App\Commands\Post\CheckFloodgate;
 use App\Commands\Post\CreatePost;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -51,12 +52,7 @@ class CreatePostController extends AbstractCreateController
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
         $threadId = Arr::get($data, 'relationships.thread.data.id');
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
-
-        // 检查发帖频率
-        // if (! $request->getAttribute('bypassFloodgate')) {
-        //     $this->floodgate->assertNotFlooding($actor);
-        // }
+        $ip = ip($request->getServerParams());
 
         return $this->bus->dispatch(
             new CreatePost($threadId, $actor, $data, $ip)

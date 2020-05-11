@@ -8,7 +8,7 @@
 namespace App\Api\Controller\StopWords;
 
 use App\Commands\StopWord\BatchCreateStopWord;
-use Discuz\Api\JsonApiResponse;
+use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,6 +47,6 @@ class BatchCreateStopWordsController implements RequestHandlerInterface
             ],
         ];
 
-        return new JsonApiResponse($data);
+        return DiscuzResponseFactory::JsonApiResponse($data);
     }
 }

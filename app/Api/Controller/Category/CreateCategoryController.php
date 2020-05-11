@@ -42,7 +42,7 @@ class CreateCategoryController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $data = $request->getParsedBody()->get('data', []);
-        $ip = Arr::get($request->getServerParams(), 'REMOTE_ADDR', '127.0.0.1');
+        $ip = ip($request->getServerParams());
 
         return $this->bus->dispatch(
             new CreateCategory($actor, $data, $ip)

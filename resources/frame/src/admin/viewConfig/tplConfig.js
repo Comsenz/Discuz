@@ -118,6 +118,41 @@ export default {
             }
           },
 
+          'wx-notice': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/notice/WxNoticeSetView'], resolve)
+            },
+            metaInfo: {
+              title: '通知设置',
+              name:'noticeSet',
+              attribution:'全局',
+              alias:'微信通知'
+            }
+          },
+
+          'system-notice':{
+            comLoad:function (resolve) {
+              require(['../view/site/global/notice/systemNoticeSetView'],resolve)
+            },
+            metaInfo:{
+              title:'通知设置',
+              name:'noticeSet',
+              attribution:'全局',
+              alias:'系统通知'
+            }
+          },
+
+          'notice-configure': {
+            comLoad: function (resolve) {
+              require(['../view/site/global/notice/noticeConfigureView'], resolve)
+            },
+            metaInfo: {
+              title: '通知设置',
+              name:'noticeSet',
+              attribution:'全局'
+            }
+          },
+
           'tencent-cloud-set': {
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudSetView'], resolve)
@@ -141,6 +176,36 @@ export default {
           'tencent-cloud-config/sms':{
             comLoad: function (resolve) {
               require(['../view/site/global/tencentCloudConfig/tencentCloudConfigSmsView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+          'tencent-cloud-config/cos':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCosView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+          'tencent-cloud-config/vod':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigVodView'], resolve)
+            },
+            metaInfo: {
+              title: '腾讯云设置',
+              name:'tencentCloudSet',
+              attribution:'全局'
+            }
+          },
+          'tencent-cloud-config/code':{
+            comLoad: function (resolve) {
+              require(['../view/site/global/tencentCloudConfig/tencentCloudConfigCodeView'], resolve)
             },
             metaInfo: {
               title: '腾讯云设置',
@@ -235,6 +300,17 @@ export default {
               alias:'最新主题'
             }
           },
+          'latest-reply':{
+            comLoad:function (resolve) {
+              require(['../view/site/cont/contManages/latestReplyView'],resolve)
+            },
+            metaInfo:{
+              title:"内容管理",
+              name:'contManage',
+              attribution:"内容",
+              alias:'最新回复'
+            }
+          },
           'cont-manage/search':{
             comLoad: function (resolve) {
               require(['../view/site/cont/contManages/contManageSearchView'], resolve)
@@ -289,10 +365,9 @@ export default {
               title: '回收站',
               name:'recycleBin',
               attribution:'内容',
-              alias:'回帖'
+              alias:'回复'
             }
           },
-
 
           //财务分类
           'fund-details':{
@@ -335,6 +410,16 @@ export default {
               name:'withdrawMange',
               attribution:'财务',
               alias:'提现设置'
+            }
+          },
+          'financial-statistics':{
+            comLoad: function (resolve) {
+              require(['../view/site/finance/financialStatistics'], resolve)
+            },
+            metaInfo: {
+              title: '财务统计',
+              name:'financialStatistics',
+              attribution:'财务',
             }
           },
 
@@ -400,6 +485,16 @@ export default {
               name:'userRol',
               attribution:'用户',
             }
+          },
+          'user-review':{
+            comLoad:function (resolve) {
+              require(['../view/site/user/userReviewView'],resolve)
+            },
+            metaInfo:{
+              title:'用户审核',
+              name:'userReview',
+              attribution:'用户',
+            }
           }
 
 
@@ -438,7 +533,6 @@ export default {
         return
       }
       next({path:"/admin/login"});
-      console.log('未登录');
     } else {
       this.getUserInfo(tokenId).then(res=>{
         groupId = res.readdata.groups[0]._data.id;
@@ -464,7 +558,6 @@ export default {
         }
         next({path:"/admin/login"});
       });
-      console.log('已经登录');
     }
   },
 
@@ -477,10 +570,8 @@ export default {
         include:['groups']
       }
     }).then(res=>{
-      console.log(res);
       return res
     }).catch(err=>{
-      console.log(err);
     })
   }
 

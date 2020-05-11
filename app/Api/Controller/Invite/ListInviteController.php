@@ -10,12 +10,14 @@ namespace App\Api\Controller\Invite;
 use App\Api\Serializer\InviteSerializer;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractListController;
+use Discuz\Auth\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class ListInviteController extends AbstractListController
 {
+    use AssertPermissionTrait;
+
     public $serializer = InviteSerializer::class;
 
     protected $InviteRepository;
@@ -28,6 +30,8 @@ class ListInviteController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+
+        $this->assertAdmin($actor);
 
         $data = [];
         $data['limit'] = $this->extractLimit($request);

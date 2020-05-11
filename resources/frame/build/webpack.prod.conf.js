@@ -12,7 +12,9 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
+// const UglifyPlugin = require('uglifyjs-webpack-plugin');
 const appConfig = require("../config/appConfig")
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 
@@ -44,9 +46,19 @@ const webpackConfig = merge(baseWebpackConfig, {
         cache: true,
         parallel: true,
         sourceMap: true,
-        terserOptions: {}
+        terserOptions: {
+          ecma: undefined,
+          warnings: false,
+          parse: {},
+          compress: {
+            drop_console: true,
+            drop_debugger: false,
+            pure_funcs: ['console.log'] // 移除console
+          }
+        },
       }),
-      new OptimizeCSSPlugin()
+      new OptimizeCSSPlugin(),
+      // new UglifyJsPlugin()
     ],
     splitChunks: {
       cacheGroups: {
@@ -59,11 +71,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         // app: {
         //   name: 'app',
         //   chunks: 'async',
-        //   minChunks: 3          
-        // }        
+        //   minChunks: 3
+        // }
       }
     }
-  },  
+  },
   plugins: [
     new FilterWarningsPlugin({
         exclude: /mini-css-extract-plugin[^]*Conflicting order between:/,

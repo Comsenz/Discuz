@@ -5,7 +5,8 @@ import axios from "axios";
 import appConfig from "../../config/appConfig";
 import browserDb from 'webDbHelper';
 import appCommonH from "./commonHelper";
-import router from 'vue-router';
+import Router from '../admin/viewConfig/tpl'
+
 //需要统一处理的error
 const erroCode = [-2];
 const qs = require('qs');
@@ -126,13 +127,13 @@ const appFetch = function(params, options) {
   //是不是标准接口
   params.standard = params.standard !== undefined ? params.standard : true;
 
-  
+
 
   params.method = params.method ? params.method : 'get';
-  if(!apiUrl) {
-    apiUrl = "/api/" + oldUrl;
+  // if(!apiUrl) {
+  //   apiUrl = "/api/" + oldUrl;
     // return false;
-  }
+  // }
 
   /**
     * @param {[type]} splice [接收url后面拼接]
@@ -163,12 +164,12 @@ const appFetch = function(params, options) {
     'sign-up',
     'bind-phone',
     'retrieve-pwd',
-    'admin/login'
+    'admin/login',
+    'supplier-all-back'
   ];
 
 // && !requireAuth.includes(window.location.pathname)
 
-  // console.log(window.location.pathname);
 
   let defaultHeaders;
   if(authVal != '' && authVal != null && !requireAuth.includes(window.location.pathname)){
@@ -236,18 +237,19 @@ const appFetch = function(params, options) {
 
       return data.data;
     } else {
-      console.log(data.data.errors[0].code);
 
       if (data.data.errors[0].code === 'access_denied'){
         //拒绝访问需要跳转到登录页面
-        let isWeixin = this.appCommonH.isWeixin().isWeixin;
+        let isWeixin = appCommonH.isWeixin().isWeixin;
+
         if (isWeixin){
           browserDb.setLItem('Authorization','');
           getNewToken().then(res=>{
-            this.$router.replace({path:'/supplier-all-back',query:{url:this.$router.history.current.path}});
+            Router.init().replace({path:'/supplier-all-back',query:{url:Router.init().history.current.path}});
           })
         }else {
-          this.$router.push({path:'/login-user'})
+          localStorage.clear();
+          Router.init().push({path:'/login-user'})
         }
 
       }
@@ -259,7 +261,8 @@ const appFetch = function(params, options) {
       });
 
       if (data.data.rawData[0].code === 'access_denied' && appCommonH.isWeixin().isWeixin){
-        delete data.data.errors;
+        //为什么注释delete，因为删除后上面的判断没有errors，导致报错。也导致接口请求走catch
+        // delete data.data.errors;
       }
 
       return data.data;
@@ -289,15 +292,13 @@ const getNewToken = function (router) {
       }
     }
   }).then(res=>{
-    console.log(res);
     let token = res.data.attributes.access_token;
-    let tokenId = res.data.id;
+    // let tokenId = res.data.id;
     let refreshToken = res.data.attributes.refresh_token;
     browserDb.setLItem('Authorization', token);
-    browserDb.setLItem('tokenId', tokenId);
+    // browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
-    console.log(err);
   })
 }
 

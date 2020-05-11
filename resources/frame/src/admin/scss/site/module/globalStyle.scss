@@ -5,16 +5,16 @@
  */
 
 @import "../common/index";
-@import "../../../../../static/css/admin/iconfont.css";
+@import "../../../../../static/css/admin/discuzQfont.css";
 
 
 /**
   公共样式
  */
-
+.marT15 { margin-top: 15PX}
 /*表格图标和内容*/
-.table-icon{
-  font-size: 40PX;
+.iconfont.table-icon{
+  font-size: 40PX ;
   vertical-align: middle;
   margin-right: 10PX;
 }
@@ -155,6 +155,11 @@
 
 }
 
+.card-radio-con .card-row-lf{
+  padding-top: 8PX;
+  line-height: 20PX;
+}
+
 
 /**
   注册设置
@@ -188,7 +193,10 @@
   第三方登录设置配置
 */
 .worth-mentioning-config-h5-box{
-
+  .random-btn{
+    color: $main !important;
+    cursor: pointer;
+  }
 }
 
 
@@ -421,5 +429,3 @@
     }
   }
 }
-
-

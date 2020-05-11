@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 use Illuminate\Database\Seeder;
 use App\Models\Setting;
 
@@ -44,6 +49,26 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'qcloud_sms',          // 腾讯云短信开关：0 关闭，1 开启
                 'value' => '0',                 // 默认关闭
                 'tag' => 'qcloud',
+            ],
+            [
+                'key' => 'qcloud_vod',          // 腾讯云点播开关：0 关闭，1 开启
+                'value' => '0',                 // 默认关闭
+                'tag' => 'qcloud',
+            ],
+            [
+                'key' => 'support_img_ext',     // 默认支持的图片扩展名
+                'value' => 'png,gif,jpg,jpeg,bmp,heic',
+                'tag' => 'default',
+            ],
+            [
+                'key' => 'support_file_ext',    // 默认支持的附件扩展名
+                'value' => 'doc,docx,pdf,zip',
+                'tag' => 'default',
+            ],
+            [
+                'key' => 'support_max_size',    // 默认支持附件最大大小 MB单位
+                'value' => 5,
+                'tag' => 'default',
             ]
         ]);
     }

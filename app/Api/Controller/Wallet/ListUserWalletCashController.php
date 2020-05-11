@@ -22,6 +22,7 @@ use Discuz\Auth\AssertPermissionTrait;
 class ListUserWalletCashController extends AbstractListController
 {
     use AssertPermissionTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -105,10 +106,10 @@ class ListUserWalletCashController extends AbstractListController
             'total' => $this->total,
             'pageCount' => ceil($this->total / $limit),
         ]);
-        $load         = $this->extractInclude($request);
-        $cash_records = $cash_records->load($load);
 
-        return $cash_records;
+        $include = $this->extractInclude($request);
+
+        return $cash_records->load($include);
     }
 
     /**

@@ -142,7 +142,7 @@ appCommonH.isWeixin = function(){
       isAndroid = u.indexOf('android') > -1 || u.indexOf('adr') > -1,
       isiOS = !!u.match(/\(i[^;]+;( u;)? cpu.+mac os x/),
       isPhone = isAndroid || isiOS,
-      isWeixin = u.match(/microMessenger/i) == 'micromessenger' || u.match(/_sq_/i) == '_sq_',
+      isWeixin = u.match(/microMessenger/i) == 'micromessenger',
       isPc = u.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
       // if(isWeixin == true){
       //   alert('weixin');
@@ -154,6 +154,16 @@ appCommonH.isWeixin = function(){
   return {
     isWeixin,isPhone,isPc
   }
+}
+/**
+ * 是否是WeLink
+ * @return {Boolean} [description]
+ */
+appCommonH.isWeLink = function(){
+    var isWeLink = navigator.userAgent.indexOf('HuaWei-AnyOffice') > -1
+    return {
+        isWeLink
+    }
 }
 
 /**
@@ -338,6 +348,23 @@ appCommonH.timeago = function(dateTimeStamp){
   return result;
 }
 
+/**
+* 返回根据主题类型和是否付费显示图标
+* @param {[type]} item [主题]
+* */
+appCommonH.titleIcon = function(item){
+  let icon = '';
+
+  if (parseInt(item.price) > 0){
+    icon = 'iconmoney';
+  } else if (item.type === 1){
+    icon = 'iconchangwen'
+  } else {
+    icon = '';
+  }
+
+  return icon;
+}
 
 
 
@@ -347,7 +374,6 @@ appCommonH.timeago = function(dateTimeStamp){
  * @param {[type]} params [description]
  */
 appCommonH.setGetUrl = function(url, params) {
-  console.log(url,params);
   var paramsStr = "";
 
   for(var key in params) {
@@ -387,6 +413,38 @@ appCommonH.closePage = function() {
 appCommonH.formatDate = function(data,format){
   return moment(data).format('YYYY-MM-DD HH:mm')
 };
+
+/**
+ * 设置页面标题
+ * @param {[type]} type [页面：(detail:详情，circle:首页)]
+ * @param {[data]} data [主题数据]
+ * @param {[title]} title [页面标题]
+ * */
+appCommonH.setPageTitle = function (type,data,title) {
+  if (type === 'detail'){
+    switch (data.readdata._data.type) {
+      case 0:
+        title = data.readdata.firstPost._data.content.slice(0,80) + ' - Powered by Discuz! Q';
+        break;
+      case 1:
+        title = data.readdata._data.title + ' - Powered by Discuz! Q';
+        break;
+      case 2:
+        title = data.readdata.firstPost._data.content.slice(0,80) + ' - Powered by Discuz! Q';
+        break;
+      default:
+        title = '主题详情页 - Powered by Discuz! Q';
+    }
+  } else if (type === 'circle'){
+    title =  data.readdata._data.set_site.site_name + ' - Powered by Discuz! Q';
+  } else {
+    title = title;
+  }
+
+  return document.title = title;
+};
+
+
 
 if(!Vue.prototype.appCommonH) {
 	Vue.prototype.appCommonH = appCommonH;

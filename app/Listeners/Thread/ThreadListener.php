@@ -17,6 +17,9 @@ use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
 use App\Models\OperationLog;
 use App\Models\Post;
+use App\Models\PostMod;
+use App\Models\Thread;
+use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -25,11 +28,14 @@ use Illuminate\Support\Arr;
 class ThreadListener
 {
     use ThreadTrait;
+    use ThreadNoticesTrait;
 
     public function subscribe(Dispatcher $events)
     {
+        // 分类主题
+        $events->listen(Saving::class, SaveCategoryToDatabase::class);
+
         // 发布帖子
-        $events->listen(Saving::class, [$this, 'categorizeThread']);
         $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
         $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
 
@@ -45,6 +51,9 @@ class ThreadListener
         // 收藏主题
         $events->listen(Serializing::class, AddThreadFavoriteAttribute::class);
         $events->listen(Saving::class, SaveFavoriteToDatabase::class);
+
+        // 通知主题
+        $events->listen(ThreadNotices::class, [$this, 'whenThreadNotices']);
     }
 
     /**
@@ -102,26 +111,39 @@ class ThreadListener
      * 审核主题时，记录操作
      *
      * @param ThreadWasApproved $event
-     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
+        // 审核通过时，清除记录的敏感词
+        if ($event->thread->is_approved == Thread::APPROVED) {
+            PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+        }
+
         $action = $this->transLogAction($event->thread->is_approved);
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+        $message = $event->data['message'] ?? '';
+
+        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+
+        // 发送操作通知
+        $this->threadNotices($event->data['notice_type'], $event);
     }
 
     /**
      * 隐藏主题时，记录操作
      *
      * @param Hidden $event
-     * @throws \App\Exceptions\ThreadException
      */
     public function whenThreadWasHidden(Hidden $event)
     {
         $action = 'hide';
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $event->data['message']);
+        $message = $event->data['message'] ?? '';
+
+        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+
+        // 发送删除通知
+        $this->threadNotices('isDeleted', $event);
     }
 
     /**
@@ -132,5 +154,34 @@ class ThreadListener
     public function whenThreadWasDeleted(Deleted $event)
     {
         Post::where('thread_id', $event->thread->id)->delete();
+    }
+
+    /**
+     * 操作主题时，发送对应通知
+     *
+     * @param $noticeType
+     * @param $event
+     */
+    public function threadNotices($noticeType, $event)
+    {
+        // 判断是修改自己的主题 则不发送通知
+        if ($event->thread->user_id == $event->actor->id) {
+            return;
+        }
+
+        switch ($noticeType) {
+            case 'isApproved':  // 内容审核通知
+                $this->sendIsApproved($event->thread, ['refuse' => $this->reasonValue($event->data)]);
+                break;
+            case 'isSticky':    // 内容置顶通知
+                $this->sendIsSticky($event->thread);
+                break;
+            case 'isEssence':   // 内容精华通知
+                $this->sendIsEssence($event->thread);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->sendIsDeleted($event->thread, ['refuse' => $this->reasonValue($event->data)]);
+                break;
+        }
     }
 }

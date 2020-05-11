@@ -76,11 +76,13 @@ class BatchEditPosts
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $post)) {
                     $post->is_approved = $attributes['isApproved'];
+                    $message = isset($attributes['message']) ? $attributes['message'] : '';
 
+                    // 操作审核时触发 回复内容通知和记录日志
                     $post->raise(new PostWasApproved(
                         $post,
                         $this->actor,
-                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
+                        ['message' => $message]
                     ));
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -93,9 +95,9 @@ class BatchEditPosts
                     $message = isset($attributes['message']) ? $attributes['message'] : '';
 
                     if ($attributes['isDeleted']) {
-                        $post->hide($this->actor, $message);
+                        $post->hide($this->actor, ['message' => $message]);
                     } else {
-                        $post->restore($this->actor, $message);
+                        $post->restore($this->actor, ['message' => $message]);
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];

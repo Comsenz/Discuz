@@ -27,7 +27,7 @@ export default {
         description: '用户在PC的网页使用微信扫码登录',
         status:'',
         icon:'iconweixin'
-      }]
+        }]
       // settingStatus:{}
     }
   },
@@ -43,8 +43,6 @@ export default {
         data:{
         }
       }).then(data=>{
-        console.log(data.readdata._data.passport);
-
         if (data.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -67,7 +65,6 @@ export default {
         }
         // this.$message({'修改成功'});
       }).catch(error=>{
-        // console.log('失败');
       })
     },
 
@@ -115,7 +112,7 @@ export default {
           this.loadStatus();
         }
       }).catch(error=>{
-        cthis.$message.error('修改失败');
+        this.$message.error('修改失败');
       })
     }
   }

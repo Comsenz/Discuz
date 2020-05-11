@@ -86,8 +86,16 @@
             //width: calc(100% - 140PX);
             //left: 111PX;
           }
+          &-title-icon{
+            vertical-align: middle;
+          }
         }
 
+      }
+
+      &-long-text{
+        border-bottom: 1PX solid $borderColor;
+        padding: 15PX 20PX;
       }
 
       &-box{

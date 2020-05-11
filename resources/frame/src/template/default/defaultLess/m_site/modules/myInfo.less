@@ -1,4 +1,4 @@
-@import "../common/var";
+@import "../common/theme";
 
 /**
   公共样式--strat
@@ -96,19 +96,32 @@
     border-bottom: 1PX solid @corE5;
   }
 }
+.myModifyPhone {
+  position: relative;
+  box-sizing: border-box;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid @corE5;
+  }
+}
 
 /**
   引用内容---回复内容样式
  */
-.reference{
+.reference {
   padding: 10px 15px 0 15px;
-  .reference-cont{
+
+  .reference-cont {
     background-color: @corF7;
     padding: 8px;
-    font-size:13px;
-    font-weight:400;
-    color:@cor888;
-    line-height:20px;
+    font-size: 13px;
+    font-weight: 400;
+    color: @cor888;
+    line-height: 20px;
   }
 }
 .quote-reply{
@@ -180,6 +193,127 @@ h2,h3,h4{
 /**
   我的主页
  */
+.personHead {
+  padding: 24px 15px;
+  .perHeadCon {
+    height: 46px;
+    .perHeadImgBox {
+      width: 46px;
+      height: 46px;
+      overflow: visible;
+      position: relative;
+      float: left;
+      .perHeadImg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+      }
+      .icon-yirenzheng {
+        position: absolute;
+        bottom: -3px;
+        right: -3px;
+        width: 12px;
+        height: 12px;
+      }
+    }
+    .userDetInfo {
+      float: left;
+      height: 46px;
+      margin-left: 10px;
+      max-width: 130px;
+      .userDetName {
+        font-size: 18px;
+        line-height: 20px;
+        text-align: left;
+        margin-bottom: 10px;
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .userDetRole {
+        display: block;
+        font-size: 12px;
+        line-height: 12px;
+        color: #939393;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .userOpera {
+      float: right;
+      text-align: right;
+      padding-top: 8px;
+      a {
+        // display: inline-block;
+        font-size: 14px;
+        // line-height: 26px;
+        border-radius: 13px;
+        margin-left: 8px;
+        padding: 6px 12px;
+      }
+      .perLetter {
+        color: @main;
+        background:#f2f2f2;
+      }
+      .followStatus {
+        background: @main;
+        color: #ffffff;
+      }
+    }
+  }
+}
+.personDetails {
+  padding: 0 15px 24px 15px;
+  overflow: hidden;
+  .personDetChi {
+    position: relative;
+    float: left;
+    width: 33.33%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: center;
+    .personDetNum {
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 19px;
+      margin-bottom: 3px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .personDetType {
+      font-size: 12px;
+      color: #9d9d9d;
+      line-height: 17px;
+    }
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 12px;
+      width: 1px;
+      height: 24px;
+      background: #f6f6f6;
+    }
+    &:last-child {
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 12px;
+        width: 1px;
+        height: 24px;
+        background: transparent;
+      }
+    }
+  }
+}
+
 
 //内容页面-头像
 .avatar-img{
@@ -340,11 +474,11 @@ h2,h3,h4{
   line-height: 20px;
   margin-bottom: 10px;
   a {
-    display: block;
-    line-height: 20px;
+    // display: block;
+    // line-height: 20px;
+    line-height: 1.5;
     color: @font000;
   }
-
 }
 
 
@@ -407,23 +541,83 @@ h2,h3,h4{
     background-color: @corFff;
 
     .modify-data-avatar{
+      position: relative;
       height: auto;
       padding: 8px 0 8px 15px;
       box-sizing: border-box;
-      .modify-data-avatar-img {
-        img {
-          width: 58px;
-          height: 58px;
-          border-radius: 4px;
-          position: relative;
-          vertical-align: top;
+      display: flex;
+      justify-content:space-between;
+      // align-items: center;
+      .hiddenInput{
+        position: absolute;
+        // left: -7.73333rem;
+        opacity:0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        // width:143rem;
+        // height:3rem;
+      }
+      .modify-data-avatar-title{
+        // flex:1;
+        text-align: left;
+        line-height: 58px;
+        p {
+          font-size: 15px;
         }
+      }
+      .modify-data-avatar-img {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        text-align: right;
+        line-height: 60px;
+
+        //我的资料-头像
+        .modify-data-avatar-box{
+          width: 100%;
+          height: 58px;
+          position: relative;
+          img {
+            width: 58px;
+            height: 58px;
+            border-radius: 4px;
+            position: relative;
+            vertical-align: top;
+            display: inline-block;
+          }
+          .icon-yirenzheng{
+            width: 12px;
+            height: 12px;
+            position: absolute;
+            right: -3px;
+            bottom: -3px;
+            font-size: 12px;
+          }
+        }
+
+
+      }
+      .modify-data-avatar-right {
+        line-height: 58px;
+        padding-left: 6px;
       }
       .iconfont {
         display: inline-block;
         margin-right: 15px;
-        position: relative;
-        top: 22px;
+        // position: relative;
+        // top: 22px;
+      }
+      &:after {
+        position: absolute;
+        box-sizing: border-box;
+        content: ' ';
+        pointer-events: none;
+        right: 0;
+        bottom: 0;
+        left: 15px;
+        border-bottom: 1px solid #E5E5E5;
       }
     }
   }
@@ -452,6 +646,9 @@ h2,h3,h4{
     font-size: 14px;
     line-height: 18px;
     color: @cor444;
+    a{
+      color:@cor444;
+    }
   }
   &:after {
     position: absolute;
@@ -464,3 +661,66 @@ h2,h3,h4{
     border-bottom: 1px solid @gray-light;
   }
 }
+
+
+/*
+  支付密码设置相关
+*/
+.pay-password-box{
+  text-align: center;
+
+  .pay-password-box_title{
+    margin-top: 84px;
+    text-align: center;
+
+    h1{
+      font-size: 19px;
+      font-weight: 500;
+      color: @font000;
+      margin-bottom: 20px;
+    }
+
+    p{
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+  }
+
+  .forGetPwd{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    color: @main;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .passwordInp:after {
+    border-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px !important;
+  }
+
+  .passwordInp li.van-hairline--left:after {
+    border-left-width: 1px;
+  }
+
+  .van-number-keyboard {
+    border-top: 1PX solid @corE5;
+  }
+
+  .van-button {
+    margin-top: 40px;
+  }
+
+  .van-password-input__error-info {
+    color: @corErr;
+  }
+
+}
+
+
+
+
+

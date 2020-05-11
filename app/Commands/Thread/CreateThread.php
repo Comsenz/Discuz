@@ -14,6 +14,7 @@ use App\Events\Thread\Saving;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
+use App\Settings\SettingsRepository;
 use App\Validators\ThreadValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -70,29 +71,53 @@ class CreateThread
      * @param Censor $censor
      * @param Thread $thread
      * @param ThreadValidator $validator
+     * @param SettingsRepository $settings
      * @return Thread
-     * @throws ValidationException
      * @throws PermissionDeniedException
-     * @throws Exception
+     * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator)
+    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator, SettingsRepository $settings)
     {
         $this->events = $events;
 
+        // Check Permissions
         $this->assertCan($this->actor, 'createThread');
+        $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
+        if ($thread->type == 1) {
+            $this->assertCan($this->actor, 'createThreadLong');
+        } elseif ($thread->type == 2) {
+            $this->assertCan($this->actor, 'createThreadVideo');
+        } elseif ($thread->type == 3) {
+            $this->assertCan($this->actor, 'createThreadImage');
+        }
 
         // 敏感词校验
+        $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
         Arr::set($this->data, 'attributes.content', $content);
 
-        // 存在审核敏感词时，将主题放入待审核
-        if ($censor->isMod) {
+        // 存在审核敏感词/发布视频主题时，将主题放入待审核
+        if ($censor->isMod || $thread->type == 2) {
             $thread->is_approved = 0;
         }
 
         $thread->user_id = $this->actor->id;
-        $thread->price = Arr::get($this->data, 'attributes.price', 0);
         $thread->created_at = Carbon::now();
+
+        // 长文帖需要设置标题
+        if ($thread->type == 1) {
+            $thread->title = $title;
+        }
+
+        // 非文字贴可设置价格
+        if ($thread->type != 0) {
+            $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
+
+            // 付费长文帖可设置免费阅读字数
+            if ($thread->type == 1 && $thread->price) {
+                $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
+            }
+        }
 
         $thread->setRelation('user', $this->actor);
 
@@ -102,7 +127,24 @@ class CreateThread
             new Saving($thread, $this->actor, $this->data)
         );
 
-        $validator->valid($thread->getAttributes());
+        // 发帖验证码
+        $captcha = '';  // 默认为空将不走验证
+        if (!$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha')) {
+            $captcha = [
+                Arr::get($this->data, 'attributes.captcha_ticket', ''),
+                Arr::get($this->data, 'attributes.captcha_rand_str', ''),
+                $this->ip,
+            ];
+        }
+        //视频贴验证是否上传视频
+        $file_id = '';
+        $file_name = '';
+        if ($thread->type == 2) {
+            $file_id = Arr::get($this->data, 'attributes.file_id', '');
+            $file_name = Arr::get($this->data, 'attributes.file_name', '');
+        }
+
+        $validator->valid($thread->getAttributes() + compact('captcha', 'file_id', 'file_name'));
 
         $thread->save();
 
@@ -116,10 +158,18 @@ class CreateThread
             throw $e;
         }
 
+        // 视频主题存储相关数据
+        if ($thread->type == 2) {
+            $threadVideo = $bus->dispatch(
+                new CreateThreadVideo($this->actor, $thread->id, $this->data)
+            );
+            $thread->setRelation('threadVideo', $threadVideo);
+        }
+
         // 记录触发的审核词
         if ($thread->is_approved == 0 && $censor->wordMod) {
             $stopWords = new PostMod;
-            $stopWords->stop_word = implode(',', $censor->wordMod);
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
             $post->stopWords()->save($stopWords);
         }

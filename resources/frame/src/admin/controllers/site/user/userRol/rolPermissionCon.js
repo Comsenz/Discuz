@@ -8,17 +8,35 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
-      checked:[]
+      checked:[],
+      disabled:false,  //是否可以开启验证码
+      videoDisabled: false,
     }
   },
   methods:{
+    signUpSet(){
+      this.appFetch({
+        url:'forum',
+        method:'get',
+      }).then(res=>{
+        if (res.errors){
+          this.$message.error(res.errors[0].code);
+        }else {
+          if(res.readdata._data.qcloud.qcloud_captcha == false){
+            this.disabled = true
+          }
+          if(res.readdata._data.qcloud.qcloud_vod == false){
+            this.videoDisabled = true
+          }
+        }
+      })
+    },
     /*
     * 权限列表中英文对应拿到后，在页面的label中对应填写
     * */
 
 
     submitClick(){
-      console.log(this.checked);
       this.patchGroupPermission();
     },
 
@@ -37,7 +55,6 @@ export default {
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
-          console.log(res);
           let data = res.readdata.permission;
           this.checked = [];
           data.forEach((item) => {
@@ -46,7 +63,6 @@ export default {
         }
 
       }).catch(err=>{
-        console.log(err);
       })
     },
     patchGroupPermission(){
@@ -62,7 +78,6 @@ export default {
           }
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         } else {
@@ -73,14 +88,13 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log('错误');
-        console.log(err);
       })
     }
 
   },
   created(){
     this.getGroupResource();
+    this.signUpSet()
   },
   components:{
     Card,

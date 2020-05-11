@@ -3,7 +3,7 @@
 /**
  * index style
  */
-@import "./../common/var.less";
+@import "./../common/theme.less";
 // @import "./../common/_app.scss";
 
 body {
@@ -133,7 +133,7 @@ body {
   .perDet {
     float: left;
     height: 40px;
-    width: 230px;
+    width: 220px;
     .perName {
       line-height: 20px;
       color: @main;
@@ -150,7 +150,31 @@ body {
       font-size: 14px;
       color: @cor888;
     }
+    .perExamine{
+      position: absolute;
+      top:13px;
+      right:15px;
+      width:65px;
+      height:18px;
+      color:#336699;
+      font-size:13px;
+      text-align: right;
+      .icon-sigh{
+        font-size:13px;
+        padding-right:2px;
+      }
+    }
   }
+  .font9 {
+    color: @cor999;
+  }
+}
+.postHeaderAvatar{
+  position: relative;
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
 }
 .postOpera {
   float: right;
@@ -174,14 +198,21 @@ body {
   .icon-top {
     float: left;
   }
+  .icon-money1 {
+    color: #FD6B6B;
+    margin-left: 6px;
+  }
 }
 .postContent {
   font-size: 15px;
-  line-height: 20px;
+  // line-height: 20px;
+  line-height: 1.5;
   margin-bottom: 10px;
-  a {
-    display: block;
-    line-height: 20px;
+  overflow: hidden;
+  word-break: break-all;
+  .postConTitle {
+    // display: block;
+    line-height: 1.5;
     color: @font000;
     word-break: break-all;
   }
@@ -189,6 +220,51 @@ body {
     display: inline-block;
     height: 20px;
     vertical-align: text-bottom;
+  }
+  .icon-longtext, .icon-money1 {
+    color: #CCCCCC;
+  }
+  .videoCoverBox {
+    display: inline-block;
+    position: relative;
+    .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 9;
+      font-size: 48px;
+      line-height: 48px;
+      margin-left: -24px;
+      margin-top: -24px;
+      color: #fff;
+    }
+    .videoCoverMask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 8;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.2);
+    }
+    .videoCover {
+      display: block;
+      max-width: 100%;
+      max-height: 200px;
+      overflow: hidden;
+    }
+  }
+}
+.transcodingCover {
+  display: block;
+  width: 100%;
+}
+.listPostCon {
+  // a {
+  //   // display: inline-block;
+  // }
+  .icon {
+    color: #CCCCCC;
   }
 }
 .operaBox {
@@ -247,6 +323,7 @@ body {
     line-height: 20px;
     margin-bottom: 4px;
     font-size: 14px;
+    overflow: hidden;
     a {
       color: @main;
     }
@@ -278,22 +355,74 @@ body {
 .fixedEdit {
   position: fixed;
   right: 15px;
-  bottom: 54px;
+  bottom: 15px;
   z-index: 12;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   line-height: 50px;
-  // line-height: 40px;
   background: @main;
   border-radius: 50%;
   text-align: center;
   box-shadow: 0 0 7px rgba(0,0,0,0.2);
+  transform:rotate(0deg);
+  transition: all 200ms;
   .icon {
     color: #fff;
     font-size: 20px;
   }
-}
 
+}
+.rotate {
+  transform:rotate(45deg);
+  -ms-transform:rotate(45deg); 	/* IE 9 */
+  -moz-transform:rotate(45deg); 	/* Firefox */
+  -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+  -o-transform:rotate(45deg);
+  transform: rotate(45deg);
+  transition: all 200ms;
+}
+.publishTypeBox {
+  position: fixed;
+  bottom: 74px;
+  right: 15px;
+  z-index: 12;
+  width: 52px;
+  padding: 7px 4px;
+  border: 1px solid #e5e5e5;
+  border-radius: 30px;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 0 7px rgba(0,0,0,0.1);
+  .iconBg {
+    background: #F4F4F4;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+    text-align: center;
+    line-height: 42px;
+    .icon {
+      font-size: 20px;
+      color: #000000;
+    }
+  }
+  .publishCho {
+    width: 42px;
+    .publishChoWo {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      line-height: 16px;
+    }
+    &:first-child {
+      .publishChoWo {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+
+}
 /*
 付费站点-首页-未登录
 payCircle.view
@@ -309,8 +438,7 @@ payCircle.view
   }
   .circleLogo {
     float: right;
-    height: 21px;
-    max-width: 110px;
+    max-height: 20px;
   }
 }
 .circleInfo {
@@ -331,6 +459,13 @@ payCircle.view
     border-bottom: 1px solid @gray-light;
     word-break: break-all;
   }
+}
+//站点信息
+.circlePL {
+  padding-left: 15px;
+	.circleLoBox {
+    padding-left: 0;
+	}
 }
 .infoItem {
   padding: 13px 15px 13px 0;
@@ -427,7 +562,7 @@ payCircle.view
   circleInviteView.vue
 */
 .invitePerDet {
-  padding: 44px 15px 3px 15px;
+  padding: 30px 15px 3px 15px;
   .inviteHead {
     display: block;
     height: 46px;
@@ -436,6 +571,12 @@ payCircle.view
     margin-right: auto;
     margin-bottom: 6px;
     border-radius: 4px;
+    position: relative;
+    .user-img{
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }
   }
   .inviteName {
     color: @main;
@@ -445,7 +586,6 @@ payCircle.view
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
-    margin-bottom: 14px;
     line-height: 20px;
   }
   .inviteWo {
@@ -501,11 +641,7 @@ payCircle.view
       line-height: 24px;
       padding-bottom: 8px;
     }
-    .powerChi {
-      font-size: 14px;
-      line-height: 20px;
-      color: rgba(#000,0.5);
-    }
+
   }
 }
 .payMoney {
@@ -514,6 +650,20 @@ payCircle.view
   padding-top: 15px;
   color: rgba(#000,0.5);
   text-align: center;
+}
+.powerChi {
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(#000,0.5);
+  i{
+    width:9px;
+    height:12px;
+    text-align: center;
+    line-height:16px;
+    float:right;
+    margin-right:8px;
+    // border: 1px dashed #000;
+  }
 }
 /*
 公开站点，内容页的分享
@@ -535,6 +685,12 @@ openCircleConView.vue
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 14px;
+      .van-image__img {
+        display: block;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+      }
       &:last-child {
         margin-bottom: 0;
       }
@@ -549,7 +705,7 @@ openCircleConView.vue
     height: 20px;
     line-height: 20px;
     font-size: 15px;
-    @include px2rem(margin-bottom, 26);
+    margin-bottom: 13px;
     margin-bottom: 13px;
     .icon {
       float: left;
@@ -573,6 +729,7 @@ openCircleConView.vue
   }
 }
 .postDetBot {
+  padding-top: 10px;
   line-height: 20px;
   font-size: 14px;
   color: @cor888;
@@ -618,14 +775,24 @@ openCircleConView.vue
       background: transparent;
     font-size: 14px;
     word-break: break-all;
-    .icon {
+    overflow: hidden;
+    .likedUserList {
+      overflow: hidden;
+      color: #888888;
+      font-size: 13px;
+      line-height: 18px;
+    }
+    .icon-praise-after {
       font-size: 14px;
       line-height: 18px;
       margin-left: -14px;
+      // margin-right: 6px;
+      // float: left;
     }
     a {
       font-size: 14px;
       line-height: 18px;
+      // float: left;
     }
   }
   .payPer {
@@ -640,23 +807,86 @@ openCircleConView.vue
       line-height: 14px;
       margin-left: -14px;
     }
-    .payPerHead {
+    .payPerHeaChi {
       float: left;
-      border-radius: 2px;
       height: 26px;
       width: 26px;
       margin: 0 0 3px 3px;
+      border-radius: 2px;
+    }
+    .payPerHead {
+      display: block;
+      border-radius: 2px;
+      height: 26px;
+      width: 26px;
       // @include px2rem(margin, 0 0 7 7);
+    }
+
+  }
+  .foldTip {
+    float: left;
+    line-height: 18px;
+    font-size: 13px;
+    padding-top: 8px;
+    color: #888888;
+    padding-left: 8px;
+
+  }
+  .foldTag {
+    float: left;
+    padding-left: 8px;
+    line-height: 18px;
+    font-size: 13px;
+    padding-top: 8px;
+    color: #888888;
+    font-style: normal;
+    .icon {
+      font-size: 16px;
+      margin-left: 4px;
+      color: #888888;
+      line-height: 18px;
+    }
+    .rotate180 {
+      transform:rotate(180deg);
+      -ms-transform:rotate(180deg); 	/* IE 9 */
+      -moz-transform:rotate(180deg); 	/* Firefox */
+      -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+      -o-transform:rotate(180deg);
+      transform: rotate(180deg);
+      transition: all 200ms;
+    }
+  }
+  .likeBox {
+    .foldTip {
+      padding-top: 0;
+    }
+    .foldTag {
+      padding-top: 0;
     }
   }
   .commentPostDet {
     padding: 14px 15px 0 15px;
+    position: relative;
     .postContent {
       font-size: 14px;
       color: #444444;
       line-height: 20px;
+      a {
+        color: @main;
+      }
     }
-
+    .themeImgList {
+      .van-image {
+        display: block;
+        max-width: 100%;
+        .van-image__img {
+          display: block;
+          max-width: 100%;
+          width: auto;
+          height: auto;
+        }
+      }
+    }
     .quotePostTop {
       padding-top: 10px;
       margin-bottom: 11px;
@@ -689,7 +919,7 @@ openCircleConView.vue
     padding: 0 15px 11px 15px;
     .icon {
       font-size: 13px;
-      @include px2rem(line-height, 36);
+      line-height: 18px;
       line-height: 18px;
     }
     a {
@@ -734,8 +964,7 @@ openCircleConView.vue
   padding-top: 0;
   padding-bottom: 10px;
 }
-.themeImgList {
-}
+
 .themeOneImgChild {
   width: 50%;
   min-height: 100px;
@@ -782,6 +1011,14 @@ openCircleConView.vue
 主题详情页
 details.vue
 */
+.circleDetCon * {
+  -moz-user-select:text; /* Firefox私有属性 */
+  -webkit-user-select:text; /* WebKit内核私有属性 */
+  -ms-user-select:text; /* IE私有属性(IE10及以后) */
+  -khtml-user-select:text; /* KHTML内核私有属性 */
+  -o-user-select:text; /* Opera私有属性 */
+  user-select:text; /* CSS3属性 */
+}
 .marBfixed {
   margin-bottom: 52px;
   overflow: hidden;
@@ -831,6 +1068,11 @@ details.vue
     }
   }
 }
+.twoChi {
+  .footChi {
+    width: 50%;
+  }
+}
 .rewardPopup {
   height: 266px;
   .support {
@@ -869,72 +1111,141 @@ details.vue
     }
   }
 }
-.qrCodeBox {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 290px;
-  height: 410px;
-  .popupTit {
-    display: block;
-    font-size: 13px;
-    line-height: 18px;
-    color: @cor888;
-    padding: 18px 0 0 0;
-    text-align: center;
-  }
-  .payNum {
-    line-height: 42px;
-    font-size: 24px;
-    padding: 18px 0;
-    margin: 0 15px 12px 15px;
-    border-bottom: 1px solid @gray-light;
-    text-align: center;
-    span {
-      font-size: 35px;
-    }
-  }
-  .payType {
-    margin: 0 15px 17px 15px;
-    line-height: 18px;
-    font-size: 13px;
-    overflow: hidden;
-    .typeLeft {
-      float: left;
-      color: @cor888;
-    }
-    .typeRight {
-      float: right;
-      color: @cor444;
-      .icon {
-        font-size: 15px;
-        margin-right: 7px;
-        color: #09BB07;
-      }
-    }
-  }
-  .qrCode {
-    display: block;
-     width: 190px;
-     height: 190px;
-     margin-top: 17px;
-     margin-bottom: 7px;
-     margin-left: auto;
-     margin-right: auto;
-  }
-  .payTip {
-    font-size: 15px;
-    color: @cor333;
-    line-height: 21px;
-    margin-top: 20px;
-    text-align: center;
-  }
-}
+
 .commentBox {
   .van-list__finished-text {
     line-height: 140px;
   }
 }
+
+.postTitle {
+  line-height: 24px;
+  font-size: 16px;
+  text-align: left;
+  padding-bottom: 10px;
+  position: relative;
+  word-break: break-all;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid @corE5;
+    font-size: 0;
+    line-height: 0;
+  }
+}
+.videoContentText {
+  line-height: 20px;
+  padding-top: 10px;
+  font-size: 15px;
+  word-break: break-all;
+}
+.longTextContent {
+  // color: #555;
+  // line-height: 20px;
+  padding-top: 10px;
+  // font-size: 15px;
+  // word-break: break-all;
+  // p {
+  //   margin: 15px auto !important;
+  // }
+  li {
+    list-style: disc;
+    // margin: 15px !important;
+  }
+  ol {
+    list-style-type: decimal;
+    li {
+      list-style: decimal;
+    }
+  }
+  // h3 {
+  //   font-size: 21px;;
+  // }
+  // blockquote {
+  //   color: #666;
+  //   border-left: 4px solid #ddd;
+  //   padding-left: 20px;
+  //   margin-left: 0;
+  //   font-size: 15px;
+  //   font-style: italic;
+  // }
+  // code {
+  //   border: 1px solid #ddd;
+  //   background: #f6f6f6;
+  //   padding: 3px;
+  //   border-radius: 3px;
+  //   font-size: 15px;
+  // }
+  // pre {
+  //   padding: 10px;
+  //   background: #f6f6f6;
+  //   border: 1px solid #ddd;
+  //   white-space: pre-wrap;
+  //   word-wrap: break-word;
+  //   code {
+  //     display: inline;
+  //     max-width: initial;
+  //     padding: 0;
+  //     margin: 0;
+  //     overflow: initial;
+  //     line-height: inherit;
+  //     word-wrap: normal;
+  //     background-color: transparent;
+  //     border: 0;
+  //   }
+  // }
+}
+.payTipBox {
+  margin: 30px 0;
+  background: #f6f6f6;
+  padding: 32px 15px 28px 15px;
+  text-align: center;
+  .tipPrice {
+    text-align: center;
+    font-size: 15px;
+    color: #333333;
+    padding-bottom: 18px;
+    span {
+      font-size: 15px;
+      color: #EF7D1C;
+    }
+  }
+  .buyBtn {
+    display: block;
+    width: 168px;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    background: @main;
+    border-radius: 5px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 auto;
+  }
+}
+.videoBox {
+  padding: 14px 0 10px 0;
+  .videoCover {
+    display: block;
+    max-width: 100%;
+  }
+  .video-js {
+    max-width: 100%;
+  }
+  .videoContent {
+    width: 100%;
+    img {
+      display: block;
+      max-width: 100%;
+    }
+  }
+}
+
 
 //发表主题
 .post-topic-box{
@@ -942,12 +1253,12 @@ details.vue
   height: 100%;
   color: #000;
   .post-topic-header{
-    position: relative;
+    position: fixed;
     width: 100%;
     height: 44px;
     background-color: rgba(249, 249, 249, 0.9);
-    box-shadow:0px 1px 0px 0px rgba(0,0,0,0.1);
-
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    z-index: 6;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -980,12 +1291,12 @@ details.vue
 
   .post-topic-form{
     width: 100%;
-    height: 70%;
+    // height: 70%;
     min-height: 150px;
-    padding: 0 15px 50px 15px;
+    padding: 44px 15px 50px 15px;
     box-sizing: border-box;
-    #post-topic-form-text{
-    }
+    height: 100%;
+    overflow-y: scroll;
   }
   .uploadBox {
     padding: 0;
@@ -1002,6 +1313,7 @@ details.vue
     display: flex;
     justify-content: space-between;
     padding: 0 16px;
+    background: #ffffff;
     .post-topic-footer-left{
       width: 30%;
       height: 100%;
@@ -1048,6 +1360,320 @@ details.vue
     position: absolute;
   }
 }
+/**
+ *  发布长文
+ */
+ .markdownFix {
+   position: fixed;
+   bottom: 100px;
+   width: 100%;
+   background: #ffffff;
+   &:after {
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid @corE5;
+  }
+ }
+ .markMove {
+   bottom: 340px;
+ }
+ .markdownText {
+  width: 100%;
+  // min-height: 80px;
+  // max-height: 150px;
+  height: 150px;
+  // max-height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  padding-right: 15px;
+  font-size: 15px;
+  box-sizing: border-box;
+  caret-color: @main;  //光标颜色
+
+ }
+.post-longText-form {
+  width: 100%;
+  min-height: 150px;
+  padding: 44px 0 150px 15px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: scroll;
+}
+.pubThemeTitle {
+  height: 52px;
+  text-align: left;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid @corE5;
+  width: 100%;
+  position: relative;
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+.paySetting {
+   position: fixed;
+   bottom: 50px;
+   &:after {
+     border-bottom: none !important;
+   }
+}
+.payMove {
+    bottom: 290px;
+}
+.paySetShow {
+  width: 290px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.popTitBox {
+  line-height: 21px;
+  font-size: 15px;
+  overflow: hidden;
+  .popupTit {
+    float: left;
+    color: @cor333;
+  }
+  .icon {
+    float: right;
+    cursor: pointer;
+    color: #888888;
+  }
+}
+.payMoneyBox {
+  height: 42px;
+  text-align: left;
+  padding: 18px 0;
+  border-bottom: 1px solid @corE5;
+  /*span {
+    float: left;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  .payMoneyInp {
+    font-size: 35px;
+    height: 42px;
+    line-height: 42px;
+    color: #000000;
+    border: none;
+    width: 220px;
+    text-align: left;
+  }*/
+
+  .van-cell{
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    .van-cell__title.van-field__label{
+      flex: 0;
+      span{
+        font-size: 25px;
+      }
+    }
+    .van-cell__value{
+
+      .van-field__body{
+
+        .van-field__control{
+          font-size: 35px;
+        }
+
+      }
+
+    }
+
+  }
+
+
+}
+.payEx {
+  padding: 16px 0 14px 0;
+  font-size: 15px;
+  color: #333333;
+}
+.payExplain {
+  line-height: 16px;
+  font-size: 15px;
+  border: none;
+  width: 100%;
+  &::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &::-moz-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba(0,0,0,0.5);
+  }
+}
+.popSureBtn {
+  display: block;
+  width: 168px;
+  margin: 30px auto 16px auto;
+  border-radius: 5px;
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+}
+.forbiddenCli {
+  background: @corC9;
+}
+.sureBtnCli {
+  background: @main;
+}
+
+/**
+ *  发布视频
+ */
+.videoUploader {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  text-align: center;
+  .icon-add {
+    font-size: 24px;
+    color: #d8d8d8;
+    line-height: 54px;
+  }
+  .videoUpInp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    opacity: 0.8;
+  }
+}
+.videoShow {
+  position: relative;
+  width: 160px;
+  height: 210px;
+  .videoDele {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    z-index: 10;
+    background: #d8d8d8;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    .icon-closeCho {
+      font-size: 14px;
+      color: #ffffff;
+    }
+  }
+}
+
+
+
+/**
+ *  回复输入框
+ */
+.reply-box{
+  width: 100%;
+  min-height: 140px;
+  // max-height: 150px;
+  _height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  line-height: inherit;
+  outline: 0;
+  margin: 14px 0;
+  font-size: 15px;
+  box-sizing: content;
+  caret-color: @main;  //光标颜色
+  &::-webkit-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &::-moz-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+  &:-ms-input-placeholder {
+    color: #b2b2b2;
+    font-size: 13px;
+  }
+}
+
+/**
+  列表-公共样式
+ */
+.m-site-cell-access{
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #E5E5E5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:last-child{
+    border-bottom: 0;
+  }
+
+  .m-site-cell-access-bd{
+    flex: 1;
+    font-size: 15px;
+    font-weight:400;
+    color:#000000;
+    // @include px2rem(line-height,42);
+    line-height: 21px;
+  }
+
+  .m-site-cell-access-ft{
+    // @include font-dpr(30);
+    font-size: 15px;
+    font-weight:400;
+    color:rgba(0,0,0,0.5);
+    line-height: 16px;
+    padding-right: 22px;
+    position: relative;
+    i{
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
 .enclosure {
   padding-top: 14px;
   .enclosureChi {
@@ -1078,6 +1704,42 @@ details.vue
       white-space: nowrap;
     }
     .encDelete {
+      color:@corB2;
+      display: inline-block;
+      line-height: 18px;
+      margin-left: 14px;
+      font-size: 15px;
+      vertical-align: bottom;
+      .icon {
+        font-size: 16px;
+        color: @white;
+      }
+    }
+  }
+}
+.videoCon {
+  padding-top: 14px;
+  .videoChi {
+    line-height: 20px;
+    vertical-align: middle;
+    .icon-video1 {
+      float: left;
+      font-size: 17px;
+      color: #0494F9;
+    }
+
+    .videoName {
+      float: left;
+      margin-left: 5px;
+      font-size: 15px;
+      line-height: 20px;
+      color: @main;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .videoDelete {
       color:@corB2;
       display: inline-block;
       line-height: 18px;
@@ -1192,3 +1854,116 @@ details.vue
 .face-content .v-tabs__wrapper {
   display: none;
 }
+.contentExamine{
+  width:345px;
+  height:34px;
+  margin:14px 15px 0 15px;
+  border-radius:4px;
+  background:rgba(241,248,253,1);
+  border: 1px dashed #B9D8ED;
+  text-align: center;
+  line-height: 34px;
+  font-size:14px;
+  color:#336699;
+}
+.recordNumber{
+  text-align: center;
+  color:#B2B2B2;
+  font-size:13px;
+  line-height: 50px;
+  background:rgba(238,239,239,1);
+  a {
+    color: #B2B2B2;
+  }
+}
+
+//管理，删除
+.manageFootFixed {
+	// overflow: hidden;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 12;
+	width: 100%;
+  height: 52px;
+  padding: 9px 14px 7px 14px;
+	background: #fff;
+	border-top: 1px solid @gray-light;
+	box-sizing: border-box;
+	.operaCho {
+		position: relative;
+    width: 216px;
+		.operaWo {
+			float: left;
+			position: relative;
+      width: 216px;
+      height: 36px;
+      padding: 8px 11px 7px 15px;
+			background: @corF7;
+			border: 1px solid @gray-light;
+			box-sizing: border-box;
+      border-radius: 5px;
+			text-align: left;
+			span {
+        font-size: 15px;
+        line-height: 21px;
+			}
+			.icon {
+				position: absolute;
+        font-size: 12px;
+        bottom: 12px;
+        right: 11px;
+			}
+		}
+		.operaChoList {
+			position: absolute;
+      bottom: 5px;
+			left: 0;
+			width: 100%;
+			background: @corF7;
+			border: 1px solid @gray-light;
+			@include px2rem(border-radius, 10);
+      border-radius: 5px;
+			box-sizing: border-box;
+			overflow: hidden;
+			.operaChoLi {
+        height: 47px;
+        line-height: 47px;
+				border-bottom: 1px solid @gray-light;
+        font-size: 15px;
+				color: @cor888;
+        padding: 0 15px;
+				box-sizing: border-box;
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+
+	}
+	.checkSubmit {
+		float: right;
+		background: @main;
+    width: 120px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 5px;
+		border: none;
+		color: #fff;
+    font-size: 16px;
+		text-align: center;
+	}
+}
+.choFixed {
+	a {
+		display: inline-block;
+    font-size: 15px;
+    line-height: 36px;
+		&:first-child {
+      margin-right: 30px;
+		}
+	}
+}
+
+
+

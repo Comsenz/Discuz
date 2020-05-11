@@ -7,15 +7,15 @@
     </template>
 
     <template v-else-if="pageName === 'wx-login-bd'">
-      <span @click="wxSignUpBdClick">没有账号？注册，绑定微信新账号</span>
+      <span @click="wxSignUpBdClick">没有帐号？注册，绑定微信新帐号</span>
     </template>
 
     <template v-else-if="pageName === 'wx-sign-up-bd'">
-      <span @click="wxLoginBdClick">已有账号？登录，微信绑定账号</span>
+      <span @click="wxLoginBdClick">已有帐号？登录，微信绑定帐号</span>
     </template>
 
     <template v-else-if="pageName === 'sign-up'">
-      <span @click="loginClick">已有账号立即登录</span>
+      <span @click="loginClick">已有帐号立即登录</span>
     </template>
 
     <template v-else-if="pageName === 'bind-phone'">

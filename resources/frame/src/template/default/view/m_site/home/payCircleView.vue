@@ -6,24 +6,24 @@
     <div v-if="siteInfo">
       <Header :logoShow="true" :perDetShow="true"></Header>
       <div class="gap"></div>
-      <div class="circlePL">
+      <!-- <div class="circlePL">
       	<div class="circleLoBox">
         	<span class="circleIcon">站点图标</span>
-          <img v-if="siteInfo._data.logo" :src="siteInfo._data.logo" class="circleLogo">
+          <img v-if="siteInfo._data.set_site.site_logo" :src="siteInfo._data.set_site.site_logo" class="circleLogo">
           <img v-else="" :src="appConfig.staticBaseUrl+'/images/logo.png'" class="circleLogo">
         </div>
-      </div>
+      </div> -->
       <div class="circleInfo padB0 lastBorNone">
       	<h1 class="cirInfoTit">站点简介</h1>
-      	<p class="cirInfoWord">{{siteInfo._data.siteIntroduction}}</p>
+      	<p class="cirInfoWord">{{siteInfo._data.set_site.site_introduction}}</p>
       	<div class="infoItem">
         	<span class="infoItemLeft">创建时间</span>
-        	<span class="infoItemRight">{{siteInfo._data.siteInstall}}</span>
+        	<span class="infoItemRight">{{siteInfo._data.set_site.site_install}}</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">加入方式</span>
-        	<!--<span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，有效期自加入起{{siteInfo._data.siteExpire}}天</span>-->
-          <span class="infoItemRight">付费{{siteInfo._data.sitePrice}}元，{{siteInfo._data.siteExpire === '0' || siteInfo._data.siteExpire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.siteExpire +'天'}}</span>
+        	<!--<span class="infoItemRight">付费{{siteInfo._data.set_site.site_price}}元，有效期自加入起{{siteInfo._data.set_site.site_expire}}天</span>-->
+          <span class="infoItemRight">付费{{siteInfo._data.set_site.site_price}}元，{{siteInfo._data.set_site.site_expire === '0' || siteInfo._data.set_site.site_expire === ''?'永久加入':'有效期自加入起'+ siteInfo._data.set_site.site_expire +'天'}}</span>
         </div>
         <div class="infoItem">
         	<span class="infoItemLeft">站长</span>
@@ -54,7 +54,8 @@
 import mSitePayCircleCon from '../../../controllers/m_site/circle/payCircleCon';
 import mSiteHeader from '../../../controllers/m_site/common/headerCon';
 import Header from '../../m_site/common//headerView';
-import '../../../scss/m_site/mobileIndex.scss';
+import  '../../../defaultLess/m_site/common/common.less';
+import  '../../../defaultLess/m_site/modules/circle.less';
 export default {
     name: "payCircleView",
     components:{

@@ -14,9 +14,12 @@ export default {
       radio:'',
       alternateRadio:'',    //默认级别选中备份
       radioName:'',         //默认级别名称
+      radioIndex:'',        //默认级别序号
       deleteStatus:true,
       multipleSelection:[],
-      addStatus:false
+      addStatus:false,
+      btnLoading:false,     //提交按钮状态
+      delLoading:false,     //删除按钮状态
     }
   },
   methods:{
@@ -31,15 +34,12 @@ export default {
     },
 
     /*checkSelect(val){
-      console.log(val);
 
-      console.log(this.multipleSelection);
     },*/
 
-    radioChange(val){
-      console.log(val);
+    radioChange(val,index){
       this.radioName = val._data.name;
-      console.log(this.radio);
+      this.radioIndex = index;
     },
 
     checkSelectable(row){
@@ -73,10 +73,10 @@ export default {
         });
       }
       this.addStatus = true;
-      console.log(this.tableData);
     },
 
     submitClick(){
+      this.btnLoading = true;
       /*if (this.addStatus && this.multipleSelection.length > 0){
         this.$message({
           showClose: true,
@@ -88,7 +88,8 @@ export default {
         let singleData = {
           "type": "groups",
           "attributes": {
-            "name": ""
+            "name": "",
+            'default':''
           }
         };    //单个
 
@@ -114,10 +115,13 @@ export default {
           singleData.attributes.name = this.tableData[i]._data.name;
         }
 
+        if (this.radioIndex + 1 === this.tableData.length){
+          singleData.attributes.default = 1;
+        }
+
         this.postGroups(singleData);
 
       }else if(this.radio !== this.alternateRadio) {
-        console.log('修改默认级别');
         this.singlePatchGroup(this.radio,this.radioName);
       } else {
         let data = [];
@@ -136,12 +140,14 @@ export default {
     singleDelete(index,id){
       if (index > this.alternateLength-1){
         this.tableData.pop();
+        this.addStatus = false;
       } else {
         this.singleDeleteGroup(id);
       }
     },
 
     deleteClick(){
+      this.delLoading = true;
       let data = {
         id:[]
       };
@@ -160,7 +166,6 @@ export default {
         method:'get',
         data:{}
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -174,7 +179,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     postGroups(data){
@@ -185,9 +189,14 @@ export default {
           data
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
-          this.$message.error(res.errors[0].code);
-        }else {
+          if (res.errors[0].detail){
+            this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+          } else {
+            this.$message.error(res.errors[0].code);
+          }
+        } else {
           this.$message({
             message: '提交成功！',
             type: 'success'
@@ -196,7 +205,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     singleDeleteGroup(id){
@@ -216,7 +224,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchDeleteGroup(data){
@@ -227,6 +234,7 @@ export default {
           data
         }
       }).then(res=>{
+        this.delLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -237,7 +245,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     singlePatchGroup(id,name){
@@ -254,6 +261,7 @@ export default {
           }
         }
       }).then(res=>{
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -264,7 +272,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
     batchPatchGroup(data){
@@ -275,7 +282,7 @@ export default {
           data
         }
       }).then(res=>{
-        console.log(res);
+        this.btnLoading = false;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -286,7 +293,6 @@ export default {
           this.getGroups();
         }
       }).catch(err=>{
-        console.log(err);
       })
     }
 

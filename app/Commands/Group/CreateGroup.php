@@ -73,7 +73,7 @@ class CreateGroup
         $group->type = Arr::get($attributes, 'type', '');
         $group->color = Arr::get($attributes, 'color', '');
         $group->icon = Arr::get($attributes, 'icon', '');
-        $group->default = Arr::get($attributes, 'default', 0);
+        $group->is_display = (bool) Arr::get($attributes, 'isDisplay');
 
         $group->raise(new Created($group));
 

@@ -9,7 +9,7 @@
        class="sidebarWrap"
        v-model="popupShow"
        position="right"
-       :style="{ height: '100%' }"
+       :style="{'height':'100%','right': (!isPhone && !isWeixin) ? (viewportWidth - 640)/2+'px' : '0'}"
     >
        <sidebar></sidebar>
      </van-popup>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import '../../../../../../../static/css/iconfont.css';
+// import '../../../../../../../static/css/iconfont.css';
 // import '../../../../scss/m_site/common/loginSignUpHeader/loginSignUpHeader.scss';
 import '../../../../defaultLess/m_site/common/common.less';
 import Sidebar from '../../../m_site/common/sidebarView';

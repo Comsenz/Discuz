@@ -14,7 +14,7 @@ use App\Trade\TransferTrade;
 use App\Settings\SettingsRepository;
 use Illuminate\Database\ConnectionInterface;
 use App\Models\UserWalletCash;
-use App\Models\UserWechat;
+use App\Models\User;
 use App\Models\UserWalletLog;
 use App\Models\UserWallet;
 use Carbon\Carbon;
@@ -77,13 +77,15 @@ class CashTransfer
 
     /**
      * 微信企业付
-     * @param  Cash   $event 事件参数
+     * @param Cash $event 事件参数
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function wecahtTransfer(Cash $event)
     {
         //获取用户openid
         $user_id = $event->cash_record->user_id;
-        $user_wecaht = UserWechat::find($user_id);
+        $user_wecaht = User::findOrfail($user_id)->wechat;
+
         if (isset($user_wecaht->mp_openid)) {
             $openid = $user_wecaht->mp_openid;
         } else {
@@ -189,7 +191,6 @@ class CashTransfer
      */
     public function transferFailure($cash_id, $data, bool $is_thaw = false)
     {
-
         $user_wallet_cash = UserWalletCash::find($cash_id);
         $cash_apply_amount = $user_wallet_cash->cash_apply_amount;//提现申请金额
         $user_id = $user_wallet_cash->user_id;//提现用户

@@ -58,14 +58,15 @@ export default {
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
       submitForm:[],              //提交操作表单
-      showViewer:false,      //预览图
-      url:[]
+      showViewer:false,           //预览图
+      url:[],
+      subLoading:false,           //提交按钮状态
+      btnLoading:0,               //0表示没有loading状态，1：全部还原、2：全部删除
     }
   },
 
   methods:{
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -104,12 +105,11 @@ export default {
           this.submitForm[index].hardDelete = true;
           break;
         default:
-          console.log("左侧操作错误，请刷新页面!")
+          //左侧操作错误，请刷新页面
       }
     },
 
     searchClick(){
-      console.log(this.releaseTime);
       this.currentPaga = 1;
       this.getThemeList(1);
     },
@@ -122,7 +122,7 @@ export default {
     },
 
     submitClick() {
-      console.log(this.submitForm);
+      this.subLoading = true;
 
       this.deleteStatusList = [];
       let isDeleted = [];
@@ -154,6 +154,7 @@ export default {
     },
 
     allOperationsSubmit(val){
+      this.btnLoading = val;
       let deleteStr = '';
       switch (val){
         case 1:
@@ -173,7 +174,7 @@ export default {
           this.deleteThreadsBatch(deleteStr);
           break;
         default:
-          console.log("全部还原或全部删除操作错误,请刷新页面!")
+          //全部还原或全部删除操作错误,请刷新页面
       }
     },
 
@@ -196,7 +197,7 @@ export default {
         url:'threads',
         method:'get',
         data:{
-          include: ['user','firstPost','category','deletedUser','lastDeletedLog','firstPost.images','firstPost.attachments'],
+          include: ['user','firstPost','category','deletedUser','lastDeletedLog','firstPost.images','firstPost.attachments', 'threadVideo'],
           // include:['user', 'firstPost', 'lastPostedUser','deletedUser', 'category','firstPost.images','firstPost.attachments'],
           'filter[isDeleted]':'yes',
           'filter[username]':this.searchUserName,
@@ -212,7 +213,6 @@ export default {
           'sort':'-deletedAt'
         }
       }).then(res=>{
-        console.log(res);
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -241,7 +241,6 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -263,7 +262,6 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
 
     },
@@ -275,6 +273,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -287,7 +287,6 @@ export default {
               type: 'success'
             });
           }
-          console.log(res);
         }
       }).catch(err=>{
 
@@ -299,7 +298,8 @@ export default {
         method:'delete',
         splice:'/'+ data
       }).then(res=>{
-        console.log(res);
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
@@ -314,16 +314,13 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.getThemeList(1);
       } else {
-        console.log(state);
         this.getThemeList(Number(webDb.getLItem('currentPag'))||1);
       }
     }
@@ -336,7 +333,6 @@ export default {
   beforeRouteEnter (to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
         vm.getCreated(false)

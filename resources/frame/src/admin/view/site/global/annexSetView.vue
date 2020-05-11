@@ -1,7 +1,7 @@
 <template>
   <div class="annex-set-box">
     <Card header="支持的图片扩展名：">
-      <CardRow description="多个请用,隔开，例如 png,gif,jpg">
+      <CardRow description="多个请用,隔开，例如 png,gif,jpg,jpeg,bmp,heic">
         <el-input v-model="picture"></el-input>
       </CardRow>
     </Card>

@@ -14,10 +14,10 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Discuz\Http\UrlGenerator;
+use Exception;
 use Illuminate\Contracts\Filesystem\Factory as FileFactory;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
-use Intervention\Image\ImageManager;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tobscure\JsonApi\Document;
@@ -62,22 +62,15 @@ class UploadLogoController extends AbstractResourceController
         UrlGenerator::setRequest($request);
 
         $file = Arr::get($request->getUploadedFiles(), 'logo');
-
-        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'logo');
-
-        $file->moveTo($tmpFile);
-
-        $file = new UploadedFile(
-            $tmpFile,
+        $verifyFile = new UploadedFile(
+            $file->getStream()->getMetadata('uri'),
             $file->getClientFilename(),
             $file->getClientMediaType(),
-            $file->getSize(),
             $file->getError(),
             true
         );
-
         $this->validator->make(
-            ['logo' => $file],
+            ['logo' => $verifyFile],
             [
                 'logo' => [
                     'required',
@@ -87,23 +80,29 @@ class UploadLogoController extends AbstractResourceController
             ]
         )->validate();
 
-        try {
-            $image = (new ImageManager())->make($tmpFile);
-
-            if (extension_loaded('exif')) {
-                $image->orientate();
-            }
-
-            $encodedImage = $image->encode('png');
-
-            $fileName = 'logo.png';
-
-            $this->filesystem->disk('public')->put($fileName, $encodedImage);
-        } finally {
-            @unlink($tmpFile);
+        // 写入配置表的名字
+        switch (Arr::get($request->getParsedBody(), 'type', 'logo')) {
+            case 'background_image':
+                $settingName = 'background_image';
+                break;
+            case 'header_logo':
+                $settingName = 'header_logo';
+                break;
+            default:
+                $settingName = 'logo';
+                break;
         }
 
-        $this->settings->set('logo', $fileName);
+        // 文件名
+        $fileName = $settingName . '.' . $verifyFile->getClientOriginalExtension();
+
+        try {
+            $this->filesystem->disk('public')->put($fileName, $file->getStream());
+        } catch (Exception $e) {
+            throw new $e;
+        }
+
+        $this->settings->set($settingName, $fileName);
 
         return [
             'key' => 'logo',

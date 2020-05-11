@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Thread;
+use App\Models\Topic;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
@@ -42,10 +43,14 @@ class ThreadSerializer extends AbstractSerializer
         $gate = $this->gate->forUser($this->actor);
 
         $attributes = [
+            'type'              => (int) $model->type,
             'title'             => $model->title,
             'price'             => $model->price,
+            'freeWords'         => (int) $model->free_words,
             'viewCount'         => (int) $model->view_count,
             'postCount'         => (int) $model->post_count,
+            'paidCount'         => (int) $model->paid_count,
+            'rewardedCount'     => (int) $model->rewarded_count,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,
@@ -63,6 +68,10 @@ class ThreadSerializer extends AbstractSerializer
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
+        }
+
+        if ($model->price > 0) {
+            $attributes['paid'] = (bool) $model->getAttribute('paid');
         }
 
         Thread::setStateUser($this->actor);
@@ -155,6 +164,15 @@ class ThreadSerializer extends AbstractSerializer
      * @param $thread
      * @return Relationship
      */
+    public function paidUsers($thread)
+    {
+        return $this->hasMany($thread, UserSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
     public function logs($thread)
     {
         return $this->hasMany($thread, OperationLogSerializer::class);
@@ -167,5 +185,19 @@ class ThreadSerializer extends AbstractSerializer
     public function lastDeletedLog($thread)
     {
         return $this->hasOne($thread, OperationLogSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function threadVideo($thread)
+    {
+        return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    public function topic($thread)
+    {
+        return $this->hasMany($thread, TopicSerializer::class);
     }
 }

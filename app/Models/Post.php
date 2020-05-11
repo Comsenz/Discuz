@@ -11,14 +11,17 @@ use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
 use App\Formatter\Formatter;
+use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -35,18 +38,36 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon $deleted_at
  * @property int $deleted_user_id
  * @property bool $is_first
+ * @property bool $is_comment
  * @property bool $is_approved
+ * @property Attachment $images
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
  * @property User $deletedUser
  * @property PostMod $stopWords
+ * @property Post replyPost
  * @package App\Models
  */
 class Post extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+
+    /**
+     * 摘要长度
+     */
+    const SUMMARY_LENGTH = 100;
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const NOTICE_LENGTH = 80;
+
+    /**
+     * 摘要结尾
+     */
+    const SUMMARY_END_WITH = '...';
 
     const UNAPPROVED = 0;
 
@@ -59,6 +80,7 @@ class Post extends Model
      */
     protected $casts = [
         'is_first' => 'boolean',
+        'is_comment' => 'boolean',
     ];
 
     /**
@@ -85,6 +107,13 @@ class Post extends Model
     protected static $formatter;
 
     /**
+     * The markdown text formatter instance.
+     *
+     * @var MarkdownFormatter
+     */
+    protected static $markdownFormatter;
+
+    /**
      * Unparse the parsed content.
      *
      * @param string $value
@@ -92,7 +121,11 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        return static::$formatter->unparse($value);
+        if ($this->is_first && $this->thread->type == 1) {
+            return static::$markdownFormatter->unparse($value);
+        } else {
+            return static::$formatter->unparse($value);
+        }
     }
 
     /**
@@ -112,7 +145,11 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+        if ($this->is_first && ($this->thread->type == 1)) {
+            $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
+        } else {
+            $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+        }
     }
 
     /**
@@ -132,9 +169,76 @@ class Post extends Model
      */
     public function formatContent()
     {
-        return $this->attributes['content']
-            ? static::$formatter->render($this->attributes['content'])
-            : '';
+        $content = $this->attributes['content'] ?: '';
+
+        if ($this->is_first && ($this->thread->type == 1)) {
+            $content = $content ? static::$markdownFormatter->render($content) : '';
+        } else {
+            $content = $content ? static::$formatter->render($content) : '';
+        }
+
+        return $content;
+    }
+
+    /**
+     * 获取 Content & firstContent
+     *
+     * @param int $substr
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getSummaryContent($substr = 0)
+    {
+        $special = app()->make(SpecialCharServer::class);
+
+        $build = [
+            'content' => '',
+            'first_content' => '',
+        ];
+
+        /**
+         * 判断是否是楼中楼的回复
+         */
+        if ($this->reply_post_id) {
+            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+            $content = $this->formatContent();
+        } else {
+            /**
+             * 判断长文点赞通知内容为标题
+             */
+            if ($this->thread->type == 1) {
+                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
+            } else {
+                // 引用回复去除引用部分
+                $this->filterPostContent();
+
+                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+                $content = $this->formatContent();
+
+                $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+            }
+        }
+
+        $build['content'] = $content;
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->title);
+
+        return $build;
+    }
+
+    /**
+     * 引用回复去除引用部分
+     *
+     * @param int $substr
+     */
+    public function filterPostContent($substr = 0)
+    {
+        // 引用回复去除引用部分
+        $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+        $this->content = preg_replace($pattern, '', $this->content);
+
+        if ($substr) {
+            $this->content = Str::of($this->content)->substr(0, $substr);
+        }
     }
 
     /**
@@ -147,9 +251,10 @@ class Post extends Model
      * @param int $replyPostId
      * @param int $replyUserId
      * @param int $isFirst
+     * @param int $isComment
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst = 0)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment)
     {
         $post = new static;
 
@@ -161,6 +266,7 @@ class Post extends Model
         $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
+        $post->is_comment = $isComment;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
@@ -190,16 +296,16 @@ class Post extends Model
      * Hide the post.
      *
      * @param User $actor
-     * @param string $message
+     * @param array $options
      * @return $this
      */
-    public function hide(User $actor, $message = '')
+    public function hide(User $actor, $options = [])
     {
-        if (! $this->deleted_at) {
+        if (!$this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 
-            $this->raise(new Hidden($this, $actor, ['message' => $message]));
+            $this->raise(new Hidden($this, $actor, $options));
         }
 
         return $this;
@@ -209,16 +315,16 @@ class Post extends Model
      * Restore the post.
      *
      * @param User $actor
-     * @param string $message
+     * @param array $options
      * @return $this
      */
-    public function restore(User $actor, $message = '')
+    public function restore(User $actor, $options = [])
     {
         if ($this->deleted_at !== null) {
             $this->deleted_at = null;
             $this->deleted_user_id = null;
 
-            $this->raise(new Restored($this, $actor, ['message' => $message]));
+            $this->raise(new Restored($this, $actor, $options));
         }
 
         return $this;
@@ -243,11 +349,8 @@ class Post extends Model
      */
     public function refreshReplyCount()
     {
-        $this->reply_count = $this
-            ->where([
-                'reply_post_id' => $this->id,
-                'is_approved' => 1
-            ])
+        $this->reply_count = $this->where('reply_post_id', $this->id)
+            ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
             ->count();
 
@@ -285,6 +388,16 @@ class Post extends Model
     }
 
     /**
+     * Define the relationship with the post's content post.
+     *
+     * @return BelongsTo
+     */
+    public function replyPost()
+    {
+        return $this->belongsTo(Post::class, 'reply_post_id');
+    }
+
+    /**
      * Define the relationship with the user who hid the post.
      *
      * @return BelongsTo
@@ -309,7 +422,9 @@ class Post extends Model
      */
     public function likedUsers()
     {
-        return $this->belongsToMany(User::class)->withPivot('created_at');
+        return $this->belongsToMany(User::class)
+            ->orderBy('post_user.created_at', 'desc')
+            ->withPivot('created_at');
     }
 
     /**
@@ -329,7 +444,7 @@ class Post extends Model
      */
     public function images()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', true);
+        return $this->hasMany(Attachment::class)->where('is_gallery', true)->orderBy('order');
     }
 
     /**
@@ -339,7 +454,7 @@ class Post extends Model
      */
     public function attachments()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', false);
+        return $this->hasMany(Attachment::class)->where('is_gallery', false)->orderBy('order');
     }
 
     /**
@@ -355,6 +470,10 @@ class Post extends Model
         return $this->hasOne(PostUser::class)->where('user_id', $user ? $user->id : null);
     }
 
+    public function mentionUsers()
+    {
+        return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
+    }
     /**
      * Set the user for which the state relationship should be loaded.
      *
@@ -376,6 +495,16 @@ class Post extends Model
     }
 
     /**
+     * Get the markdown text formatter instance.
+     *
+     * @return MarkdownFormatter
+     */
+    public static function getMarkdownFormatter()
+    {
+        return static::$markdownFormatter;
+    }
+
+    /**
      * Set the text formatter instance.
      *
      * @param Formatter $formatter
@@ -383,5 +512,15 @@ class Post extends Model
     public static function setFormatter(Formatter $formatter)
     {
         static::$formatter = $formatter;
+    }
+
+    /**
+     * Set the markdown text formatter instance.
+     *
+     * @param MarkdownFormatter $formatter
+     */
+    public static function setMarkdownFormatter(MarkdownFormatter $formatter)
+    {
+        static::$markdownFormatter = $formatter;
     }
 }

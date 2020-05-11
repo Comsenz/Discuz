@@ -27,15 +27,19 @@ use Illuminate\Support\Carbon;
  * @property string $username
  * @property string $mobile
  * @property string $password
+ * @property string $pay_password
  * @property string $avatar
  * @property int $status
- * @property int $mobile_confirmed
  * @property string $union_id
  * @property string $last_login_ip
  * @property string $register_ip
+ * @property string $register_reason
+ * @property string $signature
+ * @property string $username_bout
  * @property int $thread_count
  * @property int $follow_count
  * @property int $fans_count
+ * @property int $liked_count
  * @property Carbon $login_at
  * @property Carbon $avatar_at
  * @property Carbon $joined_at
@@ -45,18 +49,22 @@ use Illuminate\Support\Carbon;
  * @property string $identity
  * @property string $realname
  * @property Group $groups
+ * @property userFollow $follow
+ * @property UserWallet $userWallet
+ * @property UserWechat $wechat
  * @package App\Models
  * @method truncate()
+ * @method hasAvatar()
  * @method static find($id)
- * @method static where(array)
+ * @method static whereIn($field, $ids)
+ * @method static findOrfail($id)
+ * @method static where($column, $array)
  */
 class User extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
     use Notifiable;
-
-    const MOBILE_ACTIVE = true;
 
     /**
      * @var bool
@@ -67,7 +75,6 @@ class User extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'mobile_confirmed' => 'boolean',
     ];
 
     /**
@@ -95,17 +102,15 @@ class User extends Model
     /**
      * 枚举 - status
      *
-     * 0 正常 1 禁用 2 审核中
-     * 3 审核通过 4 审核拒绝 5 审核忽略
+     * 0 正常 1 禁用 2 审核中 3 审核拒绝 4 审核忽略
      * @var array
      */
     protected static $status = [
         'normal' => 0,
         'ban' => 1,
         'mod' => 2,
-        'through' => 3,
-        'refuse' => 4,
-        'ignore' => 5,
+        'refuse' => 3,
+        'ignore' => 4,
     ];
 
     /**
@@ -140,6 +145,7 @@ class User extends Model
         $user = new static;
         $user->attributes = $data;
         $user->joined_at = Carbon::now();
+        $user->login_at = Carbon::now();
         $user->setPasswordAttribute($user->password);
         return $user;
     }
@@ -187,7 +193,16 @@ class User extends Model
     {
         $this->password = $password;
 
-//        $this->raise(new PasswordChanged($this));
+        // $this->raise(new PasswordChanged($this));
+
+        return $this;
+    }
+
+    public function changePayPassword($password)
+    {
+        $this->pay_password = $password;
+
+        // $this->raise(new PayPasswordChanged($this));
 
         return $this;
     }
@@ -227,9 +242,26 @@ class User extends Model
         return $this;
     }
 
-    public function changeMobileActive($active)
+    public function changeUpdateAt()
     {
-        $this->mobile_confirmed = $active;
+        $this->updated_at = Carbon::now();
+
+        return $this;
+    }
+
+    public function changeUsername($username)
+    {
+        $this->username = $username;
+
+        // 修改次数+1
+        $this->username_bout += 1;
+
+        return $this;
+    }
+
+    public function changeSignature($signature)
+    {
+        $this->signature = $signature;
 
         return $this;
     }
@@ -243,6 +275,17 @@ class User extends Model
     public function checkPassword($password)
     {
         return static::$hasher->check($password, $this->password);
+    }
+
+    /**
+     * Check if a given password matches the user's wallet pay password.
+     *
+     * @param string $password
+     * @return bool
+     */
+    public function checkWalletPayPassword($password)
+    {
+        return static::$hasher->check($password, $this->pay_password);
     }
 
     /*
@@ -259,6 +302,11 @@ class User extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value ? static::$hasher->make($value) : '';
+    }
+
+    public function setPayPasswordAttribute($value)
+    {
+        $this->attributes['pay_password'] = $value ? static::$hasher->make($value) : '';
     }
 
     public function getAvatarAttribute($value)
@@ -299,7 +347,7 @@ class User extends Model
     public function refreshThreadCount()
     {
         $this->thread_count = $this->threads()
-            ->where('is_approved', 1)
+            ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
             ->count();
 
@@ -351,6 +399,39 @@ class User extends Model
         return false;
     }
 
+    /**
+     * 刷新用户关注数
+     * @return $this
+     */
+    public function refreshUserFollow()
+    {
+        $this->follow_count = $this->userFollow()->count();
+        return $this;
+    }
+
+    /**
+     * 刷新用户粉丝数
+     * @return $this
+     */
+    public function refreshUserFans()
+    {
+        $this->fans_count = $this->userFans()->count();
+        return $this;
+    }
+
+    /**
+     * 刷新用户点赞主题数
+     * @return $this
+     */
+    public function refreshUserLiked()
+    {
+        $this->liked_count = $this->postUser()
+            ->join('posts', 'post_user.post_id', '=', 'posts.id')
+            ->where('posts.is_first', true)
+            ->count();
+        return $this;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | 关联模型
@@ -362,19 +443,14 @@ class User extends Model
         return $this->morphMany(OperationLog::class, 'log_able');
     }
 
+    public function latelyLog()
+    {
+        return $this->hasOne(OperationLog::class, 'log_able_id')->orderBy('id', 'desc');
+    }
+
     public function wechat()
     {
         return $this->hasOne(UserWechat::class);
-    }
-
-    /**
-     * Define the relationship with the user's profiles.
-     *
-     * @return HasOne
-     */
-    public function userProfiles()
-    {
-        return $this->hasOne(UserProfile::class);
     }
 
     /**
@@ -469,19 +545,10 @@ class User extends Model
         return $this->hasMany(UserFollow::class, 'to_user_id');
     }
 
-    public function refreshUserFollow()
+    public function postUser()
     {
-        $this->follow_count = $this->userFollow()->count();
-        return $this;
+        return $this->hasMany(PostUser::class);
     }
-
-    public function refreshUserFans()
-    {
-        $this->fans_count = $this->userFans()->count();
-        return $this;
-    }
-
-
     /*
     |--------------------------------------------------------------------------
     | 权限验证
@@ -558,5 +625,30 @@ class User extends Model
     public static function setHasher(Hasher $hasher)
     {
         static::$hasher = $hasher;
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeHasAvatar($query)
+    {
+        return $query->whereNotNull('avatar');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deny()
+    {
+        return $this->belongsToMany(User::class, 'deny_users', 'user_id', 'deny_user_id', null, null, 'deny');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function denyFrom()
+    {
+        return $this->belongsToMany(User::class, 'deny_users', 'deny_user_id', 'user_id', null, null, 'denyFrom');
     }
 }

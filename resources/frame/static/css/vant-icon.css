@@ -1,0 +1,16 @@
+/* @font-face {
+  font-family: "van-discuzQ";
+  src: url('../font/vant/vant-icon.ttf') format('truetype'),
+    url('../font/vant/vant-icon.woff') format('woff'),
+    url('../font/vant/vant-icon.woff2') format('woff2')
+}
+.van-icon {
+  font-family: "van-discuzQ" !important;
+  font-size: 14px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.van-icon,.van-icon::before {
+  display: inline-block;
+} */

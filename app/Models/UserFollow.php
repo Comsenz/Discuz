@@ -15,13 +15,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $from_user_id
  * @property int $to_user_id
+ * @property int $is_mutual
+ * @property Carbon $updated_at
  * @property Carbon $created_at
  * @package App\Models
  */
 class UserFollow extends Model
 {
-    const UPDATED_AT = null;
-
     /**
      * {@inheritdoc}
      */
@@ -31,6 +31,7 @@ class UserFollow extends Model
      * {@inheritdoc}
      */
     protected $dates = [
+        'updated_at',
         'created_at',
     ];
 
@@ -39,7 +40,8 @@ class UserFollow extends Model
      */
     protected $fillable = [
         'from_user_id',
-        'to_user_id'
+        'to_user_id',
+        'is_mutual',
     ];
 
     /**

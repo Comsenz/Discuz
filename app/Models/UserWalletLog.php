@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -11,7 +10,21 @@ namespace App\Models;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $user_id
+ * @property float $change_available_amount
+ * @property float $change_freeze_amount
+ * @property int $change_type
+ * @property string $change_desc
+ * @property int $order_id
+ * @property int $user_wallet_cash_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property Order $order
+ * @package App\Models
+ */
 class UserWalletLog extends Model
 {
     use EventGeneratorTrait;
@@ -25,7 +38,7 @@ class UserWalletLog extends Model
     /**
      * 钱包明细类型
      */
-    const TYPE_CASH_SFREEZE = 10; //提现冻结
+    const TYPE_CASH_FREEZE = 10; //提现冻结
 
     const TYPE_CASH_SUCCESS = 11; //提现成功
 
@@ -39,16 +52,27 @@ class UserWalletLog extends Model
 
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
 
+    // ----- 分割线 -----
+
+    const TYPE_EXPEND_REWARD     = 41; //打赏支出
+
+    const TYPE_INCOME_THREAD     = 60; //付费主题收入
+
+    const TYPE_EXPEND_THREAD     = 61; //付费主题支出
+
+    const TYPE_EXPEND_RENEW      = 71; //站点续费支出
+
     /**
      * 创建钱包动账记录
-     * @param  [type] $user_id                 [description]
-     * @param  [type] $change_available_amount [description]
-     * @param  [type] $change_freeze_amount    [description]
-     * @param  [type] $change_type             [description]
-     * @param  [type] $change_desc             [description]
-     * @param  [type] $user_wallet_cash_id     [description]
-     * @param  [type] $order_id                [description]
-     * @return [type]                          [description]
+     *
+     * @param int $user_id
+     * @param float $change_available_amount
+     * @param float $change_freeze_amount
+     * @param int $change_type
+     * @param string $change_desc
+     * @param int|null $user_wallet_cash_id
+     * @param int|null $order_id
+     * @return UserWalletLog
      */
     public static function createWalletLog(
         $user_id,
@@ -91,7 +115,6 @@ class UserWalletLog extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 
     /**
      * Define the relationship with the cash log.

@@ -73,7 +73,7 @@ class Category extends Model
     public function refreshThreadCount()
     {
         $this->thread_count = $this->threads()
-            ->where('is_approved', 1)
+            ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
             ->count();
 
@@ -88,5 +88,47 @@ class Category extends Model
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    /**
+     * @param User $user
+     * @param string $permission
+     * @param bool $condition
+     * @return array
+     */
+    protected static function getIdsWherePermission(User $user, string $permission, bool $condition = true): array
+    {
+        static $categories;
+
+        if (! $categories) {
+            $categories = static::all();
+        }
+
+        $ids = [];
+        $hasGlobalPermission = $user->hasPermission($permission);
+
+        $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
+            return $hasGlobalPermission && $user->hasPermission('category'.$category->id.'.'.$permission);
+        };
+
+        foreach ($categories as $category) {
+            $can = $canForCategory($category);
+
+            if ($can === $condition) {
+                $ids[] = $category->id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public static function getIdsWhereCan(User $user, string $permission): array
+    {
+        return static::getIdsWherePermission($user, $permission, true);
+    }
+
+    public static function getIdsWhereCannot(User $user, string $permission): array
+    {
+        return static::getIdsWherePermission($user, $permission, false);
     }
 }

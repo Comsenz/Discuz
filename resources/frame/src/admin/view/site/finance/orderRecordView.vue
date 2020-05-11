@@ -21,13 +21,25 @@
       </div>
 
       <div class="order-record__search-condition">
-        <span class="order-record__search-condition__title">操作用户：</span>
-        <el-input clearable v-model="operationUser" placeholder="搜索操作用户"></el-input>
+        <span class="order-record__search-condition__title">发起方：</span>
+        <el-input clearable v-model="operationUser" placeholder="搜索发起方"></el-input>
       </div>
 
       <div class="order-record__search-condition">
         <span class="order-record__search-condition__title">商品：</span>
         <el-input clearable v-model="commodity" placeholder="搜索商品"></el-input>
+      </div>
+
+      <div class="order-record__search-condition">
+        <span class="order-record__search-condition__title">订单状态：</span>
+        <el-select v-model="value" clearable placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </div>
 
       <div class="order-record__search-condition">
@@ -42,12 +54,18 @@
 
         <el-table-column
           prop="_data.order_sn"
-          label="订单号">
+          label="订单号"
+          min-width="110">
         </el-table-column>
 
         <el-table-column
           prop="user._data.username"
-          label="操作用户">
+          label="发起方">
+        </el-table-column>
+
+        <el-table-column
+          prop="payee._data.username"
+          label="收入方">
         </el-table-column>
 
         <el-table-column
@@ -55,6 +73,14 @@
           show-overflow-tooltip
           label="商品名称"
           min-width="150">
+          <template slot-scope="scope">
+            <span :class="scope.row.thread?'cursor-pointer':''" v-if="scope.row.thread && scope.row.thread._data.type === 1" @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
+              {{scope.row.thread._data.title}}
+            </span>
+            <span :class="scope.row.thread?'cursor-pointer':''" v-else @click="viewClick(scope.row.thread?scope.row.thread._data.id:'')">
+              {{scope.row.thread?scope.row.thread.firstPost._data.content:'注册付费'}}
+            </span>
+          </template>
         </el-table-column>
 
         <el-table-column

@@ -8,10 +8,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Discuz\Database\ScopeVisibilityTrait;
 
 /**
  * @property int $id
@@ -26,6 +26,7 @@ use Discuz\Database\ScopeVisibilityTrait;
  * @property int $status
  * @property int $platform
  * @property int $payment_type
+ * @property int $is_anonymous
  * @property string $remark
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -45,6 +46,8 @@ class Order extends Model
 
     const ORDER_TYPE_REWARD   = 2; //打赏
 
+    const ORDER_TYPE_THREAD   = 3; //付费主题
+
     /**
      * 订单状态
      */
@@ -58,6 +61,17 @@ class Order extends Model
      * 注册收款人ID
      */
     const REGISTER_PAYEE_ID = 0;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'master_amount' => 'decimal:2',
+        'type' => 'integer',
+        'status' => 'integer',
+        'is_anonymous' => 'boolean',
+    ];
 
     /**
      * Define the relationship with the order's owner.

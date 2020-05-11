@@ -15,8 +15,7 @@ export default {
       },
       rules:{
         user:[
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password:[
           { required: true, message: '请输入密码', trigger: 'blur' }
@@ -36,50 +35,72 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.postLogin().then(res=>{
-            // this.tokenId = res.data.id;
-            let token = res.data.attributes.access_token;
-            let tokenId = res.data.id;
-            let refreshToken = res.data.attributes.refresh_token;
-            browserDb.setLItem('Authorization', token);
-            browserDb.setLItem('tokenId', tokenId);
-            browserDb.setLItem('refreshToken',refreshToken);
 
-            if (token && tokenId) {
-              this.getUserInfo(tokenId).then(res => {
-                if (res.errors){
-                  if (res.errors[0].detail){
+            if (res.errors){
+              if (res.errors[0].detail){
+                this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+              } else {
+                this.$message.error(res.errors[0].code);
+              }
+              this.loginLoading = false;
+            } else {
+              // this.tokenId = res.data.id;
+              let token = res.data.attributes.access_token;
+              let tokenId = res.data.id;
+              let refreshToken = res.data.attributes.refresh_token;
+              browserDb.setLItem('Authorization', token);
+              browserDb.setLItem('tokenId', tokenId);
+              browserDb.setLItem('refreshToken', refreshToken);
+
+              if (token && tokenId) {
+                this.getUserInfo(tokenId).then(res => {
+                  if (res.errors) {
+                    if (res.errors[0].detail) {
+                      this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
+                    } else {
+                      this.$message.error(res.errors[0].code);
+                    }
+                    this.loginLoading = false;
+                  } else {
+                    let groupId = res.readdata.groups[0]._data.id;
+                    browserDb.setLItem('username', res.data.attributes.username);
+                    if (groupId === "1") {
+                      this.$router.push({path: '/admin'});
+                      this.$message({
+                        message: '登录成功！',
+                        type: 'success'
+                      });
+                      this.loginLoading = false;
+                    } else {
+                      this.$message.error('权限不足！');
+                      this.loginLoading = false;
+                    }
+                  }
+                })
+              } else {
+                if (res.errors) {
+                  if (res.errors[0].detail) {
                     this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0])
                   } else {
                     this.$message.error(res.errors[0].code);
                   }
                   this.loginLoading = false;
-                } else {
-                  let groupId = res.readdata.groups[0]._data.id;
-                  browserDb.setLItem('username', res.data.attributes.username);
-                if (groupId === "1") {
-                    this.$router.push({path: '/admin'});
-                    this.$message({
-                      message: '登录成功！',
-                      type: 'success'
-                    });
-                    this.loginLoading = false;
-                  } else {
-                    this.$message.error('权限不足！');
-                    this.loginLoading = false;
-                  }
                 }
-              })
-            } else {
-              this.$message.error('登录失败');
+              }
+            }
+          }).catch((err)=>{
+            if (err.errors){
+              if (err.errors[0].detail){
+                this.$message.error(err.errors[0].code + '\n' + err.errors[0].detail[0])
+              } else {
+                this.$message.error(err.errors[0].code);
+              }
               this.loginLoading = false;
             }
-          }).catch(()=>{
-            this.$message.error('登录失败');
             this.loginLoading = false;
           })
 
         } else {
-          console.log('error submit!!');
           this.loginLoading = false;
           return false;
         }
@@ -109,7 +130,6 @@ export default {
       }).then(res=>{
           return res
       }).catch(err=>{
-        console.log(err);
       })
     },
     getUserInfo(id){
@@ -123,7 +143,6 @@ export default {
       }).then(res=>{
         return res
       }).catch(err=>{
-        console.log(err);
       })
     }
   },

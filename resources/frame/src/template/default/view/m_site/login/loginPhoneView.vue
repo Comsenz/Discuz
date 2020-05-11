@@ -28,7 +28,7 @@
         </div>
 
         <div class="login-phone-btn">
-          <van-button type="primary" @click="phoneLoginClick">登录</van-button>
+          <van-button type="primary" :loading="btnLoading" loading-text="登录中..." @click="phoneLoginClick">登录</van-button>
         </div>
 
         <div class="login-phone-method">
@@ -37,7 +37,7 @@
           </div>
 
           <div class="login-phone-method-icon">
-            <div class="login-phone-method-icon-box" :class="{'justifyCenter':isOne}">
+            <div class="login-phone-method-icon-box" :class="{'justifyCenter':phoneStatus !== wxLoginShow}">
               <i @click="loginUserClick" class="login-phone-method-icon-ring iconfont">
                 <span class="icon iconfont icon-yonghu" style="color:rgba(136, 136, 136, 1);"></span>
               </i>
@@ -53,9 +53,6 @@
 </template>
 
 <script>
-// import '../../../../../../static/css/iconfont.css';
-// import '../../../scss/m_site/login/loginSignUpModule.scss';
-
 import '../../../defaultLess/m_site/modules/loginSignUpModule.less'
 import '../../../defaultLess/m_site/common/common.less'
 import loginPhoneCon from '../../../controllers/m_site/login/loginPhoneCon';

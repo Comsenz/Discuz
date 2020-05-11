@@ -9,6 +9,7 @@ import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
 import moment from "moment/moment";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+import commonHelper from "../../../../../helpers/commonHelper";
 
 
 export default {
@@ -46,8 +47,8 @@ export default {
           }
         }]
       },
-      releaseTime: ['',''],            //发布时间范围
-      deleteTime: ['',''],             //删除时间范围
+      releaseTime: ['',''],       //发布时间范围
+      deleteTime: ['',''],        //删除时间范围
 
       radioList:'',               //主题左侧单选
       deleteStatusList:[],        //硬删除列表
@@ -58,15 +59,21 @@ export default {
       total:0,                    //主题列表总条数
       pageCount:1,                //总页数
       submitForm:[],              //提交操作表单
-      showViewer:false,      //预览图
-      url:[]
+      showViewer:false,           //预览图
+      url:[],
+      subLoading:false,           //提交按钮状态
+      btnLoading:0,               //0表示没有loading状态，1：全部还原、2：全部删除
 
     }
   },
 
   methods:{
+
+    titleIcon(item){
+      return commonHelper.titleIcon(item);
+    },
+
     imgShowClick(list,imgIndex){
-      console.log(list);
       this.url = [];
       let urlList = [];
 
@@ -104,12 +111,10 @@ export default {
           this.submitForm[index].hardDelete = true;
           break;
         default:
-          console.log("左侧操作错误，请刷新页面!")
       }
     },
 
     searchClick(){
-      console.log(this.releaseTime);
       this.currentPaga = 1;
       this.getPostsList(1);
     },
@@ -122,8 +127,7 @@ export default {
     },
 
     submitClick() {
-      console.log(this.submitForm);
-
+      this.subLoading = true;
       this.deleteStatusList = [];
       let isDeleted = [];
 
@@ -146,6 +150,7 @@ export default {
     },
 
     allOperationsSubmit(val){
+      this.btnLoading = val;
       let deleteStr = '';
       switch (val){
         case 1:
@@ -165,7 +170,6 @@ export default {
           this.deletePostsBatch(deleteStr);
           break;
         default:
-          console.log("全部还原或全部删除操作错误,请刷新页面!")
       }
     },
 
@@ -200,8 +204,6 @@ export default {
           'sort':'-deletedAt'
         }
       }).then(res=>{
-        console.log(res);
-
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -218,7 +220,6 @@ export default {
               type: 'posts',
               id: item._data.id,
               attributes: {
-                isApproved: 0,
                 isDeleted: true,
                 message: '',
               }
@@ -226,9 +227,7 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
     getCategories(){
       this.appFetch({
@@ -248,9 +247,7 @@ export default {
           })
         }
       }).catch(err=>{
-        console.log(err);
       })
-
     },
     patchPostsBatch(data){
       this.appFetch({
@@ -260,6 +257,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -272,7 +271,6 @@ export default {
               type: 'success'
             });
           }
-          console.log(res);
         }
       }).catch(err=>{
 
@@ -287,6 +285,8 @@ export default {
           data
         }
       }).then(res=>{
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.errors){
           this.$message.error(res.errors[0].code);
         }else {
@@ -302,7 +302,6 @@ export default {
           }
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
@@ -312,7 +311,8 @@ export default {
         method:'delete',
         splice:'/'+ data
       }).then(res=>{
-        console.log(res);
+        this.subLoading = false;
+        this.btnLoading = 0;
         if (res.meta){
           res.meta.forEach((item,index)=>{
             setTimeout(()=>{
@@ -327,16 +327,13 @@ export default {
           });
         }
       }).catch(err=>{
-        console.log(err);
       })
     },
 
     getCreated(state){
       if(state){
-        console.log(state);
         this.getPostsList(1);
       } else {
-        console.log(state);
         this.getPostsList(Number(webDb.getLItem('currentPag'))||1);
       }
     }
@@ -349,10 +346,8 @@ export default {
   beforeRouteEnter(to,from,next){
     next(vm => {
       if (to.name !== from.name && from.name !== null){
-        console.log('执行');
         vm.getCreated(true)
       }else {
-        console.log('不执行');
         vm.getCreated(false)
       }
     })

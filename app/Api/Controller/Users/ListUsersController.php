@@ -13,7 +13,6 @@ use App\Traits\UserTrait;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Http\UrlGenerator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -34,11 +33,6 @@ class ListUsersController extends AbstractListController
      * {@inheritdoc}
      */
     public $include = ['groups'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public $optionalInclude = ['wechat'];
 
     /**
      * {@inheritdoc}
@@ -79,7 +73,7 @@ class ListUsersController extends AbstractListController
 
         $this->assertCan($actor, 'viewUserList');
 
-        $filter = Arr::only($this->extractFilter($request), ['id', 'username', 'mobile', 'group_id', 'wechat', 'status']);
+        $filter = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 
         $limit = $this->extractLimit($request);
@@ -100,7 +94,7 @@ class ListUsersController extends AbstractListController
 
         $document->setMeta([
             'total' => $this->userCount,
-            'size' => (int) $limit,
+            'pageCount' => ceil($this->userCount / $limit),
         ]);
 
         return $users;
@@ -119,7 +113,7 @@ class ListUsersController extends AbstractListController
     {
         $query = $this->users->query()->whereVisibleTo($actor);
 
-        $this->applyFilters($query, $filter);
+        $this->applyFilters($query, $filter, $actor);
 
         $this->userCount = $limit > 0 ? $query->count() : null;
 

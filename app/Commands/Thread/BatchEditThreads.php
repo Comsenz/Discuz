@@ -74,13 +74,16 @@ class BatchEditThreads
 
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $thread)) {
-                    $thread->is_approved = $attributes['isApproved'];
-
-                    $thread->raise(new ThreadWasApproved(
-                        $thread,
-                        $this->actor,
-                        ['message' => isset($attributes['message']) ? $attributes['message'] : '']
-                    ));
+                    if ($thread->is_approved != $attributes['isApproved']) {
+                        $thread->is_approved = $attributes['isApproved'];
+                        $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
+                        // 内容审核通知
+                        $thread->raise(new ThreadWasApproved(
+                            $thread,
+                            $this->actor,
+                            ['notice_type' => 'isApproved', 'message' => $approvedMsg]
+                        ));
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -89,7 +92,18 @@ class BatchEditThreads
 
             if (isset($attributes['isSticky'])) {
                 if ($this->actor->can('sticky', $thread)) {
-                    $thread->is_sticky = $attributes['isSticky'];
+                    if ($thread->is_sticky != $attributes['isSticky']) {
+                        $thread->is_sticky = $attributes['isSticky'];
+                        // 批量置顶通知
+                        if ($attributes['isSticky']) {
+                            // 内容置顶通知
+                            $thread->raise(new ThreadWasApproved(
+                                $thread,
+                                $this->actor,
+                                ['notice_type' => 'isSticky']
+                            ));
+                        }
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -98,7 +112,17 @@ class BatchEditThreads
 
             if (isset($attributes['isEssence'])) {
                 if ($this->actor->can('essence', $thread)) {
-                    $thread->is_essence = $attributes['isEssence'];
+                    if ($thread->is_essence != $attributes['isEssence']) {
+                        $thread->is_essence = $attributes['isEssence'];
+                        // 内容精华通知
+                        if ($attributes['isEssence']) {
+                            $thread->raise(new ThreadWasApproved(
+                                $thread,
+                                $this->actor,
+                                ['notice_type' => 'isEssence']
+                            ));
+                        }
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -107,12 +131,15 @@ class BatchEditThreads
 
             if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('hide', $thread)) {
-                    $message = isset($attributes['message']) ? $attributes['message'] : '';
+                    if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
+                        $message = isset($attributes['message']) ? $attributes['message'] : '';
 
-                    if ($attributes['isDeleted']) {
-                        $thread->hide($this->actor, $message);
-                    } else {
-                        $thread->restore($this->actor, $message);
+                        if ($attributes['isDeleted']) {
+                            // 内容删除通知
+                            $thread->hide($this->actor, ['message' => $message]);
+                        } else {
+                            $thread->restore($this->actor, ['message' => $message]);
+                        }
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];

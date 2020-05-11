@@ -22,7 +22,6 @@ export default {
 
   [SET_NUM](state,payload){
     state.num++;
-    console.log(payload);
   }
 
 }

@@ -37,5 +37,45 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
+        $query->whereIn('id', Category::getIdsWhereCan($actor, 'viewThreads'));
+    }
+
+    /**
+     * @param User $actor
+     * @param Category $category
+     * @return bool|null
+     */
+    public function viewThreads(User $actor, Category $category)
+    {
+        if ($actor->hasPermission('viewThreads')
+            && $actor->hasPermission('category'.$category->id.'.viewThreads')) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Category $category
+     * @return bool|null
+     */
+    public function createThread(User $actor, Category $category)
+    {
+        if ($actor->hasPermission('createThread')
+            && $actor->hasPermission('category'.$category->id.'.createThread')) {
+            return true;
+        }
+    }
+
+    /**
+     * @param User $actor
+     * @param Category $category
+     * @return bool|null
+     */
+    public function replyThread(User $actor, Category $category)
+    {
+        if ($actor->hasPermission('thread.reply')
+            && $actor->hasPermission('category'.$category->id.'.replyThread')) {
+            return true;
+        }
     }
 }

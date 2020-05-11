@@ -76,7 +76,8 @@
         <ContArrange
           v-for="(items,index) in  themeList"
           :replyBy="!items.user?'该用户被删除':items.user._data.username"
-          :themeName="items.thread.firstPost._data.content"
+          :themeName="items.thread._data.type === 1?items.thread._data.title:items.thread.firstPost._data.content"
+          :titleIcon="titleIcon(items.thread._data)"
           :finalPost="formatDate(items._data.createdAt)"
           :deleTime="formatDate(items._data.deletedAt)"
           :ip="items._data.ip"
@@ -90,9 +91,14 @@
             </el-radio-group>
           </div>
 
+          <!--<a slot="longText" class="recycle-bin-reply-table__long-text" v-if="items.thread._data.isLongArticle" :href="'/details/' + items._data.id" >
+            {{items.thread._data.title}}
+            <span  class="iconfont" :class="parseInt(items.thread._data.price) > 0?'iconmoney':'iconchangwen'" ></span>
+          </a>-->
+
           <div class="recycle-bin-reply-table__main" slot="main">
             <!--<a :href="'/details/' + items._data.id" style="color: #333333;" target="_blank" v-html="items._data.contentHtml"></a>-->
-            <a class="recycle-bin-reply-table__main__cont-text" :href="'/details/' + items._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+            <a class="recycle-bin-reply-table__main__cont-text" :href="'/details/' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
             <div class="recycle-bin-reply-table__main__cont-imgs">
               <p class="recycle-bin-reply-table__main__cont-imgs-p" v-for="(item,index) in items.images" :key="index">
                 <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">
@@ -132,9 +138,9 @@
       </div>
 
       <div class="recycle-bin-reply-footer footer-btn">
-        <el-button size="small" type="primary" @click="submitClick">提交</el-button>
-        <el-button type="text" @click="allOperationsSubmit(1)">全部还原</el-button>
-        <el-button type="text" @click="allOperationsSubmit(2)">全部删除</el-button>
+        <el-button size="small" :loading="subLoading" type="primary" @click="submitClick">提交</el-button>
+        <el-button type="text" :loading="btnLoading === 1" @click="allOperationsSubmit(1)">全部还原</el-button>
+        <el-button type="text" :loading="btnLoading === 2" @click="allOperationsSubmit(2)">全部删除</el-button>
         <!-- <el-checkbox v-model="appleAll">将操作应用到其他所有页面</el-checkbox> -->
       </div>
 

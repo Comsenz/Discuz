@@ -8,6 +8,7 @@
 namespace App\Listeners\User;
 
 use App\Events\Users\Registered;
+use App\Models\Group;
 use App\Models\Invite;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
@@ -31,12 +32,16 @@ class InviteBind
             $len = mb_strlen($code, 'utf-8');
 
             if ($len == 32) {
-                //用户吗32位长度为管理员邀请
+                //邀请码 32位长度为管理员邀请
                 $invite = $this->InviteRepository->verifyCode($code);
 
                 if ($invite) {
                     $invite->to_user_id = $event->user->id;
+                    $invite->status = 2;
                     $invite->save();
+                    //同步用户组
+                    $defaultGroup = Group::find($invite->group_id);
+                    $event->user->groups()->sync($defaultGroup->id);
                 }
             } else {
                 $encrypter = app('encrypter');

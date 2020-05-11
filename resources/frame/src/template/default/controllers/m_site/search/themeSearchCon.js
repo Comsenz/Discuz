@@ -5,29 +5,39 @@
 export default {
   data: function () {
     return {
-      serHide: true,
-      serShow: false,
+      // serHide: true,
+      serShow: true,
       searchVal: '',
+      inputSearchVal:'',
       searchThemeList: [],
       themeLoadMorePageChange: false,
       loading: false, //是否处于加载状态
       finished: false, //是否已加载完所有数据
       isLoading: false, //是否处于下拉刷新状态
-      pageIndex: 1, //页码
+      pageIndex: 0, //页码
       offset: 100, //滚动条与底部距离小于 offset 时触发load事件
       immediateCheck: false, //是否在初始化时立即执行滚动位置检查
       pageLimit: 20,
       searchTimer: null,
+      // placeholder:'', //搜索框回填
     }
   },
   //用于数据初始化
   created: function () {
     // this.loadUserList();
-    let searchWord = '';
+    // let searchWord = '';
     if (this.$route.query && this.$route.query.searchWord) {
-      searchWord = this.$route.query.searchWord
+      this.searchVal = this.$route.query.searchWord;
+      if(this.searchVal){
+        // this.serShow = true;
+        // this.serShow = false;
+        this.onSearch(this.searchVal);
+      }else{
+
+      }
+      // this.inputSearchVal =  this.$route.query.searchWord;
     }
-    this.onSearch(searchWord);
+    this.onSearch(this.searchVal);
   },
   methods: {
     //搜索框切换
@@ -39,7 +49,7 @@ export default {
     onSearch(val) {
       clearTimeout(this.searchTimer);
       this.searchVal = val;
-      this.pageIndex = 1;
+      this.pageIndex = 0;
       this.searchTimer = setTimeout(()=>{
           this.handleSearchUser(true);
       }, 220)
@@ -52,8 +62,8 @@ export default {
             method: 'get',
             //   data:this.userParams
             data: {
-              include: ['user', 'firstPost', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers'],
-              'filter[username]': this.searchVal.trim(),
+              include: ['user', 'firstPost','user.groups', 'firstPost.images', 'lastThreePosts', 'lastThreePosts.user', 'lastThreePosts.replyUser', 'firstPost.likedUsers', 'rewardedUsers', 'threadVideo'],
+              'filter[q]': this.searchVal.trim(),
               'page[number]': this.pageIndex,
               'page[limit]': this.pageLimit
             }
@@ -106,7 +116,7 @@ export default {
     },
     //点击用户名称，跳转到用户主页
     jumpPerDet: function (id) {
-      console.log('跳转到个人主页')
+      //跳转到个人主页
       this.$router.push({
         path: '/home-page' + '/' + id
       });

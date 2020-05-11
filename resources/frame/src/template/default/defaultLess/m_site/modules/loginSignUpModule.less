@@ -3,7 +3,7 @@
  *   移动端登录模块样式
  */
 
-@import "../common/var.less";
+@import "../common/theme.less";
 @w100:100%;  //宽度100%
 
 
@@ -47,7 +47,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 40px 0 58px 0;
+  margin: 40px 0 48px 0;
 
   .login-module-title{
     text-align: center;
@@ -92,9 +92,9 @@ body{
 
   .login-user-box-main{
     width: @w100;
-    height: 100%;
+    // height: 100%;
     // height: @heightCalc40;
-    padding: 44px 30px 0 30px;
+    padding: 44px 30px 40px 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -155,9 +155,9 @@ body{
   min-height: 600px;
   .login-phone-box-main{
     width: @w100;
-    height: 100%;
+    // height: 100%;
     // height: @heightCalc40;
-    padding: 44px 30px 0 30px;
+    padding: 44px 30px 40px 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -222,10 +222,10 @@ body{
 
   .wx-login-bd-main{
     width: 100%;
-    height: 100%;
+    // height: 100%;
     //height: @heightCalc;
     font-size: 15px;
-    padding: 44px 30px 0 30px;
+    padding: 44px 30px 40px 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -281,10 +281,10 @@ body{
 
   .wx-sign-up-bd-main{
     width: 100%;
-    height: 100%;
+    // height: 100%;
     //height: @heightCalc;
     font-size: 15px;
-    padding: 44px 30px 0 30px;
+    padding: 44px 30px 40px 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -342,10 +342,10 @@ body{
 
   .bind-phone-main{
     width: @w100;
-    height: 100%;
+    // height: 100%;
     //height: @heightCalc40;
 
-    padding: 44px 30px 0 30px;
+    padding: 44px 30px 40px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -406,8 +406,8 @@ body{
 
   .sign-up-main{
     width: @w100;
-    height: 100%;
-    padding: 44px 30px 0 30px;
+    // height: 100%;
+    padding: 44px 30px 40px 30px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -449,7 +449,7 @@ body{
       justify-content: center;
       align-items: center;
       margin-top: 40px;
-      margin-bottom: 58px;
+      margin-bottom:38px;
 
       h2{
         font-size:19px;
@@ -464,7 +464,7 @@ body{
       font-size: 16px;
     }
     .pay-the-fee-title-footer{
-      margin-top: 15px;
+      margin-top: 20px;
       margin-bottom: 15px;
       font-size: 14px;
       font-weight:500;
@@ -480,7 +480,7 @@ body{
 
     background-color: @corFff;
     margin-top: 22px;
-    padding: 32px;
+    padding: 16px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -519,9 +519,7 @@ body{
     .pay-the-fee-per-list-footer{
       width: 100%;
       height: 30px;
-      position: absolute;
-      left: 0;
-      bottom: 49px;
+      padding-top: 40px;
       text-align: center;
       p{
         color: @main;
@@ -532,4 +530,41 @@ body{
 
   }
 
+}
+
+
+/*
+ * 微信pc端扫码
+ */
+.wx-qr-code-box{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(249, 249, 249);
+  text-align: center;
+  padding-top: 50px;
+  box-sizing: border-box;
+
+  h2{
+    font-size: 14px;
+  }
+
+  .img-box{
+    text-align: center;
+
+    .qrcode{
+      width: 280PX;
+      margin-top: 15px;
+      border: 1px solid #E2e2e2;
+    }
+
+    .wx-qr-info{
+      text-align: center;
+      &__title{
+        margin-top: 15px;
+        border-radius: 100px;
+        line-height: 2;
+      }
+    }
+
+  }
 }

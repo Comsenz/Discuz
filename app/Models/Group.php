@@ -7,13 +7,12 @@
 
 namespace App\Models;
 
-use App\Events\Group\Saved;
+use App\Events\Group\Deleted;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
-use Discuz\Foundation\EventsDispatchTrait;
-use DomainException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -22,9 +21,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $type
  * @property string $color
  * @property string $icon
+ * @property int $default
+ * @property int $is_display
  * @property Collection $users
  * @property Collection $permissions
- * @property int default
  * @method truncate()
  * @method create(array $array)
  * @method insert(array $array)
@@ -33,12 +33,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Group extends Model
 {
-    use EventGeneratorTrait, ScopeVisibilityTrait;
+    use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
     /**
      * The ID of the administrator group.
      */
     const ADMINISTRATOR_ID = 1;
+
+    /**
+     * The ID of the banned group.
+     */
+    const BAN_ID = 5;
+
+    /**
+     * The ID of the unpaid group.
+     */
+    const UNPAID = 6;
 
     /**
      * The ID of the guest group.
@@ -50,34 +61,44 @@ class Group extends Model
      */
     const MEMBER_ID = 10;
 
-    /*
-     * 未付费用户组
-     */
-    const UNPAID = 6;
-
-    const BAN_ID = 5;
-
-    const DEFAULT = 1;
-
     /**
-     * @var bool
+     * {@inheritdoc}
      */
     public $timestamps = false;
 
     /**
-     * @var array
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'default' => 'boolean',
+        'is_display' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
      */
     protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
 
+    /**
+     * {@inheritdoc}
+     */
     protected static function boot()
     {
         parent::boot();
 
-        static::deleting(function (self $group) {
-            if (in_array($group->id, [self::GUEST_ID, self::ADMINISTRATOR_ID, self::MEMBER_ID])) {
-                throw new DomainException('Cannot delete the default group');
-            }
+        static::deleted(function (self $group) {
+            $group->raise(new Deleted($group));
         });
+    }
+
+    /**
+     * Define the relationship with the group's users.
+     *
+     * @return BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
     /**
@@ -90,8 +111,18 @@ class Group extends Model
         return $this->hasMany(GroupPermission::class);
     }
 
-    public function users()
+    /**
+     * Check whether the group has a certain permission.
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermission($permission)
     {
-        return $this->belongsToMany(User::class);
+        if ($this->id == self::ADMINISTRATOR_ID) {
+            return true;
+        }
+
+        return $this->permissions->contains('permission', $permission);
     }
 }

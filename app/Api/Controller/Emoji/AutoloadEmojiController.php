@@ -9,12 +9,12 @@ namespace App\Api\Controller\Emoji;
 
 use App\Commands\Emoji\LoadEmoji;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Http\DiscuzResponseFactory;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Illuminate\Support\Arr;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Laminas\Diactoros\Response\XmlResponse;
 
 class AutoloadEmojiController implements RequestHandlerInterface
 {
@@ -33,18 +33,18 @@ class AutoloadEmojiController implements RequestHandlerInterface
         $this->bus = $bus;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = $request->getAttribute('actor');
-        //分类
         $category = Arr::get($request->getQueryParams(), 'category', 'all');
 
-        $emoji = $this->bus->dispatch(
+        $this->bus->dispatch(
             new LoadEmoji($actor, $category)
         );
 
-        $body = '<xml>load emoji success</xml>';
-
-        return new XmlResponse($body);
+        return DiscuzResponseFactory::XmlResponse('<xml>load emoji success</xml>');
     }
 }

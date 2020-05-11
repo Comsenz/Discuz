@@ -50,8 +50,6 @@ export default {
   },
 
   /*beforeRouteLeave(to,form,next){
-    console.log(to);
-    console.log('离开');
     next();
   },*/
 
@@ -63,13 +61,13 @@ export default {
   },
 
   watch: {
-    currentPage:{
-      immediate: true,
+    currentPage(val){
+      /*immediate: true,
       handler (val) {
+        console.log(val);
         this.currentPags = val;
-        console.log(this.currentPags);
-      }
-
+      }*/
+      this.currentPags = val;
     }
   }
 }

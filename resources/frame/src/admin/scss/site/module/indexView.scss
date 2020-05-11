@@ -5,7 +5,7 @@
  */
 
 @import "../common/index";
-@import '../../../../../static/css/admin/iconfont.css';
+@import '../../../../../static/css/admin/discuzQfont.css';
 
 
 .index-container-box{
@@ -30,8 +30,7 @@
       justify-content: center;
 
       a{
-        width: 162Px;
-        height: 30Px;
+        height: 35Px;
         img{
           height: 100%;
         }
@@ -40,7 +39,7 @@
     }
 
     .index-header__nav{
-      width: 400PX;
+      width: 450PX;
       margin-left: 34PX;
 
       -webkit-box-sizing: border-box;
@@ -118,11 +117,12 @@
     //height: calc(100% - #{80px});
 
     .index-main-con__side{
-      width: 100%;
-      height: 100%;
+      //width: 100%;
+      //height: 100%;
       box-shadow:0 2PX 12PX 0 rgba(0,0,0,0.06);
       padding: 20PX 40PX ;
       position: relative;
+      overflow: hidden;
 
       .index-main-con__side-title{
         height: 42PX;
