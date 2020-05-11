@@ -852,7 +852,12 @@ export default {
                 if (res.readdata._data.set_site.site_mode === 'public') {
                   next({ path: 'wx-sign-up-bd' });
                 } else if (res.readdata._data.set_site.site_mode === 'pay') {
-                  next({ path: 'pay-circle' });
+                  if (to.name === 'pay-circle') {
+                    next();
+                    return;
+                  } else {
+                    next({ path: 'pay-circle' });
+                  }
                 }
               }
             } else {
