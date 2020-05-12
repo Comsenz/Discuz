@@ -37,13 +37,7 @@ export default {
 
     loadSite(initStatus = false) {
       //请求初始化站点信息数据
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (initStatus) {
           this.siteInfo = []
         }

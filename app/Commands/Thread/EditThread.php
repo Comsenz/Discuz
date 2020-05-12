@@ -187,16 +187,30 @@ class EditThread
 
         //编辑视频
         if ($thread->type == 2 && $file_id) {
+            /** @var ThreadVideo $threadVideo */
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
+
             if ($threadVideo->file_id != $attributes['file_id']) {
-                $threadVideo->file_name = $attributes['file_name'];
-                $threadVideo->file_id = $attributes['file_id'];
-                $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
-                $threadVideo->media_url = '';
-                $threadVideo->cover_url = '';
+                // 将旧的视频主题 id 设为 0
+                $threadVideo->thread_id = 0;
                 $threadVideo->save();
 
-                //重新上传视频修改为审核状态
+                // 创建新的视频记录
+                $newVideo = new ThreadVideo;
+
+                $newVideo->thread_id = $thread->id;
+                $newVideo->post_id = 0;
+                $newVideo->user_id = $this->actor->id;
+                $newVideo->type = ThreadVideo::TYPE_OF_VIDEO;
+                $newVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+                $newVideo->file_name = $attributes['file_name'];
+                $newVideo->file_id = $attributes['file_id'];
+                $newVideo->media_url = '';
+                $newVideo->cover_url = '';
+
+                $newVideo->save();
+
+                // 重新上传视频修改为审核状态
                 $thread->is_approved = 0;
             }
         }

@@ -38,6 +38,7 @@ class ThreadListener
         // 发布帖子
         $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
         $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
+        $events->listen(ThreadCreated::class, SaveVideoToDatabase::class);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);

@@ -56,6 +56,22 @@ export default {
     signUpClick() {
       this.btnLoading = true;
 
+      if (this.username === '') {
+        this.$toast("用户名不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password === '') {
+        this.$toast("密码不能为空");
+        this.btnLoading = false;
+        return;
+      }
+      if (this.password.length < this.password_length) {
+        this.$toast(`密码至少为${this.password_length}个字符`);
+        this.btnLoading = false;
+        return;
+      }
+
       if (this.signReasonStatus) {
         if (this.signReason.length < 1) {
           this.$toast.fail('请填写注册原因！');
@@ -88,11 +104,7 @@ export default {
     * 接口请求
     * */
     getForum() {
-      return this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -111,7 +123,6 @@ export default {
             this.signUpShow = false
           }
         }
-      }).catch(err => {
       })
     },
     setSignData() {
@@ -132,9 +143,8 @@ export default {
           }
         }
       }).then(res => {
-        this.btnLoading = false;
-
         this.getForum().then(() => {
+          this.btnLoading = false;
           if (res.errors) {
             if (res.errors[0].detail) {
               this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
@@ -153,7 +163,7 @@ export default {
             browserDb.setLItem('Authorization', token);
             browserDb.setLItem('tokenId', tokenId);
             browserDb.setLItem('refreshToken', refreshToken);
-
+            this.$store.dispatch("appSiteModule/invalidateForum");
             if (this.phoneStatus) {
               this.$router.push({ path: 'bind-phone' });
             } else if (this.siteMode === 'pay') {

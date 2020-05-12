@@ -38,7 +38,6 @@ export default {
       this.$router.push({path:'/login-user'})
     },
     wxLoginClick(){
-      // this.$router.push({path:'/wx-login-bd'})
       this.$router.push({path:'wx-qr-code'});
     },
 
@@ -113,6 +112,9 @@ export default {
           browserDb.setLItem('tokenId', tokenId);
           browserDb.setLItem('refreshToken',refreshToken);
 
+          this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$store.dispatch("appSiteModule/invalidateForum");
+
           this.getUsers(tokenId).then(res=>{
             if (res.readdata._data.paid){
               this.$router.push({path:'/'})
@@ -147,11 +149,7 @@ export default {
     * 接口请求
     * */
     getForum(){
-      return this.appFetch({
-        url:'forum',
-        method:'get',
-        data:{}
-      }).then(res=>{
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
         } else {

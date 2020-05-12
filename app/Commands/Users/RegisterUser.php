@@ -99,8 +99,12 @@ class RegisterUser
             new Saving($user, $this->actor, $this->data)
         );
 
-        //使用该验证可不传 password_confirmation参数不检测
-        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha')));
+        // 密码为空的时候，不验证密码，允许创建密码为空的用户(但无法登录，只能用其它方法登录)
+        $attrs_to_validate = array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha'));
+        if ($password === '') {
+            $attrs_to_validate = array_diff($attrs_to_validate, ['password' => '']);
+        }
+        $validator->valid($attrs_to_validate);
 
         $user->save();
 

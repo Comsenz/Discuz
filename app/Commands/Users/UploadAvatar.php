@@ -95,7 +95,9 @@ class UploadAvatar
             $this->assertCan($this->actor, 'edit', $user);
         }
 
-        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'avatar');
+        $ext = pathinfo($this->upload_file->getClientFilename(), PATHINFO_EXTENSION);
+        $ext ? $ext = ".$ext" : "";
+        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'avatar') . $ext;
 
         $this->upload_file->moveTo($tmpFile);
 

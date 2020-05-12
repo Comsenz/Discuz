@@ -14,7 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int $thread_id
+ * @property int $post_id
  * @property int $user_id
+ * @property int $type
  * @property int $status
  * @property string $reason
  * @property string $file_name
@@ -27,6 +29,10 @@ use Illuminate\Database\Eloquent\Model;
 class ThreadVideo extends Model
 {
     protected $table = 'thread_video';
+
+    const TYPE_OF_VIDEO = 0; // 视频
+
+    const TYPE_OF_AUDIO = 1; // 音频
 
     const VIDEO_STATUS_TRANSCODING = 0; //转码中
 

@@ -225,11 +225,7 @@ export default {
     * 接口请求
     * */
     getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {

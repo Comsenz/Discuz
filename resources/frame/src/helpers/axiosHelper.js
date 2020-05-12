@@ -5,7 +5,8 @@ import axios from "axios";
 import appConfig from "../../config/appConfig";
 import browserDb from 'webDbHelper';
 import appCommonH from "./commonHelper";
-import Router from '../admin/viewConfig/tpl'
+
+const Router = Vue.prototype.$rconfig;
 
 //需要统一处理的error
 const erroCode = [-2];
@@ -299,6 +300,9 @@ const getNewToken = function (router) {
     // browserDb.setLItem('tokenId', tokenId);
     browserDb.setLItem('refreshToken',refreshToken);
   }).catch(err=>{
+    browserDb.removeLItem('Authorization');
+    browserDb.removeLItem('refreshToken');
+    browserDb.removeLItem('tokenId');
   })
 }
 

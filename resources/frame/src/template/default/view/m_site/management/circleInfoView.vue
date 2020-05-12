@@ -54,11 +54,11 @@
             </div>
             <div class="infoItem">
             	<span class="infoItemLeft">加入时间</span>
-            	<span class="infoItemRight">{{$moment(joinedAt).format('YYYY-MM-DD')}}</span>
+            	<span class="infoItemRight">{{$dayjs(joinedAt).format('YYYY-MM-DD')}}</span>
             </div>
             <div class="infoItem" v-if="expiredAt">
             	<span class="infoItemLeft">有效期至</span>
-            	<span class="infoItemRight">{{$moment(expiredAt).format('YYYY-MM-DD')}}</span>
+            	<span class="infoItemRight">{{$dayjs(expiredAt).format('YYYY-MM-DD')}}</span>
             </div>
           </div>
           <div class="powerListBox" v-if="limitList">

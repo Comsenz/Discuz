@@ -76,6 +76,7 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 | Oauth client
 |--------------------------------------------------------------------------
 */
+
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
@@ -152,6 +153,7 @@ $route->delete('/threads/batch/{ids}', 'threads.batchDelete', ApiController\Thre
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->post('/threads/notify/video', 'threads.notify.video', ApiController\Threads\Notify\ThreadVideoNotifyController::class);
 $route->post('/thread/video', 'threads.video', ApiController\Threads\CreateThreadVideoController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Posts
@@ -253,6 +255,7 @@ $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInvit
 | Emoji
 |--------------------------------------------------------------------------
 */
+
 $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
 
 /*
@@ -260,6 +263,7 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 | Statistic
 |--------------------------------------------------------------------------
 */
+
 $route->get('/statistic/finance', 'statistic.finance', ApiController\Statistic\FinanceProfileController::class);
 $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\Statistic\FinanceChartController::class);
 
@@ -280,6 +284,7 @@ $route->delete('/follow/{id}/{type}', 'follow.delete.type', ApiController\Users\
 | Dialog
 |--------------------------------------------------------------------------
 */
+
 $route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
 $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
@@ -292,4 +297,5 @@ $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListD
 | Topic
 |--------------------------------------------------------------------------
 */
+
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);

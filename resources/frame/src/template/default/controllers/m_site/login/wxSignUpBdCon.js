@@ -86,19 +86,20 @@ export default {
     * 接口请求
     * */
     getForum() {
-      return this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
+          let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
+          let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
+          if (qcloud_captcha && register_captcha) {
+            this.signUpBdClickShow = false
+          }
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
         }
-
       }).catch(err => {
         console.log(err);
       })
@@ -143,16 +144,13 @@ export default {
           webDb.setLItem('tokenId', tokenId);
           webDb.setLItem('refreshToken', refreshToken);
 
+          this.$store.dispatch("appSiteModule/invalidateForum");
+
           this.getForum().then(() => {
-            if (this.phoneStatus) {
-              this.$router.push({ path: 'bind-phone' });
-            } else if (this.siteMode === 'pay') {
+            if (this.siteMode === 'pay') {
               this.$router.push({ path: 'pay-the-fee' });
-            } else if (this.siteMode === 'public') {
-              this.$router.push({ path: '/' });
-            } else {
-              //缺少参数，请刷新页面
             }
+            this.$router.push({ path: '/' });
           })
 
         }
@@ -161,6 +159,10 @@ export default {
         console.log(err);
         this.btnLoading = false;
       })
+    },
+    getRandomChars(len) {
+      var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      return Array(len).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
     },
     getWatchHref(code, state, sessionId) {
       this.appFetch({
@@ -178,6 +180,30 @@ export default {
           if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
+            let gotologin = webDb.getLItem('wx-goto-login');
+            if (gotologin) {
+              webDb.removeLItem('wx-goto-login');
+              this.$router.push({ path: '/wx-login-bd' })
+              return;
+            }
+            this.password = "";
+            if (this.signUpBdClickShow) {
+                this.userName = "网友" + this.getRandomChars(6);
+                this.setSignData();
+            } else {
+              this.captcha = new TencentCaptcha(this.appID, res => {
+                if (res.ret === 0) {
+                  this.userName = "网友" + this.getRandomChars(6);
+                  this.captcha_ticket = res.ticket;
+                  this.captcha_rand_str = res.randstr;
+                  //验证通过后注册
+                  this.setSignData();
+                }
+              });
+              // 显示验证码
+              this.captcha.show();
+            }
+            return;
           }
 
           if (res.errors[0].detail) {
@@ -294,16 +320,10 @@ export default {
   created() {
     this.getForum();
     this.wxtoken = webDb.getLItem('wxtoken');
-    this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
-    let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
-    if (qcloud_captcha && register_captcha) {
-      this.signUpBdClickShow = false
-    }
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);
