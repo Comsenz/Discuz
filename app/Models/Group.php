@@ -62,6 +62,16 @@ class Group extends Model
     const MEMBER_ID = 10;
 
     /**
+     * The ID of preset groups
+     */
+    const PRESET_GROUPS = [1, 5, 6, 7, 10];
+
+    /**
+     * The group need paid
+     */
+    const IS_PAID = 1;
+
+    /**
      * {@inheritdoc}
      */
     public $timestamps = false;

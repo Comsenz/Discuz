@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $payee_id
  * @property int $type
  * @property int $thread_id
+ * @property int $group_id
  * @property int $status
  * @property int $platform
  * @property int $payment_type
@@ -47,6 +48,8 @@ class Order extends Model
     const ORDER_TYPE_REWARD   = 2; //打赏
 
     const ORDER_TYPE_THREAD   = 3; //付费主题
+
+    const ORDER_TYPE_GROUP    = 4; //付费用户组
 
     /**
      * 订单状态
@@ -111,5 +114,15 @@ class Order extends Model
     public function thread()
     {
         return $this->belongsTo(Thread::class);
+    }
+
+    /**
+     * Define the relationship with the order's thread.
+     *
+     * @return BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

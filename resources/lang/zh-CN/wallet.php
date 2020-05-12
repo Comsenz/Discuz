@@ -22,4 +22,5 @@ return [
     'expend_renew'              => '站点续费支出',
     'expend_reward'             => '打赏主题支出',
     'expend_thread'             => '付费主题支出',
+    'expend_group'              => '加入用户组支出',
 ];

@@ -490,7 +490,8 @@ class User extends Model
      */
     public function groups()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)
+            ->withPivot('expiration_time');
     }
 
     /**
