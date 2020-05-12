@@ -231,7 +231,7 @@ class PayOrder
                 break;
             case '13': //小程序支付
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
-                $config['app_id']     = $this->settings->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
+                $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid： min_openid
                 $extra                = [
