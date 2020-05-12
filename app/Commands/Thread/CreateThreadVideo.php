@@ -79,12 +79,7 @@ class CreateThreadVideo
         $fileId = Arr::get($this->data, 'attributes.file_id', '');
 
         /** @var ThreadVideo $threadVideo */
-        $threadVideo = ThreadVideo::query()->where('file_id', $fileId)->firstOrNew();
-
-        // 已关联主题的视频防止再次操作
-        if ($threadVideo->thread_id != 0) {
-            throw new PermissionDeniedException();
-        }
+        $threadVideo = ThreadVideo::query()->where('thread_id', 0)->where('file_id', $fileId)->firstOrNew();
 
         /**
          * 传入 Thread 时，则视为发视频
