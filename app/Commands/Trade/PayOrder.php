@@ -19,6 +19,7 @@ use App\Trade\PayTrade;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
@@ -107,6 +108,7 @@ class PayOrder
         $this->url     = $url;
         $this->userWalletFailLogs = $userWalletFailLogs;
 
+        $this->data = collect(Arr::get($this->data, 'data.attributes'));
         // 使用钱包支付时，检查是否设置支付密码
         if (
             $this->data->get('payment_type') == 20
