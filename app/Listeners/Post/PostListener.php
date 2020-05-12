@@ -45,6 +45,7 @@ class PostListener
         // 发表回复
         $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+        $events->listen(Created::class, SaveAudioToDatabase::class);
 
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
