@@ -92,6 +92,13 @@ class ThreadVideoNotify
                             $threadVideo->cover_url = $value->CoverBySnapshotTask->Output->CoverUrl;
                         }
                     }
+                    //动图任务流
+                    if ($value->Type == 'AnimatedGraphics') {
+                        if ($value->AnimatedGraphicTask->ErrCode == 0) {
+                            //截取封面图成功
+                            $threadVideo->cover_url = $value->AnimatedGraphicTask->Output->Url;
+                        }
+                    }
                 }
             }
 

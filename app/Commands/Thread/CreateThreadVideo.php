@@ -109,6 +109,10 @@ class CreateThreadVideo
                 //普通转码
                 $this->transcodeVideo($threadVideo->file_id, 'TranscodeTaskSet');
             }
+            //转动图
+            if ($template_name = $this->settings->get('qcloud_vod_taskflow_gif', 'qcloud')) {
+                $this->processMediaByProcedure($file_id, $template_name);
+            }
         }
 
         return $threadVideo;

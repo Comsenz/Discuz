@@ -57,25 +57,28 @@ class CreateVodPlaySignature
 
         $currentTime = Carbon::now()->timestamp;
 
-        $original = [
-            'appId'                  => $subAppId,
+        $header = ['alg'=>'HS256','typ'=>'JWT'];
+
+        $payLoad = [
+            'appId'                  => $appId,
             'fileId'                 => 1,
             'currentTimeStamp'       => $currentTime,
             'expireTimeStamp'        => $currentTime + self::EXPIRETIME,    //签名到期时间戳
-            'pcfg'                   => 'Default',                          //超级播放配置名称
-            'urlAccessInfo'          => [                                   //播放链接的防盗链配置参数
-                'KEY'            => $urlKey,
-                't'              => $currentTime + self::EXPIRETIME,
-                'Dir'            => '',
-                'rlimit'         => 3,
-                'us'             => Str::random(10),
-            ],
-            'drmLicenseInfo'         => [                                   //加密内容的密钥配置参数
-                'expireTimeStamp'=>$currentTime + self::EXPIRETIME
-            ],
+            'pcfg'                   => 'basicDrmPreset',                   //超级播放配置名称
+//            'urlAccessInfo'          => [                                   //播放链接的防盗链配置参数
+//                't'              => $currentTime + self::EXPIRETIME,
+//                'rlimit'         => 3,
+//                'us'             => Str::random(10),
+//            ],
+//            'drmLicenseInfo'         => [                                   //加密内容的密钥配置参数
+//                'expireTimeStamp'=>$currentTime + self::EXPIRETIME
+//            ],
         ];
+        $header = http_build_query($header);
+        $payLoad = http_build_query($payLoad);
+        $signature = hash_hmac('HS256', base64_encode($header) . '.' . base64_encode($payLoad), $urlKey, true);
+        $token = base64_encode($header) . '.' . base64_encode($payLoad) . '.' . base64_encode($signature);
 
-
-        return $original;
+        return $token;
     }
 }
