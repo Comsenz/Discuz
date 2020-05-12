@@ -45,7 +45,9 @@ class SaveAudioToDatabase
         /**
          * 回复 或 长文首贴 可发音频
          */
-        if ($fileId && !$post->is_first || ($post->is_first && $post->thread->type === 1)) {
+        $canCreateAudio = !$post->is_first || ($post->is_first && $post->thread->type === 1);
+
+        if ($fileId && $canCreateAudio) {
             $audio = $this->bus->dispatch(
                 new CreateThreadVideo($actor, $post, $data)
             );
