@@ -16,7 +16,7 @@
             v-else
             @click="jumpPerDet(themeCon.user._data.id)"
           />
-          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="/static/images/authIcon.svg" alt="实名认证">
         </div>
 
 
@@ -29,7 +29,7 @@
             <span class="groupsName" v-if="themeCon.user._data.showGroups">({{themeCon.user.groups?themeCon.user.groups[0]._data.name:'无用户组'}})</span>
           </div>
           <div class="perName" v-else>该用户已被删除</div>
-          <div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+          <div class="postTime">{{$dayjs(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
         </div>
       </div>
       <div class="postOpera">

@@ -10,6 +10,8 @@ export default {
   data: function () {
     return {
       headPortrait: '',      //头像
+      username: '',
+      showModifyUsername: false,
       modifyPhone: '',       //修改手机号
       changePwd: '',         //修改密码
       bindType: '',          //绑定类型
@@ -38,9 +40,9 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     if (this.isWeixin) {
-      this.tipWx = '确认解绑微信及退出登录';
+      this.tipWx = '确认解绑微信并退出登录，如果您没有设置密码或手机等其它登录方法，将无法再次登录';
     } else {
-      this.tipWx = '确认解绑微信'
+      this.tipWx = '确认解绑微信';
     }
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
     if (qcloud_faceid == false) {
@@ -58,6 +60,9 @@ export default {
       switch (str) {
         case 'modify-phone':
           this.$router.push('/modify-phone'); //修改手机号
+          break;
+        case 'modify-username':
+          this.$router.push('/change-username'); //修改用户名
           break;
         case 'change-pwd':
           this.$router.push('/change-pwd'); //修改密码
@@ -82,35 +87,12 @@ export default {
     },
 
     modifyData() {
-      // this.appFetch({
-      //   url:'forum',
-      //   method:'get',
-      //   data:{
-
-      //   }
-      // }).then(res=>{
-      //   if (res.errors){
-      //     this.$message.error(res.errors[0].code);
-      //   }else {
-      //     if(res.readdata._data.qcloud.qcloud_facdid == false){
-      //       this.realNameShow = false
-      //     }
-      //   }
-      // })
-
-      let userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: 'wechat'
-        }
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
           this.isReal = res.readdata._data.isReal;              //实名认证
+          this.username = res.readdata._data.username;
           this.modifyPhone = res.readdata._data.mobile;         //用户手机号
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id
@@ -120,13 +102,11 @@ export default {
           } else {
             this.wechatNickname = false
           }
-          // if(res.readdata)
           if (res.readdata._data.realname !== '') {
             this.realName = `${res.readdata._data.realname}  ${res.readdata._data.identity}`
           } else {
             this.realName = false
           }
-          // this.modifyData()
         }
       })
 
@@ -158,7 +138,7 @@ export default {
             this.$toast.fail(res.errors[0].code);
           }
         } else {
-          // alert(res)
+          this.$store.dispatch("appSiteModule/invalidateUser");
           this.$toast('上传头像成功!');
           this.headPortrait = res.data.attributes.avatarUrl;
           this.modifyData()
@@ -193,10 +173,12 @@ export default {
           if (res.errors) {
             this.$toast.fail(res.errors[0].code);
           } else {
+            this.$store.dispatch("appSiteModule/invalidateUser");
             let isWeixin = this.appCommonH.isWeixin().isWeixin;
             if (isWeixin) {
               // var userId = browserDb.getLItem('tokenId');
               localStorage.clear();
+              browserDb.setLItem("wx-goto-login", true);
               this.$router.push({ path: '/wx-sign-up-bd' })
             } else {
               this.modifyData()
@@ -207,53 +189,12 @@ export default {
     },
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
-        window.location.href = '/api/oauth/wechat';
+        browserDb.setLItem("wx-goto-login", true);
+        this.$router.push({ path: '/wx-sign-up-bd' })
         localStorage.clear();
-        /*this.appFetch({
-          url: 'wechatBind',
-          method: 'get',
-          data: {}
-        }).then(res => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-          } else {
-            window.location.href = res.readdata._data.location
-          }
-        })*/
-      } else if (this.isPhone) {
-        this.$toast.fail('请在微信客户端中进行绑定操作');
-        // this.appFetch({
-        //   url:'wechatBind',
-        //   method:'get',
-        //   data:{}
-        // }).then(res=>{
-        //   if (res.errors){
-        //     this.$toast.fail(res.errors[0].code);
-        //   }else{
-        //   window.location.href = res.readdata._data.location
-        //   }
-        // })
       } else {
         this.$toast.fail('请在微信客户端中进行绑定操作');
-
-        // window.location.href = '/api/oauth/wechat/pc';
-
-        // this.$router.push({path:'wx-qr-code'});
-        // browserDb.setSItem('beforeVisiting','modify-data');
-
-        /*this.appFetch({     //pc端绑定
-          url: 'wxPcLogin',
-          method: 'get',
-          data: {}
-        }).then(res => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-          } else {
-            window.location.href = res.readdata._data.location
-          }
-        })*/
       }
-
     },
 
   }

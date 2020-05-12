@@ -2,6 +2,7 @@
  * pay-circle控制器
  */
 import appCommonH from '../../../../../helpers/commonHelper';
+import webDb from '../../../../../helpers/webDbHelper';
 export default {
   data: function () {
     return {
@@ -38,13 +39,7 @@ export default {
   methods: {
     getInfo(initStatus = false) {
       //请求站点信息，用于判断站点是否是付费站点
-      return this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -73,7 +68,8 @@ export default {
     //跳转到登录页
     loginJump: function () {
       if (this.isWeixin) {
-        this.$router.push({ path: '/wx-login-bd' })
+        webDb.setLItem("wx-goto-login", true);
+        this.$router.push({ path: '/wx-sign-up-bd' })
       } else {
         this.$router.push({ path: '/login-user' })
       }

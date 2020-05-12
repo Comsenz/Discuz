@@ -1,15 +1,8 @@
-/**
- * 模板实例化和个性化设置
- */
-import Vue from 'vue';
-import baseTpl from "../../extend/viewBase/baseTpl";
-import tplConfig from "../viewConfig/tplConfig";
-import commonHelper from "commonHelper";
-import "systemCommon.scss";
+import frontTplConfig from "./tplConfig";
+import baseTpl from "../../../extend/viewBase/baseTpl";
+import appStore from "../../../admin/store/index";							//vuex 初始化
 
-
-//实例化当前模板
-const defaultConfig = new baseTpl(tplConfig);
+const defaultConfig = new baseTpl(frontTplConfig);
 
 /**
  * 初始化模板
@@ -37,7 +30,7 @@ defaultConfig.beforeEnterModule = function(Router) {
 	 * @return {[type]}       [description]
 	 */
 	Router.beforeEach(function(to, form, next) {
-		tplConfig.beforeEnter(to, form, next);
+        frontTplConfig.beforeEnter(appStore, to, form, next);
 	});
 
   Router.onError((error) => {
@@ -45,8 +38,6 @@ defaultConfig.beforeEnterModule = function(Router) {
     const isChunkLoadFailed = error.message.match(pattern);
     if(isChunkLoadFailed){
       location.reload();
-      // const targetPath = $router.history.pending.fullPath;
-      // $router.replace(targetPath);
     }
 
   });

@@ -28,23 +28,12 @@
         @change="searchChange"
         @focus="showFacePanel = false; footMove = false; keyboard = false;"
       ></textarea>
-      <div class="uploadBox" v-if="isAndroid && isWeixin">
-        <div class="uploadBox" v-if="uploadShow">
-          <van-uploader
-            :max-count="12"
-            :after-read="handleFile"
-            v-model="fileListOne"
-            @delete="deleteEnclosure($event,'img')"
-            multiple
-          ></van-uploader>
-        </div>
-      </div>
-      <div class v-else>
+      <div class="uploadBox">
         <div class="uploadBox" v-if="uploadShow">
           <van-uploader
             :max-count="12"
             :accept="supportImgExtRes"
-            multiple="false"
+            :show-upload="false"
             :after-read="handleFile"
             v-model="fileListOne"
             @delete="deleteEnclosure($event,'img')"
@@ -85,20 +74,19 @@
           class="icon iconfont icon-picture post-topic-header-icon uploadIcon"
           v-if="canUploadImages && limitMaxLength"
         >
-          <input
-            type="file"
-            @change="handleFileUp"
+          <button
+            v-on:click="weixinUpload"
             class="hiddenInput"
-            v-if="isAndroid && isWeixin"
-          />
-          <input
-            type="file"
+            v-if="isWeixinUpload"
+          ></button>
+          <van-uploader
+            :max-count="12"
             :accept="supportImgExtRes"
-            @change="handleFileUp"
+            multiple="true"
+            :after-read="handleFile"
             class="hiddenInput"
             v-else
-            multiple
-          />
+          ></van-uploader>
         </span>
         <span
           class="icon iconfont icon-picture post-topic-header-icon uploadIcon"

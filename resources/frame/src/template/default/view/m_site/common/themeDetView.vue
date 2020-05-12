@@ -7,7 +7,7 @@
             <div class>
               <div class="postTop">
                 <div class="postPer">
-                  <div class="avatar-box">
+                  <div class="avatar-box" >
                     <img
                       :src="item.user._data.avatarUrl"
                       @click="jumpPerDet(item.user._data.id)"
@@ -20,26 +20,22 @@
                       v-else
                       @click="jumpPerDet(item.user._data.id)"
                     />
-                    <img
-                      v-if="item.user._data.isReal"
-                      class="icon-yirenzheng"
-                      src="../../../../../../static/images/authIcon.svg"
-                      alt="实名认证"
-                    />
+                    <img v-if="item.user._data.isReal" class="icon-yirenzheng" src="/static/images/authIcon.svg" alt="实名认证">
                   </div>
 
+
                   <div class="perDet">
-                    <div class="perName" v-if="item.user" @click="jumpPerDet(item.user._data.id)">
+                    <div
+                      class="perName"
+                      v-if="item.user"
+                      @click="jumpPerDet(item.user._data.id)">
                       {{item.user._data.username}}
-                      <span
-                        class="groupsName"
-                        v-if="item.user._data.showGroups"
-                      >({{item.user.groups[0]._data.name}})</span>
+                      <span class="groupsName" v-if="item.user._data.showGroups">({{item.user.groups[0]._data.name}})</span>
                     </div>
                     <div class="perName" v-else>该用户已被删除</div>
                     <div
                       class="postTime"
-                    >{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+                    >{{$dayjs(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                   </div>
                 </div>
                 <div class="postOpera">
@@ -145,15 +141,15 @@
                     :src="item.threadVideo._data.cover_url"
                     alt="视频封面"
                     class="videoCover"
-                  />-->
-                  <van-image
-                    v-if="item.threadVideo"
-                    lazy-load
-                    class="videoCover"
-                    :src="item.threadVideo._data.cover_url"
-                    fit="scale-down"
-                    alt="视频封面"
-                  />
+                  /> -->
+                    <van-image
+                      v-if="item.threadVideo"
+                      lazy-load
+                      class="videoCover"
+                      :src="item.threadVideo._data.cover_url"
+                      fit="scale-down"
+                      alt="视频封面"
+                    />
                 </div>
               </div>
               <div

@@ -17,7 +17,7 @@
           <img
             class="icon-yirenzheng"
             v-if="isReal"
-            src="../../../../../../static/images/authIcon.svg"
+            src="/static/images/authIcon.svg"
             alt="实名认证"
           />
         </div>

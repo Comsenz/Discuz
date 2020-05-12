@@ -16,7 +16,7 @@
             v-else
             @click="jumpPerDet(themeCon.user._data.id)"
           />
-          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">
+          <img v-if="themeCon.user._data.isReal" class="icon-yirenzheng" src="/static/images/authIcon.svg" alt="实名认证">
         </div>
 
 
@@ -30,7 +30,7 @@
             <span class="groupsName" v-if="themeCon.user._data.showGroups">({{themeCon.user.groups?themeCon.user.groups[0]._data.name:'无用户组'}})</span>
           </div>
           <div class="perName" v-else>该用户已被删除</div>
-          <div class="postTime">{{$moment(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+          <div class="postTime">{{$dayjs(themeCon._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
         </div>
       </div>
       <div class="postOpera">
@@ -61,27 +61,21 @@
         alt
         class="transcodingCover"
       />
-      <div
+      <div style="text-align: center"
         class="videoContent"
         v-if="themeCon.threadVideo._data.file_id != '' && themeCon.threadVideo._data.file_id != null && themeCon.threadVideo._data.status == 1"
       >
-        <div class="postImgList" v-show="loadCover">
-            <van-image
-              lazy-load
-              :src="coverUrl"
-              fit="contain"
-            />
-
+        <div v-show="loadCover" style="display: inline-block">
+          <van-loading type="circular" size="24px">视频加载中...</van-loading>
         </div>
-        <!-- <img :src="coverUrl" v-show="loadCover" alt ref="coverShow" /> -->
-        <div v-show="loadVideo">
+        <div v-show="loadVideo" style="display: inline-block">
           <video
             :id="tcPlayerId"
             preload="auto"
             width="100%"
             playsinline
             webkit-playsinline
-            x5-playsinline
+            x5-video-player-type="h5-page"
           ></video>
         </div>
       </div>

@@ -14,7 +14,7 @@
             <img
               v-if="isReal"
               class="icon-yirenzheng"
-              src="../../../../../../../static/images/authIcon.svg"
+              src="/static/images/authIcon.svg"
               alt="实名认证"
             />
           </div>
@@ -24,6 +24,7 @@
           <span class="icon iconfont icon-right m-site-cell-access-ft-icon" style="color: #e5e5e5;"></span>
         </i>
       </div>
+      <van-cell title="用户名" @click="myModify('modify-username')" is-link :value="username" />
       <div class="myModifyPhone" v-show="myModifyPhone">
         <van-cell
           title="手机号"

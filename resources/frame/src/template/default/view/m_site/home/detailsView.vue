@@ -184,7 +184,7 @@
                       <img
                         v-if="item.user._data.isReal"
                         class="icon-yirenzheng"
-                        src="../../../../../../static/images/authIcon.svg"
+                        src="/static/images/authIcon.svg"
                         alt="实名认证"
                       />
                     </div>
@@ -221,7 +221,7 @@
                       </div>
                       <div
                         class="postTime"
-                      >{{$moment(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
+                      >{{$dayjs(item._data.createdAt).format('YYYY-MM-DD HH:mm')}}</div>
                     </div>
                   </div>
                 </div>
@@ -358,8 +358,8 @@
     </div>
     <div class="mask" v-if="wxShareTip"></div>
     <div class="wxShareTip" v-if="wxShareTip" @click="wxShareClose">
-      <img src="../../../../../../static/images/sharePoint.png" alt class="sharePoint" />
-      <img src="../../../../../../static/images/shareKnow.png" alt class="shareKnow" />
+      <img src="/static/images/sharePoint.png" alt class="sharePoint" />
+      <img src="/static/images/shareKnow.png" alt class="shareKnow" />
     </div>
     <van-button
       type="primary"

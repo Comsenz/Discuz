@@ -2,7 +2,7 @@
  * 模板配置文件 base类
  * @type {[type]}
  */
-var path = require('path');
+var path = require("path");
 import Vue from "vue";
 import VueRouter from "vue-router";
 import md5 from "js-md5";
@@ -10,72 +10,76 @@ import commonHelper from "commonHelper";
 Vue.use(VueRouter);
 
 const appConfig = Vue.prototype.appConfig;
-const baseTpl = function (params) {
-	this.Router = null;
+const baseTpl = function(params) {
+  this.Router = null;
 
-	this.template = params.template ? params.template : null;
+  this.template = params.template ? params.template : null;
 
-	this.publicCss = params.publicCss ? params.publicCss : [];
-	this.publicJs = params.publicJs ? params.publicJs : [];
-	this.styleCss = params.styleCss ? params.styleCss : {};
+  this.publicCss = params.publicCss ? params.publicCss : [];
+  this.publicJs = params.publicJs ? params.publicJs : [];
+  this.styleCss = params.styleCss ? params.styleCss : {};
 
-	this.needLogins = params.needLogins ? params.needLogins : [];
-	this.ctype = "";
-}
+  this.needLogins = params.needLogins ? params.needLogins : [];
+  this.ctype = "";
+};
 
 /**
  * 检查配置
  * @return {[type]} [description]
  */
 baseTpl.prototype.checkConfig = function() {
-	if(!this.template || !this.checkTemplate()) {
-		//template 模板配置错误
-		console.error("template 模板配置错误！");
+  if (!this.template || !this.checkTemplate()) {
+    //template 模板配置错误
+    console.error("template 模板配置错误！");
 
-		return false;
-	}
+    return false;
+  }
 
-	return true;
+  return true;
 };
 
 /**
  * 检查模板配置
  * @return {[type]} [description]
  */
-baseTpl.prototype.checkTemplate= function() {
-	var pageNum = 0;
+baseTpl.prototype.checkTemplate = function() {
+  var pageNum = 0;
 
-	for(var moduleName in this.template) {
-		var moduleInfo = this.template[moduleName];
+  for (var moduleName in this.template) {
+    var moduleInfo = this.template[moduleName];
 
-		for(var pageName in moduleInfo) {
-			if(['js', 'css'].includes(pageName)) continue;
+    for (var pageName in moduleInfo) {
+      if (["js", "css"].includes(pageName)) continue;
 
-			var pageInfo = moduleInfo[pageName];
+      var pageInfo = moduleInfo[pageName];
 
-			if(!pageInfo.comLoad || typeof pageInfo.comLoad != "function") {
-				console.error(moduleName+"模块， "+pageName+"页面，comLoad函数设置错误！");
+      if (!pageInfo.comLoad || typeof pageInfo.comLoad != "function") {
+        console.error(
+          moduleName + "模块， " + pageName + "页面，comLoad函数设置错误！"
+        );
 
-				return false;
-			}
+        return false;
+      }
 
-			if(!pageInfo.metaInfo || !pageInfo.metaInfo.title) {
-				console.error(moduleName+"模块， "+pageName+"页面，metainfo设置错误！");
+      if (!pageInfo.metaInfo || !pageInfo.metaInfo.title) {
+        console.error(
+          moduleName + "模块， " + pageName + "页面，metainfo设置错误！"
+        );
 
-				return false;
-			}
+        return false;
+      }
 
-			pageNum++;
-		}
-	}
+      pageNum++;
+    }
+  }
 
-	if(!pageNum) {
-		console.error("最少应该有一个页面！");
+  if (!pageNum) {
+    console.error("最少应该有一个页面！");
 
-		return false;
-	}
+    return false;
+  }
 
-	return true;
+  return true;
 };
 
 /**
@@ -84,138 +88,140 @@ baseTpl.prototype.checkTemplate= function() {
  * @return {[object]}        [路由对象]
  */
 baseTpl.prototype.getBaseRouter = function(routes) {
-
-  if(this.Router) {
-		return this.Router;
-	} else {
-		//实例化路由
-		this.Router = new VueRouter({
-			mode: 'history',
-			routes: routes,
-			base: appConfig.siteBasePath,
-			scrollBehavior: function(to, from, savedPosition) {
-        if(savedPosition){
-          return savedPosition
-        }else{
-          return {x:0,y:0}
+  if (this.Router) {
+    return this.Router;
+  } else {
+    //实例化路由
+    this.Router = new VueRouter({
+      mode: "history",
+      routes: routes,
+      base: appConfig.siteBasePath,
+      scrollBehavior: function(to, from, savedPosition) {
+        if (savedPosition) {
+          return savedPosition;
+        } else {
+          return { x: 0, y: 0 };
         }
-			}
-		});
+      }
+    });
 
-		//each 结束后加载完成进度条
-		var _this = this;
-		this.Router.afterEach(function() {
-			_this.progressEnd();
-		})
+    //each 结束后加载完成进度条
+    // var _this = this;
+    this.Router.afterEach(function() {});
 
-		//基本信息加载
-		this.progressStart();
-		this.loadMetaInfo(this.Router);
-		this.loadOtherSource(this.Router);
+    //基本信息加载
+    //this.progressStart();
+    this.loadMetaInfo(this.Router);
+    this.loadOtherSource(this.Router);
+    this.progressEnd();
 
-		return this.Router;
-	}
-}
+    return this.Router;
+  }
+};
 
 baseTpl.prototype.mergeArr = function(one, two) {
-	one = one ? one : [];
-	two = two ? two : [];
+  one = one ? one : [];
+  two = two ? two : [];
 
-	return [...one, ...two];
-}
+  return [...one, ...two];
+};
 
 /**
  * 支持的三大模块
  * @type {Array}
  */
-baseTpl.prototype.modules = ['m_site', 'p_site', 'admin_site'];
+baseTpl.prototype.modules = ["m_site", "p_site", "admin_site"];
 
 /**
  * 加载路由和模板页面
  * @return {[type]} [description]
  */
 baseTpl.prototype.loadRouter = function() {
-	if(!this.checkConfig()) return false;
+  if (!this.checkConfig()) return false;
 
-	var routes = [],
-		template = this.template,
-		defaultView = null,
-		_this = this;
+  var routes = [],
+    template = this.template,
+    defaultView = null,
+    _this = this;
 
+  for (var folder in template) {
+    if (!this.modules.includes(folder)) continue;
 
-  	for(var folder in template) {
-  		if(!this.modules.includes(folder)) continue;
+    var nowModules = template[folder];
+    for (var mName in nowModules) {
+      if (["js", "css"].includes(mName)) continue;
 
-	    var nowModules = template[folder];
-	    for(var mName in nowModules) {
-	    	if(['js', 'css'].includes(mName)) continue;
+      var newChildrenList = [];
+      for (var childrenName in nowModules[mName].children) {
+        var newChildren = {
+          name: nowModules[mName].children[childrenName].metaInfo.title,
+          path: "/" + mName + "/" + childrenName,
+          component: nowModules[mName].children[childrenName]["comLoad"],
+          meta: {
+            ...nowModules[mName].children[childrenName]["metaInfo"],
+            css: this.mergeArr(
+              nowModules[mName].children[childrenName]["css"],
+              nowModules["css"]
+            ),
+            js: this.mergeArr(
+              nowModules[mName].children[childrenName]["js"],
+              nowModules["js"]
+            ),
+            isMobile: folder === "m_site",
+            isAdmin: folder === "admin_site"
+          }
+        };
 
-	      	var newChildrenList = [];
-	      	for (var childrenName in nowModules[mName].children){
-	        	var newChildren = {
-			            name: nowModules[mName].children[childrenName].metaInfo.title,
-			            path: "/" + mName + "/" + childrenName,
-			            component: nowModules[mName].children[childrenName]['comLoad'],
-			            meta: {
-			            	...nowModules[mName].children[childrenName]['metaInfo'],
-							css: this.mergeArr(nowModules[mName].children[childrenName]['css'], nowModules['css']),
-				            js: this.mergeArr(nowModules[mName].children[childrenName]['js'], nowModules['js']),
-				            isMobile: folder === 'm_site',
-				            isAdmin: folder === 'admin_site'		            	
-			            }
-		          	};
+        newChildrenList.push(newChildren);
+      }
 
-	        	newChildrenList.push(newChildren);
-	      	}
+      if (newChildrenList.length) {
+        var defaultChildren = {};
 
-	      	if(newChildrenList.length) {
-	      		var defaultChildren = {};
+        defaultChildren.name = newChildrenList[0].name;
+        defaultChildren.path = "";
+        defaultChildren.component = newChildrenList[0].component;
+        defaultChildren.meta = newChildrenList[0].meta;
+        newChildrenList.unshift(defaultChildren);
+      }
 
-	      		defaultChildren.name = newChildrenList[0].name;
-	      		defaultChildren.path = "";
-				defaultChildren.component = newChildrenList[0].component;
-	      		defaultChildren.meta = newChildrenList[0].meta;	      		
-	      		newChildrenList.unshift(defaultChildren);
-	      	}
+      var nowRouterInfo = {
+        name: mName,
+        path: "/" + mName,
+        children: newChildrenList,
+        component: nowModules[mName]["comLoad"],
+        meta: {
+          ...nowModules[mName]["metaInfo"],
+          css: this.mergeArr(nowModules[mName]["css"], nowModules["css"]),
+          js: this.mergeArr(nowModules[mName]["js"], nowModules["js"]),
+          isMobile: folder === "m_site",
+          isAdmin: folder === "admin_site"
+        }
+      };
 
-	    	var nowRouterInfo = {
-					name: mName,
-			        path: '/' + mName,
-			        children:newChildrenList,
-					component: nowModules[mName]["comLoad"],
-					meta: {
-						...nowModules[mName]["metaInfo"],
-						css: this.mergeArr(nowModules[mName]["css"], nowModules['css']),
-						js: this.mergeArr(nowModules[mName]["js"], nowModules['js']),
-						isMobile: folder === 'm_site',
-						isAdmin: folder === 'admin_site' 					
-					}
-					
-				};
+      routes.push(nowRouterInfo);
+    }
+  }
 
-			routes.push(nowRouterInfo);
-		}
-	}
-
-	//设置默认加载页面
-	defaultView = {...{}, ...routes[0]};
-	defaultView.path = "*";
-	routes.push(defaultView);
-  	return this.getBaseRouter(routes);
-}
+  //设置默认加载页面
+  defaultView = { ...{}, ...routes[0] };
+  defaultView.path = "*";
+  routes.push(defaultView);
+  return this.getBaseRouter(routes);
+};
 
 /**
  * 路由访问时加载元信息
  * @return {[type]} [description]
  */
 baseTpl.prototype.loadMetaInfo = function(Router) {
-	Router.beforeEach(function(to, from, next) {
-		if(to.meta.title) document.title = to.meta.title;
-		if(to.meta.desc) document.desc = to.meta.desc;
+  Router.beforeEach(function(to, from, next) {
+    if (to.meta.title) document.title = to.meta.title;
+    if (to.meta.desc) document.desc = to.meta.desc;
 
-		next();
-	});
-}
+    next();
+  });
+};
 
 //资源列表
 baseTpl.prototype.sourceArrs = {};
@@ -232,29 +238,29 @@ baseTpl.prototype.sourceCallBack = null;
  * @return {[type]}        [description]
  */
 baseTpl.prototype.loadOtherSource = function(Router) {
-	var _this = this;
+  var _this = this;
 
-	Router.beforeEach(function(to, from, next) {
-		_this.clearSource();
+  Router.beforeEach(function(to, from, next) {
+    _this.clearSource();
 
-		var nowRoute = to.matched[0].path == "*" ? Router.options.routes[0] : to;
-		var publicCss = _this.publicCss ? _this.publicCss : [],
-			publicJs = _this.publicJs ? _this.publicJs : [],
-			selfCss = nowRoute.meta.css ? nowRoute.meta.css : [],
-			selfJs = nowRoute.meta.js ? nowRoute.meta.js : [];
+    var nowRoute = to.matched[0].path == "*" ? Router.options.routes[0] : to;
+    var publicCss = _this.publicCss ? _this.publicCss : [],
+      publicJs = _this.publicJs ? _this.publicJs : [],
+      selfCss = nowRoute.meta.css ? nowRoute.meta.css : [],
+      selfJs = nowRoute.meta.js ? nowRoute.meta.js : [];
 
-		var sourceArrs = {
-			css: [...publicCss, ...selfCss],
-			js: [...publicJs, ...selfJs],
-		};
+    var sourceArrs = {
+      css: [...publicCss, ...selfCss],
+      js: [...publicJs, ...selfJs]
+    };
 
-		if(!sourceArrs.css.length && !sourceArrs.js.length) {
-			next();
-		} else {
-			_this.sourceArrs = sourceArrs;
-			_this.registerSource(to, next);
-		}
-	});
+    if (!sourceArrs.css.length && !sourceArrs.js.length) {
+      next();
+    } else {
+      _this.sourceArrs = sourceArrs;
+      _this.registerSource(to, next);
+    }
+  });
 };
 
 /**
@@ -263,22 +269,28 @@ baseTpl.prototype.loadOtherSource = function(Router) {
  * @return {[type]}        [description]
  */
 baseTpl.prototype.getStyleCss = function(topath) {
-	var styleCss = this.styleCss;
+  var styleCss = this.styleCss;
 
-	if(!styleCss.path || !styleCss.baseName.length) {
-		return [];
-	}
+  if (!styleCss.path || !styleCss.baseName.length) {
+    return [];
+  }
 
-	var styleCssPaths = [],
-		mobilePrefix = commonHelper.getClientType(topath) ? "m." : "",
-		type = commonHelper.getClientType(topath) ? "mstyle" : "style";
+  var styleCssPaths = [],
+    mobilePrefix = commonHelper.getClientType(topath) ? "m." : "",
+    type = commonHelper.getClientType(topath) ? "mstyle" : "style";
 
-	var _this = this;
-	styleCss.baseName.forEach(function(cssName) {
-		styleCssPaths.push(styleCss.path+mobilePrefix+commonHelper.getWebStyle(type)+"."+cssName);
-	});
+  var _this = this;
+  styleCss.baseName.forEach(function(cssName) {
+    styleCssPaths.push(
+      styleCss.path +
+        mobilePrefix +
+        commonHelper.getWebStyle(type) +
+        "." +
+        cssName
+    );
+  });
 
-	return styleCssPaths;
+  return styleCssPaths;
 };
 
 /**
@@ -287,8 +299,8 @@ baseTpl.prototype.getStyleCss = function(topath) {
  * @return {[type]}    [description]
  */
 baseTpl.prototype.getClientClass = function(to) {
-	return to.meta.isMobile ? 'mobile' : 'pc';
-}
+  return to.meta.isMobile ? "mobile" : "pc";
+};
 
 /**
  * 注册要引入的css和js资源，注册后清空上一次的注册
@@ -296,200 +308,137 @@ baseTpl.prototype.getClientClass = function(to) {
  * @return {[type]}           [description]
  */
 baseTpl.prototype.registerSource = function(to, next) {
-	this.sourceCallBack = next;
+  this.sourceCallBack = next;
 
-	var nowClientClass = this.getClientClass(to);
+  var nowClientClass = this.getClientClass(to);
 
-	this.ctype = nowClientClass;
-	this.loadCssSource(nowClientClass);
-	this.loadJsSource(nowClientClass);
-}
+  this.ctype = nowClientClass;
+  this.loadCssSource(nowClientClass);
+  this.loadJsSource(nowClientClass);
+};
 
 /**
  * 清空资源加载状态
  * @return {[type]} [description]
  */
 baseTpl.prototype.clearSource = function() {
-	this.sourceArrs = [];
-	this.loadAllNum = 0;
-	this.sourceCallBack = null;
-}
+  this.sourceArrs = [];
+  this.loadAllNum = 0;
+  this.sourceCallBack = null;
+};
 
 /**
  * 加载css资源
  * @return {[type]}           [description]
  */
 baseTpl.prototype.loadCssSource = function(clientClass) {
-	var _this = this;
+  var _this = this;
 
-	this.sourceArrs.css.forEach(function(cssOne) {
-		var allPath = appConfig.staticBaseUrl+cssOne,
-			md5Key = md5(allPath);
+  this.sourceArrs.css.forEach(function(cssOne) {
+    var allPath = appConfig.staticBaseUrl + cssOne,
+      md5Key = md5(allPath);
 
-		_this.loadAllNum++;
-		if(!$('[data-id="'+md5Key+'"]').length) {
-			var cssHtml = '<link data-id="'+md5Key+'" data-type="'+clientClass+'" href="'+allPath+'?v='+appConfig.sourceV+'" rel="stylesheet" type="text/css"/>';
-			$("head").append(cssHtml);
-
-			$('[data-id="'+md5Key+'"]').load(function() {
-				_this.loadSourceSuccess(clientClass);
-			});
-		} else {
-			setTimeout(function() {
-				_this.loadSourceSuccess(clientClass);
-			}, 100);
-		}
-	})
-}
+    _this.loadAllNum++;
+    if (!document.querySelectorAll('[data-id="' + md5Key + '"]').length) {
+      var elem = document.createElement("link");
+      elem.setAttribute("data-id", md5Key);
+      elem.setAttribute("data-type", clientClass);
+      elem.href = allPath + "?v=" + appConfig.sourceV;
+      elem.rel = "stylesheet";
+      elem.type = "text/css";
+      document.querySelector("head").appendChild(elem);
+      elem.onload = function() {
+        _this.loadSourceSuccess(clientClass);
+      };
+    } else {
+      setTimeout(function() {
+        _this.loadSourceSuccess(clientClass);
+      }, 100);
+    }
+  });
+};
 
 /**
  * 加载js资源
  * @return {[type]} [description]
  */
 baseTpl.prototype.loadJsSource = function(clientClass) {
-	var _this = this;
+  var _this = this;
 
-	this.sourceArrs.js.forEach(function(jsPath) {
-		var allPath = appConfig.staticBaseUrl+jsPath,
-			md5Key = md5(allPath);
+  this.sourceArrs.js.forEach(function(jsPath) {
+    var allPath = appConfig.staticBaseUrl + jsPath,
+      md5Key = md5(allPath);
 
-		_this.loadAllNum++;
-		if(!$('[data-id="'+md5Key+'"]').length) {
-			var jsScript = document.createElement("script");
-			jsScript.src = allPath+'?v='+appConfig.sourceV;
-			jsScript.setAttribute("data-id", md5Key);
-			jsScript.setAttribute("data-type", clientClass);
-			jsScript.type = "text/javascript";
-			jsScript.async = false;
-			jsScript.setAttribute("data-path", jsPath);
-			jsScript.onload = function() {
-				_this.loadSourceSuccess(clientClass);
-			};
+    _this.loadAllNum++;
+    if (!document.querySelectorAll('[data-id="' + md5Key + '"]').length) {
+      var jsScript = document.createElement("script");
+      jsScript.src = allPath + "?v=" + appConfig.sourceV;
+      jsScript.setAttribute("data-id", md5Key);
+      jsScript.setAttribute("data-type", clientClass);
+      jsScript.type = "text/javascript";
+      jsScript.async = false;
+      jsScript.setAttribute("data-path", jsPath);
+      jsScript.onload = function() {
+        _this.loadSourceSuccess(clientClass);
+      };
 
-			document.getElementsByTagName("body")[0].appendChild(jsScript);
-		} else {
-			setTimeout(function() {
-				_this.loadSourceSuccess(clientClass);
-			}, 100);
-		}
-	})
-}
+      document.getElementsByTagName("body")[0].appendChild(jsScript);
+    } else {
+      setTimeout(function() {
+        _this.loadSourceSuccess(clientClass);
+      }, 100);
+    }
+  });
+};
 
 /**
  * 加载资源成功会掉方法
  * @return {[type]} [description]
  */
 baseTpl.prototype.loadSourceSuccess = function(clientClass) {
-	this.loadAllNum--;
+  this.loadAllNum--;
 
-	if(!this.loadAllNum) {
-		this.sourceCallBack();
-	}
-}
+  if (!this.loadAllNum) {
+    this.sourceCallBack();
+  }
+};
 
 /**
  * 清除非当前类型客户端残留
  * @return {[type]} [description]
  */
 baseTpl.prototype.clearOtherClientStyle = function() {
-	var nowClient = commonHelper.isWeixin().isPhone ? "mobile" : "pc";
-	if(this.ctype != nowClient) return false;
+  var nowClient = commonHelper.isWeixin().isPhone ? "mobile" : "pc";
+  if (this.ctype != nowClient) return false;
 
-	$('[data-type="'+(this.ctype == "pc" ? "mobile" : "pc")+'"]').remove();
-	//手机转pc 端去掉rem 设置
-	if(this.ctype == "pc") {
-		document.documentElement.style = "";
-	}
-}
+  var elem = document.querySelector(
+    '[data-type="' + (this.ctype == "pc" ? "mobile" : "pc") + '"]'
+  );
+  if (elem) {
+    elem.parentNode.removeChild(elem);
+  }
+  //手机转pc 端去掉rem 设置
+  if (this.ctype == "pc") {
+    document.documentElement.style = "";
+  }
+};
 
 /**
  * 模块加载前，回调函数
  * @param  {[type]} Router [description]
  * @return {[type]}        [description]
  */
-baseTpl.prototype.beforeEnterModule = function(Router) {
-
-}
-
-//进度条选择器
-baseTpl.prototype.progressSelector = "progress_loading";
-
-/**
- * 开始显示进度条
- * @return {[type]} [description]
- */
-baseTpl.prototype.progressStart = function() {
-	if(!$("#"+this.progressSelector).length) {
-		var progressHtml = '<div id="'+this.progressSelector+'">'
-								+'<div></div>'
-						   +'</div>';
-
-		$("body").append(progressHtml)
-	}
-
-	this.clearProgress();
-	$("#"+this.progressSelector).show();
-	this.progressNum = 0;
-
-	this.progressChange(98, 3000);
-}
+baseTpl.prototype.beforeEnterModule = function(Router) {};
 
 /**
  * 结束显示进度条
  * @return {[type]} [description]
  */
 baseTpl.prototype.progressEnd = function() {
-	if($(".frame-loader").length) {
-		$(".frame-loader").remove();
-	}
-
-	this.progressChange(100, 300);
-}
-
-//周期循环句柄
-baseTpl.prototype.progressClearBar = null;
-
-//进度具体数值
-baseTpl.prototype.progressNum = 0;
-
-/**
- * 进度条改变事件
- * @param  {[type]} endnum [结束进度]
- * @param  {[type]} time   [所用时间]
- * @return {[type]}        [description]
- */
-baseTpl.prototype.progressChange = function(endnum, time) {
-	var stepTime = 20,
-		stepNum = (endnum - this.progressNum) / (time / stepTime),
-		_this = this;
-
-
-	clearInterval(_this.progressClearBar);
-	_this.progressClearBar = setInterval(function() {
-		$("#"+_this.progressSelector).find("div").width(_this.progressNum+"%");
-
-		if(_this.progressNum >= endnum) {
-			clearInterval(_this.progressClearBar);
-
-			if(_this.progressNum >= 100) {
-				$("#"+_this.progressSelector).hide();
-				_this.clearProgress();
-				_this.clearOtherClientStyle();
-			}
-
-			return false;
-		}
-
-		_this.progressNum += stepNum;
-	}, stepTime);
-}
-
-/**
- * 清空进度条进度
- * @return {[type]} [description]
- */
-baseTpl.prototype.clearProgress = function() {
-	$("#"+this.progressSelector).find("div").width("0%");
-}
+  var elem = document.querySelector(".frame-loader");
+  if (elem) {
+    elem.parentNode.removeChild(elem);
+  }
+};
 
 export default baseTpl;

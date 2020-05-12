@@ -72,8 +72,9 @@ export default {
           webDb.setLItem('refreshToken',refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
           this.$router.push({ path: webDb.getSItem('beforeVisiting') });
-
-          this.getUsers(tokenId).then(res => {
+          this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$store.dispatch("appSiteModule/invalidateForum");
+          this.getUser().then(res => {
             if (res.readdata._data.paid) {
               if (beforeVisiting) {
                 this.$router.replace({ path: beforeVisiting });
@@ -106,26 +107,13 @@ export default {
     * */
 
     getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteMode = res.readdata._data.set_site.site_mode;
         webDb.setLItem('siteInfo', res.readdata);
-      }).catch(err => {
-      })
+      });
     },
-    getUsers(id) {
-      return this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + id,
-        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
-        data: {
-          include: ['groups']
-        }
-      }).then(res => {
+    getUser() {
+      return this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {

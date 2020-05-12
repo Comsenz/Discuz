@@ -15,18 +15,25 @@ export default {
       confirmpwd: '', //确认密码
       loading: '', //loading状态
       btnLoading:false, //提交按钮loading状态
+      hasPassword: true // 是否有密码
     }
   },
 
   components: {
     ChangePWDHeader
   },
-  mounted() {
-    // this.ChangePwd()
+  created() {
+    this.$store.dispatch("appSiteModule/loadUser").then(res => {
+      if (res.errors) {
+        this.$toast.fail(res.errors[0].code);
+      } else {
+        this.hasPassword = res.data.attributes.hasPassword;
+      }
+    });
   },
   methods: {
     subm() {
-      if (this.pwd === '') {
+      if (this.hasPassword && this.pwd === '') {
         this.$toast("旧密码不能为空");
         return;
       }
@@ -80,13 +87,11 @@ export default {
           }
         } else {
           this.$toast("密码修改成功");
-          this.$router.push({ path: '../view/m_site/home/circleView' });
+          this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$router.push({ path: '/modify-data' });
         }
 
       })
-      // .catch((err)=>{
-      //   this.$toast("密码修改失败，请重试");
-      // })
     },
   }
 

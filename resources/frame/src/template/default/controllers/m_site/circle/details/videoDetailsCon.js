@@ -50,24 +50,18 @@ export default {
   },
   mounted() {
     let self = this
-    setTimeout(() => {
-      self.videoFileid = self.themeCon.threadVideo._data.file_id;
-      self.videoAppid = self.videoAppid;
-      self.videoAppidChild = self.videoAppidChild;
-      var videoId;
-      // if (self.videoAppidChild != '' || self.videoAppidChild != '0' || self.videoAppidChild != null) {
-      if (!!self.videoAppidChild && self.videoAppidChild != '0') {
-        videoId = self.videoAppidChild
-      } else {
-        videoId = self.videoAppid
-      }
-      // self.videoFileCover = self.themeCon.threadVideo._data.cover_url;
-      self.$nextTick(() => {
-        // self.getVideoLang(self.videoFileid, self.videoAppid, self.videoFileCover)
+    self.videoFileid = self.themeCon.threadVideo._data.file_id;
+    self.videoAppid = self.videoAppid;
+    self.videoAppidChild = self.videoAppidChild;
+    var videoId;
+    if (!!self.videoAppidChild && self.videoAppidChild != '0') {
+      videoId = self.videoAppidChild
+    } else {
+      videoId = self.videoAppid
+    }
+    self.$nextTick(() => {
         self.getVideoLang(self.videoFileid, videoId);
-      })
-
-    }, 2000)
+    });
   },
   created: function () {
     this.loadCover = true;
@@ -81,15 +75,13 @@ export default {
     this.userId = browserDb.getLItem('tokenId');
     this.videoAppid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_app_id;
     this.videoAppidChild = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_sub_app_id;
-    this.loadUserInfo();
     this.getForum();
-    if (this.userId) {
-      this.getUsers(browserDb.getLItem('tokenId')).then(res => {
-        this.getAuthority(res.readdata.groups[0]._data.id);
-        this.walletBalance = res.readdata._data.walletBalance;
-      });
-    }
-    this.coverUrl = this.themeCon.threadVideo._data.cover_url
+    this.getUsers().then(res => {
+      this.getAuthority(res.readdata.groups[0]._data.id);
+      this.walletBalance = res.readdata._data.walletBalance;
+    }).catch(() => {
+    });
+    this.coverUrl = this.themeCon.threadVideo._data.cover_url;
   },
   computed: {
     themeId: function () {
@@ -98,62 +90,8 @@ export default {
   },
 
   methods: {
-    // 初始化腾讯云播放器
-    getVideoLang(fileID, appID, posterImg) {
-
-      this.loadCover = true;
-      this.loadVideo = false;
-      const playerParam = {
-        fileID: fileID,
-        appID: appID,
-        'width': this.viewportWidth - 30,
-        // 'poster': posterImg,
-        // 'poster': 'http://www.test.com/myimage.jpg',
-        'posterImage': false,
-      }
-      this.player = window.TCPlayer(this.tcPlayerId, playerParam);
-      this.player.ready(() => {
-        // debugger;
-        this.loadCover = false;
-        this.loadVideo = true;
-      });
-    },
-    //点击用户名称，跳转到用户主页
-    jumpPerDet: function (id) {
-      //   if(!this.userId){
-      //     this.$router.push({
-      //       path:'/login-user',
-      //       name:'login-user'
-      //     })
-      //   } else {
-      this.$router.push({ path: '/home-page' + '/' + id });
-      // }
-    },
-    //初始化请求用户信息
-    loadUserInfo() {
-      if (!this.userId) {
-        return false;
-      }
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + this.userId,
-        data: {
-        }
-      }).then((res) => {
-        this.walletBalance = res.readdata._data.walletBalance;
-
-      })
-    },
-    /*
-   * 接口请求
-   * */
     getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -180,6 +118,66 @@ export default {
       }).catch(err => {
       })
     },
+    // 初始化腾讯云播放器
+    getVideoLang(fileID, appID, posterImg) {
+      this.loadCover = true;
+      this.loadVideo = false;
+      const maxWidth = appCommonH.isWeixin().isPc ? 580 : this.viewportWidth * 0.9;
+      const playerParam = {
+        fileID: fileID,
+        appID: appID,
+        width: maxWidth,
+        posterImage: false,
+        autoplay: true,
+        preload: 'auto',
+        controlBar: {
+          playbackRateMenuButton: false,
+          volumePanel: false
+        },
+      }
+      this.player = TCPlayer(this.tcPlayerId, playerParam);
+      var self = this;
+      if (this.isiOS && this.isWeixin) {
+        this.player.ready(function() {
+          self.loadCover = false;
+          self.loadVideo = true;
+        });
+      }
+      this.player.on('loadedmetadata', function() {
+        self.adjustVideoAspect(maxWidth);
+      });
+      this.player.on('timeupdate', function() {
+        self.adjustVideoAspect(maxWidth);
+      });
+    },
+    adjustVideoAspect: function(maxWidth) {
+      if (this.player.videoHeight() > 400) {
+        this.player.height(400);
+        this.player.width(400 * this.player.videoWidth() / this.player.videoHeight());
+      } else if (this.player.videoWidth < maxWidth) {
+        this.player.width(this.player.videoWidth);
+      }
+      if (this.player.width() > maxWidth) {
+        this.player.width(maxWidth);
+        this.player.height(maxWidth * this.player.videoHeight() / this.player.videoWidth());
+      }
+      this.loadCover = false;
+      this.loadVideo = true;
+    },
+    //点击用户名称，跳转到用户主页
+    jumpPerDet: function (id) {
+      //   if(!this.userId){
+      //     this.$router.push({
+      //       path:'/login-user',
+      //       name:'login-user'
+      //     })
+      //   } else {
+      this.$router.push({ path: '/home-page' + '/' + id });
+      // }
+    },
+    /*
+   * 接口请求
+   * */
     //购买内容
     buyTheme() {
       if(this.userId){
@@ -369,8 +367,6 @@ export default {
       }).catch(err => {
       })
     },
-    getUsersInfo() {
-    },
     getOrderStatus() {
       // alert('查询支付状态');
       // alert(this.orderSn);
@@ -412,16 +408,8 @@ export default {
       // alert('执行');
       this.$emit('listenToChildEvent', true);
     },
-    getUsers(id) {
-      return this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + id,
-        headers: { 'Authorization': 'Bearer ' + browserDb.getLItem('Authorization') },
-        data: {
-          include: ['groups']
-        }
-      }).then(res => {
+    getUsers() {
+      return this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {

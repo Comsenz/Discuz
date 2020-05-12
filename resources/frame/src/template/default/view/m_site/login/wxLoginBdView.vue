@@ -27,7 +27,7 @@
         </form>
 
         <div class="wx-login-bd-btn">
-          <van-button type="primary" :loading="btnLoading" @click="loginBdClick">登录并绑定</van-button>
+          <van-button plain type="primary" :loading="btnLoading" @click="loginBdClick">登录并绑定</van-button>
         </div>
 
       </main>

@@ -3,7 +3,7 @@
     <el-header height="80px" class="index-header">
       <h1 class="index-header__icon">
         <a href="/admin/home">
-          <img src="../../../../static/images/admin-logo-x2.png"  alt="Logo">
+          <img src="/static/images/admin-logo-x2.png"  alt="Logo">
         </a>
       </h1>
 
