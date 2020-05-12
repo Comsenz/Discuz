@@ -10,6 +10,7 @@ namespace App\Listeners\Post;
 use App\Commands\Thread\CreateThreadVideo;
 use App\Events\Post\Created;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 
 class SaveAudioToDatabase
@@ -39,10 +40,12 @@ class SaveAudioToDatabase
         $actor = $event->actor;
         $data = $this->request->getParsedBody()->get('data', []);
 
+        $fileId = Arr::get($data, 'attributes.file_id', '');
+
         /**
          * 回复 或 长文首贴 可发音频
          */
-        if (!$post->is_first || ($post->is_first && $post->thread->type === 1)) {
+        if ($fileId && !$post->is_first || ($post->is_first && $post->thread->type === 1)) {
             $audio = $this->bus->dispatch(
                 new CreateThreadVideo($actor, $post, $data)
             );
