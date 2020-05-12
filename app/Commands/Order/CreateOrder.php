@@ -12,9 +12,12 @@ use App\Models\Order;
 use App\Models\PayNotify;
 use App\Models\Thread;
 use App\Models\User;
+use App\Models\Group;
 use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use App\Events\Group\PaidGroup;
 use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -55,13 +58,16 @@ class CreateOrder
      * @throws ValidationException
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
-    public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting)
+    public function handle(Validator $validator, ConnectionInterface $db, SettingsRepository $setting, Dispatcher $events)
     {
+        $this->events = $events;
+
         $this->assertCan($this->actor, 'order.create');
 
         $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $validator_info = $validator->make($this->data->toArray(), [
+            'group_id'  => 'filled|int',
             'is_anonymous'  => 'filled|int',
             'type'          => 'required|int',
             'thread_id'     => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
@@ -73,7 +79,7 @@ class CreateOrder
         }
 
         $orderType = (int) $this->data->get('type');
-
+        $order_zero_amout_allowed = false;//是否允许金额为0
         switch ($orderType) {
             // 注册订单
             case Order::ORDER_TYPE_REGISTER:
@@ -125,14 +131,32 @@ class CreateOrder
                     throw new OrderException('order_post_not_found');
                 }
                 break;
-
+            // 付费用户组
+            case Order::ORDER_TYPE_GROUP:
+                $order_zero_amout_allowed = true;
+                $group_id = $this->data->get('group_id');
+                if (in_array($group_id, Group::PRESET_GROUPS)) {
+                    throw new OrderException('order_group_forbidden');
+                }
+                $group = Group::find($group_id);
+                if (
+                    isset($group->days)
+                    && $group->days > 0
+                    && $group->is_paid == Group::IS_PAID
+                    && $group->fee > 0
+                ) {
+                    $payeeId = Order::REGISTER_PAYEE_ID;
+                    $amount = $group->fee;
+                } else {
+                    throw new OrderException('order_group_error');
+                }
+                break;
             default:
                 throw new OrderException('order_type_error');
                 break;
         }
-
-        // 订单金额需大于 0
-        if ($amount <= 0) {
+        // 订单金额需检查
+        if (($amount == 0 && !$order_zero_amout_allowed) || $amount < 0) {
             throw new OrderException('order_amount_error');
         }
 
@@ -155,6 +179,7 @@ class CreateOrder
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->thread_id       = isset($thread) ? $thread->id : null;
+        $order->group_id        = isset($group_id) ? $group_id : null;
         $order->payee_id        = $payeeId;
         $order->is_anonymous    = $is_anonymous;
         $order->status          = 0; // 待支付
@@ -162,15 +187,25 @@ class CreateOrder
         // 开始事务
         $db->beginTransaction();
         try {
+            if ($amount == 0 && $order_zero_amout_allowed) {
+                //用户组0付费
+                $order->status = 1;
+            }
             $pay_notify->save();    // 保存通知数据
             $order->save();         // 保存订单
 
+            if ($orderType == Order::ORDER_TYPE_GROUP && $order->status == 1) {
+                $this->events->dispatch(
+                    new PaidGroup($order->group_id, $this->actor, $order)
+                );
+            }
             $db->commit();          // 提交事务
 
             return $order;
         } catch (Exception $e) {
             $db->rollback();        // 回滚事务
 
+            echo $e->getMessage();
             throw new OrderException('order_create_failure');
         }
     }

@@ -169,6 +169,9 @@ class PayOrder
             case Order::ORDER_TYPE_THREAD:
                 $order_info->body = trans('order.order_type_thread');
                 break;
+            case Order::ORDER_TYPE_GROUP:
+                $order_info->body = trans('order.order_type_group');
+                break;
             default:
                 $order_info->body = '';
                 break;

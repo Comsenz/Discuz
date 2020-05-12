@@ -68,6 +68,10 @@ class WalletPayNotify
                     $change_type = UserWalletLog::TYPE_EXPEND_THREAD;
                     $change_type_lang = 'wallet.expend_thread';
                     break;
+                case Order::ORDER_TYPE_GROUP:
+                    $change_type = UserWalletLog::TYPE_EXPEND_GROUP;
+                    $change_type_lang = 'wallet.expend_group';
+                    break;
                 default:
                     $change_type = $this->data['type'];
                     $change_type_lang = '';
@@ -84,7 +88,7 @@ class WalletPayNotify
             );
 
             //支付成功处理
-            $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting);
+            $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting, $events);
             $connection->commit();
             if ($order_info) {
                 $events->dispatch(
