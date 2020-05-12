@@ -221,12 +221,20 @@ class PayOrder
                     ]
                 ];
                 break;
-            case '12': //微信网页、公众号、小程序支付网关
+            case '12': //微信网页、公众号
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid
                 $extra                = [
                     'openid' => $this->actor->wechat->mp_openid,
+                ];
+                break;
+            case '13': //小程序支付
+                $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
+                $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                //获取用户openid： min_openid
+                $extra                = [
+                    'openid' => $this->actor->wechat->min_openid,
                 ];
                 break;
             case '20': // 用户钱包支付
