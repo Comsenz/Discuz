@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 
-class CreateSignature
+class CreateVodUploadSignature
 {
     use AssertPermissionTrait;
 
