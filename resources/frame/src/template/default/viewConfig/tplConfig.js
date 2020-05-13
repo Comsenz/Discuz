@@ -625,7 +625,7 @@ export default {
    * @return {[type]}        [description]
    */
 
-  beforeEnter: function (appStore, to, form, next) {
+  beforeEnter: function (appStore, to, from, next) {
     //判断设备
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let isPhone = appCommonH.isWeixin().isPhone;
@@ -724,7 +724,9 @@ export default {
     var canWalletPay = '';  //钱包密码设置
     var modifyPhone = '';   //短信验证是否关闭
 
-    if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
+    browserDb.setLItem('prevRoute', from.name);
+
+    if (to.name === 'supplier-all-back' || from.name === 'supplier-all-back') {
       next();
     } else {
       appStore.dispatch('appSiteModule/loadForum').then(res => {
@@ -838,7 +840,6 @@ export default {
             })
           } else {
             if (signInAndPayForAccess.includes(to.name)) {
-              // next(form.path)
               next('/')
             } else {
               next();
