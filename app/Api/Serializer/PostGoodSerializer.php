@@ -9,23 +9,18 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
-class SessionSerializer extends AbstractSerializer
+class PostGoodSerializer extends AbstractSerializer
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $type = 'sessions';
+    protected $type = 'post_goods';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultAttributes($model)
     {
-        return ['sessionId'=> $model['sessionId']];
+        return $model;
     }
 
     public function getId($model)
     {
-        return $model['sessionId'];
+        return 1;
     }
+
 }

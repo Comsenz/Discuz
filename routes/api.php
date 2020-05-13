@@ -299,3 +299,11 @@ $route->post('/reports', 'reports.create', ApiController\Report\CreateReportsCon
 $route->get('/reports', 'reports.list', ApiController\Report\ListReportsController::class);
 $route->patch('/reports/batch', 'reports.batchUpdate', ApiController\Report\BatchUpdateReportsController::class);
 $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Report\BatchDeleteReportsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Analysis
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
