@@ -8,9 +8,9 @@
 namespace App\Api\Serializer;
 
 use App\Commands\Attachment\CreateAttachment;
+use App\Models\Attachment;
+use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
-use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
@@ -23,29 +23,22 @@ class AttachmentSerializer extends AbstractSerializer
     protected $type = 'attachments';
 
     /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /*
      * @var Filesystem
      */
     protected $filesystem;
 
     /**
-     * AttachmentSerializer constructor.
-     * @param UrlGenerator $url
      * @param Filesystem $filesystem
-     * @param SettingsRepository $settings
      */
-    public function __construct(UrlGenerator $url, Filesystem $filesystem, SettingsRepository $settings)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->url = $url;
         $this->filesystem = $filesystem;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param Attachment $model
      */
     public function getDefaultAttributes($model)
     {
@@ -61,7 +54,11 @@ class AttachmentSerializer extends AbstractSerializer
 
         $path = $model->file_path . '/' . $model->attachment;
 
-        $url = $this->filesystem->disk($model->is_remote ? 'attachment_cos' : 'attachment')->url($path);
+        if ($model->is_remote) {
+            $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5));
+        } else {
+            $url = $this->filesystem->disk('attachment')->url($path);
+        }
 
         $fixWidth = CreateAttachment::FIX_WIDTH;
 
@@ -85,7 +82,7 @@ class AttachmentSerializer extends AbstractSerializer
                 $attributes['thumbUrl'] = $url;
             } else {
                 $attributes['thumbUrl'] = $model->is_remote
-                    ? $url . '?imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
+                    ? $url . '&imageMogr2/thumbnail/' . $fixWidth . 'x' . $fixWidth
                     : Str::replaceLast('.', '_thumb.', $url);
             }
         }
