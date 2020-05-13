@@ -182,7 +182,7 @@ class BaseFormatter
     {
         foreach (Emoji::cursor() as $emoji) {
             $url = $this->url->to('/' . $emoji->url);
-            $emojiImg = '<img src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
+            $emojiImg = '<img style="display:inline-block;height:20px;vertical-align:top;" src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
     }
