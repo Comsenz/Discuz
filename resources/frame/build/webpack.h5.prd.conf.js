@@ -28,6 +28,11 @@ module.exports = {
     app: resolve("src/h5-main.js"),
     admin: resolve("src/admin-main.js")
   },
+  externals: {
+    'vue': 'Vue',
+    'vuex': 'Vuex',
+    'vant': 'vant'
+  },
   output: {
     path: resolvePublic(),
     filename: "static/js/[name].js?v=" + VERSION,

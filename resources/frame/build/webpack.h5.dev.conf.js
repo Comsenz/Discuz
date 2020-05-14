@@ -16,6 +16,11 @@ module.exports = {
     app: resolve("src/h5-main.js"),
     admin: resolve("src/admin-main.js")
   },
+  externals: {
+    'vue': 'Vue',
+    'vuex': 'Vuex',
+    'vant': 'vant'
+  },
   output: {
     filename: "static/js/[name].js?v=" + VERSION,
     chunkFilename: "static/js/[id].[chunkhash].js?v=" + VERSION,
