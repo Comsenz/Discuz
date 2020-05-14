@@ -143,21 +143,21 @@ trait PostGoodsTrait
         }
 
         // get title
-        $JDRegex = '/<div\s*class="sku-name">(?<title>\s.*)<\/div>/i';
+        $JDRegex = '/<div\s*class="fn_text_wrap"\s*id="itemName">(?<title>.+)<\/div>/i';
         if (preg_match($JDRegex, $this->html, $matchTitle)) {
-            $this->goodsInfo['title'] = mb_convert_encoding($matchTitle['title'], 'UTF-8', 'GBK');
+            $this->goodsInfo['title'] = $matchTitle['title'];
         }
 
         // get src
-        $srcRegex = '/<img\s*id="spec-img"\s*width="\d*"\s*data-origin="(?<src>.+\.(jpeg|jpg|png))"/i';
+        $srcRegex = '/<li\s*id="firstImgLi"\s*data-ul-child="child">\s*<img\s*id="firstImg"\s*onload=".*src="(?<src>.+\.[a-z]+)"/i';
         if (preg_match($srcRegex, $this->html, $matchSrc)) {
             $this->goodsInfo['src'] = trim($matchSrc['src'], '/');
         }
 
-        dd($this->html);
         // get price
-        if (preg_match('/venderId:\d+,/', $this->html, $venderId)) {
-            dd($venderId);
+        $priceRegex = '/<em>(?<price>\d+)<\/em>\s*<span\s*class="price_decimals">(?<price_point>.+)<\/span>/';
+        if (preg_match($priceRegex, $this->html, $matchPrice)) {
+            $this->goodsInfo['price'] = $matchPrice['price'] . $matchPrice['price_point'];
         }
     }
 

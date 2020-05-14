@@ -54,7 +54,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         $actor = $request->getAttribute('actor');
         $readyContent = Arr::get($request->getParsedBody(), 'data.attributes.address');
 
-        // Filter Url [\x{4e00}-\x{9fa5}]
+        // Filter Url
         $addressRegex = '/(?<address>(https|http):[\S.]+)/i';
         if (!preg_match($addressRegex, $readyContent, $matchAddress)) {
             throw new TranslatorException('post_goods_not_found_address');
@@ -83,21 +83,26 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
          * Send
          * @see https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html#allow-redirects
          */
-        $response = $this->httpClient->request('GET', $this->address, [
-            'allow_redirects' => [
-                'max' => 100,
-                'track_redirects' => true
-            ]
-        ]);
-        if ($response->getStatusCode() != 200) {
-            throw new TranslatorException('post_goods_http_client_fail');
+        $sendType = PostGood::setBySending($this->address);
+        if ($sendType == 'Guzzle') {
+            $response = $this->httpClient->request('GET', $this->address, [
+                'allow_redirects' => [
+                    'max' => 100,
+                    'track_redirects' => true
+                ],
+            ]);
+            if ($response->getStatusCode() != 200) {
+                throw new TranslatorException('post_goods_http_client_fail');
+            }
+            $this->html = $response->getBody()->getContents();
+        } else {
+            $this->html = file_get_contents($this->address);
         }
 
         /**
          * Get GoodsInfo
          * @see PostGoodsTrait
          */
-        $this->html = $response->getBody()->getContents();
         $this->{$this->goodsType['value']}();
 
         // Build

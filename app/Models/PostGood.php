@@ -37,6 +37,8 @@ class PostGood extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    public static $key;
+
     /**
      * 允许的域名
      *
@@ -107,37 +109,70 @@ class PostGood extends Model
         $domain = static::$domainName;
 
         if (is_numeric($mixed)) {
+            self::$key = $mixed;
             if ($result = array_key_exists($mixed, $domain) && !is_null($callback)) {
                 $callback(['key' => $mixed, 'value' => $domain[$mixed]]);
             }
         } elseif (is_string($mixed)) {
-            if ($result = in_array($mixed, $domain) && !is_null($callback)) {
-                $key = array_search($mixed, $domain);
-                $callback(['key' => $key, 'value' => $mixed]);
+            if ($result = in_array($mixed, $domain)) {
+                self::$key = array_search($mixed, $domain);
+                $callback ? $callback(['key' => self::$key, 'value' => $mixed]) : null;
             }
         } elseif (is_array($mixed)) {
             // 单独处理口令
             if (in_array('m', $mixed)) {
-                foreach ($mixed as $key => $item) {
-                    if ($item == 'm') {
-                        $name = $mixed[$key + 1];
-                        $mixed[$key + 1] = $item . '.' .$name;
-                        $mixed = Arr::except($mixed, [$key]);
-                        break;
-                    }
-                }
-                $mixed = array_values($mixed);
+                self::passwordValueChange($mixed);
             }
 
             $result = array_walk($domain, function ($value, $key) use ($domain, $mixed, $callback) {
                 if (in_array($value, $mixed)) {
-                    $callback ? $callback(['key' => $key, 'value' => $value]) : null;
+                    self::$key = $key;
+                    $callback ? $callback(['key' => self::$key, 'value' => $value]) : null;
                     return true;
                 }
             });
         }
 
         return $result ?? false;
+    }
+
+    /**
+     * 口令值单独处理
+     *
+     * @param $mixed
+     */
+    public static function passwordValueChange(&$mixed)
+    {
+        foreach ($mixed as $key => $item) {
+            if ($item == 'm') {
+                $name = $mixed[$key + 1];
+                $mixed[$key + 1] = $item . '.' .$name;
+                $mixed = Arr::except($mixed, [$key]);
+                break;
+            }
+        }
+
+        $mixed = array_values($mixed);
+    }
+
+    /**
+     * http请求方式
+     * (兼容京东)
+     *
+     * @param string $address
+     * @return string
+     */
+    public static function setBySending(&$address = '')
+    {
+        if (self::$key == 2) {
+            $domain = static::$domainName;
+            $address = str_replace($domain[2] . '.com/', $domain[6] . '.com/product/', $address);
+            $mode = 'File';
+        } elseif (self::$key == 6) {
+            $mode = 'File';
+        }
+
+        return $mode ?? 'Guzzle';
     }
 
     /**
