@@ -12,18 +12,16 @@ use App\Models\User;
 use App\Models\UserWechat;
 use App\Observer\UserObserver;
 use App\Observer\UserWechatObserver;
-use Illuminate\Support\ServiceProvider;
+use Discuz\Foundation\AbstractServiceProvider;
 
-class UserServiceProvider extends ServiceProvider
+class UserServiceProvider extends AbstractServiceProvider
 {
     public function boot()
     {
         $events = $this->app->make('events');
 
-        // 订阅事件
         $events->subscribe(UserListener::class);
 
-        //添加Observer
         User::observe(UserObserver::class);
         UserWechat::observe(UserWechatObserver::class);
     }
