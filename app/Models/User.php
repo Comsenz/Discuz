@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -321,7 +320,7 @@ class User extends Model
                 $value = app(Filesystem::class)
                     ->disk('avatar_cos')
                     ->temporaryUrl(
-                        'public/avatar/' . Str::of($value)->afterLast('://'),
+                        'public/avatar/' . $this->id . 'png',
                         \Carbon\Carbon::now()->addMinutes(5)
                     );
             }
@@ -562,6 +561,7 @@ class User extends Model
     {
         return $this->hasMany(PostUser::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | 权限验证
