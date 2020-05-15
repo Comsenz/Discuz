@@ -864,6 +864,10 @@ export default {
                 next();
               } else {
                 if (res.readdata._data.set_site.site_mode === 'public') {
+                  if (to.name == 'circle' || to.name == 'details/:themeId' || to.name == 'home-page/:userId') {
+                    next();
+                    return;
+                  }
                   next({ path: 'wx-sign-up-bd' });
                 } else if (res.readdata._data.set_site.site_mode === 'pay') {
                   if (to.name === 'pay-circle') {
