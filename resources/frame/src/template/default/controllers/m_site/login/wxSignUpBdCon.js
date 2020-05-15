@@ -24,6 +24,7 @@ export default {
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
       btnLoading: false,        //注册按钮状态
+      registerClose: true,      // true的时候能注册
     }
   },
 
@@ -99,6 +100,7 @@ export default {
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
+          this.registerClose = res.readdata._data.set_reg.register_close;
         }
       }).catch(err => {
         console.log(err);
@@ -186,22 +188,26 @@ export default {
               this.$router.push({ path: '/wx-login-bd' })
               return;
             }
-            this.password = "";
-            if (this.signUpBdClickShow) {
-                this.userName = "网友" + this.getRandomChars(6);
-                this.setSignData();
-            } else {
-              this.captcha = new TencentCaptcha(this.appID, res => {
-                if (res.ret === 0) {
+            if (this.registerClose) { //可以注册
+              this.password = "";
+              if (this.signUpBdClickShow) {
                   this.userName = "网友" + this.getRandomChars(6);
-                  this.captcha_ticket = res.ticket;
-                  this.captcha_rand_str = res.randstr;
-                  //验证通过后注册
                   this.setSignData();
-                }
-              });
-              // 显示验证码
-              this.captcha.show();
+              } else {
+                this.captcha = new TencentCaptcha(this.appID, res => {
+                  if (res.ret === 0) {
+                    this.userName = "网友" + this.getRandomChars(6);
+                    this.captcha_ticket = res.ticket;
+                    this.captcha_rand_str = res.randstr;
+                    //验证通过后注册
+                    this.setSignData();
+                  }
+                });
+                // 显示验证码
+                this.captcha.show();
+              }
+            } else {
+              this.$toast.fail("站点已关闭注册");
             }
             return;
           }
