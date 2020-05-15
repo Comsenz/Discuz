@@ -13,6 +13,8 @@ class NoUserException extends Exception
 {
     protected $token;
 
+    protected $user;
+
     public function setToken($token)
     {
         $this->token = $token;
@@ -22,5 +24,15 @@ class NoUserException extends Exception
     public function getToken()
     {
         return $this->token->token;
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
     }
 }

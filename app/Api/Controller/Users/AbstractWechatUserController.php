@@ -128,7 +128,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $token = SessionToken::generate($this->getDriver(), $rawUser);
         $token->save();
-        throw (new NoUserException())->setToken($token);
+
+        $noUserException = new NoUserException();
+        $noUserException->setToken($token);
+        $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
+        throw $noUserException;
     }
 
     abstract protected function getDriver();
