@@ -7,7 +7,6 @@ import tableNoList from '../../../../view/site/common/table/tableNoList'
 import Page from '../../../../view/site/common/page/page';
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import webDb from 'webDbHelper';
-import moment from 'moment';
 import commonHelper from '../../../../../helpers/commonHelper'
 
 
@@ -75,7 +74,7 @@ export default {
     * 格式化日期
     * */
     formatDate(data){
-      return moment(data).format('YYYY-MM-DD HH:mm')
+      return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
 
     handleCheckAllChange(val){

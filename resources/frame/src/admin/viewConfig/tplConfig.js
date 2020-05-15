@@ -1,7 +1,6 @@
 /**
  * 模板配置
  */
-import tplConfig from "../../template/default/viewConfig/tplConfig";         //获取配置信息
 import webDb from '../../helpers/webDbHelper';
 import appFetch from '../../helpers/axiosHelper';
 
@@ -13,8 +12,6 @@ export default {
    * site为模块名，index为页面名称，拼接后路径为site/index
    */
   template: {
-    ...tplConfig.template,
-
     //后台模块
     admin_site:{
       js: [],

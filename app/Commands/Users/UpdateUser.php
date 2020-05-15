@@ -8,12 +8,14 @@
 namespace App\Commands\Users;
 
 use App\Censor\Censor;
+use App\Events\Group\PaidGroup;
 use App\Events\Users\ChangeUserStatus;
 use App\Events\Users\PayPasswordChanged;
 use App\Exceptions\TranslatorException;
 use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
+use App\Models\GroupPaidUser;
 use App\Models\UserActionLogs;
 use App\Models\User;
 use App\Notifications\System;
@@ -25,6 +27,7 @@ use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class UpdateUser
@@ -173,6 +176,26 @@ class UpdateUser
             if ($newGroups && $newGroups != $oldGroups->keys()) {
                 // 更新用户组
                 $user->groups()->sync($newGroups);
+
+                $deleteGroups = array_diff($oldGroups->keys()->toArray(), $newGroups->toArray());
+                if ($deleteGroups) {
+                    //删除付费用户组
+                    $groupsPaid = Group::whereIn('id', $deleteGroups)->where('is_paid', Group::IS_PAID)->pluck('id')->toArray();
+                    if (!empty($groupsPaid)) {
+                        GroupPaidUser::whereIn('group_id', $groupsPaid)
+                            ->where('user_id', $user->id)
+                            ->update(['operator_id' => $this->actor->id, 'deleted_at' => Carbon::now(), 'delete_type' => GroupPaidUser::DELETE_TYPE_ADMIN]);
+                    }
+                }
+                $newPaidGroups = $user->groups()->where('is_paid', Group::IS_PAID)->get();
+                if ($newPaidGroups->count()) {
+                    //新增付费用户组处理
+                    foreach ($newPaidGroups as $paidgGroupKey => $paidGroupVal) {
+                        $this->events->dispatch(
+                            new PaidGroup($paidGroupVal->id,  $user, null, $this->actor)
+                        );
+                    }
+                }
 
                 // 发送系统通知
                 $notifyData = [

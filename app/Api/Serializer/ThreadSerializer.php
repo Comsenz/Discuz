@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Thread;
+use App\Models\Topic;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
@@ -193,5 +194,10 @@ class ThreadSerializer extends AbstractSerializer
     public function threadVideo($thread)
     {
         return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    public function topic($thread)
+    {
+        return $this->hasMany($thread, TopicSerializer::class);
     }
 }

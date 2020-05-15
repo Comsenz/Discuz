@@ -7,10 +7,13 @@
 
 namespace App\Listeners\User;
 
+use App\Events\Group\PaidGroup;
 use App\Events\Users\Logind;
 use App\Models\Group;
+use App\Models\GroupPaidUser;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,14 +27,17 @@ class ChangeLastActived
 
     public $app;
 
+    public $events;
+
     /**
      * @param SettingsRepository $settings
      * @param Application $app
      */
-    public function __construct(SettingsRepository $settings, Application $app)
+    public function __construct(SettingsRepository $settings, Application $app, Dispatcher $events)
     {
         $this->settings = $settings;
         $this->app = $app;
+        $this->events = $events;
     }
 
     /**
@@ -59,6 +65,26 @@ class ChangeLastActived
         // 如果用户没有用户组
         if (! $user->groups->count()) {
             $user->groups()->attach(Group::MEMBER_ID);
+        } else {
+            //检查到期付费用户组
+            $groups = $user->groups()->where('is_paid', Group::IS_PAID)->get();
+
+            if ($groups->count()) {
+                $now = Carbon::now();
+                foreach ($groups as $group => $group_item) {
+                    if (empty($group_item->pivot->expiration_time)) {
+                        //免费组变为收费组
+                        $this->events->dispatch(
+                            new PaidGroup($group_item->id, $user)
+                        );
+                    } elseif ($group_item->pivot->expiration_time < $now) {
+                        GroupPaidUser::where('group_id', $group_item->pivot->group_id)
+                            ->where('user_id', $group_item->pivot->user_id)
+                            ->update(['deleted_at' => $now, 'delete_type' => GroupPaidUser::DELETE_TYPE_EXPIRE]);
+                        $user->groups()->detach($group_item);
+                    }
+                }
+            }
         }
 
         // 更新用户最后登录时间

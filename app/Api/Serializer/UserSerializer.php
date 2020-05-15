@@ -52,14 +52,14 @@ class UserSerializer extends AbstractSerializer
         $attributes = [
             'id'                => (int) $model->id,
             'username'          => $model->username,
-            'avatarUrl'         => $this->getAvatarUrl($model),
+            'avatarUrl'         => $model->avatar,
             'isReal'            => $this->getIsReal($model),
             'threadCount'       => (int) $model->thread_count,
             'followCount'       => (int) $model->follow_count,
             'fansCount'         => (int) $model->fans_count,
             'likedCount'        => (int) $model->liked_count,
             'signature'         => $model->signature,
-            'usernameBout'     => (int) $model->username_bout,
+            'usernameBout'      => (int) $model->username_bout,
             'follow'            => $this->userFollow->findFollowDetail($this->actor->id, $model->id), //TODO 解决N+1
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
@@ -102,17 +102,6 @@ class UserSerializer extends AbstractSerializer
         }
 
         return $attributes;
-    }
-
-    /**
-     * 获取头像地址
-     *
-     * @param User $model
-     * @return string
-     */
-    public function getAvatarUrl(User $model)
-    {
-        return $model->avatar ? $model->avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '';
     }
 
     /**

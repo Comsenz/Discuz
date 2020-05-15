@@ -40,15 +40,7 @@ export default {
   },
   methods: {
     userPhone() {
-      let userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          // include: 'wechat'  
-        }
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -60,7 +52,8 @@ export default {
           }
           this.headerShow = true
         }
-      })
+      }).catch(() => {
+      });
     },
 
     //获取验证码
@@ -172,11 +165,11 @@ export default {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
         } else {
-          // this.mobileConfirmed = res.readdata._data.mobileConfirmed;
-          // if (this.mobileConfirmed == true) {
-          this.$toast("手机号绑定成功");
-          this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
-          // }
+          if (this.newphone === res.readdata._data.originalMobile) {
+            this.$store.dispatch("appSiteModule/invalidateUser");
+            this.$toast("手机号绑定成功");
+            this.$router.push({ path: '/modify-data', query: { backGo: this.backGo } });
+          }
         }
 
       }).catch((err) => {

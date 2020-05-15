@@ -9,7 +9,7 @@ namespace App\Traits;
 
 use App\Exceptions\ThreadException;
 use App\Models\UserActionLogs;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Thread;
 
 trait ThreadTrait
 {
@@ -25,12 +25,12 @@ trait ThreadTrait
     /**
      * 判断是否可以操作
      *
-     * @param Model $thread
-     * @param string $action
+     * @param Thread $thread
      * @param mixed $behavior
+     * @param string $action
      * @throws ThreadException
      */
-    public function action(Model $thread, $behavior, &$action = '')
+    public function action(Thread $thread, $behavior, &$action = '')
     {
         if (!$thread->offsetExists('user')) {
             $this->ThreadException('count_fail');
@@ -48,11 +48,11 @@ trait ThreadTrait
     /**
      * 帖子状态的改变
      *
-     * @param $thread
+     * @param Thread $thread
      * @return mixed
      * @throws ThreadException
      */
-    public function behavior($thread)
+    public function behavior(Thread $thread)
     {
         if (!array_key_exists($thread->is_approved, UserActionLogs::behavior())) {
             $this->ThreadException('behavior_fail');
@@ -74,11 +74,11 @@ trait ThreadTrait
     /**
      * 操作帖子的行为
      *
-     * @param $thread
+     * @param Thread $thread
      * @param string $behavior
      * @throws ThreadException
      */
-    public function actionThread($thread, $behavior)
+    public function actionThread(Thread $thread, $behavior)
     {
         if (!in_array($behavior, UserActionLogs::getAction('thread'))) {
             $this->ThreadException('action_fail');
@@ -101,13 +101,19 @@ trait ThreadTrait
         }
     }
 
-    public function increments(Model $thread)
+    /**
+     * @param Thread $thread
+     */
+    public function increments(Thread $thread)
     {
         $thread->category->increment('thread_count');
         $thread->user->increment('thread_count');
     }
 
-    public function decrement(Model $thread)
+    /**
+     * @param Thread $thread
+     */
+    public function decrement(Thread $thread)
     {
         $thread->category->decrement('thread_count');
         $thread->user->decrement('thread_count');

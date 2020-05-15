@@ -177,11 +177,7 @@ export default {
     * 接口请求
     * */
     getUserInfo() {
-      this.appFetch({
-        url: "users",
-        method: "get",
-        splice: '/' + this.tokenId
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           if (res.errors[0].detail) {
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])

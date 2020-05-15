@@ -71,12 +71,11 @@ class CreateThread
      * @param Censor $censor
      * @param Thread $thread
      * @param ThreadValidator $validator
-     * @param SettingsRepository $settings
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator, SettingsRepository $settings)
+    public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator)
     {
         $this->events = $events;
 
@@ -85,6 +84,11 @@ class CreateThread
         $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
         if ($thread->type == 1) {
             $this->assertCan($this->actor, 'createThreadLong');
+
+            // 是否有权发布音频
+            if (Arr::get($this->data, 'attributes.file_id', '')) {
+                $this->assertCan($this->actor, 'createAudio');
+            }
         } elseif ($thread->type == 2) {
             $this->assertCan($this->actor, 'createThreadVideo');
         } elseif ($thread->type == 3) {
@@ -156,14 +160,6 @@ class CreateThread
             $thread->delete();
 
             throw $e;
-        }
-
-        // 视频主题存储相关数据
-        if ($thread->type == 2) {
-            $threadVideo = $bus->dispatch(
-                new CreateThreadVideo($this->actor, $thread->id, $this->data)
-            );
-            $thread->setRelation('threadVideo', $threadVideo);
         }
 
         // 记录触发的审核词

@@ -19,6 +19,7 @@ use App\Trade\PayTrade;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
@@ -107,6 +108,7 @@ class PayOrder
         $this->url     = $url;
         $this->userWalletFailLogs = $userWalletFailLogs;
 
+        $this->data = collect(Arr::get($this->data, 'data.attributes'));
         // 使用钱包支付时，检查是否设置支付密码
         if (
             $this->data->get('payment_type') == 20
@@ -169,6 +171,9 @@ class PayOrder
             case Order::ORDER_TYPE_THREAD:
                 $order_info->body = trans('order.order_type_thread');
                 break;
+            case Order::ORDER_TYPE_GROUP:
+                $order_info->body = trans('order.order_type_group');
+                break;
             default:
                 $order_info->body = '';
                 break;
@@ -216,12 +221,21 @@ class PayOrder
                     ]
                 ];
                 break;
-            case '12': //微信网页、公众号、小程序支付网关
+            case '12': //微信网页、公众号
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
                 $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                 //获取用户openid
                 $extra                = [
                     'openid' => $this->actor->wechat->mp_openid,
+                ];
+                break;
+            case '13': //小程序支付
+                $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
+                $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
+                $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                //获取用户openid： min_openid
+                $extra                = [
+                    'openid' => $this->actor->wechat->min_openid,
                 ];
                 break;
             case '20': // 用户钱包支付

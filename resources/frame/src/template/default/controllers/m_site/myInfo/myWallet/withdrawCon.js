@@ -75,15 +75,7 @@ export default {
       this.withdrawalAmount = this.withdrawalAmount.slice(0, -1);
     },
     withdrawUser() {
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: 'wechat'
-        }
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)
@@ -94,8 +86,10 @@ export default {
             this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
           }
         }
-      })
+      }).catch(() => {
+      });
 
+      let userId = browserDb.getLItem("tokenId");
       this.appFetch({
         url: 'wallet',
         method: 'get',

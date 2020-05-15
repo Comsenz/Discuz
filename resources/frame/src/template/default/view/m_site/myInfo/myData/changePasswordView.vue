@@ -4,7 +4,7 @@
     <main class="change-pwd-main">
       <div class="change-pwd-form my-info-form">
         <van-cell-group>
-          <van-field label="旧密码" v-model="pwd" type="password" placeholder="请输入您的旧密码" />
+          <van-field label="旧密码" v-model="pwd" type="password" placeholder="请输入您的旧密码" v-if="hasPassword"/>
           <van-field label="新密码" v-model="newpwd" type="password" placeholder="请输入您的新密码" />
           <van-field label="确认密码" v-model="confirmpwd" type="password" placeholder="请输入您的确认密码" />
         </van-cell-group>

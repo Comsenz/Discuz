@@ -60,6 +60,7 @@ class ThreadVideoNotify
                 $threadVideo = $threadVideo->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
 
                 foreach ($taskDetail->ProcedureTask->MediaProcessResultSet as $key => $value) {
+                    //普通转码
                     if ($value->Type == 'Transcode') {
                         if ($value->TranscodeTask->ErrCode == 0) {
                             //转码成功
@@ -72,11 +73,30 @@ class ThreadVideoNotify
                         }
                     }
 
+                    //自适应码流转码
+                    if ($value->Type == 'AdaptiveDynamicStreaming') {
+                        if ($value->AdaptiveDynamicStreamingTask->ErrCode == 0) {
+                            //转码成功
+                            $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
+                            $threadVideo->media_url = $value->AdaptiveDynamicStreamingTask->Output->Url;
+                        } else {
+                            //转码失败
+                            $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;
+                            $threadVideo->reason = $value->AdaptiveDynamicStreamingTask->Message;
+                        }
+                    }
 
                     if ($value->Type == 'CoverBySnapshot') {
                         if ($value->CoverBySnapshotTask->ErrCode == 0) {
                             //截取封面图成功
                             $threadVideo->cover_url = $value->CoverBySnapshotTask->Output->CoverUrl;
+                        }
+                    }
+                    //动图任务流
+                    if ($value->Type == 'AnimatedGraphics') {
+                        if ($value->AnimatedGraphicTask->ErrCode == 0) {
+                            //截取封面图成功
+                            $threadVideo->cover_url = $value->AnimatedGraphicTask->Output->Url;
                         }
                     }
                 }

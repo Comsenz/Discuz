@@ -27,6 +27,7 @@ class CreateOrderController extends AbstractCreateController
     public $include = [
         'user',
         'thread',
+        'group',
         'thread.firstPost'
     ];
 

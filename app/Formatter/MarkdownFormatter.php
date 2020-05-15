@@ -9,7 +9,7 @@ namespace App\Formatter;
 
 use s9e\TextFormatter\Configurator;
 
-class MarkdownFormatter extends Formatter
+class MarkdownFormatter extends BaseFormatter
 {
     /**
      * Flush the cache so that the formatter components are regenerated.
@@ -35,6 +35,14 @@ class MarkdownFormatter extends Formatter
     protected function getConfigurator()
     {
         $configurator = parent::getConfigurator();
+
+        parent::confEmoji($configurator);
+
+        parent::confHtml($configurator);
+
+        parent::confUserMention($configurator);
+
+        parent::confTopic($configurator);
 
         $configurator->plugins->load('Litedown');
 

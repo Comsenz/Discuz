@@ -25,17 +25,16 @@ class ThreadVideoRepository extends AbstractRepository
 
     public function findOrFailByFileId($file_id)
     {
-        $query = $this->query();
-        $query->where('file_id', $file_id);
-
-        return $query->firstOrFail();
+        return $this->query()
+            ->where('file_id', $file_id)
+            ->firstOrFail();
     }
 
     public function findOrFailByThreadId($file_id)
     {
-        $query = $this->query();
-        $query->where('thread_id', $file_id);
-
-        return $query->firstOrFail();
+        return $this->query()
+            ->where('thread_id', $file_id)
+            ->where('type', ThreadVideo::TYPE_OF_VIDEO)
+            ->firstOrFail();
     }
 }

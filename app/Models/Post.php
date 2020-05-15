@@ -481,7 +481,6 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
-
     /**
      * Set the user for which the state relationship should be loaded.
      *

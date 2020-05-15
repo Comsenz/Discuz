@@ -8,7 +8,7 @@
               <i class="iconfont table-icon" :class="scope.row.icon"></i>
               <div class="table-con-box">
                 <p>{{scope.row.name }}</p>
-                <p>{{scope.row.description }}</p>
+                <p><span v-html="scope.row.description"></span></p>
               </div>
             </div>
           </template>

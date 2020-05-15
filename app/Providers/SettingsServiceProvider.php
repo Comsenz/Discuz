@@ -35,7 +35,7 @@ class SettingsServiceProvider extends ServiceProvider
     {
         Setting::setEncrypt($this->app->make(Encrypter::class));
 
-        //必须设置完加解密函数之后才能调用
+        // 必须设置完加解密函数之后才能调用
         if ($this->app->isInstall()) {
             $settings = $this->app->make(ContractsSettingsRepository::class);
             $qcloud = $settings->tag('qcloud');
@@ -48,15 +48,24 @@ class SettingsServiceProvider extends ServiceProvider
                 $avatarDisk = 'avatar_cos';
             }
 
-            $this->app->when([AttachmentUploadTool::class, ImageUploadTool::class, AttachmentSerializer::class])->needs(ContractsFilesystem::class)->give(function (Application $app) use($attachmentDisk) {
+            $this->app->when([
+                AttachmentUploadTool::class,
+                ImageUploadTool::class,
+                AttachmentSerializer::class,
+            ])
+            ->needs(ContractsFilesystem::class)
+            ->give(function (Application $app) use ($attachmentDisk) {
                 return $app->make(Factory::class)->disk($attachmentDisk);
             });
 
-            $this->app->when([AvatarUploader::class, UserWechatObserver::class])
-                ->needs(ContractsFilesystem::class)
-                ->give(function (Application $app) use($avatarDisk) {
-                    return $app->make(Factory::class)->disk($avatarDisk);
-                });
+            $this->app->when([
+                AvatarUploader::class,
+                UserWechatObserver::class,
+            ])
+            ->needs(ContractsFilesystem::class)
+            ->give(function (Application $app) use ($avatarDisk) {
+                return $app->make(Factory::class)->disk($avatarDisk);
+            });
         }
     }
 }

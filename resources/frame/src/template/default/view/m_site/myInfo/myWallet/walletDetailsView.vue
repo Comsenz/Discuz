@@ -17,7 +17,7 @@
                 v-for="(item,index) in walletDetailsList"
                 :key="index">
           <!-- <span slot="label">当前可用金额：{{item.attributes.change_freeze_amount}}</span> -->
-          <span slot="label">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</span>
+          <span slot="label">{{$dayjs(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</span>
         </Panenl>
       </main>
       <footer class="my-info-money-footer"></footer>

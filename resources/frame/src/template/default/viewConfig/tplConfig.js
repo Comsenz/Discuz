@@ -5,7 +5,7 @@ import browserDb from '../../../helpers/webDbHelper';
 import appFetch from '../../../helpers/axiosHelper';
 import appCommonH from '../../../helpers/commonHelper';
 import fa from "element-ui/src/locale/lang/fa";
-import appConfig from '../../../../config/appConfig'
+import appConfig from '../../../../config/appConfig';
 
 export default {
   /**
@@ -409,6 +409,14 @@ export default {
           title: "修改密码"
         }
       },
+      'change-username': {
+        comLoad: function (resolve) {
+          require(['../view/m_site/myInfo/myData/changeUsernameView'], resolve)
+        },
+        metaInfo: {
+          title: "修改用户名"
+        }
+      },
       'real-name': {
         comLoad: function (resolve) {
           require(['../view/m_site/myInfo/myData/realNameView'], resolve)
@@ -617,7 +625,7 @@ export default {
    * @return {[type]}        [description]
    */
 
-  beforeEnter: function (to, form, next) {
+  beforeEnter: function (appStore, to, form, next) {
     //判断设备
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let isPhone = appCommonH.isWeixin().isPhone;
@@ -680,7 +688,8 @@ export default {
       'supplier-all-back',
       'circle-invite',
       'site-close',
-      'information-page'
+      'information-page',
+      'wx-qr-code'
     ];
 
     /*
@@ -700,8 +709,8 @@ export default {
     /*
     * 获取tokenId
     * */
-    const tokenId = browserDb.getLItem('tokenId');
-    const Authorization = browserDb.getLItem('Authorization');
+    let tokenId = browserDb.getLItem('tokenId');
+    let Authorization = browserDb.getLItem('Authorization');
 
     /*
     * 前台路由全局处理
@@ -718,10 +727,7 @@ export default {
     if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
       next();
     } else {
-      this.getForum().then((res) => {
-        /*
-        * 站点关闭，跳转到站点关闭页面
-        * */
+      appStore.dispatch('appSiteModule/loadForum').then(res => {
         if (res.errors) {
           if (res.rawData[0].code === 'site_closed') {
             if (to.name === 'login-user') {
@@ -799,6 +805,12 @@ export default {
           /*已登录状态*/
           if (res.readdata._data.set_site.site_mode === 'pay') {
             this.getUsers(tokenId).then(userInfo => {
+              if (userInfo.errors) {
+                browserDb.removeLItem("tokenId");
+                browserDb.removeLItem("Authorization");
+                next({ path: '/' });
+                return;
+              }
               /*获取用户付费状态并判断*/
               if (userInfo.readdata._data.paid) {
                 /*付费状态下，用户已付费可以任意访问，但不能访问未登录可以访问的页面*/
@@ -852,7 +864,12 @@ export default {
                 if (res.readdata._data.set_site.site_mode === 'public') {
                   next({ path: 'wx-sign-up-bd' });
                 } else if (res.readdata._data.set_site.site_mode === 'pay') {
-                  next({ path: 'pay-circle' });
+                  if (to.name === 'pay-circle') {
+                    next();
+                    return;
+                  } else {
+                    next({ path: 'pay-circle' });
+                  }
                 }
               }
             } else {
@@ -970,6 +987,8 @@ export default {
         const scale = document.documentElement.clientWidth / 320;
         // 设置页面根节点字体大小
         document.documentElement.style.fontSize = (baseSize * Math.min(scale, 2)) + 'px'
+        let viewportWidth = window.innerWidth;
+        document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640) / 2 + 'px';
       }
       // 初始化
       setRem();
@@ -980,8 +999,6 @@ export default {
 
       document.getElementsByTagName("html")[0].style.backgroundColor = '#f9f9f9';
       document.getElementsByTagName("body")[0].style.width = "640px";
-      let viewportWidth = window.innerWidth;
-      document.getElementsByTagName("body")[0].style.marginLeft = (viewportWidth - 640) / 2 + 'px';
     }
 
   },

@@ -10,6 +10,7 @@ namespace App\Providers;
 use App\Events\Group\Created as GroupCreated;
 use App\Events\Group\Saving as GroupSaving;
 use App\Events\Group\Deleted as GroupDeleted;
+use App\Events\Group\PaidGroup;
 use App\Events\Users\Logind;
 use App\Events\Users\Logining;
 use App\Events\Users\RefreshTokend;
@@ -19,6 +20,7 @@ use App\Listeners\AddApiMiddleware;
 use App\Listeners\DenyUser\DeleteFollow;
 use App\Listeners\Group\ChangeDefaultGroup;
 use App\Listeners\Group\ResetDefaultGroup;
+use App\Listeners\Group\PaidGroupOrder;
 use App\Listeners\Group\SetDefaultPermission;
 use App\Listeners\User\AddDefaultGroup;
 use App\Listeners\User\BanLogin;
@@ -84,6 +86,9 @@ class EventServiceProvider extends BaseEventServiceProvider
         ],
         DenyUserSaved::class => [
             DeleteFollow::class
+        ],
+        PaidGroup::class => [
+            PaidGroupOrder::class
         ]
     ];
 

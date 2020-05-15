@@ -13,6 +13,7 @@ use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
+use App\Events\Post\Saving;
 use App\MessageTemplate\PostMessage;
 use App\MessageTemplate\RelatedMessage;
 use App\MessageTemplate\RepliedMessage;
@@ -30,6 +31,7 @@ use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use s9e\TextFormatter\Utils;
@@ -41,7 +43,9 @@ class PostListener
     public function subscribe(Dispatcher $events)
     {
         // 发表回复
+        $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
+        $events->listen(Created::class, SaveAudioToDatabase::class);
 
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
@@ -64,6 +68,24 @@ class PostListener
 
         // @
         $events->listen(Saved::class, [$this, 'userMentions']);
+
+        // #话题#
+        $events->listen(Saved::class, [$this, 'threadTopic']);
+    }
+
+    /**
+     * @param Saving $event
+     * @throws PermissionDeniedException
+     */
+    public function whenPostWasSaving(Saving $event)
+    {
+        $post = $event->post;
+        $actor = $event->actor;
+
+        // 是否有权限在该主题所在分类下回复
+        if (! $event->post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
+            throw new PermissionDeniedException;
+        }
     }
 
     /**
@@ -284,10 +306,10 @@ class PostListener
 
         $users = User::whereIn('id', $mentioned)->get();
         $users->load('deny');
-        $users->filter(function($user) use ($event) {
+        $users->filter(function ($user) use ($event) {
             //把作者拉黑的用户不发通知
             return !in_array($event->post->user_id, array_column($user->deny->toArray(), 'id'));
-        })->each(function(User $user) use ($event) {
+        })->each(function (User $user) use ($event) {
             // 数据库通知
             $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
 
@@ -297,5 +319,20 @@ class PostListener
                 'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
             ]));
         });
+    }
+
+    /**
+     * 解析话题、创建话题、存储话题主题关系、修改话题主题数/阅读数
+     * @param Saved $event
+     */
+    public function threadTopic(Saved $event)
+    {
+        $topics = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
+
+        if ($event->post->is_first) {
+            $event->post->thread->topic()->sync($topics);
+
+            $event->post->thread->topic->each->refreshTopicThreadCount();
+        }
     }
 }

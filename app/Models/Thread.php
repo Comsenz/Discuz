@@ -43,6 +43,7 @@ use Illuminate\Support\Str;
  * @property bool $is_essence
  * @property int $type
  * @property Post $firstPost
+ * @property Topic|Collection $topic
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
@@ -366,6 +367,17 @@ class Thread extends Model
     public function threadVideo()
     {
         return $this->hasOne(ThreadVideo::class);
+    }
+
+
+    public function topic()
+    {
+        return $this->belongsToMany(Topic::class)->withPivot('created_at');
+    }
+
+    public function threadTopic()
+    {
+        return $this->hasMany(ThreadTopic::class);
     }
 
     /**

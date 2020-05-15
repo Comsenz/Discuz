@@ -35,7 +35,7 @@ $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsCont
 |--------------------------------------------------------------------------
 */
 
-$route->get('/signature', 'signature', ApiController\Qcloud\CreateSignatureController::class);
+$route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSignatureController::class);
 $route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
 
 /*
@@ -58,7 +58,8 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 |--------------------------------------------------------------------------
 */
 
-$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\Permission\UpdateGroupPermissionController::class);
+$route->post('/permission/group', 'permission.group', ApiController\Permission\SetPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -307,3 +308,11 @@ $route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Repo
 */
 
 $route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Topic
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);

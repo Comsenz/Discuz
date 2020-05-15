@@ -9,56 +9,56 @@ export default {
         {
           name: '云API',
           type: 'qcloud_close',
-          description: '配置云API的密钥后，才可使用腾讯云的各项服务和能力',
+          description: '配置云API的密钥后，才可使用腾讯云的各项服务和能力，<a href="https://discuz.chat/manual-admin/2.html#_2-7-1-%E4%BA%91api" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconAPI',
           setFlag: true
         }, {
           name: '图片内容安全',
           type: 'qcloud_cms_image',
-          description: '请先配置云API，开通腾讯云图片内容安全服务，并确保有对应套餐包',
+          description: '请先配置云API，开通腾讯云图片内容安全服务，并确保有对应套餐包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-2-%E5%9B%BE%E7%89%87%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8" target="_blank">查看文档</a>',
           status: '',
           icon: 'icontupian',
           setFlag: false
         }, {
           name: '文本内容安全',
           type: 'qcloud_cms_text',
-          description: '请先配置云API，开通腾讯云文本内容安全服务，并确保有对应套餐包',
+          description: '请先配置云API，开通腾讯云文本内容安全服务，并确保有对应套餐包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-3-%E6%96%87%E6%9C%AC%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconwenben',
           setFlag: false
         }, {
           name: '短信',
           type: 'qcloud_sms',
-          description: '请先配置云API，开通腾讯云短信服务，并确保腾讯云账户的短信额度充足',
+          description: '请先配置云API，开通腾讯云短信服务，并确保腾讯云账户的短信额度充足，<a href="https://discuz.chat/manual-admin/2.html#_2-7-4-%E7%9F%AD%E4%BF%A1" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconduanxin',
           setFlag: true
         }, {
           name: '实名认证',
           type: 'qcloud_faceid',
-          description: '请先配置云API，开通腾讯云的人脸核身服务，并确保有对应资源包',
+          description: '请先配置云API，开通腾讯云的人脸核身服务，并确保有对应资源包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-5-%E5%AE%9E%E5%90%8D%E8%AE%A4%E8%AF%81" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconshimingrenzheng',
           setFlag: false
         }, {
           name: '对象存储',
           type: 'qcloud_cos',
-          description: '请先配置云API，开通腾讯云的对象存储服务，并确保有对应资源包',
+          description: '请先配置云API，开通腾讯云的对象存储服务，并确保有对应资源包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-6-%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconduixiangcunchu',
           setFlag: true
         }, {
           name: '视频',
           type: 'qcloud_vod',
-          description: '请先配置云API，开通腾讯云的云点播VOD服务，并确保有对应资源包',
+          description: '请先配置云API，开通腾讯云的云点播VOD服务，并确保有对应资源包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-7-%E8%A7%86%E9%A2%91" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconshipin',
           setFlag: true
         }, {
           name: '验证码',
           type: 'qcloud_captcha',
-          description: '请先配置云API，开通腾讯云的验证码服务，并确保有对应的资源包',
+          description: '请先配置云API，开通腾讯云的验证码服务，并确保有对应的资源包，<a href="https://discuz.chat/manual-admin/2.html#_2-7-8-%E9%AA%8C%E8%AF%81%E7%A0%81" target="_blank">查看文档</a>',
           status: '',
           icon: 'iconyanzhengma',
           setFlag: true

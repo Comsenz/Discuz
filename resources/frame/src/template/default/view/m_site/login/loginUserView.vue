@@ -12,7 +12,7 @@
               v-model="userName"
               clearable
               label="用户名"
-              placeholder="请输入您的用户名"
+              placeholder="请输入用户名"
             />
 
             <van-field
@@ -26,7 +26,7 @@
         </form>
 
         <div class="login-user-btn">
-          <van-button type="primary" @click="loginClick" :loading="btnLoading" loading-text="登录中..." >登录</van-button>
+          <van-button plain type="primary" @click="loginClick" :loading="btnLoading" loading-text="登录中..." >登录</van-button>
         </div>
 
         <div class="login-user-method">

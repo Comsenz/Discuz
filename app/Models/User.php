@@ -9,17 +9,19 @@ namespace App\Models;
 
 use App\Traits\Notifiable;
 use Discuz\Auth\Guest;
+use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Discuz\Foundation\EventGeneratorTrait;
-use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -313,8 +315,18 @@ class User extends Model
 
     public function getAvatarAttribute($value)
     {
-        if ($value && strpos($value, '://') === false) {
-            return app(UrlGenerator::class)->to('/storage/avatars/'.$value);
+        if ($value) {
+            if (strpos($value, '://') === false) {
+                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value)
+                    . '?' . \Carbon\Carbon::parse($this->avatar_at)->timestamp;
+            } else {
+                $value = app(Filesystem::class)
+                    ->disk('avatar_cos')
+                    ->temporaryUrl(
+                        'public/avatar/' . Str::of($value)->afterLast('://'),
+                        \Carbon\Carbon::now()->addMinutes(5)
+                    );
+            }
         }
 
         return $value;
@@ -492,7 +504,8 @@ class User extends Model
      */
     public function groups()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsToMany(Group::class)
+            ->withPivot('expiration_time');
     }
 
     /**

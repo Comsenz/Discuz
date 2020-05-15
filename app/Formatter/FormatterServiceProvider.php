@@ -44,7 +44,7 @@ class FormatterServiceProvider extends AbstractServiceProvider
             return new Formatter(
                 $this->url,
                 $this->cache,
-                $this->app->storagePath().'/formatter'
+                $this->app
             );
         });
 
@@ -52,7 +52,15 @@ class FormatterServiceProvider extends AbstractServiceProvider
             return new MarkdownFormatter(
                 $this->url,
                 $this->cache,
-                $this->app->storagePath().'/formatter'
+                $this->app
+            );
+        });
+
+        $this->app->singleton(DialogMessageFormatter::class, function () {
+            return new DialogMessageFormatter(
+                $this->url,
+                $this->cache,
+                $this->app
             );
         });
     }

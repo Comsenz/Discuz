@@ -30,7 +30,8 @@ export default {
 
     //登录微信帐号
     wxLoginBdClick(){
-      this.$router.push('/wx-login-bd')
+      webDb.setLItem("wx-goto-login", true);
+      this.$router.push('/wx-sign-up-bd')
     },
 
     //已有帐号立即登录
@@ -52,17 +53,12 @@ export default {
     },
 
     getForum(){
-      this.appFetch({
-        url:'forum',
-        method:'get',
-        data:{}
-      }).then(res=>{
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteMode = res.readdata._data.set_site.site_mode;
         this.registerClose = res.readdata._data.set_reg.register_close;
         this.qcloudSms = res.readdata._data.qcloud.qcloud_sms;
         webDb.setLItem('siteInfo',res.readdata);
-      }).catch(err=>{
-      })
+      });
     }
 
   },

@@ -14,16 +14,11 @@
   <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
   <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
   <title></title>
-  <!-- 引入播放器 css 文件 -->
   <link href="https://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.css" rel="stylesheet">
-  <!-- 如需在IE8、9浏览器中初始化播放器，浏览器需支持Flash并在页面中引入 -->
-  <!--[if lt IE 9]>
- <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/ie8/videojs-ie8.js"></script>
- <![endif]-->
-  <!-- 如果需要在 Chrome Firefox 等现代浏览器中通过H5播放hls，需要引入 hls.js -->
-  <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/lib/hls.min.0.8.8.js"></script>
-  <!-- 引入播放器 js 文件 -->
-  <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.min.js"></script>
+  <!--如果需要在 Chrome 和 Firefox 等现代浏览器中通过 H5 播放 HLS 格式的视频，需要在 tcplayer.v4.min.js 之前引入 hls.js。-->
+  <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/libs/hls.min.0.12.4.js"></script>
+  <!--播放器脚本文件-->
+  <script src="https://imgcache.qq.com/open/qcloud/video/tcplayer/tcplayer.v4.min.js"></script>
 
   <style>
     .frame-loader {
@@ -169,8 +164,8 @@
         clearTimeout(d), d = setTimeout(c, 300)
       }, !1), a.addEventListener("pageshow", function (a) {
         a.persisted && (clearTimeout(d), d = setTimeout(c, 300))
-      }, !1), "complete" === e.readyState ? e.body.style.fontSize = 12 * i + "px" : e.addEventListener("DOMContentLoaded", function () {
-        e.body.style.fontSize = 12 * i + "px"
+      }, !1), "complete" === e.readyState ? 1 : e.addEventListener("DOMContentLoaded", function () {
+        1
       }, !1), c(), k.dpr = a.dpr = i, k.refreshRem = c, k.rem2px = function (a) {
         var b = parseFloat(a) * this.rem;
         return "string" == typeof a && a.match(/rem$/) && (b += "px"), b
@@ -193,9 +188,29 @@
     <div class="dot"></div>
   </div>
   <div id="app"></div>
-  <iframe id="printCasLogout" style="display: none;"></iframe>
 </body>
 <script>
+  window.entryUrl = location.href.split('#')[0];
+  var appjs = document.createElement("script");
+  appjs.type = "text/javascript";
+  appjs.async = true;
+  var appcss = document.createElement("link");
+  appcss.rel = "stylesheet";
+  if (window.location.href.indexOf("/admin") !== -1) {
+    appjs.src = "/static/js/admin.js?v<%= version %>"
+    appcss.href = "/static/css/admin.css?v<%= version %>"
+  } else {
+    appjs.src = "/static/js/app.js?v<%= version %>"
+    appcss.href = "/static/css/app.css?v<%= version %>"
+  }
+  document.getElementsByTagName("head")[0].appendChild(appcss);
+  document.getElementsByTagName("body")[0].appendChild(appjs);
+  window.sessionStorage.setItem('__TD_td_channel', window.location.hostname.replace(/\./g, "_"));
+  var tdjs = document.createElement("script");
+  tdjs.type = "text/javascript";
+  tdjs.async = true;
+  tdjs.src = "https://jic.talkingdata.com/app/h5/v1?appid=86697ADBE1104854B72523C08FFB688B";
+  document.getElementsByTagName("body")[0].appendChild(tdjs);
   //vconsole 调试
   if (window.location.href.indexOf("debug=1") !== -1) {
     var jsScript = document.createElement("script");

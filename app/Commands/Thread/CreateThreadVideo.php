@@ -7,14 +7,17 @@
 
 namespace App\Commands\Thread;
 
+use App\Models\Post;
+use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
-use App\Repositories\ThreadRepository;
 use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
 use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 class CreateThreadVideo
@@ -33,6 +36,11 @@ class CreateThreadVideo
     public $actor;
 
     /**
+     * @var Thread|Post
+     */
+    public $model;
+
+    /**
      * The attributes of the new thread.
      *
      * @var array
@@ -40,58 +48,81 @@ class CreateThreadVideo
     public $data;
 
     /**
-     * The id of the thread.
-     *
-     * @var int
+     * @var
      */
-    public $threadId;
+    public $settings;
 
     /**
      * CreateThread constructor.
      * @param User $actor
-     * @param $threadId
+     * @param Model $model
      * @param array $data
      */
-    public function __construct(User $actor, $threadId, array $data)
+    public function __construct(User $actor, Model $model, array $data)
     {
         $this->actor = $actor;
+        $this->model = $model;
         $this->data = $data;
-        $this->threadId = $threadId;
     }
 
     /**
      * @param EventDispatcher $events
-     * @param ThreadRepository $threads
-     * @param ThreadVideo $threadVideo
+     * @param SettingsRepository $settings
      * @return ThreadVideo
+     * @throws PermissionDeniedException
      */
-    public function handle(EventDispatcher $events, ThreadRepository $threads, ThreadVideo $threadVideo)
+    public function handle(EventDispatcher $events, SettingsRepository $settings)
     {
         $this->events = $events;
+        $this->settings = $settings;
 
-        //传入主题ID时更新数据
-        if ($this->threadId) {
-            $thread = $threads->findOrFail($this->threadId);
-        }
-        $file_id = Arr::get($this->data, 'attributes.file_id');
-        $threadVideoRes = $threadVideo->where('file_id', $file_id)->first();
-        if ($threadVideoRes) {
-            $threadVideo = $threadVideoRes;
+        $fileId = Arr::get($this->data, 'attributes.file_id', '');
+
+        /** @var ThreadVideo $threadVideo */
+        $threadVideo = ThreadVideo::query()->where('thread_id', 0)->where('file_id', $fileId)->firstOrNew();
+
+        /**
+         * 传入 Thread 时，则视为发视频
+         * 传入 Post 时，则视为发音频
+         * 如果改需求，建议改为构造方法中传入 type
+         */
+        if ($this->model instanceof Thread) {
+            $thread = $this->model;
+            $post = new Post;
+            $type = ThreadVideo::TYPE_OF_VIDEO;
+        } elseif ($this->model instanceof Post) {
+            $thread = $this->model->thread;
+            $post = $this->model;
+            $type = ThreadVideo::TYPE_OF_AUDIO;
+        } else {
+            throw new PermissionDeniedException();
         }
 
-        $threadVideo->user_id   = $this->actor->id;
-        $threadVideo->thread_id = isset($thread) ? $thread->id : $this->threadId;
-        $threadVideo->status    = $threadVideo::VIDEO_STATUS_TRANSCODING;
-        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name')?:'';
-        $threadVideo->file_id   = $file_id;
-        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url')?:'';
-        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url')?:'';
+        $threadVideo->user_id = $this->actor->id;
+        $threadVideo->thread_id = $thread->id ?? 0;
+        $threadVideo->post_id = $post->id ?? 0;
+        $threadVideo->type = $type;
+        $threadVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
+        $threadVideo->file_id = $fileId;
+        $threadVideo->file_name = Arr::get($this->data, 'attributes.file_name', '');
+        $threadVideo->media_url = Arr::get($this->data, 'attributes.media_url', '');
+        $threadVideo->cover_url = Arr::get($this->data, 'attributes.cover_url', '');
 
         $threadVideo->save();
 
-        if (isset($thread)) {
-            //发布文章时，通知腾讯云点播转码
-            $this->transcodeVideo($threadVideo->file_id);
+        if ($type === ThreadVideo::TYPE_OF_VIDEO && $thread->exists) {
+            // 发布文章时，转码
+            if ($this->settings->get('qcloud_vod_transcode_ads', 'qcloud')) {
+                // 加密自适应
+                $this->transcodeVideo($threadVideo->file_id, 'AdaptiveDynamicStreamingTaskSet');
+            } else {
+                // 普通转码
+                $this->transcodeVideo($threadVideo->file_id, 'TranscodeTaskSet');
+            }
+            // 转动图
+            if ($template_name = $this->settings->get('qcloud_vod_taskflow_gif', 'qcloud')) {
+                $this->processMediaByProcedure($fileId, $template_name);
+            }
         }
 
         return $threadVideo;
