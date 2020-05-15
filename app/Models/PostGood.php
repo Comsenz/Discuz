@@ -41,8 +41,9 @@ class PostGood extends Model
 
     /**
      * 允许的域名
+     *  0淘宝 1天猫 2京东 3拼多多H5 4有赞 5淘宝口令粘贴值 6京东粘贴值H5域名 7有赞粘贴值
      *
-     * @var string[]
+     * @var array[]
      */
     protected static $domainName = [
         0 => 'taobao',      // 淘宝

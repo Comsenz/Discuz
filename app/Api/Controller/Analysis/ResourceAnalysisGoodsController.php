@@ -12,6 +12,7 @@ use App\Exceptions\TranslatorException;
 use App\Models\PostGood;
 use App\Traits\PostGoodsTrait;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,6 +21,7 @@ use Tobscure\JsonApi\Document;
 class ResourceAnalysisGoodsController extends AbstractResourceController
 {
     use PostGoodsTrait;
+    use AssertPermissionTrait;
 
     protected $httpClient;
 
@@ -47,11 +49,18 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
     /**
      * {@inheritdoc}
+     *
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return array|mixed
      * @throws TranslatorException
+     * @throws \Discuz\Auth\Exception\NotAuthenticatedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $this->assertRegistered($actor);
+
         $readyContent = Arr::get($request->getParsedBody(), 'data.attributes.address');
 
         // Filter Url
