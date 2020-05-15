@@ -41,7 +41,8 @@ class NoUserExceptionHandler implements ExceptionHandlerInterface
         $error = [
             'status' => $status,
             'code' => 'no_bind_user',
-            'token' => $e->getToken()
+            'token' => $e->getToken(),
+            'user' => $e->getUser()
         ];
 
         return new ResponseBag($status, [$error]);
