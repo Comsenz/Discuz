@@ -214,7 +214,7 @@ export default {
             } else if (res.rawData[0].code === 'ban_user') {
               this.$router.push({ path: "information-page", query: { setInfo: 'banUser' } })
             } else {
-              this.$toast.fail(res.errors[0].code);
+              window.location.href = '/api/oauth/wechat';
             }
           }
           // } else if (res.data.attributes.location) {
