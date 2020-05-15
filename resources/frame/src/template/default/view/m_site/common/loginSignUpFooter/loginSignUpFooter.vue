@@ -1,8 +1,10 @@
 <template>
   <footer class="login-user-footer">
-    <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
+    <template v-if="pageName === 'login-user'||pageName === 'login-phone'||pageName==='wx-login-bd'">
       <span v-if="qcloudSms" @click="retrieveClick">忘记密码？找回</span>
       <i v-if="registerClose && qcloudSms"></i>
+    </template>
+    <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
       <span v-if="registerClose" @click="signUpClick">注册</span>
     </template>
 
