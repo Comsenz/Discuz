@@ -700,6 +700,7 @@ export default {
       'wx-sign-up-bd',
       'supplier-all-back',
       'site-close',
+      'retrieve-pwd',
       'information-page',
       '/api/oauth/wechat',
       '/api/oauth/wechat/pc'
