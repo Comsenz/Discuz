@@ -9,11 +9,11 @@
     </template>
 
     <template v-else-if="pageName === 'wx-login-bd'">
-      <span @click="wxSignUpBdClick">没有帐号？注册，绑定微信新帐号</span>
+      <span @click="wxSignUpBdClick">没有帐号？注册并绑定微信</span>
     </template>
 
     <template v-else-if="pageName === 'wx-sign-up-bd'">
-      <span @click="wxLoginBdClick">已有帐号？登录，微信绑定帐号</span>
+      <span @click="wxLoginBdClick">已有帐号？登录并绑定微信</span>
     </template>
 
     <template v-else-if="pageName === 'sign-up'">

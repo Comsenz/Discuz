@@ -28,6 +28,7 @@ export default {
       myModifyPhone: '',
       isReal: false,     //是否实名认证
       updataLoading: false,  //上传状态
+      hasPassword: true
     }
   },
 
@@ -97,6 +98,7 @@ export default {
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id
           this.canWalletPay = res.readdata._data.canWalletPay;  //钱包密码
+          this.hasPassword = res.data.attributes.hasPassword;   //是否有密码
           if (res.readdata.wechat) {
             this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
           } else {
