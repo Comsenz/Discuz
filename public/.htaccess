@@ -1,8 +1,9 @@
 <IfModule mod_rewrite.c>
     Options +FollowSymLinks
     RewriteEngine On
+    SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
     RewriteRule ^install.*  /index.php?%{QUERY_STRING} [L,QSA,PT]
-    RewriteRule ^api.*  index.php?%{QUERY_STRING} [L,QSA,PT,E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule ^api.*  index.php?%{QUERY_STRING} [L,QSA,PT]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule . index.html [L]
