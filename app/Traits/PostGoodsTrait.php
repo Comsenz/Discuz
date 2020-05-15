@@ -8,6 +8,7 @@
 namespace App\Traits;
 
 use App\Exceptions\TranslatorException;
+use App\Models\PostGood;
 
 /**
  * 获取网址里的[商品信息]
@@ -63,7 +64,7 @@ trait PostGoodsTrait
             case 'yangkeduo':
                 $this->pdd();
                 break;
-            case 'youzan':
+            case 'm.youzan':
                 $this->youZan();
                 break;
             case 'm.tb':
@@ -163,12 +164,38 @@ trait PostGoodsTrait
 
     protected function pdd()
     {
-        dd('拼多多');
+        // get address platformId
+        $idRegex = '/goods_id=(?<platform_id>\d+)/';
+        if (preg_match($idRegex, $this->address, $matchAddress)) {
+            $this->goodsInfo['platform_id'] = $matchAddress['platform_id'];
+        }
     }
 
     protected function youZan()
     {
-        dd('有赞');
+        // get address platformId
+        $idRegex = '/detail\/(?<platform_id>\w+)\?/i';
+        if (preg_match($idRegex, $this->address, $matchAddress)) {
+            $this->goodsInfo['platform_id'] = $matchAddress['platform_id'];
+        } else {
+            if (preg_match('/wscgoods\/detail\/(?<platform_id>\w+)\?/i', $this->html, $matchAddress)) {
+                $this->goodsInfo['platform_id'] = $matchAddress['platform_id'];
+            }
+        }
+
+        // get title & src
+        $infoRegex = '/"cover"\s*:\s*"(?<src>.+\.(jpeg|jpg|png))"\s*,\s*"title"\s*:\s*"(?<title>.+)"\s*,\s*"desc"/i';
+        if (preg_match($infoRegex, $this->html, $matchContent)) {
+            $this->goodsInfo['title'] = $matchContent['title'];
+            $this->goodsInfo['src'] = trim($matchContent['src'], '/');
+        }
+
+        // get price
+        $priceRegex = '/"price"\s*:\s*(?<price>\d+),/';
+        if (preg_match($priceRegex, $this->html, $matchPrice)) {
+            $matchPrice['price'] = 38956;
+            $this->goodsInfo['price'] = number_format($matchPrice['price'] / 100, 2);
+        }
     }
 
     protected function wirelessShare()
@@ -183,12 +210,23 @@ trait PostGoodsTrait
                 ]
             ]);
 
+            // 获取最终的重定向真实域名地址
+            $redirects = $response->getHeader('X-Guzzle-Redirect-History');
+            if (!empty($redirects)) {
+                $match['address'] = array_shift($redirects);
+            }
+
             // 重新覆盖
             $this->html = $response->getBody()->getContents();
             $this->address = $match['address'];
 
-            // 调用淘宝提取方法
-            $this->taoBao();
+            // 判断用 淘宝/天猫 提取方法
+            $regex = '/(https|http):\/\/(?<url>[0-9a-z.]+)/i';
+            if (preg_match($regex, $this->address, $match)) {
+                PostGood::enumType(explode('.', $match['url']), function ($callback) {
+                    $this->{$callback['value']}();
+                });
+            }
         }
     }
 }

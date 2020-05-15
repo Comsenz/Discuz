@@ -17,7 +17,7 @@ class CreatePostGoods extends Migration
 
             $table->unsignedBigInteger('user_id')->default(0)->comment('用户 id');
             $table->unsignedBigInteger('post_id')->default(0)->comment('帖子 id');
-            $table->unsignedBigInteger('platform_id')->default(0)->comment('平台商品 id');
+            $table->string('platform_id')->default('')->comment('平台商品 id');
             $table->string('title')->default('')->comment('商品标题');
             $table->unsignedDecimal('price', 10, 2)->default(0)->comment('价格');
             $table->string('image_path')->default('')->comment('商品封面图');

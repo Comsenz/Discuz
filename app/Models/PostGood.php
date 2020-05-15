@@ -19,7 +19,7 @@ use Illuminate\Support\Arr;
  *
  * @property int $user_id
  * @property int $post_id
- * @property int $platform_id
+ * @property string $platform_id
  * @property string $title
  * @property float $price
  * @property string $image_path
@@ -49,9 +49,10 @@ class PostGood extends Model
         1 => 'tmall',       // 天猫
         2 => 'jd',          // 京东
         3 => 'yangkeduo',   // 拼多多H5
-        4 => 'youzan',      // 有赞
+        4 => 'm.youzan',    // 有赞
         5 => 'm.tb',        // 淘宝口令粘贴值
         6 => 'm.jd',        // 京东粘贴值H5域名
+        7 => 'youzan',      // 有赞粘贴值
     ];
 
     /**
@@ -59,7 +60,7 @@ class PostGood extends Model
      *
      * @param int $user_id
      * @param int $post_id
-     * @param int $platform_id
+     * @param string $platform_id
      * @param string $title
      * @param float $price
      * @param string $imagePath
@@ -72,7 +73,7 @@ class PostGood extends Model
     public static function store(
         int $user_id,
         int $post_id,
-        int $platform_id,
+        string $platform_id,
         string $title,
         float $price,
         string $imagePath,
@@ -170,6 +171,8 @@ class PostGood extends Model
             $mode = 'File';
         } elseif (self::$key == 6) {
             $mode = 'File';
+        } elseif (self::$key == 3) {
+            $mode = 'DoNotSend';
         }
 
         return $mode ?? 'Guzzle';
