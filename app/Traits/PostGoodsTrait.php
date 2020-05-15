@@ -193,7 +193,6 @@ trait PostGoodsTrait
         // get price
         $priceRegex = '/"price"\s*:\s*(?<price>\d+),/';
         if (preg_match($priceRegex, $this->html, $matchPrice)) {
-            $matchPrice['price'] = 38956;
             $this->goodsInfo['price'] = number_format($matchPrice['price'] / 100, 2);
         }
     }
