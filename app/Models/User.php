@@ -250,12 +250,14 @@ class User extends Model
         return $this;
     }
 
-    public function changeUsername($username)
+    public function changeUsername($username, $isAdmin = false)
     {
         $this->username = $username;
 
-        // 修改次数+1
-        $this->username_bout += 1;
+        if (!$isAdmin) {
+            // 修改次数+1
+            $this->username_bout += 1;
+        }
 
         return $this;
     }
@@ -451,12 +453,12 @@ class User extends Model
 
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     public function latelyLog()
     {
-        return $this->hasOne(OperationLog::class, 'log_able_id')->orderBy('id', 'desc');
+        return $this->hasOne(UserActionLogs::class, 'log_able_id')->orderBy('id', 'desc');
     }
 
     public function wechat()

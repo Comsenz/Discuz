@@ -21,7 +21,7 @@ use App\MessageTemplate\Wechat\WechatPostMessage;
 use App\MessageTemplate\Wechat\WechatRelatedMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Attachment;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
@@ -205,7 +205,7 @@ class PostListener
             $action = 'disapprove';
         }
 
-        OperationLog::writeLog($event->actor, $event->post, $action, $event->data['message']);
+        UserActionLogs::writeLog($event->actor, $event->post, $action, $event->data['message']);
 
         // 发送审核通知
         $this->postNotices('isApproved', $event);
@@ -219,7 +219,7 @@ class PostListener
     public function whenPostWasHidden(Hidden $event)
     {
         // 记录操作日志
-        OperationLog::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
+        UserActionLogs::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
 
         // 发送删除通知
         $this->postNotices('isDeleted', $event);
@@ -268,7 +268,7 @@ class PostListener
      */
     public function whenPostWasRevised(Revised $event)
     {
-        OperationLog::writeLog(
+        UserActionLogs::writeLog(
             $event->actor,
             $event->post,
             'revise',

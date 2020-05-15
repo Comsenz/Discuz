@@ -33,6 +33,8 @@ use Illuminate\Support\Str;
  * @property string $ip
  * @property int $reply_count
  * @property int $like_count
+ * @property float $longitude
+ * @property float $latitude
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
@@ -252,9 +254,11 @@ class Post extends Model
      * @param int $replyUserId
      * @param int $isFirst
      * @param int $isComment
+     * @param float $latitude
+     * @param float $longitude
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment, $latitude, $longitude)
     {
         $post = new static;
 
@@ -270,6 +274,9 @@ class Post extends Model
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
+
+        $post->latitude = $latitude;
+        $post->longitude = $longitude;
 
         return $post;
     }
@@ -412,7 +419,7 @@ class Post extends Model
      */
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     /**

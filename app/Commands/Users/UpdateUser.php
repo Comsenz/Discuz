@@ -16,7 +16,7 @@ use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use App\Models\User;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -158,7 +158,7 @@ class UpdateUser
             // 审核后系统通知事件
             $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
-            OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
+            UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
@@ -221,7 +221,8 @@ class UpdateUser
             // 过滤内容
             $username = $this->specialChar->purify($username);
 
-            if (!$this->actor->isAdmin()) {
+            $isAdmin = $this->actor->isAdmin();
+            if (!$isAdmin) {
                 if ($user->username_bout >= $this->settings->get('username_bout', 'default', 1)) {
                     throw new TranslatorException('user_username_bout_limit_error');
                 }
@@ -231,7 +232,7 @@ class UpdateUser
                 throw new TranslatorException('user_username_already_exists');
             }
 
-            $user->changeUsername($username);
+            $user->changeUsername($username, $isAdmin);
         }
 
         if ($signature = Arr::get($attributes, 'signature')) {

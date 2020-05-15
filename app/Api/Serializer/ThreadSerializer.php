@@ -175,7 +175,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function logs($thread)
     {
-        return $this->hasMany($thread, OperationLogSerializer::class);
+        return $this->hasMany($thread, UserActionLogsSerializer::class);
     }
 
     /**
@@ -184,7 +184,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function lastDeletedLog($thread)
     {
-        return $this->hasOne($thread, OperationLogSerializer::class);
+        return $this->hasOne($thread, UserActionLogsSerializer::class);
     }
 
     /**

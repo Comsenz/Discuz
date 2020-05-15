@@ -15,7 +15,7 @@ use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
 use App\Exceptions\CategoryNotFoundException;
 use App\Models\Category;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
@@ -124,7 +124,7 @@ class ThreadListener
 
         $message = $event->data['message'] ?? '';
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
 
         // 发送操作通知
         $this->threadNotices($event->data['notice_type'], $event);
@@ -141,7 +141,7 @@ class ThreadListener
 
         $message = $event->data['message'] ?? '';
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
 
         // 发送删除通知
         $this->threadNotices('isDeleted', $event);

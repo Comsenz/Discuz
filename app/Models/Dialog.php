@@ -60,10 +60,10 @@ class Dialog extends Model
 
     public static function buildOrFetch(int $sender_user_id, int $recipient_user_id)
     {
-        $dialog =  self::query()
-            ->where(['sender_user_id'=>$sender_user_id,'recipient_user_id'=>$recipient_user_id])
-            ->orWhere(function ($query) use ($recipient_user_id,$sender_user_id) {
-                $query->where(['sender_user_id'=>$recipient_user_id,'recipient_user_id'=>$sender_user_id]);
+        $dialog = self::query()
+            ->where(['sender_user_id' => $sender_user_id, 'recipient_user_id' => $recipient_user_id])
+            ->orWhere(function ($query) use ($recipient_user_id, $sender_user_id) {
+                $query->where(['sender_user_id' => $recipient_user_id, 'recipient_user_id' => $sender_user_id]);
             })
             ->first();
 
