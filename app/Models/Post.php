@@ -29,6 +29,7 @@ use Illuminate\Support\Str;
  * @property int $thread_id
  * @property int $reply_post_id
  * @property int $reply_user_id
+ * @property string $summary
  * @property string $content
  * @property string $ip
  * @property int $reply_count
@@ -62,14 +63,14 @@ class Post extends Model
     const SUMMARY_LENGTH = 100;
 
     /**
-     * 通知内容展示长度(字)
-     */
-    const NOTICE_LENGTH = 80;
-
-    /**
      * 摘要结尾
      */
     const SUMMARY_END_WITH = '...';
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const NOTICE_LENGTH = 80;
 
     const UNAPPROVED = 0;
 
@@ -116,6 +117,27 @@ class Post extends Model
      * @var MarkdownFormatter
      */
     protected static $markdownFormatter;
+
+    /**
+     * 帖子摘要
+     *
+     * @return string
+     */
+    public function getSummaryAttribute()
+    {
+        $content = Str::of($this->content ?: '');
+
+        if ($content->length() > self::SUMMARY_LENGTH) {
+            $content = static::$formatter->parse(
+                $content->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)
+            );
+            $content = static::$formatter->render($content);
+        } else {
+            $content = $this->formatContent();
+        }
+
+        return $content;
+    }
 
     /**
      * Unparse the parsed content.
@@ -268,7 +290,6 @@ class Post extends Model
         $post->thread_id = $threadId;
         $post->user_id = $userId;
         $post->ip = $ip;
-        $post->reply_post_id = $replyPostId;
         $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;

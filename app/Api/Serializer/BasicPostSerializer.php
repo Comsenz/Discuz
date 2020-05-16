@@ -45,6 +45,7 @@ class BasicPostSerializer extends AbstractSerializer
 
         $attributes = [
             'replyUserId'       => $model->reply_user_id,
+            'summary'           => $model->summary,
             'content'           => $model->content,
             'contentHtml'       => $model->formatContent(),
             'replyCount'        => (int) $model->reply_count,
