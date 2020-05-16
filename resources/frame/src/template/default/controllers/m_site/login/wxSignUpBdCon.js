@@ -18,13 +18,15 @@ export default {
       platform: '',
       signReason: '',        //注册原因
       signReasonStatus: false,
-      signUpBdClickShow: true, // 是否触发验证码按钮
+      signUpBdClickShow: true, // 是否触发验证码按钮, true的时候不显示验证码
       appID: '',               // 腾讯云验证码场景 id
       captcha: null,           // 腾讯云验证码实例
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
       btnLoading: false,        //注册按钮状态
       registerClose: true,      // true的时候能注册
+      showSignupInput: false,   // true时显示用户名/密码输入框
+      redirectMessage: "正在跳转...",
     }
   },
 
@@ -106,7 +108,7 @@ export default {
         console.log(err);
       })
     },
-    setSignData() {
+    setSignData(error_callback) {
       this.appFetch({
         url: 'register',
         method: 'post',
@@ -128,11 +130,21 @@ export default {
         this.btnLoading = false;
         if (res.errors) {
           if (res.errors[0].detail) {
+            if (error_callback) {
+              error_callback(res);
+              return;
+            }
+            this.showSignupInput = true;
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             if (res.rawData[0].code === 'register_validate') {
               this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' } })
             } else {
+              if (error_callback) {
+                error_callback(res);
+                return;
+              }
+              this.showSignupInput = true;
               this.$toast.fail(res.errors[0].code);
             }
           }
@@ -160,11 +172,33 @@ export default {
       }).catch(err => {
         console.log(err);
         this.btnLoading = false;
+        this.showSignupInput = true;
       })
     },
     getRandomChars(len) {
       var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       return Array(len).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+    },
+    autoRegister(nickname) {
+      if (nickname) {
+        nickname = nickname.replace(".", "");
+        this.userName = nickname;
+      } else {
+        this.userName = "网友" + this.getRandomChars(6);
+      }
+      this.setSignData((res) => {
+        if (this.signUpBdClickShow && res.errors[0].detail[0].includes("已经存在")) {
+          if (nickname) {
+            this.userName = nickname + this.getRandomChars(6);
+          } else {
+            this.userName = "网友" + this.getRandomChars(6);
+          }
+          this.setSignData();
+        } else {
+          this.showSignupInput = true;
+          this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+        }
+      });
     },
     getWatchHref(code, state, sessionId) {
       this.appFetch({
@@ -189,18 +223,19 @@ export default {
               return;
             }
             if (this.registerClose) { //可以注册
+              this.redirectMessage = "正在自动注册并登录..."
               this.password = "";
+              let nickname = res.errors[0].user.nickname;
               if (this.signUpBdClickShow) {
-                  this.userName = "网友" + this.getRandomChars(6);
-                  this.setSignData();
+                this.autoRegister(nickname);
               } else {
                 this.captcha = new TencentCaptcha(this.appID, res => {
                   if (res.ret === 0) {
-                    this.userName = "网友" + this.getRandomChars(6);
                     this.captcha_ticket = res.ticket;
                     this.captcha_rand_str = res.randstr;
-                    //验证通过后注册
-                    this.setSignData();
+                    this.autoRegister(nickname);
+                  } else {
+                    this.showSignupInput = true;
                   }
                 });
                 // 显示验证码
