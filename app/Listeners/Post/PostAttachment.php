@@ -50,7 +50,7 @@ class PostAttachment
             // 图片
             case 3:
                 // 发表图片帖必须有图片
-                if (!$post->exists) {
+                if (!$post->exists && $post->is_first) {
                     $images = $attachments && Attachment::query()
                             ->where('user_id', $event->actor->id)
                             ->where('post_id', 0)

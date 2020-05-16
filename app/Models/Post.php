@@ -81,6 +81,8 @@ class Post extends Model
      * {@inheritdoc}
      */
     protected $casts = [
+        'reply_count' => 'integer',
+        'like_count' => 'integer',
         'is_first' => 'boolean',
         'is_comment' => 'boolean',
     ];

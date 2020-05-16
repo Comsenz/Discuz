@@ -68,6 +68,8 @@ class ThreadSerializer extends AbstractSerializer
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
+        } else {
+            $attributes['isDeleted'] = false;
         }
 
         if ($model->price > 0) {
