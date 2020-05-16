@@ -98,6 +98,7 @@ class UserSerializer extends AbstractSerializer
             $attributes += [
                 'canWalletPay'  => $gate->allows('walletPay', $model),
                 'walletBalance' => $model->userWallet->available_amount,
+                'walletFreeze'  => $model->userWallet->freeze_amount,
             ];
         }
 
