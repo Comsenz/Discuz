@@ -31,6 +31,7 @@ class PostAttachment
      */
     public function whenPostIsSaving(Saving $event)
     {
+        $post = $event->post;
         $attachments = Arr::get($event->data, 'relationships.attachments.data');
 
         switch ($event->post->thread->type) {
@@ -48,16 +49,18 @@ class PostAttachment
             // case 2:
             // 图片
             case 3:
-                // 图片帖必须有图片
-                $images = $attachments && Attachment::query()
-                    ->where('user_id', $event->actor->id)
-                    ->where('post_id', 0)
-                    ->where('is_gallery', true)
-                    ->whereIn('id', array_column($attachments, 'id'))
-                    ->exists();
+                // 发表图片帖必须有图片
+                if (!$post->exists) {
+                    $images = $attachments && Attachment::query()
+                            ->where('user_id', $event->actor->id)
+                            ->where('post_id', 0)
+                            ->where('is_gallery', true)
+                            ->whereIn('id', array_column($attachments, 'id'))
+                            ->exists();
 
-                if (!$images) {
-                    throw new \Exception('cannot_create_image_thread_without_attachments');
+                    if (!$images) {
+                        throw new \Exception('cannot_create_image_thread_without_attachments');
+                    }
                 }
 
                 break;
