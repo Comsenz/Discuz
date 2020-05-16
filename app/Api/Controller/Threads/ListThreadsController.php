@@ -589,10 +589,12 @@ class ListThreadsController extends AbstractListController
 
             // 加载首贴时，处理内容
             if (in_array('firstPost', $include)) {
-                // 长文帖子无论如何不返回内容
-                if ($thread->type == 1) {
-                    $thread->firstPost->content = '';
-                }
+                // 长文帖子无论如何不返回内容，其他类型截取部分内容
+                $thread->firstPost->content = $thread->type == 1
+                    ? ''
+                    : Str::of($thread->firstPost->content)
+                        ->substr(0, Post::SUMMARY_LENGTH)
+                        ->finish(Post::SUMMARY_END_WITH);
 
                 // 付费内容未付费处理
                 if ($thread->price > 0 && !$thread->getAttribute('paid')) {
