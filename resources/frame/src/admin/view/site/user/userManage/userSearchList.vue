@@ -44,9 +44,9 @@
               label="用户组">
             </el-table-column>
 
-            <el-table-column label="是否已加入"> 
+            <el-table-column label="是否已付费"> 
               <template slot-scope="scope">
-                <el-tag :type="scope.row._data.joinedAt ? 'success' : 'info'">{{scope.row._data.joinedAt ? "是" : "否"}}</el-tag>
+                <el-tag :type="$dayjs().isSameOrBefore($dayjs(scope.row._data.expiredAt)) ? 'success' : 'info'">{{ $dayjs().isSameOrBefore($dayjs(scope.row._data.expiredAt)) ? "是" : "否" }}</el-tag>
               </template>
 
             </el-table-column>
