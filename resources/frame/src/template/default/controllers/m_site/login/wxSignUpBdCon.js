@@ -181,7 +181,6 @@ export default {
     },
     autoRegister(nickname) {
       if (nickname) {
-        nickname = nickname.replace(".", "");
         this.userName = nickname;
       } else {
         this.userName = "网友" + this.getRandomChars(6);
@@ -196,6 +195,14 @@ export default {
           this.setSignData();
         } else {
           this.showSignupInput = true;
+          if (res.errors[0].detail[0].includes("特殊字符")) {
+            this.$dialog.alert({
+              title: "无法自动注册账号",
+              message: "您的微信昵称中含有不允许注册的字符，无法自动完成账号注册。请手工设置用户名。"
+            });
+            this.userName = "";
+            return;
+          }
           this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
         }
       });
@@ -255,6 +262,7 @@ export default {
             } else if (res.rawData[0].code === 'ban_user') {
               this.$router.push({ path: "information-page", query: { setInfo: 'banUser' } })
             } else {
+              window.alert(JSON.stringify(res));
               window.location.href = '/api/oauth/wechat';
             }
           }
