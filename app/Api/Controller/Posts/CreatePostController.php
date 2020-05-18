@@ -58,6 +58,8 @@ class CreatePostController extends AbstractCreateController
 
         if ($isComment) {
             $this->serializer = CommentPostSerializer::class;
+
+            $this->include = array_merge($this->include, ['replyUser']);
         }
 
         return $this->bus->dispatch(
