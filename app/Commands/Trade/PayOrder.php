@@ -202,41 +202,44 @@ class PayOrder
         }
         $extra       = []; //可选参数
         $pay_gateway = ''; //付款通道及方式
-
-        // TODO: 并不是每种方式都需要微信支付配置
-        $config      = $this->setting->tag('wxpay'); //配置信息
+        $config      = []; //配置信息
         switch ($this->payment_type) {
             case '10': //微信扫码支付
-                $pay_gateway          = GatewayConfig::WECAHT_PAY_NATIVE;
-                $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
-                break;
             case '11': //微信h5支付
-                $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
-                $pay_gateway          = GatewayConfig::WECAHT_PAY_WAP;
-                $extra = [
-                    'h5_info' => [
-                        'type' => 'Wap',
-                        'wap_url' => '',
-                        'wap_name' => ''
-                    ]
-                ];
-                break;
             case '12': //微信网页、公众号
+            case '13': //微信小程序支付
+                $config = $this->setting->tag('wxpay'); //配置信息
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
-                $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
-                //获取用户openid
-                $extra                = [
-                    'openid' => $this->actor->wechat->mp_openid,
-                ];
-                break;
-            case '13': //小程序支付
-                $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
-                $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
-                $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
-                //获取用户openid： min_openid
-                $extra                = [
-                    'openid' => $this->actor->wechat->min_openid,
-                ];
+                switch ($this->payment_type) {
+                    case '10': //微信扫码支付
+                        $pay_gateway          = GatewayConfig::WECAHT_PAY_NATIVE;
+                        break;
+                    case '11': //微信h5支付
+                        $pay_gateway          = GatewayConfig::WECAHT_PAY_WAP;
+                        $extra = [
+                            'h5_info' => [
+                                'type' => 'Wap',
+                                'wap_url' => '',
+                                'wap_name' => ''
+                            ]
+                        ];
+                        break;
+                    case '12': //微信网页、公众号
+                        $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                        //获取用户openid
+                        $extra                = [
+                            'openid' => $this->actor->wechat->mp_openid,
+                        ];
+                        break;
+                    case '13': //小程序支付
+                        $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
+                        $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                        //获取用户openid： min_openid
+                        $extra                = [
+                            'openid' => $this->actor->wechat->min_openid,
+                        ];
+                        break;
+                }
                 break;
             case '20': // 用户钱包支付
                 $pay_gateway = GatewayConfig::WALLET_PAY;
