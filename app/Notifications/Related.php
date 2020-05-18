@@ -105,7 +105,7 @@ class Related extends System
             $build['thread_username'] = $this->post->thread->user->username;
             $build['thread_title'] = $firstContent;
             $build['thread_created_at'] = $this->post->thread->created_at->toDateTimeString();
-            $build['post_content'] = $content;
+            $build['post_content'] = $content == $firstContent ? '' : $content ;
             $build['post_created_at'] = $this->post->created_at->toDateTimeString();
         }
     }

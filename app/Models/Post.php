@@ -241,7 +241,12 @@ class Post extends Model
                 $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
                 $content = $this->formatContent();
 
-                $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                // 如果是首贴 firstContent === content 内容一样
+                if ($this->is_first) {
+                    $firstContent = $content;
+                } else {
+                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                }
             }
         }
 
@@ -504,6 +509,7 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
+
     /**
      * Set the user for which the state relationship should be loaded.
      *

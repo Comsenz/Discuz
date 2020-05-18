@@ -52,6 +52,10 @@ class UserListener
         $event->toUser->save();
     }
 
+    /**
+     * @param ChangeUserStatus $event
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function notifications(ChangeUserStatus $event)
     {
         $user = $event->user;

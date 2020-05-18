@@ -31,12 +31,13 @@ class Liked extends System
     public $channel;
 
     /**
-     * LikedTest constructor.
+     * Liked constructor.
      *
      * @param Post $post
      * @param $actor
-     * @param $messageClass
-     * @param $build
+     * @param string $messageClass
+     * @param array $build
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Post $post, $actor, $messageClass = '', $build = [])
     {
@@ -100,7 +101,7 @@ class Liked extends System
             $build['thread_username'] = $this->post->thread->user->username;
             $build['thread_title'] = $firstContent;
             $build['thread_created_at'] = $this->post->thread->created_at->toDateTimeString();
-            $build['post_content'] = $content;
+            $build['post_content'] = $content == $firstContent ? '' : $content ;
             $build['post_created_at'] = $this->post->created_at->toDateTimeString();
         }
     }
