@@ -7,8 +7,10 @@
 
 namespace App\Api\Controller\Posts;
 
+use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\Commands\Post\EditPost;
+use App\Models\Post;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -57,8 +59,15 @@ class UpdatePostController extends AbstractResourceController
         $postId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
+        /** @var Post $post */
+        $post = $this->bus->dispatch(
             new EditPost($postId, $actor, $data)
         );
+
+        if ($post->is_comment) {
+            $this->serializer = CommentPostSerializer::class;
+        }
+
+        return $post;
     }
 }

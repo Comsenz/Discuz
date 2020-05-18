@@ -7,6 +7,7 @@
 
 namespace App\Api\Controller\Posts;
 
+use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\Models\Post;
 use App\Models\User;
@@ -290,6 +291,8 @@ class ListPostsController extends AbstractListController
         // 是否是评论
         if ($isComment = Arr::get($filter, 'isComment')) {
             if ($isComment == 'yes') {
+                $this->serializer = CommentPostSerializer::class;
+
                 $query->where('posts.is_comment', true);
             } elseif ($isComment == 'no') {
                 $query->where('posts.is_comment', false);

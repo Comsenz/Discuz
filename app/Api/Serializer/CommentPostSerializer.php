@@ -11,6 +11,10 @@ use App\Models\Post;
 
 class CommentPostSerializer extends BasicPostSerializer
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $type = 'comment-posts';
 
     /**
      * {@inheritdoc}
