@@ -46,8 +46,6 @@ class Formatter extends BaseFormatter
 
         parent::confTopic($configurator);
 
-        parent::confPostGoods($configurator);
-
         return $configurator;
     }
 
