@@ -144,8 +144,6 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
 
         $goods->save();
 
-        $build['id'] = $goods->id;
-
         return $goods;
     }
 }
