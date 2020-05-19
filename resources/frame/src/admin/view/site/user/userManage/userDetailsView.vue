@@ -1,10 +1,14 @@
 <template>
   <div class="user-details-box">
     <div class="details-wallet-header">
-      <p class="details-wallet-header__name">{{this.userInfo.username}}（UID：{{this.userInfo.id}}）</p>
+      <p class="details-wallet-header__name">
+        {{ this.userInfo.username }}（UID：{{ this.userInfo.id }}）
+      </p>
       <i class="details-wallet-header__i"></i>
       <span class="details-wallet-header__details">详情</span>
-      <span @click="$router.push({path:'/admin/wallet', query: query})">钱包</span>
+      <span @click="$router.push({ path: '/admin/wallet', query: query })"
+        >钱包</span
+      >
     </div>
 
     <Card>
@@ -41,14 +45,22 @@
       </el-upload>
       <el-button
         type="text"
-        :style="{'opacity':deleBtn?'1':'0','cursor':deleBtn?'pointer':'auto'}"
+        :style="{
+          opacity: deleBtn ? '1' : '0',
+          cursor: deleBtn ? 'pointer' : 'auto'
+        }"
         @click="deleteImage"
-      >删除</el-button>
+        >删除</el-button
+      >
     </Card>
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input v-model="newPassword" clearable :disabled="disabled"></el-input>
+        <el-input
+          v-model="newPassword"
+          clearable
+          :disabled="disabled"
+        ></el-input>
       </CardRow>
     </Card>
 
@@ -81,7 +93,7 @@
         >
           <el-option
             v-for="item in optionsStatus"
-            :disabled="item.value ==='2'"
+            :disabled="item.value === '2'"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -96,45 +108,53 @@
       </CardRow>
     </Card>
 
-    <!-- <Card header="已加入的站点：">
-      <span class="add-site">站长帮<i>（站长）</i></span>
-      <span class="add-site">站长帮<i>（站长）</i></span>
-    </Card>-->
+    <Card header="过期时间：">
+      <div class="block">
+        <el-date-picker
+          v-model="expired_at"
+          type="datetime"
+          placeholder="选择日期时间"
+        >
+        </el-date-picker>
+      </div>
+    </Card>
 
     <Card header="注册时间：">
-      <p>{{$dayjs(userInfo.createdAt).format('YYYY-MM-DD HH:mm')}}</p>
+      <p>{{ $dayjs(userInfo.createdAt).format("YYYY-MM-DD HH:mm") }}</p>
     </Card>
 
     <Card header="注册IP：">
-      <p>{{userInfo.registerIp}}</p>
+      <p>{{ userInfo.registerIp }}</p>
     </Card>
 
     <Card header="最后登录时间：" v-if="userInfo.loginAt">
-      <p>{{$dayjs(userInfo.loginAt).format('YYYY-MM-DD HH:mm')}}</p>
+      <p>{{ $dayjs(userInfo.loginAt).format("YYYY-MM-DD HH:mm") }}</p>
     </Card>
 
     <Card header="最后登录IP：">
-      <p>{{userInfo.lastLoginIp}}</p>
+      <p>{{ userInfo.lastLoginIp }}</p>
     </Card>
 
     <Card header="微信昵称：" v-if="wechatNickName">
-      <p>{{wechatNickName}}</p>
+      <p>{{ wechatNickName }}</p>
     </Card>
 
     <Card header="性别：" v-if="sex">
-      <p>{{sex === 0 ? "未知" : sex === 1 ? "男" : "女"}}</p>
+      <p>{{ sex === 0 ? "未知" : sex === 1 ? "男" : "女" }}</p>
     </Card>
 
     <Card header="实名认证姓名：" v-show="realname">
-      <p>{{userInfo.realname}}</p>
+      <p>{{ userInfo.realname }}</p>
     </Card>
 
     <Card header="实名认证身份证号：" v-show="realname">
-      <p>{{userInfo.identity}}</p>
+      <p>{{ userInfo.identity }}</p>
     </Card>
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium" @click="submission">提交</el-button>
+      <el-button type="primary" size="medium" @click="submission"
+        >提交</el-button
+      >
     </Card>
   </div>
 </template>
