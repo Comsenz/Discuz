@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -443,6 +444,21 @@ class User extends Model
             ->where('posts.is_first', true)
             ->count();
         return $this;
+    }
+
+    /**
+     * 注册用创建一个随即用户名
+     * getNewUsername
+     * @return string
+     */
+    public static function getNewUsername()
+    {
+        $username = trans('validation.attributes.username_prefix') . Str::random(6);
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            return self::getNewUsername();
+        }
+        return $username;
     }
 
     /*
