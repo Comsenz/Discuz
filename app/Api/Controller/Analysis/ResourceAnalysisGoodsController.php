@@ -7,9 +7,9 @@
 
 namespace App\Api\Controller\Analysis;
 
-use App\Api\Serializer\PostGoodSerializer;
+use App\Api\Serializer\PostGoodsSerializer;
 use App\Exceptions\TranslatorException;
-use App\Models\PostGood;
+use App\Models\PostGoods;
 use App\Traits\PostGoodsTrait;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -28,12 +28,12 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $serializer = PostGoodSerializer::class;
+    public $serializer = PostGoodsSerializer::class;
 
     /**
      * {@inheritdoc}
      */
-    public $include = [];
+    public $optionalInclude = ['user', 'post'];
 
     /**
      * ResourceInviteController constructor.
@@ -82,7 +82,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         }
 
         // Judge Enum
-        if (!PostGood::enumType(explode('.', $url), function ($callback) {
+        if (!PostGoods::enumType(explode('.', $url), function ($callback) {
             $this->goodsType = $callback;
         })) {
             throw new TranslatorException('post_goods_not_found_enum');
@@ -92,7 +92,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
          * Send
          * @see https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html#allow-redirects
          */
-        $sendType = PostGood::setBySending($this->address);
+        $sendType = PostGoods::setBySending($this->address);
         if ($sendType == 'Guzzle') {
             $response = $this->httpClient->request('GET', $this->address, [
                 'allow_redirects' => [
@@ -129,7 +129,7 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
         ];
 
         // Created
-        PostGood::store(
+        $goods = PostGoods::store(
             $build['user_id'],
             $build['post_id'],
             $build['platform_id'],
@@ -142,6 +142,10 @@ class ResourceAnalysisGoodsController extends AbstractResourceController
             $build['detail_content']
         );
 
-        return $build;
+        $goods->save();
+
+        $build['id'] = $goods->id;
+
+        return $goods;
     }
 }

@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 /**
  * @package App\Models
  *
+ * @property int $id
  * @property int $user_id
  * @property int $post_id
  * @property string $platform_id
@@ -31,8 +32,9 @@ use Illuminate\Support\Arr;
  * @property Carbon created_at
  * @property Carbon deleted_at
  * @method static create(array $array)
+ * @method static first(array $array)
  */
-class PostGood extends Model
+class PostGoods extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
@@ -69,7 +71,7 @@ class PostGood extends Model
      * @param int $status
      * @param string $readyContent
      * @param string $detailContent
-     * @return bool
+     * @return static
      */
     public static function store(
         int $user_id,
@@ -96,7 +98,7 @@ class PostGood extends Model
         $goods->ready_content = $readyContent;
         $goods->detail_content = $detailContent;
 
-        return $goods->save();
+        return $goods;
     }
 
     /**

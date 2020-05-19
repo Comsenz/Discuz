@@ -8,7 +8,7 @@
 namespace App\Traits;
 
 use App\Exceptions\TranslatorException;
-use App\Models\PostGood;
+use App\Models\PostGoods;
 
 /**
  * 获取网址里的[商品信息]
@@ -222,7 +222,7 @@ trait PostGoodsTrait
             // 判断用 淘宝/天猫 提取方法
             $regex = '/(https|http):\/\/(?<url>[0-9a-z.]+)/i';
             if (preg_match($regex, $this->address, $match)) {
-                PostGood::enumType(explode('.', $match['url']), function ($callback) {
+                PostGoods::enumType(explode('.', $match['url']), function ($callback) {
                     $this->{$callback['value']}();
                 });
             }
