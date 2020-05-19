@@ -37,14 +37,13 @@ class ThreadVideoNotify
     /**
      *
      * @param Dispatcher $events
-     * @param ThreadVideoRepository $threadVideo
+     * @param ThreadVideoRepository $threadVideos
      * @param Censor $censor
      * @param PostRepository $posts
      * @param ThreadRepository $threads
      * @return string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideo, Censor $censor, PostRepository $posts, ThreadRepository $threads)
+    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideos, Censor $censor, PostRepository $posts, ThreadRepository $threads)
     {
         $this->events = $events;
         $log = app('log');
@@ -57,7 +56,9 @@ class ThreadVideoNotify
         $taskDetail  = $this->describeTaskDetail(Arr::get($this->data, 'ProcedureStateChangeEvent.TaskId'));
         if ($taskDetail && $taskDetail->TaskType == 'Procedure' && $taskDetail->Status == 'FINISH') {
             if ($taskDetail->ProcedureTask->Status == 'FINISH') {
-                $threadVideo = $threadVideo->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
+
+                /** @var ThreadVideo $threadVideo */
+                $threadVideo = $threadVideos->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
 
                 foreach ($taskDetail->ProcedureTask->MediaProcessResultSet as $key => $value) {
                     //普通转码
