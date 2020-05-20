@@ -1,14 +1,12 @@
 <template>
   <div class="user-details-box">
     <div class="details-wallet-header">
-      <p class="details-wallet-header__name">
-        {{ this.userInfo.username }}（UID：{{ this.userInfo.id }}）
-      </p>
+      <p
+        class="details-wallet-header__name"
+      >{{ this.userInfo.username }}（UID：{{ this.userInfo.id }}）</p>
       <i class="details-wallet-header__i"></i>
       <span class="details-wallet-header__details">详情</span>
-      <span @click="$router.push({ path: '/admin/wallet', query: query })"
-        >钱包</span
-      >
+      <span @click="$router.push({ path: '/admin/wallet', query: query })">钱包</span>
     </div>
 
     <Card>
@@ -50,17 +48,12 @@
           cursor: deleBtn ? 'pointer' : 'auto'
         }"
         @click="deleteImage"
-        >删除</el-button
-      >
+      >删除</el-button>
     </Card>
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input
-          v-model="newPassword"
-          clearable
-          :disabled="disabled"
-        ></el-input>
+        <el-input v-model="newPassword" clearable :disabled="disabled"></el-input>
       </CardRow>
     </Card>
 
@@ -114,8 +107,8 @@
           v-model="expired_at"
           type="datetime"
           placeholder="选择日期时间"
-        >
-        </el-date-picker>
+          value-format="yyyy-MM-dd HH:mm:ss"
+        ></el-date-picker>
       </div>
     </Card>
 
@@ -152,9 +145,7 @@
     </Card>
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium" @click="submission"
-        >提交</el-button
-      >
+      <el-button type="primary" size="medium" @click="submission">提交</el-button>
     </Card>
   </div>
 </template>
