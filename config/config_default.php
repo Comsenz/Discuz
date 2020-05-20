@@ -141,6 +141,7 @@ return [
         App\Formatter\FormatterServiceProvider::class,
         App\Passport\Oauth2ServiceProvider::class,
         App\Providers\AppServiceProvider::class,
+        App\Providers\AttachmentServiceProvider::class,
         App\Providers\CategoryServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
