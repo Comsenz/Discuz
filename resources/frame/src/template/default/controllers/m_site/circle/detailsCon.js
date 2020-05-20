@@ -1099,11 +1099,9 @@ export default {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: logo               // 分享图标
+        logo: logo               // 分享图标
       }
       wxShare(data, { name: 'circle' })
-      wx.updateAppMessageShareData(data);
-      wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {
