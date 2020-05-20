@@ -203,7 +203,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addUserId']);
-        $configurator->Preg->match('/\B@(?<username>.+)/i', $tagName);
+        $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
     }
 
     protected function confTopic($configurator)
@@ -212,7 +212,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addTopicId']);
-        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}\w]+)#/ui', $tagName);
+        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}a-z0-9_]+)#/ui', $tagName);
     }
 
     /**
