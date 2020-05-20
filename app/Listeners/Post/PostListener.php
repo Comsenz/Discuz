@@ -316,7 +316,9 @@ class PostListener
             // 微信通知
             $user->notify(new Related($event->post, $event->actor, WechatRelatedMessage::class, [
                 'message' => $event->post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                'raw' => Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id'])
+                'raw' => array_merge(Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
+                    'actor_username' => $event->actor->username    // 发送人姓名
+                ]),
             ]));
         });
     }

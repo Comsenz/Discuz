@@ -38,7 +38,8 @@ class WechatRelatedMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $replyPostId = Arr::get($data, 'raw.reply_post_id', 0); // 楼中楼时不为0
+        $replyPostId = Arr::get($data, 'raw.reply_post_id', 0);  // 楼中楼时不为0
+        $actorName = Arr::get($data, 'raw.actor_username', '');  // 发送人姓名
 
         /**
          * TODO 判断是否是楼中楼
@@ -51,7 +52,7 @@ class WechatRelatedMessage extends DatabaseMessage
         }
 
         return [
-            $this->notifiable->username,        // 用户名
+            $actorName,
             $this->strWords($message),          // @内容
             Carbon::now()->toDateTimeString(),  // 通知时间
             $threadUrl,                         // 跳转地址
