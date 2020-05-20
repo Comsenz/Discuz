@@ -27,7 +27,7 @@ class ThreadVideoNotify
 
     /**
      *
-     * @param $data
+     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -46,9 +46,14 @@ class ThreadVideoNotify
     public function handle(Dispatcher $events, ThreadVideoRepository $threadVideos, Censor $censor, PostRepository $posts, ThreadRepository $threads)
     {
         $this->events = $events;
-        $log = app('log');
-        $log->info('vod_notify', $this->data);
+        $log = app('qcloudLog');
+        try {
+            $log->info('vod_notify', $this->data);
+        } catch (\Exception $e) {
+            goto todo;
+        }
 
+        todo:
         //只处理视频处理类型的通知
         if (Arr::get($this->data, 'EventType') != 'ProcedureStateChanged') {
             return 'pass';
