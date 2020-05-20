@@ -265,6 +265,7 @@ class PostListener
      * 修改内容时，记录操作
      *
      * @param Revised $event
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function whenPostWasRevised(Revised $event)
     {
