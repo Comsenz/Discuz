@@ -143,7 +143,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
     {
         $data = array_merge($rawUser, ['user_id' => $actor->id, $this->getType() => $rawUser['openid']]);
         unset($data['openid'], $data['language']);
-        $data['privilege'] = serialize($data['privilege']);
+	$data['privilege'] = ''; // 不保存privilege，字段待删除
         return $data;
     }
 }
