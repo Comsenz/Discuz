@@ -8,6 +8,7 @@
 namespace App\Providers;
 
 use App\Api\Serializer\AttachmentSerializer;
+use App\Commands\Attachment\AttachmentUploader;
 use App\Models\Setting;
 use App\Observer\UserWechatObserver;
 use App\Settings\SettingsRepository;
@@ -49,6 +50,7 @@ class SettingsServiceProvider extends ServiceProvider
             }
 
             $this->app->when([
+                AttachmentUploader::class,
                 AttachmentUploadTool::class,
                 ImageUploadTool::class,
                 AttachmentSerializer::class,

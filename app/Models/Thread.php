@@ -48,14 +48,19 @@ use Illuminate\Support\Str;
  * @property Category $category
  * @property threadVideo $threadVideo
  * @package App\Models
- * @method static find($id)
- * @property string getContentByType
- * @property int refreshPaidCount
  */
 class Thread extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+
+    const TYPE_OF_TEXT = 0;
+
+    const TYPE_OF_LONG = 1;
+
+    const TYPE_OF_VIDEO = 2;
+
+    const TYPE_OF_IMAGE = 3;
 
     const UNAPPROVED = 0;
 
@@ -366,7 +371,7 @@ class Thread extends Model
 
     public function threadVideo()
     {
-        return $this->hasOne(ThreadVideo::class);
+        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
     }
 
 

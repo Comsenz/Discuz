@@ -8,6 +8,8 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
+use App\Models\Post;
+use App\Models\PostGoods;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
@@ -201,7 +203,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addUserId']);
-        $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
+        $configurator->Preg->match('/\B@(?<username>.+)\s/i', $tagName);
     }
 
     protected function confTopic($configurator)
@@ -210,9 +212,8 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addTopicId']);
-        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}a-z0-9_]+)#/ui', $tagName);
+        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}\w]+)#/ui', $tagName);
     }
-
 
     /**
      * @param $tag

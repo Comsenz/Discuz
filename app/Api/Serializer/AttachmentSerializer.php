@@ -7,7 +7,6 @@
 
 namespace App\Api\Serializer;
 
-use App\Commands\Attachment\CreateAttachment;
 use App\Models\Attachment;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
@@ -60,7 +59,7 @@ class AttachmentSerializer extends AbstractSerializer
             $url = $this->filesystem->disk('attachment')->url($path);
         }
 
-        $fixWidth = CreateAttachment::FIX_WIDTH;
+        $fixWidth = Attachment::FIX_WIDTH;
 
         $attributes = [
             'order'             => $model->order,

@@ -96,6 +96,6 @@ class Dialog extends Model
 
     public function dialogMessage()
     {
-        return $this->hasOne(DialogMessage::class);
+        return $this->belongsTo(DialogMessage::class);
     }
 }

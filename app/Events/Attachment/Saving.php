@@ -7,15 +7,21 @@
 
 namespace App\Events\Attachment;
 
+use App\Commands\Attachment\AttachmentUploader;
 use App\Models\Attachment;
 use App\Models\User;
 
-class Created
+class Saving
 {
     /**
      * @var Attachment
      */
     public $attachment;
+
+    /**
+     * @var AttachmentUploader
+     */
+    public $uploader;
 
     /**
      * @var User
@@ -24,11 +30,13 @@ class Created
 
     /**
      * @param Attachment $attachment
+     * @param AttachmentUploader $uploader
      * @param User $actor
      */
-    public function __construct(Attachment $attachment, User $actor = null)
+    public function __construct(Attachment $attachment, AttachmentUploader $uploader, User $actor = null)
     {
         $this->attachment = $attachment;
+        $this->uploader = $uploader;
         $this->actor = $actor;
     }
 }

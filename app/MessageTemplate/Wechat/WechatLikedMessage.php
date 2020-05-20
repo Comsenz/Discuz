@@ -38,6 +38,7 @@ class WechatLikedMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
+        $actorName = Arr::get($data, 'raw.actor_username', '');  // 发送人姓名
 
         // 主题ID为空时跳转到首页
         if (empty($threadId)) {
@@ -47,7 +48,7 @@ class WechatLikedMessage extends DatabaseMessage
         }
 
         return [
-            $this->notifiable->username,
+            $actorName,
             $this->strWords($message),
             Carbon::now()->toDateTimeString(),
             $threadUrl,

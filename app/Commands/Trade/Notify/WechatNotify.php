@@ -46,8 +46,14 @@ class WechatNotify
         if (isset($notify_result['result_code']) && $notify_result['result_code'] == 'SUCCESS') {
             //支付成功
             if ($this->queryOrderStatus($notify_result['transaction_id'])) {
-                $log = app('log');
-                $log->info('notify', $notify_result);
+                $log = app('payLog');
+                try {
+                    $log->info('notify', $notify_result);
+                } catch (\Exception $e) {
+                    goto todo;
+                }
+
+                todo:
                 $payment_sn = $notify_result['out_trade_no'];//商户交易号
                 $trade_no = $notify_result['transaction_id'];//微信交易号
                 //开始事务
