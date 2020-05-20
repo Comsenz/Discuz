@@ -135,7 +135,8 @@ module.exports = {
     contentBase: false,
     proxy: {
       "/api": {
-        target: "https://discuz.chat",
+        // target: "https://discuz.chat",
+        target: "http://discuz.com:8001",
         changeOrigin: true,
         secure: false,
       }
