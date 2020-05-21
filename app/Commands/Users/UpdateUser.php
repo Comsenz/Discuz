@@ -235,7 +235,10 @@ class UpdateUser
             $user->changeUsername($username, $isAdmin);
         }
 
-        if ($signature = Arr::get($attributes, 'signature')) {
+        if (Arr::has($attributes, 'signature')) {
+            // 可为空
+            $signature = Arr::get($attributes, 'signature');
+
             // 敏感词校验
             $this->censor->checkText($signature);
             if ($this->censor->isMod) {
