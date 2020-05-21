@@ -11,7 +11,6 @@ use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
-use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\User;
