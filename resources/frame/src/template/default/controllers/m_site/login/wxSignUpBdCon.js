@@ -163,8 +163,14 @@ export default {
           this.getForum().then(() => {
             if (this.siteMode === 'pay') {
               this.$router.push({ path: 'pay-the-fee' });
+            } else {
+              let beforeVisiting = webDb.getSItem('beforeVisiting');
+              if (beforeVisiting) {
+                this.$router.push({ path: beforeVisiting });
+              } else {
+                this.$router.push({ path: '/' });
+              }
             }
-            this.$router.push({ path: '/' });
           })
 
         }
