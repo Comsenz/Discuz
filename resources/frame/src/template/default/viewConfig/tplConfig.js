@@ -1066,10 +1066,9 @@ export default {
 };
 
 export function wxShare(shareData, toName) {
-  var u = navigator.userAgent;
-  let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+  let isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   let url = window.location.href.split("#")[0];
-  if (isiOS && window.entryUrl) { // iOS下，URL必须设置为整个SPA的入口URL
+  if (isiOS && window.entryUrl && !/wechatdevtools/.test(navigator.userAgent)) { // iOS下，URL必须设置为整个SPA的入口URL
     url = window.entryUrl;
   }
   appFetch({
