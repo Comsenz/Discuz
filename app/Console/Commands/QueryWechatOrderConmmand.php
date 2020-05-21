@@ -77,8 +77,8 @@ class QueryWechatOrderConmmand extends AbstractCommand
                         if ($result_data) {
                             $payment_sn = $result_data['out_trade_no'];//商户交易号
                             $trade_no = $result_data['transaction_id'];//微信交易号
-                            //$log = app('payLog');
-                            //$log->info('console: ', [$result_data]);
+                            $log = app('payLog');
+                            $log->info('console: ', [$result_data]);
                         }
                         break;
                     default:
@@ -100,8 +100,8 @@ class QueryWechatOrderConmmand extends AbstractCommand
                     } catch (Exception $e) {
                         //回滚事务
                         $this->connection->rollback();
-                        //$log = app('payLog');
-                        //$log->info('console: ', $e->getMessage());
+                        $log = app('payLog');
+                        $log->info('console: ', $e->getMessage());
                     }
                 } else {
                     //订单未支付
