@@ -14,8 +14,12 @@ use App\Events\Users\Logind;
 use App\Models\UserWechat;
 use App\Settings\SettingsRepository;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\AssertPermissionTrait;
+use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Socialite\Exception\SocialiteException;
 use EasyWeChat\Factory;
+use EasyWeChat\Kernel\Exceptions\DecryptException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
@@ -26,6 +30,8 @@ use Tobscure\JsonApi\Document;
 
 class WechatMiniProgramLoginController extends AbstractResourceController
 {
+    use AssertPermissionTrait;
+
     public $serializer = TokenSerializer::class;
 
     protected $easyWeChat;
@@ -53,11 +59,14 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     /**
      * @inheritDoc
      * @throws SocialiteException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \EasyWeChat\Kernel\Exceptions\DecryptException
+     * @throws InvalidConfigException
+     * @throws DecryptException
+     * @throws PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        $this->assertPermission((bool)$this->settings->get('register_close'));
+
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $js_code = Arr::get($attributes, 'js_code');
