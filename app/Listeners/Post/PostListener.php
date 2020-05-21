@@ -297,7 +297,9 @@ class PostListener
      */
     public function userMentions(Saved $event)
     {
-        if ($event->post->is_approved !== Thread::APPROVED) {
+        // 任何修改帖子行为 都不允许发送@通知
+        $edit = Arr::get($event->data, 'edit', false);
+        if ($edit || ($event->post->is_approved !== Thread::APPROVED)) {
             return;
         }
 
