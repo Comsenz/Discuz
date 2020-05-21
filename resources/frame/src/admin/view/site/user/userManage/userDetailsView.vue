@@ -114,6 +114,7 @@
           v-model="expired_at"
           type="datetime"
           placeholder="选择日期时间"
+          value-format="yyyy-MM-dd HH:mm:ss"
         >
         </el-date-picker>
       </div>

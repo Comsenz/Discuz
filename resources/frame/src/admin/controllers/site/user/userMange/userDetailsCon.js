@@ -66,7 +66,7 @@ export default {
         } else {
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
-          this.expired_at = this.userInfo.expiredAt;
+          this.expired_at = this.$dayjs(this.userInfo.expiredAt).format("YYYY-MM-DD HH:mm:ss");
           if (this.imageUrl != "" && this.imageUrl != null) {
             this.deleBtn = true;
           }
