@@ -63,8 +63,8 @@ export default {
         return;
       }
 
-      if (document.referrer == '' && (window.history.length == 0 || window.history.length < 3)) {
-        window.location.href = appConfig.baseUrl;
+      if (document.referrer == '' && window.history.length == 0) {
+        this.$router.push("/");
       } else {
         this.$router.go(-1);
       }
