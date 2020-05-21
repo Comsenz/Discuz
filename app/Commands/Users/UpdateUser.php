@@ -157,7 +157,7 @@ class UpdateUser
             // 审核后系统通知事件
             $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
-            UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
+            OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
         }
 
         if ($expiredAt = Arr::get($this->data, 'data.attributes.expired_at')) {
