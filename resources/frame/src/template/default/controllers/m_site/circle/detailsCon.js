@@ -883,7 +883,7 @@ export default {
 
       if (data.name === '微信支付') {
         this.show = false;
-        if (isWeixin) {
+        if (isWeixin && isPhone) {
           //微信
           this.getOrderSn(this.amountNum).then(() => {
             this.orderPay(12).then((res) => {
