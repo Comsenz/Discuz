@@ -10,6 +10,7 @@ namespace App\Console;
 use App\Console\Commands\AttachmentClearCommand;
 use App\Console\Commands\AvatarClearCommand;
 use App\Console\Commands\FinanceCreate;
+use App\Console\Commands\QueryWechatOrderConmmand;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
         FinanceCreate::class,
         AvatarClearCommand::class,
         AttachmentClearCommand::class,
+        QueryWechatOrderConmmand::class,
     ];
 
     /**
@@ -30,6 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('finance:create')->daily();
+        $schedule->command('order:query')->everyMinute();
 
         // 维护清理
         $schedule->command('clear:avatar')->daily();
