@@ -65,8 +65,6 @@ class WechatMiniProgramLoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $this->assertPermission((bool)$this->settings->get('register_close'));
-
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
         $js_code = Arr::get($attributes, 'js_code');
@@ -95,6 +93,9 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
             $user = $wechatUser->user;
         } else {
+            //站点关闭不允许注册
+            $this->assertPermission((bool)$this->settings->get('register_close'));
+
             //注册
             if (!$wechatUser) {
                 $this->validation->make(
