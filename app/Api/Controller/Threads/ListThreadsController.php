@@ -370,14 +370,13 @@ class ListThreadsController extends AbstractListController
 
         // TODO: 关键词搜索 优化搜索
         if ($queryWord = Arr::get($filter, 'q')) {
-            $query->leftJoin('posts', 'threads.id', '=', 'posts.thread_id')
-                ->where('posts.is_first', true)
-                ->where(function ($query) use ($queryWord) {
-                    $queryWord = explode(',', $queryWord);
-                    foreach ($queryWord as $word) {
-                        $query->orWhere('posts.content', 'like', "%{$word}%");
-                    }
-                });
+            $query->where('threads.title', 'like', "%$queryWord%");
+            $query->orWhereIn('threads.id', function ($query) use ($queryWord){
+                $query->select("posts.thread_id")
+                    ->from((new Post)->getTable())
+                    ->where('posts.is_first', true)
+                    ->where('posts.content', 'like', "%{$queryWord}%");
+            });
         }
 
         //关注的人的文章
