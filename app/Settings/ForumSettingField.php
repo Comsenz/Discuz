@@ -70,6 +70,7 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
+            'username_bout' => $this->settings->get('username_bout', 'default', 1), // 用户名修改次数
         ];
     }
 
