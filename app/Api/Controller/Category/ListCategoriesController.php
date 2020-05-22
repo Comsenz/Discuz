@@ -26,10 +26,15 @@ class ListCategoriesController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
+        $filter = $this->extractFilter($request);
 
+        $query = Category::query();
+        // 可发布主题的分类
+        if ($actor->id && isset($filter['createThread']) && $filter['createThread']) {
+            $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'createThread'));
+        }
         // 仅返回可查看内容的分类
-        return Category::query()
-            ->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'))
+        return $query->whereNotIn('id', Category::getIdsWhereCannot($actor, 'viewThreads'))
             ->orderBy('sort')
             ->get();
     }
