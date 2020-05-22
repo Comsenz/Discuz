@@ -107,7 +107,7 @@ class EditPost
                 ['message' => $message]
             ));
         }
-
+        // dd($post);
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $post);
 

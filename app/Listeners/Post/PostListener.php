@@ -297,10 +297,17 @@ class PostListener
      */
     public function userMentions(Saved $event)
     {
-        // 任何修改帖子行为 都不允许发送@通知
+        // 任何修改帖子行为 除了修改是否合法字段,其它都不允许发送@通知
         $edit = Arr::get($event->data, 'edit', false);
-        if ($edit || ($event->post->is_approved !== Thread::APPROVED)) {
-            return;
+        if ($edit) {
+            // 判断是否修改合法值
+            if (!Arr::has($event->data, 'attributes.isApproved')) {
+                return;
+            }
+            // 判断是否合法
+            if (Arr::get($event->data, 'attributes.isApproved') != Thread::APPROVED) {
+                return;
+            }
         }
 
         $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');
