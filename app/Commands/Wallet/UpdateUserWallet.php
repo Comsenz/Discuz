@@ -98,10 +98,16 @@ class UpdateUserWallet
             switch ($operate_type) {
                 case UserWallet::OPERATE_ADD: //增加
                     $change_type = UserWalletLog::TYPE_INCOME_ARTIFICIAL;
+                    if (empty($operate_reason)) {
+                        $operate_reason = app('translator')->get('wallet.income_artificial');
+                    }
                     break;
                 case UserWallet::OPERATE_REDUCE: //减少
                     if ($user_wallet->available_amount - $operate_amount < 0) {
                         throw new Exception('available_amount_error');
+                    }
+                    if (empty($operate_reason)) {
+                        $operate_reason = app('translator')->get('wallet.expend_artificial');
                     }
                     $change_available_amount = -$change_available_amount;
                     $change_type = UserWalletLog::TYPE_EXPEND_ARTIFICIAL;
