@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('finance:create')->daily();
-        $schedule->command('order:query')->everyMinute();
+        $schedule->command('order:query')->everyMinute()->withoutOverlapping();
 
         // 维护清理
         $schedule->command('clear:avatar')->daily();
