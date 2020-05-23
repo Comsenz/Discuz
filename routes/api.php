@@ -317,10 +317,10 @@ $route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\Reso
 
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | System
 |--------------------------------------------------------------------------
 */
+
 $route->get('/system/command', 'system.command', ApiController\System\CallCommandController::class);
