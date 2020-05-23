@@ -31,8 +31,15 @@ class ResourceGroupsController extends AbstractResourceController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $inputs = $request->getQueryParams();
+        $include = $this->extractInclude($request);
 
         $query = GroupRepository::query();
+
+        if (in_array('permission', $include)) {
+            $query->with(['permission' => function ($query) {
+                $query->where('permission', 'not like', 'category%');
+            }]);
+        }
 
         return $query->where('id', $inputs['id'])->first();
     }

@@ -43,6 +43,16 @@
     </Card>
 
     <Card>
+      <CardRow description="允许发布私信">
+        <el-checkbox
+          v-model="checked"
+          label="dialog.create"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布私信</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
       <CardRow description="回复主题的权限">
         <el-checkbox
           v-model="checked"

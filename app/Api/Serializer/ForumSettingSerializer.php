@@ -168,6 +168,9 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 提现设置
                 $attributes['set_cash'] += $this->forumField->getCashSettings();
+
+                // 水印设置
+                $attributes['watermark'] = $this->forumField->getWatermarkSettings();
             }
         }
 
