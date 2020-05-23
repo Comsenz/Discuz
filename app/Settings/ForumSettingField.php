@@ -196,4 +196,20 @@ class ForumSettingField
             'qcloud_vod_sub_app_id' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud'),
         ];
     }
+
+    /**
+     * 水印设置
+     *
+     * @return array
+     */
+    public function getWatermarkSettings()
+    {
+        return [
+            'watermark' => (bool) $this->settings->get('watermark', 'watermark'),
+            'watermark_image' => $this->settings->get('watermark_image', 'watermark', ''),
+            'position' => (int) $this->settings->get('position', 'watermark'),
+            'horizontal_spacing' => (int) $this->settings->get('horizontal_spacing', 'watermark'),
+            'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
+        ];
+    }
 }

@@ -12,12 +12,12 @@ use Carbon\Carbon;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Foundation\Application;
 use Discuz\Http\UrlGenerator;
 use Exception;
 use Illuminate\Contracts\Filesystem\Factory as FileFactory;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tobscure\JsonApi\Document;
@@ -26,21 +26,51 @@ class UploadLogoController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
+    /**
+     * @var string
+     */
     public $serializer = SettingSerializer::class;
 
-    protected $app;
-
+    /**
+     * @var Factory
+     */
     protected $validator;
 
+    /**
+     * @var FileFactory
+     */
     protected $filesystem;
 
+    /**
+     * @var SettingsRepository
+     */
     protected $settings;
 
+    /**
+     * @var UrlGenerator
+     */
     protected $url;
 
-    public function __construct(Application $app, Factory $validator, FileFactory $filesystem, SettingsRepository $settings, UrlGenerator $url)
+    /**
+     * 允许上传的类型
+     *
+     * @var array
+     */
+    protected $allowTypes = [
+        'background_image',
+        'watermark_image',
+        'header_logo',
+        'logo',
+    ];
+
+    /**
+     * @param Factory $validator
+     * @param FileFactory $filesystem
+     * @param SettingsRepository $settings
+     * @param UrlGenerator $url
+     */
+    public function __construct(Factory $validator, FileFactory $filesystem, SettingsRepository $settings, UrlGenerator $url)
     {
-        $this->app = $app;
         $this->validator = $validator;
         $this->filesystem = $filesystem;
         $this->settings = $settings;
@@ -50,7 +80,7 @@ class UploadLogoController extends AbstractResourceController
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
-     * @return mixed|void
+     * @return array
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
@@ -61,7 +91,9 @@ class UploadLogoController extends AbstractResourceController
 
         UrlGenerator::setRequest($request);
 
+        $type = Arr::get($request->getParsedBody(), 'type', 'logo');
         $file = Arr::get($request->getUploadedFiles(), 'logo');
+
         $verifyFile = new UploadedFile(
             $file->getStream()->getMetadata('uri'),
             $file->getClientFilename(),
@@ -69,32 +101,20 @@ class UploadLogoController extends AbstractResourceController
             $file->getError(),
             true
         );
+
         $this->validator->make(
-            ['logo' => $verifyFile],
+            ['type' => $type, 'logo' => $verifyFile],
             [
+                'type' => [Rule::in($this->allowTypes)],
                 'logo' => [
                     'required',
-                    'mimes:jpeg,jpg,png,bmp,gif',
+                    'mimes:' . ($type === 'watermark_image' ? 'png' : 'jpeg,jpg,png,bmp,gif'),
                     'max:5120'
                 ]
             ]
         )->validate();
 
-        // 写入配置表的名字
-        switch (Arr::get($request->getParsedBody(), 'type', 'logo')) {
-            case 'background_image':
-                $settingName = 'background_image';
-                break;
-            case 'header_logo':
-                $settingName = 'header_logo';
-                break;
-            default:
-                $settingName = 'logo';
-                break;
-        }
-
-        // 文件名
-        $fileName = $settingName . '.' . $verifyFile->getClientOriginalExtension();
+        $fileName = $type . '.' . $verifyFile->getClientOriginalExtension();
 
         try {
             $this->filesystem->disk('public')->put($fileName, $file->getStream());
@@ -102,7 +122,7 @@ class UploadLogoController extends AbstractResourceController
             throw new $e;
         }
 
-        $this->settings->set($settingName, $fileName);
+        $this->settings->set($type, $fileName, $type === 'watermark_image' ? 'watermark' : '');
 
         return [
             'key' => 'logo',

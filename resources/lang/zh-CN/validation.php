@@ -203,7 +203,7 @@ return [
         'watermark'             => '水印开关',
         'position'              => '水印位置',
         'horizontal_spacing'    => '水印水平边距',
-        'vertical_spacing'      => '水印垂直间距',
+        'vertical_spacing'      => '水印垂直边距',
 
         // sms
         'sms_code'              => '验证码',
