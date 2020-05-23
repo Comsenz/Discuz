@@ -320,7 +320,20 @@ export default {
         }
       }).then((res) => {
         if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].code.includes('没有权限')) {
+            if (this.userId) {
+              this.$toast.fail('您没有权限访问此内容');
+            } else {
+              browserDb.setSItem('beforeVisiting', this.$route.path);
+              if (this.isWeixin) {
+                this.$router.push({ path: '/wx-sign-up-bd' });
+              } else {
+                this.$router.push({ path: '/login-user' });
+              }
+            }
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
           throw new Error(res.error)
         } else {
           appCommonH.setPageTitle('detail', res);
