@@ -47,8 +47,13 @@ class UserWechatObserver
 
         // 微信存储本地头像 用到的 HttpClient()
         $wechatImg = $userWechat->headimgurl;
-        $avatarPath = $userWechat->user_id . '.png';
-        $avatarUrl = $userWechat->user_id . '.png';
+        if ($userWechat->user_id) {
+            $avatarPath = $userWechat->user_id . '.png';
+            $avatarUrl = $userWechat->user_id . '.png';
+	    } else {
+            $avatarPath = uniqid() . '.png';
+            $avatarUrl = $avatarPath;
+	    }
 
         // 判断是否开启云储存
         if ($this->settings->get('qcloud_cos', 'qcloud')) {
