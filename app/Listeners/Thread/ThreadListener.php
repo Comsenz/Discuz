@@ -13,17 +13,14 @@ use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
-use App\Exceptions\CategoryNotFoundException;
-use App\Models\Category;
-use App\Models\UserActionLogs;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
+use App\Models\UserActionLogs;
 use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Arr;
 
 class ThreadListener
 {
@@ -38,7 +35,6 @@ class ThreadListener
         // 发布帖子
         $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
         $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
-        $events->listen(ThreadCreated::class, SaveVideoToDatabase::class);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
@@ -55,30 +51,6 @@ class ThreadListener
 
         // 通知主题
         $events->listen(ThreadNotices::class, [$this, 'whenThreadNotices']);
-    }
-
-    /**
-     * 分类主题
-     *
-     * @param Saving $event
-     * @throws CategoryNotFoundException
-     */
-    public function categorizeThread(Saving $event)
-    {
-        $categoryId = Arr::get($event->data, 'relationships.category.data.id');
-
-        // 如果主题尚未分类 或 接收到的分类与当前分类不一致，就修改分类
-        if (! $event->thread->category_id || $categoryId && $event->thread->category_id != $categoryId) {
-            // 如果接收到可用的分类，则设置分类
-            if ($categoryId = Category::where('id', $categoryId)->value('id')) {
-                $event->thread->category_id = $categoryId;
-            }
-
-            // 如果没有分类，则抛出异常
-            if (! $categoryId) {
-                throw new CategoryNotFoundException;
-            }
-        }
     }
 
     /**
