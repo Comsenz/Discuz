@@ -110,7 +110,7 @@ class EditThread
         if ($thread->price > 0 && isset($attributes['free_words'])) {
             $this->assertCan($this->actor, 'editPrice', $thread);
 
-            $thread->price = (int) $attributes['free_words'];
+            $thread->free_words = (int) $attributes['free_words'];
         }
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
