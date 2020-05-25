@@ -75,7 +75,6 @@ class UserSerializer extends AbstractSerializer
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
             'denyStatus'        => (bool)$model->denyStatus,
-            'canEditUsername'   => $model->username_bout >= $settings->get('username_bout', 'default', 1) ? false : true,
         ];
 
         // 判断禁用原因
@@ -102,6 +101,17 @@ class UserSerializer extends AbstractSerializer
                 'canWalletPay'  => $gate->allows('walletPay', $model),
                 'walletBalance' => $model->userWallet->available_amount,
                 'walletFreeze'  => $model->userWallet->freeze_amount,
+            ];
+        }
+
+        // 是否管理员
+        if ($this->actor->isAdmin()) {
+            $attributes += [
+                'canEditUsername' => true,  // 可否更改用户名
+            ];
+        } else {
+            $attributes += [
+                'canEditUsername' => $model->username_bout >= $settings->get('username_bout', 'default', 1) ? false : true,
             ];
         }
 
