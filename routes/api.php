@@ -326,8 +326,9 @@ $route->get('/system/command', 'system.command', ApiController\System\CallComman
 
 /*
 |--------------------------------------------------------------------------
-| wechat - offiaccount
+| Wechat - Offiaccount
 |--------------------------------------------------------------------------
 */
 
-$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
+$route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
+
