@@ -91,12 +91,12 @@ class QueryWechatOrderConmmand extends AbstractCommand
                     try {
                         //支付成功处理
                         $order_info = $this->paymentSuccess($payment_sn, $trade_no, $this->setting, $this->events);
-                        $this->connection->commit();
                         if ($order_info) {
                             $this->events->dispatch(
                                 new Updated($order_info)
                             );
                         }
+                        $this->connection->commit();
                     } catch (Exception $e) {
                         //回滚事务
                         $this->connection->rollback();
