@@ -1115,6 +1115,12 @@ export default {
         logo: logo               // 分享图标
       }
       wxShare(data, { name: 'circle' })
+    },
+    urlify(text) {
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, function(url) {
+          return '<a href="' + url + '">' + url + '</a>';
+      })
     }
   },
   mounted: function () {
