@@ -13,7 +13,7 @@ use App\Models\UserWalletCash;
 use Carbon\Carbon;
 use Discuz\Console\AbstractCommand;
 
-class FinanceCreate extends AbstractCommand
+class FinanceCreateCommand extends AbstractCommand
 {
     protected $signature = 'finance:create';
 

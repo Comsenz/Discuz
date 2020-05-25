@@ -9,7 +9,7 @@ namespace App\Console;
 
 use App\Console\Commands\AttachmentClearCommand;
 use App\Console\Commands\AvatarClearCommand;
-use App\Console\Commands\FinanceCreate;
+use App\Console\Commands\FinanceCreateCommand;
 use App\Console\Commands\QueryWechatOrderConmmand;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
@@ -17,7 +17,7 @@ use Illuminate\Console\Scheduling\Schedule;
 class Kernel extends ConsoleKernel
 {
     public $commands = [
-        FinanceCreate::class,
+        FinanceCreateCommand::class,
         AvatarClearCommand::class,
         AttachmentClearCommand::class,
         QueryWechatOrderConmmand::class,
