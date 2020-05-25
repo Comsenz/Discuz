@@ -31,6 +31,7 @@ trait PostNoticesTrait
      *
      * @param $post
      * @param array $attach 原因
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     private function postIsDeleted($post, $attach)
     {

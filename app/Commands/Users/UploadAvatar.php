@@ -96,7 +96,7 @@ class UploadAvatar
         }
 
         $ext = pathinfo($this->upload_file->getClientFilename(), PATHINFO_EXTENSION);
-        $ext ? $ext = ".$ext" : "";
+        $ext ? $ext = ".$ext" : '';
         $tmpFile = tempnam($this->app->storagePath().'/tmp', 'avatar') . $ext;
 
         $this->upload_file->moveTo($tmpFile);

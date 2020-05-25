@@ -70,6 +70,7 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
+            'username_bout' => $this->settings->get('username_bout', 'default', 1), // 用户名修改次数
         ];
     }
 
@@ -193,6 +194,22 @@ class ForumSettingField
             'qcloud_vod_ext' => $this->settings->get('qcloud_vod_ext', 'qcloud'),
             'qcloud_vod_size' => $this->settings->get('qcloud_vod_size', 'qcloud'),
             'qcloud_vod_sub_app_id' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud'),
+        ];
+    }
+
+    /**
+     * 水印设置
+     *
+     * @return array
+     */
+    public function getWatermarkSettings()
+    {
+        return [
+            'watermark' => (bool) $this->settings->get('watermark', 'watermark'),
+            'watermark_image' => $this->settings->get('watermark_image', 'watermark', ''),
+            'position' => (int) $this->settings->get('position', 'watermark'),
+            'horizontal_spacing' => (int) $this->settings->get('horizontal_spacing', 'watermark'),
+            'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
         ];
     }
 }

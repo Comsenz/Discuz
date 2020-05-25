@@ -83,7 +83,7 @@ class PostListener
         $actor = $event->actor;
 
         // 是否有权限在该主题所在分类下回复
-        if (! $event->post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
+        if (! $post->exists && ! $post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
             throw new PermissionDeniedException;
         }
     }
@@ -265,6 +265,7 @@ class PostListener
      * 修改内容时，记录操作
      *
      * @param Revised $event
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function whenPostWasRevised(Revised $event)
     {
@@ -296,8 +297,17 @@ class PostListener
      */
     public function userMentions(Saved $event)
     {
-        if ($event->post->is_approved !== Thread::APPROVED) {
-            return;
+        // 任何修改帖子行为 除了修改是否合法字段,其它都不允许发送@通知
+        $edit = Arr::get($event->data, 'edit', false);
+        if ($edit) {
+            // 判断是否修改合法值
+            if (!Arr::has($event->data, 'attributes.isApproved')) {
+                return;
+            }
+            // 判断是否合法
+            if (Arr::get($event->data, 'attributes.isApproved') != Thread::APPROVED) {
+                return;
+            }
         }
 
         $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');

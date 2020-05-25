@@ -107,7 +107,7 @@ class EditPost
                 ['message' => $message]
             ));
         }
-
+        // dd($post);
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $post);
 
@@ -142,7 +142,7 @@ class EditPost
 
         $post->save();
 
-        $post->raise(new Saved($post, $this->actor, $this->data));
+        $post->raise(new Saved($post, $this->actor, array_merge($this->data, ['edit' => true])));
 
         $this->dispatchEventsFor($post, $this->actor);
 

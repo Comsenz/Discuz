@@ -203,7 +203,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addUserId']);
-        $configurator->Preg->match('/\B@(?<username>.+)/i', $tagName);
+        $configurator->Preg->match('/\B@(?<username>[\S]+)/i', $tagName);
     }
 
     protected function confTopic($configurator)

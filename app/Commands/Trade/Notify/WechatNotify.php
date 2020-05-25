@@ -10,7 +10,7 @@ namespace App\Commands\Trade\Notify;
 
 use App\Trade\Config\GatewayConfig;
 use App\Trade\NotifyTrade;
-use App\Trade\QeuryTrade;
+use App\Trade\QueryTrade;
 use App\Settings\SettingsRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -46,8 +46,14 @@ class WechatNotify
         if (isset($notify_result['result_code']) && $notify_result['result_code'] == 'SUCCESS') {
             //支付成功
             if ($this->queryOrderStatus($notify_result['transaction_id'])) {
-                $log = app('log');
-                $log->info('notify', $notify_result);
+                $log = app('payLog');
+                try {
+                    $log->info('notify', $notify_result);
+                } catch (\Exception $e) {
+                    goto todo;
+                }
+
+                todo:
                 $payment_sn = $notify_result['out_trade_no'];//商户交易号
                 $trade_no = $notify_result['transaction_id'];//微信交易号
                 //开始事务
@@ -79,11 +85,14 @@ class WechatNotify
      */
     public function queryOrderStatus($transaction_id)
     {
-        $query_result = QeuryTrade::query(GatewayConfig::WECAHT_PAY_QUERY, $transaction_id, $this->config);
+        $query_result = QueryTrade::query(GatewayConfig::WECAHT_PAY_QUERY, $this->config, $transaction_id);
         if (isset($query_result['return_code'])
             && isset($query_result['result_code'])
+            && isset($query_result['trade_state'])
             && $query_result['return_code'] == 'SUCCESS'
-            && $query_result['result_code'] == 'SUCCESS') {
+            && $query_result['result_code'] == 'SUCCESS'
+            && $query_result['trade_state'] == 'SUCCESS'
+        ) {
             return true;
         }
         return false;

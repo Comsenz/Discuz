@@ -55,7 +55,7 @@ class AvatarClearCommand extends AbstractCommand
             $nowAvatar = $user->getRawOriginal('avatar');
 
             // 判断是否是cos地址
-            if (substr_count($nowAvatar, 'http') > 0) {
+            if (strpos($nowAvatar, '://') === false) {
                 $res = $this->app->make(Factory::class)->disk('avatar')->delete($img);
                 $type = 'local';
             } else {
