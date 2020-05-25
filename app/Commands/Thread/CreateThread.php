@@ -14,7 +14,6 @@ use App\Events\Thread\Saving;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\User;
-use App\Settings\SettingsRepository;
 use App\Validators\ThreadValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
@@ -140,15 +139,8 @@ class CreateThread
                 $this->ip,
             ];
         }
-        //视频贴验证是否上传视频
-        $file_id = '';
-        $file_name = '';
-        if ($thread->type == 2) {
-            $file_id = Arr::get($this->data, 'attributes.file_id', '');
-            $file_name = Arr::get($this->data, 'attributes.file_name', '');
-        }
 
-        $validator->valid($thread->getAttributes() + compact('captcha', 'file_id', 'file_name'));
+        $validator->valid($thread->getAttributes() + compact('captcha'));
 
         $thread->save();
 

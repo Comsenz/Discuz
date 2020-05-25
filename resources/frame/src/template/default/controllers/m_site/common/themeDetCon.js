@@ -345,7 +345,15 @@ export default {
       if(canViewPosts){
         this.$router.push({ path:'/details'+'/'+id});
       } else {
-        this.$toast.fail('没有权限，请联系站点管理员');
+        if (this.userId) {
+          this.$toast.fail('您没有权限访问此内容');
+        } else {
+          if (this.isWeixin) {
+            this.$router.push({ path: '/wx-sign-up-bd' });
+          } else {
+            this.$router.push({ path: '/login-user' });
+          }
+        }
       }
 
     },

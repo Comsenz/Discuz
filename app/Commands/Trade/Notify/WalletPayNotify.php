@@ -95,11 +95,14 @@ class WalletPayNotify
 
             //支付成功处理
             $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting, $events);
-            $connection->commit();
+
             if ($order_info) {
                 $events->dispatch(
                     new Updated($order_info)
                 );
+            }
+            $connection->commit();
+            if ($order_info) {
                 return [
                     'wallet_pay' => [
                         'result' => 'success',

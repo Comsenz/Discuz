@@ -58,7 +58,6 @@ class QueryWechatOrderConmmand extends AbstractCommand
     {
         //查询已经过期的订单
         $query_orders = Order::where('status', Order::ORDER_STATUS_PENDING)
-            ->where('payment_type', '<>', Order::PAYMENT_TYPE_WALLET)
             ->where('created_at', '<', Carbon::now()->subMinute(Order::ORDER_EXPIRE_TIME + 1))
             ->limit(500)
             ->get();
@@ -91,12 +90,12 @@ class QueryWechatOrderConmmand extends AbstractCommand
                     try {
                         //支付成功处理
                         $order_info = $this->paymentSuccess($payment_sn, $trade_no, $this->setting, $this->events);
-                        $this->connection->commit();
                         if ($order_info) {
                             $this->events->dispatch(
                                 new Updated($order_info)
                             );
                         }
+                        $this->connection->commit();
                     } catch (Exception $e) {
                         //回滚事务
                         $this->connection->rollback();

@@ -35,6 +35,10 @@ import "commonHelper";						//公共函数封装
 import browserDb from "webDbHelper";						//公共函数封装
 import appStore from "./admin/store/index";							//vuex 初始化
 import dayjs from 'dayjs';                  //导入文件 momnet时间转换
+var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
+var isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
+dayjs.extend(isSameOrBefore)
 import 'dayjs/locale/zh-cn';
 dayjs.locale('zh-cn');//时间转换-需要汉化
 import utils from "./common/urlGet";         //获取url参数

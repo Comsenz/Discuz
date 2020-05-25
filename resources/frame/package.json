@@ -20,7 +20,6 @@
     "element-ui": "^2.13.1",
     "github-markdown-css": "^4.0.0",
     "install": "^0.13.0",
-    "js-md5": "^0.7.3",
     "lrz": "^4.9.40",
     "npm": "^6.12.0",
     "postcss-pxtorem": "^4.0.1",

@@ -29,8 +29,6 @@ class CreateThreadVideo
     const API_URL = 'vod.tencentcloudapi.com';
 
     /**
-     * The user performing the action.
-     *
      * @var User
      */
     public $actor;
@@ -41,19 +39,16 @@ class CreateThreadVideo
     public $model;
 
     /**
-     * The attributes of the new thread.
-     *
      * @var array
      */
     public $data;
 
     /**
-     * @var
+     * @var SettingsRepository
      */
     public $settings;
 
     /**
-     * CreateThread constructor.
      * @param User $actor
      * @param Model $model
      * @param array $data

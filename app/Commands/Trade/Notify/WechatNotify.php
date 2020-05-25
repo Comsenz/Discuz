@@ -61,11 +61,13 @@ class WechatNotify
                 try {
                     //支付成功处理
                     $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting, $events);
-                    $connection->commit();
                     if ($order_info) {
                         $events->dispatch(
                             new Updated($order_info)
                         );
+                    }
+                    $connection->commit();
+                    if ($order_info) {
                         return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
                     }
                 } catch (Exception $e) {

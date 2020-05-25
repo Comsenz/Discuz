@@ -8,6 +8,7 @@
 namespace App\Providers;
 
 use App\Listeners\Thread\ThreadListener;
+use App\Listeners\Thread\ThreadVideoListener;
 use App\Policies\ThreadPolicy;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -28,6 +29,7 @@ class ThreadServiceProvider extends AbstractServiceProvider
         $events = $this->app->make('events');
 
         $events->subscribe(ThreadListener::class);
+        $events->subscribe(ThreadVideoListener::class);
         $events->subscribe(ThreadPolicy::class);
     }
 }

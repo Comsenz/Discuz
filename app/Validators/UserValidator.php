@@ -118,7 +118,6 @@ class UserValidator extends AbstractValidator
         $rules = [
             'username' => [
                 'required',
-                'min:2',
                 'max:15',
                 'unique:users'
             ],
