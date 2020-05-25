@@ -35,11 +35,11 @@ class Bind
         $openid = Arr::get($session, 'payload.openid');
         if (in_array($scope, ['wechat', 'wechatweb', 'min'])) {
             $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
-            $wechat->user_id = $user->id;
             // 已经存在绑定，抛出异常
             if ($wechat->user_id) {
                 throw new \Exception('account_has_been_bound');
             }
+            $wechat->user_id = $user->id;
             /**
              * 如果用户没有头像，绑定微信时观察者中设置绑定微信用户头像
              * @see UserWechatObserver
