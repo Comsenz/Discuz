@@ -136,7 +136,7 @@ class Post extends Model
             $content = $this->formatContent();
         }
 
-        return $content;
+        return str_replace('<br>', '', $content);
     }
 
     /**
