@@ -11,6 +11,7 @@ use App\Events\Post\Created as PostCreated;
 use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
+use App\Events\Thread\Restored;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
 use App\Models\Post;
@@ -39,8 +40,9 @@ class ThreadListener
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
 
-        // 隐藏主题
+        // 隐藏/还原主题
         $events->listen(Hidden::class, [$this, 'whenThreadWasHidden']);
+        $events->listen(Restored::class, [$this, 'whenThreadWasRestored']);
 
         // 删除主题
         $events->listen(Deleted::class, [$this, 'whenThreadWasDeleted']);
@@ -60,13 +62,7 @@ class ThreadListener
      */
     public function whenPostWasCreated(PostCreated $event)
     {
-        $thread = $event->post->thread;
-
-        if ($thread && $thread->exists) {
-            $thread->refreshPostCount();
-            $thread->refreshLastPost();
-            $thread->save();
-        }
+        $this->refreshData($event->post->thread);
     }
 
     /**
@@ -89,7 +85,7 @@ class ThreadListener
     {
         // 审核通过时，清除记录的敏感词
         if ($event->thread->is_approved == Thread::APPROVED) {
-            PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+            PostMod::query()->where('post_id', $event->thread->firstPost->id)->delete();
         }
 
         $action = $this->transLogAction($event->thread->is_approved);
@@ -103,20 +99,41 @@ class ThreadListener
     }
 
     /**
-     * 隐藏主题时，记录操作
+     * 隐藏主题时
      *
      * @param Hidden $event
      */
     public function whenThreadWasHidden(Hidden $event)
     {
-        $action = 'hide';
+        $thread = $event->thread;
 
-        $message = $event->data['message'] ?? '';
+        $thread->firstPost->deleted_at = $thread->deleted_at;
 
-        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
+        $thread->firstPost->save();
+
+        $this->refreshData($thread);
+
+        // 日志
+        UserActionLogs::writeLog($event->actor, $thread, 'hide', $event->data['message'] ?? '');
 
         // 发送删除通知
         $this->threadNotices('isDeleted', $event);
+    }
+
+    /**
+     * 还原主题时
+     *
+     * @param Restored $event
+     */
+    public function whenThreadWasRestored(Restored $event)
+    {
+        $thread = $event->thread;
+
+        $thread->firstPost->deleted_at = null;
+
+        $thread->firstPost->save();
+
+        $this->refreshData($thread);
     }
 
     /**
@@ -126,7 +143,7 @@ class ThreadListener
      */
     public function whenThreadWasDeleted(Deleted $event)
     {
-        Post::where('thread_id', $event->thread->id)->delete();
+        Post::query()->where('thread_id', $event->thread->id)->delete();
     }
 
     /**

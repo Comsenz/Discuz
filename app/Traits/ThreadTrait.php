@@ -129,4 +129,18 @@ trait ThreadTrait
     {
         return UserActionLogs::behavior()[$isApproved];
     }
+
+    /**
+     * 刷新相关数据
+     *
+     * @param Thread $thread
+     */
+    public function refreshData(Thread $thread)
+    {
+        if ($thread && $thread->exists) {
+            $thread->refreshPostCount();
+            $thread->refreshLastPost();
+            $thread->save();
+        }
+    }
 }

@@ -11,6 +11,7 @@ use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
+use App\Events\Post\Restored;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
@@ -50,8 +51,9 @@ class PostListener
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
 
-        // 隐藏回复
+        // 隐藏/还原回复
         $events->listen(Hidden::class, [$this, 'whenPostWasHidden']);
+        $events->listen(Restored::class, [$this, 'whenPostWasRestored']);
 
         // 删除首帖
         $events->listen(Deleted::class, [$this, 'whenPostWasDeleted']);
@@ -218,11 +220,35 @@ class PostListener
      */
     public function whenPostWasHidden(Hidden $event)
     {
+        $post = $event->post;
+
+        if ($post->is_first) {
+            $post->thread->deleted_at = $post->deleted_at;
+
+            $post->thread->save();
+        }
+
         // 记录操作日志
-        UserActionLogs::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
+        UserActionLogs::writeLog($event->actor, $post, 'hide', $event->data['message']);
 
         // 发送删除通知
         $this->postNotices('isDeleted', $event);
+    }
+
+    /**
+     * 还原回复时
+     *
+     * @param Restored $event
+     */
+    public function whenPostWasRestored(Restored $event)
+    {
+        $post = $event->post;
+
+        if ($post->is_first) {
+            $post->thread->deleted_at = null;
+
+            $post->thread->save();
+        }
     }
 
     /**
