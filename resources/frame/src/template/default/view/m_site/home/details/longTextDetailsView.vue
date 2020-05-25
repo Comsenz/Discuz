@@ -92,7 +92,7 @@
         <span class="fileName">{{attachment._data.fileName}}</span>
       </a>
     </div>
-    <div class="uploadFileList" v-if="themeCon.firstPost.attachments.length>0">
+    <div class="uploadFileList" v-if="!isiOS && themeCon.firstPost.attachments.length>0">
       <a
         :href="attachment._data.url"
         class="fileChi"
