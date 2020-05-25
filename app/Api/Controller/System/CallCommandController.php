@@ -7,6 +7,11 @@
 
 namespace App\Api\Controller\System;
 
+use App\Console\Commands\AttachmentClearCommand;
+use App\Console\Commands\AvatarClearCommand;
+use App\Console\Commands\FinanceCreateCommand;
+use App\Console\Commands\QueryWechatOrderConmmand;
+use App\Console\Commands\VideoClearCommand;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Console\Kernel;
 use Discuz\Api\Controller\AbstractResourceController;
@@ -15,6 +20,7 @@ use Discuz\Http\DiscuzResponseFactory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Tobscure\JsonApi\Document;
 
 class CallCommandController extends AbstractResourceController
@@ -25,11 +31,18 @@ class CallCommandController extends AbstractResourceController
     protected $app;
 
     /**
-     * @param Application $app
+     * @var ConsoleApplication
      */
-    public function __construct(Application $app)
+    protected $console;
+
+    /**
+     * @param Application $app
+     * @param ConsoleApplication $console
+     */
+    public function __construct(Application $app, ConsoleApplication $console)
     {
         $this->app = $app;
+        $this->console = $console;
     }
 
     /**
@@ -52,16 +65,19 @@ class CallCommandController extends AbstractResourceController
     public function data(ServerRequestInterface $request, Document $document)
     {
         $commandList = [
-            'finance:create',
-            'clear:avatar',
-            'clear:attachment',
-            'clear:video',
-            'order:query',
+            'finance:create'    => FinanceCreateCommand::class,
+            'clear:avatar'      => AvatarClearCommand::class,
+            'clear:attachment'  => AttachmentClearCommand::class,
+            'clear:video'       => VideoClearCommand::class,
+            'order:query'       => QueryWechatOrderConmmand::class,
         ];
-        $command = Arr::get($request->getParsedBody(), 'data.attributes.command');
-        if (!in_array($commandList, $command)) {
+        $command = Arr::get($request->getQueryParams(), 'name');
+        if (!Arr::has($commandList, $command)) {
             throw new PermissionDeniedException();
         }
-        $this->app->make(Kernel::class)->call($command);
+        $this->console->add($this->app->make($commandList[$command]));
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->setDisco($this->console);
+        $kernel->call($command);
     }
 }
