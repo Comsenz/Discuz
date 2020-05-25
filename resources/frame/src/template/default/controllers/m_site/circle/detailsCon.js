@@ -320,7 +320,20 @@ export default {
         }
       }).then((res) => {
         if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
+          if (res.errors[0].code.includes('没有权限')) {
+            if (this.userId) {
+              this.$toast.fail('您没有权限访问此内容');
+            } else {
+              browserDb.setSItem('beforeVisiting', this.$route.path);
+              if (this.isWeixin) {
+                this.$router.push({ path: '/wx-sign-up-bd' });
+              } else {
+                this.$router.push({ path: '/login-user' });
+              }
+            }
+          } else {
+            this.$toast.fail(res.errors[0].code);
+          }
           throw new Error(res.error)
         } else {
           appCommonH.setPageTitle('detail', res);
@@ -438,30 +451,13 @@ export default {
       this.index = index;
     },
     cutString(str, len) {
-      //length属性读出来的汉字长度为1
-      if (str.length * 2 <= len) {
+      if (str.length <= len) {
         return str;
       }
-      var strlen = 0;
-      var s = "";
-      for (var i = 0; i < str.length; i++) {
-        s = s + str.charAt(i);
-        if (str.charCodeAt(i) > 128) {
-          strlen = strlen + 2;
-          if (strlen >= len) {
-            return s.substring(0, s.length - 1) + "...";
-          }
-        } else {
-          strlen = strlen + 1;
-          if (strlen >= len) {
-            return s.substring(0, s.length - 2) + "...";
-          }
-        }
-      }
-      return s;
+      return str.substring(0, len - 3) + "...";
     },
     removeHtmlTag(str) {
-      return str.replace(/<[^>]+>/g, "");  //正则去掉所有的html标记
+      return str.replace(/<[^>]+>|\n/g, "");  //正则去掉所有的html标记
     },
     copyFocus(obj) {
       obj.blur;
@@ -488,7 +484,7 @@ export default {
         this.themeTitle = this.themeTitle.replace(reTag2, '');
         this.themeTitle = this.themeTitle.replace(reTag3, '');
         this.themeTitle = this.themeTitle.replace(/\s+/g, "");
-        this.themeTitle = this.cutString(this.themeTitle, 40);
+        this.themeTitle = this.cutString(this.themeTitle, 20);
         oInput.value = this.themeTitle + '  ' + Url;
         document.body.appendChild(oInput);
         oInput.select(); // 选择对象
@@ -900,7 +896,7 @@ export default {
 
       if (data.name === '微信支付') {
         this.show = false;
-        if (isWeixin) {
+        if (isWeixin && isPhone) {
           //微信
           this.getOrderSn(this.amountNum).then(() => {
             this.orderPay(12).then((res) => {
@@ -1082,21 +1078,19 @@ export default {
       var desc = '';
       var logo = '';
       if (this.themeCon._data.type == 0) {  //普通主题
-
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
-        title = shareContent + ' - ' + this.siteName;
-        desc = shareContent;
+        var strippedContent = this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml);
+        desc = this.cutString(strippedContent, 60);
+        title = this.cutString(strippedContent, 20) + ' - ' + this.siteName;
         if (this.firstpostImageList.length > 0) {
           logo = this.firstpostImageList[0];
         } else {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 1) {   //长文类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
         if (this.themeCon._data.price > 0) {
           desc = ''
         } else {
-          desc = shareContent;
+          desc = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 60);
         }
         title = this.themeCon._data.title + ' - ' + this.siteName;
         if (this.firstpostImageList.length > 0) {
@@ -1105,9 +1099,9 @@ export default {
           logo = appConfig.baseUrl + '/static/images/wxshare.png';
         }
       } else if (this.themeCon._data.type == 2) {  //视频类型
-        var shareContent = this.cutString(this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml), 38);
-        title = shareContent + ' - ' + this.siteName;
-        desc = shareContent;
+        var strippedContent = this.removeHtmlTag(this.themeCon.firstPost._data.contentHtml);
+        desc = this.cutString(strippedContent, 60);
+        title = this.cutString(strippedContent, 20) + ' - ' + this.siteName;
         if (this.themeCon.threadVideo._data.cover_url) {
           logo = this.themeCon.threadVideo._data.cover_url;
         } else {
@@ -1118,11 +1112,9 @@ export default {
         title: title,       // 分享标题
         desc: desc,         // 分享描述
         link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        logo               // 分享图标
+        logo: logo               // 分享图标
       }
       wxShare(data, { name: 'circle' })
-      wx.updateAppMessageShareData(data);
-      wx.updateTimelineShareData(data);
     }
   },
   mounted: function () {

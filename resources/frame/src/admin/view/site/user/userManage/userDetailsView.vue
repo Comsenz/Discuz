@@ -48,12 +48,17 @@
           cursor: deleBtn ? 'pointer' : 'auto'
         }"
         @click="deleteImage"
-      >删除</el-button>
+        >删除</el-button
+      >
     </Card>
 
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
-        <el-input v-model="newPassword" clearable :disabled="disabled"></el-input>
+        <el-input
+          v-model="newPassword"
+          clearable
+          :disabled="disabled"
+        ></el-input>
       </CardRow>
     </Card>
 
@@ -145,7 +150,9 @@
     </Card>
 
     <Card class="footer-btn">
-      <el-button type="primary" size="medium" @click="submission">提交</el-button>
+      <el-button type="primary" size="medium" @click="submission"
+        >提交</el-button
+      >
     </Card>
   </div>
 </template>

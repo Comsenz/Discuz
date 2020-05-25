@@ -625,7 +625,7 @@ export default {
    * @return {[type]}        [description]
    */
 
-  beforeEnter: function (appStore, to, form, next) {
+  beforeEnter: function (appStore, to, from, next) {
     //判断设备
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let isPhone = appCommonH.isWeixin().isPhone;
@@ -700,6 +700,7 @@ export default {
       'wx-sign-up-bd',
       'supplier-all-back',
       'site-close',
+      'retrieve-pwd',
       'information-page',
       '/api/oauth/wechat',
       '/api/oauth/wechat/pc'
@@ -724,7 +725,9 @@ export default {
     var canWalletPay = '';  //钱包密码设置
     var modifyPhone = '';   //短信验证是否关闭
 
-    if (to.name === 'supplier-all-back' || form.name === 'supplier-all-back') {
+    browserDb.setLItem('prevRoute', from.name);
+
+    if (to.name === 'supplier-all-back' || from.name === 'supplier-all-back') {
       next();
     } else {
       appStore.dispatch('appSiteModule/loadForum').then(res => {
@@ -838,7 +841,6 @@ export default {
             })
           } else {
             if (signInAndPayForAccess.includes(to.name)) {
-              // next(form.path)
               next('/')
             } else {
               next();
@@ -862,7 +864,11 @@ export default {
                 next();
               } else {
                 if (res.readdata._data.set_site.site_mode === 'public') {
-                  next({ path: 'wx-sign-up-bd' });
+                  if (to.name == 'circle' || to.name == 'details/:themeId' || to.name == 'home-page/:userId') {
+                    next();
+                    return;
+                  }
+                  next({ path: '/wx-sign-up-bd' });
                 } else if (res.readdata._data.set_site.site_mode === 'pay') {
                   if (to.name === 'pay-circle') {
                     next();
@@ -1060,7 +1066,11 @@ export default {
 };
 
 export function wxShare(shareData, toName) {
+  let isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   let url = window.location.href.split("#")[0];
+  if (isiOS && window.entryUrl && !/wechatdevtools/.test(navigator.userAgent)) { // iOS下，URL必须设置为整个SPA的入口URL
+    url = window.entryUrl;
+  }
   appFetch({
     url: 'weChatShare',
     method: 'get',

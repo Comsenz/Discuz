@@ -3,7 +3,7 @@
     <header class="header-box" id="comHeader">
       <span @click="headerBack" class="icon iconfont header-icon icon-back" ></span>
       <span class="header-title">{{headerTitle}}</span>
-      <span class="icon iconfont icon-Shape comHeadMenu" v-show="menuIconShow" @click="showPopup()"></span>
+      <span class="icon iconfont icon-home comHeadMenu" @click="goHome()"></span>
     </header>
     <van-popup
        class="sidebarWrap"

@@ -754,7 +754,7 @@ export default {
     initWxUpload() {
       if (this.isWeixin) {
         let url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + this.$route.path;
-        if (this.isiOS && window.entryUrl) {
+        if (this.isiOS && window.entryUrl && !/wechatdevtools/.test(navigator.userAgent)) { // iOS下，URL必须设置为整个SPA的入口URL
           url = window.entryUrl;
         }
         this.appFetch({
