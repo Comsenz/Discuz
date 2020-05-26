@@ -22,4 +22,5 @@ return [
     'user_username_censor_error' => '用户名内容敏感',
     'user_signature_censor_error' => '签名内容敏感',
     'user_signature_limit_error' => '签名内容过长',
+    'user_delete_group_error' => '管理组用户不允许删除',
 ];
