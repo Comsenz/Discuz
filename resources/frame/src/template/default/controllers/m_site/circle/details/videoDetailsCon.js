@@ -342,8 +342,12 @@ export default {
         url: "orderList",
         method: "post",
         data: {
-          type: 3,
-          thread_id: this.themeId
+          data: {
+            attributes: {
+              type: 3,
+              thread_id: this.themeId
+            }
+          }
         }
       })
         .then(res => {

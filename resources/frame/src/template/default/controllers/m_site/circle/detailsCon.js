@@ -1039,9 +1039,13 @@ export default {
         url: "orderList",
         method: "post",
         data: {
-          type: 2,
-          thread_id: this.themeId,
-          amount: amount
+          data: {
+            attributes: {
+              type: 2,
+              thread_id: this.themeId,
+              amount: amount
+            }
+          }
         }
       }).then(res => {
         this.orderSn = res.readdata._data.order_sn;
