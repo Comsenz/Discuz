@@ -1119,6 +1119,9 @@ export default {
     urlify(text) {
       var urlRegex = /(https?:\/\/[^\s]+)/g;
       return text.replace(urlRegex, function(url) {
+          if (url.includes('/emoji/qq/')) {
+            return url;
+          }
           return '<a href="' + url + '">' + url + '</a>';
       })
     }
