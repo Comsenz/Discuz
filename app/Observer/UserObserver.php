@@ -4,7 +4,9 @@
 namespace App\Observer;
 
 
+use App\Exceptions\TranslatorException;
 use App\Models\User;
+use App\Models\Group;
 use Discuz\Contracts\Setting\SettingsRepository;
 
 class UserObserver
@@ -28,4 +30,15 @@ class UserObserver
         $this->settings->set('user_count', User::where('status', 0)->count());
     }
 
+    /**
+     * 管理组用户不允许删除
+     * @param User $user
+     * @throws TranslatorException
+     */
+    public function deleting(User $user) {
+        if ($user->groups()->where('groups.id', Group::ADMINISTRATOR_ID)->exists()) {
+            throw new TranslatorException('user_delete_group_error');
+        }
+    }
 }
+
