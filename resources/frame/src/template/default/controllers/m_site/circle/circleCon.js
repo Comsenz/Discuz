@@ -107,7 +107,8 @@ export default {
           this.canCreateThread = res.readdata._data.other.can_create_thread;
           this.canCreateLongText =
             res.readdata._data.other.can_create_thread_long;
-          this.canCreateVideo = res.readdata._data.other.can_create_thread_video;
+          this.canCreateVideo =
+            res.readdata._data.other.can_create_thread_video;
           this.canViewThreads = res.readdata._data.other.can_view_threads;
           this.allowRegister = res.readdata._data.set_reg.register_close;
           this.offiaccountClose = res.readdata._data.passport.offiaccount_close;
@@ -198,6 +199,7 @@ export default {
         "filter[categoryId]": this.categoryId,
         "filter[isApproved]": 1,
         "filter[isDeleted]": "no",
+        "filter[type]": 4,
         include: [
           "user",
           "firstPost",
