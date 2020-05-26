@@ -6,7 +6,6 @@ namespace App\Observer;
 
 use App\Exceptions\TranslatorException;
 use App\Models\User;
-use App\Models\Group;
 use Discuz\Contracts\Setting\SettingsRepository;
 
 class UserObserver
