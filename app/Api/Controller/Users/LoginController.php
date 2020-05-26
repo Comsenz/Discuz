@@ -58,22 +58,18 @@ class LoginController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $data = Arr::get($request->getParsedBody(), 'data.attributes');
+        $data = Arr::get($request->getParsedBody(), 'data.attributes', []);
 
-        $validator = $this->validator->make($data, [
+        $this->validator->make($data, [
             'username' => 'required',
             'password' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
+        ])->validate();
 
         $response = $this->bus->dispatch(
             new GenJwtToken($data)
         );
-        if($response->getStatusCode() === 200) {
 
+        if ($response->getStatusCode() === 200) {
             $user = $this->app->make(UserRepository::class)->getUser();
 
             if ($token = Arr::get($data, 'token')) {

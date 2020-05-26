@@ -65,7 +65,7 @@
         </div>
 
         <Card class="footer-btn">
-          <el-button type="primary" size="medium" :disabled="deleteStatus" @click="deleteBatch">删除</el-button>
+          <!-- <el-button type="primary" size="medium" :disabled="deleteStatus" @click="deleteBatch">删除</el-button> -->
           <el-button size="medium" :disabled="deleteStatus" @click="disabledBatch">禁用</el-button>
         </Card>
 
