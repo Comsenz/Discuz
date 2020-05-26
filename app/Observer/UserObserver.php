@@ -36,7 +36,7 @@ class UserObserver
      * @throws TranslatorException
      */
     public function deleting(User $user) {
-        if ($user->groups()->where('groups.id', Group::ADMINISTRATOR_ID)->exists()) {
+        if ($user->isAdmin()) {
             throw new TranslatorException('user_delete_group_error');
         }
     }
