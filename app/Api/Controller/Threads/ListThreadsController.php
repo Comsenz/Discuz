@@ -265,9 +265,13 @@ class ListThreadsController extends AbstractListController
             $query->where('threads.category_id', $categoryId);
         }
 
-        // 类型：0普通 1长文 2视频 3图片
+        // 类型：0普通 1长文 2视频 3图片 [4 不返回图片帖（临时）]
         if (($type = Arr::get($filter, 'type', '')) !== '') {
-            $query->where('threads.type', (int) $type);
+            if ((int) $type === 4) {
+                $query->where('threads.type', '<>', 3);
+            } else {
+                $query->where('threads.type', (int) $type);
+            }
         }
 
         // 作者 ID
