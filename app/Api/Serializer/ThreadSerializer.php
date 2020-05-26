@@ -72,11 +72,11 @@ class ThreadSerializer extends AbstractSerializer
             $attributes['isDeleted'] = false;
         }
 
-        if ($model->price > 0) {
-            $attributes['paid'] = (bool) $model->getAttribute('paid');
-        }
-
         Thread::setStateUser($this->actor);
+
+        if ($model->price > 0) {
+            $attributes['paid'] = $model->getAttribute('paid') ?? $model->paidState();
+        }
 
         return $attributes;
     }

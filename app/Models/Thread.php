@@ -369,6 +369,32 @@ class Thread extends Model
         return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
     }
 
+    /**
+     * Define the relationship with the thread's paid state for a particular user.
+     *
+     * @param User|null $user
+     * @return bool|null
+     */
+    public function paidState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        if (!$user->exists || $this->price <= 0) {
+            return null;
+        }
+
+        if ($this->user_id == $user->id || $user->isAdmin()) {
+            return true;
+        } else {
+            return Order::query()
+                ->where('user_id', $user->id)
+                ->where('thread_id', $this->id)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->exists();
+        }
+    }
+
     public function threadVideo()
     {
         return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
