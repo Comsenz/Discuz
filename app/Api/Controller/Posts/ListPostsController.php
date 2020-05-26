@@ -91,7 +91,6 @@ class ListPostsController extends AbstractListController
     /**
      * @param PostRepository $posts
      * @param UrlGenerator $url
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(PostRepository $posts, UrlGenerator $url)
     {

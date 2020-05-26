@@ -203,6 +203,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addUserId']);
+        $tag->template = '<span id="member" value="{@id}"><xsl:apply-templates/></span>';
         $configurator->Preg->match('/\B@(?<username>[\S]+)/i', $tagName);
     }
 
@@ -212,6 +213,7 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addTopicId']);
+        $tag->template = '<span id="topic" value="{@id}"><xsl:apply-templates/></span>';
         $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}\w]+)#/ui', $tagName);
     }
 

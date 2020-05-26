@@ -1,31 +1,31 @@
 /**
  * 发布视频主题控制器
  */
-import { debounce, autoTextarea } from '../../../../../../common/textarea.js';
-import appCommonH from '../../../../../../helpers/commonHelper';
-import browserDb from '../../../../../../helpers/webDbHelper';
+import { debounce, autoTextarea } from "../../../../../../common/textarea.js";
+import appCommonH from "../../../../../../helpers/commonHelper";
+import browserDb from "../../../../../../helpers/webDbHelper";
 import axiosHelper from "axiosHelper";
-import TcVod from 'vod-js-sdk-v6';
+import TcVod from "vod-js-sdk-v6";
 let rootFontSize = parseFloat(document.documentElement.style.fontSize);
 //获取签名
 function getSignature() {
   return axiosHelper({
-    url: 'signature',
-    method: 'get',
-  }).then((res) => {
+    url: "signature",
+    method: "get"
+  }).then(res => {
     return res.readdata._data.signature;
-  })
+  });
 }
 export default {
-  data: function () {
+  data: function() {
     return {
       headerTitle: "发布视频",
-      selectSort: '',
+      selectSort: "",
       showPopup: false,
       categories: [],
       categoriesId: [],
-      cateId: '',
-      content: '',
+      cateId: "",
+      content: "",
       showFacePanel: false,
       keyboard: false,
       keywordsMax: 10000,
@@ -35,24 +35,24 @@ export default {
       faceData: [],
       uploadShow: false,
       avatar: "",
-      themeId: '',
-      postsId: '',
+      themeId: "",
+      postsId: "",
       files: {
         name: "",
-        type: '',
+        type: ""
       },
       headerImage: null,
       picValue: null,
-      upImgUrl: '',
+      upImgUrl: "",
       isWeixin: false,
       isPhone: false,
       themeCon: false,
       attriAttachment: false,
-      canUploadImages: '',
-      canUploadAttachments: '',
-      supportVideoExt: '',
-      supportVideoExtRes: '',
-      fileSize: '',
+      canUploadImages: "",
+      canUploadAttachments: "",
+      supportVideoExt: "",
+      supportVideoExtRes: "",
+      fileSize: "",
       limitMaxLength: true,
       limitMaxEncLength: true,
       isiOS: false,
@@ -60,32 +60,31 @@ export default {
       testingRes: false,
       backGo: -2,
       formdataList: [],
-      viewportWidth: '',
-      viewportHeight: '',
+      viewportWidth: "",
+      viewportHeight: "",
       nowCate: [],
-      payValue: '免费',
+      payValue: "免费",
       paySetShow: false,
       isCli: true,
-      moneyVal: '',
-      paySetValue: '',
-      videoShow: false,   //上传视频后显示
-      videoUp: true,      //上传加号
-      vcVideoName: '',
+      moneyVal: "",
+      paySetValue: "",
+      videoShow: false, //上传视频后显示
+      videoUp: true, //上传加号
+      vcVideoName: "",
       uploaderInfos: [],
       testingSizeRes: false,
       testingTypeRes: false,
-      fileId: '',
+      fileId: "",
       loading: false, //是否处于加载状态
-      publishShow: '',
-      appID: '',              // 腾讯云验证码场景 id
-      captcha: null,          // 腾讯云验证码实例
-      captcha_ticket: '',     // 腾讯云验证码返回票据
-      captcha_rand_str: '',   // 腾讯云验证码返回随机字符串
-
-    }
+      publishShow: "",
+      appID: "", // 腾讯云验证码场景 id
+      captcha: null, // 腾讯云验证码实例
+      captcha_ticket: "", // 腾讯云验证码返回票据
+      captcha_rand_str: "" // 腾讯云验证码返回随机字符串
+    };
   },
   computed: {
-    nowCateId: function () {
+    nowCateId: function() {
       return this.$route.params.cateId;
     }
   },
@@ -94,15 +93,16 @@ export default {
       let textarea = this.$refs.textarea;
       textarea.focus();
       let prevHeight = 300;
-      textarea && autoTextarea(textarea, 5, 65535, (height) => {
-        height += 20;
-        if (height !== prevHeight) {
-          prevHeight = height;
-          let rem = height / rootFontSize;
-          // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-        }
-      });
-    })
+      textarea &&
+        autoTextarea(textarea, 5, 65535, height => {
+          height += 20;
+          if (height !== prevHeight) {
+            prevHeight = height;
+            let rem = height / rootFontSize;
+            // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
+          }
+        });
+    });
     //设置在pc的宽度
     if (this.isWeixin != true && this.isPhone != true) {
       this.limitWidth();
@@ -112,34 +112,48 @@ export default {
     this.tcVod = new TcVod({
       getSignature: getSignature
     });
-    let qcloud_captcha = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    let thread_captcha = browserDb.getLItem('siteInfo')._data.other.create_thread_with_captcha;
-    this.appID = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
+    let qcloud_captcha = browserDb.getLItem("siteInfo")._data.qcloud
+      .qcloud_captcha;
+    let thread_captcha = browserDb.getLItem("siteInfo")._data.other
+      .create_thread_with_captcha;
+    this.appID = browserDb.getLItem(
+      "siteInfo"
+    )._data.qcloud.qcloud_captcha_app_id;
     this.publishShow = !(qcloud_captcha && thread_captcha);
-    var videoExt = '';
-    if (browserDb.getLItem('siteInfo') && browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext) {
-      this.fileSize = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_size;
-      videoExt = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_vod_ext.split(',');
-      var videoStr = '';
-      var videoStrRes = '';
+    var videoExt = "";
+    if (
+      browserDb.getLItem("siteInfo") &&
+      browserDb.getLItem("siteInfo")._data.qcloud.qcloud_vod_ext
+    ) {
+      this.fileSize = browserDb.getLItem(
+        "siteInfo"
+      )._data.qcloud.qcloud_vod_size;
+      videoExt = browserDb
+        .getLItem("siteInfo")
+        ._data.qcloud.qcloud_vod_ext.split(",");
+      var videoStr = "";
+      var videoStrRes = "";
       for (var k = 0; k < videoExt.length; k++) {
-        videoStr = '.' + videoExt[k] + ',';
+        videoStr = "." + videoExt[k] + ",";
         // videoStrRes = 'video/' + videoExt[k] + ',';
-        videoStrRes = '.' + videoExt[k] + ',';
+        videoStrRes = "." + videoExt[k] + ",";
         this.supportVideoExt += videoStr;
         this.supportVideoExtRes += videoStrRes;
       }
-      this.supportVideoExtRes = 'video/*,' + this.supportVideoExtRes;
-      this.supportVideoExtRes = this.supportVideoExtRes.substring(0, this.supportVideoExtRes.length - 1);
+      this.supportVideoExtRes = "video/*," + this.supportVideoExtRes;
+      this.supportVideoExtRes = this.supportVideoExtRes.substring(
+        0,
+        this.supportVideoExtRes.length - 1
+      );
     } else {
-      videoExt = '*';
+      videoExt = "*";
     }
     this.viewportWidth = window.innerWidth;
     this.viewportHeight = window.innerHeight;
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     var u = navigator.userAgent;
-    this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    this.isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
     this.isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if (this.isiOS) {
       this.encuploadShow = true;
@@ -156,21 +170,19 @@ export default {
     this.loadCategories();
     //初始化请求forum
     this.getInfo();
-
-
   },
   watch: {
-    showFacePanel: function (newVal, oldVal) {
+    showFacePanel: function(newVal, oldVal) {
       this.showFacePanel = newVal;
       if (this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+        document.getElementById("postForm").style.height =
+          this.viewportHeight - 240 + "px";
       } else {
-        document.getElementById('postForm').style.height = '100%';
+        document.getElementById("postForm").style.height = "100%";
       }
-    },
+    }
   },
   methods: {
-
     formatter(value) {
       return this.handleReg(value);
     },
@@ -178,14 +190,17 @@ export default {
     handleReg(value) {
       value = value.toString(); // 先转换成字符串类型
 
-      if (value.indexOf('.') == 0) {
-        value = '0.';  // 第一位就是 .
+      if (value.indexOf(".") == 0) {
+        value = "0."; // 第一位就是 .
       }
 
-      value = value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      value = value.replace(/[^\d.]/g, ""); //清除“数字”和“.”以外的字符
       value = value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
-      value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+      value = value
+        .replace(".", "$#$")
+        .replace(/\./g, "")
+        .replace("$#$", ".");
+      value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
 
       //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
       if (value.indexOf(".") < 0 && value != "") {
@@ -195,8 +210,7 @@ export default {
       return value;
     },
 
-
-    vExampleAdd: function () {
+    vExampleAdd: function() {
       this.$refs.vExampleFile.click();
       // this.$refs.vcExampleCover.click();
     },
@@ -206,7 +220,9 @@ export default {
     // },
     //验证上传格式是否符合设置
     testingType(eFile, allUpext) {
-      let extName = eFile.name.substring(eFile.name.lastIndexOf(".")).toLowerCase();
+      let extName = eFile.name
+        .substring(eFile.name.lastIndexOf("."))
+        .toLowerCase();
       let AllUpExt = allUpext;
       if (AllUpExt.indexOf(extName + ",") == "-1") {
         this.$toast.fail("文件类型不允许!");
@@ -222,7 +238,7 @@ export default {
       let fileSize = eFile.size;
       // 视频大小大于接口返回的最大限制值时置空
       if (fileSize / 1024 / 1024 > allowSize) {
-        this.$toast.fail('超出视频大小限制');
+        this.$toast.fail("超出视频大小限制");
         // this.$refs.vExampleFile.files[0] = '';
         this.$refs.vExample.reset();
 
@@ -242,13 +258,13 @@ export default {
         var mediaFile = this.$refs.vExampleFile.files[0];
         this.vcVideoName = this.$refs.vExampleFile.files[0].name;
         var uploader = this.tcVod.upload({
-          mediaFile: mediaFile,
+          mediaFile: mediaFile
           // coverFile: coverFile,
         });
-        uploader.on("media_progress", function (info) {
+        uploader.on("media_progress", function(info) {
           uploaderInfo.progress = info.percent;
         });
-        uploader.on("media_upload", function (info) {
+        uploader.on("media_upload", function(info) {
           uploaderInfo.isVideoUploadSuccess = true;
         });
 
@@ -259,7 +275,7 @@ export default {
           progress: 0,
           fileId: "",
           videoUrl: "",
-          cancel: function () {
+          cancel: function() {
             uploaderInfo.isVideoUploadCancel = true;
             uploader.cancel();
           }
@@ -269,22 +285,46 @@ export default {
 
         uploader
           .done()
-          .then((doneResult) => {
+          .then(doneResult => {
             uploaderInfo.fileId = doneResult.fileId;
             this.videoUp = false;
             this.loading = false;
             this.videoShow = true;
             this.fileId = doneResult.fileId;
+
+            this.appFetch({
+              url: "threadVideo",
+              method: "post",
+              data: {
+                data: {
+                  type: "thread-video",
+                  attributes: {
+                    file_id: this.fileId
+                  }
+                }
+              }
+            }).then(res => {
+              if (res.errors) {
+                if (res.errors[0].detail) {
+                  this.$toast.fail(
+                    res.errors[0].code + "\n" + res.errors[0].detail[0]
+                  );
+                } else {
+                  this.$toast.fail(res.errors[0].code);
+                }
+              } else {
+                console.log("调用了");
+              }
+            });
           })
-          .then(function (videoUrl) {
+          .then(function(videoUrl) {
             uploaderInfo.videoUrl = videoUrl;
             self.$refs.vExample.reset();
           });
       }
-
     },
 
-    setVcExampleCoverName: function () {
+    setVcExampleCoverName: function() {
       this.vcExampleCoverName = this.$refs.vcExampleCover.files[0].name;
     },
     getInfo() {
@@ -292,10 +332,11 @@ export default {
       this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error);
         } else {
           this.canUploadImages = res.readdata._data.other.can_upload_images;
-          this.canUploadAttachments = res.readdata._data.other.can_upload_attachments;
+          this.canUploadAttachments =
+            res.readdata._data.other.can_upload_attachments;
         }
       });
     },
@@ -304,82 +345,89 @@ export default {
     videoDeleClick() {
       this.videoShow = false;
       this.videoUp = true;
-      this.fileId = '';
+      this.fileId = "";
     },
     //发布主题
     publish() {
-      if (this.content == '' || this.content == null) {
-        this.$toast.fail('内容不能为空');
+      if (this.content == "" || this.content == null) {
+        this.$toast.fail("内容不能为空");
         return;
       }
       if (this.cateId == 0 || this.cateId == undefined) {
-        this.$toast.fail('请选择分类');
+        this.$toast.fail("请选择分类");
         return;
       }
-      if (this.vcVideoName == '') {
-        this.$toast.fail('视频不能为空');
+      if (this.vcVideoName == "") {
+        this.$toast.fail("视频不能为空");
         return;
       }
       this.loading = true;
       if (this.postsId && this.content) {
         this.appFetch({
-          url: 'posts',
-          splice: '/' + this.postsId,
+          url: "posts",
+          splice: "/" + this.postsId,
           method: "patch",
           data: {
-            "data": {
-              "type": "posts",
-              "attributes": {
-                "content": this.content
+            data: {
+              type: "posts",
+              attributes: {
+                content: this.content
               }
             }
           }
-        }).then((res) => {
+        }).then(res => {
           if (res.errors) {
             if (res.errors[0].detail) {
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+              this.$toast.fail(
+                res.errors[0].code + "\n" + res.errors[0].detail[0]
+              );
             } else {
               this.$toast.fail(res.errors[0].code);
             }
             this.loading = false;
           } else {
-            this.$router.replace({ path: 'details' + '/' + this.themeId, query: { backGo: this.backGo }, replace: true });
+            this.$router.replace({
+              path: "details" + "/" + this.themeId,
+              query: { backGo: this.backGo },
+              replace: true
+            });
           }
-        })
+        });
       } else {
         this.appFetch({
           url: "threads",
           method: "post",
           data: {
-            "data": {
-              "type": "threads",
-              "attributes": {
-                "content": this.content,
-                "price": this.paySetValue,
-                'file_id': this.fileId,
-                'file_name': this.vcVideoName,
-                'type': 2,
-                "captcha_ticket": this.captcha_ticket,
-                "captcha_rand_str": this.captcha_rand_str
+            data: {
+              type: "threads",
+              attributes: {
+                content: this.content,
+                price: this.paySetValue,
+                file_id: this.fileId,
+                file_name: this.vcVideoName,
+                type: 2,
+                captcha_ticket: this.captcha_ticket,
+                captcha_rand_str: this.captcha_rand_str
               },
-              "relationships": {
-                "category": {
-                  "data": {
-                    "type": "categories",
-                    "id": this.cateId
+              relationships: {
+                category: {
+                  data: {
+                    type: "categories",
+                    id: this.cateId
                   }
                 },
-                "attachments": {
-                  "data": this.attriAttachment
-                },
+                attachments: {
+                  data: this.attriAttachment
+                }
               }
-
             }
-          },
-        }).then((res) => {
+          }
+        }).then(res => {
           if (res.errors) {
             if (res.errors[0].detail) {
-              this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+              this.$toast.fail(
+                res.errors[0].code + "\n" + res.errors[0].detail[0]
+              );
             } else {
               this.$toast.fail(res.errors[0].code);
             }
@@ -387,30 +435,34 @@ export default {
           } else {
             var postThemeId = res.readdata._data.id;
             var _this = this;
-            _this.$router.replace({ path: '/details' + '/' + postThemeId, query: { backGo: this.backGo }, replace: true });
+            _this.$router.replace({
+              path: "/details" + "/" + postThemeId,
+              query: { backGo: this.backGo },
+              replace: true
+            });
           }
-        })
+        });
       }
     },
 
     //设置底部在pc里的宽度
     limitWidth() {
-      document.getElementById('post-topic-footer').style.width = "640px";
+      document.getElementById("post-topic-footer").style.width = "640px";
       let viewportWidth = window.innerWidth;
-      document.getElementById('post-topic-footer').style.left = (viewportWidth - 640) / 2 + 'px';
+      document.getElementById("post-topic-footer").style.left =
+        (viewportWidth - 640) / 2 + "px";
     },
 
     getAllEvens(arr) {
       arr => {
         let temp = evens(arr);
         return flat(temp);
-      }
+      };
     },
-
 
     //输入框自适应高度
     clearKeywords() {
-      this.keywords = '';
+      this.keywords = "";
       this.list = [];
       let textarea = this.$refs.textarea;
       let height = 40;
@@ -420,7 +472,7 @@ export default {
       // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
       textarea.focus();
     },
-    searchChange: debounce(function () {
+    searchChange: debounce(function() {
       let trim = this.keywords && this.keywords.trim();
       if (!trim) {
         this.list = [];
@@ -428,7 +480,7 @@ export default {
       }
       const params = {
         keywords: this.keywords
-      }
+      };
       // 调api ...
     }),
     handleFaceChoose(face) {
@@ -436,13 +488,16 @@ export default {
       const el = this.$refs.textarea;
       const startPos = el.selectionStart;
       const endPos = el.selectionEnd;
-      const newValue = value.substring(0, startPos) + face + value.substring(endPos, value.length)
-      this.content = newValue
+      const newValue =
+        value.substring(0, startPos) +
+        face +
+        value.substring(endPos, value.length);
+      this.content = newValue;
       if (el.setSelectionRange) {
         setTimeout(() => {
-          const index = startPos + face.length
-          el.setSelectionRange(index, index)
-        }, 0)
+          const index = startPos + face.length;
+          el.setSelectionRange(index, index);
+        }, 0);
       }
     },
     // handleKeyboardClick () {
@@ -454,23 +509,24 @@ export default {
     addExpression() {
       this.keyboard = !this.keyboard;
       this.appFetch({
-        url: 'emojis',
-        method: 'get',
+        url: "emojis",
+        method: "get",
         data: {
-          include: '',
+          include: ""
         }
-      }).then((data) => {
+      }).then(data => {
         this.faceData = data.readdata;
-      })
+      });
       this.showFacePanel = !this.showFacePanel;
       // if(this.showFacePanel == true){
       //   // document.getElementById('showFacePanel').style.width = "640px";
       //   document.getElementById('showFacePanel').style.left = (this.viewportWidth - 640)/2+'px';
       // }
       if (this.showFacePanel) {
-        document.getElementById('postForm').style.height = (this.viewportHeight - 240) + 'px';
+        document.getElementById("postForm").style.height =
+          this.viewportHeight - 240 + "px";
       } else {
-        document.getElementById('postForm').style.height = '100%';
+        document.getElementById("postForm").style.height = "100%";
       }
       this.footMove = !this.footMove;
       this.payMove = !this.payMove;
@@ -491,44 +547,40 @@ export default {
     //分类接口
     loadCategories() {
       this.appFetch({
-        url: 'categories',
-        method: 'get',
+        url: "categories",
+        method: "get",
         data: {
-          include: '',
+          include: ""
         }
-      }).then((res) => {
+      }).then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
-          throw new Error(res.error)
+          throw new Error(res.error);
         } else {
-
           var newCategories = [];
           newCategories = res.readdata;
           for (let j = 0, len = newCategories.length; j < len; j++) {
-            this.categories.push(
-              {
-                'text': newCategories[j]._data.name,
-                'id': newCategories[j]._data.id
-              }
-            );
+            this.categories.push({
+              text: newCategories[j]._data.name,
+              id: newCategories[j]._data.id
+            });
             this.categoriesId.push(newCategories[j]._data.id);
           }
           if (this.nowCateId != 0 && this.nowCateId != undefined) {
             var nowCate = {};
-            nowCate = newCategories.find((item) => {
+            nowCate = newCategories.find(item => {
               if (item._data.id === this.nowCateId) {
-                return item
+                return item;
               }
-            })
+            });
             this.nowCate = { id: nowCate._data.id, name: nowCate._data.name };
             this.cateId = this.nowCate.id;
             this.selectSort = this.nowCate.name;
           } else {
             this.selectSort = "选择分类";
           }
-
         }
-      })
+      });
     },
     onCancel() {
       this.showPopup = false;
@@ -537,15 +589,15 @@ export default {
     paySetting() {
       this.paySetShow = true;
 
-      if (this.payValue === '免费') {
+      if (this.payValue === "免费") {
         this.paySetValue = null;
       } else {
         this.paySetValue = this.payValue.slice(0, this.payValue.length - 1);
       }
 
       if (this.paySetShow) {
-        setTimeout(function () {
-          document.getElementById('payMoneyInp').focus();
+        setTimeout(function() {
+          document.getElementById("payMoneyInp").focus();
         }, 200);
       }
     },
@@ -555,10 +607,10 @@ export default {
       // this.paySetValue = '免费';
     },
     //设置付费时，实时获取输入框的值，用来判断按钮状态
-    search: function (event) {
-
-      if (this.paySetValue === '.') {                // 如果只输入一个点  变成 0.
-        this.paySetValue = '0.';
+    search: function(event) {
+      if (this.paySetValue === ".") {
+        // 如果只输入一个点  变成 0.
+        this.paySetValue = "0.";
         return;
       }
 
@@ -572,23 +624,24 @@ export default {
     paySetSure() {
       this.paySetShow = false;
       if (this.paySetValue <= 0) {
-        this.payValue = '免费';
+        this.payValue = "免费";
       } else {
         this.paySetValue = Number(this.paySetValue);
-        this.payValue = Number(this.paySetValue) + '元';
+        this.payValue = Number(this.paySetValue) + "元";
       }
     },
-    initCaptcha() {   //发布主题验证码
-      if (this.content == '' || this.content == null) {
-        this.$toast.fail('内容不能为空');
+    initCaptcha() {
+      //发布主题验证码
+      if (this.content == "" || this.content == null) {
+        this.$toast.fail("内容不能为空");
         return;
       }
       if (this.cateId == 0 || this.cateId == undefined) {
-        this.$toast.fail('请选择分类');
+        this.$toast.fail("请选择分类");
         return;
       }
-      if (this.vcVideoName == '') {
-        this.$toast.fail('视频不能为空');
+      if (this.vcVideoName == "") {
+        this.$toast.fail("视频不能为空");
         return;
       }
       this.captcha = new TencentCaptcha(this.appID, res => {
@@ -602,7 +655,6 @@ export default {
       // 显示验证码
       this.captcha.show();
     }
-
   },
   beforeRouteLeave(to, from, next) {
     // 隐藏验证码
@@ -611,4 +663,4 @@ export default {
     }
     next();
   }
-}
+};
