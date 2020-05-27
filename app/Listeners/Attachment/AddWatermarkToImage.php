@@ -48,7 +48,15 @@ class AddWatermarkToImage
      */
     public function __construct(ServerRequestInterface $request, SettingsRepository $settings)
     {
-        $this->data = $request->getParsedBody();
+        /**
+         * TODO: is_gallery is_sound 需要整合为 type 字段
+         *
+         * type：0 附件 1 图片 2 音频 3 视频
+         */
+        $isGallery = (bool) Arr::get($request->getParsedBody(), 'isGallery', false);
+        $type = $isGallery ? 1 : (int) Arr::get($request->getParsedBody(), 'type', 0);
+
+        $this->data = array_merge($request->getParsedBody(), ['type' => $type]);
         $this->settings = $settings;
     }
 
@@ -83,7 +91,7 @@ class AddWatermarkToImage
         );
 
         // 默认水印图
-        if (! file_exists($watermarkImage)) {
+        if (! is_file($watermarkImage)) {
             $watermarkImage = resource_path('images/watermark.png');
         }
 
