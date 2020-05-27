@@ -40,7 +40,7 @@ class CheckWatermarkSetting
             'horizontal_spacing' => $settings->get('horizontal_spacing'),
             'vertical_spacing' => $settings->get('vertical_spacing'),
         ], [
-            'watermark' => 'required|boolean',
+            'watermark' => 'nullable|boolean',
             'position' => 'exclude_if:watermark,false|required|integer|between:1,9',
             'horizontal_spacing' => 'exclude_if:watermark,false|required|integer|between:0,9999',
             'vertical_spacing' => 'exclude_if:watermark,false|required|integer|between:0,9999',
