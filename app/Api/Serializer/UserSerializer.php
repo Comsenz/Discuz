@@ -9,8 +9,8 @@ namespace App\Api\Serializer;
 
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
-use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
@@ -49,6 +49,8 @@ class UserSerializer extends AbstractSerializer
 
         $canEdit = $gate->allows('edit', $model);
 
+        $settings = app()->make(SettingsRepository::class);
+
         $attributes = [
             'id'                => (int) $model->id,
             'username'          => $model->username,
@@ -72,7 +74,7 @@ class UserSerializer extends AbstractSerializer
             'showGroups'        => $model->hasPermission('showGroups'),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
-            'denyStatus'        => (bool)$model->denyStatus
+            'denyStatus'        => (bool)$model->denyStatus,
         ];
 
         // 判断禁用原因
@@ -99,6 +101,17 @@ class UserSerializer extends AbstractSerializer
                 'canWalletPay'  => $gate->allows('walletPay', $model),
                 'walletBalance' => $model->userWallet->available_amount,
                 'walletFreeze'  => $model->userWallet->freeze_amount,
+            ];
+        }
+
+        // 是否管理员
+        if ($this->actor->isAdmin()) {
+            $attributes += [
+                'canEditUsername' => true,  // 可否更改用户名
+            ];
+        } else {
+            $attributes += [
+                'canEditUsername' => $model->username_bout >= $settings->get('username_bout', 'default', 1) ? false : true,
             ];
         }
 

@@ -32,6 +32,11 @@ class GroupPermissionTableSeeder extends Seeder
         'category.delete' => [],                // 删除分类
         'category.edit' => [],                  // 修改分类
 
+        // 默认分类下的权限
+        'category1.viewThreads' => [7, 10],     // 默认分类看帖权限
+        'category1.createThread' => [10],       // 默认分类发帖权限
+        'category1.replyThread' => [10],        // 默认分类发回复权限
+
         // 主题
         'viewThreads' => [7, 10],               // 查看主题列表
         'createThread' => [10],                 // 发布主题

@@ -77,6 +77,7 @@ class UpdateUser
      */
     public function __invoke()
     {
+        /** @var User $user */
         $user = $this->users->findOrFail($this->id, $this->actor);
 
         $isSelf = $this->actor->id === $user->id;
@@ -161,6 +162,12 @@ class UpdateUser
             UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
         }
 
+        if ($expiredAt = Arr::get($this->data, 'data.attributes.expired_at')) {
+            $this->assertAdmin($this->actor);
+
+            $user->expired_at = Carbon::parse($expiredAt);
+        }
+
         if ($groups = Arr::get($attributes, 'groupId')) {
             $this->assertCan($this->actor, 'edit.group', $user);
 
@@ -192,7 +199,7 @@ class UpdateUser
                     //新增付费用户组处理
                     foreach ($newPaidGroups as $paidgGroupKey => $paidGroupVal) {
                         $this->events->dispatch(
-                            new PaidGroup($paidGroupVal->id,  $user, null, $this->actor)
+                            new PaidGroup($paidGroupVal->id, $user, null, $this->actor)
                         );
                     }
                 }
@@ -235,7 +242,10 @@ class UpdateUser
             $user->changeUsername($username, $isAdmin);
         }
 
-        if ($signature = Arr::get($attributes, 'signature')) {
+        if (Arr::has($attributes, 'signature')) {
+            // 可为空
+            $signature = Arr::get($attributes, 'signature');
+
             // 敏感词校验
             $this->censor->checkText($signature);
             if ($this->censor->isMod) {

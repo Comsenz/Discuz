@@ -12,10 +12,11 @@ return [
     'cash_failure'           => '提现失败，退回',
     'cash_review_failure'           => '审核不通过，退回',
     'operate_forbidden' => '非法操作',
-    'register_income' => '注册收入',
-    'artificial_income' => '人工收入',
 
     // 分割线
+
+    'income_register'           => '注册收入',
+    'income_artificial'         => '人工收入',
     'income_reward'             => '打赏主题收入',
     'income_thread'             => '付费主题收入',
 
@@ -23,4 +24,5 @@ return [
     'expend_reward'             => '打赏主题支出',
     'expend_thread'             => '付费主题支出',
     'expend_group'              => '加入用户组支出',
+    'expend_artificial'         => '人工支出',
 ];

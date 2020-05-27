@@ -20,11 +20,11 @@
               width="55">
             </el-table-column>
 
-            <el-table-column
-              prop="_data.id"
-              label="编号"
-              min-width="60"
-              >
+            <el-table-column prop="_data.id" label="编号" width="80"> </el-table-column>
+            <el-table-column label="头像" width="60" align="center">
+              <template slot-scope="scope" class="image-slot">
+                <el-image style="width: 32px; height: 32px" :src="scope.row._data.avatarUrl ? scope.row._data.avatarUrl : '/static/images/noavatar.gif'" lazy></el-image>
+              </template>
             </el-table-column>
 
             <el-table-column
@@ -44,6 +44,13 @@
               label="用户组">
             </el-table-column>
 
+            <el-table-column label="是否已付费"> 
+              <template slot-scope="scope">
+                <el-tag :type="$dayjs().isSameOrBefore($dayjs(scope.row._data.expiredAt)) ? 'success' : 'info'">{{ $dayjs().isSameOrBefore($dayjs(scope.row._data.expiredAt)) ? "是" : "否" }}</el-tag>
+              </template>
+
+            </el-table-column>
+
             <el-table-column
               label="">
               <template slot-scope="scope">
@@ -58,7 +65,7 @@
         </div>
 
         <Card class="footer-btn">
-          <el-button type="primary" size="medium" :disabled="deleteStatus" @click="deleteBatch">删除</el-button>
+          <!-- <el-button type="primary" size="medium" :disabled="deleteStatus" @click="deleteBatch">删除</el-button> -->
           <el-button size="medium" :disabled="deleteStatus" @click="disabledBatch">禁用</el-button>
         </Card>
 

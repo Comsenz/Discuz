@@ -84,15 +84,15 @@ class AddWatermarkToImage
 
         if ($watermark && file_exists($watermarkImage)) {
             // 水印位置
-            $watermarkPosition = (int) $this->settings->get('watermark_position', 'watermark');
+            $position = (int) $this->settings->get('position', 'watermark');
 
             // the watermark image on x-axis of the current image.
-            $x = (int) $this->settings->get('watermark_horizontal_spacing', 'watermark');
+            $x = (int) $this->settings->get('horizontal_spacing', 'watermark');
 
             // the watermark image on y-axis of the current image.
-            $y = (int) $this->settings->get('watermark_vertical_spacing', 'watermark');
+            $y = (int) $this->settings->get('vertical_spacing', 'watermark');
 
-            $image->insert($watermarkImage, $this->positions[$watermarkPosition], $x, $y);
+            $image->insert($watermarkImage, $this->positions[$position], $x, $y);
         }
 
         return $image;

@@ -8,7 +8,8 @@ import {
   SET_FORUM_STATE,
   SET_FORUM_PROMISE,
   SET_USER,
-  SET_USER_STATE
+  SET_USER_STATE,
+  SET_USER_PROMISE
 } from "./mutationTypes";
 
 export default {
@@ -35,5 +36,8 @@ export default {
   },
   [SET_USER_STATE](state, payload) {
     state.userState = payload;
-  }
+  },
+  [SET_USER_PROMISE](state, payload) {
+    state.userPromise = payload;
+  },
 };

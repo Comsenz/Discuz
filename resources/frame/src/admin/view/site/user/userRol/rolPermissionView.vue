@@ -3,22 +3,22 @@
     <Card :header="'设置权限——' + $router.history.current.query.name"></Card>
     <Card header="内容发布权限："></Card>
     <Card>
-      <CardRow description="允许发布主题">
+      <CardRow description="允许发布文本">
         <el-checkbox
           v-model="checked"
           label="createThread"
           :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发布主题</el-checkbox>
+        >发布文本</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="允许发布长文">
+      <CardRow description="允许发布帖子">
         <el-checkbox
           v-model="checked"
           label="createThreadLong"
           :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发布长文</el-checkbox>
+        >发布帖子</el-checkbox>
       </CardRow>
     </Card>
 
@@ -29,6 +29,26 @@
           label="createThreadVideo"
           :disabled="videoDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
         >发布视频</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布图片">
+        <el-checkbox
+          v-model="checked"
+          label="createThreadImage"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布图片</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布私信">
+        <el-checkbox
+          v-model="checked"
+          label="dialog.create"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布私信</el-checkbox>
       </CardRow>
     </Card>
 

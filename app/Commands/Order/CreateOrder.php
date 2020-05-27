@@ -200,12 +200,9 @@ class CreateOrder
                 );
             }
             $db->commit();          // 提交事务
-
             return $order;
         } catch (Exception $e) {
             $db->rollback();        // 回滚事务
-
-            echo $e->getMessage();
             throw new OrderException('order_create_failure');
         }
     }

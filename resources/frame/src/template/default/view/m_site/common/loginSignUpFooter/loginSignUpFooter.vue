@@ -1,17 +1,19 @@
 <template>
   <footer class="login-user-footer">
-    <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
+    <template v-if="pageName === 'login-user'||pageName === 'login-phone'||pageName==='wx-login-bd'">
       <span v-if="qcloudSms" @click="retrieveClick">忘记密码？找回</span>
       <i v-if="registerClose && qcloudSms"></i>
+    </template>
+    <template v-if="pageName === 'login-user'||pageName === 'login-phone'">
       <span v-if="registerClose" @click="signUpClick">注册</span>
     </template>
 
     <template v-else-if="pageName === 'wx-login-bd'">
-      <span @click="wxSignUpBdClick">没有帐号？注册，绑定微信新帐号</span>
+      <span @click="wxSignUpBdClick">没有帐号？注册并绑定微信</span>
     </template>
 
     <template v-else-if="pageName === 'wx-sign-up-bd'">
-      <span @click="wxLoginBdClick">已有帐号？登录，微信绑定帐号</span>
+      <span @click="wxLoginBdClick">已有帐号？登录并绑定微信</span>
     </template>
 
     <template v-else-if="pageName === 'sign-up'">

@@ -2,7 +2,7 @@
 
 define('DISCUZ_START', microtime(true));
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $app = new Discuz\Foundation\Application(dirname(__DIR__));
 

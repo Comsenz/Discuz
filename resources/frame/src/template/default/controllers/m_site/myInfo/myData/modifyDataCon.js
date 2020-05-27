@@ -28,6 +28,7 @@ export default {
       myModifyPhone: '',
       isReal: false,     //是否实名认证
       updataLoading: false,  //上传状态
+      hasPassword: true
     }
   },
 
@@ -39,11 +40,7 @@ export default {
     this.wechat()
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
-    if (this.isWeixin) {
-      this.tipWx = '确认解绑微信并退出登录，如果您没有设置密码或手机等其它登录方法，将无法再次登录';
-    } else {
-      this.tipWx = '确认解绑微信';
-    }
+    this.tipWx = '点击下面的确认解绑按钮后，您将解除微信与本账号的绑定。\n\n如果您没有设置密码或手机等其它登录方法，将无法再次登录！';
     let qcloud_faceid = browserDb.getLItem('siteInfo')._data.qcloud.qcloud_faceid;
     if (qcloud_faceid == false) {
       this.realNameShow = false
@@ -97,6 +94,7 @@ export default {
           this.headPortrait = res.readdata._data.avatarUrl;     //用户头像
           this.wechatId = res.readdata._data.id;                //用户Id
           this.canWalletPay = res.readdata._data.canWalletPay;  //钱包密码
+          this.hasPassword = res.data.attributes.hasPassword;   //是否有密码
           if (res.readdata.wechat) {
             this.wechatNickname = res.readdata.wechat._data.nickname //微信昵称
           } else {
@@ -147,16 +145,22 @@ export default {
     },
 
     myModifyWechat() {
-      this.$dialog.confirm({
-        title: this.tipWx,
-        // message: '弹窗内容'
-      }).then((res) => {
-        if (res.errors) {
-          this.$toast.fail(res.errors[0].code);
-        } else {
+      if (this.hasPassword) {
+        this.$dialog.confirm({
+          title: "请确认解除微信绑定",
+          message: this.tipWx,
+          confirmButtonText: "确认解绑",
+          confirmButtonColor: "#DC143C",
+          messageAlign: "left"
+        }).then(() => {
           this.wechat(this.wechatId)
-        }
-      })
+        })
+      } else {
+        this.$dialog.alert({
+          title: "无法解除微信绑定",
+          message: "您还没有设置密码，无法解除微信绑定，请先设置登录密码。"
+        });
+      }
       // .catch(() => {
       //   // on cancel
       // });
@@ -189,9 +193,9 @@ export default {
     },
     wechatBind() {    //去绑定微信
       if (this.isWeixin) {
+        localStorage.clear();
         browserDb.setLItem("wx-goto-login", true);
         this.$router.push({ path: '/wx-sign-up-bd' })
-        localStorage.clear();
       } else {
         this.$toast.fail('请在微信客户端中进行绑定操作');
       }

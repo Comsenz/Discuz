@@ -30,8 +30,12 @@ export default {
 
     //登录微信帐号
     wxLoginBdClick(){
-      webDb.setLItem("wx-goto-login", true);
-      this.$router.push('/wx-sign-up-bd')
+      if (this.pageName != 'wx-sign-up-bd') {
+        webDb.setLItem("wx-goto-login", true);
+        this.$router.push('/wx-sign-up-bd')
+      } else {
+        this.$router.push('/wx-login-bd')
+      }
     },
 
     //已有帐号立即登录

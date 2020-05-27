@@ -115,7 +115,16 @@ export default {
                   if (this.siteMode === 'pay') {
                     this.$router.push({ path: 'pay-circle-login' });
                   } else if (this.siteMode === 'public') {
-                    this.$router.push({ path: '/' });
+                    let beforeVisiting = browserDb.getSItem('beforeVisiting');
+                    if (beforeVisiting) {
+                      this.$router.replace({ path: beforeVisiting });
+                      browserDb.setSItem('beforeState', 1);
+                      setTimeout(() => {
+                        this.$router.go(0);
+                      }, 800)
+                    } else {
+                      this.$router.push({ path: '/' });
+                    }
                   } else {
                     //缺少参数，请刷新页面
                   }

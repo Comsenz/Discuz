@@ -16,6 +16,7 @@ use App\Repositories\UserWalletFailLogsRepository;
 use App\Settings\SettingsRepository;
 use App\Trade\Config\GatewayConfig;
 use App\Trade\PayTrade;
+use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -111,7 +112,7 @@ class PayOrder
         $this->data = collect(Arr::get($this->data, 'data.attributes'));
         // 使用钱包支付时，检查是否设置支付密码
         if (
-            $this->data->get('payment_type') == 20
+            $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
             && empty($this->actor->pay_password)
         ) {
             throw new \Exception('uninitialized_pay_password');
@@ -120,7 +121,7 @@ class PayOrder
         // 验证错误次数
         $failCount = $this->userWalletFailLogs->getCountByUserId($this->actor->id);
         if (
-            $this->data->get('payment_type') == 20
+            $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
             && $failCount > UserWalletFailLogs::TOPLIMIT
         ) {
             throw new \Exception('pay_password_failures_times_toplimit');
@@ -134,7 +135,7 @@ class PayOrder
                 function ($attribute, $value, $fail) {
                     // 使用钱包支付时验证密码
                     if (
-                        $this->data->get('payment_type') == 20
+                        $this->data->get('payment_type') == Order::PAYMENT_TYPE_WALLET
                         && ! $this->actor->checkWalletPayPassword($value)
                     ) {
                         //记录钱包密码错误日志
@@ -203,18 +204,19 @@ class PayOrder
         $extra       = []; //可选参数
         $pay_gateway = ''; //付款通道及方式
         $config      = []; //配置信息
+        $time_expire = Carbon::now()->addMinutes(Order::ORDER_EXPIRE_TIME)->format('YmdHis'); //订单过期时间
         switch ($this->payment_type) {
-            case '10': //微信扫码支付
-            case '11': //微信h5支付
-            case '12': //微信网页、公众号
-            case '13': //微信小程序支付
+            case Order::PAYMENT_TYPE_WECHAT_NATIVE: //微信扫码支付
+            case Order::PAYMENT_TYPE_WECHAT_WAP: //微信h5支付
+            case Order::PAYMENT_TYPE_WECHAT_JS: //微信网页、公众号
+            case Order::PAYMENT_TYPE_WECHAT_MINI: //微信小程序支付
                 $config = $this->setting->tag('wxpay'); //配置信息
                 $config['notify_url'] = $this->url->to('/api/trade/notify/wechat');
                 switch ($this->payment_type) {
-                    case '10': //微信扫码支付
+                    case Order::PAYMENT_TYPE_WECHAT_NATIVE: //微信扫码支付
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_NATIVE;
                         break;
-                    case '11': //微信h5支付
+                    case Order::PAYMENT_TYPE_WECHAT_WAP: //微信h5支付
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_WAP;
                         $extra = [
                             'h5_info' => [
@@ -224,14 +226,14 @@ class PayOrder
                             ]
                         ];
                         break;
-                    case '12': //微信网页、公众号
+                    case Order::PAYMENT_TYPE_WECHAT_JS: //微信网页、公众号
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                         //获取用户openid
                         $extra                = [
                             'openid' => $this->actor->wechat->mp_openid,
                         ];
                         break;
-                    case '13': //小程序支付
+                    case Order::PAYMENT_TYPE_WECHAT_MINI: //小程序支付
                         $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
                         //获取用户openid： min_openid
@@ -240,8 +242,11 @@ class PayOrder
                         ];
                         break;
                 }
+
+                //订单过期时间
+                $extra['time_expire'] = $time_expire;
                 break;
-            case '20': // 用户钱包支付
+            case Order::PAYMENT_TYPE_WALLET: // 用户钱包支付
                 $pay_gateway = GatewayConfig::WALLET_PAY;
                 break;
             default:

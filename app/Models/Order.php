@@ -60,10 +60,33 @@ class Order extends Model
 
     const ORDER_STATUS_CANCEL  = 2; //取消订单
 
+    const ORDER_STATUS_FAILED  = 3; //支付失败
+
+    const ORDER_STATUS_EXPIRED = 4; //订单已过期
+
     /**
      * 注册收款人ID
      */
     const REGISTER_PAYEE_ID = 0;
+
+
+    /**
+     * 付款方式
+     */
+    const PAYMENT_TYPE_WECHAT_NATIVE = 10; //微信扫码支付
+
+    const PAYMENT_TYPE_WECHAT_WAP    = 11; //微信h5支付
+
+    const PAYMENT_TYPE_WECHAT_JS     = 12; //微信网页、公众号
+
+    const PAYMENT_TYPE_WECHAT_MINI   = 13; //微信小程序支付
+
+    const PAYMENT_TYPE_WALLET        = 20;//钱包支付
+
+    /**
+     * 订单过期时间，单位分钟，订单过期后无法支付
+     */
+    const ORDER_EXPIRE_TIME          = 10;
 
     /**
      * {@inheritdoc}

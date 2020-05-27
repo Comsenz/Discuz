@@ -11,6 +11,7 @@ use App\Events\Post\Created;
 use App\Events\Post\Deleted;
 use App\Events\Post\Hidden;
 use App\Events\Post\PostWasApproved;
+use App\Events\Post\Restored;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
@@ -50,8 +51,9 @@ class PostListener
         // 操作审核回复，触发行为动作
         $events->listen(PostWasApproved::class, [$this, 'whenPostWasApproved']);
 
-        // 隐藏回复
+        // 隐藏/还原回复
         $events->listen(Hidden::class, [$this, 'whenPostWasHidden']);
+        $events->listen(Restored::class, [$this, 'whenPostWasRestored']);
 
         // 删除首帖
         $events->listen(Deleted::class, [$this, 'whenPostWasDeleted']);
@@ -83,7 +85,7 @@ class PostListener
         $actor = $event->actor;
 
         // 是否有权限在该主题所在分类下回复
-        if (! $event->post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
+        if (! $post->exists && ! $post->is_first && $actor->cannot('replyThread', $post->thread->category)) {
             throw new PermissionDeniedException;
         }
     }
@@ -218,11 +220,35 @@ class PostListener
      */
     public function whenPostWasHidden(Hidden $event)
     {
+        $post = $event->post;
+
+        if ($post->is_first) {
+            $post->thread->deleted_at = $post->deleted_at;
+
+            $post->thread->save();
+        }
+
         // 记录操作日志
-        UserActionLogs::writeLog($event->actor, $event->post, 'hide', $event->data['message']);
+        UserActionLogs::writeLog($event->actor, $post, 'hide', $event->data['message']);
 
         // 发送删除通知
         $this->postNotices('isDeleted', $event);
+    }
+
+    /**
+     * 还原回复时
+     *
+     * @param Restored $event
+     */
+    public function whenPostWasRestored(Restored $event)
+    {
+        $post = $event->post;
+
+        if ($post->is_first) {
+            $post->thread->deleted_at = null;
+
+            $post->thread->save();
+        }
     }
 
     /**
@@ -297,8 +323,17 @@ class PostListener
      */
     public function userMentions(Saved $event)
     {
-        if ($event->post->is_approved !== Thread::APPROVED) {
-            return;
+        // 任何修改帖子行为 除了修改是否合法字段,其它都不允许发送@通知
+        $edit = Arr::get($event->data, 'edit', false);
+        if ($edit) {
+            // 判断是否修改合法值
+            if (!Arr::has($event->data, 'attributes.isApproved')) {
+                return;
+            }
+            // 判断是否合法
+            if (Arr::get($event->data, 'attributes.isApproved') != Thread::APPROVED) {
+                return;
+            }
         }
 
         $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');

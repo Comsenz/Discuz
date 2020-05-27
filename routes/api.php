@@ -36,7 +36,6 @@ $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsCont
 */
 
 $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSignatureController::class);
-$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -316,3 +315,20 @@ $route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\Reso
 */
 
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
+
+/*
+|--------------------------------------------------------------------------
+| System
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/system/command', 'system.command', ApiController\System\CallCommandController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Wechat - Offiaccount
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
+
