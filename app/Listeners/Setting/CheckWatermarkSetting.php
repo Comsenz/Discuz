@@ -8,7 +8,9 @@
 namespace App\Listeners\Setting;
 
 use App\Events\Setting\Saving;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CheckWatermarkSetting
@@ -32,18 +34,15 @@ class CheckWatermarkSetting
      */
     public function handle(Saving $event)
     {
-        $settings = $event->settings->pluck('value', 'key');
+        $settings = $event->settings->where('tag', 'watermark')->pluck('value', 'key')->all();
 
-        $this->validator->make([
-            'watermark' => $settings->get('watermark'),
-            'position' => $settings->get('position'),
-            'horizontal_spacing' => $settings->get('horizontal_spacing'),
-            'vertical_spacing' => $settings->get('vertical_spacing'),
-        ], [
+        $watermark = (bool) Arr::get($settings, 'watermark');
+
+        $this->validator->make($settings, [
             'watermark' => 'nullable|boolean',
-            'position' => 'exclude_if:watermark,false|required|integer|between:1,9',
-            'horizontal_spacing' => 'exclude_if:watermark,false|required|integer|between:0,9999',
-            'vertical_spacing' => 'exclude_if:watermark,false|required|integer|between:0,9999',
+            'position' => [Rule::requiredIf($watermark), 'integer', 'between:1,9'],
+            'horizontal_spacing' => [Rule::requiredIf($watermark), 'integer', 'between:0,9999'],
+            'vertical_spacing' => [Rule::requiredIf($watermark), 'integer', 'between:0,9999'],
         ])->validate();
     }
 }

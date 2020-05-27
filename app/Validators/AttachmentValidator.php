@@ -39,7 +39,7 @@ class AttachmentValidator extends AbstractValidator
     {
         // type：0 附件 1 图片 2 音频 3 视频
         $type = (int) Arr::get($this->data, 'type');
-        $typeName = Arr::get(Attachment::$type, $type, head(Attachment::$type));
+        $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
 
         // 文件类型
         $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
