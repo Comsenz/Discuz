@@ -32,7 +32,7 @@ module.exports = {
   walletFrozen: "/wallet/log", //冻结金额
   orderList: "/orders", //订单明细,打赏支付
   orderPay: "/trade/pay/order", //订单支付
-  order: "/order", //订单支付
+  order: "/orders", //订单支付
   walletDetails: "/wallet/log", //钱包明细
   updateWallet: "/wallet/user/", //更新用户钱包
   cash: "/wallet/cash", //提现
