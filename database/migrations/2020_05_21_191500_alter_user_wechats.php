@@ -17,7 +17,7 @@ class AlterUserWechats extends Migration
             $table->string('province', 100)->default('')->comment('省份')->change();
             $table->string('city', 100)->default('')->comment('城市')->change();
             $table->string('country', 100)->default('')->comment('国家')->change();
-            $table->string('privilege', 200)->default('')->comment('用户特权信息')->change();
+            $table->string('privilege', 255)->default('')->comment('用户特权信息')->change();
         });
     }
 
