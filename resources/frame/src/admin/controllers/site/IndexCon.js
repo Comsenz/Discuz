@@ -63,7 +63,7 @@ export default {
               id: 75,
               title: "水印设置",
               name: "waterMarkSet",
-              icon: "iconfujianshezhi"
+              icon: "iconwatermark"
             },
             {
               id: 5,
