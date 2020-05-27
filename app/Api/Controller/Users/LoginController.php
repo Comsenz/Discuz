@@ -76,10 +76,6 @@ class LoginController extends AbstractResourceController
                 $this->bind->wechat($token, $user);
             }
 
-            if ($mobile = Arr::get($data, 'mobile')) {
-                $this->bind->mobile($token);
-            }
-
             $this->events->dispatch(new Logind($user));
 
         }

@@ -48,7 +48,15 @@ class AddWatermarkToImage
      */
     public function __construct(ServerRequestInterface $request, SettingsRepository $settings)
     {
-        $this->data = $request->getParsedBody();
+        /**
+         * TODO: is_gallery is_sound 需要整合为 type 字段
+         *
+         * type：0 附件 1 图片 2 音频 3 视频
+         */
+        $isGallery = (bool) Arr::get($request->getParsedBody(), 'isGallery', false);
+        $type = $isGallery ? 1 : (int) Arr::get($request->getParsedBody(), 'type', 0);
+
+        $this->data = array_merge($request->getParsedBody(), ['type' => $type]);
         $this->settings = $settings;
     }
 
@@ -77,14 +85,19 @@ class AddWatermarkToImage
         // 水印开关
         $watermark = (bool) $this->settings->get('watermark', 'watermark');
 
-        // 水印图
+        // 自定义水印图
         $watermarkImage = storage_path(
-            'app/public/' . $this->settings->get('watermark_image', 'watermark', '')
+            'app/public/' . $this->settings->get('watermark_image', 'watermark')
         );
 
-        if ($watermark && file_exists($watermarkImage)) {
+        // 默认水印图
+        if (! is_file($watermarkImage)) {
+            $watermarkImage = resource_path('images/watermark.png');
+        }
+
+        if ($watermark) {
             // 水印位置
-            $position = (int) $this->settings->get('position', 'watermark');
+            $position = (int) $this->settings->get('position', 'watermark', 1);
 
             // the watermark image on x-axis of the current image.
             $x = (int) $this->settings->get('horizontal_spacing', 'watermark');

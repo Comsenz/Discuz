@@ -186,8 +186,12 @@ export default {
         method: 'post',
         splice: '/' + this.orderSn,
         data: {
-          "payment_type": type,
-          'pay_password': value
+          data: {
+            attributes: {
+              "payment_type": type,
+              'pay_password': value
+            }
+          }
         }
       }).then(res => {
         if (res.errors) {

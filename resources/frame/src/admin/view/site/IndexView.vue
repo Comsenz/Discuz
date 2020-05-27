@@ -24,7 +24,6 @@
         <span @click="quitClick">&nbsp;[退出]</span>
         <span class="site-home" ><a :href="appConfig.baseUrl" target="_blank">{{$t('admin.siteHome')}}</a></span>
       </div>
-
     </el-header>
 
     <el-container class="index-main-con">
