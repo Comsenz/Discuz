@@ -1,94 +1,102 @@
 /**
  * 后台Index
  */
-import webDb from '../../../helpers/webDbHelper'
+import webDb from "../../../helpers/webDbHelper";
 import appConfig from "../../../../../frame/config/appConfig";
 export default {
-  data:function () {
+  data: function() {
     return {
-      indexTitle:"管理中心首页",    //页面内容标题  /顶部导航下面
-      sideTitle:"首页",           //左侧菜单标题
+      indexTitle: "管理中心首页", //页面内容标题  /顶部导航下面
+      sideTitle: "首页", //左侧菜单标题
 
       /*菜单列表里的name必须和路由里面的name一致，*/
-      navList:[
+      navList: [
         {
-          id:0,
-          title:'首页',
-          name:'home',
-          submenu:[{
-            id:0,
-            title:'管理中心首页',
-            name:'controlCenter',
-            icon:'iconshouye',
-          }]
+          id: 0,
+          title: "首页",
+          name: "home",
+          submenu: [
+            {
+              id: 0,
+              title: "管理中心首页",
+              name: "controlCenter",
+              icon: "iconshouye"
+            }
+          ]
         },
         {
-          id:1,
-          title:'全局',
-          name:'global',
-          submenu:[
+          id: 1,
+          title: "全局",
+          name: "global",
+          submenu: [
             {
-              id:0,
-              title:'站点设置',
-              name:'siteSet',
-              icon:'iconzhandianshezhi'
+              id: 0,
+              title: "站点设置",
+              name: "siteSet",
+              icon: "iconzhandianshezhi"
             },
             {
-              id:1,
-              title:'注册设置',
-              name:'signUpSet',
-              icon:'iconzhuceshezhi'
+              id: 1,
+              title: "注册设置",
+              name: "signUpSet",
+              icon: "iconzhuceshezhi"
             },
             {
-              id:2,
-              title:'微信设置',
-              name:'worthMentioningSet',
-              icon:'icondisanfangdenglushezhi'
+              id: 2,
+              title: "微信设置",
+              name: "worthMentioningSet",
+              icon: "icondisanfangdenglushezhi"
             },
             {
-              id:3,
-              title:'支付设置',
-              name:'paySet',
-              icon:'iconzhifushezhi'
+              id: 3,
+              title: "支付设置",
+              name: "paySet",
+              icon: "iconzhifushezhi"
             },
             {
-              id:4,
-              title:'附件设置',
-              name:'annexSet',
-              icon:'iconfujianshezhi'
+              id: 4,
+              title: "附件设置",
+              name: "annexSet",
+              icon: "iconfujianshezhi"
             },
             {
-              id:5,
-              title:'内容过滤设置',
-              name:'contentFilteringSet',
-              icon:'iconneirongguolvshezhi'
+              id: 75,
+              title: "水印设置",
+              name: "waterMarkSet",
+              icon: "iconfujianshezhi"
             },
             {
-              id:6,
-              title:'腾讯云设置',
-              name:'tencentCloudSet',
-              icon:'icontengxunyun'
+              id: 5,
+              title: "内容过滤设置",
+              name: "contentFilteringSet",
+              icon: "iconneirongguolvshezhi"
             },
             {
-              id:7,
-              title:'通知设置',
-              name:'noticeSet',
-              icon:'icontongzhi',
-              submenu:[
+              id: 6,
+              title: "腾讯云设置",
+              name: "tencentCloudSet",
+              icon: "icontengxunyun"
+            },
+            {
+              id: 7,
+              title: "通知设置",
+              name: "noticeSet",
+              icon: "icontongzhi",
+              submenu: [
                 {
-                  id:71,
-                  title:'系统通知',
-                  name:'noticeSet',
-                  icon:'icontongzhi',
+                  id: 71,
+                  title: "系统通知",
+                  name: "noticeSet",
+                  icon: "icontongzhi"
                 },
                 {
-                  id:72,
-                  title:'微信通知',
-                  name:'noticeSet',
-                  icon:'icontongzhi',
-                },
+                  id: 72,
+                  title: "微信通知",
+                  name: "noticeSet",
+                  icon: "icontongzhi"
+                }
               ]
-            },
+            }
             // {
             //   id:7,
             //   title:'后台用户管理',
@@ -101,55 +109,55 @@ export default {
             //   name:'adminRoleManage',
             //   icon:'iconjiaoseguanli'
             // }
-            ]
+          ]
         },
         {
-          id:2,
-          title:'用户',
-          name:'user',
-          submenu:[
+          id: 2,
+          title: "用户",
+          name: "user",
+          submenu: [
             {
-              id:20,
-              title:'用户管理',
-              name:'userManage',
-              icon:'iconyonghuguanli'
+              id: 20,
+              title: "用户管理",
+              name: "userManage",
+              icon: "iconyonghuguanli"
             },
             {
-              id:21,
-              title:'用户角色',
-              name:'userRol',
-              icon:'iconjiaoseguanli'
+              id: 21,
+              title: "用户角色",
+              name: "userRol",
+              icon: "iconjiaoseguanli"
             },
             {
-              id:22,
-              title:'用户审核',
-              name:'userReview',
-              icon:'iconyonghushenhe'
+              id: 22,
+              title: "用户审核",
+              name: "userReview",
+              icon: "iconyonghushenhe"
             }
           ]
         },
         {
-          id:3,
-          title:'内容',
-          name:'cont',
-          submenu:[
+          id: 3,
+          title: "内容",
+          name: "cont",
+          submenu: [
             {
-              id:0,
-              title:'内容分类',
-              name:'contClass',
-              icon:'iconneirongfenlei'
+              id: 0,
+              title: "内容分类",
+              name: "contClass",
+              icon: "iconneirongfenlei"
             },
             {
-              id:1,
-              title:'内容管理',
-              name:'contManage',
-              icon:'iconneirongguanli',
-              submenu:[
+              id: 1,
+              title: "内容管理",
+              name: "contManage",
+              icon: "iconneirongguanli",
+              submenu: [
                 {
-                  id:11,
-                  title:'最新主题',
-                  name:'contManage',
-                  icon:'iconneirongguanli',
+                  id: 11,
+                  title: "最新主题",
+                  name: "contManage",
+                  icon: "iconneirongguanli"
                 },
                 // {
                 //   id:12,
@@ -158,403 +166,413 @@ export default {
                 //   icon:'iconneirongguanli',
                 // },
                 {
-                  id:13,
-                  title:'最新回复',
-                  name:'contManage',
-                  icon:'iconneirongguanli',
-                },
-              ]
-            },
-            {
-              id:2,
-              title:'内容审核',
-              name:'contReview',
-              icon:'iconneirongshenhe',
-              submenu:[
-                {
-                  id:21,
-                  title:'主题审核',
-                  name:'contReview',
-                  icon:'iconneirongshenhe',
-                },
-                {
-                  id:22,
-                  title:'回复审核',
-                  name:'contReview',
-                  icon:'iconneirongshenhe',
+                  id: 13,
+                  title: "最新回复",
+                  name: "contManage",
+                  icon: "iconneirongguanli"
                 }
               ]
             },
             {
-              id:3,
-              title:'回收站',
-              name:'recycleBin',
-              icon:'iconhuishouzhan',
-              submenu:[
+              id: 2,
+              title: "内容审核",
+              name: "contReview",
+              icon: "iconneirongshenhe",
+              submenu: [
                 {
-                  id:31,
-                  title:'主题',
-                  name:'recycleBin',
-                  icon:'iconhuishouzhan',
+                  id: 21,
+                  title: "主题审核",
+                  name: "contReview",
+                  icon: "iconneirongshenhe"
                 },
                 {
-                  id:32,
-                  title:'回复',
-                  name:'recycleBin',
-                  icon:'iconhuishouzhan',
+                  id: 22,
+                  title: "回复审核",
+                  name: "contReview",
+                  icon: "iconneirongshenhe"
+                }
+              ]
+            },
+            {
+              id: 3,
+              title: "回收站",
+              name: "recycleBin",
+              icon: "iconhuishouzhan",
+              submenu: [
+                {
+                  id: 31,
+                  title: "主题",
+                  name: "recycleBin",
+                  icon: "iconhuishouzhan"
+                },
+                {
+                  id: 32,
+                  title: "回复",
+                  name: "recycleBin",
+                  icon: "iconhuishouzhan"
                 }
               ]
             }
           ]
         },
         {
-          id:4,
-          title:'财务',
-          name:'finance',
-          submenu:[
+          id: 4,
+          title: "财务",
+          name: "finance",
+          submenu: [
             {
-              id:40,
-              title:'资金明细',
-              name:'fundDetails',
-              icon:'iconzijinmingxi'
+              id: 40,
+              title: "资金明细",
+              name: "fundDetails",
+              icon: "iconzijinmingxi"
             },
             {
-              id:41,
-              title:'订单记录',
-              name:'orderRecord',
-              icon:'icondingdanjilu'
+              id: 41,
+              title: "订单记录",
+              name: "orderRecord",
+              icon: "icondingdanjilu"
             },
             {
-              id:42,
-              title:'提现管理',
-              name:'withdrawMange',
-              icon:'icontixianguanli',
-              submenu:[
+              id: 42,
+              title: "提现管理",
+              name: "withdrawMange",
+              icon: "icontixianguanli",
+              submenu: [
                 {
-                  id:421,
-                  title:'提现申请',
-                  name:'withdrawMange',
-                  icon:'icontixianguanli',
+                  id: 421,
+                  title: "提现申请",
+                  name: "withdrawMange",
+                  icon: "icontixianguanli"
                 },
                 {
-                  id:422,
-                  title:'提现设置',
-                  name:'withdrawMange',
-                  icon:'icontixianguanli',
+                  id: 422,
+                  title: "提现设置",
+                  name: "withdrawMange",
+                  icon: "icontixianguanli"
                 }
               ]
             },
             {
-              id:43,
-              title:'财务统计',
-              name:'financialStatistics',
-              icon:'iconcaiwutongji',
+              id: 43,
+              title: "财务统计",
+              name: "financialStatistics",
+              icon: "iconcaiwutongji"
             }
           ]
         }
-      ],             //导航菜单列表
-      navSelect:'',              //导航选中
+      ], //导航菜单列表
+      navSelect: "", //导航选中
 
-      sideList:[],               //侧边菜单
-      sideSelect:'',             //侧边选中
+      sideList: [], //侧边菜单
+      sideSelect: "", //侧边选中
 
-      sideSubmenu:[],            //侧边栏子菜单
-      sideSubmenuSelect:'',      //侧边栏子菜单选中
+      sideSubmenu: [], //侧边栏子菜单
+      sideSubmenuSelect: "", //侧边栏子菜单选中
 
-      userName:'',               //用户名
-
-    }
+      userName: "" //用户名
+    };
   },
-  methods:{
+  methods: {
     /*
-    *  导航菜单点击事件
-    * */
-    menuClick(item){
+     *  导航菜单点击事件
+     * */
+    menuClick(item) {
       this.sideTitle = item.title;
 
       this.navSelect = item.name;
 
-      switch (item.name){
-        case 'home':
+      switch (item.name) {
+        case "home":
           this.sideList = this.navList[0].submenu;
           this.sideSelect = this.navList[0].submenu[0].name;
           this.indexTitle = this.navList[0].submenu[0].title;
-          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
-          this.$router.push({path:'/admin/home'});
+          this.sideSubmenu =
+            this.navList[0].submenu[0].submenu === undefined || null
+              ? []
+              : this.navList[0].submenu[0].submenu;
+          this.$router.push({ path: "/admin/home" });
           break;
-        case 'global':
+        case "global":
           this.sideList = this.navList[1].submenu;
           this.sideSelect = this.navList[1].submenu[0].name;
           this.indexTitle = this.navList[1].submenu[0].title;
-          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
-          this.$router.push({path:'/admin/site-set'});
+          this.sideSubmenu =
+            this.navList[0].submenu[0].submenu === undefined || null
+              ? []
+              : this.navList[0].submenu[0].submenu;
+          this.$router.push({ path: "/admin/site-set" });
           break;
-        case 'user':
+        case "user":
           this.sideList = this.navList[2].submenu;
           this.sideSelect = this.navList[2].submenu[0].name;
           this.indexTitle = this.navList[2].submenu[0].title;
-          this.sideSubmenu = this.navList[2].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
-          this.$router.push({path:'/admin/user-manage'});
+          this.sideSubmenu =
+            this.navList[2].submenu[0].submenu === undefined || null
+              ? []
+              : this.navList[0].submenu[0].submenu;
+          this.$router.push({ path: "/admin/user-manage" });
           break;
-        case 'cont':
+        case "cont":
           this.sideList = this.navList[3].submenu;
           this.sideSelect = this.navList[3].submenu[0].name;
           this.indexTitle = this.navList[3].submenu[0].title;
-          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
-          this.$router.push({path:'/admin/cont-class'});
+          this.sideSubmenu =
+            this.navList[0].submenu[0].submenu === undefined || null
+              ? []
+              : this.navList[0].submenu[0].submenu;
+          this.$router.push({ path: "/admin/cont-class" });
           break;
-        case 'finance':
+        case "finance":
           this.sideList = this.navList[4].submenu;
           this.sideSelect = this.navList[4].submenu[0].name;
           this.indexTitle = this.navList[4].submenu[0].title;
-          this.sideSubmenu = this.navList[0].submenu[0].submenu === undefined || null?[]:this.navList[0].submenu[0].submenu;
-          this.$router.push({path:'/admin/fund-details'});
+          this.sideSubmenu =
+            this.navList[0].submenu[0].submenu === undefined || null
+              ? []
+              : this.navList[0].submenu[0].submenu;
+          this.$router.push({ path: "/admin/fund-details" });
           break;
-        default :
+        default:
           this.sideList = [];
       }
-
     },
 
     /*
-    *  左侧菜单点击事件
-    * */
-    sideClick(item){
-
+     *  左侧菜单点击事件
+     * */
+    sideClick(item) {
       this.sideSelect = item.name;
       this.indexTitle = item.title;
 
       this.sideSubmenu = [];
 
-      switch (item.name){
-        case 'controlCenter':
-          this.$router.push({path:'/admin/home'});
+      switch (item.name) {
+        case "controlCenter":
+          this.$router.push({ path: "/admin/home" });
           break;
-        case 'siteSet':
-          this.$router.push({path:'/admin/site-set',query:{name:'123'}});
+        case "siteSet":
+          this.$router.push({
+            path: "/admin/site-set",
+            query: { name: "123" }
+          });
           break;
-        case 'signUpSet':
-          this.$router.push({path:'/admin/sign-up-set'});
+        case "signUpSet":
+          this.$router.push({ path: "/admin/sign-up-set" });
           break;
-        case 'worthMentioningSet':
-          this.$router.push({path:'/admin/worth-mentioning-set'});
+        case "worthMentioningSet":
+          this.$router.push({ path: "/admin/worth-mentioning-set" });
           break;
-        case 'paySet':
-          this.$router.push({path:'/admin/pay-set'});
+        case "paySet":
+          this.$router.push({ path: "/admin/pay-set" });
           break;
-        case 'annexSet':
-          this.$router.push({path:'/admin/annex-set'});
+        case "annexSet":
+          this.$router.push({ path: "/admin/annex-set" });
           break;
-        case 'contentFilteringSet':
-          this.$router.push({path:'/admin/content-filter-set'});
+        case "waterMarkSet":
+          this.$router.push({ path: "/admin/water-mark-set" });
           break;
-        case 'tencentCloudSet':
-          this.$router.push({path:'/admin/tencent-cloud-set'});
+        case "contentFilteringSet":
+          this.$router.push({ path: "/admin/content-filter-set" });
           break;
-        case 'noticeSet':
+        case "tencentCloudSet":
+          this.$router.push({ path: "/admin/tencent-cloud-set" });
+          break;
+        case "noticeSet":
           this.sideSubmenu = this.navList[1].submenu[7].submenu;
           this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
-          this.$router.push({path:'/admin/system-notice'});
+          this.$router.push({ path: "/admin/system-notice" });
           break;
-        case 'adminUserManage':
-          this.$router.push({path:'/admin/user-manage-set'});
+        case "adminUserManage":
+          this.$router.push({ path: "/admin/user-manage-set" });
           break;
-        case 'adminRoleManage':
-          this.$router.push({path:'/admin/role-manage-set'});
-          break;
-
-
-        case 'userManage':
-          this.$router.push({path:'/admin/user-manage'});
-          break;
-        case 'userRol':
-          this.$router.push({path:'/admin/user-rol'});
-          break;
-        case 'userReview':
-          this.$router.push({path:'/admin/user-review'});
+        case "adminRoleManage":
+          this.$router.push({ path: "/admin/role-manage-set" });
           break;
 
-
-
-        case 'contClass':
-          this.$router.push({path:'/admin/cont-class'});
+        case "userManage":
+          this.$router.push({ path: "/admin/user-manage" });
           break;
-        case 'contManage':
+        case "userRol":
+          this.$router.push({ path: "/admin/user-rol" });
+          break;
+        case "userReview":
+          this.$router.push({ path: "/admin/user-review" });
+          break;
+
+        case "contClass":
+          this.$router.push({ path: "/admin/cont-class" });
+          break;
+        case "contManage":
           this.sideSubmenu = this.navList[3].submenu[1].submenu;
           this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
-          this.$router.push({path:'/admin/cont-manage'});
+          this.$router.push({ path: "/admin/cont-manage" });
           break;
-        case 'contReview':
+        case "contReview":
           this.sideSubmenu = this.navList[3].submenu[2].submenu;
           this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[0].title;
-          this.$router.push({path:'/admin/cont-review'});
+          this.$router.push({ path: "/admin/cont-review" });
           break;
-        case 'recycleBin':
+        case "recycleBin":
           this.sideSubmenu = this.navList[3].submenu[3].submenu;
           this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
-          this.$router.push({path:'/admin/recycle-bin'});
+          this.$router.push({ path: "/admin/recycle-bin" });
           break;
 
-
-        case 'fundDetails':
-          this.$router.push({path:'/admin/fund-details'});
+        case "fundDetails":
+          this.$router.push({ path: "/admin/fund-details" });
           break;
-        case 'orderRecord':
-          this.$router.push({path:'/admin/order-record'});
+        case "orderRecord":
+          this.$router.push({ path: "/admin/order-record" });
           break;
-        case 'withdrawMange' :
+        case "withdrawMange":
           this.sideSubmenu = this.navList[4].submenu[2].submenu;
           this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[0].title;
-          this.$router.push({path:'/admin/withdrawal-application'});
+          this.$router.push({ path: "/admin/withdrawal-application" });
           break;
-        case 'financialStatistics':
-          this.$router.push({path:'/admin/financial-statistics'})
+        case "financialStatistics":
+          this.$router.push({ path: "/admin/financial-statistics" });
           break;
-
       }
-
     },
 
     /*
-    *  跳转到站点首页
-    * */
-    jumpIndex(){
-      let Url= '';
+     *  跳转到站点首页
+     * */
+    jumpIndex() {
+      let Url = "";
       Url = appConfig.baseUrl;
 
       this.$router.push({
-        path: '/admin'
+        path: "/admin"
       });
     },
 
     /*
-    *  左侧菜单的子菜单(位置对应：横向导航下面)点击事件
-    *  配置点击子菜单后跳转页面
-    * */
-    sideSubmenuClick(title){
+     *  左侧菜单的子菜单(位置对应：横向导航下面)点击事件
+     *  配置点击子菜单后跳转页面
+     * */
+    sideSubmenuClick(title) {
+      switch (title) {
+        case "系统通知":
+          this.sideSubmenuSelect = title;
+          this.$router.push({ path: "/admin/system-notice" });
+          break;
+        case "微信通知":
+          this.sideSubmenuSelect = title;
+          this.$router.push({ path: "/admin/wx-notice" });
+          break;
 
-      switch (title){
-        case '系统通知':
+        case "最新主题":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/system-notice'});
+          this.$router.push({ path: "/admin/cont-manage" });
           break;
-        case '微信通知':
+        case "最新回复":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/wx-notice'});
-          break;
-
-        case '最新主题':
-          this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/cont-manage'});
-          break;
-        case '最新回复':
-          this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/latest-reply'});
+          this.$router.push({ path: "/admin/latest-reply" });
           break;
         // case '搜索':
         //   this.sideSubmenuSelect = title;
         //   this.$router.push({path:'/admin/cont-manage/search'});
         //   break;
-        case '主题审核':
+        case "主题审核":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/cont-review'});
+          this.$router.push({ path: "/admin/cont-review" });
           break;
-        case '回复审核':
+        case "回复审核":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/reply-review'});
+          this.$router.push({ path: "/admin/reply-review" });
           break;
-        case '主题':
+        case "主题":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/recycle-bin'});
+          this.$router.push({ path: "/admin/recycle-bin" });
           break;
-        case '回复':
+        case "回复":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/recycle-bin-reply'});
+          this.$router.push({ path: "/admin/recycle-bin-reply" });
           break;
-        case '提现申请':
+        case "提现申请":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/withdrawal-application'});
+          this.$router.push({ path: "/admin/withdrawal-application" });
           break;
-        case '提现设置':
+        case "提现设置":
           this.sideSubmenuSelect = title;
-          this.$router.push({path:'/admin/withdrawal-setting'});
+          this.$router.push({ path: "/admin/withdrawal-setting" });
           break;
         default:
           this.$message.error("没有当前页面，跳转404页面");
           // this.$router.push({path:'/admin/home'});
           console.log("没有当前页面，跳转404页面");
       }
-
     },
 
     /*
-    *  配置页面刷新后菜单保持选中
-    * */
-    setDataStatus(){
+     *  配置页面刷新后菜单保持选中
+     * */
+    setDataStatus() {
       //设置页面刷新前状态，通过路由获取
 
-      let attribution = this.$router.history.current.meta.attribution;  //导航名字
-      let name = this.$router.history.current.meta.name;  //子菜单唯一标识符
-      let title = this.$router.history.current.meta.title;  //子菜单名字
+      let attribution = this.$router.history.current.meta.attribution; //导航名字
+      let name = this.$router.history.current.meta.name; //子菜单唯一标识符
+      let title = this.$router.history.current.meta.title; //子菜单名字
 
-      switch (attribution){
-        case '首页':
+      switch (attribution) {
+        case "首页":
           this.navSelect = this.navList[0].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
           this.sideList = this.navList[0].submenu;
           break;
-        case '全局':
+        case "全局":
           this.navSelect = this.navList[1].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
           this.sideList = this.navList[1].submenu;
           break;
-        case '用户':
+        case "用户":
           this.navSelect = this.navList[2].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
           this.sideList = this.navList[2].submenu;
           break;
-        case '内容':
+        case "内容":
           this.navSelect = this.navList[3].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
           this.sideList = this.navList[3].submenu;
           break;
-        case '财务':
+        case "财务":
           this.navSelect = this.navList[4].name;
           this.indexTitle = title;
           this.sideTitle = attribution;
           this.sideSelect = name;
           this.sideList = this.navList[4].submenu;
           break;
-        default :
+        default:
           console.log("获取菜单出错");
           this.$message.error("获取菜单出错");
       }
 
       /*
-      * 获取子菜单别名，对应位置导航下子菜单，刷新后设置子菜单选中状态
-      * */
+       * 获取子菜单别名，对应位置导航下子菜单，刷新后设置子菜单选中状态
+       * */
       let sideSubmenu = this.$router.history.current.meta.alias;
 
-      if (sideSubmenu){
-        switch (sideSubmenu){
-          case '系统通知':
+      if (sideSubmenu) {
+        switch (sideSubmenu) {
+          case "系统通知":
             this.sideSubmenu = this.navList[1].submenu[7].submenu;
             this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
             break;
-          case '微信通知':
+          case "微信通知":
             this.sideSubmenu = this.navList[1].submenu[7].submenu;
             this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[1].title;
             break;
 
-          case '最新主题':
+          case "最新主题":
             this.sideSubmenu = this.navList[3].submenu[1].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
             break;
@@ -578,15 +596,15 @@ export default {
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
             break;
-          case '回复':
+          case "回复":
             this.sideSubmenu = this.navList[3].submenu[3].submenu;
             this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
             break;
-          case '提现申请':
+          case "提现申请":
             this.sideSubmenu = this.navList[4].submenu[2].submenu;
             this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[0].title;
             break;
-          case '提现设置':
+          case "提现设置":
             this.sideSubmenu = this.navList[4].submenu[2].submenu;
             this.sideSubmenuSelect = this.navList[4].submenu[2].submenu[1].title;
             break;
@@ -597,23 +615,20 @@ export default {
             this.$message.error("当下没有侧边栏子菜单");
         }
       }
-
     },
 
-    quitClick(){
+    quitClick() {
       localStorage.clear();
-      this.$router.push({path:'/admin/login'});
+      this.$router.push({ path: "/admin/login" });
     }
-
   },
-  created(){
+  created() {
     this.setDataStatus();
-    this.userName = webDb.getLItem('username');
+    this.userName = webDb.getLItem("username");
   },
   watch: {
-    $route () {
+    $route() {
       this.setDataStatus();
     }
   }
-
-}
+};

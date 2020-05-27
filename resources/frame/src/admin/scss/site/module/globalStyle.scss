@@ -7,73 +7,70 @@
 @import "../common/index";
 @import "../../../../../static/css/admin/discuzQfont.css";
 
-
 /**
   公共样式
  */
-.marT15 { margin-top: 15PX}
+.marT15 {
+  margin-top: 15PX;
+}
 /*表格图标和内容*/
-.iconfont.table-icon{
-  font-size: 40PX ;
+.iconfont.table-icon {
+  font-size: 40PX;
   vertical-align: middle;
   margin-right: 10PX;
 }
-.pay-set-type-box{
+.pay-set-type-box {
   display: flex;
   align-items: center;
-  .table-con-box{
+  .table-con-box {
     //width:calc(100% - 55PX);
     display: inline-block;
     vertical-align: middle;
-    p{
-      font-size:12PX;
-      font-weight:500;
-      color:rgba(144,147,153,1);
-      line-height:14PX;
+    p {
+      font-size: 12PX;
+      font-weight: 500;
+      color: rgba(144, 147, 153, 1);
+      line-height: 14PX;
     }
-    p:first-of-type{
-      font-size:14PX;
-      font-weight:600;
-      color:$titleColor;
-      line-height:20PX;
+    p:first-of-type {
+      font-size: 14PX;
+      font-weight: 600;
+      color: $titleColor;
+      line-height: 20PX;
     }
-    p:last-of-type{
+    p:last-of-type {
       margin-top: 7PX;
     }
   }
 }
 
-
-.icon-add{
+.icon-add {
   font-size: 15.5PX !important;
 }
-
-
 
 /**
   home页面样式
  */
-.home-box{
-
-  .home-card-box{
-    .section{
-      color:$titleColor;
-      line-height:20PX;
-      &:not(:last-child){
+.home-box {
+  .home-card-box {
+    .section {
+      color: $titleColor;
+      line-height: 20PX;
+      &:not(:last-child) {
         margin-bottom: 20PX;
       }
-      span{
+      span {
         margin-right: 20PX;
       }
     }
-    .pending-p{
+    .pending-p {
       display: inline-block;
       margin-right: 20PX;
     }
   }
 
-  .home-card__footer{
-    a{
+  .home-card__footer {
+    a {
       margin-right: 20PX;
       color: $main;
       //font-size: $contFontSize;
@@ -81,12 +78,10 @@
   }
 }
 
-
 /**
   站点信息
  */
-.site-set-box{
-
+.site-set-box {
   /*.site-set__logo{
     i{
       height: 15PX;
@@ -123,107 +118,122 @@
     display: block;
     position: relative;
   }
-  .avatar-LogoImage{
+  .avatar-LogoImage {
     position: absolute;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin: auto;
   }
-  .el-button--text{
+  .el-button--text {
     padding-bottom: 0;
   }
 
-  .proportion-box{
+  .proportion-box {
     width: 45%;
     display: inline-block;
-    span{
+    span {
       height: 20PX;
       display: inline-block;
       white-space: pre-wrap;
-      margin-right: 20PX;
+      margin-right: 10PX;
     }
 
-    .el-input{
+    .el-input {
       width: 120PX;
       height: 36PX;
+    }
+    .marL10 {
+      margin-left: 10PX;
     }
 
     margin-right: 5PX;
   }
-
 }
 
-.card-radio-con .card-row-lf{
+.card-radio-con .card-row-lf {
   padding-top: 8PX;
   line-height: 20PX;
 }
 
-
 /**
   注册设置
  */
-.sign-up-set-box{
-
+.sign-up-set-box {
 }
-
 
 /**
   附件设置
  */
-.annex-set-box{
-
+.annex-set-box {
 }
 
+/**
+  水印设置
+ */
+.posi-list {
+  overflow: hidden;
+  width: 370PX;
+  .posi-child {
+    float: left;
+    width: 100PX;
+    height: 48PX;
+    margin: 0 20PX 20PX 0;
+    font-size: 14PX;
+    color: #979ca9;
+    line-height: 46PX;
+    text-align: center;
+    border: 1PX solid #dcdfe6;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .posiactive {
+    color: $main;
+    background: #f2faff;
+    border: 1PX solid $main;
+  }
+}
 
 /**
   第三方登录设置
  */
-.worth-mention-box{
-
-  .worth-mention__default{
+.worth-mention-box {
+  .worth-mention__default {
     padding-top: 15PX;
   }
-
 }
-
 
 /*
   第三方登录设置配置
 */
-.worth-mentioning-config-h5-box{
-  .random-btn{
+.worth-mentioning-config-h5-box {
+  .random-btn {
     color: $main !important;
     cursor: pointer;
   }
 }
 
-
 /**
   内容过滤设置
  */
-.content-filter-set-box{
-
-  .content-filter-set__search{
-
-    .el-cascader__search-input{
+.content-filter-set-box {
+  .content-filter-set__search {
+    .el-cascader__search-input {
       width: 60%;
       max-width: 440PX;
       margin: 0 14PX 0 0;
     }
-    &-button{
+    &-button {
       width: 20%;
       max-width: 68PX;
     }
-
   }
 
-  .content-filter-set-main{
-
-    .list-set-box{
+  .content-filter-set-main {
+    .list-set-box {
       margin: 15PX 0;
-      span{
+      span {
         color: $main;
         margin-right: 40PX;
         cursor: pointer;
@@ -245,7 +255,6 @@
         //font-weight:400;
       }
     }*/
-
   }
 
   /*.batch-set-box{
@@ -271,77 +280,68 @@
     }
 
   }*/
-
 }
 
 /*
   批量添加本地敏感词
 */
-.add-sensitive-words-box{
-
-  .el-radio-group{
+.add-sensitive-words-box {
+  .el-radio-group {
     margin-top: 15PX;
 
-    div:last-of-type{
+    div:last-of-type {
       margin-top: 22PX;
     }
-
   }
 
-  h2{
-    font-size:18PX;
-    color:$titleColor;
-    line-height:25PX;
+  h2 {
+    font-size: 18PX;
+    color: $titleColor;
+    line-height: 25PX;
     margin-bottom: 11PX;
   }
-  p{
-    color:$commentColor;
-    line-height:28PX;
+  p {
+    color: $commentColor;
+    line-height: 28PX;
   }
 }
-
-
 
 /**
   支付设置
  */
-.pay-set-box{
-
-  .pay-set__default{
+.pay-set-box {
+  .pay-set__default {
     margin-top: 15PX;
   }
 }
 
-
 /**
   用户管理
  */
-.user-manage-set-box{
+.user-manage-set-box {
   margin-top: 15PX;
 
-  .user-manage-set-table-add{
+  .user-manage-set-table-add {
     width: 100%;
     height: 45PX;
-    border-bottom: 1PX solid #EBEEF5;
+    border-bottom: 1PX solid #ebeef5;
     line-height: 45PX;
     display: flex;
     align-items: center;
-    p{
+    p {
       margin-left: 65PX;
       color: $main;
-      span{
+      span {
         cursor: pointer;
       }
     }
   }
-
 }
-
 
 /**
   角色管理
  */
-.role-manage-set-box{
+.role-manage-set-box {
   margin-top: 15PX;
 
   /*.role-manage-set-table-add{
@@ -392,32 +392,29 @@
       }
     }
   }*/
-
 }
-
 
 /*
   角色管理-权限编辑
 */
-.role-editing-box{
-
-  .card-box{
+.role-editing-box {
+  .card-box {
     border-bottom: 0;
   }
 
-  .role-table{
+  .role-table {
     width: 100%;
-    tr{
+    tr {
       width: 100%;
-      border-bottom: 1PX solid #EBEEF5;
+      border-bottom: 1PX solid #ebeef5;
 
-      th{
-        background-color: #FAFAFA;
+      th {
+        background-color: #fafafa;
         padding: 15PX 14PX 15PX 17PX;
         line-height: 23PX;
       }
 
-      td{
+      td {
         vertical-align: middle;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
