@@ -1,19 +1,19 @@
 /*
-* 验证身份管理器
-* */
+ * 验证身份管理器
+ * */
 
-import verifyPayPwdHeader from '../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader';
-import webDb from '../../../../../../helpers/webDbHelper';
+import verifyPayPwdHeader from "../../../../view/m_site/common/loginSignUpHeader/loginSignUpHeader";
+import webDb from "../../../../../../helpers/webDbHelper";
 
 export default {
-  data: function () {
+  data: function() {
     return {
-      value: '',
+      value: "",
       showKeyboard: true,
       pwdShow: true,
-      modifyPhone: '',        //是否绑定手机号
-      loading: false,         //验证状态
-    }
+      modifyPhone: "", //是否绑定手机号
+      loading: false //验证状态
+    };
   },
   methods: {
     onInput(key) {
@@ -26,42 +26,48 @@ export default {
       this.value = this.value.slice(0, this.value.length - 1);
     },
 
-
     /*
-    * 接口请求
-    * */
+     * 接口请求
+     * */
     setPwd() {
       this.loading = true;
       this.appFetch({
         url: "verifyPayPwd",
         method: "post",
         data: {
-          "pay_password": this.value
-        }
-      }).then(res => {
-        this.loading = false;
-        if (res.errors) {
-          this.value = '';
-          if (res.errors[0].detail) {
-            this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
-          } else {
-            this.$toast.fail(res.errors[0].code);
+          data: {
+            attributes: {
+              pay_password: this.value
+            }
           }
-        } else {
-          webDb.setLItem('payPwdToken', res.token);
-          this.$router.replace({ path: "/setup-pay-pwd" })
         }
-      }).catch(err => {
-        console.log(err);
       })
+        .then(res => {
+          this.loading = false;
+          if (res.errors) {
+            this.value = "";
+            if (res.errors[0].detail) {
+              this.$toast.fail(
+                res.errors[0].code + "\n" + res.errors[0].detail[0]
+              );
+            } else {
+              this.$toast.fail(res.errors[0].code);
+            }
+          } else {
+            webDb.setLItem("payPwdToken", res.token);
+            this.$router.replace({ path: "/setup-pay-pwd" });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
-
   },
   created() {
-    this.pwdShow = webDb.getLItem('siteInfo')._data.qcloud.qcloud_sms;
+    this.pwdShow = webDb.getLItem("siteInfo")._data.qcloud.qcloud_sms;
     this.modifyPhone = this.$route.query.modifyPhone;
   },
   components: {
     verifyPayPwdHeader
-  },
-}
+  }
+};

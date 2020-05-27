@@ -16,6 +16,7 @@ use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\MessageTemplate\Wechat\WechatPostThroughMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Post;
+use App\Models\Thread;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
@@ -77,7 +78,7 @@ trait PostNoticesTrait
                 // 发送微信通知
                 $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
                     'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                    'subject' => $post->thread->post->getSummaryContent(Post::NOTICE_LENGTH)['first_content'],
+                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $post->user->username    // 发送人姓名
                     ]),
