@@ -51,7 +51,6 @@ class ResourceAttachmentController implements RequestHandlerInterface
      * @return ResponseInterface
      * @throws OrderException
      * @throws PermissionDeniedException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

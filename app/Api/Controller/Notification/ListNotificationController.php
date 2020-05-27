@@ -100,7 +100,7 @@ class ListNotificationController extends AbstractListController
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {
-                return $query->where('type', $type);
+                return $query->whereIn('type', explode(',', $type));
             });
         $query->orderBy('created_at', 'desc');
 

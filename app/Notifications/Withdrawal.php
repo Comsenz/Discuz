@@ -9,40 +9,37 @@ namespace App\Notifications;
 
 use App\Models\Order;
 use App\Models\Thread;
+use App\Models\UserWalletCash;
 use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
- * 支付通知
- * (包含: 打赏帖子/支付付费贴)
+ * 提现通知
  *
- * Class Rewarded
+ * Class Withdrawal
  * @package App\Notifications
  */
-class Rewarded extends System
+class Withdrawal extends System
 {
     use Queueable;
 
-    public $order;
-
-    public $actor;
+    public $cash;
 
     public $channel;
 
     /**
-     * Rewarded constructor.
+     * Withdrawal constructor.
      *
-     * @param Order $order
-     * @param $actor
+     * @param UserWalletCash $cash
      * @param string $messageClass
      * @param array $build
      */
-    public function __construct(Order $order, $actor, $messageClass = '', $build = [])
+    public function __construct(UserWalletCash $cash, $messageClass = '', $build = [])
     {
         $this->setChannelName($messageClass);
 
-        $this->order = $order;
-        $this->actor = $actor;
+        $this->cash = $cash;
 
         parent::__construct($messageClass, $build);
     }
@@ -55,8 +52,9 @@ class Rewarded extends System
      */
     public function toDatabase($notifiable)
     {
+        dd($this->cash);
         $build = [
-            'user_id' => $this->order->user->id,  // 付款人ID
+            'user_id' => $this->order->user->id,  // 提现人ID
             'order_id' => $this->order->id,
             'thread_id' => $this->order->thread->id,   // 必传
             'thread_username' => $this->order->thread->user->username, // 必传主题用户名
