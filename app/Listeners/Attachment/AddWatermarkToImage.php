@@ -77,14 +77,19 @@ class AddWatermarkToImage
         // 水印开关
         $watermark = (bool) $this->settings->get('watermark', 'watermark');
 
-        // 水印图
+        // 自定义水印图
         $watermarkImage = storage_path(
-            'app/public/' . $this->settings->get('watermark_image', 'watermark', '')
+            'app/public/' . $this->settings->get('watermark_image', 'watermark')
         );
 
-        if ($watermark && file_exists($watermarkImage)) {
+        // 默认水印图
+        if (! file_exists($watermarkImage)) {
+            $watermarkImage = resource_path('images/watermark.png');
+        }
+
+        if ($watermark) {
             // 水印位置
-            $position = (int) $this->settings->get('position', 'watermark');
+            $position = (int) $this->settings->get('position', 'watermark', 1);
 
             // the watermark image on x-axis of the current image.
             $x = (int) $this->settings->get('horizontal_spacing', 'watermark');

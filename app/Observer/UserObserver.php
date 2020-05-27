@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\Observer;
-
 
 use App\Exceptions\TranslatorException;
 use App\Models\User;
@@ -10,7 +13,6 @@ use Discuz\Contracts\Setting\SettingsRepository;
 
 class UserObserver
 {
-
     protected $settings;
 
     public function __construct(SettingsRepository $settings)
@@ -34,10 +36,10 @@ class UserObserver
      * @param User $user
      * @throws TranslatorException
      */
-    public function deleting(User $user) {
+    public function deleting(User $user)
+    {
         if ($user->isAdmin()) {
             throw new TranslatorException('user_delete_group_error');
         }
     }
 }
-
