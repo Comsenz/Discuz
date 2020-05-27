@@ -207,7 +207,7 @@ class ForumSettingField
         return [
             'watermark' => (bool) $this->settings->get('watermark', 'watermark'),
             'watermark_image' => $this->settings->get('watermark_image', 'watermark', ''),
-            'position' => (int) $this->settings->get('position', 'watermark'),
+            'position' => (int) $this->settings->get('position', 'watermark', 1),
             'horizontal_spacing' => (int) $this->settings->get('horizontal_spacing', 'watermark'),
             'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
         ];
