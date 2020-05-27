@@ -75,10 +75,11 @@ export default {
           if(this.imageUrl != '' && this.imageUrl != null){
             this.deleBtn = true;
           }
-          // this.waterMarkPosi = data.readdata._data.watermark.position;
           if( res.readdata._data.watermark.position != '' && res.readdata._data.watermark.position != null && res.readdata._data.watermark.position != 0 ){
             this.posiCurrent = res.readdata._data.watermark.position - 1;
+            this.waterMarkPosi = res.readdata._data.watermark.position;
           }
+          
           this.verticalSpacing = res.readdata._data.watermark.vertical_spacing;
           this.verticalSpacing = res.readdata._data.watermark.horizontal_spacing;
         }
