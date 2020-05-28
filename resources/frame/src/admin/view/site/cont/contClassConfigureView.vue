@@ -17,26 +17,22 @@
                        @change="handleCheckAllChange(scope)"></el-checkbox>
         </el-table-column>
 
-        <el-table-column label="用户角色"
-                         min-width="150">
+        <el-table-column label="用户角色">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
 
-        <el-table-column label="浏览分类"
-                         width="250">
+        <el-table-column label="浏览分类">
           <el-checkbox slot-scope="scope"
                        v-model="scope.row.viewThreads"></el-checkbox>
         </el-table-column>
 
-        <el-table-column label="发表内容"
-                         min-width="150">
+        <el-table-column label="发表内容">
           <el-checkbox slot-scope="scope"
                        v-model="scope.row.createThread"
                        :disabled="!scope.row.viewThreads"></el-checkbox>
         </el-table-column>
 
-        <el-table-column label="发表评论"
-                         width="200">
+        <el-table-column label="发表评论">
           <el-checkbox slot-scope="scope"
                        v-model="scope.row.replyThread"
                        :disabled="!scope.row.viewThreads"></el-checkbox>
