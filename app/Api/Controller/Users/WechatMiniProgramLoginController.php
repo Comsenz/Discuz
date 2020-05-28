@@ -90,7 +90,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 Arr::get($attributes, 'iv'),
                 Arr::get($attributes, 'encryptedData')
             );
-
+            $wechatUser->min_openid = Arr::get($authSession, 'openid');
             $wechatUser->nickname = $decryptedData['nickName'];
             $wechatUser->city = $decryptedData['city'];
             $wechatUser->province = $decryptedData['province'];
@@ -101,11 +101,6 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
-            if (!$wechatUser->min_openid) {
-                //绑定之前unionid绑定的公众号账号
-                $wechatUser->min_openid = Arr::get($authSession, 'openid');
-            }
-
             $user = $wechatUser->user;
         } else {
             //未绑定的用户注册
