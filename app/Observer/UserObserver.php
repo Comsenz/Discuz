@@ -57,7 +57,7 @@ class UserObserver
         $img = $user->id . '.png';
 
         // 判断是否是 Cos 地址（如果是 Cos 就删除本地文件，否则删除 Local 文件）
-        if (strpos($user->avatar, '://') === false) {
+        if (strpos($user->avatar, '://') === true) {
             $cosPath = 'public/avatar/' . $img;
             $this->app->make(Factory::class)->disk('avatar_cos')->delete($cosPath);
         } else {
