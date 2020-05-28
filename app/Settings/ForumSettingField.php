@@ -204,10 +204,14 @@ class ForumSettingField
      */
     public function getWatermarkSettings()
     {
+        $watermarkImage = $this->settings->get('watermark_image', 'watermark');
+
+        $watermarkImageUrl = $watermarkImage ? $this->url->to('/storage/' . $watermarkImage) : '';
+
         return [
             'watermark' => (bool) $this->settings->get('watermark', 'watermark'),
-            'watermark_image' => $this->settings->get('watermark_image', 'watermark', ''),
-            'position' => (int) $this->settings->get('position', 'watermark'),
+            'watermark_image' => $watermarkImageUrl,
+            'position' => (int) $this->settings->get('position', 'watermark', 1),
             'horizontal_spacing' => (int) $this->settings->get('horizontal_spacing', 'watermark'),
             'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
         ];

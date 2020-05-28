@@ -8,9 +8,6 @@ export default {
       radio:'1',
       radio2:'2',
       // fileList:[],
-      imageUrl: '',
-      imgWidht: 0,
-      imgHeight: 0,
       loading: true,
       fullscreenLoading: false,
       siteName:'',
@@ -31,6 +28,26 @@ export default {
       dialogVisible: false,
       fileList:[],
       deleBtn: false,
+      numberimg:[
+        {
+          imageUrl: '',
+          imgWidht: 0,
+          imgHeight: 0,
+          test:'站点LOGO',
+        },
+        {
+          imageUrl: '',
+          imgWidht: 0,
+          imgHeight: 0,
+          test:'首页头部LOGO',
+        },
+        {
+          imageUrl: '',
+          imgWidht: 0,
+          imgHeight: 0,
+          test:'首页头部背景',
+        }
+      ]
     }
   },
 
@@ -55,7 +72,7 @@ export default {
   //     }
   //   },
   // },
-
+  
   methods:{
     loadStatus(){
       //初始化设置
@@ -65,19 +82,27 @@ export default {
         data:{
         }
       }).then(data=>{
+        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
           this.siteName = data.readdata._data.set_site.site_name;
           this.siteIntroduction = data.readdata._data.set_site.site_introduction;
           this.siteMode = data.readdata._data.set_site.site_mode;
-          this.imageUrl = data.readdata._data.set_site.site_logo;
-          if(this.imageUrl != '' && this.imageUrl != null){
-            this.deleBtn = true;
-          }
-          this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
-            this.imgWidht = res.width;
-            this.imgHeight = res.height;
+          this.numberimg[0].imageUrl = data.readdata._data.set_site.site_logo;
+          this.numberimg[1].imageUrl = data.readdata._data.set_site.site_index_cover;
+          this.numberimg[2].imageUrl = data.readdata._data.set_site.site_index_logo;
+          this.getScaleImgSize(this.numberimg[0].imageUrl,{width: 140, height: 140}).then((res)=>{
+            this.numberimg[0].imgWidht = res.width;
+            this.numberimg[0].imgHeight = res.height;
+          })
+          this.getScaleImgSize(this.numberimg[1].imageUrl,{width: 140, height: 140}).then((res)=>{
+            this.numberimg[1].imgWidht = res.width;
+            this.numberimg[1].imgHeight = res.height;
+          })
+          this.getScaleImgSize(this.numberimg[2].imageUrl,{width: 140, height: 140}).then((res)=>{
+            this.numberimg[2].imgWidht = res.width;
+            this.numberimg[2].imgHeight = res.height;
           })
           if (this.siteMode == 'pay') {
             this.radio = '2';
@@ -109,24 +134,30 @@ export default {
       })
     },
     //删除已上传logo
-    deleteImage(file, fileList) {
-      if(this.deleBtn == false){
-        return
+    deleteImage(file,index, fileList) {
+      console.log(file,index);
+      let logo = '';
+      switch(index){
+        case 0: logo = 'logo';
+        break;
+        case 1: logo = 'header_logo';
+        break;
+        case 2: logo = 'background_image';
       }
       let logoFormData = new FormData()
-      logoFormData.append('logo', file.raw);
+      logoFormData.append(logo, file.raw);
       // this.uploaderLogo(logoFormData);
-      this.imageUrl = '';
+      this.numberimg[index].imageUrl = '';
       this.appFetch({
         url:'logo',
         method:'delete',
         data:logoFormData,
       }).then(data=>{
+        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
         }else {
           this.$message('删除成功');
-          this.deleBtn = false;
         }
       }).catch(error=>{
       })
@@ -200,25 +231,37 @@ export default {
       this.multfileImg = file
       return isJPG && isLt2M
     },
-    uploaderLogo(e) {
+    // 上传图片
+    uploaderLogo(e,index) {
+      console.log(e,index);
+      let logo = '';
+      switch(index){
+        case 0: logo = 'logo';
+        break;
+        case 1: logo = 'header_logo';
+        break;
+        case 2: logo = 'background_image';
+      }
+      console.log(logo);
       let logoFormData = new FormData()
-      logoFormData.append('logo', e.file);
+      logoFormData.append(logo, e.file);
       // this.uploaderLogo(logoFormData);
       this.appFetch({
         url:'logo',
         method:'post',
         data:logoFormData,
       }).then(data=>{
+        console.log(data);
         if (data.errors){
           this.$message.error(data.errors[0].code);
-        }else {
-          this.imageUrl = data.readdata._data.default.logo;
-          this.getScaleImgSize(this.imageUrl,{width: 120, height: 120}).then((res)=>{
-            this.imgWidht = res.width;
-            this.imgHeight = res.height;
-          })
+        } else {
+            this.numberimg[index].imageUrl = data.readdata._data.default.logo;
+            this.getScaleImgSize(this.numberimg[index].imageUrl,{width: 120, height: 120}).then((res)=>{
+              this.numberimg[index].imgWidht = res.width;
+              this.numberimg[index].imgHeight = res.height;
+              console.log(this.numberimg[index].imgHeight);
+            })
           this.$message({message: '上传成功', type: 'success'});
-          this.deleBtn = true;
         }
       }).catch(error=>{
       })

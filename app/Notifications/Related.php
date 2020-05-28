@@ -43,7 +43,6 @@ class Related extends System
      * @param $actor
      * @param string $messageClass
      * @param array $build
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Post $post, $actor, $messageClass = '', $build = [])
     {
@@ -58,7 +57,6 @@ class Related extends System
     /**
      * @param $notifiable
      * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function toDatabase($notifiable)
     {
@@ -81,7 +79,6 @@ class Related extends System
 
     /**
      * @param & $build
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function build(&$build)
     {

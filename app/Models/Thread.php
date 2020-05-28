@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 
 /**
  * @property int $id
@@ -142,8 +144,7 @@ class Thread extends Model
      * 根据类型获取 Thread content
      *
      * @param int $substr
-     * @return \Illuminate\Support\Stringable|string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @return Stringable|string
      */
     public function getContentByType($substr = 0)
     {

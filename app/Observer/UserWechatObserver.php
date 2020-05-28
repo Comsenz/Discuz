@@ -39,7 +39,14 @@ class UserWechatObserver
 
     /**
      * @param UserWechat $userWechat
-     * @throws TranslatorException
+     */
+    public function created(UserWechat $userWechat)
+    {
+        $this->avatarSync($userWechat);
+    }
+
+    /**
+     * @param UserWechat $userWechat
      */
     public function updated(UserWechat $userWechat)
     {
@@ -50,7 +57,6 @@ class UserWechatObserver
      * 同步微信头像
      *
      * @param UserWechat $userWechat
-     * @throws TranslatorException
      */
     public function avatarSync($userWechat)
     {
@@ -70,7 +76,7 @@ class UserWechatObserver
         $response = (new Client())->request('get', $userWechat->headimgurl);
 
         if ($response->getStatusCode() != 200) {
-            throw new TranslatorException('user_avatar_update_sync_fail');
+            return;
         }
 
         // 微信头像二进制内容

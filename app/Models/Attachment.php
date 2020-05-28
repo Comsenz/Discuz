@@ -67,7 +67,7 @@ class Attachment extends Model
      *
      * @var array
      */
-    public static $type = [
+    public static $allowTypes = [
         'file',
         'img',
         'audio',

@@ -36,7 +36,6 @@ class SaveLikesToDatabase
      * @param Saving $event
      * @throws NotAuthenticatedException
      * @throws PermissionDeniedException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function whenPostIsSaving(Saving $event)
     {

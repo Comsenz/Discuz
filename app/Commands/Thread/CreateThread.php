@@ -81,43 +81,56 @@ class CreateThread
         // Check Permissions
         $this->assertCan($this->actor, 'createThread');
         $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
-        if ($thread->type == 1) {
+        if ($thread->type === Thread::TYPE_OF_LONG) {
             $this->assertCan($this->actor, 'createThreadLong');
 
             // 是否有权发布音频
             if (Arr::get($this->data, 'attributes.file_id', '')) {
                 $this->assertCan($this->actor, 'createAudio');
             }
-        } elseif ($thread->type == 2) {
+        } elseif ($thread->type === Thread::TYPE_OF_VIDEO) {
             $this->assertCan($this->actor, 'createThreadVideo');
-        } elseif ($thread->type == 3) {
+        } elseif ($thread->type === Thread::TYPE_OF_IMAGE) {
             $this->assertCan($this->actor, 'createThreadImage');
         }
 
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
+
+        // 视频帖、图片帖不传内容是设置默认内容
+        if (! $content) {
+            switch ($thread->type) {
+                case Thread::TYPE_OF_VIDEO:
+                    $content = '分享视频';
+                    break;
+                case Thread::TYPE_OF_IMAGE:
+                    $content = '分享图片';
+                    break;
+            }
+        }
+
         Arr::set($this->data, 'attributes.content', $content);
 
         // 存在审核敏感词/发布视频主题时，将主题放入待审核
-        if ($censor->isMod || $thread->type == 2) {
-            $thread->is_approved = 0;
+        if ($censor->isMod || $thread->type == Thread::TYPE_OF_VIDEO) {
+            $thread->is_approved = Thread::UNAPPROVED;
         }
 
         $thread->user_id = $this->actor->id;
         $thread->created_at = Carbon::now();
 
         // 长文帖需要设置标题
-        if ($thread->type == 1) {
+        if ($thread->type === Thread::TYPE_OF_LONG) {
             $thread->title = $title;
         }
 
         // 非文字贴可设置价格
-        if ($thread->type != 0) {
+        if ($thread->type !== Thread::TYPE_OF_TEXT) {
             $thread->price = (float) Arr::get($this->data, 'attributes.price', 0);
 
             // 付费长文帖可设置免费阅读字数
-            if ($thread->type == 1 && $thread->price) {
+            if ($thread->type === Thread::TYPE_OF_LONG && $thread->price) {
                 $thread->free_words = (int) Arr::get($this->data, 'attributes.free_words', 0);
             }
         }
@@ -155,7 +168,7 @@ class CreateThread
         }
 
         // 记录触发的审核词
-        if ($thread->is_approved == 0 && $censor->wordMod) {
+        if ($thread->is_approved === Thread::UNAPPROVED && $censor->wordMod) {
             $stopWords = new PostMod;
             $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 

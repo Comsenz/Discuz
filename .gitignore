@@ -3,8 +3,6 @@
 /composer.lock
 /.idea
 /config/config.php
-.project
-.settings
 /node_modules
 .php_cs.cache
 /public/static
@@ -15,4 +13,3 @@
 /public/api-docs
 /public/manual-h5
 /public/manual-admin
-/app/Console/Commands/Upgrades/*

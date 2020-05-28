@@ -211,7 +211,6 @@ class Post extends Model
      *
      * @param int $substr
      * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function getSummaryContent($substr = 0)
     {

@@ -23,6 +23,32 @@
         <el-input v-model="screenshot" clearable></el-input>
       </CardRow>
     </Card>
+
+    <Card header="动图封面任务流名称：">
+      <CardRow
+        description="请填写腾讯云账户 - 云点播 - 视频处理设置 - 任务流设置中的任务流名称。如果创建新任
+务流，必须勾选“转动图”，选择合适的转动图gif模板并设置合适的时间段。如果填写了动图
+模板名称，则“截图模板”设置失效。"
+      >
+        <el-input v-model="vodTaskflowGif" clearable></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="云点播防盗链 Key：">
+      <CardRow description="请填写腾讯云账户 - 云点播 - 分发播放设置 - 域名管理 - 设置中的Key 防盗链。">
+        <el-input v-model="vodUrlKey" clearable></el-input>
+      </CardRow>
+    </Card>
+
+    <Card header="云点播防盗链签名有效期：">
+      <CardRow
+        description="单位秒。过期后该 URL 将不再有效，返回 403 响应码。考虑到机器之间可能存在时间差，
+防盗链 URL 的实际过期时间一般比指定的过期时间长 5 分钟，即额外给出 300 秒的容差
+时间。建议过期时间戳不要过短，确保视频有足够时间完整播放。"
+      >
+        <el-input v-model="vodUrlExpire" clearable></el-input>
+      </CardRow>
+    </Card>
     <Card header="支持的视频扩展名:">
       <CardRow description="多个请用,隔开，例如 wmv,rm,mov,mpeg,mp4,3gp,flv,avi,rmvb">
         <el-input v-model="vodExt" clearable></el-input>

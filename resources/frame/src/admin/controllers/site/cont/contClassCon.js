@@ -102,6 +102,12 @@ export default {
       this.visible = false;
     },
 
+    // 权限设置跳转页面
+    permission(id) {
+      this.$router.push({path:'/admin/cont-class-configure',query: {id:id}})
+      // this.$router.push({path:'/admin/contclass-configure',query: {id:id}});
+    },
+
     /*
     * 接口请求
     * */

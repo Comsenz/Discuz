@@ -54,7 +54,6 @@ class UserListener
 
     /**
      * @param ChangeUserStatus $event
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function notifications(ChangeUserStatus $event)
     {

@@ -26,7 +26,15 @@ class LocalImageHandler
      */
     public function __construct(ServerRequestInterface $request)
     {
-        $this->data = $request->getParsedBody();
+        /**
+         * TODO: is_gallery is_sound 需要整合为 type 字段
+         *
+         * type：0 附件 1 图片 2 音频 3 视频
+         */
+        $isGallery = (bool) Arr::get($request->getParsedBody(), 'isGallery', false);
+        $type = $isGallery ? 1 : (int) Arr::get($request->getParsedBody(), 'type', 0);
+
+        $this->data = array_merge($request->getParsedBody(), ['type' => $type]);
     }
 
     public function handle(Uploaded $event)

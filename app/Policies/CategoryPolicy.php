@@ -47,8 +47,10 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function viewThreads(User $actor, Category $category)
     {
-        if ($actor->hasPermission('viewThreads')
-            && $actor->hasPermission('category'.$category->id.'.viewThreads')) {
+        if (
+            $actor->hasPermission('viewThreads')
+            && $actor->hasPermission('category'.$category->id.'.viewThreads')
+        ) {
             return true;
         }
     }
@@ -60,8 +62,11 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function createThread(User $actor, Category $category)
     {
-        if ($actor->hasPermission('createThread')
-            && $actor->hasPermission('category'.$category->id.'.createThread')) {
+        if (
+            $actor->hasPermission('createThread')
+            && $actor->hasPermission('category'.$category->id.'.viewThreads')
+            && $actor->hasPermission('category'.$category->id.'.createThread')
+        ) {
             return true;
         }
     }
@@ -73,8 +78,11 @@ class CategoryPolicy extends AbstractPolicy
      */
     public function replyThread(User $actor, Category $category)
     {
-        if ($actor->hasPermission('thread.reply')
-            && $actor->hasPermission('category'.$category->id.'.replyThread')) {
+        if (
+            $actor->hasPermission('thread.reply')
+            && $actor->hasPermission('category'.$category->id.'.viewThreads')
+            && $actor->hasPermission('category'.$category->id.'.replyThread')
+        ) {
             return true;
         }
     }

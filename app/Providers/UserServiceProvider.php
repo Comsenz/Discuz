@@ -9,8 +9,10 @@ namespace App\Providers;
 
 use App\Listeners\User\UserListener;
 use App\Models\User;
+use App\Models\UserWalletCash;
 use App\Models\UserWechat;
 use App\Observer\UserObserver;
+use App\Observer\UserWalletCashObserver;
 use App\Observer\UserWechatObserver;
 use Discuz\Foundation\AbstractServiceProvider;
 
@@ -24,5 +26,6 @@ class UserServiceProvider extends AbstractServiceProvider
 
         User::observe(UserObserver::class);
         UserWechat::observe(UserWechatObserver::class);
+        UserWalletCash::observe(UserWalletCashObserver::class);
     }
 }

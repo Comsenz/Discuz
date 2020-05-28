@@ -49,7 +49,7 @@ class CreateDialogMessageController extends AbstractCreateController
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         $this->validation->make($attributes, [
-            'message_text' => 'required',
+            'message_text' => 'required|max:10000',
         ])->validate();
 
         return $this->bus->dispatch(
