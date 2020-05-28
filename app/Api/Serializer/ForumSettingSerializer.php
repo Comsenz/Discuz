@@ -37,6 +37,7 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         // 获取logo完整地址
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
+        $headerLogo = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
         $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
 
         $attributes = [
@@ -47,6 +48,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
+                'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
                 'site_url' => $this->settings->get('site_url'),
                 'site_stat' => $this->settings->get('site_stat') ?: '',
