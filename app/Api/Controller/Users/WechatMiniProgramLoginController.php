@@ -83,13 +83,22 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         }
         //获取小程序用户信息
         /** @var UserWechat $wechatUser */
-        $wechatUser = UserWechat::firstOrNew(['unionid' => Arr::get($authSession, 'unionid')]);
+        $wechatUser = UserWechat::where('unionid', Arr::get($authSession, 'unionid'))
+            ->orWhere('min_openid', Arr::get($authSession, 'openid'))->first();
+        if (!$wechatUser) {
+            $wechatUser = UserWechat::build([]);
+        }
+
         if (Arr::get($attributes, 'iv') && Arr::get($attributes, 'encryptedData')) {
             $decryptedData = $app->encryptor->decryptData(
                 $authSession['session_key'],
                 Arr::get($attributes, 'iv'),
                 Arr::get($attributes, 'encryptedData')
             );
+            //站长未开通open绑定小程序、用户未关注公众号 没有unionid
+            if (Arr::get($authSession, 'unionid')) {
+                $wechatUser->unionid = Arr::get($authSession, 'unionid');
+            }
             $wechatUser->min_openid = Arr::get($authSession, 'openid');
             $wechatUser->nickname = $decryptedData['nickName'];
             $wechatUser->city = $decryptedData['city'];
