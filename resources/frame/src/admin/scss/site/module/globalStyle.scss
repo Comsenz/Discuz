@@ -99,7 +99,18 @@
   }*/
 
   /*头像上传样式*/
+  .avatar-box {
+    display: flex;
+    width: 167PX;
+    height: 167PX;
+  }
+  .avatar-somer-box {
+    margin-right: 87PX;
+  }
   .avatar-uploader .el-upload {
+    width: 140PX;
+    height: 140PX;
+    background-color: #F9F9F9;
     border: 1PX dashed #d9d9d9;
     border-radius: 6PX;
     cursor: pointer;
@@ -109,21 +120,50 @@
   .avatar-uploader .el-upload:hover {
     border-color: $main;
   }
-  .avatar-uploader-icon {
-    font-size: 28PX;
-    color: #8c939d;
-    width: 120PX;
-    height: 120PX;
-    line-height: 120PX;
-    text-align: center;
+  .el-icon-circle-plus-outline {
+    display: block;
+    width: 48PX;
+    height: 48PX;
+    font-size: 48PX;
+    margin: 22PX auto 0;
+    color: #D5D8DE;
+  }
+  .avatar-logo {
+    display: block;
+    font-size:14PX;
+    font-weight:600;
+    margin: 10PX auto 0;
+    color:rgba(151,156,169,1);
+    line-height:20PX;
+  }
+  .avatar-pm {
+    margin: 4PX auto 0;
+    display: block;
+    font-size:10PX;
+    font-weight:400;
+    color:rgba(151,156,169,1);
+    line-height:14PX;
+  }
+  .avatar-btn {
+    padding: 0;
+    margin:11PX 0 0 56PX;
   }
   .avatar {
-    width: 120PX;
-    height: 120PX;
+    width: 140PX;
+    height: 140PX;
     display: block;
     position: relative;
   }
   .avatar-LogoImage{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    margin: auto;
+  }
+  .avatar-LogoImage-img {
+    height: 100%;
     position: absolute;
     top:0;
     bottom:0;
@@ -164,17 +204,17 @@
 /**
   注册设置
  */
-.sign-up-set-box{
+// .sign-up-set-box{
 
-}
+// }
 
 
 /**
   附件设置
  */
-.annex-set-box{
+// .annex-set-box{
 
-}
+// }
 
 
 /**
