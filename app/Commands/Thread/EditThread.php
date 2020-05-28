@@ -100,11 +100,17 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        //长文、视频可以修改价格
+        // 长文、视频可以修改价格
         if (isset($attributes['price']) && ($thread->type != 0)) {
             $this->assertCan($this->actor, 'editPrice', $thread);
 
             $thread->price = (float) $attributes['price'];
+        }
+
+        if ($thread->price > 0 && isset($attributes['free_words'])) {
+            $this->assertCan($this->actor, 'editPrice', $thread);
+
+            $thread->free_words = (int) $attributes['free_words'];
         }
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {

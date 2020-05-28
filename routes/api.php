@@ -36,7 +36,6 @@ $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsCont
 */
 
 $route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSignatureController::class);
-$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -278,7 +277,6 @@ $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowControll
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
 $route->delete('/follow/{id}/{type}', 'follow.delete.type', ApiController\Users\DeleteUserFollowByTypeController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | Dialog
@@ -291,6 +289,24 @@ $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController:
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Reports
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/reports', 'reports.create', ApiController\Report\CreateReportsController::class);
+$route->get('/reports', 'reports.list', ApiController\Report\ListReportsController::class);
+$route->patch('/reports/batch', 'reports.batchUpdate', ApiController\Report\BatchUpdateReportsController::class);
+$route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Report\BatchDeleteReportsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Analysis
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -299,3 +315,20 @@ $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListD
 */
 
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
+
+/*
+|--------------------------------------------------------------------------
+| System
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/system/command', 'system.command', ApiController\System\CallCommandController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Wechat - Offiaccount
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
+

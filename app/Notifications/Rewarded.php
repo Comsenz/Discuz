@@ -13,7 +13,8 @@ use Discuz\SpecialChar\SpecialCharServer;
 use Illuminate\Bus\Queueable;
 
 /**
- * 打赏通知
+ * 支付通知
+ * (包含: 打赏帖子/支付付费贴)
  *
  * Class Rewarded
  * @package App\Notifications
@@ -35,7 +36,6 @@ class Rewarded extends System
      * @param $actor
      * @param string $messageClass
      * @param array $build
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(Order $order, $actor, $messageClass = '', $build = [])
     {
@@ -52,7 +52,6 @@ class Rewarded extends System
      *
      * @param $notifiable
      * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function toDatabase($notifiable)
     {
@@ -65,6 +64,7 @@ class Rewarded extends System
             'content' => '',  // 兼容原数据
             'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
             'amount' => $this->order->amount - $this->order->master_amount,
+            'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
         ];
 
         $this->build($build);
@@ -74,7 +74,6 @@ class Rewarded extends System
 
     /**
      * @param $build
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function build(&$build)
     {

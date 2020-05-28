@@ -108,7 +108,6 @@ class ListThreadsController extends AbstractListController
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(ThreadRepository $threads, UrlGenerator $url)
     {
@@ -266,9 +265,13 @@ class ListThreadsController extends AbstractListController
             $query->where('threads.category_id', $categoryId);
         }
 
-        // 类型：0普通 1长文 2视频 3图片
+        // 类型：0普通 1长文 2视频 3图片 [4 不返回图片帖（临时）]
         if (($type = Arr::get($filter, 'type', '')) !== '') {
-            $query->where('threads.type', (int) $type);
+            if ((int) $type === 4) {
+                $query->where('threads.type', '<>', 3);
+            } else {
+                $query->where('threads.type', (int) $type);
+            }
         }
 
         // 作者 ID
@@ -590,9 +593,15 @@ class ListThreadsController extends AbstractListController
             // 加载首贴时，处理内容
             if (in_array('firstPost', $include)) {
                 // 长文帖子无论如何不返回内容，其他类型截取部分内容
-                $thread->firstPost->content = $thread->type == 1
-                    ? ''
-                    : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
+                if ($thread->type == 1) {
+                    $thread->firstPost->content = '';
+                } else {
+                    if (Str::of($thread->firstPost->content)->length() > Post::SUMMARY_LENGTH) {
+                        $thread->firstPost->content = Str::of($thread->firstPost->content)
+                            ->substr(0, Post::SUMMARY_LENGTH)
+                            ->finish(Post::SUMMARY_END_WITH);
+                    }
+                }
 
                 // 付费内容未付费处理
                 if ($thread->price > 0 && !$thread->getAttribute('paid')) {

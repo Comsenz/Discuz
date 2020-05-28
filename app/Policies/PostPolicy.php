@@ -54,6 +54,13 @@ class PostPolicy extends AbstractPolicy
      */
     public function find(User $actor, Builder $query)
     {
+        // 过滤不存在用户的内容
+        $query->whereExists(function ($query) {
+            $query->selectRaw('1')
+                ->from('users')
+                ->whereColumn('posts.user_id', 'users.id');
+        });
+
         // 确保帖子所在主题可见。
         $query->whereExists(function ($query) use ($actor) {
             $query->selectRaw('1')

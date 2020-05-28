@@ -236,3 +236,6 @@
 .icon-sigh:before {
   content: "\e646";
 }
+.icon-home:before {
+  content: "\e692";
+}

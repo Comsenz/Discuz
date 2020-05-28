@@ -8,6 +8,8 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
+use App\Models\Post;
+use App\Models\PostGoods;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
@@ -182,7 +184,7 @@ class BaseFormatter
     {
         foreach (Emoji::cursor() as $emoji) {
             $url = $this->url->to('/' . $emoji->url);
-            $emojiImg = '<img src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
+            $emojiImg = '<img style="display:inline-block;height:20px;vertical-align:top;" src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
     }
@@ -201,7 +203,8 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addUserId']);
-        $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
+        $tag->template = '<span id="member" value="{@id}"><xsl:apply-templates/></span>';
+        $configurator->Preg->match('/\B@(?<username>[\S]+)/i', $tagName);
     }
 
     protected function confTopic($configurator)
@@ -210,9 +213,9 @@ class BaseFormatter
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
         $tag->filterChain->prepend([static::class, 'addTopicId']);
-        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}a-z0-9_]+)#/ui', $tagName);
+        $tag->template = '<span id="topic" value="{@id}"><xsl:apply-templates/></span>';
+        $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}\w]+)#/ui', $tagName);
     }
-
 
     /**
      * @param $tag

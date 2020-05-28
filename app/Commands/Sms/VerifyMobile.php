@@ -11,6 +11,7 @@ use App\Api\Controller\Mobile\VerifyController;
 use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
+use App\Commands\Users\RegisterPhoneUser;
 use App\Models\MobileCode;
 use App\Models\User;
 use App\Models\UserWalletFailLogs;
@@ -64,21 +65,29 @@ class VerifyMobile
      */
     protected function login()
     {
-        if (!is_null($this->mobileCode->user)) {
-            $this->controller->serializer = TokenSerializer::class;
-            $params = [
-                'username' => $this->mobileCode->user->username,
-                'password' => ''
-            ];
-
-            $response = $this->bus->dispatch(
-                new GenJwtToken($params)
+        //register new user
+        if (is_null($this->mobileCode->user)) {
+            $data['register_ip'] = $this->params['ip'];
+            $data['mobile'] = $this->mobileCode->mobile;
+            $user = $this->bus->dispatch(
+                new RegisterPhoneUser($this->actor, $data)
             );
-
-            return json_decode($response->getBody());
+            $this->mobileCode->setRelation('user', $user);
         }
 
-        throw new PermissionDeniedException;
+        //login
+        $this->controller->serializer = TokenSerializer::class;
+        $params = [
+            'username' => $this->mobileCode->user->username,
+            'password' => ''
+        ];
+
+        $response = $this->bus->dispatch(
+            new GenJwtToken($params)
+        );
+
+        return json_decode($response->getBody());
+
     }
 
     protected function bind()

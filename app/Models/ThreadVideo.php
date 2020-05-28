@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $reason
  * @property string $file_name
  * @property string $file_id
+ * @property int $width
+ * @property int $height
  * @property string $media_url
  * @property string $cover_url
  * @property Carbon $updated_at

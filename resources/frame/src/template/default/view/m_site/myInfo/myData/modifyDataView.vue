@@ -41,7 +41,7 @@
           v-else
         />
       </div>
-      <van-cell title="登录密码" @click="myModify('change-pwd')" is-link value="********" />
+      <van-cell title="登录密码" @click="myModify('change-pwd')" is-link :value="hasPassword ? '********' : '设置密码'" />
       <van-cell
         title="钱包密码"
         @click="myModify('change-pay-pwd')"
@@ -49,13 +49,13 @@
         :value="canWalletPay?'********':'设置密码'"
       />
       <van-cell
-        title="微信"
+        title="微信已绑定"
         is-link
-        :value="wechatNickname"
+        value="点击解绑并退出登录"
         v-if="wechatNickname"
         @click="myModifyWechat"
       />
-      <van-cell title="微信" is-link value="去绑定" v-else @click="wechatBind" />
+      <van-cell title="微信未绑定" is-link value="点击立即绑定" v-else @click="wechatBind" />
       <div v-show="realNameShow">
         <van-cell title="实名认证" :value="realName" v-if="realName" />
         <van-cell

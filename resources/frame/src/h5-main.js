@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import "../config/languageConfig";
 
-import 'vant/lib/index.css';             //引入vant样式
-import './extend/viewBase/vantuiInit';   //引入vant组件
+//import 'vant/lib/index.css';             //引入vant样式
+//import './extend/viewBase/vantuiInit';   //引入vant组件
 
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n);

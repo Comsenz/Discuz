@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 
 /**
  * @property int $id
@@ -48,14 +50,19 @@ use Illuminate\Support\Str;
  * @property Category $category
  * @property threadVideo $threadVideo
  * @package App\Models
- * @method static find($id)
- * @property string getContentByType
- * @property int refreshPaidCount
  */
 class Thread extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+
+    const TYPE_OF_TEXT = 0;
+
+    const TYPE_OF_LONG = 1;
+
+    const TYPE_OF_VIDEO = 2;
+
+    const TYPE_OF_IMAGE = 3;
 
     const UNAPPROVED = 0;
 
@@ -137,8 +144,7 @@ class Thread extends Model
      * 根据类型获取 Thread content
      *
      * @param int $substr
-     * @return \Illuminate\Support\Stringable|string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @return Stringable|string
      */
     public function getContentByType($substr = 0)
     {
@@ -338,7 +344,7 @@ class Thread extends Model
      */
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     /**
@@ -364,9 +370,35 @@ class Thread extends Model
         return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
     }
 
+    /**
+     * Define the relationship with the thread's paid state for a particular user.
+     *
+     * @param User|null $user
+     * @return bool|null
+     */
+    public function paidState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        if (!$user->exists || $this->price <= 0) {
+            return null;
+        }
+
+        if ($this->user_id == $user->id || $user->isAdmin()) {
+            return true;
+        } else {
+            return Order::query()
+                ->where('user_id', $user->id)
+                ->where('thread_id', $this->id)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->exists();
+        }
+    }
+
     public function threadVideo()
     {
-        return $this->hasOne(ThreadVideo::class);
+        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
     }
 
 

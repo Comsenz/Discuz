@@ -9,9 +9,12 @@ namespace App\Notifications;
 
 use App\MessageTemplate\StatusMessage;
 use App\MessageTemplate\Wechat\WechatStatusMessage;
+use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
+use App\MessageTemplate\WithdrawalMessage;
 use App\Models\NotificationTpl;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Arr;
 
 /**
  * 系统通知
@@ -36,7 +39,6 @@ class System extends Notification
      *
      * @param $type
      * @param array $data
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct($type, $data = [])
     {
@@ -51,13 +53,7 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
 
-        if ($this->message instanceof StatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
-        }
-
-        if ($this->message instanceof WechatStatusMessage) {
-            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
-        }
+        $this->specialNotice($notifiable, $tplId);
 
         // set tplData
         $this->getTplData($tplId);
@@ -93,12 +89,38 @@ class System extends Notification
     }
 
     /**
+     * 特殊处理通知类
+     *
+     * @param $notifiable
+     * @param $tplId
+     */
+    protected function specialNotice($notifiable, &$tplId)
+    {
+        if ($this->message instanceof StatusMessage) {
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'));
+        }
+
+        if ($this->message instanceof WechatStatusMessage) {
+            $tplId = $this->discTpl($notifiable->status, $notifiable->getRawOriginal('status'), 1);
+        }
+
+        if ($this->message instanceof WithdrawalMessage || $this->message instanceof WechatWithdrawalMessage) {
+            $cashStatus = Arr::get($this->data, 'cash_status'); // 获取提现状态
+            $type = 0;
+            if ($this->message instanceof WechatWithdrawalMessage) {
+                $type = 1;
+            }
+            $tplId = $this->cashTpl($cashStatus, $type);
+        }
+    }
+
+    /**
      * 区分通知
      * (审核中变为正常 和 禁用中变为正常)
      *
      * @param $status
      * @param $originStatus
-     * @param $type int 0系统 1微信
+     * @param int $type 0系统 1微信
      * @return int
      */
     public function discTpl($status, $originStatus, $type = 0)
@@ -140,6 +162,32 @@ class System extends Notification
         // 设值tplID
         $this->message->setTplId($id);
 
+        return $id;
+    }
+
+    /**
+     * @param int $status 提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败
+     * @param int $type 0系统 1微信
+     * @return int
+     */
+    public function cashTpl($status, $type = 0)
+    {
+        $noReason = [1, 2, 4, 5];
+        if (!$type) {
+            if (in_array($status, $noReason)) {
+                $id = 1;
+            } else {
+                $id = 2;
+            }
+        } else {
+            if (in_array($status, $noReason)) {
+                $id = 1;
+            } else {
+                $id = 2;
+            }
+        }
+
+        $id = 0;
         return $id;
     }
 }

@@ -22,12 +22,9 @@ use Tobscure\JsonApi\Document;
 use EasyWeChat\Factory;
 
 /**
- * 微信公众号 - JSSDK
- *
- * Class WechatOffiaccountJSSDKController
  * @package App\Api\Controller\Wechat
  */
-class WechatOffiaccountJSSDKController extends AbstractCreateController
+class OffIAccountJSSDKController extends AbstractCreateController
 {
     public $serializer = WechatJssdkSerializer::class;
 

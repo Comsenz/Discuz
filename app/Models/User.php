@@ -9,17 +9,20 @@ namespace App\Models;
 
 use App\Traits\Notifiable;
 use Discuz\Auth\Guest;
+use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Discuz\Foundation\EventGeneratorTrait;
-use Discuz\Database\ScopeVisibilityTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -249,12 +252,14 @@ class User extends Model
         return $this;
     }
 
-    public function changeUsername($username)
+    public function changeUsername($username, $isAdmin = false)
     {
         $this->username = $username;
 
-        // 修改次数+1
-        $this->username_bout += 1;
+        if (!$isAdmin) {
+            // 修改次数+1
+            $this->username_bout += 1;
+        }
 
         return $this;
     }
@@ -311,8 +316,18 @@ class User extends Model
 
     public function getAvatarAttribute($value)
     {
-        if ($value && strpos($value, '://') === false) {
-            return app(UrlGenerator::class)->to('/storage/avatars/'.$value);
+        if ($value) {
+            if (strpos($value, '://') === false) {
+                $value = app(UrlGenerator::class)->to('/storage/avatars/' . $value)
+                    . '?' . \Carbon\Carbon::parse($this->avatar_at)->timestamp;
+            } else {
+                $value = app(Filesystem::class)
+                    ->disk('avatar_cos')
+                    ->temporaryUrl(
+                        'public/avatar/' . $this->id . '.png',
+                        \Carbon\Carbon::now()->addMinutes(5)
+                    );
+            }
         }
 
         return $value;
@@ -432,6 +447,21 @@ class User extends Model
         return $this;
     }
 
+    /**
+     * 注册用创建一个随即用户名
+     * getNewUsername
+     * @return string
+     */
+    public static function getNewUsername()
+    {
+        $username = trans('validation.attributes.username_prefix') . Str::random(6);
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            return self::getNewUsername();
+        }
+        return $username;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | 关联模型
@@ -440,12 +470,12 @@ class User extends Model
 
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     public function latelyLog()
     {
-        return $this->hasOne(OperationLog::class, 'log_able_id')->orderBy('id', 'desc');
+        return $this->hasOne(UserActionLogs::class, 'log_able_id')->orderBy('id', 'desc');
     }
 
     public function wechat()
@@ -550,6 +580,7 @@ class User extends Model
     {
         return $this->hasMany(PostUser::class);
     }
+
     /*
     |--------------------------------------------------------------------------
     | 权限验证
@@ -564,7 +595,7 @@ class User extends Model
      */
     public function permissions()
     {
-        $groupIds = $this->groups->pluck('id')->all();
+        $groupIds = (Arr::get($this->getRelations(), 'groups') ?? $this->groups)->pluck('id')->all();
 
         return Permission::whereIn('group_id', $groupIds);
     }

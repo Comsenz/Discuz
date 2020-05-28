@@ -40,6 +40,7 @@ class ShareThreadController extends ResourceThreadController
         $threadId = Arr::get($request->getQueryParams(), 'id');
         $include = $this->extractInclude($request);
 
+        /** @var Thread $thread */
         $thread = Thread::query()
             ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
@@ -49,7 +50,7 @@ class ShareThreadController extends ResourceThreadController
 
         $thread->firstPost->content = $thread->price > 0
             ? ''
-            : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
+            : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH)->finish(Post::SUMMARY_END_WITH);
 
         return $thread;
     }

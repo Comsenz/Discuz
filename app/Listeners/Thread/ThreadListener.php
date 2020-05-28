@@ -11,19 +11,17 @@ use App\Events\Post\Created as PostCreated;
 use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
+use App\Events\Thread\Restored;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
-use App\Exceptions\CategoryNotFoundException;
-use App\Models\Category;
-use App\Models\OperationLog;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
+use App\Models\UserActionLogs;
 use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Arr;
 
 class ThreadListener
 {
@@ -38,13 +36,13 @@ class ThreadListener
         // 发布帖子
         $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
         $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
-        $events->listen(ThreadCreated::class, SaveVideoToDatabase::class);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
 
-        // 隐藏主题
+        // 隐藏/还原主题
         $events->listen(Hidden::class, [$this, 'whenThreadWasHidden']);
+        $events->listen(Restored::class, [$this, 'whenThreadWasRestored']);
 
         // 删除主题
         $events->listen(Deleted::class, [$this, 'whenThreadWasDeleted']);
@@ -58,43 +56,13 @@ class ThreadListener
     }
 
     /**
-     * 分类主题
-     *
-     * @param Saving $event
-     * @throws CategoryNotFoundException
-     */
-    public function categorizeThread(Saving $event)
-    {
-        $categoryId = Arr::get($event->data, 'relationships.category.data.id');
-
-        // 如果主题尚未分类 或 接收到的分类与当前分类不一致，就修改分类
-        if (! $event->thread->category_id || $categoryId && $event->thread->category_id != $categoryId) {
-            // 如果接收到可用的分类，则设置分类
-            if ($categoryId = Category::where('id', $categoryId)->value('id')) {
-                $event->thread->category_id = $categoryId;
-            }
-
-            // 如果没有分类，则抛出异常
-            if (! $categoryId) {
-                throw new CategoryNotFoundException;
-            }
-        }
-    }
-
-    /**
      * 发布首帖时，更新主题回复数，最后回复 ID
      *
      * @param PostCreated $event
      */
     public function whenPostWasCreated(PostCreated $event)
     {
-        $thread = $event->post->thread;
-
-        if ($thread && $thread->exists) {
-            $thread->refreshPostCount();
-            $thread->refreshLastPost();
-            $thread->save();
-        }
+        $this->refreshData($event->post->thread);
     }
 
     /**
@@ -117,34 +85,55 @@ class ThreadListener
     {
         // 审核通过时，清除记录的敏感词
         if ($event->thread->is_approved == Thread::APPROVED) {
-            PostMod::where('post_id', $event->thread->firstPost->id)->delete();
+            PostMod::query()->where('post_id', $event->thread->firstPost->id)->delete();
         }
 
         $action = $this->transLogAction($event->thread->is_approved);
 
         $message = $event->data['message'] ?? '';
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
 
         // 发送操作通知
         $this->threadNotices($event->data['notice_type'], $event);
     }
 
     /**
-     * 隐藏主题时，记录操作
+     * 隐藏主题时
      *
      * @param Hidden $event
      */
     public function whenThreadWasHidden(Hidden $event)
     {
-        $action = 'hide';
+        $thread = $event->thread;
 
-        $message = $event->data['message'] ?? '';
+        $thread->firstPost->deleted_at = $thread->deleted_at;
 
-        OperationLog::writeLog($event->actor, $event->thread, $action, $message);
+        $thread->firstPost->save();
+
+        $this->refreshData($thread);
+
+        // 日志
+        UserActionLogs::writeLog($event->actor, $thread, 'hide', $event->data['message'] ?? '');
 
         // 发送删除通知
         $this->threadNotices('isDeleted', $event);
+    }
+
+    /**
+     * 还原主题时
+     *
+     * @param Restored $event
+     */
+    public function whenThreadWasRestored(Restored $event)
+    {
+        $thread = $event->thread;
+
+        $thread->firstPost->deleted_at = null;
+
+        $thread->firstPost->save();
+
+        $this->refreshData($thread);
     }
 
     /**
@@ -154,7 +143,7 @@ class ThreadListener
      */
     public function whenThreadWasDeleted(Deleted $event)
     {
-        Post::where('thread_id', $event->thread->id)->delete();
+        Post::query()->where('thread_id', $event->thread->id)->delete();
     }
 
     /**

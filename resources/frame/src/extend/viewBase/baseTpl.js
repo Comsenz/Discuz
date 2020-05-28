@@ -5,7 +5,6 @@
 var path = require("path");
 import Vue from "vue";
 import VueRouter from "vue-router";
-import md5 from "js-md5";
 import commonHelper from "commonHelper";
 Vue.use(VueRouter);
 
@@ -112,7 +111,6 @@ baseTpl.prototype.getBaseRouter = function(routes) {
     //基本信息加载
     //this.progressStart();
     this.loadMetaInfo(this.Router);
-    this.loadOtherSource(this.Router);
     this.progressEnd();
 
     return this.Router;
@@ -232,66 +230,6 @@ baseTpl.prototype.loadAllNum = 0;
 //加载成功会掉方法
 baseTpl.prototype.sourceCallBack = null;
 
-/**
- * 第三方资源加载
- * @param  {[type]} Router [description]
- * @return {[type]}        [description]
- */
-baseTpl.prototype.loadOtherSource = function(Router) {
-  var _this = this;
-
-  Router.beforeEach(function(to, from, next) {
-    _this.clearSource();
-
-    var nowRoute = to.matched[0].path == "*" ? Router.options.routes[0] : to;
-    var publicCss = _this.publicCss ? _this.publicCss : [],
-      publicJs = _this.publicJs ? _this.publicJs : [],
-      selfCss = nowRoute.meta.css ? nowRoute.meta.css : [],
-      selfJs = nowRoute.meta.js ? nowRoute.meta.js : [];
-
-    var sourceArrs = {
-      css: [...publicCss, ...selfCss],
-      js: [...publicJs, ...selfJs]
-    };
-
-    if (!sourceArrs.css.length && !sourceArrs.js.length) {
-      next();
-    } else {
-      _this.sourceArrs = sourceArrs;
-      _this.registerSource(to, next);
-    }
-  });
-};
-
-/**
- * 获取风格css
- * @param  {[type]} topath [description]
- * @return {[type]}        [description]
- */
-baseTpl.prototype.getStyleCss = function(topath) {
-  var styleCss = this.styleCss;
-
-  if (!styleCss.path || !styleCss.baseName.length) {
-    return [];
-  }
-
-  var styleCssPaths = [],
-    mobilePrefix = commonHelper.getClientType(topath) ? "m." : "",
-    type = commonHelper.getClientType(topath) ? "mstyle" : "style";
-
-  var _this = this;
-  styleCss.baseName.forEach(function(cssName) {
-    styleCssPaths.push(
-      styleCss.path +
-        mobilePrefix +
-        commonHelper.getWebStyle(type) +
-        "." +
-        cssName
-    );
-  });
-
-  return styleCssPaths;
-};
 
 /**
  * 获取页面类型
@@ -300,107 +238,6 @@ baseTpl.prototype.getStyleCss = function(topath) {
  */
 baseTpl.prototype.getClientClass = function(to) {
   return to.meta.isMobile ? "mobile" : "pc";
-};
-
-/**
- * 注册要引入的css和js资源，注册后清空上一次的注册
- * @param  {[type]} sourceArr [列表]
- * @return {[type]}           [description]
- */
-baseTpl.prototype.registerSource = function(to, next) {
-  this.sourceCallBack = next;
-
-  var nowClientClass = this.getClientClass(to);
-
-  this.ctype = nowClientClass;
-  this.loadCssSource(nowClientClass);
-  this.loadJsSource(nowClientClass);
-};
-
-/**
- * 清空资源加载状态
- * @return {[type]} [description]
- */
-baseTpl.prototype.clearSource = function() {
-  this.sourceArrs = [];
-  this.loadAllNum = 0;
-  this.sourceCallBack = null;
-};
-
-/**
- * 加载css资源
- * @return {[type]}           [description]
- */
-baseTpl.prototype.loadCssSource = function(clientClass) {
-  var _this = this;
-
-  this.sourceArrs.css.forEach(function(cssOne) {
-    var allPath = appConfig.staticBaseUrl + cssOne,
-      md5Key = md5(allPath);
-
-    _this.loadAllNum++;
-    if (!document.querySelectorAll('[data-id="' + md5Key + '"]').length) {
-      var elem = document.createElement("link");
-      elem.setAttribute("data-id", md5Key);
-      elem.setAttribute("data-type", clientClass);
-      elem.href = allPath + "?v=" + appConfig.sourceV;
-      elem.rel = "stylesheet";
-      elem.type = "text/css";
-      document.querySelector("head").appendChild(elem);
-      elem.onload = function() {
-        _this.loadSourceSuccess(clientClass);
-      };
-    } else {
-      setTimeout(function() {
-        _this.loadSourceSuccess(clientClass);
-      }, 100);
-    }
-  });
-};
-
-/**
- * 加载js资源
- * @return {[type]} [description]
- */
-baseTpl.prototype.loadJsSource = function(clientClass) {
-  var _this = this;
-
-  this.sourceArrs.js.forEach(function(jsPath) {
-    var allPath = appConfig.staticBaseUrl + jsPath,
-      md5Key = md5(allPath);
-
-    _this.loadAllNum++;
-    if (!document.querySelectorAll('[data-id="' + md5Key + '"]').length) {
-      var jsScript = document.createElement("script");
-      jsScript.src = allPath + "?v=" + appConfig.sourceV;
-      jsScript.setAttribute("data-id", md5Key);
-      jsScript.setAttribute("data-type", clientClass);
-      jsScript.type = "text/javascript";
-      jsScript.async = false;
-      jsScript.setAttribute("data-path", jsPath);
-      jsScript.onload = function() {
-        _this.loadSourceSuccess(clientClass);
-      };
-
-      document.getElementsByTagName("body")[0].appendChild(jsScript);
-    } else {
-      setTimeout(function() {
-        _this.loadSourceSuccess(clientClass);
-      }, 100);
-    }
-  });
-};
-
-/**
- * 加载资源成功会掉方法
- * @return {[type]} [description]
- */
-baseTpl.prototype.loadSourceSuccess = function(clientClass) {
-  this.loadAllNum--;
-
-  if (!this.loadAllNum) {
-    this.sourceCallBack();
-  }
 };
 
 /**

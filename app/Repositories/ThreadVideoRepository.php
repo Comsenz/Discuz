@@ -9,14 +9,20 @@ namespace App\Repositories;
 
 use App\Models\ThreadVideo;
 use Discuz\Foundation\AbstractRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class ThreadVideoRepository
+ * @package App\Repositories
+ *
+ */
 class ThreadVideoRepository extends AbstractRepository
 {
     /**
      * Get a new query builder for the user login log table.
      *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
+     * @return Model|Builder
      */
     public function query()
     {

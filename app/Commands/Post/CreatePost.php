@@ -11,7 +11,6 @@ use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
-use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\User;
@@ -151,7 +150,9 @@ class CreatePost
             $this->replyPostId,
             $this->replyUserId,
             $isFirst,
-            $isComment
+            $isComment,
+            Arr::get($this->data, 'attributes.latitude', 0),
+            Arr::get($this->data, 'attributes.longitude', 0)
         );
 
         // 存在审核敏感词时，将回复内容放入待审核

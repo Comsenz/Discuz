@@ -16,6 +16,11 @@ module.exports = {
     app: resolve("src/h5-main.js"),
     admin: resolve("src/admin-main.js")
   },
+  externals: {
+    'vue': 'Vue',
+    'vuex': 'Vuex',
+    'vant': 'vant'
+  },
   output: {
     filename: "static/js/[name].js?v=" + VERSION,
     chunkFilename: "static/js/[id].[chunkhash].js?v=" + VERSION,
@@ -132,10 +137,13 @@ module.exports = {
         { from: /.*/, to: "/index.html" },
       ]
     },
+    port: 443,
+    http2: true,
+    disableHostCheck: true,
     contentBase: false,
     proxy: {
       "/api": {
-        target: "https://discuz.chat",
+        target: "https://discuz.run",
         changeOrigin: true,
         secure: false,
       }

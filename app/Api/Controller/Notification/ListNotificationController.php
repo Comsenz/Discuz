@@ -100,7 +100,7 @@ class ListNotificationController extends AbstractListController
 
         $query = $actor->notifications()
             ->when($type, function ($query, $type) {
-                return $query->where('type', $type);
+                return $query->whereIn('type', explode(',', $type));
             });
         $query->orderBy('created_at', 'desc');
 
@@ -132,16 +132,16 @@ class ListNotificationController extends AbstractListController
                  * 解决 N+1 问题
                  */
                 $user = $users->get(Arr::get($item->data, 'user_id'));
-                $item->user_name = $user->username;
-                $item->user_avatar = $user->avatar;
+                if (!empty($user)) {
+                    $item->user_name = $user->username;
+                    $item->user_avatar = $user->avatar;
+                }
                 // 查询主题相关内容
-                if (Arr::has($item->data, 'thread_username')) {
-                    $item->thread_user_name = Arr::get($item->data, 'thread_username', '');
-                } elseif (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
+                if (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
                     if (!empty($threads->get($threadID))) {
                         $threadUser = $threads->get($threadID)->user;
-                        $item->thread_user_name = $threadUser->username;
+                        $item->thread_username = $threadUser->username;
                         $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
                     }
                 }

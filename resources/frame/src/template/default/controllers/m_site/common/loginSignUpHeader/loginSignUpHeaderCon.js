@@ -1,6 +1,7 @@
 // import {Bus} from '../../../../store/site/bus.js';
 import appCommonH from '../../../../../../helpers/commonHelper';
 import appConfig from "../../../../../../../../frame/config/appConfig";
+import browserDb from '../../../../../../helpers/webDbHelper';
 export default {
   data: function () {
     return {
@@ -14,7 +15,7 @@ export default {
       isWeixin: false,
       isPhone: false,
       viewportWidth: '',
-
+      prevRoute: null
     }
   },
   props: {
@@ -30,6 +31,7 @@ export default {
     this.isWeixin = appCommonH.isWeixin().isWeixin;
     this.isPhone = appCommonH.isWeixin().isPhone;
     this.viewportWidth = window.innerWidth;
+    this.prevRoute = browserDb.getLItem('prevRoute');
   },
   methods: {
     //设置Header在pc里的宽度
@@ -42,23 +44,27 @@ export default {
       //侧边栏显示
       this.popupShow = true;
     },
+    goHome() {
+      this.$router.push("/");
+    },
     headerBack() {
       let backGo = this.$route.query.backGo;
-      // this.$router.go(-1);
-
-      // this.$router.back(-1);
-
-      // alert(window.history.length);
-
       const sidePageList = ['my-wallet', 'modify-data'];
+      const noGobackList = [
+        'pay-circle-login', 'login-user', 'login-phone', 'wx-login-bd', 'wx-sign-up-bd', 
+        'welink-login-bd', 'welink-sign-up-bd', 'sign-up'];
 
       if (sidePageList.includes(this.$route.name)) {
         this.$router.push('/');
         return;
       }
+      if (noGobackList.includes(this.prevRoute)) {
+        this.$router.push("/");
+        return;
+      }
 
-      if (document.referrer == '' && (window.history.length == 0 || window.history.length < 3)) {
-        window.location.href = appConfig.baseUrl;
+      if (document.referrer == '' && window.history.length == 0) {
+        this.$router.push("/");
       } else {
         this.$router.go(-1);
       }
@@ -90,6 +96,5 @@ export default {
     if (this.isWeixin != true && this.isPhone != true) {
       this.limitWidth();
     }
-  },
-
+  }
 }

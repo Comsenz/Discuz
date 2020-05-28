@@ -29,10 +29,13 @@ use Illuminate\Support\Str;
  * @property int $thread_id
  * @property int $reply_post_id
  * @property int $reply_user_id
+ * @property string $summary
  * @property string $content
  * @property string $ip
  * @property int $reply_count
  * @property int $like_count
+ * @property float $longitude
+ * @property float $latitude
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
@@ -60,14 +63,14 @@ class Post extends Model
     const SUMMARY_LENGTH = 100;
 
     /**
-     * 通知内容展示长度(字)
-     */
-    const NOTICE_LENGTH = 80;
-
-    /**
      * 摘要结尾
      */
     const SUMMARY_END_WITH = '...';
+
+    /**
+     * 通知内容展示长度(字)
+     */
+    const NOTICE_LENGTH = 80;
 
     const UNAPPROVED = 0;
 
@@ -79,6 +82,8 @@ class Post extends Model
      * {@inheritdoc}
      */
     protected $casts = [
+        'reply_count' => 'integer',
+        'like_count' => 'integer',
         'is_first' => 'boolean',
         'is_comment' => 'boolean',
     ];
@@ -112,6 +117,27 @@ class Post extends Model
      * @var MarkdownFormatter
      */
     protected static $markdownFormatter;
+
+    /**
+     * 帖子摘要
+     *
+     * @return string
+     */
+    public function getSummaryAttribute()
+    {
+        $content = Str::of($this->content ?: '');
+
+        if ($content->length() > self::SUMMARY_LENGTH) {
+            $content = static::$formatter->parse(
+                $content->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)
+            );
+            $content = static::$formatter->render($content);
+        } else {
+            $content = $this->formatContent();
+        }
+
+        return str_replace('<br>', '', $content);
+    }
 
     /**
      * Unparse the parsed content.
@@ -185,7 +211,6 @@ class Post extends Model
      *
      * @param int $substr
      * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function getSummaryContent($substr = 0)
     {
@@ -215,7 +240,12 @@ class Post extends Model
                 $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
                 $content = $this->formatContent();
 
-                $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                // 如果是首贴 firstContent === content 内容一样
+                if ($this->is_first) {
+                    $firstContent = $content;
+                } else {
+                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                }
             }
         }
 
@@ -252,9 +282,11 @@ class Post extends Model
      * @param int $replyUserId
      * @param int $isFirst
      * @param int $isComment
+     * @param float $latitude
+     * @param float $longitude
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment)
+    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment, $latitude, $longitude)
     {
         $post = new static;
 
@@ -263,13 +295,15 @@ class Post extends Model
         $post->user_id = $userId;
         $post->ip = $ip;
         $post->reply_post_id = $replyPostId;
-        $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
         $post->is_comment = $isComment;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
+
+        $post->latitude = $latitude;
+        $post->longitude = $longitude;
 
         return $post;
     }
@@ -412,7 +446,7 @@ class Post extends Model
      */
     public function logs()
     {
-        return $this->morphMany(OperationLog::class, 'log_able');
+        return $this->morphMany(UserActionLogs::class, 'log_able');
     }
 
     /**
@@ -474,6 +508,7 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'post_mentions_user', 'post_id', 'mentions_user_id');
     }
+
     /**
      * Set the user for which the state relationship should be loaded.
      *

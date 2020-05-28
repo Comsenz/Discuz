@@ -10,6 +10,7 @@ export const SET_FORUM_PROMISE = 'SET_FORUM_PROMISE';
 export const SET_FORUM_STATE = 'SET_FORUM_STATE';
 export const SET_USER = 'SET_USER';
 export const SET_USER_STATE = 'SET_USER_STATE';
+export const SET_USER_PROMISE = 'SET_USER_PROMISE';
 
 
 

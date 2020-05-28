@@ -37,26 +37,23 @@
           label="操作"
           width="180">
           <template slot-scope="scope">
-            <div v-if="scope.row._data.status == 1">
-              <el-button
-                size="mini"
-                @click="configClick(scope.row._data.id,scope.row._data.type_name)">
-                配置
-              </el-button>
-
-              <el-button
-              	@click.native.prevent="noticeSetting(scope.row._data.id,'close')"
-                size="mini">
-                关闭
-              </el-button>
-            </div>
-			      <div v-if="scope.row._data.status == 0">
-	            <el-button
-	              size="mini"
-	              @click.native.prevent="noticeSetting(scope.row._data.id,'open')"
-	            >开启
-	            </el-button>
-            </div>
+            <el-button
+              size="mini"
+              @click="configClick(scope.row._data.id,scope.row._data.type_name)">
+              配置
+            </el-button>
+            <el-button
+              v-if="scope.row._data.status == 0"
+              size="mini"
+              @click.native.prevent="noticeSetting(scope.row._data.id,'open')"
+            >开启
+            </el-button>
+            <el-button
+              v-if="scope.row._data.status == 1"
+              @click.native.prevent="noticeSetting(scope.row._data.id,'close')"
+              size="mini">
+              关闭
+            </el-button>
           </template>
         </el-table-column>
 

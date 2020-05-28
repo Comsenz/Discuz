@@ -16,7 +16,7 @@ use App\MessageTemplate\GroupMessage;
 use App\MessageTemplate\Wechat\WechatGroupMessage;
 use App\Models\Group;
 use App\Models\GroupPaidUser;
-use App\Models\OperationLog;
+use App\Models\UserActionLogs;
 use App\Models\User;
 use App\Notifications\System;
 use App\Repositories\UserRepository;
@@ -77,6 +77,7 @@ class UpdateUser
      */
     public function __invoke()
     {
+        /** @var User $user */
         $user = $this->users->findOrFail($this->id, $this->actor);
 
         $isSelf = $this->actor->id === $user->id;
@@ -158,7 +159,13 @@ class UpdateUser
             // 审核后系统通知事件
             $this->events->dispatch(new ChangeUserStatus($user, $logMsg));
 
-            OperationLog::writeLog($this->actor, $user, $actionType, $logMsg);
+            UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
+        }
+
+        if ($expiredAt = Arr::get($this->data, 'data.attributes.expired_at')) {
+            $this->assertAdmin($this->actor);
+
+            $user->expired_at = Carbon::parse($expiredAt);
         }
 
         if ($groups = Arr::get($attributes, 'groupId')) {
@@ -192,7 +199,7 @@ class UpdateUser
                     //新增付费用户组处理
                     foreach ($newPaidGroups as $paidgGroupKey => $paidGroupVal) {
                         $this->events->dispatch(
-                            new PaidGroup($paidGroupVal->id,  $user, null, $this->actor)
+                            new PaidGroup($paidGroupVal->id, $user, null, $this->actor)
                         );
                     }
                 }
@@ -221,7 +228,8 @@ class UpdateUser
             // 过滤内容
             $username = $this->specialChar->purify($username);
 
-            if (!$this->actor->isAdmin()) {
+            $isAdmin = $this->actor->isAdmin();
+            if (!$isAdmin) {
                 if ($user->username_bout >= $this->settings->get('username_bout', 'default', 1)) {
                     throw new TranslatorException('user_username_bout_limit_error');
                 }
@@ -231,10 +239,13 @@ class UpdateUser
                 throw new TranslatorException('user_username_already_exists');
             }
 
-            $user->changeUsername($username);
+            $user->changeUsername($username, $isAdmin);
         }
 
-        if ($signature = Arr::get($attributes, 'signature')) {
+        if (Arr::has($attributes, 'signature')) {
+            // 可为空
+            $signature = Arr::get($attributes, 'signature');
+
             // 敏感词校验
             $this->censor->checkText($signature);
             if ($this->censor->isMod) {

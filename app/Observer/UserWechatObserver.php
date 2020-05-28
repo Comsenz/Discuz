@@ -1,87 +1,109 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
+
 namespace App\Observer;
 
 use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;
 use Carbon\Carbon;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Http\UrlGenerator;
+use Discuz\Filesystem\CosAdapter;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 class UserWechatObserver
 {
+    /**
+     * @var \League\Flysystem\Filesystem
+     */
     protected $filesystem;
 
-    protected $app;
-
+    /**
+     * @var SettingsRepository
+     */
     protected $settings;
 
-    protected $url;
-
-    public function __construct(Filesystem $filesystem, SettingsRepository $settings, UrlGenerator $url)
+    /**
+     * @param Filesystem $filesystem
+     * @param SettingsRepository $settings
+     */
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings)
     {
         $this->filesystem = $filesystem;
         $this->settings = $settings;
-        $this->url = $url;
+    }
+
+    /**
+     * @param UserWechat $userWechat
+     */
+    public function created(UserWechat $userWechat)
+    {
+        $this->avatarSync($userWechat);
+    }
+
+    /**
+     * @param UserWechat $userWechat
+     */
+    public function updated(UserWechat $userWechat)
+    {
+        $this->avatarSync($userWechat);
     }
 
     /**
      * 同步微信头像
      *
      * @param UserWechat $userWechat
-     * @throws TranslatorException
      */
     public function avatarSync($userWechat)
     {
+        // 是否存在微信头像
+        if (empty($userWechat->headimgurl)) {
+            return;
+        }
+
         $user = $userWechat->user;
-        if (empty($user)) {
+
+        // 是否未绑定用户 或 用户已设置头像
+        if (empty($user) || $user->avatar_at) {
             return;
         }
 
-        // 判断用户是否有设置头像
-        if (!empty($user->avatar_at)) {
-            return;
-        }
+        // 获取微信头像
+        $response = (new Client())->request('get', $userWechat->headimgurl);
 
-        // 微信存储本地头像 用到的 HttpClient()
-        $wechatImg = $userWechat->headimgurl;
-        $avatarPath = $userWechat->user_id . '.png';
-        $avatarUrl = $userWechat->user_id . '.png';
-
-        // 判断是否开启云储存
-        if ($this->settings->get('qcloud_cos', 'qcloud')) {
-            $avatarPath = 'public/avatar/' . $avatarPath; // 云目录
-            $avatarUrl = $this->filesystem->url($avatarPath);
-        }
-
-        $httpClient = new Client();
-
-        $response = $httpClient->request('get', $wechatImg);
         if ($response->getStatusCode() != 200) {
-            throw new TranslatorException('user_avatar_update_sync_fail');
+            return;
         }
 
-        // 获取图片二进制
+        // 微信头像二进制内容
         $img = $response->getBody()->getContents();
 
-        $user->changeAvatar($avatarUrl);
+        // 是否云存储
+        $isRemote = $this->filesystem->getAdapter() instanceof CosAdapter;
 
-        $this->filesystem->put($avatarPath, $img);
+        // 头像名称
+        $avatar = $user->id . '.png';
 
-        $user->avatar_at = Carbon::now()->toDateTimeString();
+        /**
+         * 保存头像：开启云存储时，使用磁盘 avatar_cos，否则使用磁盘 avatar
+         * @see SettingsServiceProvider boot()
+         */
+        $this->filesystem->put(($isRemote ? 'public/avatar/' : '') . $avatar, $img);
+
+        /**
+         * 修改用户信息
+         *
+         * 因为之前开启 cos 时用户头像存的完整 url，获取头像地址是通过 '://' 判断
+         * 所以这里依旧给 cos 头像拼接 '://' 以作区分
+         * @see \App\Models\User getAvatarAttribute()
+         */
+        $user->changeAvatar(($isRemote ? '://' : '') . $avatar);
+        $user->avatar_at = Carbon::now();
+
         $user->save();
-    }
-
-    /**
-     * 更新User表头像
-     *
-     * @param UserWechat $userWechat
-     * @throws TranslatorException
-     */
-    public function updated(UserWechat $userWechat)
-    {
-        $this->avatarSync($userWechat);
     }
 }

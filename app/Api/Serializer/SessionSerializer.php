@@ -23,6 +23,7 @@ class SessionSerializer extends AbstractSerializer
     {
         return ['sessionId'=> $model['sessionId']];
     }
+
     public function getId($model)
     {
         return $model['sessionId'];

@@ -5,21 +5,20 @@ import {
   SET_FORUM_STATE,
   SET_FORUM_PROMISE,
   SET_USER,
-  SET_USER_STATE
+  SET_USER_STATE,
+  SET_USER_PROMISE
 } from "./mutationTypes";
 import browserDb from "../../../helpers/webDbHelper";
 
 export default {
   loadForum({ commit, state }) {
+    if (state.forumState == "FORUM_LOADING") {
+        return state.promise;
+    }
     return new Promise((resolve, reject) => {
       if (state.forumState == "FORUM_LOADED") {
         resolve(state.forum);
         return;
-      }
-      if (state.forumState == "FORUM_LOADING") {
-        state.forumPromise.then(res => {
-          resolve(res);
-        });
       }
       commit(SET_FORUM_STATE, "FORUM_LOADING");
       let promise = Vue.prototype
@@ -53,18 +52,21 @@ export default {
     commit(SET_FORUM_STATE, "FORUM_INIT");
   },
   loadUser({ commit, state }) {
+    if (state.userState == "USER_LOADING") {
+      return state.userPromise;
+    }
     return new Promise((resolve, reject) => {
-      if (state.userState == "USER_LOADED") {
-        resolve(state.user);
-        return;
-      }
       let userId = browserDb.getLItem("tokenId");
       if (!userId) {
         reject();
         return;
       }
+      if (state.userState == "USER_LOADED") {
+        resolve(state.user);
+        return;
+      }
       commit(SET_USER_STATE, "USER_LOADING");
-      Vue.prototype
+      let promise = Vue.prototype
         .appFetch({
           url: "users",
           method: "get",
@@ -78,6 +80,7 @@ export default {
           commit(SET_USER_STATE, "USER_LOADED");
           resolve(res);
         });
+      commit(SET_USER_PROMISE, promise);
     });
   },
   invalidateUser({ commit }){

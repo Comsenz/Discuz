@@ -29,11 +29,6 @@ class ThreadValidator extends AbstractValidator
     protected $qCloudCaptchaSwitch = false;
 
     /**
-     * @var bool
-     */
-    protected $qCloudVodSwitch = false;
-
-    /**
      * 获取相关设置
      *
      * @param Factory $validator
@@ -47,9 +42,6 @@ class ThreadValidator extends AbstractValidator
 
         // 获取后台设置的腾讯云验证码开关
         $this->qCloudCaptchaSwitch = (bool)$settings->get('qcloud_captcha', 'qcloud');
-
-        // 获取后台设置的腾讯云验证码开关
-        $this->qCloudVodSwitch = (bool)$settings->get('qcloud_vod', 'qcloud');
     }
 
     /**
@@ -61,7 +53,7 @@ class ThreadValidator extends AbstractValidator
             'title' => 'required|min:3|max:80',
             'price' => [
                 'sometimes',
-                'regex:/^(0|[1-9]\d{0,7})(\.\d{1,2})?$/',   // decimal 10,2
+                'regex:/^(0|[1-9]\d{0,5})(\.\d{1,2})?$/',   // decimal 10,2
             ],
         ];
 
@@ -81,19 +73,6 @@ class ThreadValidator extends AbstractValidator
                     }
                 },
             ];
-        }
-
-        // 发布、更新视频主题时验证
-        if ($this->data['type'] == 2) {
-            $rules['file_id'] = [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (!$this->qCloudVodSwitch) {
-                        $fail(trans('validation.qcloud_vod'));
-                    }
-                }
-            ];
-            $rules['file_name'] = 'required';
         }
 
         return $rules;

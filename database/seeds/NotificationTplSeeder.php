@@ -28,11 +28,11 @@ class NotificationTplSeeder extends Seeder
         $wechat = $this->wechatData();
 
         // 新增新通知(叠加)
-        $newData = $this->newData();
+        $newData = NotificationTplModel::addData();
 
-        $datas = array_merge($system, $wechat, $newData);
+        $appendArr = array_merge($system, $wechat, $newData);
 
-        $notificationTpl->insert($datas);
+        $notificationTpl->insert($appendArr);
     }
 
     /**
@@ -413,143 +413,6 @@ class NotificationTplSeeder extends Seeder
                     '{username}' => '用户名',
                     '{oldgroupname}' => '老用户组',
                     '{newgroupname}' => '新用户组'
-                ])
-            ],
-        ];
-    }
-
-    /**
-     * 新增通知数据
-     * (在数组最后以叠加的形式初始化)
-     *
-     * @return array
-     */
-    public function newData()
-    {
-        return [
-
-            /*
-            |--------------------------------------------------------------------------
-            | 新增系统通知
-            |--------------------------------------------------------------------------
-            */
-
-            [
-                'status' => 1,
-                'type' => 0,
-                'type_name' => '内容回复通知',
-                'title' => '内容通知',
-                'content' => '',
-                'vars' => '',
-            ],
-            [
-                'status' => 1,
-                'type' => 0,
-                'type_name' => '内容点赞通知',
-                'title' => '内容通知',
-                'content' => '',
-                'vars' => '',
-            ],
-            [
-                'status' => 1,
-                'type' => 0,
-                'type_name' => '内容打赏通知',
-                'title' => '内容通知',
-                'content' => '',
-                'vars' => '',
-            ],
-            [
-                'status' => 1,
-                'type' => 0,
-                'type_name' => '内容@通知',
-                'title' => '内容通知',
-                'content' => '',
-                'vars' => '',
-            ],
-
-            /*
-            |--------------------------------------------------------------------------
-            | 新增微信通知
-            |--------------------------------------------------------------------------
-            */
-
-            [
-                'status' => 0,
-                'type' => 1,
-                'type_name' => '内容回复通知',
-                'title' => '微信内容通知',
-                'content' => NotificationTplModel::getWechatFormat([
-                    'first' => '{username}回复了你',
-                    'keyword1' => '{content}',
-                    'keyword2' => '{subject}',
-                    'keyword3' => '{dateline}',
-                    'remark' => '点击查看',
-                    'redirect_url' => '{redirecturl}',
-                ]),
-                'vars' => serialize([
-                    '{username}' => '回复人用户名',
-                    '{content}' => '回复内容',
-                    '{subject}' => '原文内容',
-                    '{dateline}' => '通知时间',
-                    '{redirecturl}' => '跳转地址',
-                ])
-            ],
-            [
-                'status' => 0,
-                'type' => 1,
-                'type_name' => '内容点赞通知',
-                'title' => '微信内容通知',
-                'content' => NotificationTplModel::getWechatFormat([
-                    'first' => '{username}点赞了你',
-                    'keyword1' => '{content}',
-                    'keyword2' => '{dateline}',
-                    'remark' => '点击查看',
-                    'redirect_url' => '{redirecturl}',
-                ]),
-                'vars' => serialize([
-                    '{username}' => '点赞人用户名',
-                    '{content}' => '点赞内容',
-                    '{dateline}' => '通知时间',
-                    '{redirecturl}' => '跳转地址',
-                ])
-            ],
-            [
-                'status' => 0,
-                'type' => 1,
-                'type_name' => '内容打赏通知',
-                'title' => '微信内容通知',
-                'content' => NotificationTplModel::getWechatFormat([
-                    'first' => '{username}打赏了你{money}',
-                    'keyword1' => '{content}',
-                    'keyword2' => '{dateline}',
-                    'remark' => '点击查看',
-                    'redirect_url' => '{redirecturl}',
-                ]),
-                'vars' => serialize([
-                    '{username}' => '打赏人用户名',
-                    '{money}' => '金额',
-                    '{content}' => '打赏内容',
-                    '{dateline}' => '通知时间',
-                    '{redirecturl}' => '跳转地址',
-                ])
-            ],
-            [
-                'status' => 0,
-                'type' => 1,
-                'type_name' => '内容@通知',
-                'title' => '微信内容通知',
-                'content' => NotificationTplModel::getWechatFormat([
-                    'first' => '{username}@了你',
-                    'keyword1' => '{content}',
-                    'keyword2' => '{dateline}',
-                    'remark' => '点击查看',
-                    'redirect_url' => '{redirecturl}',
-                ]),
-                'vars' => serialize([
-                    '{username}' => '@人用户名',
-                    '{content}' => '@内容',
-                    '{dateline}' => '通知时间',
-                    '{redirecturl}' => '跳转地址',
                 ])
             ],
         ];

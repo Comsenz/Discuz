@@ -45,10 +45,13 @@ class BasicPostSerializer extends AbstractSerializer
 
         $attributes = [
             'replyUserId'       => $model->reply_user_id,
+            'summary'           => $model->summary,
             'content'           => $model->content,
             'contentHtml'       => $model->formatContent(),
-            'replyCount'        => $model->reply_count,
-            'likeCount'         => $model->like_count,
+            'replyCount'        => (int) $model->reply_count,
+            'likeCount'         => (int) $model->like_count,
+            'longitude'         => $model->longitude,
+            'latitude'          => $model->latitude,
             'createdAt'         => $this->formatDate($model->created_at),
             'updatedAt'         => $this->formatDate($model->updated_at),
             'isApproved'        => (int) $model->is_approved,
@@ -67,6 +70,8 @@ class BasicPostSerializer extends AbstractSerializer
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
+        } else {
+            $attributes['isDeleted'] = false;
         }
 
         Post::setStateUser($this->actor);
@@ -152,7 +157,7 @@ class BasicPostSerializer extends AbstractSerializer
      */
     public function logs($post)
     {
-        return $this->hasMany($post, OperationLogSerializer::class);
+        return $this->hasMany($post, UserActionLogsSerializer::class);
     }
 
     /**
@@ -161,6 +166,6 @@ class BasicPostSerializer extends AbstractSerializer
      */
     public function lastDeletedLog($post)
     {
-        return $this->hasOne($post, OperationLogSerializer::class);
+        return $this->hasOne($post, UserActionLogsSerializer::class);
     }
 }

@@ -78,25 +78,12 @@ class UploadAvatar
     {
         $user = $this->users->findOrFail($this->id);
 
-        /**
-         * 检测是否开启头像过滤-开启后限制次数
-         */
-        if (!$this->actor->isAdmin()) {
-            if ($this->settings->get('qcloud_cms_image', 'qcloud', 0)) {
-                if (!empty($user->avatar_at)) {
-                    if (Carbon::now() < Carbon::parse($user->avatar_at)->addDay()) {
-                        throw new UploadException('upload_time_not_up');
-                    }
-                }
-            }
-        }
-
         if ($this->actor->id !== $user->id) {
             $this->assertCan($this->actor, 'edit', $user);
         }
 
         $ext = pathinfo($this->upload_file->getClientFilename(), PATHINFO_EXTENSION);
-        $ext ? $ext = ".$ext" : "";
+        $ext ? $ext = ".$ext" : '';
         $tmpFile = tempnam($this->app->storagePath().'/tmp', 'avatar') . $ext;
 
         $this->upload_file->moveTo($tmpFile);

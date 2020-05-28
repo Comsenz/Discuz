@@ -199,6 +199,12 @@ return [
         'cash_sum_limit'        => '每日提现总金额上限',
         'cash_apply_amount'     => '提现金额',
 
+        // settings - watermark 水印设置
+        'watermark'             => '水印开关',
+        'position'              => '水印位置',
+        'horizontal_spacing'    => '水印水平边距',
+        'vertical_spacing'      => '水印垂直边距',
+
         // sms
         'sms_code'              => '验证码',
         'sms_type' => '验证码类型',

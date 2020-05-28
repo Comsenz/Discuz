@@ -7,16 +7,16 @@
 
 namespace App\Api\Controller\Settings;
 
+use App\Events\Setting\Saving;
 use App\Models\Group;
 use App\Settings\SettingsRepository;
 use App\Validators\SetSettingValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Foundation\Application;
 use Discuz\Http\DiscuzResponseFactory;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -26,18 +26,32 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SetSettingsController implements RequestHandlerInterface
 {
-    use AssertPermissionTrait, QcloudTrait;
+    use AssertPermissionTrait;
+    use QcloudTrait;
 
-    protected $cache;
+    /**
+     * @var Events
+     */
+    protected $events;
 
+    /**
+     * @var SettingsRepository
+     */
     protected $settings;
 
+    /**
+     * @var SetSettingValidator
+     */
     protected $validator;
 
-    public function __construct(CacheRepository $cache, SettingsRepository $settings, Application $app, SetSettingValidator $validator)
+    /**
+     * @param Events $events
+     * @param SettingsRepository $settings
+     * @param SetSettingValidator $validator
+     */
+    public function __construct(Events $events, SettingsRepository $settings, SetSettingValidator $validator)
     {
-        $this->cache = $cache;
-        $this->app = $app;
+        $this->events = $events;
         $this->settings = $settings;
         $this->validator = $validator;
     }
@@ -52,12 +66,19 @@ class SetSettingsController implements RequestHandlerInterface
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
+        // 转换为以 tag + key 为键的集合，即可去重又方便取用
         $settings = collect($request->getParsedBody()->get('data', []))
             ->pluck('attributes')
             ->keyBy(function ($item) {
-                // 以 tag + key 为键既可去重又方便取用
                 return $item['tag'] . '_' . $item['key'];
             });
+
+        /**
+         * TODO: 将不同功能的设置放到监听器中验证，不要全写在 SetSettingValidator
+         * @example CheckWatermarkSetting::class
+         * @deprecated SetSettingValidator::class（建议整改后废弃）
+         */
+        $this->events->dispatch(new Saving($settings));
 
         // 分成比例检查
         $siteAuthorScale = $settings->pull('default_site_author_scale');

@@ -27,7 +27,7 @@ class ThreadVideoNotify
 
     /**
      *
-     * @param $data
+     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -37,19 +37,23 @@ class ThreadVideoNotify
     /**
      *
      * @param Dispatcher $events
-     * @param ThreadVideoRepository $threadVideo
+     * @param ThreadVideoRepository $threadVideos
      * @param Censor $censor
      * @param PostRepository $posts
      * @param ThreadRepository $threads
      * @return string
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideo, Censor $censor, PostRepository $posts, ThreadRepository $threads)
+    public function handle(Dispatcher $events, ThreadVideoRepository $threadVideos, Censor $censor, PostRepository $posts, ThreadRepository $threads)
     {
         $this->events = $events;
-        $log = app('log');
-        $log->info('vod_notify', $this->data);
+        $log = app('qcloudLog');
+        try {
+            $log->info('vod_notify', $this->data);
+        } catch (\Exception $e) {
+            goto todo;
+        }
 
+        todo:
         //只处理视频处理类型的通知
         if (Arr::get($this->data, 'EventType') != 'ProcedureStateChanged') {
             return 'pass';
@@ -57,7 +61,9 @@ class ThreadVideoNotify
         $taskDetail  = $this->describeTaskDetail(Arr::get($this->data, 'ProcedureStateChangeEvent.TaskId'));
         if ($taskDetail && $taskDetail->TaskType == 'Procedure' && $taskDetail->Status == 'FINISH') {
             if ($taskDetail->ProcedureTask->Status == 'FINISH') {
-                $threadVideo = $threadVideo->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
+
+                /** @var ThreadVideo $threadVideo */
+                $threadVideo = $threadVideos->findOrFailByFileId($taskDetail->ProcedureTask->FileId);
 
                 foreach ($taskDetail->ProcedureTask->MediaProcessResultSet as $key => $value) {
                     //普通转码
@@ -66,6 +72,8 @@ class ThreadVideoNotify
                             //转码成功
                             $threadVideo->status = ThreadVideo::VIDEO_STATUS_SUCCESS;
                             $threadVideo->media_url = $value->TranscodeTask->Output->Url;
+                            $threadVideo->width = $value->TranscodeTask->Output->Width;
+                            $threadVideo->height = $value->TranscodeTask->Output->Height;
                         } else {
                             //转码失败
                             $threadVideo->status = ThreadVideo::VIDEO_STATUS_FAIL;

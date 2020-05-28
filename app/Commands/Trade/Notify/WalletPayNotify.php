@@ -41,8 +41,14 @@ class WalletPayNotify
      */
     public function handle(ConnectionInterface $connection, Dispatcher $events, SettingsRepository $setting)
     {
-        $log = app('log');
-        $log->info('notify', $this->data);
+        $log = app('payLog');
+        try {
+            $log->info('notify', $this->data);
+        } catch (\Exception $e) {
+            goto todo;
+        }
+
+        todo:
         $payment_sn = $this->data['payment_sn'];//商户交易号
         $trade_no = $this->data['payment_sn'];//微信交易号
 
@@ -89,11 +95,14 @@ class WalletPayNotify
 
             //支付成功处理
             $order_info = $this->paymentSuccess($payment_sn, $trade_no, $setting, $events);
-            $connection->commit();
+
             if ($order_info) {
                 $events->dispatch(
                     new Updated($order_info)
                 );
+            }
+            $connection->commit();
+            if ($order_info) {
                 return [
                     'wallet_pay' => [
                         'result' => 'success',

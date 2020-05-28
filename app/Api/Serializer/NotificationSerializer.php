@@ -26,8 +26,6 @@ class NotificationSerializer extends AbstractSerializer
             'id'            => $model->id,
             'type'          => $model->type,
             'user_id'       => $model->notifiable_id,
-            'user_name'     => $model->user_name ?: '',
-            'user_avatar'   => $model->user_avatar ?: '',
             'read_at'       => $this->formatDate($model->read_at),
             'created_at'    => $this->formatDate($model->created_at),
         ], $model->data);
@@ -35,8 +33,8 @@ class NotificationSerializer extends AbstractSerializer
         // 新增单独赋值的字段值
         $result = array_merge($result, [
             'user_name' => $model->user_name ?: '',
-            'user_avatar' => $model->user_avatar ? $model->user_avatar . '?' . Carbon::parse($model->avatar_at)->timestamp : '',
-            'thread_user_name' => $model->thread_user_name ?? '',
+            'user_avatar' => $model->user_avatar ?: '',
+            'thread_username' => $model->thread_username ?? '',
             'thread_user_groups' => $model->thread_user_groups ?? '',
         ]);
 
