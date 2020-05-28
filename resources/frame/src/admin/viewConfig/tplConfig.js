@@ -279,6 +279,18 @@ export default {
               attribution: "全局"
             }
           },
+          "add-sensitive-words": {
+            comLoad: function(resolve) {
+              require([
+                "../view/site/global/contentFilteringSet/addSensitiveWordsView"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "内容过滤设置",
+              name: "contentFilteringSet",
+              attribution: "全局"
+            }
+          },
           /*'user-manage-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/userManageSetView'], resolve)
@@ -315,6 +327,17 @@ export default {
           "cont-class": {
             comLoad: function(resolve) {
               require(["../view/site/cont/contClassView"], resolve);
+            },
+            metaInfo: {
+              title: "内容分类",
+              name: "contClass",
+              attribution: "内容"
+            }
+          },
+
+          "cont-class-configure": {
+            comLoad: function(resolve) {
+              require(["../view/site/cont/contClassConfigureView"], resolve);
             },
             metaInfo: {
               title: "内容分类",

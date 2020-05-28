@@ -122,7 +122,7 @@ class UploadLogoController extends AbstractResourceController
             throw new $e;
         }
 
-        $this->settings->set($type, $fileName, $type === 'watermark_image' ? 'watermark' : '');
+        $this->settings->set($type, $fileName, $type === 'watermark_image' ? 'watermark' : 'default');
 
         return [
             'key' => 'logo',

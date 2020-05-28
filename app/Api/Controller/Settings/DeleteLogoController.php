@@ -75,7 +75,7 @@ class DeleteLogoController extends AbstractResourceController
         $type = in_array($type, $this->allowTypes) ? $type : 'logo';
 
         // 设置项 Tag
-        $settingTag = $type === 'watermark_image' ? 'watermark' : '';
+        $settingTag = $type === 'watermark_image' ? 'watermark' : 'default';
 
         // 删除原图
         $this->remove($this->settings->get($type, $settingTag));

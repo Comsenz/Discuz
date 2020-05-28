@@ -55,6 +55,7 @@ module.exports = {
   invite: "/invite", //创建邀请码
   groups: "/groups", //获取所有操作类型、获取所有用户角色
   groupPermission: "/permission", //修改用户组权限
+  setPermission: "/permission/group", //设置权限的用户组
   deleteNotification: "/notification", //删除通知里的回复我的
   wechatDelete: "/users/", //修改资料里的解绑微信
   wechatBind: "/oauth/wechat/user", //去绑定微信
