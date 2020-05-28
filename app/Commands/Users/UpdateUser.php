@@ -219,6 +219,8 @@ class UpdateUser
         }
 
         if ($username = Arr::get($attributes, 'username')) {
+            $validator['username'] = $username;
+
             // 敏感词校验
             $this->censor->checkText($username, 'username');
             if ($this->censor->isMod) {
@@ -235,11 +237,8 @@ class UpdateUser
                 }
             }
 
-            if (User::where('username', $username)->exists()) {
-                throw new TranslatorException('user_username_already_exists');
-            }
-
             $user->changeUsername($username, $isAdmin);
+
         }
 
         if (Arr::has($attributes, 'signature')) {

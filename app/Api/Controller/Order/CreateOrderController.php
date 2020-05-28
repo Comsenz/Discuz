@@ -24,7 +24,7 @@ class CreateOrderController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public $include = [
+    public $optionalInclude = [
         'user',
         'thread',
         'group',
