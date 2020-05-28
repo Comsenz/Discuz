@@ -9,7 +9,7 @@
   width: 200px;
   height: 100px;
   border-radius: 4px;
-  background-color: #409EFF;
+  background-color: #409eff;
   text-align: center;
   color: #fff;
   padding: 40px 20px;
@@ -20,13 +20,14 @@
 /*
   内容分类
   */
-.cont-class-box{
+.cont-class-box {
   color: $titleColor;
 
-  .cont-class-table{
-    margin-top: 15PX;
+  .cont-class-table {
+    margin-top: 15px;
   }
 }
+
 /*
   转码状态颜色样式
   */
@@ -35,236 +36,229 @@
 }
 .graybtn {
   span {
-    color: #C0C4CC;
+    color: #c0c4cc;
   }
 }
 /*
   内容管理：最新主题
   */
-.cont-manage-box{
+.cont-manage-box {
   color: $titleColor;
 
-  .cont-manage-header{
-    margin-top: 15PX;
+  .cont-manage-header {
+    margin-top: 15px;
 
-    &_condition{
+    &_condition {
       flex: 1;
       display: flex;
       align-items: center;
 
       &-title {
-        width: 70PX;
+        width: 70px;
       }
-      .el-input{
+      .el-input {
         flex: 1;
       }
-      .el-select{
+      .el-select {
         flex: 1;
       }
-      .el-date-editor{
+      .el-date-editor {
         flex: 1;
-        width: 220PX;
+        width: 220px;
       }
-      .el-button{
-        margin-left: 15PX;
+      .el-button {
+        margin-left: 15px;
       }
     }
 
-    &_condition-lf{
-      margin-right: 30PX;
+    &_condition-lf {
+      margin-right: 30px;
     }
-    &_condition-rh{
+    &_condition-rh {
       flex: 2;
     }
 
-    .cont-manage-header_condition-mid{
-      margin-right: 30PX;
+    .cont-manage-header_condition-mid {
+      margin-right: 30px;
     }
 
-    .condition-box{
+    .condition-box {
       display: flex;
-      margin-bottom: 15PX;
+      margin-bottom: 15px;
     }
 
-    &_middle{
-      .cont-manage-header_condition:last-of-type{
-        margin-left: 30PX;
+    &_middle {
+      .cont-manage-header_condition:last-of-type {
+        margin-left: 30px;
       }
     }
 
-    &_bottom{
-      .spacing{
-        width: 20PX;
+    &_bottom {
+      .spacing {
+        width: 20px;
         text-align: center;
       }
     }
-
   }
 
-  .cont-manage-theme{
-    margin-top: 15PX;
+  .cont-manage-theme {
+    margin-top: 15px;
 
-    &__table{
+    &__table {
       width: 100%;
 
-      &-header{
+      &-header {
         width: 100%;
-        height: 53PX;
+        height: 53px;
         background-color: $tableHeaderColor;
         display: flex;
         align-items: center;
-        padding-left: 17PX;
+        padding-left: 17px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1PX solid $tableBorderColor;
+        border-bottom: 1px solid $tableBorderColor;
 
-        &__title{
-          margin-left: 30PX;
-          color:$commentColor ;
+        &__title {
+          margin-left: 30px;
+          color: $commentColor;
         }
-
       }
 
-      &-footer{
-        padding: 15PX 0;
+      &-footer {
+        padding: 15px 0;
         text-align: center;
       }
 
-      &-side{
+      &-side {
         width: 100%;
-        .el-checkbox__label{
+        .el-checkbox__label {
           display: none;
         }
       }
 
-      &-long-text{
-        line-height: 20PX;
+      &-long-text {
+        line-height: 20px;
         color: $titleColor;
       }
 
-      &-main{
-        line-height: 20PX;
+      &-main {
+        line-height: 20px;
 
-        &__cont-text{
+        &__cont-text {
           width: 100%;
           color: $titleColor;
-          word-break:break-all;
+          word-break: break-all;
           display: block;
         }
 
-        &__cont-imgs{
-          &-p{
+        &__cont-imgs {
+          &-p {
             text-align: center;
-            margin-top: 14PX;
-            img{
+            margin-top: 14px;
+            img {
               max-width: 60%;
               cursor: pointer;
             }
           }
         }
 
-        &__cont-annex{
-          margin-top: 10PX;
+        &__cont-annex {
+          margin-top: 10px;
         }
       }
     }
-
   }
 
-  .cont-manage-operating{
-    p{
-      padding: 25PX 0 15PX 0;
+  .cont-manage-operating {
+    p {
+      padding: 25px 0 15px 0;
       color: $commentColor;
     }
 
-    .cont-manage-operating__table-label{
-      padding-left: 31PX;
+    .cont-manage-operating__table-label {
+      padding-left: 31px;
     }
 
-    .el-radio__label{
-      padding-left: 31PX;
+    .el-radio__label {
+      padding-left: 31px;
     }
 
-    .cont-manage__option-select{
-      .el-radio__label{
-        padding-left: 10PX;
+    .cont-manage__option-select {
+      .el-radio__label {
+        padding-left: 10px;
       }
     }
-
   }
 }
-
 
 /*
   内容管理：最新回复
 */
-.latest-reply-box{
+.latest-reply-box {
+  .latest-reply-header {
+    margin-top: 15px;
 
-  .latest-reply-header{
-    margin-top: 15PX;
-
-    &_condition{
+    &_condition {
       flex: 1;
       display: flex;
       align-items: center;
 
       &-title {
-        width: 70PX;
+        width: 70px;
       }
-      .el-input{
+      .el-input {
         flex: 1;
       }
-      .el-date-editor{
+      .el-date-editor {
         flex: 1;
-        width: 220PX;
+        width: 220px;
       }
-      .el-button{
-        margin-left: 15PX;
+      .el-button {
+        margin-left: 15px;
       }
     }
 
-    &_condition-lf{
-      margin-right: 30PX;
+    &_condition-lf {
+      margin-right: 30px;
     }
 
-    .condition-box{
+    .condition-box {
       display: flex;
-      margin-bottom: 15PX;
+      margin-bottom: 15px;
     }
 
-    &_bottom{
-      .condition-time{
+    &_bottom {
+      .condition-time {
         flex: 1;
         max-width: 42%;
-        min-width: 425.5PX;
+        min-width: 425.5px;
       }
     }
   }
 
-  .latest-reply-theme{
-    margin-top: 15PX;
+  .latest-reply-theme {
+    margin-top: 15px;
 
-    &__table{
+    &__table {
       width: 100%;
 
-      &-header{
+      &-header {
         width: 100%;
-        height: 53PX;
+        height: 53px;
         background-color: $tableHeaderColor;
         display: flex;
         align-items: center;
-        padding-left: 17PX;
+        padding-left: 17px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1PX solid $tableBorderColor;
+        border-bottom: 1px solid $tableBorderColor;
 
-        &__title{
-          margin-left: 30PX;
-          color:$commentColor ;
+        &__title {
+          margin-left: 30px;
+          color: $commentColor;
         }
-
       }
 
       //&-footer{
@@ -272,77 +266,70 @@
       //  text-align: center;
       //}
 
-      &-side{
+      &-side {
         width: 100%;
-        .el-checkbox__label{
+        .el-checkbox__label {
           display: none;
         }
       }
 
-      &-long-text{
-        line-height: 20PX;
+      &-long-text {
+        line-height: 20px;
         color: $titleColor;
       }
 
-      &-main{
-        line-height: 20PX;
+      &-main {
+        line-height: 20px;
 
-        &__cont-text{
+        &__cont-text {
           width: 100%;
           color: $titleColor;
-          word-break:break-all;
+          word-break: break-all;
           display: block;
         }
 
-        &__cont-imgs{
-          &-p{
+        &__cont-imgs {
+          &-p {
             text-align: center;
-            margin-top: 14PX;
-            img{
+            margin-top: 14px;
+            img {
               max-width: 60%;
               cursor: pointer;
             }
           }
         }
 
-        &__cont-annex{
-          margin-top: 10PX;
+        &__cont-annex {
+          margin-top: 10px;
         }
       }
 
-      &-footer{
+      &-footer {
         width: 100%;
         height: 100%;
         display: flex;
 
-        &__lf{
+        &__lf {
           display: flex;
           align-items: center;
-          margin-right: 66PX;
+          margin-right: 66px;
 
-          i{
-            height: 16PX;
-            width: 1PX;
+          i {
+            height: 16px;
+            width: 1px;
             display: inline-block;
-            background-color: #DCDFE6;
-            margin: 0 14PX;
+            background-color: #dcdfe6;
+            margin: 0 14px;
           }
         }
-
       }
-
-
     }
   }
 
-  .latest-reply-footer{
-    margin-top: 30PX;
+  .latest-reply-footer {
+    margin-top: 30px;
   }
-
 }
-
-
-
 
 /*
   内容管理--主题搜索
@@ -350,530 +337,499 @@
 
 /*范围box*/
 
-.range-box{
-
-  .card-box__main{
+.range-box {
+  .card-box__main {
     width: 40%;
     display: flex;
     align-items: center;
 
-    i{
-      width: 10PX;
-      height: 1PX;
-      margin: 0 15PX;
+    i {
+      width: 10px;
+      height: 1px;
+      margin: 0 15px;
       background-color: $commentColor;
     }
   }
 }
 
-.cont-manage-search-box{
-  margin-top: 15PX;
+.cont-manage-search-box {
+  margin-top: 15px;
 
-  .el-select{
+  .el-select {
     width: 40%;
   }
 
-  .el-button{
-    margin-right:40PX;
+  .el-button {
+    margin-right: 40px;
   }
 
-  .cont-manage-search-more{
-
-    .el-date-editor{
+  .cont-manage-search-more {
+    .el-date-editor {
       width: 100%;
     }
-
   }
-
 }
-
 
 /*
   内容审核
 */
 
 /*搜索栏下标题*/
-.cont-review-header__lf-title{
-  min-width: 70PX;
-  line-height: 36PX;
+.cont-review-header__lf-title {
+  min-width: 70px;
+  line-height: 36px;
 }
 
-.cont-review-box{
+.cont-review-box {
   width: 100%;
   height: 100%;
   color: $titleColor;
   .iconvideo {
-    line-height: 20PX;
-    font-size: 16PX;
+    line-height: 20px;
+    font-size: 16px;
     display: inline-block;
     vertical-align: bottom;
   }
-  .cont-review-header{
+  .cont-review-header {
     width: 100%;
-    height: 100PX;       //根据设计图算的出来的效果不一样，写了一个大概
-    padding: 15PX 0;
+    height: 100px; //根据设计图算的出来的效果不一样，写了一个大概
+    padding: 15px 0;
     display: flex;
     //justify-content: space-between;
 
-    &__lf{
+    &__lf {
       //width: 39%;
       display: inline-block;
-      margin-right: 25PX;
+      margin-right: 25px;
       flex-grow: 1;
-      div{
-        height: 36PX;
+      div {
+        height: 36px;
         display: flex;
 
-        .el-input{
+        .el-input {
           width: 100%;
         }
 
-        .el-select{
+        .el-select {
           width: 100%;
         }
       }
 
-      div:first-of-type{
-        margin-bottom: 15PX;
+      div:first-of-type {
+        margin-bottom: 15px;
       }
-
     }
 
-    &__rt{
+    &__rt {
       //width: 59%;
       flex-grow: 1;
       display: inline-block;
 
-      div{
-        height: 36PX;
+      div {
+        height: 36px;
         display: flex;
 
-        .content-contains-input{
-          width: 200PX;
+        .content-contains-input {
+          width: 200px;
         }
 
-        .el-input--medium{
+        .el-input--medium {
           //width: 200PX;
           width: 100%;
         }
 
-        .el-checkbox{
-          line-height: 36PX;
-          margin-left: 40PX;
+        .el-checkbox {
+          line-height: 36px;
+          margin-left: 40px;
         }
 
-        .el-select--medium{
+        .el-select--medium {
           //width: 140PX;
           width: 100%;
-          margin-right: 10PX;
+          margin-right: 10px;
         }
       }
 
-      div:first-of-type{
-        margin-bottom: 15PX;
+      div:first-of-type {
+        margin-bottom: 15px;
       }
-
     }
   }
 
-  .cont-review-table{
-    border-top: 1PX solid $tableBorderColor;
+  .cont-review-table {
+    border-top: 1px solid $tableBorderColor;
 
-    &__side{
-
-      .el-radio-group{
+    &__side {
+      .el-radio-group {
         display: flex;
         flex-direction: column;
 
-        .el-radio{
+        .el-radio {
           margin-right: 0;
-          margin-bottom: 12PX;
+          margin-bottom: 12px;
         }
       }
     }
 
-    &__long-text{
-      line-height: 20PX;
+    &__long-text {
+      line-height: 20px;
       color: $titleColor;
     }
 
-    &__header{
+    &__header {
       width: 100%;
       display: flex;
       align-items: center;
 
-      div{
-        flex-grow:1;
-        p:nth-of-type(2){
-          margin-top: 12PX;
+      div {
+        flex-grow: 1;
+        p:nth-of-type(2) {
+          margin-top: 12px;
         }
 
-        .desc{
+        .desc {
           color: $descColor;
         }
       }
 
-      div:first-of-type{
+      div:first-of-type {
         flex-grow: 2;
       }
-
     }
 
-    &__main{
-      line-height: 20PX;
-      .highlight{
+    &__main {
+      line-height: 20px;
+      .highlight {
         background-color: yellow;
       }
 
-      &__cont-text{
+      &__cont-text {
         width: 100%;
         color: $titleColor;
-        word-break:break-all;
+        word-break: break-all;
         display: block;
       }
 
-      &__cont-imgs{
-        &-p{
+      &__cont-imgs {
+        &-p {
           text-align: center;
-          margin-top: 14PX;
-          img{
+          margin-top: 14px;
+          img {
             max-width: 60%;
             cursor: pointer;
           }
         }
       }
 
-      &__cont-annex{
-        margin-top: 10PX;
+      &__cont-annex {
+        margin-top: 10px;
       }
-
     }
-    &__footer{
+    &__footer {
       width: 100%;
       height: 100%;
       display: flex;
 
-      &__lf{
+      &__lf {
         display: flex;
         align-items: center;
-        margin-right: 66PX;
+        margin-right: 66px;
 
-        i{
-          height: 16PX;
-          width: 1PX;
+        i {
+          height: 16px;
+          width: 1px;
           display: inline-block;
-          background-color: #DCDFE6;
-          margin: 0 14PX;
+          background-color: #dcdfe6;
+          margin: 0 14px;
         }
       }
 
-      &__rt{
+      &__rt {
         //flex-grow: 1;
         display: flex;
         justify-content: flex-start;
         align-items: center;
 
-        .el-input{
-          width: 140PX;
-          margin-right: 10PX;
+        .el-input {
+          width: 140px;
+          margin-right: 10px;
         }
-
       }
 
-      &__bottom{
+      &__bottom {
         flex: 1;
         text-align: right;
       }
-
     }
 
-    &__table-footer{
-      padding: 15PX 0;
+    &__table-footer {
+      padding: 15px 0;
       text-align: center;
     }
-
   }
 
-  .cont-review-footer{
-    margin-top: 30PX;
+  .cont-review-footer {
+    margin-top: 30px;
 
-    .el-button--primary{
-      margin-right: 20PX;
+    .el-button--primary {
+      margin-right: 20px;
     }
 
-    .el-button--text{
-      margin-left: 20PX;
+    .el-button--text {
+      margin-left: 20px;
     }
 
-    .el-checkbox{
-      margin-left: 20PX;
+    .el-checkbox {
+      margin-left: 20px;
     }
-
   }
-
 }
-
 
 /*
   回复审核
 */
-.reply-review-box{
+.reply-review-box {
   width: 100%;
   height: 100%;
   color: $titleColor;
 
-  .cont-review-header{
+  .cont-review-header {
     width: 100%;
-    height: 100PX;
-    padding: 15PX 0;
+    height: 100px;
+    padding: 15px 0;
     display: flex;
     //justify-content: space-between;
 
-    &__lf{
+    &__lf {
       //width: 39%;
       display: inline-block;
-      margin-right: 25PX;
+      margin-right: 25px;
       flex-grow: 1;
-      div{
-        height: 36PX;
+      div {
+        height: 36px;
         display: flex;
 
-        .el-input{
+        .el-input {
           width: 100%;
         }
 
-        .el-select{
+        .el-select {
           width: 100%;
         }
       }
 
-      div:first-of-type{
-        margin-bottom: 15PX;
+      div:first-of-type {
+        margin-bottom: 15px;
       }
-
     }
 
-    &__rt{
+    &__rt {
       //width: 59%;
       display: inline-block;
       flex-grow: 1;
       //margin-left: 10PX;
 
-      div{
-        height: 36PX;
+      div {
+        height: 36px;
         display: flex;
 
-        .content-contains-input{
+        .content-contains-input {
           //width: 200PX;
           width: 100%;
         }
 
-        .el-input--medium{
+        .el-input--medium {
           //width: 200PX;
           width: 100%;
         }
 
-        .el-checkbox{
-          line-height: 36PX;
-          margin-left: 40PX;
+        .el-checkbox {
+          line-height: 36px;
+          margin-left: 40px;
         }
 
-        .el-select--medium{
+        .el-select--medium {
           //width: 140PX;
           width: 100%;
-          margin-right: 10PX;
+          margin-right: 10px;
         }
       }
 
-      div:first-of-type{
-        margin-bottom: 15PX;
+      div:first-of-type {
+        margin-bottom: 15px;
       }
-
     }
-
   }
 
-  .cont-review-table{
-    border-top: 1PX solid $tableBorderColor;
+  .cont-review-table {
+    border-top: 1px solid $tableBorderColor;
 
-    &__side{
-
-      .el-radio-group{
+    &__side {
+      .el-radio-group {
         display: flex;
         flex-direction: column;
 
-        .el-radio{
+        .el-radio {
           margin-right: 0;
-          margin-bottom: 12PX;
+          margin-bottom: 12px;
         }
       }
     }
 
-    &__long-text{
-      line-height: 20PX;
+    &__long-text {
+      line-height: 20px;
       color: $titleColor;
     }
 
-    &__header{
+    &__header {
       width: 100%;
       display: flex;
       align-items: center;
 
-      div{
-        flex-grow:1;
-        p:nth-of-type(2){
-          margin-top: 12PX;
+      div {
+        flex-grow: 1;
+        p:nth-of-type(2) {
+          margin-top: 12px;
         }
 
-        .desc{
+        .desc {
           color: $descColor;
         }
       }
 
-      div:first-of-type{
+      div:first-of-type {
         flex-grow: 2;
       }
-
     }
 
-    &__main{
-      line-height: 20PX;
-      .highlight{
+    &__main {
+      line-height: 20px;
+      .highlight {
         background-color: yellow;
       }
 
-      &__cont-text{
+      &__cont-text {
         width: 100%;
         color: $titleColor;
-        word-break:break-all;
+        word-break: break-all;
         display: block;
       }
 
-      &__cont-imgs{
-        &-p{
+      &__cont-imgs {
+        &-p {
           text-align: center;
-          margin-top: 14PX;
-          img{
+          margin-top: 14px;
+          img {
             max-width: 60%;
             cursor: pointer;
           }
         }
       }
-
     }
-    &__footer{
+    &__footer {
       width: 100%;
       height: 100%;
       display: flex;
 
-
-      &__lf{
+      &__lf {
         display: flex;
         align-items: center;
         //flex-grow: 1;
-        margin-right: 66PX;
+        margin-right: 66px;
 
-        i{
-          height: 16PX;
-          width: 1PX;
+        i {
+          height: 16px;
+          width: 1px;
           display: inline-block;
-          background-color: #DCDFE6;
-          margin: 0 14PX;
+          background-color: #dcdfe6;
+          margin: 0 14px;
         }
       }
 
-      &__rt{
+      &__rt {
         //flex-grow: 1;
         display: flex;
         justify-content: flex-start;
         align-items: center;
 
-        .el-input{
-          width: 140PX;
-          margin-right: 10PX;
+        .el-input {
+          width: 140px;
+          margin-right: 10px;
         }
-
       }
 
-      &__bottom{
+      &__bottom {
         flex: 1;
         text-align: right;
       }
-
     }
-
   }
 
-  .cont-review-footer{
-    margin-top: 30PX;
+  .cont-review-footer {
+    margin-top: 30px;
 
-    .el-button--primary{
-      margin-right: 20PX;
+    .el-button--primary {
+      margin-right: 20px;
     }
 
-    .el-button--text{
-      margin-left: 20PX;
+    .el-button--text {
+      margin-left: 20px;
     }
 
-    .el-checkbox{
-      margin-left: 20PX;
+    .el-checkbox {
+      margin-left: 20px;
     }
-
   }
-
 }
-
 
 /*
   回收站--主题
 */
-.recycle-bin-box{
+.recycle-bin-box {
   color: $titleColor;
 
-  .recycle-bin-header{
-
+  .recycle-bin-header {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15PX 0;
+    padding: 15px 0;
 
-    .recycle-bin-header__section{
+    .recycle-bin-header__section {
       flex: 1;
-      margin-right: 20PX;
+      margin-right: 20px;
 
-      &:nth-child(3){
+      &:nth-child(3) {
         flex-grow: 1.5;
       }
 
-      .section-top{
-        margin-bottom: 15PX;
+      .section-top {
+        margin-bottom: 15px;
       }
 
-      div{
+      div {
         display: flex;
         align-items: center;
-        .el-select{
+        .el-select {
           width: 100%;
         }
-        .el-date-editor{
+        .el-date-editor {
           width: 100%;
         }
       }
 
-      &:last-of-type{
-        flex:0;
+      &:last-of-type {
+        flex: 0;
         margin-right: 0;
         display: flex;
         align-items: flex-end;
       }
 
-      .time-title{
-        min-width: 100PX;
+      .time-title {
+        min-width: 100px;
       }
-
     }
 
-    div{
+    div {
       /*自适应*/
       /* height: 40PX;
        -webkit-box-flex: 1;
@@ -890,7 +846,6 @@
        box-sizing: border-box;
        margin-bottom: 10PX;
        margin-right: 10PX;*/
-
     }
 
     /*&__lf{
@@ -954,113 +909,108 @@
       }
 
     }*/
-
   }
 
-  .recycle-bin-table{
-    border-top: 1PX solid $tableBorderColor;
-    .cell{
+  .recycle-bin-table {
+    border-top: 1px solid $tableBorderColor;
+    .cell {
       display: flex;
       align-items: center;
     }
 
-    .recycle-bin-table-checkbox{
+    .recycle-bin-table-checkbox {
       display: flex;
       flex-direction: column;
 
-      .el-checkbox:last-of-type{
-        margin-top: 12PX;
+      .el-checkbox:last-of-type {
+        margin-top: 12px;
       }
     }
 
-    &__side{
-      .el-radio-group{
+    &__side {
+      .el-radio-group {
         display: flex;
         flex-direction: column;
 
-        .el-radio{
+        .el-radio {
           margin-right: 0;
-          margin-bottom: 12PX;
+          margin-bottom: 12px;
         }
       }
     }
 
-    &__long-text{
-      line-height: 20PX;
+    &__long-text {
+      line-height: 20px;
       color: $titleColor;
     }
 
-    &__main{
-      line-height: 20PX;
+    &__main {
+      line-height: 20px;
 
-      &__cont-text{
+      &__cont-text {
         width: 100%;
         color: $titleColor;
-        word-break:break-all;
+        word-break: break-all;
         display: block;
       }
 
-      &__cont-imgs{
-        &-p{
+      &__cont-imgs {
+        &-p {
           text-align: center;
-          margin-top: 14PX;
-          img{
+          margin-top: 14px;
+          img {
             max-width: 60%;
             cursor: pointer;
           }
         }
       }
 
-      &__cont-annex{
-        margin-top: 10PX;
+      &__cont-annex {
+        margin-top: 10px;
       }
-
     }
 
-    &__footer{
+    &__footer {
       color: $commentColor;
       width: 100%;
       .transcodStatus {
         float: right;
       }
-      div{
+      div {
         display: inline-block;
       }
-      div:first-of-type{
-        margin-right: 40PX;
+      div:first-of-type {
+        margin-right: 40px;
       }
     }
-
   }
 
-  .recycle-bin-footer{
-    margin-top: 20PX;
+  .recycle-bin-footer {
+    margin-top: 20px;
 
-    .el-button--primary{
-      margin-right: 20PX;
+    .el-button--primary {
+      margin-right: 20px;
     }
 
-    .el-button--text{
-      margin-left: 20PX;
+    .el-button--text {
+      margin-left: 20px;
     }
 
-    .el-checkbox{
-      margin-left: 20PX;
+    .el-checkbox {
+      margin-left: 20px;
     }
-
   }
-
 }
 
 /*
   回收站--回帖
 */
-.recycle-bin-reply-box{
-   color: $titleColor;
+.recycle-bin-reply-box {
+  color: $titleColor;
 
-  .recycle-bin-reply-header{
+  .recycle-bin-reply-header {
     /*自适应*/
-   /* width: 100%;
+    /* width: 100%;
     display: -ms-flexbox;
     display: inline-flex;
     -ms-flex-pack: start;
@@ -1074,43 +1024,42 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15PX 0;
+    padding: 15px 0;
 
-    .recycle-bin-reply-header__section{
+    .recycle-bin-reply-header__section {
       flex: 1;
-      margin-right: 20PX;
+      margin-right: 20px;
 
-      .section-top{
-        margin-bottom: 15PX;
+      .section-top {
+        margin-bottom: 15px;
       }
 
-      div{
+      div {
         display: flex;
         align-items: center;
-        .el-select{
+        .el-select {
           width: 100%;
         }
-        .el-date-editor{
+        .el-date-editor {
           width: 100%;
         }
       }
 
-      &:last-of-type{
-        flex:0;
+      &:last-of-type {
+        flex: 0;
         margin-right: 0;
         display: flex;
         align-items: flex-end;
       }
 
-      .time-title{
-       min-width: 100PX;
+      .time-title {
+        min-width: 100px;
       }
-
     }
 
-    div{
+    div {
       /*自适应*/
-     /* height: 40PX;
+      /* height: 40PX;
       -webkit-box-flex: 1;
       -webkit-flex: 1;
       -ms-flex: 1;
@@ -1125,33 +1074,29 @@
       box-sizing: border-box;
       margin-bottom: 10PX;
       margin-right: 10PX;*/
-
     }
-
   }
 
-  .recycle-bin-reply-table{
-    border-top: 1PX solid $tableBorderColor;
-    &__side{
-
-      .el-radio-group{
+  .recycle-bin-reply-table {
+    border-top: 1px solid $tableBorderColor;
+    &__side {
+      .el-radio-group {
         display: flex;
         flex-direction: column;
 
-        .el-radio{
+        .el-radio {
           margin-right: 0;
-          margin-bottom: 12PX;
+          margin-bottom: 12px;
         }
       }
     }
 
-    &__long-text{
-      line-height: 20PX;
+    &__long-text {
+      line-height: 20px;
       color: $titleColor;
     }
 
-    &__header{
-
+    &__header {
       /*&-bottom{
         p{
           span:first-of-type{
@@ -1161,61 +1106,56 @@
       }*/
     }
 
-    &__main{
-      line-height: 20PX;
+    &__main {
+      line-height: 20px;
 
-      &__cont-text{
+      &__cont-text {
         width: 100%;
         color: $titleColor;
-        word-break:break-all;
+        word-break: break-all;
         display: block;
       }
 
-      &__cont-imgs{
-        &-p{
+      &__cont-imgs {
+        &-p {
           text-align: center;
-          margin-top: 14PX;
-          img{
+          margin-top: 14px;
+          img {
             max-width: 60%;
             cursor: pointer;
           }
         }
       }
 
-      a{
-        word-break:break-all;
+      a {
+        word-break: break-all;
       }
     }
 
-    &__footer{
+    &__footer {
       color: $commentColor;
-      div{
+      div {
         display: inline-block;
       }
-      div:first-of-type{
-        margin-right: 40PX;
+      div:first-of-type {
+        margin-right: 40px;
       }
     }
-
   }
 
-  .recycle-bin-reply-footer{
+  .recycle-bin-reply-footer {
+    margin-top: 20px;
 
-    margin-top: 20PX;
-
-    .el-button--primary{
-      margin-right: 20PX;
+    .el-button--primary {
+      margin-right: 20px;
     }
 
-    .el-button--text{
-      margin-left: 20PX;
+    .el-button--text {
+      margin-left: 20px;
     }
 
-    .el-checkbox{
-      margin-left: 20PX;
+    .el-checkbox {
+      margin-left: 20px;
     }
-
   }
-
 }
-

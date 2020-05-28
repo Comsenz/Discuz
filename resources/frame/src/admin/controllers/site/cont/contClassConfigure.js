@@ -31,7 +31,8 @@ export default {
         data: {
           include: ["permission"]
         }
-      }).then(res => {
+      })
+        .then(res => {
           if (res.errors) {
             this.$message.error(res.errors[0].code);
           } else {
@@ -41,12 +42,18 @@ export default {
               // 该用户组的所有权限数组
               const allPermissions = [];
               item.permission.map(value => {
-                  allPermissions.push(value._data.permission);
+                allPermissions.push(value._data.permission);
               });
 
-              const viewThreads = allPermissions.indexOf(`category${categoryId}.viewThreads`) !== -1;
-              const createThread = allPermissions.indexOf(`category${categoryId}.createThread`) !== -1
-              const replyThread = allPermissions.indexOf(`category${categoryId}.replyThread`) !== -1;
+              const viewThreads =
+                allPermissions.indexOf(`category${categoryId}.viewThreads`) !==
+                -1;
+              const createThread =
+                allPermissions.indexOf(`category${categoryId}.createThread`) !==
+                -1;
+              const replyThread =
+                allPermissions.indexOf(`category${categoryId}.replyThread`) !==
+                -1;
               const checkAll = viewThreads && createThread && replyThread;
               const isIndeterminate = !checkAll;
 
@@ -58,20 +65,77 @@ export default {
                 replyThread: replyThread,
                 checkAll: checkAll,
                 isIndeterminate: isIndeterminate
-                // viewThreads: allPermissions.indexOf(`category${categoryId}.viewThreads`) !== -1,
-                // createThread: allPermissions.indexOf(`category${categoryId}.createThread`) !== -1,
-                // replyThread: allPermissions.indexOf(`category${categoryId}.replyThread`) !== -1
               });
             });
-            console.log(this.groupsList);
           }
-        }).catch(err => {});
+        })
+        .catch(err => {});
     },
-    handleCheckAllChange(e, id) {
-      console.log(e, id);
-      // this.checkedCities = val ? cityOptions : [];
-      // this.isIndeterminate = false;
+    handleCheckAllChange(scope) {
+      const flag = scope.row.checkAll;
+      console.log(flag, "flag");
+      scope.row.viewThreads = flag;
+      scope.row.createThread = flag;
+      scope.row.replyThread = flag;
+      console.log(scope);
     },
+    submitClick() {
+      const viewThreads = [];
+      const createThread = [];
+      const replyThread = [];
+      const categoryId = this.query.id;
+      let error = "";
+      this.groupsList.map(item => {
+        item.viewThreads && viewThreads.push(item.id);
+        item.createThread && createThread.push(item.id);
+        item.replyThread && replyThread.push(item.id);
+      });
+      console.log(viewThreads, createThread, replyThread);
+      this.appFetch({
+        url: "setPermission",
+        method: "post",
+        data: {
+          permission: `category${categoryId}.viewThreads`,
+          groupIds: viewThreads
+        }
+      }).then(res => {
+        if (res.errors) {
+          error = res.errors[0].code;
+        }
+      });
+      this.appFetch({
+        url: "setPermission",
+        method: "post",
+        data: {
+          permission: `category${categoryId}.createThread`,
+          groupIds: createThread
+        }
+      }).then(res => {
+        if (res.errors) {
+          error = res.errors[0].code;
+        }
+      });
+      this.appFetch({
+        url: "setPermission",
+        method: "post",
+        data: {
+          permission: `category${categoryId}.replyThread`,
+          groupIds: replyThread
+        }
+      }).then(res => {
+        if (res.errors) {
+          error = res.errors[0].code;
+        }
+      });
+      if (error) {
+        this.$message.error(error);
+      } else {
+        this.$message({
+          message: "提交成功！",
+          type: "success"
+        });
+      }
+    }
   },
 
   components: {

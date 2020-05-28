@@ -34,6 +34,7 @@
               type="text"
               slot="reference"
               width="100"
+              style="padding-right: 40px;"
               @click="permission(scope.row.id)"
               >设置权限</el-button
             >
