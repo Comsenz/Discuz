@@ -7,7 +7,7 @@
 
 namespace App\MessageTemplate\Wechat;
 
-use Carbon\Carbon;
+use App\Models\UserWalletCash;
 use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
@@ -35,18 +35,25 @@ class WechatWithdrawalMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        $refuse = '无';
-        if (Arr::has($data, 'refuse')) {
-            if (!empty($data['refuse'])) {
-                $refuse = $data['refuse'];
-            }
+        $cash_actual_amount = Arr::get($data, 'cash_actual_amount');
+        $created_at = Arr::get($data, 'created_at', '')->toDateTimeString();
+        $cashStatus = Arr::get($data, 'cash_status');
+        $refuse = Arr::get($data, 'refuse', '');
+
+        $build = [
+            $cash_actual_amount,  // 1. 提现金额
+            $created_at,          // 2. 提现时间
+            UserWalletCash::enumCashStatus($cashStatus), // 3. 提现结果
+        ];
+
+        // 4. 原因
+        if (!UserWalletCash::notificationByWhich($cashStatus)) {
+            array_push($build, $refuse);
         }
 
-        return [
-            $this->notifiable->username,
-            Carbon::now()->toDateTimeString(),
-            $this->url->to(''),
-            $refuse,
-        ];
+        // 5. 跳转地址
+        array_push($build, $this->url->to(''));
+
+        return $build;
     }
 }

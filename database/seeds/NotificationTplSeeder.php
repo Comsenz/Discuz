@@ -28,7 +28,7 @@ class NotificationTplSeeder extends Seeder
         $wechat = $this->wechatData();
 
         // 新增新通知(叠加)
-        $newData = NotificationTplModel::addData();
+        $newData = array_values(NotificationTplModel::addData());
 
         $appendArr = array_merge($system, $wechat, $newData);
 

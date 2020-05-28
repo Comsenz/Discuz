@@ -52,32 +52,15 @@ class Withdrawal extends System
      */
     public function toDatabase($notifiable)
     {
-        dd($this->cash);
-        $build = [
-            'user_id' => $this->order->user->id,  // 提现人ID
-            'order_id' => $this->order->id,
-            'thread_id' => $this->order->thread->id,   // 必传
-            'thread_username' => $this->order->thread->user->username, // 必传主题用户名
-            'thread_title' => $this->order->thread->title,
-            'content' => '',  // 兼容原数据
-            'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
-            'amount' => $this->order->amount - $this->order->master_amount,
-            'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
+        return [
+            'user_id' => $this->cash->user->id,  // 提现人ID
+            'wallet_cash_id' => $this->cash->id, // 提现记录ID
+            'cash_actual_amount' => $this->cash->cash_actual_amount, // 实际提现金额
+            'cash_apply_amount' => $this->cash->cash_apply_amount,   // 提现申请金额
+            'cash_status' => $this->cash->cash_status,
+            'remark' => $this->cash->remark,
+            'created_at' => $this->cash->created_at,
         ];
-
-        $this->build($build);
-
-        return $build;
-    }
-
-    /**
-     * @param $build
-     */
-    public function build(&$build)
-    {
-        $content = $this->order->thread->getContentByType(Thread::CONTENT_LENGTH);
-
-        $build['content'] = $content;
     }
 
     /**
@@ -88,10 +71,10 @@ class Withdrawal extends System
     protected function setChannelName($strClass)
     {
         switch ($strClass) {
-            case 'App\MessageTemplate\Wechat\WechatRewardedMessage':
+            case 'App\MessageTemplate\Wechat\WechatWithdrawalMessage':
                 $this->channel = 'wechat';
                 break;
-            case 'App\MessageTemplate\RewardedMessage':
+            case 'App\MessageTemplate\WithdrawalMessage':
             default:
                 $this->channel = 'database';
                 break;

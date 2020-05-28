@@ -12,6 +12,7 @@ use App\MessageTemplate\Wechat\WechatStatusMessage;
 use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
 use App\MessageTemplate\WithdrawalMessage;
 use App\Models\NotificationTpl;
+use App\Models\UserWalletCash;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
@@ -53,9 +54,10 @@ class System extends Notification
     {
         $tplId = $this->message->getTplId();
 
+        // Handle Special Notice
         $this->specialNotice($notifiable, $tplId);
 
-        // set tplData
+        // Set TplDataS
         $this->getTplData($tplId);
 
         $this->message->setTplData($this->tplData);
@@ -110,8 +112,36 @@ class System extends Notification
             if ($this->message instanceof WechatWithdrawalMessage) {
                 $type = 1;
             }
+
             $tplId = $this->cashTpl($cashStatus, $type);
         }
+    }
+
+    /**
+     * @param int $status 提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败
+     * @param int $type 0系统 1微信
+     * @return int
+     */
+    public function cashTpl($status, $type = 0)
+    {
+        if ($type) {
+            // 微信
+            if (UserWalletCash::notificationByWhich($status)) { // 非失败状态
+                $id = 35;
+            } else {
+                $id = 36;
+            }
+        } else {
+            if (UserWalletCash::notificationByWhich($status)) {
+                $id = 33;
+            } else {
+                $id = 34;
+            }
+        }
+
+        $this->message->setTplId($id);
+
+        return $id;
     }
 
     /**
@@ -165,29 +195,4 @@ class System extends Notification
         return $id;
     }
 
-    /**
-     * @param int $status 提现状态：1：待审核，2：审核通过，3：审核不通过，4：待打款， 5，已打款， 6：打款失败
-     * @param int $type 0系统 1微信
-     * @return int
-     */
-    public function cashTpl($status, $type = 0)
-    {
-        $noReason = [1, 2, 4, 5];
-        if (!$type) {
-            if (in_array($status, $noReason)) {
-                $id = 1;
-            } else {
-                $id = 2;
-            }
-        } else {
-            if (in_array($status, $noReason)) {
-                $id = 1;
-            } else {
-                $id = 2;
-            }
-        }
-
-        $id = 0;
-        return $id;
-    }
 }

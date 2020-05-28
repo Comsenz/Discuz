@@ -4,46 +4,38 @@
 namespace App\Observer;
 
 
+use App\MessageTemplate\Wechat\WechatWithdrawalMessage;
 use App\MessageTemplate\WithdrawalMessage;
 use App\Models\UserWalletCash;
-use App\Notifications\Rewarded;
 use App\Notifications\Withdrawal;
 
 class UserWalletCashObserver
 {
-    protected $cash;
-
-    /**
-     * @param UserWalletCash $cash
-     */
-    public function created(UserWalletCash $cash)
-    {
-        // $this->cash = $cash;
-        //
-        // $this->sendNotification();
-        // dump('created');
-    }
-
     public function updated(UserWalletCash $cash)
     {
-        // TODO 审核通过时,通知里取得金额数是真实到账金额吗?
-        // dump('updated');
+        // 修改状态后 - 发送通知
+        $this->sendNotification($cash);
     }
 
-    public function sendNotification()
+    public function sendNotification($cash)
     {
-        // // 数据库通知
-        // $this->cash->user->notify(new Withdrawal($this->cash, WithdrawalMessage::class, [
-        //     'refuse' => $this->cash->remark,
-        //     'cash_status' => $this->cash->cash_status,
-        // ]));
+        /**
+         * 只允许某一些状态发送通知
+         */
+        $allowSend = UserWalletCash::notificationByWhich('', function ($call) {
+            return $call['send'];
+        });
 
-        // $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
-        //     'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH),
-        //     'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'amount', 'type']), [
-        //         'actor_username' => $order->user->username    // 发送人姓名
-        //     ]),
-        // ]));
+        if (in_array($cash->cash_status, $allowSend)) {
+            $cash->user->notify(new Withdrawal($cash, WithdrawalMessage::class));
+
+            $cash->user->notify(new Withdrawal($cash, WechatWithdrawalMessage::class, [
+                'cash_actual_amount' => $cash->cash_actual_amount, // 提现实际到账金额
+                'cash_status' => $cash->cash_status, // 提现结果
+                'created_at' => $cash->created_at,  // 提现时间
+                'refuse' => $cash->remark, // 原因
+            ]));
+        }
     }
 
 }

@@ -25,16 +25,6 @@ class WithdrawalMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        $refuse = '无';
-        if (Arr::has($data, 'refuse')) {
-            if (!empty($data['refuse'])) {
-                $refuse = $data['refuse'];
-            }
-        }
-
-        return [
-            $this->notifiable->username,
-            $refuse
-        ];
+        return $data;
     }
 }

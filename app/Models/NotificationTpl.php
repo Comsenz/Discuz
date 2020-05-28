@@ -26,6 +26,8 @@ class NotificationTpl extends Model
 
     public $timestamps = false;
 
+    public $table = 'notification_tpls';
+
     /**
      * 枚举 - type
      *
@@ -86,9 +88,9 @@ class NotificationTpl extends Model
         ];
 
         /**
-         * 允许多个 keyword
+         * 公众号限制 (keyword最少2个 最多是5个)
          */
-        for ($i = 3; $i < 10; $i++) {
+        for ($i = 3; $i < 5; $i++) {
             $keyword = 'keyword' . $i;
             if (array_key_exists($keyword, $arr)) {
                 $result['data'][$keyword] = [
@@ -112,7 +114,7 @@ class NotificationTpl extends Model
     {
         // 以数组追加形式新增放入最后
         return [
-            [
+            25 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '内容回复通知',
@@ -120,7 +122,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            26 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '内容点赞通知',
@@ -128,7 +130,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            27 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '内容支付通知',
@@ -136,7 +138,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            28 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '内容@通知',
@@ -144,7 +146,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            29 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '内容回复通知',
@@ -165,7 +167,7 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
-            [
+            30 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '内容点赞通知',
@@ -184,7 +186,7 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
-            [
+            31 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '内容支付通知',
@@ -206,7 +208,7 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
-            [
+            32 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '内容@通知',
@@ -225,7 +227,7 @@ class NotificationTpl extends Model
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
-            [
+            33 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '提现通知',
@@ -233,7 +235,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            34 => [
                 'status' => 1,
                 'type' => 0,
                 'type_name' => '提现失败通知',
@@ -241,7 +243,7 @@ class NotificationTpl extends Model
                 'content' => '',
                 'vars' => '',
             ],
-            [
+            35 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '提现通知',
@@ -249,19 +251,19 @@ class NotificationTpl extends Model
                 'content' => self::getWechatFormat([
                     'first' => '你发起的提现请求',
                     'keyword1' => '{money}',
-                    'keyword2' => '{withdrawalStatus}',
-                    'keyword3' => '{dateline}',
+                    'keyword2' => '{dateline}',
+                    'keyword3' => '{withdrawalStatus}',
                     'remark' => '点击查看',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
                     '{money}' => '金额',
+                    '{dateline}' => '申请时间',
                     '{withdrawalStatus}' => '提现状态',
-                    '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
-            [
+            36 => [
                 'status' => 0,
                 'type' => 1,
                 'type_name' => '提现失败通知',
@@ -269,17 +271,17 @@ class NotificationTpl extends Model
                 'content' => self::getWechatFormat([
                     'first' => '你发起的提现请求',
                     'keyword1' => '{money}',
-                    'keyword2' => '{withdrawalStatus}',
-                    'keyword3' => '{reason}',
-                    'keyword4' => '{dateline}',
+                    'keyword2' => '{dateline}',
+                    'keyword3' => '{withdrawalStatus}',
+                    'keyword4' => '{reason}',
                     'remark' => '点击查看',
                     'redirect_url' => '{redirecturl}',
                 ]),
                 'vars' => serialize([
                     '{money}' => '金额',
+                    '{dateline}' => '申请时间',
                     '{withdrawalStatus}' => '提现状态',
                     '{reason}' => '原因',
-                    '{dateline}' => '通知时间',
                     '{redirecturl}' => '跳转地址',
                 ])
             ],
