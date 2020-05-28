@@ -82,40 +82,33 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             throw new SocialiteException($authSession['errmsg'], $authSession['errcode']);
         }
         //获取小程序用户信息
-        $decryptedData = null;
+        /** @var UserWechat $wechatUser */
+        $wechatUser = UserWechat::firstOrNew(['unionid' => Arr::get($authSession, 'unionid')]);
         if (Arr::get($attributes, 'iv') && Arr::get($attributes, 'encryptedData')) {
             $decryptedData = $app->encryptor->decryptData(
                 $authSession['session_key'],
                 Arr::get($attributes, 'iv'),
                 Arr::get($attributes, 'encryptedData')
             );
+
+            $wechatUser->nickname = $decryptedData['nickName'];
+            $wechatUser->city = $decryptedData['city'];
+            $wechatUser->province = $decryptedData['province'];
+            $wechatUser->country = $decryptedData['country'];
+            $wechatUser->sex = $decryptedData['gender'];
+            $wechatUser->headimgurl = $decryptedData['avatarUrl'];
         }
 
-
-        $wechatUser = UserWechat::where('unionid', Arr::get($authSession, 'unionid'))
-                                ->orWhere('min_openid', Arr::get($authSession, 'openid'))->first();
-
-        if ($wechatUser && $wechatUser->user) {
-            //登陆
+        if ($wechatUser->user_id) {
+            //已绑定的用户登陆
             if (!$wechatUser->min_openid) {
                 //绑定之前unionid绑定的公众号账号
                 $wechatUser->min_openid = Arr::get($authSession, 'openid');
             }
-            if ($decryptedData) {
-                $wechatUser->nickname = $decryptedData['nickName'];
-                $wechatUser->city = $decryptedData['city'];
-                $wechatUser->province = $decryptedData['province'];
-                $wechatUser->country = $decryptedData['country'];
-                $wechatUser->sex = $decryptedData['gender'];
-                $wechatUser->headimgurl = $decryptedData['avatarUrl'];
-            }
-            $wechatUser->save();
 
             $user = $wechatUser->user;
         } else {
-            //站点关闭不允许注册
-            $this->assertPermission((bool)$this->settings->get('register_close'));
-
+            //未绑定的用户注册
             $this->validation->make(
                 [
                     'iv' => Arr::get($attributes, 'iv', ''),
@@ -126,21 +119,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                     'encryptedData' => 'required'
                 ]
             )->validate();
-            //添加微信用户信息
-            if (!$wechatUser) {
-                $decryptedData['min_openid'] = $decryptedData['openId'];
-                $decryptedData['nickname'] = $decryptedData['nickName'];
-                $decryptedData['sex'] = $decryptedData['gender'];
-                $decryptedData['headimgurl'] = $decryptedData['avatarUrl'];
+            $this->assertPermission((bool)$this->settings->get('register_close'));
 
-                $wechatUser = UserWechat::build(Arr::Only(
-                    $decryptedData,
-                    ['min_openid', 'nickname', 'city', 'province', 'country', 'sex',  'headimgurl',  'unionId']
-                ));
-                $wechatUser->save();
-            }
-
-            //本地注册
             $data['code'] = Arr::get($attributes, 'code');
             $data['username'] = $wechatUser->nickname;
             $data['register_ip'] = ip($request->getServerParams());
@@ -148,8 +128,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
                 new RegisterWechatMiniProgramUser($request->getAttribute('actor'), $data)
             );
             $wechatUser->user_id = $user->id;
-            $wechatUser->save();
         }
+        $wechatUser->save();
 
         //创建 token
         $params = [
