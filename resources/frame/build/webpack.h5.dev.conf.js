@@ -137,9 +137,9 @@ module.exports = {
         { from: /.*/, to: "/index.html" },
       ]
     },
-    // port: 443,
-    // http2: true,
-    // disableHostCheck: true,
+    port: 443,
+    http2: true,
+    disableHostCheck: true,
     contentBase: false,
     proxy: {
       "/api": {
