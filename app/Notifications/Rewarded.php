@@ -63,7 +63,7 @@ class Rewarded extends System
             'thread_title' => $this->order->thread->title,
             'content' => '',  // 兼容原数据
             'thread_created_at' => $this->order->thread->created_at->toDateTimeString(),
-            'amount' => $this->order->amount - $this->order->master_amount,
+            'amount' => $this->order->amount - $this->order->master_amount, // 支付金额 - 分成金额
             'order_type' => $this->order->type,  // 1：注册，2：打赏，3：付费主题，4：付费用户组
         ];
 
