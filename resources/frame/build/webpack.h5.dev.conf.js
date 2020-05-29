@@ -137,13 +137,14 @@ module.exports = {
         { from: /.*/, to: "/index.html" },
       ]
     },
-    port: 443,
-    http2: true,
-    disableHostCheck: true,
+    // port: 443,
+    // http2: true,
+    // disableHostCheck: true,
     contentBase: false,
     proxy: {
       "/api": {
-        target: "https://discuz.run",
+        // target: "https://discuz.run",
+        target: "http://discuz.com:8001/",
         changeOrigin: true,
         secure: false,
       }
