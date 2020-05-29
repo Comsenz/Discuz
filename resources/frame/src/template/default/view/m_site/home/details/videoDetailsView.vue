@@ -80,38 +80,28 @@
         />
       </div>
     </div>
-    <div class="videoBox" v-else>
+    <div class="videoBox" v-if="themeCon._data.paid || themeCon._data.price <= 0">
       <img
         v-if="themeCon.threadVideo._data.status == 0"
         :src="appConfig.staticBaseUrl + '/images/transcoding.png'"
         alt
         class="transcodingCover"
       />
-      <div
-        style="text-align: center"
-        class="videoContent"
-        v-if="
-          themeCon.threadVideo._data.file_id != '' &&
-            themeCon.threadVideo._data.file_id != null &&
-            themeCon.threadVideo._data.status == 1
-        "
-      >
-        <div v-show="themeCon._data.paid" style="display: inline-block">
-          <!--<video
-            :id="tcPlayerId"
-            preload="auto"
-            width="100%"
-            playsinline
-            webkit-playsinline
-            x5-video-player-type="h5-page"
-          ></video>-->
-          <video
-            preload="auto"
-            controls
-            width="100%"
-            :src="themeCon.threadVideo._data.media_url"
-          ></video>
-        </div>
+      <div>
+        <!--<video
+          :id="tcPlayerId"
+          preload="auto"
+          width="100%"
+          playsinline
+          webkit-playsinline
+          x5-video-player-type="h5-page"
+        ></video>-->
+        <video
+          preload="auto"
+          controls
+          width="100%"
+          :src="themeCon.threadVideo._data.media_url"
+        ></video>
       </div>
     </div>
     <div
