@@ -11,6 +11,7 @@ use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class Censor
 {
@@ -102,7 +103,16 @@ class Censor
 
             // 腾讯云敏感词校验
             if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
-                $content = $this->tencentCloudCheck($content);
+                // 判断是否大于 5000 字
+                if (Str::of($content)->length() > 5000) {
+                    $begin = $this->tencentCloudCheck(Str::of($content)->substr(0, 4900));
+                    $middle = $this->tencentCloudCheck(Str::of($content)->substr(4900, 5100));
+                    $end = $this->tencentCloudCheck(Str::of($content)->substr(5100));
+
+                    $content = $begin . Str::of($middle)->substr(0, 5100 - 4900) . $end;
+                } else {
+                    $content = $this->tencentCloudCheck($content);
+                }
             }
         }
 
