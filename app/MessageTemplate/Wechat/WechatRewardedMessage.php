@@ -40,7 +40,8 @@ class WechatRewardedMessage extends DatabaseMessage
     {
         $message = Arr::get($data, 'message', '');
         $threadId = Arr::get($data, 'raw.thread_id', 0);
-        $amount = Arr::get($data, 'raw.amount', 0) - Arr::get($data, 'raw.master_amount', 0);
+        $actualAmount = Arr::get($data, 'raw.actual_amount', 0); // 实际金额
+
         // 获取支付类型
         $orderName = Order::enumType(Arr::get($data, 'raw.type', 0), function ($args) {
             return $args['value'];
@@ -57,7 +58,7 @@ class WechatRewardedMessage extends DatabaseMessage
 
         return [
             $actorName,
-            $amount,
+            $actualAmount,
             $this->strWords($message),
             $orderName, // 1：注册，2：打赏，3：付费主题，4：付费用户组
             Carbon::now()->toDateTimeString(),
