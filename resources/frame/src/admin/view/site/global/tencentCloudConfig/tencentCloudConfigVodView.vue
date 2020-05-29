@@ -22,7 +22,7 @@
       <CardRow
         description="腾讯云账户 - 云点播 - 视频处理设置 - 模板设置 - 水印模板中的模板ID，如果不填写则不启用视频水印。"
       >
-        <el-input v-model="vodTranscode" clearable></el-input>
+        <el-input v-model="vodWatermark" clearable></el-input>
       </CardRow>
     </Card>
 
