@@ -68,7 +68,6 @@ class CreateOrder
 
         $validator_info = $validator->make($this->data->toArray(), [
             'group_id'  => 'filled|int',
-            'is_anonymous'  => 'filled|int',
             'type'          => 'required|int',
             'thread_id'     => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
             'amount'        => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
