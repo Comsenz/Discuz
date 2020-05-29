@@ -265,12 +265,17 @@ class ListThreadsController extends AbstractListController
             $query->where('threads.category_id', $categoryId);
         }
 
-        // 类型：0普通 1长文 2视频 3图片 [4 不返回图片帖（临时）]
+        // 类型：0普通 1长文 2视频 3图片
         if (($type = Arr::get($filter, 'type', '')) !== '') {
-            if ((int) $type === 4) {
-                $query->where('threads.type', '<>', 3);
-            } else {
+            // 筛选单个类型 或 以逗号分隔的多个类型
+            if (strpos($type, ',') === false) {
                 $query->where('threads.type', (int) $type);
+            } else {
+                $type = Str::of($type)->explode(',')->map(function ($item) {
+                    return (int) $item;
+                })->filter()->unique()->values();
+
+                $query->whereIn('threads.type', $type);
             }
         }
 

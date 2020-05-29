@@ -199,7 +199,7 @@ export default {
         "filter[categoryId]": this.categoryId,
         "filter[isApproved]": 1,
         "filter[isDeleted]": "no",
-        "filter[type]": 4,
+        "filter[type]": '0,1,2',
         include: [
           "user",
           "firstPost",
