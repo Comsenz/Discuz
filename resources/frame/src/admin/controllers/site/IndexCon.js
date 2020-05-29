@@ -60,43 +60,44 @@ export default {
               icon: "iconfujianshezhi"
             },
             {
-              id: 75,
+              id: 5,
               title: "水印设置",
               name: "waterMarkSet",
               icon: "iconwatermark"
             },
             {
-              id: 5,
+              id: 6,
               title: "内容过滤设置",
               name: "contentFilteringSet",
               icon: "iconneirongguolvshezhi"
             },
             {
-              id: 6,
+              id: 7,
               title: "腾讯云设置",
               name: "tencentCloudSet",
               icon: "icontengxunyun"
             },
             {
-              id: 7,
+              id: 8,
               title: "通知设置",
               name: "noticeSet",
               icon: "icontongzhi",
               submenu: [
                 {
-                  id: 71,
+                  id: 81,
                   title: "系统通知",
                   name: "noticeSet",
                   icon: "icontongzhi"
                 },
                 {
-                  id: 72,
+                  id: 82,
                   title: "微信通知",
                   name: "noticeSet",
                   icon: "icontongzhi"
                 }
               ]
-            }
+            },
+            
             // {
             //   id:7,
             //   title:'后台用户管理',
@@ -378,8 +379,8 @@ export default {
           this.$router.push({ path: "/admin/tencent-cloud-set" });
           break;
         case "noticeSet":
-          this.sideSubmenu = this.navList[1].submenu[7].submenu;
-          this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+          this.sideSubmenu = this.navList[1].submenu[8].submenu;
+          this.sideSubmenuSelect = this.navList[1].submenu[8].submenu[0].title;
           this.$router.push({ path: "/admin/system-notice" });
           break;
         case "adminUserManage":
@@ -564,12 +565,12 @@ export default {
       if (sideSubmenu) {
         switch (sideSubmenu) {
           case "系统通知":
-            this.sideSubmenu = this.navList[1].submenu[7].submenu;
-            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[0].title;
+            this.sideSubmenu = this.navList[1].submenu[8].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[8].submenu[0].title;
             break;
           case "微信通知":
-            this.sideSubmenu = this.navList[1].submenu[7].submenu;
-            this.sideSubmenuSelect = this.navList[1].submenu[7].submenu[1].title;
+            this.sideSubmenu = this.navList[1].submenu[8].submenu;
+            this.sideSubmenuSelect = this.navList[1].submenu[8].submenu[1].title;
             break;
 
           case "最新主题":
