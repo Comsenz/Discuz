@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class UserWalletCash
+ *
  * @package App\Models
  * @property User user
  * @property int id
@@ -88,13 +89,13 @@ class UserWalletCash extends Model
 
     /**
      * 创建提现申请
-     * @param  [type] $user_id        [description]
-     * @param  [type] $cash_sn        [description]
-     * @param  [type] $cash_charge    [description]
-     * @param  [type] $cash_actual_amount    [description]
-     * @param  [type] $cash_apply_amount     [description]
-     * @param  [type] $remark         [description]
-     * @return [type]                 [description]
+     * @param $user_id
+     * @param $cash_sn
+     * @param $cash_charge
+     * @param $cash_actual_amount
+     * @param $cash_apply_amount
+     * @param $remark
+     * @return UserWalletCash [type]                 [description]
      */
     public static function createCash(
         $user_id,
@@ -103,8 +104,7 @@ class UserWalletCash extends Model
         $cash_actual_amount,
         $cash_apply_amount,
         $remark
-    )
-    {
+    ) {
         $cash = new static;
         $cash->user_id = $user_id;
         $cash->cash_sn = $cash_sn;
