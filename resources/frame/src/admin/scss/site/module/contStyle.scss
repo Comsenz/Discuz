@@ -5,16 +5,16 @@
 
 //过渡效果样式
 .transition-box {
-  margin-bottom: 10px;
-  width: 200px;
-  height: 100px;
-  border-radius: 4px;
+  margin-bottom: 10PX;
+  width: 200PX;
+  height: 100PX;
+  border-radius: 4PX;
   background-color: #409eff;
   text-align: center;
   color: #fff;
-  padding: 40px 20px;
+  padding: 40PX 20PX;
   box-sizing: border-box;
-  margin-right: 20px;
+  margin-right: 20PX;
 }
 
 /*
@@ -24,7 +24,7 @@
   color: $titleColor;
 
   .cont-class-table {
-    margin-top: 15px;
+    margin-top: 15PX;
   }
 }
 
@@ -46,7 +46,7 @@
   color: $titleColor;
 
   .cont-manage-header {
-    margin-top: 15px;
+    margin-top: 15PX;
 
     &_condition {
       flex: 1;
@@ -54,7 +54,7 @@
       align-items: center;
 
       &-title {
-        width: 70px;
+        width: 70PX;
       }
       .el-input {
         flex: 1;
@@ -64,69 +64,69 @@
       }
       .el-date-editor {
         flex: 1;
-        width: 220px;
+        width: 220PX;
       }
       .el-button {
-        margin-left: 15px;
+        margin-left: 15PX;
       }
     }
 
     &_condition-lf {
-      margin-right: 30px;
+      margin-right: 30PX;
     }
     &_condition-rh {
       flex: 2;
     }
 
     .cont-manage-header_condition-mid {
-      margin-right: 30px;
+      margin-right: 30PX;
     }
 
     .condition-box {
       display: flex;
-      margin-bottom: 15px;
+      margin-bottom: 15PX;
     }
 
     &_middle {
       .cont-manage-header_condition:last-of-type {
-        margin-left: 30px;
+        margin-left: 30PX;
       }
     }
 
     &_bottom {
       .spacing {
-        width: 20px;
+        width: 20PX;
         text-align: center;
       }
     }
   }
 
   .cont-manage-theme {
-    margin-top: 15px;
+    margin-top: 15PX;
 
     &__table {
       width: 100%;
 
       &-header {
         width: 100%;
-        height: 53px;
+        height: 53PX;
         background-color: $tableHeaderColor;
         display: flex;
         align-items: center;
-        padding-left: 17px;
+        padding-left: 17PX;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1px solid $tableBorderColor;
+        border-bottom: 1PX solid $tableBorderColor;
 
         &__title {
-          margin-left: 30px;
+          margin-left: 30PX;
           color: $commentColor;
         }
       }
 
       &-footer {
-        padding: 15px 0;
+        padding: 15PX 0;
         text-align: center;
       }
 
@@ -138,12 +138,12 @@
       }
 
       &-long-text {
-        line-height: 20px;
+        line-height: 20PX;
         color: $titleColor;
       }
 
       &-main {
-        line-height: 20px;
+        line-height: 20PX;
 
         &__cont-text {
           width: 100%;
@@ -155,7 +155,7 @@
         &__cont-imgs {
           &-p {
             text-align: center;
-            margin-top: 14px;
+            margin-top: 14PX;
             img {
               max-width: 60%;
               cursor: pointer;
@@ -164,7 +164,7 @@
         }
 
         &__cont-annex {
-          margin-top: 10px;
+          margin-top: 10PX;
         }
       }
     }
@@ -172,21 +172,21 @@
 
   .cont-manage-operating {
     p {
-      padding: 25px 0 15px 0;
+      padding: 25PX 0 15PX 0;
       color: $commentColor;
     }
 
     .cont-manage-operating__table-label {
-      padding-left: 31px;
+      padding-left: 31PX;
     }
 
     .el-radio__label {
-      padding-left: 31px;
+      padding-left: 31PX;
     }
 
     .cont-manage__option-select {
       .el-radio__label {
-        padding-left: 10px;
+        padding-left: 10PX;
       }
     }
   }
@@ -197,7 +197,7 @@
 */
 .latest-reply-box {
   .latest-reply-header {
-    margin-top: 15px;
+    margin-top: 15PX;
 
     &_condition {
       flex: 1;
@@ -205,58 +205,58 @@
       align-items: center;
 
       &-title {
-        width: 70px;
+        width: 70PX;
       }
       .el-input {
         flex: 1;
       }
       .el-date-editor {
         flex: 1;
-        width: 220px;
+        width: 220PX;
       }
       .el-button {
-        margin-left: 15px;
+        margin-left: 15PX;
       }
     }
 
     &_condition-lf {
-      margin-right: 30px;
+      margin-right: 30PX;
     }
 
     .condition-box {
       display: flex;
-      margin-bottom: 15px;
+      margin-bottom: 15PX;
     }
 
     &_bottom {
       .condition-time {
         flex: 1;
         max-width: 42%;
-        min-width: 425.5px;
+        min-width: 425.5PX;
       }
     }
   }
 
   .latest-reply-theme {
-    margin-top: 15px;
+    margin-top: 15PX;
 
     &__table {
       width: 100%;
 
       &-header {
         width: 100%;
-        height: 53px;
+        height: 53PX;
         background-color: $tableHeaderColor;
         display: flex;
         align-items: center;
-        padding-left: 17px;
+        padding-left: 17PX;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1px solid $tableBorderColor;
+        border-bottom: 1PX solid $tableBorderColor;
 
         &__title {
-          margin-left: 30px;
+          margin-left: 30PX;
           color: $commentColor;
         }
       }
@@ -274,12 +274,12 @@
       }
 
       &-long-text {
-        line-height: 20px;
+        line-height: 20PX;
         color: $titleColor;
       }
 
       &-main {
-        line-height: 20px;
+        line-height: 20PX;
 
         &__cont-text {
           width: 100%;
@@ -291,7 +291,7 @@
         &__cont-imgs {
           &-p {
             text-align: center;
-            margin-top: 14px;
+            margin-top: 14PX;
             img {
               max-width: 60%;
               cursor: pointer;
@@ -300,7 +300,7 @@
         }
 
         &__cont-annex {
-          margin-top: 10px;
+          margin-top: 10PX;
         }
       }
 
@@ -312,14 +312,14 @@
         &__lf {
           display: flex;
           align-items: center;
-          margin-right: 66px;
+          margin-right: 66PX;
 
           i {
-            height: 16px;
-            width: 1px;
+            height: 16PX;
+            width: 1PX;
             display: inline-block;
             background-color: #dcdfe6;
-            margin: 0 14px;
+            margin: 0 14PX;
           }
         }
       }
@@ -327,7 +327,7 @@
   }
 
   .latest-reply-footer {
-    margin-top: 30px;
+    margin-top: 30PX;
   }
 }
 
@@ -344,23 +344,23 @@
     align-items: center;
 
     i {
-      width: 10px;
-      height: 1px;
-      margin: 0 15px;
+      width: 10PX;
+      height: 1PX;
+      margin: 0 15PX;
       background-color: $commentColor;
     }
   }
 }
 
 .cont-manage-search-box {
-  margin-top: 15px;
+  margin-top: 15PX;
 
   .el-select {
     width: 40%;
   }
 
   .el-button {
-    margin-right: 40px;
+    margin-right: 40PX;
   }
 
   .cont-manage-search-more {
@@ -376,8 +376,8 @@
 
 /*搜索栏下标题*/
 .cont-review-header__lf-title {
-  min-width: 70px;
-  line-height: 36px;
+  min-width: 70PX;
+  line-height: 36PX;
 }
 
 .cont-review-box {
@@ -385,25 +385,25 @@
   height: 100%;
   color: $titleColor;
   .iconvideo {
-    line-height: 20px;
-    font-size: 16px;
+    line-height: 20PX;
+    font-size: 16PX;
     display: inline-block;
     vertical-align: bottom;
   }
   .cont-review-header {
     width: 100%;
-    height: 100px; //根据设计图算的出来的效果不一样，写了一个大概
-    padding: 15px 0;
+    height: 100PX; //根据设计图算的出来的效果不一样，写了一个大概
+    padding: 15PX 0;
     display: flex;
     //justify-content: space-between;
 
     &__lf {
       //width: 39%;
       display: inline-block;
-      margin-right: 25px;
+      margin-right: 25PX;
       flex-grow: 1;
       div {
-        height: 36px;
+        height: 36PX;
         display: flex;
 
         .el-input {
@@ -416,7 +416,7 @@
       }
 
       div:first-of-type {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
     }
 
@@ -426,11 +426,11 @@
       display: inline-block;
 
       div {
-        height: 36px;
+        height: 36PX;
         display: flex;
 
         .content-contains-input {
-          width: 200px;
+          width: 200PX;
         }
 
         .el-input--medium {
@@ -439,25 +439,25 @@
         }
 
         .el-checkbox {
-          line-height: 36px;
-          margin-left: 40px;
+          line-height: 36PX;
+          margin-left: 40PX;
         }
 
         .el-select--medium {
           //width: 140PX;
           width: 100%;
-          margin-right: 10px;
+          margin-right: 10PX;
         }
       }
 
       div:first-of-type {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
     }
   }
 
   .cont-review-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
 
     &__side {
       .el-radio-group {
@@ -466,13 +466,13 @@
 
         .el-radio {
           margin-right: 0;
-          margin-bottom: 12px;
+          margin-bottom: 12PX;
         }
       }
     }
 
     &__long-text {
-      line-height: 20px;
+      line-height: 20PX;
       color: $titleColor;
     }
 
@@ -484,7 +484,7 @@
       div {
         flex-grow: 1;
         p:nth-of-type(2) {
-          margin-top: 12px;
+          margin-top: 12PX;
         }
 
         .desc {
@@ -498,7 +498,7 @@
     }
 
     &__main {
-      line-height: 20px;
+      line-height: 20PX;
       .highlight {
         background-color: yellow;
       }
@@ -513,7 +513,7 @@
       &__cont-imgs {
         &-p {
           text-align: center;
-          margin-top: 14px;
+          margin-top: 14PX;
           img {
             max-width: 60%;
             cursor: pointer;
@@ -522,7 +522,7 @@
       }
 
       &__cont-annex {
-        margin-top: 10px;
+        margin-top: 10PX;
       }
     }
     &__footer {
@@ -533,14 +533,14 @@
       &__lf {
         display: flex;
         align-items: center;
-        margin-right: 66px;
+        margin-right: 66PX;
 
         i {
-          height: 16px;
-          width: 1px;
+          height: 16PX;
+          width: 1PX;
           display: inline-block;
           background-color: #dcdfe6;
-          margin: 0 14px;
+          margin: 0 14PX;
         }
       }
 
@@ -551,8 +551,8 @@
         align-items: center;
 
         .el-input {
-          width: 140px;
-          margin-right: 10px;
+          width: 140PX;
+          margin-right: 10PX;
         }
       }
 
@@ -563,24 +563,24 @@
     }
 
     &__table-footer {
-      padding: 15px 0;
+      padding: 15PX 0;
       text-align: center;
     }
   }
 
   .cont-review-footer {
-    margin-top: 30px;
+    margin-top: 30PX;
 
     .el-button--primary {
-      margin-right: 20px;
+      margin-right: 20PX;
     }
 
     .el-button--text {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
 
     .el-checkbox {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
   }
 }
@@ -595,18 +595,18 @@
 
   .cont-review-header {
     width: 100%;
-    height: 100px;
-    padding: 15px 0;
+    height: 100PX;
+    padding: 15PX 0;
     display: flex;
     //justify-content: space-between;
 
     &__lf {
       //width: 39%;
       display: inline-block;
-      margin-right: 25px;
+      margin-right: 25PX;
       flex-grow: 1;
       div {
-        height: 36px;
+        height: 36PX;
         display: flex;
 
         .el-input {
@@ -619,7 +619,7 @@
       }
 
       div:first-of-type {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
     }
 
@@ -630,7 +630,7 @@
       //margin-left: 10PX;
 
       div {
-        height: 36px;
+        height: 36PX;
         display: flex;
 
         .content-contains-input {
@@ -644,25 +644,25 @@
         }
 
         .el-checkbox {
-          line-height: 36px;
-          margin-left: 40px;
+          line-height: 36PX;
+          margin-left: 40PX;
         }
 
         .el-select--medium {
           //width: 140PX;
           width: 100%;
-          margin-right: 10px;
+          margin-right: 10PX;
         }
       }
 
       div:first-of-type {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
     }
   }
 
   .cont-review-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
 
     &__side {
       .el-radio-group {
@@ -671,13 +671,13 @@
 
         .el-radio {
           margin-right: 0;
-          margin-bottom: 12px;
+          margin-bottom: 12PX;
         }
       }
     }
 
     &__long-text {
-      line-height: 20px;
+      line-height: 20PX;
       color: $titleColor;
     }
 
@@ -689,7 +689,7 @@
       div {
         flex-grow: 1;
         p:nth-of-type(2) {
-          margin-top: 12px;
+          margin-top: 12PX;
         }
 
         .desc {
@@ -703,7 +703,7 @@
     }
 
     &__main {
-      line-height: 20px;
+      line-height: 20PX;
       .highlight {
         background-color: yellow;
       }
@@ -718,7 +718,7 @@
       &__cont-imgs {
         &-p {
           text-align: center;
-          margin-top: 14px;
+          margin-top: 14PX;
           img {
             max-width: 60%;
             cursor: pointer;
@@ -735,14 +735,14 @@
         display: flex;
         align-items: center;
         //flex-grow: 1;
-        margin-right: 66px;
+        margin-right: 66PX;
 
         i {
-          height: 16px;
-          width: 1px;
+          height: 16PX;
+          width: 1PX;
           display: inline-block;
           background-color: #dcdfe6;
-          margin: 0 14px;
+          margin: 0 14PX;
         }
       }
 
@@ -753,8 +753,8 @@
         align-items: center;
 
         .el-input {
-          width: 140px;
-          margin-right: 10px;
+          width: 140PX;
+          margin-right: 10PX;
         }
       }
 
@@ -766,18 +766,18 @@
   }
 
   .cont-review-footer {
-    margin-top: 30px;
+    margin-top: 30PX;
 
     .el-button--primary {
-      margin-right: 20px;
+      margin-right: 20PX;
     }
 
     .el-button--text {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
 
     .el-checkbox {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
   }
 }
@@ -792,18 +792,18 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15px 0;
+    padding: 15PX 0;
 
     .recycle-bin-header__section {
       flex: 1;
-      margin-right: 20px;
+      margin-right: 20PX;
 
       &:nth-child(3) {
         flex-grow: 1.5;
       }
 
       .section-top {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
 
       div {
@@ -825,7 +825,7 @@
       }
 
       .time-title {
-        min-width: 100px;
+        min-width: 100PX;
       }
     }
 
@@ -912,7 +912,7 @@
   }
 
   .recycle-bin-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
     .cell {
       display: flex;
       align-items: center;
@@ -923,7 +923,7 @@
       flex-direction: column;
 
       .el-checkbox:last-of-type {
-        margin-top: 12px;
+        margin-top: 12PX;
       }
     }
 
@@ -934,18 +934,18 @@
 
         .el-radio {
           margin-right: 0;
-          margin-bottom: 12px;
+          margin-bottom: 12PX;
         }
       }
     }
 
     &__long-text {
-      line-height: 20px;
+      line-height: 20PX;
       color: $titleColor;
     }
 
     &__main {
-      line-height: 20px;
+      line-height: 20PX;
 
       &__cont-text {
         width: 100%;
@@ -957,7 +957,7 @@
       &__cont-imgs {
         &-p {
           text-align: center;
-          margin-top: 14px;
+          margin-top: 14PX;
           img {
             max-width: 60%;
             cursor: pointer;
@@ -966,7 +966,7 @@
       }
 
       &__cont-annex {
-        margin-top: 10px;
+        margin-top: 10PX;
       }
     }
 
@@ -980,24 +980,24 @@
         display: inline-block;
       }
       div:first-of-type {
-        margin-right: 40px;
+        margin-right: 40PX;
       }
     }
   }
 
   .recycle-bin-footer {
-    margin-top: 20px;
+    margin-top: 20PX;
 
     .el-button--primary {
-      margin-right: 20px;
+      margin-right: 20PX;
     }
 
     .el-button--text {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
 
     .el-checkbox {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
   }
 }
@@ -1024,14 +1024,14 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15px 0;
+    padding: 15PX 0;
 
     .recycle-bin-reply-header__section {
       flex: 1;
-      margin-right: 20px;
+      margin-right: 20PX;
 
       .section-top {
-        margin-bottom: 15px;
+        margin-bottom: 15PX;
       }
 
       div {
@@ -1053,7 +1053,7 @@
       }
 
       .time-title {
-        min-width: 100px;
+        min-width: 100PX;
       }
     }
 
@@ -1078,7 +1078,7 @@
   }
 
   .recycle-bin-reply-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
     &__side {
       .el-radio-group {
         display: flex;
@@ -1086,13 +1086,13 @@
 
         .el-radio {
           margin-right: 0;
-          margin-bottom: 12px;
+          margin-bottom: 12PX;
         }
       }
     }
 
     &__long-text {
-      line-height: 20px;
+      line-height: 20PX;
       color: $titleColor;
     }
 
@@ -1107,7 +1107,7 @@
     }
 
     &__main {
-      line-height: 20px;
+      line-height: 20PX;
 
       &__cont-text {
         width: 100%;
@@ -1119,7 +1119,7 @@
       &__cont-imgs {
         &-p {
           text-align: center;
-          margin-top: 14px;
+          margin-top: 14PX;
           img {
             max-width: 60%;
             cursor: pointer;
@@ -1138,24 +1138,24 @@
         display: inline-block;
       }
       div:first-of-type {
-        margin-right: 40px;
+        margin-right: 40PX;
       }
     }
   }
 
   .recycle-bin-reply-footer {
-    margin-top: 20px;
+    margin-top: 20PX;
 
     .el-button--primary {
-      margin-right: 20px;
+      margin-right: 20PX;
     }
 
     .el-button--text {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
 
     .el-checkbox {
-      margin-left: 20px;
+      margin-left: 20PX;
     }
   }
 }
