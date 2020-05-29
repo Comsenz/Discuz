@@ -80,7 +80,6 @@ export default {
         data: {}
       })
         .then(data => {
-          console.log(data);
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
@@ -147,29 +146,26 @@ export default {
     },
     //删除已上传logo
     deleteImage(file, index, fileList) {
-      console.log(file, index);
-      let logo = "";
+      let type = "";
       switch (index) {
-        case 0:
-          logo = "logo";
-          break;
         case 1:
-          logo = "header_logo";
+          type = "header_logo";
           break;
         case 2:
-          logo = "background_image";
+          type = "background_image";
+          break;
+        default:
+          type = "logo";
       }
-      let logoFormData = new FormData();
-      logoFormData.append(logo, file.raw);
-      // this.uploaderLogo(logoFormData);
       this.numberimg[index].imageUrl = "";
       this.appFetch({
         url: "logo",
         method: "delete",
-        data: logoFormData
+        data: {
+          type: type
+        }
       })
         .then(data => {
-          console.log(data);
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
@@ -271,7 +267,6 @@ export default {
         data: logoFormData
       })
         .then(data => {
-          console.log(data);
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
@@ -282,7 +277,6 @@ export default {
             }).then(res => {
               this.numberimg[index].imgWidht = res.width;
               this.numberimg[index].imgHeight = res.height;
-              console.log(this.numberimg[index].imgHeight);
             });
             this.$message({ message: "上传成功", type: "success" });
           }
