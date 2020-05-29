@@ -7,15 +7,14 @@
 
 namespace App\Listeners\Post;
 
-use App\Api\Serializer\CommentPostSerializer;
-use App\Api\Serializer\PostSerializer;
+use App\Api\Serializer\BasicPostSerializer;
 use Discuz\Api\Events\Serializing;
 
 class AddPostLikeAttribute
 {
     public function handle(Serializing $event)
     {
-        if ($event->isSerializer(PostSerializer::class) || $event->isSerializer(CommentPostSerializer::class)) {
+        if ($event->isSerializer(BasicPostSerializer::class)) {
             $event->attributes['canLike'] = (bool) $event->actor->can('like', $event->model);
 
             if ($likeState = $event->model->likeState) {

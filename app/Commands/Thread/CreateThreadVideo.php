@@ -107,13 +107,8 @@ class CreateThreadVideo
 
         if ($type === ThreadVideo::TYPE_OF_VIDEO && $thread->exists) {
             // 发布文章时，转码
-            if ($this->settings->get('qcloud_vod_transcode_ads', 'qcloud')) {
-                // 加密自适应
-                $this->transcodeVideo($threadVideo->file_id, 'AdaptiveDynamicStreamingTaskSet');
-            } else {
-                // 普通转码
-                $this->transcodeVideo($threadVideo->file_id, 'TranscodeTaskSet');
-            }
+            $this->transcodeVideo($threadVideo->file_id, 'TranscodeTaskSet');
+
             // 转动图
             if ($template_name = $this->settings->get('qcloud_vod_taskflow_gif', 'qcloud')) {
                 $this->processMediaByProcedure($fileId, $template_name);

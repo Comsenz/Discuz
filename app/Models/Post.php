@@ -172,9 +172,9 @@ class Post extends Model
     public function setContentAttribute($value)
     {
         if ($this->is_first && ($this->thread->type == 1)) {
-            $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
+            $this->attributes['content'] = strlen($value) ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
-            $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+            $this->attributes['content'] = strlen($value) ? static::$formatter->parse($value, $this) : null;
         }
     }
 
@@ -298,12 +298,11 @@ class Post extends Model
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
         $post->is_comment = $isComment;
+        $post->latitude = $latitude;
+        $post->longitude = $longitude;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
-
-        $post->latitude = $latitude;
-        $post->longitude = $longitude;
 
         return $post;
     }
