@@ -103,7 +103,7 @@ class CashTransfer
             'partner_trade_no' => $cash_sn,//商户订单号
             'openid' => $openid,//用户openid
             'amount' => $cash_amount,
-            'desc' => '提现',//备注
+            'desc' => app('translator')->get('wallet.cash_operate_desc'),//备注
             'spbill_create_ip' => $event->ip_address,
             'check_name' => 'NO_CHECK',//NO_CHECK：不校验真实姓名 FORCE_CHECK：强校验真实姓名
             //'re_user_name' => '',//收款用户真实姓名
