@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Closure;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
@@ -30,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string error_message
  * @property int cash_status
  * @property string remark
- * @property string created_at
+ * @property Carbon $created_at
  */
 class UserWalletCash extends Model
 {

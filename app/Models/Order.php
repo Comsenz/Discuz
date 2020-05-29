@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $payment_sn
  * @property float $amount
  * @property float $master_amount
+ * @property float $actual_amount
  * @property int $user_id
  * @property int $payee_id
  * @property int $type
@@ -151,6 +152,16 @@ class Order extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * 获取实际金额
+     *
+     * @return float
+     */
+    public function getActualAmountAttribute()
+    {
+        return number_format($this->amount - $this->master_amount, 2, '.', '');
     }
 
     /**

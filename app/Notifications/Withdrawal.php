@@ -59,7 +59,7 @@ class Withdrawal extends System
             'cash_apply_amount' => $this->cash->cash_apply_amount,   // 提现申请金额
             'cash_status' => $this->cash->cash_status,
             'remark' => $this->cash->remark,
-            'created_at' => $this->cash->created_at,
+            'created_at' => $this->cash->created_at->toDateTimeString(),
         ];
     }
 
