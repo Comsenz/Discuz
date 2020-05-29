@@ -78,27 +78,38 @@ export default {
             "{{remark.DATA}}",
           29:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
             "{{first.DATA}}\n" +
-            "用户名：{{keyword1.DATA}}\n" +
-            "原角色：{{keyword2.DATA}}\n" +
-            "新角色：{{keyword2.DATA}}\n" +
+            "回复内容：{{keyword1.DATA}}\n" +
+            "原文内容：{{keyword2.DATA}}\n" +
+            "回复时间：{{keyword3.DATA}}\n" +
             "{{remark.DATA}}",
           30:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
             "{{first.DATA}}\n" +
-            "用户名：{{keyword1.DATA}}\n" +
-            "原角色：{{keyword2.DATA}}\n" +
-            "新角色：{{keyword2.DATA}}\n" +
+            "点赞内容：{{keyword1.DATA}}\n" +
+            "点赞时间：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
           31:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
             "{{first.DATA}}\n" +
-            "用户名：{{keyword1.DATA}}\n" +
-            "原角色：{{keyword2.DATA}}\n" +
-            "新角色：{{keyword2.DATA}}\n" +
+            "支付内容：{{keyword1.DATA}}\n" +
+            "支付类型：{{keyword2.DATA}}\n" +
+            "支付时间：{{keyword3.DATA}}\n" +
             "{{remark.DATA}}",
           32:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
             "{{first.DATA}}\n" +
-            "用户名：{{keyword1.DATA}}\n" +
-            "原角色：{{keyword2.DATA}}\n" +
-            "新角色：{{keyword2.DATA}}\n" +
+            "@的内容：{{keyword1.DATA}}\n" +
+            "@的时间：{{keyword2.DATA}}\n" +
+            "{{remark.DATA}}",
+          35:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "提现金额：{{keyword1.DATA}}\n" +
+            "申请时间：{{keyword2.DATA}}\n" +
+            "提现状态：{{keyword3.DATA}}\n" +
+            "{{remark.DATA}}",
+          36:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "提现金额：{{keyword1.DATA}}\n" +
+            "申请时间：{{keyword2.DATA}}\n" +
+            "提现状态：{{keyword3.DATA}}\n" +
+            "原因：{{keyword4.DATA}}\n" +
             "{{remark.DATA}}",
         },   //微信通知提示语。tpi：提示语id不同显示不同，每添加一个通知，就需要对应的添加一个提示语，id根据接口返回对应添加
         wxNoticeCon:'',        //微信配置ID
