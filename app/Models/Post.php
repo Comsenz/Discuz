@@ -172,9 +172,9 @@ class Post extends Model
     public function setContentAttribute($value)
     {
         if ($this->is_first && ($this->thread->type == 1)) {
-            $this->attributes['content'] = $value ? static::$markdownFormatter->parse($value, $this) : null;
+            $this->attributes['content'] = strlen($value) ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
-            $this->attributes['content'] = $value ? static::$formatter->parse($value, $this) : null;
+            $this->attributes['content'] = strlen($value) ? static::$formatter->parse($value, $this) : null;
         }
     }
 
