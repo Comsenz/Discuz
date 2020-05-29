@@ -12,7 +12,7 @@
   background-color: #409eff;
   text-align: center;
   color: #fff;
-  padding: 40px 20PX;
+  padding: 40PX 20PX;
   box-sizing: border-box;
   margin-right: 20PX;
 }
@@ -117,7 +117,7 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1px solid $tableBorderColor;
+        border-bottom: 1PX solid $tableBorderColor;
 
         &__title {
           margin-left: 30PX;
@@ -126,7 +126,7 @@
       }
 
       &-footer {
-        padding: 15px 0;
+        padding: 15PX 0;
         text-align: center;
       }
 
@@ -172,7 +172,7 @@
 
   .cont-manage-operating {
     p {
-      padding: 25px 0 15px 0;
+      padding: 25PX 0 15PX 0;
       color: $commentColor;
     }
 
@@ -253,7 +253,7 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        border-bottom: 1px solid $tableBorderColor;
+        border-bottom: 1PX solid $tableBorderColor;
 
         &__title {
           margin-left: 30PX;
@@ -393,7 +393,7 @@
   .cont-review-header {
     width: 100%;
     height: 100PX; //根据设计图算的出来的效果不一样，写了一个大概
-    padding: 15px 0;
+    padding: 15PX 0;
     display: flex;
     //justify-content: space-between;
 
@@ -457,7 +457,7 @@
   }
 
   .cont-review-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
 
     &__side {
       .el-radio-group {
@@ -563,7 +563,7 @@
     }
 
     &__table-footer {
-      padding: 15px 0;
+      padding: 15PX 0;
       text-align: center;
     }
   }
@@ -596,7 +596,7 @@
   .cont-review-header {
     width: 100%;
     height: 100PX;
-    padding: 15px 0;
+    padding: 15PX 0;
     display: flex;
     //justify-content: space-between;
 
@@ -662,7 +662,7 @@
   }
 
   .cont-review-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
 
     &__side {
       .el-radio-group {
@@ -792,7 +792,7 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15px 0;
+    padding: 15PX 0;
 
     .recycle-bin-header__section {
       flex: 1;
@@ -912,7 +912,7 @@
   }
 
   .recycle-bin-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
     .cell {
       display: flex;
       align-items: center;
@@ -1024,7 +1024,7 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    padding: 15px 0;
+    padding: 15PX 0;
 
     .recycle-bin-reply-header__section {
       flex: 1;
@@ -1078,7 +1078,7 @@
   }
 
   .recycle-bin-reply-table {
-    border-top: 1px solid $tableBorderColor;
+    border-top: 1PX solid $tableBorderColor;
     &__side {
       .el-radio-group {
         display: flex;

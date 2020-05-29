@@ -5,6 +5,7 @@ export default {
   data: function() {
     return {
       vodTranscode: "", // 转码模板
+      vodWatermark: "", // 水印模板ID
       vodExt: "",
       vodSize: "", // 短信签名
       subApplication: "", // 子应用
@@ -30,6 +31,7 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.vodTranscode = res.readdata._data.qcloud.qcloud_vod_transcode;
+          this.vodWatermark = res.readdata._data.qcloud.qcloud_vod_watermark;
           this.vodExt = res.readdata._data.qcloud.qcloud_vod_ext;
           this.vodSize = res.readdata._data.qcloud.qcloud_vod_size;
           this.subApplication = res.readdata._data.qcloud.qcloud_vod_sub_app_id;
@@ -61,6 +63,13 @@ export default {
               attributes: {
                 key: "qcloud_vod_transcode",
                 value: this.vodTranscode,
+                tag: "qcloud"
+              }
+            },
+            {
+              attributes: {
+                key: "qcloud_vod_watermark",
+                value: this.vodWatermark,
                 tag: "qcloud"
               }
             },
