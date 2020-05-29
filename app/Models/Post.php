@@ -298,12 +298,11 @@ class Post extends Model
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;
         $post->is_comment = $isComment;
+        $post->latitude = $latitude;
+        $post->longitude = $longitude;
 
         // Set content last, as the parsing may rely on other post attributes.
         $post->content = $content;
-
-        $post->latitude = $latitude;
-        $post->longitude = $longitude;
 
         return $post;
     }
