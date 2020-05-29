@@ -25,4 +25,6 @@ return [
     'expend_thread'             => '付费主题支出',
     'expend_group'              => '加入用户组支出',
     'expend_artificial'         => '人工支出',
+
+    'cash_operate_desc'         => '提现',
 ];
