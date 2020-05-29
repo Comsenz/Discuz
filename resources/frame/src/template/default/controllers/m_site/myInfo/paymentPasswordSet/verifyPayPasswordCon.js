@@ -54,7 +54,7 @@ export default {
               this.$toast.fail(res.errors[0].code);
             }
           } else {
-            webDb.setLItem("payPwdToken", res.token);
+            webDb.setLItem("payPwdToken", res.data.id);
             this.$router.replace({ path: "/setup-pay-pwd" });
           }
         })
