@@ -58,7 +58,9 @@ class ChangeLastActived
             if (! $user->expired_at && $user->joined_at < $sitePayTime) {
                 $siteExpire = $this->settings->get('site_expire');
 
-                $user->expired_at = Carbon::now()->addDays($siteExpire);
+                if($siteExpire) {
+                    $user->expired_at = Carbon::now()->addDays($siteExpire);
+                }
             }
         }
 

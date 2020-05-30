@@ -30,11 +30,7 @@
         {
             "type" : "path",
             "url" : "./framework"
-	    },
-        {
-            "type": "composer",
-            "url": "https://cloud.discuz.chat"
-        }
+	    }
 	],
 	"minimum-stability" : "dev",
 	"prefer-stable" : true,
