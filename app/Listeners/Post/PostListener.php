@@ -262,10 +262,10 @@ class PostListener
         if ($event->post->user_id != $event->actor->id) {
             switch ($noticeType) {
                 case 'isApproved':  // 内容审核通知
-                    $this->postisapproved($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                    $this->postisapproved($event->post, ['refuse' => $this->reasonValuePost($event->data)]);
                     break;
                 case 'isDeleted':   // 内容删除通知
-                    $this->postIsDeleted($event->post, ['refuse' => $this->reasonValue($event->data)]);
+                    $this->postIsDeleted($event->post, ['refuse' => $this->reasonValuePost($event->data)]);
                     break;
             }
         }
@@ -323,6 +323,7 @@ class PostListener
     {
         // 任何修改帖子行为 除了修改是否合法字段,其它都不允许发送@通知
         $edit = Arr::get($event->data, 'edit', false);
+
         if ($edit) {
             // 判断是否修改合法值
             if (!Arr::has($event->data, 'attributes.isApproved')) {
@@ -332,29 +333,15 @@ class PostListener
             if (Arr::get($event->data, 'attributes.isApproved') != Thread::APPROVED) {
                 return;
             }
+        } else {
+            // 判断是否是合法的主题
+            if ($event->post->thread->is_approved != Thread::APPROVED) {
+                return;
+            }
         }
 
-        $mentioned = Utils::getAttributeValues($event->post->parsedContent, 'USERMENTION', 'id');
-
-        $event->post->mentionUsers()->sync($mentioned);
-
-        $users = User::whereIn('id', $mentioned)->get();
-        $users->load('deny');
-        $users->filter(function ($user) use ($event) {
-            //把作者拉黑的用户不发通知
-            return !in_array($event->post->user_id, array_column($user->deny->toArray(), 'id'));
-        })->each(function (User $user) use ($event) {
-            // 数据库通知
-            $user->notify(new Related($event->post, $event->actor, RelatedMessage::class));
-
-            // 微信通知
-            $user->notify(new Related($event->post, $event->actor, WechatRelatedMessage::class, [
-                'message' => $event->post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                'raw' => array_merge(Arr::only($event->post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
-                    'actor_username' => $event->actor->username    // 发送人姓名
-                ]),
-            ]));
-        });
+        // 发送@通知
+        $this->sendRelated($event->post, $event->post->user);
     }
 
     /**

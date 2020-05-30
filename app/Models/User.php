@@ -61,7 +61,7 @@ use Illuminate\Support\Str;
  * @method static find($id)
  * @method static whereIn($field, $ids)
  * @method static findOrfail($id)
- * @method static where($column, $array)
+ * @method static where($column, $fields)
  */
 class User extends Model
 {

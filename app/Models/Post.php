@@ -50,7 +50,9 @@ use Illuminate\Support\Str;
  * @property User $deletedUser
  * @property PostMod $stopWords
  * @property Post replyPost
+ * @property string parsedContent
  * @package App\Models
+ * @method static where($column, $fields)
  */
 class Post extends Model
 {

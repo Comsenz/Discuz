@@ -50,6 +50,7 @@ use Illuminate\Support\Stringable;
  * @property Category $category
  * @property threadVideo $threadVideo
  * @package App\Models
+ * @method static where($column, $fields)
  */
 class Thread extends Model
 {

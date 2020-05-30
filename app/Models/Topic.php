@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $created_at
  * @package App\Models
  * @method static find($id)
- * @method static where($column, $array)
+ * @method static where($column, $fields)
  * @method static firstOrCreate($attributes, $values)
  */
 class Topic extends Model

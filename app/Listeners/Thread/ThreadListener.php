@@ -18,6 +18,7 @@ use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
 use App\Models\UserActionLogs;
+use App\Traits\PostNoticesTrait;
 use App\Traits\ThreadNoticesTrait;
 use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
@@ -27,6 +28,7 @@ class ThreadListener
 {
     use ThreadTrait;
     use ThreadNoticesTrait;
+    use PostNoticesTrait;
 
     public function subscribe(Dispatcher $events)
     {
@@ -154,6 +156,11 @@ class ThreadListener
      */
     public function threadNotices($noticeType, $event)
     {
+        // 判断是否是审核通过操作 检索内容发送@通知
+        if ($noticeType == 'isApproved' && $event->thread->is_approved == Thread::APPROVED) {
+            $this->sendRelated($event->thread->firstPost, $event->thread->user);
+        }
+
         // 判断是修改自己的主题 则不发送通知
         if ($event->thread->user_id == $event->actor->id) {
             return;
