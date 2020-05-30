@@ -354,7 +354,7 @@ export default {
         case "siteSet":
           this.$router.push({
             path: "/admin/site-set",
-            query: { name: "123" }
+            query: { name: "站点设置" }
           });
           break;
         case "signUpSet":
