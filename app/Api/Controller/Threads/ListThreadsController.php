@@ -273,7 +273,7 @@ class ListThreadsController extends AbstractListController
             } else {
                 $type = Str::of($type)->explode(',')->map(function ($item) {
                     return (int) $item;
-                })->filter()->unique()->values();
+                })->unique()->values();
 
                 $query->whereIn('threads.type', $type);
             }
