@@ -36,13 +36,13 @@ class WechatRelatedMessage extends DatabaseMessage
 
     protected function contentReplaceVars($data)
     {
-        $message = Arr::get($data, 'message', '');
+        $message = strip_tags(Arr::get($data, 'message', ''));   // 去除@样式的html标签
         $threadId = Arr::get($data, 'raw.thread_id', 0);
         $replyPostId = Arr::get($data, 'raw.reply_post_id', 0);  // 楼中楼时不为0
         $actorName = Arr::get($data, 'raw.actor_username', '');  // 发送人姓名
 
         /**
-         * TODO 判断是否是楼中楼
+         * TODO 判断是否是楼中楼跳转到楼中楼详情页
          * 主题ID为空时跳转到首页
          */
         if (empty($threadId)) {
