@@ -34,6 +34,7 @@
                   <img
                     :src="item.imageUrl"
                     class="avatar-LogoImage"
+                    alt="item.imgAlt"
                     :style="{'width': item.imgWidht + 'px', 'height': item.imgHeight+'px'}"
                   />
                 </div>

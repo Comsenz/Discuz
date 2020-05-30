@@ -98,6 +98,7 @@ export default {
             }).then(res => {
               this.numberimg[0].imgWidht = res.width;
               this.numberimg[0].imgHeight = res.height;
+              this.numberimg[0].imgAlt = '站点LOGO';
             });
             this.getScaleImgSize(this.numberimg[1].imageUrl, {
               width: 140,
@@ -105,6 +106,7 @@ export default {
             }).then(res => {
               this.numberimg[1].imgWidht = res.width;
               this.numberimg[1].imgHeight = res.height;
+              this.numberimg[0].imgAlt = '首页头部LOGO';
             });
             this.getScaleImgSize(this.numberimg[2].imageUrl, {
               width: 140,
@@ -112,6 +114,7 @@ export default {
             }).then(res => {
               this.numberimg[2].imgWidht = res.width;
               this.numberimg[2].imgHeight = res.height;
+              this.numberimg[0].imgAlt = '首页头部背景';
             });
             if (this.siteMode == "pay") {
               this.radio = "2";
@@ -379,7 +382,7 @@ export default {
       })
         .then(data => {
           if (data.errors) {
-            this.$message.error(data.errors[0].code);
+            this.$message.error(data.errors[0].code + res.errors[0].detail[0]);
           } else {
             this.$message({
               message: "提交成功",
