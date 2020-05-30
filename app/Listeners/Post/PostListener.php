@@ -338,6 +338,11 @@ class PostListener
             if ($event->post->thread->is_approved != Thread::APPROVED) {
                 return;
             }
+
+            // 判断是否是合法的回复
+            if ($event->post->is_approved != Post::APPROVED) {
+                return;
+            }
         }
 
         // 发送@通知
