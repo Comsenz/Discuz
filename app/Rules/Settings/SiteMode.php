@@ -7,9 +7,7 @@
 
 namespace App\Rules\Settings;
 
-use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Validation\AbstractRule;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * 站点付费 - 验证
@@ -25,23 +23,25 @@ class SiteMode extends AbstractRule
      */
     public $message = 'set_error';
 
+    private $sitePrice;
+
+    public function __construct($sitePrice)
+    {
+        $this->sitePrice = $sitePrice;
+    }
+
     /**
      * 判断开启站点付费时,价格不能为空
      *
      * @param string $attribute
      * @param mixed $value
      * @return bool
-     * @throws BindingResolutionException
      */
     public function passes($attribute, $value)
     {
         if ($value == 'pay') {
             // 验证 价格不能为空
-            $settings = app()->make(SettingsRepository::class);
-
-            $sitePrice =  $settings->get('site_price', 'default', 0);
-
-            if (empty($sitePrice)) {
+            if (empty($this->sitePrice)) {
                 $this->message = 'site_mode_not_found_price';
                 return false;
             }
