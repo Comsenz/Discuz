@@ -104,12 +104,8 @@ class Censor
             // 腾讯云敏感词校验
             if ($this->setting->get('qcloud_cms_text', 'qcloud', false)) {
                 // 判断是否大于 5000 字
-                if (Str::of($content)->length() > 5000) {
-                    $begin = $this->tencentCloudCheck(Str::of($content)->substr(0, 4900));
-                    $middle = $this->tencentCloudCheck(Str::of($content)->substr(4900, 5100));
-                    $end = $this->tencentCloudCheck(Str::of($content)->substr(5100));
-
-                    $content = $begin . Str::of($middle)->substr(0, 5100 - 4900) . $end;
+                if (($length = Str::of($content)->length()) > 5000) {
+                    $this->overrunContent($length, $content);
                 } else {
                     $content = $this->tencentCloudCheck($content);
                 }
@@ -117,6 +113,37 @@ class Censor
         }
 
         return $content;
+    }
+
+    /**
+     * 循环拆分数字 - 过滤验证
+     *
+     * @param $length
+     * @param $content
+     * @return string
+     */
+    public function overrunContent($length, $content)
+    {
+        $content = Str::of($content);
+
+        // init
+        $size = 4900;
+        $repeat = 100;
+
+        $array = [];
+        for ($i = 0; ; $i++) {
+            $start = $i ? $i * ($size - $repeat) : 0;
+
+            if ($start >= $length) {
+                break;
+            }
+
+            $replaced = $this->tencentCloudCheck($content->substr($start, $size)->__toString());
+
+            $array[] = Str::of($replaced)->substr(0, -$repeat)->__toString();
+        }
+
+        return implode('', $array);
     }
 
     /**
