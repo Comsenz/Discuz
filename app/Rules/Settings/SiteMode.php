@@ -9,6 +9,7 @@ namespace App\Rules\Settings;
 
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Validation\AbstractRule;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * 站点付费 - 验证
@@ -25,11 +26,12 @@ class SiteMode extends AbstractRule
     public $message = 'set_error';
 
     /**
-     * 判断不允许存在的扩展名
+     * 判断开启站点付费时,价格不能为空
      *
      * @param string $attribute
      * @param mixed $value
      * @return bool
+     * @throws BindingResolutionException
      */
     public function passes($attribute, $value)
     {
