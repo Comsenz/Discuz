@@ -9,6 +9,9 @@ return [
     // default
     'set_error' => '设值失败',
 
+    // site
+    'site_mode_not_found_price' => '请设置加入价格',
+
     'min_greater_than_max' => '单次提现最小金额 不能大于 最大金额',
     'min_greater_than_limit' => '单次提现最小金额 不能大于 单日提现总金额',
     'min_exceed_5000' => '单次提现最小金额 不能超过 5000',

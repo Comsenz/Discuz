@@ -118,7 +118,6 @@ class SetSettingsController implements RequestHandlerInterface
             return $item;
         });
 
-
         /**
          * @see SetSettingValidator
          */
