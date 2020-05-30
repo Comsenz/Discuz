@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -212,10 +211,11 @@ class Thread extends Model
      */
     public function refreshPostCount()
     {
-        $this->post_count = $this->replies()
+        $this->post_count = $this->posts()
+            ->where('is_first', false)
             ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
-            ->count();
+            ->count() + 1;  // include first post
 
         return $this;
     }
