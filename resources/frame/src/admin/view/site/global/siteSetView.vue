@@ -34,12 +34,13 @@
                   <img
                     :src="item.imageUrl"
                     class="avatar-LogoImage"
-                    alt="item.imgAlt"
+                    :alt="item.text"
+                    :title="item.text"
                     :style="{'width': item.imgWidht + 'px', 'height': item.imgHeight+'px'}"
                   />
                 </div>
                 <i v-else class="el-icon-circle-plus-outline"></i>
-                <p class="avatar-logo">{{item.test}}</p>
+                <p class="avatar-logo">{{item.text}}</p>
                 <p class="avatar-pm">大小：小于5M</p>
               </el-upload>
               <el-button
