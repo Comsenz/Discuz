@@ -179,9 +179,7 @@ export default {
     //判断设备，下载时提示
     downAttachment(url) {
       if (this.isiOS) {
-        this.$message(
-          "因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载"
-        );
+        this.$toast('因iPhone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
       }
     },
     //点赞和打赏数组处理（用户名之间用逗号分隔）
@@ -1189,12 +1187,21 @@ export default {
         }
       }
       let data = {
-        title: title, // 分享标题
-        desc: desc, // 分享描述
-        link: window.location.href.split("#")[0], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        logo: logo // 分享图标
-      };
-      wxShare(data, { name: "circle" });
+        title: title,       // 分享标题
+        desc: desc,         // 分享描述
+        link: window.location.href.split("#")[0],// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        logo: logo               // 分享图标
+      }
+      wxShare(data, { name: 'circle' })
+    },
+    urlify(text) {
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, function(url) {
+          if (url.includes('/emoji/qq/')) {
+            return url;
+          }
+          return '<a href="' + url + '">' + url + '</a>';
+      })
     }
   },
   mounted: function() {

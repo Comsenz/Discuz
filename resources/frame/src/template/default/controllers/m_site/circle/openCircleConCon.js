@@ -196,7 +196,7 @@ export default {
           }
         }
       }).then((res) => {
-        this.$message('修改成功');
+        this.$toast('修改成功');
         this.detailsLoad();
       })
     },

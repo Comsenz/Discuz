@@ -63,9 +63,7 @@ export default {
     //判断设备，下载时提示
     downAttachment(url) {
       if (this.isiOS) {
-        this.$message(
-          "因iphone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载"
-        );
+        this.$toast('因iPhone系统限制，您的手机无法下载文件。请使用安卓手机或电脑访问下载');
       }
     },
     //点击用户名称，跳转到用户主页
