@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\Order;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Tobscure\JsonApi\Relationship;
 
@@ -58,7 +59,9 @@ class OrderSerializer extends AbstractSerializer
      */
     protected function thread($order)
     {
-        return $this->hasOne($order, ThreadSerializer::class);
+        if ($order->status == Order::ORDER_STATUS_PAID || $this->actor->isAdmin()) {
+            return $this->hasOne($order, ThreadSerializer::class);
+        }
     }
 
     /**
