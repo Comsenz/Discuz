@@ -479,7 +479,7 @@ class Post extends Model
      */
     public function images()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', true)->orderBy('order');
+        return $this->hasMany(Attachment::class)->where('type', Attachment::TYPE_OF_IMAGE)->orderBy('order');
     }
 
     /**
@@ -489,7 +489,7 @@ class Post extends Model
      */
     public function attachments()
     {
-        return $this->hasMany(Attachment::class)->where('is_gallery', false)->orderBy('order');
+        return $this->hasMany(Attachment::class)->where('type', Attachment::TYPE_OF_FILE)->orderBy('order');
     }
 
     /**

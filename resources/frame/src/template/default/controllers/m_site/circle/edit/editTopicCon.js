@@ -396,7 +396,7 @@ export default {
         let file = e.target.files[0];
         let formdata = new FormData();
         formdata.append('file', file);
-        formdata.append('isGallery', 0);
+        formdata.append('type', 0);
         this.loading = true;
         this.uploaderEnclosure(formdata, false, false, true);
       } else {
@@ -405,7 +405,7 @@ export default {
           let file = e.target.files[0];
           let formdata = new FormData();
           formdata.append('file', file);
-          formdata.append('isGallery', 0);
+          formdata.append('type', 0);
           this.loading = true;
           this.uploaderEnclosure(formdata, false, false, true);
         }
@@ -505,7 +505,7 @@ export default {
       }).then(function (rst) {
         let formdata = new FormData();
         formdata.append('file', rst.file, file.name);
-        formdata.append('isGallery', 1);
+        formdata.append('type', 1);
         formdata.append('order', index);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
         that.loading = false;

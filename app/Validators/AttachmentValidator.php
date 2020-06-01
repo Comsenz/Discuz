@@ -37,7 +37,6 @@ class AttachmentValidator extends AbstractValidator
      */
     protected function getRules()
     {
-        // type：0 附件 1 图片 2 音频 3 视频
         $type = (int) Arr::get($this->data, 'type');
         $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
 
