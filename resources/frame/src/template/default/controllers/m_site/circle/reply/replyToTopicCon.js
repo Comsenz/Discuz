@@ -35,7 +35,6 @@ export default {
       supportImgExt: '',
       supportImgExtRes: '',
       limitMaxLength: true,
-      fileListOne: [],
       fileListOneLen: '',
       canUploadImages: '',
       backGo: -3,
@@ -267,7 +266,7 @@ export default {
       }).then(function (rst) {
         let formdata = new FormData();
         formdata.append('file', rst.file, file.name);
-        formdata.append('isGallery', 1);
+        formdata.append('type', 1);
         // that.uploaderEnclosure(formdata, uploadShow, !uploadShow);
         that.uploaderEnclosure(formdata, uploadShow, !uploadShow, false, index);
       }).catch(function (err) {
@@ -511,51 +510,6 @@ export default {
         })
       }
 
-    },
-
-    //输入框自适应高度
-    clearKeywords() {
-      this.keywords = '';
-      this.list = [];
-      let textarea = this.$refs.textarea;
-      let height = 40;
-      let rem = height / rootFontSize;
-      textarea.style.height = `${rem}rem`;
-      rem = (height + 20) / rootFontSize;
-      // this.$refs.list.style.height = `calc(100% - ${rem}rem)`;
-      textarea.focus();
-    },
-    // searchChange: debounce(function () {
-    //   let trim = this.keywords.trim();
-    //   if (!trim) {
-    //     this.list = [];
-    //     return;
-    //   }
-    //   const params = {
-    //     keywords: this.keywords
-    //   }
-    //   // 调api ...
-    // }),
-    // handleFaceChoose (face) {
-    //   const value = this.replyText
-    //   const el = this.$refs.textarea
-    //   const startPos = el.selectionStart
-    //   const endPos = el.selectionEnd
-    //   const newValue =
-    //     value.substring(0, startPos) +
-    //     face +
-    //     value.substring(endPos, value.length)
-    //   this.replyText = newValue
-    //   if (el.setSelectionRange) {
-    //     setTimeout(() => {
-    //       const index = startPos + face.length
-    //       el.setSelectionRange(index, index)
-    //     }, 0)
-    //   }
-    // },
-
-    backClick() {
-      this.$router.go(-1);
     },
   },
 

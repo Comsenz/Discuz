@@ -164,9 +164,9 @@ class PostListener
             }
 
             Attachment::where('user_id', $actor->id)
-                ->where('post_id', 0)
+                ->where('type_id', 0)
                 ->whereIn('id', $ids)
-                ->update(['post_id' => $post->id]);
+                ->update(['type_id' => $post->id]);
         }
 
         // 刷新主题回复数、最后一条回复

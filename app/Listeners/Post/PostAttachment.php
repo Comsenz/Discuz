@@ -53,8 +53,8 @@ class PostAttachment
                 if (!$post->exists && $post->is_first) {
                     $images = $attachments && Attachment::query()
                             ->where('user_id', $event->actor->id)
-                            ->where('post_id', 0)
-                            ->where('is_gallery', true)
+                            ->where('type_id', 0)
+                            ->where('type', Attachment::TYPE_OF_IMAGE)
                             ->whereIn('id', array_column($attachments, 'id'))
                             ->exists();
 

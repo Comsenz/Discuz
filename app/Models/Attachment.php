@@ -17,10 +17,8 @@ use Illuminate\Support\Str;
 /**
  * @property string $uuid
  * @property int $user_id
- * @property int $post_id
+ * @property int $type_id
  * @property int $order
- * @property int $is_gallery
- * @property int $is_sound
  * @property int $type
  * @property int $is_approved
  * @property int $is_remote
@@ -48,6 +46,8 @@ class Attachment extends Model
 
     const TYPE_OF_VIDEO = 3;
 
+    const TYPE_OF_DIALOG_MESSAGE = 4;
+
     const UNAPPROVED = 0;
 
     const APPROVED = 1;
@@ -58,12 +58,11 @@ class Attachment extends Model
     protected $casts = [
         'type' => 'integer',
         'is_approved' => 'integer',
-        'is_gallery' => 'boolean',
         'is_remote' => 'boolean',
     ];
 
     /**
-     * type：0 附件 1 图片 2 音频 3 视频
+     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4消息图片
      *
      * @var array
      */
@@ -72,11 +71,12 @@ class Attachment extends Model
         'img',
         'audio',
         'video',
+        'dialogMessage',
     ];
 
     /**
      * @param int $userId 用户id
-     * @param int $type 类型 type：0 附件 1 图片 2 音频 3 视频
+     * @param int $type 附件类型(0帖子附件，1帖子图片，2帖子视频，3帖子音频，4消息图片)
      * @param string $name 文件名称
      * @param string $path 文件路径
      * @param string $originalName 文件原名
@@ -107,10 +107,7 @@ class Attachment extends Model
         $attachment->user_id = $userId;
         $attachment->order = $order;
 
-        // TODO: remove is_gallery & rename is_sound to type
-        // $attachment->type = $type;
-        $attachment->is_gallery = $type === 1;
-        $attachment->is_sound = $type;
+        $attachment->type = $type;
 
         $attachment->is_remote = $isRemote;
         $attachment->is_approved = $isApproved;
@@ -167,6 +164,6 @@ class Attachment extends Model
      */
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'id', 'type_id');
     }
 }

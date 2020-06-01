@@ -63,7 +63,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         $attributes = [
             'order'             => $model->order,
-            'isGallery'         => $model->is_gallery,
+            'type'              => $model->type,
             'isRemote'          => $model->is_remote,
             'isApproved'        => $model->is_approved,
             'url'               => $url,
@@ -76,7 +76,7 @@ class AttachmentSerializer extends AbstractSerializer
         ];
 
         // 图片缩略图地址
-        if ($model->is_gallery) {
+        if ($model->type == Attachment::TYPE_OF_IMAGE) {
             if ($blur) {
                 $attributes['thumbUrl'] = $url;
             } else {
