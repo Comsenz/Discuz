@@ -91,13 +91,13 @@
         <div class="iconBg">
           <span class="icon iconfont icon-theme"></span>
         </div>
-        <div class="publishChoWo">主题</div>
+        <div class="publishChoWo">文本</div>
       </div>
       <div class="publishCho" v-if="canCreateLongText" @click="postType(1)">
         <div class="iconBg">
           <span class="icon iconfont icon-longtext"></span>
         </div>
-        <div class="publishChoWo">长文</div>
+        <div class="publishChoWo">帖子</div>
       </div>
     </div>
     <!-- <div class="loadFix" v-if="loading1">
