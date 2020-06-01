@@ -166,6 +166,6 @@ class Attachment extends Model
      */
     public function post()
     {
-        return $this->belongsTo(Post::class, 'post_id', 'type_id');
+        return $this->belongsTo(Post::class, 'id', 'type_id');
     }
 }
