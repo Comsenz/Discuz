@@ -20,7 +20,6 @@ use Illuminate\Support\Str;
  * @property int $type_id
  * @property int $order
  * @property int $type
- * @property int $is_sound
  * @property int $is_approved
  * @property int $is_remote
  * @property string $attachment
@@ -109,7 +108,6 @@ class Attachment extends Model
         $attachment->order = $order;
 
         $attachment->type = $type;
-        $attachment->is_sound = $type;
 
         $attachment->is_remote = $isRemote;
         $attachment->is_approved = $isApproved;
