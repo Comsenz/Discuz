@@ -13,6 +13,7 @@ use App\Settings\ForumSettingField;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Illuminate\Support\Arr;
 
 class ForumSettingSerializer extends AbstractSerializer
 {
@@ -143,6 +144,12 @@ class ForumSettingSerializer extends AbstractSerializer
         } else {
             //未开启vod服务 不可发布视频主题
             $attributes['other']['can_create_thread_video'] = false;
+        }
+
+        // 微信小程序请求时判断视频开关
+        if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
+            strpos(Arr::get($this->request->getServerParams(), 'HTTP_USER_AGENT'), 'miniprogram') !== false) {
+            $attributes['set_site']['other']['can_create_thread_video'] = false;
         }
 
         // 判断用户是否存在
