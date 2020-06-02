@@ -35,22 +35,15 @@ class ThreadPolicy extends AbstractPolicy
      */
     protected $settings;
 
-    /**
-     * @var Request
-     */
-    protected $request;
-
 
     /**
      * @param Dispatcher $events
      * @param SettingsRepository $settings
-     * @param Request $request
      */
-    public function __construct(Dispatcher $events, SettingsRepository $settings, Request $request)
+    public function __construct(Dispatcher $events, SettingsRepository $settings)
     {
         $this->events = $events;
         $this->settings = $settings;
-        $this->request = $request;
     }
 
     /**
@@ -107,10 +100,10 @@ class ThreadPolicy extends AbstractPolicy
                     ->orWhere('threads.user_id', $actor->id);
             });
         }
-
+        $request = app('request');
         //过滤小程序视频主题
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
-            strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
+            strpos(Arr::get($request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $query->where('type', '<>', Thread::TYPE_OF_VIDEO);
         }
     }
