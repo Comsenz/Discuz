@@ -77,6 +77,7 @@ class ForumSettingSerializer extends AbstractSerializer
             // 支付设置
             'paycenter' => [
                 'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
+                'wxpay_ios'   => (bool)$this->settings->get('wxpay_ios', 'wxpay'),
             ],
 
             // 附件设置
@@ -148,7 +149,7 @@ class ForumSettingSerializer extends AbstractSerializer
 
         // 微信小程序请求时判断视频开关
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
-            strpos(Arr::get($this->request->getServerParams(), 'HTTP_USER_AGENT'), 'miniprogram') !== false) {
+            strpos(Arr::get($this->request->getServerParams(), 'X-App-Platform'), 'wx_miniprogram') !== false) {
             $attributes['set_site']['other']['can_create_thread_video'] = false;
         }
 
