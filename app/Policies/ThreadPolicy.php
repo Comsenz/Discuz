@@ -10,10 +10,13 @@ namespace App\Policies;
 use App\Models\Category;
 use App\Models\Thread;
 use App\Models\User;
+use App\Settings\SettingsRepository;
 use Discuz\Api\Events\ScopeModelVisibility;
 use Discuz\Foundation\AbstractPolicy;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ThreadPolicy extends AbstractPolicy
 {
@@ -28,11 +31,26 @@ class ThreadPolicy extends AbstractPolicy
     protected $events;
 
     /**
-     * @param Dispatcher $events
+     * @var SettingsRepository
      */
-    public function __construct(Dispatcher $events)
+    protected $settings;
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+
+    /**
+     * @param Dispatcher $events
+     * @param SettingsRepository $settings
+     * @param Request $request
+     */
+    public function __construct(Dispatcher $events, SettingsRepository $settings, Request $request)
     {
         $this->events = $events;
+        $this->settings = $settings;
+        $this->request = $request;
     }
 
     /**
@@ -88,6 +106,12 @@ class ThreadPolicy extends AbstractPolicy
                 $query->where('threads.is_approved', Thread::APPROVED)
                     ->orWhere('threads.user_id', $actor->id);
             });
+        }
+
+        //过滤小程序视频主题
+        if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
+            strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
+            $query->where('type', '<>', Thread::TYPE_OF_VIDEO);
         }
     }
 
