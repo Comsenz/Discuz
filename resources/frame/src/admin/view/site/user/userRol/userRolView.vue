@@ -18,12 +18,18 @@
             </template>
           </el-table-column>
 
-          <!--<el-table-column
-            label="排序">
+          <el-table-column
+            width="100"
+            label="显示组名">
             <template slot-scope="scope">
-              <el-input></el-input>
+            <el-switch
+            :disabled="scope.row._data.id === '7'"
+            v-model="scope.row._data.isDisplay"
+            active-color="#336699"
+            inactive-color="#bbbbbb">
+          </el-switch>
             </template>
-          </el-table-column>-->
+          </el-table-column>
 
           <el-table-column>
             <template slot-scope="scope">

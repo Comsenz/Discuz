@@ -20,6 +20,7 @@ export default {
       addStatus:false,
       btnLoading:false,     //提交按钮状态
       delLoading:false,     //删除按钮状态
+      groupName:'',      //是否显示用户组名称
     }
   },
   methods:{
@@ -129,7 +130,8 @@ export default {
           data.push({
             "attributes": {
               "name": item._data.name,
-              'id':item._data.id
+              'id':item._data.id,
+              'isDisplay':item._data.isDisplay,
             },
           })
         });
@@ -172,6 +174,8 @@ export default {
           this.tableData = res.readdata;
           this.alternateLength = res.readdata.length;
           this.tableData.forEach((item) => {
+            this.groupName = item._data.isDisplay;
+            console.log(this.groupName)
             if (item._data.default == 1) {
               this.radio = item._data.id;
               this.alternateRadio = item._data.id;
