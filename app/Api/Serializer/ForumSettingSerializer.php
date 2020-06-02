@@ -150,7 +150,7 @@ class ForumSettingSerializer extends AbstractSerializer
         // 微信小程序请求时判断视频开关
         if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
-            $attributes['set_site']['other']['can_create_thread_video'] = false;
+            $attributes['other']['can_create_thread_video'] = false;
         }
 
         // 判断用户是否存在
