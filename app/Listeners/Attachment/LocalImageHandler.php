@@ -51,7 +51,7 @@ class LocalImageHandler
             })->save($thumbPath);
 
             // 生成模糊图
-            $image->blur(75)->save($blurPath);
+            $image->blur(90)->save($blurPath);
         }
     }
 }

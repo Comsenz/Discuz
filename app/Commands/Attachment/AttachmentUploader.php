@@ -79,7 +79,7 @@ class AttachmentUploader
                         'rules' => [
                             [
                                 'fileid' => md5($hash) . '_blur.' . $extension,
-                                'rule' => 'imageMogr2/thumbnail/500x500/blur/35x15',
+                                'rule' => 'imageMogr2/thumbnail/500x500/blur/40x20',
                             ]
                         ],
                     ]),
