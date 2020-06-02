@@ -13,7 +13,7 @@ use App\Api\Controller as ApiController;
 |--------------------------------------------------------------------------
 */
 
-$route->get('/uc', 'uc', ApiController\Ucenter\UcenterController::class);
+$route->get('/uc', 'uc1', ApiController\Ucenter\UcenterController::class);
 
 /*
 |--------------------------------------------------------------------------
