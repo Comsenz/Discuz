@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int $attachment_id
  * @property int $dialog_id
  * @property int $message_text
  * @property Carbon $updated_at
