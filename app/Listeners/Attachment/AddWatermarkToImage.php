@@ -48,9 +48,7 @@ class AddWatermarkToImage
      */
     public function __construct(ServerRequestInterface $request, SettingsRepository $settings)
     {
-        $type = (int) Arr::get($request->getParsedBody(), 'type', 0);
-
-        $this->data = array_merge($request->getParsedBody(), ['type' => $type]);
+        $this->data = $request->getParsedBody();
         $this->settings = $settings;
     }
 

@@ -106,9 +106,7 @@ class Attachment extends Model
         $attachment->uuid = Str::uuid();
         $attachment->user_id = $userId;
         $attachment->order = $order;
-
         $attachment->type = $type;
-
         $attachment->is_remote = $isRemote;
         $attachment->is_approved = $isApproved;
         $attachment->attachment = $name;

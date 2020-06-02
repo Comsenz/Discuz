@@ -26,9 +26,7 @@ class LocalImageHandler
      */
     public function __construct(ServerRequestInterface $request)
     {
-        $type = (int) Arr::get($request->getParsedBody(), 'type', 0);
-
-        $this->data = array_merge($request->getParsedBody(), ['type' => $type]);
+        $this->data = $request->getParsedBody();
     }
 
     public function handle(Uploaded $event)
