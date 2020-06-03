@@ -331,4 +331,8 @@ $route->get('/system/command', 'system.command', ApiController\System\CallComman
 */
 
 $route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
-
+$route->get('/offiaccount/asset', 'offiaccount.asset.list', ApiController\Wechat\OffIAccountAssetListController::class);
+$route->get('/offiaccount/asset/{media_id}', 'offiaccount.asset.resource', ApiController\Wechat\OffIAccountAssetResourceController::class);
+$route->post('/offiaccount/asset', 'offiaccount.asset.upload', ApiController\Wechat\OffIAccountAssetUploadController::class);
+// $route->path('/offiaccount/asset', 'offiaccount.asset.update', ApiController\Settings\OffIAccountAssetUpdateController::class);
+$route->delete('/offiaccount/asset/{media_id}', 'offiaccount.asset.delete', ApiController\Wechat\OffIAccountAssetDeleteController::class);
