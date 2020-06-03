@@ -77,6 +77,7 @@ class ExportUserController implements RequestHandlerInterface
             'login_at',
             'last_login_ip',
             'register_ip',
+            'register_port',
             'users.status',
             'users.created_at',
             'users.updated_at',
@@ -101,6 +102,7 @@ class ExportUserController implements RequestHandlerInterface
             'nickname',
             'created_at',
             'register_ip',
+            'register_port',
             'login_at',
             'last_login_ip',
         ];

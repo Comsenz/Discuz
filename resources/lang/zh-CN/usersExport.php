@@ -11,6 +11,7 @@
         'nickname' => '微信昵称',
         'created_at' => '注册时间',
         'register_ip' => '注册IP',
+        'register_port' => '注册端口',
         'login_at' => '最后登录时间',
         'last_login_ip' => '最后登录ip',
     ];
