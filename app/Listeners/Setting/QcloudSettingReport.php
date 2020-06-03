@@ -100,8 +100,8 @@ class QcloudSettingReport
             if (!empty($data)) {
                 $data['site_id'] = $this->settings->get('site_id', 'default');
                 try {
-                    $this->report($data)->then(function (ResponseInterface $response) {
-                      //
+                    $this->qcloudReport($data)->then(function (ResponseInterface $response) {
+                        //$response->getBody()->getContents());
                     })->wait();
                 } catch (Exception $e) {
 
