@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Settings;
 
 use App\Events\Setting\Saving;
+use App\Events\Setting\Saved;
 use App\Models\Group;
 use App\Settings\SettingsRepository;
 use App\Validators\SetSettingValidator;
@@ -132,6 +133,7 @@ class SetSettingsController implements RequestHandlerInterface
             );
         });
 
+        $this->events->dispatch(new Saved($settings));
         return DiscuzResponseFactory::EmptyResponse(204);
     }
 
