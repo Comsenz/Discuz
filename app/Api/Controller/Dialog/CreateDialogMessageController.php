@@ -30,6 +30,8 @@ class CreateDialogMessageController extends AbstractCreateController
      */
     protected $validation;
 
+    public $include = ['attachment'];
+
     /**
      * @param Dispatcher $bus
      * @param Factory $validation
@@ -47,9 +49,10 @@ class CreateDialogMessageController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
-
         $this->validation->make($attributes, [
-            'message_text' => 'required|max:10000',
+            'dialog_id'     => 'required|int',
+            'message_text'  => 'required_without:attachment_id|max:10000',
+            'attachment_id' => 'required_without:message_text|int',
         ])->validate();
 
         return $this->bus->dispatch(

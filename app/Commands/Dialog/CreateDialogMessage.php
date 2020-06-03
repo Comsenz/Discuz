@@ -8,6 +8,7 @@
 namespace App\Commands\Dialog;
 
 use App\Censor\Censor;
+use App\Models\Attachment;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\User;
@@ -73,7 +74,21 @@ class CreateDialogMessage
             throw new PermissionDeniedException('user_deny');
         }
 
-        $dialogMessage = DialogMessage::build($this->actor->id, $dialog_id, $message_text);
+        $attachment_id = Arr::get($this->attributes, 'attachment_id', 0);
+
+        if ($attachment_id) {
+            $attachment = Attachment::query()
+                    ->where('user_id', $this->actor->id)
+                    ->where('type_id', 0)
+                    ->where('type', Attachment::TYPE_OF_DIALOG_MESSAGE)
+                    ->where('id', $attachment_id)
+                    ->first();
+            if (!$attachment) {
+                throw new \Exception('attachments_error');
+            }
+        }
+
+        $dialogMessage = DialogMessage::build($this->actor->id, $dialog_id, $attachment_id, $message_text);
         $dialogMessageRes = $dialogMessage->save();
 
         if ($dialogMessageRes) {

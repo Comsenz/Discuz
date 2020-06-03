@@ -29,21 +29,22 @@ class DialogMessageObserver
      */
     public function created(DialogMessage $dialogMessage)
     {
-        $attachments = Arr::get($this->request->getParsedBody(), 'relationships.attachments.data');
+        $attachment_id = Arr::get($this->request->getParsedBody(), 'data.attributes.attachment_id');
 
         //更新附件的type_id
-        /** @var Attachment $images */
-        $images = $attachments && Attachment::query()
-                ->where('user_id', $dialogMessage->user_id)
-                ->where('type_id', 0)
-                ->where('type', Attachment::TYPE_OF_DIALOG_MESSAGE)
-                ->whereIn('id', array_column($attachments, 'id'))
-                ->first();
+        if ($attachment_id) {
+            $attachments = Attachment::query()
+                    ->where('user_id', $dialogMessage->user_id)
+                    ->where('type_id', 0)
+                    ->where('type', Attachment::TYPE_OF_DIALOG_MESSAGE)
+                    ->where('id', $attachment_id)
+                    ->first();
 
-        if (!$images) {
-            throw new \Exception('attachments_error');
+            if (!$attachments) {
+                throw new \Exception('attachments_error');
+            }
+            $attachments->type_id = $dialogMessage->id;
+            $attachments->save();
         }
-
-        $images->update(['type_id' => $dialogMessage->id]);
     }
 }
