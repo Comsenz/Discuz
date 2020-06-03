@@ -52,16 +52,25 @@ class CreateThread
     public $ip;
 
     /**
+     * The current port of the actor.
+     *
+     * @var int
+     */
+    public $port;
+
+    /**
      * CreateThread constructor.
      * @param User $actor
      * @param array $data
      * @param $ip
+     * @param $port
      */
-    public function __construct(User $actor, array $data, $ip)
+    public function __construct(User $actor, array $data, $ip, $port)
     {
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
+        $this->port = $port;
     }
 
     /**
@@ -159,7 +168,7 @@ class CreateThread
 
         try {
             $post = $bus->dispatch(
-                new CreatePost($thread->id, $this->actor, $this->data, $this->ip)
+                new CreatePost($thread->id, $this->actor, $this->data, $this->ip, $this->port)
             );
         } catch (Exception $e) {
             $thread->delete();

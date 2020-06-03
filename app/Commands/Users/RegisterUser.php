@@ -74,7 +74,7 @@ class RegisterUser
             }
         }
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason']));
 
         // 注册验证码
         $captcha = '';  // 默认为空将不走验证

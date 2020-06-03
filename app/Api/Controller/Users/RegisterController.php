@@ -64,6 +64,7 @@ class RegisterController extends AbstractCreateController
 
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
         $attributes['register_ip'] = ip($request->getServerParams());
+        $attributes['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
 
         $user = $this->bus->dispatch(
             new RegisterUser($request->getAttribute('actor'), $attributes)

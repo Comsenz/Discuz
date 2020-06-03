@@ -87,6 +87,7 @@ class UserSerializer extends AbstractSerializer
             $attributes += [
                 'originalMobile'    => $model->getRawOriginal('mobile'),
                 'registerIp'        => $model->register_ip,
+                'registerPort'      => $model->register_port,
                 'lastLoginIp'       => $model->last_login_ip,
                 'identity'          => $model->identity,
                 'realname'          => $model->realname,

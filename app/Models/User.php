@@ -36,6 +36,7 @@ use Illuminate\Support\Str;
  * @property string $union_id
  * @property string $last_login_ip
  * @property string $register_ip
+ * @property int $register_port
  * @property string $register_reason
  * @property string $signature
  * @property string $username_bout

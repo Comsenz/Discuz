@@ -63,7 +63,8 @@ class BasicPostSerializer extends AbstractSerializer
 
         if ($canEdit || $this->actor->id === $model->user_id) {
             $attributes += [
-                'ip' => $model->ip,
+                'ip'    => $model->ip,
+                'port'  => $model->port,
             ];
         }
 

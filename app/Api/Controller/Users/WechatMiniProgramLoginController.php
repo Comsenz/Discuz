@@ -128,6 +128,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             $data['code'] = Arr::get($attributes, 'code');
             $data['username'] = $wechatUser->nickname;
             $data['register_ip'] = ip($request->getServerParams());
+            $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
             $user = $this->bus->dispatch(
                 new RegisterWechatMiniProgramUser($request->getAttribute('actor'), $data)
             );
