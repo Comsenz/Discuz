@@ -13,7 +13,8 @@ class AlterAddPortToUsers extends Migration
     public function up()
     {
         $this->schema()->table('users', function (Blueprint $table) {
-            $table->unsignedInteger('register_port')->after('register_ip')->comment('端口');
+            $table->unsignedInteger('register_port')->after('register_ip')->comment('注册端口');
+            $table->unsignedInteger('last_login_port')->after('last_login_ip')->comment('最后登录端口');
         });
     }
 
@@ -26,6 +27,7 @@ class AlterAddPortToUsers extends Migration
     {
         $this->schema()->table('users', function (Blueprint $table) {
             $table->dropColumn('register_port');
+            $table->dropColumn('last_login_port');
         });
     }
 }

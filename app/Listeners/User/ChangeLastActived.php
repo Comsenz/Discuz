@@ -58,7 +58,7 @@ class ChangeLastActived
             if (! $user->expired_at && $user->joined_at < $sitePayTime) {
                 $siteExpire = $this->settings->get('site_expire');
 
-                if($siteExpire) {
+                if ($siteExpire) {
                     $user->expired_at = Carbon::now()->addDays($siteExpire);
                 }
             }
@@ -92,6 +92,7 @@ class ChangeLastActived
         // 更新用户最后登录时间
         $user->login_at = Carbon::now();
         $user->last_login_ip = $ip;
+        $user->last_login_port = Arr::get($request->getServerParams(), 'REMOTE_PORT');
 
         $user->save();
     }
