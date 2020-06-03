@@ -51,7 +51,7 @@ class AttachmentSerializer extends AbstractSerializer
             $model->attachment = implode('_blur.', $parts);
         }
 
-        $path = $model->file_path . '/' . $model->attachment;
+        $path = Str::finish($model->file_path, '/') . $model->attachment;
 
         if ($model->is_remote) {
             $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5));
