@@ -19,6 +19,7 @@ class DialogMessageSerializer extends AbstractSerializer
         return [
             'user_id' => $model->user_id,
             'dialog_id' => $model->dialog_id,
+            'attachment_id' => $model->attachment_id,
             'message_text' => $model->message_text,
             'message_text_html'  => $model->formatMessageText(),
             'updated_at' => $this->formatDate($model->updated_at),
@@ -27,13 +28,22 @@ class DialogMessageSerializer extends AbstractSerializer
     }
 
     /**
-     * Define the relationship with the from_user.
-     *
+     * User
      * @param $model
      * @return Relationship
      */
     public function user($model)
     {
         return $this->hasOne($model, UserSerializer::class);
+    }
+
+    /**
+     * Attachment
+     * @param $model
+     * @return Relationship
+     */
+    public function attachment($model)
+    {
+        return $this->hasOne($model, AttachmentSerializer::class);
     }
 }
