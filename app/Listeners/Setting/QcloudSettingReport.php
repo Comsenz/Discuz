@@ -76,7 +76,7 @@ class QcloudSettingReport
                     //对象存储
                     $data['cos'] = [
                         'action' => $action,
-                        'bucket' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
+                        'bucket' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
                         'region' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud')
                     ];
                     break;
