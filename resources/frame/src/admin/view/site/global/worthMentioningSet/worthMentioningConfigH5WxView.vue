@@ -18,8 +18,8 @@
       </CardRow>
     </Card>
 
-    <Card header="关闭小程序视频功能：" v-if="type === 'wx_miniprogram'">
-      <CardRow description="关闭后，在小程序前台将不再展示视频内容，并且不可进行视频内容的发布">
+    <Card header="开启小程序视频功能：" v-if="type === 'wx_miniprogram'">
+      <CardRow description="开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布">
         <el-switch
           v-model="closeVideo"
           active-color="#336699"
