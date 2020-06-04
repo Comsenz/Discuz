@@ -34,7 +34,7 @@ export default {
           this.mchId = data.readdata._data.paycenter.mch_id;
           this.apiKey = data.readdata._data.paycenter.api_key;
           this.appSecret = data.readdata._data.paycenter.app_secret;
-          this.iOSPay = data.readdata._data.paycenter.iOSPay;
+          this.iOSPay = data.readdata._data.paycenter.wxpay_ios;
         }
       }).catch(error=>{
       })
