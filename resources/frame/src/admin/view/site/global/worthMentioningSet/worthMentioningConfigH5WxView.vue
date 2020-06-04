@@ -19,7 +19,7 @@
     </Card>
 
     <Card header="开启小程序视频功能：" v-if="type === 'wx_miniprogram'">
-      <CardRow description="开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布">
+      <CardRow description="开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布。请务必确保您的小程序已有 [文娱-视频] 服务类目，否则小程序将无法发布上线。">
         <el-switch
           v-model="closeVideo"
           active-color="#336699"
