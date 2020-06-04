@@ -11,7 +11,7 @@ use Discuz\Api\Serializer\AbstractSerializer;
 
 class WechatAssetSerializer extends AbstractSerializer
 {
-    protected $type = 'signature';
+    protected $type = 'offiaccount_asset';
 
     /**
      * Get the default set of serialized attributes for a model.

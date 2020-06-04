@@ -70,26 +70,10 @@ class OffIAccountAssetDeleteController implements RequestHandlerInterface
         $this->assertAdmin($request->getAttribute('actor'));
 
         $mediaId = Arr::get($request->getQueryParams(), 'media_id');
-        dd($mediaId);
+
         // 获取永久素材
         $response = $this->easyWechat->material->delete($mediaId);
 
-        /**
-         * 根据类型数据不同 返回数据形式&格式不同
-         */
-        switch ($type) {
-            case 'image': // 图片（image）
-                header('Content-type: image/jpeg');
-                return $response;
-            case 'video': // 视频（video）
-                return DiscuzResponseFactory::JsonApiResponse($response);
-            case 'voice': // 语音（voice）
-                header('Content-type: audio/mpeg');
-                return $response;
-            case 'news':  // 图文（news）
-                return DiscuzResponseFactory::JsonResponse($response);
-            default:
-                throw new \Exception('Unexpected value');
-        }
+        return DiscuzResponseFactory::JsonApiResponse($response);
     }
 }
