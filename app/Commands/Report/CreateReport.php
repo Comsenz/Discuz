@@ -69,7 +69,7 @@ class CreateReport
         $postId = Arr::get($data, 'attributes.post_id', 0);
         $reason = Arr::get($data, 'attributes.reason');
 
-        $validator->valid(Arr::get($data, 'attributes'), ['user_id']);
+        $validator->valid(Arr::get($data, 'attributes'));
 
         /**
          * 判断是否存在,合并理由
