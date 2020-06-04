@@ -27,7 +27,7 @@
         >
         </el-switch>
         <template #tail>
-          <a :href="typeCopywriting[type].url" target="_blank" style="margin-left: 15px;">点此查看</a>
+          <a :href="typeCopywriting[type].url" target="_blank">点此查看</a>
         </template>
       </CardRow>
     </Card> 
