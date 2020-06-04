@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card header="小程序设置"></Card>
+    <Card header="小程序配置"></Card>
 
     <Card header="APPID：">
       <CardRow description="填写申请小程序微信授权登录后，你获得的APPID">
