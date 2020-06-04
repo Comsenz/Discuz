@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Wechat;
 
 use App\Api\Serializer\WechatAssetSerializer;
+use App\Validators\OffIAccountAssetUploadValidator;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -16,7 +17,6 @@ use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Support\Collection;
 use EasyWeChat\OfficialAccount\Application;
-use Illuminate\Contracts\Validation\Factory;
 use EasyWeChat\Factory as EasyWechatFactory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -56,11 +56,11 @@ class OffIAccountAssetUploadController extends AbstractResourceController
     protected $allowTypes = [];
 
     /**
-     * @param Factory $validator
+     * @param OffIAccountAssetUploadValidator $validator
      * @param SettingsRepository $settings
      * @param EasyWechatFactory $easyWechat
      */
-    public function __construct(Factory $validator, SettingsRepository $settings, EasyWechatFactory $easyWechat)
+    public function __construct(OffIAccountAssetUploadValidator $validator, SettingsRepository $settings, EasyWechatFactory $easyWechat)
     {
         $this->validator = $validator;
         $this->settings = $settings;
@@ -82,20 +82,25 @@ class OffIAccountAssetUploadController extends AbstractResourceController
      * @throws InvalidConfigException
      * @throws PermissionDeniedException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
         // 图片（image）、视频（video）、语音（voice）、图文（news）
+        $type = Arr::get($request->getQueryParams(), 'type', '');
         $body = $request->getParsedBody();
-        $type = Arr::get($body, 'type', 'image');
-        $file = Arr::get($request->getUploadedFiles(), 'file');
 
-        // path name TODO 归类一个文件夹
-        $path = storage_path('tmp/') . $file->getClientFilename();
+        $path = '';
+        if ($isNews = $type != 'news') {
+            $file = Arr::get($request->getUploadedFiles(), 'file');
 
-        $file->moveTo($path);
+            // path name
+            $path = storage_path('tmp/') . $file->getClientFilename();
+
+            $file->moveTo($path);
+        }
 
         $result = [];
         switch ($type) {
@@ -111,24 +116,18 @@ class OffIAccountAssetUploadController extends AbstractResourceController
                 $result = $this->easyWechat->material->uploadVoice($path);
                 break;
             case 'news':  // 图文（news）
-                // TODO 缺 validator 验证以下字段
+                $news = json_decode(Arr::get($body, 'news', []), true);
+                /**
+                 * @see OffIAccountAssetUploadValidator
+                 */
+                $this->validator->valid($news);
+
                 // 上传单篇图文
-                $article = new Article([
-                    'title' => Arr::get($body, 'news_title', ''),        // 标题
-                    'thumb_media_id' => Arr::get($body, 'news_media_id', ''), // 封面图ID
-                    'authod' =>  Arr::get($body, 'news_author', ''),    // 作者(微信文档起名错误)
-                    'digest' =>  Arr::get($body, 'news_digest', ''),    // 图文消息摘要
-                    'show_cover_pic' => Arr::get($body, 'news_show_cover_pic', 1), // 是否显示封面，0为false，即不显示，1为true，即显示
-                    'content' => Arr::get($body, 'news_content', ''), // 内容
-                    'content_source_url' => Arr::get($body, 'news_content', 1),
-                    'need_open_comment' => Arr::get($body, 'news_news_content', 1), // 是否打开评论，0不打开，1打开
-                    // 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
-                    'only_fans_can_comment' => Arr::get($body, 'news_only_fans_can_comment', 0),
-                ]);
+                $article = new Article($news);
                 $result = $this->easyWechat->material->uploadArticle($article);
                 break;
             case 'lot_of_news':
-                // 或者多篇图文
+                // TODO 或者多篇图文
                 // $result = $this->easyWechat->material->uploadArticle([$article, $article2, ...]);
                 break;
             case 'thumbnail':   // 缩略图
@@ -136,8 +135,10 @@ class OffIAccountAssetUploadController extends AbstractResourceController
                 break;
         }
 
-        // remove
-        unlink($path);
+        if ($isNews) {
+            // remove
+            unlink($path);
+        }
 
         return $result;
     }
