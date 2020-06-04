@@ -20,6 +20,7 @@ use App\Validators\UserValidator;
 use Discuz\Api\Client;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -67,7 +68,8 @@ class VerifyMobile
     {
         //register new user
         if (is_null($this->mobileCode->user)) {
-            $data['register_ip'] = $this->params['ip'];
+            $data['register_ip'] = Arr::get($this->params, 'ip');
+            $data['register_port'] = Arr::get($this->params, 'port');
             $data['mobile'] = $this->mobileCode->mobile;
             $user = $this->bus->dispatch(
                 new RegisterPhoneUser($this->actor, $data)

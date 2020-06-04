@@ -54,6 +54,7 @@ class CreatePostController extends AbstractCreateController
         $data = $request->getParsedBody()->get('data', []);
         $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = ip($request->getServerParams());
+        $port = Arr::get($request->getServerParams(), 'REMOTE_PORT');
 
         $isComment = (bool) Arr::get($data, 'attributes.isComment');
 
@@ -64,7 +65,7 @@ class CreatePostController extends AbstractCreateController
         }
 
         return $this->bus->dispatch(
-            new CreatePost($threadId, $actor, $data, $ip)
+            new CreatePost($threadId, $actor, $data, $ip, $port)
         );
     }
 }

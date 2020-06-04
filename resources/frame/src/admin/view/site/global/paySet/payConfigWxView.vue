@@ -20,6 +20,17 @@
       </CardRow>
     </Card>
 
+    <!-- <Card header="iOS下开启支付功能">
+      <CardRow description="开启后，iOS设备中付费模式才可正常使用，且免费模式下才可设置内容付费以及使用打赏功能">
+        <el-switch
+          v-model="iOSPay"
+          active-color="#336699"
+          inactive-color="#bbbbbb"
+        >
+        </el-switch>
+      </CardRow>
+    </Card>  -->
+
     <!-- <Card header="App Secret：">
       <CardRow description="App Secret是APPID对应的接口密码，用于获取接口调用凭证access_token时使用">
         <el-input v-model="appSecret"></el-input>

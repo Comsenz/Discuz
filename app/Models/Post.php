@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @property string $summary
  * @property string $content
  * @property string $ip
+ * @property int $port
  * @property int $reply_count
  * @property int $like_count
  * @property float $longitude
@@ -280,6 +281,7 @@ class Post extends Model
      * @param string $content
      * @param int $userId
      * @param string $ip
+     * @param int $port
      * @param int $replyPostId
      * @param int $replyUserId
      * @param int $isFirst
@@ -288,7 +290,7 @@ class Post extends Model
      * @param float $longitude
      * @return static
      */
-    public static function reply($threadId, $content, $userId, $ip, $replyPostId, $replyUserId, $isFirst, $isComment, $latitude, $longitude)
+    public static function reply($threadId, $content, $userId, $ip, $port, $replyPostId, $replyUserId, $isFirst, $isComment, $latitude, $longitude)
     {
         $post = new static;
 
@@ -296,6 +298,7 @@ class Post extends Model
         $post->thread_id = $threadId;
         $post->user_id = $userId;
         $post->ip = $ip;
+        $post->port = $port;
         $post->reply_post_id = $replyPostId;
         $post->reply_user_id = $replyUserId;
         $post->is_first = $isFirst;

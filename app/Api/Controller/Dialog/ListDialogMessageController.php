@@ -65,16 +65,9 @@ class ListDialogMessageController extends AbstractListController
         'createdAt',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public $optionalInclude = ['user','user.groups'];
+    public $include = ['attachment'];
 
-    /* The relationships that are included by default.
-     *
-     * @var array
-     */
-    public $include = [];
+    public $optionalInclude = ['user','user.groups'];
 
     /**
      * @param DialogRepository $dialogs

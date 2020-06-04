@@ -8,6 +8,7 @@
 namespace App\Listeners\Setting;
 
 use App\Events\Setting\Saving;
+use App\Events\Setting\Saved;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SettingListener
@@ -18,5 +19,6 @@ class SettingListener
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Saving::class, CheckWatermarkSetting::class);
+        $events->listen(Saved::class, QcloudSettingReport::class);
     }
 }

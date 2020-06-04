@@ -22,9 +22,9 @@ export default {
           url: 'https://mp.weixin.qq.com/',
         },
         wx_miniprogram: {
-          title: '小程序设置',
+          title: '小程序配置',
           appIdDescription: '填写申请小程序后，你获得的APPID ',
-          appSecretDescription: '填写申请小程序后，你获得的App secret111',
+          appSecretDescription: '填写申请小程序后，你获得的App secret',
           closeVideo: '开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布。开启前，请务必确保您的小程序已有相应的视频播放类目的权限。具体类目权限请 点此查看',
           url: 'https://developers.weixin.qq.com/miniprogram/product/material/',
         },

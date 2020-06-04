@@ -24,4 +24,12 @@ class ReportValidator extends AbstractValidator
     {
         return [];
     }
+
+    /**
+     * @return array|string[]
+     */
+    protected function haveToFields()
+    {
+        return ['user_id'];
+    }
 }

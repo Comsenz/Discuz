@@ -87,7 +87,7 @@ class RegisterWechatMiniProgramUser
             $this->data['expired_at'] = Carbon::now();
         }
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason', 'status']));
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason', 'status']));
 
         $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)
