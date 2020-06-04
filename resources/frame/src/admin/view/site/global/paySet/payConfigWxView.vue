@@ -20,7 +20,7 @@
       </CardRow>
     </Card>
 
-    <Card header="iOS下开启支付功能" v-if="type === 'wxpay_ios'">
+    <Card header="iOS下开启支付功能">
       <CardRow description="开启后，iOS设备中付费模式才可正常使用，且免费模式下才可设置内容付费以及使用打赏功能">
         <el-switch
           v-model="iOSPay"
