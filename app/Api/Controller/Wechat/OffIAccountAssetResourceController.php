@@ -64,6 +64,7 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
      * @throws GuzzleException
      * @throws InvalidConfigExceptionAlias
      * @throws PermissionDeniedException
+     * @throws \Exception
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
