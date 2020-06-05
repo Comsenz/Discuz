@@ -67,9 +67,11 @@ class WechatMiniProgramLoginController extends AbstractResourceController
     {
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', []);
         $js_code = Arr::get($attributes, 'js_code');
+        $iv = Arr::get($attributes, 'iv');
+        $encryptedData =Arr::get($attributes, 'encryptedData');
         $this->validation->make(
-            ['js_code' => $js_code],
-            ['js_code' => 'required']
+            $attributes,
+            ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
         $app = $this->easyWeChat::miniProgram([
@@ -81,48 +83,35 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         if (isset($authSession['errcode']) && $authSession['errcode'] != 0) {
             throw new SocialiteException($authSession['errmsg'], $authSession['errcode']);
         }
+        $decryptedData = $app->encryptor->decryptData(Arr::get($authSession, 'session_key'), $iv, $encryptedData);
+        $unionid = Arr::get($decryptedData, 'unionId') ?: Arr::get($authSession, 'unionid', '');
+
         //获取小程序用户信息
         /** @var UserWechat $wechatUser */
-        $wechatUser = UserWechat::where('unionid', Arr::get($authSession, 'unionid'))
-            ->orWhere('min_openid', Arr::get($authSession, 'openid'))->first();
+        $wechatUser = UserWechat::when($unionid, function ($query, $unionid) {
+            return $query->where('unionid', $unionid);
+        })->orWhere('min_openid', Arr::get($authSession, 'openid'))->first();
+
         if (!$wechatUser) {
             $wechatUser = UserWechat::build([]);
         }
 
-        if (Arr::get($attributes, 'iv') && Arr::get($attributes, 'encryptedData')) {
-            $decryptedData = $app->encryptor->decryptData(
-                $authSession['session_key'],
-                Arr::get($attributes, 'iv'),
-                Arr::get($attributes, 'encryptedData')
-            );
-            //站长未开通open绑定小程序、用户未关注公众号 没有unionid
-            if (Arr::get($authSession, 'unionid')) {
-                $wechatUser->unionid = Arr::get($authSession, 'unionid');
-            }
-            $wechatUser->min_openid = Arr::get($authSession, 'openid');
-            $wechatUser->nickname = $decryptedData['nickName'];
-            $wechatUser->city = $decryptedData['city'];
-            $wechatUser->province = $decryptedData['province'];
-            $wechatUser->country = $decryptedData['country'];
-            $wechatUser->sex = $decryptedData['gender'];
-            $wechatUser->headimgurl = $decryptedData['avatarUrl'];
-        }
+        //解密获取数据，更新/插入wechatUser
+        $wechatUser->unionid = $unionid;
+        $wechatUser->min_openid = Arr::get($decryptedData, 'openid');
+        $wechatUser->nickname = $decryptedData['nickName'];
+        $wechatUser->city = $decryptedData['city'];
+        $wechatUser->province = $decryptedData['province'];
+        $wechatUser->country = $decryptedData['country'];
+        $wechatUser->sex = $decryptedData['gender'];
+        $wechatUser->headimgurl = $decryptedData['avatarUrl'];
+
 
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
             $user = $wechatUser->user;
         } else {
             //未绑定的用户注册
-            $this->validation->make(
-                [
-                    'iv' => Arr::get($attributes, 'iv', ''),
-                    'encryptedData' => Arr::get($attributes, 'encryptedData', '')
-                ],
-                [
-                    'iv' => 'required',
-                    'encryptedData' => 'required'
-                ]
-            )->validate();
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
             $data['code'] = Arr::get($attributes, 'code');
