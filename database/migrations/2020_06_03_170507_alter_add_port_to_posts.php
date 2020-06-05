@@ -13,7 +13,7 @@ class AlterAddPortToPosts extends Migration
     public function up()
     {
         $this->schema()->table('posts', function (Blueprint $table) {
-            $table->unsignedInteger('port')->after('ip')->comment('端口');
+            $table->unsignedInteger('port')->default(0)->after('ip')->comment('端口');
         });
     }
 
