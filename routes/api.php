@@ -265,6 +265,7 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 
 $route->get('/statistic/finance', 'statistic.finance', ApiController\Statistic\FinanceProfileController::class);
 $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\Statistic\FinanceChartController::class);
+$route->post('/statistic/miniprogram', 'statistic.miniProgramStat', ApiController\Statistic\MiniProgramStatController::class);
 
 /*
 |--------------------------------------------------------------------------
