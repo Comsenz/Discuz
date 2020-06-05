@@ -161,4 +161,13 @@ class UserSerializer extends AbstractSerializer
     {
         return $this->hasMany($user, UserSerializer::class);
     }
+
+    /**
+     * @param $user
+     * @return Relationship
+     */
+    public function dialog($user)
+    {
+        return $this->hasOne($user, DialogSerializer::class);
+    }
 }

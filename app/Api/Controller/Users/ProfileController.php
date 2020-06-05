@@ -9,6 +9,7 @@ namespace App\Api\Controller\Users;
 
 use App\Api\Serializer\UserProfileSerializer;
 use App\Api\Serializer\UserSerializer;
+use App\Models\Dialog;
 use App\Models\Group;
 use App\Models\User;
 use App\Repositories\UserFollowRepository;
@@ -27,7 +28,7 @@ class ProfileController extends AbstractResourceController
 
     public $serializer = UserSerializer::class;
 
-    public $optionalInclude = ['groups'];
+    public $optionalInclude = ['groups', 'dialog'];
 
     protected $users;
 
@@ -70,7 +71,21 @@ class ProfileController extends AbstractResourceController
 
         $include = $this->extractInclude($request);
 
-        $user->load($include);
+        if ($key = array_search('dialog', $include) !== false) {
+            if (!$isSelf) {
+                //添加会话关系
+                $dialog = Dialog::query()
+                    ->where(['sender_user_id' => $actor->id, 'recipient_user_id' => $user->id])
+                    ->orWhere(function ($query) use ($actor, $user) {
+                        $query->where(['sender_user_id' => $user->id, 'recipient_user_id' => $actor->id]);
+                    })
+                    ->first();
+                $user->setRelation('dialog', $dialog);
+            } else {
+                unset($include[$key]);
+            }
+        }
+        $user->loadMissing($include);
 
         // 判断用户是否禁用
         if ($user->status == User::enumStatus('ban')) {
