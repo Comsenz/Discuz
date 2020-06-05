@@ -76,9 +76,9 @@ class UpdateGroupPermissionController extends AbstractListController
             })
             ->toArray();
 
-        Permission::where('group_id', $groupId)->delete();
+        Permission::query()->where('group_id', $groupId)->where('permission', 'not like', 'category%')->delete();
 
-        Permission::insert($permissions);
+        Permission::query()->insert($permissions);
 
         return DiscuzResponseFactory::EmptyResponse();
     }
