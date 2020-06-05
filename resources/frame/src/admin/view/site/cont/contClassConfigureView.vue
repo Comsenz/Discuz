@@ -1,6 +1,6 @@
 <template>
   <div class="cont-class-box">
-    <Card header="设置权限-站长"
+    <Card header="设置权限"
           style="border-bottom: none">
     </Card>
     <div class="cont-class-table">
