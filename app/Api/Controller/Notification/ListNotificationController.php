@@ -140,7 +140,9 @@ class ListNotificationController extends AbstractListController
                 if (!empty($threadID = Arr::get($item->data, 'thread_id', 0))) {
                     // 获取主题作者用户组
                     if (!empty($threads->get($threadID))) {
-                        $threadUser = $threads->get($threadID)->user;
+                        $thread = $threads->get($threadID);
+                        $threadUser = $thread->user;
+                        $item->thread_created_at = $thread->created_at;
                         if (!empty($threadUser)) {
                             $item->thread_username = $threadUser->username;
                             $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');
