@@ -319,9 +319,6 @@ class ListPostsController extends AbstractListController
 
         $subSql = Post::query()
             ->selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.`is_first` = `is_first`')
-            ->whereRaw($this->tablePrefix . 'a.`is_comment` = `is_comment`')
-            ->whereRaw($this->tablePrefix . 'a.`is_approved` = `is_approved`')
             ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
             ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
