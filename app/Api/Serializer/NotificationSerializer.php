@@ -34,9 +34,9 @@ class NotificationSerializer extends AbstractSerializer
         $result = array_merge($result, [
             'user_name' => $model->user_name ?: '',
             'user_avatar' => $model->user_avatar ?: '',
-            'thread_username' => $model->thread_username ?? '',
-            'thread_user_groups' => $model->thread_user_groups ?? '',
-            'thread_created_at' => $model->thread_created_at
+            'thread_username' => $model->thread_username ?: '',
+            'thread_user_groups' => $model->thread_user_groups ?: '',
+            'thread_created_at' => $model->thread_created_at ?: ''
         ]);
 
         return $result;
