@@ -52,6 +52,7 @@ class SetSettingValidator extends AbstractValidator
             'site_mode' => ['in:pay,public', new SiteMode($this->faker('site_price'))],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
+            'register_type' => ['in:0,1,2']
         ];
 
         // 腾讯云验证码特殊处理
