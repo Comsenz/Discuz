@@ -71,7 +71,8 @@ class ProfileController extends AbstractResourceController
 
         $include = $this->extractInclude($request);
 
-        if ($key = array_search('dialog', $include) !== false) {
+        $key = array_search('dialog', $include);
+        if ($key !== false) {
             if (!$isSelf) {
                 //添加会话关系
                 $dialog = Dialog::query()
