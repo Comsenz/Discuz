@@ -61,7 +61,11 @@
       }
       span {
         margin-right: 20PX;
+        display: inline-block;
       }
+    }
+    .section-title {
+      width: 150PX;
     }
     .pending-p {
       display: inline-block;
