@@ -111,6 +111,11 @@ class WechatMiniProgramLoginController extends AbstractResourceController
         if ($wechatUser->user_id) {
             //已绑定的用户登陆
             $user = $wechatUser->user;
+
+            //用户被删除
+            if (!$user) {
+                throw new \Exception('bind_error');
+            }
         } else {
             //未绑定的用户注册
             $this->assertPermission((bool)$this->settings->get('register_close'));
