@@ -25,26 +25,36 @@ class QcloudSettingReport
     }
     public function handle(Saved $event)
     {
-        $event->settings->each(function ($setting) {
+        $data = [];
+        $user_uin = '';
+        $event->settings->each(function ($setting) use (&$data, &$user_uin) {
             $key = Arr::get($setting, 'key');
             $value = (bool) Arr::get($setting, 'value');
             $tag = Arr::get($setting, 'tag');
             if ($tag != 'qcloud') {
                 return true;
             }
-            $data = [];
             $action = $value ? 'on' : 'off';
             switch ($key) {
                 case 'qcloud_close':
-                    $info = $this->MsUserInfo();
+                case 'qcloud_app_id':
+                case 'qcloud_secret_id':
+                case 'qcloud_secret_key':
                     //云API
-                    if (!isset($info['UserUin'])) {
-                        return false;
+                    if (empty($user_uin)) {
+                        $user_uin = $this->MsUserInfo();
+                        if (!isset($user_uin['UserUin'])) {
+                            $user_uin = '';
+                            return false;
+                        }
+                    }
+                    if ($key != 'qcloud_close') {
+                        $action = ((bool) $this->settings->get('qcloud_close', 'qcloud')) ? 'on' : 'off';
                     }
                     $data['site'] = [
                         'action' => $action,
                         'url' => $this->settings->get('site_url', 'default'),
-                        'uin' => $info['UserUin'],
+                        'uin' => $user_uin['UserUin'],
                     ];
                     break;
                 case 'qcloud_cms_image':
@@ -60,6 +70,13 @@ class QcloudSettingReport
                     ];
                     break;
                 case 'qcloud_sms':
+                case 'qcloud_sms_app_id':
+                case 'qcloud_sms_app_key':
+                case 'qcloud_sms_template_id':
+                case 'qcloud_sms_sign':
+                    if ($key != 'qcloud_sms') {
+                        $action = ((bool) $this->settings->get('qcloud_sms', 'qcloud')) ? 'on' : 'off';
+                    }
                     //短信
                     $data['sms'] = [
                         'action' => $action,
@@ -73,7 +90,13 @@ class QcloudSettingReport
                     ];
                     break;
                 case 'qcloud_cos':
+                case 'qcloud_cos_bucket_name':
+                case 'qcloud_cos_bucket_area':
+                case 'qcloud_cos_cdn_url':
                     //对象存储
+                    if ($key != 'qcloud_cos') {
+                        $action = ((bool) $this->settings->get('qcloud_cos', 'qcloud')) ? 'on' : 'off';
+                    }
                     $data['cos'] = [
                         'action' => $action,
                         'bucket' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
@@ -81,14 +104,29 @@ class QcloudSettingReport
                     ];
                     break;
                 case 'qcloud_vod':
+                case 'qcloud_vod_sub_app_id':
+                case 'qcloud_vod_transcode':
+                case 'qcloud_vod_cover_template':
+                case 'qcloud_vod_ext':
+                case 'qcloud_vod_size':
                     //视频
+                    if ($key != 'qcloud_vod') {
+                        $action = ((bool) $this->settings->get('qcloud_vod', 'qcloud')) ? 'on' : 'off';
+                    }
                     $data['vod'] = [
                         'action' => $action,
                         'subappid' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud')
                     ];
                     break;
                 case 'qcloud_captcha':
+                case 'qcloud_captcha_app_id':
+                case 'qcloud_captcha_secret_key':
+                case 'qcloud_captcha_ticket':
+                case 'qcloud_captcha_randstr':
                     //验证码
+                    if ($key != 'qcloud_captcha') {
+                        $action = ((bool) $this->settings->get('qcloud_captcha', 'qcloud')) ? 'on' : 'off';
+                    }
                     $data['captcha'] = [
                         'action' => $action,
                         'appid' => $this->settings->get('qcloud_captcha_app_id', 'qcloud')
@@ -97,17 +135,17 @@ class QcloudSettingReport
                 default:
                     break;
             }
-            if (!empty($data)) {
-                $data['site_id'] = $this->settings->get('site_id', 'default');
-                try {
-                    $this->qcloudReport($data)->then(function (ResponseInterface $response) {
-                        //$response->getBody()->getContents());
-                    })->wait();
-                } catch (Exception $e) {
-
-                }
-            }
 
         });
+        if (!empty($data)) {
+            $data['site_id'] = $this->settings->get('site_id', 'default');
+            try {
+                $this->qcloudReport($data)->then(function (ResponseInterface $response) {
+                    //$response->getBody()->getContents();
+                })->wait();
+            } catch (Exception $e) {
+
+            }
+        }
     }
 }
