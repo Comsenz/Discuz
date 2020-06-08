@@ -39,6 +39,10 @@ class AttachmentValidator extends AbstractValidator
     {
         $type = (int) Arr::get($this->data, 'type');
         $typeName = Arr::get(Attachment::$allowTypes, $type, head(Attachment::$allowTypes));
+        if ($type == 4) {
+            //消息类型的附件与图片相同
+            $typeName = Arr::get(Attachment::$allowTypes, 1);
+        }
 
         // 文件类型
         $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
@@ -52,7 +56,7 @@ class AttachmentValidator extends AbstractValidator
 
         // 验证规则
         $rules =  [
-            'type' => 'required|integer|between:0,3',
+            'type' => 'required|integer|between:0,4',
             'file' => ['required', "mimes:{$mimes}"],
         ];
 
