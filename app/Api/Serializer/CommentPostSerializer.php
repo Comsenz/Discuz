@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Post;
+use Tobscure\JsonApi\Relationship;
 
 class CommentPostSerializer extends BasicPostSerializer
 {
@@ -29,5 +30,14 @@ class CommentPostSerializer extends BasicPostSerializer
         $attributes['isComment'] = (bool) $model->is_comment;
 
         return $attributes;
+    }
+
+    /**
+     * @param $post
+     * @return Relationship
+     */
+    protected function lastThreeComments($post)
+    {
+        return $this->hasMany($post, CommentPostSerializer::class);
     }
 }
