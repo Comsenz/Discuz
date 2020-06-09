@@ -103,6 +103,12 @@ class CreateThread
             $this->assertCan($this->actor, 'createThreadImage');
         }
 
+        // 发布内容需先实名认证
+        !$this->actor->isAdmin() && $this->assertCan($this->actor, 'publishNeedRealName');
+
+        // 发布内容需先绑定手机
+        !$this->actor->isAdmin() && $this->assertCan($this->actor, 'publishNeedBindPhone');
+
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
         $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));

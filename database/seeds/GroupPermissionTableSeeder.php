@@ -48,6 +48,8 @@ class GroupPermissionTableSeeder extends Seeder
         'createThreadVideo' => [],              // 发布视频主题
         'createThreadLong' => [10],             // 发布长文主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
+        'publishNeedRealName' => [],            // 发布内容需先实名认证
+        'publishNeedBindPhone' => [],           // 发布内容需先绑定手机
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情

@@ -88,8 +88,28 @@
         <el-checkbox
           v-model="checked"
           label="createThreadWithCaptcha"
-          :disabled="disabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+          :disabled="captchaDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
         >发表内容时启用验证码</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="实名认证后才可发布内容">
+        <el-checkbox
+          v-model="checked"
+          label="publishNeedRealName"
+          :disabled="realNameDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布内容需先实名认证</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="绑定手机后才可发布内容">
+        <el-checkbox
+          v-model="checked"
+          label="publishNeedBindPhone"
+          :disabled="bindPhoneDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布内容需先绑定手机</el-checkbox>
       </CardRow>
     </Card>
 
