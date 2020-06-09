@@ -31,6 +31,9 @@ class UpdatePostController extends AbstractResourceController
         'user',
         'thread',
         'images',
+        'lastThreeComments',
+        'lastThreeComments.user',
+        'lastThreeComments.replyUser',
     ];
 
     /**
@@ -69,6 +72,20 @@ class UpdatePostController extends AbstractResourceController
             $this->serializer = CommentPostSerializer::class;
         }
 
-        return $post;
+        // 被回复帖子的最后三条回复
+        $post->setRelation(
+            'lastThreeComments',
+            Post::query()
+                ->where('reply_post_id', $post->id)
+                ->whereNull('deleted_at')
+                ->where('is_first', false)
+                ->where('is_comment', true)
+                ->where('is_approved', Post::APPROVED)
+                ->orderBy('updated_at', 'desc')
+                ->limit(3)
+                ->get()
+        );
+
+        return $post->loadMissing($this->extractInclude($request));
     }
 }
