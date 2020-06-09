@@ -14,6 +14,7 @@ use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
+use App\Listeners\User\CheckPublish;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
@@ -33,6 +34,7 @@ class ThreadListener
     public function subscribe(Dispatcher $events)
     {
         // 分类主题
+        $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, SaveCategoryToDatabase::class);
 
         // 发布帖子

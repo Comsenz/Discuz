@@ -121,6 +121,8 @@ return [
     'session_token'        => '令牌已失效。',
     'wrong'                => ':attribute 错误。',
     'qcloud_vod'           => '未开启腾讯云 云点播 服务。',
+    'publishNeedRealName'  => '发布内容需先实名认证。',
+    'publishNeedBindPhone' => '发布内容需先绑定手机。',
 
     /*
     |--------------------------------------------------------------------------

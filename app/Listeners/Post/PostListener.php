@@ -15,19 +15,16 @@ use App\Events\Post\Restored;
 use App\Events\Post\Revised;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
+use App\Listeners\User\CheckPublish;
 use App\MessageTemplate\PostMessage;
-use App\MessageTemplate\RelatedMessage;
 use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostMessage;
-use App\MessageTemplate\Wechat\WechatRelatedMessage;
 use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Attachment;
-use App\Models\UserActionLogs;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
-use App\Models\User;
-use App\Notifications\Related;
+use App\Models\UserActionLogs;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
@@ -44,6 +41,7 @@ class PostListener
     public function subscribe(Dispatcher $events)
     {
         // 发表回复
+        $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, [$this, 'whenPostWasSaving']);
         $events->listen(Created::class, [$this, 'whenPostWasCreated']);
         $events->listen(Created::class, SaveAudioToDatabase::class);

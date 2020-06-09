@@ -120,12 +120,6 @@ class CreatePost
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
 
-            // 发布内容需先实名认证
-            !$this->actor->isAdmin() && $this->assertCan($this->actor, 'publishNeedRealName');
-
-            // 发布内容需先绑定手机
-            !$this->actor->isAdmin() && $this->assertCan($this->actor, 'publishNeedBindPhone');
-
             // 是否有权发布音频
             if (Arr::get($this->data, 'attributes.file_id', '')) {
                 $this->assertCan($this->actor, 'createAudio');
