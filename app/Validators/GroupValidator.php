@@ -14,7 +14,9 @@ class GroupValidator extends AbstractValidator
     protected function getRules()
     {
         return [
-            'name' => ['required']
+            'name' => ['required'],
+            'fee' => 'filled|numeric|min:0',
+            'days' => 'sometimes|min:0|int'
         ];
     }
 

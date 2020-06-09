@@ -87,7 +87,7 @@ class Group extends Model
     /**
      * {@inheritdoc}
      */
-    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
+    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default', 'is_paid', 'fee', 'days'];
 
     /**
      * {@inheritdoc}

@@ -74,13 +74,16 @@ class CreateGroup
         $group->color = Arr::get($attributes, 'color', '');
         $group->icon = Arr::get($attributes, 'icon', '');
         $group->is_display = (bool) Arr::get($attributes, 'isDisplay');
+        $group->is_paid = (bool) Arr::get($attributes, 'is_paid');
+        $fee = (float) Arr::get($attributes, 'fee');
+        $group->fee = sprintf('%.2f', $fee);
+        $group->days = (int) Arr::get($attributes, 'days');
 
         $group->raise(new Created($group));
 
         $this->events->dispatch(
             new Saving($group, $this->actor, $this->data)
         );
-
         $this->validator->valid($group->getAttributes());
 
         $group->save();

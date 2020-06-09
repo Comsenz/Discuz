@@ -59,6 +59,9 @@ class UpdateGroup
         $group->color = Arr::get($this->data, 'attributes.color', '');
         $group->icon = Arr::get($this->data, 'attributes.icon', '');
         $group->is_display = (bool) Arr::get($this->data, 'attributes.isDisplay');
+        $group->is_paid = (bool) Arr::get($this->data, 'attributes.is_paid');
+        $group->fee = (float) Arr::get($this->data, 'attributes.fee');
+        $group->days = (int) Arr::get($this->data, 'attributes.days');
 
         $this->validator->valid($group->getDirty());
 
