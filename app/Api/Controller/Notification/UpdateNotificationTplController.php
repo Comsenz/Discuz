@@ -56,8 +56,8 @@ class UpdateNotificationTplController extends AbstractResourceController
         switch ($notificationTpl->type) {
             case 0:
                 $this->validation->make($attributes, [
-                    'title'     => 'required',
-                    'content'     => 'required',
+                    'title'     => 'filled',
+                    'content'     => 'filled',
                 ])->validate();
 
                 if ($title = Arr::get($attributes, 'title')) {
@@ -69,11 +69,12 @@ class UpdateNotificationTplController extends AbstractResourceController
                 break;
             case 1:
                 $this->validation->make($attributes, [
-                    'template_id'     => 'required',
+                    'template_id'     => 'filled',
                 ])->validate();
 
-                $notificationTpl->template_id = Arr::get($attributes, 'template_id');
-
+                if ($template_id = Arr::get($attributes, 'template_id')) {
+                    $notificationTpl->template_id = $template_id;
+                }
                 break;
         }
 
