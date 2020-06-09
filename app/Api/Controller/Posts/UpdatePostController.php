@@ -76,7 +76,7 @@ class UpdatePostController extends AbstractResourceController
         $post->setRelation(
             'lastThreeComments',
             Post::query()
-                ->where('reply_post_id', $post->id)
+                ->where('reply_post_id', $post->reply_post_id)
                 ->whereNull('deleted_at')
                 ->where('is_first', false)
                 ->where('is_comment', true)
