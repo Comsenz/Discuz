@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property int $default
  * @property int $is_display
+ * @property int is_paid
+ * @property float fee
+ * @property int days
  * @property Collection $users
  * @property Collection $permissions
  * @method truncate()
