@@ -12,6 +12,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class NotificationTpl
  *
+ * @property int $id
+ * @property int $status
+ * @property int $type
+ * @property int $type_name
+ * @property string $title
+ * @property string $content
+ * @property string $vars
+ * @property string $template_id
  * @package App\Models
  * @method static find($id)
  * @method static where($where)
