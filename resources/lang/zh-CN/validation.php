@@ -224,5 +224,7 @@ return [
         'captcha' => '验证码',
         'type' => '类型',
 
+        //NotificationTpl
+        'template_id' => '模板ID',
     ],
 ];
