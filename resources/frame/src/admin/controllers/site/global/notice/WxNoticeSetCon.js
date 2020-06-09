@@ -58,7 +58,7 @@ export default {
         }
       }).then(res => {
         if (res.errors) {
-          this.$message.error(res.errors[0].code);
+          this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0]);
         } else {
           this.$message({
             message: '修改成功',
