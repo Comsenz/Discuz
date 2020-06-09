@@ -29,6 +29,14 @@ class UpdateNotificationTplController extends AbstractResourceController
     protected $validation;
 
     /**
+     * @param Factory $validation
+     */
+    public function __construct(Factory  $validation)
+    {
+        $this->validation = $validation;
+    }
+
+    /**
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return mixed
