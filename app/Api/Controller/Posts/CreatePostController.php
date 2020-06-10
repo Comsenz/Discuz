@@ -10,6 +10,7 @@ namespace App\Api\Controller\Posts;
 use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\Commands\Post\CreatePost;
+use App\Models\Post;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -30,6 +31,9 @@ class CreatePostController extends AbstractCreateController
         'user',
         'thread',
         'images',
+        'lastThreeComments',
+        'lastThreeComments.user',
+        'lastThreeComments.replyUser',
     ];
 
     /**
@@ -55,17 +59,34 @@ class CreatePostController extends AbstractCreateController
         $threadId = Arr::get($data, 'relationships.thread.data.id');
         $ip = ip($request->getServerParams());
         $port = Arr::get($request->getServerParams(), 'REMOTE_PORT');
+        $include = $this->extractInclude($request);
 
         $isComment = (bool) Arr::get($data, 'attributes.isComment');
 
         if ($isComment) {
             $this->serializer = CommentPostSerializer::class;
 
-            $this->include = array_merge($this->include, ['replyUser']);
+            $include = array_merge($include, ['replyUser']);
         }
 
-        return $this->bus->dispatch(
+        $post = $this->bus->dispatch(
             new CreatePost($threadId, $actor, $data, $ip, $port)
         );
+
+        // 被回复帖子的最后三条回复
+        $post->setRelation(
+            'lastThreeComments',
+            Post::query()
+                ->where('reply_post_id', $post->reply_post_id)
+                ->whereNull('deleted_at')
+                ->where('is_first', false)
+                ->where('is_comment', true)
+                ->where('is_approved', Post::APPROVED)
+                ->orderBy('updated_at', 'desc')
+                ->limit(3)
+                ->get()
+        );
+
+        return $post->loadMissing($include);
     }
 }
