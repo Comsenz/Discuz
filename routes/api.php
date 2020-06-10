@@ -86,6 +86,11 @@ $route->post('/oauth/wechat/web/user/event', 'wechat.web.user.postevent', ApiCon
 $route->get('/oauth/wechat/web/user/serach', 'wechat.web.user.search', ApiController\Users\WechatWebUserLoginSearchController::class);
 $route->post('/oauth/wechat/miniprogram', 'wechat.miniprogram.login', ApiController\Users\WechatMiniProgramLoginController::class);
 $route->get('/oauth/wechat/miniprogram/code', 'wechat.mini.program.code', ApiController\Wechat\WechatMiniProgramCodeController::class);
+$route->get('/oauth/wechat/qy', 'wechat.qy.login', ApiController\Users\WechatQyLoginController::class);
+$route->get('/oauth/wechat/qy/user', 'wechat.qy.user', ApiController\Users\WechatQyUserController::class);
+$route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::class);
+$route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
+
 
 /*
 |--------------------------------------------------------------------------
