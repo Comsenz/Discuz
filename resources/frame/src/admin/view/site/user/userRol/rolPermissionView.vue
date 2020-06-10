@@ -89,7 +89,7 @@
           v-model="checked"
           label="createThreadWithCaptcha"
           :disabled="captchaDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发表内容时启用验证码</el-checkbox>
+        >发布内容时启用验证码</el-checkbox>
       </CardRow>
     </Card>
 
