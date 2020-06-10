@@ -159,31 +159,37 @@ class Censor
     public function localStopWordsCheck($content, $type)
     {
         // 处理指定类型非忽略的敏感词
-        StopWord::when(in_array($type, ['ugc', 'username']), function ($query) use ($type) {
-            return $query->where($type, '<>', self::IGNORE);
-        })->cursor()->tapEach(function ($word) use (&$content, $type) {
-            // 转义元字符并生成正则
-            $find = '/' . addcslashes($word->find, '\/^$()[]{}|+?.*') . '/i';
+        StopWord::query()
+            ->when(in_array($type, ['ugc', 'username']), function ($query) use ($type) {
+                return $query->where($type, '<>', self::IGNORE);
+            })
+            ->cursor()
+            ->tapEach(function ($word) use (&$content, $type) {
+                // 转义元字符并生成正则
+                $find = '/' . addcslashes($word->find, '\/^$()[]{}|+?.*') . '/i';
 
-            if ($word->{$type} == self::REPLACE) {
-                $content = preg_replace($find, $word->replacement, $content);
-            } else {
-                if ($word->{$type} == self::MOD) {
-                    if (preg_match($find, $content, $matches)) {
-                        // 记录触发的审核词
-                        array_push($this->wordMod, $word->find);
+                // 将 {n} 转换为 .{0,n}（当 n 为 0 - 99 时）
+                $find = preg_replace('/\\\{(\d{1,2})\\\}/', '.{0,${1}}', $find);
 
-                        $this->isMod = true;
-                    }
-                } elseif ($word->{$type} == self::BANNED) {
+                if ($word->{$type} === self::REPLACE) {
+                    $content = preg_replace($find, $word->replacement, $content);
+                } else {
                     if (preg_match($find, $content, $matches)) {
-                        throw new CensorNotPassedException('content_banned');
+                        if ($word->{$type} === self::MOD) {
+                            // 记录触发的审核词
+                            array_push($this->wordMod, head($matches));
+
+                            $this->isMod = true;
+                        } elseif ($word->{$type} === self::BANNED) {
+                            throw new CensorNotPassedException('content_banned');
+                        }
                     }
                 }
-            }
-        })->each(function ($word) {
-            // tapEach 尚未真正开始处理，在此处触发 tapEach
-        });
+            })
+            ->each(function ($word) {
+                // tapEach 尚未真正开始处理，在此处触发 tapEach
+                /** @see https://learnku.com/docs/laravel/7.x/collections/7483#4017b9 */
+            });
 
         return $content;
     }
