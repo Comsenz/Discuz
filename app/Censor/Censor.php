@@ -224,7 +224,7 @@ class Censor
 
         $result = $easyWeChat->content_security->checkText($content);
 
-        if (Arr::get($result, 'errCode', 0) !== 0) {
+        if (Arr::get($result, 'errcode', 0) !== 0) {
             $this->isMod = true;
         }
 
@@ -278,7 +278,7 @@ class Censor
                 $result = $easyWeChat->content_security->checkImage($filePathname);
             }
 
-            if (Arr::get($result, 'errCode', 0) !== 0) {
+            if (Arr::get($result, 'errcode', 0) !== 0) {
                 $this->isMod = true;
             }
         }
