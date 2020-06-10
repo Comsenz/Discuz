@@ -138,8 +138,14 @@ class PayTrade
             }
         } else {
             $message = $response->getData();
-            $log = app('log');
-            $log->info('WeiChat Pay Response: ', $message);
+            $log = app('payLog');
+            try {
+                $log->info('WeiChat Pay Response: ', $message);
+            } catch (\Exception $e) {
+                goto todo;
+            }
+
+            todo:
             $message = isset($message['err_code_des']) ? $message['err_code_des'] : $message['return_msg'];
             throw new TradeErrorException($message, 500);
         }

@@ -7,13 +7,13 @@
 
 namespace App\Api\Serializer;
 
-use App\Models\Post;
-use App\Models\Thread;
+use App\Models\Category;
 use App\Models\User;
 use App\Settings\ForumSettingField;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Illuminate\Support\Arr;
 
 class ForumSettingSerializer extends AbstractSerializer
 {
@@ -37,6 +37,7 @@ class ForumSettingSerializer extends AbstractSerializer
     {
         // 获取logo完整地址
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
+        $headerLogo = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
         $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
 
         $attributes = [
@@ -47,6 +48,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
+                'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
                 'site_url' => $this->settings->get('site_url'),
                 'site_stat' => $this->settings->get('site_stat') ?: '',
@@ -63,6 +65,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'register_captcha' => (bool)$this->settings->get('register_captcha'),
                 'password_length' => (int)$this->settings->get('password_length'),
                 'password_strength' => empty($this->settings->get('password_strength')) ? [] : explode(',', $this->settings->get('password_strength')),
+                'register_type' => (int)$this->settings->get('register_type', 'default', 0),
             ],
 
             // 第三方登录设置
@@ -75,6 +78,7 @@ class ForumSettingSerializer extends AbstractSerializer
             // 支付设置
             'paycenter' => [
                 'wxpay_close' => (bool)$this->settings->get('wxpay_close', 'wxpay'),
+                'wxpay_ios' => (bool)$this->settings->get('wxpay_ios', 'wxpay'),
             ],
 
             // 附件设置
@@ -114,12 +118,16 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_create_thread_long' => $this->actor->can('createThreadLong'),
                 'can_create_thread_video' => $this->actor->can('createThreadVideo'),
                 'can_create_thread_image' => $this->actor->can('createThreadImage'),
+                'can_create_thread_in_category' => (bool)Category::getIdsWhereCan($this->actor, 'createThread'),
+                'can_create_audio' => $this->actor->can('createAudio'),
                 'can_view_threads' => $this->actor->can('viewThreads'),
                 'can_batch_edit_threads' => $this->actor->can('thread.batchEdit'),
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
                 'create_thread_with_captcha' => !$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
+                'publish_need_real_name' => !$this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && $this->actor->realname,
+                'publish_need_bind_phone' => !$this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && $this->actor->mobile,
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
             ],
         ];
@@ -139,6 +147,12 @@ class ForumSettingSerializer extends AbstractSerializer
             $attributes['qcloud'] += $this->forumField->getQCloudVod();
         } else {
             //未开启vod服务 不可发布视频主题
+            $attributes['other']['can_create_thread_video'] = false;
+        }
+
+        // 微信小程序请求时判断视频开关
+        if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
+            strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $attributes['other']['can_create_thread_video'] = false;
         }
 
@@ -167,6 +181,9 @@ class ForumSettingSerializer extends AbstractSerializer
 
                 // 提现设置
                 $attributes['set_cash'] += $this->forumField->getCashSettings();
+
+                // 水印设置
+                $attributes['watermark'] = $this->forumField->getWatermarkSettings();
             }
         }
 

@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Discuz & Tencent Cloud
  * This is NOT a freeware, use is subject to license terms
@@ -7,80 +8,10 @@
 
 namespace App\Formatter;
 
-use App\Models\Emoji;
-use App\Models\User;
-use Discuz\Cache\CacheManager;
-use Discuz\Http\UrlGenerator;
 use s9e\TextFormatter\Configurator;
-use s9e\TextFormatter\Unparser;
 
-class Formatter
+class Formatter extends BaseFormatter
 {
-    /**
-     * @var UrlGenerator
-     */
-    protected $url;
-
-    /**
-     * @var CacheManager
-     */
-    protected $cache;
-
-    /**
-     * @var string
-     */
-    protected $cacheDir;
-
-    /**
-     * @param UrlGenerator $url
-     * @param CacheManager $cache
-     * @param string $cacheDir
-     */
-    public function __construct(UrlGenerator $url, CacheManager $cache, $cacheDir)
-    {
-        $this->url = $url;
-        $this->cache = $cache;
-        $this->cacheDir = $cacheDir;
-    }
-
-    /**
-     * Parse text.
-     *
-     * @param string $text
-     * @param mixed $context
-     * @return string
-     */
-    public function parse($text, $context = null)
-    {
-        $parser = $this->getParser($context);
-
-        return $parser->parse($text);
-    }
-
-    /**
-     * Render parsed XML.
-     *
-     * @param string $xml
-     * @return string
-     */
-    public function render($xml)
-    {
-        $renderer = $this->getRenderer();
-
-        return $renderer->render($xml);
-    }
-
-    /**
-     * Unparse XML.
-     *
-     * @param string $xml
-     * @return string
-     */
-    public function unparse($xml)
-    {
-        return Unparser::unparse($xml);
-    }
-
     /**
      * Flush the cache so that the formatter components are regenerated.
      */
@@ -104,37 +35,16 @@ class Formatter
      */
     protected function getConfigurator()
     {
-        $configurator = new Configurator;
 
-        $configurator->rootRules->enableAutoLineBreaks();
+        $configurator = parent::getConfigurator();
 
-        $configurator->rendering->engine = 'PHP';
-        $configurator->rendering->engine->cacheDir = $this->cacheDir;
+        parent::confEmoji($configurator);
 
-        $configurator->plugins->load('Escaper');
-        // $configurator->plugins->load('Autoemail');
-        // $configurator->plugins->load('Autolink');
-        $configurator->tags->onDuplicate('replace');
+        parent::confHtml($configurator);
 
-        // emoji
-        foreach (Emoji::cursor() as $emoji) {
-            $url = $this->url->to('/' . $emoji->url);
-            $emojiImg = '<img src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
-            $configurator->Emoticons->add($emoji->code, $emojiImg);
-        }
+        parent::confUserMention($configurator);
 
-        // html
-        $configurator->HTMLElements->allowElement('blockquote');
-        $configurator->HTMLElements->allowAttribute('blockquote', 'class');
-        $configurator->HTMLElements->allowElement('span');
-        $configurator->HTMLElements->allowAttribute('span', 'class');
-
-        // USERMENTION
-        $tagName = 'USERMENTION';
-        $tag = $configurator->tags->add($tagName);
-        $tag->attributes->add('id');
-        $tag->filterChain->prepend([static::class, 'addUserId']);
-        $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)/i', $tagName);
+        parent::confTopic($configurator);
 
         return $configurator;
     }
@@ -149,60 +59,12 @@ class Formatter
     {
         $formatter = $this->cache->get('formatter');
 
-        if (! $formatter) {
+        if (!$formatter) {
             $this->cacheFormatter();
 
             $formatter = $this->cache->get('formatter');
         }
 
         return $formatter[$name];
-    }
-
-    /**
-     * Get the parser.
-     *
-     * @param mixed $context
-     * @return \s9e\TextFormatter\Parser
-     */
-    protected function getParser($context = null)
-    {
-        $parser = $this->getComponent('parser');
-
-        $parser->registeredVars['context'] = $context;
-
-        return $parser;
-    }
-
-    /**
-     * Get the renderer.
-     *
-     * @return \s9e\TextFormatter\Renderer
-     */
-    protected function getRenderer()
-    {
-        spl_autoload_register(function ($class) {
-            if (file_exists($file = $this->cacheDir.'/'.$class.'.php')) {
-                include $file;
-            } else {
-                $this->flush();
-
-                $this->cacheFormatter();
-            }
-        });
-
-        return $this->getComponent('renderer');
-    }
-
-    /**
-     * @param $tag
-     *
-     * @return bool
-     */
-    public static function addUserId($tag)
-    {
-        if ($user = User::where('username', $tag->getAttribute('username'))->first()) {
-            $tag->setAttribute('id', $user->id);
-            return true;
-        }
     }
 }

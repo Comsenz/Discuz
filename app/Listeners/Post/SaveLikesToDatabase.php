@@ -68,13 +68,15 @@ class SaveLikesToDatabase
                     if ($post->user->id != $actor->id) {
                         $build = [
                             'message' => $post->content,
-                            'raw' => Arr::only($post->toArray(), ['id', 'thread_id', 'is_first'])
+                            'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'is_first']), [
+                                'actor_username' => $actor->username    // 发送人姓名
+                            ]),
                         ];
                         // 数据库通知
-                        $post->user->notify(new Liked($post, $actor, LikedMessage::class));
+                        $post->user->notify(new Liked(clone $post, $actor, LikedMessage::class));
 
                         // 微信通知
-                        $post->user->notify(new Liked($post, $actor, WechatLikedMessage::class, $build));
+                        $post->user->notify(new Liked(clone $post, $actor, WechatLikedMessage::class, $build));
                     }
                 }
             }

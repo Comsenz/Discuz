@@ -16,7 +16,7 @@ class RsaCertGenerate extends AbstractCommand
 
     protected $signature = 'rsa:gen';
 
-    protected $description = '生成 OAUTH2 private.key 和 public.key ';
+    protected $description = '生成 OAUTH2 private.key 和 public.key';
 
     protected $dn = [
         'countryName' => 'GB',

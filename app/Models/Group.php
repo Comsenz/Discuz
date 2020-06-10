@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property int $default
  * @property int $is_display
+ * @property int is_paid
+ * @property float fee
+ * @property int days
  * @property Collection $users
  * @property Collection $permissions
  * @method truncate()
@@ -62,6 +65,16 @@ class Group extends Model
     const MEMBER_ID = 10;
 
     /**
+     * The ID of preset groups
+     */
+    const PRESET_GROUPS = [1, 5, 6, 7, 10];
+
+    /**
+     * The group need paid
+     */
+    const IS_PAID = 1;
+
+    /**
      * {@inheritdoc}
      */
     public $timestamps = false;
@@ -77,7 +90,7 @@ class Group extends Model
     /**
      * {@inheritdoc}
      */
-    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default'];
+    protected $fillable = ['id', 'name', 'type', 'color', 'icon', 'default', 'is_paid', 'fee', 'days'];
 
     /**
      * {@inheritdoc}

@@ -12,7 +12,7 @@
         <main class="reward-main content">
           <div class="systemCon cell-crossing" v-for='(item,index) in systemResList' :key='index'>
             <div class="systemTitle">{{item._data.title}}</div>
-            <div class="systemTime">{{$moment(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</div>
+            <div class="systemTime">{{$dayjs(item._data.created_at).format('YYYY-MM-DD HH:mm')}}</div>
             <div class="systemDet">
               <a href="javascript:;" v-if="item._data.raw && item._data.raw.thread_id > 0"
                  @click="jumpDetails(item._data.raw.thread_id)" v-html="item._data.content"></a>

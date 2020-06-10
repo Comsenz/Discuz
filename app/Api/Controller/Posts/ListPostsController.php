@@ -7,6 +7,7 @@
 
 namespace App\Api\Controller\Posts;
 
+use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\Models\Post;
 use App\Models\User;
@@ -90,7 +91,6 @@ class ListPostsController extends AbstractListController
     /**
      * @param PostRepository $posts
      * @param UrlGenerator $url
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(PostRepository $posts, UrlGenerator $url)
     {
@@ -290,6 +290,8 @@ class ListPostsController extends AbstractListController
         // 是否是评论
         if ($isComment = Arr::get($filter, 'isComment')) {
             if ($isComment == 'yes') {
+                $this->serializer = CommentPostSerializer::class;
+
                 $query->where('posts.is_comment', true);
             } elseif ($isComment == 'no') {
                 $query->where('posts.is_comment', false);
@@ -317,11 +319,12 @@ class ListPostsController extends AbstractListController
 
         $subSql = Post::query()
             ->selectRaw('count(*)')
+            ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
+            ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
+            ->whereRaw($this->tablePrefix . 'a.`deleted_at` = `deleted_at`')
             ->whereRaw($this->tablePrefix . 'a.`is_first` = `is_first`')
             ->whereRaw($this->tablePrefix . 'a.`is_comment` = `is_comment`')
             ->whereRaw($this->tablePrefix . 'a.`is_approved` = `is_approved`')
-            ->whereRaw($this->tablePrefix . 'a.`reply_post_id` = `reply_post_id`')
-            ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
             ->toSql();
 
         $allLastThreeComments = Post::query()

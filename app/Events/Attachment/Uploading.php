@@ -8,7 +8,7 @@
 namespace App\Events\Attachment;
 
 use App\Models\User;
-use Psr\Http\Message\UploadedFileInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Uploading
 {
@@ -18,15 +18,15 @@ class Uploading
     public $actor;
 
     /**
-     * @var UploadedFileInterface
+     * @var UploadedFile
      */
     public $file;
 
     /**
      * @param User $actor
-     * @param UploadedFileInterface $file
+     * @param UploadedFile $file
      */
-    public function __construct(User $actor, UploadedFileInterface $file)
+    public function __construct(User $actor, UploadedFile $file)
     {
         $this->actor = $actor;
         $this->file = $file;

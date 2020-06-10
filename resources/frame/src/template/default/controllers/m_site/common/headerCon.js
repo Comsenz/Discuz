@@ -5,6 +5,7 @@ import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appCommonH from '../../../../../helpers/commonHelper';
 import appConfig from '../../../../../../config/appConfig';
+
 export default {
   data: function () {
     return {
@@ -106,7 +107,7 @@ export default {
   computed: {
     personUserId: function () {
       return this.$route.params.userId;
-    }
+    },
   },
   created() {
     this.userId = browserDb.getLItem('tokenId');
@@ -133,7 +134,7 @@ export default {
   watch: {
     'isfixNav': function (newVal, oldVal) {
       this.isfixNav = newVal;
-    }
+    },
   },
   methods: {
     //设置底部在pc里的宽度
@@ -144,14 +145,7 @@ export default {
     },
     //初始化请站点信息和分类接口
     loadCategories() {
-      //请求站点信息
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteInfo = res.readdata;
         this.logo = res.readdata._data.set_site.site_logo;
         if (res.readdata._data.set_site.site_logo == '' || res.readdata._data.set_site.site_logo == null) {
@@ -159,7 +153,7 @@ export default {
         }
         //把站点是否收费的值存储起来，以便于传到父页面
         this.isPayVal = res.readdata._data.set_site.site_mode;
-      })
+      });
       if (this.navShow) {
         //请求分类接口
         this.appFetch({
@@ -199,16 +193,7 @@ export default {
     },
     //初始化请求用户信息
     loadUserInfo() {
-      if (!this.userId) {
-        return false;
-      }
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + this.userId,
-        data: {
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error);
@@ -227,6 +212,8 @@ export default {
           }
           this.noticeSum = res.data.attributes.typeUnreadNotifications.liked + res.data.attributes.typeUnreadNotifications.replied + res.data.attributes.typeUnreadNotifications.rewarded + res.data.attributes.typeUnreadNotifications.system;
         }
+      }).catch(() => {
+        return false;
       })
     },
 
@@ -316,7 +303,9 @@ export default {
     handleTabFix() {
       if (this.headFixed) {
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-        var offsetTop = document.querySelector('#testNavBar').offsetTop;
+        var topElem = document.querySelector("#testNavBar");
+        if (!topElem) return;
+        var offsetTop = topElem.offsetTop;
         if (scrollTop > offsetTop) {
           this.showHeader = true;
           // this.isfixHead = true;
@@ -349,7 +338,7 @@ export default {
 
   mounted: function () {
     this.handleTabFix()
-    // window.addEventListener('scroll', this.handleTabFix, true);
+    window.addEventListener('scroll', this.handleTabFix, true);
   },
   beforeDestroy() {
     // alert('销毁');

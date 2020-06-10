@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Thread;
+use App\Models\Topic;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
@@ -67,13 +68,15 @@ class ThreadSerializer extends AbstractSerializer
         if ($model->deleted_at) {
             $attributes['isDeleted'] = true;
             $attributes['deletedAt'] = $this->formatDate($model->deleted_at);
-        }
-
-        if ($model->price > 0) {
-            $attributes['paid'] = (bool) $model->getAttribute('paid');
+        } else {
+            $attributes['isDeleted'] = false;
         }
 
         Thread::setStateUser($this->actor);
+
+        if ($model->price > 0) {
+            $attributes['paid'] = $model->getAttribute('paid') ?? $model->paidState();
+        }
 
         return $attributes;
     }
@@ -174,7 +177,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function logs($thread)
     {
-        return $this->hasMany($thread, OperationLogSerializer::class);
+        return $this->hasMany($thread, UserActionLogsSerializer::class);
     }
 
     /**
@@ -183,7 +186,7 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function lastDeletedLog($thread)
     {
-        return $this->hasOne($thread, OperationLogSerializer::class);
+        return $this->hasOne($thread, UserActionLogsSerializer::class);
     }
 
     /**
@@ -193,5 +196,10 @@ class ThreadSerializer extends AbstractSerializer
     public function threadVideo($thread)
     {
         return $this->hasOne($thread, ThreadVideoSerializer::class);
+    }
+
+    public function topic($thread)
+    {
+        return $this->hasMany($thread, TopicSerializer::class);
     }
 }

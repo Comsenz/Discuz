@@ -32,7 +32,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     protected $attachments;
 
     /**
-     * {@inheritdoc}
+     * {}
      */
     public $serializer = AttachmentSerializer::class;
 
@@ -51,7 +51,6 @@ class ResourceAttachmentController implements RequestHandlerInterface
      * @return ResponseInterface
      * @throws OrderException
      * @throws PermissionDeniedException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -63,7 +62,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
         $filePath = storage_path('app/attachment/' . $attachment->attachment);
 
         // 帖子图片直接显示
-        if ($attachment->is_gallery) {
+        if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
             // 是否要获取缩略图
             if (Arr::get($request->getQueryParams(), 'thumb') === 'true') {
                 $thumb = Str::replaceLast('.', '_thumb.', $filePath);
@@ -100,7 +99,7 @@ class ResourceAttachmentController implements RequestHandlerInterface
     {
         $attachment = $this->attachments->findOrFail($attachmentUuid, $actor);
 
-        $this->assertCan($actor, 'view.' . $attachment->is_gallery, $attachment);
+        $this->assertCan($actor, 'view.' . $attachment->type, $attachment);
 
         // 附件是否被绑定到帖子上
         $post = $attachment->post;

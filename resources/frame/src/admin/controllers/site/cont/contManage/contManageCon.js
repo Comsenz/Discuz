@@ -6,7 +6,6 @@ import Card from '../../../../view/site/common/card/card';
 import ContArrange from '../../../../view/site/common/cont/contArrange';
 import tableNoList from '../../../../view/site/common/table/tableNoList'
 import Page from '../../../../view/site/common/page/page';
-import moment from 'moment';
 import webDb from 'webDbHelper';
 import { mapState, mapMutations } from 'vuex';
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
@@ -223,7 +222,7 @@ export default {
     * 格式化日期
     * */
     formatDate(data) {
-      return moment(data).format('YYYY-MM-DD HH:mm')
+      return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
 
     submitClick() {

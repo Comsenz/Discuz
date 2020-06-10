@@ -10,6 +10,7 @@ export default {
       appSecret: '',
       type: '',
       prefix: '',
+      closeVideo: false,
       typeCopywriting: {
         wx_offiaccount: {
           title: '公众号接口配置',
@@ -21,10 +22,11 @@ export default {
           url: 'https://mp.weixin.qq.com/',
         },
         wx_miniprogram: {
-          title: '小程序微信授权登录设置',
+          title: '小程序配置',
           appIdDescription: '填写申请小程序后，你获得的APPID ',
           appSecretDescription: '填写申请小程序后，你获得的App secret',
-          url: 'https://mp.weixin.qq.com/',
+          closeVideo: '开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布。开启前，请务必确保您的小程序已有相应的视频播放类目的权限。具体类目权限请 点此查看',
+          url: 'https://developers.weixin.qq.com/miniprogram/product/material/',
         },
         wx_oplatform: {
           title: 'PC端微信扫码登录',
@@ -76,7 +78,15 @@ export default {
             "value": this.appSecret,
             "tag": this.type
           }
-        }
+        },
+        {
+          "attributes": {
+            "key": this.prefix + "video",
+            "value": this.closeVideo,
+            "tag": 'wx_miniprogram'
+          }
+        },
+
       ];
 
       if (this.type === 'wx_offiaccount'){
@@ -139,6 +149,7 @@ export default {
           this.prefix = 'miniprogram_';
           this.appId = data.readdata._data.passport.miniprogram_app_id;
           this.appSecret = data.readdata._data.passport.miniprogram_app_secret;
+          this.closeVideo = data.readdata._data.set_site.miniprogram_video;
           break;
         case 'wx_oplatform':
           this.prefix = 'oplatform_';

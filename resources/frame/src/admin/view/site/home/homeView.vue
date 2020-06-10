@@ -33,32 +33,33 @@
 
     <Card class="home-card-box" header="系统信息" intercept="true">
       <p class="section">
-        <span>Discuz!程序版本</span>
+        <span class="section-title">Discuz!程序版本：</span>
         <span>{{siteInfo.version}}</span>
       </p>
       <p class="section">
-        <span>服务器系统及PHP</span>
+        <span class="section-title">服务器系统及PHP：</span>
         <span>{{siteInfo.php_version}}</span>
       </p>
       <p class="section">
-        <span>服务器软件</span>
+        <span class="section-title">服务器软件：</span>
         <span>{{siteInfo.server_software}}</span>
       </p>
       <p class="section">
-        <span>服务器MySQL版本</span>
+        <span class="section-title">服务器MySQL版本：</span>
         <span>{{siteInfo.db}}</span>
       </p>
       <p class="section">
-        <span>上传许可</span>
+        <span class="section-title">上传许可：</span>
         <span>{{siteInfo.upload_size}}</span>
       </p>
       <p class="section">
-        <span>当前数据库尺寸</span>
+        <span class="section-title">当前数据库尺寸：</span>
         <span>{{siteInfo.db_size}}</span>
       </p>
     </Card>
 
     <Card class="home-card-box home-card__footer" header="相关链接">
+      <a href="https://discuz.chat/manual-admin/" target="_blank">使用手册</a>
       <a href="https://www.discuz.net/" target="_blank">Discuz!&nbsp;支持论坛</a>
       <a href="https://cloud.tencent.com/" target="_blank">腾讯云</a>
       <a href="http://www.dnspod.cn/" target="_blank">DNSPod</a>

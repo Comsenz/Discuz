@@ -14,7 +14,6 @@ use App\Events\Users\Logind;
 use App\Exceptions\NoUserException;
 use App\Models\SessionToken;
 use App\Models\UserWechat;
-use App\Passport\Repositories\UserRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Cache\Repository;
@@ -94,7 +93,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
                 new GenJwtToken($params)
             );
 
-            if($response->getStatusCode() === 200) {
+            if ($response->getStatusCode() === 200) {
                 $this->events->dispatch(new Logind($wechatUser->user));
             }
 
@@ -128,7 +127,11 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
         $token = SessionToken::generate($this->getDriver(), $rawUser);
         $token->save();
-        throw (new NoUserException())->setToken($token);
+
+        $noUserException = new NoUserException();
+        $noUserException->setToken($token);
+        $noUserException->setUser(Arr::only($wechatUser->toArray(), ['nickname', 'headimgurl']));
+        throw $noUserException;
     }
 
     abstract protected function getDriver();

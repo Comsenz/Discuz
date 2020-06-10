@@ -3,22 +3,22 @@
     <Card :header="'设置权限——' + $router.history.current.query.name"></Card>
     <Card header="内容发布权限："></Card>
     <Card>
-      <CardRow description="允许发布主题">
+      <CardRow description="允许发布文本">
         <el-checkbox
           v-model="checked"
           label="createThread"
           :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发布主题</el-checkbox>
+        >发布文本</el-checkbox>
       </CardRow>
     </Card>
 
     <Card>
-      <CardRow description="允许发布长文">
+      <CardRow description="允许发布帖子">
         <el-checkbox
           v-model="checked"
           label="createThreadLong"
           :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发布长文</el-checkbox>
+        >发布帖子</el-checkbox>
       </CardRow>
     </Card>
 
@@ -29,6 +29,26 @@
           label="createThreadVideo"
           :disabled="videoDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
         >发布视频</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布图片">
+        <el-checkbox
+          v-model="checked"
+          label="createThreadImage"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布图片</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="允许发布私信">
+        <el-checkbox
+          v-model="checked"
+          label="dialog.create"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布私信</el-checkbox>
       </CardRow>
     </Card>
 
@@ -68,8 +88,28 @@
         <el-checkbox
           v-model="checked"
           label="createThreadWithCaptcha"
-          :disabled="disabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >发表内容时启用验证码</el-checkbox>
+          :disabled="captchaDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布内容时启用验证码</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="实名认证后才可发布内容">
+        <el-checkbox
+          v-model="checked"
+          label="publishNeedRealName"
+          :disabled="realNameDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布内容需先实名认证</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="绑定手机后才可发布内容">
+        <el-checkbox
+          v-model="checked"
+          label="publishNeedBindPhone"
+          :disabled="bindPhoneDisabled || $router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >发布内容需先绑定手机</el-checkbox>
       </CardRow>
     </Card>
 
@@ -204,17 +244,6 @@
           label="user.edit"
           :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
         >编辑用户状态</el-checkbox>
-      </CardRow>
-    </Card>
-
-    <Card header="其他设置："></Card>
-    <Card>
-      <CardRow description="开启后将在用户名后显示角色">
-        <el-checkbox
-          v-model="checked"
-          label="showGroups"
-          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
-        >显示用户角色</el-checkbox>
       </CardRow>
     </Card>
 

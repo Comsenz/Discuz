@@ -72,8 +72,9 @@ export default {
           webDb.setLItem('refreshToken',refreshToken);
           let beforeVisiting = webDb.getSItem('beforeVisiting');
           this.$router.push({ path: webDb.getSItem('beforeVisiting') });
-
-          this.getUsers(tokenId).then(res => {
+          this.$store.dispatch("appSiteModule/invalidateUser");
+          this.$store.dispatch("appSiteModule/invalidateForum");
+          this.getUser().then(res => {
             if (res.readdata._data.paid) {
               if (beforeVisiting) {
                 this.$router.replace({ path: beforeVisiting });
@@ -106,26 +107,13 @@ export default {
     * */
 
     getForum() {
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         this.siteMode = res.readdata._data.set_site.site_mode;
         webDb.setLItem('siteInfo', res.readdata);
-      }).catch(err => {
-      })
+      });
     },
-    getUsers(id) {
-      return this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + id,
-        headers: { 'Authorization': 'Bearer ' + webDb.getLItem('Authorization') },
-        data: {
-          include: ['groups']
-        }
-      }).then(res => {
+    getUser() {
+      return this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
@@ -134,105 +122,8 @@ export default {
       }).catch(err => {
       })
     },
-    /*getWatchHrefPC(code, state, sessionId) {
-      this.appFetch({
-        url: 'wxLogin',
-        method: 'get',
-        data: {
-          code: code,
-          state: state,
-          sessionId: sessionId,
-        }
-      }).then(res => {
-        if (res.errors) {
-
-          let wxStatus = res.errors[0].status;
-          let wxtoken = res.errors[0].user.wxtoken;
-
-          if (wxStatus == 400) {
-            //微信跳转
-            this.wxtoken = wxtoken;
-            webDb.setLItem('wxtoken', wxtoken);
-            this.$router.push({ path: '/wx-login-bd' });
-          }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location;
-        } else if (res.data.attributes.access_token) {
-
-          this.$toast.success('登录成功');
-          let token = res.data.attributes.access_token;
-          let tokenId = res.data.id;
-          webDb.setLItem('Authorization', token);
-          webDb.setLItem('tokenId', tokenId);
-          let beforeVisiting = webDb.getSItem('beforeVisiting');
-
-          if (beforeVisiting) {
-            this.$router.replace({ path: beforeVisiting });
-            webDb.setSItem('beforeState', 1);
-          } else {
-            this.$router.push({ path: '/' });
-          }
-
-        } else {
-          //任何情况都不符合
-        }
-      }).catch(err => {
-      })
-    },
-    getWatchHref(code, state, sessionId) {
-      this.appFetch({
-        url: 'wechat',
-        method: 'get',
-        data: {
-          code: code,
-          state: state,
-          sessionId: sessionId,
-        }
-      }).then(res => {
-        if (res.errors) {
-
-          let wxStatus = res.errors[0].status;
-          let wxtoken = res.errors[0].user.wxtoken;
-
-          if (wxStatus == 400) {
-            //微信跳转
-            this.wxtoken = wxtoken;
-            webDb.setLItem('wxtoken', wxtoken);
-            this.$router.push({ path: '/wx-login-bd' });
-          }
-        } else if (res.data.attributes.location) {
-          //获取地址
-          this.wxurl = res.data.attributes.location;
-          window.location.href = res.data.attributes.location
-        } else if (res.data.attributes.access_token) {
-
-          this.$toast.success('登录成功');
-          let token = res.data.attributes.access_token;
-          let tokenId = res.data.id;
-          webDb.setLItem('Authorization', token);
-          webDb.setLItem('tokenId', tokenId);
-          let beforeVisiting = webDb.getSItem('beforeVisiting');
-
-          if (beforeVisiting) {
-            this.$router.replace({ path: beforeVisiting });
-            webDb.setSItem('beforeState', 1);
-          } else {
-            this.$router.push({ path: '/' });
-          }
-
-        } else {
-          //任何情况都不符合
-        }
-      }).catch(err => {
-      })
-    },*/
   },
   created() {
-    let code = this.$router.history.current.query.code;
-    let state = this.$router.history.current.query.state;
-    let sessionId = this.$router.history.current.query.sessionId;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     this.wxtoken = webDb.getLItem('wxtoken');
 

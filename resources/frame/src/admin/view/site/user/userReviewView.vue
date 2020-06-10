@@ -77,7 +77,7 @@
             <el-button size="mini" type="text" @click="visible = false">取消</el-button>
             <el-button type="danger" size="mini" @click="allOperation('del')">确认</el-button>
           </div>
-          <el-button size="medium" slot="reference">删除</el-button>
+          <!-- <el-button size="medium" slot="reference">删除</el-button> -->
         </el-popover>
 
       </Card>

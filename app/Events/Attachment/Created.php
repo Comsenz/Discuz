@@ -15,7 +15,7 @@ class Created
     /**
      * @var Attachment
      */
-    public $attach;
+    public $attachment;
 
     /**
      * @var User
@@ -23,12 +23,12 @@ class Created
     public $actor;
 
     /**
-     * @param Attachment $attach
+     * @param Attachment $attachment
      * @param User $actor
      */
-    public function __construct(Attachment $attach, User $actor = null)
+    public function __construct(Attachment $attachment, User $actor = null)
     {
-        $this->attach = $attach;
+        $this->attachment = $attachment;
         $this->actor = $actor;
     }
 }

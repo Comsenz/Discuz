@@ -7,7 +7,6 @@ import ContArrange from '../../../../view/site/common/cont/contArrange';
 import Page from '../../../../view/site/common/page/page';
 import tableNoList from '../../../../view/site/common/table/tableNoList';
 import webDb from 'webDbHelper';
-import moment from "moment/moment";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 
 
@@ -182,7 +181,7 @@ export default {
     * 格式化日期
     * */
     formatDate(data){
-      return moment(data).format('YYYY-MM-DD HH:mm')
+      return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
 
 

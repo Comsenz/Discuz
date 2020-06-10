@@ -40,6 +40,7 @@ export default {
   },
   methods:{
     myJump(str){
+      this.$store.dispatch("appSiteModule/invalidateUser");
       switch (str) {
         case 'reply':
           this.$router.push('/reply');
@@ -55,15 +56,7 @@ export default {
       }
     },
     notice(){
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url:'users',
-        method:'get',
-        splice:'/'+userId,
-        standard: false,
-        data:{
-        }
-      }).then(res=>{
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (res.errors){
           this.$toast.fail(res.errors[0].code);
           // throw new Error(res.error)

@@ -63,7 +63,8 @@ export default {
                   webDb.setLItem('tokenId', tokenId);
                   webDb.setLItem('refreshToken', refreshToken);
                   let beforeVisiting = webDb.getSItem('beforeVisiting');
-
+                  this.$store.dispatch("appSiteModule/invalidateUser");
+                  this.$store.dispatch("appSiteModule/invalidateForum");
                   this.getUsers(tokenId).then((data) => {
                     webDb.setLItem('foregroundUser', data.data.attributes.username);
                     if (beforeVisiting) {

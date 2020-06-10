@@ -6,7 +6,7 @@
          <div  class="side-bar-avatar-box">
            <img :src="avatarUrl" v-if="avatarUrl != '' && avatarUrl != null " class="side-user-img" >
            <img :src="appConfig.staticBaseUrl+'/images/noavatar.gif'" class="userHead" v-else>
-           <img v-if="isReal" class="icon-yirenzheng" src="../../../../../../static/images/authIcon.svg" alt="实名认证">
+           <img v-if="isReal" class="icon-yirenzheng" src="/static/images/authIcon.svg" alt="实名认证">
          </div>
 
          <div class="userDet">

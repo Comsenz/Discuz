@@ -2,7 +2,6 @@
 * 用户审核管理器
 * */
 
-import moment from "moment/moment";
 import Card from '../../../view/site/common/card/card';
 import Page from '../../../view/site/common/page/page';
 import tableNoList from '../../../view/site/common/table/tableNoList';
@@ -127,7 +126,7 @@ export default {
     * 格式化日期
     * */
     formatDate(data){
-      return moment(data).format('YYYY-MM-DD HH:mm')
+      return this.$dayjs(data).format('YYYY-MM-DD HH:mm')
     },
 
     getUserList(pageNumber){

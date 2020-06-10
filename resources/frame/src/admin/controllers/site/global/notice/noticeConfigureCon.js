@@ -76,7 +76,42 @@ export default {
             "原角色：{{keyword2.DATA}}\n" +
             "新角色：{{keyword2.DATA}}\n" +
             "{{remark.DATA}}",
-        },   //微信通知提示语
+          29:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "回复内容：{{keyword1.DATA}}\n" +
+            "原文内容：{{keyword2.DATA}}\n" +
+            "回复时间：{{keyword3.DATA}}\n" +
+            "{{remark.DATA}}",
+          30:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "点赞内容：{{keyword1.DATA}}\n" +
+            "点赞时间：{{keyword2.DATA}}\n" +
+            "{{remark.DATA}}",
+          31:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "支付内容：{{keyword1.DATA}}\n" +
+            "支付类型：{{keyword2.DATA}}\n" +
+            "支付时间：{{keyword3.DATA}}\n" +
+            "{{remark.DATA}}",
+          32:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "@的内容：{{keyword1.DATA}}\n" +
+            "@的时间：{{keyword2.DATA}}\n" +
+            "{{remark.DATA}}",
+          35:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "提现金额：{{keyword1.DATA}}\n" +
+            "申请时间：{{keyword2.DATA}}\n" +
+            "提现状态：{{keyword3.DATA}}\n" +
+            "{{remark.DATA}}",
+          36:"请在“微信公众号-模板消息”中按照以下格式添加模版，并填写审核通过后的模板ID。<br>\n" +
+            "{{first.DATA}}\n" +
+            "提现金额：{{keyword1.DATA}}\n" +
+            "申请时间：{{keyword2.DATA}}\n" +
+            "提现状态：{{keyword3.DATA}}\n" +
+            "原因：{{keyword4.DATA}}\n" +
+            "{{remark.DATA}}",
+        },   //微信通知提示语。tpi：提示语id不同显示不同，每添加一个通知，就需要对应的添加一个提示语，id根据接口返回对应添加
         wxNoticeCon:'',        //微信配置ID
       }
     },
@@ -88,6 +123,7 @@ export default {
       this.query = this.$route.query;
 
       this.noticeConfigure();
+      this.getNoticeList();
     },
     methods: {
       noticeConfigure() {   //初始化配置列表信息
@@ -129,7 +165,7 @@ export default {
           }
       }).then(res=>{
         if (res.errors) {
-            this.$message.error(res.errors[0].code);
+            this.$message.error(res.errors[0].code + '\n' + res.errors[0].detail[0]);
           } else {
             this.$message({
               message: '提交成功',

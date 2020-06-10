@@ -15,6 +15,7 @@ use App\Rules\Settings\QcloudSecretVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
+use App\Rules\Settings\SiteMode;
 use App\Rules\Settings\SupportExt;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\AbstractValidator;
@@ -48,9 +49,10 @@ class SetSettingValidator extends AbstractValidator
             'cash_min_sum' => ['gte:0', new CashMinSum($this->faker('cash_max_sum', 0), $this->faker('cash_sum_limit', 0))],
             'cash_max_sum' => ['gte:0', new CashMaxSum($this->faker('cash_sum_limit', 0))],
             'cash_sum_limit' => ['gte:0', new CashSumLimit()],
-            'site_mode' => ['in:pay,public'],
+            'site_mode' => ['in:pay,public', new SiteMode($this->faker('site_price'))],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
+            'register_type' => ['in:0,1,2']
         ];
 
         // 腾讯云验证码特殊处理
@@ -67,19 +69,19 @@ class SetSettingValidator extends AbstractValidator
 
         //开启验证
         if (Arr::has($this->data, 'qcloud_vod') && $this->data['qcloud_vod'] == 1) {
-            $rules['qcloud_vod'] =  ['filled',
+            $rules['qcloud_vod'] = ['filled',
                 new QcloudVodTranscodeVerify($this->settings->get('qcloud_vod_transcode', 'qcloud')),
                 new QcloudVodVerify($this->settings->get('qcloud_vod_sub_app_id', 'qcloud'))];
         }
 
         if (Arr::has($this->data, 'qcloud_vod_sub_app_id')) {
-            $rules['qcloud_vod_sub_app_id'] =  [new QcloudVodVerify()];
+            $rules['qcloud_vod_sub_app_id'] = [new QcloudVodVerify()];
         }
         if (Arr::has($this->data, 'qcloud_vod_transcode')) {
-            $rules['qcloud_vod_transcode'] =  [new QcloudVodTranscodeVerify()];
+            $rules['qcloud_vod_transcode'] = [new QcloudVodTranscodeVerify()];
         }
         if (Arr::has($this->data, 'qcloud_vod_cover_template')) {
-            $rules['qcloud_vod_cover_template'] =  [new QcloudVodCoverTemplateVerify()];
+            $rules['qcloud_vod_cover_template'] = [new QcloudVodCoverTemplateVerify()];
         }
 
         return $rules;

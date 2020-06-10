@@ -74,11 +74,11 @@ class RegisterUser
             }
         }
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason']));
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason']));
 
         // 注册验证码
         $captcha = '';  // 默认为空将不走验证
-        if ((bool)$settings->get('register_captcha')) {
+        if ((bool)$settings->get('register_captcha') && (bool)$settings->get('qcloud_captcha', 'qcloud')) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
                 Arr::get($this->data, 'captcha_rand_str', ''),
@@ -99,8 +99,12 @@ class RegisterUser
             new Saving($user, $this->actor, $this->data)
         );
 
-        //使用该验证可不传 password_confirmation参数不检测
-        $validator->valid(array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha')));
+        // 密码为空的时候，不验证密码，允许创建密码为空的用户(但无法登录，只能用其它方法登录)
+        $attrs_to_validate = array_merge($user->getAttributes(), compact('password', 'password_confirmation', 'captcha'));
+        if ($password === '') {
+            unset($attrs_to_validate['password']);
+        }
+        $validator->valid($attrs_to_validate);
 
         $user->save();
 

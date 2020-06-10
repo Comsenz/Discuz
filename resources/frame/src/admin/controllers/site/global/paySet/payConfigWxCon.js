@@ -9,7 +9,8 @@ export default {
       mchId:'',
       apiKey:'',
       appSecret:'',
-      type:''
+      type:'',
+      iOSPay: false
     }
   },
 
@@ -33,6 +34,7 @@ export default {
           this.mchId = data.readdata._data.paycenter.mch_id;
           this.apiKey = data.readdata._data.paycenter.api_key;
           this.appSecret = data.readdata._data.paycenter.app_secret;
+          this.iOSPay = data.readdata._data.paycenter.wxpay_ios;
         }
       }).catch(error=>{
       })
@@ -69,6 +71,13 @@ export default {
                "attributes":{
                 "key":"app_secret",
                 "value":this.appSecret,
+                "tag": this.type
+               }
+            },
+            {
+               "attributes":{
+                "key":"wxpay_ios",
+                "value":this.iOSPay,
                 "tag": this.type
                }
             }

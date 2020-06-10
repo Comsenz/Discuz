@@ -35,8 +35,7 @@ $route->get('/forum', 'forum.settings', ApiController\Settings\ForumSettingsCont
 |--------------------------------------------------------------------------
 */
 
-$route->get('/signature', 'signature', ApiController\Qcloud\CreateSignatureController::class);
-$route->get('/offiaccount/jssdk', 'Wechat.offiaccount.jssdk', ApiController\Wechat\WechatOffiaccountJSSDKController::class);
+$route->get('/signature', 'signature', ApiController\Qcloud\CreateVodUploadSignatureController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +57,8 @@ $route->delete('/groups', 'groups.delete', ApiController\Group\DeleteGroupsContr
 |--------------------------------------------------------------------------
 */
 
-$route->post('/permission', 'permission.update', ApiController\GroupPermission\UpdateGroupPermissionController::class);
+$route->post('/permission', 'permission.update', ApiController\Permission\UpdateGroupPermissionController::class);
+$route->post('/permission/group', 'permission.group', ApiController\Permission\SetPermissionController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +75,7 @@ $route->post('/refresh-token', 'oauth2.refresh.token', ApiController\Oauth2\Refr
 | Oauth client
 |--------------------------------------------------------------------------
 */
+
 $route->get('/oauth/wechat', 'wechat.login', ApiController\Users\WechatLoginController::class);
 $route->get('/oauth/wechat/user', 'wechat.user', ApiController\Users\WechatUserController::class);
 $route->get('/oauth/wechat/pc', 'wechat.web.login', ApiController\Users\WechatWebLoginController::class);
@@ -156,6 +157,7 @@ $route->delete('/threads/batch/{ids}', 'threads.batchDelete', ApiController\Thre
 $route->delete('/threads/{id}', 'threads.delete', ApiController\Threads\DeleteThreadController::class);
 $route->post('/threads/notify/video', 'threads.notify.video', ApiController\Threads\Notify\ThreadVideoNotifyController::class);
 $route->post('/thread/video', 'threads.video', ApiController\Threads\CreateThreadVideoController::class);
+
 /*
 |--------------------------------------------------------------------------
 | Posts
@@ -257,6 +259,7 @@ $route->delete('/invite/{id}', 'invite.delete', ApiController\Invite\DeleteInvit
 | Emoji
 |--------------------------------------------------------------------------
 */
+
 $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::class);
 
 /*
@@ -264,8 +267,10 @@ $route->get('/emoji', 'emoji.list', ApiController\Emoji\ListEmojiController::cla
 | Statistic
 |--------------------------------------------------------------------------
 */
+
 $route->get('/statistic/finance', 'statistic.finance', ApiController\Statistic\FinanceProfileController::class);
 $route->get('/statistic/financeChart', 'statistic.financeChart', ApiController\Statistic\FinanceChartController::class);
+$route->post('/statistic/miniprogram', 'statistic.miniProgramStat', ApiController\Statistic\MiniProgramStatController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -278,15 +283,62 @@ $route->get('/follow', 'follow.list', ApiController\Users\ListUserFollowControll
 $route->delete('/follow', 'follow.delete', ApiController\Users\DeleteUserFollowController::class);
 $route->delete('/follow/{id}/{type}', 'follow.delete.type', ApiController\Users\DeleteUserFollowByTypeController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | Dialog
 |--------------------------------------------------------------------------
 */
+
 $route->post('/dialog', 'dialog.create', ApiController\Dialog\CreateDialogController::class);
 $route->post('/dialog/batch', 'dialog.batchCreate', ApiController\Dialog\BatchCreateDialogController::class);
 $route->get('/dialog', 'dialog.list', ApiController\Dialog\ListDialogController::class);
 $route->post('/dialog/message', 'dialog.message.create', ApiController\Dialog\CreateDialogMessageController::class);
 $route->get('/dialog/message', 'dialog.message.list', ApiController\Dialog\ListDialogMessageController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Reports
+|--------------------------------------------------------------------------
+*/
+
+$route->post('/reports', 'reports.create', ApiController\Report\CreateReportsController::class);
+$route->get('/reports', 'reports.list', ApiController\Report\ListReportsController::class);
+$route->patch('/reports/batch', 'reports.batchUpdate', ApiController\Report\BatchUpdateReportsController::class);
+$route->delete('/reports/batch/{ids}', 'reports.batchDelete', ApiController\Report\BatchDeleteReportsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Analysis
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\ResourceAnalysisGoodsController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Topic
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
+
+/*
+|--------------------------------------------------------------------------
+| System
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/system/command', 'system.command', ApiController\System\CallCommandController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Wechat - Offiaccount
+|--------------------------------------------------------------------------
+*/
+
+$route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
+$route->get('/offiaccount/asset', 'offiaccount.asset.list', ApiController\Wechat\OffIAccountAssetListController::class);
+$route->get('/offiaccount/asset/{media_id}', 'offiaccount.asset.resource', ApiController\Wechat\OffIAccountAssetResourceController::class);
+$route->post('/offiaccount/asset', 'offiaccount.asset.upload', ApiController\Wechat\OffIAccountAssetUploadController::class);
+$route->patch('/offiaccount/asset', 'offiaccount.asset.update', ApiController\Wechat\OffIAccountAssetUpdateController::class);
+$route->delete('/offiaccount/asset/{media_id}', 'offiaccount.asset.delete', ApiController\Wechat\OffIAccountAssetDeleteController::class);

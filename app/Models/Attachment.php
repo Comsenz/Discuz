@@ -17,17 +17,16 @@ use Illuminate\Support\Str;
 /**
  * @property string $uuid
  * @property int $user_id
- * @property int $post_id
+ * @property int $type_id
  * @property int $order
- * @property int $is_gallery
- * @property int $is_sound
+ * @property int $type
  * @property int $is_approved
+ * @property int $is_remote
  * @property string $attachment
  * @property string $file_path
  * @property string $file_name
  * @property int $file_size
  * @property string $file_type
- * @property int $is_remote
  * @property string $ip
  * @property User $user
  * @property Post $post
@@ -37,110 +36,89 @@ class Attachment extends Model
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
 
+    const FIX_WIDTH = 500;
+
+    const TYPE_OF_FILE = 0;
+
+    const TYPE_OF_IMAGE = 1;
+
+    const TYPE_OF_AUDIO = 2;
+
+    const TYPE_OF_VIDEO = 3;
+
+    const TYPE_OF_DIALOG_MESSAGE = 4;
+
+    const UNAPPROVED = 0;
+
+    const APPROVED = 1;
+
     /**
      * {@inheritdoc}
      */
     protected $casts = [
-        'is_gallery' => 'boolean',
+        'type' => 'integer',
+        'is_approved' => 'integer',
         'is_remote' => 'boolean',
     ];
 
     /**
-     * 枚举 - 是否是音频 isSound
+     * type：0 帖子附件 1 帖子图片 2 帖子音频 3 帖子视频 4消息图片
      *
-     * 0文件 1音频 2视频
      * @var array
      */
-    protected static $isSound = [
-        'support_file_ext' => 0,
-        'support_audio_ext' => 1,
-        'support_video_ext' => 2,
+    public static $allowTypes = [
+        'file',
+        'img',
+        'audio',
+        'video',
+        'dialogMessage',
     ];
 
     /**
-     * 根据 值/类型 获取对应值
-     * ($sizeName 获取对应在 setting中的名称)
-     *
-     * @param mixed $mixed
-     * @param string $sizeName
-     * @return mixed
-     */
-    public static function enumIsSound($mixed, &$sizeName)
-    {
-        $arr = static::$isSound;
-
-        if (is_numeric($mixed)) {
-            $result = array_search($mixed, $arr);
-            if ($mixed != 0) {
-                $sizeName = explode('_', $result);
-                array_pop($sizeName);
-                array_push($sizeName, 'size');
-                $sizeName = implode($sizeName, '_');
-            }
-        } else {
-            $result = $arr[$mixed];
-        }
-
-        return $result;
-    }
-
-    /**
-     * 创建附件.
-     *
-     * @param int $user_id 用户id
-     * @param int $post_id 回复id
-     * @param int $order 排序
-     * @param int $isGallery 是否是帖子图片
-     * @param int $isSound 是否是音频：0文件1音频2视频
-     * @param int $isApproved 是否合法（敏感图）
-     * @param string $attachment 系统生成的名称
-     * @param string $file_path 文件路径
-     * @param string $file_name 文件原名称
-     * @param int $file_size 文件大小
-     * @param string $file_type 文件类型
-     * @param int $is_remote 是否远程附件
-     * @param string $ip 创建的IP地址
+     * @param int $userId 用户id
+     * @param int $type 附件类型(0帖子附件，1帖子图片，2帖子视频，3帖子音频，4消息图片)
+     * @param string $name 文件名称
+     * @param string $path 文件路径
+     * @param string $originalName 文件原名
+     * @param int $size 文件大小
+     * @param string $mime 文件 mime 类型
+     * @param bool $isRemote 是否云存储
+     * @param bool $isApproved 是否合法
+     * @param string $ip ip 地址
+     * @param int $order 文件顺序
      * @return static
      */
-    public static function creation(
-        $user_id,
-        $post_id,
-        $order,
-        $isGallery,
-        $isSound,
+    public static function build(
+        $userId,
+        $type,
+        $name,
+        $path,
+        $originalName,
+        $size,
+        $mime,
+        $isRemote,
         $isApproved,
-        $attachment,
-        $file_path,
-        $file_name,
-        $file_size,
-        $file_type,
-        $is_remote,
-        $ip
+        $ip,
+        $order = 0
     ) {
-        // 实例一个附件模型
-        $attach = new static;
+        $attachment = new static;
 
-        // 设置模型属性值
-        $attach->uuid = Str::uuid();
-        $attach->user_id = $user_id;
-        $attach->post_id = $post_id;
-        $attach->order = $order;
-        $attach->is_gallery = $isGallery;
-        $attach->is_sound = $isSound;
-        $attach->is_approved = $isApproved;
-        $attach->attachment = $attachment;
-        $attach->file_path = $file_path;
-        $attach->file_name = $file_name;
-        $attach->file_size = $file_size;
-        $attach->file_type = $file_type;
-        $attach->is_remote = $is_remote;
-        $attach->ip = $ip;
+        $attachment->uuid = Str::uuid();
+        $attachment->user_id = $userId;
+        $attachment->order = $order;
+        $attachment->type = $type;
+        $attachment->is_remote = $isRemote;
+        $attachment->is_approved = $isApproved;
+        $attachment->attachment = $name;
+        $attachment->file_path = $path;
+        $attachment->file_name = $originalName;
+        $attachment->file_size = $size;
+        $attachment->file_type = $mime;
+        $attachment->ip = $ip;
 
-        // 暂存需要执行的事件
-        $attach->raise(new Created($attach));
+        $attachment->raise(new Created($attachment));
 
-        // 返回附件模型
-        return $attach;
+        return $attachment;
     }
 
     /**
@@ -184,6 +162,6 @@ class Attachment extends Model
      */
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'id', 'type_id');
     }
 }

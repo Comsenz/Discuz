@@ -73,7 +73,7 @@ class RegisterWechatMiniProgramUser
                 throw new CensorNotPassedException();
             }
         } catch (CensorNotPassedException $e) {
-            $this->data['username'] = $this->getNewUsername();
+            $this->data['username'] = User::getNewUsername();
         }
 
         // 审核模式，设置注册为审核状态
@@ -87,7 +87,7 @@ class RegisterWechatMiniProgramUser
             $this->data['expired_at'] = Carbon::now();
         }
 
-        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_reason', 'status']));
+        $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason', 'status']));
 
         $this->events->dispatch(
             new Saving($user, $this->actor, $this->data)
@@ -100,16 +100,5 @@ class RegisterWechatMiniProgramUser
         $this->dispatchEventsFor($user, $this->actor);
 
         return $user;
-    }
-
-
-    private function getNewUsername()
-    {
-        $username = trans('validation.attributes.username_prefix') . Str::random(6);
-        $user = User::where('username', $username)->first();
-        if ($user) {
-            return $this->getNewUsername();
-        }
-        return $username;
     }
 }

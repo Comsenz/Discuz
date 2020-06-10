@@ -1,4 +1,5 @@
 <?php
+
 return [
     'residue_degree' => '登录失败，您还可以尝试:values次',
     'WebUser_img_error' => '二维码生成失败',

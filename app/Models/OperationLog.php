@@ -8,123 +8,78 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property string $action
- * @property string $message
- * @property int $log_able_id
- * @property string $log_able_type
- * @property Carbon $created_at
- * @property User $user
  * @package App\Models
+ *
+ * @property int $user_id
+ * @property string $path
+ * @property string $method
+ * @property string $ip
+ * @property string $input
+ * @property int $type
+ * @property Carbon updated_at
+ * @property Carbon created_at
+ * @method static create(array $array)
  */
 class OperationLog extends Model
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $timestamps = false;
+    use EventGeneratorTrait;
+    use ScopeVisibilityTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $table = 'operation_log';
+    const HEADER_NAME = 'Operation-Log';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $dates = ['created_at'];
-
-    /**
-     * 状态改变
-     * (键要对应数据库)
-     * @var array
-     */
-    public static $behavior = [
-        0 => 'disapprove',  // 放入待审核
-        1 => 'approve',     // 审核通过
-        2 => 'ignore',      // 审核忽略
+    protected static $typeValue = [
+        'backstage' => 0,
     ];
 
     /**
-     * 操作行为
-     * @var array
-     */
-    public static $actionType = [
-        // 用户操作行为
-        'user' => [
-            'normal',      // 启用
-            'ban',         // 禁用
-            'mod',         // 审核中
-            'through',     // 审核通过
-            'refuse',      // 审核拒绝
-            'ignore',      // 审核忽略
-        ],
-        // 主题操作行为
-        'thread' => [
-            'create',      // 创建
-            'hide',        // 放入回收站
-            'restore',     // 还原
-            'revise',      // 修改内容
-        ],
-    ];
-
-    /**
-     * 写入操作日志
+     * Create a new OperationLog
      *
-     * @param User $actor
-     * @param Model $model
-     * @param string $action
-     * @param string $message
+     * @param int $user_id
+     * @param string $path
+     * @param string $method
+     * @param string $ip
+     * @param string $input
+     * @param int $type
+     * @return bool
      */
-    public static function writeLog(User $actor, Model $model, string $action, string $message = '')
+    public static function store(int $user_id, string $path, string $method, string $ip, string $input, int $type = 0)
     {
-        $log = new static;
+        $operationLog = new static;
 
-        $log->user_id = $actor->id;
-        $log->action = $action;
-        $log->message = $message;
-        $log->created_at = Carbon::now();
+        $operationLog->user_id = $user_id;
+        $operationLog->path = $path;
+        $operationLog->method = $method;
+        $operationLog->ip = $ip;
+        $operationLog->input = $input;
+        $operationLog->type = $type;
 
-        $model->logs()->save($log);
+        return $operationLog->save();
     }
 
     /**
-     * get array [behavior]
-     *
-     * @return array
-     */
-    public static function behavior()
-    {
-        return self::$behavior;
-    }
-
-    /**
-     * get array [actionType]
+     * Exists Type
      *
      * @param string $type
-     * @return array
+     * @param int $int
+     * @return bool
      */
-    public static function getAction(string $type)
+    public static function existsToType(string $type, &$int = 0) : bool
     {
-        return self::$actionType[$type];
+        if ($bool = array_key_exists($type, self::$typeValue)) {
+            $int = self::$typeValue[$type];
+        }
+
+        return $bool;
     }
 
     /**
-     * @return MorphTo
-     */
-    public function logFor()
-    {
-        return $this->morphTo('log_able');
-    }
-
-    /**
-     * Define the relationship with the log's author.
+     * Define the relationship with the OperationLog's author.
      *
      * @return BelongsTo
      */

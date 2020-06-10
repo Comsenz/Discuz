@@ -112,7 +112,7 @@ class SendController extends AbstractCreateController
                 'required',
                 'unique:users,mobile',
             ];
-        } elseif (in_array($type, ['login', 'reset_pwd', 'reset_pay_pwd'])) {
+        } elseif (in_array($type, ['reset_pwd', 'reset_pay_pwd'])) {
             // 如果已经绑定，不能再发送绑定短息
             // 如果重设密码，必须要已绑定的手机号
             $mobileRule = 'required|exists:users,mobile';

@@ -76,6 +76,7 @@ class UpdateUserWallet
         $operate_type   = Arr::get($this->data, 'operate_type');
         $operate_amount = Arr::get($this->data, 'operate_amount');
         $operate_reason = Arr::get($this->data, 'operate_reason', '');
+        $operate_reason = trim($operate_reason);
         $wallet_status  = Arr::get($this->data, 'wallet_status');
         if (!is_null($operate_type)) {
             if (!in_array($operate_type, [UserWallet::OPERATE_ADD, UserWallet::OPERATE_REDUCE])) {
@@ -88,8 +89,6 @@ class UpdateUserWallet
         }
         //操作金额
         $change_available_amount = sprintf('%.2f', floatval($operate_amount));
-        // 判断有没有权限执行此操作
-        // $this->assertCan($this->actor, 'UpdateUserWallet');
         //开始事务
         $db->beginTransaction();
         $change_type = '';
@@ -98,10 +97,16 @@ class UpdateUserWallet
             switch ($operate_type) {
                 case UserWallet::OPERATE_ADD: //增加
                     $change_type = UserWalletLog::TYPE_INCOME_ARTIFICIAL;
+                    if (!strlen($operate_reason)) {
+                        $operate_reason = app('translator')->get('wallet.income_artificial');
+                    }
                     break;
                 case UserWallet::OPERATE_REDUCE: //减少
                     if ($user_wallet->available_amount - $operate_amount < 0) {
                         throw new Exception('available_amount_error');
+                    }
+                    if (!strlen($operate_reason)) {
+                        $operate_reason = app('translator')->get('wallet.expend_artificial');
                     }
                     $change_available_amount = -$change_available_amount;
                     $change_type = UserWalletLog::TYPE_EXPEND_ARTIFICIAL;

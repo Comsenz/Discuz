@@ -13,10 +13,8 @@ use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property 用户组ID group_id
- * @property 权限名称 permission
- * @method truncate()
- * @method insert(array $array)
+ * @property int $group_id
+ * @property string $permission
  */
 class GroupPermission extends Model
 {
@@ -24,58 +22,34 @@ class GroupPermission extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 与模型关联的数据表.
-     *
      * @var string
      */
     protected $table = 'group_permission';
 
     /**
-     * 可以被批量赋值的属性。
-     *
      * @var array
      */
     protected $fillable = ['group_id', 'permission'];
 
     /**
-     * 该模型是否被自动维护时间戳.
-     *
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * 模型的「启动」方法.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-    }
-
-    /**
-     * 创建用户组权限.
-     *
-     * @param $group_id 用户组ID
-     * @param $permission 权限名称
+     * @param int $group_id
+     * @param string $permission
      * @return static
      */
-    public static function creation(
-        $group_id,
-        $permission
-    ) {
-        // 实例一个模型
+    public static function creation($group_id, $permission)
+    {
         $groupPermission = new static;
 
-        // 设置模型属性值
         $groupPermission->group_id = $group_id;
         $groupPermission->permission = $permission;
 
-        // 暂存需要执行的事件
         $groupPermission->raise(new Created($groupPermission));
 
-        // 返回模型
         return $groupPermission;
     }
 }

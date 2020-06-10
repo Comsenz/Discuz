@@ -11,7 +11,6 @@ use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
-use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\User;
@@ -74,18 +73,26 @@ class CreatePost
     public $ip;
 
     /**
+     * The current port of the actor.
+     *
+     * @var int
+     */
+    public $port;
+
+    /**
      * @param $threadId
      * @param User $actor
      * @param array $data
      * @param null $ip
      */
-    public function __construct($threadId, User $actor, array $data, $ip = null)
+    public function __construct($threadId, User $actor, array $data, $ip, $port)
     {
         $this->threadId = $threadId;
         $this->replyPostId = Arr::get($data, 'attributes.replyId', null);
         $this->actor = $actor;
         $this->data = $data;
         $this->ip = $ip;
+        $this->port = $port;
     }
 
     /**
@@ -112,6 +119,11 @@ class CreatePost
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
+
+            // 是否有权发布音频
+            if (Arr::get($this->data, 'attributes.file_id', '')) {
+                $this->assertCan($this->actor, 'createAudio');
+            }
 
             // 引用回复
             if (! empty($this->replyPostId)) {
@@ -143,10 +155,13 @@ class CreatePost
             trim(Arr::get($this->data, 'attributes.content')),
             $this->actor->id,
             $this->ip,
+            $this->port,
             $this->replyPostId,
             $this->replyUserId,
             $isFirst,
-            $isComment
+            $isComment,
+            Arr::get($this->data, 'attributes.latitude', 0),
+            Arr::get($this->data, 'attributes.longitude', 0)
         );
 
         // 存在审核敏感词时，将回复内容放入待审核

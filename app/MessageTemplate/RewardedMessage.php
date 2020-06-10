@@ -11,7 +11,8 @@ use Discuz\Notifications\Messages\DatabaseMessage;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 /**
- * 内容打赏通知
+ * 内容支付通知
+ * (包含: 打赏帖子/支付付费贴)
  *
  * Class RewardedMessage
  * @package App\MessageTemplate\Wechat

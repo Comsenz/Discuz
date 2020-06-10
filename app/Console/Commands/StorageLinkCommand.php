@@ -33,7 +33,7 @@ class StorageLinkCommand extends AbstractCommand
      *
      * @var string
      */
-    protected $description = 'Create a symbolic link from "public/storage" to "storage/app/public"';
+    protected $description = '创建从“公共/存储”到“存储/应用/公共”的符号链接';
 
     /**
      * Execute the console command.

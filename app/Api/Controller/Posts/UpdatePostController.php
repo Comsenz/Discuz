@@ -7,8 +7,10 @@
 
 namespace App\Api\Controller\Posts;
 
+use App\Api\Serializer\CommentPostSerializer;
 use App\Api\Serializer\PostSerializer;
 use App\Commands\Post\EditPost;
+use App\Models\Post;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -27,7 +29,11 @@ class UpdatePostController extends AbstractResourceController
      */
     public $include = [
         'user',
-        'thread'
+        'thread',
+        'images',
+        'lastThreeComments',
+        'lastThreeComments.user',
+        'lastThreeComments.replyUser',
     ];
 
     /**
@@ -57,8 +63,29 @@ class UpdatePostController extends AbstractResourceController
         $postId = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody()->get('data', []);
 
-        return $this->bus->dispatch(
+        /** @var Post $post */
+        $post = $this->bus->dispatch(
             new EditPost($postId, $actor, $data)
         );
+
+        if ($post->is_comment) {
+            $this->serializer = CommentPostSerializer::class;
+        }
+
+        // 被回复帖子的最后三条回复
+        $post->setRelation(
+            'lastThreeComments',
+            Post::query()
+                ->where('reply_post_id', $post->reply_post_id)
+                ->whereNull('deleted_at')
+                ->where('is_first', false)
+                ->where('is_comment', true)
+                ->where('is_approved', Post::APPROVED)
+                ->orderBy('updated_at', 'desc')
+                ->limit(3)
+                ->get()
+        );
+
+        return $post->loadMissing($this->extractInclude($request));
     }
 }

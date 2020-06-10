@@ -16,8 +16,6 @@ use Tobscure\JsonApi\Document;
 
 class ResourceInviteController extends AbstractResourceController
 {
-    protected $invite;
-
     /**
      * {@inheritdoc}
      */
@@ -26,10 +24,14 @@ class ResourceInviteController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $include = ['group', 'group.permission','user'];
+    public $include = ['user', 'group', 'group.permission'];
 
     /**
-     * ResourceInviteController constructor.
+     * @var InviteRepository
+     */
+    protected $invite;
+
+    /**
      * @param InviteRepository $invite
      */
     public function __construct(InviteRepository $invite)
@@ -44,6 +46,11 @@ class ResourceInviteController extends AbstractResourceController
     {
         $code = Arr::get($request->getQueryParams(), 'code');
 
-        return $this->invite->query()->where('code', $code)->firstOrFail();
+        return $this->invite->query()
+            ->with(['group.permission' => function ($query) {
+                $query->where('permission', 'not like', 'category%');
+            }])
+            ->where('code', $code)
+            ->firstOrFail();
     }
 }

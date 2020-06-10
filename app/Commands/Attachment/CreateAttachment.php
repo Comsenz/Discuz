@@ -7,21 +7,17 @@
 
 namespace App\Commands\Attachment;
 
-use App\Censor\Censor;
+use App\Events\Attachment\Saving;
+use App\Events\Attachment\Uploaded;
 use App\Events\Attachment\Uploading;
-use App\Exceptions\UploadException;
 use App\Models\Attachment;
 use App\Models\User;
-use App\Settings\SettingsRepository;
-use App\Tools\AttachmentUploadTool;
+use App\Validators\AttachmentValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
-use Discuz\Http\Exception\UploadVerifyException;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
+use Illuminate\Http\UploadedFile;
 use Psr\Http\Message\UploadedFileInterface;
 
 class CreateAttachment
@@ -29,40 +25,27 @@ class CreateAttachment
     use AssertPermissionTrait;
     use EventsDispatchTrait;
 
-    const FIX_WIDTH = 500;
-
     /**
-     * 执行操作的用户.
-     *
      * @var User
      */
     public $actor;
 
     /**
-     * 上传的附件.
-     *
      * @var UploadedFileInterface
      */
     public $file;
 
     /**
-     * 请求来源的IP地址.
-     *
      * @var string
      */
     public $ipAddress;
 
     /**
-     * 请求来源的IP地址.
+     * 类型：0 附件 1 图片 2 音频 3 视频
      *
-     * @var string
-     */
-    public $isGallery;
-
-    /**
      * @var int
      */
-    public $isSound;
+    public $type;
 
     /**
      * @var int
@@ -70,142 +53,89 @@ class CreateAttachment
     public $order;
 
     /**
-     * 是否合法 0 不合法 1 合法
-     *
-     * @var int
-     */
-    public $isApproved = 0;
-
-    /**
-     * 初始化命令参数
-     *
-     * @param User $actor 执行操作的用户.
+     * @param User $actor
      * @param UploadedFileInterface $file
-     * @param string $ipAddress 请求来源的IP地址.
-     * @param bool $isGallery 是否是帖子图片
-     * @param int $isSound 是否是音频：0文件 1音频 2视频
+     * @param string $ipAddress
+     * @param int $type
      * @param int $order
      */
-    public function __construct($actor, UploadedFileInterface $file, string $ipAddress, bool $isGallery, $isSound, $order = 0)
+    public function __construct(User $actor, UploadedFileInterface $file, string $ipAddress, $type, $order = 0)
     {
         $this->actor = $actor;
         $this->file = $file;
         $this->ipAddress = $ipAddress;
-        $this->isGallery = $isGallery;
-        $this->isSound = $isSound;
+        $this->type = $type;
         $this->order = $order;
     }
 
     /**
-     * 执行命令
-     *
      * @param Dispatcher $events
-     * @param AttachmentUploadTool $uploadTool
-     * @param SettingsRepository $settings
-     * @param Censor $censor
+     * @param AttachmentValidator $validator
+     * @param AttachmentUploader $uploader
      * @return Attachment
      * @throws PermissionDeniedException
-     * @throws UploadException
-     * @throws UploadVerifyException
-     * @throws \Illuminate\Contracts\Filesystem\FileExistsException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function handle(Dispatcher $events, AttachmentUploadTool $uploadTool, SettingsRepository $settings, Censor $censor)
+    public function handle(Dispatcher $events, AttachmentValidator $validator, AttachmentUploader $uploader)
     {
         $this->events = $events;
 
-        // 判断有没有权限执行此操作
-        $this->assertCan($this->actor, 'attachment.create.' . (int) $this->isGallery);
+        $this->assertCan($this->actor, 'attachment.create.' . $this->type);
 
-        // 判断上传的文件是否正常
-        if ($this->file->getError()) {
-            throw new UploadException();
+        $file = $this->file;
+
+        // 移动到临时文件目录
+        $tmpFile = tempnam(storage_path('/tmp'), 'attachment');
+        $file->moveTo($tmpFile);
+
+        try {
+            $file = new UploadedFile(
+                $tmpFile,
+                $file->getClientFilename(),
+                $file->getClientMediaType(),
+                $file->getError(),
+                true
+            );
+
+            // 验证
+            $validator->valid(['type' => $this->type, 'file' => $file]);
+
+            $this->events->dispatch(
+                new Uploading($this->actor, $file)
+            );
+
+            // 上传
+            $uploader->upload($file, $this->type);
+
+            $this->events->dispatch(
+                new Uploaded($this->actor, $uploader)
+            );
+
+            $attachment = Attachment::build(
+                $this->actor->id,
+                $this->type,
+                $file->hashName(),
+                $uploader->getPath(),
+                $file->getClientOriginalName(),
+                $file->getSize(),
+                $file->getMimeType(),
+                $uploader->isRemote(),
+                Attachment::APPROVED,
+                $this->ipAddress,
+                $this->order
+            );
+
+            $this->events->dispatch(
+                new Saving($attachment, $uploader, $this->actor)
+            );
+
+            $attachment->save();
+
+            $this->dispatchEventsFor($attachment);
+        } finally {
+            // 删除临时文件
+            @unlink($tmpFile);
         }
-
-        $this->file->isGallery = $this->isGallery;
-
-        $uploadTool->upload($this->file, 'public/attachment');
-
-        $this->events->dispatch(
-            new Uploading($this->actor, $this->file)
-        );
-
-        if (!empty($this->isSound)) {
-            // 0文件 1音频 2视频
-            $enum = Attachment::enumIsSound($this->isSound, $sizeType);
-            $type = $settings->get($enum);
-        } else {
-            $type = $settings->get($this->isGallery ? 'support_img_ext' : 'support_file_ext');
-            $sizeType = 'support_max_size';
-        }
-
-        $type = $type ? explode(',', $type) : [];
-
-        // 将数据库存的 Mb 转换为 bytes
-        $size = $settings->get($sizeType, 'default', 0) * 1024 * 1024;
-
-        $uploadFile = $uploadTool->save($type, $size);
-
-        if (! $uploadFile) {
-            throw new UploadException();
-        }
-
-        $isRemote = $uploadFile['isRemote'];
-
-        // TODO：放入事件？
-        // 本地图片处理
-        if ($this->isGallery && !$isRemote && $this->isSound == 0) {
-            $img = (new ImageManager())->make(Arr::get($uploadFile, 'path'));
-
-            $thumbPath = Str::replaceLast($img->filename, $img->filename . '_thumb', $img->basePath());
-            $blurPath = Str::replaceLast($img->filename, md5($img->filename) . '_blur', $img->basePath());
-
-            // 生成缩略图
-            $img->resize(self::FIX_WIDTH, null, function ($constraint) {
-                $constraint->aspectRatio();     // 保持纵横比
-                $constraint->upsize();          // 避免文件变大
-            })->save($thumbPath);
-
-            // 生成模糊图
-            $img->blur(75)->save($blurPath);
-        }
-
-        // 检测敏感图
-        $this->isApproved = 1;
-        if (Str::before($this->file->getClientMediaType(), '/') == 'image') {
-            $filePathName = Arr::get($uploadFile, $isRemote ? 'url' : 'path');
-
-            $censor->checkImage($filePathName, $isRemote);
-            if ($censor->isMod) {
-                $this->isApproved = 0;
-            }
-        }
-
-        $uploadPath = $uploadTool->getUploadPath();
-
-        $uploadName = $uploadTool->getUploadName();
-
-        // 初始附件数据
-        $attachment = Attachment::creation(
-            $this->actor->id,
-            0,
-            $this->order,
-            $this->isGallery,
-            $this->isSound,
-            $this->isApproved,
-            $uploadName,
-            $uploadPath,
-            $this->file->getClientFilename(),
-            $this->file->getSize(),
-            $this->file->getClientMediaType(),
-            $isRemote,
-            $this->ipAddress
-        );
-
-        // 保存附件
-        $attachment->save();
-
-        // 调用钩子事件
-        $this->dispatchEventsFor($attachment);
 
         return $attachment;
     }

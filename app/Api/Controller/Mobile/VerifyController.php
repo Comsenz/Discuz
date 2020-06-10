@@ -66,6 +66,9 @@ class VerifyController extends AbstractResourceController
             'sms_code' => 'required'
         ])->validate();
 
+        /**
+         * @var MobileCode $mobileCode
+        **/
         $mobileCode = $this->mobileCodeRepository->getSmsCode($mobile, $type);
 
         if (!$mobileCode || $mobileCode->code !== $code || $mobileCode->expired_at < Carbon::now()) {
@@ -74,6 +77,9 @@ class VerifyController extends AbstractResourceController
 
         $mobileCode->changeState(MobileCode::USED_STATE);
         $mobileCode->save();
+
+        $data['ip'] = ip($request->getServerParams());
+        $data['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
 
         //各种类型验证通过后，返回相关数据
         return $this->bus->dispatch(new VerifyMobile($this, $mobileCode, $actor, $data));

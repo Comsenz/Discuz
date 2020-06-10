@@ -63,7 +63,7 @@ export default {
       try {
         const response = await this.appFetch({
           url: 'groups',
-          splice: '?type=invite',
+          splice: '?filter[type]=invite',
           method: 'get'
         })
         if (response.errors) {

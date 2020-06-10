@@ -80,10 +80,10 @@ class ResourcePostController extends AbstractResourceController
 
         $post = $this->posts->findOrFail($postId, $actor);
 
-        $this->assertCan($actor, 'viewPosts', $post);
+        $this->assertCan($actor, 'view', $post);
 
-        if ($post->is_first || $post->is_comment) {
-            throw new TranslatorException('post_not_found');
+        if ($post->is_first || $post->is_comment || $post->thread->deleted_at) {
+            throw new TranslatorException('post_not_found', [], 404);
         }
 
         if (($postRelationships = $this->getPostRelationships($include)) || in_array('commentPosts', $include)) {

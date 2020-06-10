@@ -11,7 +11,6 @@ use App\Api\Serializer\TokenSerializer;
 use App\Commands\Users\WebUserSearch;
 use App\Exceptions\NoUserException;
 use App\Exceptions\QrcodeImgException;
-use App\Models\User;
 use Discuz\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -35,16 +34,14 @@ class WechatWebUserLoginSearchController extends AbstractResourceController
      * @return mixed
      * @throws NoUserException
      * @throws QrcodeImgException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-
         $data = $this->bus->dispatch(
             new WebUserSearch(Arr::get($request->getQueryParams(), 'scene_str'))
         );
 
-        if(is_null($data['type'])) {
+        if (is_null($data['type'])) {
             throw new QrcodeImgException(trans('login.WebUser_img_payload_error'));
         } elseif ($data['type'] == 'bind') {
             throw (new NoUserException())->setToken($data['payload']);

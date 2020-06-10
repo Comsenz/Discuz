@@ -9,6 +9,7 @@ namespace App\Api\Controller\Threads;
 
 use App\Api\Serializer\ThreadVideoSerializer;
 use App\Commands\Thread\CreateThreadVideo;
+use App\Models\Thread;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Validation\Factory;
@@ -55,7 +56,7 @@ class CreateThreadVideoController extends AbstractCreateController
         ])->validate();
 
         return $this->bus->dispatch(
-            new CreateThreadVideo($actor, 0, $request->getParsedBody()->get('data', []))
+            new CreateThreadVideo($actor, new Thread, $request->getParsedBody()->get('data', []))
         );
     }
 }

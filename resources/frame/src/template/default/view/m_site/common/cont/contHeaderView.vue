@@ -3,7 +3,7 @@
     <div class="avatar-box">
       <a :href="'/home-page/'+$attrs.userId" class="img-box">
         <img :src="imgUrl" alt="用户头像" />
-<!--        <img v-if="$attrs.isReal" class="icon-yirenzheng" src="../../../../../../../static/images/authIcon.svg" alt="实名认证">-->
+<!--        <img v-if="$attrs.isReal" class="icon-yirenzheng" src="/static/images/authIcon.svg" alt="实名认证">-->
       </a>
     </div>
 

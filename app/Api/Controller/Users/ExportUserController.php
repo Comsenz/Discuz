@@ -76,7 +76,9 @@ class ExportUserController implements RequestHandlerInterface
             'mobile',
             'login_at',
             'last_login_ip',
+            'last_login_port',
             'register_ip',
+            'register_port',
             'users.status',
             'users.created_at',
             'users.updated_at',
@@ -101,8 +103,10 @@ class ExportUserController implements RequestHandlerInterface
             'nickname',
             'created_at',
             'register_ip',
+            'register_port',
             'login_at',
             'last_login_ip',
+            'last_login_port',
         ];
 
         $query = User::query();

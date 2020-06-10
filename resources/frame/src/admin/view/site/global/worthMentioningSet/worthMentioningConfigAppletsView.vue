@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card header="小程序微信授权登录"></Card>
+    <Card header="小程序配置"></Card>
 
     <Card header="APPID：">
       <CardRow description="填写申请小程序微信授权登录后，你获得的APPID">
@@ -16,6 +16,7 @@
         <el-input></el-input>
       </CardRow>
     </Card>
+
 
     <Card class="footer-btn">
       <el-button type="primary" size="medium" @click@click="$router.push({path:'/admin/worth-mentioning-set'})">提交</el-button>

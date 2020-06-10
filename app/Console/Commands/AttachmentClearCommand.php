@@ -43,13 +43,9 @@ class AttachmentClearCommand extends AbstractCommand
 
     public function handle()
     {
-        // test data
-        // $array = [2413, 2414, 2415, 2416];
-        // $attachments = $this->attachment->where('post_id', 0)->whereIn('id', $array)->get();
-
         $yesterday = Carbon::yesterday()->toDateTimeString();
 
-        $attachments = $this->attachment->where('post_id', 0)->whereTime('created_at', '<', $yesterday)->get();
+        $attachments = $this->attachment->where('type_id', 0)->whereTime('created_at', '<', $yesterday)->get();
 
         $bar = $this->createProgressBar(count($attachments));
 
@@ -66,7 +62,7 @@ class AttachmentClearCommand extends AbstractCommand
             } else {
                 $res = $this->filesystem->disk('attachment')->delete($path);
                 // 如果是帖子图片,删除本地缩略图
-                if ($attachment->is_gallery) {
+                if ($attachment->type == Attachment::TYPE_OF_IMAGE) {
                     $thumb = $attachment::replaceThumb($path);
                     $this->filesystem->disk('attachment')->delete($thumb);
                 }

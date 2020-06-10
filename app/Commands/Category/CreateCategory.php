@@ -61,7 +61,6 @@ class CreateCategory
      * @param Dispatcher $events
      * @param CategoryValidator $validator
      * @return Category
-     * @throws NotAuthenticatedException
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
@@ -69,7 +68,6 @@ class CreateCategory
     {
         $this->events = $events;
 
-        $this->assertRegistered($this->actor);
         $this->assertCan($this->actor, 'createCategory');
 
         $category = Category::build(

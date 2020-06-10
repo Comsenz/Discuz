@@ -52,6 +52,8 @@ class UserWalletLog extends Model
 
     const TYPE_EXPEND_ARTIFICIAL = 50; //人工支出
 
+    const TYPE_EXPEND_GROUP      = 51; //加入用户组支出
+
     // ----- 分割线 -----
 
     const TYPE_EXPEND_REWARD     = 41; //打赏支出

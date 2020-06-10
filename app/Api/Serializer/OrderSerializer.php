@@ -7,6 +7,7 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\Order;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Tobscure\JsonApi\Relationship;
 
@@ -28,6 +29,7 @@ class OrderSerializer extends AbstractSerializer
             'status'                => $model->status,
             'type'                  => $model->type,
             'thread_id'             => $model->thread_id,
+            'group_id'              => $model->group_id,
             'updated_at'            => $this->formatDate($model->updated_at),
             'created_at'            => $this->formatDate($model->created_at),
         ];
@@ -57,6 +59,17 @@ class OrderSerializer extends AbstractSerializer
      */
     protected function thread($order)
     {
-        return $this->hasOne($order, ThreadSerializer::class);
+        if ($order->status == Order::ORDER_STATUS_PAID || $this->actor->isAdmin()) {
+            return $this->hasOne($order, ThreadSerializer::class);
+        }
+    }
+
+    /**
+     * @param $order
+     * @return Relationship
+     */
+    protected function group($order)
+    {
+        return $this->hasOne($order, GroupSerializer::class);
     }
 }

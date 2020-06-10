@@ -5,6 +5,7 @@ import { Bus } from '../../../store/bus.js';
 import browserDb from '../../../../../helpers/webDbHelper';
 import appConfig from "../../../../../../../frame/config/appConfig";
 import appCommonH from '../../../../../helpers/commonHelper';
+
 export default {
   //接收站点是否收费的值
   props: {
@@ -100,15 +101,7 @@ export default {
   methods: {
     //获取用户信息
     getUserInfo() {
-      var userId = browserDb.getLItem('tokenId');
-      this.appFetch({
-        url: 'users',
-        method: 'get',
-        splice: '/' + userId,
-        data: {
-          include: '',
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
         if (!res.data.attributes.typeUnreadNotifications.liked) {
           res.data.attributes.typeUnreadNotifications.liked = 0;
         }
@@ -129,17 +122,11 @@ export default {
         this.mobile = res.readdata._data.mobile;
         this.userId = res.readdata._data.id;
         this.isReal = res.readdata._data.isReal;
-      })
-
+      }).catch(() => {
+      });
     },
     getInfo() {
-      //请求站点信息，用于判断站点是否是付费站点
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -163,12 +150,12 @@ export default {
       });
     },
     onLoad() {
-      let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;
-      //微信内登录
-      let isWeixin = this.appCommonH.isWeixin().isWeixin;
-      if (isWeixin && wxOfficial == '1') {
-        this.sidebarList2.splice(1, 1);
-      }
+      // let wxOfficial = browserDb.getLItem('siteInfo')._data.passport.offiaccount_close;
+      // //微信内登录
+      // let isWeixin = this.appCommonH.isWeixin().isWeixin;
+      // if (isWeixin && wxOfficial == '1') {
+      //   this.sidebarList2.splice(1, 1);
+      // }
     },
 
     copyFocus(obj) {

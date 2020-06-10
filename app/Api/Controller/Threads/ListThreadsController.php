@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\Post;
 use App\Models\PostUser;
 use App\Models\Thread;
+use App\Models\Topic;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use Discuz\Api\Controller\AbstractListController;
@@ -60,6 +61,7 @@ class ListThreadsController extends AbstractListController
         'rewardedUsers',
         'paidUsers',
         'lastDeletedLog',
+        'topic',
     ];
 
     /**
@@ -106,7 +108,6 @@ class ListThreadsController extends AbstractListController
     /**
      * @param ThreadRepository $threads
      * @param UrlGenerator $url
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __construct(ThreadRepository $threads, UrlGenerator $url)
     {
@@ -266,7 +267,16 @@ class ListThreadsController extends AbstractListController
 
         // 类型：0普通 1长文 2视频 3图片
         if (($type = Arr::get($filter, 'type', '')) !== '') {
-            $query->where('threads.type', (int) $type);
+            // 筛选单个类型 或 以逗号分隔的多个类型
+            if (strpos($type, ',') === false) {
+                $query->where('threads.type', (int) $type);
+            } else {
+                $type = Str::of($type)->explode(',')->map(function ($item) {
+                    return (int) $item;
+                })->unique()->values();
+
+                $query->whereIn('threads.type', $type);
+            }
         }
 
         // 作者 ID
@@ -394,7 +404,17 @@ class ListThreadsController extends AbstractListController
         $fromUserId = Arr::get($filter, 'fromUserId');
         if ($fromUserId && $fromUserId == $actor->id) {
             $query->join('user_follow', 'threads.user_id', '=', 'user_follow.to_user_id')
-                    ->where('user_follow.from_user_id', $fromUserId);
+                ->where('user_follow.from_user_id', $fromUserId);
+        }
+
+        //话题文章
+        if ($topic_id = Arr::get($filter, 'topic_id', '0')) {
+            //更新话题阅读数
+            $topic = Topic::find($topic_id);
+            $topic->refreshTopicViewCount();
+
+            $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
+                ->where('thread_topic.topic_id', $topic_id);
         }
     }
 
@@ -410,8 +430,12 @@ class ListThreadsController extends AbstractListController
 
         $subSql = Post::query()
             ->selectRaw('count(*)')
-            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
             ->whereRaw($this->tablePrefix . 'a.`id` < `id`')
+            ->whereRaw($this->tablePrefix . 'a.`thread_id` = `thread_id`')
+            ->whereRaw($this->tablePrefix . 'a.`deleted_at` = `deleted_at`')
+            ->whereRaw($this->tablePrefix . 'a.`is_first` = `is_first`')
+            ->whereRaw($this->tablePrefix . 'a.`is_comment` = `is_comment`')
+            ->whereRaw($this->tablePrefix . 'a.`is_approved` = `is_approved`')
             ->toSql();
 
         $allLastThreePosts = Post::query()
@@ -419,9 +443,9 @@ class ListThreadsController extends AbstractListController
             ->whereRaw('(' . $subSql . ') < ?', [3])
             ->whereIn('thread_id', $threadIds)
             ->whereNull('deleted_at')
-            ->where('is_approved', Post::APPROVED)
             ->where('is_first', false)
             ->where('is_comment', false)
+            ->where('is_approved', Post::APPROVED)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
@@ -578,9 +602,15 @@ class ListThreadsController extends AbstractListController
             // 加载首贴时，处理内容
             if (in_array('firstPost', $include)) {
                 // 长文帖子无论如何不返回内容，其他类型截取部分内容
-                $thread->firstPost->content = $thread->type == 1
-                    ? ''
-                    : Str::of($thread->firstPost->content)->substr(0, Post::SUMMARY_LENGTH) . Post::SUMMARY_END_WITH;
+                if ($thread->type == 1) {
+                    $thread->firstPost->content = '';
+                } else {
+                    if (Str::of($thread->firstPost->content)->length() > Post::SUMMARY_LENGTH) {
+                        $thread->firstPost->content = Str::of($thread->firstPost->content)
+                            ->substr(0, Post::SUMMARY_LENGTH)
+                            ->finish(Post::SUMMARY_END_WITH);
+                    }
+                }
 
                 // 付费内容未付费处理
                 if ($thread->price > 0 && !$thread->getAttribute('paid')) {

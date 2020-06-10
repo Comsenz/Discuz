@@ -32,15 +32,24 @@ class GroupPermissionTableSeeder extends Seeder
         'category.delete' => [],                // 删除分类
         'category.edit' => [],                  // 修改分类
 
+        // 默认分类下的权限
+        'category1.viewThreads' => [7, 10],     // 默认分类看帖权限
+        'category1.createThread' => [10],       // 默认分类发帖权限
+        'category1.replyThread' => [10],        // 默认分类发回复权限
+
         // 主题
         'viewThreads' => [7, 10],               // 查看主题列表
         'createThread' => [10],                 // 发布主题
         'thread.rename' => [],                  // 修改主题标题
         'thread.reply' => [10],                 // 回复主题
         'thread.favorite' => [10],              // 收藏主题
+        'createAudio' => [],                    // 发布语音
+        'createThreadImage' => [],              // 发布图片主题
         'createThreadVideo' => [],              // 发布视频主题
         'createThreadLong' => [10],             // 发布长文主题
         'createThreadWithCaptcha' => [],        // 发布主题验证验证码
+        'publishNeedRealName' => [],            // 发布内容需先实名认证
+        'publishNeedBindPhone' => [],           // 发布内容需先绑定手机
 
         // 回复
         'thread.viewPosts' => [7, 10],          // 查看主题详情

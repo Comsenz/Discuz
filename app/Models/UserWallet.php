@@ -31,37 +31,36 @@ class UserWallet extends Model
     use ScopeVisibilityTrait;
 
     /**
-     * 主键
-     * @var string
-     */
-    protected $primaryKey = 'user_id';
-
-    /**
-     * 非递增主键
-     * @var boolean
-     */
-    public $incrementing = false;
-
-    /**
-     * 该模型是否被自动维护时间戳.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
      * 操作钱包
      */
-    const OPERATE_ADD = 1;//增加操作
+    const OPERATE_ADD = 1;          //增加操作
 
-    const OPERATE_REDUCE = 2;//减少操作
+    const OPERATE_REDUCE = 2;       //减少操作
 
     /**
      * 钱包状态
      */
-    const WALLET_STATUS_NORMAL = 0;//正常
+    const WALLET_STATUS_NORMAL = 0; //正常
 
-    const WALLET_STATUS_FROZEN = 1;//冻结提现
+    const WALLET_STATUS_FROZEN = 1; //冻结提现
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $casts = [
+        'available_amount' => 'decimal:2',
+        'freeze_amount' => 'decimal:2',
+    ];
 
     /**
      * 创建用户钱包

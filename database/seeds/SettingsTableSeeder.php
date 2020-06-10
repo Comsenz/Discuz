@@ -69,6 +69,11 @@ class SettingsTableSeeder extends Seeder
                 'key' => 'support_max_size',    // 默认支持附件最大大小 MB单位
                 'value' => 5,
                 'tag' => 'default',
+            ],
+            [
+                'key' => 'miniprogram_video',    // 小程序视频开关：0 关闭，1 开启
+                'value' => 1,                    // 默认开启
+                'tag' => 'wx_miniprogram',
             ]
         ]);
     }

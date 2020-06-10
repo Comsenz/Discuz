@@ -18,6 +18,7 @@ use Discuz\Http\UrlGenerator;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -55,16 +56,18 @@ class ListDialogMessageController extends AbstractListController
      * @var ValidationFactory
      */
     public $validation;
-    /**
-     * {@inheritdoc}
-     */
-    public $optionalInclude = ['user','user.groups'];
 
-    /* The relationships that are included by default.
-     *
-     * @var array
+
+    /**
+     * @var string[]
      */
-    public $include = [];
+    public $sortFields = [
+        'createdAt',
+    ];
+
+    public $include = ['attachment'];
+
+    public $optionalInclude = ['user','user.groups'];
 
     /**
      * @param DialogRepository $dialogs
@@ -96,6 +99,7 @@ class ListDialogMessageController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
+        $sort = $this->extractSort($request);
 
         $this->validation->make(
             ['dialog_id' => Arr::get($filter, 'dialog_id')],
@@ -111,7 +115,7 @@ class ListDialogMessageController extends AbstractListController
         }
         $dialog->setRead($type);
 
-        $dialogMessages = $this->search($actor, $filter, $limit, $offset);
+        $dialogMessages = $this->search($actor, $sort, $filter, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('dialog.message.list'),
@@ -138,7 +142,7 @@ class ListDialogMessageController extends AbstractListController
      * @param int $offset
      * @return Collection
      */
-    public function search(User $actor, $filter, $limit = null, $offset = 0)
+    public function search(User $actor, $sort, $filter, $limit = null, $offset = 0)
     {
         $query = $this->dialogMessage->query();
 
@@ -155,6 +159,9 @@ class ListDialogMessageController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
+        }
         return $query->get();
     }
 }

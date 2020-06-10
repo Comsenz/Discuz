@@ -21,13 +21,7 @@ export default {
     //请求初始化用户信息数据
     loadSite() {
       //请求初始化站点信息数据
-      this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {
-          include: ['users'],
-        }
-      }).then((res) => {
+      this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
           throw new Error(res.error)
@@ -35,7 +29,6 @@ export default {
           this.siteInfo = res.readdata;
           this.allowRegister = res.readdata._data.set_reg.register_close;
         }
-
       });
 
       //请求权限列表数据
@@ -54,31 +47,20 @@ export default {
           this.limitList = res.readdata[0];
         }
       });
-      var userId = browserDb.getLItem('tokenId');
-      if (!userId) {
-        return
-      } else {
-        this.appFetch({
-          url: 'users',
-          method: 'get',
-          splice: '/' + userId,
-          data: {
-            include: 'groups',
-          }
-        }).then((res) => {
-          if (res.errors) {
-            this.$toast.fail(res.errors[0].code);
-            throw new Error(res.error)
+      this.$store.dispatch("appSiteModule/loadUser").then(res => {
+        if (res.errors) {
+          this.$toast.fail(res.errors[0].code);
+          throw new Error(res.error)
+        } else {
+          this.roleList = res.readdata.groups;
+          if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
+            this.joinedAt = res.readdata._data.createdAt;
           } else {
-            this.roleList = res.readdata.groups;
-            if (res.readdata._data.joinedAt == '' || res.readdata._data.joinedAt == null) {
-              this.joinedAt = res.readdata._data.createdAt;
-            } else {
-              this.joinedAt = res.readdata._data.joinedAt;
-            }
+            this.joinedAt = res.readdata._data.joinedAt;
           }
-        })
-      }
+        }
+      }).catch(() => {
+      });
 
 
     },

@@ -10,13 +10,21 @@ namespace App\Traits;
 use App\MessageTemplate\PostDeleteMessage;
 use App\MessageTemplate\PostModMessage;
 use App\MessageTemplate\PostThroughMessage;
+use App\MessageTemplate\RelatedMessage;
+use App\MessageTemplate\RepliedMessage;
 use App\MessageTemplate\Wechat\WechatPostDeleteMessage;
 use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\MessageTemplate\Wechat\WechatPostThroughMessage;
+use App\MessageTemplate\Wechat\WechatRelatedMessage;
+use App\MessageTemplate\Wechat\WechatRepliedMessage;
 use App\Models\Post;
+use App\Models\Thread;
+use App\Models\User;
+use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
+use s9e\TextFormatter\Utils;
 
 /**
  * Post 发送通知
@@ -26,6 +34,37 @@ use Illuminate\Support\Arr;
  */
 trait PostNoticesTrait
 {
+    /**
+     * 发送@通知
+     *
+     * @param Post $post
+     * @param User $actor 并非当前登录用户,这里是发帖人
+     */
+    public function sendRelated(Post $post, User $actor)
+    {
+        $mentioned = Utils::getAttributeValues($post->parsedContent, 'USERMENTION', 'id');
+
+        $post->mentionUsers()->sync($mentioned);
+
+        $users = User::whereIn('id', $mentioned)->get();
+        $users->load('deny');
+        $users->filter(function ($user) use ($post) {
+            //把作者拉黑的用户不发通知
+            return !in_array($post->user_id, array_column($user->deny->toArray(), 'id'));
+        })->each(function (User $user) use ($post, $actor) {
+            // 数据库通知
+            $user->notify(new Related($post, $actor, RelatedMessage::class));
+
+            // 微信通知
+            $user->notify(new Related($post, $actor, WechatRelatedMessage::class, [
+                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
+                    'actor_username' => $actor->username    // 发送人姓名
+                ]),
+            ]));
+        });
+    }
+
     /**
      * 内容删除通知
      *
@@ -68,7 +107,16 @@ trait PostNoticesTrait
             $post->user->notify(new System(WechatPostThroughMessage::class, $data));
             // 发送回复人的主题通知 (回复自己主题不发送通知)
             if ($post->user_id != $post->thread->user_id) {
-                $post->thread->user->notify(new Replied($post));
+                // 发送系统通知
+                $post->thread->user->notify(new Replied($post, $post->user, RepliedMessage::class));
+                // 发送微信通知
+                $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
+                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
+                    'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
+                        'actor_username' => $post->user->username    // 发送人姓名
+                    ]),
+                ]));
             }
         } elseif ($post->is_approved == 2) {
             // 忽略就发送不通过通知
@@ -95,7 +143,7 @@ trait PostNoticesTrait
      * @param $attach
      * @return mixed|string
      */
-    public function reasonValue($attach)
+    public function reasonValuePost($attach)
     {
         if (Arr::has($attach, 'message')) {
             if (!empty($attach['message'])) {

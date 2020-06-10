@@ -9,14 +9,20 @@ namespace App\Repositories;
 
 use App\Models\ThreadVideo;
 use Discuz\Foundation\AbstractRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class ThreadVideoRepository
+ * @package App\Repositories
+ *
+ */
 class ThreadVideoRepository extends AbstractRepository
 {
     /**
      * Get a new query builder for the user login log table.
      *
-     * @return Model|\Illuminate\Database\Eloquent\Builder
+     * @return Model|Builder
      */
     public function query()
     {
@@ -25,17 +31,16 @@ class ThreadVideoRepository extends AbstractRepository
 
     public function findOrFailByFileId($file_id)
     {
-        $query = $this->query();
-        $query->where('file_id', $file_id);
-
-        return $query->firstOrFail();
+        return $this->query()
+            ->where('file_id', $file_id)
+            ->firstOrFail();
     }
 
     public function findOrFailByThreadId($file_id)
     {
-        $query = $this->query();
-        $query->where('thread_id', $file_id);
-
-        return $query->firstOrFail();
+        return $this->query()
+            ->where('thread_id', $file_id)
+            ->where('type', ThreadVideo::TYPE_OF_VIDEO)
+            ->firstOrFail();
     }
 }

@@ -14,7 +14,7 @@ export default {
         status:'',
         icon:'iconH'
       }, {
-        name: '小程序微信授权登录',
+        name: '小程序配置',
         type:'miniprogram_close',
         tag: 'wx_miniprogram',
         description: '用户在小程序使用微信授权登录',

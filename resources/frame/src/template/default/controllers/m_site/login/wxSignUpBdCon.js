@@ -18,12 +18,15 @@ export default {
       platform: '',
       signReason: '',        //注册原因
       signReasonStatus: false,
-      signUpBdClickShow: true, // 是否触发验证码按钮
+      signUpBdClickShow: true, // 是否触发验证码按钮, true的时候不显示验证码
       appID: '',               // 腾讯云验证码场景 id
       captcha: null,           // 腾讯云验证码实例
       captcha_ticket: '',      // 腾讯云验证码返回票据
       captcha_rand_str: '',    // 腾讯云验证码返回随机字符串
       btnLoading: false,        //注册按钮状态
+      registerClose: true,      // true的时候能注册
+      showSignupInput: false,   // true时显示用户名/密码输入框
+      redirectMessage: "正在跳转...",
     }
   },
 
@@ -86,24 +89,26 @@ export default {
     * 接口请求
     * */
     getForum() {
-      return this.appFetch({
-        url: 'forum',
-        method: 'get',
-        data: {}
-      }).then(res => {
+      return this.$store.dispatch("appSiteModule/loadForum").then(res => {
         if (res.errors) {
           this.$toast.fail(res.errors[0].code);
         } else {
+          this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
+          let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
+          let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
+          if (qcloud_captcha && register_captcha) {
+            this.signUpBdClickShow = false
+          }
           this.phoneStatus = res.readdata._data.qcloud.qcloud_sms;
           this.siteMode = res.readdata._data.set_site.site_mode;
           this.signReasonStatus = res.readdata._data.set_reg.register_validate;
+          this.registerClose = res.readdata._data.set_reg.register_close;
         }
-
       }).catch(err => {
         console.log(err);
       })
     },
-    setSignData() {
+    setSignData(error_callback) {
       this.appFetch({
         url: 'register',
         method: 'post',
@@ -125,11 +130,21 @@ export default {
         this.btnLoading = false;
         if (res.errors) {
           if (res.errors[0].detail) {
+            if (error_callback) {
+              error_callback(res);
+              return;
+            }
+            this.showSignupInput = true;
             this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
           } else {
             if (res.rawData[0].code === 'register_validate') {
               this.$router.push({ path: "information-page", query: { setInfo: 'registrationReview' } })
             } else {
+              if (error_callback) {
+                error_callback(res);
+                return;
+              }
+              this.showSignupInput = true;
               this.$toast.fail(res.errors[0].code);
             }
           }
@@ -143,15 +158,18 @@ export default {
           webDb.setLItem('tokenId', tokenId);
           webDb.setLItem('refreshToken', refreshToken);
 
+          this.$store.dispatch("appSiteModule/invalidateForum");
+
           this.getForum().then(() => {
-            if (this.phoneStatus) {
-              this.$router.push({ path: 'bind-phone' });
-            } else if (this.siteMode === 'pay') {
+            if (this.siteMode === 'pay') {
               this.$router.push({ path: 'pay-the-fee' });
-            } else if (this.siteMode === 'public') {
-              this.$router.push({ path: '/' });
             } else {
-              //缺少参数，请刷新页面
+              let beforeVisiting = webDb.getSItem('beforeVisiting');
+              if (beforeVisiting) {
+                this.$router.push({ path: beforeVisiting });
+              } else {
+                this.$router.push({ path: '/' });
+              }
             }
           })
 
@@ -160,7 +178,40 @@ export default {
       }).catch(err => {
         console.log(err);
         this.btnLoading = false;
+        this.showSignupInput = true;
       })
+    },
+    getRandomChars(len) {
+      var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      return Array(len).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+    },
+    autoRegister(nickname) {
+      if (nickname) {
+        this.userName = nickname;
+      } else {
+        this.userName = "网友" + this.getRandomChars(6);
+      }
+      this.setSignData((res) => {
+        if (this.signUpBdClickShow && res.errors[0].detail[0].includes("已经存在")) {
+          if (nickname) {
+            this.userName = nickname + this.getRandomChars(6);
+          } else {
+            this.userName = "网友" + this.getRandomChars(6);
+          }
+          this.setSignData();
+        } else {
+          this.showSignupInput = true;
+          if (res.errors[0].detail[0].includes("特殊字符")) {
+            this.$dialog.alert({
+              title: "无法自动注册账号",
+              message: "您的微信昵称中含有不允许注册的字符，无法自动完成账号注册。请手工设置用户名。"
+            });
+            this.userName = "";
+            return;
+          }
+          this.$toast.fail(res.errors[0].code + '\n' + res.errors[0].detail[0])
+        }
+      });
     },
     getWatchHref(code, state, sessionId) {
       this.appFetch({
@@ -178,6 +229,35 @@ export default {
           if (res.rawData[0].code === 'no_bind_user') {
             this.wxtoken = wxtoken;
             webDb.setLItem('wxtoken', wxtoken);
+            let gotologin = webDb.getLItem('wx-goto-login');
+            if (gotologin) {
+              webDb.removeLItem('wx-goto-login');
+              this.$router.push({ path: '/wx-login-bd' })
+              return;
+            }
+            if (this.registerClose) { //可以注册
+              this.redirectMessage = "正在自动注册并登录..."
+              this.password = "";
+              let nickname = res.errors[0].user.nickname;
+              if (this.signUpBdClickShow) {
+                this.autoRegister(nickname);
+              } else {
+                this.captcha = new TencentCaptcha(this.appID, res => {
+                  if (res.ret === 0) {
+                    this.captcha_ticket = res.ticket;
+                    this.captcha_rand_str = res.randstr;
+                    this.autoRegister(nickname);
+                  } else {
+                    this.showSignupInput = true;
+                  }
+                });
+                // 显示验证码
+                this.captcha.show();
+              }
+            } else {
+              this.$toast.fail("站点已关闭注册");
+            }
+            return;
           }
 
           if (res.errors[0].detail) {
@@ -188,7 +268,10 @@ export default {
             } else if (res.rawData[0].code === 'ban_user') {
               this.$router.push({ path: "information-page", query: { setInfo: 'banUser' } })
             } else {
-              this.$toast.fail(res.errors[0].code);
+              if (!res.rawData[0].code.includes('access_token')) {
+                this.$toast(JSON.stringify(res));
+              }
+              window.location.href = '/api/oauth/wechat';
             }
           }
           // } else if (res.data.attributes.location) {
@@ -294,16 +377,10 @@ export default {
   created() {
     this.getForum();
     this.wxtoken = webDb.getLItem('wxtoken');
-    this.appID = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha_app_id;
     let isWeixin = appCommonH.isWeixin().isWeixin;
     let code = this.$router.history.current.query.code;
     let state = this.$router.history.current.query.state;
     let sessionId = this.$router.history.current.query.sessionId;
-    let qcloud_captcha = webDb.getLItem('siteInfo')._data.qcloud.qcloud_captcha;
-    let register_captcha = webDb.getLItem('siteInfo')._data.set_reg.register_captcha;
-    if (qcloud_captcha && register_captcha) {
-      this.signUpBdClickShow = false
-    }
 
     webDb.setLItem('code', code);
     webDb.setLItem('state', state);

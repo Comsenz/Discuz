@@ -6,27 +6,35 @@ import Card from '../../../../view/site/common/card/card';
 import CardRow from '../../../../view/site/common/card/cardRow';
 
 export default {
-  data:function () {
+  data: function () {
     return {
-      checked:[],
-      disabled:false,  //是否可以开启验证码
-      videoDisabled: false,
+      checked: [],
+      videoDisabled: false,       // 是否开启云点播
+      captchaDisabled: false,     // 是否开启验证码
+      realNameDisabled: false,    // 是否开启实名认证
+      bindPhoneDisabled: false,   // 是否开启短信验证
     }
   },
-  methods:{
-    signUpSet(){
+  methods: {
+    signUpSet() {
       this.appFetch({
-        url:'forum',
-        method:'get',
-      }).then(res=>{
-        if (res.errors){
+        url: 'forum',
+        method: 'get',
+      }).then(res => {
+        if (res.errors) {
           this.$message.error(res.errors[0].code);
-        }else {
-          if(res.readdata._data.qcloud.qcloud_captcha == false){
-            this.disabled = true
-          }
-          if(res.readdata._data.qcloud.qcloud_vod == false){
+        } else {
+          if (res.readdata._data.qcloud.qcloud_vod === false) {
             this.videoDisabled = true
+          }
+          if (res.readdata._data.qcloud.qcloud_captcha === false) {
+            this.captchaDisabled = true
+          }
+          if (res.readdata._data.qcloud.qcloud_faceid === false) {
+            this.realNameDisabled = true
+          }
+          if (res.readdata._data.qcloud.qcloud_sms === false) {
+            this.bindPhoneDisabled = true
           }
         }
       })
@@ -36,25 +44,25 @@ export default {
     * */
 
 
-    submitClick(){
+    submitClick() {
       this.patchGroupPermission();
     },
 
     /*
     * 接口请求
     * */
-    getGroupResource(){
+    getGroupResource() {
       this.appFetch({
-        url:"groups",
-        method:'get',
+        url: "groups",
+        method: 'get',
         splice: '/' + this.$route.query.id,
-        data:{
-          include:['permission']
+        data: {
+          include: ['permission']
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$message.error(res.errors[0].code);
-        }else {
+        } else {
           let data = res.readdata.permission;
           this.checked = [];
           data.forEach((item) => {
@@ -62,14 +70,14 @@ export default {
           })
         }
 
-      }).catch(err=>{
+      }).catch(err => {
       })
     },
-    patchGroupPermission(){
+    patchGroupPermission() {
       this.appFetch({
-        url:'groupPermission',
-        method:'post',
-        data:{
+        url: 'groupPermission',
+        method: 'post',
+        data: {
           data: {
             "attributes": {
               "groupId": this.$route.query.id,
@@ -77,8 +85,8 @@ export default {
             }
           }
         }
-      }).then(res=>{
-        if (res.errors){
+      }).then(res => {
+        if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
           this.$message({
@@ -87,16 +95,16 @@ export default {
             type: 'success'
           });
         }
-      }).catch(err=>{
+      }).catch(err => {
       })
     }
 
   },
-  created(){
+  created() {
     this.getGroupResource();
     this.signUpSet()
   },
-  components:{
+  components: {
     Card,
     CardRow
   }

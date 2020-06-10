@@ -196,7 +196,8 @@ class ListUserWalletLogsController extends AbstractListController
             $query->where('change_desc', 'like', "%$log_change_desc%");
         });
         $query->when(!is_null($log_change_type), function ($query) use ($log_change_type) {
-            $query->where('change_type', $log_change_type);
+            $log_change_type = explode(',', $log_change_type);
+            $query->whereIn('change_type', $log_change_type);
         });
         $query->when($log_start_time, function ($query) use ($log_start_time) {
             $query->where('created_at', '>=', $log_start_time);

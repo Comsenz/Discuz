@@ -97,7 +97,7 @@ class EditPost
 
         if (isset($attributes['isApproved'])) {
             $this->assertCan($this->actor, 'approve', $post);
-            $message = isset($attributes['message']) ? $attributes['message'] : '';
+            $message = $attributes['message'] ?? '';
             $post->is_approved = $attributes['isApproved'];
 
             // 操作审核时触发 回复内容通知和记录日志
@@ -111,7 +111,7 @@ class EditPost
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $post);
 
-            $message = isset($attributes['message']) ? $attributes['message'] : '';
+            $message = $attributes['message'] ?? '';
 
             if ($attributes['isDeleted']) {
                 $post->hide($this->actor, ['message' => $message]);
@@ -142,7 +142,7 @@ class EditPost
 
         $post->save();
 
-        $post->raise(new Saved($post, $this->actor, $this->data));
+        $post->raise(new Saved($post, $this->actor, array_merge($this->data, ['edit' => true])));
 
         $this->dispatchEventsFor($post, $this->actor);
 

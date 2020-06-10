@@ -3,7 +3,7 @@
       <main class="login-main">
         <header class="login-header">
           <a href="/">
-            <img src="../../../../../static/images/logo.png" alt="LOGO">
+            <img src="/static/images/logo.png" alt="LOGO">
           </a>
         </header>
 

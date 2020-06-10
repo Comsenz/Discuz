@@ -70,6 +70,8 @@ class ForumSettingField
         return [
             'site_author_scale' => $this->settings->get('site_author_scale'), // 作者比例
             'site_master_scale' => $this->settings->get('site_master_scale'), // 站长比例
+            'username_bout'     => $this->settings->get('username_bout', 'default', 1), // 用户名修改次数
+            'miniprogram_video' => (bool)$this->settings->get('miniprogram_video', 'wx_miniprogram'),
         ];
     }
 
@@ -138,9 +140,12 @@ class ForumSettingField
             'qcloud_sms_sign' => $this->settings->get('qcloud_sms_sign', 'qcloud'),
             'qcloud_cos_bucket_name' => $this->settings->get('qcloud_cos_bucket_name', 'qcloud'),
             'qcloud_cos_bucket_area' => $this->settings->get('qcloud_cos_bucket_area', 'qcloud'),
-            'qcloud_ci_url' => $this->settings->get('qcloud_ci_url', 'qcloud'),
+            'qcloud_cos_cdn_url' => $this->settings->get('qcloud_cos_cdn_url', 'qcloud'),
             'qcloud_vod_transcode' => $this->settings->get('qcloud_vod_transcode', 'qcloud'),
             'qcloud_vod_cover_template' => $this->settings->get('qcloud_vod_cover_template', 'qcloud'),
+            'qcloud_vod_url_key' => $this->settings->get('qcloud_vod_url_key', 'qcloud'),
+            'qcloud_vod_url_expire' => $this->settings->get('qcloud_vod_url_expire', 'qcloud'),
+            'qcloud_vod_taskflow_gif' => $this->settings->get('qcloud_vod_taskflow_gif', 'qcloud'),
         ];
         $settings += $this->getQCloudVod();
         return $settings;
@@ -190,6 +195,27 @@ class ForumSettingField
             'qcloud_vod_ext' => $this->settings->get('qcloud_vod_ext', 'qcloud'),
             'qcloud_vod_size' => $this->settings->get('qcloud_vod_size', 'qcloud'),
             'qcloud_vod_sub_app_id' => $this->settings->get('qcloud_vod_sub_app_id', 'qcloud'),
+            'qcloud_vod_watermark' => $this->settings->get('qcloud_vod_watermark', 'qcloud'),
+        ];
+    }
+
+    /**
+     * 水印设置
+     *
+     * @return array
+     */
+    public function getWatermarkSettings()
+    {
+        $watermarkImage = $this->settings->get('watermark_image', 'watermark');
+
+        $watermarkImageUrl = $watermarkImage ? $this->url->to('/storage/' . $watermarkImage) : '';
+
+        return [
+            'watermark' => (bool) $this->settings->get('watermark', 'watermark'),
+            'watermark_image' => $watermarkImageUrl,
+            'position' => (int) $this->settings->get('position', 'watermark', 1),
+            'horizontal_spacing' => (int) $this->settings->get('horizontal_spacing', 'watermark'),
+            'vertical_spacing' => (int) $this->settings->get('vertical_spacing', 'watermark'),
         ];
     }
 }

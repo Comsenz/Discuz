@@ -59,6 +59,10 @@ class CreateDialog
         if ($sender == $recipientUser->id) {
             throw new PermissionDeniedException();
         }
+        //在黑名单中，不能创建会话
+        if (in_array($sender, array_column($recipientUser->deny->toArray(), 'id'))) {
+            throw new PermissionDeniedException('user_deny');
+        }
 
         $dialogRes = $dialog::buildOrFetch($sender, $recipientUser->id);
 

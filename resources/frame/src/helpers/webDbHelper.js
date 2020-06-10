@@ -169,6 +169,6 @@
 	};
 
 	export default (new browserDb({
-		DbName: "officeDb",
+		DbName: "dzq",
 		expires: 0 //默认为永久保存
 	}));

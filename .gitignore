@@ -3,8 +3,13 @@
 /composer.lock
 /.idea
 /config/config.php
-.project
-.settings
 /node_modules
 .php_cs.cache
-
+/public/static
+/public/index.html
+/public/storage
+/storage/install.lock
+/public/docs
+/public/api-docs
+/public/manual-h5
+/public/manual-admin

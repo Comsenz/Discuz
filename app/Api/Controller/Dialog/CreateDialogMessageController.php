@@ -11,6 +11,7 @@ use App\Api\Serializer\DialogMessageSerializer;
 use App\Commands\Dialog\CreateDialogMessage;
 use Discuz\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -25,11 +26,20 @@ class CreateDialogMessageController extends AbstractCreateController
     protected $bus;
 
     /**
-     * @param Dispatcher $bus
+     * @var Factory
      */
-    public function __construct(Dispatcher $bus)
+    protected $validation;
+
+    public $include = ['attachment'];
+
+    /**
+     * @param Dispatcher $bus
+     * @param Factory $validation
+     */
+    public function __construct(Dispatcher $bus, Factory  $validation)
     {
         $this->bus = $bus;
+        $this->validation = $validation;
     }
 
     /**
@@ -39,6 +49,11 @@ class CreateDialogMessageController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
+        $this->validation->make($attributes, [
+            'dialog_id'     => 'required|int',
+            'message_text'  => 'required_without:attachment_id|max:10000',
+            'attachment_id' => 'required_without:message_text|int',
+        ])->validate();
 
         return $this->bus->dispatch(
             new CreateDialogMessage($actor, $attributes)

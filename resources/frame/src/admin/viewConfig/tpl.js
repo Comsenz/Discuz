@@ -1,8 +1,6 @@
 /**
  * 模板实例化和个性化设置
  */
-import frontTplConfig from "../../template/default/viewConfig/tplConfig";
-
 import Vue from 'vue';
 import baseTpl from "../../extend/viewBase/baseTpl";
 import tplConfig from "../viewConfig/tplConfig";
@@ -39,11 +37,7 @@ defaultConfig.beforeEnterModule = function(Router) {
 	 * @return {[type]}       [description]
 	 */
 	Router.beforeEach(function(to, form, next) {
-		if(to.meta.isAdmin) {
-			tplConfig.beforeEnter(to, form, next);
-		} else {
-			frontTplConfig.beforeEnter(to, form, next);
-		}
+		tplConfig.beforeEnter(to, form, next);
 	});
 
   Router.onError((error) => {

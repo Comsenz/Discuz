@@ -37,7 +37,7 @@ export default {
             },
             {
               "attributes":{
-                "key":'qcloud_ci_url',
+                "key":'qcloud_cos_cdn_url',
                 "value":this.cosDomainName,
                 "tag": "qcloud",
               }
@@ -65,7 +65,7 @@ export default {
         }else {
           this.cosName = res.readdata._data.qcloud.qcloud_cos_bucket_name;
           this.cosArea = res.readdata._data.qcloud.qcloud_cos_bucket_area;
-          this.cosDomainName = res.readdata._data.qcloud.qcloud_ci_url;
+          this.cosDomainName = res.readdata._data.qcloud.qcloud_cos_cdn_url;
         }
       })
     },

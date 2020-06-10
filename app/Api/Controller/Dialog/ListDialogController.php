@@ -15,6 +15,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\NotAuthenticatedException;
 use Discuz\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
@@ -43,6 +44,10 @@ class ListDialogController extends AbstractListController
      */
     public $dialogCount;
 
+    public $sortFields = [
+        'dialogMessageId',
+        'createdAt',
+    ];
     /**
      * {@inheritdoc}
      */
@@ -79,8 +84,9 @@ class ListDialogController extends AbstractListController
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $include = $this->extractInclude($request);
+        $sort = $this->extractSort($request);
 
-        $dialogs = $this->search($actor, $limit, $offset);
+        $dialogs = $this->search($actor, $sort, $limit, $offset);
 
         $document->addPaginationLinks(
             $this->url->route('dialog.list'),
@@ -104,9 +110,10 @@ class ListDialogController extends AbstractListController
      * @param User $actor
      * @param null $limit
      * @param int $offset
+     * @param $sort
      * @return Collection
      */
-    public function search(User $actor, $limit = null, $offset = 0)
+    public function search(User $actor, $sort, $limit = null, $offset = 0)
     {
         $query = $this->dialog->query();
 
@@ -117,6 +124,9 @@ class ListDialogController extends AbstractListController
 
         $query->skip($offset)->take($limit);
 
+        foreach ((array) $sort as $field => $order) {
+            $query->orderBy(Str::snake($field), $order);
+        }
         return $query->get();
     }
 }
