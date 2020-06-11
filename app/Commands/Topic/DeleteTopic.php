@@ -35,13 +35,11 @@ class DeleteTopic
     {
         $this->events = $events;
 
-        $topic = $topics->findOrFail($this->id);
-
         $this->assertAdmin($this->actor);
 
-        $topic->delete();
+        $topic = $topics->findOrFail($this->id);
 
-        $this->dispatchEventsFor($topic, $this->actor);
+        $topic->delete();
 
         return $topic;
     }
