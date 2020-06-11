@@ -327,7 +327,7 @@ class User extends Model
                     ->disk('avatar_cos')
                     ->temporaryUrl(
                         'public/avatar/' . $this->id . '.png',
-                        \Carbon\Carbon::now()->addMinutes(5)
+                        \Carbon\Carbon::now()->addHour()
                     );
             }
         }
