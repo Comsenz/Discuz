@@ -55,6 +55,6 @@ class TopicSerializer extends AbstractSerializer
      */
     public function lastThread($model)
     {
-        return $this->hasOne($model, ThreadSerializer::class);
+        return $this->hasMany($model, ThreadSerializer::class);
     }
 }
