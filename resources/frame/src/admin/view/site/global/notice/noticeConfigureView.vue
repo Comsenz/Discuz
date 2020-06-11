@@ -15,8 +15,6 @@
                     {groupname} ：所属用户组
                     {time}：发送时间
                     {sitename}：网站名称（显示在页面底部的联系方式名称）
-                    {bbname}：站点名称（显示在浏览器窗口标题等位置的名称）
-                    {adminemail}：管理员Email
                     {content}：内容
                     {reason}：原因"
       >
