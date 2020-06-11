@@ -127,14 +127,17 @@ class EditPost
 
         $validator->valid($post->getDirty());
 
-        // 记录触发的审核词
-        if ($post->is_approved === Post::UNAPPROVED && $censor->wordMod) {
-            /** @var PostMod $stopWords */
-            $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
+        // 待审核帖子
+        if ($post->is_approved === Post::UNAPPROVED) {
+            // 记录触发的审核词
+            if ($censor->wordMod) {
+                /** @var PostMod $stopWords */
+                $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
 
-            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
+                $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
-            $post->stopWords()->save($stopWords);
+                $post->stopWords()->save($stopWords);
+            }
 
             // 如果是首贴，将主题放入待审核
             if ($post->is_first) {
