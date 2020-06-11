@@ -40,6 +40,8 @@ class BaseFormatter
      */
     protected static $actor;
 
+    protected $app;
+
     /**
      * @param UrlGenerator $url
      * @param CacheManager $cache
@@ -49,6 +51,7 @@ class BaseFormatter
     {
         $this->url = $url;
         $this->cache = $cache;
+        $this->app = $app;
         $this->cacheDir = $app->storagePath().'/formatter';
     }
 
@@ -114,6 +117,8 @@ class BaseFormatter
     protected function getConfigurator()
     {
         $configurator = new Configurator;
+
+        $configurator->enableJavaScript();
 
         $configurator->rootRules->enableAutoLineBreaks();
 

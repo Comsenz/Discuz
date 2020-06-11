@@ -46,6 +46,10 @@ class Formatter extends BaseFormatter
 
         parent::confTopic($configurator);
 
+        $configuratorArr = $configurator->finalize();
+
+        file_put_contents($this->app->publicPath().'/s9e.js', $configuratorArr['js']);
+
         return $configurator;
     }
 
