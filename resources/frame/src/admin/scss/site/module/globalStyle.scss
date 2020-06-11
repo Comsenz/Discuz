@@ -120,6 +120,14 @@
   .avatar-uploader .el-upload:hover {
     border-color: $main;
   }
+  .avatar-uploader-icon {
+    font-size: 28PX;
+    color: #8c939d;
+    width: 140PX;
+    height: 140PX;
+    line-height: 140PX;
+    text-align: center;
+  }
   .el-icon-circle-plus-outline {
     display: block;
     width: 48PX;
