@@ -10,6 +10,7 @@ namespace App\Console;
 use App\Console\Commands\AttachmentClearCommand;
 use App\Console\Commands\AvatarClearCommand;
 use App\Console\Commands\FinanceCreateCommand;
+use App\Console\Commands\InviteExpireCommand;
 use App\Console\Commands\QueryWechatOrderConmmand;
 use Discuz\Console\Kernel as ConsoleKernel;
 use Illuminate\Console\Scheduling\Schedule;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         AvatarClearCommand::class,
         AttachmentClearCommand::class,
         QueryWechatOrderConmmand::class,
+        InviteExpireCommand::class,
     ];
 
     /**
@@ -33,6 +35,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('finance:create')->daily();
         $schedule->command('order:query')->everyMinute()->withoutOverlapping();
+        $schedule->command('invite:expire')->everyMinute()->withoutOverlapping();
 
         // 维护清理
         $schedule->command('clear:attachment')->daily();
