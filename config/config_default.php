@@ -176,5 +176,19 @@ return [
                 'sign_name' => '', // 短信签名，如果使用默认签名，该字段可缺省（对应官方文档中的sign）
             ],
         ],
+    ],
+    'cross' => [
+        'status' => true,//如果为true则在响应中加入headers
+
+        'headers' => [
+            'Access-Control-Allow-Origin' => [
+                //设置允许跨域，默认包含本站site_url
+            ],
+            'Access-Control-Allow-Headers' => 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN',
+            'Access-Control-Expose-Headers' => 'Authorization, authenticated',
+            'Access-Control-Allow-Methods' => 'GET, POST, PATCH, PUT, OPTIONS, DELETE',
+            'Access-Control-Allow-Credentials' => 'true'
+
+        ]
     ]
 ];
