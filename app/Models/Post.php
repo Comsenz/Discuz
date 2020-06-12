@@ -13,6 +13,7 @@ use App\Events\Post\Revised;
 use App\Formatter\Formatter;
 use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
+use DateTime;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -120,6 +121,17 @@ class Post extends Model
      * @var MarkdownFormatter
      */
     protected static $markdownFormatter;
+
+    /**
+     * datetime 时间转换
+     *
+     * @param $timeAt
+     * @return string
+     */
+    public function formatDate($timeAt)
+    {
+        return $this->{$timeAt}->format(DateTime::RFC3339);
+    }
 
     /**
      * 帖子摘要

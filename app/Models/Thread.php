@@ -10,6 +10,7 @@ namespace App\Models;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use Carbon\Carbon;
+use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -101,6 +102,17 @@ class Thread extends Model
      * @var User
      */
     protected static $stateUser;
+
+    /**
+     * datetime 时间转换
+     *
+     * @param $timeAt
+     * @return string
+     */
+    public function formatDate($timeAt)
+    {
+        return $this->{$timeAt}->format(DateTime::RFC3339);
+    }
 
     /**
      * Hide the thread.

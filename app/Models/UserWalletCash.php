@@ -10,6 +10,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Closure;
+use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -87,6 +88,17 @@ class UserWalletCash extends Model
     const REFUNDS_STATUS_NO = 0; //未返款
 
     const REFUNDS_STATUS_YES = 1; //已返款
+
+    /**
+     * datetime 时间转换
+     *
+     * @param $timeAt
+     * @return string
+     */
+    public function formatDate($timeAt)
+    {
+        return $this->{$timeAt}->format(DateTime::RFC3339);
+    }
 
     /**
      * 创建提现申请

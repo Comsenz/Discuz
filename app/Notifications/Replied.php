@@ -85,7 +85,7 @@ class Replied extends System
         if ($this->post->reply_post_id) {
             $build['post_content'] = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['content'];
             $build['reply_post_id'] = $this->post->reply_post_id;
-            $build['post_created_at'] = $this->post->created_at;
+            $build['post_created_at'] = $this->post->formatDate('created_at');
         } else {
             /**
              * 长文点赞通知内容为标题
@@ -98,9 +98,9 @@ class Replied extends System
             $build['thread_id'] = $this->post->thread->id;
             $build['thread_username'] = $this->post->thread->user->username;
             $build['thread_title'] = $firstContent;
-            $build['thread_created_at'] = $this->post->thread->created_at;
+            $build['thread_created_at'] = $this->post->thread->formatDate('created_at');
             $build['post_content'] = $content == $firstContent ? '' : $content ;
-            $build['post_created_at'] = $this->post->created_at;
+            $build['post_created_at'] = $this->post->formatDate('created_at');
         }
     }
 
