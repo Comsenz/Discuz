@@ -152,7 +152,7 @@ class PostListener
 
         // 绑定附件
         if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
-            if ($post->exists) {
+            if (! $post->wasRecentlyCreated) {
                 $this->assertCan($actor, 'edit', $post);
             }
 

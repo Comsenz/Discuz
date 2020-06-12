@@ -106,7 +106,7 @@ class PostPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Post $post)
     {
-        if ($actor->hasPermission('thread.manage') && ($post->user_id == $actor->id || $actor->isAdmin())) {
+        if ($actor->hasPermission('thread.managePosts') && ($post->user_id == $actor->id || $actor->isAdmin())) {
             return true;
         }
     }
