@@ -9,6 +9,10 @@ namespace App\Api\Controller\Wallet;
 
 use App\Api\Serializer\UserWalletCashSerializer;
 use Discuz\Api\Controller\AbstractResourceController;
+use Discuz\Auth\Exception\NotAuthenticatedException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use App\Repositories\UserWalletCashRepository;
@@ -37,7 +41,10 @@ class ResourceUserWalletCashController extends AbstractResourceController
     }
 
     /**
-     * {@inheritdoc}
+     * @param ServerRequestInterface $request
+     * @param Document $document
+     * @return Builder|Model|mixed
+     * @throws NotAuthenticatedException
      */
     public function data(ServerRequestInterface $request, Document $document)
     {
