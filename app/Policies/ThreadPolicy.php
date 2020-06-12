@@ -115,7 +115,7 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Thread $thread)
     {
-        if ($actor->hasPermission('thread.manage') && ($thread->user_id == $actor->id || $actor->isAdmin())) {
+        if ($actor->hasPermission('editOwnThreadOrPost') && ($thread->user_id == $actor->id || $actor->isAdmin())) {
             return true;
         }
     }
@@ -127,6 +127,8 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        return $this->edit($actor, $thread);
+        if ($actor->hasPermission('hideOwnThreadOrPost') && ($thread->user_id == $actor->id || $actor->isAdmin())) {
+            return true;
+        }
     }
 }
