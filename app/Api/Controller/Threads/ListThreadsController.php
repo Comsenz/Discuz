@@ -408,13 +408,13 @@ class ListThreadsController extends AbstractListController
         }
 
         //话题文章
-        if ($topic_id = Arr::get($filter, 'topic_id', '0')) {
+        if ($topicId = Arr::get($filter, 'topicId', '0')) {
             //更新话题阅读数
-            $topic = Topic::find($topic_id);
+            $topic = Topic::find($topicId);
             $topic->refreshTopicViewCount();
 
             $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
-                ->where('thread_topic.topic_id', $topic_id);
+                ->where('thread_topic.topic_id', $topicId);
         }
     }
 
