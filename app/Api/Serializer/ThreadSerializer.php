@@ -63,6 +63,7 @@ class ThreadSerializer extends AbstractSerializer
             'canEssence'        => $gate->allows('essence', $model),
             'canDelete'         => $gate->allows('delete', $model),
             'canHide'           => $gate->allows('hide', $model),
+            'canEdit'           => $gate->allows('edit', $model),
         ];
 
         if ($model->deleted_at) {

@@ -60,10 +60,6 @@ use Illuminate\Support\Str;
  * @package App\Models
  * @method truncate()
  * @method hasAvatar()
- * @method static find($id)
- * @method static whereIn($field, $ids)
- * @method static findOrfail($id)
- * @method static where($column, $fields)
  */
 class User extends Model
 {

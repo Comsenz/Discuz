@@ -54,7 +54,6 @@ use Illuminate\Support\Str;
  * @property Post replyPost
  * @property string parsedContent
  * @package App\Models
- * @method static where($column, $fields)
  */
 class Post extends Model
 {

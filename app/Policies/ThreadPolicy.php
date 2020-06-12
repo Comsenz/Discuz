@@ -113,9 +113,9 @@ class ThreadPolicy extends AbstractPolicy
      * @param Thread $thread
      * @return bool|null
      */
-    public function rename(User $actor, Thread $thread)
+    public function edit(User $actor, Thread $thread)
     {
-        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
+        if ($actor->hasPermission('thread.manage') && ($thread->user_id == $actor->id || $actor->isAdmin())) {
             return true;
         }
     }
@@ -127,20 +127,6 @@ class ThreadPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Thread $thread)
     {
-        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
-            return true;
-        }
-    }
-
-    /**
-     * @param User $actor
-     * @param Thread $thread
-     * @return bool
-     */
-    public function editPrice(User $actor, Thread $thread)
-    {
-        if ($thread->user_id == $actor->id || $actor->isAdmin()) {
-            return true;
-        }
+        return $this->edit($actor, $thread);
     }
 }

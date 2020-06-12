@@ -156,6 +156,26 @@
       </CardRow>
     </Card>
 
+    <Card>
+      <CardRow description="作者编辑或删除自己主题的权限">
+        <el-checkbox
+          v-model="checked"
+          label="thread.manage"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >编辑或删除自己的主题</el-checkbox>
+      </CardRow>
+    </Card>
+
+    <Card>
+      <CardRow description="作者编辑或删除自己回复的权限">
+        <el-checkbox
+          v-model="checked"
+          label="thread.managePosts"
+          :disabled="$router.history.current.query.id === '1' || $router.history.current.query.id === '7'"
+        >编辑或删除自己的回复</el-checkbox>
+      </CardRow>
+    </Card>
+
     <Card header="前台管理权限："></Card>
     <Card>
       <CardRow description="前台删除单个主题的权限">

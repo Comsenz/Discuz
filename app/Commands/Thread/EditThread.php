@@ -84,7 +84,7 @@ class EditThread
         $thread = $threads->findOrFail($this->threadId, $this->actor);
 
         if (isset($attributes['title'])) {
-            $this->assertCan($this->actor, 'rename', $thread);
+            $this->assertCan($this->actor, 'edit', $thread);
 
             // 敏感词校验
             $title = $censor->checkText($attributes['title']);
@@ -100,15 +100,15 @@ class EditThread
             $thread->timestamps = false;
         }
 
-        // 长文、视频可以修改价格
-        if (isset($attributes['price']) && ($thread->type != 0)) {
-            $this->assertCan($this->actor, 'editPrice', $thread);
+        // 非文字贴可设置价格
+        if (isset($attributes['price']) && $thread->type !== Thread::TYPE_OF_TEXT) {
+            $this->assertCan($this->actor, 'edit', $thread);
 
             $thread->price = (float) $attributes['price'];
         }
 
         if ($thread->price > 0 && isset($attributes['free_words'])) {
-            $this->assertCan($this->actor, 'editPrice', $thread);
+            $this->assertCan($this->actor, 'edit', $thread);
 
             $thread->free_words = (int) $attributes['free_words'];
         }
