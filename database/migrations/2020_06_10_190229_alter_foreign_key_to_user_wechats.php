@@ -12,11 +12,11 @@ class AlterForeignKeyToUserWechats extends Migration
      */
     public function up()
     {
-        $this->schema()->getConnection()->statement('SET FOREIGN_KEY_CHECKS = 0');
+        $this->schema()->disableForeignKeyConstraints();
         $this->schema()->table('user_wechats', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
-        $this->schema()->getConnection()->statement('SET FOREIGN_KEY_CHECKS = 1');
+        $this->schema()->enableForeignKeyConstraints();
     }
 
     /**
