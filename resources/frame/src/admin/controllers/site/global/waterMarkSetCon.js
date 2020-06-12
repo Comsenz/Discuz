@@ -8,9 +8,9 @@ export default {
       // fileExtension: "", //文件扩展名
       // maximumSize: "", //最大尺寸
       switchBtn: false, //水印开关状态
-      deleBtn: false, //图片删除按钮显示状态
+      deleteBtn: false, //图片删除按钮显示状态
       imageUrl: "",
-      imgWidht: 0,
+      imgWidth: 0,
       imgHeight: 0,
       posiCurrent: -1,
       posiList: [
@@ -72,14 +72,14 @@ export default {
         } else {
           this.switchBtn = res.readdata._data.watermark.watermark;
           this.imageUrl = res.readdata._data.watermark.watermark_image;
-          if(this.imageUrl != '' && this.imageUrl != null){
-            this.deleBtn = true;
+          if(this.imageUrl !== '' && this.imageUrl != null){
+            this.deleteBtn = true;
           }
-          if( res.readdata._data.watermark.position != '' && res.readdata._data.watermark.position != null && res.readdata._data.watermark.position != 0 ){
+          if( res.readdata._data.watermark.position !== '' && res.readdata._data.watermark.position != null && res.readdata._data.watermark.position !== 0 ){
             this.posiCurrent = res.readdata._data.watermark.position - 1;
             this.waterMarkPosi = res.readdata._data.watermark.position;
           }
-          
+
           this.verticalSpacing = res.readdata._data.watermark.vertical_spacing;
           this.verticalSpacing = res.readdata._data.watermark.horizontal_spacing;
         }
@@ -88,7 +88,7 @@ export default {
 
     submi() {
       //提交水印信息
-      var regSize = /^[0-9]*$/;
+      const regSize = /^[0-9]*$/;
       if( this.switchBtn ){
         if (!this.imageUrl) {
           this.$message.error("请上传水印图片");
@@ -115,7 +115,7 @@ export default {
           return;
         }
       }
-      
+
       this.appFetch({
         url: "settings",
         method: "post",
@@ -149,7 +149,7 @@ export default {
                 tag: "watermark"
               }
             },
-            
+
           ]
         }
       })
@@ -166,7 +166,7 @@ export default {
 
     //上传时，判断文件的类型及大小是否符合规则
     beforeAvatarUpload(file) {
-      const isJPG = file.type == "image/png";
+      const isJPG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
         this.$message.warning("上传水印图片只能是 PNG 格式!");
@@ -176,7 +176,6 @@ export default {
         this.$message.warning("上传头像图片大小不能超过 2MB!");
         return isLt2M;
       }
-      this.multfileImg = file;
       return isJPG && isLt2M;
     },
     // 上传
@@ -184,7 +183,6 @@ export default {
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);
       logoFormData.append("type", "watermark_image");
-      // this.uploaderLogo(logoFormData);
       this.appFetch({
         url: "logo",
         method: "post",
@@ -196,32 +194,30 @@ export default {
           } else {
             this.imageUrl = data.readdata._data.default.logo;
             this.$message({ message: "上传成功", type: "success" });
-            this.deleBtn = true;
+            this.deleteBtn = true;
           }
         })
         .catch(error => {});
     },
     //删除已上传logo
     deleteImage(file, fileList) {
-      if (this.deleBtn == false) {
+      if (this.deleteBtn === false) {
         return;
       }
-      let logoFormData = new FormData();
-      logoFormData.append("logo", file.raw);
-      logoFormData.append("type", "watermark_image");
-      // this.uploaderLogo(logoFormData);
       this.imageUrl = "";
       this.appFetch({
         url: "logo",
         method: "delete",
-        data: logoFormData
+        data: {
+          type: 'watermark_image',
+        }
       })
         .then(data => {
           if (data.errors) {
             this.$message.error(data.errors[0].code);
           } else {
             this.$message("删除成功");
-            this.deleBtn = false;
+            this.deleteBtn = false;
           }
         })
         .catch(error => {});

@@ -33,8 +33,8 @@
         <el-button
           type="text"
           :style="{
-            opacity: deleBtn ? '1' : '0',
-            cursor: deleBtn ? 'pointer' : 'auto'
+            opacity: deleteBtn ? '1' : '0',
+            cursor: deleteBtn ? 'pointer' : 'auto'
           }"
           @click="deleteImage"
           >删除</el-button

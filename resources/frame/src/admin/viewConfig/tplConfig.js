@@ -17,13 +17,13 @@ export default {
       js: [],
       css: ["../../../static/css/reset.css"],
       admin: {
-        comLoad: function(resolve) {
+        comLoad: function (resolve) {
           require(["../view/site/IndexView"], resolve);
         },
         children: {
           //全局
           home: {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/home/homeView"], resolve);
             },
             metaInfo: {
@@ -33,7 +33,7 @@ export default {
             }
           },
           "site-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/siteSetView"], resolve);
             },
             metaInfo: {
@@ -43,7 +43,7 @@ export default {
             }
           },
           "sign-up-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/signUpSetView"], resolve);
             },
             metaInfo: {
@@ -54,7 +54,7 @@ export default {
           },
 
           "worth-mentioning-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/worthMentioningSet/worthMentioningSetView"
               ], resolve);
@@ -66,7 +66,7 @@ export default {
             }
           },
           "worth-mentioning-config/h5wx": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/worthMentioningSet/worthMentioningConfigH5WxView"
               ], resolve);
@@ -78,7 +78,7 @@ export default {
             }
           },
           "worth-mentioning-config/applets": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/worthMentioningSet/worthMentioningConfigAppletsView"
               ], resolve);
@@ -90,7 +90,7 @@ export default {
             }
           },
           "worth-mentioning-config/pcwx": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/worthMentioningSet/worthMentioningConfigPcWxView"
               ], resolve);
@@ -103,7 +103,7 @@ export default {
           },
 
           "pay-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/paySet/paySetView"], resolve);
             },
             metaInfo: {
@@ -113,7 +113,7 @@ export default {
             }
           },
           "pay-config/wx": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/paySet/payConfigWxView"], resolve);
             },
             metaInfo: {
@@ -124,7 +124,7 @@ export default {
           },
 
           "wx-notice": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/notice/WxNoticeSetView"], resolve);
             },
             metaInfo: {
@@ -136,7 +136,7 @@ export default {
           },
 
           "system-notice": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/notice/systemNoticeSetView"
               ], resolve);
@@ -150,7 +150,7 @@ export default {
           },
 
           "notice-configure": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/notice/noticeConfigureView"
               ], resolve);
@@ -163,7 +163,7 @@ export default {
           },
 
           "tencent-cloud-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudSetView"
               ], resolve);
@@ -175,7 +175,7 @@ export default {
             }
           },
           "tencent-cloud-config/cloud": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudConfigCloudView"
               ], resolve);
@@ -187,7 +187,7 @@ export default {
             }
           },
           "tencent-cloud-config/sms": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudConfigSmsView"
               ], resolve);
@@ -199,7 +199,7 @@ export default {
             }
           },
           "tencent-cloud-config/cos": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudConfigCosView"
               ], resolve);
@@ -211,7 +211,7 @@ export default {
             }
           },
           "tencent-cloud-config/vod": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudConfigVodView"
               ], resolve);
@@ -223,7 +223,7 @@ export default {
             }
           },
           "tencent-cloud-config/code": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/tencentCloudConfig/tencentCloudConfigCodeView"
               ], resolve);
@@ -236,7 +236,7 @@ export default {
           },
 
           "annex-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/annexSetView"], resolve);
             },
             metaInfo: {
@@ -246,7 +246,7 @@ export default {
             }
           },
           "water-mark-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/global/waterMarkSetView"], resolve);
             },
             metaInfo: {
@@ -256,7 +256,7 @@ export default {
             }
           },
           "content-filter-set": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/contentFilteringSet/contentFilteringSetView"
               ], resolve);
@@ -268,19 +268,7 @@ export default {
             }
           },
           "add-sensitive-words": {
-            comLoad: function(resolve) {
-              require([
-                "../view/site/global/contentFilteringSet/addSensitiveWordsView"
-              ], resolve);
-            },
-            metaInfo: {
-              title: "内容过滤设置",
-              name: "contentFilteringSet",
-              attribution: "全局"
-            }
-          },
-          "add-sensitive-words": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/global/contentFilteringSet/addSensitiveWordsView"
               ], resolve);
@@ -325,7 +313,7 @@ export default {
 
           //内容分类
           "cont-class": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/cont/contClassView"], resolve);
             },
             metaInfo: {
@@ -336,7 +324,7 @@ export default {
           },
 
           "cont-class-configure": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/cont/contClassConfigureView"], resolve);
             },
             metaInfo: {
@@ -347,7 +335,7 @@ export default {
           },
 
           "cont-manage": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/contManages/contManageView"
               ], resolve);
@@ -360,7 +348,7 @@ export default {
             }
           },
           "latest-reply": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/contManages/latestReplyView"
               ], resolve);
@@ -373,7 +361,7 @@ export default {
             }
           },
           "cont-manage/search": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/contManages/contManageSearchView"
               ], resolve);
@@ -387,7 +375,7 @@ export default {
           },
 
           "cont-review": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/contModeration/contReviewView"
               ], resolve);
@@ -400,7 +388,7 @@ export default {
             }
           },
           "reply-review": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/contModeration/replyReviewView"
               ], resolve);
@@ -414,7 +402,7 @@ export default {
           },
 
           "recycle-bin": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/cont/recycleBin/recycleBinView"], resolve);
             },
             metaInfo: {
@@ -425,7 +413,7 @@ export default {
             }
           },
           "recycle-bin-reply": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/cont/recycleBin/recycleBinReplyView"
               ], resolve);
@@ -440,7 +428,7 @@ export default {
 
           //财务分类
           "fund-details": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/finance/fundDetailsView"], resolve);
             },
             metaInfo: {
@@ -450,7 +438,7 @@ export default {
             }
           },
           "order-record": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/finance/orderRecordView"], resolve);
             },
             metaInfo: {
@@ -460,7 +448,7 @@ export default {
             }
           },
           "withdrawal-application": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/finance/withdrawMange/withdrawalApplicationView"
               ], resolve);
@@ -473,7 +461,7 @@ export default {
             }
           },
           "withdrawal-setting": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/finance/withdrawMange/withdrawalSettingView"
               ], resolve);
@@ -486,7 +474,7 @@ export default {
             }
           },
           "financial-statistics": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/finance/financialStatistics"], resolve);
             },
             metaInfo: {
@@ -498,7 +486,7 @@ export default {
 
           //用户
           "user-manage": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userManage/userManageView"], resolve);
             },
             metaInfo: {
@@ -508,7 +496,7 @@ export default {
             }
           },
           "user-search-list": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userManage/userSearchList"], resolve);
             },
             metaInfo: {
@@ -518,7 +506,7 @@ export default {
             }
           },
           "user-details": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require([
                 "../view/site/user/userManage/userDetailsView"
               ], resolve);
@@ -530,7 +518,7 @@ export default {
             }
           },
           wallet: {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userManage/walletView"], resolve);
             },
             metaInfo: {
@@ -541,7 +529,7 @@ export default {
           },
 
           "user-rol": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userRol/userRolView"], resolve);
             },
             metaInfo: {
@@ -551,7 +539,7 @@ export default {
             }
           },
           "rol-permission": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userRol/rolPermissionView"], resolve);
             },
             metaInfo: {
@@ -561,7 +549,7 @@ export default {
             }
           },
           "user-review": {
-            comLoad: function(resolve) {
+            comLoad: function (resolve) {
               require(["../view/site/user/userReviewView"], resolve);
             },
             metaInfo: {
@@ -576,7 +564,7 @@ export default {
         }
       },
       "admin/login": {
-        comLoad: function(resolve) {
+        comLoad: function (resolve) {
           require(["../view/site/login/loginView"], resolve);
         },
         metaInfo: {
@@ -592,7 +580,7 @@ export default {
    * @param  {Function} next [description]
    * @return {[type]}        [description]
    */
-  beforeEnter: function(to, form, next) {
+  beforeEnter: function (to, form, next) {
     let token = webDb.getLItem("Authorization");
     let tokenId = webDb.getLItem("tokenId");
     let groupId = "";
@@ -602,7 +590,7 @@ export default {
         next();
         return;
       }
-      next({ path: "/admin/login" });
+      next({path: "/admin/login"});
     } else {
       this.getUserInfo(tokenId)
         .then(res => {
@@ -620,7 +608,7 @@ export default {
               next();
               return;
             }
-            next({ path: "/admin/login" });
+            next({path: "/admin/login"});
           }
         })
         .catch(() => {
@@ -628,7 +616,7 @@ export default {
             next();
             return;
           }
-          next({ path: "/admin/login" });
+          next({path: "/admin/login"});
         });
     }
   },
@@ -645,6 +633,7 @@ export default {
       .then(res => {
         return res;
       })
-      .catch(err => {});
+      .catch(err => {
+      });
   }
 };
