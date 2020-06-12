@@ -15,104 +15,122 @@ use App\Validators\AvatarValidator;
 use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Foundation\Application;
 use Intervention\Image\ImageManager;
+use Psr\Http\Message\UploadedFileInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
-use Nyholm\Psr7\UploadedFile;
 
 class UploadAvatar
 {
     use AssertPermissionTrait;
 
-    protected $app;
+    /**
+     * @var int
+     */
+    public $userId;
 
-    protected $validator;
+    /**
+     * @var UploadedFileInterface
+     */
+    public $avatar;
 
+    /**
+     * @var User
+     */
+    public $actor;
+
+    /**
+     * @var UserRepository
+     */
     protected $users;
 
-    protected $upload_file;
+    /**
+     * @var AvatarUploader
+     */
+    protected $uploader;
 
-    protected $avatarUploader;
+    /**
+     * @var AvatarValidator
+     */
+    protected $validator;
 
-    protected $settings;
-
-    protected $actor;
-
-    protected $id;
-
-    public function __construct(User $actor, $id, UploadedFile $upload_file)
+    /**
+     * @param int $userId The ID of the user to upload the avatar for.
+     * @param UploadedFileInterface $avatar The avatar file to upload.
+     * @param User $actor The user performing the action.
+     */
+    public function __construct($userId, UploadedFileInterface $avatar, User $actor)
     {
+        $this->userId = $userId;
+        $this->avatar = $avatar;
         $this->actor = $actor;
-        $this->id = $id;
-        $this->upload_file = $upload_file;
     }
 
     /**
-     * @param Application $app
      * @param UserRepository $users
+     * @param AvatarUploader $uploader
      * @param AvatarValidator $validator
-     * @param AvatarUploader $avatarUploader
-     * @param SettingsRepository $settings
-     * @return mixed
+     * @return User|mixed
      * @throws PermissionDeniedException
      * @throws UploadException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function handle(Application $app, UserRepository $users, AvatarValidator $validator, AvatarUploader $avatarUploader, SettingsRepository $settings)
+    public function handle(UserRepository $users, AvatarUploader $uploader, AvatarValidator $validator)
     {
-        $this->app = $app;
         $this->users = $users;
+        $this->uploader = $uploader;
         $this->validator = $validator;
-        $this->avatarUploader = $avatarUploader;
-        $this->settings = $settings;
 
         return $this();
     }
 
     /**
      * @return mixed
-     * @throws UploadException
      * @throws PermissionDeniedException
+     * @throws UploadException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function __invoke()
     {
-        $user = $this->users->findOrFail($this->id);
+        $user = $this->users->findOrFail($this->userId);
 
         if ($this->actor->id !== $user->id) {
             $this->assertCan($this->actor, 'edit', $user);
         }
 
-        $ext = pathinfo($this->upload_file->getClientFilename(), PATHINFO_EXTENSION);
-        $ext ? $ext = ".$ext" : '';
-        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'avatar') . $ext;
+        $ext = pathinfo($this->avatar->getClientFilename(), PATHINFO_EXTENSION);
+        $ext = $ext ? ".$ext" : '';
 
-        $this->upload_file->moveTo($tmpFile);
+        $tmpFile = tempnam(storage_path('/tmp'), 'avatar');
+        $tmpFileWithExt = $tmpFile . $ext;
+
+        $this->avatar->moveTo($tmpFileWithExt);
 
         try {
             $file = new SymfonyUploadedFile(
-                $tmpFile,
-                $this->upload_file->getClientFilename(),
-                $this->upload_file->getClientMediaType(),
-                $this->upload_file->getError(),
+                $tmpFileWithExt,
+                $this->avatar->getClientFilename(),
+                $this->avatar->getClientMediaType(),
+                $this->avatar->getError(),
                 true
             );
 
             $this->validator->valid(['avatar' => $file]);
 
-            $image = (new ImageManager())->make($tmpFile);
+            $image = (new ImageManager())->make($tmpFileWithExt);
 
             // 压缩头像 100 * 100
             $image->resize(100, 100, function ($constraint) {
                 $constraint->upsize();          // 避免文件变大
             })->save();
 
-            $this->avatarUploader->upload($user, $image);
+            $this->uploader->upload($user, $image);
 
-            $user->avatar_at = Carbon::now()->toDateTimeString();
+            $user->avatar_at = Carbon::now();
 
             $user->save();
         } finally {
             @unlink($tmpFile);
+            @unlink($tmpFileWithExt);
         }
 
         return $user;

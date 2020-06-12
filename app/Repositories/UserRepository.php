@@ -30,7 +30,7 @@ class UserRepository extends AbstractRepository
      *
      * @param int $id
      * @param User $actor
-     * @return Builder|\Illuminate\Database\Eloquent\Model
+     * @return Builder|\Illuminate\Database\Eloquent\Model|User
      *
      * @throws ModelNotFoundException
      */
