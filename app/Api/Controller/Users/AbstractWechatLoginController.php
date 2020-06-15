@@ -16,6 +16,8 @@ use App\Traits\RequestContainerTrait;
 
 abstract class AbstractWechatLoginController implements RequestHandlerInterface
 {
+    use RequestContainerTrait;
+
     protected $socialite;
 
     public $type;
