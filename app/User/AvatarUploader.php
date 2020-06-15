@@ -68,6 +68,7 @@ class AvatarUploader
         // 判断是否开启云储存
         if ($this->settings->get('qcloud_cos', 'qcloud')) {
             $user->changeAvatar('cos://' . $this->avatarPath);
+            $this->avatarPath = 'public/avatar/' . $this->avatarPath; // 云目录
         } else {
             $user->changeAvatar($this->avatarPath);
         }
