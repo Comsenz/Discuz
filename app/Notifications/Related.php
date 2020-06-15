@@ -89,8 +89,12 @@ class Related extends System
          */
         if ($this->post->reply_post_id) {
             $build['post_content'] = $result['content'];
-            $build['reply_post_id'] = $this->post->reply_post_id;
             $build['post_created_at'] = $this->post->formatDate('created_at');
+            // 回复的楼中楼数据
+            $build['reply_post_id'] = $this->post->reply_post_id;
+            $build['reply_post_user_id'] = $this->post->replyPost->user_id;
+            $build['reply_post_content'] = $this->post->replyPost->formatContent();
+            $build['reply_post_created_at'] = $this->post->replyPost->formatDate('created_at');
         } else {
             /**
              * 长文点赞通知内容为标题
@@ -100,13 +104,15 @@ class Related extends System
             // 不是长文没有标题则使用首贴内容
             $firstContent = $result['first_content'];
 
-            $build['thread_id'] = $this->post->thread->id;
-            $build['thread_username'] = $this->post->thread->user->username;
-            $build['thread_title'] = $firstContent;
-            $build['thread_created_at'] = $this->post->thread->formatDate('created_at');
             $build['post_content'] = $content == $firstContent ? '' : $content ;
             $build['post_created_at'] = $this->post->formatDate('created_at');
         }
+
+        // 主题数据
+        $build['thread_id'] = $this->post->thread->id;
+        $build['thread_username'] = $this->post->thread->user->username;
+        $build['thread_title'] = $firstContent ?? $result['first_content'];
+        $build['thread_created_at'] = $this->post->thread->formatDate('created_at');
     }
 
     /**
