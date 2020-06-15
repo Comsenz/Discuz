@@ -82,21 +82,23 @@ class Related extends System
      */
     public function build(&$build)
     {
+        $result = $this->post->getSummaryContent(Post::NOTICE_LENGTH);
+
         /**
          * 判断是否是楼中楼的回复
          */
         if ($this->post->reply_post_id) {
-            $build['post_content'] = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['content'];
+            $build['post_content'] = $result['content'];
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['post_created_at'] = $this->post->formatDate('created_at');
         } else {
             /**
              * 长文点赞通知内容为标题
              */
-            $content = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['content'];
+            $content = $result['content'];
 
             // 不是长文没有标题则使用首贴内容
-            $firstContent = $this->post->getSummaryContent(Post::NOTICE_LENGTH)['first_content'];
+            $firstContent = $result['first_content'];
 
             $build['thread_id'] = $this->post->thread->id;
             $build['thread_username'] = $this->post->thread->user->username;
