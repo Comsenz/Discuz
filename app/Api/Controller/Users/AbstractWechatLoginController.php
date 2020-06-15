@@ -32,7 +32,7 @@ abstract class AbstractWechatLoginController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->setRequest($request);
+        $this->setSiteRequest($request);
 
         $request = $request->withAttribute('session', new SessionToken());
         $this->socialite->setRequest($request);
