@@ -46,7 +46,7 @@ class UserRepository implements UserRepositoryInterface
     {
         $user = $this->users->findByIdentification(compact('username'));
 
-        if (! $user) {
+        if (! $user && ! $user = $this->users->findByIdentification(['mobile'=>$username])) {
             throw new LoginFailedException;
         }
 
