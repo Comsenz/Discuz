@@ -265,7 +265,7 @@ class Post extends Model
         }
 
         $build['content'] = $content;
-        $build['first_content'] = $firstContent ?? $special->purify($this->thread->title);
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType());
 
         return $build;
     }
