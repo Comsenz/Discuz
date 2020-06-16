@@ -77,7 +77,7 @@ class ThreadSerializer extends AbstractSerializer
 
         if ($model->price > 0) {
             $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 is_paid
-            $attributes['is_paid'] = $model->is_paid;
+            $attributes['isPaid'] = $model->is_paid;
         }
 
         return $attributes;

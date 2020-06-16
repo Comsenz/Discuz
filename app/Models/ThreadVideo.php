@@ -9,6 +9,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Thread $thread
+ * @property Post $post
  */
 class ThreadVideo extends Model
 {
@@ -52,4 +54,24 @@ class ThreadVideo extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Define the relationship with the video's thread.
+     *
+     * @return BelongsTo
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
+    }
+
+    /**
+     * Define the relationship with the audio's post.
+     *
+     * @return BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

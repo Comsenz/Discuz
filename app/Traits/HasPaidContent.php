@@ -62,6 +62,7 @@ trait HasPaidContent
     {
         if (
             $post->is_first
+            && $post->thread
             && $post->thread->price > 0
             && ! $post->thread->is_paid
         ) {
@@ -89,7 +90,9 @@ trait HasPaidContent
     {
         if (
             $attachment->type === Attachment::TYPE_OF_IMAGE
+            && $attachment->post
             && $attachment->post->is_first
+            && $attachment->post->thread
             && $attachment->post->thread->type === Thread::TYPE_OF_IMAGE
             && $attachment->post->thread->price > 0
             && ! $attachment->post->thread->is_paid
@@ -112,6 +115,7 @@ trait HasPaidContent
     {
         if (
             $threadVideo->type === ThreadVideo::TYPE_OF_VIDEO
+            && $threadVideo->thread
             && $threadVideo->thread->type === Thread::TYPE_OF_VIDEO
             && $threadVideo->thread->price > 0
             && ! $threadVideo->thread->is_paid
