@@ -228,6 +228,9 @@ class PayOrder
                         break;
                     case Order::PAYMENT_TYPE_WECHAT_JS: //微信网页、公众号
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                        if (empty($this->actor->wechat->mp_openid)) {
+                            throw new TradeErrorException('missing_wechat_openid', 500);
+                        }
                         //获取用户openid
                         $extra                = [
                             'openid' => $this->actor->wechat->mp_openid,
@@ -236,6 +239,9 @@ class PayOrder
                     case Order::PAYMENT_TYPE_WECHAT_MINI: //小程序支付
                         $config['app_id']     = $this->setting->get('miniprogram_app_id', 'wx_miniprogram');//小程序openid
                         $pay_gateway          = GatewayConfig::WECAHT_PAY_JS;
+                        if (empty($this->actor->wechat->min_openid)) {
+                            throw new TradeErrorException('missing_wechat_openid', 500);
+                        }
                         //获取用户openid： min_openid
                         $extra                = [
                             'openid' => $this->actor->wechat->min_openid,
