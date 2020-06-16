@@ -8,12 +8,15 @@
 namespace App\Api\Serializer;
 
 use App\Models\Post;
+use App\Traits\HasPaidContent;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
 class BasicPostSerializer extends AbstractSerializer
 {
+    use HasPaidContent;
+
     /**
      * {@inheritdoc}
      */
@@ -39,6 +42,8 @@ class BasicPostSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
+        $this->paidContent($model);
+
         $gate = $this->gate->forUser($this->actor);
 
         $canEdit = $gate->allows('edit', $model);

@@ -99,61 +99,6 @@ class ResourceThreadController extends AbstractResourceController
 
         $this->assertCan($actor, 'viewPosts', $thread);
 
-        // 付费主题对未付费用户只展示部分内容
-        if ($thread->price > 0 && (in_array('firstPost', $include) || in_array('threadVideo', $include))) {
-            // 是否付费
-            if ($thread->user_id == $actor->id || $actor->isAdmin()) {
-                $paid = true;
-            } else {
-                $paid = Order::query()
-                    ->where('user_id', $actor->id)
-                    ->where('thread_id', $thread->id)
-                    ->where('status', Order::ORDER_STATUS_PAID)
-                    ->where('type', Order::ORDER_TYPE_THREAD)
-                    ->exists();
-            }
-
-            $thread->setAttribute('paid', $paid);
-
-            /**
-             * 详情内容处理
-             *
-             * 0. 普通帖子不能设为付费帖无需处理
-             * 1. 长文帖子未付费仅展示免费阅读部分
-             * 2. 视频帖子未付费仅展示封面
-             * 3. 图片帖子未付费仅展示高斯模糊图
-             */
-
-            if (in_array('firstPost', $include) && !$paid) {
-                switch ($thread->type) {
-                    // 帖子
-                    case 1:
-                        $thread->firstPost->content = Str::of($thread->firstPost->content)
-                                ->substr(0, $thread->free_words) . Post::SUMMARY_END_WITH;
-
-                        $thread->firstPost->setRelation('images', collect());
-                        $thread->firstPost->setRelation('attachments', collect());
-                        break;
-                    // 图片
-                    case 3:
-                        $thread->firstPost->load('images');
-
-                        $thread->firstPost->images->map(function (Attachment $image) {
-                            $image->setAttribute('blur', true);
-                        });
-                        break;
-                }
-            }
-
-            // 付费视频，未付费时，隐藏视频
-            if (in_array('threadVideo', $include) && $thread->type == 2 && !$paid) {
-                if ($thread->threadVideo) {
-                    $thread->threadVideo->file_id = '';
-                    $thread->threadVideo->media_url = '';
-                }
-            }
-        }
-
         // 更新浏览量
         $thread->timestamps = false;
         $thread->increment('view_count');

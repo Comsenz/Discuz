@@ -7,18 +7,25 @@
 
 namespace App\Api\Serializer;
 
+use App\Models\ThreadVideo;
 use App\Settings\SettingsRepository;
+use App\Traits\HasPaidContent;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Support\Str;
 
 class ThreadVideoSerializer extends AbstractSerializer
 {
+    use HasPaidContent;
+
     /**
      * {@inheritdoc}
      */
     protected $type = 'thread-video';
 
+    /**
+     * @var SettingsRepository
+     */
     protected $settings;
 
     public function __construct(SettingsRepository $settings)
@@ -29,9 +36,12 @@ class ThreadVideoSerializer extends AbstractSerializer
     /**
      * {@inheritdoc}
      *
+     * @param ThreadVideo $model
      */
     public function getDefaultAttributes($model)
     {
+        $this->paidContent($model);
+
         $attributes = [
             'user_id'        => $model->user_id,
             'thread_id'      => $model->thread_id,
