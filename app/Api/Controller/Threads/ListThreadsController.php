@@ -147,7 +147,7 @@ class ListThreadsController extends AbstractListController
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
 
-        Thread::setStateUser($actor);
+        Thread::setStateUser($actor, $threads);
 
         // 特殊关联：最新三条回复
         if (in_array('lastThreePosts', $include)) {
@@ -214,11 +214,6 @@ class ListThreadsController extends AbstractListController
                     }
                 }
             });
-        }
-
-        // 处理付费主题内容
-        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor, $include);
         }
 
         return $threads;
@@ -549,98 +544,6 @@ class ListThreadsController extends AbstractListController
 
         $threads->map(function (Thread $thread) use ($allRewardedUser, $limit, $relation) {
             $thread->setRelation($relation, $allRewardedUser->where('thread_id', $thread->id)->take($limit));
-        });
-
-        return $threads;
-    }
-
-    /**
-     * 付费主题对未付费用户只展示部分内容
-     *
-     * @param Collection $threads
-     * @param User $actor
-     * @param array $include
-     * @return Collection
-     */
-    protected function cutThreadContent(Collection $threads, User $actor, array $include)
-    {
-        // 需付费主题
-        $notFreeThreads = $threads->where('price', '>', 0)->pluck('id');
-
-        // 已付费主题
-        if ($notFreeThreads && !$actor->isAdmin()) {
-            $paidThreads = Order::query()
-                ->whereIn('thread_id', $notFreeThreads)
-                ->where('user_id', $actor->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->pluck('thread_id');
-        } else {
-            $paidThreads = $notFreeThreads;
-        }
-
-        // 主题内容处理
-        $threads->map(function (Thread $thread) use ($paidThreads, $actor, $include) {
-            // 付费主题，是否付费
-            if ($thread->price > 0) {
-                if ($thread->user_id == $actor->id || $paidThreads->contains($thread->id)) {
-                    $thread->setAttribute('paid', true);
-                } else {
-                    $thread->setAttribute('paid', false);
-                }
-            }
-
-            /**
-             * 列表内容处理
-             *
-             * 0. 普通帖子不能设为付费帖无需处理
-             * 1. 长文帖子无论如何不返回内容
-             * 2. 视频帖子未付费仅展示封面
-             * 3. 图片帖子未付费仅展示高斯模糊图
-             */
-
-            // 加载首贴时，处理内容
-            if (in_array('firstPost', $include)) {
-                // 长文帖子无论如何不返回内容，其他类型截取部分内容
-                if ($thread->type == 1) {
-                    $thread->firstPost->content = '';
-                } else {
-                    if (Str::of($thread->firstPost->content)->length() > Post::SUMMARY_LENGTH) {
-                        $thread->firstPost->content = Str::of($thread->firstPost->content)
-                            ->substr(0, Post::SUMMARY_LENGTH)
-                            ->finish(Post::SUMMARY_END_WITH);
-                    }
-                }
-
-                // 付费内容未付费处理
-                if ($thread->price > 0 && !$thread->getAttribute('paid')) {
-                    switch ($thread->type) {
-                        // 帖子
-                        case 1:
-                            $thread->firstPost->setRelation('images', collect());
-                            $thread->firstPost->setRelation('attachments', collect());
-                            break;
-                        // 图片
-                        case 3:
-                            $thread->firstPost->load('images');
-
-                            $thread->firstPost->images->map(function (Attachment $image) {
-                                $image->setAttribute('blur', true);
-                            });
-                            break;
-                    }
-                }
-            }
-
-            // 付费视频，未付费时，隐藏视频
-            if (in_array('threadVideo', $include)) {
-                if ($thread->price > 0 && $thread->type == 2 && !$thread->getAttribute('paid')) {
-                    if ($thread->threadVideo) {
-                        $thread->threadVideo->file_id = '';
-                        $thread->threadVideo->media_url = '';
-                    }
-                }
-            }
         });
 
         return $threads;

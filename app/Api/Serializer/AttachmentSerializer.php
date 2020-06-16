@@ -8,6 +8,7 @@
 namespace App\Api\Serializer;
 
 use App\Models\Attachment;
+use App\Traits\HasPaidContent;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
@@ -16,6 +17,8 @@ use Tobscure\JsonApi\Relationship;
 
 class AttachmentSerializer extends AbstractSerializer
 {
+    use HasPaidContent;
+
     /**
      * {@inheritdoc}
      */
@@ -41,15 +44,7 @@ class AttachmentSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
-        // 是否返回模糊图
-        $blur = (bool) $model->getAttribute('blur');
-
-        if ($blur) {
-            $parts = explode('.', $model->attachment);
-            $parts[0] = md5($parts[0]);
-
-            $model->attachment = implode('_blur.', $parts);
-        }
+        $this->paidContent($model);
 
         $path = Str::finish($model->file_path, '/') . $model->attachment;
 
@@ -78,7 +73,7 @@ class AttachmentSerializer extends AbstractSerializer
 
         // 图片缩略图地址
         if ($model->type == Attachment::TYPE_OF_IMAGE) {
-            if ($blur) {
+            if ($model->getAttribute('blur')) {
                 $attributes['thumbUrl'] = $url;
             } else {
                 $attributes['thumbUrl'] = $model->is_remote

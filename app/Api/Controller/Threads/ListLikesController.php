@@ -60,13 +60,10 @@ class ListLikesController extends ListThreadsController
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
 
+        Thread::setStateUser($actor, $threads);
+
         // 加载其他关联
         $threads->loadMissing($include);
-
-        // 处理付费主题内容
-        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor, $include);
-        }
 
         return $threads;
     }

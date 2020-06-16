@@ -53,7 +53,7 @@ class ListFavoritesController extends ListThreadsController
             'pageCount' => ceil($this->threadCount / $limit),
         ]);
 
-        Thread::setStateUser($actor);
+        Thread::setStateUser($actor, $threads);
 
         // 特殊关联：最新三条回复
         if (in_array('lastThreePosts', $include)) {
@@ -74,11 +74,6 @@ class ListFavoritesController extends ListThreadsController
 
         // 加载其他关联
         $threads->loadMissing($include);
-
-        // 处理付费主题内容
-        if (in_array('firstPost', $include) || in_array('threadVideo', $include)) {
-            $threads = $this->cutThreadContent($threads, $actor, $include);
-        }
 
         return $threads;
     }

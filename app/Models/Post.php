@@ -14,9 +14,10 @@ use App\Formatter\Formatter;
 use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use DateTime;
-use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -45,7 +46,7 @@ use Illuminate\Support\Str;
  * @property bool $is_first
  * @property bool $is_comment
  * @property bool $is_approved
- * @property Attachment $images
+ * @property Collection $images
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
@@ -350,7 +351,7 @@ class Post extends Model
      */
     public function hide(User $actor, $options = [])
     {
-        if (!$this->deleted_at) {
+        if (! $this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 
