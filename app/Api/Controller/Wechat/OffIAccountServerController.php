@@ -12,19 +12,14 @@ use App\WechatMessageHandler\FileMessageHandler;
 use App\WechatMessageHandler\ImageMessageHandler;
 use App\WechatMessageHandler\LinkMessageHandler;
 use App\WechatMessageHandler\LocationMessageHandler;
-use App\WechatMessageHandler\ReplyMessageHandler;
 use App\WechatMessageHandler\TextMessageHandler;
 use App\WechatMessageHandler\VideoMessageHandler;
 use App\WechatMessageHandler\VoiceMessageHandler;
 use Discuz\Contracts\Setting\SettingsRepository;
-use Discuz\Http\DiscuzResponseFactory;
-use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use EasyWeChat\Factory;
-use EasyWeChat\Kernel\Messages\Text;
-use EasyWeChat\Kernel\Messages\Image;
 use EasyWeChat\Kernel\Messages\Message;
 
 /**

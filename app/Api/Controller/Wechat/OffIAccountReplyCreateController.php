@@ -15,7 +15,7 @@ use Tobscure\JsonApi\Document;
 use Illuminate\Validation\Factory as Validator;
 use Illuminate\Validation\ValidationException;
 
-class OffIAccountCreateReplyController extends AbstractCreateController
+class OffIAccountReplyCreateController extends AbstractCreateController
 {
     use AssertPermissionTrait;
 
@@ -63,7 +63,7 @@ class OffIAccountCreateReplyController extends AbstractCreateController
          */
         $build = array_merge($attributes, ['type' => $type]);
         $validatorInfo = $this->validator->make($build, [
-            'key_words' => 'required',
+            'keyword' => 'required',
             'type' => [
                 'in:0,1,2',
                 // 当0自动回复1消息回复 都只允许有一条数据

@@ -23,7 +23,7 @@ class OffIAccountReplySerializer extends AbstractSerializer
     {
         return [
             'name' => $model->name,
-            'key_words' => $model->key_words,
+            'keyword' => $model->keyword,
             'match_type' => $model->match_type,
             'reply_type' => $model->reply_type,
             'media_id' => $model->media_id,
@@ -36,6 +36,6 @@ class OffIAccountReplySerializer extends AbstractSerializer
 
     public function getId($model)
     {
-        return 1;
+        return $model->id;
     }
 }

@@ -7,7 +7,6 @@
 
 namespace App\Api\Controller\Wechat;
 
-use App\Exceptions\TranslatorException;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
