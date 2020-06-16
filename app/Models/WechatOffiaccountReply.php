@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  *
  * @property string $name
- * @property string $key_words
+ * @property string $keyword
  * @property string $media_id
  * @property int $match_type
  * @property int $reply_type
@@ -36,7 +36,7 @@ class WechatOffiaccountReply extends Model
 
     protected $fillable = [
         'name',
-        'key_words',
+        'keyword',
         'match_type',
         'reply_type',
         'media_id',

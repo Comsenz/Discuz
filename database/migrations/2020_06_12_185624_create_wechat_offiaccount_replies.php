@@ -15,7 +15,7 @@ class CreateWechatOffiaccountReplies extends Migration
         $this->schema()->create('wechat_offiaccount_replies', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->default('')->comment('规则名');
-            $table->string('key_words')->default('')->comment('关键词');
+            $table->string('keyword')->default('')->comment('关键词');
             $table->unsignedTinyInteger('match_type')->default(0)->comment('匹配类型:0全匹配1半匹配');
             $table->unsignedTinyInteger('reply_type')->default(0)->comment('消息回复类型:1文本2图片3语音4视频5音乐6图文');
             $table->string('media_id')->default('')->comment('素材ID');
@@ -27,7 +27,7 @@ class CreateWechatOffiaccountReplies extends Migration
             $table->dateTime('updated_at')->comment('更新时间');
             $table->dateTime('deleted_at')->nullable()->comment('删除时间');
 
-            $table->index('key_words', 'idx_key_words');
+            $table->index('keyword', 'idx_keyword');
         });
     }
 
