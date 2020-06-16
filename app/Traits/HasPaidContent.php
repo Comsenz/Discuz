@@ -37,12 +37,12 @@ trait HasPaidContent
         /** @var User $actor */
         $actor = $this->actor;
 
-        Thread::setStateUser($actor);
-
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
         if ($actor->id === $model->user_id || $actor->isAdmin()) {
             return;
         }
+
+        Thread::setStateUser($actor);
 
         if ($model instanceof Post) {
             $this->summaryOfContent($model);
