@@ -92,7 +92,6 @@ $route->get('/oauth/wechat/qy/user', 'wechat.qy.user', ApiController\Users\Wecha
 $route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::class);
 $route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | Users

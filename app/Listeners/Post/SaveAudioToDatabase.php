@@ -38,7 +38,7 @@ class SaveAudioToDatabase
     {
         $post = $event->post;
         $actor = $event->actor;
-        $data = $this->request->getParsedBody()->get('data', []);
+        $data = Arr::get($this->request->getParsedBody(), 'data', []);
 
         $fileId = Arr::get($data, 'attributes.file_id', '');
 

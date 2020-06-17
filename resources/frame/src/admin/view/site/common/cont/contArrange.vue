@@ -18,8 +18,15 @@
                   {{$attrs.replyBy}}
                 </a>
               </p>
+              <p v-if="$attrs.establish" ref="userName">
+                <a :href="'/home-page/' + $attrs.userId" style="color: #333333;" target="_blank">
+                  {{$attrs.establish}}
+                </a>
+              </p>
               <span v-if="$attrs.author">发布于</span>
+              <span v-if="$attrs.establish">创建于</span>
               <span v-if="$attrs.replyBy">回复主题</span>
+              <p v-if="$attrs.time">{{$attrs.time}}</p>
               <p v-if="$attrs.theme">{{$attrs.theme}}</p>
               <p v-if="$attrs.themeName" ref="themeName" :class="$attrs.themeName?'themeName':''" :style=themeNameStyle >
                 {{$attrs.themeName}}
@@ -55,6 +62,16 @@
             <div v-if="$attrs.deleTime" class=" rt-box">
               <span>删除时间：</span>
               <span>{{$attrs.deleTime}}</span>
+            </div>
+
+            <div v-if="$attrs.numbertopic" class="cont-arrange__rt-main-header__release-time rt-box">
+              <span>主题数：</span>
+              <span>{{$attrs.numbertopic}}</span>
+            </div>
+
+            <div v-if="$attrs.heatNumber" class="cont-arrange__rt-main-header__release-time rt-box">
+              <span>热度数：</span>
+              <span>{{$attrs.heatNumber}}</span>
             </div>
 
             <slot name="header"></slot>

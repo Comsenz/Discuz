@@ -49,22 +49,24 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $data = Arr::get($request->getParsedBody(), 'data', []);
+        $data = $request->getQueryParams();
 
-        $path = Arr::get($data, 'attributes.path', 'path/to/page');
-        $width = Arr::get($data, 'attributes.width', '');
-        $colorR = Arr::get($data, 'attributes.color.r', '');
-        $colorG = Arr::get($data, 'color.g', '');
-        $colorB = Arr::get($data, 'color.b', '');
+        $path = Arr::get($data, 'path', '');
+        $width = Arr::get($data, 'width', '');
+        $colorR = Arr::get($data, 'r', '');
+        $colorG = Arr::get($data, 'g', '');
+        $colorB = Arr::get($data, 'b', '');
 
         $config = [
-            'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            'secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            // 'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
+            // 'secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            'app_id' => 'wx7f778478f6f501fa',
+            'secret' => 'cf8dcd9a0ee1208a972bd7e200b6dcb2',
         ];
 
         $app = $this->easyWechat::miniProgram($config);
 
-        return $app->app_code->get($path, [
+        $response = $app->app_code->get($path, [
             'width' => $width,
             'line_color' => [
                 'r' => $colorR,
@@ -72,5 +74,9 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
                 'b' => $colorB,
             ],
         ]);
+
+        $response = $response->withoutHeader('Content-disposition');
+
+        return $response;
     }
 }
