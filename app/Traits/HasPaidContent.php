@@ -69,7 +69,7 @@ trait HasPaidContent
             $content = Str::of($post->content);
 
             // 截取内容
-            if ($content->length() > Post::SUMMARY_LENGTH) {
+            if ($content->length() > $post->thread->free_words) {
                 $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
             }
 
