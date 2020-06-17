@@ -66,7 +66,7 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
 
         $app = $this->easyWechat::miniProgram($config);
 
-        return $app->app_code->get($path, [
+        $response = $app->app_code->get($path, [
             'width' => $width,
             'line_color' => [
                 'r' => $colorR,
@@ -74,5 +74,9 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
                 'b' => $colorB,
             ],
         ]);
+
+        $response = $response->withoutHeader('Content-disposition');
+
+        return $response;
     }
 }
