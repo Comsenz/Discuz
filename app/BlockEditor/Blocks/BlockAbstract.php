@@ -13,7 +13,7 @@ abstract class BlockAbstract
 
     public $type;//block类型
 
-    public $data;
+    protected $data;//块数据
 
     public static function getInstance()
     {
