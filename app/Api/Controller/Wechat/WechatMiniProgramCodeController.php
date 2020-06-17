@@ -58,8 +58,10 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
         $colorB = Arr::get($data, 'color.b', '');
 
         $config = [
-            'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            'secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            // 'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
+            // 'secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
+            'app_id' => 'wx7f778478f6f501fa',
+            'secret' => 'cf8dcd9a0ee1208a972bd7e200b6dcb2',
         ];
 
         $app = $this->easyWechat::miniProgram($config);
