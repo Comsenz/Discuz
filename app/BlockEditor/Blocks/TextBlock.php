@@ -6,6 +6,8 @@
  */
 namespace App\BlockEditor\Blocks;
 
+use App\Censor\Censor;
+
 class TextBlock extends BlockAbstract
 {
 
@@ -13,10 +15,15 @@ class TextBlock extends BlockAbstract
 
     public function parse()
     {
-        // TODO: Implement parse() method.
-        return [
-            'replace' => ['sss' => 'ss']
-        ];
-    }
+        // 敏感词校验
+        /** @var Censor $censor */
+        $censor = app()->make(Censor::class);
+        $this->data['value'] = $censor->checkText($this->data['value']);
 
+        //解析内容blockquote span
+        /**  html  */
+        $this->data['value'] = htmlspecialchars($this->data['value']);
+
+        return $this->data;
+    }
 }

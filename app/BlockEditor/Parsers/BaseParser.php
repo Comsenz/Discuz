@@ -11,12 +11,13 @@ class BaseParser
 {
     private static $data;
 
-    public static function setData($data) {
+    public static function setData($data)
+    {
         self::$data = $data;
     }
 
-    public static function getData() {
+    public static function getData()
+    {
         self::$data;
     }
-
 }
