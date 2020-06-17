@@ -49,13 +49,13 @@ class WechatMiniProgramCodeController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $data = Arr::get($request->getParsedBody(), 'data', []);
+        $data = $request->getQueryParams();
 
-        $path = Arr::get($data, 'attributes.path', 'path/to/page');
-        $width = Arr::get($data, 'attributes.width', '');
-        $colorR = Arr::get($data, 'attributes.color.r', '');
-        $colorG = Arr::get($data, 'color.g', '');
-        $colorB = Arr::get($data, 'color.b', '');
+        $path = Arr::get($data, 'path', '');
+        $width = Arr::get($data, 'width', '');
+        $colorR = Arr::get($data, 'r', '');
+        $colorG = Arr::get($data, 'g', '');
+        $colorB = Arr::get($data, 'b', '');
 
         $config = [
             // 'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
