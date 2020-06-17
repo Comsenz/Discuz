@@ -50,7 +50,7 @@ class ThreadValidator extends AbstractValidator
     protected function getRules()
     {
         $rules = [
-            'title' => 'required|min:3|max:80',
+            'title' => 'required|max:80',
             'price' => [
                 'sometimes',
                 'regex:/^(0|[1-9]\d{0,5})(\.\d{1,2})?$/',   // decimal 10,2

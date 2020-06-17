@@ -17,21 +17,35 @@ use Tobscure\JsonApi\Document;
 
 class UploadAvatarController extends AbstractResourceController
 {
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = UserSerializer::class;
 
+    /**
+     * @var Dispatcher
+     */
     protected $bus;
 
+    /**
+     * @param Dispatcher $bus
+     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
         $id = Arr::get($request->getQueryParams(), 'id');
         $file = Arr::get($request->getUploadedFiles(), 'avatar');
+        $actor = $request->getAttribute('actor');
 
-        return $this->bus->dispatch(new UploadAvatar($actor, $id, $file));
+        return $this->bus->dispatch(
+            new UploadAvatar($id, $file, $actor)
+        );
     }
 }

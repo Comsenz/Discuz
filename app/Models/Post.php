@@ -13,9 +13,11 @@ use App\Events\Post\Revised;
 use App\Formatter\Formatter;
 use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
-use Discuz\Foundation\EventGeneratorTrait;
+use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
+use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -44,7 +46,7 @@ use Illuminate\Support\Str;
  * @property bool $is_first
  * @property bool $is_comment
  * @property bool $is_approved
- * @property Attachment $images
+ * @property Collection $images
  * @property Thread $thread
  * @property User $user
  * @property User $replyUser
@@ -53,7 +55,6 @@ use Illuminate\Support\Str;
  * @property Post replyPost
  * @property string parsedContent
  * @package App\Models
- * @method static where($column, $fields)
  */
 class Post extends Model
 {
@@ -120,6 +121,17 @@ class Post extends Model
      * @var MarkdownFormatter
      */
     protected static $markdownFormatter;
+
+    /**
+     * datetime 时间转换
+     *
+     * @param $timeAt
+     * @return string
+     */
+    public function formatDate($timeAt)
+    {
+        return $this->{$timeAt}->format(DateTime::RFC3339);
+    }
 
     /**
      * 帖子摘要
@@ -253,7 +265,7 @@ class Post extends Model
         }
 
         $build['content'] = $content;
-        $build['first_content'] = $firstContent ?? $special->purify($this->thread->title);
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType());
 
         return $build;
     }
@@ -339,7 +351,7 @@ class Post extends Model
      */
     public function hide(User $actor, $options = [])
     {
-        if (!$this->deleted_at) {
+        if (! $this->deleted_at) {
             $this->deleted_at = Carbon::now();
             $this->deleted_user_id = $actor->id;
 

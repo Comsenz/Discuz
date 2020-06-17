@@ -92,7 +92,6 @@ $route->get('/oauth/wechat/qy/user', 'wechat.qy.user', ApiController\Users\Wecha
 $route->get('/oauth/qq', 'qq.login', ApiController\Users\QQLoginController::class);
 $route->get('/oauth/qq/user', 'qq.user', ApiController\Users\QQUserController::class);
 
-
 /*
 |--------------------------------------------------------------------------
 | Users
@@ -321,6 +320,8 @@ $route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\Reso
 */
 
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
+$route->get('/topics/{id}', 'topics.resource', ApiController\Topic\ResourceTopicController::class);
+$route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicController::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -336,9 +337,15 @@ $route->get('/system/command', 'system.command', ApiController\System\CallComman
 |--------------------------------------------------------------------------
 */
 
+$route->get('/offiaccount/server', 'offiaccount.server', ApiController\Wechat\OffIAccountServerController::class);
+$route->post('/offiaccount/server', 'offiaccount.server', ApiController\Wechat\OffIAccountServerController::class);
 $route->get('/offiaccount/jssdk', 'offiaccount.jssdk', ApiController\Wechat\OffIAccountJSSDKController::class);
 $route->get('/offiaccount/asset', 'offiaccount.asset.list', ApiController\Wechat\OffIAccountAssetListController::class);
 $route->get('/offiaccount/asset/{media_id}', 'offiaccount.asset.resource', ApiController\Wechat\OffIAccountAssetResourceController::class);
 $route->post('/offiaccount/asset', 'offiaccount.asset.upload', ApiController\Wechat\OffIAccountAssetUploadController::class);
 $route->patch('/offiaccount/asset', 'offiaccount.asset.update', ApiController\Wechat\OffIAccountAssetUpdateController::class);
 $route->delete('/offiaccount/asset/{media_id}', 'offiaccount.asset.delete', ApiController\Wechat\OffIAccountAssetDeleteController::class);
+$route->get('/offiaccount/reply', 'offiaccount.reply.list', ApiController\Wechat\OffIAccountReplyListController::class);
+$route->post('/offiaccount/reply', 'offiaccount.reply.create', ApiController\Wechat\OffIAccountReplyCreateController::class);
+$route->get('/offiaccount/reply/{id}', 'offiaccount.reply.resource', ApiController\Wechat\OffIAccountReplyResourceController::class);
+$route->delete('/offiaccount/reply/{id}', 'offiaccount.reply.delete', ApiController\Wechat\OffIAccountReplyDeleteController::class);

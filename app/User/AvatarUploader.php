@@ -67,9 +67,8 @@ class AvatarUploader
 
         // 判断是否开启云储存
         if ($this->settings->get('qcloud_cos', 'qcloud')) {
+            $user->changeAvatar('cos://' . $this->avatarPath);
             $this->avatarPath = 'public/avatar/' . $this->avatarPath; // 云目录
-            $avatarUrl = $this->filesystem->url($this->avatarPath);
-            $user->changeAvatar($avatarUrl);
         } else {
             $user->changeAvatar($this->avatarPath);
         }
@@ -104,17 +103,17 @@ class AvatarUploader
     public function deleteFile(User $user, $avatarPath)
     {
         // 判断是否是cos地址
-        if (substr_count($avatarPath, 'http') > 0) {
+        if (strpos($avatarPath, '://') === false) {
+            if ($this->filesystem->has($avatarPath)) {
+                $this->filesystem->delete($avatarPath);
+            }
+        } else {
             $cosPath = 'public/avatar/' . $user->id . '.png';
             // 判断是否关闭了腾讯COS
             if ($this->settings->get('qcloud_cos', 'qcloud')) {
                 $this->filesystem->delete($cosPath);
             } else {
                 $this->app->make(Factory::class)->disk('avatar_cos')->delete($cosPath);
-            }
-        } else {
-            if ($this->filesystem->has($avatarPath)) {
-                $this->filesystem->delete($avatarPath);
             }
         }
     }

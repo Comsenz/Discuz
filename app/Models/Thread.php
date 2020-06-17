@@ -10,6 +10,7 @@ namespace App\Models;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
 use Carbon\Carbon;
+use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
@@ -27,6 +28,7 @@ use Illuminate\Support\Stringable;
  * @property int $user_id
  * @property int $last_posted_user_id
  * @property int $category_id
+ * @property int $type
  * @property string $title
  * @property float $price
  * @property int $free_words
@@ -39,17 +41,16 @@ use Illuminate\Support\Stringable;
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
  * @property int $deleted_user_id
- * @property bool $is_approved
+ * @property int $is_approved
+ * @property bool|null $is_paid
  * @property bool $is_sticky
  * @property bool $is_essence
- * @property int $type
  * @property Post $firstPost
  * @property Topic|Collection $topic
  * @property User $user
  * @property Category $category
  * @property threadVideo $threadVideo
  * @package App\Models
- * @method static where($column, $fields)
  */
 class Thread extends Model
 {
@@ -101,6 +102,24 @@ class Thread extends Model
      * @var User
      */
     protected static $stateUser;
+
+    /**
+     * 主题下已付费用户列表，以用户 id 为键，以主题 id 的数组为值。
+     *
+     * @var Collection
+     */
+    protected static $userHasPaidThreads;
+
+    /**
+     * datetime 时间转换
+     *
+     * @param $timeAt
+     * @return string
+     */
+    public function formatDate($timeAt)
+    {
+        return $this->{$timeAt}->format(DateTime::RFC3339);
+    }
 
     /**
      * Hide the thread.
@@ -359,45 +378,6 @@ class Thread extends Model
         return $this->belongsToMany(User::class)->withPivot('created_at');
     }
 
-    /**
-     * Define the relationship with the thread's favorite state for a particular user.
-     *
-     * @param User|null $user
-     * @return HasOne
-     */
-    public function favoriteState(User $user = null)
-    {
-        $user = $user ?: static::$stateUser;
-
-        return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
-    }
-
-    /**
-     * Define the relationship with the thread's paid state for a particular user.
-     *
-     * @param User|null $user
-     * @return bool|null
-     */
-    public function paidState(User $user = null)
-    {
-        $user = $user ?: static::$stateUser;
-
-        if (!$user->exists || $this->price <= 0) {
-            return null;
-        }
-
-        if ($this->user_id == $user->id || $user->isAdmin()) {
-            return true;
-        } else {
-            return Order::query()
-                ->where('user_id', $user->id)
-                ->where('thread_id', $this->id)
-                ->where('status', Order::ORDER_STATUS_PAID)
-                ->where('type', Order::ORDER_TYPE_THREAD)
-                ->exists();
-        }
-    }
-
     public function threadVideo()
     {
         return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
@@ -418,9 +398,84 @@ class Thread extends Model
      * Set the user for which the state relationship should be loaded.
      *
      * @param User $user
+     * @param Collection $threads
      */
-    public static function setStateUser(User $user)
+    public static function setStateUser(User $user, Collection $threads = null)
     {
         static::$stateUser = $user;
+
+        // 当前用户对于传入主题列表是否付费
+        if ($threads) {
+            $orders = Order::query()
+                ->whereIn('thread_id', $threads->pluck('id'))
+                ->where('user_id', $user->id)
+                ->where('status', Order::ORDER_STATUS_PAID)
+                ->where('type', Order::ORDER_TYPE_THREAD)
+                ->pluck('thread_id');
+
+            static::$userHasPaidThreads[$user->id] = $threads->keyBy('id')
+                ->map(function ($thread) use ($orders) {
+                    return $orders->contains($thread->id);
+                });
+        }
+    }
+
+    /**
+     * Define the relationship with the thread's favorite state for a particular user.
+     *
+     * @param User|null $user
+     * @return HasOne
+     */
+    public function favoriteState(User $user = null)
+    {
+        $user = $user ?: static::$stateUser;
+
+        return $this->hasOne(ThreadUser::class)->where('user_id', $user ? $user->id : null);
+    }
+
+    /**
+     * 主题对于某用户是否付费
+     *
+     * @return bool|null
+     */
+    public function getIsPaidAttribute()
+    {
+        $user = static::$stateUser;
+
+        // 必须有用户
+        if (! $user) {
+            throw new \RuntimeException('You must set the user with setStateUser()');
+        }
+
+        // 非付费主题返回 null
+        if ($this->price <= 0) {
+            return null;
+        }
+
+        // 用户不存在返回 false
+        if (! $user->exists) {
+            return false;
+        }
+
+        // 作者本人 或 管理员 返回 true
+        if ($this->user_id === $user->id || $user->isAdmin()) {
+            return true;
+        }
+
+        // 是否已缓存付费状态（为避免 N + 1 问题）
+        if (array_key_exists($this->id, static::$userHasPaidThreads[$user->id] ?? [])) {
+            return static::$userHasPaidThreads[$user->id][$this->id];
+        }
+
+        $isPaid = Order::query()
+            ->where('user_id', $user->id)
+            ->where('thread_id', $this->id)
+            ->where('status', Order::ORDER_STATUS_PAID)
+            ->where('type', Order::ORDER_TYPE_THREAD)
+            ->exists();
+
+        static::$userHasPaidThreads[$user->id][$this->id] = $isPaid;
+
+        return $isPaid;
     }
 }

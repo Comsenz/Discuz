@@ -18,7 +18,7 @@
       </CardRow>
     </Card>
 
-    <Card header="关闭小程序视频功能：" v-if="type === 'wx_miniprogram'">
+    <Card header="开启小程序视频功能：" v-if="type === 'wx_miniprogram'">
       <CardRow description="开启后，在小程序前台将展示视频内容，并且可进行视频内容的发布。开启前，请务必确保您的小程序已有相应的视频播放类目的权限。具体类目权限请">
         <el-switch
           v-model="closeVideo"
@@ -30,7 +30,7 @@
           <a :href="typeCopywriting[type].url" target="_blank">点此查看</a>
         </template>
       </CardRow>
-    </Card> 
+    </Card>
 
     <Card header="服务器地址(URL)：" v-if="type === 'wx_offiaccount'">
       <CardRow :description="typeCopywriting[type].serverUrl">

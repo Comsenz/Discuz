@@ -53,6 +53,7 @@ class Setting extends Model
         'qcloud_captcha_app_id',
         'qcloud_captcha_secret_key',
         'qcloud_vod_url_key',
+        'offiaccount_server_config_token',
     ];
 
     /**

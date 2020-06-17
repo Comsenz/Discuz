@@ -12,9 +12,12 @@ use Discuz\Contracts\Socialite\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use App\Traits\RequestContainerTrait;
 
 abstract class AbstractWechatLoginController implements RequestHandlerInterface
 {
+    use RequestContainerTrait;
+
     protected $socialite;
 
     public $type;
@@ -29,6 +32,8 @@ abstract class AbstractWechatLoginController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $this->setSiteRequest($request);
+
         $request = $request->withAttribute('session', new SessionToken());
         $this->socialite->setRequest($request);
         return $this->socialite->driver($this->type)->redirect();

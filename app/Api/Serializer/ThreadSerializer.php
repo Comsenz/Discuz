@@ -63,6 +63,7 @@ class ThreadSerializer extends AbstractSerializer
             'canEssence'        => $gate->allows('essence', $model),
             'canDelete'         => $gate->allows('delete', $model),
             'canHide'           => $gate->allows('hide', $model),
+            'canEdit'           => $gate->allows('edit', $model),
         ];
 
         if ($model->deleted_at) {
@@ -75,7 +76,8 @@ class ThreadSerializer extends AbstractSerializer
         Thread::setStateUser($this->actor);
 
         if ($model->price > 0) {
-            $attributes['paid'] = $model->getAttribute('paid') ?? $model->paidState();
+            $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 is_paid
+            $attributes['isPaid'] = $model->is_paid;
         }
 
         return $attributes;

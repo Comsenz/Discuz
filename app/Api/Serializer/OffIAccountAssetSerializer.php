@@ -9,7 +9,7 @@ namespace App\Api\Serializer;
 
 use Discuz\Api\Serializer\AbstractSerializer;
 
-class WechatAssetSerializer extends AbstractSerializer
+class OffIAccountAssetSerializer extends AbstractSerializer
 {
     protected $type = 'offiaccount_asset';
 

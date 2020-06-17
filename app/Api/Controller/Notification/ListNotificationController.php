@@ -142,7 +142,7 @@ class ListNotificationController extends AbstractListController
                     if (!empty($threads->get($threadID))) {
                         $thread = $threads->get($threadID);
                         $threadUser = $thread->user;
-                        $item->thread_created_at = $thread->created_at;
+                        $item->thread_created_at = $thread->formatDate('created_at');
                         if (!empty($threadUser)) {
                             $item->thread_username = $threadUser->username;
                             $item->thread_user_groups = $threadUser->groups->pluck('name')->join(',');

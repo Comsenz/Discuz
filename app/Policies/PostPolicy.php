@@ -106,8 +106,7 @@ class PostPolicy extends AbstractPolicy
      */
     public function edit(User $actor, Post $post)
     {
-        // 作者本人，或管理员才可编辑
-        if ($post->user_id == $actor->id || $actor->isAdmin()) {
+        if ($actor->hasPermission('editOwnThreadOrPost') && ($post->user_id == $actor->id || $actor->isAdmin())) {
             return true;
         }
     }
@@ -119,6 +118,8 @@ class PostPolicy extends AbstractPolicy
      */
     public function hide(User $actor, Post $post)
     {
-        return $this->edit($actor, $post);
+        if ($actor->hasPermission('hideOwnThreadOrPost') && ($post->user_id == $actor->id || $actor->isAdmin())) {
+            return true;
+        }
     }
 }

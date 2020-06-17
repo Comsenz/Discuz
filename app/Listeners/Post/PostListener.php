@@ -29,6 +29,7 @@ use App\Notifications\Replied;
 use App\Notifications\System;
 use App\Traits\PostNoticesTrait;
 use Discuz\Api\Events\Serializing;
+use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -36,6 +37,7 @@ use s9e\TextFormatter\Utils;
 
 class PostListener
 {
+    use AssertPermissionTrait;
     use PostNoticesTrait;
 
     public function subscribe(Dispatcher $events)
@@ -141,6 +143,7 @@ class PostListener
      * 绑定附件 & 刷新被回复数
      *
      * @param Saved $event
+     * @throws PermissionDeniedException
      */
     public function whenPostWasSaved(Saved $event)
     {
@@ -149,6 +152,10 @@ class PostListener
 
         // 绑定附件
         if ($attachments = Arr::get($event->data, 'relationships.attachments.data')) {
+            if (! $post->wasRecentlyCreated) {
+                $this->assertCan($actor, 'edit', $post);
+            }
+
             $ids = array_column($attachments, 'id');
 
             // 判断附件是否合法
@@ -161,7 +168,8 @@ class PostListener
                 $post->is_approved = Post::UNAPPROVED;
             }
 
-            Attachment::where('user_id', $actor->id)
+            Attachment::query()
+                ->where('user_id', $actor->id)
                 ->where('type_id', 0)
                 ->whereIn('id', $ids)
                 ->update(['type_id' => $post->id]);

@@ -7,7 +7,7 @@
 
 namespace App\Api\Controller\Wechat;
 
-use App\Api\Serializer\WechatAssetSerializer;
+use App\Api\Serializer\OffIAccountAssetSerializer;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -34,7 +34,7 @@ class OffIAccountAssetListController extends AbstractCreateController
     /**
      * @var string
      */
-    public $serializer = WechatAssetSerializer::class;
+    public $serializer = OffIAccountAssetSerializer::class;
 
     /**
      * @var Dispatcher

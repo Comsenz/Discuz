@@ -242,7 +242,6 @@ export default {
         this.$message.warning("上传头像图片大小不能超过 2MB!");
         return isLt2M;
       }
-      this.multfileImg = file;
       return isJPG && isLt2M;
     },
     // 上传图片

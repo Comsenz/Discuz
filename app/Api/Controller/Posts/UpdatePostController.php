@@ -30,7 +30,6 @@ class UpdatePostController extends AbstractResourceController
     public $include = [
         'user',
         'thread',
-        'images',
         'lastThreeComments',
         'lastThreeComments.user',
         'lastThreeComments.replyUser',

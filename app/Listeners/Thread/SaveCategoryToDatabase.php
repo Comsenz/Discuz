@@ -32,7 +32,12 @@ class SaveCategoryToDatabase
 
         // 如果主题尚未分类 或 接收到的分类与当前分类不一致，就修改分类
         if (! $thread->category_id || $categoryId && $thread->category_id != $categoryId) {
+            if ($thread->exists) {
+                $this->assertCan($actor, 'edit', $thread);
+            }
+
             // 如果接收到可用的分类，则设置分类
+            /** @var Category $category */
             if ($category = Category::query()->where('id', $categoryId)->first()) {
                 $thread->category_id = $category->id;
             } else {

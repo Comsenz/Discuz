@@ -12,14 +12,14 @@ class AlterAddForeignKeyToUserFollow extends Migration
      */
     public function up()
     {
-        $this->schema()->getConnection()->statement('SET FOREIGN_KEY_CHECKS = 0');
+        $this->schema()->disableForeignKeyConstraints();
         $this->schema()->table('user_follow', function (Blueprint $table) {
             $table->unsignedBigInteger('from_user_id')->change();
             $table->unsignedBigInteger('to_user_id')->change();
             $table->foreign('from_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('to_user_id')->references('id')->on('users')->onDelete('cascade');
         });
-        $this->schema()->getConnection()->statement('SET FOREIGN_KEY_CHECKS = 1');
+        $this->schema()->enableForeignKeyConstraints();
     }
 
     /**

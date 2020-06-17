@@ -57,10 +57,10 @@ abstract class AbstractQQUserController extends AbstractResourceController
 
         $this->validation->make([
             'access_token' => Arr::get($request->getQueryParams(), 'access_token'),
-//            'sessionId' => Arr::get($request->getQueryParams(), 'sessionId'),
+            'sessionId' => Arr::get($request->getQueryParams(), 'sessionId'),
         ], [
             'access_token' => 'required',
-//            'sessionId' => 'required'
+            'sessionId' => 'required'
         ])->validate();
         $this->socialite->setRequest($request);
         $driver = $this->socialite->driver($this->getDriver());
