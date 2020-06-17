@@ -97,8 +97,10 @@ export default {
         numberOfRepliesMin: '',   //被回复数最小
         numberOfRepliesMax: '',   //被回复数最大
         essentialTheme: '',       //精华主题类型
-        topType: ''               //置顶主题类型
+        topType: '',              //置顶主题类型
+        topicId: 0,               //主题话题ID
       },
+      topic: null,  // 话题
       topicType: [
         {
           name: '全部',
@@ -402,6 +404,7 @@ export default {
           'filter[postCountLt]': searchData.numberOfRepliesMax,
           'filter[isEssence]': searchData.essentialTheme,
           'filter[isSticky]': searchData.topType,
+          'filter[topicId]': searchData.topicId,
           'sort': '-createdAt'
         }
       }).then(res => {
@@ -458,6 +461,18 @@ export default {
   },
 
   created() {
+    if (this.$route.query && this.$route.query.id) {
+      this.searchData.topicId = this.$route.query.id;
+
+      this.appFetch({
+        url: 'topics',
+        method: 'get',
+        splice:'/' + this.$route.query.id
+      }).then(res => {
+        this.topic = res.readdata._data;
+      });
+    }
+
     this.currentPag = Number(webDb.getLItem('currentPag')) || 1;
     this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
     this.getCategories();
