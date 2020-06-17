@@ -25,14 +25,23 @@ class BlocksParser
     public function parse()
     {
         $blocks = $this->data->get('blocks');
+        $blocks = $this->parseBlocks($blocks);
+        return collect([$this->data, ['blocks' => $blocks]])->collapse();
+    }
+
+    private function parseBlocks($blocks)
+    {
         if (!empty($blocks)) {
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
-                $parser = self::getBlockInstance($type);
+                $parser = $this->getBlockInstance($type);
+                if (isset($value['data']['child'])) {//子blocks解析
+                    $value['data']['child'] = $this->parseBlocks($value['data']['child']);
+                }
                 $value['data'] += (array) $parser->parse();
             }
         }
-        return collect([$this->data, ['blocks' => $blocks]])->collapse() ;
+        return $blocks;
     }
 
     private function getBlockInstance($type)
