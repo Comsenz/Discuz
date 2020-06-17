@@ -7,6 +7,7 @@
 namespace App\BlockEditor\Blocks;
 
 use App\Censor\Censor;
+use Discuz\SpecialChar\SpecialCharServer;
 
 class TextBlock extends BlockAbstract
 {
@@ -21,8 +22,10 @@ class TextBlock extends BlockAbstract
         $this->data['value'] = $censor->checkText($this->data['value']);
 
         //解析内容blockquote span
-        /**  html  */
-        $this->data['value'] = htmlspecialchars($this->data['value']);
+        /**  @var SpecialCharServer $special  */
+        $special = app()->make(SpecialCharServer::class);
+        $special->html = 'span[class],blockquote[class]';
+        $this->data['value'] = $special->purify($this->data['value']);
 
         return $this->data;
     }
