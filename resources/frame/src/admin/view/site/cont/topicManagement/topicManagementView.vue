@@ -84,14 +84,13 @@
             ></el-checkbox>
           </div>
 
-          <a
+          <p
             slot="longText"
             class="cont-manage-theme__table-long-text"
-            :href="'/details/' + items._data.id"
-            target="_blank"
+            @click="$router.push({path:'/admin/cont-manage/topic', query: {id: items._data.id}})"
           >
             {{`#${items._data.content}#`}}
-          </a>
+          </p>
         </ContArrange>
 
         <el-image-viewer v-if="showViewer" :on-close="closeViewer" :url-list="url" />

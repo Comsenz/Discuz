@@ -52,7 +52,6 @@ export default {
               attribution: "全局"
             }
           },
-
           "worth-mentioning-set": {
             comLoad: function (resolve) {
               require([
@@ -101,7 +100,6 @@ export default {
               attribution: "全局"
             }
           },
-
           "pay-set": {
             comLoad: function (resolve) {
               require(["../view/site/global/paySet/paySetView"], resolve);
@@ -122,7 +120,6 @@ export default {
               attribution: "全局"
             }
           },
-
           "wx-notice": {
             comLoad: function (resolve) {
               require(["../view/site/global/notice/WxNoticeSetView"], resolve);
@@ -134,7 +131,6 @@ export default {
               alias: "微信通知"
             }
           },
-
           "system-notice": {
             comLoad: function (resolve) {
               require([
@@ -148,7 +144,6 @@ export default {
               alias: "系统通知"
             }
           },
-
           "notice-configure": {
             comLoad: function (resolve) {
               require([
@@ -161,7 +156,6 @@ export default {
               attribution: "全局"
             }
           },
-
           "tencent-cloud-set": {
             comLoad: function (resolve) {
               require([
@@ -234,7 +228,6 @@ export default {
               attribution: "全局"
             }
           },
-
           "annex-set": {
             comLoad: function (resolve) {
               require(["../view/site/global/annexSetView"], resolve);
@@ -289,7 +282,6 @@ export default {
               attribution:'全局'
             }
           },
-
           'role-manage-set':{
             comLoad: function (resolve) {
               require(['../view/site/global/roleManagesSet/roleManageSetView'], resolve)
@@ -322,7 +314,6 @@ export default {
               attribution: "内容"
             }
           },
-
           "cont-class-configure": {
             comLoad: function (resolve) {
               require(["../view/site/cont/contClassConfigureView"], resolve);
@@ -333,8 +324,20 @@ export default {
               attribution: "内容"
             }
           },
-
           "cont-manage": {
+            comLoad: function (resolve) {
+              require([
+                "../view/site/cont/contManages/contManageView"
+              ], resolve);
+            },
+            metaInfo: {
+              title: "内容管理",
+              name: "contManage",
+              attribution: "内容",
+              alias: "最新主题"
+            }
+          },
+          "cont-manage/topic": {
             comLoad: function (resolve) {
               require([
                 "../view/site/cont/contManages/contManageView"
@@ -373,7 +376,6 @@ export default {
               alias: "搜索"
             }
           },
-
           "cont-review": {
             comLoad: function (resolve) {
               require([
@@ -400,7 +402,6 @@ export default {
               alias: "回复审核"
             }
           },
-
           "recycle-bin": {
             comLoad: function (resolve) {
               require(["../view/site/cont/recycleBin/recycleBinView"], resolve);
@@ -433,9 +434,9 @@ export default {
             metaInfo: {
               title: "话题管理",
               name: "topicManagement",
+              attribution: "内容"
             }
           },
-
           //财务分类
           "fund-details": {
             comLoad: function (resolve) {
@@ -493,7 +494,6 @@ export default {
               attribution: "财务"
             }
           },
-
           //用户
           "user-manage": {
             comLoad: function (resolve) {
@@ -537,7 +537,6 @@ export default {
               attribution: "用户"
             }
           },
-
           "user-rol": {
             comLoad: function (resolve) {
               require(["../view/site/user/userRol/userRolView"], resolve);
@@ -583,7 +582,6 @@ export default {
       }
     }
   },
-
   /**
    * 后端路由守卫
    * @param  {[type]}   to   [description]
@@ -630,7 +628,6 @@ export default {
         });
     }
   },
-
   getUserInfo(id) {
     return appFetch({
       url: "users",
