@@ -9,8 +9,10 @@ namespace App\BlockEditor;
 
 use Illuminate\Support\Collection;
 use App\BlockEditor\Exception\TestException;
+use App\BlockEditor\Blocks\BlockAbstract;
 use App\BlockEditor\Blocks\TextBlock;
 use App\BlockEditor\Blocks\PayBlock;
+use App\BlockEditor\Blocks\ImageBlock;
 use Illuminate\Support\Arr;
 
 class BlocksParser
@@ -37,15 +39,15 @@ class BlocksParser
                 if (isset($value['data']['child'])) {//子blocks解析
                     $value['data']['child'] = $this->parseBlocks($value['data']['child']);
                 }
+                $parser->setData($value['data']);
                 $value['data'] += (array) $parser->parse();
             }
         }
         return $blocks;
     }
 
-    private function getBlockInstance($type)
+    private function getBlockInstance($type): BlockAbstract
     {
-        $parser = '';
         switch ($type) {
             case 'text':
                 $parser = TextBlock::getInstance();
@@ -53,8 +55,11 @@ class BlocksParser
             case 'pay':
                 $parser = PayBlock::getInstance();
                 break;
+            case 'image':
+                $parser = ImageBlock::getInstance();
+                break;
             default:
-                throw new TestException($type . ' not exist', 500);
+                throw new TestException($type . ' not exist');
                 break;
         }
         return $parser;

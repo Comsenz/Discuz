@@ -13,6 +13,8 @@ abstract class BlockAbstract
 
     public $type;//block类型
 
+    public $data;
+
     public static function getInstance()
     {
 
@@ -23,6 +25,10 @@ abstract class BlockAbstract
         return static::$instance;
     }
 
-    abstract protected function parse();
+    abstract public function parse();
 
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 }

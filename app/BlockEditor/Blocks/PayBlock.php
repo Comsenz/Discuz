@@ -6,7 +6,6 @@
  */
 namespace App\BlockEditor\Blocks;
 
-
 class PayBlock extends BlockAbstract
 {
 

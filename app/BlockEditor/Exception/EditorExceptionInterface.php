@@ -6,7 +6,6 @@
 
 namespace App\BlockEditor\Exception;
 
-use Exception;
 /**
  * Invalid argument exception
  */
