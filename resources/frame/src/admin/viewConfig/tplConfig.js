@@ -437,6 +437,16 @@ export default {
               alias: "回复"
             }
           },
+          //话题管理
+          "topic-management": {
+            comLoad: function(resolve) {
+              require(["../view/site/cont/topicManagement/topicManagementView"], resolve);
+            },
+            metaInfo: {
+              title: "话题管理",
+              name: "topicManagement",
+            }
+          },
 
           //财务分类
           "fund-details": {

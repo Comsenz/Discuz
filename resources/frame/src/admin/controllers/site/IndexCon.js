@@ -213,6 +213,12 @@ export default {
                   icon: "iconhuishouzhan"
                 }
               ]
+            },
+            {
+              id: 4,
+              title: "话题管理",
+              name: "topicManagement",
+              icon: "iconhuishouzhan",
             }
           ]
         },
@@ -403,6 +409,7 @@ export default {
         case "contClass":
           this.$router.push({ path: "/admin/cont-class" });
           break;
+
         case "contManage":
           this.sideSubmenu = this.navList[3].submenu[1].submenu;
           this.sideSubmenuSelect = this.navList[3].submenu[1].submenu[0].title;
@@ -417,6 +424,9 @@ export default {
           this.sideSubmenu = this.navList[3].submenu[3].submenu;
           this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
           this.$router.push({ path: "/admin/recycle-bin" });
+          break;
+        case "topicManagement":
+          this.$router.push({ path: "/admin/topic-management" });
           break;
 
         case "fundDetails":
