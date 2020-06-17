@@ -25,13 +25,11 @@ class BlocksParser
     public function parse()
     {
         $blocks = $this->data->get('blocks');
-        $data = [];
         if (!empty($blocks)) {
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = self::getBlockInstance($type);
-                $value['data'] = $value['data'] + (array) $parser->parse();
-                array_push($data, $value);
+                $value['data'] += (array) $parser->parse();
             }
         }
         return collect([$this->data, ['blocks' => $blocks]])->collapse() ;
@@ -49,6 +47,7 @@ class BlocksParser
                 break;
             default:
                 throw new TestException($type . ' not exist', 500);
+                break;
         }
         return $parser;
     }

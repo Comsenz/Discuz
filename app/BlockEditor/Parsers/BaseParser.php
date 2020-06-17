@@ -9,14 +9,14 @@ namespace App\BlockEditor\Parsers;
 
 class BaseParser
 {
-    private $data;
+    private static $data;
 
-    public function setData($data) {
-        $this->data = $data;
+    public static function setData($data) {
+        self::$data = $data;
     }
 
-    public function getData() {
-        return $this->data;
+    public static function getData() {
+        self::$data;
     }
 
 }
