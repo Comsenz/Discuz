@@ -34,7 +34,7 @@ class BlocksParser
                 array_push($data, $value);
             }
         }
-        return $this->data;
+        return collect([$this->data, ['blocks' => $blocks]])->collapse() ;
     }
 
     private function getBlockInstance($type)
