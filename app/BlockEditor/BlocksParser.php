@@ -10,6 +10,7 @@ namespace App\BlockEditor;
 use Illuminate\Support\Collection;
 use App\BlockEditor\Exception\TestException;
 use App\BlockEditor\Blocks\TextBlock;
+use App\BlockEditor\Blocks\PayBlock;
 use Illuminate\Support\Arr;
 
 class BlocksParser
@@ -26,25 +27,30 @@ class BlocksParser
         $blocks = $this->data->get('blocks');
         $data = [];
         if (!empty($blocks)) {
-            foreach ($blocks as $key => $value) {
+            foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = self::getBlockInstance($type);
-                $value['data'] = $value['data'] + $parser->parse();
+                $value['data'] = $value['data'] + (array) $parser->parse();
                 array_push($data, $value);
             }
         }
-        return $data;
+        return $this->data;
     }
 
     private function getBlockInstance($type)
     {
+        $parser = '';
         switch ($type) {
             case 'text':
-                return TextBlock::getInstance();
+                $parser = TextBlock::getInstance();
+                break;
+            case 'pay':
+                $parser = PayBlock::getInstance();
                 break;
             default:
                 throw new TestException($type . ' not exist', 500);
         }
+        return $parser;
     }
 }
 

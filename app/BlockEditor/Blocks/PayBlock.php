@@ -6,16 +6,17 @@
  */
 namespace App\BlockEditor\Blocks;
 
-class TextBlock extends BlockAbstract
+
+class PayBlock extends BlockAbstract
 {
 
-    public $type = 'text';
+    public $type = 'pay';
 
     public function parse()
     {
         // TODO: Implement parse() method.
         return [
-            'replace' => ['sss' => 'ss']
+            'd'=> 's'
         ];
     }
 
