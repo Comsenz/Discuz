@@ -24,8 +24,7 @@ class BlocksParser
 
     public function parse()
     {
-        $blocks = $this->data->get('blocks');
-        $blocks = $this->parseBlocks($blocks);
+        $blocks = $this->parseBlocks($this->data->get('blocks'));
         return collect([$this->data, ['blocks' => $blocks]])->collapse();
     }
 
