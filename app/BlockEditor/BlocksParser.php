@@ -8,7 +8,7 @@
 namespace App\BlockEditor;
 
 use Illuminate\Support\Collection;
-use App\BlockEditor\Exception\TestException;
+use App\BlockEditor\Exception\BlockInvalidException;
 use App\BlockEditor\Blocks\BlockAbstract;
 use App\BlockEditor\Blocks\TextBlock;
 use App\BlockEditor\Blocks\PayBlock;
@@ -59,7 +59,7 @@ class BlocksParser
                 $parser = ImageBlock::getInstance();
                 break;
             default:
-                throw new TestException($type . ' not exist');
+                throw new BlockInvalidException($type . ' block is invalid');
                 break;
         }
         return $parser;

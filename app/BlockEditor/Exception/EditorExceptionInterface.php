@@ -7,7 +7,8 @@
 namespace App\BlockEditor\Exception;
 
 /**
- * Invalid argument exception
+ * Interface EditorExceptionInterface
+ * @package App\BlockEditor\Exception
  */
 interface EditorExceptionInterface
 {
