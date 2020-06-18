@@ -53,19 +53,22 @@ class SpecialChar implements SpecialCharServer
      * 返回过滤后的字符串
      *
      * @param $string
+     * @param null $config
      * @return mixed
      */
-    public function purify($string)
+    public function purify($string, $config = null)
     {
-        $this->filtration();
+        if ($config) {
+            $this->$config();
+        } else {
+            $this->filtration();
+        }
 
         // 使用配置生成过滤用的对象
         $purifier = new HTMLPurifier($this->config);
 
         // 过滤字符串
-        $cleanHtml = $purifier->purify($string);
-
-        return $cleanHtml;
+        return $purifier->purify($string);
     }
 
     /**
@@ -84,6 +87,19 @@ class SpecialChar implements SpecialCharServer
 
         $this->config->set('Cache.SerializerPath', storage_path('cache'));
     }
+
+    public function textBlockConfig()
+    {
+        $this->setConfig();
+        //设置白名单
+        $this->config->set('HTML.Allowed', 'span[class],blockquote[class]');
+        //替换成html实体码
+        $this->config->set('Core.EscapeInvalidTags', true);
+
+        $this->config->set('Cache.SerializerPath', storage_path('cache'));
+    }
+
+
 
     public function setConfig()
     {

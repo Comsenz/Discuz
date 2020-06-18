@@ -21,11 +21,10 @@ class TextBlock extends BlockAbstract
         $censor = app()->make(Censor::class);
         $this->data['value'] = $censor->checkText($this->data['value']);
 
-        //解析内容blockquote span
+        //转义、过滤内容
         /**  @var SpecialCharServer $special  */
         $special = app()->make(SpecialCharServer::class);
-        $special->html = 'span[class],blockquote[class]';
-        $this->data['value'] = $special->purify($this->data['value']);
+        $this->data['value'] = $special->purify($this->data['value'], 'textBlockConfig');
 
         return $this->data;
     }
