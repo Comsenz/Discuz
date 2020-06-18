@@ -109,7 +109,7 @@ class ListNotificationController extends AbstractListController
         $query->skip($offset)->take($limit);
 
         // type markAsRead
-        $actor->unreadNotifications()->where('type', $type)->get()->markAsRead();
+        $actor->unreadNotifications()->whereIn('type', explode(',', $type))->get()->markAsRead();
 
         $data = $query->get();
 
