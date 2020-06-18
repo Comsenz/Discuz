@@ -34,8 +34,8 @@ module.exports = {
   },
   output: {
     path: resolvePublic(),
-    filename: "static/js/[name].js?v=" + VERSION,
-    chunkFilename: "static/js/[id].[chunkhash].js",
+    filename: "static-admin/js/[name].js?v=" + VERSION,
+    chunkFilename: "static-admin/js/[id].[chunkhash].js",
     publicPath: "/"
   },
   optimization: {
@@ -125,7 +125,7 @@ module.exports = {
         loader: "url-loader",
         options: {
           limit: 10000,
-          name: "static/fonts/[name].[hash:7].[ext]"
+          name: "static-admin/fonts/[name].[hash:7].[ext]"
         }
       },
       {
@@ -133,7 +133,7 @@ module.exports = {
         loader: "url-loader",
         options: {
           limit: 10000,
-          name: "static/img/[name].[hash:7].[ext]"
+          name: "static-admin/img/[name].[hash:7].[ext]"
         }
       }
     ]
@@ -146,8 +146,8 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: "static/css/[name].css?v=" + VERSION,
-      chunkFilename: "static/css/[id].[contenthash].css"
+      filename: "static-admin/css/[name].css?v=" + VERSION,
+      chunkFilename: "static-admin/css/[id].[contenthash].css"
     }),
     new HtmlWebpackPlugin({
       filename: "admin.html",
