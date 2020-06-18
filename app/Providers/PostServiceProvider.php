@@ -33,9 +33,6 @@ class PostServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        Post::setFormatter($this->app->make(Formatter::class));
-        Post::setMarkdownFormatter($this->app->make(MarkdownFormatter::class));
-
         // 事件处理类
         $events = $this->app->make('events');
 

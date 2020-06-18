@@ -52,7 +52,6 @@ class BasicPostSerializer extends AbstractSerializer
             'replyUserId'       => $model->reply_user_id,
             'summary'           => $model->summary,
             'content'           => $model->content,
-            'contentHtml'       => $model->formatContent(),
             'replyCount'        => (int) $model->reply_count,
             'likeCount'         => (int) $model->like_count,
             'longitude'         => $model->longitude,

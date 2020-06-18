@@ -10,8 +10,6 @@ namespace App\Models;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
-use App\Formatter\Formatter;
-use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -109,20 +107,6 @@ class Post extends Model
     protected static $stateUser;
 
     /**
-     * The text formatter instance.
-     *
-     * @var Formatter
-     */
-    protected static $formatter;
-
-    /**
-     * The markdown text formatter instance.
-     *
-     * @var MarkdownFormatter
-     */
-    protected static $markdownFormatter;
-
-    /**
      * datetime 时间转换
      *
      * @param $timeAt
@@ -140,68 +124,23 @@ class Post extends Model
      */
     public function getSummaryAttribute()
     {
-        $content = Str::of($this->content ?: '');
+        /** @var Collection $blocks */
+        $content = $this->attributes['content'];
+        $listBlock = $content->get('listBlock', 0);
+        $blocks = $content->get('blocks');
+        $summary = $blocks[$listBlock]['data']['value'];
 
-        if ($content->length() > self::SUMMARY_LENGTH) {
-            $content = static::$formatter->parse(
-                $content->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)
-            );
-            $content = static::$formatter->render($content);
-        } else {
-            $content = $this->formatContent();
+        if (strlen($summary) > self::SUMMARY_LENGTH) {
+            /** @var SpecialCharServer $special */
+            $special = app()->make(SpecialCharServer::class);
+            $summary = (string) Str::of($special->purify($summary, 'textBlockConfig'))
+                ->substr(0, self::SUMMARY_LENGTH)
+                ->finish(self::SUMMARY_END_WITH);
         }
 
-        return str_replace('<br>', '', $content);
+        return $summary;
     }
 
-    /**
-     * Unparse the parsed content.
-     *
-     * @param string $value
-     * @return string
-     */
-    public function getContentAttribute($value)
-    {
-        if ($this->is_first && $this->thread->type == 1) {
-            return static::$markdownFormatter->unparse($value);
-        } else {
-            return static::$formatter->unparse($value);
-        }
-    }
-
-    /**
-     * Get the parsed/raw content.
-     *
-     * @return string
-     */
-    public function getParsedContentAttribute()
-    {
-        return $this->attributes['content'];
-    }
-
-    /**
-     * Parse the content before it is saved to the database.
-     *
-     * @param string $value
-     */
-    public function setContentAttribute($value)
-    {
-        if ($this->is_first && ($this->thread->type == 1)) {
-            $this->attributes['content'] = strlen($value) ? static::$markdownFormatter->parse($value, $this) : null;
-        } else {
-            $this->attributes['content'] = strlen($value) ? static::$formatter->parse($value, $this) : null;
-        }
-    }
-
-    /**
-     * Set the parsed/raw content.
-     *
-     * @param string $value
-     */
-    public function setParsedContentAttribute($value)
-    {
-        $this->attributes['content'] = $value;
-    }
 
     /**
      * Get the content rendered as HTML.
@@ -210,15 +149,12 @@ class Post extends Model
      */
     public function formatContent()
     {
-        $content = $this->attributes['content'] ?: '';
+        /** @var Collection $blocks */
+        $content = $this->attributes['content'];
+        $listBlock = $content->get('listBlock', 0);
+        $blocks = $content->get('blocks');
 
-        if ($this->is_first && ($this->thread->type == 1)) {
-            $content = $content ? static::$markdownFormatter->render($content) : '';
-        } else {
-            $content = $content ? static::$formatter->render($content) : '';
-        }
-
-        return $content;
+        return $blocks[$listBlock]['data']['value'];
     }
 
     /**
@@ -533,45 +469,5 @@ class Post extends Model
     public static function setStateUser(User $user)
     {
         static::$stateUser = $user;
-    }
-
-    /**
-     * Get the text formatter instance.
-     *
-     * @return Formatter
-     */
-    public static function getFormatter()
-    {
-        return static::$formatter;
-    }
-
-    /**
-     * Get the markdown text formatter instance.
-     *
-     * @return MarkdownFormatter
-     */
-    public static function getMarkdownFormatter()
-    {
-        return static::$markdownFormatter;
-    }
-
-    /**
-     * Set the text formatter instance.
-     *
-     * @param Formatter $formatter
-     */
-    public static function setFormatter(Formatter $formatter)
-    {
-        static::$formatter = $formatter;
-    }
-
-    /**
-     * Set the markdown text formatter instance.
-     *
-     * @param MarkdownFormatter $formatter
-     */
-    public static function setMarkdownFormatter(MarkdownFormatter $formatter)
-    {
-        static::$markdownFormatter = $formatter;
     }
 }
