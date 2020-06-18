@@ -195,8 +195,8 @@
   appjs.async = true;
   var appcss = document.createElement("link");
   appcss.rel = "stylesheet";
-  appjs.src = "/static/js/admin.js?v<%= version %>"
-  appcss.href = "/static/css/admin.css?v<%= version %>"
+  appjs.src = "/static-admin/js/admin.js?v<%= version %>"
+  appcss.href = "/static-admin/css/admin.css?v<%= version %>"
   document.getElementsByTagName("head")[0].appendChild(appcss);
   document.getElementsByTagName("body")[0].appendChild(appjs);
   window.sessionStorage.setItem('__TD_td_channel', window.location.hostname.replace(/\./g, "_"));
@@ -205,18 +205,6 @@
   tdjs.async = true;
   tdjs.src = "https://jic.talkingdata.com/app/h5/v1?appid=86697ADBE1104854B72523C08FFB688B";
   document.getElementsByTagName("body")[0].appendChild(tdjs);
-  //vconsole 调试
-  if (window.location.href.indexOf("debug=1") !== -1) {
-    var jsScript = document.createElement("script");
-    jsScript.src = "/v2/static/js/common/vconsole.min.js";
-    jsScript.type = "text/javascript";
-    jsScript.async = false;
-    jsScript.onload = function () {
-      var vConsole = new VConsole();
-    };
-
-    document.getElementsByTagName("body")[0].appendChild(jsScript);
-  }
 </script>
 
 </html>

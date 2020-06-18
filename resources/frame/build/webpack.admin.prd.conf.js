@@ -166,7 +166,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: resolve("static"),
-        to: "static",
+        to: "static-admin",
         ignore: [".*"]
       }
     ]),
