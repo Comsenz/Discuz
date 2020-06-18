@@ -17,6 +17,7 @@ class ImageBlock extends BlockAbstract
 
     public function parse()
     {
+        $this->data['value'] = array_unique($this->data['value']);
         $actor = app('request')->getAttribute('actor');
         $result = AttatchParser::checkAttachExist($this->data['value'], $actor, Attachment::TYPE_OF_IMAGE);
         if (!$result) {
