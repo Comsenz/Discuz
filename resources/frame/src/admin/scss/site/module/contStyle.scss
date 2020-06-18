@@ -49,7 +49,7 @@
     margin-top: 15PX;
 
     &_condition {
-      flex: 1;
+      // flex: 1;
       display: flex;
       align-items: center;
 
@@ -79,6 +79,10 @@
     }
     &_condition-rh {
       flex: 2;
+    }
+    &_condition-rhs {
+      width: 300PX;
+      // flex: 1;
     }
 
     .cont-manage-header_condition-mid {

@@ -4,18 +4,18 @@
       <div class="cont-manage-header_top condition-box">
         <div class="cont-manage-header_condition cont-manage-header_condition-lf">
           <span class="cont-manage-header_condition-title">作者：</span>
-          <el-input size="medium" placeholder="搜索作者" v-model="searchData.topicAuthor" clearable></el-input>
+          <el-input size="medium" v-model="searchData.topicAuthor" clearable></el-input>
         </div>
-        <div class="cont-manage-header_condition cont-manage-header_condition-rh">
+        <div class="cont-manage-header_condition cont-manage-header_condition-rhs">
           <span class="cont-manage-header_condition-title">话题：</span>
-          <el-input size="medium" placeholder="搜索话题" v-model="searchData.topicContent" clearable></el-input>
+          <el-input size="medium" v-model="searchData.topicContent" clearable></el-input>
         </div>
 
         <div class="cont-manage-header_condition cont-manage-header_condition-mid">
-          <span class="cont-manage-header_condition-titles">创建时间范围：</span>
-          <el-input size="medium" placeholder="大于" v-model="searchData.viewedTimesMin" clearable></el-input>
+          <span class="cont-manage-header_condition-titles" style="padding-left: 20px">创建时间范围：</span>
+          <el-input size="medium" v-model="searchData.viewedTimesMin" clearable></el-input>
           <div class="spacing">-</div>
-          <el-input size="medium" placeholder="小于" v-model="searchData.viewedTimesMax" clearable></el-input>
+          <el-input size="medium" v-model="searchData.viewedTimesMax" clearable></el-input>
         </div>
       </div>
 
@@ -24,31 +24,27 @@
           <span class="cont-manage-header_condition-titles">主题数介于：</span>
           <el-input
             size="medium"
-            placeholder="大于"
             v-model="searchData.numberOfRepliesMin"
             clearable
           ></el-input>
           <div class="spacing">-</div>
           <el-input
             size="medium"
-            placeholder="小于"
             v-model="searchData.numberOfRepliesMax"
             clearable
           ></el-input>
         </div>
 
         <div class="cont-manage-header_condition">
-          <span class="cont-manage-header_condition-titles">热度数介于：</span>
+          <span class="cont-manage-header_condition-titles" style="padding-left: 20px">热度数介于：</span>
           <el-input
             size="medium"
-            placeholder="大于"
             v-model="searchData.numberOfRepliesMin"
             clearable
           ></el-input>
           <div class="spacing">-</div>
           <el-input
             size="medium"
-            placeholder="小于"
             v-model="searchData.numberOfRepliesMax"
             clearable
           ></el-input>
@@ -87,6 +83,7 @@
           <p
             slot="longText"
             class="cont-manage-theme__table-long-text"
+            style="cursor: pointer;"
             @click="$router.push({path:'/admin/cont-manage/topic', query: {id: items._data.id}})"
           >
             {{`#${items._data.content}#`}}

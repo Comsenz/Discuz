@@ -64,12 +64,12 @@
               <span>{{$attrs.deleTime}}</span>
             </div>
 
-            <div v-if="$attrs.numbertopic" class="cont-arrange__rt-main-header__release-time rt-box">
+            <div v-if="$attrs.numbertopic >= 0" class="cont-arrange__rt-main-header__release-time rt-box">
               <span>主题数：</span>
               <span>{{$attrs.numbertopic}}</span>
             </div>
 
-            <div v-if="$attrs.heatNumber" class="cont-arrange__rt-main-header__release-time rt-box">
+            <div v-if="$attrs.heatNumber >= 0" class="cont-arrange__rt-main-header__release-time rt-box">
               <span>热度数：</span>
               <span>{{$attrs.heatNumber}}</span>
             </div>

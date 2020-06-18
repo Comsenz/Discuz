@@ -56,7 +56,7 @@ export default {
       url: [],
 
       searchData: {
-        topicContent: '0',         //话题内容
+        topicContent: '',         //话题内容
         pageSelect: '10',         //每页显示数
         topicAuthor: '',          //主题作者
         themeKeyWords: '',        //主题关键词
@@ -165,7 +165,7 @@ export default {
           this.$message.error(res.errors[0].code);
         } else {
           this.themeList = res.readdata;
-          this.total = res.meta.threadCount;
+          this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
 
           this.themeListAll = [];
@@ -177,15 +177,17 @@ export default {
       })
     },
     // 全部删除
-    deleteClick(id) {
+    deleteClick() {
+      const ids = this.checkedTheme.join(',');
       this.appFetch({
         url: 'deleteTopics',
         method: 'delete',
-        splice: '/' + id,
+        splice: '/' + ids,
         }).then(res => {
-            
+          this.$message.success("删除成功");
+          this.getThemeList();
         })
-    }
+    },
   },
 
   beforeDestroy() {
@@ -207,7 +209,6 @@ export default {
   created() {
     this.currentPag = Number(webDb.getLItem('currentPag')) || 1;
     this.getThemeList(Number(webDb.getLItem('currentPag')) || 1);
-    this.getCategories();
   },
 
   components: {
