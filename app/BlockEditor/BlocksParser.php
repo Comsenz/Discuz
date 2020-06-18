@@ -19,9 +19,16 @@ class BlocksParser
 {
     public $data;
 
-    public function __construct(Collection $data)
+    /**
+     * @var
+     * 需要解析的block类型
+     */
+    public $parse_types;
+
+    public function __construct(Collection $data, $parse_types = [])
     {
         $this->data = $data;
+        $this->parse_types = $parse_types;
     }
 
     public function parse()
@@ -38,6 +45,12 @@ class BlocksParser
                 $parser = $this->getBlockInstance($type);
                 if (isset($value['data']['child'])) {//子blocks解析
                     $value['data']['child'] = $this->parseBlocks($value['data']['child']);
+                }
+                if (!empty($this->parse_types)) {
+                    //如果填写了$parse_types 数组，则只解析相应的块。
+                    if (!in_array($type, $this->parse_types)) {
+                        continue;
+                    }
                 }
                 $parser->setData($value['data']);
                 $value['data'] += (array) $parser->parse();
