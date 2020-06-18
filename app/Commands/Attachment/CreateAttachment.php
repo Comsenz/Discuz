@@ -38,6 +38,11 @@ class CreateAttachment
     /**
      * @var string
      */
+    public $name;
+
+    /**
+     * @var string
+     */
     public $ipAddress;
 
     /**
@@ -55,14 +60,16 @@ class CreateAttachment
     /**
      * @param User $actor
      * @param UploadedFileInterface $file
+     * @param string $name
      * @param string $ipAddress
      * @param int $type
      * @param int $order
      */
-    public function __construct(User $actor, UploadedFileInterface $file, string $ipAddress, $type, $order = 0)
+    public function __construct(User $actor, UploadedFileInterface $file, string $name, string $ipAddress, $type, $order = 0)
     {
         $this->actor = $actor;
         $this->file = $file;
+        $this->name = $name;
         $this->ipAddress = $ipAddress;
         $this->type = $type;
         $this->order = $order;
@@ -116,7 +123,7 @@ class CreateAttachment
                 $this->type,
                 $file->hashName(),
                 $uploader->getPath(),
-                $file->getClientOriginalName(),
+                $this->name ?: $file->getClientOriginalName(),
                 $file->getSize(),
                 $file->getMimeType(),
                 $uploader->isRemote(),
