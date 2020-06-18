@@ -54,7 +54,7 @@ class BlocksParser
                     }
                 }
                 $parser->setData($value['data']);
-                $value['data'] += (array) $parser->parse();
+                $value['data'] = array_merge($value['data'], (array) $parser->parse());
             }
         }
         return $blocks;
