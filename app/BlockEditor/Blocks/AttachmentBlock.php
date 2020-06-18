@@ -11,14 +11,14 @@ use App\BlockEditor\Parsers\AttatchParser;
 use App\BlockEditor\Exception\BlockParseException;
 use App\Models\Attachment;
 
-class ImageBlock extends BlockAbstract
+class AttachmentBlock extends BlockAbstract
 {
-    public $type = 'image';
+    public $type = 'attachment';
 
     public function parse()
     {
         $actor = app('request')->getAttribute('actor');
-        $result = AttatchParser::checkAttachExist($this->data['value'], $actor, Attachment::TYPE_OF_IMAGE);
+        $result = AttatchParser::checkAttachExist($this->data['value'], $actor, Attachment::TYPE_OF_FILE);
         if (!$result) {
             throw new BlockParseException($this->type . ' file not exist');
         }

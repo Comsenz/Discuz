@@ -7,6 +7,7 @@
 
 namespace App\BlockEditor;
 
+use App\BlockEditor\Blocks\AttachmentBlock;
 use Illuminate\Support\Collection;
 use App\BlockEditor\Exception\BlockInvalidException;
 use App\BlockEditor\Blocks\BlockAbstract;
@@ -57,6 +58,9 @@ class BlocksParser
                 break;
             case 'image':
                 $parser = ImageBlock::getInstance();
+                break;
+            case 'attachment':
+                $parser = AttachmentBlock::getInstance();
                 break;
             default:
                 throw new BlockInvalidException($type . ' block is invalid');
