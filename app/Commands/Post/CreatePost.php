@@ -123,7 +123,7 @@ class CreatePost
 
         $isMod = false;
         foreach ($content->get('blocks') as $block) {
-            if (isset($block['data']['isMod']) && $block['data']['isMod']) {
+            if ($block['type'] == 'text' && isset($block['data']['isMod']) && $block['data']['isMod']) {
                 $isMod = $block['data']['isMod'];
                 break;
             }
@@ -142,7 +142,12 @@ class CreatePost
             if (! empty($this->replyPostId)) {
                 // 不能只回复引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
-                $replyContent = preg_replace($pattern, '', Arr::get($this->data, 'attributes.content'));
+                $replyContent = '';
+                foreach ($content->get('blocks') as $block) {
+                    if ($block['type'] == 'text' && $replyContent = preg_replace($pattern, '', $block['data']['value'])) {
+                        break;
+                    }
+                }
 
                 if (! $replyContent) {
                     throw new Exception('reply_content_cannot_null');
@@ -182,7 +187,7 @@ class CreatePost
 
         $post = $post->reply(
             $thread->id,
-            trim(Arr::get($this->data, 'attributes.content')),
+            $content,
             $this->actor->id,
             $this->ip,
             $this->port,
