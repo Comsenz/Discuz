@@ -8,20 +8,21 @@
 namespace App\BlockEditor\Parsers;
 
 use App\Models\Attachment;
+use App\Models\ThreadVideo;
 use App\Models\User;
 
-class AttatchParser extends BaseParser
+class VideoParser extends BaseParser
 {
-    public static function checkAttachExist(array $attach_ids, User $actor, int $type)
+    public static function checkVideoExist(array $video_ids, User $actor, int $type)
     {
-        $count = Attachment::query()
+        $count = ThreadVideo::query()
             ->where('user_id', $actor->id)
-            ->where('type_id', 0)
             ->where('type', $type)
-            ->whereIn('id', $attach_ids)
+            ->where('thread_id', 0)
+            ->whereIn('id', $video_ids)
             ->count();
 
-        if ($count == count($attach_ids)) {
+        if ($count == count($video_ids)) {
             return true;
         } else {
             return false;
