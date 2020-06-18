@@ -5,10 +5,10 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-namespace App\Api\Controller\Report;
+namespace App\Api\Controller\Topic;
 
-use App\Api\Serializer\ReportsSerializer;
-use App\Commands\Report\BatchDeleteReport;
+use App\Api\Serializer\TopicSerializer;
+use App\Commands\Topic\DeleteTopic;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -16,50 +16,36 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class BatchDeleteReportsController extends AbstractListController
+class BatchDeleteTopicController extends AbstractListController
 {
     use AssertPermissionTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public $serializer = ReportsSerializer::class;
+    public $serializer = TopicSerializer::class;
 
-    /**
-     * @var Dispatcher
-     */
     protected $bus;
 
-    /**
-     * @param Dispatcher $bus
-     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param ServerRequestInterface $request
-     * @param Document $document
-     * @return array|mixed
+     * @inheritDoc
      * @throws \Discuz\Auth\Exception\PermissionDeniedException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $this->assertPermission($actor->isAdmin());
+        $this->assertAdmin($actor);
 
         $ids = explode(',', Arr::get($request->getQueryParams(), 'ids'));
         $idsCollect = collect($ids);
 
         $result = ['data' => [], 'meta' => []];
-
         $idsCollect->each(function ($id) use ($actor, &$result) {
             try {
                 $result['data'][] = $this->bus->dispatch(
-                    new BatchDeleteReport($actor, $id)
+                    new DeleteTopic($id, $actor)
                 );
             } catch (\Exception $e) {
                 $result['meta'][] = ['id' => $id, 'message' => $e->getMessage()];

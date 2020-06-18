@@ -322,6 +322,7 @@ $route->get('/analysis/goods', 'analysis.goods.url', ApiController\Analysis\Reso
 $route->get('/topics', 'topics.list', ApiController\Topic\ListTopicController::class);
 $route->get('/topics/{id}', 'topics.resource', ApiController\Topic\ResourceTopicController::class);
 $route->delete('/topics/{id}', 'topics.delete', ApiController\Topic\DeleteTopicController::class);
+$route->delete('/topics/batch/{ids}', 'topics.batchDelete', ApiController\Topic\BatchDeleteTopicController::class);
 
 /*
 |--------------------------------------------------------------------------
