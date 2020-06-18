@@ -19,6 +19,7 @@ class AudioBlock extends BlockAbstract
 
     public function parse()
     {
+        $this->data['value'] = array_unique($this->data['value']);
         $actor = app('request')->getAttribute('actor');
         $result = VideoParser::checkVideoExist($this->data['value'], $actor, ThreadVideo::TYPE_OF_AUDIO);
         if (!$result) {
