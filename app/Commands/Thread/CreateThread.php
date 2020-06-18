@@ -105,21 +105,6 @@ class CreateThread
 
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
-        $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
-
-        // 视频帖、图片帖不传内容是设置默认内容
-        if (! $content) {
-            switch ($thread->type) {
-                case Thread::TYPE_OF_VIDEO:
-                    $content = '分享视频';
-                    break;
-                case Thread::TYPE_OF_IMAGE:
-                    $content = '分享图片';
-                    break;
-            }
-        }
-
-        Arr::set($this->data, 'attributes.content', $content);
 
         // 存在审核敏感词/发布视频主题时，将主题放入待审核
         if ($censor->isMod || $thread->type == Thread::TYPE_OF_VIDEO) {

@@ -7,12 +7,14 @@
 
 namespace App\Commands\Post;
 
+use App\BlockEditor\BlocksParser;
 use App\Censor\Censor;
 use App\Events\Post\Created;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
 use App\Models\Post;
 use App\Models\PostMod;
+use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
 use App\Validators\PostValidator;
@@ -116,6 +118,17 @@ class CreatePost
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 
+        $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')));
+        $content = $BlocksParser->parse();
+
+        $isMod = false;
+        foreach ($content->get('blocks') as $block) {
+            if (isset($block['data']['isMod']) && $block['data']['isMod']) {
+                $isMod = $block['data']['isMod'];
+                break;
+            }
+        }
+
         if (! $isFirst) {
             // 非首帖，检查是否有权回复
             $this->assertCan($this->actor, 'reply', $thread);
@@ -145,10 +158,27 @@ class CreatePost
                 }
             }
 
-            // 敏感词校验
-            $content = $censor->checkText(Arr::get($this->data, 'attributes.content'));
-            Arr::set($this->data, 'attributes.content', $content);
+        } else {
+            //发布的是首帖时修改主题审核属性
+            if ($isMod) {
+                $thread->is_approved = Thread::UNAPPROVED;
+                $thread->save();
+            }
+
+            //TODO 内容没有text块时的处理（没文字可能会影响分享）
+//            if (! $content) {
+//                switch ($thread->type) {
+//                    case Thread::TYPE_OF_VIDEO:
+//                        $content = '分享视频';
+//                        break;
+//                    case Thread::TYPE_OF_IMAGE:
+//                        $content = '分享图片';
+//                        break;
+//                }
+//            }
+
         }
+
 
         $post = $post->reply(
             $thread->id,
@@ -165,7 +195,7 @@ class CreatePost
         );
 
         // 存在审核敏感词时，将回复内容放入待审核
-        if ($censor->isMod) {
+        if ($isMod) {
             $post->is_approved = 0;
         } else {
             $post->is_approved = 1;

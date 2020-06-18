@@ -20,6 +20,9 @@ class TextBlock extends BlockAbstract
         /** @var Censor $censor */
         $censor = app()->make(Censor::class);
         $this->data['value'] = $censor->checkText($this->data['value']);
+        if ($censor->isMod) {
+            $this->data['isMod'] = true;
+        }
 
         //转义、过滤内容
         /**  @var SpecialCharServer $special  */
