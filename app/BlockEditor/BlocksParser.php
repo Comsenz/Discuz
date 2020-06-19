@@ -20,15 +20,18 @@ class BlocksParser
 {
     public $data;
 
+    public $post;
+
     /**
      * @var
      * 需要解析的block类型
      */
     public $parse_types;
 
-    public function __construct(Collection $data, $parse_types = [])
+    public function __construct(Collection $data, $post, $parse_types = [])
     {
         $this->data = $data;
+        $this->post = $post;
         $this->parse_types = $parse_types;
     }
 
@@ -54,6 +57,7 @@ class BlocksParser
                     }
                 }
                 $parser->setData($value['data']);
+                $parser->setPost($this->post);
                 $value['data'] = array_merge($value['data'], (array) $parser->parse());
             }
         }

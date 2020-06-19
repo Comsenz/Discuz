@@ -118,7 +118,7 @@ class CreatePost
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 
-        $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')));
+        $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), $post);
         $content = $BlocksParser->parse();
 
         $isMod = false;

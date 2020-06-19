@@ -13,6 +13,8 @@ abstract class BlockAbstract
 
     public $type;//block类型
 
+    public $post;//帖子数据
+
     protected $data;//块数据
 
     public static function getInstance()
@@ -30,5 +32,10 @@ abstract class BlockAbstract
     public function setData($data)
     {
         $this->data = $data;
+    }
+
+    public function setPost($post)
+    {
+        $this->post = $post;
     }
 }
