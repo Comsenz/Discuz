@@ -218,7 +218,7 @@ export default {
               id: 4,
               title: "话题管理",
               name: "topicManagement",
-              icon: "iconhuishouzhan",
+              icon: "icontopicmanagement",
             }
           ]
         },

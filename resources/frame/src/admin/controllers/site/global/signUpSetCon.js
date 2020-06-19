@@ -11,6 +11,9 @@ export default {
       checkList:[],           //密码规则
       register_captcha:'',    //验证码开始
       disabled:true,            //是否可以开启验证码
+      register_type: null,    // 注册模式
+      qcloud_sms: true,
+      qcloud_wx: true,
     }
   },
   created(){
@@ -34,6 +37,13 @@ export default {
           this.pwdLength = res.readdata._data.set_reg.password_length;
           this.checkList = res.readdata._data.set_reg.password_strength;
           this.register_captcha = res.readdata._data.set_reg.register_captcha;
+          this.register_type = res.readdata._data.set_reg.register_type;
+          if(res.readdata._data.qcloud.qcloud_sms == true) {
+            this.qcloud_sms = false
+          }
+          if(res.readdata._data.passport.offiaccount_close == true) {
+            this.qcloud_wx = false
+          }
           if(res.readdata._data.qcloud.qcloud_captcha == true){
             this.disabled = false
           }
@@ -90,7 +100,14 @@ export default {
                 "value":passwordStrength,
                 "tag": 'default'
                }
-            }
+            },
+            {
+              "attributes":{
+                "key":'register_type',
+                "value":this.register_type,
+                "tag": 'default'
+               }
+            },
            ]
         }
       }).then(data=>{
