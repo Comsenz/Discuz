@@ -11,7 +11,7 @@ export default {
       checkList:[],           //密码规则
       register_captcha:'',    //验证码开始
       disabled:true,            //是否可以开启验证码
-      register_type: '',      // 注册模式
+      register_type: 0,      // 注册模式
       qcloud_sms: true,
       qcloud_wx: true,
     }
