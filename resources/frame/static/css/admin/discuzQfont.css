@@ -210,3 +210,6 @@
 .iconwatermark:before {
   content: "\e694";
 }
+.icontopicmanagement:before {
+  content: "\e6ba"
+}
