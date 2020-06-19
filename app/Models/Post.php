@@ -119,31 +119,70 @@ class Post extends Model
 
     /**
      * 帖子摘要
-     * @TODO 不是块时的处理
      * @return string
      */
     public function getSummaryAttribute()
+    {
+        return $this->getTextFromContent();
+    }
+
+    /**
+     * 获取文章默认块的一段文字 （没text块取默认值）
+     */
+    protected function getTextFromContent()
     {
         /** @var Collection $blocks */
         $content = $this->attributes['content'];
         $listBlock = $content->get('listBlock', 0);
         $blocks = $content->get('blocks');
+
+        $type = $blocks[$listBlock]['type'];
         $summary = $blocks[$listBlock]['data']['value'];
 
-        if (strlen($summary) > self::SUMMARY_LENGTH) {
-            /** @var SpecialCharServer $special */
-            $special = app()->make(SpecialCharServer::class);
-            $summary = (string) Str::of($special->purify($summary, 'textBlockConfig'))
-                ->substr(0, self::SUMMARY_LENGTH)
-                ->finish(self::SUMMARY_END_WITH);
+        switch ($type) {
+            case 'text':
+                if (strlen($summary) > self::SUMMARY_LENGTH) {
+                    /** @var SpecialCharServer $special */
+                    $special = app()->make(SpecialCharServer::class);
+                    $summary = (string) Str::of($special->purify($summary, 'textBlockConfig'))
+                        ->substr(0, self::SUMMARY_LENGTH)
+                        ->finish(self::SUMMARY_END_WITH);
+                }
+                break;
+            case 'image':
+            case 'attachment':
+            case 'video':
+            case 'audio':
+            case 'goods':
+                $summary = trans('post.post_default_'.$type);
+                break;
+            case 'pay':
+                $summary = '这是一个付费贴。';
+                break;
         }
 
         return $summary;
     }
 
+    /**
+     * 获取默认块
+     * @return mixed
+     */
+    protected function getListBlock()
+    {
+        /** @var Collection $blocks */
+        $content = $this->content;
+        $listBlock = $content->get('listBlock', 0);
+        return $content->get('blocks')[$listBlock];
+    }
+
+    /**
+     * 默认块
+     * @return string
+     */
     public function formatContent()
     {
-        return $this->getSummaryAttribute();
+        return $this->getTextFromContent();
     }
 
     /**
@@ -165,25 +204,29 @@ class Post extends Model
          * 判断是否是楼中楼的回复
          */
         if ($this->reply_post_id) {
-            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
-            $content = $this->formatContent();
+//            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+            $content = $this->getListBlock();
         } else {
             /**
              * 判断长文点赞通知内容为标题
              */
-            if ($this->thread->type == 1) {
+            if ($this->thread->title) {
                 $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
+//            }
+//            if ($this->thread->type == 1) {
+//                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
             } else {
                 // 引用回复去除引用部分
-                $this->filterPostContent();
+//                $this->filterPostContent();
 
-                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
-                $content = $this->formatContent();
+//                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
+                $content = $this->getTextFromContent();
 
                 // 如果是首贴 firstContent === content 内容一样
                 if ($this->is_first) {
                     $firstContent = $content;
                 } else {
+                    //@todo ？
                     $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
                 }
             }

@@ -93,7 +93,7 @@ class Related extends System
             // 回复的楼中楼数据
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['reply_post_user_id'] = $this->post->replyPost->user_id;
-            $build['reply_post_content'] = $this->post->replyPost->formatContent();
+            $build['reply_post_content'] = $this->post->replyPost->getSummaryContent(Post::NOTICE_LENGTH)['content'];
             $build['reply_post_created_at'] = $this->post->replyPost->formatDate('created_at');
         } else {
             /**

@@ -21,4 +21,12 @@ return [
     'post_goods_fail_url' => '匹配到解析地址错误',
     'post_goods_not_found_enum' => '暂不支持解析该地址内容',
     'post_goods_http_client_fail' => '请求地址失败',
+
+    // default text
+    'post_default_image' => '分享图片',
+    'post_default_attachment' => '分享附件',
+    'post_default_video' => '分享视频',
+    'post_default_audio' => '分享音频',
+    'post_default_goods' => '分享商品',
+    'post_default_pay' => '分享内容',
 ];

@@ -168,14 +168,14 @@ class Thread extends Model
     public function getContentByType($substr = 0)
     {
         $special = app()->make(SpecialCharServer::class);
-
-        if ($this->type == 1) {
+        //存在标题取标题
+        if ($this->title) {
             $content = $substr ? Str::of($this->title)->substr(0, $substr) : $this->title;
             $content = $special->purify($content);
         } else {
-            // 不是长文没有标题则使用首贴内容
-            $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
-            $content = $this->firstPost->formatContent();
+            // 没有标题则使用默认块
+//            $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
+            $content = $this->firstPost->getListBlock();
         }
 
         return $content;
