@@ -119,7 +119,7 @@ class Post extends Model
 
     /**
      * 帖子摘要
-     *
+     * @TODO 不是块时的处理
      * @return string
      */
     public function getSummaryAttribute()
@@ -141,20 +141,9 @@ class Post extends Model
         return $summary;
     }
 
-
-    /**
-     * Get the content rendered as HTML.
-     *
-     * @return string
-     */
     public function formatContent()
     {
-        /** @var Collection $blocks */
-        $content = $this->attributes['content'];
-        $listBlock = $content->get('listBlock', 0);
-        $blocks = $content->get('blocks');
-
-        return $blocks[$listBlock]['data']['value'];
+        return $this->getSummaryAttribute();
     }
 
     /**
