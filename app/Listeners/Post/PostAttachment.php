@@ -33,7 +33,7 @@ class PostAttachment
     public function whenPostIsSaving(Saving $event)
     {
         $post = $event->post;
-        $attachments = Arr::get($event->data, 'relationships.attachments.data');
+        $attachments = (array) Arr::get($event->data, 'relationships.attachments.data');
 
         switch ($event->post->thread->type) {
             // // 文本
@@ -51,7 +51,7 @@ class PostAttachment
             // 图片
             case 3:
                 // 图片帖必须有图片
-                if ($post->is_first) {
+                if ($post->is_first && $attachments) {
                     if ($post->exists) {
                         $images = Attachment::query()
                                 ->where('user_id', $event->actor->id)
@@ -60,7 +60,7 @@ class PostAttachment
                                     $query->where('type_id', $post->id)
                                           ->orWhere(function (Builder $query) use ($attachments) {
                                               $query->where('type_id', 0)
-                                                    ->whereIn('id', $attachments);
+                                                    ->whereIn('id', array_column($attachments, 'id'));
                                           });
                                 })
                                 ->exists();
