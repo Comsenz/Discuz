@@ -11,6 +11,7 @@ use App\Events\Post\Saving;
 use App\Models\Attachment;
 use Discuz\Auth\AssertPermissionTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class PostAttachment
@@ -49,16 +50,30 @@ class PostAttachment
             // case 2:
             // 图片
             case 3:
-                // 发表图片帖必须有图片
-                if (!$post->exists && $post->is_first) {
-                    $images = $attachments && Attachment::query()
-                            ->where('user_id', $event->actor->id)
-                            ->where('type_id', 0)
-                            ->where('type', Attachment::TYPE_OF_IMAGE)
-                            ->whereIn('id', array_column($attachments, 'id'))
-                            ->exists();
+                // 图片帖必须有图片
+                if ($post->is_first) {
+                    if ($post->exists) {
+                        $images = Attachment::query()
+                                ->where('user_id', $event->actor->id)
+                                ->where('type', Attachment::TYPE_OF_IMAGE)
+                                ->where(function (Builder $query) use ($post, $attachments) {
+                                    $query->where('type_id', $post->id)
+                                          ->orWhere(function (Builder $query) use ($attachments) {
+                                              $query->where('type_id', 0)
+                                                    ->whereIn('id', $attachments);
+                                          });
+                                })
+                                ->exists();
+                    } else {
+                        $images = $attachments && Attachment::query()
+                                ->where('user_id', $event->actor->id)
+                                ->where('type', Attachment::TYPE_OF_IMAGE)
+                                ->where('type_id', 0)
+                                ->whereIn('id', array_column($attachments, 'id'))
+                                ->exists();
+                    }
 
-                    if (!$images) {
+                    if (! $images) {
                         throw new \Exception('cannot_create_image_thread_without_attachments');
                     }
                 }
