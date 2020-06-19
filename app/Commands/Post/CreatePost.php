@@ -169,19 +169,6 @@ class CreatePost
                 $thread->is_approved = Thread::UNAPPROVED;
                 $thread->save();
             }
-
-            //TODO 内容没有text块时的处理（没文字可能会影响分享）
-//            if (! $content) {
-//                switch ($thread->type) {
-//                    case Thread::TYPE_OF_VIDEO:
-//                        $content = '分享视频';
-//                        break;
-//                    case Thread::TYPE_OF_IMAGE:
-//                        $content = '分享图片';
-//                        break;
-//                }
-//            }
-
         }
 
 

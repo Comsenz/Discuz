@@ -8,6 +8,9 @@
 namespace App\BlockEditor;
 
 use App\BlockEditor\Blocks\AttachmentBlock;
+use App\BlockEditor\Blocks\AudioBlock;
+use App\BlockEditor\Blocks\GoodsBlock;
+use App\BlockEditor\Blocks\VideoBlock;
 use Illuminate\Support\Collection;
 use App\BlockEditor\Exception\BlockInvalidException;
 use App\BlockEditor\Blocks\BlockAbstract;
@@ -78,6 +81,15 @@ class BlocksParser
                 break;
             case 'attachment':
                 $parser = AttachmentBlock::getInstance();
+                break;
+            case 'audio':
+                $parser = AudioBlock::getInstance();
+                break;
+            case 'video':
+                $parser = VideoBlock::getInstance();
+                break;
+            case 'goods':
+                $parser = GoodsBlock::getInstance();
                 break;
             default:
                 throw new BlockInvalidException($type . ' block is invalid');
