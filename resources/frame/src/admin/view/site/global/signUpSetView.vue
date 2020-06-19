@@ -7,10 +7,10 @@
       </CardRow>
     </Card>
 
-    <Card header="注册模式”：">
+    <Card header="注册模式：">
       <CardRow description="开启无感模式后，微信下将自动注册。开启手机号模式后，将用手机号的方式注册登录。开启
 用户名模式后，将以用户名的方式注册登录。">
-        <eel-radio v-model="register_type" value="0">用户名模式</el-radio>
+        <el-radio v-model="register_type" value="0"> 用户名模式 </el-radio>
         <el-radio v-model="register_type" value="1" disabled="qcloud_sms">手机号模式</el-radio>
         <el-radio v-model="register_type" value="2" disabled="qcloud_wx">无感模式</el-radio>
       </CardRow>
