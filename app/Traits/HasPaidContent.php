@@ -7,12 +7,15 @@
 
 namespace App\Traits;
 
+use App\BlockEditor\Formater\PaidCheck;
 use App\Models\Attachment;
 use App\Models\Post;
+use App\Models\Order;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\BlockEditor\Formater\PostFormater;
 
 /**
  * @package App\Traits
@@ -39,50 +42,41 @@ trait HasPaidContent
 
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
         if ($actor->id === $model->user_id || $actor->isAdmin()) {
-            return;
+            $content = $model->getAttribute('content');
+            $model->content = json_decode($content, true);
+           return;
         }
 
         Thread::setStateUser($actor);
 
         if ($model instanceof Post) {
-            $this->summaryOfContent($model);
+            $model->content = PostFormater::pure($model);
         } elseif ($model instanceof Attachment) {
-            $this->blurImage($model);
+            $model = PostFormater::checkAttachment($model);
+            $status = PaidCheck::idPaid($model->type_id, $model->pay_blocks);
+            if ($status) {
+                $model->setAttribute('paid', true);
+            } else {
+                $this->blurImage($model);
+                $model->setAttribute('paid', false);
+            }
         } elseif ($model instanceof ThreadVideo) {
-            $this->hideMedia($model);
-        }
-    }
 
-    /**
-     * 付费长文帖未付费时返回免费部分内容，不返回图片及附件
-     *
-     * @param Post $post
-     */
-    public function summaryOfContent(Post $post)
-    {
-        if (
-            $post->is_first
-            && $post->thread
-            && $post->thread->price > 0
-            && ! $post->thread->is_paid
-        ) {
-            $content = Str::of($post->content);
-
-            // 截取内容
-            if ($content->length() > $post->thread->free_words) {
-                $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
-            }
-
-            // 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
-            if ($post->thread->type === Thread::TYPE_OF_LONG) {
-                $post->setRelation('images', collect());
-                $post->setRelation('attachments', collect());
+            $model = PostFormater::checkVodeo($model);
+            $status = PaidCheck::idPaid($model->post_id, $model->pay_blocks);
+            if ($status) {
+                $model->setAttribute('paid', true);
+            } else {
+                $model->file_id = '';
+                $model->media_url = '';
+                $model->setAttribute('paid', false);
             }
         }
     }
 
+
     /**
-     * 付费图片帖未付费时返回模糊图
+     * 付费块包含图片为付费时返回模糊图片
      *
      * @param Attachment $attachment
      */
@@ -90,13 +84,8 @@ trait HasPaidContent
     {
         if (
             $attachment->type === Attachment::TYPE_OF_IMAGE
-            && $attachment->post
-            && $attachment->post->is_first
-            && $attachment->post->thread
-            && $attachment->post->thread->type === Thread::TYPE_OF_IMAGE
-            && $attachment->post->thread->price > 0
-            && ! $attachment->post->thread->is_paid
         ) {
+
             $attachment->setAttribute('blur', true);
 
             $parts = explode('.', $attachment->attachment);
@@ -106,22 +95,4 @@ trait HasPaidContent
         }
     }
 
-    /**
-     * 付费视频帖未付费时不返回媒体 id 及地址
-     *
-     * @param ThreadVideo $threadVideo
-     */
-    public function hideMedia(ThreadVideo $threadVideo)
-    {
-        if (
-            $threadVideo->type === ThreadVideo::TYPE_OF_VIDEO
-            && $threadVideo->thread
-            && $threadVideo->thread->type === Thread::TYPE_OF_VIDEO
-            && $threadVideo->thread->price > 0
-            && ! $threadVideo->thread->is_paid
-        ) {
-            $threadVideo->file_id = '';
-            $threadVideo->media_url = '';
-        }
-    }
 }

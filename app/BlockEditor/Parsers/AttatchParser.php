@@ -16,7 +16,6 @@ class AttatchParser extends BaseParser
     {
         $count = Attachment::query()
             ->where('user_id', $actor->id)
-            ->where('type_id', 0)
             ->where('type', $type)
             ->whereIn('id', $attach_ids)
             ->count();

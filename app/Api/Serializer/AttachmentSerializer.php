@@ -45,13 +45,17 @@ class AttachmentSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         $this->paidContent($model);
-
         $path = Str::finish($model->file_path, '/') . $model->attachment;
-
         if ($model->is_remote) {
             $url = $this->filesystem->disk('attachment_cos')->temporaryUrl($path, Carbon::now()->addMinutes(5));
         } else {
             $url = $this->filesystem->disk('attachment')->url($path);
+        }
+
+        if (!$model->paid && $model->type == Attachment::TYPE_OF_FILE) {
+            $url = '';
+            $model->file_name = '';
+            $model->attachment = '';
         }
 
         $fixWidth = Attachment::FIX_WIDTH;
@@ -70,6 +74,8 @@ class AttachmentSerializer extends AbstractSerializer
             'fileSize'          => (int) $model->file_size,
             'fileType'          => $model->file_type,
         ];
+
+
 
         // 图片缩略图地址
         if ($model->type == Attachment::TYPE_OF_IMAGE) {
