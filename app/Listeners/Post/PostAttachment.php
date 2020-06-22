@@ -54,7 +54,7 @@ class PostAttachment
                 if ($post->is_first && $attachments) {
                     if ($post->exists) {
                         $images = Attachment::query()
-                                ->where('user_id', $event->actor->id)
+                                // ->where('user_id', $event->actor->id) // 允许管理员编辑
                                 ->where('type', Attachment::TYPE_OF_IMAGE)
                                 ->where(function (Builder $query) use ($post, $attachments) {
                                     $query->where('type_id', $post->id)
