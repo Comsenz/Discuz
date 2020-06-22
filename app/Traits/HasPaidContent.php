@@ -63,6 +63,7 @@ trait HasPaidContent
         if (
             $post->is_first
             && $post->thread
+            && $post->thread->type === Thread::TYPE_OF_LONG
             && $post->thread->price > 0
             && ! $post->thread->is_paid
         ) {
@@ -74,10 +75,8 @@ trait HasPaidContent
             }
 
             // 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
-            if ($post->thread->type === Thread::TYPE_OF_LONG) {
-                $post->setRelation('images', collect());
-                $post->setRelation('attachments', collect());
-            }
+            $post->setRelation('images', collect());
+            $post->setRelation('attachments', collect());
         }
     }
 
