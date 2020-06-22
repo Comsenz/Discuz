@@ -76,10 +76,11 @@ class Replied extends System
 
     /**
      * @param & $build
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function build(&$build)
     {
-        $result = $this->post->getSummaryContent(Post::NOTICE_LENGTH);
+        $result = $this->post->getSummaryContent(0, Post::NOTICE_LENGTH);
 
         /**
          * 判断是否是楼中楼的回复
@@ -90,14 +91,14 @@ class Replied extends System
             // 回复的楼中楼数据
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['reply_post_user_id'] = $this->post->replyPost->user_id;
-            $build['reply_post_content'] = $this->post->replyPost->getSummaryContent(Post::NOTICE_LENGTH)['content'];
+            $build['reply_post_content'] = $this->post->replyPost->getSummaryContent(0, Post::NOTICE_LENGTH)['content'];
             $build['reply_post_created_at'] = $this->post->replyPost->formatDate('created_at');
         } else {
 
             // 不是长文没有标题则使用首贴内容
             $firstContent = $result['first_content'];
 
-            $build['post_content'] = $this->post->replyPost->getSummaryContent(Post::NOTICE_LENGTH)['content'];  // 回复的内容
+            $build['post_content'] = $this->post->replyPost->getSummaryContent(0, Post::NOTICE_LENGTH)['content'];  // 回复的内容
             $build['post_created_at'] = $this->post->formatDate('created_at');
         }
 

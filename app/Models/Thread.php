@@ -162,10 +162,12 @@ class Thread extends Model
     /**
      * 根据类型获取 Thread content
      *
+     * @param $isText
      * @param int $substr
      * @return Stringable|string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function getContentByType($substr = 0)
+    public function getContentByType($isText, $substr = 0)
     {
         $special = app()->make(SpecialCharServer::class);
         //存在标题取标题
@@ -173,9 +175,12 @@ class Thread extends Model
             $content = $substr ? Str::of($this->title)->substr(0, $substr) : $this->title;
             $content = $special->purify($content);
         } else {
-            // 没有标题则使用默认块
-//            $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
-            $content = $this->firstPost->getListBlock();
+            // 微信使用文本，系统通知使用默认块
+            if ($isText) {
+                $content = $this->firstPost->getTextFromContent($substr);
+            } else {
+                $content = $this->firstPost->getListBlock();
+            }
         }
 
         return $content;

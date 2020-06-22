@@ -57,7 +57,7 @@ trait PostNoticesTrait
 
             // 微信通知
             $user->notify(new Related($post, $actor, WechatRelatedMessage::class, [
-                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                'message' => $post->getSummaryContent(1, Post::NOTICE_LENGTH)['content'],
                 'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                     'actor_username' => $actor->username    // 发送人姓名
                 ]),
@@ -87,8 +87,9 @@ trait PostNoticesTrait
     /**
      * 内容审核通知
      *
-     * @param $post
+     * @param Post $post
      * @param array $attach 原因
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     private function postIsApproved($post, $attach)
     {
@@ -111,8 +112,8 @@ trait PostNoticesTrait
                 $post->thread->user->notify(new Replied($post, $post->user, RepliedMessage::class));
                 // 发送微信通知
                 $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
-                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
+                    'message' => $post->getSummaryContent(1, Post::NOTICE_LENGTH)['content'],
+                    'subject' => $post->thread->getContentByType(1, Thread::CONTENT_LENGTH),
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $post->user->username    // 发送人姓名
                     ]),
@@ -134,7 +135,7 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
+        return $post->thread->type == 1 ? $post->thread->title : $post->getTextFromContent();
     }
 
     /**

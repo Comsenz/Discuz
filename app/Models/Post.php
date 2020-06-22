@@ -15,6 +15,9 @@ use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Discuz\SpecialChar\SpecialCharServer;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -128,8 +131,11 @@ class Post extends Model
 
     /**
      * 获取文章默认块的一段文字 （没text块取默认值）
+     * @param int $strLength
+     * @return array|Application|Translator|string|null
+     * @throws BindingResolutionException
      */
-    protected function getTextFromContent()
+    protected function getTextFromContent($strLength = 0)
     {
         /** @var Collection $blocks */
         $content = $this->attributes['content'];
@@ -141,11 +147,16 @@ class Post extends Model
 
         switch ($type) {
             case 'text':
-                if (strlen($summary) > self::SUMMARY_LENGTH) {
+                //引用回复去掉引用部分
+                $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
+                $summary = preg_replace($pattern, '', $summary);
+
+                $strLength = $strLength ?: self::SUMMARY_LENGTH;
+                if (strlen($summary) > $strLength) {
                     /** @var SpecialCharServer $special */
                     $special = app()->make(SpecialCharServer::class);
                     $summary = (string) Str::of($special->purify($summary, 'textBlockConfig'))
-                        ->substr(0, self::SUMMARY_LENGTH)
+                        ->substr(0, $strLength)
                         ->finish(self::SUMMARY_END_WITH);
                 }
                 break;
@@ -177,21 +188,14 @@ class Post extends Model
     }
 
     /**
-     * 默认块
-     * @return string
-     */
-    public function formatContent()
-    {
-        return $this->getTextFromContent();
-    }
-
-    /**
      * 获取 Content & firstContent
      *
-     * @param int $substr
+     * @param int $isText 获取的是否为纯文本（1是 0否返回listBlock）
+     * @param int $strLength
      * @return array
+     * @throws BindingResolutionException
      */
-    public function getSummaryContent($substr = 0)
+    public function getSummaryContent($isText, $strLength = 0)
     {
         $special = app()->make(SpecialCharServer::class);
 
@@ -204,36 +208,36 @@ class Post extends Model
          * 判断是否是楼中楼的回复
          */
         if ($this->reply_post_id) {
-//            $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
-            $content = $this->getListBlock();
+            if ($isText) {
+                $content = $this->getTextFromContent($strLength);
+            } else {
+                $content = $this->getListBlock();
+            }
         } else {
             /**
              * 判断长文点赞通知内容为标题
              */
             if ($this->thread->title) {
-                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
-//            }
-//            if ($this->thread->type == 1) {
-//                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                $content = $this->thread->getContentByType($isText, self::NOTICE_LENGTH);
             } else {
-                // 引用回复去除引用部分
-//                $this->filterPostContent();
-
-//                $this->content = $substr ? Str::of($this->content)->substr(0, $substr) : $this->content;
-                $content = $this->getTextFromContent();
+                if ($isText) {
+                    $content = $this->getTextFromContent($strLength);
+                } else {
+                    $content = $this->getListBlock();
+                }
 
                 // 如果是首贴 firstContent === content 内容一样
                 if ($this->is_first) {
                     $firstContent = $content;
                 } else {
-                    //@todo ？
-                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                    //获取回复的主体内容
+                    $firstContent = $this->thread->getContentByType($isText, self::NOTICE_LENGTH);
                 }
             }
         }
 
         $build['content'] = $content;
-        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType());
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType($isText));
 
         return $build;
     }
