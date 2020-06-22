@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -142,20 +143,21 @@ class Post extends Model
         $listBlock = $content->get('listBlock', 0);
         $blocks = $content->get('blocks');
 
+        /** @var SpecialCharServer $special */
+        $special = app()->make(SpecialCharServer::class);
+
         $type = $blocks[$listBlock]['type'];
-        $summary = $blocks[$listBlock]['data']['value'];
 
         switch ($type) {
             case 'text':
+                $summary = $blocks[$listBlock]['data']['value'];
                 //引用回复去掉引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                 $summary = preg_replace($pattern, '', $summary);
 
                 $strLength = $strLength ?: self::SUMMARY_LENGTH;
                 if (strlen($summary) > $strLength) {
-                    /** @var SpecialCharServer $special */
-                    $special = app()->make(SpecialCharServer::class);
-                    $summary = (string) Str::of($special->purify($summary, 'textBlockConfig'))
+                    $summary = (string) Str::of($special->purify($summary))
                         ->substr(0, $strLength)
                         ->finish(self::SUMMARY_END_WITH);
                 }
@@ -168,7 +170,18 @@ class Post extends Model
                 $summary = trans('post.post_default_'.$type);
                 break;
             case 'pay':
-                $summary = '这是一个付费贴。';
+                //获取 文本块可读文字或者非文本块分享文字
+                $defaultBlockKey = Arr::get($blocks[$listBlock], 'data.defaultBlock');
+                $defaultBlock =  Arr::get($blocks[$listBlock], 'data.child.'.$defaultBlockKey);
+                if ($defaultBlock['type'] == 'text') {
+                    $value = Arr::get($defaultBlock, 'data.value', '');
+                    $limit = Arr::get($defaultBlock, 'data.canSee') ?: $strLength;
+                    $summary = (string) Str::of($special->purify($value))
+                        ->substr(0, $limit)
+                        ->finish(self::SUMMARY_END_WITH);
+                } else {
+                    $summary = trans('post.post_default_'.$defaultBlock['type']);
+                }
                 break;
         }
 
