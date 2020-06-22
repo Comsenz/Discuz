@@ -29,6 +29,7 @@ class CreatePostController extends AbstractCreateController
     public $include = [
         'user',
         'thread',
+        'images',
     ];
 
     /**
