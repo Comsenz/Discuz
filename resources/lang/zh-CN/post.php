@@ -23,6 +23,7 @@ return [
     'post_goods_http_client_fail' => '请求地址失败',
 
     // default text
+    'post_default_' => '分享文章',
     'post_default_image' => '分享图片',
     'post_default_attachment' => '分享附件',
     'post_default_video' => '分享视频',

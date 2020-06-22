@@ -147,7 +147,7 @@ class Post extends Model
         $special = app()->make(SpecialCharServer::class);
 
         $type = $blocks[$listBlock]['type'];
-
+        $summary = '';
         switch ($type) {
             case 'text':
                 $summary = $blocks[$listBlock]['data']['value'];
@@ -197,7 +197,13 @@ class Post extends Model
         /** @var Collection $blocks */
         $content = $this->content;
         $listBlock = $content->get('listBlock', 0);
-        return $content->get('blocks')[$listBlock];
+        $block = $content->get('blocks')[$listBlock];
+        if ($blocks[$listBlock]['type'] == 'pay') {
+            //@todo 获取有限内容的块
+            $block = '';
+        }
+
+        return $block;
     }
 
     /**
