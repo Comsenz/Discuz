@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @property int $reply_post_id
  * @property int $reply_user_id
  * @property string $summary
+ * @property string $summary_text
  * @property string $content
  * @property string $ip
  * @property int $port
@@ -155,6 +156,18 @@ class Post extends Model
     }
 
     /**
+     * 帖子纯文本摘要
+     *
+     * @return string
+     */
+    public function getSummaryTextAttribute()
+    {
+        $content = strip_tags($this->formatContent());
+
+        return $content ? Str::of($content)->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH) : '';
+    }
+
+    /**
      * Unparse the parsed content.
      *
      * @param string $value
@@ -162,7 +175,7 @@ class Post extends Model
      */
     public function getContentAttribute($value)
     {
-        if ($this->is_first && $this->thread->type == 1) {
+        if ($this->is_first && $this->thread->type === Thread::TYPE_OF_LONG) {
             return static::$markdownFormatter->unparse($value);
         } else {
             return static::$formatter->unparse($value);
@@ -186,7 +199,7 @@ class Post extends Model
      */
     public function setContentAttribute($value)
     {
-        if ($this->is_first && ($this->thread->type == 1)) {
+        if ($this->is_first && $this->thread->type === Thread::TYPE_OF_LONG) {
             $this->attributes['content'] = strlen($value) ? static::$markdownFormatter->parse($value, $this) : null;
         } else {
             $this->attributes['content'] = strlen($value) ? static::$formatter->parse($value, $this) : null;
@@ -212,7 +225,7 @@ class Post extends Model
     {
         $content = $this->attributes['content'] ?: '';
 
-        if ($this->is_first && ($this->thread->type == 1)) {
+        if ($this->is_first && $this->thread->type === Thread::TYPE_OF_LONG) {
             $content = $content ? static::$markdownFormatter->render($content) : '';
         } else {
             $content = $content ? static::$formatter->render($content) : '';
@@ -246,7 +259,7 @@ class Post extends Model
             /**
              * 判断长文点赞通知内容为标题
              */
-            if ($this->thread->type == 1) {
+            if ($this->thread->type === Thread::TYPE_OF_LONG) {
                 $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
             } else {
                 // 引用回复去除引用部分
