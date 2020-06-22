@@ -228,7 +228,11 @@ class Censor
             'secret' => $this->setting->get('miniprogram_app_secret', 'wx_miniprogram'),
         ]);
 
-        $result = $easyWeChat->content_security->checkText($content);
+        try {
+            $result = $easyWeChat->content_security->checkText($content);
+        } finally {
+            $result = $result ?? [];
+        }
 
         if (Arr::get($result, 'errcode', 0) !== 0) {
             $this->isMod = true;
@@ -281,7 +285,11 @@ class Censor
                     @unlink($tmpFile);
                 }
             } else {
-                $result = $easyWeChat->content_security->checkImage($filePathname);
+                try {
+                    $result = $easyWeChat->content_security->checkImage($filePathname);
+                } finally {
+                    $result = $result ?? [];
+                }
             }
 
             if (Arr::get($result, 'errcode', 0) !== 0) {
