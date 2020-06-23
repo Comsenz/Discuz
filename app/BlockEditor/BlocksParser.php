@@ -44,18 +44,28 @@ class BlocksParser
         return collect([$this->data, ['blocks' => $blocks]])->collapse();
     }
 
-    private function parseBlocks($blocks)
+    /**
+     * @param $blocks
+     * @param int $level json解析的最大层级数
+     * @return mixed
+     * @throws BlockInvalidException
+     */
+    private function parseBlocks($blocks, $level = 5)
     {
+        if (!$level) {
+            throw new BlockInvalidException('块层级超过最大允许层级');
+        }
+        $level--;
         if (!empty($blocks)) {
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
                 if (isset($value['data']['child'])) {//子blocks解析
                     $child_types = array_column($value['data']['child'], 'type');
-                    if (in_array('pay', $child_types)) {
-                        throw new BlockInvalidException('付费块子块不能包含付费块');
+                    if (in_array('pay', $child_types) && $type == 'pay') {
+                        throw new BlockInvalidException('付费直接块子块不能包含付费块');
                     }
-                    $value['data']['child'] = $this->parseBlocks($value['data']['child']);
+                    $value['data']['child'] = $this->parseBlocks($value['data']['child'], $level);
                 }
                 if (!empty($this->parse_types)) {
                     //如果填写了$parse_types 数组，则只解析相应的块。
