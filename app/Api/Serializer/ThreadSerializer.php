@@ -8,13 +8,15 @@
 namespace App\Api\Serializer;
 
 use App\Models\Thread;
-use App\Models\Topic;
+use App\Traits\HasPaidContent;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Tobscure\JsonApi\Relationship;
 
 class ThreadSerializer extends AbstractSerializer
 {
+    use HasPaidContent;
+
     /**
      * {@inheritdoc}
      */
@@ -40,6 +42,8 @@ class ThreadSerializer extends AbstractSerializer
      */
     public function getDefaultAttributes($model)
     {
+        $this->paidContent($model);
+
         $gate = $this->gate->forUser($this->actor);
 
         $attributes = [
@@ -72,8 +76,6 @@ class ThreadSerializer extends AbstractSerializer
         } else {
             $attributes['isDeleted'] = false;
         }
-
-        Thread::setStateUser($this->actor);
 
         if ($model->price > 0) {
             $attributes['paid'] = $model->is_paid;      // 向下兼容，建议改为 is_paid

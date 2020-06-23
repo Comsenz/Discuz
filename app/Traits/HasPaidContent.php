@@ -30,7 +30,7 @@ trait HasPaidContent
     protected $orders = [];
 
     /**
-     * @param Post|Attachment|ThreadVideo $model
+     * @param Thread|Post|Attachment|ThreadVideo $model
      */
     public function paidContent($model)
     {
@@ -44,7 +44,9 @@ trait HasPaidContent
 
         Thread::setStateUser($actor);
 
-        if ($model instanceof Post) {
+        if ($model instanceof Thread) {
+            $this->hideImagesAndAttachments($model);
+        } elseif ($model instanceof Post) {
             $this->summaryOfContent($model);
         } elseif ($model instanceof Attachment) {
             $this->blurImage($model);
@@ -54,7 +56,25 @@ trait HasPaidContent
     }
 
     /**
-     * 付费长文帖未付费时返回免费部分内容，不返回图片及附件
+     * 付费长文帖未付费时不返回图片及附件
+     * 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
+     *
+     * @param Thread $thread
+     */
+    public function hideImagesAndAttachments(Thread $thread)
+    {
+        if (
+            $thread->type === Thread::TYPE_OF_LONG
+            && $thread->price > 0
+            && ! $thread->is_paid
+        ) {
+            $thread->firstPost->setRelation('images', collect());
+            $thread->firstPost->setRelation('attachments', collect());
+        }
+    }
+
+    /**
+     * 付费长文帖未付费时返回免费部分内容
      *
      * @param Post $post
      */
@@ -69,14 +89,9 @@ trait HasPaidContent
         ) {
             $content = Str::of($post->content);
 
-            // 截取内容
             if ($content->length() > $post->thread->free_words) {
                 $post->content = $content->substr(0, $post->thread->free_words)->finish(Post::SUMMARY_END_WITH);
             }
-
-            // 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
-            $post->setRelation('images', collect());
-            $post->setRelation('attachments', collect());
         }
     }
 
