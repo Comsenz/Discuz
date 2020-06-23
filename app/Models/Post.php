@@ -92,6 +92,7 @@ class Post extends Model
         'like_count' => 'integer',
         'is_first' => 'boolean',
         'is_comment' => 'boolean',
+        'content' => 'collection',
     ];
 
     /**
@@ -139,7 +140,8 @@ class Post extends Model
     public function getTextFromContent($strLength = 0)
     {
         /** @var Collection $blocks */
-        $content = $this->attributes['content'];
+        $content = $this->content;
+
         $listBlock = $content->get('listBlock', 0);
         $blocks = $content->get('blocks');
 
@@ -150,17 +152,19 @@ class Post extends Model
         $summary = '';
         switch ($type) {
             case 'text':
-                $summary = $blocks[$listBlock]['data']['value'];
+                $summary = html_entity_decode($blocks[$listBlock]['data']['value']);
                 //引用回复去掉引用部分
                 $pattern = '/<blockquote class="quoteCon">.*<\/blockquote>/';
                 $summary = preg_replace($pattern, '', $summary);
 
                 $strLength = $strLength ?: self::SUMMARY_LENGTH;
+                $summary = Str::of($special->purify($summary));
                 if (strlen($summary) > $strLength) {
-                    $summary = (string) Str::of($special->purify($summary))
+                    $summary = $summary
                         ->substr(0, $strLength)
                         ->finish(self::SUMMARY_END_WITH);
                 }
+                $summary = $summary->__toString();
                 break;
             case 'image':
             case 'attachment':
