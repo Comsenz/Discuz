@@ -385,7 +385,7 @@ class Thread extends Model
 
     public function threadVideo()
     {
-        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO);
+        return $this->hasOne(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO)->where('post_id', 0);
     }
 
 

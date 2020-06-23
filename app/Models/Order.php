@@ -53,6 +53,8 @@ class Order extends Model
 
     const ORDER_TYPE_GROUP    = 4; //付费用户组
 
+    const ORDER_TYPE_BLOCK    = 5; //付费块订单
+
     /**
      * 订单状态
      */
@@ -212,5 +214,16 @@ class Order extends Model
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+
+
+    /**
+     * Define the relationship with the order's post.
+     *
+     * @return BelongsTo
+     */
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
     }
 }

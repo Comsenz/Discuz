@@ -9,13 +9,16 @@ namespace App\BlockEditor\Formater;
 
 use App\Models\Attachment;
 use App\Models\Post;
-use App\Models\Thread;
 use App\Models\ThreadVideo;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
 class PostFormater
 {
+    /**
+     * 过滤块
+     * @param Post $post
+     * @return mixed
+     */
     public static function pure(Post $post)
     {
         $content = $post->getAttribute('content');
@@ -45,7 +48,7 @@ class PostFormater
                             $value['data']['status'] = true;//自己的post默认已付费
                         } else {
                             $block_payid = Arr::get($value, 'data.blockPayid');
-                            $paid_status = PaidCheck::idPaid($post->id, [$block_payid]);
+                            $paid_status = PaidCheck::isPaid($post->id, [$block_payid]);
                             if (!$paid_status) {//不返回无权查看的块
                                 $value['data']['status'] = false;//先设置未未付费
                                 $pured_child = isset($value['defaultBlock']) ? $child[$value['defaultBlock']] : $child[0];
@@ -84,7 +87,11 @@ class PostFormater
      */
     public static function checkVodeo(ThreadVideo $video)
     {
-        $content = json_decode($video->post->content, true);
+        if (!empty($video->post_id)) {
+            $content = json_decode($video->post->content, true);
+        } else {
+            $content = json_decode($video->thread->firstPost, true);
+        }
         $pay_blocks = self::isInPayBlock(Arr::get($content, 'blocks'), $video->id, ['video']);
         $video->setAttribute('pay_blocks', $pay_blocks);
         return $video;
@@ -125,6 +132,35 @@ class PostFormater
                             }
                         } elseif($value['data']['value'] == $attachment_id) {
                             $values[] = $payid;
+                        }
+                    }
+                }
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * 获取所有付费块id以及价格
+     * @param $blocks
+     * @return array
+     */
+    public static function getPayIds($blocks)
+    {
+        $values = [];
+        if (!empty($blocks)) {
+            foreach ($blocks as $key => $value) {
+                $type = Arr::get($value, 'type');
+                if ($type == 'pay') {
+                    $block_payid = Arr::get($value, 'data.blockPayid');
+                    $values[$block_payid] = [
+                        'price' => Arr::get($value, 'data.price')
+                    ];
+                    $child = Arr::get($value, 'data.child');
+                    if (!empty($child)) {
+                        $ids = self::getPayIds($child);
+                        if (is_array($ids) && !empty($ids)) {
+                            $values = array_merge($values, $ids);
                         }
                     }
                 }

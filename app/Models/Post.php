@@ -525,4 +525,21 @@ class Post extends Model
     {
         static::$stateUser = $user;
     }
+
+    public function postVideo()
+    {
+        return $this->hasMany(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_VIDEO)->orderBy('id');
+    }
+
+
+    public function postAudio()
+    {
+        return $this->hasMany(ThreadVideo::class)->where('type', ThreadVideo::TYPE_OF_AUDIO)->orderBy('id');
+    }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

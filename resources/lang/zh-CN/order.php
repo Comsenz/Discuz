@@ -13,4 +13,5 @@ return [
     'payee_not_found'               => '收款人不存在',
     'order_group_error'             => '用户组不存在或配置有误',
     'order_group_forbidden'         => '默认用户组不允许购买',
+    'order_block_not_found'         => '付费块不存在',
 ];

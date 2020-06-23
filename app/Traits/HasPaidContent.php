@@ -42,9 +42,10 @@ trait HasPaidContent
 
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
         if ($actor->id === $model->user_id || $actor->isAdmin()) {
-            $content = $model->getAttribute('content');
-            $model->content = json_decode($content, true);
-           return;
+            if ($model instanceof Post) {
+               $model->content = PostFormater::pure($model);
+            }
+            return;
         }
 
         Thread::setStateUser($actor);
@@ -53,7 +54,7 @@ trait HasPaidContent
             $model->content = PostFormater::pure($model);
         } elseif ($model instanceof Attachment) {
             $model = PostFormater::checkAttachment($model);
-            $status = PaidCheck::idPaid($model->type_id, $model->pay_blocks);
+            $status = PaidCheck::isPaid($model->type_id, $model->pay_blocks);
             if ($status) {
                 $model->setAttribute('paid', true);
             } else {
@@ -63,7 +64,7 @@ trait HasPaidContent
         } elseif ($model instanceof ThreadVideo) {
 
             $model = PostFormater::checkVodeo($model);
-            $status = PaidCheck::idPaid($model->post_id, $model->pay_blocks);
+            $status = PaidCheck::isPaid($model->post_id, $model->pay_blocks);
             if ($status) {
                 $model->setAttribute('paid', true);
             } else {

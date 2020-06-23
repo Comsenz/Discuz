@@ -173,4 +173,24 @@ class BasicPostSerializer extends AbstractSerializer
     {
         return $this->hasOne($post, UserActionLogsSerializer::class);
     }
+
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function postVideo($post)
+    {
+        return $this->hasMany($post, ThreadVideoSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function postAudio($post)
+    {
+        return $this->hasMany($post, ThreadVideoSerializer::class);
+    }
+
 }

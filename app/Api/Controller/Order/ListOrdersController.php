@@ -48,6 +48,7 @@ class ListOrdersController extends AbstractListController
         'thread',
         'thread.user',
         'thread.firstPost',
+        'post',
     ];
 
     /**

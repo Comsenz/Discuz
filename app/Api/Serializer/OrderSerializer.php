@@ -29,6 +29,7 @@ class OrderSerializer extends AbstractSerializer
             'status'                => $model->status,
             'type'                  => $model->type,
             'thread_id'             => $model->thread_id,
+            'post_id'               => $model->post_id,
             'group_id'              => $model->group_id,
             'updated_at'            => $this->formatDate($model->updated_at),
             'created_at'            => $this->formatDate($model->created_at),
@@ -71,5 +72,14 @@ class OrderSerializer extends AbstractSerializer
     protected function group($order)
     {
         return $this->hasOne($order, GroupSerializer::class);
+    }
+
+    /**
+     * @param $thread
+     * @return Relationship
+     */
+    public function post($thread)
+    {
+        return $this->hasOne($thread, PostSerializer::class);
     }
 }

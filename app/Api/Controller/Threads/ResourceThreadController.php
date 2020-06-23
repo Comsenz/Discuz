@@ -57,6 +57,8 @@ class ResourceThreadController extends AbstractResourceController
         'posts.replyUser',
         'posts.thread',
         'posts.images',
+        'posts.postVideo',
+        'posts.postAudio',
     ];
 
     /**

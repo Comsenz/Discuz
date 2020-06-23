@@ -36,7 +36,8 @@ class ResourceOrderController extends AbstractResourceController
     public $include = [
         'user',
         'thread',
-        'thread.firstPost'
+        'thread.firstPost',
+        'post',
     ];
 
     public function __construct(OrderRepository $order)

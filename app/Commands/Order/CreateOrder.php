@@ -13,9 +13,11 @@ use App\Models\PayNotify;
 use App\Models\Thread;
 use App\Models\User;
 use App\Models\Group;
+use App\Models\Post;
 use App\Settings\SettingsRepository;
 use Discuz\Auth\AssertPermissionTrait;
 use App\Events\Group\PaidGroup;
+use App\BlockEditor\Formater\PostFormater;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
@@ -67,7 +69,8 @@ class CreateOrder
         $this->data = collect(Arr::get($this->data, 'data.attributes'));
 
         $validator_info = $validator->make($this->data->toArray(), [
-            'group_id'  => 'filled|int',
+            'group_id'      => 'filled|int',
+            'post_id'       => 'filled|int',
             'type'          => 'required|int',
             'thread_id'     => 'required_if:type,' . Order::ORDER_TYPE_REWARD . ',' . Order::ORDER_TYPE_THREAD . '|int',
             'amount'        => 'required_if:type,' . Order::ORDER_TYPE_REWARD . '|numeric|min:0.01',
@@ -85,7 +88,6 @@ class CreateOrder
                 $payeeId = Order::REGISTER_PAYEE_ID;
                 $amount = sprintf('%.2f', (float) $setting->get('site_price'));
                 break;
-
             // 主题打赏订单
             case Order::ORDER_TYPE_REWARD:
                 $thread = Thread::query()
@@ -102,7 +104,6 @@ class CreateOrder
                     throw new OrderException('order_post_not_found');
                 }
                 break;
-
             // 付费主题订单
             case Order::ORDER_TYPE_THREAD:
                 // 根据主题 id 查询非自己的付费主题
@@ -150,6 +151,27 @@ class CreateOrder
                     throw new OrderException('order_group_error');
                 }
                 break;
+            // 付费块
+            case Order::ORDER_TYPE_BLOCK:
+                $post_id     = $this->data->get('post_id');
+                $block_payid = $this->data->get('block_payid');
+                $post        = Post::findOrfail($post_id);
+                $content     = $post->getAttribute('content');
+                $content     = json_decode($content, true);
+                $payids      = [];
+                $pay_info    = [];
+                if (isset($content['blocks'])) {
+                    $pay_info = PostFormater::getPayIds($content['blocks']);
+                    $payids = array_keys($pay_info);
+                }
+
+                if (in_array($block_payid, $payids)) {
+                    $amount  = $pay_info[$block_payid]['price'];
+                    $payeeId = $post->user_id;
+                } else {
+                    throw new OrderException('order_block_not_found');
+                }
+                break;
             default:
                 throw new OrderException('order_type_error');
                 break;
@@ -177,6 +199,7 @@ class CreateOrder
         $order->amount          = $amount;
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
+        $order->post_id         = isset($post) ? $post->id : null;
         $order->thread_id       = isset($thread) ? $thread->id : null;
         $order->group_id        = isset($group_id) ? $group_id : null;
         $order->payee_id        = $payeeId;

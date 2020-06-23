@@ -56,6 +56,8 @@ class ResourcePostController extends AbstractResourceController
         'commentPosts.images',
         'images',
         'attachments',
+        'postVideo',
+        'postAudio',
     ];
 
     /**

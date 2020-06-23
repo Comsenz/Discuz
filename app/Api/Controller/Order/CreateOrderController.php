@@ -28,7 +28,8 @@ class CreateOrderController extends AbstractCreateController
         'user',
         'thread',
         'group',
-        'thread.firstPost'
+        'thread.firstPost',
+        'post',
     ];
 
     /**

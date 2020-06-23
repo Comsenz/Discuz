@@ -11,7 +11,7 @@ use App\Models\Order;
 
 class PaidCheck
 {
-    public static function idPaid($post_id, array $block_payid)
+    public static function isPaid($post_id, array $block_payid)
     {
         $actor = app('request')->getAttribute('actor');
         return $actor->orders()
