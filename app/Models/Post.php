@@ -196,13 +196,13 @@ class Post extends Model
      * 获取默认块
      * @return mixed
      */
-    protected function getListBlock()
+    public function getListBlock()
     {
         /** @var Collection $blocks */
         $content = $this->content;
         $listBlock = $content->get('listBlock', 0);
         $block = $content->get('blocks')[$listBlock];
-        if ($blocks[$listBlock]['type'] == 'pay') {
+        if ($block['type'] == 'pay') {
             //@todo 获取有限内容的块
             $block = '';
         }
