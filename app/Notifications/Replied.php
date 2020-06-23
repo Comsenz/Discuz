@@ -98,7 +98,7 @@ class Replied extends System
             // 不是长文没有标题则使用首贴内容
             $firstContent = $result['first_content'];
 
-            $build['post_content'] = $this->post->replyPost->getSummaryContent(0, Post::NOTICE_LENGTH)['content'];  // 回复的内容
+            $build['post_content'] = $this->post->getSummaryContent(0, Post::NOTICE_LENGTH)['content'];  // 回复的内容
             $build['post_created_at'] = $this->post->formatDate('created_at');
         }
 
