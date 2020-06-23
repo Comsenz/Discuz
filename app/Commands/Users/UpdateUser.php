@@ -162,6 +162,13 @@ class UpdateUser
             UserActionLogs::writeLog($this->actor, $user, $actionType, $logMsg);
         }
 
+        //修改注册原因
+        if (Arr::has($attributes, 'register_reason') && $user->status == 2) {
+            $registerReason = Arr::get($attributes, 'register_reason');
+            $registerReason = $this->specialChar->purify($registerReason);
+            $user->register_reason = $registerReason;
+        }
+
         if ($expiredAt = Arr::get($this->data, 'data.attributes.expired_at')) {
             $this->assertAdmin($this->actor);
 
