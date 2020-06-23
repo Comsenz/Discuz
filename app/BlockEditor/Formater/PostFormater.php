@@ -52,7 +52,7 @@ class PostFormater
                             if (!$paid_status) {//不返回无权查看的块
                                 $value['data']['status'] = false;//先设置未未付费
                                 $pured_child = isset($value['defaultBlock']) ? $child[$value['defaultBlock']] : $child[0];
-                                $value['data']['child'] = array($pured_child);
+                                $value['data']['child'] = [$pured_child];
                                 $value['data']['defaultBlock'] = 0;
                                 continue;
                             } else {
@@ -60,7 +60,7 @@ class PostFormater
                             }
                         }
                     }
-                    $value['data']['child'] = array(self::pureBlocks($child, $post));
+                    $value['data']['child'] = [self::pureBlocks($child, $post)];
                 }
             }
         }
@@ -118,7 +118,7 @@ class PostFormater
                         $status = self::isInPayBlock($child, $attachment_id, $figure_types, $block_payid);
                         if ($status) {
                             if (is_array($status) && !empty($status)) {
-                               $values = array_merge($values, $status);
+                                $values = array_merge($values, $status);
                             } else {
                                 $values[] = $block_payid;
                             }
@@ -130,7 +130,7 @@ class PostFormater
                             if (in_array($attachment_id, $value['data']['value'])) {
                                 $values[] = $payid;
                             }
-                        } elseif($value['data']['value'] == $attachment_id) {
+                        } elseif ($value['data']['value'] == $attachment_id) {
                             $values[] = $payid;
                         }
                     }
@@ -168,5 +168,4 @@ class PostFormater
         }
         return $values;
     }
-
 }
