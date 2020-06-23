@@ -23,9 +23,8 @@ class PayBlock extends BlockAbstract
         } else {
             throw new BlockParseException('未正确设置付费价格', 500);
         }
-        if (isset($this->data['block_payid'])) {
-            $this->data['block_payid'] = PayParser::checkPayID($this->data);
-        }
+        $this->data['blockPayid'] = PayParser::checkPayID($this->data);
+
         $this->data['freeWords'] = isset($this->data['freeWords']) ? (int) $this->data['freeWords'] : 0;
         $this->data['defaultBlock'] = isset($this->data['defaultBlock']) ? (int) $this->data['defaultBlock'] : 0;
         $this->data['status'] = 0;
