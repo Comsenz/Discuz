@@ -136,7 +136,7 @@ class Post extends Model
      * @return array|Application|Translator|string|null
      * @throws BindingResolutionException
      */
-    protected function getTextFromContent($strLength = 0)
+    public function getTextFromContent($strLength = 0)
     {
         /** @var Collection $blocks */
         $content = $this->attributes['content'];
