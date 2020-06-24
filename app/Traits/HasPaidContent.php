@@ -10,11 +10,9 @@ namespace App\Traits;
 use App\BlockEditor\Formater\PaidCheck;
 use App\Models\Attachment;
 use App\Models\Post;
-use App\Models\Order;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
-use Illuminate\Support\Str;
 use App\BlockEditor\Formater\PostFormater;
 
 /**
@@ -43,7 +41,7 @@ trait HasPaidContent
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
         if ($actor->id === $model->user_id || $actor->isAdmin()) {
             if ($model instanceof Post) {
-               $model->content = PostFormater::pure($model);
+                $model->content = PostFormater::pure($model);
             }
             return;
         }
@@ -62,7 +60,6 @@ trait HasPaidContent
                 $model->setAttribute('paid', false);
             }
         } elseif ($model instanceof ThreadVideo) {
-
             $model = PostFormater::checkVodeo($model);
             $status = PaidCheck::isPaid($model->post_id, $model->pay_blocks);
             if ($status) {
@@ -75,7 +72,6 @@ trait HasPaidContent
         }
     }
 
-
     /**
      * 付费块包含图片为付费时返回模糊图片
      *
@@ -86,7 +82,6 @@ trait HasPaidContent
         if (
             $attachment->type === Attachment::TYPE_OF_IMAGE
         ) {
-
             $attachment->setAttribute('blur', true);
 
             $parts = explode('.', $attachment->attachment);
@@ -95,5 +90,4 @@ trait HasPaidContent
             $attachment->attachment = implode('_blur.', $parts);
         }
     }
-
 }
