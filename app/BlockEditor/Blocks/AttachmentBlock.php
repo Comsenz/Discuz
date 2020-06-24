@@ -24,7 +24,7 @@ class AttachmentBlock extends BlockAbstract
         $this->assertCan($actor, 'attachment.create.0');
 
         $this->data['value'] = array_unique($this->data['value']);
-        $result = AttatchParser::checkAttachExist($this->data['value'], $actor, Attachment::TYPE_OF_FILE);
+        $result = AttatchParser::checkAttachExist($this->data['value'], $actor, Attachment::TYPE_OF_FILE, $this->post);
         if (!$result) {
             throw new BlockParseException($this->type . ' file not exist');
         }
