@@ -45,7 +45,13 @@ export default {
           imgWidht: 0,
           imgHeight: 0,
           text: "首页头部背景"
-        }
+        },
+        {
+          imageUrl: "",
+          imgWidht: 0,
+          imgHeight: 0,
+          text: "ICON"
+        },
       ]
     };
   },
@@ -59,17 +65,6 @@ export default {
     //     return this.fileList.length >0
     // },
   },
-  // watch: {
-  //监听图片数组变化
-  //   'this.fileList.length': {
-  //     handler(newValue, oldValue) {
-  //       if (newValue !== oldValue) {
-  //         // 操作
-  //          this.fileList = newValue;
-  //         }
-  //     }
-  //   },
-  // },
 
   methods: {
     loadStatus() {
@@ -92,6 +87,9 @@ export default {
               data.readdata._data.set_site.site_header_logo;
             this.numberimg[2].imageUrl =
               data.readdata._data.set_site.site_background_image;
+              // icon
+              this.numberimg[3].imageUrl =
+              data.readdata._data.set_site.site_favicon;
             this.getScaleImgSize(this.numberimg[0].imageUrl, {
               width: 140,
               height: 140
@@ -112,6 +110,13 @@ export default {
             }).then(res => {
               this.numberimg[2].imgWidht = res.width;
               this.numberimg[2].imgHeight = res.height;
+            });
+            this.getScaleImgSize(this.numberimg[3].imageUrl, {
+              width: 140,
+              height:140
+            }).then(res => {
+              this.numberimg[3].imgWidht = res.width;
+              this.numberimg[3].imgHeight = res.height;
             });
             if (this.siteMode == "pay") {
               this.radio = "2";
@@ -154,8 +159,11 @@ export default {
         case 2:
           type = "background_image";
           break;
-        default:
+        case 3:
           type = "logo";
+        case 4:
+          type = "favicon";
+        default:
       }
       this.numberimg[index].imageUrl = "";
       this.appFetch({
@@ -254,8 +262,11 @@ export default {
         case 2:
           type = "background_image";
           break;
-        default:
+        case 3:
           type = "logo";
+        case 4:
+          type = "favicon";
+        default:
       }
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);
