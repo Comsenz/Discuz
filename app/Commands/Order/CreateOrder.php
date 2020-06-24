@@ -200,6 +200,7 @@ class CreateOrder
         $order->user_id         = $this->actor->id;
         $order->type            = $orderType;
         $order->post_id         = isset($post) ? $post->id : null;
+        $order->block_payid     = isset($block_payid) ? $block_payid : null;
         $order->thread_id       = isset($thread) ? $thread->id : null;
         $order->group_id        = isset($group_id) ? $group_id : null;
         $order->payee_id        = $payeeId;

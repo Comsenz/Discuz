@@ -7,6 +7,7 @@
 
 namespace App\Commands\Post;
 
+use App\BlockEditor\BlocksParser;
 use App\Censor\Censor;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saved;
@@ -82,9 +83,8 @@ class EditPost
         if (isset($attributes['content'])) {
             $this->assertCan($this->actor, 'edit', $post);
 
-            // 敏感词校验
-            $content = $censor->checkText($attributes['content']);
-
+            $BlocksParser = new BlocksParser(collect(Arr::get($this->data, 'attributes.content')), $post);
+            $content = $BlocksParser->parse();
             // 存在审核敏感词时，将主题放入待审核
             if ($censor->isMod) {
                 $post->is_approved = Post::UNAPPROVED;

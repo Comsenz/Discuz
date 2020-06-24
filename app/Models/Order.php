@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $user_id
  * @property int $payee_id
  * @property int $type
+ * @property int $post_id
+ * @property string $block_payid
  * @property int $thread_id
  * @property int $group_id
  * @property int $status

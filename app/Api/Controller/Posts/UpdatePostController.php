@@ -33,6 +33,10 @@ class UpdatePostController extends AbstractResourceController
         'lastThreeComments',
         'lastThreeComments.user',
         'lastThreeComments.replyUser',
+        'images',
+        'attachments',
+        'postVideo',
+        'postAudio',
     ];
 
     /**
