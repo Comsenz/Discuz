@@ -40,6 +40,9 @@ class BlocksParser
 
     public function parse()
     {
+        if (!$this->data->get('blocks')) {
+            throw new BlockInvalidException('内容不能为空');
+        }
         $blocks = $this->parseBlocks($this->data->get('blocks'));
         return collect([$this->data, ['blocks' => $blocks]])->collapse();
     }
@@ -115,53 +118,53 @@ class BlocksParser
 
 /*
 {
-	"blocks": [{
-			"type": "pay",
-			"data": {
-				"payid": "xxx",
-				"price": 100,
-				"defaultBlock": "0",
-				"child": [{
-					"type": "text",
-					"data": {
-						"value": "ooo  @yyyy #xxx# :oooo:  $oooooopoo$",
-						"metion": [{
-							"id": "1",
-							"name": "@yyyy"
-						}],
-						"topic": [{
-							"id": "1",
-							"name": "#xxx#"
-						}],
-						"emoji": [{
-							"name": ":oooo:",
-							"url": "http://xxxx"
-						}],
-						"goods": [{
-							"id": "1",
-							"name": "$oooooopoo$"
-						}]
-					}
-				}]
-			}
-		},
-		{
-			"type": "text",
-			"data": {
-				"value": "Editor.js"
-			}
-		},
-		{
-			"type": "image",
-			"data": {
-				"style": "1",
-				"value": [
-					1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-				]
-			}
-		}
-	],
-	"listBlock": "0"
+    "blocks": [{
+            "type": "pay",
+            "data": {
+                "payid": "xxx",
+                "price": 100,
+                "defaultBlock": "0",
+                "child": [{
+                    "type": "text",
+                    "data": {
+                        "value": "ooo  @yyyy #xxx# :oooo:  $oooooopoo$",
+                        "metion": [{
+                            "id": "1",
+                            "name": "@yyyy"
+                        }],
+                        "topic": [{
+                            "id": "1",
+                            "name": "#xxx#"
+                        }],
+                        "emoji": [{
+                            "name": ":oooo:",
+                            "url": "http://xxxx"
+                        }],
+                        "goods": [{
+                            "id": "1",
+                            "name": "$oooooopoo$"
+                        }]
+                    }
+                }]
+            }
+        },
+        {
+            "type": "text",
+            "data": {
+                "value": "Editor.js"
+            }
+        },
+        {
+            "type": "image",
+            "data": {
+                "style": "1",
+                "value": [
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+                ]
+            }
+        }
+    ],
+    "listBlock": "0"
 }
 
  */
