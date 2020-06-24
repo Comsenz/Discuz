@@ -19,12 +19,14 @@ return [
     'income_artificial'         => '人工收入',
     'income_reward'             => '打赏主题收入',
     'income_thread'             => '付费主题收入',
+    'income_block'             => '主题付费块收入',
 
     'expend_renew'              => '站点续费支出',
     'expend_reward'             => '打赏主题支出',
     'expend_thread'             => '付费主题支出',
     'expend_group'              => '加入用户组支出',
     'expend_artificial'         => '人工支出',
+    'expend_block'              => '块付费',
 
     'cash_operate_desc'         => '提现',
 ];

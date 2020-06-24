@@ -44,6 +44,7 @@ trait NotifyTrait
                     //break;
                 case Order::ORDER_TYPE_REWARD:
                 case Order::ORDER_TYPE_THREAD:
+                case Order::ORDER_TYPE_BLOCK:
                     $order_amount = $order_info->amount;//订单金额
                     //站长作者分成配置
                     $site_author_scale = $setting->get('site_author_scale');
@@ -81,6 +82,10 @@ trait NotifyTrait
                             case Order::ORDER_TYPE_THREAD:
                                 $change_type = UserWalletLog::TYPE_INCOME_THREAD;
                                 $change_type_lang = 'wallet.income_thread';
+                                break;
+                            case Order::ORDER_TYPE_BLOCK:
+                                $change_type = UserWalletLog::TYPE_INCOME_BLOCK;
+                                $change_type_lang = 'wallet.income_block';
                                 break;
                             default:
                                 $change_type = $order_info->type;

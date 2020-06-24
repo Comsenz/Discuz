@@ -78,6 +78,10 @@ class WalletPayNotify
                     $change_type = UserWalletLog::TYPE_EXPEND_GROUP;
                     $change_type_lang = 'wallet.expend_group';
                     break;
+                case Order::ORDER_TYPE_BLOCK:
+                    $change_type = UserWalletLog::TYPE_EXPEND_BLOCK;
+                    $change_type_lang = 'wallet.expend_block';
+                    break;
                 default:
                     $change_type = $this->data['type'];
                     $change_type_lang = '';
