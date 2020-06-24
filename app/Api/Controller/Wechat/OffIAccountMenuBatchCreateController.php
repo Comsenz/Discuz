@@ -12,20 +12,18 @@ use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException as InvalidConfigExceptionAlias;
-use EasyWeChat\Kernel\Messages\Video;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Factory as Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use EasyWeChat\Factory;
 
 /**
- * 微信公众号 - 获取单条永久素材
- *
  * @package App\Api\Controller\Wechat
  */
-class OffIAccountAssetResourceController implements RequestHandlerInterface
+class OffIAccountMenuBatchCreateController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
 
@@ -33,6 +31,11 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
      * @var Factory
      */
     protected $easyWechat;
+
+    /**
+     * @var Validator
+     */
+    protected $validator;
 
     /**
      * @var SettingsRepository
@@ -43,10 +46,12 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
      * WechatMiniProgramCodeController constructor.
      *
      * @param Factory $easyWechat
+     * @param Validator $validator
      * @param SettingsRepository $settings
      */
-    public function __construct(Factory $easyWechat, SettingsRepository $settings)
+    public function __construct(Factory $easyWechat, Validator $validator, SettingsRepository $settings)
     {
+        $this->validator = $validator;
         $this->settings = $settings;
 
         $config = [
@@ -70,34 +75,20 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $mediaId = Arr::get($request->getQueryParams(), 'media_id');
-        $type = Arr::get($request->getQueryParams(), 'filter.type');
+        $data = Arr::get($request->getParsedBody(), 'data');
 
-        // 获取永久素材
-        $response = $this->easyWechat->material->get($mediaId);
+        $build = [];
+        collect($data)->each(function ($item) use (&$build) {
+            $attribute = Arr::get($item, 'attributes');
+            array_push($build, $attribute);
+        });
 
-        /**
-         * 根据类型数据不同 返回数据形式&格式不同
-         */
-        switch ($type) {
-            case 'image': // 图片（image）
-                header('Content-type: image/jpeg');
-                return $response;
-            case 'video': // 视频（video）
-                if (is_array($response)) {
-                    return DiscuzResponseFactory::JsonApiResponse($response);
-                }
-                break;
-            case 'voice': // 语音（voice）
-                header('Content-type: audio/mpeg');
-                return $response;
-            case 'news':  // 图文（news）
-                if (is_array($response)) {
-                    return DiscuzResponseFactory::JsonResponse($response);
-                }
-                break;
+        $result = $this->easyWechat->menu->create($build);
+
+        if (array_key_exists('errmsg', $result) && $result['errmsg'] != 'ok') {
+            throw new \Exception($result['errmsg']);
         }
 
-        throw new \Exception('Unexpected value');
+        return DiscuzResponseFactory::JsonApiResponse($result);
     }
 }
