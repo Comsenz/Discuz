@@ -6,7 +6,9 @@
 /node_modules
 .php_cs.cache
 /public/static
+/public/admin.html
 /public/index.html
+/public/s9e.js
 /public/storage
 /storage/install.lock
 /public/docs

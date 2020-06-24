@@ -13,6 +13,7 @@ use App\Settings\ForumSettingField;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
 
 class ForumSettingSerializer extends AbstractSerializer
@@ -36,6 +37,7 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         // 获取logo完整地址
+        $favicon = $this->forumField->siteUrlSplicing($this->settings->get('favicon'));
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
         $headerLogo = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
         $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
@@ -47,6 +49,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_introduction' => $this->settings->get('site_introduction'),
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
+                'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
                 'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
