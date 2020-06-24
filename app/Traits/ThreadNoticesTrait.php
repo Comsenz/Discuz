@@ -17,6 +17,7 @@ use App\MessageTemplate\Wechat\WechatPostModMessage;
 use App\MessageTemplate\Wechat\WechatPostOrderMessage;
 use App\MessageTemplate\Wechat\WechatPostStickMessage;
 use App\MessageTemplate\Wechat\WechatPostThroughMessage;
+use App\Models\Thread;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
 
@@ -36,7 +37,7 @@ trait ThreadNoticesTrait
     private function sendIsSticky($thread)
     {
         $build = [
-            'message' => $this->getThreadTitle($thread),
+            'message' => $thread->getContentByType(),
             'raw' => [
                 'thread_id' => $thread->id,
             ],
@@ -57,7 +58,7 @@ trait ThreadNoticesTrait
     private function sendIsEssence($thread)
     {
         $build = [
-            'message' => $this->getThreadTitle($thread),
+            'message' => $thread->getContentByType(),
             'raw' => [
                 'thread_id' => $thread->id,
             ],
@@ -73,13 +74,13 @@ trait ThreadNoticesTrait
     /**
      * 内容删除通知
      *
-     * @param $thread
+     * @param Thread $thread
      * @param array $attach 原因
      */
     private function sendIsDeleted($thread, $attach)
     {
         $data = [
-            'message' => $this->getThreadTitle($thread),
+            'message' => $thread->getContentByType(),
             'refuse' => $attach['refuse'],
         ];
 
@@ -99,7 +100,7 @@ trait ThreadNoticesTrait
     private function sendIsApproved($thread, $attach)
     {
         $data = [
-            'message' => $this->getThreadTitle($thread),
+            'message' => $thread->getContentByType(),
             'refuse' => $attach['refuse'],
             'raw' => [
                 'thread_id' => $thread->id,
@@ -117,17 +118,6 @@ trait ThreadNoticesTrait
             // 微信通知
             $thread->user->notify(new System(WechatPostModMessage::class, $data));
         }
-    }
-
-    /**
-     * 首贴内容代替
-     *
-     * @param $thread
-     * @return mixed
-     */
-    public function getThreadTitle($thread)
-    {
-        return empty($thread->title) ? $thread->firstPost->content : $thread->title;
     }
 
     /**
