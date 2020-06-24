@@ -79,7 +79,7 @@ class Liked extends System
      */
     public function build(&$build)
     {
-        $result = $this->post->getSummaryContent(0, Post::NOTICE_LENGTH);
+        $result = $this->post->getSummaryContent(Post::NOTICE_LENGTH);
 
         /**
          * 判断是否是楼中楼的回复
@@ -90,7 +90,7 @@ class Liked extends System
             // 回复的楼中楼数据
             $build['reply_post_id'] = $this->post->reply_post_id;
             $build['reply_post_user_id'] = $this->post->replyPost->user_id;
-            $build['reply_post_content'] = $this->post->replyPost->getSummaryContent(0, Post::NOTICE_LENGTH)['content'];
+            $build['reply_post_content'] = $this->post->replyPost->getSummaryContent(Post::NOTICE_LENGTH)['content'];
             $build['reply_post_created_at'] = $this->post->replyPost->formatDate('created_at');
         } else {
             /**

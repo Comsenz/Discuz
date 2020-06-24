@@ -78,7 +78,7 @@ class Rewarded extends System
      */
     public function build(&$build)
     {
-        $content = $this->order->thread->getContentByType(0, Thread::CONTENT_LENGTH);
+        $content = $this->order->thread->getContentByType(Thread::CONTENT_LENGTH);
 
         $build['content'] = $content;
     }

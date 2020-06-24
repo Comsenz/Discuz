@@ -213,12 +213,11 @@ class Post extends Model
     /**
      * 获取 Content & firstContent
      *
-     * @param int $isText 获取的是否为纯文本（1是 0否返回listBlock）
      * @param int $strLength
      * @return array
      * @throws BindingResolutionException
      */
-    public function getSummaryContent($isText, $strLength = 0)
+    public function getSummaryContent($strLength = 0)
     {
         $special = app()->make(SpecialCharServer::class);
 
@@ -231,36 +230,28 @@ class Post extends Model
          * 判断是否是楼中楼的回复
          */
         if ($this->reply_post_id) {
-            if ($isText) {
-                $content = $this->getTextFromContent($strLength);
-            } else {
-                $content = $this->getListBlock();
-            }
+            $content = $this->getTextFromContent($strLength);
         } else {
             /**
              * 判断长文点赞通知内容为标题
              */
             if ($this->thread->title) {
-                $content = $this->thread->getContentByType($isText, self::NOTICE_LENGTH);
+                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
             } else {
-                if ($isText) {
-                    $content = $this->getTextFromContent($strLength);
-                } else {
-                    $content = $this->getListBlock();
-                }
+                $content = $this->getTextFromContent($strLength);
 
                 // 如果是首贴 firstContent === content 内容一样
                 if ($this->is_first) {
                     $firstContent = $content;
                 } else {
                     //获取回复的主体内容
-                    $firstContent = $this->thread->getContentByType($isText, self::NOTICE_LENGTH);
+                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
                 }
             }
         }
 
         $build['content'] = $content;
-        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType($isText));
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType());
 
         return $build;
     }
