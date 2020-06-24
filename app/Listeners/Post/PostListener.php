@@ -33,6 +33,7 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use s9e\TextFormatter\Utils;
 
 class PostListener
@@ -361,10 +362,19 @@ class PostListener
      */
     public function threadTopic(Saved $event)
     {
-        $topics = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
+        //获取所有的话题ID
+        $blocks = $event->post->content->get('blocks');
+        $topicIds = [];
+        foreach ($blocks as $block) {
+            if ($block['type'] == 'text' && isset($block['data']['topics'])) {
+                foreach ($block['data']['topics'] as $topic) {
+                    $topicIds[] = Arr::get($topic, 'id');
+                }
+            }
+        }
 
         if ($event->post->is_first) {
-            $event->post->thread->topic()->sync($topics);
+            $event->post->thread->topic()->sync($topicIds);
 
             $event->post->thread->topic->each->refreshTopicThreadCount();
         }

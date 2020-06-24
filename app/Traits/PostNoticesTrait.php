@@ -24,7 +24,6 @@ use App\Notifications\Related;
 use App\Notifications\Replied;
 use App\Notifications\System;
 use Illuminate\Support\Arr;
-use s9e\TextFormatter\Utils;
 
 /**
  * Post 发送通知
@@ -42,8 +41,20 @@ trait PostNoticesTrait
      */
     public function sendRelated(Post $post, User $actor)
     {
-        $mentioned = Utils::getAttributeValues($post->parsedContent, 'USERMENTION', 'id');
 
+        //获取所有的话题ID
+        $blocks = $post->content->get('blocks');
+        $mentioned = [];
+        foreach ($blocks as $block) {
+            if ($block['type'] == 'text' && isset($block['data']['userMentions'])) {
+                foreach ($block['data']['userMentions'] as $userMention) {
+                    $mentioned[] = Arr::get($userMention, 'id');
+                }
+            }
+        }
+        if (!$mentioned) {
+            return false;
+        }
         $post->mentionUsers()->sync($mentioned);
 
         $users = User::whereIn('id', $mentioned)->get();

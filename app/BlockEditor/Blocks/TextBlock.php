@@ -34,10 +34,10 @@ class TextBlock extends BlockAbstract
         $this->data['value'] = $special->purify($this->data['value'], 'textBlockConfig');
 
         //解析@
-        if ($this->data['userMentions']) {
+        if (isset($this->data['userMentions'])) {
             $userIds = [];
             foreach ($this->data['userMentions'] as $user) {
-                $userIds = Arr::get($user, 'id');
+                $userIds[] = Arr::get($user, 'id');
             }
 
             $userCount = User::whereIn('id', $userIds)->count();
@@ -47,10 +47,10 @@ class TextBlock extends BlockAbstract
         }
 
         //解析#
-        if ($this->data['topics']) {
+        if (isset($this->data['topics'])) {
             $topicIds = [];
-            foreach ($this->data['topic'] as $topic) {
-                $topicIds = Arr::get($topic, 'id');
+            foreach ($this->data['topics'] as $topic) {
+                $topicIds[] = Arr::get($topic, 'id');
             }
 
             $topicCount = Topic::whereIn('id', $topicIds)->count();
