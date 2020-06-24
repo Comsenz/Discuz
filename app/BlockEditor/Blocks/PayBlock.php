@@ -23,6 +23,11 @@ class PayBlock extends BlockAbstract
         } else {
             throw new BlockParseException('未正确设置付费价格', 500);
         }
+
+        $child_types = array_column($this->data['child'], 'type');
+        if (in_array('pay', $child_types)) {
+            throw new BlockParseException('付费直接块子块不能包含付费块');
+        }
         $this->data['blockPayid'] = PayParser::checkPayID($this->data);
 
         $this->data['freeWords'] = isset($this->data['freeWords']) ? (int) $this->data['freeWords'] : 0;

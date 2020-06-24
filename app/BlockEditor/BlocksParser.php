@@ -64,10 +64,6 @@ class BlocksParser
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
                 if (isset($value['data']['child'])) {//子blocks解析
-                    $child_types = array_column($value['data']['child'], 'type');
-                    if (in_array('pay', $child_types) && $type == 'pay') {
-                        throw new BlockInvalidException('付费直接块子块不能包含付费块');
-                    }
                     $value['data']['child'] = $this->parseBlocks($value['data']['child'], $level);
                 }
                 if (!empty($this->parse_types)) {
