@@ -25,7 +25,7 @@ class VideoBlock extends BlockAbstract
         $this->assertCan($actor, 'createThreadVideo');
 
         $this->data['value'] = array_unique($this->data['value']);
-        $result = VideoParser::checkVideoExist($this->data['value'], $actor, ThreadVideo::TYPE_OF_VIDEO);
+        $result = VideoParser::checkVideoExist($this->data['value'], $actor, ThreadVideo::TYPE_OF_VIDEO, $this->post);
         if (!$result) {
             throw new BlockParseException($this->type . ' video not exist');
         }
