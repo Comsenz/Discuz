@@ -124,13 +124,19 @@ class BlocksParser
                     "type": "text",
                     "data": {
                         "value": "ooo  @yyyy #xxx# :oooo:  $oooooopoo$",
-                        "metion": [{
+                        "userMentions": [{
                             "id": "1",
                             "name": "@yyyy"
+                        },{
+                            "id": "2",
+                            "name": "@xxx"
                         }],
-                        "topic": [{
+                        "topics": [{
                             "id": "1",
                             "name": "#xxx#"
+                        },{
+                            "id": "2",
+                            "name": "#yyy#"
                         }],
                         "emoji": [{
                             "name": ":oooo:",
