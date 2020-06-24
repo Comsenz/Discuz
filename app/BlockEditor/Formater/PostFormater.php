@@ -75,7 +75,7 @@ class PostFormater
     public static function checkAttachment(Attachment $attachment)
     {
         $content = json_decode($attachment->post->content, true);
-        $pay_blocks = self::isInPayBlock(Arr::get($content, 'blocks'), $attachment->id, ['attachment', 'image', 'video']);
+        $pay_blocks = self::isInPayBlock(Arr::get($content, 'blocks'), $attachment->id, ['attachment', 'image']);
         $attachment->setAttribute('pay_blocks', $pay_blocks);
         return $attachment;
     }

@@ -27,7 +27,7 @@ class AudioBlock extends BlockAbstract
         $this->data['value'] = array_unique($this->data['value']);
         $result = VideoParser::checkVideoExist($this->data['value'], $actor, ThreadVideo::TYPE_OF_AUDIO, $this->post);
         if (!$result) {
-            throw new BlockParseException($this->type . ' video not exist');
+            throw new BlockParseException('block_audio_error_file_not_found');
         }
     }
 }

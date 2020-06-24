@@ -25,7 +25,7 @@ class GoodsBlock extends BlockAbstract
             ->where('post_id', 0)
             ->count();
         if ($result != count($this->data['value'])) {
-            throw new BlockParseException($this->type . ' goods error');
+            throw new BlockParseException('block_goods_error_file_not_found');
         }
     }
 }

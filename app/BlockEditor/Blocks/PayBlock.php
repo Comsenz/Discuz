@@ -16,23 +16,23 @@ class PayBlock extends BlockAbstract
     public function parse()
     {
         if (empty($this->data['child'])) {
-            throw new BlockParseException('至少包含一个子块', 500);
+            throw new BlockParseException('block_parse_error_need_child');
         }
         if (isset($this->data['price']) && is_numeric($this->data['price'])) {
             $this->data['price'] = sprintf('%.2f', (float) $this->data['price']);
         } else {
-            throw new BlockParseException('未正确设置付费价格', 500);
+            throw new BlockParseException('block_pay_error_price');
         }
 
         $child_types = array_column($this->data['child'], 'type');
         if (in_array('pay', $child_types)) {
-            throw new BlockParseException('付费直接块子块不能包含付费块');
+            throw new BlockParseException('block_pay_error_child_pay');
         }
         $this->data['blockPayid'] = PayParser::checkPayID($this->data);
 
-        $this->data['freeWords'] = isset($this->data['freeWords']) ? (int) $this->data['freeWords'] : 0;
+        $this->data['freeWords']    = isset($this->data['freeWords']) ? (int) $this->data['freeWords'] : 0;
         $this->data['defaultBlock'] = isset($this->data['defaultBlock']) ? (int) $this->data['defaultBlock'] : 0;
-        $this->data['status'] = 0;
+        $this->data['status']       = false;
 
         return $this->data;
     }

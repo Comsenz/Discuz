@@ -37,8 +37,8 @@ class EditorExceptionHandler implements ExceptionHandlerInterface
     public function handle(Exception $e)
     {
         $code = $e->getMessage();
-        $language = app('translator')->get('editor.' . $code);
-        if (app('translator')->get($language) == 'editor.' . $code) {
+        $language = app('translator')->get('blockEditor.' . $code);
+        if (app('translator')->get($language) == 'blockEditor.' . $code) {
             $language = $e->getMessage();
         }
         $status = $e->getCode();

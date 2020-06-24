@@ -41,7 +41,7 @@ class BlocksParser
     public function parse()
     {
         if (!$this->data->get('blocks')) {
-            throw new BlockInvalidException('内容不能为空');
+            throw new BlockInvalidException('block_invalid_empty');
         }
         $blocks = $this->parseBlocks($this->data->get('blocks'));
         return collect([$this->data, ['blocks' => $blocks]])->collapse();
@@ -56,7 +56,7 @@ class BlocksParser
     private function parseBlocks($blocks, $level = 5)
     {
         if (!$level) {
-            throw new BlockInvalidException('块层级超过最大允许层级');
+            throw new BlockInvalidException('block_invalid_level');
         }
         $level--;
         if (!empty($blocks)) {
@@ -105,7 +105,7 @@ class BlocksParser
                 $parser = GoodsBlock::getInstance();
                 break;
             default:
-                throw new BlockInvalidException($type . ' block is invalid');
+                throw new BlockInvalidException('block_invalid');
                 break;
         }
         return $parser;
@@ -170,3 +170,4 @@ class BlocksParser
 }
 
  */
+
