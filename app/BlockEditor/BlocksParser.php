@@ -63,8 +63,12 @@ class BlocksParser
             foreach ($blocks as $key => &$value) {
                 $type = Arr::get($value, 'type');
                 $parser = $this->getBlockInstance($type);
-                if (isset($value['data']['child'])) {//子blocks解析
-                    $value['data']['child'] = $this->parseBlocks($value['data']['child'], $level);
+                if(!isset($value['data']['value']) && $type != 'pay') {
+                    throw new BlockInvalidException('block_invalid_key_not_exist');
+                }
+                $data = Arr::get($value, 'data');
+                if (isset($data['child'])) {//子blocks解析
+                    $data['child'] = $this->parseBlocks($data['child'], $level);
                 }
                 if (!empty($this->parse_types)) {
                     //如果填写了$parse_types 数组，则只解析相应的块。
@@ -72,9 +76,9 @@ class BlocksParser
                         continue;
                     }
                 }
-                $parser->setData($value['data']);
+                $parser->setData($data);
                 $parser->setPost($this->post);
-                $value['data'] = array_merge($value['data'], (array) $parser->parse());
+                $value['data'] = array_merge($data, (array) $parser->parse());
             }
         }
         return $blocks;

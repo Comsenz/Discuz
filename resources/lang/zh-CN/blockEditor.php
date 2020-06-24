@@ -2,6 +2,7 @@
 
 return [
     'block_invalid'                         => '包含无效的块类型',
+    'block_invalid_key_not_exist'           => '块中缺少data.value属性',
     'block_invalid_empty'                   => '内容不能为空',
     'block_invalid_level'                   => '块层级超过最大允许层级',
 
