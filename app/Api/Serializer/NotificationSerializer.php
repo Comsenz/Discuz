@@ -30,6 +30,13 @@ class NotificationSerializer extends AbstractSerializer
             'created_at'    => $this->formatDate($model->created_at),
         ], $model->data);
 
+        // 默认必须要有的字段
+        if (!array_key_exists('reply_post_id', $result)) {
+            $result = array_merge($result, [
+                'reply_post_id' => 0
+            ]);
+        }
+
         // 新增单独赋值的字段值
         $result = array_merge($result, [
             'user_name' => $model->user_name ?: '',
