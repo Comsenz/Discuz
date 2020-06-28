@@ -8,6 +8,7 @@
 namespace App\Listeners\Thread;
 
 use App\Events\Post\Created as PostCreated;
+use App\Events\Post\Saved;
 use App\Events\Thread\Created as ThreadCreated;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
@@ -18,6 +19,7 @@ use App\Listeners\User\CheckPublish;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
+use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
 use App\Traits\PostNoticesTrait;
 use App\Traits\ThreadNoticesTrait;
@@ -90,6 +92,11 @@ class ThreadListener
         // 审核通过时，清除记录的敏感词
         if ($event->thread->is_approved == Thread::APPROVED) {
             PostMod::query()->where('post_id', $event->thread->firstPost->id)->delete();
+
+            //创建话题和关系
+            $event->thread->firstPost->setContentAttribute($event->thread->firstPost->content);
+            $event->thread->firstPost->save();
+            ThreadTopic::setThreadTopic($event->thread->firstPost);
         }
 
         $action = $this->transLogAction($event->thread->is_approved);

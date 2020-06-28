@@ -9,6 +9,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use s9e\TextFormatter\Utils;
 
 /**
  * Models a thread-topic state record in the database.
@@ -27,4 +28,18 @@ class ThreadTopic extends Pivot
 
     public $incrementing = true;
 
+    /**
+     * 设置主题话题关联关系
+     * @param Post $post
+     */
+    public static function setThreadTopic(Post $post)
+    {
+        if ($post->is_first) {
+            $topics = Utils::getAttributeValues($post->parsedContent, 'TOPIC', 'id');
+
+            $post->thread->topic()->sync($topics);
+
+            $post->thread->topic->each->refreshTopicThreadCount();
+        }
+    }
 }
