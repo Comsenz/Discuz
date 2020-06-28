@@ -8,6 +8,7 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
+use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
@@ -64,7 +65,8 @@ class BaseFormatter
     {
         $parser = $this->getParser($context);
 
-        if ($context && !$context->thread->is_approved) {
+        /** @var Post $context */
+        if ($context && (!$context->thread->is_approved || !$context->is_first)) {
             $parser->disableTag('TOPIC');
         }
         return $parser->parse($text);
