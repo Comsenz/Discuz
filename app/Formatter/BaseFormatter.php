@@ -66,7 +66,7 @@ class BaseFormatter
         $parser = $this->getParser($context);
 
         /** @var Post $context */
-        if ($context && (!$context->thread->is_approved || !$context->is_first)) {
+        if ($context instanceof Post && (!$context->thread->is_approved || !$context->is_first)) {
             $parser->disableTag('TOPIC');
         }
         return $parser->parse($text);
