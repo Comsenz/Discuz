@@ -113,28 +113,28 @@
             :href="'/details/' + items._data.id"
             target="_blank"
             :style="{'display':(items.threadVideo ? 'inline':'block')}"
-            v-html="items.firstPost._data.contentHtml"
+            v-html="items.firstPost && items.firstPost._data.contentHtml"
           ></a>
           <span class="iconfont iconvideo" v-if="items.threadVideo"></span>
           <div class="cont-review-table__main__cont-imgs">
             <p
               class="cont-review-table__main__cont-imgs-p"
-              v-for="(item,index) in items.firstPost.images"
+              v-for="(item,index) in items.firstPost && items.firstPost.images"
               :key="index"
             >
               <img
                 v-lazy="item._data.thumbUrl"
-                @click="imgShowClick(items.firstPost.images,index)"
+                @click="imgShowClick(items.firstPost && items.firstPost.images,index)"
                 :alt="item._data.fileName"
               />
             </p>
           </div>
           <div
             class="cont-review-table__main__cont-annex"
-            v-show="items.firstPost.attachments.length > 0"
+            v-show="items.firstPost && items.firstPost.attachments.length > 0"
           >
             <span>附件：</span>
-            <p v-for="(item,index) in items.firstPost.attachments" :key="index">
+            <p v-for="(item,index) in items.firstPost && items.firstPost.attachments" :key="index">
               <a :href="item._data.url" target="_blank">{{item._data.fileName}}</a>
             </p>
           </div>
