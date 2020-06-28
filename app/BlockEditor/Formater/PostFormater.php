@@ -85,7 +85,7 @@ class PostFormater
      * @param ThreadVideo
      * @return mixed
      */
-    public static function checkVodeo(ThreadVideo $video)
+    public static function checkVideo(ThreadVideo $video)
     {
         if (!empty($video->post_id)) {
             $content = json_decode($video->post->content, true);

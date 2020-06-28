@@ -60,7 +60,7 @@ trait HasPaidContent
                 $model->setAttribute('paid', false);
             }
         } elseif ($model instanceof ThreadVideo) {
-            $model = PostFormater::checkVodeo($model);
+            $model = PostFormater::checkVideo($model);
             $status = PaidCheck::isPaid($model->post_id, $model->pay_blocks);
             if ($status) {
                 $model->setAttribute('paid', true);
