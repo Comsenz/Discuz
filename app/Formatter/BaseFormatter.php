@@ -243,7 +243,7 @@ class BaseFormatter
     public static function addTopicId($tag)
     {
         $topic = Topic::firstOrCreate(
-            ['content' => $tag->getAttribute('topic')],
+            ['content' => trim($tag->getAttribute('topic'))],
             ['user_id'=>static::$actor->id]
         );
 
