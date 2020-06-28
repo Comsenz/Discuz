@@ -8,8 +8,6 @@
 namespace App\Formatter;
 
 use App\Models\Emoji;
-use App\Models\Post;
-use App\Models\PostGoods;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
@@ -66,6 +64,9 @@ class BaseFormatter
     {
         $parser = $this->getParser($context);
 
+        if ($context && !$context->thread->is_approved) {
+            $parser->disableTag('TOPIC');
+        }
         return $parser->parse($text);
     }
 
@@ -217,6 +218,7 @@ class BaseFormatter
         $tagName = 'TOPIC';
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('id');
+        $tag->attributes->add('content');
         $tag->filterChain->prepend([static::class, 'addTopicId']);
         $tag->template = '<span id="topic" value="{@id}"><xsl:apply-templates/></span>';
         $configurator->Preg->match('/\B#(?<topic>[\x{4e00}-\x{9fa5}\w]+)#/ui', $tagName);
@@ -246,10 +248,9 @@ class BaseFormatter
             ['user_id'=>static::$actor->id]
         );
 
-        if ($topic) {
-            $tag->setAttribute('id', $topic->id);
-            return true;
-        }
+        $tag->setAttribute('id', $topic->id);
+
+        return true;
     }
 
     public static function setActor($actor)
