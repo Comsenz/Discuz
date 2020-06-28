@@ -30,15 +30,10 @@ class EventMessageHandler extends MessageEventHandlerInterface
      */
     protected $eventKey;
 
-    /**
-     * @var
-     */
-    protected $reply;
-
     public function __construct($app)
     {
         $this->message = $app->server->getMessage();
-        app('wechatOffiaccount')->info(self::class . ': ', (array)$this->message);
+        // app('wechatOffiaccount')->info(self::class . ': ', (array)$this->message);
 
         $settings = app()->make(SettingsRepository::class);
         $config = [
@@ -58,29 +53,35 @@ class EventMessageHandler extends MessageEventHandlerInterface
 
     public function handle($payload = null)
     {
-        if ($this->isNewSubscribe()) {
-            // 查询被关注回复
-            $attention = WechatOffiaccountReply::where('type', 0)->first();
+        try {
+            if ($this->isNewSubscribe()) {
+                // 查询被关注回复
+                $this->reply = WechatOffiaccountReply::where('type', 0)->first();
 
-            if (!empty($attention)) {
-                $type = WechatOffiaccountReply::enumReplyType($attention->reply_type);
-                if (empty($type)) {
-                    return $this->{'Error'}('公众号配置关注信息错误');
+                if (!empty($this->reply)) {
+                    $type = WechatOffiaccountReply::enumReplyType($this->reply->reply_type);
+                    if (empty($type)) {
+                        return $this->{'Error'}('公众号配置关注信息错误');
+                    }
+
+                    return $this->{$type}();
                 }
-                $this->wechatDebugLog($type, $attention->reply_type);
-                return $this->{$type}();
+
+                return '';
             }
 
-            return '';
+            /**
+             * 触发监听
+             * @var mixed $result
+             */
+            $result = $this->eventByType();
+
+            return $result;
+        } catch (\Exception $e) {
+            $this->wechatDebugLog($e->getMessage());
+
+            return $this->{'Text'}($this->error());
         }
-
-        /**
-         * 触发监听
-         * @var mixed $result
-         */
-        $result = $this->eventByType();
-
-        return $result;
     }
 
     /**

@@ -81,7 +81,7 @@ class OffIAccountServerController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        app('wechatOffiaccount')->info(self::class . ': ', (array)$request->getQueryParams());
+        // app('wechatOffiaccount')->info(self::class . ': ', (array)$request->getQueryParams());
 
         /**
          * 判断是否是服务器配置
