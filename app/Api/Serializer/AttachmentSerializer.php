@@ -52,7 +52,7 @@ class AttachmentSerializer extends AbstractSerializer
             $url = $this->filesystem->disk('attachment')->url($path);
         }
 
-        if (!$model->paid && $model->type == Attachment::TYPE_OF_FILE) {
+        if (!$model->paid && $model->type != Attachment::TYPE_OF_IMAGE) {
             $url = '';
             $model->file_name = '';
             $model->attachment = '';

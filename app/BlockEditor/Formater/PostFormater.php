@@ -49,18 +49,19 @@ class PostFormater
                         } else {
                             $block_payid = Arr::get($value, 'data.blockPayid');
                             $paid_status = PaidCheck::isPaid($post->id, [$block_payid]);
-                            if (!$paid_status) {//不返回无权查看的块
-                                $value['data']['status'] = false;//先设置未未付费
+                            if ($paid_status) {
+                                //已付费
+                                $value['data']['status'] = true;//付费状态
+                            } else {
+                                //未付费，只返回默认块
+                                $value['data']['status'] = false;//先设置未付费
                                 $pured_child = isset($value['defaultBlock']) ? $child[$value['defaultBlock']] : $child[0];
                                 $value['data']['child'] = [$pured_child];
                                 $value['data']['defaultBlock'] = 0;
-                                continue;
-                            } else {
-                                $value['data']['status'] = true;//付费状态
                             }
                         }
                     }
-                    $value['data']['child'] = [self::pureBlocks($child, $post)];
+                    $value['data']['child'] = [self::pureBlocks($value['data']['child'], $post)];
                 }
             }
         }
@@ -75,7 +76,7 @@ class PostFormater
     public static function checkAttachment(Attachment $attachment)
     {
         $content = json_decode($attachment->post->content, true);
-        $pay_blocks = self::isInPayBlock(Arr::get($content, 'blocks'), $attachment->id, ['attachment', 'image']);
+        $pay_blocks = self::isInPayBlock(Arr::get($content, 'blocks'), $attachment->id, ['attachment', 'image', 'video']);
         $attachment->setAttribute('pay_blocks', $pay_blocks);
         return $attachment;
     }
@@ -156,12 +157,12 @@ class PostFormater
                     $values[$block_payid] = [
                         'price' => Arr::get($value, 'data.price')
                     ];
-                    $child = Arr::get($value, 'data.child');
-                    if (!empty($child)) {
-                        $ids = self::getPayIds($child);
-                        if (is_array($ids) && !empty($ids)) {
-                            $values = array_merge($values, $ids);
-                        }
+                }
+                $child = Arr::get($value, 'data.child');
+                if (!empty($child)) {
+                    $ids = self::getPayIds($child);
+                    if (is_array($ids) && !empty($ids)) {
+                        $values = array_merge($values, $ids);
                     }
                 }
             }
