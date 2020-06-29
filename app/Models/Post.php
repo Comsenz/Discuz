@@ -179,7 +179,7 @@ class Post extends Model
                 $defaultBlock =  Arr::get($blocks[$listBlock], 'data.child.'.$defaultBlockKey);
                 if ($defaultBlock['type'] == 'text') {
                     $value = Arr::get($defaultBlock, 'data.value', '');
-                    $limit = Arr::get($defaultBlock, 'data.freeWords') ?: $strLength;
+                    $limit = Arr::get($blocks[$listBlock], 'data.freeWords') ?: $strLength;
                     $summary = (string) Str::of($special->purify($value))
                         ->substr(0, $limit)
                         ->finish(self::SUMMARY_END_WITH);
