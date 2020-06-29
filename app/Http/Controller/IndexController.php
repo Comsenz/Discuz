@@ -25,7 +25,7 @@ class IndexController implements RequestHandlerInterface
         if (Str::startsWith($route, '/admin')) {
             $file = 'admin.html';
         } else {
-            $file = $this->isMobile($request->getServerParams()) ? 'pc.html' : 'index.html';
+            $file = $this->isMobile($request->getServerParams()) ? 'index.html' : 'pc.html';
         }
 
         return DiscuzResponseFactory::FileResponse(
