@@ -24,7 +24,7 @@ use Illuminate\Support\Str;
  */
 class DialogMessage extends Model
 {
-    const SUMMARY_LENGTH = 80;
+    const SUMMARY_LENGTH = 40;
 
     const SUMMARY_END_WITH = '...';
 
