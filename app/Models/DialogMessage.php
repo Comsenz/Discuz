@@ -10,6 +10,7 @@ namespace App\Models;
 use App\Formatter\DialogMessageFormatter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -23,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DialogMessage extends Model
 {
+    const SUMMARY_LENGTH = 80;
+
+    const SUMMARY_END_WITH = '...';
+
     /**
      * {@inheritdoc}
      */
@@ -66,6 +71,22 @@ class DialogMessage extends Model
     public function setParsedMessageTextAttribute($value)
     {
         $this->attributes['message_text'] = $value;
+    }
+
+    public function getSummaryAttribute()
+    {
+        $message_text = Str::of($this->message_text ?: '');
+
+        if ($message_text->length() > self::SUMMARY_LENGTH) {
+            $message_text = static::$formatter->parse(
+                $message_text->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)
+            );
+            $message_text = static::$formatter->render($message_text);
+        } else {
+            $message_text = $this->formatMessageText();
+        }
+
+        return str_replace('<br>', '', $message_text);
     }
 
     public function formatMessageText()
