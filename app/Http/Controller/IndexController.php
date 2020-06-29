@@ -8,6 +8,7 @@
 namespace App\Http\Controller;
 
 use Discuz\Http\DiscuzResponseFactory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,6 +27,10 @@ class IndexController implements RequestHandlerInterface
             $file = 'admin.html';
         } else {
             $file = $this->isMobile($request->getServerParams()) ? 'index.html' : 'pc.html';
+
+            if (Arr::has($request->getQueryParams(), 'from')) {
+                $file = 'index.html';
+            }
         }
 
         return DiscuzResponseFactory::FileResponse(
