@@ -61,7 +61,7 @@ class PostFormater
                             }
                         }
                     }
-                    $value['data']['child'] = [self::pureBlocks($value['data']['child'], $post)];
+                    $value['data']['child'] = self::pureBlocks($value['data']['child'], $post);
                 }
             }
         }
