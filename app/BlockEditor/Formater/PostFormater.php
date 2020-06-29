@@ -11,6 +11,7 @@ use App\Models\Attachment;
 use App\Models\Post;
 use App\Models\ThreadVideo;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class PostFormater
 {
@@ -56,6 +57,13 @@ class PostFormater
                                 //未付费，只返回默认块
                                 $value['data']['status'] = false;//先设置未付费
                                 $pured_child = isset($value['defaultBlock']) ? $child[$value['defaultBlock']] : $child[0];
+                                //处理文本块长度
+                                if ($pured_child['type'] == 'text') {
+                                    $limit = Arr::get($value, 'data.freeWords', 0);
+                                    $child_value = Arr::get($pured_child, 'data.value', '');
+                                    $pured_child['data']['value'] = (string) Str::of($child_value)->substr(0, $limit);
+                                }
+
                                 $value['data']['child'] = [$pured_child];
                                 $value['data']['defaultBlock'] = 0;
                             }
