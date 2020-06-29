@@ -15,5 +15,7 @@ return [
     'block_goods_error_file_not_found'      => '指定的商品不存在',
     'block_image_error_file_not_found'      => '指定的图片不存在',
     'block_video_error_file_not_found'      => '指定的视频不存在',
+    'block_text_error_user_not_found'       => '指定的用户不存在',
+    'block_text_error_topic_not_found'      => '指定的话题不存在',
 
 ];

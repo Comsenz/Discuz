@@ -42,7 +42,7 @@ class TextBlock extends BlockAbstract
 
             $userCount = User::whereIn('id', $userIds)->count();
             if (count($userIds) != $userCount) {
-                throw new BlockInvalidException('用户不存在');
+                throw new BlockInvalidException('block_text_error_user_not_found');
             }
         }
 
@@ -55,7 +55,7 @@ class TextBlock extends BlockAbstract
 
             $topicCount = Topic::whereIn('id', $topicIds)->count();
             if (count($topicIds) != $topicCount) {
-                throw new BlockInvalidException('话题不存在');
+                throw new BlockInvalidException('block_text_error_topic_not_found');
             }
         }
 
