@@ -31,7 +31,7 @@ class OrientateImage
     public function handle(Uploading $event)
     {
         // 帖子图片处理
-        if ((int) Arr::get($this->data, 'type') === Attachment::TYPE_OF_IMAGE) {
+        if ((int) Arr::get($this->data, 'type') === Attachment::TYPE_OF_IMAGE && extension_loaded('exif')) {
             (new ImageManager)->make($event->file)->orientate()->save();
         }
     }
