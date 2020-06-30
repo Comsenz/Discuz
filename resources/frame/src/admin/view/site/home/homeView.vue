@@ -58,6 +58,17 @@
       </p>
     </Card>
 
+    <Card class="home-card-box" header="Discuz! Q开发团队" intercept="true">
+      <p class="section">
+        <span class="section-title">版权所有：</span>
+        <span><a href="https://cloud.tencent.com/" target="_blank">腾讯云</a></span>
+      </p>
+      <p class="section">
+        <span class="section-title">官方唯一合作：</span>
+        <span><a href="https://www.comsenz-service.com/" target="_blank">康创联盛</a></span>
+      </p>
+    </Card>
+
     <Card class="home-card-box home-card__footer" header="相关链接">
       <a href="https://discuz.chat/manual-admin/" target="_blank">使用手册</a>
       <a href="https://www.discuz.net/" target="_blank">Discuz!&nbsp;支持论坛</a>
