@@ -196,29 +196,29 @@ export default {
             },
             {
               id: 3,
+              title: "话题管理",
+              name: "topicManagement",
+              icon: "icontopicmanagement",
+            },
+            {
+              id: 4,
               title: "回收站",
               name: "recycleBin",
               icon: "iconhuishouzhan",
               submenu: [
                 {
-                  id: 31,
+                  id: 41,
                   title: "主题",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
                 },
                 {
-                  id: 32,
+                  id: 42,
                   title: "回复",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
                 }
               ]
-            },
-            {
-              id: 4,
-              title: "话题管理",
-              name: "topicManagement",
-              icon: "icontopicmanagement",
             }
           ]
         },
