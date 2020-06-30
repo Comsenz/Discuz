@@ -34,7 +34,10 @@ class UpdateThreadController extends AbstractCreateController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['logs'];
+    public $optionalInclude = [
+        'firstPost.images',
+        'logs',
+    ];
 
     /**
      * @var Dispatcher
