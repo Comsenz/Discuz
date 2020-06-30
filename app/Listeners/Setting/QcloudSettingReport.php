@@ -12,17 +12,35 @@ use App\Events\Setting\Saved;
 use Illuminate\Support\Arr;
 use Discuz\Qcloud\QcloudTrait;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class QcloudSettingReport
 {
     use QcloudTrait;
 
+    /**
+     * @var Request
+     */
+    public $request;
+
+    /**
+     * @var SettingsRepository
+     */
     public $settings;
 
-    public function __construct(SettingsRepository $settings)
+    /**
+     * @param Request $request
+     * @param SettingsRepository $settings
+     */
+    public function __construct(Request $request, SettingsRepository $settings)
     {
+        $this->request = $request;
         $this->settings = $settings;
     }
+
+    /**
+     * @param Saved $event
+     */
     public function handle(Saved $event)
     {
         $data = [];
@@ -51,9 +69,13 @@ class QcloudSettingReport
                     if ($key != 'qcloud_close') {
                         $action = ((bool) $this->settings->get('qcloud_close', 'qcloud')) ? 'on' : 'off';
                     }
+
+                    $port = $this->request->getUri()->getPort();
+                    $siteUrl = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
+
                     $data['site'] = [
                         'action' => $action,
-                        'url' => $this->settings->get('site_url', 'default'),
+                        'url' => $siteUrl,
                         'uin' => $user_uin['UserUin'],
                     ];
                     break;

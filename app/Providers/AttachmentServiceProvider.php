@@ -13,7 +13,7 @@ use App\Events\Attachment\Uploading;
 use App\Listeners\Attachment\AddWatermarkToImage;
 use App\Listeners\Attachment\CheckImage;
 use App\Listeners\Attachment\LocalImageHandler;
-use App\Listeners\Attachment\orientateImage;
+use App\Listeners\Attachment\OrientateImage;
 use Discuz\Foundation\AbstractServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 

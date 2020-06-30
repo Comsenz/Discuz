@@ -42,6 +42,9 @@ class ForumSettingSerializer extends AbstractSerializer
         $headerLogo = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
         $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
 
+        $port = $this->request->getUri()->getPort();
+        $siteUrl = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
+
         $attributes = [
             // 站点设置
             'set_site' => [
@@ -53,7 +56,7 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
                 'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
-                'site_url' => $this->settings->get('site_url'),
+                'site_url' => $siteUrl,
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
