@@ -164,7 +164,9 @@ class Post extends Model
     {
         $content = strip_tags($this->formatContent());
 
-        return $content ? Str::of($content)->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH) : '';
+        return $content
+            ? Str::of($content)->substr(0, self::SUMMARY_LENGTH)->finish(self::SUMMARY_END_WITH)->__toString()
+            : '';
     }
 
     /**

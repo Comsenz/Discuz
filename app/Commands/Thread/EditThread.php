@@ -93,7 +93,7 @@ class EditThread
 
             // 存在审核敏感词时，将主题放入待审核
             if ($censor->isMod) {
-                $thread->is_approved = 0;
+                $thread->is_approved = Thread::UNAPPROVED;
             }
 
             $thread->title = $title;
@@ -194,7 +194,7 @@ class EditThread
         $validator->valid($validAttr);
 
         //编辑视频
-        if ($thread->type == 2 && $file_id) {
+        if ($thread->type == Thread::TYPE_OF_VIDEO && $file_id) {
             /** @var ThreadVideo $threadVideo */
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
 
