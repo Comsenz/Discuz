@@ -159,8 +159,6 @@ export default {
           'sort': '-createdAt'
         }
       }).then(res => {
-          console.log(res, 'res');
-          console.log(res.readdata[0]._data.thread_count);
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {

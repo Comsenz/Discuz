@@ -88,6 +88,9 @@
           >
             {{`#${items._data.content}#`}}
           </p>
+
+            <div class="cont-manage-theme__table-main" slot="main">
+          </div>
         </ContArrange>
 
         <el-image-viewer v-if="showViewer" :on-close="closeViewer" :url-list="url" />

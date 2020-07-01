@@ -196,30 +196,30 @@ export default {
             },
             {
               id: 3,
+              title: "话题管理",
+              name: "topicManagement",
+              icon: "icontopicmanagement",
+            },
+            {
+              id: 4,
               title: "回收站",
               name: "recycleBin",
               icon: "iconhuishouzhan",
               submenu: [
                 {
-                  id: 31,
+                  id: 41,
                   title: "主题",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
                 },
                 {
-                  id: 32,
+                  id: 42,
                   title: "回复",
                   name: "recycleBin",
                   icon: "iconhuishouzhan"
                 }
               ]
             },
-            {
-              id: 4,
-              title: "话题管理",
-              name: "topicManagement",
-              icon: "icontopicmanagement",
-            }
           ]
         },
         {
@@ -421,8 +421,8 @@ export default {
           this.$router.push({ path: "/admin/cont-review" });
           break;
         case "recycleBin":
-          this.sideSubmenu = this.navList[3].submenu[3].submenu;
-          this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
+          this.sideSubmenu = this.navList[3].submenu[4].submenu;
+          this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[0].title;
           this.$router.push({ path: "/admin/recycle-bin" });
           break;
         case "topicManagement":
@@ -604,12 +604,12 @@ export default {
             this.sideSubmenuSelect = this.navList[3].submenu[2].submenu[1].title;
             break;
           case "主题":
-            this.sideSubmenu = this.navList[3].submenu[3].submenu;
-            this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[0].title;
+            this.sideSubmenu = this.navList[3].submenu[4].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[0].title;
             break;
           case "回复":
-            this.sideSubmenu = this.navList[3].submenu[3].submenu;
-            this.sideSubmenuSelect = this.navList[3].submenu[3].submenu[1].title;
+            this.sideSubmenu = this.navList[3].submenu[4].submenu;
+            this.sideSubmenuSelect = this.navList[3].submenu[4].submenu[1].title;
             break;
           case "提现申请":
             this.sideSubmenu = this.navList[4].submenu[2].submenu;
