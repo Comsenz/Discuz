@@ -10,12 +10,14 @@ namespace App\Censor;
 use App\Models\StopWord;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
-use EasyWeChat\Factory;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Censor
 {
+    use EasyWechatTrait;
+
     /**
      * 忽略、不处理
      */
@@ -223,10 +225,7 @@ class Censor
      */
     public function miniProgramCheck($content)
     {
-        $easyWeChat = Factory::miniProgram([
-            'app_id' => $this->setting->get('miniprogram_app_id', 'wx_miniprogram'),
-            'secret' => $this->setting->get('miniprogram_app_secret', 'wx_miniprogram'),
-        ]);
+        $easyWeChat = $this->miniProgram();
 
         try {
             $result = $easyWeChat->content_security->checkText($content);
@@ -269,10 +268,7 @@ class Censor
                 $data['EvilType'] != 100 ? $this->isMod = true : $this->isMod = false;
             }
         } elseif ((bool) $this->setting->get('miniprogram_close', 'wx_miniprogram', false)) {
-            $easyWeChat = Factory::miniProgram([
-                'app_id' => $this->setting->get('miniprogram_app_id', 'wx_miniprogram'),
-                'secret' => $this->setting->get('miniprogram_app_secret', 'wx_miniprogram'),
-            ]);
+            $easyWeChat = $this->miniProgram();
 
             if ($isRemote) {
                 $tmpFile = tempnam(storage_path('/tmp'), 'checkImage');

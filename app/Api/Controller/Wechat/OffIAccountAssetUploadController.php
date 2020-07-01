@@ -12,12 +12,11 @@ use App\Validators\OffIAccountAssetUploadValidator;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Support\Collection;
 use EasyWeChat\OfficialAccount\Application;
-use EasyWeChat\Factory as EasyWechatFactory;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,6 +26,7 @@ use EasyWeChat\Kernel\Messages\Article;
 class OffIAccountAssetUploadController extends AbstractResourceController
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     /**
      * @var string
@@ -34,17 +34,12 @@ class OffIAccountAssetUploadController extends AbstractResourceController
     public $serializer = OffIAccountAssetSerializer::class;
 
     /**
-     * @var Factory
+     * @var OffIAccountAssetUploadValidator
      */
     protected $validator;
 
     /**
-     * @var SettingsRepository
-     */
-    protected $settings;
-
-    /**
-     * @var Application
+     * @var $easyWechat
      */
     protected $easyWechat;
 
@@ -57,21 +52,12 @@ class OffIAccountAssetUploadController extends AbstractResourceController
 
     /**
      * @param OffIAccountAssetUploadValidator $validator
-     * @param SettingsRepository $settings
-     * @param EasyWechatFactory $easyWechat
      */
-    public function __construct(OffIAccountAssetUploadValidator $validator, SettingsRepository $settings, EasyWechatFactory $easyWechat)
+    public function __construct(OffIAccountAssetUploadValidator $validator)
     {
         $this->validator = $validator;
-        $this->settings = $settings;
 
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
     }
 
     /**

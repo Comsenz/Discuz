@@ -10,16 +10,16 @@ namespace App\Api\Controller\Users;
 use App\Commands\Users\WebUserEvent;
 use App\Settings\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use EasyWeChat\Factory;
 use Psr\Http\Server\RequestHandlerInterface;
-
 
 class WechatWebUserLoginPostEventController implements RequestHandlerInterface
 {
+    use EasyWechatTrait;
+
     /**
      * 微信参数
      *
@@ -45,12 +45,10 @@ class WechatWebUserLoginPostEventController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $wx_config = [
-            'app_id'=> $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret'=>$this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('oplatform_app_token', 'wx_oplatform'),
             'aes_key' => $this->settings->get('oplatform_app_aes_key', 'wx_oplatform')
         ];
-        $app = Factory::officialAccount($wx_config);
+        $app = $this->offiaccount($wx_config);
         $this->bus->dispatch(
             new WebUserEvent($app)
         );
