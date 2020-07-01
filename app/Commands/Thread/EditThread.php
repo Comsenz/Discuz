@@ -22,6 +22,7 @@ use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -71,11 +72,12 @@ class EditThread
      * @param Censor $censor
      * @param ThreadValidator $validator
      * @param ThreadVideoRepository $threadVideos
+     * @param BusDispatcher $bus
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos)
+    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos, BusDispatcher $bus)
     {
         $this->events = $events;
 
@@ -202,22 +204,14 @@ class EditThread
                 $threadVideo->save();
 
                 // 创建新的视频记录
-                $newVideo = new ThreadVideo;
+                $video = $bus->dispatch(
+                    new CreateThreadVideo($this->actor, $thread, $this->data)
+                );
 
-                $newVideo->thread_id = $thread->id;
-                $newVideo->post_id = 0;
-                $newVideo->user_id = $this->actor->id;
-                $newVideo->type = ThreadVideo::TYPE_OF_VIDEO;
-                $newVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
-                $newVideo->file_name = $attributes['file_name'];
-                $newVideo->file_id = $attributes['file_id'];
-                $newVideo->media_url = '';
-                $newVideo->cover_url = '';
-
-                $newVideo->save();
+                $thread->setRelation('threadVideo', $video);
 
                 // 重新上传视频修改为审核状态
-                $thread->is_approved = 0;
+                $thread->is_approved = Thread::UNAPPROVED;
             }
         }
 
