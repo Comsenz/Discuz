@@ -9,7 +9,6 @@ namespace App\Formatter;
 
 use App\Models\Emoji;
 use App\Models\Post;
-use App\Models\PostGoods;
 use App\Models\Topic;
 use App\Models\User;
 use Discuz\Cache\CacheManager;
@@ -66,6 +65,10 @@ class BaseFormatter
     {
         $parser = $this->getParser($context);
 
+        /** @var Post $context */
+        if ($context instanceof Post && (!$context->thread->is_approved || !$context->is_first)) {
+            $parser->disableTag('TOPIC');
+        }
         return $parser->parse($text);
     }
 
@@ -189,7 +192,7 @@ class BaseFormatter
     {
         foreach (Emoji::cursor() as $emoji) {
             $url = $this->url->to('/' . $emoji->url);
-            $emojiImg = '<img style="display:inline-block;height:20px;vertical-align:top;" src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
+            $emojiImg = '<img style="display:inline-block;vertical-align:top;" src="' . $url . '" alt="' . trim($emoji->code, ':') . '" class="qq-emotion"/>';
             $configurator->Emoticons->add($emoji->code, $emojiImg);
         }
     }
@@ -246,10 +249,9 @@ class BaseFormatter
             ['user_id'=>static::$actor->id]
         );
 
-        if ($topic) {
-            $tag->setAttribute('id', $topic->id);
-            return true;
-        }
+        $tag->setAttribute('id', $topic->id);
+
+        return true;
     }
 
     public static function setActor($actor)

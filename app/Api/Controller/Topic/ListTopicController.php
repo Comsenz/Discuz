@@ -142,7 +142,7 @@ class ListTopicController extends AbstractListController
     public function search($filter, $sort, $limit = null, $offset = 0)
     {
         $query = $this->topics->query();
-        if ($content = Arr::get($filter, 'content')) {
+        if ($content = trim(Arr::get($filter, 'content'))) {
             $query->where('content', 'like', '%'.$content.'%');
         }
 

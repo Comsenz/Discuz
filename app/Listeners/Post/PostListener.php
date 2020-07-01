@@ -24,6 +24,7 @@ use App\Models\Attachment;
 use App\Models\Post;
 use App\Models\PostMod;
 use App\Models\Thread;
+use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
 use App\Notifications\Replied;
 use App\Notifications\System;
@@ -361,12 +362,6 @@ class PostListener
      */
     public function threadTopic(Saved $event)
     {
-        $topics = Utils::getAttributeValues($event->post->parsedContent, 'TOPIC', 'id');
-
-        if ($event->post->is_first) {
-            $event->post->thread->topic()->sync($topics);
-
-            $event->post->thread->topic->each->refreshTopicThreadCount();
-        }
+        ThreadTopic::setThreadTopic($event->post);
     }
 }

@@ -226,5 +226,11 @@ return [
 
         //NotificationTpl
         'template_id' => '模板ID',
+
+        //会话 会话消息
+        'dialog_id' => '会话',
+        'message_text' => '消息内容',
+        'attachment_id' => '附件',
+
     ],
 ];

@@ -57,7 +57,7 @@ class AttachmentValidator extends AbstractValidator
         // 验证规则
         $rules =  [
             'type' => 'required|integer|between:0,4',
-            'file' => ['required', "mimes:{$mimes}"],
+            'file' => ['bail', 'required', 'min:1', "mimes:{$mimes}"],
         ];
 
         // 文件大小

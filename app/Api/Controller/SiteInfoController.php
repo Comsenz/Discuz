@@ -61,8 +61,11 @@ class SiteInfoController extends AbstractResourceController
 
         $decomposer = new Decomposer($this->app, $request);
 
+        $port = $request->getUri()->getPort();
+        $siteUrl = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
+
         $data = [
-            'url' => $this->settings->get('site_url'),
+            'url' => $siteUrl,
             'site_id' => $this->settings->get('site_id'),
             'site_name' => $this->settings->get('site_name'),
             'threads' => Thread::count(),

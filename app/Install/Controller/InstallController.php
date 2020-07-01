@@ -67,7 +67,7 @@ class InstallController implements RequestHandlerInterface
         $input = $request->getParsedBody();
         $input['ip'] = ip($request->getServerParams());
         $input['port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
-        $port  = $request->getUri()->getPort();
+        $port = $request->getUri()->getPort();
         $input['site_url'] = $request->getUri()->getScheme() . '://' . $request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
         if ($this->app->isInstall()) {
@@ -186,7 +186,6 @@ class InstallController implements RequestHandlerInterface
             'DummyDbUsername',
             'DummyDbPassword',
             'DummyDbPrefix',
-            'DummySiteUrl',
         ], [
             $host,
             $port,
@@ -194,7 +193,6 @@ class InstallController implements RequestHandlerInterface
             Arr::get($input, 'mysqlUsername'),
             Arr::get($input, 'mysqlPassword'),
             Arr::get($input, 'tablePrefix', ''),
-            Arr::get($input, 'site_url'),
         ], $defaultConfig);
 
         file_put_contents($this->app->configPath('config.php'), $stub);
@@ -227,7 +225,6 @@ class InstallController implements RequestHandlerInterface
         $this->setting = $this->app->make(SettingsRepository::class);
 
         $this->setting->set('site_name', Arr::get($input, 'forumTitle'));
-        $this->setting->set('site_url', Arr::get($input, 'site_url'));
         $this->setting->set('site_install', Carbon::now());
     }
 
