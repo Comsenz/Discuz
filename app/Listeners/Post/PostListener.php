@@ -34,7 +34,6 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use s9e\TextFormatter\Utils;
 
 class PostListener
 {
@@ -205,7 +204,8 @@ class PostListener
     {
         if ($event->post->is_approved == Thread::APPROVED) {
             // 审核通过时，清除记录的敏感词
-            PostMod::where('post_id', $event->post->id)->delete();
+            PostMod::query()->where('post_id', $event->post->id)->delete();
+
             $action = 'approve';
         } elseif ($event->post->is_approved == Thread::IGNORED) {
             $action = 'ignore';

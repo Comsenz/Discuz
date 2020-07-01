@@ -7,9 +7,7 @@
 
 namespace App\Listeners\Thread;
 
-use App\Events\Post\Created as PostCreated;
-use App\Events\Post\Saved;
-use App\Events\Thread\Created as ThreadCreated;
+use App\Events\Thread\Created;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
@@ -23,13 +21,11 @@ use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
 use App\Traits\PostNoticesTrait;
 use App\Traits\ThreadNoticesTrait;
-use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class ThreadListener
 {
-    use ThreadTrait;
     use ThreadNoticesTrait;
     use PostNoticesTrait;
 
@@ -39,9 +35,8 @@ class ThreadListener
         $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, SaveCategoryToDatabase::class);
 
-        // 发布帖子
-        $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
-        $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
+        // 发布主题
+        $events->listen(Created::class, [$this, 'whenThreadCreated']);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
@@ -62,51 +57,38 @@ class ThreadListener
     }
 
     /**
-     * 发布首帖时，更新主题回复数，最后回复 ID
-     *
-     * @param PostCreated $event
+     * @param Created $event
      */
-    public function whenPostWasCreated(PostCreated $event)
+    public function whenThreadCreated(Created $event)
     {
-        $this->refreshData($event->post->thread);
+        $this->updateThreadCount($event->thread);
     }
 
     /**
-     * 主题发布后，增加分类主题数量
-     *
-     * @param ThreadCreated $event
-     * @throws \App\Exceptions\ThreadException
-     */
-    public function threadCreated(ThreadCreated $event)
-    {
-        $this->action($event->thread, 'create');
-    }
-
-    /**
-     * 审核主题时，记录操作
-     *
      * @param ThreadWasApproved $event
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
-        // 审核通过时，清除记录的敏感词
-        if ($event->thread->is_approved == Thread::APPROVED) {
+        // 审核通过时
+        if ($event->thread->is_approved === Thread::APPROVED) {
+            // 清除记录的敏感词
             PostMod::query()->where('post_id', $event->thread->firstPost->id)->delete();
 
-            //创建话题和关系
+            // 创建话题和关系
             $event->thread->firstPost->setContentAttribute($event->thread->firstPost->content);
             $event->thread->firstPost->save();
             ThreadTopic::setThreadTopic($event->thread->firstPost);
         }
 
-        $action = $this->transLogAction($event->thread->is_approved);
-
-        $message = $event->data['message'] ?? '';
-
-        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
+        $this->updateThreadCount($event->thread);
 
         // 发送操作通知
         $this->threadNotices($event->data['notice_type'], $event);
+
+        // 日志
+        $action = UserActionLogs::$behavior[$event->thread->is_approved] ?? ('unknown' . $event->thread->is_approved);
+
+        UserActionLogs::writeLog($event->actor, $event->thread, $action, $event->data['message'] ?? '');
     }
 
     /**
@@ -118,17 +100,18 @@ class ThreadListener
     {
         $thread = $event->thread;
 
+        // 同步隐藏首帖
         $thread->firstPost->deleted_at = $thread->deleted_at;
 
         $thread->firstPost->save();
 
-        $this->refreshData($thread);
+        $this->updateThreadCount($thread);
+
+        // 通知
+        $this->threadNotices('isDeleted', $event);
 
         // 日志
         UserActionLogs::writeLog($event->actor, $thread, 'hide', $event->data['message'] ?? '');
-
-        // 发送删除通知
-        $this->threadNotices('isDeleted', $event);
     }
 
     /**
@@ -140,11 +123,15 @@ class ThreadListener
     {
         $thread = $event->thread;
 
+        // 同步还原首帖
         $thread->firstPost->deleted_at = null;
 
         $thread->firstPost->save();
 
-        $this->refreshData($thread);
+        $this->updateThreadCount($thread);
+
+        // 日志
+        UserActionLogs::writeLog($event->actor, $thread, 'restore', $event->data['message'] ?? '');
     }
 
     /**
@@ -155,6 +142,8 @@ class ThreadListener
     public function whenThreadWasDeleted(Deleted $event)
     {
         Post::query()->where('thread_id', $event->thread->id)->delete();
+
+        $this->updateThreadCount($event->thread);
     }
 
     /**
@@ -188,6 +177,38 @@ class ThreadListener
             case 'isDeleted':   // 内容删除通知
                 $this->sendIsDeleted($event->thread, ['refuse' => $this->reasonValue($event->data)]);
                 break;
+        }
+    }
+
+    /**
+     * 更新主题数
+     *
+     * @param Thread $thread
+     */
+    private function updateThreadCount(Thread $thread)
+    {
+        if ($thread && $thread->exists) {
+            // 主题回复数
+            $thread->refreshPostCount();
+
+            // 最新回复
+            $thread->refreshLastPost();
+
+            $thread->save();
+
+            // 用户主题数
+            $user = $thread->user;
+
+            if ($user && $user->exists) {
+                $user->refreshThreadCount()->save();
+            }
+
+            // 分类主题数
+            $category = $thread->category;
+
+            if ($category && $category->exists) {
+                $category->refreshThreadCount()->save();
+            }
         }
     }
 }

@@ -8,10 +8,8 @@
 namespace App\Commands\Thread;
 
 use App\Censor\Censor;
-use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
-use App\Events\Users\UserRefreshCount;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
@@ -175,9 +173,6 @@ class EditThread
             }
         }
 
-        // 原分类ID
-        $cateId = $thread->category_id;
-
         $this->events->dispatch(
             new Saving($thread, $this->actor, $this->data)
         );
@@ -218,16 +213,6 @@ class EditThread
         $thread->save();
 
         $this->dispatchEventsFor($thread, $this->actor);
-
-        /**
-         * 更改统计数
-         */
-        $this->events->dispatch(
-            new UserRefreshCount($thread->user)
-        );
-        $this->events->dispatch(
-            new CategoryRefreshCount($thread->category, $cateId)
-        );
 
         return $thread;
     }
