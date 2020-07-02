@@ -86,6 +86,7 @@ class ForumSettingField
             // - 微信 H5
             'offiaccount_app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount') ?: '',
             'offiaccount_app_secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount') ?: '',
+            'offiaccount_server_config_token' => $this->settings->get('offiaccount_server_config_token', 'wx_offiaccount') ?: '',
             // - 微信 小程序
             'miniprogram_app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram') ?: '',
             'miniprogram_app_secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram') ?: '',
