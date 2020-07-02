@@ -65,7 +65,7 @@ class Post extends Model
     /**
      * 摘要长度
      */
-    const SUMMARY_LENGTH = 100;
+    const SUMMARY_LENGTH = 80;
 
     /**
      * 摘要结尾
