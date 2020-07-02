@@ -62,7 +62,7 @@ class OffIAccountAssetUpdateController extends AbstractCreateController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $mediaId = Arr::get($request->getParsedBody(), 'data.id', '');
+        $mediaId = Arr::get($request->getParsedBody(), 'data.media_id', '');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', '');
 
         $this->validator->valid($attributes);
