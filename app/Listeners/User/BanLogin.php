@@ -15,8 +15,16 @@ class BanLogin
     public function handle($event)
     {
         $user = $event->user;
-        if ($user->status == 1) {
-            throw new PermissionDeniedException('ban_user');
+        switch ($user->status) {
+            case 1:
+                throw new PermissionDeniedException('ban_user');
+                break;
+            case 3:
+                throw new PermissionDeniedException('validate_reject');
+                break;
+            case 4:
+                throw new PermissionDeniedException('validate_ignore');
+                break;
         }
     }
 }
