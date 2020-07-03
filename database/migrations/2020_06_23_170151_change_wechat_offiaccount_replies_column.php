@@ -14,7 +14,7 @@ class ChangeWechatOffiaccountRepliesColumn extends Migration
     {
         $this->schema()->table('wechat_offiaccount_replies', function (Blueprint $table) use (&$tableName) {
             // 获取数据库名
-            $tableName = $table->getTable();
+            $tableName = config('database.connections.mysql.prefix') . $table->getTable();
 
             $table->string('content')->default('')->after('reply_type')->comment('回复文本内容');
         });
