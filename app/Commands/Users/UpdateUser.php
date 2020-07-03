@@ -167,6 +167,8 @@ class UpdateUser
             $registerReason = Arr::get($attributes, 'register_reason');
             $registerReason = $this->specialChar->purify($registerReason);
             $user->register_reason = $registerReason;
+
+            $validator['register_reason'] = $registerReason;
         }
 
         if ($expiredAt = Arr::get($this->data, 'data.attributes.expired_at')) {
