@@ -404,9 +404,10 @@ class ListThreadsController extends AbstractListController
 
         //话题文章
         if ($topicId = Arr::get($filter, 'topicId', '0')) {
-            //更新话题阅读数
+            //更新话题阅读数、主题数
             $topic = Topic::find($topicId);
             $topic->refreshTopicViewCount();
+            $topic->refreshTopicThreadCount();
 
             $query->join('thread_topic', 'threads.id', '=', 'thread_topic.thread_id')
                 ->where('thread_topic.topic_id', $topicId);
