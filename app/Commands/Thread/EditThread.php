@@ -117,6 +117,10 @@ class EditThread
             $this->assertCan($this->actor, 'approve', $thread);
             if ($thread->is_approved != $attributes['isApproved']) {
                 $thread->is_approved = $attributes['isApproved'];
+
+                $thread->firstPost->is_approved = $thread->is_approved;
+                $thread->firstPost->save();
+
                 $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
 
                 // 内容审核通知
