@@ -132,9 +132,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
-                'create_thread_with_captcha' => !$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
-                'publish_need_real_name' => !$this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && $this->actor->realname,
-                'publish_need_bind_phone' => !$this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && $this->actor->mobile,
+                'create_thread_with_captcha' => ! $this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
+                'publish_need_real_name' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && ! $this->actor->realname,
+                'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
             ],
         ];
@@ -158,7 +158,7 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         // 微信小程序请求时判断视频开关
-        if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
+        if (! $this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $attributes['other']['can_create_thread_video'] = false;
         }
