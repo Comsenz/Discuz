@@ -44,7 +44,7 @@ class WechatLikedMessage extends DatabaseMessage
         if (empty($threadId)) {
             $threadUrl = $this->url->to('');
         } else {
-            $threadUrl = $this->url->to('/details/' . $threadId);
+            $threadUrl = $this->url->to('/pages/topic/index?id=' . $threadId);
         }
 
         return [
