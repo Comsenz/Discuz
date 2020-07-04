@@ -389,7 +389,11 @@ export default {
       })
         .then(data => {
           if (data.errors) {
-            this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0]);
+            if (data.errors[0].detail) {
+              this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])
+            } else {
+              this.$message.error(data.errors[0].code);
+            }
           } else {
             this.$message({
               message: "提交成功",
