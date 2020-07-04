@@ -58,18 +58,15 @@ export default {
       searchData: {
         topicContent: '',         //话题内容
         pageSelect: '10',         //每页显示数
-        topicAuthor: '',          //主题作者
-        themeKeyWords: '',        //主题关键词
-        dataValue: ['', ''],      //发表时间范围
-        viewedTimesMin: '',       //被浏览次数最小
-        viewedTimesMax: '',       //被浏览次数最大
-        numberOfRepliesMin: '',   //被回复数最小
-        numberOfRepliesMax: '',   //被回复数最大
-        essentialTheme: '',       //精华主题类型
-        topType: ''               //置顶主题类型
+        topicAuthor: '',          //话题作者
+        releaseTime: ['',''],     //创建时间范围
+        numberOfThreadMin: '',    //主题数起始值
+        numberOfThreadMax: '',    //主题数结束值
+        numberOfHotMin: '',       //热度数起始值
+        numberOfHotMax: '',       //热度数结束值
       },
       subLoading:false,     //提交按钮状态
-
+      
     }
   },
   computed: mapState({
@@ -136,7 +133,7 @@ export default {
       }
 
       //处理时间为空
-      this.searchData.dataValue = this.searchData.dataValue == null ? ['', ''] : this.searchData.dataValue;
+      this.searchData.releaseTime = this.searchData.releaseTime == null ? ['', ''] : this.searchData.releaseTime;
       this.currentPag = 1;
       this.getThemeList(1);
     },
@@ -145,6 +142,7 @@ export default {
     * 请求接口
     * */
     getThemeList(pageNumber) {
+      console.log('请求');
       let searchData = this.searchData;
 
       this.appFetch({
@@ -156,12 +154,21 @@ export default {
           'page[number]': pageNumber,
           'page[size]': searchData.pageSelect,
           'filter[q]': searchData.themeKeyWords,
-          'sort': '-createdAt'
+          'sort': '-createdAt',
+          'filter[username]':searchData.topicAuthor,
+          'filter[content]':searchData.topicContent,
+          'filter[createdAtBegin]':searchData.releaseTime[0],
+          'filter[createdAtEnd]':searchData.releaseTime[1],
+          'filter[threadCountBegin]':searchData.numberOfThreadMin,
+          'filter[threadCountEnd]':searchData.numberOfThreadMax,
+          'filter[viewCountBegin]':searchData.numberOfHotMin,
+          'filter[viewCountEnd]':searchData.numberOfHotMax,
         }
       }).then(res => {
         if (res.errors) {
           this.$message.error(res.errors[0].code);
         } else {
+          console.log(this.themeList,'列表');
           this.themeList = res.readdata;
           this.total = res.meta.total;
           this.pageCount = res.meta.pageCount;
