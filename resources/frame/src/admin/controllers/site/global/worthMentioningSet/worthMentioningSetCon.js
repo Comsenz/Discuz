@@ -5,6 +5,7 @@ import CardRow from '../../../../view/site/common/card/cardRow';
 export default {
   data:function () {
     return {
+      forums: '', // forum数据
       loginStatus:'default',   //default h5 applets pc
       settingStatus: [{
         name: '公众号接口配置',
@@ -46,7 +47,8 @@ export default {
         if (data.errors){
           this.$message.error(res.errors[0].code);
         }else {
-
+          this.forums = data.readdata._data;
+          console.log(this.forums,'这是初始化');
           if (data.readdata._data.passport.offiaccount_close == '0') {
             this.settingStatus[0].status = false;
           } else {
@@ -76,6 +78,21 @@ export default {
     },
     //修改配置状态
     loginSetting(index,type,status){
+      if(status == '1') {
+        if(type == 'offiaccount_close'){
+          if(!this.forums.passport.offiaccount_app_id || !this.forums.passport.offiaccount_app_secret){
+            this.$message.error('请先填写配置再开启');
+            return;
+          }
+        }
+        if(type == 'miniprogram_close'){
+          if(!this.forums.passport.miniprogram_app_id || !this.forums.passport.miniprogram_app_secret){
+            this.$message.error('请先填写配置再开启');
+            return;
+          }
+        }
+      }
+      console.log(index,type,status,'这是参数');
       if(type == 'offiaccount_close') {
         this.changeSettings('offiaccount_close',status,'wx_offiaccount');
       } else if( type == 'miniprogram_close'){
