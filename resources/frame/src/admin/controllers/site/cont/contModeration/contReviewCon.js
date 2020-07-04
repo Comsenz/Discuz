@@ -288,7 +288,7 @@ export default {
 
     editClick(id){
       let routeData = this.$router.resolve({
-        path: `/edit-topic/${id}`
+        path: `/pages/topic/post?operating=edit&threadId=${id}`
       });
       window.open(routeData.href, '_blank');
     },
