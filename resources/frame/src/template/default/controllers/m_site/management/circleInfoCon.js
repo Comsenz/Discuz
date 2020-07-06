@@ -90,7 +90,7 @@ export default {
     },
     //点击站点成员头像，跳转到用户主页
     membersJump(userId) {
-      this.$router.push({ path: '/home-page/' + userId });
+      this.$router.push({ path: '/pages/profile/index?userId=' + userId });
     },
     onRefresh() {
       this.loadSite().then((res) => {

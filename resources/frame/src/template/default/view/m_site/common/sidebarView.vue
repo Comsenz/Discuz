@@ -1,6 +1,6 @@
 <template>
    <div class="sidebarCon">
-     <div class="sideCon" @click="$router.push({path:'/home-page/'+userId})">
+     <div class="sideCon" @click="$router.push({path:'/pages/profile/index?userId='+userId})">
        <div class="sideUserBox" v-model="userInfo">
          <!-- <img src="appConfig.staticBaseUrl/static/images/noavatar.gif" class="userHead"> -->
          <div  class="side-bar-avatar-box">
