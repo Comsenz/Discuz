@@ -95,8 +95,13 @@ class CreateUserWalletCash
         $cash_apply_amount = sprintf('%.2f', $cash_apply_amount);
 
         //今日已申提现总额
-        $totday_cash_amount = UserWalletCash::where('created_at', '>=', Carbon::today())->sum('cash_apply_amount');
-        if (($totday_cash_amount + $cash_apply_amount) > $cash_sum_limit) {
+        $totday_cash_amount = UserWalletCash::where('user_id', $this->actor->id)
+            ->where('created_at', '>=', Carbon::today())
+            ->where('refunds_status', UserWalletCash::REFUNDS_STATUS_NO)
+            ->sum('cash_apply_amount');
+        $totday_cash_amount += $cash_apply_amount;
+
+        if (bccomp($cash_sum_limit, $totday_cash_amount, 2) == -1) {
             //超出提现限额
             throw new WalletException('cash_sum_limit');
         }
