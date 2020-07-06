@@ -112,7 +112,7 @@ trait PostNoticesTrait
                 // 发送微信通知
                 $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
                     'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
-                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
+                    'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $post->user->username    // 发送人姓名
                     ]),

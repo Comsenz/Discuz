@@ -163,9 +163,10 @@ class Thread extends Model
      * 根据类型获取 Thread content
      *
      * @param int $substr
+     * @param bool $parse
      * @return Stringable|string
      */
-    public function getContentByType($substr = 0)
+    public function getContentByType($substr, $parse = false)
     {
         $special = app()->make(SpecialCharServer::class);
 
@@ -175,7 +176,12 @@ class Thread extends Model
         } else {
             // 不是长文没有标题则使用首贴内容
             $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
-            $content = $this->firstPost->formatContent();
+            if ($parse) {
+                // 原文
+                $content = $this->firstPost->content;
+            } else {
+                $content = $this->firstPost->formatContent();
+            }
         }
 
         return $content;

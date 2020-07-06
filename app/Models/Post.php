@@ -268,7 +268,7 @@ class Post extends Model
              * 判断长文点赞通知内容为标题
              */
             if ($this->thread->type === Thread::TYPE_OF_LONG) {
-                $content = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                $content = $this->thread->getContentByType(self::NOTICE_LENGTH, $parse);
             } else {
                 // 引用回复去除引用部分
                 $this->filterPostContent();
@@ -285,13 +285,13 @@ class Post extends Model
                 if ($this->is_first) {
                     $firstContent = $content;
                 } else {
-                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH);
+                    $firstContent = $this->thread->getContentByType(self::NOTICE_LENGTH, $parse);
                 }
             }
         }
 
         $build['content'] = $content;
-        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType());
+        $build['first_content'] = $firstContent ?? $special->purify($this->thread->getContentByType(Thread::CONTENT_LENGTH, $parse));
 
         return $build;
     }
