@@ -35,6 +35,33 @@ use s9e\TextFormatter\Utils;
 trait PostNoticesTrait
 {
     /**
+     * 发送通知
+     *
+     * @param Post $post
+     * @param User $actor
+     * @param string $type
+     * @param string $message
+     */
+    public function postNotices(Post $post, User $actor, $type, $message = '')
+    {
+        // 无需给自己发送通知
+        if ($post->user_id == $actor->id) {
+            return;
+        }
+
+        $message = $message ?: '无';
+
+        switch ($type) {
+            case 'isApproved':  // 内容审核通知
+                $this->postisapproved($post, ['refuse' => $message]);
+                break;
+            case 'isDeleted':   // 内容删除通知
+                $this->postIsDeleted($post, ['refuse' => $message]);
+                break;
+        }
+    }
+
+    /**
      * 发送@通知
      *
      * @param Post $post
@@ -134,23 +161,6 @@ trait PostNoticesTrait
      */
     public function getPostTitle(Post $post)
     {
-        return $post->thread->type == 1 ? $post->thread->title : $post->formatContent();
-    }
-
-    /**
-     * 过滤原因值
-     *
-     * @param $attach
-     * @return mixed|string
-     */
-    public function reasonValuePost($attach)
-    {
-        if (Arr::has($attach, 'message')) {
-            if (!empty($attach['message'])) {
-                return $attach['message'];
-            }
-        }
-
-        return '无';
+        return $post->thread->type === Thread::TYPE_OF_LONG ? $post->thread->title : $post->formatContent();
     }
 }

@@ -470,7 +470,7 @@ class Thread extends Model
         }
 
         // 是否已缓存付费状态（为避免 N + 1 问题）
-        if (array_key_exists($this->id, static::$userHasPaidThreads[$user->id] ?? [])) {
+        if (isset(static::$userHasPaidThreads[$user->id][$this->id])) {
             return static::$userHasPaidThreads[$user->id][$this->id];
         }
 

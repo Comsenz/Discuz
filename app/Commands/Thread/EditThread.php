@@ -115,65 +115,49 @@ class EditThread
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
+
             if ($thread->is_approved != $attributes['isApproved']) {
                 $thread->is_approved = $attributes['isApproved'];
 
-                $thread->firstPost->is_approved = $thread->is_approved;
-                $thread->firstPost->save();
-
-                $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
-
-                // 内容审核通知
-                $thread->raise(new ThreadWasApproved(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isApproved', 'message' => $approvedMsg]
-                ));
+                $thread->raise(
+                    new ThreadWasApproved($thread, $this->actor, ['message' => $attributes['message'] ?? ''])
+                );
             }
         }
 
         if (isset($attributes['isSticky'])) {
             $this->assertCan($this->actor, 'sticky', $thread);
+
             if ($thread->is_sticky != $attributes['isSticky']) {
                 $thread->is_sticky = $attributes['isSticky'];
-                // 置顶后 通知发帖人置顶消息
-                if ($attributes['isSticky']) {
-                    // 内容置顶通知
-                    $thread->raise(new ThreadWasApproved(
-                        $thread,
-                        $this->actor,
-                        ['notice_type' => 'isSticky']
-                    ));
+
+                if ($thread->is_sticky) {
+                    $this->threadNotices($thread, $this->actor, 'isSticky', $attributes['message'] ?? '');
                 }
             }
         }
 
         if (isset($attributes['isEssence'])) {
             $this->assertCan($this->actor, 'essence', $thread);
+
             if ($thread->is_essence != $attributes['isEssence']) {
                 $thread->is_essence = $attributes['isEssence'];
-                // 内容精华通知
-                if ($attributes['isEssence']) {
-                    $thread->raise(new ThreadWasApproved(
-                        $thread,
-                        $this->actor,
-                        ['notice_type' => 'isEssence']
-                    ));
+
+                if ($thread->is_essence) {
+                    $this->threadNotices($thread, $this->actor, 'isEssence', $attributes['message'] ?? '');
                 }
             }
         }
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $thread);
-            if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
-                $message = isset($attributes['message']) ? $attributes['message'] : '';
 
-                if ($attributes['isDeleted']) {
-                    // 内容删除通知
-                    $thread->hide($this->actor, ['message' => $message]);
-                } else {
-                    $thread->restore($this->actor, ['message' => $message]);
-                }
+            $message = $attributes['message'] ?? '';
+
+            if ($attributes['isDeleted']) {
+                $thread->hide($this->actor, ['message' => $message]);
+            } else {
+                $thread->restore($this->actor, ['message' => $message]);
             }
         }
 
