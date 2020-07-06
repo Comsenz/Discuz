@@ -39,8 +39,10 @@ class PostObserver
     public function updated(Post $post)
     {
         if ($post->isDirty('is_approved')) {
-            $post->thread->is_approved = $post->is_approved;
-            $post->thread->save();
+            if ($post->is_first) {
+                $post->thread->is_approved = $post->is_approved;
+                $post->thread->save();
+            }
 
             $this->refreshSiteThreadCount();
         }
