@@ -307,32 +307,12 @@ class PostListener
      */
     public function userMentions(Saved $event)
     {
-        // 任何修改帖子行为 除了修改是否合法字段,其它都不允许发送@通知
-        $edit = Arr::get($event->data, 'edit', false);
+        $post = $event->post;
 
-        if ($edit) {
-            // 判断是否修改合法值
-            if (!Arr::has($event->data, 'attributes.isApproved')) {
-                return;
-            }
-            // 判断是否合法
-            if (Arr::get($event->data, 'attributes.isApproved') != Thread::APPROVED) {
-                return;
-            }
-        } else {
-            // 判断是否是合法的主题
-            if ($event->post->thread->is_approved != Thread::APPROVED) {
-                return;
-            }
-
-            // 判断是否是合法的回复
-            if ($event->post->is_approved != Post::APPROVED) {
-                return;
-            }
+        // 新建 或者 修改了是否合法字段 并且 合法时，发送 @ 通知
+        if (($post->wasRecentlyCreated || $post->wasChanged('is_approved')) && $post->is_approved === Post::APPROVED) {
+            $this->sendRelated($event->post, $event->post->user);
         }
-
-        // 发送@通知
-        $this->sendRelated($event->post, $event->post->user);
     }
 
     /**

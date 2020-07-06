@@ -138,7 +138,7 @@ class EditPost
 
         $post->save();
 
-        $post->raise(new Saved($post, $this->actor, array_merge($this->data, ['edit' => true])));
+        $post->raise(new Saved($post, $this->actor, $this->data));
 
         $this->dispatchEventsFor($post, $this->actor);
 
