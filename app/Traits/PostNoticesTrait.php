@@ -57,7 +57,7 @@ trait PostNoticesTrait
 
             // 微信通知
             $user->notify(new Related($post, $actor, WechatRelatedMessage::class, [
-                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                 'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                     'actor_username' => $actor->username    // 发送人姓名
                 ]),
@@ -111,7 +111,7 @@ trait PostNoticesTrait
                 $post->thread->user->notify(new Replied($post, $post->user, RepliedMessage::class));
                 // 发送微信通知
                 $post->thread->user->notify(new Replied($post, $post->user, WechatRepliedMessage::class, [
-                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                     'subject' => $post->thread->getContentByType(Thread::CONTENT_LENGTH),
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $post->user->username    // 发送人姓名

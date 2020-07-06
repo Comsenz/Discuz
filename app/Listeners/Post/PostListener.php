@@ -108,8 +108,8 @@ class PostListener
 
                 // 微信通知
                 $post->thread->user->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
-                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
-                    'subject' => $post->getSummaryContent(Post::NOTICE_LENGTH)['first_content'],
+                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
+                    'subject' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['first_content'],
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $actor->username    // 发送人姓名
                     ]),
@@ -127,9 +127,10 @@ class PostListener
 
                 // 去掉回复引用
                 $post->replyPost->filterPostContent(Post::NOTICE_LENGTH);
+
                 // 微信通知
                 $post->replyUser->notify(new Replied($post, $actor, WechatRepliedMessage::class, [
-                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH)['content'],
+                    'message' => $post->getSummaryContent(Post::NOTICE_LENGTH, true)['content'],
                     'subject' => $post->replyPost->formatContent(), // 解析content
                     'raw' => array_merge(Arr::only($post->toArray(), ['id', 'thread_id', 'reply_post_id']), [
                         'actor_username' => $actor->username    // 发送人姓名
