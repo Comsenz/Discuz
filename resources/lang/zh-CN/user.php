@@ -11,6 +11,7 @@
  * not_match_*      不匹配
  */
 return [
+    'user_has_deleted' => '该用户已删除',
     'user_update_error' => '修改信息失败',
     'not_match_used_password' => '原密码不匹配',
     'username_error' => '用户名不能有特殊字符。',
