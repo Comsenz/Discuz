@@ -59,11 +59,10 @@ class CreateThread
     public $port;
 
     /**
-     * CreateThread constructor.
      * @param User $actor
      * @param array $data
-     * @param $ip
-     * @param $port
+     * @param string $ip
+     * @param string $port
      */
     public function __construct(User $actor, array $data, $ip, $port)
     {
@@ -82,26 +81,15 @@ class CreateThread
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
+     * @throws Exception
      */
     public function handle(EventDispatcher $events, BusDispatcher $bus, Censor $censor, Thread $thread, ThreadValidator $validator)
     {
         $this->events = $events;
 
-        // Check Permissions
-        $this->assertCan($this->actor, 'createThread');
-        $thread->type = (int) Arr::get($this->data, 'attributes.type', 0);
-        if ($thread->type === Thread::TYPE_OF_LONG) {
-            $this->assertCan($this->actor, 'createThreadLong');
+        $thread->type = (int) Arr::get($this->data, 'attributes.type', Thread::TYPE_OF_TEXT);
 
-            // 是否有权发布音频
-            if (Arr::get($this->data, 'attributes.file_id', '')) {
-                $this->assertCan($this->actor, 'createAudio');
-            }
-        } elseif ($thread->type === Thread::TYPE_OF_VIDEO) {
-            $this->assertCan($this->actor, 'createThreadVideo');
-        } elseif ($thread->type === Thread::TYPE_OF_IMAGE) {
-            $this->assertCan($this->actor, 'createThreadImage');
-        }
+        $this->canCreateThread($thread->type);
 
         // 敏感词校验
         $title = $censor->checkText(Arr::get($this->data, 'attributes.title'));
@@ -192,5 +180,36 @@ class CreateThread
         $thread->save();
 
         return $thread;
+    }
+
+    /**
+     * 是否有权限发布主题
+     *
+     * @param int $type
+     * @throws PermissionDeniedException
+     */
+    protected function canCreateThread($type)
+    {
+        switch ($type) {
+            case Thread::TYPE_OF_TEXT:
+                $this->assertCan($this->actor, 'createThread');
+                break;
+            case Thread::TYPE_OF_LONG:
+                $this->assertCan($this->actor, 'createThreadLong');
+
+                // 是否有权发布音频
+                if (Arr::get($this->data, 'attributes.file_id', '')) {
+                    $this->assertCan($this->actor, 'createAudio');
+                }
+                break;
+            case Thread::TYPE_OF_VIDEO:
+                $this->assertCan($this->actor, 'createThreadVideo');
+                break;
+            case Thread::TYPE_OF_IMAGE:
+                $this->assertCan($this->actor, 'createThreadImage');
+                break;
+            default:
+                // TODO 是否允许发布其他未知类型主题
+        }
     }
 }
