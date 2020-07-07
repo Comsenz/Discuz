@@ -101,11 +101,6 @@ class ThreadListener
     {
         $thread = $event->thread;
 
-        // 同步隐藏首帖
-        $thread->firstPost->deleted_at = $thread->deleted_at;
-
-        $thread->firstPost->save();
-
         $this->updateThreadCount($thread);
 
         // 通知
@@ -123,11 +118,6 @@ class ThreadListener
     public function whenThreadWasRestored(Restored $event)
     {
         $thread = $event->thread;
-
-        // 同步还原首帖
-        $thread->firstPost->deleted_at = null;
-
-        $thread->firstPost->save();
 
         $this->updateThreadCount($thread);
 

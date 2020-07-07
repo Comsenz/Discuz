@@ -187,10 +187,10 @@ class PostListener
 
         // 刷新被回复数
         if ($replyId = $post->reply_post_id) {
-            // 回复以及修改、批量修改 全都刷新回复数
-            $post = Post::find($replyId);
-            $post->refreshReplyCount();
-            $post->save();
+            /** @var Post $replyPost */
+            $replyPost = Post::query()->find($replyId);
+            $replyPost->refreshReplyCount();
+            $replyPost->save();
         }
     }
 
@@ -206,7 +206,7 @@ class PostListener
             PostMod::query()->where('post_id', $post->id)->delete();
 
             $action = 'approve';
-        } elseif ($post->is_approved == Thread::IGNORED) {
+        } elseif ($post->is_approved === Post::IGNORED) {
             $action = 'ignore';
         } else {
             $action = 'disapprove';
@@ -226,19 +226,11 @@ class PostListener
      */
     public function whenPostWasHidden(Hidden $event)
     {
-        $post = $event->post;
-
-        if ($post->is_first) {
-            $post->thread->deleted_at = $post->deleted_at;
-
-            $post->thread->save();
-        }
-
         // 通知
-        $this->postNotices($post, $event->actor, 'isDeleted', $event->data['message'] ?? '');
+        $this->postNotices($event->post, $event->actor, 'isDeleted', $event->data['message'] ?? '');
 
         // 日志
-        UserActionLogs::writeLog($event->actor, $post, 'hide', $event->data['message'] ?? '');
+        UserActionLogs::writeLog($event->actor, $event->post, 'hide', $event->data['message'] ?? '');
     }
 
     /**
@@ -248,13 +240,8 @@ class PostListener
      */
     public function whenPostWasRestored(Restored $event)
     {
-        $post = $event->post;
-
-        if ($post->is_first) {
-            $post->thread->deleted_at = null;
-
-            $post->thread->save();
-        }
+        // 日志
+        UserActionLogs::writeLog($event->actor, $event->post, 'restore', $event->data['message'] ?? '');
     }
 
     /**
@@ -266,9 +253,9 @@ class PostListener
     public function whenPostWasDeleted(Deleted $event)
     {
         if ($event->post->is_first) {
-            Thread::where('id', $event->post->thread_id)->delete();
+            Thread::query()->where('id', $event->post->thread_id)->delete();
 
-            Post::where('thread_id', $event->post->thread_id)->delete();
+            Post::query()->where('thread_id', $event->post->thread_id)->delete();
         }
     }
 

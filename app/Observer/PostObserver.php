@@ -30,7 +30,7 @@ class PostObserver
      */
     public function created(Post $post)
     {
-        $this->refreshSiteThreadCount();
+        $this->refreshSitePostCount();
     }
 
     /**
@@ -38,13 +38,16 @@ class PostObserver
      */
     public function updated(Post $post)
     {
-        if ($post->isDirty('is_approved')) {
+        if ($post->wasChanged(['is_approved', 'deleted_at'])) {
             if ($post->is_first) {
                 $post->thread->is_approved = $post->is_approved;
+                $post->thread->deleted_at = $post->deleted_at;
+                $post->thread->deleted_user_id = $post->deleted_user_id;
+
                 $post->thread->save();
             }
 
-            $this->refreshSiteThreadCount();
+            $this->refreshSitePostCount();
         }
     }
 
@@ -53,13 +56,13 @@ class PostObserver
      */
     public function deleted(Post $post)
     {
-        $this->refreshSiteThreadCount();
+        $this->refreshSitePostCount();
     }
 
     /**
-     * 刷新站点主题数
+     * 刷新站点回复数
      */
-    private function refreshSiteThreadCount()
+    private function refreshSitePostCount()
     {
         $this->settings->set(
             'post_count',

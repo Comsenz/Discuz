@@ -38,8 +38,11 @@ class ThreadObserver
      */
     public function updated(Thread $thread)
     {
-        if ($thread->isDirty('is_approved')) {
+        if ($thread->wasChanged(['is_approved', 'deleted_at'])) {
             $thread->firstPost->is_approved = $thread->is_approved;
+            $thread->firstPost->deleted_at = $thread->deleted_at;
+            $thread->firstPost->deleted_user_id = $thread->deleted_user_id;
+
             $thread->firstPost->save();
 
             $this->refreshSiteThreadCount();
