@@ -153,6 +153,9 @@ export default {
     deleteImage(file, index, fileList) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -160,10 +163,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       this.numberimg[index].imageUrl = "";
       this.appFetch({
@@ -256,6 +259,9 @@ export default {
     uploaderLogo(e, index) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -263,10 +269,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);

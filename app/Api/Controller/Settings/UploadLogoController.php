@@ -92,7 +92,7 @@ class UploadLogoController extends AbstractResourceController
 
         UrlGenerator::setRequest($request);
 
-        $type = Arr::get($request->getParsedBody(), 'type');
+        $type = Arr::get($request->getParsedBody(), 'type', 'logo');
         $file = Arr::get($request->getUploadedFiles(), 'logo');
 
         $verifyFile = new UploadedFile(
