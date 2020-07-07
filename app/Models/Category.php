@@ -75,6 +75,7 @@ class Category extends Model
         $this->thread_count = $this->threads()
             ->where('is_approved', Thread::APPROVED)
             ->whereNull('deleted_at')
+            ->whereNotNull('user_id')
             ->count();
 
         return $this;
@@ -104,17 +105,22 @@ class Category extends Model
             $categories = static::all();
         }
 
-        $ids = [];
-        $hasGlobalPermission = $user->hasPermission([
-            'createThread',
-            'createThreadLong',
-            'createThreadVideo',
-            'createThreadImage',
-        ], false);
+        if ($permission === 'createThread') {
+            $hasGlobalPermission = $user->hasPermission([
+                'createThread',
+                'createThreadLong',
+                'createThreadVideo',
+                'createThreadImage',
+            ], false);
+        } else {
+            $hasGlobalPermission = $user->hasPermission($permission);
+        }
 
         $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
             return $hasGlobalPermission && $user->hasPermission('category'.$category->id.'.'.$permission);
         };
+
+        $ids = [];
 
         foreach ($categories as $category) {
             if ($canForCategory($category) === $condition) {
