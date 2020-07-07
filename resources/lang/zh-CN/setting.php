@@ -19,7 +19,7 @@ return [
     'max_greater_than_limit' => '单次提现最大金额 不能大于 单日提现总金额',
     'max_exceed_5000' => '单次提现最大金额 不能超过 5000',
 
-    'limit_exceed_5000' => '单日提现总金额 不能超过 5000',
+    'limit_exceed' => '单日提现总金额 不能超过 100000000',
 
     'setting_fill_register_reason' => '注册时的注册原因必须必填',
 

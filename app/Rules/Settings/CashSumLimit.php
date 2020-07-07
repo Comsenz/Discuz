@@ -21,7 +21,7 @@ class CashSumLimit extends AbstractRule
      */
     public function passes($attribute, $value)
     {
-        return $value > 5000 ? false : true ;
+        return $value > 100000000 ? false : true ;
     }
 
     /**
@@ -31,6 +31,6 @@ class CashSumLimit extends AbstractRule
      */
     public function message()
     {
-        return trans('setting.limit_exceed_5000');
+        return trans('setting.limit_exceed');
     }
 }
