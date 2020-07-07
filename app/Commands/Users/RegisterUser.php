@@ -76,9 +76,11 @@ class RegisterUser
 
         $user = User::register(Arr::only($this->data, ['username', 'password', 'register_ip', 'register_port', 'register_reason']));
 
-        // 注册验证码
+        // 注册验证码(无感模式不走验证码，开启也不走)
         $captcha = '';  // 默认为空将不走验证
-        if ((bool)$settings->get('register_captcha') && (bool)$settings->get('qcloud_captcha', 'qcloud')) {
+        if ((bool)$settings->get('register_captcha') &&
+            (bool)$settings->get('qcloud_captcha', 'qcloud') &&
+            ($settings->get('register_type', 'default') != 2)) {
             $captcha = [
                 Arr::get($this->data, 'captcha_ticket', ''),
                 Arr::get($this->data, 'captcha_rand_str', ''),
