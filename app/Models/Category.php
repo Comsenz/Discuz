@@ -105,16 +105,19 @@ class Category extends Model
         }
 
         $ids = [];
-        $hasGlobalPermission = $user->hasPermission($permission);
+        $hasGlobalPermission = $user->hasPermission([
+            'createThread',
+            'createThreadLong',
+            'createThreadVideo',
+            'createThreadImage',
+        ], false);
 
         $canForCategory = function (self $category) use ($user, $permission, $hasGlobalPermission) {
             return $hasGlobalPermission && $user->hasPermission('category'.$category->id.'.'.$permission);
         };
 
         foreach ($categories as $category) {
-            $can = $canForCategory($category);
-
-            if ($can === $condition) {
+            if ($canForCategory($category) === $condition) {
                 $ids[] = $category->id;
             }
         }
