@@ -427,7 +427,7 @@ class Post extends Model
     {
         $this->reply_count = $this->newQuery()
             ->where('reply_post_id', $this->id)
-            ->where('is_approved', Thread::APPROVED)
+            ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
             ->whereNotNull('user_id')
             ->count();
