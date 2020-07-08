@@ -109,10 +109,10 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'file' => $file]);
+            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file]);
 
             $this->events->dispatch(
-                new Uploading($this->actor, $file)
+                new Uploading($this->actor, $file->guessExtension())
             );
 
             // 上传
