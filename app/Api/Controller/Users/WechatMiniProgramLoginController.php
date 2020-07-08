@@ -25,6 +25,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -116,7 +117,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
             $data['code'] = Arr::get($attributes, 'code');
-            $data['username'] = $wechatUser->nickname;
+            //用户名只允许15个字
+            $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
             $data['register_ip'] = ip($request->getServerParams());
             $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
             $user = $this->bus->dispatch(
