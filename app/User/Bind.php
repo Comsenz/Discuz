@@ -36,6 +36,9 @@ class Bind
         $scope = Arr::get($session, 'scope');
         $openid = Arr::get($session, 'payload.openid');
         if (in_array($scope, ['wechat', 'wechatweb'])) {
+            if (!$user->id) {
+                throw new \Exception('login_failed');
+            }
             $wechatUser = UserWechat::where('user_id', $user->id)->first();
             if (!$wechatUser) {
                 $wechat = UserWechat::where($this->platform[$scope], $openid)->first();
