@@ -57,7 +57,6 @@ class VerifyMobile
 
     protected $settings;
 
-
     public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor, $params = [])
     {
         $this->controller = $controller;
@@ -66,7 +65,7 @@ class VerifyMobile
         $this->params = $params;
     }
 
-    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator, MobileCodeRepository $mobileCodeRepository, Events $events,  SettingsRepository $settings,Bind $bind)
+    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator, MobileCodeRepository $mobileCodeRepository, Events $events, SettingsRepository $settings, Bind $bind)
     {
         $this->apiClient = $apiClient;
         $this->bus = $bus;
@@ -89,6 +88,7 @@ class VerifyMobile
             $data['register_ip'] = Arr::get($this->params, 'ip');
             $data['register_port'] = Arr::get($this->params, 'port');
             $data['mobile'] = $this->mobileCode->mobile;
+            $data['code'] = Arr::get($this->params, 'inviteCode');
             $user = $this->bus->dispatch(
                 new RegisterPhoneUser($this->actor, $data)
             );
@@ -119,7 +119,6 @@ class VerifyMobile
         );
 
         return json_decode($response->getBody());
-
     }
 
     protected function bind()
