@@ -7,6 +7,7 @@
 
 namespace App\Rules\Settings;
 
+use App\Exceptions\TranslatorException;
 use Discuz\Qcloud\QcloudTrait;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
 
@@ -57,7 +58,7 @@ class QcloudVodTranscodeVerify extends BaseQcloud
 
             $res = $this->DescribeTranscodeTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            throw new TencentCloudSDKException('qcloud_vod_'.$e->getErrorCode());
+            throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
         }
         if ($res->TotalCount == 0) {
             throw new TencentCloudSDKException('tencent_vod_transcode_error');

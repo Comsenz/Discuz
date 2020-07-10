@@ -48,6 +48,7 @@ const config = {
   pay_password_failures_times_toplimit: '您输入的密码错误次数已超限，请点击忘记密码找回或次日后重试',
   offIAccount_server_config_signature_failed: '公众号服务器配置：签名验证失败',
   qcloud_vod_cover_template_not_found: '腾讯云云点播截图模板不存在',
+  tencent_vod_error : '腾讯云云点播配置错误',
 };
 
 Vue.prototype.getLang = function (key) {

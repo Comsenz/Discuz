@@ -7,6 +7,7 @@
 
 namespace App\Rules\Settings;
 
+use App\Exceptions\TranslatorException;
 use Discuz\Qcloud\QcloudTrait;
 use Exception;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
@@ -49,7 +50,7 @@ class QcloudVodCoverTemplateVerify extends BaseQcloud
         try {
             $res = $this->describeSnapshotByTimeOffsetTemplates($value);
         } catch (TencentCloudSDKException $e) {
-            throw new TencentCloudSDKException('qcloud_vod_'.$e->getErrorCode());
+            throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
         }
         if ($res->TotalCount == 0) {
             throw new TencentCloudSDKException('qcloud_vod_cover_template_not_found');
