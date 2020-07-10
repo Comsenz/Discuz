@@ -44,7 +44,7 @@ class NotificationSerializer extends AbstractSerializer
             'thread_username' => $model->thread_username ?: '',
             'thread_user_groups' => $model->thread_user_groups ?: '',
             'thread_created_at' => $model->thread_created_at ?: '',
-            'thread_is_approved' => $model->thread_is_approved ?: null,
+            'thread_is_approved' => $model->thread_is_approved ?: 0,
         ]);
 
         return $result;
