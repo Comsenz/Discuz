@@ -240,10 +240,11 @@ export default {
       const isJPG =
         file.type == "image/jpeg" ||
         file.type == "image/png" ||
-        file.type == "image/gif";
+        file.type == "image/gif" ||
+        file.type == "image/ico";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
-        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF 格式!");
+        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF/ICO 格式!");
         return isJPG;
       }
       if (!isLt2M) {
