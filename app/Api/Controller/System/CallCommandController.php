@@ -10,6 +10,7 @@ namespace App\Api\Controller\System;
 use App\Console\Commands\AttachmentClearCommand;
 use App\Console\Commands\AvatarClearCommand;
 use App\Console\Commands\FinanceCreateCommand;
+use App\Console\Commands\InviteExpireCommand;
 use App\Console\Commands\QueryWechatOrderConmmand;
 use App\Console\Commands\VideoClearCommand;
 use Discuz\Auth\Exception\PermissionDeniedException;
@@ -66,6 +67,7 @@ class CallCommandController extends AbstractResourceController
     {
         $commandList = [
             'finance:create'    => FinanceCreateCommand::class,
+            'invite:expire'     => InviteExpireCommand::class,
             'clear:avatar'      => AvatarClearCommand::class,
             'clear:attachment'  => AttachmentClearCommand::class,
             'clear:video'       => VideoClearCommand::class,
