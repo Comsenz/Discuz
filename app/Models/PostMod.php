@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $post_id
  * @property string $stop_word
  * @package App\Models
- * @method static where($column, $fields)
  */
 class PostMod extends Model
 {

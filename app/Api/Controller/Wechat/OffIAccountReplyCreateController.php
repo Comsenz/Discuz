@@ -55,7 +55,7 @@ class OffIAccountReplyCreateController extends AbstractCreateController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $type = Arr::get($request->getQueryParams(), 'type');
+        $type = Arr::get($this->extractFilter($request), 'type');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         /**

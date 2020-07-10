@@ -4,12 +4,13 @@
 namespace App\WechatMessageHandler;
 
 use App\Models\WechatOffiaccountReply;
-use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use Discuz\Wechat\Offiaccount\MessageEventHandlerInterface;
-use EasyWeChat\Factory;
 
 class EventMessageHandler extends MessageEventHandlerInterface
 {
+    use EasyWechatTrait;
+
     /**
      * @var mixed
      */
@@ -35,13 +36,7 @@ class EventMessageHandler extends MessageEventHandlerInterface
         $this->message = $app->server->getMessage();
         // app('wechatOffiaccount')->info(self::class . ': ', (array)$this->message);
 
-        $settings = app()->make(SettingsRepository::class);
-        $config = [
-            'app_id' => $settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-        $this->easyWechat = Factory::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
 
         $this->event = $this->message['Event'];
         $this->eventKey = $this->message['EventKey'];

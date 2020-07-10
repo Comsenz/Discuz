@@ -9,16 +9,13 @@ namespace App\Api\Controller\Wechat;
 
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException as InvalidConfigExceptionAlias;
-use GuzzleHttp\Exception\GuzzleException;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Factory as Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use EasyWeChat\Factory;
 
 /**
  * @package App\Api\Controller\Wechat
@@ -26,9 +23,10 @@ use EasyWeChat\Factory;
 class OffIAccountMenuBatchCreateController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     /**
-     * @var Factory
+     * @var $easyWechat
      */
     protected $easyWechat;
 
@@ -38,36 +36,20 @@ class OffIAccountMenuBatchCreateController implements RequestHandlerInterface
     protected $validator;
 
     /**
-     * @var SettingsRepository
-     */
-    protected $settings;
-
-    /**
      * WechatMiniProgramCodeController constructor.
      *
-     * @param Factory $easyWechat
      * @param Validator $validator
-     * @param SettingsRepository $settings
      */
-    public function __construct(Factory $easyWechat, Validator $validator, SettingsRepository $settings)
+    public function __construct(Validator $validator)
     {
         $this->validator = $validator;
-        $this->settings = $settings;
 
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
     }
 
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws GuzzleException
-     * @throws InvalidConfigExceptionAlias
      * @throws PermissionDeniedException
      * @throws \Exception
      */

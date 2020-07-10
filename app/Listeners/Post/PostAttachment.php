@@ -51,7 +51,7 @@ class PostAttachment
             // 图片
             case 3:
                 // 图片帖必须有图片
-                if ($post->is_first && $attachments) {
+                if ($post->is_first) {
                     if ($post->exists) {
                         $images = Attachment::query()
                                 // ->where('user_id', $event->actor->id) // 允许管理员编辑

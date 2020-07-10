@@ -58,7 +58,7 @@
             </a> -->
 
             <div class="latest-reply-theme__table-main" slot="main">
-              <a class="latest-reply-theme__table-main__cont-text" :href="'/details/' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
+              <a class="latest-reply-theme__table-main__cont-text" :href="'/pages/topic/index?id=' + items.thread._data.id" target="_blank" v-html="items._data.contentHtml"></a>
               <div class="latest-reply-theme__table-main__cont-imgs">
                 <p class="latest-reply-theme__table-main__cont-imgs-p"  v-for="(item,index) in items.images" :key="index">
                   <img  v-lazy="item._data.thumbUrl" @click="imgShowClick(items.images,index)" :alt="item._data.fileName">
@@ -70,8 +70,6 @@
 
               <div class="latest-reply-theme__table-footer__lf">
                 <el-button type="text" @click="singleOperationSubmit(1,items._data.id)">删除</el-button>
-                <i></i>
-                <el-button type="text" @click="singleOperationSubmit(2,items._data.id,items.thread._data.id)">编辑</el-button>
               </div>
 
             </div>

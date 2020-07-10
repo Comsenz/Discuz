@@ -7,9 +7,7 @@
 
 namespace App\Listeners\Thread;
 
-use App\Events\Post\Created as PostCreated;
-use App\Events\Post\Saved;
-use App\Events\Thread\Created as ThreadCreated;
+use App\Events\Thread\Created;
 use App\Events\Thread\Deleted;
 use App\Events\Thread\Hidden;
 use App\Events\Thread\Restored;
@@ -23,13 +21,11 @@ use App\Models\ThreadTopic;
 use App\Models\UserActionLogs;
 use App\Traits\PostNoticesTrait;
 use App\Traits\ThreadNoticesTrait;
-use App\Traits\ThreadTrait;
 use Discuz\Api\Events\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class ThreadListener
 {
-    use ThreadTrait;
     use ThreadNoticesTrait;
     use PostNoticesTrait;
 
@@ -39,9 +35,8 @@ class ThreadListener
         $events->listen(Saving::class, CheckPublish::class);
         $events->listen(Saving::class, SaveCategoryToDatabase::class);
 
-        // 发布帖子
-        $events->listen(PostCreated::class, [$this, 'whenPostWasCreated']);
-        $events->listen(ThreadCreated::class, [$this, 'threadCreated']);
+        // 发布主题
+        $events->listen(Created::class, [$this, 'whenThreadCreated']);
 
         // 审核主题
         $events->listen(ThreadWasApproved::class, [$this, 'whenThreadWasApproved']);
@@ -56,57 +51,45 @@ class ThreadListener
         // 收藏主题
         $events->listen(Serializing::class, AddThreadFavoriteAttribute::class);
         $events->listen(Saving::class, SaveFavoriteToDatabase::class);
-
-        // 通知主题
-        $events->listen(ThreadNotices::class, [$this, 'whenThreadNotices']);
     }
 
     /**
-     * 发布首帖时，更新主题回复数，最后回复 ID
-     *
-     * @param PostCreated $event
+     * @param Created $event
      */
-    public function whenPostWasCreated(PostCreated $event)
+    public function whenThreadCreated(Created $event)
     {
-        $this->refreshData($event->post->thread);
+        $this->updateThreadCount($event->thread);
     }
 
     /**
-     * 主题发布后，增加分类主题数量
-     *
-     * @param ThreadCreated $event
-     * @throws \App\Exceptions\ThreadException
-     */
-    public function threadCreated(ThreadCreated $event)
-    {
-        $this->action($event->thread, 'create');
-    }
-
-    /**
-     * 审核主题时，记录操作
-     *
      * @param ThreadWasApproved $event
      */
     public function whenThreadWasApproved(ThreadWasApproved $event)
     {
-        // 审核通过时，清除记录的敏感词
-        if ($event->thread->is_approved == Thread::APPROVED) {
-            PostMod::query()->where('post_id', $event->thread->firstPost->id)->delete();
+        $thread = $event->thread;
+        $firstPost = $event->thread->firstPost;
 
-            //创建话题和关系
-            $event->thread->firstPost->setContentAttribute($event->thread->firstPost->content);
-            $event->thread->firstPost->save();
-            ThreadTopic::setThreadTopic($event->thread->firstPost);
+        // 审核通过
+        if ($thread->is_approved === Thread::APPROVED) {
+            // 清除记录的敏感词
+            PostMod::query()->where('post_id', $firstPost->id)->delete();
+
+            // 创建话题和关系
+            $firstPost->setContentAttribute($firstPost->content);
+            $firstPost->save();
+
+            ThreadTopic::setThreadTopic($firstPost);
         }
 
-        $action = $this->transLogAction($event->thread->is_approved);
+        $this->updateThreadCount($thread);
 
-        $message = $event->data['message'] ?? '';
+        // 通知
+        $this->threadNotices($thread, $event->actor, 'isApproved', $event->data['message'] ?? '');
 
-        UserActionLogs::writeLog($event->actor, $event->thread, $action, $message);
+        // 日志
+        $action = UserActionLogs::$behavior[$thread->is_approved] ?? ('unknown' . $thread->is_approved);
 
-        // 发送操作通知
-        $this->threadNotices($event->data['notice_type'], $event);
+        UserActionLogs::writeLog($event->actor, $thread, $action, $event->data['message'] ?? '');
     }
 
     /**
@@ -118,17 +101,13 @@ class ThreadListener
     {
         $thread = $event->thread;
 
-        $thread->firstPost->deleted_at = $thread->deleted_at;
+        $this->updateThreadCount($thread);
 
-        $thread->firstPost->save();
-
-        $this->refreshData($thread);
+        // 通知
+        $this->threadNotices($thread, $event->actor, 'isDeleted', $event->data['message'] ?? '');
 
         // 日志
         UserActionLogs::writeLog($event->actor, $thread, 'hide', $event->data['message'] ?? '');
-
-        // 发送删除通知
-        $this->threadNotices('isDeleted', $event);
     }
 
     /**
@@ -140,11 +119,10 @@ class ThreadListener
     {
         $thread = $event->thread;
 
-        $thread->firstPost->deleted_at = null;
+        $this->updateThreadCount($thread);
 
-        $thread->firstPost->save();
-
-        $this->refreshData($thread);
+        // 日志
+        UserActionLogs::writeLog($event->actor, $thread, 'restore', $event->data['message'] ?? '');
     }
 
     /**
@@ -155,39 +133,39 @@ class ThreadListener
     public function whenThreadWasDeleted(Deleted $event)
     {
         Post::query()->where('thread_id', $event->thread->id)->delete();
+
+        $this->updateThreadCount($event->thread);
     }
 
     /**
-     * 操作主题时，发送对应通知
+     * 更新主题数
      *
-     * @param $noticeType
-     * @param $event
+     * @param Thread $thread
      */
-    public function threadNotices($noticeType, $event)
+    private function updateThreadCount(Thread $thread)
     {
-        // 判断是否是审核通过操作 检索内容发送@通知
-        if ($noticeType == 'isApproved' && $event->thread->is_approved == Thread::APPROVED) {
-            $this->sendRelated($event->thread->firstPost, $event->thread->user);
-        }
+        if ($thread && $thread->exists) {
+            // 主题回复数
+            $thread->refreshPostCount();
 
-        // 判断是修改自己的主题 则不发送通知
-        if ($event->thread->user_id == $event->actor->id) {
-            return;
-        }
+            // 最新回复
+            $thread->refreshLastPost();
 
-        switch ($noticeType) {
-            case 'isApproved':  // 内容审核通知
-                $this->sendIsApproved($event->thread, ['refuse' => $this->reasonValue($event->data)]);
-                break;
-            case 'isSticky':    // 内容置顶通知
-                $this->sendIsSticky($event->thread);
-                break;
-            case 'isEssence':   // 内容精华通知
-                $this->sendIsEssence($event->thread);
-                break;
-            case 'isDeleted':   // 内容删除通知
-                $this->sendIsDeleted($event->thread, ['refuse' => $this->reasonValue($event->data)]);
-                break;
+            $thread->save();
+
+            // 用户主题数
+            $user = $thread->user;
+
+            if ($user && $user->exists) {
+                $user->refreshThreadCount()->save();
+            }
+
+            // 分类主题数
+            $category = $thread->category;
+
+            if ($category && $category->exists) {
+                $category->refreshThreadCount()->save();
+            }
         }
     }
 }

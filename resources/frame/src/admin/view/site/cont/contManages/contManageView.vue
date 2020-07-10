@@ -123,7 +123,7 @@
             slot="longText"
             class="cont-manage-theme__table-long-text"
             v-if="items._data.type === 1"
-            :href="'/details/' + items._data.id"
+            :href="'/pages/topic/index?id=' + items._data.id"
             target="_blank"
           >
             {{items._data.title}}
@@ -136,7 +136,7 @@
           <div class="cont-manage-theme__table-main" slot="main">
             <a
               class="cont-manage-theme__table-main__cont-text"
-              :href="'/details/' + items._data.id"
+              :href="'/pages/topic/index?id=' + items._data.id"
               target="_blank"
               :style="{'display':(items.threadVideo ? 'inline':'block')}"
               v-html="items.firstPost._data.contentHtml"

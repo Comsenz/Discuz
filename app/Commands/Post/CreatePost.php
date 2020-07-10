@@ -80,10 +80,11 @@ class CreatePost
     public $port;
 
     /**
-     * @param $threadId
+     * @param int $threadId
      * @param User $actor
      * @param array $data
-     * @param null $ip
+     * @param string $ip
+     * @param int $port
      */
     public function __construct($threadId, User $actor, array $data, $ip, $port)
     {
@@ -112,7 +113,7 @@ class CreatePost
 
         $thread = $threads->findOrFail($this->threadId);
 
-        $isFirst = empty($thread->last_posted_user_id);
+        $isFirst = empty($thread->post_count);
 
         $isComment = (bool) Arr::get($this->data, 'attributes.isComment');
 

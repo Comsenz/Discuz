@@ -10,7 +10,7 @@ namespace App\Api\Controller\Wechat;
 use App\Api\Serializer\WechatJssdkSerializer;
 use App\Exceptions\TranslatorException;
 use Discuz\Api\Controller\AbstractCreateController;
-use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -19,13 +19,14 @@ use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Tobscure\JsonApi\Document;
-use EasyWeChat\Factory;
 
 /**
  * @package App\Api\Controller\Wechat
  */
 class OffIAccountJSSDKController extends AbstractCreateController
 {
+    use EasyWechatTrait;
+
     public $serializer = WechatJssdkSerializer::class;
 
     /**
@@ -34,31 +35,17 @@ class OffIAccountJSSDKController extends AbstractCreateController
     protected $bus;
 
     /**
-     * @var Factory
-     */
-    protected $easyWechat;
-
-    /**
-     * @var SettingsRepository
-     */
-    protected $settings;
-
-    /**
      * @var UrlGenerator
      */
     protected $url;
 
     /**
      * @param Dispatcher $bus
-     * @param Factory $easyWechat
-     * @param SettingsRepository $settings
      * @param UrlGenerator $url
      */
-    public function __construct(Dispatcher $bus, Factory $easyWechat, SettingsRepository $settings, UrlGenerator $url)
+    public function __construct(Dispatcher $bus, UrlGenerator $url)
     {
         $this->bus = $bus;
-        $this->easyWechat = $easyWechat;
-        $this->settings = $settings;
         $this->url = $url;
     }
 
@@ -73,13 +60,7 @@ class OffIAccountJSSDKController extends AbstractCreateController
             throw new TranslatorException('wechat_invalid_unknown_url_exception');
         }
 
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $app = $this->easyWechat::officialAccount($config);
+        $app = $this->offiaccount();
 
         // js functions
         $build = [

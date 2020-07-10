@@ -16,11 +16,11 @@ use App\WechatMessageHandler\TextMessageHandler;
 use App\WechatMessageHandler\VideoMessageHandler;
 use App\WechatMessageHandler\VoiceMessageHandler;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Message;
 
 /**
@@ -28,10 +28,7 @@ use EasyWeChat\Kernel\Messages\Message;
  */
 class OffIAccountServerController implements RequestHandlerInterface
 {
-    /**
-     * @var Factory
-     */
-    protected $easyWechat;
+    use EasyWechatTrait;
 
     /**
      * @var SettingsRepository
@@ -39,19 +36,19 @@ class OffIAccountServerController implements RequestHandlerInterface
     protected $settings;
 
     /**
-     * @param Factory $easyWechat
+     * @var $easyWechat
+     */
+    protected $easyWechat;
+
+    /**
      * @param SettingsRepository $settings
      */
-    public function __construct(Factory $easyWechat, SettingsRepository $settings)
+    public function __construct(SettingsRepository $settings)
     {
         $this->settings = $settings;
 
         $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('offiaccount_server_config_token', 'wx_offiaccount'),
-            'response_type' => 'array',
-
             'log' => [
                 'default' => 'dev', // 默认使用的 channel，生产环境可以改为下面的 prod
                 'channels' => [
@@ -71,7 +68,7 @@ class OffIAccountServerController implements RequestHandlerInterface
             ],
         ];
 
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount($config);
     }
 
     /**

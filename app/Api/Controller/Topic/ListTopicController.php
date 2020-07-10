@@ -141,9 +141,39 @@ class ListTopicController extends AbstractListController
      */
     public function search($filter, $sort, $limit = null, $offset = 0)
     {
-        $query = $this->topics->query();
+        $query = $this->topics->query()->select('topics.*');
+
+        if ($username = trim(Arr::get($filter, 'username'))) {
+            $query->join('users', 'users.id', '=', 'topics.user_id')
+                ->where('users.username', 'like', '%'.$username.'%');
+        }
+
         if ($content = trim(Arr::get($filter, 'content'))) {
-            $query->where('content', 'like', '%'.$content.'%');
+            $query->where('topics.content', 'like', '%'.$content.'%');
+        }
+
+        if ($createdAtBegin = Arr::get($filter, 'createdAtBegin')) {
+            $query->where('topics.created_at', '>=', $createdAtBegin);
+        }
+
+        if ($createdAtEnd = Arr::get($filter, 'createdAtEnd')) {
+            $query->where('topics.created_at', '<=', $createdAtEnd);
+        }
+
+        if ($threadCountBegin = Arr::get($filter, 'threadCountBegin')) {
+            $query->where('topics.thread_count', '>=', $threadCountBegin);
+        }
+
+        if ($threadCountEnd = Arr::get($filter, 'threadCountEnd')) {
+            $query->where('topics.thread_count', '<=', $threadCountEnd);
+        }
+
+        if ($viewCountBegin = Arr::get($filter, 'viewCountBegin')) {
+            $query->where('topics.view_count', '>=', $viewCountBegin);
+        }
+
+        if ($viewCountEnd = Arr::get($filter, 'viewCountEnd')) {
+            $query->where('topics.view_count', '<=', $viewCountEnd);
         }
 
         foreach ((array) $sort as $field => $order) {

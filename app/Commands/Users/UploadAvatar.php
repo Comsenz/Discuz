@@ -118,11 +118,6 @@ class UploadAvatar
 
             $image = (new ImageManager())->make($tmpFileWithExt);
 
-            // 压缩头像 100 * 100
-            $image->resize(100, 100, function ($constraint) {
-                $constraint->upsize();          // 避免文件变大
-            })->save();
-
             $this->uploader->upload($user, $image);
 
             $user->avatar_at = Carbon::now();

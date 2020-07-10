@@ -47,17 +47,22 @@ class AttachmentValidator extends AbstractValidator
         // 文件类型
         $mimes = Str::of($this->settings->get("support_{$typeName}_ext"))
             ->explode(',')
-            ->unique()
-            ->filter(function ($value) {
-                // 无论如何禁止上传 php 文件
-                return $value !== 'php';
-            })
-            ->join(',');
+            ->unique();
+        $mimes = $mimes->each(function ($value, $key) use ($mimes) {
+            if ($value == 'mp3') {
+                $mimes[$key] = 'mpga';
+            }
+            // 无论如何禁止上传 php 文件
+            if ($value == 'php') {
+                unset($mimes[$key]);
+            }
+        })->push('bin')->join(',');
 
         // 验证规则
         $rules =  [
             'type' => 'required|integer|between:0,4',
-            'file' => ['bail', 'required', 'min:1', "mimes:{$mimes}"],
+            'size' => 'bail|gt:0',
+            'file' => ['bail', 'required', "mimes:{$mimes}"],
         ];
 
         // 文件大小

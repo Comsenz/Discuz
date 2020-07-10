@@ -10,6 +10,7 @@ namespace App\Commands\Post;
 use App\Events\Post\PostWasApproved;
 use App\Events\Post\Saved;
 use App\Events\Post\Saving;
+use App\Models\Post;
 use App\Models\User;
 use App\Repositories\PostRepository;
 use Discuz\Foundation\EventsDispatchTrait;
@@ -62,6 +63,7 @@ class BatchEditPosts
                 continue;
             }
 
+            /** @var Post $post */
             $post = $posts->query()->whereVisibleTo($this->actor)->find($id);
 
             if ($post) {
@@ -75,15 +77,13 @@ class BatchEditPosts
 
             if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
                 if ($this->actor->can('approve', $post)) {
-                    $post->is_approved = $attributes['isApproved'];
-                    $message = isset($attributes['message']) ? $attributes['message'] : '';
+                    if ($post->is_approved != $attributes['isApproved']) {
+                        $post->is_approved = $attributes['isApproved'];
 
-                    // 操作审核时触发 回复内容通知和记录日志
-                    $post->raise(new PostWasApproved(
-                        $post,
-                        $this->actor,
-                        ['message' => $message]
-                    ));
+                        $post->raise(
+                            new PostWasApproved($post, $this->actor, ['message' => $attributes['message'] ?? ''])
+                        );
+                    }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
                     continue;
@@ -92,7 +92,7 @@ class BatchEditPosts
 
             if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('hide', $post)) {
-                    $message = isset($attributes['message']) ? $attributes['message'] : '';
+                    $message = $attributes['message'] ?? '';
 
                     if ($attributes['isDeleted']) {
                         $post->hide($this->actor, ['message' => $message]);

@@ -11,17 +11,14 @@ use App\Api\Serializer\OffIAccountAssetSerializer;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Support\Collection;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use EasyWeChat\Factory;
 use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 /**
@@ -30,6 +27,7 @@ use Tobscure\JsonApi\Exception\InvalidParameterException;
 class OffIAccountAssetListController extends AbstractCreateController
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     /**
      * @var string
@@ -42,14 +40,9 @@ class OffIAccountAssetListController extends AbstractCreateController
     protected $bus;
 
     /**
-     * @var Factory
+     * @var $easyWechat
      */
     protected $easyWechat;
-
-    /**
-     * @var SettingsRepository
-     */
-    protected $settings;
 
     /**
      * @var UrlGenerator
@@ -58,32 +51,21 @@ class OffIAccountAssetListController extends AbstractCreateController
 
     /**
      * @param Dispatcher $bus
-     * @param Factory $easyWechat
-     * @param SettingsRepository $settings
      * @param UrlGenerator $url
      */
-    public function __construct(Dispatcher $bus, Factory $easyWechat, SettingsRepository $settings, UrlGenerator $url)
+    public function __construct(Dispatcher $bus, UrlGenerator $url)
     {
         $this->bus = $bus;
-        $this->settings = $settings;
         $this->url = $url;
 
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return array|Collection|mixed|object|ResponseInterface|string
-     * @throws InvalidConfigException
      * @throws PermissionDeniedException
-     * @throws GuzzleException
      * @throws InvalidParameterException
      */
     protected function data(ServerRequestInterface $request, Document $document)

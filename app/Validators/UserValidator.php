@@ -130,6 +130,7 @@ class UserValidator extends AbstractValidator
                 'regex:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/',
             ],
             'realname' => 'required',
+            'register_reason' => 'filled|max:50',
         ];
 
         if ($this->user) {

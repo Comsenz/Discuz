@@ -153,6 +153,9 @@ export default {
     deleteImage(file, index, fileList) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -160,10 +163,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       this.numberimg[index].imageUrl = "";
       this.appFetch({
@@ -257,6 +260,9 @@ export default {
     uploaderLogo(e, index) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
@@ -264,10 +270,10 @@ export default {
           type = "background_image";
           break;
         case 3:
-          type = "logo";
-        case 4:
           type = "favicon";
+          break;
         default:
+          this.$message.error('未知类型');
       }
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);
@@ -390,7 +396,11 @@ export default {
       })
         .then(data => {
           if (data.errors) {
-            this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0]);
+            if (data.errors[0].detail) {
+              this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])
+            } else {
+              this.$message.error(data.errors[0].code);
+            }
           } else {
             this.$message({
               message: "提交成功",

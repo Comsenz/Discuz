@@ -8,6 +8,7 @@
 namespace App\Commands\Dialog;
 
 use App\Censor\Censor;
+use App\Censor\CensorNotPassedException;
 use App\Models\Attachment;
 use App\Models\Dialog;
 use App\Models\DialogMessage;
@@ -57,7 +58,9 @@ class CreateDialogMessage
 
         //敏感词检查
         $message_text = trim($censor->checkText(Arr::get($this->attributes, 'message_text')));
-
+        if ($censor->isMod) {
+            throw new CensorNotPassedException('content_banned');
+        }
         /** @var Dialog $dialogRes */
         $dialogRes = $dialog->findOrFail($dialog_id, $this->actor);
 

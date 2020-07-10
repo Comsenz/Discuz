@@ -163,9 +163,10 @@ class Thread extends Model
      * 根据类型获取 Thread content
      *
      * @param int $substr
+     * @param bool $parse
      * @return Stringable|string
      */
-    public function getContentByType($substr = 0)
+    public function getContentByType($substr, $parse = false)
     {
         $special = app()->make(SpecialCharServer::class);
 
@@ -175,7 +176,12 @@ class Thread extends Model
         } else {
             // 不是长文没有标题则使用首贴内容
             $this->firstPost->content = $substr ? Str::of($this->firstPost->content)->substr(0, $substr) : $this->firstPost->content;
-            $content = $this->firstPost->formatContent();
+            if ($parse) {
+                // 原文
+                $content = $this->firstPost->content;
+            } else {
+                $content = $this->firstPost->formatContent();
+            }
         }
 
         return $content;
@@ -235,6 +241,7 @@ class Thread extends Model
             ->where('is_comment', false)
             ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
+            ->whereNotNull('user_id')
             ->count() + 1;  // include first post
 
         return $this;
@@ -337,7 +344,9 @@ class Thread extends Model
      */
     public function deletedUser()
     {
-        return $this->belongsTo(User::class, 'deleted_user_id');
+        return $this->belongsTo(User::class, 'deleted_user_id')->withDefault([
+            'username' => trans('user.user_has_deleted'),
+        ]);
     }
 
     /**
@@ -463,7 +472,7 @@ class Thread extends Model
         }
 
         // 是否已缓存付费状态（为避免 N + 1 问题）
-        if (array_key_exists($this->id, static::$userHasPaidThreads[$user->id] ?? [])) {
+        if (isset(static::$userHasPaidThreads[$user->id][$this->id])) {
             return static::$userHasPaidThreads[$user->id][$this->id];
         }
 

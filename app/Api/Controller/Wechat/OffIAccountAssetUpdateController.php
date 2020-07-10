@@ -12,15 +12,12 @@ use App\Validators\OffIAccountAssetUpdateValidator;
 use Discuz\Api\Controller\AbstractCreateController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
-use Discuz\Contracts\Setting\SettingsRepository;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Support\Collection;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
-use EasyWeChat\Factory;
 
 /**
  * @package App\Api\Controller\Wechat
@@ -28,6 +25,7 @@ use EasyWeChat\Factory;
 class OffIAccountAssetUpdateController extends AbstractCreateController
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     /**
      * @var string
@@ -35,14 +33,9 @@ class OffIAccountAssetUpdateController extends AbstractCreateController
     public $serializer = OffIAccountAssetSerializer::class;
 
     /**
-     * @var Factory
+     * @var $easyWechat
      */
     protected $easyWechat;
-
-    /**
-     * @var SettingsRepository
-     */
-    protected $settings;
 
     /**
      * @var OffIAccountAssetUpdateValidator
@@ -50,30 +43,18 @@ class OffIAccountAssetUpdateController extends AbstractCreateController
     protected $validator;
 
     /**
-     * @param Factory $easyWechat
-     * @param SettingsRepository $settings
      * @param OffIAccountAssetUpdateValidator $validator
      */
-    public function __construct(Factory $easyWechat, SettingsRepository $settings, OffIAccountAssetUpdateValidator $validator)
+    public function __construct(OffIAccountAssetUpdateValidator $validator)
     {
-        $this->settings = $settings;
         $this->validator = $validator;
-
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param Document $document
      * @return array|Collection|mixed|object|ResponseInterface|string
-     * @throws GuzzleException
-     * @throws InvalidConfigException
      * @throws PermissionDeniedException
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -81,7 +62,7 @@ class OffIAccountAssetUpdateController extends AbstractCreateController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $mediaId = Arr::get($request->getParsedBody(), 'data.id', '');
+        $mediaId = Arr::get($request->getParsedBody(), 'data.media_id', '');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes', '');
 
         $this->validator->valid($attributes);

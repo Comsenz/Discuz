@@ -609,12 +609,16 @@ class User extends Model
     }
 
     /**
-     * Check whether the user has a certain permission based on their groups.
+     * 检查用户是否具有一定的权限基于他们的用户组。
+     * 传入字符串时，返回是否具有此权限。
+     * 传入数组时，如果第二个参数为 true (default) 返回是否同时具有这些权限，
+     * 如果第二个参数为 false 则返回是否具有这些权限其中之一。
      *
-     * @param string $permission
+     * @param string|array $permission
+     * @param bool $condition
      * @return bool
      */
-    public function hasPermission($permission)
+    public function hasPermission($permission, bool $condition = true)
     {
         if ($this->isAdmin()) {
             return true;
@@ -624,7 +628,23 @@ class User extends Model
             $this->permissions = $this->getPermissions();
         }
 
-        return in_array($permission, $this->permissions);
+        if (is_array($permission)) {
+            foreach ($permission as $item) {
+                if ($condition) {
+                    if (! in_array($item, $this->permissions)) {
+                        return false;
+                    }
+                } else {
+                    if (in_array($item, $this->permissions)) {
+                        return true;
+                    }
+                }
+            }
+
+            return $condition;
+        } else {
+            return in_array($permission, $this->permissions);
+        }
     }
 
     /**
