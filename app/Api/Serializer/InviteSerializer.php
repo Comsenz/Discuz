@@ -27,10 +27,6 @@ class InviteSerializer extends AbstractSerializer
             'status' => $model->status,
         ];
 
-        if (!$model->to_user_id && $model->endtime < time()) {
-            $attributes['status'] = 3; // 已过期
-        }
-
         return $attributes;
     }
 
