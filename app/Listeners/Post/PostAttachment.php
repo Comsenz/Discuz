@@ -50,28 +50,14 @@ class PostAttachment
             // case 2:
             // 图片
             case 3:
-                // 图片帖必须有图片
-                if ($post->is_first) {
-                    if ($post->exists) {
-                        $images = Attachment::query()
-                                // ->where('user_id', $event->actor->id) // 允许管理员编辑
-                                ->where('type', Attachment::TYPE_OF_IMAGE)
-                                ->where(function (Builder $query) use ($post, $attachments) {
-                                    $query->where('type_id', $post->id)
-                                          ->orWhere(function (Builder $query) use ($attachments) {
-                                              $query->where('type_id', 0)
-                                                    ->whereIn('id', array_column($attachments, 'id'));
-                                          });
-                                })
-                                ->exists();
-                    } else {
-                        $images = $attachments && Attachment::query()
-                                ->where('user_id', $event->actor->id)
-                                ->where('type', Attachment::TYPE_OF_IMAGE)
-                                ->where('type_id', 0)
-                                ->whereIn('id', array_column($attachments, 'id'))
-                                ->exists();
-                    }
+                // 发表图片帖必须有图片
+                if (! $post->exists && $post->is_first) {
+                    $images = $attachments && Attachment::query()
+                            ->where('user_id', $event->actor->id)
+                            ->where('type', Attachment::TYPE_OF_IMAGE)
+                            ->where('type_id', 0)
+                            ->whereIn('id', array_column($attachments, 'id'))
+                            ->exists();
 
                     if (! $images) {
                         throw new \Exception('cannot_create_image_thread_without_attachments');
