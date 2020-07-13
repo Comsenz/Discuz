@@ -7,9 +7,8 @@
 
 namespace App\Observer;
 
-use App\Exceptions\TranslatorException;
 use App\Models\UserWechat;
-use Carbon\Carbon;
+use App\User\AvatarUploader;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Filesystem\CosAdapter;
 use GuzzleHttp\Client;
@@ -28,13 +27,20 @@ class UserWechatObserver
     protected $settings;
 
     /**
+     * @var AvatarUploader
+     */
+    protected $uploader;
+
+    /**
      * @param Filesystem $filesystem
      * @param SettingsRepository $settings
+     * @param AvatarUploader $uploader
      */
-    public function __construct(Filesystem $filesystem, SettingsRepository $settings)
+    public function __construct(Filesystem $filesystem, SettingsRepository $settings, AvatarUploader $uploader)
     {
         $this->filesystem = $filesystem;
         $this->settings = $settings;
+        $this->uploader = $uploader;
     }
 
     /**
@@ -86,7 +92,7 @@ class UserWechatObserver
         $isRemote = $this->filesystem->getAdapter() instanceof CosAdapter;
 
         // 头像名称
-        $avatar = $user->id . '.png';
+        $avatar = $this->uploader->getAvatarPath($user);
 
         /**
          * 保存头像：开启云存储时，使用磁盘 avatar_cos，否则使用磁盘 avatar
@@ -101,8 +107,7 @@ class UserWechatObserver
          * 所以这里依旧给 cos 头像拼接 '://' 以作区分
          * @see \App\Models\User getAvatarAttribute()
          */
-        $user->changeAvatar(($isRemote ? '://' : '') . $avatar);
-        $user->avatar_at = Carbon::now();
+        $user->changeAvatar($avatar, $isRemote);
 
         $user->save();
     }

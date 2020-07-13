@@ -208,9 +208,15 @@ class User extends Model
         return $this;
     }
 
-    public function changeAvatar($path)
+    /**
+     * @param string $path
+     * @param bool $isRemote
+     * @return $this
+     */
+    public function changeAvatar($path, $isRemote = false)
     {
-        $this->avatar = $path;
+        $this->avatar = ($isRemote ? 'cos://' : '') . $path;
+        $this->avatar_at = $path ? Carbon::now() : null;
 
         return $this;
     }

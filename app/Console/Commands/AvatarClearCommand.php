@@ -11,6 +11,7 @@ use App\Models\User;
 use Discuz\Console\AbstractCommand;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Support\Str;
 
 class AvatarClearCommand extends AbstractCommand
 {
@@ -49,7 +50,7 @@ class AvatarClearCommand extends AbstractCommand
         $bar->start();
 
         $users->map(function ($user) use ($bar) {
-            $img = $user->id . '.png';
+            $img = Str::after($user->getRawOriginal('avatar'), '://');
 
             $nowAvatar = $user->getRawOriginal('avatar');
 

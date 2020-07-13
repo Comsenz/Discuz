@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\User\AvatarUploader;
 use App\Validators\AvatarValidator;
-use Carbon\Carbon;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Intervention\Image\ImageManager;
@@ -119,8 +118,6 @@ class UploadAvatar
             $image = (new ImageManager())->make($tmpFileWithExt);
 
             $this->uploader->upload($user, $image);
-
-            $user->avatar_at = Carbon::now();
 
             $user->save();
         } finally {
