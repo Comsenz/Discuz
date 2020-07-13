@@ -9,6 +9,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Arr;
 use s9e\TextFormatter\Utils;
 
 /**
@@ -34,12 +35,21 @@ class ThreadTopic extends Pivot
      */
     public static function setThreadTopic(Post $post)
     {
-        if ($post->is_first) {
-            $topics = Utils::getAttributeValues($post->parsedContent, 'TOPIC', 'id');
+        $blocks = $post->content->get('blocks');
+        $topicIds = [];
+        foreach ($blocks as $block) {
+            if ($block['type'] == 'text' && isset($block['data']['topics'])) {
+                foreach ($block['data']['topics'] as $topic) {
+                    $topicIds[] = Arr::get($topic, 'id');
+                }
+            }
+        }
 
-            $post->thread->topic()->sync($topics);
+        if ($post->is_first) {
+            $post->thread->topic()->sync($topicIds);
 
             $post->thread->topic->each->refreshTopicThreadCount();
         }
+
     }
 }

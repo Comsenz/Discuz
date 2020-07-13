@@ -115,20 +115,6 @@ class Post extends Model
     protected static $stateUser;
 
     /**
-     * The text formatter instance.
-     *
-     * @var Formatter
-     */
-    protected static $formatter;
-
-    /**
-     * The markdown text formatter instance.
-     *
-     * @var MarkdownFormatter
-     */
-    protected static $markdownFormatter;
-
-    /**
      * datetime 时间转换
      *
      * @param $timeAt
@@ -142,6 +128,7 @@ class Post extends Model
     /**
      * 帖子摘要
      * @return string
+     * @throws BindingResolutionException
      */
     public function getSummaryAttribute()
     {

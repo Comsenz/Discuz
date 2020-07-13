@@ -310,21 +310,6 @@ class PostListener
      */
     public function threadTopic(Saved $event)
     {
-        //获取所有的话题ID
-        $blocks = $event->post->content->get('blocks');
-        $topicIds = [];
-        foreach ($blocks as $block) {
-            if ($block['type'] == 'text' && isset($block['data']['topics'])) {
-                foreach ($block['data']['topics'] as $topic) {
-                    $topicIds[] = Arr::get($topic, 'id');
-                }
-            }
-        }
-
-        if ($event->post->is_first) {
-            $event->post->thread->topic()->sync($topicIds);
-
-            $event->post->thread->topic->each->refreshTopicThreadCount();
-        }
+        ThreadTopic::setThreadTopic($event->post);
     }
 }
