@@ -9,6 +9,7 @@
 namespace App\Commands\Thread\Notify;
 
 use App\Censor\Censor;
+use App\Models\ThreadTopic;
 use App\Models\ThreadVideo;
 use App\Repositories\PostRepository;
 use App\Repositories\ThreadRepository;
@@ -119,6 +120,11 @@ class ThreadVideoNotify
                 $thread = $threads->findOrFail($threadVideo->thread_id);
                 $thread->is_approved = 1;
                 $thread->save();
+
+                //解析并创建话题和关系
+                $thread->firstPost->setContentAttribute($thread->firstPost->content);
+                $thread->firstPost->save();
+                ThreadTopic::setThreadTopic($thread->firstPost);
             }
         }
 

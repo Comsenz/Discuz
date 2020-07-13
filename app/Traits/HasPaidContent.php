@@ -31,7 +31,7 @@ trait HasPaidContent
     protected $orders = [];
 
     /**
-     * @param Post|Attachment|ThreadVideo $model
+     * @param Thread|Post|Attachment|ThreadVideo $model
      */
     public function paidContent($model)
     {

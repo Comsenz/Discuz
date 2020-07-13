@@ -140,7 +140,7 @@ abstract class AbstractWechatUserController extends AbstractResourceController
 
     protected function fixData($rawUser, $actor)
     {
-        $data = array_merge($rawUser, ['user_id' => $actor->id, $this->getType() => $rawUser['openid']]);
+        $data = array_merge($rawUser, ['user_id' => $actor->id ?: null, $this->getType() => $rawUser['openid']]);
         unset($data['openid'], $data['language']);
         $data['privilege'] = serialize($data['privilege']);
         return $data;

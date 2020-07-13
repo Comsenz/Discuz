@@ -84,13 +84,17 @@ class CreateAttachment
 
         $file = $this->file;
 
-        // 移动到临时文件目录
+        $ext = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
+        $ext = $ext ? ".$ext" : '';
+
         $tmpFile = tempnam(storage_path('/tmp'), 'attachment');
-        $file->moveTo($tmpFile);
+        $tmpFileWithExt = $tmpFile . $ext;
+
+        $file->moveTo($tmpFileWithExt);
 
         try {
             $file = new UploadedFile(
-                $tmpFile,
+                $tmpFileWithExt,
                 $file->getClientFilename(),
                 $file->getClientMediaType(),
                 $file->getError(),
@@ -98,7 +102,7 @@ class CreateAttachment
             );
 
             // 验证
-            $validator->valid(['type' => $this->type, 'file' => $file]);
+            $validator->valid(['type' => $this->type, 'size' => $file->getSize(), 'file' => $file]);
 
             $this->events->dispatch(
                 new Uploading($this->actor, $file)
@@ -133,8 +137,8 @@ class CreateAttachment
 
             $this->dispatchEventsFor($attachment);
         } finally {
-            // 删除临时文件
             @unlink($tmpFile);
+            @unlink($tmpFileWithExt);
         }
 
         return $attachment;

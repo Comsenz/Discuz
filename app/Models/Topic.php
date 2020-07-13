@@ -43,6 +43,7 @@ class Topic extends Model
 
     /**
      * refresh thread count
+     * 用户删除、帖子审核、帖子逻辑删除不计算
      */
     public function refreshTopicThreadCount()
     {
@@ -50,6 +51,7 @@ class Topic extends Model
             ->where('thread_topic.topic_id', $this->id)
             ->where('threads.is_approved', Thread::APPROVED)
             ->whereNull('threads.deleted_at')
+            ->whereNotNull('user_id')
             ->count();
         $this->thread_count = $threadCount;
         $this->save();
@@ -57,6 +59,7 @@ class Topic extends Model
 
     /**
      * refresh view count
+     * 帖子审核、帖子逻辑删除不计算
      */
     public function refreshTopicViewCount()
     {

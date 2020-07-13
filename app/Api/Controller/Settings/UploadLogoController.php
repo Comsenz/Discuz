@@ -61,6 +61,7 @@ class UploadLogoController extends AbstractResourceController
         'watermark_image',
         'header_logo',
         'logo',
+        'favicon',
     ];
 
     /**
@@ -102,13 +103,18 @@ class UploadLogoController extends AbstractResourceController
             true
         );
 
+        $mimes = [
+            'watermark_image' => 'mimes:png',
+            'favicon' => 'mimes:jpeg,jpg,png,bmp,gif,ico,svg',
+        ];
+
         $this->validator->make(
             ['type' => $type, 'logo' => $verifyFile],
             [
                 'type' => [Rule::in($this->allowTypes)],
                 'logo' => [
                     'required',
-                    'mimes:' . ($type === 'watermark_image' ? 'png' : 'jpeg,jpg,png,bmp,gif'),
+                    $mimes[$type] ?? 'mimes:jpeg,jpg,png,bmp,gif',
                     'max:5120'
                 ]
             ]

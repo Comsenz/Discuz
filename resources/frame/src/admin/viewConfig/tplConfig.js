@@ -402,6 +402,18 @@ export default {
               alias: "回复审核"
             }
           },
+          //话题管理
+          "topic-management": {
+            comLoad: function(resolve) {
+              require(["../view/site/cont/topicManagement/topicManagementView"], resolve);
+            },
+            metaInfo: {
+                title: "话题管理",
+                name: "topicManagement",
+                attribution: "内容"
+                }
+          },
+
           "recycle-bin": {
             comLoad: function (resolve) {
               require(["../view/site/cont/recycleBin/recycleBinView"], resolve);
@@ -411,6 +423,17 @@ export default {
               name: "recycleBin",
               attribution: "内容",
               alias: "主题"
+            }
+          },
+          //话题管理
+          "topic-management": {
+            comLoad: function(resolve) {
+              require(["../view/site/cont/topicManagement/topicManagementView"], resolve);
+            },
+            metaInfo: {
+              title: "话题管理",
+              name: "topicManagement",
+              attribution: "内容"
             }
           },
           "recycle-bin-reply": {
@@ -424,17 +447,6 @@ export default {
               name: "recycleBin",
               attribution: "内容",
               alias: "回复"
-            }
-          },
-          //话题管理
-          "topic-management": {
-            comLoad: function(resolve) {
-              require(["../view/site/cont/topicManagement/topicManagementView"], resolve);
-            },
-            metaInfo: {
-              title: "话题管理",
-              name: "topicManagement",
-              attribution: "内容"
             }
           },
           //财务分类

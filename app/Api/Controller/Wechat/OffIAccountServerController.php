@@ -16,11 +16,11 @@ use App\WechatMessageHandler\TextMessageHandler;
 use App\WechatMessageHandler\VideoMessageHandler;
 use App\WechatMessageHandler\VoiceMessageHandler;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Messages\Message;
 
 /**
@@ -28,10 +28,7 @@ use EasyWeChat\Kernel\Messages\Message;
  */
 class OffIAccountServerController implements RequestHandlerInterface
 {
-    /**
-     * @var Factory
-     */
-    protected $easyWechat;
+    use EasyWechatTrait;
 
     /**
      * @var SettingsRepository
@@ -39,26 +36,26 @@ class OffIAccountServerController implements RequestHandlerInterface
     protected $settings;
 
     /**
-     * @param Factory $easyWechat
+     * @var $easyWechat
+     */
+    protected $easyWechat;
+
+    /**
      * @param SettingsRepository $settings
      */
-    public function __construct(Factory $easyWechat, SettingsRepository $settings)
+    public function __construct(SettingsRepository $settings)
     {
         $this->settings = $settings;
 
         $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
             'token' => $this->settings->get('offiaccount_server_config_token', 'wx_offiaccount'),
-            'response_type' => 'array',
-
             'log' => [
                 'default' => 'dev', // 默认使用的 channel，生产环境可以改为下面的 prod
                 'channels' => [
                     // 测试环境
                     'dev' => [
                         'driver' => 'single',
-                        'path' => storage_path('logs/easyWechatOffiaccount.log'),
+                        'path' => storage_path('logs/easyWechatOffiaccountDev.log'),
                         'level' => 'debug',
                     ],
                     // 生产环境
@@ -71,7 +68,7 @@ class OffIAccountServerController implements RequestHandlerInterface
             ],
         ];
 
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount($config);
     }
 
     /**
@@ -81,21 +78,22 @@ class OffIAccountServerController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // app('wechatOffiaccount')->info('notify: ', (array) $request->getQueryParams());
+        // app('wechatOffiaccount')->info(self::class . ': ', (array)$request->getQueryParams());
 
         /**
          * 判断是否是服务器配置
          */
-        if (!Arr::has($request->getQueryParams(), 'signature')) {
-            $this->easyWechat->server->push(TextMessageHandler::class, Message::TEXT);  // 粉丝文本
-            // $this->easyWechat->server->push(ReplyMessageHandler::class, Message::TEXT); // 粉丝回复
+        $params = Arr::wrap($request->getQueryParams());
+        if (Arr::has($params, 'signature')) {
+            $this->easyWechat->server->push(TextMessageHandler::class, Message::TEXT);   // 粉丝文本
             $this->easyWechat->server->push(EventMessageHandler::class, Message::EVENT); // 粉丝事件
-            $this->easyWechat->server->push(ImageMessageHandler::class, Message::IMAGE); // 粉丝图片
-            $this->easyWechat->server->push(VoiceMessageHandler::class, Message::VOICE); // 粉丝语音
-            $this->easyWechat->server->push(VideoMessageHandler::class, Message::VIDEO); // 粉丝视频
-            $this->easyWechat->server->push(LocationMessageHandler::class, Message::LOCATION); // 粉丝坐标
-            $this->easyWechat->server->push(LinkMessageHandler::class, Message::LINK); // 粉丝链接
-            $this->easyWechat->server->push(FileMessageHandler::class, Message::FILE); // 粉丝文件
+            // TODO 未使用的可扩展事件，监听粉丝发送给公众号的信息
+            $this->easyWechat->server->push(ImageMessageHandler::class, Message::IMAGE); // 粉丝发图片
+            $this->easyWechat->server->push(VoiceMessageHandler::class, Message::VOICE); // 粉丝发语音
+            $this->easyWechat->server->push(VideoMessageHandler::class, Message::VIDEO); // 粉丝发视频
+            $this->easyWechat->server->push(LocationMessageHandler::class, Message::LOCATION); // 粉丝发坐标
+            $this->easyWechat->server->push(LinkMessageHandler::class, Message::LINK); // 粉丝发链接
+            $this->easyWechat->server->push(FileMessageHandler::class, Message::FILE); // 粉丝发文件
         }
 
         $response = $this->easyWechat->server->serve();

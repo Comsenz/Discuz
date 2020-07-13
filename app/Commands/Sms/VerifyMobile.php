@@ -12,20 +12,29 @@ use App\Api\Serializer\TokenSerializer;
 use App\Api\Serializer\UserSerializer;
 use App\Commands\Users\GenJwtToken;
 use App\Commands\Users\RegisterPhoneUser;
+use App\Events\Users\Logind;
+use App\MessageTemplate\Wechat\WechatRegisterMessage;
 use App\Models\MobileCode;
 use App\Models\User;
 use App\Models\UserWalletFailLogs;
+use App\Notifications\System;
 use App\Repositories\MobileCodeRepository;
+use App\User\Bind;
 use App\Validators\UserValidator;
 use Discuz\Api\Client;
 use Discuz\Auth\Exception\PermissionDeniedException;
+use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class VerifyMobile
 {
+    use EventsDispatchTrait;
+
     protected $controller;
 
     protected $mobileCode;
@@ -42,6 +51,12 @@ class VerifyMobile
 
     protected $mobileCodeRepository;
 
+    protected $events;
+
+    protected $bind;
+
+    protected $settings;
+
     public function __construct(VerifyController $controller, MobileCode $mobileCode, User $actor, $params = [])
     {
         $this->controller = $controller;
@@ -50,13 +65,15 @@ class VerifyMobile
         $this->params = $params;
     }
 
-    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator, MobileCodeRepository $mobileCodeRepository)
+    public function handle(Client $apiClient, Dispatcher $bus, UserValidator $validator, MobileCodeRepository $mobileCodeRepository, Events $events, SettingsRepository $settings, Bind $bind)
     {
         $this->apiClient = $apiClient;
         $this->bus = $bus;
         $this->validator = $validator;
         $this->mobileCodeRepository = $mobileCodeRepository;
-
+        $this->events = $events;
+        $this->bind = $bind;
+        $this->settings = $settings;
         return call_user_func([$this, Str::camel($this->mobileCode->type)]);
     }
 
@@ -71,12 +88,25 @@ class VerifyMobile
             $data['register_ip'] = Arr::get($this->params, 'ip');
             $data['register_port'] = Arr::get($this->params, 'port');
             $data['mobile'] = $this->mobileCode->mobile;
+            $data['code'] = Arr::get($this->params, 'inviteCode');
             $user = $this->bus->dispatch(
                 new RegisterPhoneUser($this->actor, $data)
             );
             $this->mobileCode->setRelation('user', $user);
         }
 
+        if ($token = Arr::get($this->params, 'token')) {
+            $this->bind->wechat($token, $this->mobileCode->user);
+            // 判断是否开启了注册审核
+            if (!(bool)$this->settings->get('register_validate')) {
+                // 在注册绑定微信后 发送注册微信通知
+                $this->mobileCode->user->notify(new System(WechatRegisterMessage::class));
+            }
+        }
+
+        $this->events->dispatch(
+            new Logind($this->mobileCode->user)
+        );
         //login
         $this->controller->serializer = TokenSerializer::class;
         $params = [
@@ -89,7 +119,6 @@ class VerifyMobile
         );
 
         return json_decode($response->getBody());
-
     }
 
     protected function bind()

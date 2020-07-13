@@ -47,29 +47,6 @@ class UserActionLogs extends Model
     ];
 
     /**
-     * 操作行为
-     * @var array
-     */
-    public static $actionType = [
-        // 用户操作行为
-        'user' => [
-            'normal',      // 启用
-            'ban',         // 禁用
-            'mod',         // 审核中
-            'through',     // 审核通过
-            'refuse',      // 审核拒绝
-            'ignore',      // 审核忽略
-        ],
-        // 主题操作行为
-        'thread' => [
-            'create',      // 创建
-            'hide',        // 放入回收站
-            'restore',     // 还原
-            'revise',      // 修改内容
-        ],
-    ];
-
-    /**
      * 写入操作日志
      *
      * @param User $actor
@@ -87,27 +64,6 @@ class UserActionLogs extends Model
         $log->created_at = Carbon::now();
 
         $model->logs()->save($log);
-    }
-
-    /**
-     * get array [behavior]
-     *
-     * @return array
-     */
-    public static function behavior()
-    {
-        return self::$behavior;
-    }
-
-    /**
-     * get array [actionType]
-     *
-     * @param string $type
-     * @return array
-     */
-    public static function getAction(string $type)
-    {
-        return self::$actionType[$type];
     }
 
     /**

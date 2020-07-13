@@ -7,6 +7,7 @@
 
 namespace App\Rules\Settings;
 
+use App\Exceptions\TranslatorException;
 use Discuz\Qcloud\QcloudTrait;
 use Illuminate\Support\Arr;
 use TencentCloud\Common\Exception\TencentCloudSDKException;
@@ -58,11 +59,11 @@ class QcloudVodVerify extends BaseQcloud
 
             $this->describeStorageData($value);
         } catch (TencentCloudSDKException $e) {
-            $message = 'tencent_vod_error';
             if ($e->getCode() == 'FailedOperation.InvalidVodUser') {
-                $message = 'tencent_vod_subappid_error';
+                throw new TencentCloudSDKException('tencent_vod_subappid_error');
+            } else {
+                throw new TranslatorException('tencent_vod_error', [$e->getCode()]);
             }
-            throw new TencentCloudSDKException($message);
         }
         return true;
     }

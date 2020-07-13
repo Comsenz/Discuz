@@ -13,6 +13,7 @@ use App\Settings\ForumSettingField;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
+use Discuz\Http\UrlGenerator;
 use Illuminate\Support\Arr;
 
 class ForumSettingSerializer extends AbstractSerializer
@@ -36,9 +37,13 @@ class ForumSettingSerializer extends AbstractSerializer
     public function getDefaultAttributes($model)
     {
         // 获取logo完整地址
+        $favicon = $this->forumField->siteUrlSplicing($this->settings->get('favicon'));
         $logo = $this->forumField->siteUrlSplicing($this->settings->get('logo'));
         $headerLogo = $this->forumField->siteUrlSplicing($this->settings->get('header_logo'));
         $backgroundImage = $this->forumField->siteUrlSplicing($this->settings->get('background_image'));
+
+        $port = $this->request->getUri()->getPort();
+        $siteUrl = $this->request->getUri()->getScheme() . '://' . $this->request->getUri()->getHost().(in_array($port, [80, 443, null]) ? '' : ':'.$port);
 
         $attributes = [
             // 站点设置
@@ -47,10 +52,11 @@ class ForumSettingSerializer extends AbstractSerializer
                 'site_introduction' => $this->settings->get('site_introduction'),
                 'site_mode' => $this->settings->get('site_mode'), // pay public
                 'site_close' => (bool)$this->settings->get('site_close'),
+                'site_favicon' => $favicon ?: app(UrlGenerator::class)->to('/favicon.ico'),
                 'site_logo' => $logo ? $logo . '?' . Carbon::now()->timestamp : '', // 拼接日期
                 'site_header_logo' => $headerLogo ? $headerLogo . '?' . Carbon::now()->timestamp : '',
                 'site_background_image' => $backgroundImage ? $backgroundImage . '?' . Carbon::now()->timestamp : '',
-                'site_url' => $this->settings->get('site_url'),
+                'site_url' => $siteUrl,
                 'site_stat' => $this->settings->get('site_stat') ?: '',
                 'site_author' => User::where('id', $this->settings->get('site_author'))->first(['id', 'username', 'avatar']),
                 'site_install' => $this->settings->get('site_install'), // 安装时间
@@ -125,9 +131,9 @@ class ForumSettingSerializer extends AbstractSerializer
                 'can_view_user_list' => $this->actor->can('viewUserList'),
                 'can_edit_user_group' => $this->actor->can('user.edit.group'),
                 'can_create_invite' => $this->actor->can('createInvite'),
-                'create_thread_with_captcha' => !$this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
-                'publish_need_real_name' => !$this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && $this->actor->realname,
-                'publish_need_bind_phone' => !$this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && $this->actor->mobile,
+                'create_thread_with_captcha' => ! $this->actor->isAdmin() && $this->actor->can('createThreadWithCaptcha'),
+                'publish_need_real_name' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedRealName') && ! $this->actor->realname,
+                'publish_need_bind_phone' => ! $this->actor->isAdmin() && $this->actor->can('publishNeedBindPhone') && ! $this->actor->mobile,
                 'initialized_pay_password' => (bool)$this->actor->pay_password,  // 是否初始化支付密码
             ],
         ];
@@ -151,7 +157,7 @@ class ForumSettingSerializer extends AbstractSerializer
         }
 
         // 微信小程序请求时判断视频开关
-        if (!$this->settings->get('miniprogram_video', 'wx_miniprogram') &&
+        if (! $this->settings->get('miniprogram_video', 'wx_miniprogram') &&
             strpos(Arr::get($this->request->getServerParams(), 'HTTP_X_APP_PLATFORM'), 'wx_miniprogram') !== false) {
             $attributes['other']['can_create_thread_video'] = false;
         }

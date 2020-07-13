@@ -1,12 +1,20 @@
 <?php
 
+/**
+ * Discuz & Tencent Cloud
+ * This is NOT a freeware, use is subject to license terms
+ */
 
 namespace App\WechatMessageHandler;
 
+use App\Models\WechatOffiaccountReply;
+use Discuz\Wechat\EasyWechatTrait;
 use Discuz\Wechat\Offiaccount\MessageEventHandlerInterface;
 
 class TextMessageHandler extends MessageEventHandlerInterface
 {
+    use EasyWechatTrait;
+
     /**
      * @var mixed
      */
@@ -21,16 +29,47 @@ class TextMessageHandler extends MessageEventHandlerInterface
     {
         $message = $app->server->getMessage();
         $this->content = $message['Content'];
+
+        $this->easyWechat = $this->offiaccount();
     }
 
     public function handle($payload = null)
     {
-        // 全匹配查询
+        try {
+            // 匹配查询
+            $bool = WechatOffiaccountReply::match($this->content, $this->reply);
+            if (!$bool) {
+                return $this->error(''); // 匹配不到不回复
+            }
 
-        // 检测有无关键词(全匹配/模糊匹配)
+            $type = WechatOffiaccountReply::enumReplyType($this->reply->reply_type);
+            if (empty($type)) {
+                return $this->{'Text'}($this->error());
+            }
 
-        // 是否设定消息回复
+            /**
+             * 回复对应类型
+             * (目前微信不支持 链接消息、坐标消息)
+             *
+             * @var object $result
+             */
+            $result = $this->{$type}();
 
-        return '文本消息(关键词消息) !';
+            return $result;
+
+        } catch (\Exception $e) {
+            $this->wechatDebugLog($e->getMessage());
+
+            return $this->{'Text'}($this->error());
+        }
+    }
+
+    /**
+     * @param string $argSting
+     * @return string
+     */
+    public function error($argSting = '系统加载，请稍后再试...') : string
+    {
+        return $argSting;
     }
 }

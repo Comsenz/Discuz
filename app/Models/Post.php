@@ -10,6 +10,8 @@ namespace App\Models;
 use App\Events\Post\Hidden;
 use App\Events\Post\Restored;
 use App\Events\Post\Revised;
+use App\Formatter\Formatter;
+use App\Formatter\MarkdownFormatter;
 use Carbon\Carbon;
 use DateTime;
 use Discuz\Database\ScopeVisibilityTrait;
@@ -34,6 +36,7 @@ use Illuminate\Support\Str;
  * @property int $reply_post_id
  * @property int $reply_user_id
  * @property string $summary
+ * @property string $summary_text
  * @property string $content
  * @property string $ip
  * @property int $port
@@ -66,7 +69,7 @@ class Post extends Model
     /**
      * 摘要长度
      */
-    const SUMMARY_LENGTH = 100;
+    const SUMMARY_LENGTH = 80;
 
     /**
      * 摘要结尾
@@ -110,6 +113,20 @@ class Post extends Model
      * @var User
      */
     protected static $stateUser;
+
+    /**
+     * The text formatter instance.
+     *
+     * @var Formatter
+     */
+    protected static $formatter;
+
+    /**
+     * The markdown text formatter instance.
+     *
+     * @var MarkdownFormatter
+     */
+    protected static $markdownFormatter;
 
     /**
      * datetime 时间转换
@@ -385,9 +402,11 @@ class Post extends Model
      */
     public function refreshReplyCount()
     {
-        $this->reply_count = $this->where('reply_post_id', $this->id)
-            ->where('is_approved', Thread::APPROVED)
+        $this->reply_count = $this->newQuery()
+            ->where('reply_post_id', $this->id)
+            ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
+            ->whereNotNull('user_id')
             ->count();
 
         return $this;

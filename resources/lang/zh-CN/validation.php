@@ -216,6 +216,7 @@ return [
         'pay_password_confirmation' => '支付密码',
         'groupId' => '用户组',
         'username_prefix' => '网友',
+        'register_reason' => '注册原因',
 
         // thread
         'file_id' => '视频文件',
@@ -226,5 +227,11 @@ return [
 
         //NotificationTpl
         'template_id' => '模板ID',
+
+        //会话 会话消息
+        'dialog_id' => '会话',
+        'message_text' => '消息内容',
+        'attachment_id' => '附件',
+
     ],
 ];

@@ -8,10 +8,8 @@
 namespace App\Commands\Thread;
 
 use App\Censor\Censor;
-use App\Events\Category\CategoryRefreshCount;
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
-use App\Events\Users\UserRefreshCount;
 use App\Models\Thread;
 use App\Models\ThreadVideo;
 use App\Models\User;
@@ -22,6 +20,7 @@ use App\Validators\ThreadValidator;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Foundation\EventsDispatchTrait;
+use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
@@ -71,11 +70,12 @@ class EditThread
      * @param Censor $censor
      * @param ThreadValidator $validator
      * @param ThreadVideoRepository $threadVideos
+     * @param BusDispatcher $bus
      * @return Thread
      * @throws PermissionDeniedException
      * @throws ValidationException
      */
-    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos)
+    public function handle(Dispatcher $events, ThreadRepository $threads, Censor $censor, ThreadValidator $validator, ThreadVideoRepository $threadVideos, BusDispatcher $bus)
     {
         $this->events = $events;
 
@@ -91,7 +91,7 @@ class EditThread
 
             // 存在审核敏感词时，将主题放入待审核
             if ($censor->isMod) {
-                $thread->is_approved = 0;
+                $thread->is_approved = Thread::UNAPPROVED;
             }
 
             $thread->title = $title;
@@ -115,66 +115,51 @@ class EditThread
 
         if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $thread);
+
             if ($thread->is_approved != $attributes['isApproved']) {
                 $thread->is_approved = $attributes['isApproved'];
-                $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
 
-                // 内容审核通知
-                $thread->raise(new ThreadWasApproved(
-                    $thread,
-                    $this->actor,
-                    ['notice_type' => 'isApproved', 'message' => $approvedMsg]
-                ));
+                $thread->raise(
+                    new ThreadWasApproved($thread, $this->actor, ['message' => $attributes['message'] ?? ''])
+                );
             }
         }
 
         if (isset($attributes['isSticky'])) {
             $this->assertCan($this->actor, 'sticky', $thread);
+
             if ($thread->is_sticky != $attributes['isSticky']) {
                 $thread->is_sticky = $attributes['isSticky'];
-                // 置顶后 通知发帖人置顶消息
-                if ($attributes['isSticky']) {
-                    // 内容置顶通知
-                    $thread->raise(new ThreadWasApproved(
-                        $thread,
-                        $this->actor,
-                        ['notice_type' => 'isSticky']
-                    ));
+
+                if ($thread->is_sticky) {
+                    $this->threadNotices($thread, $this->actor, 'isSticky', $attributes['message'] ?? '');
                 }
             }
         }
 
         if (isset($attributes['isEssence'])) {
             $this->assertCan($this->actor, 'essence', $thread);
+
             if ($thread->is_essence != $attributes['isEssence']) {
                 $thread->is_essence = $attributes['isEssence'];
-                // 内容精华通知
-                if ($attributes['isEssence']) {
-                    $thread->raise(new ThreadWasApproved(
-                        $thread,
-                        $this->actor,
-                        ['notice_type' => 'isEssence']
-                    ));
+
+                if ($thread->is_essence) {
+                    $this->threadNotices($thread, $this->actor, 'isEssence', $attributes['message'] ?? '');
                 }
             }
         }
 
         if (isset($attributes['isDeleted'])) {
             $this->assertCan($this->actor, 'hide', $thread);
-            if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
-                $message = isset($attributes['message']) ? $attributes['message'] : '';
 
-                if ($attributes['isDeleted']) {
-                    // 内容删除通知
-                    $thread->hide($this->actor, ['message' => $message]);
-                } else {
-                    $thread->restore($this->actor, ['message' => $message]);
-                }
+            $message = $attributes['message'] ?? '';
+
+            if ($attributes['isDeleted']) {
+                $thread->hide($this->actor, ['message' => $message]);
+            } else {
+                $thread->restore($this->actor, ['message' => $message]);
             }
         }
-
-        // 原分类ID
-        $cateId = $thread->category_id;
 
         $this->events->dispatch(
             new Saving($thread, $this->actor, $this->data)
@@ -192,7 +177,7 @@ class EditThread
         $validator->valid($validAttr);
 
         //编辑视频
-        if ($thread->type == 2 && $file_id) {
+        if ($thread->type == Thread::TYPE_OF_VIDEO && $file_id) {
             /** @var ThreadVideo $threadVideo */
             $threadVideo = $threadVideos->findOrFailByThreadId($thread->id);
 
@@ -202,38 +187,20 @@ class EditThread
                 $threadVideo->save();
 
                 // 创建新的视频记录
-                $newVideo = new ThreadVideo;
+                $video = $bus->dispatch(
+                    new CreateThreadVideo($this->actor, $thread, $this->data)
+                );
 
-                $newVideo->thread_id = $thread->id;
-                $newVideo->post_id = 0;
-                $newVideo->user_id = $this->actor->id;
-                $newVideo->type = ThreadVideo::TYPE_OF_VIDEO;
-                $newVideo->status = ThreadVideo::VIDEO_STATUS_TRANSCODING;
-                $newVideo->file_name = $attributes['file_name'];
-                $newVideo->file_id = $attributes['file_id'];
-                $newVideo->media_url = '';
-                $newVideo->cover_url = '';
-
-                $newVideo->save();
+                $thread->setRelation('threadVideo', $video);
 
                 // 重新上传视频修改为审核状态
-                $thread->is_approved = 0;
+                $thread->is_approved = Thread::UNAPPROVED;
             }
         }
 
         $thread->save();
 
         $this->dispatchEventsFor($thread, $this->actor);
-
-        /**
-         * 更改统计数
-         */
-        $this->events->dispatch(
-            new UserRefreshCount($thread->user)
-        );
-        $this->events->dispatch(
-            new CategoryRefreshCount($thread->category, $cateId)
-        );
 
         return $thread;
     }

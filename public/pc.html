@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        text-align: center;
+        display: block;
+      }
+      .iframe-responsive {
+        width: 640px;
+        height: 100vh;
+        /* height: calc(100% / 0.67); */
+        /* transform-origin: 0 0; */
+        /* transform: scale(0.67); */
+        border: none;
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var path = window.location.pathname + window.location.search;
+      if(path.indexOf('?') !== -1) {
+        path += '&from=pc';
+      } else {
+        path += '?from=pc';
+      }
+
+      var iframe = document.createElement('iframe');
+      iframe.className = 'iframe-responsive';
+      iframe.frameBorder = 'no';
+      iframe.marginWidth = '0';
+      iframe.marginHeight = '0';
+      iframe.src = window.location.origin + path;
+      iframe.onload = function() {
+        setInterval(function() {
+          if(!iframe) return;
+          if(document.title !== iframe.contentWindow.document.title) {
+            document.title = iframe.contentWindow.document.title;
+          }
+          if(document.querySelector('link[type="image/x-icon"]') === null && iframe.contentWindow.document.querySelector('link[type="image/x-icon"]')) {
+            document.head.append(iframe.contentWindow.document.querySelector('link[type="image/x-icon"]'));
+          }
+          var iframeHref = iframe.contentWindow.location.href.replace('&from=pc', '').replace('?from=pc', '');
+          if(window.location.href !== iframeHref) {
+            history.replaceState({}, iframe.contentWindow.document.title, iframeHref);
+          }
+        }, 700);
+      };
+      document.body.append(iframe);
+    </script>
+  </body>
+</html>

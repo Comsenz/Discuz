@@ -55,7 +55,7 @@ class OrderSubscriber
             // 发送通知
             $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
             $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
-                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH),
+                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                 'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                     'actor_username' => $order->user->username,    // 发送人姓名
                     'actual_amount' => $order->actual_amount,      // 获取实际金额
@@ -71,7 +71,7 @@ class OrderSubscriber
             // 发送通知
             $order->payee->notify(new Rewarded($order, $order->user, RewardedMessage::class));
             $order->payee->notify(new Rewarded($order, $order->user, WechatRewardedMessage::class, [
-                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH),
+                'message' => $order->thread->getContentByType(Thread::CONTENT_LENGTH, true),
                 'raw' => array_merge(Arr::only($order->toArray(), ['id', 'thread_id', 'type']), [
                     'actor_username' => $order->user->username,    // 发送人姓名
                     'actual_amount' => $order->actual_amount       // 获取实际金额

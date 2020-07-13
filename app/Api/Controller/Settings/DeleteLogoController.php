@@ -45,6 +45,7 @@ class DeleteLogoController extends AbstractResourceController
         'watermark_image',
         'header_logo',
         'logo',
+        'favicon',
     ];
 
     /**

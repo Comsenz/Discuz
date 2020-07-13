@@ -102,7 +102,7 @@ export default {
       let datas = [];
       data.forEach((item)=>{
 
-        datas.push('<a  href="/home-page/'+item._data.id+'">'+ item._data.username + '</a>')
+        datas.push('<a  href="/pages/profile/index?userId='+item._data.id+'">'+ item._data.username + '</a>')
       });
       return datas.join(',')
     },

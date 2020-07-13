@@ -63,7 +63,12 @@ class CategoryPolicy extends AbstractPolicy
     public function createThread(User $actor, Category $category)
     {
         if (
-            $actor->hasPermission('createThread')
+            $actor->hasPermission([
+                'createThread',
+                'createThreadLong',
+                'createThreadVideo',
+                'createThreadImage',
+            ], false)
             && $actor->hasPermission('category'.$category->id.'.viewThreads')
             && $actor->hasPermission('category'.$category->id.'.createThread')
         ) {

@@ -45,7 +45,13 @@ export default {
           imgWidht: 0,
           imgHeight: 0,
           text: "首页头部背景"
-        }
+        },
+        {
+          imageUrl: "",
+          imgWidht: 0,
+          imgHeight: 0,
+          text: "ICON"
+        },
       ]
     };
   },
@@ -59,17 +65,6 @@ export default {
     //     return this.fileList.length >0
     // },
   },
-  // watch: {
-  //监听图片数组变化
-  //   'this.fileList.length': {
-  //     handler(newValue, oldValue) {
-  //       if (newValue !== oldValue) {
-  //         // 操作
-  //          this.fileList = newValue;
-  //         }
-  //     }
-  //   },
-  // },
 
   methods: {
     loadStatus() {
@@ -92,6 +87,9 @@ export default {
               data.readdata._data.set_site.site_header_logo;
             this.numberimg[2].imageUrl =
               data.readdata._data.set_site.site_background_image;
+              // icon
+              this.numberimg[3].imageUrl =
+              data.readdata._data.set_site.site_favicon;
             this.getScaleImgSize(this.numberimg[0].imageUrl, {
               width: 140,
               height: 140
@@ -112,6 +110,13 @@ export default {
             }).then(res => {
               this.numberimg[2].imgWidht = res.width;
               this.numberimg[2].imgHeight = res.height;
+            });
+            this.getScaleImgSize(this.numberimg[3].imageUrl, {
+              width: 140,
+              height:140
+            }).then(res => {
+              this.numberimg[3].imgWidht = res.width;
+              this.numberimg[3].imgHeight = res.height;
             });
             if (this.siteMode == "pay") {
               this.radio = "2";
@@ -148,14 +153,20 @@ export default {
     deleteImage(file, index, fileList) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
         case 2:
           type = "background_image";
           break;
+        case 3:
+          type = "favicon";
+          break;
         default:
-          type = "logo";
+          this.$message.error('未知类型');
       }
       this.numberimg[index].imageUrl = "";
       this.appFetch({
@@ -232,10 +243,11 @@ export default {
       const isJPG =
         file.type == "image/jpeg" ||
         file.type == "image/png" ||
-        file.type == "image/gif";
+        file.type == "image/gif" ||
+        file.type == "image/ico";
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isJPG) {
-        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF 格式!");
+        this.$message.warning("上传头像图片只能是 JPG/PNG/GIF/ICO 格式!");
         return isJPG;
       }
       if (!isLt2M) {
@@ -248,14 +260,20 @@ export default {
     uploaderLogo(e, index) {
       let type = "";
       switch (index) {
+        case 0:
+          type = "logo";
+          break;
         case 1:
           type = "header_logo";
           break;
         case 2:
           type = "background_image";
           break;
+        case 3:
+          type = "favicon";
+          break;
         default:
-          type = "logo";
+          this.$message.error('未知类型');
       }
       let logoFormData = new FormData();
       logoFormData.append("logo", e.file);
@@ -378,7 +396,11 @@ export default {
       })
         .then(data => {
           if (data.errors) {
-            this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0]);
+            if (data.errors[0].detail) {
+              this.$message.error(data.errors[0].code + '\n' + data.errors[0].detail[0])
+            } else {
+              this.$message.error(data.errors[0].code);
+            }
           } else {
             this.$message({
               message: "提交成功",

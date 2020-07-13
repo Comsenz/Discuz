@@ -39,9 +39,7 @@ class ExportStopWordsController implements RequestHandlerInterface
 
         $filename = app()->config('excel.root') . DIRECTORY_SEPARATOR . 'stop-words.txt';
 
-        if (file_exists($filename)) {
-            unlink($filename);
-        }
+        file_put_contents($filename, '');
 
         foreach ($stopWords as $stopWord) {
             file_put_contents($filename, $stopWord . "\r\n", FILE_APPEND | LOCK_EX);

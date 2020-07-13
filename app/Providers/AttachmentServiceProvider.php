@@ -13,6 +13,7 @@ use App\Events\Attachment\Uploading;
 use App\Listeners\Attachment\AddWatermarkToImage;
 use App\Listeners\Attachment\CheckImage;
 use App\Listeners\Attachment\LocalImageHandler;
+use App\Listeners\Attachment\OrientateImage;
 use Discuz\Foundation\AbstractServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 
@@ -32,6 +33,7 @@ class AttachmentServiceProvider extends AbstractServiceProvider implements Defer
     {
         $events = $this->app->make('events');
 
+        $events->listen(Uploading::class, OrientateImage::class);
         $events->listen(Uploading::class, AddWatermarkToImage::class);
         $events->listen(Uploaded::class, LocalImageHandler::class);
 

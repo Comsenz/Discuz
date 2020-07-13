@@ -9,8 +9,10 @@ namespace App\Commands\Thread;
 
 use App\Events\Thread\Saving;
 use App\Events\Thread\ThreadWasApproved;
+use App\Models\Thread;
 use App\Models\User;
 use App\Repositories\ThreadRepository;
+use App\Traits\ThreadNoticesTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -18,6 +20,7 @@ use Illuminate\Support\Arr;
 class BatchEditThreads
 {
     use EventsDispatchTrait;
+    use ThreadNoticesTrait;
 
     /**
      * The user performing the action.
@@ -61,6 +64,7 @@ class BatchEditThreads
                 continue;
             }
 
+            /** @var Thread $thread */
             $thread = $threads->query()->whereVisibleTo($this->actor)->find($id);
 
             if ($thread) {
@@ -76,13 +80,10 @@ class BatchEditThreads
                 if ($this->actor->can('approve', $thread)) {
                     if ($thread->is_approved != $attributes['isApproved']) {
                         $thread->is_approved = $attributes['isApproved'];
-                        $approvedMsg = isset($attributes['message']) ? $attributes['message'] : '';
-                        // 内容审核通知
-                        $thread->raise(new ThreadWasApproved(
-                            $thread,
-                            $this->actor,
-                            ['notice_type' => 'isApproved', 'message' => $approvedMsg]
-                        ));
+
+                        $thread->raise(
+                            new ThreadWasApproved($thread, $this->actor, ['message' => $attributes['message'] ?? ''])
+                        );
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];
@@ -94,14 +95,9 @@ class BatchEditThreads
                 if ($this->actor->can('sticky', $thread)) {
                     if ($thread->is_sticky != $attributes['isSticky']) {
                         $thread->is_sticky = $attributes['isSticky'];
-                        // 批量置顶通知
-                        if ($attributes['isSticky']) {
-                            // 内容置顶通知
-                            $thread->raise(new ThreadWasApproved(
-                                $thread,
-                                $this->actor,
-                                ['notice_type' => 'isSticky']
-                            ));
+
+                        if ($thread->is_sticky) {
+                            $this->threadNotices($thread, $this->actor, 'isSticky', $attributes['message'] ?? '');
                         }
                     }
                 } else {
@@ -114,13 +110,9 @@ class BatchEditThreads
                 if ($this->actor->can('essence', $thread)) {
                     if ($thread->is_essence != $attributes['isEssence']) {
                         $thread->is_essence = $attributes['isEssence'];
-                        // 内容精华通知
-                        if ($attributes['isEssence']) {
-                            $thread->raise(new ThreadWasApproved(
-                                $thread,
-                                $this->actor,
-                                ['notice_type' => 'isEssence']
-                            ));
+
+                        if ($thread->is_essence) {
+                            $this->threadNotices($thread, $this->actor, 'isEssence', $attributes['message'] ?? '');
                         }
                     }
                 } else {
@@ -131,15 +123,12 @@ class BatchEditThreads
 
             if (isset($attributes['isDeleted'])) {
                 if ($this->actor->can('hide', $thread)) {
-                    if ((bool) $thread->deleted_at != $attributes['isDeleted']) {
-                        $message = isset($attributes['message']) ? $attributes['message'] : '';
+                    $message = $attributes['message'] ?? '';
 
-                        if ($attributes['isDeleted']) {
-                            // 内容删除通知
-                            $thread->hide($this->actor, ['message' => $message]);
-                        } else {
-                            $thread->restore($this->actor, ['message' => $message]);
-                        }
+                    if ($attributes['isDeleted']) {
+                        $thread->hide($this->actor, ['message' => $message]);
+                    } else {
+                        $thread->restore($this->actor, ['message' => $message]);
                     }
                 } else {
                     $result['meta'][] = ['id' => $id, 'message' => 'permission_denied'];

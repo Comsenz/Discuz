@@ -192,9 +192,9 @@ export default {
       // }
       data = data.slice(0, 10);
       data.forEach((item, key) => {
-        // datas.push('<a  href="/home-page/'+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
+        // datas.push('<a  href="/pages/profile/index?userId='+item._data.id+'" style="'+(key>10?this.hideStyle:'')+'">'+ item._data.username  +'</a>');
         datas.push(
-          '<a  href="/home-page/' +
+          '<a  href="/pages/profile/index?userId=' +
             item._data.id +
             '">' +
             item._data.username +

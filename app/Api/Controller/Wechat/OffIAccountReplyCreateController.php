@@ -55,7 +55,7 @@ class OffIAccountReplyCreateController extends AbstractCreateController
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $type = Arr::get($request->getQueryParams(), 'type');
+        $type = Arr::get($this->extractFilter($request), 'type');
         $attributes = Arr::get($request->getParsedBody(), 'data.attributes');
 
         /**
@@ -66,7 +66,7 @@ class OffIAccountReplyCreateController extends AbstractCreateController
             'keyword' => 'required',
             'type' => [
                 'in:0,1,2',
-                // 当0自动回复1消息回复 都只允许有一条数据
+                // 当0被关注回复1消息回复 都只允许有一条数据
                 function ($attribute, $value, $fail) {
                     if ($value != 2) {
                         // exists data

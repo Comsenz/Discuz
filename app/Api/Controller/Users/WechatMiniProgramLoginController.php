@@ -17,7 +17,7 @@ use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Socialite\Exception\SocialiteException;
-use EasyWeChat\Factory;
+use Discuz\Wechat\EasyWechatTrait;
 use EasyWeChat\Kernel\Exceptions\DecryptException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -25,16 +25,16 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Events\Dispatcher as Events;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class WechatMiniProgramLoginController extends AbstractResourceController
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     public $serializer = TokenSerializer::class;
-
-    protected $easyWeChat;
 
     protected $bus;
 
@@ -46,9 +46,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
 
     protected $settings;
 
-    public function __construct(Factory $easyWeChat, Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
+    public function __construct(Dispatcher $bus, Repository $cache, ValidationFactory $validation, Events $events, SettingsRepository $settings)
     {
-        $this->easyWeChat = $easyWeChat;
         $this->bus = $bus;
         $this->cache = $cache;
         $this->validation = $validation;
@@ -74,10 +73,7 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             ['js_code' => 'required','iv' => 'required','encryptedData' => 'required']
         )->validate();
 
-        $app = $this->easyWeChat::miniProgram([
-            'app_id' => $this->settings->get('miniprogram_app_id', 'wx_miniprogram'),
-            'secret' => $this->settings->get('miniprogram_app_secret', 'wx_miniprogram'),
-        ]);
+        $app = $this->miniProgram();
         //获取小程序登陆session key
         $authSession = $app->auth->session($js_code);
         if (isset($authSession['errcode']) && $authSession['errcode'] != 0) {
@@ -121,7 +117,8 @@ class WechatMiniProgramLoginController extends AbstractResourceController
             $this->assertPermission((bool)$this->settings->get('register_close'));
 
             $data['code'] = Arr::get($attributes, 'code');
-            $data['username'] = $wechatUser->nickname;
+            //用户名只允许15个字
+            $data['username'] = Str::of($wechatUser->nickname)->substr(0, 15);
             $data['register_ip'] = ip($request->getServerParams());
             $data['register_port'] = Arr::get($request->getServerParams(), 'REMOTE_PORT');
             $user = $this->bus->dispatch(

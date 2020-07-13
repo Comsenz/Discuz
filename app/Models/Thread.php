@@ -234,6 +234,7 @@ class Thread extends Model
             ->where('is_comment', false)
             ->where('is_approved', Post::APPROVED)
             ->whereNull('deleted_at')
+            ->whereNotNull('user_id')
             ->count() + 1;  // include first post
 
         return $this;
@@ -336,7 +337,9 @@ class Thread extends Model
      */
     public function deletedUser()
     {
-        return $this->belongsTo(User::class, 'deleted_user_id');
+        return $this->belongsTo(User::class, 'deleted_user_id')->withDefault([
+            'username' => trans('user.user_has_deleted'),
+        ]);
     }
 
     /**
@@ -462,7 +465,7 @@ class Thread extends Model
         }
 
         // 是否已缓存付费状态（为避免 N + 1 问题）
-        if (array_key_exists($this->id, static::$userHasPaidThreads[$user->id] ?? [])) {
+        if (isset(static::$userHasPaidThreads[$user->id][$this->id])) {
             return static::$userHasPaidThreads[$user->id][$this->id];
         }
 

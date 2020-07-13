@@ -128,23 +128,6 @@ class ListOrdersController extends AbstractListController
             'pageCount' => ceil($this->total / $limit),
         ]);
 
-        // 主题标题
-        if (in_array('thread.firstPost', $include)) {
-            $orders->load('thread.firstPost')
-                ->map(function (Order $order) {
-                    if ($order->thread) {
-                        if ($order->thread->type == 1) {
-                            $title = Str::limit($order->thread->title, 40);
-                        } else {
-                            $title = Str::limit($order->thread->firstPost->content, 40);
-                            $title = str_replace("\n", '', $title);
-                        }
-
-                        $order->thread->title = htmlspecialchars($title);
-                    }
-                });
-        }
-
         return $orders->loadMissing($include);
     }
 

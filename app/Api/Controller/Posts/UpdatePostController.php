@@ -42,7 +42,10 @@ class UpdatePostController extends AbstractResourceController
     /**
      * {@inheritdoc}
      */
-    public $optionalInclude = ['logs'];
+    public $optionalInclude = [
+        'images',
+        'logs',
+    ];
 
     /**
      * @var Dispatcher

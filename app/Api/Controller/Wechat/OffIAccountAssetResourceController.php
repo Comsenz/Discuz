@@ -11,13 +11,11 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Http\DiscuzResponseFactory;
-use EasyWeChat\Kernel\Exceptions\InvalidConfigException as InvalidConfigExceptionAlias;
-use GuzzleHttp\Exception\GuzzleException;
+use Discuz\Wechat\EasyWechatTrait;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use EasyWeChat\Factory;
 
 /**
  * 微信公众号 - 获取单条永久素材
@@ -27,9 +25,10 @@ use EasyWeChat\Factory;
 class OffIAccountAssetResourceController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
+    use EasyWechatTrait;
 
     /**
-     * @var Factory
+     * @var $easyWechat
      */
     protected $easyWechat;
 
@@ -40,28 +39,15 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
 
     /**
      * WechatMiniProgramCodeController constructor.
-     *
-     * @param Factory $easyWechat
-     * @param SettingsRepository $settings
      */
-    public function __construct(Factory $easyWechat, SettingsRepository $settings)
+    public function __construct()
     {
-        $this->settings = $settings;
-
-        $config = [
-            'app_id' => $this->settings->get('offiaccount_app_id', 'wx_offiaccount'),
-            'secret' => $this->settings->get('offiaccount_app_secret', 'wx_offiaccount'),
-            'response_type' => 'array',
-        ];
-
-        $this->easyWechat = $easyWechat::officialAccount($config);
+        $this->easyWechat = $this->offiaccount();
     }
 
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws GuzzleException
-     * @throws InvalidConfigExceptionAlias
      * @throws PermissionDeniedException
      * @throws \Exception
      */
@@ -97,7 +83,6 @@ class OffIAccountAssetResourceController implements RequestHandlerInterface
                 break;
         }
 
-        // throw new TranslatorException('wechat_offiaccount_')
         throw new \Exception('Unexpected value');
     }
 }

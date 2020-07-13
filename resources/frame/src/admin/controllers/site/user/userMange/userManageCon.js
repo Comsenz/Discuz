@@ -14,9 +14,9 @@ export default {
       userRole: [],
       checked: false,
       userPhone: '',
-      userWeChat: 'no',
+      userWeChat: '',
       userStatus: [],
-      isReal: 'no', //是否实名认证
+      isReal: '', //是否实名认证
       disabled: true,//禁用表单上的游客
       optionsStatus: [
         {
@@ -66,8 +66,8 @@ export default {
       };
       if (!this.checked) {
         this.userPhone = '';
-        this.userWeChat = 'no';
-        this.isReal = 'no';
+        this.userWeChat = '';
+        this.isReal = '';
 
         if (query.username + query.userUID + query.userRole + query.userStatus === '') {
           query = {};

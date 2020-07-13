@@ -49,7 +49,9 @@ class InviteBind
                 try {
                     $user_id = $encrypter->decryptString($code);
                 } catch (DecryptException $e) {
-                    throw new DecryptException();
+//                    throw new DecryptException();
+                    //邀请码解密失败后普通注册
+                    return;
                 }
                 //生成记录
                 Invite::insert([

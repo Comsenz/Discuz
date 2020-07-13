@@ -128,7 +128,7 @@ class SetSettingsController implements RequestHandlerInterface
         $settings->each(function ($setting) {
             $this->settings->set(
                 Arr::get($setting, 'key'),
-                Arr::get($setting, 'value'),
+                trim(Arr::get($setting, 'value')),
                 Arr::get($setting, 'tag')
             );
         });

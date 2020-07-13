@@ -96,17 +96,16 @@ class EditPost
             $post->timestamps = false;
         }
 
-        if (isset($attributes['isApproved'])) {
+        if (isset($attributes['isApproved']) && $attributes['isApproved'] < 3) {
             $this->assertCan($this->actor, 'approve', $post);
-            $message = $attributes['message'] ?? '';
-            $post->is_approved = $attributes['isApproved'];
 
-            // 操作审核时触发 回复内容通知和记录日志
-            $post->raise(new PostWasApproved(
-                $post,
-                $this->actor,
-                ['message' => $message]
-            ));
+            if ($post->is_approved != $attributes['isApproved']) {
+                $post->is_approved = $attributes['isApproved'];
+
+                $post->raise(
+                    new PostWasApproved($post, $this->actor, ['message' => $attributes['message'] ?? ''])
+                );
+            }
         }
 
         if (isset($attributes['isDeleted'])) {
@@ -127,29 +126,19 @@ class EditPost
 
         $validator->valid($post->getDirty());
 
-        // 待审核帖子
-        if ($post->is_approved === Post::UNAPPROVED) {
-            // 记录触发的审核词
-            if ($censor->wordMod) {
-                /** @var PostMod $stopWords */
-                $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
+        // 记录触发的审核词
+        if ($post->is_approved === Post::UNAPPROVED && $censor->wordMod) {
+            /** @var PostMod $stopWords */
+            $stopWords = PostMod::query()->firstOrNew(['post_id' => $post->id]);
 
-                $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
+            $stopWords->stop_word = implode(',', array_unique($censor->wordMod));
 
-                $post->stopWords()->save($stopWords);
-            }
-
-            // 如果是首贴，将主题放入待审核
-            if ($post->is_first) {
-                $post->thread->is_approved = Thread::UNAPPROVED;
-
-                $post->thread->save();
-            }
+            $post->stopWords()->save($stopWords);
         }
 
         $post->save();
 
-        $post->raise(new Saved($post, $this->actor, array_merge($this->data, ['edit' => true])));
+        $post->raise(new Saved($post, $this->actor, $this->data));
 
         $this->dispatchEventsFor($post, $this->actor);
 
