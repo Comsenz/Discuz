@@ -20,6 +20,11 @@ use Illuminate\Support\Str;
 trait HasPaidContent
 {
     /**
+     * @var User
+     */
+    protected $actor;
+
+    /**
      * @var array
      */
     protected $threads = [];
@@ -34,13 +39,10 @@ trait HasPaidContent
      */
     public function paidContent($model)
     {
-        /** @var User $actor */
-        $actor = $this->actor;
-
-        Thread::setStateUser($actor);
+        Thread::setStateUser($this->actor);
 
         // 作者本人 或 管理员 不处理（新增类型时请保证 $model->user_id 存在）
-        if ($actor->id === $model->user_id || $actor->isAdmin()) {
+        if ($this->actor->id === $model->user_id || $this->actor->isAdmin()) {
             return;
         }
 
@@ -56,6 +58,18 @@ trait HasPaidContent
     }
 
     /**
+     * 是否无权查看
+     *
+     * @param Thread $thread
+     * @return bool
+     */
+    public function cannotView(Thread $thread)
+    {
+        return ! $this->actor->hasPermission('thread.viewPosts')
+            || ($thread->price > 0 && ! $thread->is_paid);
+    }
+
+    /**
      * 付费长文帖未付费时不返回图片及附件
      * 帖子的 images 与 attachments 不在序列化 Attachment 时处理，直接设为空
      *
@@ -65,8 +79,7 @@ trait HasPaidContent
     {
         if (
             $thread->type === Thread::TYPE_OF_LONG
-            && $thread->price > 0
-            && ! $thread->is_paid
+            && $this->cannotView($thread)
         ) {
             $thread->firstPost->setRelation('images', collect());
             $thread->firstPost->setRelation('attachments', collect());
@@ -84,8 +97,7 @@ trait HasPaidContent
             $post->is_first
             && $post->thread
             && $post->thread->type === Thread::TYPE_OF_LONG
-            && $post->thread->price > 0
-            && ! $post->thread->is_paid
+            && $this->cannotView($post->thread)
         ) {
             $content = Str::of($post->content);
 
@@ -108,8 +120,7 @@ trait HasPaidContent
             && $attachment->post->is_first
             && $attachment->post->thread
             && $attachment->post->thread->type === Thread::TYPE_OF_IMAGE
-            && $attachment->post->thread->price > 0
-            && ! $attachment->post->thread->is_paid
+            && $this->cannotView($attachment->post->thread)
         ) {
             $attachment->setAttribute('blur', true);
 
@@ -131,8 +142,7 @@ trait HasPaidContent
             $threadVideo->type === ThreadVideo::TYPE_OF_VIDEO
             && $threadVideo->thread
             && $threadVideo->thread->type === Thread::TYPE_OF_VIDEO
-            && $threadVideo->thread->price > 0
-            && ! $threadVideo->thread->is_paid
+            && $this->cannotView($threadVideo->thread)
         ) {
             $threadVideo->file_id = '';
             $threadVideo->media_url = '';
