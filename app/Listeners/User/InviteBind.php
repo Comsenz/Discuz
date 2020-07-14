@@ -12,6 +12,7 @@ use App\Models\Group;
 use App\Models\Invite;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Arr;
 
@@ -19,9 +20,12 @@ class InviteBind
 {
     protected $InviteRepository;
 
-    public function __construct(InviteRepository $InviteRepository)
+    protected $settings;
+
+    public function __construct(InviteRepository $InviteRepository, SettingsRepository $settings)
     {
         $this->InviteRepository = $InviteRepository;
+        $this->settings = $settings;
     }
 
     public function handle(Registered $event)
@@ -42,6 +46,12 @@ class InviteBind
                     //同步用户组
                     $defaultGroup = Group::find($invite->group_id);
                     $event->user->groups()->sync($defaultGroup->id);
+
+                    //修改付费状态
+                    if ($this->settings->get('site_mode') == 'pay') {
+                        $event->user->expired_at = Carbon::now()->addDays($this->settings->get('site_expire'));
+                        $event->user->save();
+                    }
                 }
             } else {
                 $encrypter = app('encrypter');
