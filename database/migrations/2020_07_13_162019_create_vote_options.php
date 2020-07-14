@@ -3,7 +3,7 @@
 use Discuz\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateVoteItems extends Migration
+class CreateVoteOptions extends Migration
 {
     /**
      * Run the migrations.

@@ -14,6 +14,7 @@ class CreateVoteLogs extends Migration
     {
         $this->schema()->create('vote_logs', function (Blueprint $table) {
             $table->id()->comment('投票记录ID');
+            $table->unsignedBigInteger('user_id')->comment('用户ID');
             $table->unsignedBigInteger('vote_id')->comment('投票ID');
             $table->unsignedBigInteger('option_id')->comment('选项ID');
             $table->ipAddress('ip')->default('')->comment('IP');
