@@ -47,6 +47,7 @@ const config = {
   tencent_vod_subappid_error: '腾讯云云点播子应用错误',
   pay_password_failures_times_toplimit: '您输入的密码错误次数已超限，请点击忘记密码找回或次日后重试',
   offIAccount_server_config_signature_failed: '公众号服务器配置：签名验证失败',
+  tencent_qcloud_sms_app_error: '腾讯云短信配置错误',
 };
 
 Vue.prototype.getLang = function (key) {
