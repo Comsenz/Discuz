@@ -60,7 +60,7 @@ class CreateInvite
 
         $invite = Invite::creation(
             Arr::get($this->data, 'attributes.group_id'),
-            2,
+            Invite::TYPE_ADMIN,
             Str::random(32),
             Carbon::now()->timestamp,
             Carbon::now()->addDays(7)->timestamp,

@@ -7,6 +7,7 @@
 
 namespace App\Commands\Invite;
 
+use App\Models\Invite;
 use App\Models\User;
 use App\Repositories\InviteRepository;
 use Discuz\Auth\AssertPermissionTrait;
@@ -59,10 +60,11 @@ class DeleteInvite
      */
     public function handle(InviteRepository $inviteRepository)
     {
+        /** @var Invite $invite */
         $invite = $inviteRepository->findOrFail($this->inviteId, $this->actor);
 
         $this->assertCan($this->actor, 'delete', $invite);
-        $invite->status = 0;
+        $invite->status = Invite::STATUS_INVALID;
         $invite->save();
 
         return $invite;

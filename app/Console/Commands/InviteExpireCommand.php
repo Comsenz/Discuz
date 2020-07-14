@@ -7,6 +7,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Invite;
 use App\Repositories\InviteRepository;
 use Carbon\Carbon;
 use Discuz\Console\AbstractCommand;
@@ -39,12 +40,12 @@ class InviteExpireCommand extends AbstractCommand
     {
         //清理前天的未发布主题视频数据
         $invitesList = $this->invites->query()
-            ->where('status', 1)
+            ->where('status', Invite::STATUS_UNUSED)
             ->where('endtime', '<', Carbon::Now()->timestamp)
             ->get();
 
         foreach ($invitesList as $invite) {
-            $invite->status = 3;
+            $invite->status = Invite::STATUS_EXPIRED;
             $invite->save();
         }
 

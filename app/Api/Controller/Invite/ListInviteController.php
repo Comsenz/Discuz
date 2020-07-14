@@ -8,6 +8,7 @@
 namespace App\Api\Controller\Invite;
 
 use App\Api\Serializer\InviteSerializer;
+use App\Models\Invite;
 use App\Repositories\InviteRepository;
 use Discuz\Api\Controller\AbstractListController;
 use Discuz\Auth\AssertPermissionTrait;
@@ -65,7 +66,7 @@ class ListInviteController extends AbstractListController
 
         $query = $this->inviteRepository->query()
                     ->where('user_id', $actor->id)
-                    ->where('type', 2)
+                    ->where('type', Invite::TYPE_ADMIN)
                     ->when($status !== '', function (Builder $query) use ($status) {
                         $query->where('status', $status);
                     });

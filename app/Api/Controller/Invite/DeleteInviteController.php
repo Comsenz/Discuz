@@ -15,6 +15,9 @@ use Illuminate\Support\Arr;
 
 class DeleteInviteController extends AbstractDeleteController
 {
+
+    protected $bus;
+
     /**
      * @param Dispatcher $bus
      */

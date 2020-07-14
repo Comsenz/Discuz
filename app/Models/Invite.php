@@ -11,11 +11,38 @@ use App\Events\Invite\Created;
 use Discuz\Database\ScopeVisibilityTrait;
 use Discuz\Foundation\EventGeneratorTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $group_id
+ * @property int $type
+ * @property string $code
+ * @property int $dateline
+ * @property int $endtime
+ * @property int $user_id
+ * @property int $to_user_id
+ * @property int $status
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @package App\Models
+ */
 class Invite extends Model
 {
     use EventGeneratorTrait;
     use ScopeVisibilityTrait;
+
+    const TYPE_GENERAL = 1; //普通会员邀请
+
+    const TYPE_ADMIN = 2;   //管理员邀请
+
+    const STATUS_INVALID = 0;  //失效
+
+    const STATUS_UNUSED = 1;   //未使用
+
+    const STATUS_USED = 2;     //已使用
+
+    const STATUS_EXPIRED = 3;   //已过期
 
     /**
      * 与模型关联的数据表.
