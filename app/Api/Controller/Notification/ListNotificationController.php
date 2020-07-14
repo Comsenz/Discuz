@@ -62,7 +62,6 @@ class ListNotificationController extends AbstractListController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-
         $this->assertRegistered($actor);
 
         $filter = $this->extractFilter($request);
@@ -113,24 +112,18 @@ class ListNotificationController extends AbstractListController
 
         $data = $query->get();
 
-        // 非系统通知
-        $list = $data->where('type', '<>', 'system')->pluck('data');
+        /**
+         * 解决 N+1 问题
+         * 获取主题&用户
+         */
+        $this->getThreads($data, $type, $users, $threads);
 
-        // 用户 IDs
-        $userIds = collect($list)->pluck('user_id')->filter()->unique()->values();
-        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-
-        // 主题 ID
-        $threadIds = collect($list)->pluck('thread_id')->filter()->unique()->values();
-        // 主题及其作者与作者用户组
-        $threads = Thread::with('user', 'user.groups')->whereIn('id', $threadIds)->get()->keyBy('id');
-
-        // 获取通知里当前的用户名称和头像
-        $data->map(function ($item) use ($users, $threads) {
-            if ($item->type != 'system') {
-                /**
-                 * 解决 N+1 问题
-                 */
+        /**
+         * 系统通知结构不一
+         */
+        if ($type != 'system') {
+            // 获取通知里当前的用户名称和头像
+            $data->map(function ($item) use ($users, $threads, $actor) {
                 $user = $users->get(Arr::get($item->data, 'user_id'));
                 if (!empty($user)) {
                     $item->user_name = $user->username;
@@ -150,9 +143,50 @@ class ListNotificationController extends AbstractListController
                         }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            // 获取通知里当前的用户名称和头像
+            $data->map(function ($item) use ($users, $threads, $actor) {
+                if (!empty($threadID = Arr::get($item, 'data.raw.thread_id', 0))) {
+                    // 获取主题作者用户组
+                    if (!empty($threads->get($threadID))) {
+                        $thread = $threads->get($threadID);
+                        $item->thread_is_approved = $thread->is_approved;
+                        $item->thread_created_at = $thread->formatDate('created_at');
+                    }
+                }
+            });
+        }
 
         return $data;
+    }
+
+    /**
+     * @param $data
+     * @param $type
+     * @param $users
+     * @param $threads
+     */
+    protected function getThreads($data, $type, &$users, &$threads)
+    {
+        if ($type == 'system') {
+            $data->where('type', '=', $type);
+            $pluck = 'raw.thread_id';
+        } else {
+            $data->where('type', '<>', $type);
+            $pluck = 'thread_id';
+        }
+
+        // 非系统通知
+        $list = $data->pluck('data');
+
+        // 用户 IDs
+        $userIds = collect($list)->pluck('user_id')->filter()->unique()->values();
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        // 主题 ID
+        $threadIds = collect($list)->pluck($pluck)->filter()->unique()->values();
+        // 主题及其作者与作者用户组
+        $threads = Thread::with('user', 'user.groups')->whereIn('id', $threadIds)->get()->keyBy('id');
     }
 }

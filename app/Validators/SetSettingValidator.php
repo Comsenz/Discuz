@@ -12,6 +12,7 @@ use App\Rules\Settings\CashMinSum;
 use App\Rules\Settings\CashSumLimit;
 use App\Rules\Settings\QcloudCaptchaVerify;
 use App\Rules\Settings\QcloudSecretVerify;
+use App\Rules\Settings\QcloudSMSVerify;
 use App\Rules\Settings\QcloudVodCoverTemplateVerify;
 use App\Rules\Settings\QcloudVodTranscodeVerify;
 use App\Rules\Settings\QcloudVodVerify;
@@ -52,7 +53,8 @@ class SetSettingValidator extends AbstractValidator
             'site_mode' => ['in:pay,public', new SiteMode($this->faker('site_price'))],
             'support_img_ext' => [new SupportExt()],
             'support_file_ext' => [new SupportExt()],
-            'register_type' => ['in:0,1,2']
+            'register_type' => ['in:0,1,2'],
+            'qcloud_sms' => Arr::has($this->data, 'qcloud_sms') ? [new QcloudSMSVerify()] : []
         ];
 
         // 腾讯云验证码特殊处理
@@ -72,6 +74,14 @@ class SetSettingValidator extends AbstractValidator
             $rules['qcloud_vod'] = ['filled',
                 new QcloudVodTranscodeVerify($this->settings->get('qcloud_vod_transcode', 'qcloud')),
                 new QcloudVodVerify($this->settings->get('qcloud_vod_sub_app_id', 'qcloud'))];
+        }
+
+        // 开启短信验证
+        if (Arr::has($this->data, 'qcloud_sms_app_id')) {
+            $rules['qcloud_sms_app_id'] = [
+                'filled',
+                new QcloudSMSVerify($this->faker('qcloud_sms_app_id'))
+            ];
         }
 
         if (Arr::has($this->data, 'qcloud_vod_sub_app_id')) {

@@ -52,6 +52,9 @@ class AttachmentValidator extends AbstractValidator
             if ($value == 'mp3') {
                 $mimes[$key] = 'mpga';
             }
+            if ($value == 'm4a') {
+                $mimes[$key] = 'x-m4a';
+            }
             // 无论如何禁止上传 php 文件
             if ($value == 'php') {
                 unset($mimes[$key]);

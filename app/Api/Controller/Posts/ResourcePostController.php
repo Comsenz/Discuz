@@ -8,13 +8,13 @@
 namespace App\Api\Controller\Posts;
 
 use App\Api\Serializer\PostSerializer;
-use App\Exceptions\TranslatorException;
 use App\Models\Post;
 use App\Repositories\PostRepository;
 use Discuz\Api\Controller\AbstractResourceController;
 use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Auth\Exception\PermissionDeniedException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -70,7 +70,6 @@ class ResourcePostController extends AbstractResourceController
      * {@inheritdoc}
      * @throws InvalidParameterException
      * @throws PermissionDeniedException
-     * @throws TranslatorException
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
@@ -83,7 +82,7 @@ class ResourcePostController extends AbstractResourceController
         $this->assertCan($actor, 'view', $post);
 
         if ($post->is_first || $post->is_comment || $post->thread->deleted_at) {
-            throw new TranslatorException('post_not_found', [], 404);
+            throw new ModelNotFoundException;
         }
 
         if (($postRelationships = $this->getPostRelationships($include)) || in_array('commentPosts', $include)) {

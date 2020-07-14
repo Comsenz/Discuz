@@ -20,16 +20,29 @@ class DeleteAvatarController extends AbstractResourceController
 {
     use AssertPermissionTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public $serializer = UserSerializer::class;
 
+    /**
+     * @var UserRepository
+     */
     protected $users;
 
-    protected $avatarUploader;
+    /**
+     * @var AvatarUploader
+     */
+    protected $uploader;
 
-    public function __construct(UserRepository $users, AvatarUploader $avatarUploader)
+    /**
+     * @param UserRepository $users
+     * @param AvatarUploader $uploader
+     */
+    public function __construct(UserRepository $users, AvatarUploader $uploader)
     {
         $this->users = $users;
-        $this->avatarUploader = $avatarUploader;
+        $this->uploader = $uploader;
     }
 
     /**
@@ -44,9 +57,10 @@ class DeleteAvatarController extends AbstractResourceController
         $id = Arr::get($request->getQueryParams(), 'id');
 
         $user = $this->users->findOrFail($id);
+
         $this->assertCan($actor, 'edit', $user);
 
-        $this->avatarUploader->remove($user);
+        $this->uploader->remove($user);
 
         $user->save();
 

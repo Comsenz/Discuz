@@ -12,6 +12,7 @@ use App\Models\User;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Discuz\Foundation\Application;
 use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Support\Str;
 
 class UserObserver
 {
@@ -53,13 +54,13 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        //删除用户头像
-        $img = $user->id . '.png';
+        // 删除用户头像
+        $rawAvatar = $user->getRawOriginal('avatar');
 
-        if (strpos($user->avatar, '://') === false) {
-            $this->app->make(Factory::class)->disk('avatar')->delete($img);
+        if (strpos($rawAvatar, '://') === false) {
+            $this->app->make(Factory::class)->disk('avatar')->delete($rawAvatar);
         } else {
-            $cosPath = 'public/avatar/' . $img;
+            $cosPath = 'public/avatar/' . Str::after($rawAvatar, '://');
             $this->app->make(Factory::class)->disk('avatar_cos')->delete($cosPath);
         }
     }
