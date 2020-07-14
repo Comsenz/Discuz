@@ -17,12 +17,19 @@ class SettingsRepository implements ContractsSettingRepository
 
     public function all()
     {
+        if ($this->settings) {
+            return $this->settings;
+        }
+
         $settings = [];
         Setting::all()->each(function ($setting) use (&$settings) {
             $tag = $setting['tag'] ?? 'default';
             $settings[$tag][$setting['key']] = $setting['value'];
         });
-        return $this->settings ?? $this->settings = collect($settings);
+
+        $this->settings = collect($settings);
+
+        return $this->settings;
     }
 
     public function get($key, $tag = 'default', $default = '')
