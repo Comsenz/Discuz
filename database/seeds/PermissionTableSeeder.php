@@ -5,10 +5,10 @@
  * This is NOT a freeware, use is subject to license terms
  */
 
-use App\Models\GroupPermission;
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
-class GroupPermissionTableSeeder extends Seeder
+class PermissionTableSeeder extends Seeder
 {
     /**
      * 默认用户组 1 为超级管理员有以下的所有权限
@@ -123,8 +123,7 @@ class GroupPermissionTableSeeder extends Seeder
             return $item->merge($value);
         });
 
-        $settings = new GroupPermission();
-        $settings->truncate();
-        $settings->insert($data->toArray());
+        Permission::query()->truncate();
+        Permission::query()->insert($data->toArray());
     }
 }

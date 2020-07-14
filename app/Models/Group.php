@@ -121,7 +121,7 @@ class Group extends Model
      */
     public function permission()
     {
-        return $this->hasMany(GroupPermission::class);
+        return $this->hasMany(Permission::class);
     }
 
     /**

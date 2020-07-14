@@ -11,7 +11,7 @@ use App\Events\Category\CategoryRefreshCount;
 use App\Events\Category\Created;
 use App\Models\Category;
 use App\Models\Group;
-use App\Models\GroupPermission;
+use App\Models\Permission;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class CategoryListener
@@ -56,7 +56,7 @@ class CategoryListener
             ],
         ]);
 
-        GroupPermission::query()->insert($permissions);
+        Permission::query()->insert($permissions);
     }
 
     /**
