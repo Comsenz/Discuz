@@ -111,7 +111,12 @@ class ListPostsController extends AbstractListController
 
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
-        $include = array_merge($this->extractInclude($request), ['likeState']);
+
+        /**
+         * thread 解决查询付费状态 N + 1 问题
+         * likeState 解决查询点赞状态 N + 1 问题
+         */
+        $include = array_merge($this->extractInclude($request), ['thread', 'likeState']);
 
         $posts = $this->search($actor, $filter, $sort, $limit, $offset);
 
@@ -152,7 +157,7 @@ class ListPostsController extends AbstractListController
         if (Arr::get($filter, 'highlight') == 'yes') {
             $posts->load('stopWords');
 
-            $posts->map(function ($post) {
+            $posts->map(function (Post $post) {
                 if ($post->stopWords) {
                     $stopWords = explode(',', $post->stopWords->stop_word);
                     $replaceWords = array_map(function ($word) {
