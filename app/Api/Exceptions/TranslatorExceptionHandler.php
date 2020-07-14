@@ -43,6 +43,6 @@ class TranslatorExceptionHandler implements ExceptionHandlerInterface
             $errors = array_merge($errors[0], ['detail' => $e->getDetail()]);
         }
 
-        return new ResponseBag(500, [$errors]);
+        return new ResponseBag($e->getCode(), [$errors]);
     }
 }
