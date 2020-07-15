@@ -12,6 +12,7 @@ use App\Repositories\UserFollowRepository;
 use Discuz\Api\Serializer\AbstractSerializer;
 use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Str;
 use Tobscure\JsonApi\Relationship;
 
 class UserSerializer extends AbstractSerializer
@@ -77,7 +78,7 @@ class UserSerializer extends AbstractSerializer
             'denyStatus'        => (bool)$model->denyStatus,
         ];
 
-        if (in_array($this->getRequest()->getUri()->getPath(), ['/api/follow', '/api/users'])) {
+        if (Str::contains($this->getRequest()->getUri()->getPath().'/', ['/api/follow/', '/api/users/'])) {
             //需要时再查询关注状态 存在n+1
             $attributes['follow'] = $this->userFollow->findFollowDetail($this->actor->id, $model->id);
         }
