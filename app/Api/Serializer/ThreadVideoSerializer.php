@@ -8,10 +8,10 @@
 namespace App\Api\Serializer;
 
 use App\Models\ThreadVideo;
-use App\Settings\SettingsRepository;
 use App\Traits\HasPaidContent;
 use Carbon\Carbon;
 use Discuz\Api\Serializer\AbstractSerializer;
+use Discuz\Contracts\Setting\SettingsRepository;
 use Illuminate\Support\Str;
 
 class ThreadVideoSerializer extends AbstractSerializer
