@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class UserFollow extends Model
 {
+    const MUTUAL = 1; //相互关注
+
+    const NOT_MUTUAL = 0; //没有相互关注
+
     /**
      * {@inheritdoc}
      */

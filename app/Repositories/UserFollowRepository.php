@@ -58,12 +58,10 @@ class UserFollowRepository extends AbstractRepository
 
         $followRes = $this->query()->where(['to_user_id'=>$to_user_id,'from_user_id'=>$from_user_id])->first();
 
-        $fansRes =  $this->query()->where(['to_user_id'=>$from_user_id,'from_user_id'=>$to_user_id])->first();
-
         if ($followRes) {
             $follow = 1;
         }
-        if ($followRes && $fansRes) {
+        if ($followRes && $followRes['is_mutual'] == UserFollow::MUTUAL) {
             $follow = 2;
         }
 

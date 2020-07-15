@@ -65,16 +65,16 @@ class DeleteUserFollow
 
         //取消互相关注
         if ($this->to_user_id) {
-            $toUserFollow = $userFollow->where(['to_user_id'=>$this->actor->id,'from_user_id'=>$this->to_user_id,'is_mutual'=>1])->first();
+            $toUserFollow = $userFollow->where(['to_user_id'=>$this->actor->id,'from_user_id'=>$this->to_user_id,'is_mutual'=>UserFollow::MUTUAL])->first();
             $toUser = $user->findOrFail($this->to_user_id);
             $fromUser = $this->actor;
         } else {
-            $toUserFollow = $userFollow->where(['to_user_id'=>$this->from_user_id,'from_user_id'=>$this->actor->id,'is_mutual'=>1])->first();
+            $toUserFollow = $userFollow->where(['to_user_id'=>$this->from_user_id,'from_user_id'=>$this->actor->id,'is_mutual'=>UserFollow::MUTUAL])->first();
             $toUser = $this->actor;
             $fromUser = $user->findOrFail($this->from_user_id);
         }
         if ($toUserFollow) {
-            $toUserFollow->is_mutual = 0;
+            $toUserFollow->is_mutual = UserFollow::NOT_MUTUAL;
             $toUserFollow->save();
         }
 

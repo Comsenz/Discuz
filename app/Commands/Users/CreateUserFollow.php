@@ -55,10 +55,10 @@ class CreateUserFollow
 
         //判断是否需要设置互相关注
         $toUserFollow = $userFollow->where(['from_user_id'=>$this->to_user_id,'to_user_id'=>$this->actor->id])->first();
-        $is_mutual = 0;
+        $is_mutual = UserFollow::NOT_MUTUAL;
         if ($toUserFollow) {
-            $is_mutual = 1;
-            $toUserFollow->is_mutual = 1;
+            $is_mutual = UserFollow::MUTUAL;
+            $toUserFollow->is_mutual = $is_mutual;
             $toUserFollow->save();
         }
 
