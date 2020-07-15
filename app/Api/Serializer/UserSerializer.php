@@ -71,7 +71,7 @@ class UserSerializer extends AbstractSerializer
             'updatedAt'         => $this->formatDate($model->updated_at),
             'canEdit'           => $canEdit,
             'canDelete'         => $gate->allows('delete', $model),
-            'showGroups'        => $model->hasPermission('showGroups'),     // 是否显示用户组
+            'showGroups'        => $gate->allows('showGroups', $model),     // 是否显示用户组
             'registerReason'    => $model->register_reason,                 // 注册原因
             'banReason'         => '',                                      // 禁用原因
             'denyStatus'        => (bool)$model->denyStatus,
@@ -105,8 +105,8 @@ class UserSerializer extends AbstractSerializer
         if ($this->actor->id === $model->id) {
             $attributes += [
                 'canWalletPay'  => $gate->allows('walletPay', $model),
-                'walletBalance' => $model->userWallet->available_amount,
-                'walletFreeze'  => $model->userWallet->freeze_amount,
+                'walletBalance' => $this->actor->userWallet->available_amount,
+                'walletFreeze'  => $this->actor->userWallet->freeze_amount,
             ];
         }
 
