@@ -63,7 +63,6 @@ class UserSerializer extends AbstractSerializer
             'likedCount'        => (int) $model->liked_count,
             'signature'         => $model->signature,
             'usernameBout'      => (int) $model->username_bout,
-            'follow'            => false,
             'status'            => $model->status,
             'loginAt'           => $this->formatDate($model->login_at),
             'joinedAt'          => $this->formatDate($model->joined_at),
