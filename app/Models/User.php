@@ -537,7 +537,8 @@ class User extends Model
     {
         return $this->belongsToMany(Thread::class)
             ->as('favoriteState')
-            ->withPivot('created_at');
+            ->withPivot('created_at')
+            ->whereNotNull('threads.user_id');
     }
 
     /**
