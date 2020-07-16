@@ -328,7 +328,7 @@ class User extends Model
                 $value = app(Filesystem::class)
                     ->disk('avatar_cos')
                     ->temporaryUrl(
-                        'public/avatar/' . $this->id . '.png',
+                        'public/avatar/' . Str::after($value, '://'),
                         \Carbon\Carbon::now()->addHour()
                     );
             }
