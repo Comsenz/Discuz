@@ -10,6 +10,7 @@ namespace App\Commands\Vote;
 use App\Censor\Censor;
 use App\Models\User;
 use App\Models\Vote;
+use App\Models\VoteOption;
 use App\Repositories\UserRepository;
 use App\Validators\VoteValidator;
 use Carbon\Carbon;
@@ -17,10 +18,9 @@ use Discuz\Auth\AssertPermissionTrait;
 use Discuz\Foundation\EventsDispatchTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherBus;
-use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Support\Arr;
 
-class CreateVote
+class CreateVoteOptions
 {
     use AssertPermissionTrait;
     use EventsDispatchTrait;
@@ -51,27 +51,13 @@ class CreateVote
     {
         $this->events = $events;
 
-        $this->assertCan($this->actor, 'vote.create');
-
-        $validation->valid($this->attributes);
-
-        $data = [
-            'name' => Arr::get($this->attributes, 'name'),
-            'type' => Arr::get($this->attributes, 'type'),
-            'user_id' => Arr::get($this->attributes, 'user_id', $this->actor->id),
-            'start_at' => Arr::get($this->attributes, 'start_at', Carbon::now()->toDate()),
-            'end_at' => Arr::get($this->attributes, 'end_at'),
-            'thread_id' => Arr::get($this->attributes, 'thread_id', 0),
-            ];
-        $vote = Vote::build($data);
-
-        if ($vote) {
-            $this->attributes['vote_id'] = $vote->id;
-            $bus->dispatchNow(
-                new CreateVoteOptions($this->actor, $this->attributes)
-            );
+        $data = [];
+        $vote_id = Arr::get($this->attributes, 'vote_id');
+        foreach (Arr::get($this->attributes, 'content') as $item) {
+            array_push($data, ['vote_id' => $vote_id, 'content' => $item]);
         }
-        return;
+
+        return VoteOption::query()->insert($data);
 
     }
 }

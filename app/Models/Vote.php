@@ -47,6 +47,13 @@ class Vote extends Model
      */
     protected $fillable = [];
 
+    public static function build(array $attributes)
+    {
+        $vote = new static;
+        $vote->attributes = $attributes;
+
+        return $vote->save();
+    }
 
     public function user()
     {
