@@ -168,6 +168,7 @@ class ListOrdersController extends AbstractListController
         $order_start_time = Arr::get($filter, 'start_time'); //订单创建开始时间
         $order_end_time = Arr::get($filter, 'end_time'); //订单创建结束时间
         $order_username = Arr::get($filter, 'username'); //订单创建人
+        $order_payee_username = Arr::get($filter, 'payee_username'); //订单收款人
         $order_product = Arr::get($filter, 'product'); //商品
 
         $query->when($status !== '', function ($query) use ($status) {
@@ -191,6 +192,15 @@ class ListOrdersController extends AbstractListController
                 User::query()
                     ->select('id', 'username')
                     ->where('users.username', $order_username)
+                    ->get()
+            );
+        });
+        $query->when($order_payee_username, function ($query) use ($order_payee_username) {
+            $query->whereIn(
+                'orders.payee_id',
+                User::query()
+                    ->select('id', 'username')
+                    ->where('users.username', $order_payee_username)
                     ->get()
             );
         });
