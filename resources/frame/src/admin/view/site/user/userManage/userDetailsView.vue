@@ -52,6 +52,12 @@
       >
     </Card>
 
+    <Card header="用户名：">
+      <CardRow>
+        <el-input v-model="userName"></el-input>
+      </CardRow>
+    </Card>
+
     <Card header="新密码：">
       <CardRow description="如果不更改密码此处请留空">
         <el-input

@@ -23,6 +23,7 @@ export default {
       reasonsForDisable: "", //禁用原用
       realname: "", //实名认证是否显示
       expired_at: "", // 选择过期时间
+      userName: "",   // 修改用户名
       optionsStatus: [
         {
           value: 0,
@@ -66,6 +67,7 @@ export default {
         } else {
           this.userInfo = response.readdata._data;
           this.imageUrl = this.userInfo.avatarUrl;
+          this.userName = this.userInfo.username;
           this.expired_at = this.userInfo.expiredAt && this.$dayjs(this.userInfo.expiredAt).format("YYYY-MM-DD HH:mm:ss");
           if (this.imageUrl != "" && this.imageUrl != null) {
             this.deleBtn = true;
@@ -182,7 +184,8 @@ export default {
               groupId: this.userRole,
               status: this.userInfo.status,
               refuse_message: this.reasonsForDisable,
-              expired_at: this.expired_at
+              expired_at: this.expired_at,
+              username: this.userName
             }
           }
         }
