@@ -41,6 +41,7 @@
                 </div>
                 <i v-else class="el-icon-circle-plus-outline"></i>
                 <p class="avatar-logo">{{item.text}}</p>
+                <p class="avatar-pm">{{item.textrule}}</p>
                 <p class="avatar-pm">大小：小于5M</p>
               </el-upload>
               <el-button

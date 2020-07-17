@@ -32,25 +32,29 @@ export default {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "站点LOGO"
+          text: "站点LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部LOGO"
+          text: "首页头部LOGO",
+          textrule: "推荐高度：88px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "首页头部背景"
+          text: "首页头部背景",
+          textrule: "尺寸：750px*400px"
         },
         {
           imageUrl: "",
           imgWidht: 0,
           imgHeight: 0,
-          text: "ICON"
+          text: "ICON",
+          textrule: "尺寸：120px*120px"
         },
       ]
     };
