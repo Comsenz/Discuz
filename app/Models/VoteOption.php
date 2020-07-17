@@ -41,8 +41,6 @@ class VoteOption extends Model
         $voteOption = new static;
         $voteOption->attributes = $attributes;
         $voteOption->count = 0;
-        $voteOption->created_at = Carbon::now()->toDateString();
-        $voteOption->updated_at = Carbon::now()->toDateString();
 
         return $voteOption;
     }
