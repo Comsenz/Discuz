@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon $updated_at
  * @property Carbon $created_at
  * @package App\Models
- * @method create()
  */
 class VoteOption extends Model
 {
@@ -36,6 +35,17 @@ class VoteOption extends Model
      * @var string[]
      */
     protected $fillable = [];
+
+    public static function build(array $attributes)
+    {
+        $voteOption = new static;
+        $voteOption->attributes = $attributes;
+        $voteOption->count = 0;
+        $voteOption->created_at = Carbon::now()->toDateString();
+        $voteOption->updated_at = Carbon::now()->toDateString();
+
+        return $voteOption;
+    }
 
     public function vote()
     {

@@ -64,6 +64,7 @@ class CreateVote
             'thread_id' => Arr::get($this->attributes, 'thread_id', 0),
             ];
         $vote = Vote::build($data);
+        $vote->save();
 
         if ($vote) {
             $this->attributes['vote_id'] = $vote->id;
@@ -71,7 +72,7 @@ class CreateVote
                 new CreateVoteOptions($this->actor, $this->attributes)
             );
         }
-        return;
+        return $vote;
 
     }
 }

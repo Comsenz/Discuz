@@ -51,8 +51,9 @@ class Vote extends Model
     {
         $vote = new static;
         $vote->attributes = $attributes;
+        $vote->total_count = 0;
 
-        return $vote->save();
+        return $vote;
     }
 
     public function user()
@@ -63,6 +64,11 @@ class Vote extends Model
     public function thread()
     {
         return $this->belongsTo(Thread::class);
+    }
+
+    public function options()
+    {
+        return $this->hasMany(VoteOption::class);
     }
 
 }

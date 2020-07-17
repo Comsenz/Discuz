@@ -51,13 +51,16 @@ class CreateVoteOptions
     {
         $this->events = $events;
 
-        $data = [];
+//        $data = [];
         $vote_id = Arr::get($this->attributes, 'vote_id');
         foreach (Arr::get($this->attributes, 'content') as $item) {
-            array_push($data, ['vote_id' => $vote_id, 'content' => $item]);
+            VoteOption::build(['vote_id' => $vote_id, 'content' => $item])->save();
+//            $a = VoteOption::build(['vote_id' => $vote_id, 'content' => $item])->toArray();
+//            dd($a);
+//            array_push($data, VoteOption::build(['vote_id' => $vote_id, 'content' => $item])->toArray());
         }
 
-        return VoteOption::query()->insert($data);
+        return ;
 
     }
 }

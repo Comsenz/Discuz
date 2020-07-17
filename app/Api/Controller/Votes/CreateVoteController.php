@@ -24,6 +24,8 @@ class CreateVoteController extends AbstractCreateController
      */
     protected $bus;
 
+    public $include = ['options'];
+
     /**
      * @param Dispatcher $bus
      */
