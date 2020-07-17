@@ -56,7 +56,7 @@ class ListInviteController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $this->assertAdmin($actor);
+        $this->assertCan($actor, 'createInvite');
 
         $filter = $this->extractFilter($request);
         $limit = $this->extractLimit($request);
