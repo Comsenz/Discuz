@@ -206,4 +206,9 @@ class ThreadSerializer extends AbstractSerializer
     {
         return $this->hasMany($thread, TopicSerializer::class);
     }
+
+    public function vote($thread)
+    {
+        return $this->hasOne($thread, VoteSerializer::class);
+    }
 }

@@ -396,6 +396,11 @@ class Thread extends Model
         return $this->hasMany(ThreadTopic::class);
     }
 
+    public function vote()
+    {
+        return $this->belongsTo(Vote::class);
+    }
+
     /**
      * Set the user for which the state relationship should be loaded.
      *

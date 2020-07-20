@@ -59,6 +59,7 @@ class ResourceThreadController extends AbstractResourceController
         'posts.images',
         'posts.postVideo',
         'posts.postAudio',
+        'vote',
     ];
 
     /**
