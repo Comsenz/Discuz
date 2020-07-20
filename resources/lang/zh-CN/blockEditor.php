@@ -17,5 +17,7 @@ return [
     'block_video_error_file_not_found'      => '指定的视频不存在',
     'block_text_error_user_not_found'       => '指定的用户不存在',
     'block_text_error_topic_not_found'      => '指定的话题不存在',
+    'block_vote_error_file_not_found'       => '指定的投票不存在',
+
 
 ];
