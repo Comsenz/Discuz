@@ -358,4 +358,6 @@ $route->post('/offiaccount/menu', 'offiaccount.menu.batchCreate', ApiController\
 | vote
 |--------------------------------------------------------------------------
 */
+$route->get('/votes/{id}', 'votes.resource', ApiController\Votes\ResourceVoteController::class);
 $route->post('/votes', 'votes.create', ApiController\Votes\CreateVoteController::class);
+$route->delete('/votes', 'votes.delete', ApiController\Votes\DeleteVoteController::class);
