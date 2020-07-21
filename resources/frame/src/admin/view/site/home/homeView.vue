@@ -1,7 +1,7 @@
 <template>
   <div class="home-box">
 
-    <Card id="other_content_header" intercept="true">
+    <Card class="home-card-box" id="other_content_header" intercept="true" style="border:0;padding:0;">
     </Card>
 
     <Card class="home-card-box" header="待处理事项" intercept="true">
