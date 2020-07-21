@@ -354,8 +354,11 @@ class ListPostsController extends AbstractListController
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function (Post $post) {
-                // 截取内容
-                $post->content = Str::limit($post->content, 70);
+                $content = Str::of($post->content);
+
+                if ($content->length() > Post::SUMMARY_LENGTH) {
+                    $post->content = $content->substr(0, Post::SUMMARY_LENGTH)->finish(Post::SUMMARY_END_WITH);
+                }
 
                 return $post;
             });
