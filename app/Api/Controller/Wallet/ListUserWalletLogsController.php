@@ -148,6 +148,7 @@ class ListUserWalletLogsController extends AbstractListController
                             $title = Str::limit($log->order->thread->title, 40);
                         } else {
                             $title = Str::limit($log->order->thread->firstPost->content, 40);
+                            $title = str_replace("\n", '', $title);
                         }
 
                         $log->order->thread->title = strip_tags($title);
