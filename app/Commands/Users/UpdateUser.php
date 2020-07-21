@@ -240,8 +240,8 @@ class UpdateUser
                 }
             }
         }
-
-        if ($username = Arr::get($attributes, 'username')) {
+        $username = Arr::get($attributes, 'username');
+        if ($username && $username != $user->username) {
             $validator['username'] = $username;
 
             // 敏感词校验
